@@ -117,6 +117,8 @@ static void
 st_label_style_changed (StWidget *self)
 {
   StLabelPrivate *priv = ST_LABEL(self)->priv;
+  StThemeNode *theme_node = st_widget_get_theme_node (self);
+  StShadow *shadow_spec = st_theme_node_get_text_shadow (theme_node);
 
   if (priv->text_shadow_material != COGL_INVALID_HANDLE)
     {
@@ -125,6 +127,16 @@ st_label_style_changed (StWidget *self)
     }
 
   _st_set_text_from_style ((ClutterText *)priv->label, st_widget_get_theme_node (self));
+
+  /* Labels with shadow need to be painted on a FBO to handle opacity
+     correctly.
+  */
+  if (shadow_spec)
+    clutter_actor_set_offscreen_redirect (CLUTTER_ACTOR (self),
+                                          CLUTTER_OFFSCREEN_REDIRECT_ALWAYS);
+  else
+    clutter_actor_set_offscreen_redirect (CLUTTER_ACTOR (self),
+                                          CLUTTER_OFFSCREEN_REDIRECT_AUTOMATIC_FOR_OPACITY);
 
   ST_WIDGET_CLASS (st_label_parent_class)->style_changed (self);
 }
