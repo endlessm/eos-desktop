@@ -242,6 +242,9 @@ function _initializeUI() {
         if (keybindingMode == Shell.KeyBindingMode.NONE) {
             keybindingMode = Shell.KeyBindingMode.NORMAL;
         }
+        if (screenShield) {
+            screenShield.lockIfWasLocked();
+        }
     });
 }
 
