@@ -629,6 +629,10 @@ const IconGrid = new Lang.Class({
     },
 
     removeAll: function() {
+        this.actor.remove_all_children();
+    },
+
+    destroyAll: function() {
         this.actor.destroy_all_children();
     },
 

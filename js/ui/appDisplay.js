@@ -158,7 +158,7 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     removeAll: function() {
-        this._grid.removeAll();
+        this._grid.destroyAll();
         this._allIcons = [];
     },
 
