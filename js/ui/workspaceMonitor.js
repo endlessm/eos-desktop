@@ -21,7 +21,7 @@ const WorkspaceMonitor = new Lang.Class({
         this._shellwm.connect('destroy', Lang.bind(this, this._destroyWindow));
 
         this._metaScreen.connect('workspace-switched', Lang.bind(this, this._workspaceSwitched));
-        Main.layoutManager.connect('fullscreen-changed', Lang.bind(this, this._updateOverview));
+        this._metaScreen.connect('in-fullscreen-changed', Lang.bind(this, this._updateOverview));
 
         this._visibleWindows = 0;
 
