@@ -1,5 +1,5 @@
 AC_PREREQ(2.63)
-AC_INIT([gnome-shell],[3.8.0],[https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-shell],[gnome-shell])
+AC_INIT([eos-shell],[3.8.0],[https://github.com/endlessm/eos-shell])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/shell-global.c])
@@ -27,7 +27,7 @@ IT_PROG_INTLTOOL([0.40])
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.17])
 
-GETTEXT_PACKAGE=gnome-shell
+GETTEXT_PACKAGE=eos-shell
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
                    [The prefix for our gettext translation domains.])
@@ -78,7 +78,7 @@ NETWORKMANAGER_MIN_VERSION=0.9.6
 PULSE_MIN_VERS=2.0
 
 # Collect more than 20 libraries for a prize!
-PKG_CHECK_MODULES(GNOME_SHELL, gio-unix-2.0 >= $GIO_MIN_VERSION
+PKG_CHECK_MODULES(EOS_SHELL, gio-unix-2.0 >= $GIO_MIN_VERSION
 			       libxml-2.0
                                gtk+-3.0 >= $GTK_MIN_VERSION
                                atk-bridge-2.0
@@ -98,7 +98,7 @@ PKG_CHECK_MODULES(GNOME_SHELL, gio-unix-2.0 >= $GIO_MIN_VERSION
                                libnm-gtk >= $NETWORKMANAGER_MIN_VERSION
                                libsecret-unstable gcr-3 >= $GCR_MIN_VERSION)
 
-PKG_CHECK_MODULES(GNOME_SHELL_JS, gio-2.0 gjs-internals-1.0 >= $GJS_MIN_VERSION)
+PKG_CHECK_MODULES(EOS_SHELL_JS, gio-2.0 gjs-internals-1.0 >= $GJS_MIN_VERSION)
 PKG_CHECK_MODULES(ST, clutter-1.0 gtk+-3.0 libcroco-0.6 >= 0.6.8 x11)
 PKG_CHECK_MODULES(SHELL_PERF_HELPER, gtk+-3.0 gio-2.0)
 PKG_CHECK_MODULES(SHELL_HOTPLUG_SNIFFER, gio-2.0 gdk-pixbuf-2.0)
