@@ -4,7 +4,7 @@
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
-PKG_NAME="gnome-shell"
+PKG_NAME="eos-shell"
 
 (test -f $srcdir/configure.ac \
   && test -d $srcdir/src) || {

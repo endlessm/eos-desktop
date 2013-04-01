@@ -29,27 +29,27 @@ CLEANFILES += $(service_DATA)
 
 CLEANFILES += $(gir_DATA) $(typelib_DATA)
 
-bin_SCRIPTS += gnome-shell-extension-tool gnome-shell-extension-prefs \
-	       gnome-shell-perf-tool
-EXTRA_DIST += gnome-shell-extension-tool.in gnome-shell-extension-prefs.in \
-	      gnome-shell-perf-tool.in
-bin_PROGRAMS = gnome-shell-real
+bin_SCRIPTS += eos-shell-extension-tool eos-shell-extension-prefs \
+	       eos-shell-perf-tool
+EXTRA_DIST += eos-shell-extension-tool.in eos-shell-extension-prefs.in \
+	      eos-shell-perf-tool.in
+bin_PROGRAMS = eos-shell-real
 
 if USE_JHBUILD_WRAPPER_SCRIPT
-gnome_shell = gnome-shell-jhbuild
-bin_SCRIPTS += gnome-shell-jhbuild
+eose_shell = eos-shell-jhbuild
+bin_SCRIPTS += eos-shell-jhbuild
 else
-gnome_shell = gnome-shell-real
+eos_shell = eos-shell-real
 endif
-EXTRA_DIST += gnome-shell-jhbuild.in
+EXTRA_DIST += eos-shell-jhbuild.in
 
-noinst_DATA = gnome-shell
-gnome-shell: $(gnome_shell) Makefile
+noinst_DATA = eos-shell
+eos-shell: $(eos_shell) Makefile
 	$(AM_V_GEN) cp $< $@.tmp && mv $@.tmp $@
 install-exec-hook:
-	mv $(DESTDIR)$(bindir)/$(gnome_shell) $(DESTDIR)$(bindir)/gnome-shell
+	mv $(DESTDIR)$(bindir)/$(eos_shell) $(DESTDIR)$(bindir)/eos-shell
 uninstall-hook:
-	rm -f $(DESTDIR)$(bindir)/gnome-shell
+	rm -f $(DESTDIR)$(bindir)/eos-shell
 
 generated_script_substitutions = \
 	    -e "s|@bindir[@]|$(bindir)|g" \
@@ -63,29 +63,29 @@ generated_script_substitutions = \
 	    -e "s|@sysconfdir[@]|$(sysconfdir)|g" \
 	    -e "s|@GJS_CONSOLE[@]|$(GJS_CONSOLE)|g"
 
-gnome-shell-jhbuild: gnome-shell-jhbuild.in gnome-shell-real Makefile
+eos-shell-jhbuild: eos-shell-jhbuild.in eos-shell-real Makefile
 	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
 	@# Regenerate libtool wrapper so Alt+F2 restart will work
-	@$(LIBTOOL) --mode=execute test -f gnome-shell-real
+	@$(LIBTOOL) --mode=execute test -f eos-shell-real
 
-gnome-shell-extension-tool: gnome-shell-extension-tool.in Makefile
+eos-shell-extension-tool: eos-shell-extension-tool.in Makefile
 	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
 
-gnome-shell-extension-prefs: gnome-shell-extension-prefs.in Makefile
+eos-shell-extension-prefs: eos-shell-extension-prefs.in Makefile
 	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
 
-gnome-shell-perf-tool: gnome-shell-perf-tool.in Makefile
+eos-shell-perf-tool: eos-shell-perf-tool.in Makefile
 	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
 
-CLEANFILES += gnome-shell $(bin_SCRIPTS)
+CLEANFILES += eos-shell $(bin_SCRIPTS)
 
 include Makefile-st.am
 include Makefile-tray.am
 include Makefile-calendar-server.am
 include Makefile-hotplug-sniffer.am
 
-gnome_shell_cflags =				\
-	$(GNOME_SHELL_CFLAGS)			\
+eos_shell_cflags =				\
+	$(EOS_SHELL_CFLAGS)			\
 	-I$(srcdir)/tray			\
 	-DVERSION=\"$(VERSION)\"		\
 	-DLOCALEDIR=\"$(datadir)/locale\" 	\
@@ -97,7 +97,7 @@ gnome_shell_cflags =				\
 	-DMUTTER_TYPELIB_DIR=\"$(MUTTER_TYPELIB_DIR)\"
 
 privlibdir = $(pkglibdir)
-privlib_LTLIBRARIES = libgnome-shell.la libgnome-shell-js.la
+privlib_LTLIBRARIES = libeos-shell.la libeos-shell-js.la
 
 shell_built_sources = \
 	shell-enum-types.h \
@@ -137,7 +137,7 @@ shell_private_sources = \
 	gactionobserver.h		\
 	gactionobserver.c
 
-libgnome_shell_la_SOURCES =		\
+libeos_shell_la_SOURCES =		\
 	$(shell_built_sources)		\
 	$(shell_public_headers_h)	\
 	$(shell_private_sources)	\
@@ -177,31 +177,31 @@ libgnome_shell_la_SOURCES =		\
 	shell-xfixes-cursor.c		\
 	$(NULL)
 
-libgnome_shell_la_gir_sources = \
-	$(filter-out %-private.h $(shell_private_sources), $(shell_public_headers_h) $(libgnome_shell_la_SOURCES))
+libeos_shell_la_gir_sources = \
+	$(filter-out %-private.h $(shell_private_sources), $(shell_public_headers_h) $(libeos_shell_la_SOURCES))
 
-gnome_shell_real_SOURCES =		\
+eos_shell_real_SOURCES =		\
 	main.c
-gnome_shell_real_CPPFLAGS = $(gnome_shell_cflags)
-gnome_shell_real_LDADD = libgnome-shell.la libgnome-shell-js.la $(libgnome_shell_la_LIBADD)
-gnome_shell_real_DEPENDENCIES = libgnome-shell.la
+eos_shell_real_CPPFLAGS = $(eos_shell_cflags)
+eos_shell_real_LDADD = libeos-shell.la libeos-shell-js.la $(libeos_shell_la_LIBADD)
+eos_shell_real_DEPENDENCIES = libeos-shell.la
 
 ########################################
 
-libgnome_shell_js_la_SOURCES =		\
+libeos_shell_js_la_SOURCES =		\
 	shell-js.h			\
 	shell-js.c			\
 	$(NULL)
 
-libgnome_shell_js_la_LIBADD =		\
-	$(GNOME_SHELL_JS_LIBS)		\
+libeos_shell_js_la_LIBADD =		\
+	$(EOS_SHELL_JS_LIBS)		\
 	$(NULL)
 
-libgnome_shell_js_la_LDFLAGS =		\
+libeos_shell_js_la_LDFLAGS =		\
 	-avoid-version
 
-libgnome_shell_js_la_CPPFLAGS =		\
-	$(GNOME_SHELL_JS_CFLAGS)
+libeos_shell_js_la_CPPFLAGS =		\
+	$(EOS_SHELL_JS_CFLAGS)
 
 ########################################
 
@@ -212,7 +212,7 @@ shell_recorder_sources =        \
 # Custom element is an internal detail
 
 if BUILD_RECORDER
-libgnome_shell_la_SOURCES += $(shell_recorder_sources)
+libeos_shell_la_SOURCES += $(shell_recorder_sources)
 
 shell_recorder_private_sources =  \
 	shell-recorder-src.c	\
@@ -233,18 +233,18 @@ endif BUILD_RECORDER
 
 ########################################
 
-libexec_PROGRAMS += gnome-shell-perf-helper
+libexec_PROGRAMS += eos-shell-perf-helper
 
-gnome_shell_perf_helper_SOURCES = shell-perf-helper.c
-gnome_shell_perf_helper_CPPFLAGS = $(SHELL_PERF_HELPER_CFLAGS)
-gnome_shell_perf_helper_LDADD = $(SHELL_PERF_HELPER_LIBS)
+eos_shell_perf_helper_SOURCES = shell-perf-helper.c
+eos_shell_perf_helper_CPPFLAGS = $(SHELL_PERF_HELPER_CFLAGS)
+eos_shell_perf_helper_LDADD = $(SHELL_PERF_HELPER_LIBS)
 
 ########################################
 
 noinst_PROGRAMS += run-js-test
 
-run_js_test_CPPFLAGS = $(gnome_shell_cflags)
-run_js_test_LDADD = libgnome-shell.la $(libgnome_shell_la_LIBADD)
+run_js_test_CPPFLAGS = $(eos_shell_cflags)
+run_js_test_LDADD = libeos-shell.la $(libeos_shell_la_LIBADD)
 run_js_test_LDFLAGS = -export-dynamic
 
 run_js_test_SOURCES =			\
@@ -274,32 +274,32 @@ shell-enum-types.c: $(srcdir)/shell-enum-types.c.in stamp-shell-enum-types.h
 	rm -f $(@F).tmp
 EXTRA_DIST += shell-enum-types.c.in
 
-libgnome_shell_la_LDFLAGS = -avoid-version
-libgnome_shell_la_LIBADD =		\
+libeos_shell_la_LDFLAGS = -avoid-version
+libeos_shell_la_LIBADD =		\
 	-lm			\
-	$(GNOME_SHELL_LIBS)	\
+	$(EOS_SHELL_LIBS)	\
 	$(BLUETOOTH_LIBS)	\
 	libst-1.0.la       	\
 	libtray.la		\
 	gvc/libgvc.la		\
 	$(NULL)
 
-libgnome_shell_la_CPPFLAGS = $(gnome_shell_cflags)
+libeos_shell_la_CPPFLAGS = $(eos_shell_cflags)
 
-Shell-0.1.gir: libgnome-shell.la St-1.0.gir
+Shell-0.1.gir: libeos-shell.la St-1.0.gir
 Shell_0_1_gir_INCLUDES = Clutter-1.0 ClutterX11-1.0 Meta-3.0 TelepathyGLib-0.12 Soup-2.4 GMenu-3.0 NetworkManager-1.0 NMClient-1.0
-Shell_0_1_gir_CFLAGS = $(libgnome_shell_la_CPPFLAGS) -I $(srcdir)
-Shell_0_1_gir_LIBS = libgnome-shell.la
-Shell_0_1_gir_FILES = $(libgnome_shell_la_gir_sources)
+Shell_0_1_gir_CFLAGS = $(libeos_shell_la_CPPFLAGS) -I $(srcdir)
+Shell_0_1_gir_LIBS = libeos-shell.la
+Shell_0_1_gir_FILES = $(libeos_shell_la_gir_sources)
 Shell_0_1_gir_SCANNERFLAGS = --include-uninstalled=$(builddir)/St-1.0.gir \
 	--add-include-path=$(MUTTER_GIR_DIR) $(if $(BLUETOOTH_DIR),-L $(BLUETOOTH_DIR),)
 INTROSPECTION_GIRS += Shell-0.1.gir
 CLEANFILES += Shell-0.1.gir
 
-ShellJS-0.1.gir: libgnome-shell-js.la
-ShellJS_0_1_gir_CFLAGS = $(libgnome_shell_la_CPPFLAGS) -I $(srcdir)
-ShellJS_0_1_gir_LIBS = libgnome-shell-js.la
-ShellJS_0_1_gir_FILES = $(libgnome_shell_js_la_SOURCES)
+ShellJS-0.1.gir: libeos-shell-js.la
+ShellJS_0_1_gir_CFLAGS = $(libeos_shell_la_CPPFLAGS) -I $(srcdir)
+ShellJS_0_1_gir_LIBS = libeos-shell-js.la
+ShellJS_0_1_gir_FILES = $(libeos_shell_js_la_SOURCES)
 INTROSPECTION_GIRS += ShellJS-0.1.gir
 CLEANFILES += ShellJS-0.1.gir
 
