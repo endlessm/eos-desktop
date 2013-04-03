@@ -1,4 +1,4 @@
-Id,Desktop[en_US],Desktop[es_GT],Desktop[pt_BR],Desktop[zh_CN],AppStore[en_US],AppStore[es_GT],AppStore[pt_BR],AppStore[zh_CN],Name,Name[en_US],Name[es_GT],Name[pt_BR],Name[zh_CN],Comment,Comment[en_US],Comment[es_GT],Comment[pt_BR],Comment[zh_CN],URL,URL[en_US],URL[es_GT],URL[pt_BR],URL[zh_CN],Icon,Icon[en_US],Icon[es_GT],Icon[pt_BR],Icon[zh_CN]
+Id,Desktop[en_US],Desktop[es_GT],Desktop[pt_BR],Desktop[zh_CN],AppStore[en_US],AppStore[es_GT],AppStore[pt_BR],AppStore[zh_CN],Name,Name[en],Name[es],Name[pt],Name[zh],Comment,Comment[en],Comment[es],Comment[pt],Comment[zh],URL,URL[en],URL[es],URL[pt],URL[zh],Icon,Icon[en],Icon[es],Icon[pt],Icon[zh]
 angrybirds,,,,,X,X,X,X,Angry Birds,,,,愤怒的小鸟,,,,,Angry Birds,http://chrome.angrybirds.com,,,,,angrybirds,,,,
 bandnews,,,,,,,X,,Band News,,,,,,,,,,http://bandnewsfm.band.com.br,,,,,bandnews,,,,
 bol,,,,,,,X,,Bol,,,,,,,,,,http://www.bol.uol.com.br,,,,,bol,,,,
