@@ -39,7 +39,7 @@ class DesktopWriter:
                 line = '%s%s=%s\n' % (key, self.locale_string(locale), field)
                 desktop_file.write(line)
 
-    def _write_desktop_file(self, fields, locale, url):
+    def _write_desktop_file(self, fields, locale, exec_string):
         desktop_id = fields[0]
         desktop_path = os.path.join(self._desktop_dir,
                                     desktop_id + self.locale_file(locale) +
@@ -49,9 +49,12 @@ class DesktopWriter:
         desktop_file.write('Version=1.0\n')
         self._write_key(desktop_file, fields, 'Name')
         self._write_key(desktop_file, fields, 'Comment')
-        desktop_file.write('Type=Link\n')
-        desktop_file.write('URL=%s\n' % url)
+        desktop_file.write('Type=Application\n')
+        desktop_file.write('Exec=%s\n' % exec_string)
         self._write_key(desktop_file, fields, 'Icon')
+        # Note: Categories is not localized
+        desktop_file.write('Categories=%s\n' %
+                           fields[self._indexes['Categories']['default']])
 
     def _add_index(self, key, locale, index):
         self._locales.add(locale)
@@ -76,7 +79,7 @@ class DesktopWriter:
         self._indexes = {}
 
         # Find all the locales specified in the header
-        locale_keys = ['Name', 'Comment', 'URL', 'Icon']
+        locale_keys = ['Name', 'Comment', 'Exec', 'Icon', 'Categories']
         index = 0
 
         # For each field in the header
@@ -111,17 +114,17 @@ class DesktopWriter:
             fields = line.rstrip().split(',')
             name_id = fields[0]
 
-            # Create a .desktop file for each localized URL
-            # (The desktop entry spec does not allow localized URLs
+            # Create a .desktop file for each localized Exec
+            # (The desktop entry spec does not allow localized Exec strings
             # within a single .desktop file)
             for locale in self._locales:
-                index = self._indexes['URL'][locale]
-                url = fields[index]
-                if url:
-                    self._write_desktop_file(fields, locale, url)
+                index = self._indexes['Exec'][locale]
+                exec_string = fields[index]
+                if exec_string:
+                    self._write_desktop_file(fields, locale, exec_string)
     
         csv_file.close()
 
 if __name__ == '__main__':
-    desktop_writer = DesktopWriter('links.csv', 'links')
+    desktop_writer = DesktopWriter('applications.csv', 'applications')
     desktop_writer.write_desktop_files()
