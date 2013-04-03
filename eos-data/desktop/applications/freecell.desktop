@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Name=Freecell
+Comment=Freecell
+Type=Application
+Exec=/usr/games/sol --freecell --class sol-freecell
+Icon=freecell
+Categories=Games;

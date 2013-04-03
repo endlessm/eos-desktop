@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Physics
+Name[pt]=Fisicando
+Name[es]=Retos
+Comment=Numpty Physics game
+Type=Application
+Exec=numptyphysics
+Icon=fisicando
+Categories=Games;Education;

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Presentation
+Name[pt]=Apresentação
+Name[es]=Presentación
+Comment=Impress
+Type=Application
+Exec=libreoffice --impress %U
+Icon=office_presentation
+Categories=Office;

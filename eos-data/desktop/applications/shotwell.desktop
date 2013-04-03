@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Photos
+Name[pt]=Fotos
+Name[es]=Fotos
+Comment=Shotwell Photo Organizer
+Type=Application
+Exec=shotwell %U
+Icon=shotwell
+Categories=Photos;

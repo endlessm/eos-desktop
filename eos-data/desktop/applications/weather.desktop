@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Weather
+Name[pt]=Tempo
+Name[es]=Tiempo
+Comment=See the weather forecast
+Type=Application
+Exec=endless-os-weather
+Icon=weather
+Categories=Network;News;

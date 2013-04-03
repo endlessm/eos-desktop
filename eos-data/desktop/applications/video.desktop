@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Videos
+Name[pt]=Vídeos
+Name[es]=Vídeos
+Comment=Video
+Type=Application
+Exec=/usr/bin/vlc %U
+Icon=video
+Categories=Video;

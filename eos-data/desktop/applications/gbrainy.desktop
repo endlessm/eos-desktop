@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Brain Teasers
+Name[pt]=Quebra-cabeça
+Name[es]=Rompecabezas
+Comment=GBrainy
+Type=Application
+Exec=gbrainy
+Icon=gbrainy
+Categories=Games;
