@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Files
+Name[pt]=Documentos
+Name[es]=Documentos
+Comment=File Manager
+Type=Application
+Exec=pcmanfm ~
+Icon=file-manager
+Categories=FileManager;Utility;Core;GTK;

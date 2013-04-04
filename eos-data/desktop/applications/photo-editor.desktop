@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=GIMP
+Comment=Photo Editor
+Comment[zh]=图像编辑器
+Comment[pt]=Editor de Imagens
+Comment[es]=Editor de Imágenes
+Type=Application
+Exec=gimp %U
+Icon=gimp
+Categories=Photos;

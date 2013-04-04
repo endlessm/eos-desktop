@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Dictionary
+Name[pt]=Dicionário
+Name[es]=Dicionário
+Comment=GoldenDict
+Type=Application
+Exec=goldendict
+Icon=goldendict
+Categories=Utility;

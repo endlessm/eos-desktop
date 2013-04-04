@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Name=Sudoku
+Comment=Sudoku
+Type=Application
+Exec=/usr/games/gnome-sudoku
+Icon=sudoku
+Categories=Games;

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Writer
+Name[pt]=Redator
+Name[es]=Escritor
+Comment=Writer
+Type=Application
+Exec=libreoffice --writer %U
+Icon=office_text
+Categories=Office;

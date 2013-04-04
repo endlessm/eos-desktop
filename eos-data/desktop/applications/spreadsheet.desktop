@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Spreadsheet
+Name[pt]=Planilha
+Name[es]=Hoja de Cálculo
+Comment=Spreadsheet
+Type=Application
+Exec=libreoffice --calc %U
+Icon=office_spreadsheet
+Categories=Office;
