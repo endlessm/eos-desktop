@@ -24,38 +24,24 @@ DEFAULT_TIME_RESOLUTION = 6;
 var testsRunCount = 0;
 var testsFailedCount = 0;
 
-function printType(obj){
-     print(Object.prototype.toString.apply(obj));
-}
-
 printColorized = function(color, text){
     print(color + text + ANSI_CLOSE);
 }
 
 printError = function(error){
+    const SYNTAX_ERROR = '[object Error]';
     printColorized(ANSI_RED, " " + error.message);
 
-    if(error.stack){
-        stackTrace = error.stack.split('\n');
-        stackTrace.forEach(function(line) {
-            if(line.length > 0){
-                printColorized(ANSI_RED, " --> " + line);
-            }
-        });
-    }
-}
-
-printJsUnitError = function(error){
-    printColorized(ANSI_RED, " " + error.jsUnitMessage);
-    if (error.comment){
-        printColorized(ANSI_RED, " " + error.comment);
-    }
 
     if(error.stackTrace){
-        stackTrace = error.stackTrace.split('\n');
+        let stackTrace = error.stackTrace.split('\n');
         stackTrace.forEach(function(line) {
             if(line.length > 0){
-                printColorized(ANSI_RED, " --" + line);
+                let prefix = ' --';
+                if (error.type == SYNTAX_ERROR)
+                    prefix += '> ';
+
+                printColorized(ANSI_RED, prefix + line);
             }
         });
     }
@@ -68,10 +54,12 @@ _getTime = function(){
     return time.tv_sec + time.tv_usec / Math.pow(10, DEFAULT_TIME_RESOLUTION);
 }
 
+//File to be tested
 var testFile = imports.testfoo;
 this.setjsUnitTracer(true);
 
 var results = new Array();
+
 Object.keys(testFile).forEach(function(key){
     if(key.indexOf('test') == 0) {
         var result = { "name": key };
@@ -84,21 +72,19 @@ Object.keys(testFile).forEach(function(key){
         } catch(e) {
              printColorized(ANSI_BOLD_RED, " ERROR! >>>>> " + key + " <<<<<");
 
-             if(e instanceof Error){
-               printError(e);
-             }else{
-               printJsUnitError(e);
-             }
 
              testsFailedCount++;
-             result['error'] = e;
+             result.error = { 'type': Object.prototype.toString.apply(e), 
+                              'message': e.message || e.jsUnitMessage,
+                              'stackTrace':  e.stack || e.stackTrace };
+             printError(result.error);
 
              print();
         } finally {
              testFile.tearDown();
         }
 
-        result['time'] = _getTime() - startTime;
+        result.time = _getTime() - startTime;
         results.push(result);
         testsRunCount++;
     }
@@ -107,10 +93,19 @@ Object.keys(testFile).forEach(function(key){
 testPassedCount = testsRunCount - testsFailedCount;
 
 printColorized(ANSI_BOLD_BLUE, "\nExporting Jenkins results");
-outputJenkinsResults("jenkins.xml", "eos-testrunner", results);
+aggregateResults = { 'results': results,
+                     'name': 'eos-testrunner',
+                     'tests': testsRunCount, 
+                     'errors': testsFailedCount, 
+                     'failures': 0, 
+                     'skip': 0 };
 
-printColorized(ANSI_BOLD_BLUE, "---------------------------------------------");
-printColorized(ANSI_BOLD_BLUE, "DONE! Ran " + testsRunCount + " tests (" + testPassedCount + " Passed, " + testsFailedCount + " Failed).");
+outputJenkinsResults('jenkins.xml', aggregateResults);
+
+printColorized(ANSI_BOLD_BLUE, Array(50).join("-"));
+totalsString = "Ran " + testsRunCount + " tests (" + testPassedCount + " Passed, " + testsFailedCount + " Failed)";
+printColorized(ANSI_BOLD_BLUE, totalsString);
+
 if (testsFailedCount > 0){
     throw ANSI_BOLD_RED + "Test did not complete successfully" + ANSI_CLOSE;
 }
