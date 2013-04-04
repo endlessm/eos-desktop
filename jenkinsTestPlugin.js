@@ -1,12 +1,16 @@
 const INDENT_AMOUNT = 4;
+const TIME_RESOLUTION = 5;
 
-function _closingTag(tag_name, indentationLevel){
+function _indent(text, indentationLevel){
     let indentationString = "";
-    if(indentationLevel){
+    if(indentationLevel && indentationLevel > 0){
         indentationString = Array(indentationLevel * INDENT_AMOUNT).join(" ");
     }
+    return indentationString + text;
+}
 
-    return indentationString + "</" + tag_name + ">\n";
+function _closingTag(tag_name, indentationLevel){
+    return _indent("</" + tag_name + ">\n", indentationLevel);
 }
 
 function _tag(tag_name, properties, indentationLevel){
@@ -18,11 +22,14 @@ function _tag(tag_name, properties, indentationLevel){
         });
     }
 
-    let indentationString = "";
-    if(indentationLevel){
-        indentationString = Array(indentationLevel * INDENT_AMOUNT).join(" ");
-    }
-    return indentationString + "<" + tag_name + propertyString + ">\n";
+    return _indent("<" + tag_name + propertyString + ">\n", indentationLevel);
+}
+
+function _formatTime(timeTaken){
+    roundedTime = timeTaken * Math.pow(10, TIME_RESOLUTION);
+    roundedTime = Math.round(roundedTime);
+ 
+    return "" + roundedTime / Math.pow(10, TIME_RESOLUTION);
 }
 
 function outputJenkinsResults(filename, classname, results){
@@ -31,11 +38,11 @@ function outputJenkinsResults(filename, classname, results){
     const TESTCASE = "testcase";
 
     let xmlContent = XML_HEADER;
-    xmlContent += _tag(ROOT_NODE);
+    xmlContent += _tag(ROOT_NODE, { 'name': classname, 'tests': 123, 'errors': 123, 'failures': 0, 'skip':0} );
     
     results.forEach(function(result){
         let testClass = classname + "." + result.name;
-        xmlContent += _tag(TESTCASE, { 'classname': testClass, 'name':result.name }, 1) + _closingTag(TESTCASE, 1);
+        xmlContent += _tag(TESTCASE, { 'classname': testClass, 'name':result.name, 'time':_formatTime(result.time) }, 1) + _closingTag(TESTCASE, 1);
     });
     xmlContent += _closingTag(ROOT_NODE);
     

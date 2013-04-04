@@ -1,6 +1,7 @@
 #!/usr/bin/gjs
 
 imports.searchPath.unshift('.');
+let GLib = imports.gi.GLib;
 
 if (!('assertEquals' in this)) { /* allow running this test standalone */
     imports.lang.copyPublicProperties(imports.jsUnit, this);
@@ -17,6 +18,8 @@ ANSI_BOLD_RED = ANSI_CSI + "1;31m";
 ANSI_RED = ANSI_CSI + "31m";
 ANSI_GREEN = ANSI_CSI + "32m";
 ANSI_BOLD_BLUE = ANSI_CSI + "1;34m";
+TIME_RESOLUTION = 4;
+DEFAULT_TIME_RESOLUTION = 6;
 
 var testsRunCount = 0;
 var testsFailedCount = 0;
@@ -58,6 +61,13 @@ printJsUnitError = function(error){
     }
 }
 
+_getTime = function(){
+    var time = new GLib.TimeVal();
+    GLib.get_current_time(time);
+    
+    return time.tv_sec + time.tv_usec / Math.pow(10, DEFAULT_TIME_RESOLUTION);
+}
+
 var testFile = imports.testfoo;
 this.setjsUnitTracer(true);
 
@@ -68,25 +78,31 @@ Object.keys(testFile).forEach(function(key){
         printColorized(ANSI_BOLD_BLUE, "Running: " + key);
 
         testFile.setUp();
+        startTime = _getTime();
         try {
              testFile[key]();
         } catch(e) {
              printColorized(ANSI_BOLD_RED, " ERROR! >>>>> " + key + " <<<<<");
+
              if(e instanceof Error){
                printError(e);
              }else{
                printJsUnitError(e);
              }
+
              testsFailedCount++;
+             result['error'] = e;
+
              print();
         } finally {
              testFile.tearDown();
         }
+
+        result['time'] = _getTime() - startTime;
         results.push(result);
         testsRunCount++;
     }
 });
-
 
 testPassedCount = testsRunCount - testsFailedCount;
 
