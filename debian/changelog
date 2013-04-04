@@ -1,27 +1,6 @@
-gnome-shell (3.8.0.1-2) experimental; urgency=low
+gnome-shell (3.8.0) unstable; urgency=low
 
-  * debian/control.in: Add gir1.2-telepathylogger-0.2 runtime depend
-
- -- Sjoerd Simons <sjoerd@debian.org>  Sun, 31 Mar 2013 22:36:06 +0200
-
-gnome-shell (3.8.0.1-1) experimental; urgency=low
-
-  * New upstream release.
-
- -- Emilio Pozuelo Monfort <pochu@debian.org>  Wed, 27 Mar 2013 19:12:49 +0100
-
-gnome-shell (3.8.0-1) experimental; urgency=low
-
-  [ Sjoerd Simons ]
-  * debian/control.in: Bump caribou run-time depend to >= 0.4.8
-
-  [ Emilio Pozuelo Monfort ]
-  * New upstream release.
-    + debian/control.in:
-      - Bump mutter build and binary dependencies.
-      - Remove build dependency on network-manager-dev now that
-        libnm-glib-dev has been fixed.
-      - Restrict libnm-gtk-dev build dependency to linux-any.
+  * initial eos-shell debian build
 
  -- Emilio Pozuelo Monfort <pochu@debian.org>  Wed, 27 Mar 2013 00:28:32 +0100
 
