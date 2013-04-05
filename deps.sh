@@ -10,7 +10,7 @@ sudo apt-get -y --force-yes install autotools-dev cdbs debhelper dh-autoreconf g
 #intltoolize --force
 #autoreconf
 
-./autogen.sh
-./configure
+#./autogen.sh
+#./configure
 
-debuild
+#debuild
