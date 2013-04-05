@@ -1,7 +1,7 @@
 #!/usr/bin/gjs
 
+imports.searchPath.unshift('../');
 imports.searchPath.unshift('.');
-imports.searchPath.unshift('/');
 let GLib = imports.gi.GLib;
 let Gio = imports.gi.Gio;
 
@@ -127,8 +127,11 @@ while(nextFile){
 
 print(filesToTest);
 filesToTest.forEach(function(file){
+    let dirNameLength = 'gnome-shell'.length;
+    let start = file.indexOf('gnome-shell');
+    fileName =  file.substring(start + dirNameLength, file.length);
     print("Testing: " + file);
-    executeTestsForFile(file);
+    executeTestsForFile(fileName);
     
 });
 
