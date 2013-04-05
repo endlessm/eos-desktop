@@ -2,6 +2,7 @@
 
 imports.searchPath.unshift('../');
 imports.searchPath.unshift('.');
+
 let GLib = imports.gi.GLib;
 let Gio = imports.gi.Gio;
 
@@ -16,9 +17,9 @@ TIME_RESOLUTION = 4;
 DEFAULT_TIME_RESOLUTION = 6;
 JS_EXTENSION = '.js';
 
-var testsRunCount = 0;
-var testsFailedCount = 0;
-var totalPassedCount = 0;
+let testsRunCount = 0;
+let testsFailedCount = 0;
+let totalPassedCount = 0;
 
 if (ARGV.length < 1) {
     throw("Usage: run_gjs_tests <test folder>...");
@@ -32,13 +33,13 @@ if (!('assertEquals' in this))
 if (!('outputJenkinsResults' in this))
     imports.lang.copyPublicProperties(imports.jenkinsTestPlugin, this);
 
-printColorized = function(color, text){
+_printColorized = function(color, text){
     print(color + text + ANSI_CLOSE);
 }
 
-printError = function(error){
+_printError = function(error){
     const SYNTAX_ERROR = '[object Error]';
-    printColorized(ANSI_RED, " " + error.message);
+    _printColorized(ANSI_RED, " " + error.message);
 
 
     if(error.stackTrace){
@@ -49,7 +50,7 @@ printError = function(error){
                 if (error.type == SYNTAX_ERROR)
                     prefix += '> ';
 
-                printColorized(ANSI_RED, prefix + line);
+                _printColorized(ANSI_RED, prefix + line);
             }
         });
     }
@@ -62,61 +63,55 @@ _getTime = function(){
     return time.tv_sec + time.tv_usec / Math.pow(10, DEFAULT_TIME_RESOLUTION);
 }
 
-executeTestsForFile = function(file){
+_executeTest = function(testFile, test) {
+    let result = { "name": test };
+    _printColorized(ANSI_BOLD_BLUE, "Running: " + test);
+
+    testFile.setUp();
+    let startTime = _getTime();
+    try {
+        testFile[test]();
+    } catch(e) {
+        _printColorized(ANSI_BOLD_RED, " ERROR! >>>>> " + test + " <<<<<");
+
+        testsFailedCount++;
+        result.error = { 'type': Object.prototype.toString.apply(e), 
+                         'message': e.message || e.jsUnitMessage,
+                         'stackTrace':  e.stack || e.stackTrace };
+        _printError(result.error);
+
+        print();
+    } finally {
+        testFile.tearDown();
+    }
+
+    result.time = _getTime() - startTime;
+    testsRunCount++;
+    return result;
+}
+
+_executeTestsForFile = function(file){
     eval('let testFile = imports' + file.replace(/\//g, '.'));
 
     //this.setjsUnitTracer(true);
-    var results = new Array();
+    let results = new Array();
     Object.keys(testFile).forEach(function(key){
         if(key.indexOf('test') == 0) {
-            var result = { "name": key };
-            printColorized(ANSI_BOLD_BLUE, "Running: " + key);
-
-            testFile.setUp();
-            let startTime = _getTime();
-            try {
-                testFile[key]();
-            } catch(e) {
-                printColorized(ANSI_BOLD_RED, " ERROR! >>>>> " + key + " <<<<<");
-
-                testsFailedCount++;
-                result.error = { 'type': Object.prototype.toString.apply(e), 
-                                 'message': e.message || e.jsUnitMessage,
-                                 'stackTrace':  e.stack || e.stackTrace };
-                printError(result.error);
-
-                print();
-            } finally {
-                testFile.tearDown();
-            }
-
-            result.time = _getTime() - startTime;
-            results.push(result);
-            testsRunCount++;
+            results.push(_executeTest(testFile, key));
         }
     });
 
-    testPassedCount = testsRunCount - testsFailedCount;
-
-    printColorized(ANSI_BOLD_BLUE, "\nExporting Jenkins results");
-    let aggregateResults = { 'results': results,
-                         'name': 'eos-testrunner',
-                         'tests': testsRunCount, 
-                         'errors': testsFailedCount, 
-                         'failures': 0, 
-                         'skip': 0 };
-
-     outputJenkinsResults('jenkins.xml', aggregateResults);
 }
 
-getFilesToTest = function(testDirectory){
+_getFilesToTest = function(testDirectory){
+    let filesToTest=[];
     fileEnumerator = testDirectory.enumerate_children("*", Gio.FileQueryInfoFlags.NONE, null);
 
     let nextFile = fileEnumerator.next_file(null);
     while(nextFile){
         let fileType = nextFile.get_file_type();
         if (fileType == Gio.FileType.DIRECTORY) {
-            getFilesToTest(Gio.file_new_for_path(testDirectory.get_path() + '/' +  nextFile.get_name()));
+            filesToTest = filesToTest.concat(_getFilesToTest(Gio.file_new_for_path(testDirectory.get_path() + '/' +  nextFile.get_name())));
         } else {
             let filename = nextFile.get_name();
             if(filename.indexOf(JS_EXTENSION, filename.length - JS_EXTENSION.length) !== -1){
@@ -126,31 +121,42 @@ getFilesToTest = function(testDirectory){
         }
         nextFile = fileEnumerator.next_file(null);
     }
+    return filesToTest;
+}
+
+_executeAllTests = function(filesToTest) {
+    let results = Array();
+    filesToTest.forEach(function(file){
+        let dirName = 'gnome-shell' 
+        filePath =  file.substring(file.indexOf(dirName) + dirName.length, file.length);
+        print("Testing: " + file);
+        results = results.concat(_executeTestsForFile(filePath));
+    });
+    return results;
 }
 
 
-//File to be tested
-var filesToTest=[];
+
 let testDirectory = Gio.file_new_for_path(ARGV[0]);
+filesToTest = _getFilesToTest(testDirectory);
+results = _executeAllTests(filesToTest);
 
-getFilesToTest(testDirectory);
+let testPassedCount = testsRunCount - testsFailedCount;
 
-
-
-
-print(filesToTest);
-filesToTest.forEach(function(file){
-    let dirName = 'gnome-shell' 
-    filePath =  file.substring(file.indexOf(dirName) + dirName.length, file.length);
-    print("Testing: " + file);
-    executeTestsForFile(filePath);
-    
-});
-
-
-printColorized(ANSI_BOLD_BLUE, Array(50).join("-"));
+_printColorized(ANSI_BOLD_BLUE, Array(50).join("-"));
 let totalsString = "Ran " + testsRunCount + " tests (" + testPassedCount + " Passed, " + testsFailedCount + " Failed)";
-printColorized(ANSI_BOLD_BLUE, totalsString);
+_printColorized(ANSI_BOLD_BLUE, totalsString);
+
+
+_printColorized(ANSI_BOLD_BLUE, "\nExporting Jenkins results");
+let aggregateResults = { 'results': results,
+                         'name': 'eos-testrunner',
+                         'tests': testsRunCount, 
+                         'errors': testsFailedCount, 
+                         'failures': 0, 
+                         'skip': 0 };
+
+//outputJenkinsResults('jenkins.xml', aggregateResults);
 
 if (testsFailedCount > 0){
     throw ANSI_BOLD_RED + "Test did not complete successfully" + ANSI_CLOSE;
