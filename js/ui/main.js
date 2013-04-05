@@ -309,7 +309,14 @@ function _windowRemoved(workspace, window) {
     Mainloop.timeout_add(LAST_WINDOW_GRACE_TIME, function() {
         if (workspace._lastRemovedWindow == window) {
             workspace._lastRemovedWindow = null;
-            _queueCheckWorkspaces();
+            // EOS-shell iain
+            let windows = global.get_window_actors();
+            if (windows.length == 0) {
+                // If there are no windows left, then we switch back to the first desktop
+                // and show the shell
+                global.screen.get_workspace_by_index(0).activate(global.get_current_time());
+                overview.show();
+            }
         }
         return false;
     });
