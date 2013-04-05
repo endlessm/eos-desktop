@@ -109,29 +109,41 @@ executeTestsForFile = function(file){
      outputJenkinsResults('jenkins.xml', aggregateResults);
 }
 
+getFilesToTest = function(testDirectory){
+    fileEnumerator = testDirectory.enumerate_children("*", Gio.FileQueryInfoFlags.NONE, null);
+
+    let nextFile = fileEnumerator.next_file(null);
+    while(nextFile){
+        let fileType = nextFile.get_file_type();
+        if (fileType == Gio.FileType.DIRECTORY) {
+            getFilesToTest(Gio.file_new_for_path(testDirectory.get_path() + '/' +  nextFile.get_name()));
+        } else {
+            let filename = nextFile.get_name();
+            if(filename.indexOf(JS_EXTENSION, filename.length - JS_EXTENSION.length) !== -1){
+                fixedFilename = testDirectory.get_path() + "/" + nextFile.get_name().substring(0, filename.length - JS_EXTENSION.length);
+                filesToTest.push(fixedFilename);
+            }
+        }
+        nextFile = fileEnumerator.next_file(null);
+    }
+}
+
 
 //File to be tested
+var filesToTest=[];
 let testDirectory = Gio.file_new_for_path(ARGV[0]);
-fileEnumerator = testDirectory.enumerate_children("*", Gio.FileQueryInfoFlags.NONE, null);
 
-filesToTest=[];
-let nextFile = fileEnumerator.next_file(null);
-while(nextFile){
-    let filename = nextFile.get_name();
-    if(filename.indexOf(JS_EXTENSION, filename.length - JS_EXTENSION.length) !== -1){
-        fixedFilename = testDirectory.get_path() + "/" + nextFile.get_name().substring(0, filename.length - JS_EXTENSION.length);
-        filesToTest.push(fixedFilename);
-    }
-    nextFile = fileEnumerator.next_file(null);
-}
+getFilesToTest(testDirectory);
+
+
+
 
 print(filesToTest);
 filesToTest.forEach(function(file){
-    let dirNameLength = 'gnome-shell'.length;
-    let start = file.indexOf('gnome-shell');
-    fileName =  file.substring(start + dirNameLength, file.length);
+    let dirName = 'gnome-shell' 
+    filePath =  file.substring(file.indexOf(dirName) + dirName.length, file.length);
     print("Testing: " + file);
-    executeTestsForFile(fileName);
+    executeTestsForFile(filePath);
     
 });
 
