@@ -203,6 +203,11 @@ function _initializeUI() {
                               if (keybindingMode == Shell.KeyBindingMode.NONE) {
                                   keybindingMode = Shell.KeyBindingMode.NORMAL;
                               }
+                              // EOS-shell issues/23
+                              // Now that we've started, we can show the
+                              // overview.
+                              overview.show();
+                              // EOS-shell end
                           });
 }
 
