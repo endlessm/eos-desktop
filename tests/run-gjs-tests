@@ -100,10 +100,11 @@ _executeTestsForFile = function(file){
 
 _getFilesToTest = function(testDirectory){
     let filesToTest=[];
-    fileEnumerator = testDirectory.enumerate_children("*", Gio.FileQueryInfoFlags.NONE, null);
+    let fileEnumerator = testDirectory.enumerate_children("*", Gio.FileQueryInfoFlags.NONE, null);
 
     let nextFile = fileEnumerator.next_file(null);
     while(nextFile){
+        print('NextFile ----> ' + nextFile.get_name());
         let fileType = nextFile.get_file_type();
         if (fileType == Gio.FileType.DIRECTORY) {
             filesToTest = filesToTest.concat(_getFilesToTest(Gio.file_new_for_path(testDirectory.get_path() + '/' +  nextFile.get_name())));
@@ -117,6 +118,7 @@ _getFilesToTest = function(testDirectory){
         nextFile = fileEnumerator.next_file(null);
     }
     return filesToTest;
+
 }
 
 _executeAllTests = function(filesToTest) {
