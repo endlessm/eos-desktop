@@ -62,8 +62,9 @@ _getTime = function(){
 _executeTest = function(testFile, test) {
     let result = { "name": test };
     _printColorized(ANSI_BOLD_BLUE, "Running: " + test);
-
-    testFile.setUp();
+    if(testFile.setUp){
+        testFile.setUp();
+    }
     let startTime = _getTime();
     try {
         testFile[test]();
@@ -77,7 +78,9 @@ _executeTest = function(testFile, test) {
 
         print();
     } finally {
-        testFile.tearDown();
+        if(testFile.tearDown){
+            testFile.tearDown();
+        }
     }
 
     result.time = _getTime() - startTime;
