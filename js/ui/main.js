@@ -160,6 +160,9 @@ function _initializeUI() {
     global.screen.override_workspace_layout(Meta.ScreenCorner.TOPLEFT,
                                             false, -1, 1);
     global.display.connect('overlay-key', Lang.bind(overview, overview.toggle));
+    // EOS-Shell - issue 23
+    global.display.connect('window-created', _windowWasCreated);
+    // EOS-Shell end
 
     // Provide the bus object for gnome-session to
     // initiate logouts.
@@ -320,7 +323,9 @@ function _windowRemoved(workspace, window) {
                 // If there are no windows left, then we switch back to the first desktop
                 // and show the shell
                 global.screen.get_workspace_by_index(0).activate(global.get_current_time());
+
                 overview.show();
+                // EOS-shell end
             }
         }
         return false;
@@ -352,6 +357,15 @@ function _queueCheckWorkspaces() {
     if (_checkWorkspacesId == 0)
         _checkWorkspacesId = Meta.later_add(Meta.LaterType.BEFORE_REDRAW, _checkWorkspaces);
 }
+
+// EOS-shell issue 23
+function _windowWasCreated(metaDisplay, metaWindow) {
+    // We want all windows to be opened on the second workspace
+    let appWorkspace = global.screen.get_workspace_by_index(1);
+    metaWindow.change_workspace (appWorkspace, global.get_current_time ());
+    appWorkspace.activate(global.get_current_time ());
+}
+// EOS-shell end
 
 function _nWorkspacesChanged() {
     let oldNumWorkspaces = _workspaces.length;
