@@ -18,6 +18,7 @@ const Atk = imports.gi.Atk;
 const Config = imports.misc.config;
 const CtrlAltTab = imports.ui.ctrlAltTab;
 const DND = imports.ui.dnd;
+const Hash = imports.misc.hash;
 const Overview = imports.ui.overview;
 const PopupMenu = imports.ui.popupMenu;
 const PanelMenu = imports.ui.panelMenu;
@@ -230,6 +231,144 @@ const TextShadower = new Lang.Class({
             childBox.y2 = childBox.y1 + childHeight;
             child.allocate(childBox, flags);
         }
+    }
+});
+
+// EOS-Shell issue 22
+/** AppIconButton:
+ *
+ * This class handles the application icon
+ */
+const AppIconButton = new Lang.Class({
+    Name: 'AppIconButton',
+
+    _init: function(app) {
+        this._app = app;
+
+        this.actor = app.create_icon_texture(PANEL_ICON_SIZE);
+        this.actor.reactive = true;
+
+        let clickAction = new Clutter.ClickAction();
+        clickAction.connect('clicked', Lang.bind(this, function(action) {
+            app.activate();
+        }));
+
+        this.actor.add_action(clickAction);
+    },
+});
+
+/** AppIconBar:
+ *
+ * This class handles positioning all the application icons
+ */
+const AppIconBar = new Lang.Class({
+    Name: 'AppIconBar',
+    Extends: PanelMenu.Button,
+
+    _init: function() {
+        this.parent(0.0, null, true);
+
+        let bin = new St.Bin({ name: 'appIconBar' });
+        this.actor.add_actor(bin);
+
+        this._container = new Shell.GenericContainer();
+
+        bin.set_child(this._container);
+        this._container.connect('get-preferred-width', Lang.bind(this, this._getContentPreferredWidth));
+        this._container.connect('get-preferred-height', Lang.bind(this, this._getContentPreferredHeight));
+        this._container.connect('allocate', Lang.bind(this, this._contentAllocate));
+
+        this._numberOfApps = 0;
+        this._runningApps = new Hash.Map();
+
+        let appSys = Shell.AppSystem.get_default();
+
+        // Update for any apps running before the system started
+        // (after a crash or a restart)
+        let currentlyRunning = appSys.get_running();
+        for (let i = 0; i < currentlyRunning.length; i++) {
+            let app = currentlyRunning[i];
+
+            let newChild = new AppIconButton(app);
+            this._runningApps.set(app, newChild);
+            this._numberOfApps++;
+            this._container.add_actor(newChild.actor);            
+        }
+        appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
+    },
+
+    _getContentPreferredWidth: function(actor, forHeight, alloc) {
+        alloc.min_size = PANEL_ICON_SIZE * this._numberOfApps;
+        alloc.natural_size = alloc.min_size + (PANEL_ICON_SIZE * (this._numberOfApps - 1));
+    },
+
+    _getContentPreferredHeight: function(actor, forWidth, alloc) {
+        alloc.min_size = PANEL_ICON_SIZE;
+        alloc.natural_size = PANEL_ICON_SIZE;
+    },
+
+    _contentAllocate: function(actor, box, flags) {
+        let allocWidth = box.x2 - box.x1;
+        let allocHeight = box.y2 - box.y1;
+
+        let childBox = new Clutter.ActorBox();
+
+        let [minWidth, minHeight, naturalWidth, naturalHeight] = this._container.get_preferred_size();
+
+        let direction = this.actor.get_text_direction();
+
+        let yPadding = Math.floor(Math.max(0, allocHeight - naturalHeight) / 2);
+        childBox.y1 = yPadding;
+        childBox.y2 = childBox.y1 + Math.min(naturalHeight, allocWidth);
+
+        let children = this._runningApps.items();
+        let spacing = (naturalWidth - minWidth) / children.length;
+
+        for (let i = 0; i < children.length; i++) {
+            let [key, child] = children[i];
+            
+            childBox.x1 = (PANEL_ICON_SIZE + spacing) * i;
+            childBox.x2 = childBox.x1 + PANEL_ICON_SIZE;
+
+            child.actor.allocate(childBox, flags);
+        }
+    },
+
+    _onAppStateChanged: function(appSys, app) {
+        let state = app.state;
+
+        switch(state) {
+        case Shell.AppState.STARTING:
+            global.log('Starting app ' + app.get_name() + ' ' + app);
+            let newChild = new AppIconButton(app);
+            this._runningApps.set(app, newChild);
+            this._numberOfApps++;
+            this._container.add_actor(newChild.actor);
+            break;
+
+        case Shell.AppState.RUNNING:
+            global.log('Running app ' + app.get_name() + ' ' + app);
+            if (!this._runningApps.has(app)) {
+                let newChild = new AppIconButton(app);
+                this._runningApps.set(app, newChild);
+                this._numberOfApps++;
+                this._container.add_actor(newChild.actor);
+            }
+            break;
+
+        case Shell.AppState.STOPPED:
+            let oldChild = this._runningApps.get(app);
+
+            global.log('Stopped: ' + app.get_name() + '(' + app + ')');
+            if (oldChild) {
+                this._container.remove_actor(oldChild.actor);
+                this._runningApps.delete(app);
+                this._numberOfApps--;
+            }
+            break;
+        }
+
+        global.log('Number of apps is: ' + this._numberOfApps);
     }
 });
 
@@ -866,6 +1005,7 @@ const PanelCorner = new Lang.Class({
 
 const PANEL_ITEM_IMPLEMENTATIONS = {
     'activities': ActivitiesButton,
+    'appIcons': AppIconBar,
     'appMenu': AppMenuButton,
     'dateMenu': imports.ui.dateMenu.DateMenuButton,
     'a11y': imports.ui.status.accessibility.ATIndicator,
