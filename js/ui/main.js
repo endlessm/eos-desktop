@@ -159,7 +159,10 @@ function _initializeUI() {
 
     global.screen.override_workspace_layout(Meta.ScreenCorner.TOPLEFT,
                                             false, -1, 1);
-    global.display.connect('overlay-key', Lang.bind(overview, overview.toggle));
+    // EOS-Shell - issue 23
+    global.display.connect('overlay-key', _switchDesktopToOverview);
+    // EOS-Shell end
+
     // EOS-Shell - issue 23
     global.display.connect('window-created', _windowWasCreated);
     // EOS-Shell end
@@ -362,9 +365,22 @@ function _queueCheckWorkspaces() {
 function _windowWasCreated(metaDisplay, metaWindow) {
     // We want all windows to be opened on the second workspace
     let appWorkspace = global.screen.get_workspace_by_index(1);
-    metaWindow.change_workspace (appWorkspace, global.get_current_time ());
-    appWorkspace.activate(global.get_current_time ());
+    metaWindow.change_workspace (appWorkspace, global.get_current_time());
+    appWorkspace.activate(global.get_current_time());
 }
+
+function _switchWorkspaceToOverview {
+    if (overview.visible) {
+        // This will switch us back to the application workspace
+        overview.hide();
+    } else {
+        // This will switch us to the overview workspace and turn on
+        // the overview
+        let appWorkspace = global.screen.get_workspace_by_index(0);
+        appWorkspace.activate(global.get_current_time());
+    }
+}
+
 // EOS-shell end
 
 function _nWorkspacesChanged() {
