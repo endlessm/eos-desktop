@@ -369,7 +369,7 @@ function _windowWasCreated(metaDisplay, metaWindow) {
     appWorkspace.activate(global.get_current_time());
 }
 
-function _switchWorkspaceToOverview {
+function _switchDesktopToOverview() {
     if (overview.visible) {
         // This will switch us back to the application workspace
         overview.hide();
