@@ -94,3 +94,4 @@ xmldocs.make
 *~
 *.patch
 *.sw?
+jenkins.xml
