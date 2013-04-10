@@ -15,9 +15,9 @@ impress,,,,,X,X,X,X,Presentation,,Presentación,Apresentação,,Impress,,,,,libr
 kobodeluxe,,,,,X,X,X,X,Kobo Deluxe,,Kobo Deluxe,Kobo Deluxe,,Destroy enemy bases in space,,,,,kobodl,,,,,kobodeluxe,,,,,Games;
 lbreakout,,,,,X,X,X,X,Breakout,,El Escape,Fuga,,LBreakout2 game,,,,,lbreakout2,,,,,lbreakout,,,,,Games;
 music,,,,,X,X,X,X,Music,,Música,Música,,Music,,,,,beatbox %U,,,,,music,,,,,Audio;
+nautilus,,,,,X,X,X,X,Files,,Documentos,Documentos,,File Manager,,,,,nautilus,,,,,file-manager,,,,,FileManager;Utilify;Core;GTK;
 numptyphysics,,,,,X,X,X,X,Physics,,Retos,Fisicando,,Numpty Physics game,,,,,numptyphysics,,,,,fisicando,,,,,Games;Education;
 openarena,,,,,X,X,X,X,Open Arena,,,,,Open Arena,,,,,/usr/games/openarena,,,,,openarena,,,,,Games;
-pcmanfm,,,,,X,X,X,X,Files,,Documentos,Documentos,,File Manager,,,,,pcmanfm ~,,,,,file-manager,,,,,FileManager;Utility;Core;GTK;
 photo-editor,,,,,X,X,X,X,GIMP,,,,,Photo Editor,,Editor de Imágenes,Editor de Imagens,图像编辑器,gimp %U,,,,,gimp,,,,,Photos;
 photos,,,,,X,X,X,X,Photo Editor,,Editor de Fotos,Editor de Fotos,照片编辑器,Endless Photo App,,,,,endless-os-photos %f,,,,,photo,,,,,Photos;
 pingus,,,,,X,X,X,X,Pingus,,,,,Penguin Game,,,,,pingus,,,,,pingus,,,,,Games;
