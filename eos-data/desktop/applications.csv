@@ -37,3 +37,4 @@ video,,,,,X,X,X,X,Videos,,Vídeos,Vídeos,,Video,,,,,/usr/bin/vlc %U,,,,,video,,
 weather,,,,,X,X,X,X,Weather,,Tiempo,Tempo,,See the weather forecast,,,,,endless-os-weather,,,,,weather,,,,,Network;News;
 writer,,,,,X,X,X,X,Writer,,Escritor,Redator,,Writer,,,,,libreoffice --writer %U,,,,,office_text,,,,,Office;
 youtube,,,,,X,X,X,X,YouTube,,YouTube,YouTube,,YouTube,,,,,endless-os-youtube,,,,,youtube-app,,,,,Media;
+epiphany,,,,,X,X,X,X,Internet,,,,,Browse the Web,,,,,epiphany,,,,,emblem-web,,,,,Internet;
