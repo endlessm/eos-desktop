@@ -95,3 +95,5 @@ xmldocs.make
 *.patch
 *.sw?
 jenkins.xml
+1
+nohup.out
