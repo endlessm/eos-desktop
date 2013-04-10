@@ -367,15 +367,9 @@ const AppDisplay = new Lang.Class({
                                           x_expand: true, y_expand: true });
         this.actor.add(this._viewStack, { expand: true });
 
-        let layout = new Clutter.BoxLayout({ homogeneous: true });
-        this._controls = new St.Widget({ style_class: 'app-view-controls',
-                                         layout_manager: layout });
-        this.actor.add(new St.Bin({ child: this._controls }));
-
 
         for (let i = 0; i < this._views.length; i++) {
             this._viewStack.add_actor(this._views[i].view.actor);
-            this._controls.add_actor(this._views[i].control);
 
             let viewIndex = i;
             this._views[i].control.connect('clicked', Lang.bind(this,
@@ -383,7 +377,6 @@ const AppDisplay = new Lang.Class({
                     this._showView(viewIndex);
                 }));
         }
-        this._showView(Views.FREQUENT);
 
         // We need a dummy actor to catch the keyboard focus if the
         // user Ctrl-Alt-Tabs here before the deferred work creates
