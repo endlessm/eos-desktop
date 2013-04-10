@@ -339,7 +339,6 @@ const AppIconBar = new Lang.Class({
 
         switch(state) {
         case Shell.AppState.STARTING:
-            global.log('Starting app ' + app.get_name() + ' ' + app);
             let newChild = new AppIconButton(app);
             this._runningApps.set(app, newChild);
             this._numberOfApps++;
@@ -347,7 +346,6 @@ const AppIconBar = new Lang.Class({
             break;
 
         case Shell.AppState.RUNNING:
-            global.log('Running app ' + app.get_name() + ' ' + app);
             if (!this._runningApps.has(app)) {
                 let newChild = new AppIconButton(app);
                 this._runningApps.set(app, newChild);
@@ -359,7 +357,6 @@ const AppIconBar = new Lang.Class({
         case Shell.AppState.STOPPED:
             let oldChild = this._runningApps.get(app);
 
-            global.log('Stopped: ' + app.get_name() + '(' + app + ')');
             if (oldChild) {
                 this._container.remove_actor(oldChild.actor);
                 this._runningApps.delete(app);
