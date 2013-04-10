@@ -127,8 +127,8 @@ _getFilesToTest = function(testDirectory){
 _executeAllTests = function(filesToTest) {
     let results = Array();
     filesToTest.forEach(function(file){
-        let dirName = 'gnome-shell' 
-        filePath =  file.substring(file.indexOf(dirName) + dirName.length, file.length);
+        let dirName = '-shell/'
+        filePath =  file.substring(file.indexOf(dirName) + dirName.length - 1, file.length);
         print("Testing: " + file);
         results = results.concat(_executeTestsForFile(filePath));
     });
@@ -139,9 +139,9 @@ _getTotalsFromResults = function(results) {
     let testsRunCount = 0;
     let testsFailedCount = 0;
     let testsPassedCount = 0;
-    
+
     results.forEach(function(result) {
-	if ('error' in result) {
+    if ('error' in result) {
             testsFailedCount++;
         }    
         testsRunCount++;
