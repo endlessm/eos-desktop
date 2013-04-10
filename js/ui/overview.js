@@ -203,42 +203,6 @@ const Overview = new Lang.Class({
         }
     },
 
-    _unshadeBackgrounds: function() {
-        let backgrounds = this._backgroundGroup.get_children();
-        for (let i = 0; i < backgrounds.length; i++) {
-            let background = backgrounds[i]._delegate;
-
-            Tweener.addTween(background,
-                             { brightness: 1.0,
-                               time: SHADE_ANIMATION_TIME,
-                               transition: 'easeOutQuad'
-                             });
-            Tweener.addTween(background,
-                             { vignetteSharpness: 0.0,
-                               time: SHADE_ANIMATION_TIME,
-                               transition: 'easeOutQuad'
-                             });
-        }
-    },
-
-    _shadeBackgrounds: function() {
-        let backgrounds = this._backgroundGroup.get_children();
-        for (let i = 0; i < backgrounds.length; i++) {
-            let background = backgrounds[i]._delegate;
-
-            Tweener.addTween(background,
-                             { brightness: 0.8,
-                               time: SHADE_ANIMATION_TIME,
-                               transition: 'easeOutQuad'
-                             });
-            Tweener.addTween(background,
-                             { vignetteSharpness: 0.7,
-                               time: SHADE_ANIMATION_TIME,
-                               transition: 'easeOutQuad'
-                             });
-        }
-    },
-
     _sessionUpdated: function() {
         this.isDummy = !Main.sessionMode.hasOverview;
         this._createOverview();
@@ -552,7 +516,6 @@ const Overview = new Lang.Class({
                            onComplete: this._showDone,
                            onCompleteScope: this
                          });
-        this._shadeBackgrounds();
 
         this._coverPane.raise_top();
         this._coverPane.show();
@@ -661,7 +624,6 @@ const Overview = new Lang.Class({
                            onComplete: this._hideDone,
                            onCompleteScope: this
                          });
-        this._unshadeBackgrounds();
 
         this._coverPane.raise_top();
         this._coverPane.show();
