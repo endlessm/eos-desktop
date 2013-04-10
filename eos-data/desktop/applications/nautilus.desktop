@@ -7,4 +7,4 @@ Comment=File Manager
 Type=Application
 Exec=nautilus
 Icon=file-manager
-Categories=FileManager;Utilify;Core;GTK;
+Categories=FileManager;Utility;Core;GTK;
