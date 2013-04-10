@@ -46,8 +46,8 @@ const _modes = {
         components: ['polkitAgent'],
         panel: {
             left: ['logo'],
-            center: ['dateMenu'],
-            right: ['a11yGreeter', 'display', 'keyboard',
+            center: [],
+            right: ['dateMenu', 'a11yGreeter', 'display', 'keyboard',
                     'volume', 'battery', 'powerMenu']
         },
         panelStyle: 'login-screen'
@@ -84,8 +84,8 @@ const _modes = {
         components: ['keyring'],
         panel: {
             left: [],
-            center: ['dateMenu'],
-            right: ['a11yGreeter', 'keyboard', 'volume', 'battery']
+            center: [],
+            right: ['dateMenu', 'a11yGreeter', 'keyboard', 'volume', 'battery']
         }
     },
 
@@ -105,8 +105,8 @@ const _modes = {
                      'keyring', 'recorder', 'autorunManager', 'automountManager'],
         panel: {
             left: ['activities', 'appMenu'],
-            center: ['dateMenu'],
-            right: ['a11y', 'keyboard', 'volume', 'bluetooth',
+            center: [],
+            right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
                     'network', 'battery', 'userMenu']
         }
     }
