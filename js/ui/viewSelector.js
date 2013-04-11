@@ -158,28 +158,21 @@ const ViewSelector = new Lang.Class({
     },
 
     show: function() {
-        this._activePage = this._workspacesPage;
+        // Default to the app selector rather than the workspaces display
+        this._activePage = this._appsPage;
 
         this.reset();
-        this._appsPage.hide();
         this._searchPage.hide();
-        this._workspacesDisplay.show();
 
-        if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
-            Main.overview.fadeOutDesktop();
-
-        this._showPage(this._workspacesPage, true);
+        this._showPage(this._appsPage, true);
     },
 
     zoomFromOverview: function() {
-        this._workspacesDisplay.zoomFromOverview();
-
-        if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
-            Main.overview.fadeInDesktop();
+        // Nothing to do, since we always show the app selector
     },
 
     hide: function() {
-        this._workspacesDisplay.hide();
+        // Nothing to do, since we always show the app selector
     },
 
     _addPage: function(actor, name, a11yIcon, params) {
@@ -249,8 +242,8 @@ const ViewSelector = new Lang.Class({
         if (this._showAppsBlocked)
             return;
 
-        this._showPage(this._showAppsButton.checked ?
-                       this._appsPage : this._workspacesPage);
+        // Always show the app selector
+        this._showPage(this._appsPage);
     },
 
     _resetShowAppsButton: function() {
@@ -258,7 +251,8 @@ const ViewSelector = new Lang.Class({
         this._showAppsButton.checked = false;
         this._showAppsBlocked = false;
 
-        this._showPage(this._workspacesPage, true);
+        // Always show the app selector
+        this._showPage(this._appsPage, true);
     },
 
     _onStageKeyPress: function(actor, event) {
@@ -293,8 +287,8 @@ const ViewSelector = new Lang.Class({
     },
 
     _searchCancelled: function() {
-        this._showPage(this._showAppsButton.checked ? this._appsPage
-                                                    : this._workspacesPage);
+        // Always show the app selector
+        this._showPage(this._appsPage);
 
         // Leave the entry focused when it doesn't have any text;
         // when replacing a selected search term, Clutter emits
