@@ -871,13 +871,17 @@ StScrollBar StButton#vhandle:active {
 /* Application Launchers, Grid and List results */
 
 .icon-grid {
-    spacing: 36px;
-    -shell-grid-horizontal-item-size: 118px;
-    -shell-grid-vertical-item-size: 118px;
+    spacing: 0px;
+    -shell-grid-horizontal-item-size: 128px;
+    -shell-grid-vertical-item-size: 128px;
 }
 
 .icon-grid .overview-icon {
-    icon-size: 96px;
+    icon-size: 64px;
+}
+
+.overview-icon-label {
+    width: 118px;
 }
 
 .app-display {
