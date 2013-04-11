@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Name=Internet
+Comment=Browse the Web
+Type=Application
+Exec=epiphany
+Icon=emblem-web
+Categories=Internet;
