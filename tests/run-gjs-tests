@@ -1,6 +1,7 @@
 #!/usr/bin/gjs
 
 imports.searchPath.unshift('../');
+imports.searchPath.unshift('../js');
 imports.searchPath.unshift('.');
 
 let GLib = imports.gi.GLib;
@@ -160,9 +161,9 @@ _displayResults = function(aggregateResults) {
 }
 
 let testDirectory = Gio.file_new_for_path(ARGV[0]);
-filesToTest = _getFilesToTest(testDirectory);
-results = _executeAllTests(filesToTest);
-totals = _getTotalsFromResults(results);
+let filesToTest = _getFilesToTest(testDirectory);
+let results = _executeAllTests(filesToTest);
+let totals = _getTotalsFromResults(results);
 
 
 let totalsString = "Ran " + totals.testsRunCount + " tests (" + totals.testsPassedCount + " Passed, " + totals.testsFailedCount + " Failed)";
