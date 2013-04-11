@@ -1,1 +1,1 @@
-export GI_TYPELIB_PATH=/home/roddy/gnome/install/lib64/gnome-shell:/home/roddy/gnome/install/lib64/mutter/:$GI_TYPELIB_PATH
+export GI_TYPELIB_PATH=$HOME/gnome/install/lib/gnome-shell:$HOME/gnome/install/lib/mutter/:$HOME/gnome/install/lib/girepository-1.0:$HOME/gnome/source/cogl/cogl-pango:$HOME/gnome/source/cogl/cogl
