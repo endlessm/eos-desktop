@@ -1,7 +1,4 @@
 // application/javascript;version=1.8
-const GLib = imports.gi.GLib;
-const Gio = imports.gi.Gio;
-const Lang = imports.lang;
 
 window.C_=function(type,text){
  return text;
