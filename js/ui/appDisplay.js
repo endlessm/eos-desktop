@@ -27,13 +27,14 @@ const Workspace = imports.ui.workspace;
 const Params = imports.misc.params;
 const Util = imports.misc.util;
 
+const AppStore = imports.ui.appStore;
+
 const MAX_APPLICATION_WORK_MILLIS = 75;
 const MENU_POPUP_TIMEOUT = 600;
 const MAX_COLUMNS = 6;
 
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
-
 
 // Recursively load a GMenuTreeDirectory; we could put this in ShellAppSystem too
 function _loadCategory(dir, view) {
@@ -52,6 +53,9 @@ function _loadCategory(dir, view) {
                 _loadCategory(itemDir, view);
         }
     }
+
+    let app_store = new AppStore.AppStore();
+    view.addApp(app_store);
 };
 
 const AlphabeticalView = new Lang.Class({
@@ -239,7 +243,9 @@ const AllView = new Lang.Class({
     },
 
     _createItemIcon: function(item) {
-        if (item instanceof Shell.App)
+        if (item instanceof AppStore.AppStore)
+            return new AppStore.AppStoreIcon(item);
+        else if (item instanceof Shell.App)
             return new AppIcon(item);
         else if (item instanceof GMenu.TreeDirectory)
             return new FolderIcon(item, this);
@@ -250,6 +256,11 @@ const AllView = new Lang.Class({
     _compareItems: function(itemA, itemB) {
         // bit of a hack: rely on both ShellApp and GMenuTreeDirectory
         // having a get_name() method
+        if (itemA.get_name() == "")
+            return 1;
+        if (itemB.get_name() == "")
+            return -1;
+
         let nameA = GLib.utf8_collate_key(itemA.get_name(), -1);
         let nameB = GLib.utf8_collate_key(itemB.get_name(), -1);
         return (nameA > nameB) ? 1 : (nameA < nameB ? -1 : 0);

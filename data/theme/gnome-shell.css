@@ -2542,3 +2542,9 @@ StScrollBar StButton#vhandle:active {
 .background-menu {
     -boxpointer-gap: 4px;
 }
+
+/* EndlessOS Overrides */
+.app-store-icon {
+    padding: 13px 5px 5px 5px;
+    spacing: 5px;
+}
