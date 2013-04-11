@@ -378,6 +378,9 @@ const AppDisplay = new Lang.Class({
                 }));
         }
 
+        // Default to all apps rather than frequently used
+        this._showView(Views.ALL);
+
         // We need a dummy actor to catch the keyboard focus if the
         // user Ctrl-Alt-Tabs here before the deferred work creates
         // our real contents
