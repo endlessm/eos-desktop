@@ -391,8 +391,8 @@ const LayoutManager = new Lang.Class({
     _updateBoxes: function() {
         this.screenShieldGroup.set_position(0, 0);
         this.screenShieldGroup.set_size(global.screen_width, global.screen_height);
+        this.panelBox.set_position(this.primaryMonitor.x, this.primaryMonitor.y + this.primaryMonitor.height - this.panelBox.height);
 
-        this.panelBox.set_position(this.primaryMonitor.x, this.primaryMonitor.y);
         this.panelBox.set_size(this.primaryMonitor.width, -1);
 
         if (this.keyboardIndex < 0)
@@ -425,6 +425,8 @@ const LayoutManager = new Lang.Class({
                                                          x1: primary.x + primary.width, y1: primary.y,
                                                          x2: primary.x + primary.width, y2: primary.y + this.panelBox.height,
                                                          directions: Meta.BarrierDirection.NEGATIVE_X });
+
+            this.panelBox.set_position(this.primaryMonitor.x, this.primaryMonitor.y + this.primaryMonitor.height - this.panelBox.height);
         }
     },
 
