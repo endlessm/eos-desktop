@@ -529,6 +529,10 @@ const UserMenuButton = new Lang.Class({
         this._lockedIcon = new St.Icon({ icon_name: 'changes-prevent-symbolic',
                                          style_class: 'popup-menu-icon' });
 
+        // Load the settings icon asset
+        this._settingsIcon = new St.Icon({ icon_name: 'settings-symbolic',
+                                           style_class: 'popup-menu-icon' });
+
         this._accountMgr.connect('most-available-presence-changed',
                                   Lang.bind(this, this._updatePresenceIcon));
         this._accountMgr.connect('account-enabled',
@@ -544,7 +548,9 @@ const UserMenuButton = new Lang.Class({
 
         this._name = new St.Label();
         this.actor.label_actor = this._name;
-        box.add(this._name, { y_align: St.Align.MIDDLE, y_fill: false });
+
+        // Note: we do not add the user name to the settings button
+
         this._userLoadedId = this._user.connect('notify::is-loaded', Lang.bind(this, this._updateUserName));
         this._userChangedId = this._user.connect('changed', Lang.bind(this, this._updateUserName));
         this._updateUserName();
@@ -707,20 +713,8 @@ const UserMenuButton = new Lang.Class({
     },
 
     _updatePresenceIcon: function(accountMgr, presence, status, message) {
-        if (Main.sessionMode.isLocked)
-            this._iconBox.child = this._lockedIcon;
-        else if (presence == Tp.ConnectionPresenceType.AVAILABLE)
-            this._iconBox.child = this._availableIcon;
-        else if (presence == Tp.ConnectionPresenceType.BUSY)
-            this._iconBox.child = this._busyIcon;
-        else if (presence == Tp.ConnectionPresenceType.HIDDEN)
-            this._iconBox.child = this._invisibleIcon;
-        else if (presence == Tp.ConnectionPresenceType.AWAY)
-            this._iconBox.child = this._awayIcon;
-        else if (presence == Tp.ConnectionPresenceType.EXTENDED_AWAY)
-            this._iconBox.child = this._idleIcon;
-        else
-            this._iconBox.child = this._offlineIcon;
+        // Ignore the presence and simply use the settings icon
+        this._iconBox.child = this._settingsIcon;
 
         if (Main.sessionMode.isLocked)
             this._iconBox.visible = Main.screenShield.locked;
