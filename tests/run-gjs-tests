@@ -30,6 +30,13 @@ if (!('assertEquals' in this))
 if (!('outputJenkinsResults' in this))
     imports.lang.copyPublicProperties(imports.jenkinsTestPlugin, this);
 
+//Add some boilerplate that gnome-shell depends on
+window.C_=function(type,text){
+ return text;
+}
+window._=window.C_;
+window.global={};
+
 _printColorized = function(color, text){
     print(color + text + ANSI_CLOSE);
 }

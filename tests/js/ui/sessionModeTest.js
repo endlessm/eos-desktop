@@ -1,12 +1,3 @@
-// application/javascript;version=1.8
-
-window.C_=function(type,text){
- return text;
-}
-
-window._=window.C_;
-window.global={};
-
 let sessionModeImport = imports.js.ui.sessionMode;
 
 function testClockIsOnTheRight() {
