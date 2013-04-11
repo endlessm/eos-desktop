@@ -1,1 +1,2 @@
-export GI_TYPELIB_PATH=$HOME/gnome/install/lib/gnome-shell:$HOME/gnome/install/lib/mutter/:$HOME/gnome/install/lib/girepository-1.0:$HOME/gnome/source/cogl/cogl-pango:$HOME/gnome/source/cogl/cogl
+export GI_TYPELIB_PATH=$JHBUILD_PREFIX/lib/gnome-shell:$JHBUILD_PREFIX/lib/mutter/:$JHBUILD_PREFIX/lib/girepository-1.0:/usr/lib/girepository-1.0:/usr/lib/gnome-bluetooth
+export LD_LIBRARY_PATH=$JHBUILD_LIBDIR:$JHBUILD_LIBDIR/gnome-shell

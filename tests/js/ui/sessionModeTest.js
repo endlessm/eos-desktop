@@ -8,13 +8,11 @@ window.C_=function(type,text){
 }
 
 window._=window.C_;
-window.St = {};
-window.St.Bin = new Lang.Class({Name:'Bin'});
+window.global={};
 
 let sessionModeImport = imports.js.ui.sessionMode;
 
 function testClockIsOnTheRight() {
-    print(Object.keys(this));
     let modes = sessionModeImport._modes;
 
     let rightPanel = modes['gdm']['panel']['right'];
