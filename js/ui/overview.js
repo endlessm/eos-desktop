@@ -225,7 +225,6 @@ const Overview = new Lang.Class({
         this._panelGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
                                         reactive: false,
                                         opacity: 0 });
-        this._overview.add_actor(this._panelGhost);
 
         this._searchEntry = new St.Entry({ name: 'searchEntry',
                                            /* Translators: this is the text displayed
@@ -237,7 +236,6 @@ const Overview = new Lang.Class({
                                            can_focus: true });
         this._searchEntryBin = new St.Bin({ child: this._searchEntry,
                                             x_align: St.Align.MIDDLE });
-        this._overview.add_actor(this._searchEntryBin);
 
         // Create controls
         this._dash = new Dash.Dash();
@@ -268,6 +266,11 @@ const Overview = new Lang.Class({
 
         // Add our same-line elements after the search entry
         this._overview.add(this._groupStack, { y_fill: true, expand: true });
+
+        // Add the search bar below the view selector and the panel
+        // ghost to give some spacing
+        this._overview.add_actor(this._searchEntryBin);
+        this._overview.add_actor(this._panelGhost);
 
         this._stack.add_actor(this._controls.indicatorActor);
 
