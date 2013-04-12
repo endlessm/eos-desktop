@@ -222,9 +222,15 @@ const Overview = new Lang.Class({
 
         // Add a clone of the panel to the overview so spacing and such is
         // automatic
-        this._panelGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
-                                        reactive: false,
-                                        opacity: 0 });
+        this._topGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
+                                      reactive: false,
+                                      opacity: 0 });
+
+        this._overview.add_actor(this._topGhost);
+
+        this._bottomGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
+                                      reactive: false,
+                                      opacity: 0 });
 
         this._searchEntry = new St.Entry({ name: 'searchEntry',
                                            /* Translators: this is the text displayed
@@ -262,7 +268,7 @@ const Overview = new Lang.Class({
         this._controls.dashActor.hide();
 
         // Hide the workspace thumbnails
-        this._controls.thumbnailsActor.hide();        
+        this._controls.thumbnailsActor.hide();
 
         // Add our same-line elements after the search entry
         this._overview.add(this._groupStack, { y_fill: true, expand: true });
@@ -270,7 +276,7 @@ const Overview = new Lang.Class({
         // Add the search bar below the view selector and the panel
         // ghost to give some spacing
         this._overview.add_actor(this._searchEntryBin);
-        this._overview.add_actor(this._panelGhost);
+        this._overview.add_actor(this._bottomGhost);
 
         this._stack.add_actor(this._controls.indicatorActor);
 
