@@ -27,14 +27,27 @@ const Workspace = imports.ui.workspace;
 const Params = imports.misc.params;
 const Util = imports.misc.util;
 
-const AppStore = imports.ui.appStore;
-
 const MAX_APPLICATION_WORK_MILLIS = 75;
 const MENU_POPUP_TIMEOUT = 600;
 const MAX_COLUMNS = 6;
 
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
+
+const AppStore = new Lang.Class({
+    Name: 'AppStore',
+    Extends: Shell.App,
+    get_name:function(){ return ""; },
+    get_id:function(){ return "appstoreid"; },
+
+    _init : function(params) {
+        this.parent();
+    },
+
+    activate: function(){
+        Util.spawn(["eos_app_store"]);
+    }
+});
 
 // Recursively load a GMenuTreeDirectory; we could put this in ShellAppSystem too
 function _loadCategory(dir, view) {
@@ -54,7 +67,7 @@ function _loadCategory(dir, view) {
         }
     }
 
-    let app_store = new AppStore.AppStore();
+    let app_store = new AppStore();
     view.addApp(app_store);
 };
 
@@ -243,8 +256,8 @@ const AllView = new Lang.Class({
     },
 
     _createItemIcon: function(item) {
-        if (item instanceof AppStore.AppStore)
-            return new AppStore.AppStoreIcon(item);
+        if (item instanceof AppStore)
+            return new AppStoreIcon(item);
         else if (item instanceof Shell.App)
             return new AppIcon(item);
         else if (item instanceof GMenu.TreeDirectory)
@@ -862,6 +875,71 @@ const AppIcon = new Lang.Class({
     }
 });
 Signals.addSignalMethods(AppIcon.prototype);
+
+const AppStoreIcon = new Lang.Class({
+    Name: 'AppStoreIcon',
+    Extends: AppIcon,
+
+    popupMenu: function() {},
+
+    _init : function(app, iconParams) {
+        this.app = app;
+        this.actor = new St.Button({ reactive: true,
+                                     button_mask: St.ButtonMask.ONE,
+                                     can_focus: false,
+                                     x_fill: true,
+                                     y_fill: true });
+        this.actor._delegate = this;
+
+        if (!iconParams)
+            iconParams = {};
+
+        iconParams['createIcon'] = Lang.bind(this, this._createIcon);
+        this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
+
+        iconParams['createIcon'] = Lang.bind(this, this._createPressedIcon);
+        this.pressed_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
+
+        this.actor.set_child(this.icon.actor);
+
+        this.actor.label_actor = this.icon.label;
+
+        this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
+        this.actor.connect('clicked', Lang.bind(this, this._onClicked));
+
+        this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+
+        this._menuTimeoutId = 0;
+        this._stateChangedId = this.app.connect('notify::state', Lang.bind(this, this._onStateChanged));
+        this._onStateChanged();
+   },
+   _createPressedIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize,
+        icon_name: 'add_down'});
+   },
+   _createIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize,
+        icon_name: 'add_normal'});
+   },
+   _onButtonPress: function(actor, event) {
+        let button = event.get_button();
+        if (button == 1) {
+            this._removeMenuTimeout();
+            this.actor.set_child(this.pressed_icon.actor);
+            this._menuTimeoutId = Mainloop.timeout_add(1250,
+                Lang.bind(this, function() {
+                    this.actor.set_child(this.icon.actor);
+                }));
+        }
+        return false;
+   },
+   _onActivate: function (event) {
+        this.app.activate();
+
+        Main.overview.hide();
+   },
+
+});
 
 const AppIconMenu = new Lang.Class({
     Name: 'AppIconMenu',
