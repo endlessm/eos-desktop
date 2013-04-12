@@ -39,6 +39,7 @@ nobase_dist_js_DATA = 	\
 	ui/altTab.js		\
 	ui/appDisplay.js	\
 	ui/appFavorites.js	\
+	ui/appIconBar.js	\
 	ui/backgroundMenu.js	\
 	ui/background.js	\
 	ui/boxpointer.js	\
