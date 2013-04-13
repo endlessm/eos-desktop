@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Name=Chromium BSU
-Comment=Chromium BSU
-Type=Application
-Exec=chromium-bsu --fullscreen
-Icon=chromium-bsu
-Categories=Games;

@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Name=E-mail
-Comment=E-mail
-Type=Application
-Exec=evolution %U
-Icon=email
-Categories=Mail;Email;
