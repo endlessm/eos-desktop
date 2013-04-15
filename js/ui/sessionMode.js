@@ -104,7 +104,7 @@ const _modes = {
         components: ['networkAgent', 'polkitAgent', 'telepathyClient',
                      'keyring', 'recorder', 'autorunManager', 'automountManager'],
         panel: {
-            left: ['activities'],
+            left: ['activities', 'appIcons'],
             center: [],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
                     'network', 'battery', 'userMenu']

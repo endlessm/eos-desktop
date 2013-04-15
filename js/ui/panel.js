@@ -866,6 +866,7 @@ const PanelCorner = new Lang.Class({
 
 const PANEL_ITEM_IMPLEMENTATIONS = {
     'activities': ActivitiesButton,
+    'appIcons': imports.ui.appIconBar.AppIconBar,
     'appMenu': AppMenuButton,
     'dateMenu': imports.ui.dateMenu.DateMenuButton,
     'a11y': imports.ui.status.accessibility.ATIndicator,
