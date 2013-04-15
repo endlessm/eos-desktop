@@ -37,7 +37,7 @@ const FOLDER_SUBICON_FRACTION = .4;
 const AppStore = new Lang.Class({
     Name: 'AppStore',
     Extends: Shell.App,
-    get_name:function(){ return ""; },
+    get_name:function(){ return "Add"; },
     get_id:function(){ return "appstoreid"; },
 
     _init : function(params) {
@@ -117,14 +117,19 @@ const AlphabeticalView = new Lang.Class({
     },
 
     loadGrid: function() {
-        this._allItems.sort(this._compareItems);
-
+    //    this._allItems.sort(this._compareItems);
+        let appStoreId;
         for (let i = 0; i < this._allItems.length; i++) {
             let id = this._getItemId(this._allItems[i]);
             if (!id)
                 continue;
+            if(this._allItems[i].get_name() == 'Add'){
+                appStoreId = id;
+                continue;
+            }
             this._grid.addItem(this._items[id].actor);
         }
+        this._grid.addItem(this._items[appStoreId].actor);
     }
 });
 
@@ -269,6 +274,8 @@ const AllView = new Lang.Class({
     _compareItems: function(itemA, itemB) {
         // bit of a hack: rely on both ShellApp and GMenuTreeDirectory
         // having a get_name() method
+        if (itemA.get_name() == "Add")
+            return 1;
         if (itemA.get_name() == "")
             return 1;
         if (itemB.get_name() == "")
