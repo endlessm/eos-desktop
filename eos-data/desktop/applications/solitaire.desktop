@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Name=Solitaire
-Comment=Solitaire
-Type=Application
-Exec=/usr/games/sol
-Icon=solitaire
-Categories=Games;
