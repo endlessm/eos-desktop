@@ -884,7 +884,8 @@ const AppStoreIcon = new Lang.Class({
 
     _init : function(app, iconParams) {
         this.app = app;
-        this.actor = new St.Button({ reactive: true,
+        this.actor = new St.Button({ style_class: 'app-well-app',
+                                     reactive: true,
                                      button_mask: St.ButtonMask.ONE,
                                      can_focus: false,
                                      x_fill: true,
