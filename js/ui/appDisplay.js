@@ -67,12 +67,10 @@ function _loadCategory(dir, view) {
         }
     }
 
-    let app_store = new AppStore();
-    view.addApp(app_store);
 };
 
-const AlphabeticalView = new Lang.Class({
-    Name: 'AlphabeticalView',
+const EndlessApplicationView = new Lang.Class({
+    Name: 'EndlessApplicationView',
     Abstract: true,
 
     _init: function() {
@@ -84,6 +82,9 @@ const AlphabeticalView = new Lang.Class({
 
         this._items = {};
         this._allItems = [];
+
+        this._appStore = new AppStore();
+        this._appStoreIcon = this._createItemIcon(this._appStore);
     },
 
     removeAll: function() {
@@ -117,25 +118,20 @@ const AlphabeticalView = new Lang.Class({
     },
 
     loadGrid: function() {
-    //    this._allItems.sort(this._compareItems);
         let appStoreId;
         for (let i = 0; i < this._allItems.length; i++) {
             let id = this._getItemId(this._allItems[i]);
             if (!id)
                 continue;
-            if(this._allItems[i].get_name() == 'Add'){
-                appStoreId = id;
-                continue;
-            }
             this._grid.addItem(this._items[id].actor);
         }
-        this._grid.addItem(this._items[appStoreId].actor);
+        this._grid.addItem(this._appStoreIcon.actor);
     }
 });
 
 const FolderView = new Lang.Class({
     Name: 'FolderView',
-    Extends: AlphabeticalView,
+    Extends: EndlessApplicationView,
 
     _init: function() {
         this.parent();
@@ -204,7 +200,7 @@ const AllViewLayout = new Lang.Class({
 
 const AllView = new Lang.Class({
     Name: 'AllView',
-    Extends: AlphabeticalView,
+    Extends: EndlessApplicationView,
 
     _init: function() {
         this.parent();
