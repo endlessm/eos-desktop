@@ -270,8 +270,6 @@ const AllView = new Lang.Class({
     _compareItems: function(itemA, itemB) {
         // bit of a hack: rely on both ShellApp and GMenuTreeDirectory
         // having a get_name() method
-        if (itemA.get_name() == "Add")
-            return 1;
         if (itemA.get_name() == "")
             return 1;
         if (itemB.get_name() == "")
