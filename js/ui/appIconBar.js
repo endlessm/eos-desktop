@@ -6,6 +6,7 @@ const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const Hash = imports.misc.hash;
+const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 
 const PANEL_ICON_SIZE = 22;
@@ -26,6 +27,10 @@ const AppIconButton = new Lang.Class({
 
         let clickAction = new Clutter.ClickAction();
         clickAction.connect('clicked', Lang.bind(this, function(action) {
+            if (Main.overview.visible) {
+                Main.overview.hide();
+            }
+
             app.activate();
         }));
 
