@@ -717,6 +717,7 @@ const AppIcon = new Lang.Class({
         this._draggable = DND.makeDraggable(this.actor);
         this._draggable.connect('drag-begin', Lang.bind(this,
             function () {
+                //Notify view that something is dragging
                 this._removeMenuTimeout();
                 Main.overview.beginItemDrag(this);
             }));
@@ -726,7 +727,8 @@ const AppIcon = new Lang.Class({
             }));
         this._draggable.connect('drag-end', Lang.bind(this,
             function () {
-               Main.overview.endItemDrag(this);
+                //Are we in the trashcan area?
+                Main.overview.endItemDrag(this);
             }));
 
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
@@ -902,6 +904,9 @@ const AppStoreIcon = new Lang.Class({
         iconParams['createIcon'] = Lang.bind(this, this._createPressedIcon);
         this.pressed_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
 
+        iconParams['createIcon'] = Lang.bind(this, this._createTrashIcon);
+        this.empty_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
+
         this.actor.set_child(this.icon.actor);
 
         this.actor.label_actor = this.icon.label;
@@ -910,6 +915,10 @@ const AppStoreIcon = new Lang.Class({
         this.actor.connect('clicked', Lang.bind(this, this._onClicked));
 
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+
+        Main.overview.connect('item-drag-begin', Lang.bind(this, this._item_drag_start));
+        
+        Main.overview.connect('item-drag-end', Lang.bind(this, this._item_drag_end));
 
         this._menuTimeoutId = 0;
         this._stateChangedId = this.app.connect('notify::state', Lang.bind(this, this._onStateChanged));
@@ -929,9 +938,13 @@ const AppStoreIcon = new Lang.Class({
     },
     _createIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
-                             icon_name: 'add_normal'});
-    },
-    _onButtonPress: function(actor, event) {
+        icon_name: 'add_normal'});
+   },
+   _createTrashIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize,
+        icon_name: 'trash-can_normal'});
+   },
+   _onButtonPress: function(actor, event) {
         let button = event.get_button();
         if (button == 1) {
             this._removeMenuTimeout();
@@ -942,8 +955,14 @@ const AppStoreIcon = new Lang.Class({
                 }));
         }
         return false;
-    },
-    _onActivate: function (event) {
+   },
+   _item_drag_start: function(actor, event){
+       this.actor.set_child(this.empty_trash_icon.actor);
+   },
+   _item_drag_end: function(actor, event){
+       this.actor.set_child(this.icon.actor);
+   },
+   _onActivate: function (event) {
         this.app.activate();
 
         Main.overview.hide();
