@@ -29,7 +29,7 @@ const Util = imports.misc.util;
 
 const MAX_APPLICATION_WORK_MILLIS = 75;
 const MENU_POPUP_TIMEOUT = 600;
-const MAX_COLUMNS = 6;
+const MAX_COLUMNS = 7;
 
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
