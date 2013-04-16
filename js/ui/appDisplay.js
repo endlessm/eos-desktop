@@ -34,6 +34,20 @@ const MAX_COLUMNS = 7;
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
 
+const AppStore = new Lang.Class({
+    Name: 'AppStore',
+    Extends: Shell.App,
+    get_name:function(){ return "Add"; },
+    get_id:function(){ return "appstoreid"; },
+
+    _init : function(params) {
+        this.parent();
+    },
+
+    activate: function(){
+        Util.spawn(["eos_app_store"]);
+    }
+});
 
 // Recursively load a GMenuTreeDirectory; we could put this in ShellAppSystem too
 function _loadCategory(dir, view) {
@@ -52,10 +66,11 @@ function _loadCategory(dir, view) {
                 _loadCategory(itemDir, view);
         }
     }
+
 };
 
-const AlphabeticalView = new Lang.Class({
-    Name: 'AlphabeticalView',
+const EndlessApplicationView = new Lang.Class({
+    Name: 'EndlessApplicationView',
     Abstract: true,
 
     _init: function() {
@@ -67,6 +82,9 @@ const AlphabeticalView = new Lang.Class({
 
         this._items = {};
         this._allItems = [];
+
+        this._appStore = new AppStore();
+        this._appStoreIcon = this._createItemIcon(this._appStore);
     },
 
     removeAll: function() {
@@ -100,20 +118,20 @@ const AlphabeticalView = new Lang.Class({
     },
 
     loadGrid: function() {
-        this._allItems.sort(this._compareItems);
-
+        let appStoreId;
         for (let i = 0; i < this._allItems.length; i++) {
             let id = this._getItemId(this._allItems[i]);
             if (!id)
                 continue;
             this._grid.addItem(this._items[id].actor);
         }
+        this._grid.addItem(this._appStoreIcon.actor);
     }
 });
 
 const FolderView = new Lang.Class({
     Name: 'FolderView',
-    Extends: AlphabeticalView,
+    Extends: EndlessApplicationView,
 
     _init: function() {
         this.parent();
@@ -182,7 +200,7 @@ const AllViewLayout = new Lang.Class({
 
 const AllView = new Lang.Class({
     Name: 'AllView',
-    Extends: AlphabeticalView,
+    Extends: EndlessApplicationView,
 
     _init: function() {
         this.parent();
@@ -239,7 +257,9 @@ const AllView = new Lang.Class({
     },
 
     _createItemIcon: function(item) {
-        if (item instanceof Shell.App)
+        if (item instanceof AppStore)
+            return new AppStoreIcon(item);
+        else if (item instanceof Shell.App)
             return new AppIcon(item);
         else if (item instanceof GMenu.TreeDirectory)
             return new FolderIcon(item, this);
@@ -250,6 +270,11 @@ const AllView = new Lang.Class({
     _compareItems: function(itemA, itemB) {
         // bit of a hack: rely on both ShellApp and GMenuTreeDirectory
         // having a get_name() method
+        if (itemA.get_name() == "")
+            return 1;
+        if (itemB.get_name() == "")
+            return -1;
+
         let nameA = GLib.utf8_collate_key(itemA.get_name(), -1);
         let nameB = GLib.utf8_collate_key(itemB.get_name(), -1);
         return (nameA > nameB) ? 1 : (nameA < nameB ? -1 : 0);
@@ -851,6 +876,72 @@ const AppIcon = new Lang.Class({
     }
 });
 Signals.addSignalMethods(AppIcon.prototype);
+
+const AppStoreIcon = new Lang.Class({
+    Name: 'AppStoreIcon',
+    Extends: AppIcon,
+
+    popupMenu: function() {},
+
+    _init : function(app, iconParams) {
+        this.app = app;
+        this.actor = new St.Button({ style_class: 'app-well-app',
+                                     reactive: true,
+                                     button_mask: St.ButtonMask.ONE,
+                                     can_focus: false,
+                                     x_fill: true,
+                                     y_fill: true });
+        this.actor._delegate = this;
+
+        if (!iconParams)
+            iconParams = {};
+
+        iconParams['createIcon'] = Lang.bind(this, this._createIcon);
+        this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
+
+        iconParams['createIcon'] = Lang.bind(this, this._createPressedIcon);
+        this.pressed_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
+
+        this.actor.set_child(this.icon.actor);
+
+        this.actor.label_actor = this.icon.label;
+
+        this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
+        this.actor.connect('clicked', Lang.bind(this, this._onClicked));
+
+        this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+
+        this._menuTimeoutId = 0;
+        this._stateChangedId = this.app.connect('notify::state', Lang.bind(this, this._onStateChanged));
+        this._onStateChanged();
+   },
+   _createPressedIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize,
+        icon_name: 'add_down'});
+   },
+   _createIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize,
+        icon_name: 'add_normal'});
+   },
+   _onButtonPress: function(actor, event) {
+        let button = event.get_button();
+        if (button == 1) {
+            this._removeMenuTimeout();
+            this.actor.set_child(this.pressed_icon.actor);
+            this._menuTimeoutId = Mainloop.timeout_add(1250,
+                Lang.bind(this, function() {
+                    this.actor.set_child(this.icon.actor);
+                }));
+        }
+        return false;
+   },
+   _onActivate: function (event) {
+        this.app.activate();
+
+        Main.overview.hide();
+   },
+
+});
 
 const AppIconMenu = new Lang.Class({
     Name: 'AppIconMenu',
