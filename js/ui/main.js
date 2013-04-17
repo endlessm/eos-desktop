@@ -34,6 +34,7 @@ const SessionMode = imports.ui.sessionMode;
 const ShellDBus = imports.ui.shellDBus;
 const ShellMountOperation = imports.ui.shellMountOperation;
 const WindowManager = imports.ui.windowManager;
+const WorkspaceMonitor = imports.ui.workspaceMonitor;
 const Magnifier = imports.ui.magnifier;
 const XdndHandler = imports.ui.xdndHandler;
 const Util = imports.misc.util;
@@ -69,6 +70,7 @@ let _startDate;
 let _defaultCssStylesheet = null;
 let _cssStylesheet = null;
 let _overridesSettings = null;
+let _workspaceMonitor = null;
 
 function _sessionUpdated() {
     _loadDefaultStylesheet();
@@ -154,18 +156,14 @@ function _initializeUI() {
     windowAttentionHandler = new WindowAttentionHandler.WindowAttentionHandler();
     componentManager = new Components.ComponentManager();
 
+    workspaceMonitor = new WorkspaceMonitor.WorkspaceMonitor();
+
     layoutManager.init();
     overview.init();
 
     global.screen.override_workspace_layout(Meta.ScreenCorner.TOPLEFT,
                                             false, -1, 1);
-    // EOS-Shell - issue 23
-    global.display.connect('overlay-key', _switchDesktopToOverview);
-    // EOS-Shell end
-
-    // EOS-Shell - issue 23
-    global.display.connect('window-created', _windowWasCreated);
-    // EOS-Shell end
+    global.display.connect('overlay-key', Lang.bind(overview, overview.toggle));
 
     // Provide the bus object for gnome-session to
     // initiate logouts.
@@ -209,11 +207,11 @@ function _initializeUI() {
                               if (keybindingMode == Shell.KeyBindingMode.NONE) {
                                   keybindingMode = Shell.KeyBindingMode.NORMAL;
                               }
-                              // EOS-shell issues/23
-                              // Now that we've started, we can show the
-                              // overview.
-                              overview.show();
-                              // EOS-shell end
+
+                              // Now that we've completed startup, the
+                              // workspace monitor may want to hide/show
+                              // the overview
+                              workspaceMonitor.updateOverview();
                           });
 }
 
@@ -320,16 +318,7 @@ function _windowRemoved(workspace, window) {
     Mainloop.timeout_add(LAST_WINDOW_GRACE_TIME, function() {
         if (workspace._lastRemovedWindow == window) {
             workspace._lastRemovedWindow = null;
-            // EOS-shell iain
-            let windows = global.get_window_actors();
-            if (windows.length == 0) {
-                // If there are no windows left, then we switch back to the first desktop
-                // and show the shell
-                global.screen.get_workspace_by_index(0).activate(global.get_current_time());
-
-                overview.show();
-                // EOS-shell end
-            }
+            _queueCheckWorkspaces();
         }
         return false;
     });
@@ -360,28 +349,6 @@ function _queueCheckWorkspaces() {
     if (_checkWorkspacesId == 0)
         _checkWorkspacesId = Meta.later_add(Meta.LaterType.BEFORE_REDRAW, _checkWorkspaces);
 }
-
-// EOS-shell issue 23
-function _windowWasCreated(metaDisplay, metaWindow) {
-    // We want all windows to be opened on the second workspace
-    let appWorkspace = global.screen.get_workspace_by_index(1);
-    metaWindow.change_workspace (appWorkspace, global.get_current_time());
-    appWorkspace.activate(global.get_current_time());
-}
-
-function _switchDesktopToOverview() {
-    if (overview.visible) {
-        // This will switch us back to the application workspace
-        overview.hide();
-    } else {
-        // This will switch us to the overview workspace and turn on
-        // the overview
-        let appWorkspace = global.screen.get_workspace_by_index(0);
-        appWorkspace.activate(global.get_current_time());
-    }
-}
-
-// EOS-shell end
 
 function _nWorkspacesChanged() {
     let oldNumWorkspaces = _workspaces.length;

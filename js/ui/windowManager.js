@@ -532,11 +532,6 @@ const WindowManager = new Lang.Class({
 
     _switchWorkspace : function(shellwm, from, to, direction) {
         if (!this._shouldAnimate()) {
-            // EOS-shell issue 23
-            Main.overview.hide();
-
-            // EOS-shell issue 23
-
             shellwm.completed_switch_workspace();
             return;
         }
@@ -648,13 +643,6 @@ const WindowManager = new Lang.Class({
 
         if (this._movingWindow)
             this._movingWindow = null;
-
-        // EOS-shell issue 23
-        // If we're now on workspace 0, show the overview
-        if (global.screen.get_active_workspace_index() == 0) {
-            Main.overview.show();
-        }
-        // EOS-shell issue 23
 
         shellwm.completed_switch_workspace();
     },
