@@ -914,16 +914,24 @@ const AppStoreIcon = new Lang.Class({
         this._menuTimeoutId = 0;
         this._stateChangedId = this.app.connect('notify::state', Lang.bind(this, this._onStateChanged));
         this._onStateChanged();
-   },
-   _createPressedIcon: function(iconSize) {
+    },
+    _createPressedIcon: function(iconSize) {
+        // For now, let's use the normal icon for the pressed state,
+        // for consistency with the other app selector icons,
+        // which just use the wells to represent the pressed state.
+        // In the future, we may want to use the 'add_down' icon instead.
+        // If so, the return to the normal state after the user
+        // moves off the icon to cancel should be made more responsive;
+        // the current implementation takes about a second for the change
+        // back to the normal icon to occur.
         return new St.Icon({ icon_size: iconSize,
-        icon_name: 'add_down'});
-   },
-   _createIcon: function(iconSize) {
+                             icon_name: 'add_normal'});
+    },
+    _createIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
-        icon_name: 'add_normal'});
-   },
-   _onButtonPress: function(actor, event) {
+                             icon_name: 'add_normal'});
+    },
+    _onButtonPress: function(actor, event) {
         let button = event.get_button();
         if (button == 1) {
             this._removeMenuTimeout();
@@ -934,12 +942,12 @@ const AppStoreIcon = new Lang.Class({
                 }));
         }
         return false;
-   },
-   _onActivate: function (event) {
+    },
+    _onActivate: function (event) {
         this.app.activate();
 
         Main.overview.hide();
-   },
+    },
 
 });
 
