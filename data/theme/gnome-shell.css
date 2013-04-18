@@ -457,7 +457,7 @@ StScrollBar StButton#vhandle:active {
 /* Panel */
 
 #panel {
-    background-color: transparent;
+    background-image: url("bottom-shadow.png");
     font-weight: bold;
     height: 1.86em;
 }
