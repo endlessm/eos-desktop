@@ -156,7 +156,7 @@ function _initializeUI() {
     windowAttentionHandler = new WindowAttentionHandler.WindowAttentionHandler();
     componentManager = new Components.ComponentManager();
 
-    workspaceMonitor = new WorkspaceMonitor.WorkspaceMonitor();
+    _workspaceMonitor = new WorkspaceMonitor.WorkspaceMonitor();
 
     layoutManager.init();
     overview.init();
@@ -211,7 +211,7 @@ function _initializeUI() {
                               // Now that we've completed startup, the
                               // workspace monitor may want to hide/show
                               // the overview
-                              workspaceMonitor.updateOverview();
+                              _workspaceMonitor.updateOverview();
                           });
 }
 
