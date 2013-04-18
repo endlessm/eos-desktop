@@ -10,6 +10,8 @@ const WorkspaceMonitor = new Lang.Class({
     _init: function() {
         this._metaScreen = global.screen;
 
+	this._minimizedWindows = [];
+
         this._shellwm = global.window_manager;
         this._shellwm.connect('minimize', Lang.bind(this, this._minimizeWindow));
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
@@ -19,7 +21,6 @@ const WorkspaceMonitor = new Lang.Class({
 
         this._visibleWindows = 0;
 
-	this._minimizedWindows = [];
         this._trackWorkspace(this._metaScreen.get_active_workspace());
     },
 
