@@ -69,6 +69,14 @@ function _loadCategory(dir, view) {
 
 };
 
+function getAppFromSource(source) {
+    if (source instanceof AppIcon) {
+        return source.app;
+    } else {
+        return null;
+    }
+}
+
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,
@@ -123,6 +131,7 @@ const EndlessApplicationView = new Lang.Class({
             let id = this._getItemId(this._allItems[i]);
             if (!id)
                 continue;
+            this._items[id]._delegate = this._appStoreIcon;
             this._grid.addItem(this._items[id].actor);
         }
         this._grid.addItem(this._appStoreIcon.actor);
@@ -207,8 +216,10 @@ const AllView = new Lang.Class({
 
         let box = new St.BoxLayout({ vertical: true });
         this._stack = new St.Widget({ layout_manager: new AllViewLayout() });
+        this._stack._delegate = "kyle"
         this._stack.add_actor(this._grid.actor);
         this._eventBlocker = new St.Widget({ x_expand: true, y_expand: true });
+        this._eventBlocker._delegate = this._appStoreIcon;
         this._stack.add_actor(this._eventBlocker);
         box.add(this._stack, { y_align: St.Align.START, expand: true });
 
@@ -219,6 +230,7 @@ const AllView = new Lang.Class({
                                          y_expand: true,
                                          overlay_scrollbars: true,
                                          style_class: 'all-apps vfade' });
+        this.actor._delegate = "Erik Wolfe"
         this.actor.add_actor(box);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         let action = new Clutter.PanAction({ interpolate: true });
@@ -236,6 +248,7 @@ const AllView = new Lang.Class({
                 this._currentPopup.popdown();
         }));
         this._eventBlocker.add_action(this._clickAction);
+
     },
 
     _onPan: function(action) {
@@ -391,6 +404,7 @@ const AppDisplay = new Lang.Class({
         this._viewStack = new St.Widget({ layout_manager: new Clutter.BinLayout(),
                                           x_expand: true, y_expand: true });
         this.actor.add(this._viewStack, { expand: true });
+        this._viewStack._delegate = "Matt Irwin";
 
 
         for (let i = 0; i < this._views.length; i++) {
@@ -690,6 +704,7 @@ const AppIcon = new Lang.Class({
 
     _init : function(app, iconParams) {
         this.app = app;
+
         this.actor = new St.Button({ style_class: 'app-well-app',
                                      reactive: true,
                                      button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO,
@@ -881,11 +896,10 @@ Signals.addSignalMethods(AppIcon.prototype);
 
 const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
-    Extends: AppIcon,
-
-    popupMenu: function() {},
+    Extends: St.Widget,
 
     _init : function(app, iconParams) {
+        this.parent();
         this.app = app;
         this.actor = new St.Button({ style_class: 'app-well-app',
                                      reactive: true,
@@ -894,6 +908,8 @@ const AppStoreIcon = new Lang.Class({
                                      x_fill: true,
                                      y_fill: true });
         this.actor._delegate = this;
+        
+        this.setDragApp(null);
 
         if (!iconParams)
             iconParams = {};
@@ -906,21 +922,31 @@ const AppStoreIcon = new Lang.Class({
 
         iconParams['createIcon'] = Lang.bind(this, this._createTrashIcon);
         this.empty_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
-
+        
+/*        this.empty_trash_icon.actor._delegate = this;
+        this.icon.actor._delegate = this;
+        this.pressed_icon.actor._delegate = this;
+        this._delegate = this;
+        this.empty_trash_icon._delegate = this;
+        this.pressed_icon._delegate = this;
+        this.icon._delegate = this;*/
         this.actor.set_child(this.icon.actor);
-
+        
         this.actor.label_actor = this.icon.label;
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
         this.actor.connect('clicked', Lang.bind(this, this._onClicked));
+        this.actor.connect('event', Lang.bind(this, this._enterEvent));
+
 
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
-        Main.overview.connect('item-drag-begin', Lang.bind(this, this._item_drag_start));
+        //Main.overview.connect('item-drag-begin', Lang.bind(this, this._item_drag_start));
+        Main.overview.connect('item-drag-begin',
+                              Lang.bind(this, this._onDragBegin));
         
         Main.overview.connect('item-drag-end', Lang.bind(this, this._item_drag_end));
 
-        this._menuTimeoutId = 0;
         this._stateChangedId = this.app.connect('notify::state', Lang.bind(this, this._onStateChanged));
         this._onStateChanged();
     },
@@ -936,39 +962,171 @@ const AppStoreIcon = new Lang.Class({
         return new St.Icon({ icon_size: iconSize,
                              icon_name: 'add_normal'});
     },
+
+    _onDestroy: function() {
+        if (this._stateChangedId > 0)
+            this.app.disconnect(this._stateChangedId);
+        this._stateChangedId = 0;
+    },
+
     _createIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
         icon_name: 'add_normal'});
-   },
-   _createTrashIcon: function(iconSize) {
+    },
+                 
+    _createTrashIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
         icon_name: 'trash-can_normal'});
-   },
-   _onButtonPress: function(actor, event) {
+    },
+    
+    _onButtonPress: function(actor, event) {
         let button = event.get_button();
         if (button == 1) {
-            this._removeMenuTimeout();
             this.actor.set_child(this.pressed_icon.actor);
-            this._menuTimeoutId = Mainloop.timeout_add(1250,
-                Lang.bind(this, function() {
-                    this.actor.set_child(this.icon.actor);
-                }));
         }
         return false;
-   },
-   _item_drag_start: function(actor, event){
-       this.actor.set_child(this.empty_trash_icon.actor);
-   },
-   _item_drag_end: function(actor, event){
-       this.actor.set_child(this.icon.actor);
-   },
-   _onActivate: function (event) {
-        this.app.activate();
+    },
+    _updateIconTemp: function(){
+        this.actor.set_child(this.empty_trash_icon.actor);
+    },
+    _onDragBegin: function() {
+        this.actor.set_child(this.empty_trash_icon.actor);
+        this._dragCancelled = false;
+        this._dragMonitor = {
+            dragMotion: Lang.bind(this, this._onDragMotion)
+        };
+        DND.addDragMonitor(this._dragMonitor);
+    },
+
+    _onDragMotion: function(dragEvent) {
+        global.log(">>>>>>>>>>>>>> _onDragMotion called...");
+        let app = getAppFromSource(dragEvent.source);
+        if (app == null)
+            return DND.DragMotionResult.CONTINUE;
+
+        global.log(">>>>>>>>>>>>>> app = " + app);
+        global.log(">>>>>>>>>>>>>> targetActor = " + typeof dragEvent.targetActor.name);
+        let showAppsHovered =
+            this.contains(dragEvent.targetActor);
+
+        global.log(">>>>>>>>>>>>>> showAppsHovered = " + showAppsHovered);
+        return DND.DragMotionResult.CONTINUE;
+    },
+
+    _onClicked: function(actor, button) {
+
+        if (button == 1) {
+            this._onActivate(Clutter.get_current_event());
+        } else if (button == 2) {
+            // Last workspace is always empty
+            let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
+            launchWorkspace.activate(global.get_current_time());
+            this.emit('launching');
+            this.app.open_new_window(-1);
+            Main.overview.hide();
+        }
+        return false;
+    },
+
+    getId: function() {
+        return this.app.get_id();
+    },
+
+    _item_drag_start: function(actor, event){
+        this.actor.set_child(this.empty_trash_icon.actor);
+    },
+
+    _item_drag_end: function(actor, event){
+        this.actor.set_child(this.icon.actor);
+    },
+
+    _enterEvent: function(actor, event){
+        global.log("===========================mouse enter");
+    },
+
+    _canRemoveApp: function(app) {
+       // if (app == null)
+       //     return false;
+
+        return true;
+    },
+
+    setDragApp: function(app) {
+        global.log("==================== Set Drag App 1...")
+        let canRemove = this._canRemoveApp(app);
+
+        this.actor.set_hover(canRemove);
+        if (canRemove)
+            global.log("==================== Set Drag App 2...")
+           // this.setLabelText(_("Remove from Favorites"));
+    },
+
+    handleDragOver: function(source, actor, x, y, time) {
+        global.log("==================== Handle Drag Over 1...")
+        this._updateIconTemp();
+        let app = getAppFromSource(source);
+        if (app == null)
+            return DND.DragMotionResult.NO_DROP;
+        global.log("==================== Handle Drag Over 2...")
+        let id = app.get_id();
+        return DND.DragMotionResult.MOVE_DROP;
+    },
+
+    acceptDrop: function(source, actor, x, y, time) {
+        global.log("==================== Accept Drop 1...")
+        let app = source.app;
+        if (app == null)
+            return false;
+
+        let id = app.get_id();
+
+        Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this,
+            function () {
+                //AppFavorites.getAppFavorites().removeFavorite(id);
+                global.log("==================== Accept Drop 2...")
+                return false;
+            }));
+
+        return true;
+    }, 
+
+    _onStateChanged: function() {
+        if (this.app.state != Shell.AppState.STOPPED)
+            this.actor.add_style_class_name('running');
+        else
+            this.actor.remove_style_class_name('running');
+    },
+
+    activateWindow: function(metaWindow) {
+        if (metaWindow) {
+            Main.activateWindow(metaWindow);
+        } else {
+            Main.overview.hide();
+        }
+    },
+
+    _onActivate: function (event) {
+        this.emit('launching');
+        let modifiers = event.get_state();
+
+        if (modifiers & Clutter.ModifierType.CONTROL_MASK
+            && this.app.state == Shell.AppState.RUNNING) {
+            this.app.open_new_window(-1);
+        } else {
+            this.app.activate();
+        }
 
         Main.overview.hide();
     },
 
+    shellWorkspaceLaunch : function(params) {
+        params = Params.parse(params, { workspace: -1,
+                                        timestamp: 0 });
+
+        this.app.open_new_window(params.workspace);
+    }
 });
+Signals.addSignalMethods(AppStoreIcon.prototype);
 
 const AppIconMenu = new Lang.Class({
     Name: 'AppIconMenu',

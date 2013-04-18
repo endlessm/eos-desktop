@@ -248,7 +248,7 @@ const ShowAppsIcon = new Lang.Class({
         this.icon = new IconGrid.BaseIcon(_("Show Applications"),
                                            { setSizeManually: true,
                                              showLabel: false,
-                                             createIcon: Lang.bind(this, this._createIcon) });
+                                             createIcon: Lang.bind(this, this._createItemIcon) });
         this.toggleButton.add_actor(this.icon.actor);
         this.toggleButton._delegate = this;
 
@@ -256,7 +256,7 @@ const ShowAppsIcon = new Lang.Class({
         this.setDragApp(null);
     },
 
-    _createIcon: function(size) {
+    _createItemIcon: function(size) {
         this._iconActor = new St.Icon({ icon_name: 'view-grid-symbolic',
                                         icon_size: size,
                                         style_class: 'show-apps-icon',
