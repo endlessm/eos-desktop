@@ -19,9 +19,8 @@ const WorkspaceMonitor = new Lang.Class({
 
         this._visibleWindows = 0;
 
+	this._minimizedWindows = [];
         this._trackWorkspace(this._metaScreen.get_active_workspace());
-
-        this._minimizedWindows = [];
     },
 
     _trackWorkspace: function(workspace) {
