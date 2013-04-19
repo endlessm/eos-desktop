@@ -899,7 +899,7 @@ const AppStoreIcon = new Lang.Class({
                                      y_fill: true });
         this.actor._delegate = this;
         
-        this.setDragApp(null);
+        this.actor.set_hover(true);
 
         if (!iconParams)
             iconParams = {};
@@ -999,8 +999,6 @@ const AppStoreIcon = new Lang.Class({
 
         let showAppsHovered = this.actor.contains(dragEvent.targetActor);
 
-        global.log("****************** showAppsHovered = " + showAppsHovered);
-        global.log("****************** targetActor = " + dragEvent.targetActor);
         if (showAppsHovered){
             this.actor.set_child(this.full_trash_icon.actor);
         } else {
@@ -1026,29 +1024,6 @@ const AppStoreIcon = new Lang.Class({
 
     getId: function() {
         return this.app.get_id();
-    },
-
-    _item_drag_start: function(actor, event){
-        this.actor.set_child(this.empty_trash_icon.actor);
-    },
-
-    _item_drag_end: function(actor, event){
-        this.actor.set_child(this.icon.actor);
-    },
-
-    _canRemoveApp: function(app) {
-       // if (app == null)
-       //     return false;
-
-        return true;
-    },
-
-    setDragApp: function(app) {
-        let canRemove = this._canRemoveApp(app);
-
-        this.actor.set_hover(canRemove);
-        //if (canRemove)
-           // this.setLabelText(_("Remove from Favorites"));
     },
 
     handleDragOver: function(source, actor, x, y, time) {
