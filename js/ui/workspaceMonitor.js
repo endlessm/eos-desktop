@@ -10,7 +10,8 @@ const WorkspaceMonitor = new Lang.Class({
     _init: function() {
         this._metaScreen = global.screen;
 
-	this._minimizedWindows = [];
+        this._minimizedWindows = [];
+        this._knownWindows = [];
 
         this._shellwm = global.window_manager;
         this._shellwm.connect('minimize', Lang.bind(this, this._minimizeWindow));
@@ -28,7 +29,6 @@ const WorkspaceMonitor = new Lang.Class({
         this._activeWorkspace = workspace;
 
         // Setup to listen to the number of windows being changed
-        this._numberOfWindows = this._activeWorkspace.n_windows;
         this._windowAddedId = this._activeWorkspace.connect('window-added', Lang.bind(this, this._windowAdded));
         this._windowRemovedId = this._activeWorkspace.connect('window-removed', Lang.bind(this, this._windowRemoved));
 
@@ -49,6 +49,8 @@ const WorkspaceMonitor = new Lang.Class({
             } else {
                 this._visibleWindows += 1;
             }
+
+            this._knownWindows.push(metaWindow);
         }
 
         this.updateOverview();
@@ -67,8 +69,10 @@ const WorkspaceMonitor = new Lang.Class({
 
         this._activeWorkspace = null;
 
-        this._numberOfWindows = 0;
         this._visibleWindows = 0;
+
+        this._minimizedWindows = [];
+        this._knownWindows = [];
     },
 
     _workspaceSwitched: function(from, to, direction) {
@@ -77,8 +81,17 @@ const WorkspaceMonitor = new Lang.Class({
     },
 
     _windowAdded: function(metaWorkspace, metaWindow) {
-        // Don't need to do anything here as this will be handled when
-        // _mapWindow is called
+        // Sometimes on startup a pre-mapped window will not be in the system
+        // when the code in trackWorkspace has been called.
+        // So we add it when it comes in here because it won't get
+        // a call to _mapWindow.
+        let idx = this._knownWindows.indexOf(metaWindow);
+        if (idx == -1) {
+            this._knownWindows.push(metaWindow);
+            this._visibleWindows += 1;
+        }
+
+        this.updateOverview();
     },
 
     _windowRemoved: function(metaWorkspace, metaWindow) {
@@ -96,6 +109,12 @@ const WorkspaceMonitor = new Lang.Class({
             this._minimizedWindows.splice(idx, 1);
         }
 
+        // Remove the window from our known windows
+        idx = this._knownWindows.indexOf(actor.meta_window);
+        if (idx != -1) {
+            this._knownWindows.splice(idx, 1);
+        }
+
         this.updateOverview();
     },
 
@@ -108,6 +127,13 @@ const WorkspaceMonitor = new Lang.Class({
     },
 
     _mapWindow: function(shellwm, actor) {
+        let idx = this._knownWindows.indexOf(actor.meta_window);
+        if (idx != -1) {
+            // If the window is already in _knownWindows, then
+            // we don't need to deal with it here.
+            return;
+        }
+
         this._visibleWindows += 1;
 
         // mapWindow is called when a window is added to the screen
@@ -122,13 +148,9 @@ const WorkspaceMonitor = new Lang.Class({
 
     updateOverview: function() {
         if (this._visibleWindows == 0) {
-            if (!Main.overview.visible) {
-                Main.overview.show();
-            }
+            Main.overview.show();
         } else {
-            if (Main.overview.visible) {
-                Main.overview.hide();
-            }
+            Main.overview.hide();
         }
     }
 });
