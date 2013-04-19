@@ -928,7 +928,7 @@ const AppStoreIcon = new Lang.Class({
         Main.overview.connect('item-drag-begin',
                               Lang.bind(this, this._onDragBegin));
         
-        Main.overview.connect('item-drag-end', Lang.bind(this, this._item_drag_end));
+        Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
 
         this._stateChangedId = this.app.connect('notify::state', Lang.bind(this, this._onStateChanged));
         this._onStateChanged();
@@ -977,6 +977,7 @@ const AppStoreIcon = new Lang.Class({
     _updateIconTemp: function(){
         this.actor.set_child(this.full_trash_icon.actor);
     },
+
     _onDragBegin: function() {
         this.actor.set_child(this.empty_trash_icon.actor);
         this._dragCancelled = false;
@@ -986,14 +987,20 @@ const AppStoreIcon = new Lang.Class({
         DND.addDragMonitor(this._dragMonitor);
     },
 
+    _onDragEnd: function(actor, event) {
+        this.actor.set_child(this.icon.actor);
+        DND.removeDragMonitor(this._dragMonitor);
+    },
+
     _onDragMotion: function(dragEvent) {
         let app = getAppFromSource(dragEvent.source);
         if (app == null)
             return DND.DragMotionResult.CONTINUE;
 
         let showAppsHovered = this.actor.contains(dragEvent.targetActor);
-        let target = dragEvent.targetActor;
 
+        global.log("****************** showAppsHovered = " + showAppsHovered);
+        global.log("****************** targetActor = " + dragEvent.targetActor);
         if (showAppsHovered){
             this.actor.set_child(this.full_trash_icon.actor);
         } else {
