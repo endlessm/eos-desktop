@@ -8,8 +8,6 @@ const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const Tweener = imports.ui.tweener;
 const Main = imports.ui.main;
-const AppStore = imports.ui.appDisplay.AppStore;
-const AppStoreIcon = imports.ui.appDisplay.AppStoreIcon;
 
 const Params = imports.misc.params;
 
@@ -61,8 +59,6 @@ function _getEventHandlerActor() {
 
 function addDragMonitor(monitor) {
     dragMonitors.push(monitor);
-    global.log("%%%%%%%%%%% DRAG MONITOR ADDED: "+monitor);
-    global.log("%%%%%%%%%%% Drag monitors: "+dragMonitors);
 }
 
 function removeDragMonitor(monitor) {
@@ -256,9 +252,6 @@ const _Draggable = new Lang.Class({
 
         if (this.actor._delegate && this.actor._delegate.getDragActor) {
             this._dragActor = this.actor._delegate.getDragActor();
-            global.log("**********=== Actor: " + this.actor);
-            global.log("**********=== Delegate: " + this.actor._delegate);
-            global.log("********** Drag Actor: " + this._dragActor);
             this._dragActor.reparent(Main.uiGroup);
             this._dragActor.raise_top();
             Shell.util_set_hidden_from_pick(this._dragActor, true);
@@ -400,13 +393,9 @@ const _Draggable = new Lang.Class({
                     }
                 }
             }
-            global.log("=======TARGET = " + target);
-           // this._app_store = new AppStore();
-            //this._app_store_icon = new AppStoreIcon(this._app_store);
-            //target._delegate = this._app_store_icon;
+
             while (target) {
                 if (target._delegate && target._delegate.handleDragOver) {
-                    global.log("========= delegate = " + target._delegate);
                     let [r, targX, targY] = target.transform_stage_point(stageX, stageY);
                     // We currently loop through all parents on drag-over even if one of the children has handled it.
                     // We can check the return value of the function and break the loop if it's true if we don't want
@@ -421,7 +410,6 @@ const _Draggable = new Lang.Class({
                         return true;
                     }
                 }
-                global.log("++++++++++++ TARGET: "+target+" :: class="+target.get_style_class_name()+", delegate: "+target._delegate);
                 target = target.get_parent();
             }
             global.set_cursor(Shell.Cursor.DND_IN_DRAG);
@@ -443,9 +431,6 @@ const _Draggable = new Lang.Class({
             targetActor: target,
             clutterEvent: event
         };
-        global.log("========Drop Actor: " + dropEvent.dropActor);
-        global.log("========Target Actor: " + dropEvent.targetActor);
-        global.log("========Drop event : " + dropEvent.clutterEvent.get_coords());
         for (let i = 0; i < dragMonitors.length; i++) {
             let dropFunc = dragMonitors[i].dragDrop;
             if (dropFunc)
