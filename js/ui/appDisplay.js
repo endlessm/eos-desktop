@@ -894,7 +894,6 @@ const AppStoreIcon = new Lang.Class({
                                      can_focus: false,
                                      x_fill: true,
                                      y_fill: true });
-        this.actor.set_hover(true);
 
         if (!iconParams)
             iconParams = {};
