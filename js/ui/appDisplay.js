@@ -131,7 +131,6 @@ const EndlessApplicationView = new Lang.Class({
             let id = this._getItemId(this._allItems[i]);
             if (!id)
                 continue;
-            this._items[id]._delegate = this._appStoreIcon;
             this._grid.addItem(this._items[id].actor);
         }
         this._grid.addItem(this._appStoreIcon.actor);
@@ -221,7 +220,6 @@ const AllView = new Lang.Class({
                                          y_expand: true,
                                          overlay_scrollbars: true,
                                          style_class: 'all-apps vfade' });
-        this._grid.actor._delegate = this._appStoreIcon;
         this.actor.add_actor(this._grid.actor);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         let action = new Clutter.PanAction({ interpolate: true });
@@ -394,8 +392,6 @@ const AppDisplay = new Lang.Class({
         this._viewStack = new St.Widget({ layout_manager: new Clutter.BinLayout(),
                                           x_expand: true, y_expand: true });
         this.actor.add(this._viewStack, { expand: true });
-        this._viewStack._delegate = "Matt Irwin";
-
 
         for (let i = 0; i < this._views.length; i++) {
             this._viewStack.add_actor(this._views[i].view.actor);
@@ -890,6 +886,7 @@ const AppStoreIcon = new Lang.Class({
 
     _init : function(app, iconParams) {
         this.parent();
+
         this.app = app;
         this.actor = new St.Button({ style_class: 'app-well-app',
                                      reactive: true,
@@ -897,8 +894,6 @@ const AppStoreIcon = new Lang.Class({
                                      can_focus: false,
                                      x_fill: true,
                                      y_fill: true });
-        this.actor._delegate = this;
-        
         this.actor.set_hover(true);
 
         if (!iconParams)
@@ -912,22 +907,18 @@ const AppStoreIcon = new Lang.Class({
 
         iconParams['createIcon'] = Lang.bind(this, this._createTrashIcon);
         this.empty_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
-        
+
         iconParams['createIcon'] = Lang.bind(this, this._createFullTrashIcon);
         this.full_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
 
         this.actor.set_child(this.icon.actor);
-        
         this.actor.label_actor = this.icon.label;
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
         this.actor.connect('clicked', Lang.bind(this, this._onClicked));
-
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
-        Main.overview.connect('item-drag-begin',
-                              Lang.bind(this, this._onDragBegin));
-        
+        Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
 
         this._stateChangedId = this.app.connect('notify::state', Lang.bind(this, this._onStateChanged));
@@ -956,12 +947,12 @@ const AppStoreIcon = new Lang.Class({
         return new St.Icon({ icon_size: iconSize,
         icon_name: 'add_normal'});
     },
-                 
+
     _createTrashIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
         icon_name: 'trash-can_normal'});
     },
-    
+
     _createFullTrashIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
         icon_name: 'trash-can_hover'});
@@ -973,9 +964,6 @@ const AppStoreIcon = new Lang.Class({
             this.actor.set_child(this.pressed_icon.actor);
         }
         return false;
-    },
-    _updateIconTemp: function(){
-        this.actor.set_child(this.full_trash_icon.actor);
     },
 
     _onDragBegin: function() {
@@ -1004,11 +992,11 @@ const AppStoreIcon = new Lang.Class({
         } else {
             this.actor.set_child(this.empty_trash_icon.actor);
         }
+
         return DND.DragMotionResult.CONTINUE;
     },
 
     _onClicked: function(actor, button) {
-
         if (button == 1) {
             this._onActivate(Clutter.get_current_event());
         } else if (button == 2) {
@@ -1043,7 +1031,6 @@ const AppStoreIcon = new Lang.Class({
 
         Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this,
             function () {
-                //AppFavorites.getAppFavorites().removeFavorite(id);
                 return false;
             }));
 
