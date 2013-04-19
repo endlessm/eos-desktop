@@ -4,19 +4,19 @@ imports.searchPath.unshift('../');
 imports.searchPath.unshift('../js');
 imports.searchPath.unshift('.');
 
-let GLib = imports.gi.GLib;
-let Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
+const Gio = imports.gi.Gio;
 
-ANSI_ESC = String.fromCharCode(0x1B);
-ANSI_CSI = ANSI_ESC + '[';
-ANSI_CLOSE = ANSI_CSI + "0m";
-ANSI_BOLD_RED = ANSI_CSI + "1;31m";
-ANSI_RED = ANSI_CSI + "31m";
-ANSI_GREEN = ANSI_CSI + "32m";
-ANSI_BOLD_BLUE = ANSI_CSI + "1;34m";
-TIME_RESOLUTION = 4;
-DEFAULT_TIME_RESOLUTION = 6;
-JS_EXTENSION = '.js';
+const ANSI_ESC = String.fromCharCode(0x1B);
+const ANSI_CSI = ANSI_ESC + '[';
+const ANSI_CLOSE = ANSI_CSI + "0m";
+const ANSI_BOLD_RED = ANSI_CSI + "1;31m";
+const ANSI_RED = ANSI_CSI + "31m";
+const ANSI_GREEN = ANSI_CSI + "32m";
+const ANSI_BOLD_BLUE = ANSI_CSI + "1;34m";
+let TIME_RESOLUTION = 4;
+const DEFAULT_TIME_RESOLUTION = 6;
+const JS_EXTENSION = '.js';
 
 if (ARGV.length < 1) {
     throw("Usage: run_gjs_tests <test folder>...");
@@ -115,14 +115,13 @@ _getFilesToTest = function(testDirectory){
 
     let nextFile = fileEnumerator.next_file(null);
     while(nextFile){
-        print('NextFile ----> ' + nextFile.get_name());
         let fileType = nextFile.get_file_type();
         if (fileType == Gio.FileType.DIRECTORY) {
             filesToTest = filesToTest.concat(_getFilesToTest(Gio.file_new_for_path(testDirectory.get_path() + '/' +  nextFile.get_name())));
         } else {
             let filename = nextFile.get_name();
             if(filename.indexOf(JS_EXTENSION, filename.length - JS_EXTENSION.length) !== -1){
-                fixedFilename = testDirectory.get_path() + "/" + nextFile.get_name().substring(0, filename.length - JS_EXTENSION.length);
+                let fixedFilename = testDirectory.get_path() + "/" + nextFile.get_name().substring(0, filename.length - JS_EXTENSION.length);
                 filesToTest.push(fixedFilename);
             }
         }

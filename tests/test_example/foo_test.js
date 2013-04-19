@@ -4,7 +4,7 @@ const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 
-fooImport = imports.test_example.some_class;
+const fooImport = imports.test_example.some_class;
 
 function testBarReturnsTwiceTheInputValue() {
     let parameterValue=Math.random(); 
