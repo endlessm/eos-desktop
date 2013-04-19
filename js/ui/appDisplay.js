@@ -214,15 +214,6 @@ const AllView = new Lang.Class({
     _init: function() {
         this.parent();
 
-        let box = new St.BoxLayout({ vertical: true });
-        this._stack = new St.Widget({ layout_manager: new AllViewLayout() });
-        this._stack._delegate = "kyle"
-        this._stack.add_actor(this._grid.actor);
-        this._eventBlocker = new St.Widget({ x_expand: true, y_expand: true });
-        this._eventBlocker._delegate = this._appStoreIcon;
-        this._stack.add_actor(this._eventBlocker);
-        box.add(this._stack, { y_align: St.Align.START, expand: true });
-
         this.actor = new St.ScrollView({ x_fill: true,
                                          y_fill: false,
                                          y_align: St.Align.START,
@@ -230,8 +221,8 @@ const AllView = new Lang.Class({
                                          y_expand: true,
                                          overlay_scrollbars: true,
                                          style_class: 'all-apps vfade' });
-        this.actor._delegate = "Erik Wolfe"
-        this.actor.add_actor(box);
+        this._grid.actor._delegate = this._appStoreIcon;
+        this.actor.add_actor(this._grid.actor);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         let action = new Clutter.PanAction({ interpolate: true });
         action.connect('pan', Lang.bind(this, this._onPan));
@@ -247,7 +238,6 @@ const AllView = new Lang.Class({
             if (!this._currentPopup.actor.contains(actor))
                 this._currentPopup.popdown();
         }));
-        this._eventBlocker.add_action(this._clickAction);
 
     },
 
@@ -923,25 +913,18 @@ const AppStoreIcon = new Lang.Class({
         iconParams['createIcon'] = Lang.bind(this, this._createTrashIcon);
         this.empty_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
         
-/*        this.empty_trash_icon.actor._delegate = this;
-        this.icon.actor._delegate = this;
-        this.pressed_icon.actor._delegate = this;
-        this._delegate = this;
-        this.empty_trash_icon._delegate = this;
-        this.pressed_icon._delegate = this;
-        this.icon._delegate = this;*/
+        iconParams['createIcon'] = Lang.bind(this, this._createFullTrashIcon);
+        this.full_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
+
         this.actor.set_child(this.icon.actor);
         
         this.actor.label_actor = this.icon.label;
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
         this.actor.connect('clicked', Lang.bind(this, this._onClicked));
-        this.actor.connect('event', Lang.bind(this, this._enterEvent));
-
 
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
-        //Main.overview.connect('item-drag-begin', Lang.bind(this, this._item_drag_start));
         Main.overview.connect('item-drag-begin',
                               Lang.bind(this, this._onDragBegin));
         
@@ -979,6 +962,11 @@ const AppStoreIcon = new Lang.Class({
         icon_name: 'trash-can_normal'});
     },
     
+    _createFullTrashIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize,
+        icon_name: 'trash-can_hover'});
+    },
+
     _onButtonPress: function(actor, event) {
         let button = event.get_button();
         if (button == 1) {
@@ -987,7 +975,7 @@ const AppStoreIcon = new Lang.Class({
         return false;
     },
     _updateIconTemp: function(){
-        this.actor.set_child(this.empty_trash_icon.actor);
+        this.actor.set_child(this.full_trash_icon.actor);
     },
     _onDragBegin: function() {
         this.actor.set_child(this.empty_trash_icon.actor);
@@ -999,17 +987,18 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onDragMotion: function(dragEvent) {
-        global.log(">>>>>>>>>>>>>> _onDragMotion called...");
         let app = getAppFromSource(dragEvent.source);
         if (app == null)
             return DND.DragMotionResult.CONTINUE;
 
-        global.log(">>>>>>>>>>>>>> app = " + app);
-        global.log(">>>>>>>>>>>>>> targetActor = " + typeof dragEvent.targetActor.name);
-        let showAppsHovered =
-            this.contains(dragEvent.targetActor);
+        let showAppsHovered = this.actor.contains(dragEvent.targetActor);
+        let target = dragEvent.targetActor;
 
-        global.log(">>>>>>>>>>>>>> showAppsHovered = " + showAppsHovered);
+        if (showAppsHovered){
+            this.actor.set_child(this.full_trash_icon.actor);
+        } else {
+            this.actor.set_child(this.empty_trash_icon.actor);
+        }
         return DND.DragMotionResult.CONTINUE;
     },
 
@@ -1040,10 +1029,6 @@ const AppStoreIcon = new Lang.Class({
         this.actor.set_child(this.icon.actor);
     },
 
-    _enterEvent: function(actor, event){
-        global.log("===========================mouse enter");
-    },
-
     _canRemoveApp: function(app) {
        // if (app == null)
        //     return false;
@@ -1052,28 +1037,22 @@ const AppStoreIcon = new Lang.Class({
     },
 
     setDragApp: function(app) {
-        global.log("==================== Set Drag App 1...")
         let canRemove = this._canRemoveApp(app);
 
         this.actor.set_hover(canRemove);
-        if (canRemove)
-            global.log("==================== Set Drag App 2...")
+        //if (canRemove)
            // this.setLabelText(_("Remove from Favorites"));
     },
 
     handleDragOver: function(source, actor, x, y, time) {
-        global.log("==================== Handle Drag Over 1...")
-        this._updateIconTemp();
         let app = getAppFromSource(source);
         if (app == null)
             return DND.DragMotionResult.NO_DROP;
-        global.log("==================== Handle Drag Over 2...")
         let id = app.get_id();
         return DND.DragMotionResult.MOVE_DROP;
     },
 
     acceptDrop: function(source, actor, x, y, time) {
-        global.log("==================== Accept Drop 1...")
         let app = source.app;
         if (app == null)
             return false;
@@ -1083,7 +1062,6 @@ const AppStoreIcon = new Lang.Class({
         Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this,
             function () {
                 //AppFavorites.getAppFavorites().removeFavorite(id);
-                global.log("==================== Accept Drop 2...")
                 return false;
             }));
 
