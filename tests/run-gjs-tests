@@ -37,11 +37,11 @@ window.C_=function(type,text){
 window._=window.C_;
 window.global={};
 
-_printColorized = function(color, text){
+let _printColorized = function(color, text){
     print(color + text + ANSI_CLOSE);
 }
 
-_printError = function(error){
+let _printError = function(error){
     const SYNTAX_ERROR = '[object Error]';
     _printColorized(ANSI_RED, " " + error.message);
 
@@ -60,14 +60,14 @@ _printError = function(error){
     }
 }
 
-_getTime = function(){
+let _getTime = function(){
     var time = new GLib.TimeVal();
     GLib.get_current_time(time);
     
     return time.tv_sec + time.tv_usec / Math.pow(10, DEFAULT_TIME_RESOLUTION);
 }
 
-_executeTest = function(testFile, test) {
+let _executeTest = function(testFile, test) {
     let result = { "name": test };
     _printColorized(ANSI_BOLD_BLUE, "Running: " + test);
     if(testFile.setUp){
@@ -95,7 +95,7 @@ _executeTest = function(testFile, test) {
     return result;
 }
 
-_executeTestsForFile = function(file){
+let _executeTestsForFile = function(file){
     eval('let testFile = imports' + file.replace(/\//g, '.'));
 
     let results = new Array();
@@ -109,7 +109,7 @@ _executeTestsForFile = function(file){
 
 }
 
-_getFilesToTest = function(testDirectory){
+let _getFilesToTest = function(testDirectory){
     let filesToTest=[];
     let fileEnumerator = testDirectory.enumerate_children("*", Gio.FileQueryInfoFlags.NONE, null);
 
@@ -131,18 +131,18 @@ _getFilesToTest = function(testDirectory){
 
 }
 
-_executeAllTests = function(filesToTest) {
+let _executeAllTests = function(filesToTest) {
     let results = Array();
     filesToTest.forEach(function(file){
         let dirName = '-shell/'
-        filePath =  file.substring(file.indexOf(dirName) + dirName.length - 1, file.length);
+        let filePath =  file.substring(file.indexOf(dirName) + dirName.length - 1, file.length);
         print("Testing: " + file);
         results = results.concat(_executeTestsForFile(filePath));
     });
     return results;
 }
 
-_getTotalsFromResults = function(results) {
+let _getTotalsFromResults = function(results) {
     let testsRunCount = 0;
     let testsFailedCount = 0;
     let testsPassedCount = 0;
@@ -160,7 +160,7 @@ _getTotalsFromResults = function(results) {
              'testsPassedCount': testsPassedCount }
 }
 
-_displayResults = function(aggregateResults) {
+let _displayResults = function(aggregateResults) {
     _printColorized(ANSI_BOLD_BLUE, Array(50).join("-"));
     _printColorized(ANSI_BOLD_BLUE, totalsString);
     _printColorized(ANSI_BOLD_BLUE, "\nExporting Jenkins results");
