@@ -148,7 +148,10 @@ shell_private_sources = 		\
 	gtkactionobservable.h		\
 	gtkactionobservable.c		\
 	gtkactionobserver.h		\
-	gtkactionobserver.c
+	gtkactionobserver.c		\
+	gtkmenutracker.c		\
+	gtkmenutracker.h		\
+	$(NULL)
 
 libeos_shell_sources =			\
 	$(shell_public_headers_h)	\
@@ -173,6 +176,8 @@ libeos_shell_sources =			\
 	shell-invert-lightness-effect.c	\
 	shell-keyring-prompt.h		\
 	shell-keyring-prompt.c		\
+	shell-menu-tracker.c		\
+	shell-menu-tracker.h		\
 	shell-mount-operation.c		\
 	shell-network-agent.c		\
 	shell-perf-log.c		\
