@@ -1844,7 +1844,9 @@ const RemoteMenu = new Lang.Class({
                                          items: [ ],
                                        };
         let action = this._actions[action_id];
-        let item, target, destroyId, specificSignalId;
+        let target, destroyId, specificSignalId;
+
+        let item = new PopupMenuItem(label);
 
         if (action.state) {
             // Docs have get_state_hint(), except that the DBus protocol
@@ -1852,8 +1854,6 @@ const RemoteMenu = new Lang.Class({
             // and neither GApplication), and g_action_get_state_hint()
             // always returns null
             // Funny :)
-
-            item = new PopupMenuItem(label);
 
             switch (String.fromCharCode(action.state.classify())) {
             case 'b':
@@ -1879,7 +1879,6 @@ const RemoteMenu = new Lang.Class({
             }
         } else {
             target = model.get_item_attribute_value(index, Gio.MENU_ATTRIBUTE_TARGET, null);
-            item = new PopupMenuItem(label);
             action.items.push(item);
             specificSignalId = item.connect('activate', Lang.bind(this, function() {
                 this.actionGroup.activate_action(action_id, target);
