@@ -74,7 +74,6 @@ POLKIT_MIN_VERSION=0.100
 STARTUP_NOTIFICATION_MIN_VERSION=0.11
 GCR_MIN_VERSION=3.3.90
 GNOME_DESKTOP_REQUIRED_VERSION=3.7.90
-GNOME_MENUS_REQUIRED_VERSION=3.5.3
 NETWORKMANAGER_MIN_VERSION=0.9.6
 PULSE_MIN_VERS=2.0
 
@@ -85,7 +84,6 @@ PKG_CHECK_MODULES(EOS_SHELL, gio-unix-2.0 >= $GIO_MIN_VERSION
                                atk-bridge-2.0
                                libmutter >= $MUTTER_MIN_VERSION
                                gjs-internals-1.0 >= $GJS_MIN_VERSION
-			       libgnome-menu-3.0 >= $GNOME_MENUS_REQUIRED_VERSION
                                $recorder_modules
                                gdk-x11-3.0 libsoup-2.4
 			       clutter-x11-1.0 >= $CLUTTER_MIN_VERSION
