@@ -97,8 +97,15 @@ const WorkspaceMonitor = new Lang.Class({
             return;
         }
 
-        this._knownWindows.push(metaWindow);
-        this._visibleWindows += 1;
+        if (metaWindow.minimized) {
+            this._minimizedWindows.push(metaWindow);
+        } else {
+            this._visibleWindows += 1;
+        }
+
+        if (knownIdx == -1) {
+            this._knownWindows.push(metaWindow);
+        }
 
         //global.log('_windowAdded called for unknown window: ' + metaWindow.get_title());
         //global.log('   _knownWindows: ' + this._knownWindows.length);
