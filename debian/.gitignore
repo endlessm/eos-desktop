@@ -2,4 +2,10 @@
 tmp/*
 stamp*
 *.substvars
+*.debhelper
+cdbs-*-list
+files
+autoreconf.*
 gnome-shell-common/*
+eos-shell/*
+eos-shell-dbg/*
