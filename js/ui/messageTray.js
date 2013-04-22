@@ -1702,7 +1702,10 @@ const MessageTray = new Lang.Class({
         this._chatSummaryItemsCount = 0;
 
         this._trayDwellTimeoutId = 0;
-        this._setupTrayDwellIfNeeded();
+
+        // Disable the message tray popup
+        // this._setupTrayDwellIfNeeded();
+
         this._sessionUpdated();
         this._hotCornersChanged();
 
