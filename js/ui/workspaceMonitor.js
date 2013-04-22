@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Lang = imports.lang;
+const Meta = imports.gi.Meta;
 
 const Main = imports.ui.main;
 
@@ -46,6 +47,10 @@ const WorkspaceMonitor = new Lang.Class({
         for (let i = 0; i < windows.length; i++) {
             let metaWindow = windows[i];
 
+            if (!this._interestingWindow(metaWindow)) {
+                continue;
+            }
+
             if (metaWindow.minimized) {
                 this._minimizedWindows.push(metaWindow);
             } else {
@@ -82,7 +87,25 @@ const WorkspaceMonitor = new Lang.Class({
         this._trackWorkspace(this._metaScreen.get_active_workspace());
     },
 
+    _interestingWindow: function(metaWindow) {
+        // If this window isn't interesting to us, then we
+        // can ditch it
+        let type = metaWindow.get_window_type();
+        if (type == Meta.WindowType.DESKTOP ||
+            type == Meta.WindowType.DOCK) {
+            global.log('Uninteresting window: ignoring');
+            return false;
+        }
+
+        global.log('Interesting window');
+        return true;
+    },
+
     _windowAdded: function(metaWorkspace, metaWindow) {
+        if (!this._interestingWindow(metaWindow)) {
+            return;
+        }
+
         // Sometimes on startup a pre-mapped window will not be in the system
         // when the code in trackWorkspace has been called.
         // So we add it when it comes in here because it won't get
@@ -120,12 +143,17 @@ const WorkspaceMonitor = new Lang.Class({
     },
 
     _destroyWindow: function(shellwm, actor) {
+        if (!this._interestingWindow(actor.meta_window)) {
+            return;
+        }
+
         // _windowRemoved is called for both visible and minimized windows
         // so we only need to care about tracking it if it
         // hasn't been minimized
         let idx = this._minimizedWindows.indexOf(actor.meta_window);
         if (idx == -1) {
             this._visibleWindows -= 1;
+
             if (this._visibleWindows < 0) {
                 global.log('WARNING: _visibleWindows == ' + this._visibleWindows + ' in _destroyWindow. Resetting to 0');
                 this._visibleWindows = 0;
@@ -151,6 +179,10 @@ const WorkspaceMonitor = new Lang.Class({
     },
 
     _minimizeWindow: function(shellwm, actor) {
+        if (!this._interestingWindow(actor.meta_window)) {
+            return;
+        }
+
         // Don't handle this window if it's already in the minimized
         // windows array. Something has gone wrong and we've got
         // another minimize event without the window being remapped.
@@ -181,6 +213,10 @@ const WorkspaceMonitor = new Lang.Class({
     },
 
     _mapWindow: function(shellwm, actor) {
+        if (!this._interestingWindow(actor.meta_window)) {
+            return;
+        }
+
         //global.log('_mapWindow called for window: ' + actor.meta_window.get_title());
         let knownIdx = this._knownWindows.indexOf(actor.meta_window);
         let minimizedIdx = this._minimizedWindows.indexOf(actor.meta_window);
