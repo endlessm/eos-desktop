@@ -1,4 +1,4 @@
-gnome-shell (3.8.0) unstable; urgency=low
+eos-shell (3.8.0) unstable; urgency=low
 
   * initial eos-shell debian build
 

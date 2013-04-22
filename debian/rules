@@ -14,12 +14,12 @@ endif
 
 $(patsubst %,binary-predeb/%,$(DEB_ALL_PACKAGES)) ::
 	dh_girepository -p$(cdbs_curpkg) -l src:src/gvc -p /usr/lib/mutter \
-		/usr/lib/gnome-shell
+		/usr/lib/eos-shell
 	find debian/$(cdbs_curpkg) -name '*.la' -exec rm -f '{}' ';'
 
 DEB_CONFIGURE_EXTRA_FLAGS += --enable-compile-warnings=yes
 
-DEB_DH_MAKESHLIBS_ARGS_gnome-shell = -Xlibgnome-shell
+DEB_DH_MAKESHLIBS_ARGS_eos-shell = -Xlibeos-shell
 DEB_SHLIBDEPS_INCLUDE = /usr/lib/gnome-bluetooth
 
 # List any files which are not installed
