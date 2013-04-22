@@ -213,6 +213,13 @@ const AllView = new Lang.Class({
     _init: function() {
         this.parent();
 
+        let box = new St.BoxLayout({ vertical: true });
+        this._stack = new St.Widget({ layout_manager: new AllViewLayout() });
+        this._stack.add_actor(this._grid.actor);
+        this._eventBlocker = new St.Widget({ x_expand: true, y_expand: true });
+        this._stack.add_actor(this._eventBlocker);
+        box.add(this._stack, { y_align: St.Align.START, expand: true });
+
         this.actor = new St.ScrollView({ x_fill: true,
                                          y_fill: false,
                                          y_align: St.Align.START,
@@ -220,12 +227,14 @@ const AllView = new Lang.Class({
                                          y_expand: true,
                                          overlay_scrollbars: true,
                                          style_class: 'all-apps vfade' });
-        this.actor.add_actor(this._grid.actor);
+        this.actor.add_actor(box);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         let action = new Clutter.PanAction({ interpolate: true });
         action.connect('pan', Lang.bind(this, this._onPan));
         this.actor.add_action(action);
 
+        Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
+        Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
         this._clickAction = new Clutter.ClickAction();
         this._clickAction.connect('clicked', Lang.bind(this, function() {
             if (!this._currentPopup)
@@ -256,7 +265,12 @@ const AllView = new Lang.Class({
         else
             return null;
     },
-
+    _onDragBegin: function() { 
+        this._eventBlocker.hide();
+    },
+    _onDragEnd: function() { 
+        this._eventBlocker.show();
+    },
     _createItemIcon: function(item) {
         if (item instanceof AppStore)
             return new AppStoreIcon(item);
