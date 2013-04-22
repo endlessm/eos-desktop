@@ -123,11 +123,11 @@ Breaks: gnome-shell (<< 3.2.1-6),
 Description: common files for the GNOME graphical shell
  This package contains translations and data files for the GNOME shell.
 
-Package: gnome-shell-dbg
+Package: eos-shell-dbg
 Architecture: any
 Section: debug
 Priority: extra
-Depends: gnome-shell (= ${binary:Version}),
+Depends: eos-shell (= ${binary:Version}),
          ${misc:Depends}
 Recommends: mutter-dbg
 Description: Debugging symbols for GNOME Shell
