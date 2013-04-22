@@ -23,6 +23,7 @@ const PopupMenu = imports.ui.popupMenu;
 const PanelMenu = imports.ui.panelMenu;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
+const PointerWatcher = imports.ui.pointerWatcher;
 
 const PANEL_ICON_SIZE = 24;
 
@@ -30,6 +31,13 @@ const BUTTON_DND_ACTIVATION_TIMEOUT = 250;
 
 const ANIMATED_ICON_UPDATE_TIMEOUT = 100;
 const SPINNER_ANIMATION_TIME = 0.2;
+
+const POINTER_WATCHER_TIMEOUT = 100;
+
+const TASKBAR_ANIMATION_TIME = 0.01;
+
+const TASKBAR_OPEN_THRESHOLD = 2;
+const TASKBAR_CLOSE_THRESHOLD = 27;
 
 // To make sure the panel corners blend nicely with the panel,
 // we draw background and borders the same way, e.g. drawing
@@ -923,11 +931,17 @@ const Panel = new Lang.Class({
         this.actor.connect('allocate', Lang.bind(this, this._allocate));
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
 
+        let pointerWatcher = PointerWatcher.getPointerWatcher();
+        pointerWatcher.addWatch(POINTER_WATCHER_TIMEOUT, Lang.bind(this, this._toggle));
+        this._isVisible = true;
+
         Main.overview.connect('showing', Lang.bind(this, function () {
             this.actor.add_style_pseudo_class('overview');
+            this._show();
         }));
         Main.overview.connect('hiding', Lang.bind(this, function () {
             this.actor.remove_style_pseudo_class('overview');
+            this._hide();
         }));
 
         Main.layoutManager.panelBox.add(this.actor);
@@ -936,6 +950,48 @@ const Panel = new Lang.Class({
 
         Main.sessionMode.connect('updated', Lang.bind(this, this._updatePanel));
         this._updatePanel();
+    },
+
+    _hide: function() {
+        this._isVisible = false;
+        if (!this._realPanelHeight) {
+            this._realPanelHeight = this.actor.get_height();
+        }
+        Tweener.addTween(this.actor,
+                         { height: 1,
+                           time: TASKBAR_ANIMATION_TIME,
+                           transition: 'easeOutQuad',
+                           onComplete: Lang.bind(this, function() {
+                               this.actor.hide();
+                           })
+                         });
+    },
+
+    _show: function() {
+        this._isVisible = true;
+        this.actor.show();
+        Tweener.addTween(this.actor,
+                         { height: this._realPanelHeight,
+                           time: TASKBAR_ANIMATION_TIME,
+                           transition: 'easeOutQuad'
+                         });
+    },
+
+    _toggle: function(x, y) {
+        let monitor = Main.layoutManager.bottomMonitor;
+        //Check if taskbar should be hidden
+        if (this._isVisible &&
+            !Main.overview.visible &&
+            (x >= monitor.x && x <= monitor.x + monitor.width) &&
+            y < monitor.y + monitor.height - TASKBAR_CLOSE_THRESHOLD) {
+                this._hide()
+        }
+        //Check if taskbar should be shown
+        if (!this._isVisible &&
+            (x >= monitor.x && x <= monitor.x + monitor.width) &&
+            y >= monitor.y + monitor.height - TASKBAR_OPEN_THRESHOLD) {
+            this._show();
+        }
     },
 
     _getPreferredWidth: function(actor, forHeight, alloc) {
