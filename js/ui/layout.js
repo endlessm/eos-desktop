@@ -293,17 +293,17 @@ const LayoutManager = new Lang.Class({
         for (let i = 0; i < this.monitors.length; i++) {
             let monitor = this.monitors[i];
             let cornerX = this._rtl ? monitor.x + monitor.width : monitor.x;
-            let cornerY = monitor.y;
+            let cornerY = monitor.y + monitor.height;
 
             if (i != this.primaryIndex) {
-                let haveTopLeftCorner = true;
+                let haveBottomLeftCorner = true;
 
-                // Check if we have a top left (right for RTL) corner.
-                // I.e. if there is no monitor directly above or to the left(right)
+                // Check if we have a bottom left (right for RTL) corner.
+                // I.e. if there is no monitor directly below or to the left(right)
                 let besideX = this._rtl ? monitor.x + 1 : cornerX - 1;
                 let besideY = cornerY;
-                let aboveX = cornerX;
-                let aboveY = cornerY - 1;
+                let belowX = cornerX;
+                let belowY = cornerY + 1;
 
                 for (let j = 0; j < this.monitors.length; j++) {
                     if (i == j)
@@ -313,19 +313,19 @@ const LayoutManager = new Lang.Class({
                         besideX < otherMonitor.x + otherMonitor.width &&
                         besideY >= otherMonitor.y &&
                         besideY < otherMonitor.y + otherMonitor.height) {
-                        haveTopLeftCorner = false;
+                        haveBottomLeftCorner = false;
                         break;
                     }
-                    if (aboveX >= otherMonitor.x &&
-                        aboveX < otherMonitor.x + otherMonitor.width &&
-                        aboveY >= otherMonitor.y &&
-                        aboveY < otherMonitor.y + otherMonitor.height) {
-                        haveTopLeftCorner = false;
+                    if (belowX >= otherMonitor.x &&
+                        belowX < otherMonitor.x + otherMonitor.width &&
+                        belowY >= otherMonitor.y &&
+                        belowY < otherMonitor.y + otherMonitor.height) {
+                        haveBottomLeftCorner = false;
                         break;
                     }
                 }
 
-                if (!haveTopLeftCorner)
+                if (!haveBottomLeftCorner)
                     continue;
             }
 
@@ -1122,10 +1122,11 @@ const HotCorner = new Lang.Class({
             layoutManager.addChrome(this.actor);
 
             if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL) {
-                this._corner.set_position(this.actor.width - this._corner.width, 0);
-                this.actor.set_anchor_point_from_gravity(Clutter.Gravity.NORTH_EAST);
+                this._corner.set_position(this.actor.width - this._corner.width, this.actor.height - this._corner.height);
+                this.actor.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_EAST);
             } else {
-                this._corner.set_position(0, 0);
+                this._corner.set_position(0, this.actor.height - this._corner.height);
+                this.actor.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_WEST);
             }
 
             this.actor.connect('leave-event',
@@ -1157,8 +1158,11 @@ const HotCorner = new Lang.Class({
 
         ripple._opacity = startOpacity;
 
-        if (ripple.get_text_direction() == Clutter.TextDirection.RTL)
-            ripple.set_anchor_point_from_gravity(Clutter.Gravity.NORTH_EAST);
+        if (ripple.get_text_direction() == Clutter.TextDirection.RTL) {
+            ripple.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_EAST);
+        } else {
+            ripple.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_WEST);
+        }
 
         ripple.visible = true;
         ripple.opacity = 255 * Math.sqrt(startOpacity);
