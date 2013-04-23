@@ -300,7 +300,7 @@ const LayoutManager = new Lang.Class({
 
                 // Check if we have a bottom left (right for RTL) corner.
                 // I.e. if there is no monitor directly below or to the left(right)
-                let besideX = this._rtl ? monitor.x + 1 : cornerX - 1;
+                let besideX = this._rtl ? cornerX + 1 : cornerX - 1;
                 let besideY = cornerY;
                 let belowX = cornerX;
                 let belowY = cornerY + 1;
