@@ -457,7 +457,7 @@ StScrollBar StButton#vhandle:active {
 /* Panel */
 
 #panel {
-    background-image: url("bottom-shadow.png");
+    background-color: black;
     font-weight: bold;
     height: 1.86em;
 }
@@ -493,7 +493,7 @@ StScrollBar StButton#vhandle:active {
 
 .panel-corner {
     -panel-corner-radius: 6px;
-    -panel-corner-background-color: transparent;
+    -panel-corner-background-color: black;
     -panel-corner-border-width: 2px;
     -panel-corner-border-color: transparent;
 }
