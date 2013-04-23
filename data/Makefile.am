@@ -2,7 +2,7 @@ wandadir = $(pkgdatadir)
 dist_wanda_DATA = wanda.png
 
 desktopdir=$(datadir)/applications
-desktop_DATA = gnome-shell.desktop gnome-shell-extension-prefs.desktop
+desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop
 
 # We substitute in bindir so it works as an autostart
 # file when built in a non-system prefix
@@ -82,8 +82,8 @@ convertdir = $(datadir)/GConf/gsettings
 convert_DATA = gnome-shell-overrides.convert
 
 EXTRA_DIST =						\
-	gnome-shell.desktop.in.in			\
-	gnome-shell-extension-prefs.desktop.in.in	\
+	eos-shell.desktop.in.in			\
+	eos-shell-extension-prefs.desktop.in.in	\
 	$(introspection_DATA)				\
 	$(menu_DATA)					\
 	$(convert_DATA)					\
@@ -91,8 +91,8 @@ EXTRA_DIST =						\
 	org.gnome.shell.gschema.xml.in.in
 
 CLEANFILES =						\
-	gnome-shell.desktop.in				\
-	gnome-shell-extension-prefs.in			\
+	eos-shell.desktop.in				\
+	eos-shell-extension-prefs.in			\
 	$(desktop_DATA)					\
 	$(keys_DATA)					\
 	$(gsettings_SCHEMAS)				\

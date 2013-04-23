@@ -17,10 +17,10 @@ config.status
 config
 configure
 data/50-gnome-shell-*.xml
-data/gnome-shell.desktop
-data/gnome-shell.desktop.in
-data/gnome-shell-extension-prefs.desktop
-data/gnome-shell-extension-prefs.desktop.in
+data/eos-shell.desktop
+data/eos-shell.desktop.in
+data/eos-shell-extension-prefs.desktop
+data/eos-shell-extension-prefs.desktop.in
 data/gschemas.compiled
 data/org.gnome.shell.gschema.xml
 data/org.gnome.shell.gschema.valid
