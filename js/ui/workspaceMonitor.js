@@ -25,7 +25,7 @@ const WorkspaceMonitor = new Lang.Class({
 
         this._trackWorkspace(this._metaScreen.get_active_workspace());
 
-        global.log('Start up: visibleWindows: ' + this._visibleWindows);
+        //global.log('Start up: visibleWindows: ' + this._visibleWindows);
     },
 
     _trackWorkspace: function(workspace) {
@@ -43,7 +43,7 @@ const WorkspaceMonitor = new Lang.Class({
         //  - for some reason gnome-terminal windows do not appear in
         // the list returned by list_windows().
         let windows = this._activeWorkspace.list_windows();
-        global.log("Got " + windows.length + " windows");
+        //global.log("Got " + windows.length + " windows");
         for (let i = 0; i < windows.length; i++) {
             let metaWindow = windows[i];
 
@@ -100,11 +100,11 @@ const WorkspaceMonitor = new Lang.Class({
             type == Meta.WindowType.COMBO ||
             type == Meta.WindowType.DND ||
             type == Meta.WindowType.OVERRIDE_OTHER) {
-            global.log('Uninteresting window: ignoring');
+            //global.log('Uninteresting window: ignoring');
             return false;
         }
 
-        global.log('Interesting window: ' + type);
+        //global.log('Interesting window: ' + type);
         return true;
     },
 
@@ -137,16 +137,16 @@ const WorkspaceMonitor = new Lang.Class({
             this._knownWindows.push(metaWindow);
         }
 
-        global.log('_windowAdded called for unknown window: ' + metaWindow.get_title());
-        global.log('   _knownWindows: ' + this._knownWindows.length);
-        global.log('   _visibleWindows: ' + this._visibleWindows);
+        //global.log('_windowAdded called for unknown window: ' + metaWindow.get_title());
+        //global.log('   _knownWindows: ' + this._knownWindows.length);
+        //global.log('   _visibleWindows: ' + this._visibleWindows);
 
         this.updateOverview();
     },
 
     _windowRemoved: function(metaWorkspace, metaWindow) {
-        global.log('_windowRemoved called for window: ' + metaWindow.get_title());
-        global.log('   _visibleWindows: ' + this._visibleWindows);
+        //global.log('_windowRemoved called for window: ' + metaWindow.get_title());
+        //global.log('   _visibleWindows: ' + this._visibleWindows);
     },
 
     _destroyWindow: function(shellwm, actor) {
@@ -162,16 +162,16 @@ const WorkspaceMonitor = new Lang.Class({
             this._visibleWindows -= 1;
 
             if (this._visibleWindows < 0) {
-                global.log('WARNING: _visibleWindows == ' + this._visibleWindows + ' in _destroyWindow. Resetting to 0');
+                //global.log('WARNING: _visibleWindows == ' + this._visibleWindows + ' in _destroyWindow. Resetting to 0');
                 this._visibleWindows = 0;
 
                 this._dumpMinimizedWindows();
             } else {
-                global.log('_destroyWindow called for window: ' + actor.meta_window.get_title());
-                global.log('   _visibleWindows: ' + this._visibleWindows);
+                //global.log('_destroyWindow called for window: ' + actor.meta_window.get_title());
+                //global.log('   _visibleWindows: ' + this._visibleWindows);
             }
         } else {
-            global.log('_destroyWindow called for minimized window: ' + actor.meta_window.get_title());
+            //global.log('_destroyWindow called for minimized window: ' + actor.meta_window.get_title());
             // If it was minimized then remove it from the array
             this._minimizedWindows.splice(idx, 1);
         }
@@ -195,22 +195,22 @@ const WorkspaceMonitor = new Lang.Class({
         // another minimize event without the window being remapped.
         let idx = this._minimizedWindows.indexOf(actor.meta_window);
         if (idx != -1) {
-            global.log('_minimizeWindow called for already minimized window: ' + actor.meta_window.get_title());
+            //global.log('_minimizeWindow called for already minimized window: ' + actor.meta_window.get_title());
 
             this.updateOverview();
             return;
         }
 
-        global.log('_minimizedWindow called for non-minimized window: ' + actor.meta_window.get_title());
+        //global.log('_minimizedWindow called for non-minimized window: ' + actor.meta_window.get_title());
 
         this._visibleWindows -= 1;
 
-        global.log ('   _visibleWindows: ' + this._visibleWindows);
+        //global.log ('   _visibleWindows: ' + this._visibleWindows);
 
         this._minimizedWindows.push (actor.meta_window);
 
         if (this._visibleWindows < 0) {
-            global.log('WARNING: _visibleWindows == ' + this._visibleWindows + ' in _minimizeWindow. Resetting to 0');
+            //global.log('WARNING: _visibleWindows == ' + this._visibleWindows + ' in _minimizeWindow. Resetting to 0');
             this._visibleWindows = 0;
 
             this._dumpMinimizedWindows();
@@ -224,7 +224,7 @@ const WorkspaceMonitor = new Lang.Class({
             return;
         }
 
-        global.log('_mapWindow called for window: ' + actor.meta_window.get_title());
+        //global.log('_mapWindow called for window: ' + actor.meta_window.get_title());
         let knownIdx = this._knownWindows.indexOf(actor.meta_window);
         let minimizedIdx = this._minimizedWindows.indexOf(actor.meta_window);
         if (knownIdx != -1 && minimizedIdx == -1) {
@@ -232,15 +232,15 @@ const WorkspaceMonitor = new Lang.Class({
             // and it's not minimized, then
             // we don't need to deal with it here.
 
-            global.log('Got map for known but not minimized window: ' + actor.meta_window.get_title());
-            global.log('   Ignoring');
+            //global.log('Got map for known but not minimized window: ' + actor.meta_window.get_title());
+            //global.log('   Ignoring');
 
             return;
         }
 
         this._visibleWindows += 1;
 
-        global.log('   _visibleWindows: ' + this._visibleWindows);
+        //global.log('   _visibleWindows: ' + this._visibleWindows);
         if (knownIdx == -1) {
             this._knownWindows.push(actor.meta_window);
         }
