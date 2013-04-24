@@ -24,6 +24,7 @@ const OverviewControls = imports.ui.overviewControls;
 const PopupMenu = imports.ui.popupMenu;
 const Tweener = imports.ui.tweener;
 const Workspace = imports.ui.workspace;
+const ButtonConstants = imports.ui.buttonConstants;
 const Params = imports.misc.params;
 const Util = imports.misc.util;
 
@@ -783,13 +784,13 @@ const AppIcon = new Lang.Class({
 
     _onButtonPress: function(actor, event) {
         let button = event.get_button();
-        if (button == 1) {
+        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
             this._removeMenuTimeout();
             this._menuTimeoutId = Mainloop.timeout_add(MENU_POPUP_TIMEOUT,
                 Lang.bind(this, function() {
                     this.popupMenu();
                 }));
-        } else if (button == 3) {
+        } else if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
             this.popupMenu();
             return true;
         }
@@ -799,9 +800,9 @@ const AppIcon = new Lang.Class({
     _onClicked: function(actor, button) {
         this._removeMenuTimeout();
 
-        if (button == 1) {
+        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
             this._onActivate(Clutter.get_current_event());
-        } else if (button == 2) {
+        } else if (button == ButtonConstants.MIDDLE_MOUSE_BUTTON) {
             // Last workspace is always empty
             let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
             launchWorkspace.activate(global.get_current_time());
@@ -959,17 +960,17 @@ const AppStoreIcon = new Lang.Class({
 
     _createIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
-        icon_name: 'add_normal'});
+                             icon_name: 'add_normal'});
     },
 
     _createTrashIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
-        icon_name: 'trash-can_normal'});
+                             icon_name: 'trash-can_normal'});
     },
 
     _createFullTrashIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
-        icon_name: 'trash-can_hover'});
+                             icon_name: 'trash-can_hover'});
     },
 
     _onButtonPress: function(actor, event) {
@@ -1011,9 +1012,9 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
-        if (button == 1) {
+        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
             this._onActivate(Clutter.get_current_event());
-        } else if (button == 2) {
+        } else if (button == ButtonConstants.MIDDLE_MOUSE_BUTTON) {
             // Last workspace is always empty
             let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
             launchWorkspace.activate(global.get_current_time());
