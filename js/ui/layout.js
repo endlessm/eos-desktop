@@ -1111,9 +1111,11 @@ const HotCorner = new Lang.Class({
                                              height: 3,
                                              reactive: true });
 
+            // Set the hot corner target area to 3x3 so that it works on a VirtualBox VM
+            // which "steals" the bottom two rows from the guest OS display
             this._corner = new Clutter.Rectangle({ name: 'hot-corner',
-                                                   width: 1,
-                                                   height: 1,
+                                                   width: 3,
+                                                   height: 3,
                                                    opacity: 0,
                                                    reactive: true });
             this._corner._delegate = this;
