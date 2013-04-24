@@ -393,7 +393,6 @@ const _Draggable = new Lang.Class({
                     }
                 }
             }
-
             while (target) {
                 if (target._delegate && target._delegate.handleDragOver) {
                     let [r, targX, targY] = target.transform_stage_point(stageX, stageY);
