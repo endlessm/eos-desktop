@@ -733,7 +733,7 @@ const AppIcon = new Lang.Class({
         this._draggable = DND.makeDraggable(this.actor);
         this._draggable.connect('drag-begin', Lang.bind(this,
             function () {
-                //Notify view that something is dragging
+                // Notify view that something is dragging
                 this._removeMenuTimeout();
                 Main.overview.beginItemDrag(this);
             }));
@@ -743,7 +743,7 @@ const AppIcon = new Lang.Class({
             }));
         this._draggable.connect('drag-end', Lang.bind(this,
             function () {
-                //Are we in the trashcan area?
+                // Are we in the trashcan area?
                 Main.overview.endItemDrag(this);
             }));
 
