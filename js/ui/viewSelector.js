@@ -91,10 +91,6 @@ const ViewSelector = new Lang.Class({
         this._iconClickedId = 0;
         this._capturedEventId = 0;
 
-        this._workspacesDisplay = new WorkspacesView.WorkspacesDisplay();
-        this._workspacesPage = this._addPage(this._workspacesDisplay.actor,
-                                             _("Windows"), 'emblem-documents-symbolic');
-
         this._appDisplay = new AppDisplay.AppDisplay();
         this._appsPage = this._addPage(this._appDisplay.actor,
                                        _("Applications"), 'view-grid-symbolic');
@@ -499,9 +495,7 @@ const ViewSelector = new Lang.Class({
     },
 
     getActivePage: function() {
-        if (this._activePage == this._workspacesPage)
-            return ViewPage.WINDOWS;
-        else if (this._activePage == this._appsPage)
+        if (this._activePage == this._appsPage)
             return ViewPage.APPS;
         else
             return ViewPage.SEARCH;
