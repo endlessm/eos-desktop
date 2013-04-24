@@ -235,6 +235,7 @@ const AllView = new Lang.Class({
 
         Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
+        
         this._clickAction = new Clutter.ClickAction();
         this._clickAction.connect('clicked', Lang.bind(this, function() {
             if (!this._currentPopup)
@@ -244,7 +245,8 @@ const AllView = new Lang.Class({
             let actor = global.stage.get_actor_at_pos(Clutter.PickMode.ALL, x, y);
             if (!this._currentPopup.actor.contains(actor))
                 this._currentPopup.popdown();
-        }));
+        }))
+        this._eventBlocker.add_action(this._clickAction);;
 
     },
 
