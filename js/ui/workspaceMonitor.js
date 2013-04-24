@@ -3,6 +3,7 @@
 const Lang = imports.lang;
 const Meta = imports.gi.Meta;
 
+const Hash = imports.misc.hash;
 const Main = imports.ui.main;
 
 const WorkspaceMonitor = new Lang.Class({
@@ -11,8 +12,8 @@ const WorkspaceMonitor = new Lang.Class({
     _init: function() {
         this._metaScreen = global.screen;
 
-        this._minimizedWindows = [];
-        this._knownWindows = [];
+        this._minimizedWindows = new Hash.Map();
+        this._knownWindows = new Hash.Map();
 
         this._shellwm = global.window_manager;
         this._shellwm.connect('minimize', Lang.bind(this, this._minimizeWindow));
@@ -28,6 +29,30 @@ const WorkspaceMonitor = new Lang.Class({
         //global.log('Start up: visibleWindows: ' + this._visibleWindows);
     },
 
+    _windowIsKnown: function(metaWindow) {
+        return this._knownWindows.has(metaWindow);
+    },
+
+    _addKnownWindow: function(metaWindow) {
+        this._knownWindows.set(metaWindow, true);
+    },
+
+    _removeKnownWindow: function(metaWindow) {
+        this._knownWindows.delete(metaWindow);
+    },
+
+    _windowIsMinimized: function(metaWindow) {
+        return this._minimizedWindows.has(metaWindow);
+    },
+
+    _addMinimizedWindow: function(metaWindow) {
+        this._minimizedWindows.set(metaWindow, true);
+    },
+
+    _removeMinimizedWindow: function(metaWindow) {
+        this._minimizedWindows.delete(metaWindow);
+    },
+
     _trackWorkspace: function(workspace) {
         this._activeWorkspace = workspace;
 
@@ -39,7 +64,6 @@ const WorkspaceMonitor = new Lang.Class({
         // windows already exist on the system. Currently we only have
         // one workspace so that isn't a problem.
         let windows = this._activeWorkspace.list_windows();
-        //global.log("Got " + windows.length + " windows");
         for (let i = 0; i < windows.length; i++) {
             let metaWindow = windows[i];
 
@@ -49,7 +73,7 @@ const WorkspaceMonitor = new Lang.Class({
             }
 
             if (metaWindow.minimized) {
-                this._minimizedWindows.push (metaWindow);
+                this._addMinimizedWindow(metaWindow);
             } else {
                 this._realMapWindow(metaWindow);
             }
@@ -73,8 +97,8 @@ const WorkspaceMonitor = new Lang.Class({
 
         this._visibleWindows = 0;
 
-        this._minimizedWindows = [];
-        this._knownWindows = [];
+        this._minimizedWindows = new Hash.Map();
+        this._knownWindows = new Hash.Map();
     },
 
     _workspaceSwitched: function(from, to, direction) {
@@ -128,7 +152,7 @@ const WorkspaceMonitor = new Lang.Class({
             return false;
         }
 
-        this._knownWindows.push(metaWindow);
+        this._addKnownWindow(metaWindow);
         return true;
     },
 
@@ -142,20 +166,20 @@ const WorkspaceMonitor = new Lang.Class({
         // Remove the window from our known windows
         // Window will not be in knownWindows if it wasn't
         // interesting to us.
-        let knownIdx = this._knownWindows.indexOf(metaWindow);
-        if (knownIdx == -1) {
+        if (!this._windowIsKnown(metaWindow)) {
             global.log('   unknown - ignoring');
             return;
         }
 
-        this._knownWindows.splice(knownIdx, 1);
+        this._removeKnownWindow(metaWindow);
 
         // This window may also have been minimized
         // but this doesn't affect the visibleWindows count
-        let minimizedIdx = this._minimizedWindows.indexOf(metaWindow);
-        if (minimizedIdx >= 0) {
+        //let minimizedIdx = this._minimizedWindows.indexOf(metaWindow);
+        //if (minimizedIdx >= 0) {
+        if (this._windowIsMinimized(metaWindow)) {
             global.log('   minimized - removed');
-            this._minimizedWindows.splice(minimizedIdx, 1);
+            this._removeMinimizedWindow(metaWindow);
         }
     },
 
@@ -163,8 +187,7 @@ const WorkspaceMonitor = new Lang.Class({
         global.log('_destroyWindow: ' + actor.meta_window.get_title());
         // _destroyWindow is not called for minimized windows
         // so if the window is in _knownWindows then we handle it
-        let knownIdx = this._knownWindows.indexOf(actor.meta_window);
-        if (knownIdx == -1) {
+        if (!this._windowIsKnown(actor.meta_window)) {
             global.log('   unknown - ignoring');
             return;
         }
@@ -177,8 +200,7 @@ const WorkspaceMonitor = new Lang.Class({
     _minimizeWindow: function(shellwm, actor) {
         global.log('_minimizeWindow: ' + actor.meta_window.get_title());
 
-        let knownIdx = this._knownWindows.indexOf(actor.meta_window);
-        if (knownIdx == -1) {
+        if (!this._windowIsKnown(actor.meta_window)) {
             global.log('   unknown - ignoring');
             return;
         }
@@ -186,9 +208,8 @@ const WorkspaceMonitor = new Lang.Class({
         // Don't handle this window if it's already in the minimized
         // windows array. Something has gone wrong and we've got
         // another minimize event without the window being remapped.
-        let idx = this._minimizedWindows.indexOf(actor.meta_window);
-        if (idx != -1) {
-            global.log('_minimizedWindow called for non-minimized window: ' + actor.meta_window.get_title());
+        if (this._windowIsMinimized(actor.meta_window)) {
+            global.log('_minimizedWindow called for minimized window: ' + actor.meta_window.get_title());
 
             this.updateOverview();
             return;
@@ -198,25 +219,23 @@ const WorkspaceMonitor = new Lang.Class({
         this._visibleWindows -= 1;
         global.log('   visible Windows: ' + this._visibleWindows);
 
-        this._minimizedWindows.push (actor.meta_window);
+        this._addMinimizedWindow(actor.meta_window);
         this.updateOverview();
     },
 
     _realMapWindow: function(metaWindow) {
         global.log('_realMapWindow: ' + metaWindow.get_title());
 
-        let knownIdx = this._knownWindows.indexOf(metaWindow);
         // If we don't know about it then we don't handle it
-        if (knownIdx == -1) {
+        if (!this._windowIsKnown(metaWindow)) {
             global.log('   unknown - ignoring');
             return;
         }
 
-        let minimizedIdx = this._minimizedWindows.indexOf(metaWindow);
         // If the window was minimized remove it from the array
-        if (minimizedIdx >= 0) {
+        if (this._windowIsMinimized(metaWindow)) {
             global.log('   was minimized');
-            this._minimizedWindows.splice(minimizedIdx, 1);
+            this._removeMinimizedWindow(metaWindow);
         }
 
         this._visibleWindows += 1;
