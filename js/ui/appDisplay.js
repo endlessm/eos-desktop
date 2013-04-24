@@ -245,7 +245,7 @@ const AllView = new Lang.Class({
             let actor = global.stage.get_actor_at_pos(Clutter.PickMode.ALL, x, y);
             if (!this._currentPopup.actor.contains(actor))
                 this._currentPopup.popdown();
-        }))
+        }));
         this._eventBlocker.add_action(this._clickAction);
     },
 
