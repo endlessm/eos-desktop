@@ -246,8 +246,7 @@ const AllView = new Lang.Class({
             if (!this._currentPopup.actor.contains(actor))
                 this._currentPopup.popdown();
         }))
-        this._eventBlocker.add_action(this._clickAction);;
-
+        this._eventBlocker.add_action(this._clickAction);
     },
 
     _onPan: function(action) {
