@@ -34,6 +34,7 @@ const SessionMode = imports.ui.sessionMode;
 const ShellDBus = imports.ui.shellDBus;
 const ShellMountOperation = imports.ui.shellMountOperation;
 const WindowManager = imports.ui.windowManager;
+const WorkspaceMonitor = imports.ui.workspaceMonitor;
 const Magnifier = imports.ui.magnifier;
 const XdndHandler = imports.ui.xdndHandler;
 const Util = imports.misc.util;
@@ -69,6 +70,7 @@ let _startDate;
 let _defaultCssStylesheet = null;
 let _cssStylesheet = null;
 let _overridesSettings = null;
+let _workspaceMonitor = null;
 
 function _sessionUpdated() {
     _loadDefaultStylesheet();
@@ -154,6 +156,8 @@ function _initializeUI() {
     windowAttentionHandler = new WindowAttentionHandler.WindowAttentionHandler();
     componentManager = new Components.ComponentManager();
 
+    _workspaceMonitor = new WorkspaceMonitor.WorkspaceMonitor();
+
     layoutManager.init();
     overview.init();
 
@@ -204,6 +208,11 @@ function _initializeUI() {
                               if (keybindingMode == Shell.KeyBindingMode.NONE) {
                                   keybindingMode = Shell.KeyBindingMode.NORMAL;
                               }
+
+                              // Now that we've completed startup, the
+                              // workspace monitor may want to hide/show
+                              // the overview
+                              _workspaceMonitor.updateOverview();
                           });
 }
 

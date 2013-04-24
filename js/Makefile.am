@@ -102,6 +102,7 @@ nobase_dist_js_DATA = 	\
 	ui/windowAttentionHandler.js	\
 	ui/windowManager.js	\
 	ui/workspace.js		\
+	ui/workspaceMonitor.js	\
 	ui/workspaceThumbnail.js	\
 	ui/workspacesView.js	\
 	ui/workspaceSwitcherPopup.js    \
