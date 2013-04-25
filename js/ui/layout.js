@@ -31,6 +31,10 @@ const MESSAGE_TRAY_PRESSURE_TIMEOUT = 1000; // ms
 const HOT_CORNER_PRESSURE_THRESHOLD = 100; // pixels
 const HOT_CORNER_PRESSURE_TIMEOUT = 1000; // ms
 
+// Set the hot corner target area to 3x3 so that it works on a VirtualBox VM
+// which "steals" the bottom two rows from the guest OS display
+const HOT_CORNER_SIZE = 3; // pixels
+
 function isPopupMetaWindow(actor) {
     switch(actor.meta_window.get_window_type()) {
     case Meta.WindowType.DROPDOWN_MENU:
@@ -1111,11 +1115,9 @@ const HotCorner = new Lang.Class({
                                              height: 3,
                                              reactive: true });
 
-            // Set the hot corner target area to 3x3 so that it works on a VirtualBox VM
-            // which "steals" the bottom two rows from the guest OS display
             this._corner = new Clutter.Rectangle({ name: 'hot-corner',
-                                                   width: 3,
-                                                   height: 3,
+                                                   width: HOT_CORNER_SIZE,
+                                                   height: HOT_CORNER_SIZE,
                                                    opacity: 0,
                                                    reactive: true });
             this._corner._delegate = this;
