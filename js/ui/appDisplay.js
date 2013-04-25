@@ -989,7 +989,7 @@ const AppStoreIcon = new Lang.Class({
 
     _onButtonPress: function(actor, event) {
         let button = event.get_button();
-        if (button == 1) {
+        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
             this.actor.set_child(this.pressed_icon.actor);
         }
         return false;
