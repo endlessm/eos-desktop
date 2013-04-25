@@ -21,6 +21,7 @@ DEB_CONFIGURE_EXTRA_FLAGS += --enable-compile-warnings=yes
 
 DEB_DH_MAKESHLIBS_ARGS_eos-shell = -Xlibeos-shell
 DEB_SHLIBDEPS_INCLUDE = /usr/lib/gnome-bluetooth
+DEB_DH_GIREPOSITORY_ARGS = -p/usr/lib/gnome-shell -l.
 
 # List any files which are not installed
 common-binary-post-install-arch:: list-missing

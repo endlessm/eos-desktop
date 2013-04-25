@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ln -fs /usr/lib/gdm/Gdm-1.0.typelib /usr/lib/eos-shell/
+ln -fs /usr/lib/gdm/libgdm* /usr/lib/eos-shell/
+
+exit 0
