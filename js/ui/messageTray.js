@@ -15,6 +15,7 @@ const Signals = imports.signals;
 const St = imports.gi.St;
 
 const BoxPointer = imports.ui.boxpointer;
+const ButtonConstants = imports.ui.buttonConstants;
 const CtrlAltTab = imports.ui.ctrlAltTab;
 const GnomeSession = imports.misc.gnomeSession;
 const GrabHelper = imports.ui.grabHelper;
@@ -1725,10 +1726,12 @@ const MessageTray = new Lang.Class({
 
         clickAction.connect('clicked', Lang.bind(this, function(action) {
             let button = action.get_button();
-            if (button == 3)
+            if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
                 this._openContextMenu();
-            if (button == 1 && this._contextMenu.isOpen)
+            }
+            if (button == ButtonConstants.LEFT_MOUSE_BUTTON && this._contextMenu.isOpen) {
                 this._grabHelper.ungrab({ actor: this._contextMenu.actor });
+            }
         }));
 
         clickAction.connect('long-press', Lang.bind(this, function(action, actor, state) {

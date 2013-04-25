@@ -10,6 +10,7 @@ const Mainloop = imports.mainloop;
 const St = imports.gi.St;
 
 const Config = imports.misc.config;
+const ButtonConstants = imports.ui.buttonConstants;
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
 const Params = imports.misc.params;
@@ -713,9 +714,10 @@ const Source = new Lang.Class({
         // notifications, so it possible to open them in summary mode; right
         // clicks are always forwarded, as the right click menu is not useful for
         // tray icons
-        if (button == 1 &&
-            this.notifications.length > 0)
+        if (button == ButtonContants.LEFT_MOUSE_BUTTON &&
+            this.notifications.length > 0) {
             return false;
+        }
 
         let id = global.connect('notify::stage-input-mode', Lang.bind(this, function () {
             global.disconnect(id);

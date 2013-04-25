@@ -24,6 +24,7 @@ const OverviewControls = imports.ui.overviewControls;
 const PopupMenu = imports.ui.popupMenu;
 const Tweener = imports.ui.tweener;
 const Workspace = imports.ui.workspace;
+const ButtonConstants = imports.ui.buttonConstants;
 const Params = imports.misc.params;
 const Util = imports.misc.util;
 
@@ -69,6 +70,14 @@ function _loadCategory(dir, view) {
 
 };
 
+function getAppFromSource(source) {
+    if (source instanceof AppIcon) {
+        return source.app;
+    } else {
+        return null;
+    }
+}
+
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,
@@ -107,9 +116,9 @@ const EndlessApplicationView = new Lang.Class({
 
     _addItem: function(item) {
         let id = this._getItemId(item);
-        if (this._items[id] !== undefined)
+        if (this._items[id] !== undefined) {
             return null;
-
+        }
         let itemIcon = this._createItemIcon(item);
         this._allItems.push(item);
         this._items[id] = itemIcon;
@@ -121,8 +130,10 @@ const EndlessApplicationView = new Lang.Class({
         let appStoreId;
         for (let i = 0; i < this._allItems.length; i++) {
             let id = this._getItemId(this._allItems[i]);
-            if (!id)
+            if (!id) {
                 continue;
+            }
+
             this._grid.addItem(this._items[id].actor);
         }
         this._grid.addItem(this._appStoreIcon.actor);
@@ -188,11 +199,13 @@ const AllViewLayout = new Lang.Class({
             let childY = child.y;
             let [childMin, childNatural] = child.get_preferred_height(forWidth);
 
-            if (childMin + childY > minBottom)
+            if (childMin + childY > minBottom) {
                 minBottom = childMin + childY;
-
-            if (childNatural + childY > naturalBottom)
+            }
+            
+            if (childNatural + childY > naturalBottom) {
                 naturalBottom = childNatural + childY;
+            }
         }
         return [minBottom, naturalBottom];
     }
@@ -225,15 +238,21 @@ const AllView = new Lang.Class({
         action.connect('pan', Lang.bind(this, this._onPan));
         this.actor.add_action(action);
 
+        Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
+        Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
+        
         this._clickAction = new Clutter.ClickAction();
         this._clickAction.connect('clicked', Lang.bind(this, function() {
-            if (!this._currentPopup)
+            if (!this._currentPopup) {
                 return;
+            }
 
             let [x, y] = this._clickAction.get_coords();
             let actor = global.stage.get_actor_at_pos(Clutter.PickMode.ALL, x, y);
-            if (!this._currentPopup.actor.contains(actor))
+            if (!this._currentPopup.actor.contains(actor)) {
                 this._currentPopup.popdown();
+            }
+
         }));
         this._eventBlocker.add_action(this._clickAction);
     },
@@ -248,23 +267,30 @@ const AllView = new Lang.Class({
     },
 
     _getItemId: function(item) {
-        if (item instanceof Shell.App)
+        if (item instanceof Shell.App) {
             return item.get_id();
-        else if (item instanceof GMenu.TreeDirectory)
+        } else if (item instanceof GMenu.TreeDirectory) {
             return item.get_menu_id();
-        else
+        } else {
             return null;
+        }
     },
-
+    _onDragBegin: function() { 
+        this._eventBlocker.hide();
+    },
+    _onDragEnd: function() { 
+        this._eventBlocker.show();
+    },
     _createItemIcon: function(item) {
-        if (item instanceof AppStore)
+        if (item instanceof AppStore) {
             return new AppStoreIcon(item);
-        else if (item instanceof Shell.App)
+        } else if (item instanceof Shell.App) {
             return new AppIcon(item);
-        else if (item instanceof GMenu.TreeDirectory)
+        } else if (item instanceof GMenu.TreeDirectory) {
             return new FolderIcon(item, this);
-        else
+        } else {
             return null;
+        }
     },
 
     _compareItems: function(itemA, itemB) {
@@ -391,7 +417,6 @@ const AppDisplay = new Lang.Class({
         this._viewStack = new St.Widget({ layout_manager: new Clutter.BinLayout(),
                                           x_expand: true, y_expand: true });
         this.actor.add(this._viewStack, { expand: true });
-
 
         for (let i = 0; i < this._views.length; i++) {
             this._viewStack.add_actor(this._views[i].view.actor);
@@ -690,6 +715,7 @@ const AppIcon = new Lang.Class({
 
     _init : function(app, iconParams) {
         this.app = app;
+
         this.actor = new St.Button({ style_class: 'app-well-app',
                                      reactive: true,
                                      button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO,
@@ -717,6 +743,7 @@ const AppIcon = new Lang.Class({
         this._draggable = DND.makeDraggable(this.actor);
         this._draggable.connect('drag-begin', Lang.bind(this,
             function () {
+                // Notify view that something is dragging
                 this._removeMenuTimeout();
                 Main.overview.beginItemDrag(this);
             }));
@@ -726,7 +753,8 @@ const AppIcon = new Lang.Class({
             }));
         this._draggable.connect('drag-end', Lang.bind(this,
             function () {
-               Main.overview.endItemDrag(this);
+                // Are we in the trashcan area?
+                Main.overview.endItemDrag(this);
             }));
 
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
@@ -739,8 +767,9 @@ const AppIcon = new Lang.Class({
     },
 
     _onDestroy: function() {
-        if (this._stateChangedId > 0)
+        if (this._stateChangedId > 0) {
             this.app.disconnect(this._stateChangedId);
+        }
         this._stateChangedId = 0;
         this._removeMenuTimeout();
     },
@@ -757,21 +786,22 @@ const AppIcon = new Lang.Class({
     },
 
     _onStateChanged: function() {
-        if (this.app.state != Shell.AppState.STOPPED)
+        if (this.app.state != Shell.AppState.STOPPED) {
             this.actor.add_style_class_name('running');
-        else
+        } else {
             this.actor.remove_style_class_name('running');
+        }
     },
 
     _onButtonPress: function(actor, event) {
         let button = event.get_button();
-        if (button == 1) {
+        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
             this._removeMenuTimeout();
             this._menuTimeoutId = Mainloop.timeout_add(MENU_POPUP_TIMEOUT,
                 Lang.bind(this, function() {
                     this.popupMenu();
                 }));
-        } else if (button == 3) {
+        } else if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
             this.popupMenu();
             return true;
         }
@@ -781,9 +811,9 @@ const AppIcon = new Lang.Class({
     _onClicked: function(actor, button) {
         this._removeMenuTimeout();
 
-        if (button == 1) {
+        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
             this._onActivate(Clutter.get_current_event());
-        } else if (button == 2) {
+        } else if (button == ButtonConstants.MIDDLE_MOUSE_BUTTON) {
             // Last workspace is always empty
             let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
             launchWorkspace.activate(global.get_current_time());
@@ -814,8 +844,9 @@ const AppIcon = new Lang.Class({
                 this.activateWindow(window);
             }));
             this._menu.connect('open-state-changed', Lang.bind(this, function (menu, isPoppedUp) {
-                if (!isPoppedUp)
+                if (!isPoppedUp) { 
                     this._onMenuPoppedDown();
+                }
             }));
             Main.overview.connect('hiding', Lang.bind(this, function () { this._menu.close(); }));
 
@@ -879,11 +910,11 @@ Signals.addSignalMethods(AppIcon.prototype);
 
 const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
-    Extends: AppIcon,
-
-    popupMenu: function() {},
+    Extends: St.Widget,
 
     _init : function(app, iconParams) {
+        this.parent();
+
         this.app = app;
         this.actor = new St.Button({ style_class: 'app-well-app',
                                      reactive: true,
@@ -891,10 +922,10 @@ const AppStoreIcon = new Lang.Class({
                                      can_focus: false,
                                      x_fill: true,
                                      y_fill: true });
-        this.actor._delegate = this;
 
-        if (!iconParams)
+        if (!iconParams) {
             iconParams = {};
+        }
 
         iconParams['createIcon'] = Lang.bind(this, this._createIcon);
         this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
@@ -902,16 +933,22 @@ const AppStoreIcon = new Lang.Class({
         iconParams['createIcon'] = Lang.bind(this, this._createPressedIcon);
         this.pressed_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
 
-        this.actor.set_child(this.icon.actor);
+        iconParams['createIcon'] = Lang.bind(this, this._createTrashIcon);
+        this.empty_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
 
+        iconParams['createIcon'] = Lang.bind(this, this._createFullTrashIcon);
+        this.full_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
+
+        this.actor.set_child(this.icon.actor);
         this.actor.label_actor = this.icon.label;
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
         this.actor.connect('clicked', Lang.bind(this, this._onClicked));
-
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
-        this._menuTimeoutId = 0;
+        Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
+        Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
+
         this._stateChangedId = this.app.connect('notify::state', Lang.bind(this, this._onStateChanged));
         this._onStateChanged();
     },
@@ -927,29 +964,149 @@ const AppStoreIcon = new Lang.Class({
         return new St.Icon({ icon_size: iconSize,
                              icon_name: 'add_normal'});
     },
+
+    _onDestroy: function() {
+        if (this._stateChangedId > 0) { 
+            this.app.disconnect(this._stateChangedId);
+        }
+        this._stateChangedId = 0;
+    },
+
     _createIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
                              icon_name: 'add_normal'});
     },
+
+    _createTrashIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize,
+                             icon_name: 'trash-can_normal'});
+    },
+
+    _createFullTrashIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize,
+                             icon_name: 'trash-can_hover'});
+    },
+
     _onButtonPress: function(actor, event) {
         let button = event.get_button();
-        if (button == 1) {
-            this._removeMenuTimeout();
+        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
             this.actor.set_child(this.pressed_icon.actor);
-            this._menuTimeoutId = Mainloop.timeout_add(1250,
-                Lang.bind(this, function() {
-                    this.actor.set_child(this.icon.actor);
-                }));
         }
         return false;
     },
+
+    _onDragBegin: function() {
+        this.actor.set_child(this.empty_trash_icon.actor);
+        this._dragCancelled = false;
+        this._dragMonitor = {
+            dragMotion: Lang.bind(this, this._onDragMotion)
+        };
+        DND.addDragMonitor(this._dragMonitor);
+    },
+
+    _onDragEnd: function(actor, event) {
+        this.actor.set_child(this.icon.actor);
+        DND.removeDragMonitor(this._dragMonitor);
+    },
+
+    _onDragMotion: function(dragEvent) {
+        let app = getAppFromSource(dragEvent.source);
+        if (app == null) {
+            return DND.DragMotionResult.CONTINUE;
+        }
+
+        let showAppsHovered = this.actor.contains(dragEvent.targetActor);
+
+        if (showAppsHovered) {
+            this.actor.set_child(this.full_trash_icon.actor);
+        } else {
+            this.actor.set_child(this.empty_trash_icon.actor);
+        }
+
+        return DND.DragMotionResult.CONTINUE;
+    },
+
+    _onClicked: function(actor, button) {
+        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+            this._onActivate(Clutter.get_current_event());
+        } else if (button == ButtonConstants.MIDDLE_MOUSE_BUTTON) {
+            // Last workspace is always empty
+            let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
+            launchWorkspace.activate(global.get_current_time());
+            this.emit('launching');
+            this.app.open_new_window(-1);
+            Main.overview.hide();
+        }
+        return false;
+    },
+
+    getId: function() {
+        return this.app.get_id();
+    },
+
+    handleDragOver: function(source, actor, x, y, time) {
+        let app = getAppFromSource(source);
+        if (app == null) {
+            return DND.DragMotionResult.NO_DROP;
+        }
+        let id = app.get_id();
+        return DND.DragMotionResult.MOVE_DROP;
+    },
+
+    acceptDrop: function(source, actor, x, y, time) {
+        let app = source.app;
+        if (app == null) {
+            return false;
+        }
+
+        let id = app.get_id();
+
+        Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this,
+            function () {
+                return false;
+            }));
+
+        return true;
+    }, 
+
+    _onStateChanged: function() {
+        if (this.app.state != Shell.AppState.STOPPED) {
+            this.actor.add_style_class_name('running');
+        } else {
+            this.actor.remove_style_class_name('running');
+        }
+    },
+
+    activateWindow: function(metaWindow) {
+        if (metaWindow) {
+            Main.activateWindow(metaWindow);
+        } else {
+            Main.overview.hide();
+        }
+    },
+
     _onActivate: function (event) {
-        this.app.activate();
+        this.emit('launching');
+        let modifiers = event.get_state();
+
+        if (modifiers & Clutter.ModifierType.CONTROL_MASK
+            && this.app.state == Shell.AppState.RUNNING) {
+            this.app.open_new_window(-1);
+        } else {
+            this.app.activate();
+        }
 
         Main.overview.hide();
     },
 
+    shellWorkspaceLaunch : function(params) {
+        params = Params.parse(params, { workspace: -1,
+                                        timestamp: 0 });
+
+        this.app.open_new_window(params.workspace);
+    }
 });
+Signals.addSignalMethods(AppStoreIcon.prototype);
 
 const AppIconMenu = new Lang.Class({
     Name: 'AppIconMenu',
