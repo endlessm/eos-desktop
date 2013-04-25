@@ -26,7 +26,6 @@ const NMConnectionCategory = {
 };
 
 const NMAccessPointSecurity = {
-    UNKNOWN: 0,
     NONE: 1,
     WEP: 2,
     WPA_PSK: 3,
@@ -111,8 +110,7 @@ const NMNetworkMenuItem = new Lang.Class({
         hbox.add_actor(this._signalIcon);
 
         this._secureIcon = new St.Icon({ style_class: 'popup-menu-icon' });
-        if (this.bestAP._secType != NMAccessPointSecurity.UNKNOWN &&
-            this.bestAP._secType != NMAccessPointSecurity.NONE)
+        if (this.bestAP._secType != NMAccessPointSecurity.NONE)
             this._secureIcon.icon_name = 'network-wireless-encrypted-symbolic';
         hbox.add_actor(this._secureIcon);
     },
