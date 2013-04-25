@@ -1726,10 +1726,12 @@ const MessageTray = new Lang.Class({
 
         clickAction.connect('clicked', Lang.bind(this, function(action) {
             let button = action.get_button();
-            if (button == ButtonConstants.RIGHT_MOUSE_BUTTON)
+            if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
                 this._openContextMenu();
-            if (button == ButtonConstants.LEFT_MOUSE_BUTTON && this._contextMenu.isOpen)
+            }
+            if (button == ButtonConstants.LEFT_MOUSE_BUTTON && this._contextMenu.isOpen) {
                 this._grabHelper.ungrab({ actor: this._contextMenu.actor });
+            }
         }));
 
         clickAction.connect('long-press', Lang.bind(this, function(action, actor, state) {

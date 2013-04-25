@@ -715,8 +715,9 @@ const Source = new Lang.Class({
         // clicks are always forwarded, as the right click menu is not useful for
         // tray icons
         if (button == ButtonContants.LEFT_MOUSE_BUTTON &&
-            this.notifications.length > 0)
+            this.notifications.length > 0) {
             return false;
+        }
 
         let id = global.connect('notify::stage-input-mode', Lang.bind(this, function () {
             global.disconnect(id);

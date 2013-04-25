@@ -116,9 +116,9 @@ const EndlessApplicationView = new Lang.Class({
 
     _addItem: function(item) {
         let id = this._getItemId(item);
-        if (this._items[id] !== undefined)
+        if (this._items[id] !== undefined) {
             return null;
-
+        }
         let itemIcon = this._createItemIcon(item);
         this._allItems.push(item);
         this._items[id] = itemIcon;
@@ -130,8 +130,10 @@ const EndlessApplicationView = new Lang.Class({
         let appStoreId;
         for (let i = 0; i < this._allItems.length; i++) {
             let id = this._getItemId(this._allItems[i]);
-            if (!id)
+            if (!id) {
                 continue;
+            }
+
             this._grid.addItem(this._items[id].actor);
         }
         this._grid.addItem(this._appStoreIcon.actor);
@@ -197,11 +199,13 @@ const AllViewLayout = new Lang.Class({
             let childY = child.y;
             let [childMin, childNatural] = child.get_preferred_height(forWidth);
 
-            if (childMin + childY > minBottom)
+            if (childMin + childY > minBottom) {
                 minBottom = childMin + childY;
-
-            if (childNatural + childY > naturalBottom)
+            }
+            
+            if (childNatural + childY > naturalBottom) {
                 naturalBottom = childNatural + childY;
+            }
         }
         return [minBottom, naturalBottom];
     }
@@ -239,13 +243,16 @@ const AllView = new Lang.Class({
         
         this._clickAction = new Clutter.ClickAction();
         this._clickAction.connect('clicked', Lang.bind(this, function() {
-            if (!this._currentPopup)
+            if (!this._currentPopup) {
                 return;
+            }
 
             let [x, y] = this._clickAction.get_coords();
             let actor = global.stage.get_actor_at_pos(Clutter.PickMode.ALL, x, y);
-            if (!this._currentPopup.actor.contains(actor))
+            if (!this._currentPopup.actor.contains(actor)) {
                 this._currentPopup.popdown();
+            }
+
         }));
         this._eventBlocker.add_action(this._clickAction);
     },
@@ -260,12 +267,13 @@ const AllView = new Lang.Class({
     },
 
     _getItemId: function(item) {
-        if (item instanceof Shell.App)
+        if (item instanceof Shell.App) {
             return item.get_id();
-        else if (item instanceof GMenu.TreeDirectory)
+        } else if (item instanceof GMenu.TreeDirectory) {
             return item.get_menu_id();
-        else
+        } else {
             return null;
+        }
     },
     _onDragBegin: function() { 
         this._eventBlocker.hide();
@@ -274,14 +282,15 @@ const AllView = new Lang.Class({
         this._eventBlocker.show();
     },
     _createItemIcon: function(item) {
-        if (item instanceof AppStore)
+        if (item instanceof AppStore) {
             return new AppStoreIcon(item);
-        else if (item instanceof Shell.App)
+        } else if (item instanceof Shell.App) {
             return new AppIcon(item);
-        else if (item instanceof GMenu.TreeDirectory)
+        } else if (item instanceof GMenu.TreeDirectory) {
             return new FolderIcon(item, this);
-        else
+        } else {
             return null;
+        }
     },
 
     _compareItems: function(itemA, itemB) {
@@ -758,8 +767,9 @@ const AppIcon = new Lang.Class({
     },
 
     _onDestroy: function() {
-        if (this._stateChangedId > 0)
+        if (this._stateChangedId > 0) {
             this.app.disconnect(this._stateChangedId);
+        }
         this._stateChangedId = 0;
         this._removeMenuTimeout();
     },
@@ -776,10 +786,11 @@ const AppIcon = new Lang.Class({
     },
 
     _onStateChanged: function() {
-        if (this.app.state != Shell.AppState.STOPPED)
+        if (this.app.state != Shell.AppState.STOPPED) {
             this.actor.add_style_class_name('running');
-        else
+        } else {
             this.actor.remove_style_class_name('running');
+        }
     },
 
     _onButtonPress: function(actor, event) {
@@ -833,8 +844,9 @@ const AppIcon = new Lang.Class({
                 this.activateWindow(window);
             }));
             this._menu.connect('open-state-changed', Lang.bind(this, function (menu, isPoppedUp) {
-                if (!isPoppedUp)
+                if (!isPoppedUp) { 
                     this._onMenuPoppedDown();
+                }
             }));
             Main.overview.connect('hiding', Lang.bind(this, function () { this._menu.close(); }));
 
@@ -911,8 +923,9 @@ const AppStoreIcon = new Lang.Class({
                                      x_fill: true,
                                      y_fill: true });
 
-        if (!iconParams)
+        if (!iconParams) {
             iconParams = {};
+        }
 
         iconParams['createIcon'] = Lang.bind(this, this._createIcon);
         this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
@@ -953,8 +966,9 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onDestroy: function() {
-        if (this._stateChangedId > 0)
+        if (this._stateChangedId > 0) { 
             this.app.disconnect(this._stateChangedId);
+        }
         this._stateChangedId = 0;
     },
 
@@ -997,12 +1011,13 @@ const AppStoreIcon = new Lang.Class({
 
     _onDragMotion: function(dragEvent) {
         let app = getAppFromSource(dragEvent.source);
-        if (app == null)
+        if (app == null) {
             return DND.DragMotionResult.CONTINUE;
+        }
 
         let showAppsHovered = this.actor.contains(dragEvent.targetActor);
 
-        if (showAppsHovered){
+        if (showAppsHovered) {
             this.actor.set_child(this.full_trash_icon.actor);
         } else {
             this.actor.set_child(this.empty_trash_icon.actor);
@@ -1031,16 +1046,18 @@ const AppStoreIcon = new Lang.Class({
 
     handleDragOver: function(source, actor, x, y, time) {
         let app = getAppFromSource(source);
-        if (app == null)
+        if (app == null) {
             return DND.DragMotionResult.NO_DROP;
+        }
         let id = app.get_id();
         return DND.DragMotionResult.MOVE_DROP;
     },
 
     acceptDrop: function(source, actor, x, y, time) {
         let app = source.app;
-        if (app == null)
+        if (app == null) {
             return false;
+        }
 
         let id = app.get_id();
 
@@ -1053,10 +1070,11 @@ const AppStoreIcon = new Lang.Class({
     }, 
 
     _onStateChanged: function() {
-        if (this.app.state != Shell.AppState.STOPPED)
+        if (this.app.state != Shell.AppState.STOPPED) {
             this.actor.add_style_class_name('running');
-        else
+        } else {
             this.actor.remove_style_class_name('running');
+        }
     },
 
     activateWindow: function(metaWindow) {
