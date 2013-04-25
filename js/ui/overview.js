@@ -264,12 +264,6 @@ const Overview = new Lang.Class({
                                                     expand: true });
         this._group.add_actor(this._controls.thumbnailsActor);
 
-        // Hide the dash
-        this._controls.dashActor.hide();
-
-        // Hide the workspace thumbnails
-        this._controls.thumbnailsActor.hide();
-
         // Add our same-line elements after the search entry
         this._overview.add(this._groupStack, { y_fill: true, expand: true });
 
