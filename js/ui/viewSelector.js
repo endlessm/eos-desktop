@@ -135,6 +135,12 @@ const ViewSelector = new Lang.Class({
                 this._stageKeyPressId = global.stage.connect('key-press-event',
                                                              Lang.bind(this, this._onStageKeyPress));
             }));
+        Main.overview.connect('showingApps', Lang.bind(this,
+            function () {
+                this._setShowAppsButton();
+                this._stageKeyPressId = global.stage.connect('key-press-event',
+                                                             Lang.bind(this, this._onStageKeyPress));
+            }));
         Main.overview.connect('hiding', Lang.bind(this,
             function () {
                 this._resetShowAppsButton();
@@ -172,6 +178,24 @@ const ViewSelector = new Lang.Class({
             Main.overview.fadeOutDesktop();
 
         this._showPage(this._workspacesPage, true);
+    },
+
+    showApps: function() {
+        this._activePage = this._appsPage;
+
+        Main.overview.hideDash();
+        Main.overview.hideThumbnails();
+
+        this.reset();
+        this._appsPage.show();
+        this._searchPage.hide();
+        this._workspacesDisplay.hide();
+
+        if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows()) {
+            Main.overview.fadeOutDesktop();
+        }
+
+        this._showPage(this._appsPage, true);
     },
 
     zoomFromOverview: function() {
@@ -264,13 +288,18 @@ const ViewSelector = new Lang.Class({
                        this._appsPage : this._workspacesPage);
     },
 
+    _setShowAppsButton: function() {
+        this._showAppsBlocked = true;
+        this._showAppsButton.checked = true;
+        this._showAppsBlocked = false;
+
+        this._showPage(this._appsPage, true);
+    },
+
     _resetShowAppsButton: function() {
         this._showAppsBlocked = true;
         this._showAppsButton.checked = false;
         this._showAppsBlocked = false;
-
-        Main.overview.showDash();
-        Main.overview.showThumbnails();
 
         this._showPage(this._workspacesPage, true);
     },
