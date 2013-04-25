@@ -17,8 +17,13 @@ config.status
 config
 configure
 data/50-gnome-shell-*.xml
+data/gdm-eos-shell.desktop.in
+data/gdm-eos-shell.desktop
 data/eos-shell.desktop
 data/eos-shell.desktop.in
+data/eos-session.desktop
+data/eos-session.desktop.in
+data/eos-shell.session
 data/eos-shell-extension-prefs.desktop
 data/eos-shell-extension-prefs.desktop.in
 data/gschemas.compiled

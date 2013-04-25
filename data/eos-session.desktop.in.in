@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+_Name=EOS Shell
+_Comment=Window management and application launching
+Exec=gnome-session --session=eos-shell
+Categories=GNOME;GTK;Core;

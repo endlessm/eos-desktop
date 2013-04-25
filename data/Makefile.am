@@ -4,6 +4,9 @@ dist_wanda_DATA = wanda.png
 desktopdir=$(datadir)/applications
 desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop
 
+sessionsdir=$(datadir)/xsessions
+sessions_DATA = eos-session.desktop
+
 # We substitute in bindir so it works as an autostart
 # file when built in a non-system prefix
 %.desktop.in:%.desktop.in.in
@@ -12,6 +15,22 @@ desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop
 	    $< > $@ || rm $@
 
 @INTLTOOL_DESKTOP_RULE@
+
+greeterdesktopdir = $(datadir)/gdm/greeter/applications
+greeterdesktop_DATA = gdm-eos-shell.desktop
+
+gnomesessiondir = $(datadir)/gnome-session/sessions
+gnomesession_DATA = eos-shell.session gdm-eos-shell.session
+
+%.session.in: %.session.in.in
+	$(AM_V_GEN) sed -e "s|@LIBDIR[@]|$(libdir)|" \
+	    $< > $@
+
+%.session: %.session.in
+	$(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< $@
+
+@INTLTOOL_DESKTOP_RULE@
+@INTLTOOL_XML_NOMERGE_RULE@
 
 introspectiondir = $(datadir)/dbus-1/interfaces
 introspection_DATA =				\
@@ -81,21 +100,45 @@ all-local: gschemas.compiled
 convertdir = $(datadir)/GConf/gsettings
 convert_DATA = gnome-shell-overrides.convert
 
+install-data-hook: 99-gdm-eos-shell-settings
+	if test '!' -d $(DESTDIR)$(sysconfdir)/dconf/db/gdm.d; then \
+		$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/dconf/db/gdm.d; \
+		chmod 0755 $(DESTDIR)$(sysconfdir)/dconf/db/gdm.d; \
+		chown root:root $(DESTDIR)$(sysconfdir)/dconf/db/gdm.d || : ; \
+	fi
+
+	$(INSTALL_DATA) $(srcdir)/99-gdm-eos-shell-settings $(DESTDIR)$(sysconfdir)/dconf/db/gdm.d
+	test -z "$(DESTDIR)" && dconf update || :
+
+uninstall-hook:
+	rm -f $(DESTDIR)$(sysconfdir)/dconf/db/gdm.d/99-gdm-eos-shell-settings
+
+
 EXTRA_DIST =						\
+	99-gdm-eos-shell-settings		\
+	gdm-eos-shell.desktop.in.in		\
 	eos-shell.desktop.in.in			\
+	eos-session.desktop.in.in		\
+	eos-shell.session.in.in			\
 	eos-shell-extension-prefs.desktop.in.in	\
-	$(introspection_DATA)				\
+	$(introspection_DATA)			\
 	$(menu_DATA)					\
 	$(convert_DATA)					\
 	$(keys_in_files)				\
 	org.gnome.shell.gschema.xml.in.in
 
 CLEANFILES =						\
-	eos-shell.desktop.in				\
-	eos-shell-extension-prefs.in			\
+	gdm-eos-shell.desktop.in		\
+	eos-shell.desktop.in			\
+	eos-session.desktop.in			\
+	eos-shell-extension-prefs.in	\
+	eos-shell.session				\
+	eos-shell.session.in			\
 	$(desktop_DATA)					\
+	$(sessions_DATA)				\
 	$(keys_DATA)					\
-	$(gsettings_SCHEMAS)				\
+	$(gsettings_SCHEMAS)			\
 	gschemas.compiled				\
-	org.gnome.shell.gschema.valid			\
+	org.gnome.shell.gschema.valid	\
 	org.gnome.shell.gschema.xml.in
+
