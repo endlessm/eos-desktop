@@ -2,7 +2,7 @@ eos-shell (3.8.0) unstable; urgency=low
 
   * initial eos-shell debian build
 
- -- Emilio Pozuelo Monfort <pochu@debian.org>  Wed, 27 Mar 2013 00:28:32 +0100
+ -- Srdjan Grubor <sgnn7@sgnn7.org>  Fri, 26 Apr 2013 14:28:32 -0500
 
 gnome-shell (3.7.92-1) experimental; urgency=low
 
