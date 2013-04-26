@@ -15,6 +15,7 @@ const Atk = imports.gi.Atk;
 
 const AppFavorites = imports.ui.appFavorites;
 const BoxPointer = imports.ui.boxpointer;
+const ButtonConstants = imports.ui.buttonConstants;
 const DND = imports.ui.dnd;
 const IconGrid = imports.ui.iconGrid;
 const IconGridLayout = imports.ui.iconGridLayout;
@@ -24,7 +25,6 @@ const OverviewControls = imports.ui.overviewControls;
 const PopupMenu = imports.ui.popupMenu;
 const Tweener = imports.ui.tweener;
 const Workspace = imports.ui.workspace;
-const ButtonConstants = imports.ui.buttonConstants;
 const Params = imports.misc.params;
 const Util = imports.misc.util;
 
