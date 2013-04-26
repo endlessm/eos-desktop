@@ -1,17 +1,8 @@
-GNOME Shell provides core user interface functions for the GNOME 3 desktop,
-like switching to windows and launching applications. GNOME Shell takes
-advantage of the capabilities of modern graphics hardware and introduces
-innovative user interface concepts to provide a visually attractive and
-easy to use experience.
+Eos Shell
 
-For more information about GNOME Shell, including instructions on how
-to build GNOME Shell from source and how to get involved with the project,
-see:
-
- http://live.gnome.org/GnomeShell
-
-Bugs should be reported at http://bugzilla.gnome.org against the 'gnome-shell'
-product.
+If you are installing locally, make sure to do the following:
+ln -fs $(DESTDIR)$(libdir)/gdm/Gdm-1.0.typelib $(DESTDIR)$(libdir)/eos-shell/
+ln -fs $(DESTDIR)$(libdir)/gdm/libgdm* $(DESTDIR)$(libdir)/@package@/
 
 License
 =======
