@@ -508,8 +508,7 @@ const ControlsManager = new Lang.Class({
             return;
 
         let activePage = this._viewSelector.getActivePage();
-        let dashVisible = (activePage == ViewSelector.ViewPage.WINDOWS ||
-                           activePage == ViewSelector.ViewPage.APPS);
+        let dashVisible = (activePage == ViewSelector.ViewPage.WINDOWS);
         let thumbnailsVisible = (activePage == ViewSelector.ViewPage.WINDOWS);
 
         if (dashVisible)
