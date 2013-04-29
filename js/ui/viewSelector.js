@@ -150,6 +150,8 @@ const ViewSelector = new Lang.Class({
                               Shell.KeyBindingMode.NORMAL |
                               Shell.KeyBindingMode.OVERVIEW,
                               Lang.bind(this, this._toggleAppsPage));
+
+        Main.overview.connect('show-apps-request', Lang.bind(this, this._toggleAppsPage));
     },
 
     _toggleAppsPage: function() {

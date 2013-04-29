@@ -473,6 +473,10 @@ const Overview = new Lang.Class({
         this._animateVisible();
     },
 
+    showApps : function() {
+        this.emit('show-apps-request');
+    },
+
     fadeInDesktop: function() {
             this._desktopFade.opacity = 0;
             this._desktopFade.show();
