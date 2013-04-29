@@ -264,12 +264,6 @@ const Overview = new Lang.Class({
                                                     expand: true });
         this._group.add_actor(this._controls.thumbnailsActor);
 
-        // Hide the dash
-        this._controls.dashActor.hide();
-
-        // Hide the workspace thumbnails
-        this._controls.thumbnailsActor.hide();
-
         // Add our same-line elements after the search entry
         this._overview.add(this._groupStack, { y_fill: true, expand: true });
 
@@ -466,6 +460,16 @@ const Overview = new Lang.Class({
     //
     // Animates the overview visible and grabs mouse and keyboard input
     show : function() {
+        this._showingApps = false;
+        this._show();
+    },
+
+    showApps: function() {
+        this._showingApps = true;
+        this._show();
+    },
+
+    _show: function() {
         if (this.isDummy)
             return;
         if (this._shown)
@@ -521,7 +525,12 @@ const Overview = new Lang.Class({
         Meta.disable_unredirect_for_screen(global.screen);
         this._stack.show();
         this._backgroundGroup.show();
-        this._viewSelector.show();
+
+        if (this._showingApps) {
+            this._viewSelector.showApps();
+        } else {
+            this._viewSelector.show();
+        }
 
         this._stack.opacity = 0;
         Tweener.addTween(this._stack,
@@ -534,7 +543,12 @@ const Overview = new Lang.Class({
 
         this._coverPane.raise_top();
         this._coverPane.show();
-        this.emit('showing');
+
+        if (this._showingApps) {
+            this.emit('showingApps');
+        } else {
+            this.emit('showing');
+        }
     },
 
     // hide:
@@ -685,6 +699,22 @@ const Overview = new Lang.Class({
             this._fakePointerEvent();
             this._needsFakePointerEvent = false;
         }
+    },
+
+    showDash: function() {
+        this._controls.dashActor.show();
+    },
+
+    hideDash: function() {
+        this._controls.dashActor.hide();
+    },
+
+    showThumbnails: function() {
+        this._controls.thumbnailsActor.show();
+    },
+
+    hideThumbnails: function() {
+        this._controls.thumbnailsActor.hide();
     }
 });
 Signals.addSignalMethods(Overview.prototype);

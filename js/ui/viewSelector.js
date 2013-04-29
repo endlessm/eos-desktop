@@ -91,6 +91,10 @@ const ViewSelector = new Lang.Class({
         this._iconClickedId = 0;
         this._capturedEventId = 0;
 
+        this._workspacesDisplay = new WorkspacesView.WorkspacesDisplay();
+        this._workspacesPage = this._addPage(this._workspacesDisplay.actor,
+                                             _("Windows"), 'emblem-documents-symbolic');
+
         this._appDisplay = new AppDisplay.AppDisplay();
         this._appsPage = this._addPage(this._appDisplay.actor,
                                        _("Applications"), 'view-grid-symbolic');
@@ -131,6 +135,12 @@ const ViewSelector = new Lang.Class({
                 this._stageKeyPressId = global.stage.connect('key-press-event',
                                                              Lang.bind(this, this._onStageKeyPress));
             }));
+        Main.overview.connect('showingApps', Lang.bind(this,
+            function () {
+                this._setShowAppsButton();
+                this._stageKeyPressId = global.stage.connect('key-press-event',
+                                                             Lang.bind(this, this._onStageKeyPress));
+            }));
         Main.overview.connect('hiding', Lang.bind(this,
             function () {
                 this._resetShowAppsButton();
@@ -154,21 +164,49 @@ const ViewSelector = new Lang.Class({
     },
 
     show: function() {
-        // Default to the app selector rather than the workspaces display
-        this._activePage = this._appsPage;
+        this._activePage = this._workspacesPage;
+
+        Main.overview.showDash();
+        Main.overview.showThumbnails();
 
         this.reset();
+        this._appsPage.hide();
         this._searchPage.hide();
+        this._workspacesDisplay.show();
+
+        if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
+            Main.overview.fadeOutDesktop();
+
+        this._showPage(this._workspacesPage, true);
+    },
+
+    showApps: function() {
+        this._activePage = this._appsPage;
+
+        Main.overview.hideDash();
+        Main.overview.hideThumbnails();
+
+        this.reset();
+        this._appsPage.show();
+        this._searchPage.hide();
+        this._workspacesDisplay.hide();
+
+        if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows()) {
+            Main.overview.fadeOutDesktop();
+        }
 
         this._showPage(this._appsPage, true);
     },
 
     zoomFromOverview: function() {
-        // Nothing to do, since we always show the app selector
+        this._workspacesDisplay.zoomFromOverview();
+
+        if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
+            Main.overview.fadeInDesktop();
     },
 
     hide: function() {
-        // Nothing to do, since we always show the app selector
+        this._workspacesDisplay.hide();
     },
 
     _addPage: function(actor, name, a11yIcon, params) {
@@ -238,8 +276,24 @@ const ViewSelector = new Lang.Class({
         if (this._showAppsBlocked)
             return;
 
-        // Always show the app selector
-        this._showPage(this._appsPage);
+        if (this._showAppsButton.checked) {
+            Main.overview.hideDash();
+            Main.overview.hideThumbnails();
+        } else {
+            Main.overview.showDash();
+            Main.overview.showThumbnails();
+        }
+
+        this._showPage(this._showAppsButton.checked ?
+                       this._appsPage : this._workspacesPage);
+    },
+
+    _setShowAppsButton: function() {
+        this._showAppsBlocked = true;
+        this._showAppsButton.checked = true;
+        this._showAppsBlocked = false;
+
+        this._showPage(this._appsPage, true);
     },
 
     _resetShowAppsButton: function() {
@@ -247,8 +301,7 @@ const ViewSelector = new Lang.Class({
         this._showAppsButton.checked = false;
         this._showAppsBlocked = false;
 
-        // Always show the app selector
-        this._showPage(this._appsPage, true);
+        this._showPage(this._workspacesPage, true);
     },
 
     _onStageKeyPress: function(actor, event) {
@@ -283,8 +336,8 @@ const ViewSelector = new Lang.Class({
     },
 
     _searchCancelled: function() {
-        // Always show the app selector
-        this._showPage(this._appsPage);
+        this._showPage(this._showAppsButton.checked ? this._appsPage
+                                                    : this._workspacesPage);
 
         // Leave the entry focused when it doesn't have any text;
         // when replacing a selected search term, Clutter emits
@@ -495,7 +548,9 @@ const ViewSelector = new Lang.Class({
     },
 
     getActivePage: function() {
-        if (this._activePage == this._appsPage)
+        if (this._activePage == this._workspacesPage)
+            return ViewPage.WINDOWS;
+        else if (this._activePage == this._appsPage)
             return ViewPage.APPS;
         else
             return ViewPage.SEARCH;
