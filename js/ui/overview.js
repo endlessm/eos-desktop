@@ -680,22 +680,6 @@ const Overview = new Lang.Class({
             this._fakePointerEvent();
             this._needsFakePointerEvent = false;
         }
-    },
-
-    showDash: function() {
-        this._controls.dashActor.show();
-    },
-
-    hideDash: function() {
-        this._controls.dashActor.hide();
-    },
-
-    showThumbnails: function() {
-        this._controls.thumbnailsActor.show();
-    },
-
-    hideThumbnails: function() {
-        this._controls.thumbnailsActor.hide();
     }
 });
 Signals.addSignalMethods(Overview.prototype);
