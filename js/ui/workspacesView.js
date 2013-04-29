@@ -439,7 +439,6 @@ const WorkspacesDisplay = new Lang.Class({
             // windows open. The problem is that it's too easy to miss
             // an app window and get the wrong one focused.
             if (action.get_button() == 1 &&
-                this._getPrimaryView() &&
                 this._getPrimaryView().getActiveWorkspace().isEmpty())
                 Main.overview.hide();
         }));
@@ -604,11 +603,7 @@ const WorkspacesDisplay = new Lang.Class({
     },
 
     activeWorkspaceHasMaximizedWindows: function() {
-        if (this._getPrimaryView()) {
-            return this._getPrimaryView().getActiveWorkspace().hasMaximizedWindows();
-        } else {
-            return false;
-        }
+        return this._getPrimaryView().getActiveWorkspace().hasMaximizedWindows();
     },
 
     _parentSet: function(actor, oldParent) {

@@ -135,12 +135,6 @@ const ViewSelector = new Lang.Class({
                 this._stageKeyPressId = global.stage.connect('key-press-event',
                                                              Lang.bind(this, this._onStageKeyPress));
             }));
-        Main.overview.connect('showingApps', Lang.bind(this,
-            function () {
-                this._setShowAppsButton();
-                this._stageKeyPressId = global.stage.connect('key-press-event',
-                                                             Lang.bind(this, this._onStageKeyPress));
-            }));
         Main.overview.connect('hiding', Lang.bind(this,
             function () {
                 this._resetShowAppsButton();
@@ -156,6 +150,8 @@ const ViewSelector = new Lang.Class({
                               Shell.KeyBindingMode.NORMAL |
                               Shell.KeyBindingMode.OVERVIEW,
                               Lang.bind(this, this._toggleAppsPage));
+
+        Main.overview.connect('show-apps-request', Lang.bind(this, this._toggleAppsPage));
     },
 
     _toggleAppsPage: function() {
@@ -166,9 +162,6 @@ const ViewSelector = new Lang.Class({
     show: function() {
         this._activePage = this._workspacesPage;
 
-        Main.overview.showDash();
-        Main.overview.showThumbnails();
-
         this.reset();
         this._appsPage.hide();
         this._searchPage.hide();
@@ -178,24 +171,6 @@ const ViewSelector = new Lang.Class({
             Main.overview.fadeOutDesktop();
 
         this._showPage(this._workspacesPage, true);
-    },
-
-    showApps: function() {
-        this._activePage = this._appsPage;
-
-        Main.overview.hideDash();
-        Main.overview.hideThumbnails();
-
-        this.reset();
-        this._appsPage.show();
-        this._searchPage.hide();
-        this._workspacesDisplay.hide();
-
-        if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows()) {
-            Main.overview.fadeOutDesktop();
-        }
-
-        this._showPage(this._appsPage, true);
     },
 
     zoomFromOverview: function() {
@@ -276,24 +251,8 @@ const ViewSelector = new Lang.Class({
         if (this._showAppsBlocked)
             return;
 
-        if (this._showAppsButton.checked) {
-            Main.overview.hideDash();
-            Main.overview.hideThumbnails();
-        } else {
-            Main.overview.showDash();
-            Main.overview.showThumbnails();
-        }
-
         this._showPage(this._showAppsButton.checked ?
                        this._appsPage : this._workspacesPage);
-    },
-
-    _setShowAppsButton: function() {
-        this._showAppsBlocked = true;
-        this._showAppsButton.checked = true;
-        this._showAppsBlocked = false;
-
-        this._showPage(this._appsPage, true);
     },
 
     _resetShowAppsButton: function() {
