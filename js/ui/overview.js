@@ -196,9 +196,10 @@ const Overview = new Lang.Class({
         this._bgManagers = [];
 
         for (let i = 0; i < Main.layoutManager.monitors.length; i++) {
+            // Note: do not set the vignette effect on the background;
+            // we always want to display the background without modification.
             let bgManager = new Background.BackgroundManager({ container: this._backgroundGroup,
-                                                               monitorIndex: i,
-                                                               effects: Meta.BackgroundEffects.VIGNETTE });
+                                                               monitorIndex: i });
             this._bgManagers.push(bgManager);
         }
     },
