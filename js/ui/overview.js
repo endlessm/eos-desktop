@@ -461,16 +461,6 @@ const Overview = new Lang.Class({
     //
     // Animates the overview visible and grabs mouse and keyboard input
     show : function() {
-        this._showingApps = false;
-        this._show();
-    },
-
-    showApps: function() {
-        this._showingApps = true;
-        this._show();
-    },
-
-    _show: function() {
         if (this.isDummy)
             return;
         if (this._shown)
@@ -526,12 +516,7 @@ const Overview = new Lang.Class({
         Meta.disable_unredirect_for_screen(global.screen);
         this._stack.show();
         this._backgroundGroup.show();
-
-        if (this._showingApps) {
-            this._viewSelector.showApps();
-        } else {
-            this._viewSelector.show();
-        }
+        this._viewSelector.show();
 
         this._stack.opacity = 0;
         Tweener.addTween(this._stack,
@@ -544,12 +529,7 @@ const Overview = new Lang.Class({
 
         this._coverPane.raise_top();
         this._coverPane.show();
-
-        if (this._showingApps) {
-            this.emit('showingApps');
-        } else {
-            this.emit('showing');
-        }
+        this.emit('showing');
     },
 
     // hide:
