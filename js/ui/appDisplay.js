@@ -91,9 +91,6 @@ const EndlessApplicationView = new Lang.Class({
 
         this._items = {};
         this._allItems = [];
-
-        this._appStore = new AppStore();
-        this._appStoreIcon = this._createItemIcon(this._appStore);
     },
 
     removeAll: function() {
@@ -127,7 +124,6 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     loadGrid: function() {
-        let appStoreId;
         for (let i = 0; i < this._allItems.length; i++) {
             let id = this._getItemId(this._allItems[i]);
             if (!id) {
@@ -136,7 +132,6 @@ const EndlessApplicationView = new Lang.Class({
 
             this._grid.addItem(this._items[id].actor);
         }
-        this._grid.addItem(this._appStoreIcon.actor);
     }
 });
 
@@ -255,6 +250,9 @@ const AllView = new Lang.Class({
 
         }));
         this._eventBlocker.add_action(this._clickAction);
+
+        this._appStore = new AppStore();
+        this._appStoreIcon = this._createItemIcon(this._appStore);
     },
 
     _onPan: function(action) {
@@ -304,6 +302,12 @@ const AllView = new Lang.Class({
         let nameA = GLib.utf8_collate_key(itemA.get_name(), -1);
         let nameB = GLib.utf8_collate_key(itemB.get_name(), -1);
         return (nameA > nameB) ? 1 : (nameA < nameB ? -1 : 0);
+    },
+
+    loadGrid: function() {
+        this.parent();
+
+        this._grid.addItem(this._appStoreIcon.actor);
     },
 
     addApp: function(app) {
