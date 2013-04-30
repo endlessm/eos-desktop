@@ -64,7 +64,7 @@ def get_running_session_environs():
 
 def start_shell():
     self_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-    running_from_source_tree = os.path.exists(os.path.join(self_dir, 'gnome-shell-jhbuild.in'))
+    running_from_source_tree = os.path.exists(os.path.join(self_dir, 'eos-shell-jhbuild.in'))
 
     # Set up environment
     env = dict(os.environ)
@@ -87,7 +87,7 @@ def start_shell():
             args += [os.path.join(top_dir, 'libtool'), '--mode=execute']
         args += debug_command
 
-    args.append(os.path.join(self_dir, 'gnome-shell-real'))
+    args.append(os.path.join(self_dir, 'eos-shell-real'))
     if options.replace:
         args.append('--replace')
     if options.sync:
