@@ -608,27 +608,63 @@ const FolderIcon = new Lang.Class({
         if (this._popup)
             return;
 
-        let spaceTop = this.actor.y;
-        let spaceBottom = this._parentView.actor.height - (this.actor.y + this.actor.height);
+        let [sourceX, sourceY] = this.actor.get_transformed_position();
+        let [sourceXP, sourceYP] = this._parentView.actor.get_transformed_position();
+        let relY = sourceY - sourceYP;
+        let spaceTop = relY;
+        let spaceBottom = this._parentView.actor.height - (relY + this.actor.height);
         let side = spaceTop > spaceBottom ? St.Side.BOTTOM : St.Side.TOP;
 
         this._popup = new AppFolderPopup(this, side);
         this._parentView.addFolderPopup(this._popup);
-
-        // Position the popup above or below the source icon
-        if (side == St.Side.BOTTOM) {
-            this._popup.actor.show();
-            this._popup.actor.y = this.actor.y - this._popup.actor.height;
-            this._popup.actor.hide();
-        } else {
-            this._popup.actor.y = this.actor.y + this.actor.height;
-        }
+        this._reposition(side);
 
         this._popup.connect('open-state-changed', Lang.bind(this,
             function(popup, isOpen) {
                 if (!isOpen)
                     this.actor.checked = false;
             }));
+
+        // Glue the popup to the top/bottom of the folder icon
+        let constraint;
+        if (side == St.Side.TOP) {
+            constraint = new Clutter.BindConstraint({ source: this.actor.get_parent().get_parent(),
+                                                      coordinate: Clutter.BindCoordinate.Y,
+                                                      offset: this.actor.height + this.actor.y });
+        } else {
+            constraint = new Clutter.BindConstraint({ source: this.actor.get_parent().get_parent(),
+                                                      coordinate: Clutter.BindCoordinate.Y,
+                                                      offset: -this._popup.actor.height + this.actor.y });
+        }
+        this._popup.actor.add_constraint(constraint);
+    },
+
+    _reposition: function(side) {
+        let [sourceX, sourceY] = this.actor.get_transformed_position();
+        let [sourceXP, sourceYP] = this._parentView.actor.get_transformed_position();
+        let newPosY = sourceY - sourceYP + this.actor.height;
+
+        // If the space below doesn't fit the popup, insert it in the bottom;
+        // this way, we "force" the parent layer to grow up, so it will fit the
+        // popup later
+        if (side == St.Side.TOP &&
+            sourceYP + this._parentView.actor.height - newPosY < this._popup.actor.height) {
+            this._popup.actor.y = sourceYP + this._parentView.actor.height;
+        }
+
+        // If folder icon is not enterily above or below the app folder, move
+        // the later so the pointer can point correctly to the icon
+        let sourceAllocation = Shell.util_get_transformed_allocation(this._popup.actor);
+        let actorLeft = sourceX;
+        let actorRight = sourceX + this.actor.width;
+        let popupLeft = sourceAllocation.x1;
+        let popupRight = sourceAllocation.x2;
+        if (actorLeft < popupLeft) {
+            this._popup.actor.set_anchor_point(Math.max(0, popupLeft - actorLeft), 0);
+        }
+        if (actorRight > popupRight) {
+            this._popup.actor.set_anchor_point(-Math.max(0, actorRight - popupRight), 0);
+        }
     },
 });
 
@@ -643,7 +679,7 @@ const AppFolderPopup = new Lang.Class({
         this._isOpen = false;
 
         this.actor = new St.Widget({ layout_manager: new Clutter.BinLayout(),
-                                     visible: false,
+                                     visible: true,
                                      // We don't want to expand really, but look
                                      // at the layout manager of our parent...
                                      //
