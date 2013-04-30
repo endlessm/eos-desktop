@@ -36,7 +36,7 @@ EXTRA_DIST += eos-shell-extension-tool.in eos-shell-extension-prefs.in \
 bin_PROGRAMS = eos-shell-real
 
 if USE_JHBUILD_WRAPPER_SCRIPT
-eose_shell = eos-shell-jhbuild
+eos_shell = eos-shell-jhbuild
 bin_SCRIPTS += eos-shell-jhbuild
 else
 eos_shell = eos-shell-real
