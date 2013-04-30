@@ -651,6 +651,20 @@ const FolderIcon = new Lang.Class({
             sourceYP + this._parentView.actor.height - newPosY < this._popup.actor.height) {
             this._popup.actor.y = sourceYP + this._parentView.actor.height;
         }
+
+        // If folder icon is not enterily above or below the app folder, move
+        // the later so the pointer can point correctly to the icon
+        let sourceAllocation = Shell.util_get_transformed_allocation(this._popup.actor);
+        let actorLeft = sourceX;
+        let actorRight = sourceX + this.actor.width;
+        let popupLeft = sourceAllocation.x1;
+        let popupRight = sourceAllocation.x2;
+        if (actorLeft < popupLeft) {
+            this._popup.actor.set_anchor_point(Math.max(0, popupLeft - actorLeft), 0);
+        }
+        if (actorRight > popupRight) {
+            this._popup.actor.set_anchor_point(-Math.max(0, actorRight - popupRight), 0);
+        }
     },
 });
 
