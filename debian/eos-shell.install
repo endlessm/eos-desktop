@@ -5,3 +5,4 @@ usr/share/applications
 usr/share/xsessions/eos-session.desktop
 usr/share/dbus-1
 usr/share/man
+usr/share/gnome-session/sessions/eos-shell.session
