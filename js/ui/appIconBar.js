@@ -80,6 +80,9 @@ const AppIconMenu = new Lang.Class({
     _init: function(app, parentActor) {
         this.parent(parentActor, 0.5, St.Side.BOTTOM);
 
+        // We want to popdown the menu when clicked on the source icon itself
+        this.blockSourceEvents = true;
+
         this._app = app;
 
         this.connect('activate', Lang.bind(this, this._onActivate));
