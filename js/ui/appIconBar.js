@@ -122,6 +122,7 @@ const AppIconMenu = new Lang.Class({
         workspaceWindows.sort(Lang.bind(this, _compareByStableSequence));
         otherWindows.sort(Lang.bind(this, _compareByStableSequence));
 
+        let hasWorkspaceWindows = (workspaceWindows.length > 0);
         let hasOtherWindows = (otherWindows.length > 0);
 
         // Display windows from other workspaces first, if present, since our panel
@@ -136,7 +137,7 @@ const AppIconMenu = new Lang.Class({
                 this._appendMenuItem(w, hasOtherWindows);
             }));
 
-        if (hasOtherWindows) {
+        if (hasOtherWindows && hasWorkspaceWindows) {
             this._appendCurrentWorkspaceSeparator();
         }
 
