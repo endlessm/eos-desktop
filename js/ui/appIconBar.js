@@ -3,14 +3,181 @@
 const Clutter = imports.gi.Clutter;
 const Lang = imports.lang;
 const Shell = imports.gi.Shell;
+const Signals = imports.signals;
 const St = imports.gi.St;
 
 const Hash = imports.misc.hash;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
+const PopupMenu = imports.ui.popupMenu;
 
 const PANEL_ICON_SIZE = 22;
 const PANEL_ICON_PADDING = 5;
+
+const PANEL_WINDOW_MENU_THUMBNAIL_SIZE = 128;
+
+function _compareByStableSequence(winA, winB) {
+    let seqA = winA.get_stable_sequence();
+    let seqB = winB.get_stable_sequence();
+
+    return seqA - seqB;
+}
+
+const WindowMenuItem = new Lang.Class({
+    Name: 'WindowMenuItem',
+    Extends: PopupMenu.PopupBaseMenuItem,
+
+    _init: function (window, params) {
+        this.parent(params);
+
+        this.window = window;
+
+        this.actor.add_style_class_name('panel-window-menu-item');
+
+        let windowActor = this._findWindowActor();
+        let monitor = Main.layoutManager.primaryMonitor;
+
+        // constraint the max size of the clone to the aspect ratio
+        // of the primary display, where the panel lives
+        let ratio = monitor.width / monitor.height;
+        let maxW = (ratio > 1) ?
+            PANEL_WINDOW_MENU_THUMBNAIL_SIZE : PANEL_WINDOW_MENU_THUMBNAIL_SIZE / ratio;
+        let maxH = (ratio > 1) ?
+            PANEL_WINDOW_MENU_THUMBNAIL_SIZE / ratio : PANEL_WINDOW_MENU_THUMBNAIL_SIZE;
+
+        let clone = new Clutter.Clone({ source: windowActor.get_texture() });
+        let cloneW = clone.width;
+        let cloneH = clone.height;
+        let scale = Math.min(maxW / cloneW, maxH / cloneH);
+        clone.set_size(cloneW * scale, cloneH * scale);
+
+        this.cloneBin = new St.Bin({ child: clone,
+                                     style_class: 'panel-window-menu-item-clone' });
+        this.addActor(this.cloneBin, { align: St.Align.MIDDLE });
+
+        this.label = new St.Label({ text: window.title,
+                                    style_class: 'panel-window-menu-item-label' });
+
+        this.addActor(this.label);
+        this.actor.label_actor = this.label;
+    },
+
+    _findWindowActor: function() {
+        let actors = global.get_window_actors();
+        let windowActors = actors.filter(Lang.bind(this,
+            function(actor) {
+                return actor.meta_window == this.window;
+            }));
+
+        return windowActors[0];
+    }
+});
+
+const AppIconMenu = new Lang.Class({
+    Name: 'AppIconMenu',
+    Extends: PopupMenu.PopupMenu,
+
+    _init: function(app, parentActor) {
+        this.parent(parentActor, 0.5, St.Side.BOTTOM);
+
+        this._app = app;
+
+        this.connect('activate', Lang.bind(this, this._onActivate));
+
+        // Chain our visibility and lifecycle to that of the source
+        parentActor.connect('notify::mapped', Lang.bind(this, function () {
+            if (!parentActor.mapped) {
+                this.close();
+            }
+        }));
+        parentActor.connect('destroy', Lang.bind(this, function () { this.actor.destroy(); }));
+
+        Main.uiGroup.add_actor(this.actor);
+    },
+
+    _redisplay: function() {
+        this.removeAll();
+
+        let tracker = Shell.WindowTracker.get_default();
+        let activeWorkspace = global.screen.get_active_workspace();
+
+        let windows = this._app.get_windows();
+        let workspaceWindows = [];
+        let otherWindows = [];
+
+        windows.forEach(function(w) {
+            if (!tracker.is_window_interesting(w))
+                return;
+
+            if (w.located_on_workspace(activeWorkspace)) {
+                workspaceWindows.push(w);
+            } else {
+                otherWindows.push(w);
+            }
+        });
+
+        workspaceWindows.sort(Lang.bind(this, _compareByStableSequence));
+        otherWindows.sort(Lang.bind(this, _compareByStableSequence));
+
+        let hasOtherWindows = (otherWindows.length > 0);
+
+        // Display windows from other workspaces first, if present, since our panel
+        // is at the bottom, and it's much more convenient to just move up the pointer
+        // to switch windows in the current workspace
+        if (hasOtherWindows) {
+            this._appendOtherWorkspacesLabel();
+        }
+
+        otherWindows.forEach(Lang.bind(this,
+            function(w) {
+                this._appendMenuItem(w, hasOtherWindows);
+            }));
+
+        if (hasOtherWindows) {
+            this._appendCurrentWorkspaceSeparator();
+        }
+
+        workspaceWindows.forEach(Lang.bind(this,
+            function(w) {
+                this._appendMenuItem(w, hasOtherWindows);
+            }));
+    },
+
+    _appendOtherWorkspacesLabel: function () {
+        let label = new PopupMenu.PopupMenuItem(_("Other workspaces"));
+        label.label.add_style_class_name('panel-window-menu-workspace-label');
+        this.addMenuItem(label);
+    },
+
+    _appendCurrentWorkspaceSeparator: function () {
+        let separator = new PopupMenu.PopupSeparatorMenuItem();
+        this.addMenuItem(separator);
+
+        let label = new PopupMenu.PopupMenuItem(_("Current workspace"));
+        label.label.add_style_class_name('panel-window-menu-workspace-label');
+        this.addMenuItem(label);
+    },
+
+    _appendMenuItem: function(window, hasOtherWindows) {
+        let item = new WindowMenuItem(window);
+        this.addMenuItem(item);
+
+        if (hasOtherWindows) {
+            item.cloneBin.add_style_pseudo_class('indented');
+        }
+    },
+
+    popup: function() {
+        this._redisplay();
+        this.open();
+    },
+
+    _onActivate: function (actor, item) {
+        Main.activateWindow(item.window);
+        this.close();
+    }
+});
+Signals.addSignalMethods(AppIconMenu.prototype);
 
 /** AppIconButton:
  *
@@ -22,20 +189,31 @@ const AppIconButton = new Lang.Class({
     _init: function(app) {
         this._app = app;
 
-        this.actor = app.create_icon_texture(PANEL_ICON_SIZE);
+        let icon = app.create_icon_texture(PANEL_ICON_SIZE);
+
+        this.actor = new St.Button({ child: icon, button_mask: St.ButtonMask.ONE });
         this.actor.reactive = true;
 
-        let clickAction = new Clutter.ClickAction();
-        clickAction.connect('clicked', Lang.bind(this, function(action) {
-            if (Main.overview.visible) {
-                Main.overview.hide();
+        this.actor.connect('clicked', Lang.bind(this, function() {
+            let windows = app.get_windows();
+            if (windows.length == 1) {
+                Main.activateWindow(windows[0]);
+            } else {
+                this._ensureMenu();
+                this._menu.popup();
             }
-
-            app.activate();
         }));
-
-        this.actor.add_action(clickAction);
     },
+
+    _ensureMenu: function() {
+        if (this._menu)
+            return;
+
+        this._menuManager = new PopupMenu.PopupMenuManager(this);
+
+        this._menu = new AppIconMenu(this._app, this.actor);
+        this._menuManager.addMenu(this._menu);
+    }
 });
 
 /** AppIconBar:
