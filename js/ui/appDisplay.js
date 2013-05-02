@@ -18,6 +18,7 @@ const AppFavorites = imports.ui.appFavorites;
 const BoxPointer = imports.ui.boxpointer;
 const DND = imports.ui.dnd;
 const IconGrid = imports.ui.iconGrid;
+const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
 const Overview = imports.ui.overview;
 const OverviewControls = imports.ui.overviewControls;
@@ -109,13 +110,31 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     loadGrid: function() {
+        var sortedItems = [];
+        var unsortedItems = [];
+
         for (let i = 0; i < this._allItems.length; i++) {
             let id = this._getItemId(this._allItems[i]);
+
             if (!id) {
                 continue;
             }
 
-            this._grid.addItem(this._items[id].actor);
+            let pos = IconGridLayout.layout.getPositionById(id);
+            if (pos == -1) {
+                unsortedItems.push (this._items[id]);
+            }
+            else {
+                sortedItems.splice(pos, 0, this._items[id]);
+            }
+        }
+
+        var items = sortedItems.concat (unsortedItems);
+
+        for (let i=0; i < items.length; i++) {
+            if (items[i]) {
+                this._grid.addItem(items[i].actor);
+            }
         }
     }
 });
