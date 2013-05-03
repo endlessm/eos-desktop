@@ -49,7 +49,7 @@ const WindowMenuItem = new Lang.Class({
         let cloneW = clone.width;
         let cloneH = clone.height;
         let scale = Math.min(maxW / cloneW, maxH / cloneH);
-        clone.set_size(cloneW * scale, cloneH * scale);
+        clone.set_size(Math.round(cloneW * scale), Math.round(cloneH * scale));
 
         this.cloneBin = new St.Bin({ child: clone,
                                      style_class: 'panel-window-menu-item-clone' });
