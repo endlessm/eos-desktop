@@ -66,11 +66,11 @@ let magnifier = null;
 let xdndHandler = null;
 let keyboard = null;
 let layoutManager = null;
+let workspaceMonitor = null;
 let _startDate;
 let _defaultCssStylesheet = null;
 let _cssStylesheet = null;
 let _overridesSettings = null;
-let _workspaceMonitor = null;
 
 function _sessionUpdated() {
     _loadDefaultStylesheet();
@@ -156,7 +156,7 @@ function _initializeUI() {
     windowAttentionHandler = new WindowAttentionHandler.WindowAttentionHandler();
     componentManager = new Components.ComponentManager();
 
-    _workspaceMonitor = new WorkspaceMonitor.WorkspaceMonitor();
+    workspaceMonitor = new WorkspaceMonitor.WorkspaceMonitor();
 
     layoutManager.init();
     overview.init();
@@ -212,7 +212,7 @@ function _initializeUI() {
                               // Now that we've completed startup, the
                               // workspace monitor may want to hide/show
                               // the overview
-                              _workspaceMonitor.updateOverview();
+                              workspaceMonitor.updateOverview();
                           });
 }
 
