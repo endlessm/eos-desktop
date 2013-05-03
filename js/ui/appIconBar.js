@@ -41,7 +41,7 @@ const WindowMenuItem = new Lang.Class({
         // of the primary display, where the panel lives
         let ratio = monitor.width / monitor.height;
         let maxW = (ratio > 1) ?
-            PANEL_WINDOW_MENU_THUMBNAIL_SIZE : PANEL_WINDOW_MENU_THUMBNAIL_SIZE / ratio;
+            PANEL_WINDOW_MENU_THUMBNAIL_SIZE : PANEL_WINDOW_MENU_THUMBNAIL_SIZE * ratio;
         let maxH = (ratio > 1) ?
             PANEL_WINDOW_MENU_THUMBNAIL_SIZE / ratio : PANEL_WINDOW_MENU_THUMBNAIL_SIZE;
 
