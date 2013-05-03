@@ -2552,3 +2552,17 @@ StScrollBar StButton#vhandle:active {
     padding: 13px 5px 5px 5px;
     spacing: 5px;
 }
+
+.panel-window-menu-item-clone:indented {
+    padding-left: 6px;
+}
+
+.panel-window-menu-item-label {
+    max-width: 256px;
+}
+
+.panel-window-menu-workspace-label {
+    font-size: 10pt;
+    font-weight: bold;
+    color: #999;
+}
