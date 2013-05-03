@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Lang = imports.lang;
+const Signals = imports.signals;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 
@@ -13,40 +14,71 @@ const IconGridLayout = new Lang.Class({
         this._layoutById = {};
         this._layoutByPosition = [];
 
-        this._layout = global.settings.get_value(SCHEMA_KEY);
+        let allIcons = global.settings.get_value(SCHEMA_KEY);
+        this._iconTree = {};
+        this._folderCategories = [];
 
-        for (let i=0; i<this._layout.n_children(); i++) {
-            let [id] = this._layout.get_child_value(i).get_string();
-            this._layoutById[id] = i;
-            this._layoutByPosition.push(id);
+        for (let i=0; i<allIcons.n_children(); i++) {
+            let context = allIcons.get_child_value(i);
+
+            let [folder] = context.get_child_value(0).get_string();
+
+            if (folder)
+                this._folderCategories.push(folder);
+
+            this._iconTree[folder] = context.get_child_value(1).get_strv();
+        }
+
+        global.settings.connect('changed::' + SCHEMA_KEY, Lang.bind(this, function() {
+            print("layout CHANGED!");
+        }));
+    },
+
+    getIcons: function(folder) {
+        folder = folder || "";
+
+        if (this._iconTree[folder]) {
+            return this._iconTree[folder];
+        }
+        else {
+            return null;
         }
     },
 
-    getPositionById: function(id) {
-        return this._layoutById[id] !== undefined ? this._layoutById[id] : -1;
+    iconIsFolder: function(id) {
+        return id && this._iconTree[id];
     },
 
-    setPositionById: function(id, position) {
-        if (this._layoutById[id] !== undefined) {
-            let oldPos = this._layoutById[id];
-            this._layoutByPosition.splice(oldPos, 1);
+    repositionIcon: function(folder, id, position, newFolder) {
+        folder = folder || "";
+        newFolder = newFolder || "";
+
+        let icons = this._iconTree[folder];
+        if (icons) {
+            let oldPos = icons.indexOf(id);
+            if (oldPos != -1) {
+                icons.splice(oldPos, 1);
+            }
         }
 
-        this._layoutByPosition.splice(position, 0, id);
-
-        // recreate layoutById from layoutByPosition
-        for (let i=0; i<this._layoutByPosition.length; i++) {
-            let id = this._layoutByPosition[i];
-            this._layoutById[id] = i;
+        icons = this._iconTree[newFolder];
+        if (! icons) {
+            // invalid destination folder
+            return;
         }
 
-        // recreate GVariant from layoutByPosition
-        let newLayout = GLib.Variant.new ("as", this._layoutByPosition);
+        icons.splice(position, 0, id);
+
+        // recreate GVariant from iconTree
+        let newLayout = GLib.Variant.new ("a{sas}", this._iconTree);
 
         // store gsetting
         global.settings.set_value(SCHEMA_KEY, newLayout);
+
+        this.emit('changed');
     }
 });
+Signals.addSignalMethods(IconGridLayout.prototype);
 
 // to be used as singleton
 const layout = new IconGridLayout();

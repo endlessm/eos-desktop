@@ -83,8 +83,22 @@ value here is from the GsmPresenceStatus enumeration.</_summary>
         This key sets the default state of the checkbox.
       </_description>
     </key>
-    <key name="icon-grid-layout" type="as">
-      <default l10n="messages">[ 'epiphany.desktop', 'facebook.desktop', 'youtube.desktop', 'grooveshark.desktop' ]</default>
+    <key name="icon-grid-layout" type="a{sas}">
+      <default l10n="messages">
+      {
+        '': [
+              'epiphany.desktop',
+              'facebook.desktop',
+              'youtube.desktop',
+              'Games',
+              'grooveshark.desktop'
+        ],
+
+        'Games': [
+              'angrybirds.desktop'
+        ]
+      }
+      </default>
       <_summary>Layout of application launcher icons in the grid</_summary>
       <_description>
         This key specifies the exact order of the icons shown in the applications launcher view.
