@@ -73,12 +73,14 @@ const WindowMenuItem = new Lang.Class({
     }
 });
 
+const APP_ICON_MENU_ARROW_XALIGN = 0.5;
+
 const AppIconMenu = new Lang.Class({
     Name: 'AppIconMenu',
     Extends: PopupMenu.PopupMenu,
 
     _init: function(app, parentActor) {
-        this.parent(parentActor, 0.5, St.Side.BOTTOM);
+        this.parent(parentActor, APP_ICON_MENU_ARROW_XALIGN, St.Side.BOTTOM);
 
         // We want to popdown the menu when clicked on the source icon itself
         this.blockSourceEvents = true;
