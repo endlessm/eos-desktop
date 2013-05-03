@@ -562,12 +562,25 @@ const Overview = new Lang.Class({
         this._syncInputMode();
     },
 
+    hideOrShowApps: function() {
+        if (!this._initCalled) {
+            return;
+        }
+
+        let visibleWindows = Main.workspaceMonitor.visibleWindows;
+        if (visibleWindows == 0) {
+            this.showApps();
+        } else {
+            this.hide();
+        }
+    },
+
     toggle: function() {
         if (this.isDummy)
             return;
 
         if (this.visible)
-            this.hide();
+            this.hideOrShowApps();
         else
             this.show();
     },

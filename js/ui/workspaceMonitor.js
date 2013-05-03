@@ -212,10 +212,10 @@ const WorkspaceMonitor = new Lang.Class({
             this._visibleWindows = 0;
         }
 
-        if (this._visibleWindows == 0) {
-            Main.overview.showApps();
-        } else {
-            Main.overview.hide();
-        }
+        Main.overview.hideOrShowApps();
+    },
+
+    get visibleWindows() {
+        return this._visibleWindows;
     }
 });
