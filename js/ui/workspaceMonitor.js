@@ -1,7 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Lang = imports.lang;
-const Meta = imports.gi.Meta;
+const Shell = imports.gi.Shell;
 
 const Hash = imports.misc.hash;
 const Main = imports.ui.main;
@@ -104,25 +104,6 @@ const WorkspaceMonitor = new Lang.Class({
         this._trackWorkspace(this._metaScreen.get_active_workspace());
     },
 
-    _interestingWindow: function(metaWindow) {
-        // If this window isn't interesting to us, then we
-        // can ditch it
-        let type = metaWindow.get_window_type();
-        if (type == Meta.WindowType.DESKTOP ||
-            type == Meta.WindowType.DOCK ||
-            type == Meta.WindowType.DROPDOWN_MENU ||
-            type == Meta.WindowType.POPUP_MENU ||
-            type == Meta.WindowType.TOOLTIP ||
-            type == Meta.WindowType.NOTIFICATION ||
-            type == Meta.WindowType.COMBO ||
-            type == Meta.WindowType.DND ||
-            type == Meta.WindowType.OVERRIDE_OTHER) {
-            return false;
-        }
-
-        return true;
-    },
-
     // The sequence of events is
     // Window is mapped but not yet in system: _windowAdded
     // Window is newly created: _windowAdded -> _mapWindow
@@ -144,7 +125,8 @@ const WorkspaceMonitor = new Lang.Class({
     //                 ways a window can be taken off the screen: minimizing and
     //                 closing
     _realWindowAdded: function(metaWindow) {
-        if (!this._interestingWindow(metaWindow)) {
+        let tracker = Shell.WindowTracker.get_default();
+        if (!tracker.is_window_interesting(metaWindow)) {
             return false;
         }
 
@@ -230,10 +212,10 @@ const WorkspaceMonitor = new Lang.Class({
             this._visibleWindows = 0;
         }
 
-        if (this._visibleWindows == 0) {
-            Main.overview.showApps();
-        } else {
-            Main.overview.hide();
-        }
+        Main.overview.hideOrShowApps();
+    },
+
+    get visibleWindows() {
+        return this._visibleWindows;
     }
 });
