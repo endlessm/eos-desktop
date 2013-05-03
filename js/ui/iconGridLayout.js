@@ -4,7 +4,6 @@ const Lang = imports.lang;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 
-const EOS_SHELL_SCHEMA = "org.gnome.shell";
 const SCHEMA_KEY = "icon-grid-layout";
 
 const IconGridLayout = new Lang.Class({
@@ -14,8 +13,7 @@ const IconGridLayout = new Lang.Class({
         this._layoutById = {};
         this._layoutByPosition = [];
 
-        this._settings = new Gio.Settings({schema: EOS_SHELL_SCHEMA});
-        this._layout = this._settings.get_value(SCHEMA_KEY);
+        this._layout = global.settings.get_value(SCHEMA_KEY);
 
         for (let i=0; i<this._layout.n_children(); i++) {
             let [id] = this._layout.get_child_value(i).get_string();
@@ -46,7 +44,7 @@ const IconGridLayout = new Lang.Class({
         let newLayout = GLib.Variant.new ("as", this._layoutByPosition);
 
         // store gsetting
-        this._settings.set_value(SCHEMA_KEY, newLayout);
+        global.settings.set_value(SCHEMA_KEY, newLayout);
     }
 });
 
