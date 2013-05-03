@@ -219,6 +219,7 @@ const AppIconButton = new Lang.Class({
                     }
                 }
 
+                this.actor.sync_hover();
                 return false;
             }));
 
