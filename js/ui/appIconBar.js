@@ -111,8 +111,9 @@ const AppIconMenu = new Lang.Class({
         let otherWindows = [];
 
         windows.forEach(function(w) {
-            if (!tracker.is_window_interesting(w))
+            if (!tracker.is_window_interesting(w)) {
                 return;
+            }
 
             if (w.located_on_workspace(activeWorkspace)) {
                 workspaceWindows.push(w);
@@ -212,8 +213,9 @@ const AppIconButton = new Lang.Class({
     },
 
     _ensureMenu: function() {
-        if (this._menu)
+        if (this._menu) {
             return;
+        }
 
         this._menuManager = new PopupMenu.PopupMenuManager(this);
 
