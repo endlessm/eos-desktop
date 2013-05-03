@@ -5,7 +5,6 @@ const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
-const GMenu = imports.gi.GMenu;
 const Shell = imports.gi.Shell;
 const Lang = imports.lang;
 const Signals = imports.signals;
@@ -36,26 +35,6 @@ const MAX_COLUMNS = 7;
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
 
-// Recursively load a GMenuTreeDirectory; we could put this in ShellAppSystem too
-function _loadCategory(dir, view) {
-    let iter = dir.iter();
-    let appSystem = Shell.AppSystem.get_default();
-    let nextType;
-    while ((nextType = iter.next()) != GMenu.TreeItemType.INVALID) {
-        if (nextType == GMenu.TreeItemType.ENTRY) {
-            let entry = iter.get_entry();
-            let app = appSystem.lookup_app_by_tree_entry(entry);
-            if (!entry.get_app_info().get_nodisplay())
-                view.addApp(app);
-        } else if (nextType == GMenu.TreeItemType.DIRECTORY) {
-            let itemDir = iter.get_directory();
-            if (!itemDir.get_is_nodisplay())
-                _loadCategory(itemDir, view);
-        }
-    }
-
-};
-
 function getAppFromSource(source) {
     if (source instanceof AppIcon) {
         return source.app;
@@ -68,7 +47,10 @@ const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,
 
-    _init: function() {
+    _init: function(params) {
+        params = params || {};
+        this._folder = params.folder || "";
+
         this._grid = new IconGrid.IconGrid({ xAlign: St.Align.MIDDLE,
                                              columnLimit: MAX_COLUMNS });
 
@@ -86,7 +68,7 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     _getItemId: function(item) {
-        throw new Error('Not implemented');
+        return item.get_id();
     },
 
     _createItemIcon: function(item) {
@@ -110,31 +92,13 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     loadGrid: function() {
-        var sortedItems = [];
-        var unsortedItems = [];
-
         for (let i = 0; i < this._allItems.length; i++) {
             let id = this._getItemId(this._allItems[i]);
-
             if (!id) {
                 continue;
             }
 
-            let pos = IconGridLayout.layout.getPositionById(id);
-            if (pos == -1) {
-                unsortedItems.push (this._items[id]);
-            }
-            else {
-                sortedItems.splice(pos, 0, this._items[id]);
-            }
-        }
-
-        var items = sortedItems.concat (unsortedItems);
-
-        for (let i=0; i < items.length; i++) {
-            if (items[i]) {
-                this._grid.addItem(items[i].actor);
-            }
+            this._grid.addItem(this._items[id].actor);
         }
     }
 });
@@ -148,16 +112,12 @@ const FolderView = new Lang.Class({
         this.actor = this._grid.actor;
     },
 
-    _getItemId: function(item) {
-        return item.get_id();
-    },
-
     _createItemIcon: function(item) {
         return new AppIcon(item);
     },
 
     _compareItems: function(a, b) {
-        return a.compare_by_name(b);
+        return a.get_id() == b.get_id();
     },
 
     addApp: function(app) {
@@ -272,15 +232,6 @@ const AllView = new Lang.Class({
         return false;
     },
 
-    _getItemId: function(item) {
-        if (item instanceof Shell.App) {
-            return item.get_id();
-        } else if (item instanceof GMenu.TreeDirectory) {
-            return item.get_menu_id();
-        } else {
-            return null;
-        }
-    },
     _onDragBegin: function() {
         this._eventBlocker.hide();
     },
@@ -290,15 +241,13 @@ const AllView = new Lang.Class({
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
             return new AppIcon(item);
-        } else if (item instanceof GMenu.TreeDirectory) {
-            return new FolderIcon(item, this);
         } else {
-            return null;
+            return new FolderIcon(item, this);
         }
     },
 
     _compareItems: function(itemA, itemB) {
-        // bit of a hack: rely on both ShellApp and GMenuTreeDirectory
+        // bit of a hack: rely on both ShellApp and the directory item
         // having a get_name() method
         if (itemA.get_name() == "")
             return 1;
@@ -404,6 +353,10 @@ const AppDisplay = new Lang.Class({
             Main.queueDeferredWork(this._allAppsWorkId);
         }));
 
+        IconGridLayout.layout.connect('changed', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+
         this._views = [];
 
         let view, button;
@@ -484,25 +437,23 @@ const AppDisplay = new Lang.Class({
 
     _redisplayAllApps: function() {
         let view = this._views[Views.ALL].view;
-
         view.removeAll();
 
-        let tree = this._appSystem.get_tree();
-        let root = tree.get_root_directory();
+        let topLevelIcons = IconGridLayout.layout.getIcons("");
 
-        let iter = root.iter();
-        let nextType;
-        let folderCategories = global.settings.get_strv('app-folder-categories');
-        while ((nextType = iter.next()) != GMenu.TreeItemType.INVALID) {
-            if (nextType == GMenu.TreeItemType.DIRECTORY) {
-                let dir = iter.get_directory();
-                if (dir.get_is_nodisplay())
-                    continue;
+        for (let i=0; i<topLevelIcons.length; i++) {
+            let itemId = topLevelIcons[i];
 
-                if (folderCategories.indexOf(dir.get_menu_id()) != -1)
-                    view.addFolder(dir);
-                else
-                    _loadCategory(dir, view);
+            if (IconGridLayout.layout.iconIsFolder(itemId)) {
+                view.addFolder({
+                    get_id: function() { return itemId; },
+                    get_name: function() { return itemId; },
+                });
+            }
+            else {
+                let app = this._appSystem.lookup_app(itemId);
+                if (app)
+                    view.addApp(app);
             }
         }
         view.loadGrid();
@@ -596,7 +547,7 @@ const FolderIcon = new Lang.Class({
 
         this.view = new FolderView();
         this.view.actor.reactive = false;
-        _loadCategory(dir, this.view);
+        this._loadCategory(dir, this.view);
         this.view.loadGrid();
 
         this.actor.connect('clicked', Lang.bind(this,
@@ -609,6 +560,20 @@ const FolderIcon = new Lang.Class({
                 if (!this.actor.mapped && this._popup)
                     this._popup.popdown();
             }));
+    },
+
+    _loadCategory: function(dir) {
+        let appSystem = Shell.AppSystem.get_default();
+
+        let icons = IconGridLayout.layout.getIcons(dir.get_id());
+        if (! icons)
+            return;
+
+        for (let i=0; i<icons.length; i++) {
+            let app = appSystem.lookup_app(icons[i]);
+            if (app)
+                this.view.addApp(app);
+        }
     },
 
     _createIcon: function(size) {
