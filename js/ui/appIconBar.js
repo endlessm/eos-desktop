@@ -6,6 +6,7 @@ const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
 
+const ButtonConstants = imports.ui.buttonConstants;
 const Hash = imports.misc.hash;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
@@ -201,18 +202,40 @@ const AppIconButton = new Lang.Class({
         this.actor = new St.Button({ child: icon, button_mask: St.ButtonMask.ONE });
         this.actor.reactive = true;
 
-        this.actor.connect('clicked', Lang.bind(this, function() {
-            let windows = app.get_windows();
-            if (windows.length == 1) {
-                Main.activateWindow(windows[0]);
-            } else {
-                this._ensureMenu();
-                this._menu.popup();
-            }
-        }));
+        // Handle the menu-on-press case for multiple windows
+        this.actor.connect('button-press-event', Lang.bind(this,
+            function(actor, event) {
+                let button = event.get_button();
+
+                if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+                    let windows = app.get_windows();
+                    if (windows.length > 1) {
+                        this._ensureMenu();
+                        this._menu.popup();
+                        this._menuManager.ignoreRelease();
+
+                        // This will block the clicked signal from being emitted
+                        return true;
+                    }
+                }
+
+                this.actor.sync_hover();
+                return false;
+            }));
+
+        this.actor.connect('clicked', Lang.bind(this,
+            function() {
+                // The multiple windows case is handled in button-press-event
+                let windows = app.get_windows();
+                if (windows.length == 1) {
+                    Main.activateWindow(windows[0]);
+                }
+            }));
     },
 
     _ensureMenu: function() {
+        this.actor.fake_release();
+
         if (this._menu) {
             return;
         }
