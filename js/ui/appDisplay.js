@@ -191,6 +191,11 @@ const AllViewLayout = new Lang.Class({
         for (let child = container.get_first_child();
              child;
              child = child.get_next_sibling()) {
+
+            if (!child.visible) {
+                continue;
+            }
+
             let childY = child.y;
             let [childMin, childNatural] = child.get_preferred_height(forWidth);
 
@@ -333,6 +338,7 @@ const AllView = new Lang.Class({
                 this._updateIconOpacities(isOpen);
                 if (isOpen)
                     this._ensureIconVisible(popup.actor);
+                this._grid.actor.queue_relayout();
             }));
     },
 
@@ -741,6 +747,8 @@ const AppFolderPopup = new Lang.Class({
     popdown: function() {
         if (!this._isOpen)
             return;
+
+        this.actor.hide();
 
         this._boxPointer.hide(BoxPointer.PopupAnimation.FADE |
                               BoxPointer.PopupAnimation.SLIDE);
