@@ -965,21 +965,14 @@ const AppStoreIcon = new Lang.Class({
                                      x_fill: true,
                                      y_fill: true });
 
-        if (!iconParams) {
-            iconParams = {};
-        }
-
-        iconParams['createIcon'] = Lang.bind(this, this._createIcon);
-        this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
-
-        iconParams['createIcon'] = Lang.bind(this, this._createPressedIcon);
-        this.pressed_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
-
-        iconParams['createIcon'] = Lang.bind(this, this._createTrashIcon);
-        this.empty_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
-
-        iconParams['createIcon'] = Lang.bind(this, this._createFullTrashIcon);
-        this.full_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
+        this.icon = new IconGrid.BaseIcon(_("Add"),
+                                          { createIcon: this._createIcon });
+        this.pressed_icon = new IconGrid.BaseIcon(_("Add"), 
+                                                  { createIcon: this._createPressedIcon });
+        this.empty_trash_icon = new IconGrid.BaseIcon(_("Delete"),
+                                                      { createIcon: this._createTrashIcon });
+        this.full_trash_icon = new IconGrid.BaseIcon(_("Delete"),
+                                                     { createIcon: this._createFullTrashIcon });
 
         this.actor.set_child(this.icon.actor);
         this.actor.label_actor = this.icon.label;
