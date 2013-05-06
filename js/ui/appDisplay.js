@@ -35,21 +35,6 @@ const MAX_COLUMNS = 7;
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
 
-const AppStore = new Lang.Class({
-    Name: 'AppStore',
-    Extends: Shell.App,
-    get_name:function(){ return "Add"; },
-    get_id:function(){ return "appstoreid"; },
-
-    _init : function(params) {
-        this.parent();
-    },
-
-    activate: function(){
-        Util.spawn(["eos_app_store"]);
-    }
-});
-
 // Recursively load a GMenuTreeDirectory; we could put this in ShellAppSystem too
 function _loadCategory(dir, view) {
     let iter = dir.iter();
@@ -947,6 +932,25 @@ const AppIcon = new Lang.Class({
     }
 });
 Signals.addSignalMethods(AppIcon.prototype);
+
+// FIXME: this should be removed once we install the app
+// store application with its desktop file and everything
+const AppStore = new Lang.Class({
+    Name: 'AppStore',
+    Extends: Shell.App,
+
+    get_name: function() {
+        return _("Add");
+    },
+
+    get_id: function() {
+        return "appstoreid";
+    },
+
+    activate: function(){
+        Util.spawn(["eos_app_store"]);
+    }
+});
 
 const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
