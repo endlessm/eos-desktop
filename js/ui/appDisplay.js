@@ -236,8 +236,7 @@ const AllView = new Lang.Class({
         }));
         this._eventBlocker.add_action(this._clickAction);
 
-        this._appStore = new AppStore();
-        this._appStoreIcon = this._createItemIcon(this._appStore);
+        this._appStoreIcon = new AppStoreIcon();
     },
 
     _onPan: function(action) {
@@ -265,9 +264,7 @@ const AllView = new Lang.Class({
         this._eventBlocker.show();
     },
     _createItemIcon: function(item) {
-        if (item instanceof AppStore) {
-            return new AppStoreIcon(item);
-        } else if (item instanceof Shell.App) {
+        if (item instanceof Shell.App) {
             return new AppIcon(item);
         } else if (item instanceof GMenu.TreeDirectory) {
             return new FolderIcon(item, this);
@@ -956,10 +953,11 @@ const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
     Extends: St.Widget,
 
-    _init : function(app, iconParams) {
+    _init : function() {
         this.parent();
 
-        this.app = app;
+        this.app = new AppStore();
+
         this.actor = new St.Button({ style_class: 'app-well-app',
                                      reactive: true,
                                      button_mask: St.ButtonMask.ONE,
