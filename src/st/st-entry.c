@@ -241,6 +241,26 @@ st_entry_finalize (GObject *object)
 }
 
 static void
+st_entry_set_hint_visible (StEntry *self,
+                           gboolean visible)
+{
+  StEntryPrivate *priv = self->priv;
+
+  if (visible)
+    {
+      priv->hint_visible = TRUE;
+      clutter_text_set_text (CLUTTER_TEXT (priv->entry), priv->hint);
+      st_widget_add_style_pseudo_class (ST_WIDGET (self), "indeterminate");
+     }
+  else
+    {
+      priv->hint_visible = FALSE;
+      clutter_text_set_text (CLUTTER_TEXT (priv->entry), "");
+      st_widget_remove_style_pseudo_class (ST_WIDGET (self), "indeterminate");
+    }
+}
+
+static void
 st_entry_style_changed (StWidget *self)
 {
   StEntryPrivate *priv = ST_ENTRY_PRIV (self);
@@ -471,18 +491,13 @@ clutter_text_focus_in_cb (ClutterText  *text,
 
   /* remove the hint if visible */
   if (priv->hint && priv->hint_visible)
-    {
-      priv->hint_visible = FALSE;
-
-      clutter_text_set_text (text, "");
-    }
+    st_entry_set_hint_visible (entry, FALSE);
 
   keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
   keymap_state_changed (keymap, entry);
   g_signal_connect (keymap, "state-changed",
                     G_CALLBACK (keymap_state_changed), entry);
 
-  st_widget_remove_style_pseudo_class (ST_WIDGET (actor), "indeterminate");
   st_widget_add_style_pseudo_class (ST_WIDGET (actor), "focus");
   clutter_text_set_cursor_visible (text, TRUE);
 }
@@ -499,12 +514,8 @@ clutter_text_focus_out_cb (ClutterText  *text,
 
   /* add a hint if the entry is empty */
   if (priv->hint && !strcmp (clutter_text_get_text (text), ""))
-    {
-      priv->hint_visible = TRUE;
+    st_entry_set_hint_visible (entry, TRUE);
 
-      clutter_text_set_text (text, priv->hint);
-      st_widget_add_style_pseudo_class (ST_WIDGET (actor), "indeterminate");
-    }
   clutter_text_set_cursor_visible (text, FALSE);
   remove_capslock_feedback (entry);
 
@@ -882,19 +893,12 @@ st_entry_set_text (StEntry     *entry,
   if (priv->hint
       && text && !strcmp ("", text)
       && !HAS_FOCUS (priv->entry))
-    {
-      text = priv->hint;
-      priv->hint_visible = TRUE;
-      st_widget_add_style_pseudo_class (ST_WIDGET (entry), "indeterminate");
-    }
+    st_entry_set_hint_visible (entry, TRUE);
   else
     {
-      st_widget_remove_style_pseudo_class (ST_WIDGET (entry), "indeterminate");
-
-      priv->hint_visible = FALSE;
+      st_entry_set_hint_visible (entry, FALSE);
+      clutter_text_set_text (CLUTTER_TEXT (priv->entry), text);
     }
-
-  clutter_text_set_text (CLUTTER_TEXT (priv->entry), text);
 
   g_object_notify (G_OBJECT (entry), "text");
 }
@@ -941,12 +945,7 @@ st_entry_set_hint_text (StEntry     *entry,
 
   if (!strcmp (clutter_text_get_text (CLUTTER_TEXT (priv->entry)), "")
       && !HAS_FOCUS (priv->entry))
-    {
-      priv->hint_visible = TRUE;
-
-      clutter_text_set_text (CLUTTER_TEXT (priv->entry), priv->hint);
-      st_widget_add_style_pseudo_class (ST_WIDGET (entry), "indeterminate");
-    }
+    st_entry_set_hint_visible (entry, TRUE);
 }
 
 /**
