@@ -1,0 +1,11 @@
+etc/dconf/db/gdm.d/99-gdm-eos-shell-settings
+usr/bin
+usr/lib/eos-shell
+usr/lib/mozilla
+usr/share/applications
+usr/share/xsessions/eos-session.desktop
+usr/share/dbus-1
+usr/share/man
+usr/share/gdm/greeter/applications/gdm-eos-shell.desktop
+usr/share/gnome-session/sessions/eos-shell.session
+usr/share/gnome-session/sessions/gdm-eos-shell.session

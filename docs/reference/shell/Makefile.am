@@ -117,10 +117,6 @@ GTKDOC_LIBS=$(GNOME_SHELL_LIBS) $(BLUETOOTH_LIBS) $(top_builddir)/src/libgnome-s
 # This includes the standard gtk-doc make rules, copied by gtkdocize.
 include $(top_srcdir)/gtk-doc.make
 
-# Other files to distribute
-# e.g. EXTRA_DIST += version.xml.in
-EXTRA_DIST +=
-
 # Files not to distribute
 # for --rebuild-types in $(SCAN_OPTIONS), e.g. $(DOC_MODULE).types
 # for --rebuild-sections in $(SCAN_OPTIONS) e.g. $(DOC_MODULE)-sections.txt
