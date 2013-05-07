@@ -191,6 +191,11 @@ const AllViewLayout = new Lang.Class({
         for (let child = container.get_first_child();
              child;
              child = child.get_next_sibling()) {
+
+            if (!child.visible) {
+                continue;
+            }
+
             let childY = child.y;
             let [childMin, childNatural] = child.get_preferred_height(forWidth);
 
@@ -333,6 +338,7 @@ const AllView = new Lang.Class({
                 this._updateIconOpacities(isOpen);
                 if (isOpen)
                     this._ensureIconVisible(popup.actor);
+                this._grid.actor.queue_relayout();
             }));
     },
 
@@ -621,7 +627,7 @@ const FolderIcon = new Lang.Class({
 
         this._popup = new AppFolderPopup(this, side);
         this._parentView.addFolderPopup(this._popup);
-        this._reposition(side);
+        this._reposition(side, spaceTop, spaceBottom);
 
         this._popup.connect('open-state-changed', Lang.bind(this,
             function(popup, isOpen) {
@@ -643,17 +649,20 @@ const FolderIcon = new Lang.Class({
         this._popup.actor.add_constraint(constraint);
     },
 
-    _reposition: function(side) {
+    _reposition: function(side, spaceTop, spaceBottom) {
         let [sourceX, sourceY] = this.actor.get_transformed_position();
         let [sourceXP, sourceYP] = this._parentView.actor.get_transformed_position();
         let newPosY = sourceY - sourceYP + this.actor.height;
 
-        // If the space below doesn't fit the popup, insert it in the bottom;
-        // this way, we "force" the parent layer to grow up, so it will fit the
-        // popup later
-        if (side == St.Side.TOP &&
-            sourceYP + this._parentView.actor.height - newPosY < this._popup.actor.height) {
-            this._popup.actor.y = sourceYP + this._parentView.actor.height;
+        let iconGridHeight = this.actor.get_parent().get_parent().height;
+
+        // Reposition the popup to ensure that the content will grow later when
+        // using a binding constraint. It takes in account that when this
+        // happens, the icon pointed by the popup will be repositioned in more
+        // or less in the middle of the screen (icon grid is always centered)
+        if ((side == St.Side.TOP && this._popup.actor.height > spaceBottom) ||
+            (side == St.Side.BOTTOM && this._popup.actor.height > spaceTop)) {
+            this._popup.actor.y = sourceYP + this._popup.actor.height + this.actor.y + this.actor.height + iconGridHeight;
         }
 
         // If folder icon is not enterily above or below the app folder, move
@@ -743,9 +752,12 @@ const AppFolderPopup = new Lang.Class({
             return;
 
         this._boxPointer.hide(BoxPointer.PopupAnimation.FADE |
-                              BoxPointer.PopupAnimation.SLIDE);
+                              BoxPointer.PopupAnimation.SLIDE,
+                              Lang.bind(this, function () {
+                                  this.actor.hide();
+                                  this.emit('open-state-changed', false);
+                              }));
         this._isOpen = false;
-        this.emit('open-state-changed', false);
     }
 });
 Signals.addSignalMethods(AppFolderPopup.prototype);
