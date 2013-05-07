@@ -64,16 +64,48 @@ const EndlessApplicationView = new Lang.Class({
         throw new Error('Not implemented');
     },
 
-    _addItem: function(item) {
+    _compareItems: function(a, b) {
+        throw new Error('Not implemented');
+    },
+
+    _addItem: function(item, idx) {
         let id = this._getItemId(item);
         if (this._items[id] !== undefined) {
             return null;
         }
+
         let itemIcon = this._createItemIcon(item);
-        this._allItems.push(item);
+        if (idx === undefined) {
+            this._allItems.push(item);
+        } else {
+            this._allItems.splice(idx, 0, item);
+        }
         this._items[id] = itemIcon;
 
         return itemIcon;
+    },
+
+    _removeItem: function(item) {
+        let id = this._getItemId(item);
+        if (this._items[id] === undefined) {
+            return;
+        }
+
+        delete this._items[id];
+
+        let idx = this._allItems.indexOf(item);
+        if (idx != -1) {
+            this._allItems.splice(idx, 1);
+        }
+    },
+
+    _showItem: function(item) {
+        let id = this._getItemId(item);
+        if (this._items[id] === undefined) {
+            return;
+        }
+
+        this._items[id].actor.show();
     },
 
     loadGrid: function() {
@@ -177,6 +209,8 @@ const AllView = new Lang.Class({
                                          y_expand: true,
                                          overlay_scrollbars: true,
                                          style_class: 'all-apps vfade' });
+        this.actor._delegate = this;
+
         this.actor.add_actor(box);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         let action = new Clutter.PanAction({ interpolate: true });
@@ -211,12 +245,140 @@ const AllView = new Lang.Class({
         return false;
     },
 
-    _onDragBegin: function() {
+    _getItemId: function(item) {
+        if (item instanceof Shell.App) {
+            return item.get_id();
+        } else if (item instanceof GMenu.TreeDirectory) {
+            return item.get_menu_id();
+        } else {
+            return null;
+        }
+    },
+
+    _onDragBegin: function(overview, source) {
+        this._dragItem = source;
+        this._originalIdx = this._grid.indexOf(source.actor);
+
+        this._insertIdx = -1;
+
+        global.log('Drag source is: ' + source + ' (' + this._originalIdx + ')');
+        source.actor.hide();
+
         this._eventBlocker.hide();
+
+        this._dragCancelled = false;
+        this._dragMonitor = {
+            dragMotion: Lang.bind(this, this._onDragMotion)
+        };
+        DND.addDragMonitor(this._dragMonitor);
     },
-    _onDragEnd: function() {
+
+    _onDragEnd: function(overview, source) {
         this._eventBlocker.show();
+
+        if (this._insertActor != null) {
+            this._grid.removeItem(this._insertActor);
+            this._insertActor = null;
+            this._insertIdx = -1;
+            this._originalIdx = -1;
+            this._dragItem = undefined;
+        }
+
+        DND.removeDragMonitor(this._dragMonitor);
     },
+
+    _onDragMotion: function(dragEvent) {
+        global.log('All view drag motion');
+
+        // Ask grid can we drop here
+        let [idx, onIcon] = this._grid.canDropAt(dragEvent.x, dragEvent.y,
+                                                 this._insertIdx);
+        global.log('Idx: ' + idx + ' on icon: ' + onIcon);
+        this._onIcon = onIcon;
+        this._onIconIdx = idx;
+        if (idx >= this._originalIdx) {
+            this._onIconIdx += 1;
+        }
+
+        if (onIcon || idx == -1) {
+            if (this._insertIdx != -1) {
+                this._grid.removeItem(this._insertActor);
+                this._insertIdx = -1;
+            }
+            return DND.DragMotionResult.CONTINUE;
+        }
+
+        if (idx > this._originalIdx) {
+            global.log('Gird says insert at: ' + idx);
+            idx += 1;
+        }
+
+        if (this._insertIdx == idx) {
+            global.log('InsertIdx has not changed');
+            return DND.DragMotionResult.COPY_DROP;
+        }
+
+        if (this._insertActor != null) {
+            this._grid.removeItem(this._insertActor);
+        }
+
+        global.log('Inserting at ' + idx);
+        this._insertIdx = idx;
+        this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
+                                          can_focus: false,
+                                          x_fill: true,
+                                          y_fill: true });
+        this._grid.addItem(this._insertActor, idx);
+
+        return DND.DragMotionResult.COPY_DROP;
+    },
+
+    _removeIcon: function(source) {
+        this._removeItem(source.app);
+        this._grid.removeItem(source.actor);
+    },
+
+    acceptDrop: function(source, actor, x, y, time) {
+        global.log('acceptDrop');
+        if (this._onIcon) {
+            // Let the icon handle it
+            let id = this._getItemId(this._allItems[this._onIconIdx]);
+            if (!id) {
+                global.log('No id');
+                return true;
+            }
+
+            let dropIcon = this._items[id];
+            let handler = dropIcon.iconDropHandler;
+            global.log('dropIcon: ' + dropIcon);
+
+            if (handler === undefined) {
+                global.log('No handler');
+                source.actor.show();
+                return true;
+            }
+
+            global.log('Drag end, let icon ' + this._onIconIdx + ' handle it');
+            if (handler(source)) {
+                this._removeIcon(source);
+            } else {
+                source.actor.show();
+            }
+            return true;
+        } else {
+            if (this._insertIdx == -1) {
+                source.actor.show();
+                return false;
+            } else {
+                this._removeIcon(source);
+
+                let newIcon = this._addItem(source.app, this._insertIdx);
+                this._grid.addItem(newIcon.actor, this._insertIdx);
+                return true;
+            }
+        }
+    },
+
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
             return new AppIcon(item);
@@ -613,6 +775,11 @@ const FolderIcon = new Lang.Class({
             this._popup.actor.set_anchor_point(-Math.max(0, actorRight - popupRight), 0);
         }
     },
+
+    iconDropHandler: function(source) {
+        global.log('Dropped icon on folder');
+        return false;
+    }
 });
 
 const AppFolderPopup = new Lang.Class({
@@ -908,6 +1075,11 @@ const AppIcon = new Lang.Class({
     // we show as the item is being dragged.
     getDragActorSource: function() {
         return this.icon.icon;
+    },
+
+    // Don't do anything at the moment, could be used to create a folder?
+    iconDropHandler: function(source) {
+        return false;
     }
 });
 Signals.addSignalMethods(AppIcon.prototype);
@@ -1052,7 +1224,12 @@ const AppStoreIcon = new Lang.Class({
             }));
 
         return true;
-    }
+    },
+
+    iconDropHandler: function(source) {
+        global.log('Icon dropped on trashcan');
+        return false;
+    },
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
 

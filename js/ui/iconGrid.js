@@ -286,6 +286,9 @@ const IconGrid = new Lang.Class({
                 leftPadding = availWidth - usedWidth;
         }
 
+        // Store this so we know where the icon grid starts
+        this._leftPadding = leftPadding;
+
         let x = box.x1 + leftPadding;
         let y = box.y1;
         let columnIndex = 0;
@@ -378,11 +381,99 @@ const IconGrid = new Lang.Class({
             this._grid.add_actor(actor);
     },
 
+    removeItem: function(actor) {
+        this._grid.remove_actor(actor);
+    },
+
     getItemAtIndex: function(index) {
         return this._grid.get_child_at_index(index);
     },
 
+    indexOf: function(item) {
+        let children = this._getVisibleChildren();
+        for (let i = 0; i < children.length; i++) {
+            if (item == children[i]) {
+                return i;
+            }
+        }
+
+        return -1;
+    },
+
     visibleItemsCount: function() {
         return this._grid.get_n_children() - this._grid.get_n_skip_paint();
+    },
+
+    // DnD support
+
+    // Returns the drop point index or -1 if we can't drop there
+    canDropAt: function(x, y, currentInsertIdx) {
+        let [sw, sh] = this.actor.get_transformed_size();
+        let [ok, sx, sy] = this.actor.transform_stage_point(x, y);
+
+        let [nColumns, usedWidth, spacing] = this._computeLayout(sw);
+
+        // Correct sx to handle the left padding
+        sx -= this._leftPadding;
+
+/*
+        if (sx < 0 || sy < 0 || sx > usedWidth || sy > sh) {
+            // Point is outside of the grid
+            return [-1, false];
+        }
+*/
+
+        let offset = sx % 128;
+        let row = Math.floor(sy / 128);
+        let column = Math.floor(sx / 128);
+
+        let children = this._getVisibleChildren();
+        let childIdx;
+
+        if (sx < 0) {
+            column = 0;
+        } else if (sx > usedWidth) {
+            column = 0;
+            row += 1;
+
+            childIdx = Math.min((row * nColumns) + column, children.length);
+            return [childIdx, false];
+        }
+
+        childIdx = Math.min((row * nColumns) + column, children.length);
+        global.log('column: ' + column);
+        global.log('row: ' + row);
+
+        // Shouldn't happen if we're inside the grid
+        if (childIdx < 0) {
+            return [-1, false];
+        }
+
+        global.log('Icon number: ' + childIdx);
+        let child = children[childIdx];
+        let [childMinWidth, childMinHeight, childNaturalWidth, childNaturalHeight] = child.get_preferred_size();
+        let [cx, cy] = child.get_transformed_position();
+
+        // This is the width of the icon inside the 128x128 grid square
+        let childIconWidth = Math.min(this._hItemSize, childNaturalWidth);
+
+        // childIconWidth is used to determine whether or not a drag point
+        // is inside the icon or the divider.
+        // Give the divider a larger target area by reducing the size of the
+        // icon.
+        childIconWidth -= 10;
+
+        // Reduce the size of the icon area further by only having it start
+        // 30 pixels further in. if the drop point is in those initial pixels
+        // then the drop point is the current icon
+        if (offset < 30) {
+            return [childIdx, false];
+        } else if (offset > childIconWidth) {
+            // Insert point is after the icon we're on
+            return [childIdx + 1, false];
+        } else {
+            global.log('Not in a divider');
+            return [childIdx, true];
+        }
     }
 });
