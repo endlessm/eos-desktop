@@ -748,12 +748,13 @@ const AppFolderPopup = new Lang.Class({
         if (!this._isOpen)
             return;
 
-        this.actor.hide();
-
         this._boxPointer.hide(BoxPointer.PopupAnimation.FADE |
-                              BoxPointer.PopupAnimation.SLIDE);
+                              BoxPointer.PopupAnimation.SLIDE,
+                              Lang.bind(this, function () {
+                                  this.actor.hide();
+                                  this.emit('open-state-changed', false);
+                              }));
         this._isOpen = false;
-        this.emit('open-state-changed', false);
     }
 });
 Signals.addSignalMethods(AppFolderPopup.prototype);
