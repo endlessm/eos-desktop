@@ -627,7 +627,7 @@ const FolderIcon = new Lang.Class({
 
         this._popup = new AppFolderPopup(this, side);
         this._parentView.addFolderPopup(this._popup);
-        this._reposition(side);
+        this._reposition(side, spaceTop, spaceBottom);
 
         this._popup.connect('open-state-changed', Lang.bind(this,
             function(popup, isOpen) {
@@ -649,7 +649,7 @@ const FolderIcon = new Lang.Class({
         this._popup.actor.add_constraint(constraint);
     },
 
-    _reposition: function(side) {
+    _reposition: function(side, spaceTop, spaceBottom) {
         let [sourceX, sourceY] = this.actor.get_transformed_position();
         let [sourceXP, sourceYP] = this._parentView.actor.get_transformed_position();
         let newPosY = sourceY - sourceYP + this.actor.height;
@@ -660,7 +660,10 @@ const FolderIcon = new Lang.Class({
         // using a binding constraint. It takes in account that when this
         // happens, the icon pointed by the popup will be repositioned in more
         // or less in the middle of the screen (icon grid is always centered)
-        this._popup.actor.y = sourceYP + this._popup.actor.height + this.actor.y + this.actor.height + iconGridHeight;
+        if ((side == St.Side.TOP && this._popup.actor.height > spaceBottom) ||
+            (side == St.Side.BOTTOM && this._popup.actor.height > spaceTop)) {
+            this._popup.actor.y = sourceYP + this._popup.actor.height + this.actor.y + this.actor.height + iconGridHeight;
+        }
 
         // If folder icon is not enterily above or below the app folder, move
         // the later so the pointer can point correctly to the icon
