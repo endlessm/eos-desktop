@@ -654,13 +654,13 @@ const FolderIcon = new Lang.Class({
         let [sourceXP, sourceYP] = this._parentView.actor.get_transformed_position();
         let newPosY = sourceY - sourceYP + this.actor.height;
 
-        // If the space below doesn't fit the popup, insert it in the bottom;
-        // this way, we "force" the parent layer to grow up, so it will fit the
-        // popup later
-        if (side == St.Side.TOP &&
-            sourceYP + this._parentView.actor.height - newPosY < this._popup.actor.height) {
-            this._popup.actor.y = sourceYP + this._parentView.actor.height;
-        }
+        let iconGridHeight = this.actor.get_parent().get_parent().height;
+
+        // Reposition the popup to ensure that the content will grow later when
+        // using a binding constraint. It takes in account that when this
+        // happens, the icon pointed by the popup will be repositioned in more
+        // or less in the middle of the screen (icon grid is always centered)
+        this._popup.actor.y = sourceYP + this._popup.actor.height + this.actor.y + this.actor.height + iconGridHeight;
 
         // If folder icon is not enterily above or below the app folder, move
         // the later so the pointer can point correctly to the icon
