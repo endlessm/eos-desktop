@@ -268,7 +268,7 @@ const WindowManager = new Lang.Class({
             } else {
                 let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
                 xDest = monitor.x;
-                yDest = monitor.y;
+                yDest = monitor.y + monitor.height;
                 if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
                     xDest += monitor.width;
                 xScale = 0;

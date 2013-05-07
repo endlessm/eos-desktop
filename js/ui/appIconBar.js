@@ -2,6 +2,7 @@
 
 const Clutter = imports.gi.Clutter;
 const Lang = imports.lang;
+const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
@@ -230,6 +231,33 @@ const AppIconButton = new Lang.Class({
                 if (windows.length == 1) {
                     Main.activateWindow(windows[0]);
                 }
+            }));
+
+        Main.layoutManager.connect('startup-complete', Lang.bind(this,
+            this._updateIconGeometry));
+        this.actor.connect('notify::allocation', Lang.bind(this,
+            this._updateIconGeometry));
+        this.actor.connect('destroy', Lang.bind(this,
+            this._resetIconGeometry));
+    },
+
+    _resetIconGeometry: function() {
+        let windows = this._app.get_windows();
+        windows.forEach(Lang.bind(this,
+            function(win) {
+                win.set_icon_geometry(null);
+            }));
+    },
+
+    _updateIconGeometry: function() {
+        let rect = new Meta.Rectangle();
+        [rect.x, rect.y] = this.actor.get_transformed_position();
+        [rect.width, rect.height] = this.actor.get_transformed_size();
+
+        let windows = this._app.get_windows();
+        windows.forEach(Lang.bind(this,
+            function(win) {
+                win.set_icon_geometry(rect);
             }));
     },
 
