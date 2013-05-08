@@ -398,8 +398,6 @@ StScrollBar StButton#vhandle:active {
     box-shadow: inset 0px 2px 4px rgba(0,0,0,0.6);
 }
 
-#searchEntry:focus,
-#searchEntry:hover,
 .notification StEntry:focus,
 .modal-dialog StEntry {
     border: 2px solid rgb(136,138,133);
@@ -412,24 +410,6 @@ StScrollBar StButton#vhandle:active {
 .notification StEntry:focus,
 .modal-dialog StEntry:focus {
     border: 2px solid #3465a4;
-}
-
-#searchEntry {
-    border-color: rgba(245,245,245,0.3);
-    color: rgb(192, 192, 192);
-    caret-color: rgb(192, 192, 192);
-}
-
-#searchEntry:hover {
-    color: rgb(128, 128, 128);
-    caret-color: rgb(128, 128, 128);
-}
-
-#searchEntry:focus {
-    color: rgb(64, 64, 64);
-    caret-color: rgb(64, 64, 64);
-    font-weight: bold;
-    transition-duration: 0ms;
 }
 
 .notification StEntry,
@@ -803,16 +783,28 @@ StScrollBar StButton#vhandle:active {
 
 #searchEntry {
     width: 320px;
+
+    border-color: rgba(245,245,245,0.3);
+    color: rgb(187,188,183);
+    caret-color: rgb(187,188,183);
+}
+
+#searchEntry:focus {
+    font-weight: bold;
+    transition-duration: 0ms;
 }
 
 .search-entry-icon {
     icon-size: 1em;
-    color: #c0c0c0;
 }
 
-#searchEntry:hover .search-entry-icon,
-#searchEntry:focus .search-entry-icon {
-    color: #8d8f8a;
+.search-entry-icon:hover {
+    color: rgb(255,255,255);
+}
+
+.search-entry-hint {
+    /* line the entry hint image with the search loupe */
+    padding-top: 2px;
 }
 
 /* Search Results */

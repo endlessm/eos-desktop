@@ -908,19 +908,24 @@ ensure_request (StTextureCache        *cache,
 static ClutterActor *
 load_gicon_with_colors (StTextureCache    *cache,
                         GIcon             *icon,
-                        gint               size,
+                        gint               width,
+                        gint               height,
+                        gboolean           force_square,
                         StIconColors      *colors)
 {
   AsyncTextureLoadData *request;
   ClutterActor *texture;
   char *gicon_string;
   char *key;
+  gint size;
   GtkIconTheme *theme;
   GtkIconInfo *info;
   StTextureCachePolicy policy;
 
   /* Do theme lookups in the main thread to avoid thread-unsafety */
   theme = cache->priv->icon_theme;
+
+  size = MAX (width, height);
 
   info = gtk_icon_theme_lookup_by_gicon (theme, icon, size, GTK_ICON_LOOKUP_USE_BUILTIN);
   if (info == NULL)
@@ -951,7 +956,7 @@ load_gicon_with_colors (StTextureCache    *cache,
   g_free (gicon_string);
 
   texture = (ClutterActor *) create_default_texture ();
-  clutter_actor_set_size (texture, size, size);
+  clutter_actor_set_size (texture, width, height);
 
   if (ensure_request (cache, key, policy, &request, texture))
     {
@@ -969,8 +974,9 @@ load_gicon_with_colors (StTextureCache    *cache,
       request->policy = policy;
       request->colors = colors ? st_icon_colors_ref (colors) : NULL;
       request->icon_info = info;
-      request->width = request->height = size;
-      request->enforced_square = TRUE;
+      request->width = width;
+      request->height = height;
+      request->enforced_square = force_square;
 
       load_texture_async (cache, request);
     }
@@ -998,7 +1004,36 @@ st_texture_cache_load_gicon (StTextureCache    *cache,
                              GIcon             *icon,
                              gint               size)
 {
-  return load_gicon_with_colors (cache, icon, size, theme_node ? st_theme_node_get_icon_colors (theme_node) : NULL);
+  return load_gicon_with_colors (cache, icon,
+                                 size, size, TRUE,
+                                 theme_node ? st_theme_node_get_icon_colors (theme_node) : NULL);
+}
+
+/**
+ * st_texture_cache_load_gicon_at_size:
+ * @cache: The texture cache instance
+ * @theme_node: (allow-none): The #StThemeNode to use for colors, or NULL
+ *                            if the icon must not be recolored
+ * @icon: the #GIcon to load
+ * @available_width: available width for the image, can be -1 if not limited
+ * @available_height: available height for the image, can be -1 if not limited
+ *
+ * This method returns a new #ClutterActor for a given #GIcon. If the
+ * icon isn't loaded already, the texture will be filled
+ * asynchronously.
+ *
+ * Return Value: (transfer none): A new #ClutterActor for the icon, or %NULL if not found
+ */
+ClutterActor *
+st_texture_cache_load_gicon_at_size (StTextureCache    *cache,
+                                     StThemeNode       *theme_node,
+                                     GIcon             *icon,
+                                     gint               available_width,
+                                     gint               available_height)
+{
+  return load_gicon_with_colors (cache, icon,
+                                 available_width, available_height, FALSE,
+                                 theme_node ? st_theme_node_get_icon_colors (theme_node) : NULL);
 }
 
 static ClutterActor *
