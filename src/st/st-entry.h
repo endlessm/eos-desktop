@@ -78,6 +78,8 @@ void st_entry_set_primary_icon             (StEntry      *entry,
                                             ClutterActor *icon);
 void st_entry_set_secondary_icon           (StEntry      *entry,
                                             ClutterActor *icon);
+void st_entry_set_hint_actor               (StEntry      *entry,
+                                            ClutterActor *hint_actor);
 
 G_END_DECLS
 
