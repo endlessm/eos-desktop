@@ -18,13 +18,14 @@ const IconGridLayout = new Lang.Class({
         this._iconTree = {};
         this._folderCategories = [];
 
-        for (let i=0; i<allIcons.n_children(); i++) {
+        for (let i = 0; i < allIcons.n_children(); i++) {
             let context = allIcons.get_child_value(i);
 
             let [folder] = context.get_child_value(0).get_string();
 
-            if (folder)
+            if (folder) {
                 this._folderCategories.push(folder);
+            }
 
             this._iconTree[folder] = context.get_child_value(1).get_strv();
         }
@@ -39,8 +40,7 @@ const IconGridLayout = new Lang.Class({
 
         if (this._iconTree[folder]) {
             return this._iconTree[folder];
-        }
-        else {
+        } else {
             return null;
         }
     },
@@ -70,7 +70,7 @@ const IconGridLayout = new Lang.Class({
         icons.splice(position, 0, id);
 
         // recreate GVariant from iconTree
-        let newLayout = GLib.Variant.new ("a{sas}", this._iconTree);
+        let newLayout = GLib.Variant.new("a{sas}", this._iconTree);
 
         // store gsetting
         global.settings.set_value(SCHEMA_KEY, newLayout);

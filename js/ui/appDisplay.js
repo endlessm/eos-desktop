@@ -441,7 +441,7 @@ const AppDisplay = new Lang.Class({
 
         let topLevelIcons = IconGridLayout.layout.getIcons("");
 
-        for (let i=0; i<topLevelIcons.length; i++) {
+        for (let i = 0; i < topLevelIcons.length; i++) {
             let itemId = topLevelIcons[i];
 
             if (IconGridLayout.layout.iconIsFolder(itemId)) {
@@ -449,11 +449,11 @@ const AppDisplay = new Lang.Class({
                     get_id: function() { return itemId; },
                     get_name: function() { return itemId; },
                 });
-            }
-            else {
+            } else {
                 let app = this._appSystem.lookup_app(itemId);
-                if (app)
+                if (app) {
                     view.addApp(app);
+                }
             }
         }
         view.loadGrid();
@@ -569,10 +569,11 @@ const FolderIcon = new Lang.Class({
         if (! icons)
             return;
 
-        for (let i=0; i<icons.length; i++) {
+        for (let i = 0; i < icons.length; i++) {
             let app = appSystem.lookup_app(icons[i]);
-            if (app)
+            if (app) {
                 this.view.addApp(app);
+            }
         }
     },
 
