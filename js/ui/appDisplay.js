@@ -35,21 +35,6 @@ const MAX_COLUMNS = 7;
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
 
-const AppStore = new Lang.Class({
-    Name: 'AppStore',
-    Extends: Shell.App,
-    get_name:function(){ return "Add"; },
-    get_id:function(){ return "appstoreid"; },
-
-    _init : function(params) {
-        this.parent();
-    },
-
-    activate: function(){
-        Util.spawn(["eos_app_store"]);
-    }
-});
-
 // Recursively load a GMenuTreeDirectory; we could put this in ShellAppSystem too
 function _loadCategory(dir, view) {
     let iter = dir.iter();
@@ -202,7 +187,7 @@ const AllViewLayout = new Lang.Class({
             if (childMin + childY > minBottom) {
                 minBottom = childMin + childY;
             }
-            
+
             if (childNatural + childY > naturalBottom) {
                 naturalBottom = childNatural + childY;
             }
@@ -240,7 +225,7 @@ const AllView = new Lang.Class({
 
         Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
-        
+
         this._clickAction = new Clutter.ClickAction();
         this._clickAction.connect('clicked', Lang.bind(this, function() {
             if (!this._currentPopup) {
@@ -256,8 +241,7 @@ const AllView = new Lang.Class({
         }));
         this._eventBlocker.add_action(this._clickAction);
 
-        this._appStore = new AppStore();
-        this._appStoreIcon = this._createItemIcon(this._appStore);
+        this._appStoreIcon = new AppStoreIcon();
     },
 
     _onPan: function(action) {
@@ -278,16 +262,14 @@ const AllView = new Lang.Class({
             return null;
         }
     },
-    _onDragBegin: function() { 
+    _onDragBegin: function() {
         this._eventBlocker.hide();
     },
-    _onDragEnd: function() { 
+    _onDragEnd: function() {
         this._eventBlocker.show();
     },
     _createItemIcon: function(item) {
-        if (item instanceof AppStore) {
-            return new AppStoreIcon(item);
-        } else if (item instanceof Shell.App) {
+        if (item instanceof Shell.App) {
             return new AppIcon(item);
         } else if (item instanceof GMenu.TreeDirectory) {
             return new FolderIcon(item, this);
@@ -765,8 +747,12 @@ Signals.addSignalMethods(AppFolderPopup.prototype);
 const AppIcon = new Lang.Class({
     Name: 'AppIcon',
 
-    _init : function(app, iconParams) {
+    _init : function(app, iconParams, params) {
+        params = Params.parse(params, { showMenu: true,
+                                        isDraggable: true });
+
         this.app = app;
+        this._showMenu = params.showMenu;
 
         this.actor = new St.Button({ style_class: 'app-well-app',
                                      reactive: true,
@@ -792,22 +778,24 @@ const AppIcon = new Lang.Class({
         this._menu = null;
         this._menuManager = new PopupMenu.PopupMenuManager(this);
 
-        this._draggable = DND.makeDraggable(this.actor);
-        this._draggable.connect('drag-begin', Lang.bind(this,
-            function () {
-                // Notify view that something is dragging
-                this._removeMenuTimeout();
-                Main.overview.beginItemDrag(this);
-            }));
-        this._draggable.connect('drag-cancelled', Lang.bind(this,
-            function () {
-                Main.overview.cancelledItemDrag(this);
-            }));
-        this._draggable.connect('drag-end', Lang.bind(this,
-            function () {
-                // Are we in the trashcan area?
-                Main.overview.endItemDrag(this);
-            }));
+        if (params.isDraggable) {
+            this._draggable = DND.makeDraggable(this.actor);
+            this._draggable.connect('drag-begin', Lang.bind(this,
+                function () {
+                    // Notify view that something is dragging
+                    this._removeMenuTimeout();
+                    Main.overview.beginItemDrag(this);
+                }));
+            this._draggable.connect('drag-cancelled', Lang.bind(this,
+                function () {
+                    Main.overview.cancelledItemDrag(this);
+                }));
+            this._draggable.connect('drag-end', Lang.bind(this,
+                function () {
+                    // Are we in the trashcan area?
+                    Main.overview.endItemDrag(this);
+                }));
+        }
 
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
@@ -877,6 +865,10 @@ const AppIcon = new Lang.Class({
     },
 
     _onKeyboardPopupMenu: function() {
+        if (!this._showMenu) {
+            return;
+        }
+
         this.popupMenu();
         this._menu.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
     },
@@ -887,8 +879,16 @@ const AppIcon = new Lang.Class({
 
     popupMenu: function() {
         this._removeMenuTimeout();
+
+        if (!this._showMenu) {
+            return false;
+        }
+
         this.actor.fake_release();
-        this._draggable.fakeRelease();
+
+        if (this._draggable) {
+            this._draggable.fakeRelease();
+        }
 
         if (!this._menu) {
             this._menu = new AppIconMenu(this);
@@ -896,7 +896,7 @@ const AppIcon = new Lang.Class({
                 this.activateWindow(window);
             }));
             this._menu.connect('open-state-changed', Lang.bind(this, function (menu, isPoppedUp) {
-                if (!isPoppedUp) { 
+                if (!isPoppedUp) {
                     this._onMenuPoppedDown();
                 }
             }));
@@ -960,50 +960,48 @@ const AppIcon = new Lang.Class({
 });
 Signals.addSignalMethods(AppIcon.prototype);
 
+// FIXME: this should be removed once we install the app
+// store application with its desktop file and everything
+const AppStore = new Lang.Class({
+    Name: 'AppStore',
+    Extends: Shell.App,
+
+    get_name: function() {
+        return _("Add");
+    },
+
+    get_id: function() {
+        return "appstoreid";
+    },
+
+    activate: function(){
+        Util.spawn(["eos_app_store"]);
+    }
+});
+
 const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
-    Extends: St.Widget,
+    Extends: AppIcon,
 
-    _init : function(app, iconParams) {
-        this.parent();
+    _init : function() {
+        this.parent(new AppStore(),
+                    { createIcon: this._createIcon },
+                    { showMenu: false,
+                      isDraggable: false });
 
-        this.app = app;
-        this.actor = new St.Button({ style_class: 'app-well-app',
-                                     reactive: true,
-                                     button_mask: St.ButtonMask.ONE,
-                                     can_focus: false,
-                                     x_fill: true,
-                                     y_fill: true });
-
-        if (!iconParams) {
-            iconParams = {};
-        }
-
-        iconParams['createIcon'] = Lang.bind(this, this._createIcon);
-        this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
-
-        iconParams['createIcon'] = Lang.bind(this, this._createPressedIcon);
-        this.pressed_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
-
-        iconParams['createIcon'] = Lang.bind(this, this._createTrashIcon);
-        this.empty_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
-
-        iconParams['createIcon'] = Lang.bind(this, this._createFullTrashIcon);
-        this.full_trash_icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
-
-        this.actor.set_child(this.icon.actor);
-        this.actor.label_actor = this.icon.label;
+        this.pressed_icon = new IconGrid.BaseIcon(_("Add"),
+                                                  { createIcon: this._createPressedIcon });
+        this.empty_trash_icon = new IconGrid.BaseIcon(_("Delete"),
+                                                      { createIcon: this._createTrashIcon });
+        this.full_trash_icon = new IconGrid.BaseIcon(_("Delete"),
+                                                     { createIcon: this._createFullTrashIcon });
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
-        this.actor.connect('clicked', Lang.bind(this, this._onClicked));
-        this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
         Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
-
-        this._stateChangedId = this.app.connect('notify::state', Lang.bind(this, this._onStateChanged));
-        this._onStateChanged();
     },
+
     _createPressedIcon: function(iconSize) {
         // For now, let's use the normal icon for the pressed state,
         // for consistency with the other app selector icons,
@@ -1015,13 +1013,6 @@ const AppStoreIcon = new Lang.Class({
         // back to the normal icon to occur.
         return new St.Icon({ icon_size: iconSize,
                              icon_name: 'add_normal'});
-    },
-
-    _onDestroy: function() {
-        if (this._stateChangedId > 0) { 
-            this.app.disconnect(this._stateChangedId);
-        }
-        this._stateChangedId = 0;
     },
 
     _createIcon: function(iconSize) {
@@ -1078,24 +1069,6 @@ const AppStoreIcon = new Lang.Class({
         return DND.DragMotionResult.CONTINUE;
     },
 
-    _onClicked: function(actor, button) {
-        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
-            this._onActivate(Clutter.get_current_event());
-        } else if (button == ButtonConstants.MIDDLE_MOUSE_BUTTON) {
-            // Last workspace is always empty
-            let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
-            launchWorkspace.activate(global.get_current_time());
-            this.emit('launching');
-            this.app.open_new_window(-1);
-            Main.overview.hide();
-        }
-        return false;
-    },
-
-    getId: function() {
-        return this.app.get_id();
-    },
-
     handleDragOver: function(source, actor, x, y, time) {
         let app = getAppFromSource(source);
         if (app == null) {
@@ -1119,43 +1092,6 @@ const AppStoreIcon = new Lang.Class({
             }));
 
         return true;
-    }, 
-
-    _onStateChanged: function() {
-        if (this.app.state != Shell.AppState.STOPPED) {
-            this.actor.add_style_class_name('running');
-        } else {
-            this.actor.remove_style_class_name('running');
-        }
-    },
-
-    activateWindow: function(metaWindow) {
-        if (metaWindow) {
-            Main.activateWindow(metaWindow);
-        } else {
-            Main.overview.hide();
-        }
-    },
-
-    _onActivate: function (event) {
-        this.emit('launching');
-        let modifiers = event.get_state();
-
-        if (modifiers & Clutter.ModifierType.CONTROL_MASK
-            && this.app.state == Shell.AppState.RUNNING) {
-            this.app.open_new_window(-1);
-        } else {
-            this.app.activate();
-        }
-
-        Main.overview.hide();
-    },
-
-    shellWorkspaceLaunch : function(params) {
-        params = Params.parse(params, { workspace: -1,
-                                        timestamp: 0 });
-
-        this.app.open_new_window(params.workspace);
     }
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
