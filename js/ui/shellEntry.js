@@ -138,7 +138,7 @@ const EntryHint = new Lang.Class({
     _init: function(styleClass, assetName) {
         this.parent({ style_class: styleClass });
 
-        let hintFile = new Gio.File.new_for_path(global.datadir + '/theme/' + assetName);
+        let hintFile = Gio.File.new_for_path(global.datadir + '/theme/' + assetName);
         this._gicon = new Gio.FileIcon({ file: hintFile });
 
         this._updateIcon();
