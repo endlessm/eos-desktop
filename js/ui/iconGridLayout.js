@@ -31,7 +31,7 @@ const IconGridLayout = new Lang.Class({
         }
 
         global.settings.connect('changed::' + SCHEMA_KEY, Lang.bind(this, function() {
-            print("layout CHANGED!");
+            this.emit('changed');
         }));
     },
 
