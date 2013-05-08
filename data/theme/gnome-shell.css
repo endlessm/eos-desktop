@@ -810,6 +810,11 @@ StScrollBar StButton#vhandle:active {
     color: #c0c0c0;
 }
 
+.search-entry-hint {
+    /* line the entry hint image with the search loupe */
+    padding-top: 2px;
+}
+
 #searchEntry:hover .search-entry-icon,
 #searchEntry:focus .search-entry-icon {
     color: #8d8f8a;
