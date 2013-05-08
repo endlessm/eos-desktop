@@ -95,7 +95,7 @@ shell_app_system_init (ShellAppSystem *self)
 
   /* We want to track NoDisplay apps, so we add INCLUDE_NODISPLAY. We'll
    * filter NoDisplay apps out when showing them to the user. */
-  priv->apps_tree = gmenu_tree_new ("eos-applications.menu", GMENU_TREE_FLAGS_INCLUDE_NODISPLAY);
+  priv->apps_tree = gmenu_tree_new ("gnome-applications.menu", GMENU_TREE_FLAGS_INCLUDE_NODISPLAY);
   g_signal_connect (priv->apps_tree, "changed", G_CALLBACK (on_apps_tree_changed_cb), self);
 
   on_apps_tree_changed_cb (priv->apps_tree, self);
