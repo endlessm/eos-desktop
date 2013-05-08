@@ -85,6 +85,12 @@ ClutterActor *st_texture_cache_load_gicon (StTextureCache *cache,
                                            GIcon          *icon,
                                            gint            size);
 
+ClutterActor * st_texture_cache_load_gicon_at_size (StTextureCache    *cache,
+                                                    StThemeNode       *theme_node,
+                                                    GIcon             *icon,
+                                                    gint               available_width,
+                                                    gint               available_height);
+
 ClutterActor *st_texture_cache_load_uri_async (StTextureCache    *cache,
                                                const gchar       *uri,
                                                int                available_width,
