@@ -200,8 +200,6 @@ const AllView = new Lang.Class({
 
         }));
         this._eventBlocker.add_action(this._clickAction);
-
-        this._appStoreIcon = new AppStoreIcon();
     },
 
     _onPan: function(action) {
@@ -230,7 +228,7 @@ const AllView = new Lang.Class({
     loadGrid: function() {
         this.parent();
 
-        this._grid.addItem(this._appStoreIcon.actor);
+        this._grid.addItem((new AppStoreIcon()).actor);
     },
 
     addApp: function(app) {
