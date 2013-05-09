@@ -47,10 +47,7 @@ const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,
 
-    _init: function(params) {
-        params = params || {};
-        this._folder = params.folder || "";
-
+    _init: function() {
         this._grid = new IconGrid.IconGrid({ xAlign: St.Align.MIDDLE,
                                              columnLimit: MAX_COLUMNS });
 
