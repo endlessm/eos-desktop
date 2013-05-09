@@ -11,12 +11,19 @@ const IconGridLayout = new Lang.Class({
     Name: 'IconGridLayout',
 
     _init: function(params) {
-        this._layoutById = {};
-        this._layoutByPosition = [];
+        this._updateIconTree();
 
-        let allIcons = global.settings.get_value(SCHEMA_KEY);
+        global.settings.connect('changed::' + SCHEMA_KEY, Lang.bind(this, function() {
+            this._updateIconTree();
+            this.emit('changed');
+        }));
+    },
+
+    _updateIconTree: function() {
         this._iconTree = {};
         this._folderCategories = [];
+
+        let allIcons = global.settings.get_value(SCHEMA_KEY);
 
         for (let i = 0; i < allIcons.n_children(); i++) {
             let context = allIcons.get_child_value(i);
@@ -29,10 +36,6 @@ const IconGridLayout = new Lang.Class({
 
             this._iconTree[folder] = context.get_child_value(1).get_strv();
         }
-
-        global.settings.connect('changed::' + SCHEMA_KEY, Lang.bind(this, function() {
-            this.emit('changed');
-        }));
     },
 
     getIcons: function(folder) {
@@ -74,8 +77,6 @@ const IconGridLayout = new Lang.Class({
 
         // store gsetting
         global.settings.set_value(SCHEMA_KEY, newLayout);
-
-        this.emit('changed');
     }
 });
 Signals.addSignalMethods(IconGridLayout.prototype);
