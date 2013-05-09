@@ -35,14 +35,6 @@ const MAX_COLUMNS = 7;
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
 
-function getAppFromSource(source) {
-    if (source instanceof AppIcon) {
-        return source.app;
-    } else {
-        return null;
-    }
-}
-
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,
@@ -999,6 +991,14 @@ const AppStoreIcon = new Lang.Class({
         return false;
     },
 
+    _getAppFromSource: function(source) {
+        if (source instanceof AppIcon) {
+            return source.app;
+        } else {
+            return null;
+        }
+    },
+
     _onDragBegin: function() {
         this.actor.set_child(this.empty_trash_icon.actor);
         this._dragCancelled = false;
@@ -1014,7 +1014,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onDragMotion: function(dragEvent) {
-        let app = getAppFromSource(dragEvent.source);
+        let app = this._getAppFromSource(dragEvent.source);
         if (app == null) {
             return DND.DragMotionResult.CONTINUE;
         }
@@ -1031,7 +1031,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     handleDragOver: function(source, actor, x, y, time) {
-        let app = getAppFromSource(source);
+        let app = this._getAppFromSource(source);
         if (app == null) {
             return DND.DragMotionResult.NO_DROP;
         }
