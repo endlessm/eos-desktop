@@ -72,10 +72,6 @@ const EndlessApplicationView = new Lang.Class({
         throw new Error('Not implemented');
     },
 
-    _compareItems: function(a, b) {
-        throw new Error('Not implemented');
-    },
-
     _addItem: function(item) {
         let id = this._getItemId(item);
         if (this._items[id] !== undefined) {
@@ -111,10 +107,6 @@ const FolderView = new Lang.Class({
 
     _createItemIcon: function(item) {
         return new AppIcon(item);
-    },
-
-    _compareItems: function(a, b) {
-        return a.get_id() == b.get_id();
     },
 
     addApp: function(app) {
@@ -241,19 +233,6 @@ const AllView = new Lang.Class({
         } else {
             return new FolderIcon(item, this);
         }
-    },
-
-    _compareItems: function(itemA, itemB) {
-        // bit of a hack: rely on both ShellApp and the directory item
-        // having a get_name() method
-        if (itemA.get_name() == "")
-            return 1;
-        if (itemB.get_name() == "")
-            return -1;
-
-        let nameA = GLib.utf8_collate_key(itemA.get_name(), -1);
-        let nameB = GLib.utf8_collate_key(itemB.get_name(), -1);
-        return (nameA > nameB) ? 1 : (nameA < nameB ? -1 : 0);
     },
 
     loadGrid: function() {
