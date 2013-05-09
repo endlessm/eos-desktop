@@ -413,26 +413,19 @@ const IconGrid = new Lang.Class({
 
         let [nColumns, usedWidth, spacing] = this._computeLayout(sw);
 
-        // Correct sx to handle the left padding
-        sx -= this._leftPadding;
-
-/*
-        if (sx < 0 || sy < 0 || sx > usedWidth || sy > sh) {
-            // Point is outside of the grid
-            return [-1, false];
-        }
-*/
-
-        let offset = sx % 128;
         let row = Math.floor(sy / 128);
-        let column = Math.floor(sx / 128);
+
+        // Correct sx to handle the left padding
+        // to correctly calculate the column
+        let gridx = sx - this._leftPadding;
+        let column = Math.floor(gridx / 128);
 
         let children = this._getVisibleChildren();
         let childIdx;
 
-        if (sx < 0) {
+        if (gridx < 0) {
             column = 0;
-        } else if (sx > usedWidth) {
+        } else if (gridx > usedWidth) {
             column = 0;
             row += 1;
 
@@ -441,39 +434,42 @@ const IconGrid = new Lang.Class({
         }
 
         childIdx = Math.min((row * nColumns) + column, children.length);
-        global.log('column: ' + column);
-        global.log('row: ' + row);
 
-        // Shouldn't happen if we're inside the grid
+        // If we're outside the grid, then we want to place at 0,0
         if (childIdx < 0) {
-            return [-1, false];
+            return [0, false];
         }
 
-        global.log('Icon number: ' + childIdx);
         let child = children[childIdx];
         let [childMinWidth, childMinHeight, childNaturalWidth, childNaturalHeight] = child.get_preferred_size();
-        let [cx, cy] = child.get_transformed_position();
+        let [cx, cy] = child.get_position();
 
         // This is the width of the icon inside the 128x128 grid square
         let childIconWidth = Math.min(this._hItemSize, childNaturalWidth);
 
         // childIconWidth is used to determine whether or not a drag point
         // is inside the icon or the divider.
-        // Give the divider a larger target area by reducing the size of the
-        // icon.
-        childIconWidth -= 10;
 
         // Reduce the size of the icon area further by only having it start
-        // 30 pixels further in. if the drop point is in those initial pixels
+        // further in. if the drop point is in those initial pixels
         // then the drop point is the current icon
-        if (offset < 30) {
-            return [childIdx, false];
-        } else if (offset > childIconWidth) {
-            // Insert point is after the icon we're on
-            return [childIdx + 1, false];
-        } else {
-            global.log('Not in a divider');
+        //
+        // Increasing cx and decreasing childIconWidth gives a greater priority
+        // to rearranging icons on the desktop vs putting them into folders
+        // Decreasing cx and increasing childIconWidth gives a greater priority
+        // to putting icons in folders vs rearranging them on the desktop
+        let iconX = cx + 30;
+        let iconWidth = childIconWidth - 20;
+        if (sx >= iconX && sx <= cx + iconWidth) {
             return [childIdx, true];
+        } else if (sx < iconX){
+            return [childIdx, false];
+        } else if (sx > cx + iconWidth) {
+            return [childIdx + 1, false];
         }
+
+        // This should never be reached, but Javascript complains
+        // if it is not here.
+        return [-1, false];
     }
 });
