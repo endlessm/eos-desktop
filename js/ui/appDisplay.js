@@ -415,7 +415,7 @@ const AppDisplay = new Lang.Class({
         let view = this._views[Views.ALL].view;
         view.removeAll();
 
-        let topLevelIcons = IconGridLayout.layout.getIcons("");
+        let topLevelIcons = IconGridLayout.layout.getIcons();
 
         for (let i = 0; i < topLevelIcons.length; i++) {
             let itemId = topLevelIcons[i];
