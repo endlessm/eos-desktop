@@ -1,3 +1,9 @@
+eos-shell (1.1.0) unstable; urgency=low
+
+  * Updating version to 1.1.0
+
+ -- Roddy Shuler <roddy@endlessm.com>  Thu, 09 May 2013 01:33:47 -0700
+
 eos-shell (3.8.0) unstable; urgency=low
 
   * initial eos-shell debian build
