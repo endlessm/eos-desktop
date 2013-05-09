@@ -132,13 +132,13 @@ shell_public_headers_h =		\
 	shell-window-tracker.h		\
 	shell-wm.h
 
-shell_private_sources = \
-	gactionmuxer.h			\
-	gactionmuxer.c			\
-	gactionobservable.h		\
-	gactionobservable.c		\
-	gactionobserver.h		\
-	gactionobserver.c
+shell_private_sources = 		\
+	gtkactionmuxer.h		\
+	gtkactionmuxer.c		\
+	gtkactionobservable.h		\
+	gtkactionobservable.c		\
+	gtkactionobserver.h		\
+	gtkactionobserver.c
 
 libeos_shell_sources =			\
 	$(shell_public_headers_h)	\
