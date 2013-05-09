@@ -88,14 +88,18 @@ value here is from the GsmPresenceStatus enumeration.</_summary>
       {
         '': [
               'epiphany.desktop',
-              'facebook.desktop',
-              'youtube.desktop',
               'Games',
-              'grooveshark.desktop'
+              'facebook.desktop',
+              'Media',
+              'youtube.desktop'
         ],
 
         'Games': [
               'angrybirds.desktop'
+        ],
+
+        'Media': [
+              'grooveshark.desktop'
         ]
       }
       </default>
