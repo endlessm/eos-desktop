@@ -219,6 +219,7 @@ const AllView = new Lang.Class({
 
         Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
+        Main.overview.connect('item-drag-cancelled', Lang.bind(this, this._onDragCancelled));
 
         this._clickAction = new Clutter.ClickAction();
         this._clickAction.connect('clicked', Lang.bind(this, function() {
@@ -243,16 +244,6 @@ const AllView = new Lang.Class({
         let adjustment = this.actor.vscroll.adjustment;
         adjustment.value -= (dy / this.actor.height) * adjustment.page_size;
         return false;
-    },
-
-    _getItemId: function(item) {
-        if (item instanceof Shell.App) {
-            return item.get_id();
-        } else if (item instanceof GMenu.TreeDirectory) {
-            return item.get_menu_id();
-        } else {
-            return null;
-        }
     },
 
     _onDragBegin: function(overview, source) {
@@ -285,6 +276,11 @@ const AllView = new Lang.Class({
         }
 
         DND.removeDragMonitor(this._dragMonitor);
+    },
+
+    _onDragCancelled: function(overview, source) {
+        source.actor.show();
+        this._onDragEnd(overview, source);
     },
 
     _onDragMotion: function(dragEvent) {
@@ -333,47 +329,34 @@ const AllView = new Lang.Class({
         return DND.DragMotionResult.COPY_DROP;
     },
 
-    _removeIcon: function(source) {
-        this._removeItem(source.app);
-        this._grid.removeItem(source.actor);
-    },
-
     acceptDrop: function(source, actor, x, y, time) {
-        global.log('acceptDrop');
+        let originalId = this._getItemId(this._allItems[this._originalIdx]);
         if (this._onIcon) {
-            // Let the icon handle it
+            // Find out what icon the drop is under
             let id = this._getItemId(this._allItems[this._onIconIdx]);
             if (!id) {
-                global.log('No id');
+                source.actor.show();
                 return true;
             }
 
             let dropIcon = this._items[id];
-            let handler = dropIcon.iconDropHandler;
-            global.log('dropIcon: ' + dropIcon);
-
-            if (handler === undefined) {
-                global.log('No handler');
+            if (!(dropIcon instanceof FolderIcon)) {
                 source.actor.show();
                 return true;
             }
 
-            global.log('Drag end, let icon ' + this._onIconIdx + ' handle it');
-            if (handler(source)) {
-                this._removeIcon(source);
-            } else {
-                source.actor.show();
-            }
+            let newFolder = dropIcon._dir.get_name();
+            IconGridLayout.layout.repositionIcon("", originalId,
+                                                 this._insertIdx,
+                                                 newFolder);
             return true;
         } else {
             if (this._insertIdx == -1) {
                 source.actor.show();
                 return false;
             } else {
-                this._removeIcon(source);
-
-                let newIcon = this._addItem(source.app, this._insertIdx);
-                this._grid.addItem(newIcon.actor, this._insertIdx);
+                IconGridLayout.layout.repositionIcon("", originalId,
+                                                     this._insertIdx, "");
                 return true;
             }
         }
@@ -775,11 +758,6 @@ const FolderIcon = new Lang.Class({
             this._popup.actor.set_anchor_point(-Math.max(0, actorRight - popupRight), 0);
         }
     },
-
-    iconDropHandler: function(source) {
-        global.log('Dropped icon on folder');
-        return false;
-    }
 });
 
 const AppFolderPopup = new Lang.Class({
@@ -1076,11 +1054,6 @@ const AppIcon = new Lang.Class({
     getDragActorSource: function() {
         return this.icon.icon;
     },
-
-    // Don't do anything at the moment, could be used to create a folder?
-    iconDropHandler: function(source) {
-        return false;
-    }
 });
 Signals.addSignalMethods(AppIcon.prototype);
 
@@ -1224,11 +1197,6 @@ const AppStoreIcon = new Lang.Class({
             }));
 
         return true;
-    },
-
-    iconDropHandler: function(source) {
-        global.log('Icon dropped on trashcan');
-        return false;
     },
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
