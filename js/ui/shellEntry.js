@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 const St = imports.gi.St;
@@ -127,6 +128,37 @@ const EntryMenu = new Lang.Class({
     _onPasswordActivated: function() {
         let visible = !!(this._entry.clutter_text.password_char);
         this._entry.clutter_text.set_password_char(visible ? '' : '\u25cf');
+    }
+});
+
+const EntryHint = new Lang.Class({
+    Name: 'EntryHint',
+    Extends: St.Bin,
+
+    _init: function(styleClass, assetName) {
+        this.parent({ style_class: styleClass });
+
+        let hintFile = Gio.File.new_for_path(global.datadir + '/theme/' + assetName);
+        this._gicon = new Gio.FileIcon({ file: hintFile });
+
+        this._updateIcon();
+    },
+
+    vfunc_style_changed: function(params) {
+        this.parent(params);
+        this._updateIcon();
+    },
+
+    _updateIcon: function() {
+        let themeNode = this.peek_theme_node();
+        if (!themeNode) {
+            return;
+        }
+
+        let textureCache = St.TextureCache.get_default();
+        let actor = textureCache.load_gicon_at_size(themeNode, this._gicon, -1, -1);
+
+        this.set_child(actor);
     }
 });
 

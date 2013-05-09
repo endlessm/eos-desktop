@@ -196,46 +196,11 @@ const Overview = new Lang.Class({
         this._bgManagers = [];
 
         for (let i = 0; i < Main.layoutManager.monitors.length; i++) {
+            // Note: do not set the vignette effect on the background;
+            // we always want to display the background without modification.
             let bgManager = new Background.BackgroundManager({ container: this._backgroundGroup,
-                                                               monitorIndex: i,
-                                                               effects: Meta.BackgroundEffects.VIGNETTE });
+                                                               monitorIndex: i });
             this._bgManagers.push(bgManager);
-        }
-    },
-
-    _unshadeBackgrounds: function() {
-        let backgrounds = this._backgroundGroup.get_children();
-        for (let i = 0; i < backgrounds.length; i++) {
-            let background = backgrounds[i]._delegate;
-
-            Tweener.addTween(background,
-                             { brightness: 1.0,
-                               time: SHADE_ANIMATION_TIME,
-                               transition: 'easeOutQuad'
-                             });
-            Tweener.addTween(background,
-                             { vignetteSharpness: 0.0,
-                               time: SHADE_ANIMATION_TIME,
-                               transition: 'easeOutQuad'
-                             });
-        }
-    },
-
-    _shadeBackgrounds: function() {
-        let backgrounds = this._backgroundGroup.get_children();
-        for (let i = 0; i < backgrounds.length; i++) {
-            let background = backgrounds[i]._delegate;
-
-            Tweener.addTween(background,
-                             { brightness: 0.8,
-                               time: SHADE_ANIMATION_TIME,
-                               transition: 'easeOutQuad'
-                             });
-            Tweener.addTween(background,
-                             { vignetteSharpness: 0.7,
-                               time: SHADE_ANIMATION_TIME,
-                               transition: 'easeOutQuad'
-                             });
         }
     },
 
@@ -258,10 +223,15 @@ const Overview = new Lang.Class({
 
         // Add a clone of the panel to the overview so spacing and such is
         // automatic
-        this._panelGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
-                                        reactive: false,
-                                        opacity: 0 });
-        this._overview.add_actor(this._panelGhost);
+        this._topGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
+                                      reactive: false,
+                                      opacity: 0 });
+
+        this._overview.add_actor(this._topGhost);
+
+        this._bottomGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
+                                      reactive: false,
+                                      opacity: 0 });
 
         this._searchEntry = new St.Entry({ name: 'searchEntry',
                                            /* Translators: this is the text displayed
@@ -273,7 +243,6 @@ const Overview = new Lang.Class({
                                            can_focus: true });
         this._searchEntryBin = new St.Bin({ child: this._searchEntry,
                                             x_align: St.Align.MIDDLE });
-        this._overview.add_actor(this._searchEntryBin);
 
         // Create controls
         this._dash = new Dash.Dash();
@@ -298,6 +267,11 @@ const Overview = new Lang.Class({
 
         // Add our same-line elements after the search entry
         this._overview.add(this._groupStack, { y_fill: true, expand: true });
+
+        // Add the search bar below the view selector and the panel
+        // ghost to give some spacing
+        this._overview.add_actor(this._searchEntryBin);
+        this._overview.add_actor(this._bottomGhost);
 
         this._stack.add_actor(this._controls.indicatorActor);
 
@@ -499,6 +473,10 @@ const Overview = new Lang.Class({
         this._animateVisible();
     },
 
+    showApps : function() {
+        this.emit('show-apps-request');
+    },
+
     fadeInDesktop: function() {
             this._desktopFade.opacity = 0;
             this._desktopFade.show();
@@ -552,7 +530,6 @@ const Overview = new Lang.Class({
                            onComplete: this._showDone,
                            onCompleteScope: this
                          });
-        this._shadeBackgrounds();
 
         this._coverPane.raise_top();
         this._coverPane.show();
@@ -585,12 +562,25 @@ const Overview = new Lang.Class({
         this._syncInputMode();
     },
 
+    hideOrShowApps: function() {
+        if (!this._initCalled) {
+            return;
+        }
+
+        let visibleWindows = Main.workspaceMonitor.visibleWindows;
+        if (visibleWindows == 0) {
+            this.showApps();
+        } else {
+            this.hide();
+        }
+    },
+
     toggle: function() {
         if (this.isDummy)
             return;
 
         if (this.visible)
-            this.hide();
+            this.hideOrShowApps();
         else
             this.show();
     },
@@ -661,7 +651,6 @@ const Overview = new Lang.Class({
                            onComplete: this._hideDone,
                            onCompleteScope: this
                          });
-        this._unshadeBackgrounds();
 
         this._coverPane.raise_top();
         this._coverPane.show();

@@ -43,7 +43,8 @@ const BaseIcon = new Lang.Class({
         box.add_actor(this._iconBin);
 
         if (params.showLabel) {
-            this.label = new St.Label({ text: label });
+            this.label = new St.Label({ text: label,
+                                        style_class: 'overview-icon-label' });
             box.add_actor(this.label);
         } else {
             this.label = null;
@@ -77,10 +78,17 @@ const BaseIcon = new Lang.Class({
 
             let labelHeight = availHeight >= preferredHeight ? labelNatHeight
                                                              : labelMinHeight;
+
+            let [labelMinWidth, labelNatWidth] = this.label.get_preferred_width(-1);
+            let labelWidth = availWidth >= labelNatWidth? labelNatWidth : labelMinWidth;
+            if (labelWidth > iconNatWidth) {
+                iconNatWidth = labelWidth;
+            }
+
             iconSize -= this._spacing + labelHeight;
 
-            childBox.x1 = 0;
-            childBox.x2 = availWidth;
+            childBox.x1 = Math.floor((availWidth - labelWidth)/2);
+            childBox.x2 = childBox.x1 + labelWidth;
             childBox.y1 = iconSize + this._spacing;
             childBox.y2 = childBox.y1 + labelHeight;
             this.label.allocate(childBox, flags);
@@ -338,13 +346,6 @@ const IconGrid = new Lang.Class({
         let nColumns = 0;
         let usedWidth = 0;
         let spacing = this._spacing;
-
-        if (this._colLimit) {
-            let itemWidth = this._hItemSize * this._colLimit;
-            let emptyArea = forWidth - itemWidth;
-            spacing = Math.max(this._spacing, emptyArea / (2 * this._colLimit));
-            spacing = Math.round(spacing);
-        }
 
         while ((this._colLimit == null || nColumns < this._colLimit) &&
                (usedWidth + this._hItemSize <= forWidth)) {

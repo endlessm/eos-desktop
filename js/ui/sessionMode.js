@@ -46,12 +46,16 @@ const _modes = {
         components: ['polkitAgent'],
         panel: {
             left: ['logo'],
-            center: ['dateMenu'],
-            right: ['a11yGreeter', 'display', 'keyboard',
+            center: [],
+            right: ['dateMenu', 'a11yGreeter', 'display', 'keyboard',
                     'volume', 'battery', 'powerMenu']
         },
         panelStyle: 'login-screen'
     },
+
+    // Note: since the user menu now simply has the settings icon,
+    // it does not make sense to display it as part of the
+    // lock screen or the unlock dialog.
 
     'lock-screen': {
         isLocked: true,
@@ -59,7 +63,7 @@ const _modes = {
         unlockDialog: undefined,
         components: ['polkitAgent', 'telepathyClient'],
         panel: {
-            left: ['userMenu'],
+            left: [],
             center: [],
             right: ['lockScreen']
         },
@@ -71,7 +75,7 @@ const _modes = {
         unlockDialog: undefined,
         components: ['polkitAgent', 'telepathyClient'],
         panel: {
-            left: ['userMenu'],
+            left: [],
             center: [],
             right: ['a11y', 'keyboard', 'lockScreen']
         },
@@ -84,8 +88,8 @@ const _modes = {
         components: ['keyring'],
         panel: {
             left: [],
-            center: ['dateMenu'],
-            right: ['a11yGreeter', 'keyboard', 'volume', 'battery']
+            center: [],
+            right: ['dateMenu', 'a11yGreeter', 'keyboard', 'volume', 'battery']
         }
     },
 
@@ -104,9 +108,9 @@ const _modes = {
         components: ['networkAgent', 'polkitAgent', 'telepathyClient',
                      'keyring', 'recorder', 'autorunManager', 'automountManager'],
         panel: {
-            left: ['activities', 'appMenu'],
-            center: ['dateMenu'],
-            right: ['a11y', 'keyboard', 'volume', 'bluetooth',
+            left: ['appIcons'],
+            center: [],
+            right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
                     'network', 'battery', 'userMenu']
         }
     }

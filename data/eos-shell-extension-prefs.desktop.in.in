@@ -2,9 +2,9 @@
 Type=Application
 _Name=GNOME Shell Extension Preferences
 _Comment=Configure GNOME Shell Extensions
-Exec=@bindir@/gnome-shell-extension-prefs %u
+Exec=@bindir@/eos-shell-extension-prefs %u
 X-GNOME-Bugzilla-Bugzilla=GNOME
-X-GNOME-Bugzilla-Product=gnome-shell
+X-GNOME-Bugzilla-Product=eos-shell
 X-GNOME-Bugzilla-Component=extensions
 X-GNOME-Bugzilla-Version=@VERSION@
 Categories=GNOME;GTK;

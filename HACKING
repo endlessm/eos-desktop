@@ -26,10 +26,11 @@ on one line.
     function foo(a, b) {
         let bar;
 
-        if (a > b)
+        if (a > b) {
             bar = do_thing(a);
-        else
+        } else {
             bar = do_thing(b);
+        }
 
         if (var == 5) {
             for (let i = 0; i < 10; i++) {

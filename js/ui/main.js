@@ -34,6 +34,7 @@ const SessionMode = imports.ui.sessionMode;
 const ShellDBus = imports.ui.shellDBus;
 const ShellMountOperation = imports.ui.shellMountOperation;
 const WindowManager = imports.ui.windowManager;
+const WorkspaceMonitor = imports.ui.workspaceMonitor;
 const Magnifier = imports.ui.magnifier;
 const XdndHandler = imports.ui.xdndHandler;
 const Util = imports.misc.util;
@@ -65,6 +66,7 @@ let magnifier = null;
 let xdndHandler = null;
 let keyboard = null;
 let layoutManager = null;
+let workspaceMonitor = null;
 let _startDate;
 let _defaultCssStylesheet = null;
 let _cssStylesheet = null;
@@ -154,12 +156,15 @@ function _initializeUI() {
     windowAttentionHandler = new WindowAttentionHandler.WindowAttentionHandler();
     componentManager = new Components.ComponentManager();
 
+    workspaceMonitor = new WorkspaceMonitor.WorkspaceMonitor();
+
     layoutManager.init();
     overview.init();
 
     global.screen.override_workspace_layout(Meta.ScreenCorner.TOPLEFT,
                                             false, -1, 1);
     global.display.connect('overlay-key', Lang.bind(overview, overview.toggle));
+    global.display.connect('window-created', _windowCreated);
 
     // Provide the bus object for gnome-session to
     // initiate logouts.
@@ -203,6 +208,11 @@ function _initializeUI() {
                               if (keybindingMode == Shell.KeyBindingMode.NONE) {
                                   keybindingMode = Shell.KeyBindingMode.NORMAL;
                               }
+
+                              // Now that we've completed startup, the
+                              // workspace monitor may want to hide/show
+                              // the overview
+                              workspaceMonitor.updateOverview();
                           });
 }
 
@@ -216,6 +226,14 @@ let _checkWorkspacesId = 0;
  * where it can map another window before we remove the workspace.
  */
 const LAST_WINDOW_GRACE_TIME = 1000;
+
+function _windowCreated(metaDisplay, metaWindow) {
+    let tracker = Shell.WindowTracker.get_default();
+    if (tracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
+        metaWindow.maximize(Meta.MaximizeFlags.HORIZONTAL |
+                            Meta.MaximizeFlags.VERTICAL);
+    }
+}
 
 function _checkWorkspaces() {
     let i;

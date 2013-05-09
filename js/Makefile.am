@@ -39,9 +39,11 @@ nobase_dist_js_DATA = 	\
 	ui/altTab.js		\
 	ui/appDisplay.js	\
 	ui/appFavorites.js	\
+	ui/appIconBar.js	\
 	ui/backgroundMenu.js	\
 	ui/background.js	\
 	ui/boxpointer.js	\
+	ui/buttonConstants.js	\
 	ui/calendar.js		\
 	ui/checkBox.js		\
 	ui/ctrlAltTab.js	\
@@ -101,6 +103,7 @@ nobase_dist_js_DATA = 	\
 	ui/windowAttentionHandler.js	\
 	ui/windowManager.js	\
 	ui/workspace.js		\
+	ui/workspaceMonitor.js	\
 	ui/workspaceThumbnail.js	\
 	ui/workspacesView.js	\
 	ui/workspaceSwitcherPopup.js    \

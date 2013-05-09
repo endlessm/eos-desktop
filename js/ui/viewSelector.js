@@ -84,9 +84,15 @@ const ViewSelector = new Lang.Class({
         global.stage.connect('notify::key-focus', Lang.bind(this, this._onStageKeyFocusChanged));
 
         this._entry.set_primary_icon(new St.Icon({ style_class: 'search-entry-icon',
-                                                   icon_name: 'edit-find-symbolic' }));
+                                                   icon_name: 'edit-find-symbolic',
+                                                   track_hover: true }));
         this._clearIcon = new St.Icon({ style_class: 'search-entry-icon',
-                                        icon_name: 'edit-clear-symbolic' });
+                                        icon_name: 'edit-clear-symbolic',
+                                        track_hover: true });
+
+        let hintActor = new ShellEntry.EntryHint('search-entry-hint',
+                                                 'google-logo-symbolic.svg');
+        this._entry.set_hint_actor(hintActor);
 
         this._iconClickedId = 0;
         this._capturedEventId = 0;
@@ -150,6 +156,8 @@ const ViewSelector = new Lang.Class({
                               Shell.KeyBindingMode.NORMAL |
                               Shell.KeyBindingMode.OVERVIEW,
                               Lang.bind(this, this._toggleAppsPage));
+
+        Main.overview.connect('show-apps-request', Lang.bind(this, this._toggleAppsPage));
     },
 
     _toggleAppsPage: function() {
