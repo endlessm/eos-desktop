@@ -149,6 +149,8 @@ shell_private_sources = 		\
 	gtkactionobservable.c		\
 	gtkactionobserver.h		\
 	gtkactionobserver.c		\
+	gtkmenutrackeritem.c		\
+	gtkmenutrackeritem.h		\
 	gtkmenutracker.c		\
 	gtkmenutracker.h		\
 	$(NULL)
@@ -355,12 +357,34 @@ libeos_shell_la_LIBADD =		\
 
 libeos_shell_la_CPPFLAGS = $(eos_shell_cflags)
 
-Shell-0.1.gir: libeos-shell.la St-1.0.gir
+ShellMenu-0.1.gir: libeos-shell.la
+ShellMenu_0_1_gir_INCLUDES = Gio-2.0
+ShellMenu_0_1_gir_CFLAGS = $(libeos_shell_la_CPPFLAGS) -I $(srcdir)
+ShellMenu_0_1_gir_LIBS = libeos-shell.la
+Shell_0_1_gir_SCANNERFLAGS =	\
+	$(if $(BLUETOOTH_DIR),-L $(BLUETOOTH_DIR),)
+ShellMenu_0_1_gir_FILES = \
+	gtkactionmuxer.h		\
+	gtkactionmuxer.c		\
+	gtkactionobservable.h		\
+	gtkactionobservable.c		\
+	gtkactionobserver.h		\
+	gtkactionobserver.c		\
+	gtkmenutrackeritem.c		\
+	gtkmenutrackeritem.h		\
+	$(NULL)
+ShellMenu_0_1_gir_SCANNERFLAGS = --namespace=ShellMenu --identifier-prefix=Gtk
+INTROSPECTION_GIRS += ShellMenu-0.1.gir
+CLEANFILES += ShellMenu-0.1.gir
+
+Shell-0.1.gir: libeos-shell.la St-1.0.gir ShellMenu-0.1.gir
 Shell_0_1_gir_INCLUDES = Clutter-1.0 ClutterX11-1.0 Meta-3.0 Soup-2.4 NetworkManager-1.0 NMClient-1.0
 Shell_0_1_gir_CFLAGS = $(libeos_shell_la_CPPFLAGS) -I $(srcdir)
 Shell_0_1_gir_LIBS = libeos-shell.la
 Shell_0_1_gir_FILES = $(libeos_shell_la_gir_sources)
-Shell_0_1_gir_SCANNERFLAGS = --include-uninstalled=$(builddir)/St-1.0.gir \
+Shell_0_1_gir_SCANNERFLAGS =	\
+	--include-uninstalled=$(builddir)/St-1.0.gir \
+	--include-uninstalled=$(builddir)/ShellMenu-0.1.gir \
 	--add-include-path=$(MUTTER_GIR_DIR)
 INTROSPECTION_GIRS += Shell-0.1.gir
 CLEANFILES += Shell-0.1.gir
