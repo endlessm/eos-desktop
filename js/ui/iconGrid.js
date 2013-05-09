@@ -9,6 +9,8 @@ const Params = imports.misc.params;
 
 const ICON_SIZE = 48;
 
+const LEFT_DIVIDER_LEEWAY = 30;
+const RIGHT_DIVIDER_LEEWAY = 20;
 
 const BaseIcon = new Lang.Class({
     Name: 'BaseIcon',
@@ -458,8 +460,8 @@ const IconGrid = new Lang.Class({
         // to rearranging icons on the desktop vs putting them into folders
         // Decreasing cx and increasing childIconWidth gives a greater priority
         // to putting icons in folders vs rearranging them on the desktop
-        let iconX = cx + 30;
-        let iconWidth = childIconWidth - 20;
+        let iconX = cx + LEFT_DIVIDER_LEEWAY;
+        let iconWidth = childIconWidth - RIGHT_DIVIDER_LEEWAY;
         if (sx >= iconX && sx <= cx + iconWidth) {
             return [childIdx, true];
         } else if (sx < iconX){
