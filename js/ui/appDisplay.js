@@ -251,8 +251,6 @@ const AllView = new Lang.Class({
         this._originalIdx = this._grid.indexOf(source.actor);
 
         this._insertIdx = -1;
-
-        global.log('Drag source is: ' + source + ' (' + this._originalIdx + ')');
         source.actor.hide();
 
         this._eventBlocker.hide();
@@ -284,13 +282,9 @@ const AllView = new Lang.Class({
     },
 
     _onDragMotion: function(dragEvent) {
-        global.log('All view drag motion');
-
         // Ask grid can we drop here
         let [idx, onIcon] = this._grid.canDropAt(dragEvent.x, dragEvent.y,
                                                  this._insertIdx);
-        global.log('Idx: ' + idx + ' on icon: ' + onIcon);
-
         this._onIcon = onIcon;
         this._onIconIdx = idx;
 
@@ -305,13 +299,11 @@ const AllView = new Lang.Class({
         // If the idx > originalIdx, then we need to take the hidden icon
         // into consideration
         if (idx > this._originalIdx) {
-            global.log('Gird says insert at: ' + idx);
             this._onIconIdx += 1;
             idx += 1;
         }
 
         if (this._insertIdx == idx) {
-            global.log('InsertIdx has not changed');
             return DND.DragMotionResult.COPY_DROP;
         }
 
@@ -319,7 +311,6 @@ const AllView = new Lang.Class({
             this._grid.removeItem(this._insertActor);
         }
 
-        global.log('Inserting at ' + idx);
         this._insertIdx = idx;
         this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
                                           can_focus: false,
