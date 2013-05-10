@@ -437,9 +437,14 @@ const IconGrid = new Lang.Class({
 
         childIdx = Math.min((row * nColumns) + column, children.length);
 
-        // If we're outside the grid, then we want to place at 0,0
+        // If we're outside the start of the grid, then we want to place at 0,0
         if (childIdx < 0) {
             return [0, false];
+        }
+
+        // If we're outside the end of the grid, add icon to the end
+        if (childIdx >= children.length) {
+            return [children.length, false];
         }
 
         let child = children[childIdx];

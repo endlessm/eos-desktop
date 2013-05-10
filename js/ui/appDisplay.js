@@ -290,11 +290,9 @@ const AllView = new Lang.Class({
         let [idx, onIcon] = this._grid.canDropAt(dragEvent.x, dragEvent.y,
                                                  this._insertIdx);
         global.log('Idx: ' + idx + ' on icon: ' + onIcon);
+
         this._onIcon = onIcon;
         this._onIconIdx = idx;
-        if (idx >= this._originalIdx) {
-            this._onIconIdx += 1;
-        }
 
         if (onIcon || idx == -1) {
             if (this._insertIdx != -1) {
@@ -304,8 +302,11 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.CONTINUE;
         }
 
+        // If the idx > originalIdx, then we need to take the hidden icon
+        // into consideration
         if (idx > this._originalIdx) {
             global.log('Gird says insert at: ' + idx);
+            this._onIconIdx += 1;
             idx += 1;
         }
 
