@@ -5,7 +5,6 @@ const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
-const GMenu = imports.gi.GMenu;
 const Shell = imports.gi.Shell;
 const Lang = imports.lang;
 const Signals = imports.signals;
@@ -18,6 +17,7 @@ const AppFavorites = imports.ui.appFavorites;
 const BoxPointer = imports.ui.boxpointer;
 const DND = imports.ui.dnd;
 const IconGrid = imports.ui.iconGrid;
+const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
 const Overview = imports.ui.overview;
 const OverviewControls = imports.ui.overviewControls;
@@ -34,34 +34,6 @@ const MAX_COLUMNS = 7;
 
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
-
-// Recursively load a GMenuTreeDirectory; we could put this in ShellAppSystem too
-function _loadCategory(dir, view) {
-    let iter = dir.iter();
-    let appSystem = Shell.AppSystem.get_default();
-    let nextType;
-    while ((nextType = iter.next()) != GMenu.TreeItemType.INVALID) {
-        if (nextType == GMenu.TreeItemType.ENTRY) {
-            let entry = iter.get_entry();
-            let app = appSystem.lookup_app_by_tree_entry(entry);
-            if (!entry.get_app_info().get_nodisplay())
-                view.addApp(app);
-        } else if (nextType == GMenu.TreeItemType.DIRECTORY) {
-            let itemDir = iter.get_directory();
-            if (!itemDir.get_is_nodisplay())
-                _loadCategory(itemDir, view);
-        }
-    }
-
-};
-
-function getAppFromSource(source) {
-    if (source instanceof AppIcon) {
-        return source.app;
-    } else {
-        return null;
-    }
-}
 
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
@@ -85,14 +57,10 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     _getItemId: function(item) {
-        throw new Error('Not implemented');
+        return item.get_id();
     },
 
     _createItemIcon: function(item) {
-        throw new Error('Not implemented');
-    },
-
-    _compareItems: function(a, b) {
         throw new Error('Not implemented');
     },
 
@@ -129,16 +97,8 @@ const FolderView = new Lang.Class({
         this.actor = this._grid.actor;
     },
 
-    _getItemId: function(item) {
-        return item.get_id();
-    },
-
     _createItemIcon: function(item) {
         return new AppIcon(item);
-    },
-
-    _compareItems: function(a, b) {
-        return a.compare_by_name(b);
     },
 
     addApp: function(app) {
@@ -240,8 +200,6 @@ const AllView = new Lang.Class({
 
         }));
         this._eventBlocker.add_action(this._clickAction);
-
-        this._appStoreIcon = new AppStoreIcon();
     },
 
     _onPan: function(action) {
@@ -253,15 +211,6 @@ const AllView = new Lang.Class({
         return false;
     },
 
-    _getItemId: function(item) {
-        if (item instanceof Shell.App) {
-            return item.get_id();
-        } else if (item instanceof GMenu.TreeDirectory) {
-            return item.get_menu_id();
-        } else {
-            return null;
-        }
-    },
     _onDragBegin: function() {
         this._eventBlocker.hide();
     },
@@ -271,30 +220,15 @@ const AllView = new Lang.Class({
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
             return new AppIcon(item);
-        } else if (item instanceof GMenu.TreeDirectory) {
-            return new FolderIcon(item, this);
         } else {
-            return null;
+            return new FolderIcon(item, this);
         }
-    },
-
-    _compareItems: function(itemA, itemB) {
-        // bit of a hack: rely on both ShellApp and GMenuTreeDirectory
-        // having a get_name() method
-        if (itemA.get_name() == "")
-            return 1;
-        if (itemB.get_name() == "")
-            return -1;
-
-        let nameA = GLib.utf8_collate_key(itemA.get_name(), -1);
-        let nameB = GLib.utf8_collate_key(itemB.get_name(), -1);
-        return (nameA > nameB) ? 1 : (nameA < nameB ? -1 : 0);
     },
 
     loadGrid: function() {
         this.parent();
 
-        this._grid.addItem(this._appStoreIcon.actor);
+        this._grid.addItem((new AppStoreIcon()).actor);
     },
 
     addApp: function(app) {
@@ -385,6 +319,10 @@ const AppDisplay = new Lang.Class({
             Main.queueDeferredWork(this._allAppsWorkId);
         }));
 
+        IconGridLayout.layout.connect('changed', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+
         this._views = [];
 
         let view, button;
@@ -465,25 +403,23 @@ const AppDisplay = new Lang.Class({
 
     _redisplayAllApps: function() {
         let view = this._views[Views.ALL].view;
-
         view.removeAll();
 
-        let tree = this._appSystem.get_tree();
-        let root = tree.get_root_directory();
+        let topLevelIcons = IconGridLayout.layout.getIcons();
 
-        let iter = root.iter();
-        let nextType;
-        let folderCategories = global.settings.get_strv('app-folder-categories');
-        while ((nextType = iter.next()) != GMenu.TreeItemType.INVALID) {
-            if (nextType == GMenu.TreeItemType.DIRECTORY) {
-                let dir = iter.get_directory();
-                if (dir.get_is_nodisplay())
-                    continue;
+        for (let i = 0; i < topLevelIcons.length; i++) {
+            let itemId = topLevelIcons[i];
 
-                if (folderCategories.indexOf(dir.get_menu_id()) != -1)
-                    view.addFolder(dir);
-                else
-                    _loadCategory(dir, view);
+            if (IconGridLayout.layout.iconIsFolder(itemId)) {
+                view.addFolder({
+                    get_id: function() { return itemId; },
+                    get_name: function() { return itemId; },
+                });
+            } else {
+                let app = this._appSystem.lookup_app(itemId);
+                if (app) {
+                    view.addApp(app);
+                }
             }
         }
         view.loadGrid();
@@ -577,7 +513,7 @@ const FolderIcon = new Lang.Class({
 
         this.view = new FolderView();
         this.view.actor.reactive = false;
-        _loadCategory(dir, this.view);
+        this._loadCategory(dir, this.view);
         this.view.loadGrid();
 
         this.actor.connect('clicked', Lang.bind(this,
@@ -590,6 +526,22 @@ const FolderIcon = new Lang.Class({
                 if (!this.actor.mapped && this._popup)
                     this._popup.popdown();
             }));
+    },
+
+    _loadCategory: function(dir) {
+        let appSystem = Shell.AppSystem.get_default();
+
+        let icons = IconGridLayout.layout.getIcons(dir.get_id());
+        if (! icons) {
+            return;
+        }
+
+        for (let i = 0; i < icons.length; i++) {
+            let app = appSystem.lookup_app(icons[i]);
+            if (app) {
+                this.view.addApp(app);
+            }
+        }
     },
 
     _createIcon: function(size) {
@@ -1038,6 +990,14 @@ const AppStoreIcon = new Lang.Class({
         return false;
     },
 
+    _getAppFromSource: function(source) {
+        if (source instanceof AppIcon) {
+            return source.app;
+        } else {
+            return null;
+        }
+    },
+
     _onDragBegin: function() {
         this.actor.set_child(this.empty_trash_icon.actor);
         this._dragCancelled = false;
@@ -1053,7 +1013,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onDragMotion: function(dragEvent) {
-        let app = getAppFromSource(dragEvent.source);
+        let app = this._getAppFromSource(dragEvent.source);
         if (app == null) {
             return DND.DragMotionResult.CONTINUE;
         }
@@ -1070,7 +1030,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     handleDragOver: function(source, actor, x, y, time) {
-        let app = getAppFromSource(source);
+        let app = this._getAppFromSource(source);
         if (app == null) {
             return DND.DragMotionResult.NO_DROP;
         }

@@ -57,6 +57,7 @@ nobase_dist_js_DATA = 	\
 	ui/ibusCandidatePopup.js\
 	ui/grabHelper.js	\
 	ui/iconGrid.js		\
+	ui/iconGridLayout.js	\
 	ui/keyboard.js		\
 	ui/layout.js		\
 	ui/lightbox.js		\
