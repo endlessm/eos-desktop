@@ -532,8 +532,9 @@ const FolderIcon = new Lang.Class({
         let appSystem = Shell.AppSystem.get_default();
 
         let icons = IconGridLayout.layout.getIcons(dir.get_id());
-        if (! icons)
+        if (! icons) {
             return;
+        }
 
         for (let i = 0; i < icons.length; i++) {
             let app = appSystem.lookup_app(icons[i]);
