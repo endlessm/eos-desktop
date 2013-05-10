@@ -413,7 +413,7 @@ const AppDisplay = new Lang.Class({
             if (IconGridLayout.layout.iconIsFolder(itemId)) {
                 view.addFolder({
                     get_id: function() { return itemId; },
-                    get_name: function() { return _(itemId); },
+                    get_name: function() { return itemId; },
                 });
             } else {
                 let app = this._appSystem.lookup_app(itemId);
