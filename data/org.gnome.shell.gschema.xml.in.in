@@ -84,25 +84,7 @@ value here is from the GsmPresenceStatus enumeration.</_summary>
       </_description>
     </key>
     <key name="icon-grid-layout" type="a{sas}">
-      <default l10n="messages">
-      {
-        '': [
-              'epiphany.desktop',
-              'Games',
-              'facebook.desktop',
-              'Media',
-              'youtube.desktop'
-        ],
-
-        'Games': [
-              'angrybirds.desktop'
-        ],
-
-        'Media': [
-              'grooveshark.desktop'
-        ]
-      }
-      </default>
+      <default>{}</default>
       <_summary>Layout of application launcher icons in the grid</_summary>
       <_description>
         This key specifies the exact order of the icons shown in the applications launcher view.
