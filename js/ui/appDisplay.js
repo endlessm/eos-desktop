@@ -64,22 +64,14 @@ const EndlessApplicationView = new Lang.Class({
         throw new Error('Not implemented');
     },
 
-    _compareItems: function(a, b) {
-        throw new Error('Not implemented');
-    },
-
-    _addItem: function(item, idx) {
+    _addItem: function(item) {
         let id = this._getItemId(item);
         if (this._items[id] !== undefined) {
             return null;
         }
 
         let itemIcon = this._createItemIcon(item);
-        if (idx === undefined) {
-            this._allItems.push(item);
-        } else {
-            this._allItems.splice(idx, 0, item);
-        }
+        this._allItems.push(item);
         this._items[id] = itemIcon;
 
         return itemIcon;
