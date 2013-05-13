@@ -147,8 +147,16 @@ let _getFilesToTest = function(testDirectory){
 let _executeAllTests = function(filesToTest) {
     let results = Array();
     filesToTest.forEach(function(file){
-        let dirName = '-shell/'
-        let filePath =  file.substring(file.indexOf(dirName) + dirName.length - 1, file.length);
+        let dirName = '-shell/';
+        let dirName2 = '-shell-test/';
+        let filePath = "";
+
+        if (file.indexOf(dirName) > 0){
+            filePath = file.substring(file.indexOf(dirName) + dirName.length - 1, file.length);
+        } else {
+            filePath = file.substring(file.indexOf(dirName2) + dirName2.length - 1, file.length);
+        }
+
         print("Testing: " + file);
         results = results.concat(_executeTestsForFile(filePath));
     });
