@@ -415,12 +415,12 @@ const IconGrid = new Lang.Class({
 
         let [nColumns, usedWidth, spacing] = this._computeLayout(sw);
 
-        let row = Math.floor(sy / 128);
+        let row = Math.floor(sy / (this._vItemSize + spacing));
 
         // Correct sx to handle the left padding
         // to correctly calculate the column
         let gridx = sx - this._leftPadding;
-        let column = Math.floor(gridx / 128);
+        let column = Math.floor(gridx / (this._hItemSize + spacing));
 
         let children = this._getVisibleChildren();
         let childIdx;
