@@ -15,6 +15,7 @@ const Atk = imports.gi.Atk;
 
 const AppFavorites = imports.ui.appFavorites;
 const BoxPointer = imports.ui.boxpointer;
+const ButtonConstants = imports.ui.buttonConstants;
 const DND = imports.ui.dnd;
 const IconGrid = imports.ui.iconGrid;
 const IconGridLayout = imports.ui.iconGridLayout;
@@ -24,7 +25,6 @@ const OverviewControls = imports.ui.overviewControls;
 const PopupMenu = imports.ui.popupMenu;
 const Tweener = imports.ui.tweener;
 const Workspace = imports.ui.workspace;
-const ButtonConstants = imports.ui.buttonConstants;
 const Params = imports.misc.params;
 const Util = imports.misc.util;
 
@@ -69,11 +69,35 @@ const EndlessApplicationView = new Lang.Class({
         if (this._items[id] !== undefined) {
             return null;
         }
+
         let itemIcon = this._createItemIcon(item);
         this._allItems.push(item);
         this._items[id] = itemIcon;
 
         return itemIcon;
+    },
+
+    _removeItem: function(item) {
+        let id = this._getItemId(item);
+        if (this._items[id] === undefined) {
+            return;
+        }
+
+        delete this._items[id];
+
+        let idx = this._allItems.indexOf(item);
+        if (idx != -1) {
+            this._allItems.splice(idx, 1);
+        }
+    },
+
+    _showItem: function(item) {
+        let id = this._getItemId(item);
+        if (this._items[id] === undefined) {
+            return;
+        }
+
+        this._items[id].actor.show();
     },
 
     loadGrid: function() {
@@ -177,6 +201,8 @@ const AllView = new Lang.Class({
                                          y_expand: true,
                                          overlay_scrollbars: true,
                                          style_class: 'all-apps vfade' });
+        this.actor._delegate = this;
+
         this.actor.add_actor(box);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         let action = new Clutter.PanAction({ interpolate: true });
@@ -185,6 +211,7 @@ const AllView = new Lang.Class({
 
         Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
+        Main.overview.connect('item-drag-cancelled', Lang.bind(this, this._onDragCancelled));
 
         this._clickAction = new Clutter.ClickAction();
         this._clickAction.connect('clicked', Lang.bind(this, function() {
@@ -211,12 +238,114 @@ const AllView = new Lang.Class({
         return false;
     },
 
-    _onDragBegin: function() {
+    _onDragBegin: function(overview, source) {
+        this._dragItem = source;
+        this._originalIdx = this._grid.indexOf(source.actor);
+
+        this._insertIdx = -1;
+        source.actor.hide();
+
         this._eventBlocker.hide();
+
+        this._dragCancelled = false;
+        this._dragMonitor = {
+            dragMotion: Lang.bind(this, this._onDragMotion)
+        };
+        DND.addDragMonitor(this._dragMonitor);
     },
-    _onDragEnd: function() {
+
+    _onDragEnd: function(overview, source) {
         this._eventBlocker.show();
+
+        if (this._insertActor != null) {
+            this._grid.removeItem(this._insertActor);
+            this._insertActor = null;
+            this._insertIdx = -1;
+            this._originalIdx = -1;
+            this._dragItem = undefined;
+        }
+
+        DND.removeDragMonitor(this._dragMonitor);
     },
+
+    _onDragCancelled: function(overview, source) {
+        source.actor.show();
+        this._onDragEnd(overview, source);
+    },
+
+    _onDragMotion: function(dragEvent) {
+        // Ask grid can we drop here
+        let [idx, onIcon] = this._grid.canDropAt(dragEvent.x, dragEvent.y,
+                                                 this._insertIdx);
+        this._onIcon = onIcon;
+        this._onIconIdx = idx;
+
+        if (onIcon || idx == -1) {
+            if (this._insertIdx != -1) {
+                this._grid.removeItem(this._insertActor);
+                this._insertIdx = -1;
+            }
+            return DND.DragMotionResult.CONTINUE;
+        }
+
+        // If the idx > originalIdx, then we need to take the hidden icon
+        // into consideration
+        if (idx > this._originalIdx) {
+            this._onIconIdx += 1;
+            idx += 1;
+        }
+
+        if (this._insertIdx == idx) {
+            return DND.DragMotionResult.COPY_DROP;
+        }
+
+        if (this._insertActor != null) {
+            this._grid.removeItem(this._insertActor);
+        }
+
+        this._insertIdx = idx;
+        this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
+                                            can_focus: false,
+                                            x_fill: true,
+                                            y_fill: true });
+        this._grid.addItem(this._insertActor, idx);
+
+        return DND.DragMotionResult.COPY_DROP;
+    },
+
+    acceptDrop: function(source, actor, x, y, time) {
+        let originalId = this._getItemId(this._allItems[this._originalIdx]);
+        if (this._onIcon) {
+            // Find out what icon the drop is under
+            let id = this._getItemId(this._allItems[this._onIconIdx]);
+            if (!id) {
+                source.actor.show();
+                return true;
+            }
+
+            let dropIcon = this._items[id];
+            if (!(dropIcon instanceof FolderIcon)) {
+                source.actor.show();
+                return true;
+            }
+
+            let newFolder = dropIcon._dir.get_name();
+            IconGridLayout.layout.repositionIcon("", originalId,
+                                                 this._insertIdx,
+                                                 newFolder);
+            return true;
+        } else {
+            if (this._insertIdx == -1) {
+                source.actor.show();
+                return false;
+            } else {
+                IconGridLayout.layout.repositionIcon("", originalId,
+                                                     this._insertIdx, "");
+                return true;
+            }
+        }
+    },
+
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
             return new AppIcon(item);
@@ -908,7 +1037,7 @@ const AppIcon = new Lang.Class({
     // we show as the item is being dragged.
     getDragActorSource: function() {
         return this.icon.icon;
-    }
+    },
 });
 Signals.addSignalMethods(AppIcon.prototype);
 
@@ -1052,7 +1181,7 @@ const AppStoreIcon = new Lang.Class({
             }));
 
         return true;
-    }
+    },
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
 
