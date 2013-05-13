@@ -37,6 +37,19 @@ window.C_=function(type,text){
 window._=window.C_;
 window.global={};
 
+//Overrides for EOS custom methods
+window.global.settings={};
+window.global.settings.connect=function() {};
+
+let mock_value={};
+mock_value.n_children=function() {
+                         return 0;
+                     };
+
+window.global.settings.get_value=function() {
+                                     return mock_value;
+                                 };
+
 let _printColorized = function(color, text){
     print(color + text + ANSI_CLOSE);
 }
