@@ -305,9 +305,9 @@ const AllView = new Lang.Class({
 
         this._insertIdx = idx;
         this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
-                                          can_focus: false,
-                                          x_fill: true,
-                                          y_fill: true });
+                                            can_focus: false,
+                                            x_fill: true,
+                                            y_fill: true });
         this._grid.addItem(this._insertActor, idx);
 
         return DND.DragMotionResult.COPY_DROP;
