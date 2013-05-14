@@ -37,6 +37,19 @@ window.C_=function(type,text){
 window._=window.C_;
 window.global={};
 
+//Overrides for EOS custom methods
+window.global.settings={};
+window.global.settings.connect=function() {};
+
+let mock_value={};
+mock_value.n_children=function() {
+                         return 0;
+                     };
+
+window.global.settings.get_value=function() {
+                                     return mock_value;
+                                 };
+
 let _printColorized = function(color, text){
     print(color + text + ANSI_CLOSE);
 }
@@ -134,8 +147,16 @@ let _getFilesToTest = function(testDirectory){
 let _executeAllTests = function(filesToTest) {
     let results = Array();
     filesToTest.forEach(function(file){
-        let dirName = '-shell/'
-        let filePath =  file.substring(file.indexOf(dirName) + dirName.length - 1, file.length);
+        let dirName = '-shell/';
+        let dirName2 = '-shell-test/';
+        let filePath = "";
+
+        if (file.indexOf(dirName) > 0){
+            filePath = file.substring(file.indexOf(dirName) + dirName.length - 1, file.length);
+        } else {
+            filePath = file.substring(file.indexOf(dirName2) + dirName2.length - 1, file.length);
+        }
+
         print("Testing: " + file);
         results = results.concat(_executeTestsForFile(filePath));
     });
