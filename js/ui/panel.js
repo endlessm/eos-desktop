@@ -877,7 +877,8 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'logo': imports.gdm.loginDialog.LogoMenuButton,
     'keyboard': imports.ui.status.keyboard.InputSourceIndicator,
     'powerMenu': imports.gdm.powerMenu.PowerMenuButton,
-    'userMenu': imports.ui.userMenu.UserMenuButton
+    'userMenu': imports.ui.userMenu.UserMenuButton,
+    'socialBar': imports.ui.status.social.SocialBarButton
 };
 
 if (Config.HAVE_BLUETOOTH)
