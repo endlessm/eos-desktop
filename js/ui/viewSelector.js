@@ -21,6 +21,7 @@ const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
 const Wanda = imports.ui.wanda;
 const WorkspacesView = imports.ui.workspacesView;
+const Util = imports.misc.util;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 
@@ -94,6 +95,8 @@ const ViewSelector = new Lang.Class({
                                                  'google-logo-symbolic.svg');
         this._entry.set_hint_actor(hintActor);
 
+        this._entry.connect('primary-icon-clicked', Lang.bind(this, this._activateDefaultSearch));
+
         this._iconClickedId = 0;
         this._capturedEventId = 0;
 
@@ -158,6 +161,10 @@ const ViewSelector = new Lang.Class({
                               Lang.bind(this, this._toggleAppsPage));
 
         Main.overview.connect('show-apps-request', Lang.bind(this, this._toggleAppsPage));
+    },
+
+    _activateDefaultSearch: function() {
+        Util.spawn(["x-www-browser", "http://www.google.com"]);
     },
 
     _toggleAppsPage: function() {
