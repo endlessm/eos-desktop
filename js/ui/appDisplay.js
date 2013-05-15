@@ -285,8 +285,29 @@ const AllView = new Lang.Class({
                 this._grid.removeItem(this._insertActor);
                 this._insertIdx = -1;
             }
+
+            // Take into account hidden icon if present
+            if (idx >= this._originalIdx) {
+                this._onIconIdx += 1;
+                idx += 1;
+            }
+
+            let id = this._getItemId(this._allItems[this._onIconIdx]);
+
+            //If we had a previously hovered item set hover to false
+            if (id != this._lastHoveredItem){
+                this._unsetLastItemHoverState();
+            }
+
+            // Set the item hovered state
+            this._items[id].setHoverState(true);
+            this._lastHoveredItem = id;
+
             return DND.DragMotionResult.CONTINUE;
         }
+
+        // If we are not over any icon, don't have any hover state
+        this._unsetLastItemHoverState();
 
         // If the idx > originalIdx, then we need to take the hidden icon
         // into consideration
@@ -311,6 +332,13 @@ const AllView = new Lang.Class({
         this._grid.addItem(this._insertActor, idx);
 
         return DND.DragMotionResult.COPY_DROP;
+    },
+
+    _unsetLastItemHoverState: function() {
+        if (this._lastHoveredItem != null){
+                this._items[this._lastHoveredItem].setHoverState(false);
+                this._lastHoveredItem = null;
+        }
     },
 
     acceptDrop: function(source, actor, x, y, time) {
@@ -641,7 +669,7 @@ const FolderIcon = new Lang.Class({
         this.actor.label_actor = this.icon.label;
 
         this.view = new FolderView();
-        this.view.actor.reactive = false;
+        this.view.actor.reactive = true;
         this._loadCategory(dir, this.view);
         this.view.loadGrid();
 
@@ -655,6 +683,10 @@ const FolderIcon = new Lang.Class({
                 if (!this.actor.mapped && this._popup)
                     this._popup.popdown();
             }));
+    },
+
+    setHoverState: function(isHovering){
+        this.actor.set_hover(isHovering);
     },
 
     _loadCategory: function(dir) {
@@ -897,6 +929,10 @@ const AppIcon = new Lang.Class({
 
     _createIcon: function(iconSize) {
         return this.app.create_icon_texture(iconSize);
+    },
+
+    setHoverState: function(isHovering){
+        this.actor.set_hover(isHovering);
     },
 
     _removeMenuTimeout: function() {
