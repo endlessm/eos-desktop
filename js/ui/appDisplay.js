@@ -292,7 +292,6 @@ const AllView = new Lang.Class({
                 this._insertIdx = -1;
             }
 
-
             let id = this._getItemId(this._allItems[this._onIconIdx]);
 
             // If we had a previously hovered item set hover to false
