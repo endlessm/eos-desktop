@@ -280,17 +280,18 @@ const AllView = new Lang.Class({
         this._onIcon = onIcon;
         this._onIconIdx = idx;
 
+        // Take into account hidden icon if present
+        if (idx >= this._originalIdx) {
+            this._onIconIdx += 1;
+            idx += 1;
+        }
+
         if (onIcon || idx == -1) {
             if (this._insertIdx != -1) {
                 this._grid.removeItem(this._insertActor);
                 this._insertIdx = -1;
             }
 
-            // Take into account hidden icon if present
-            if (idx >= this._originalIdx) {
-                this._onIconIdx += 1;
-                idx += 1;
-            }
 
             let id = this._getItemId(this._allItems[this._onIconIdx]);
 
@@ -308,13 +309,6 @@ const AllView = new Lang.Class({
 
         // If we are not over any icon, don't have any hover state
         this._unsetLastItemHoverState();
-
-        // If the idx > originalIdx, then we need to take the hidden icon
-        // into consideration
-        if (idx > this._originalIdx) {
-            this._onIconIdx += 1;
-            idx += 1;
-        }
 
         if (this._insertIdx == idx) {
             return DND.DragMotionResult.COPY_DROP;
