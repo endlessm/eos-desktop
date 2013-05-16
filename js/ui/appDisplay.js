@@ -295,7 +295,7 @@ const AllView = new Lang.Class({
 
             let id = this._getItemId(this._allItems[this._onIconIdx]);
 
-            //If we had a previously hovered item set hover to false
+            // If we had a previously hovered item set hover to false
             if (id != this._lastHoveredItem){
                 this._unsetLastItemHoverState();
             }
