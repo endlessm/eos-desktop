@@ -301,7 +301,7 @@ const AllView = new Lang.Class({
             }
 
             // Set the item hovered state
-            this._items[id].setHoverState(true);
+            this._items[id].actor.set_hover(true);
             this._lastHoveredItem = id;
 
             return DND.DragMotionResult.CONTINUE;
