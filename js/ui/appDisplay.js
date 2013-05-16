@@ -669,7 +669,7 @@ const FolderIcon = new Lang.Class({
         this.actor.label_actor = this.icon.label;
 
         this.view = new FolderView();
-        this.view.actor.reactive = true;
+        this.view.actor.reactive = false;
         this._loadCategory(dir, this.view);
         this.view.loadGrid();
 
