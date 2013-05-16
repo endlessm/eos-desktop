@@ -330,7 +330,7 @@ const AllView = new Lang.Class({
 
     _unsetLastItemHoverState: function() {
         if (this._lastHoveredItem != null){
-                this._items[this._lastHoveredItem].setHoverState(false);
+                this._items[this._lastHoveredItem].actor.set_hover(false);
                 this._lastHoveredItem = null;
         }
     },
@@ -679,10 +679,6 @@ const FolderIcon = new Lang.Class({
             }));
     },
 
-    setHoverState: function(isHovering){
-        this.actor.set_hover(isHovering);
-    },
-
     _loadCategory: function(dir) {
         let appSystem = Shell.AppSystem.get_default();
 
@@ -923,10 +919,6 @@ const AppIcon = new Lang.Class({
 
     _createIcon: function(iconSize) {
         return this.app.create_icon_texture(iconSize);
-    },
-
-    setHoverState: function(isHovering){
-        this.actor.set_hover(isHovering);
     },
 
     _removeMenuTimeout: function() {
