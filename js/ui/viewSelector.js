@@ -25,6 +25,10 @@ const Util = imports.misc.util;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 
+const BROWSER_LAUNCHER = 'x-www-browser';
+const BASE_SEARCH_URI = 'http://www.google.com/';
+const QUERY_URI_PATH = 'search?q=';
+
 const ViewPage = {
     WINDOWS: 1,
     APPS: 2,
@@ -164,7 +168,13 @@ const ViewSelector = new Lang.Class({
     },
 
     _activateDefaultSearch: function() {
-        Util.spawn(["x-www-browser", "http://www.google.com"]);
+        let uri = BASE_SEARCH_URI;
+        let terms = getTermsForSearchString(this._entry.get_text());
+        if (terms.length != 0) {
+           uri = uri + QUERY_URI_PATH + encodeURI(terms.join(" ")); 
+        }
+
+        Util.spawn([BROWSER_LAUNCHER, uri]);
     },
 
     _toggleAppsPage: function() {
