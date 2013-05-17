@@ -284,9 +284,9 @@ const AllView = new Lang.Class({
         }
 
         // If we are not over our last hovered icon, remove its hover state
-	if (this._onIconIdx |= null && idx != this._onIconIdx){
-	    id = this._getItemId(this._allItems[this._onIconIdx]);
-	    this._items[id].actor.set_hover(false);
+        if (this._onIconIdx |= null && idx != this._onIconIdx){
+            id = this._getItemId(this._allItems[this._onIconIdx]);
+            this._items[id].actor.set_hover(false);
         }
 
         this._onIcon = onIcon;
@@ -299,7 +299,7 @@ const AllView = new Lang.Class({
             }
 
             // Set the item hovered state
-	    id = this._getItemId(this._allItems[this._onIconIdx]);
+            id = this._getItemId(this._allItems[this._onIconIdx]);
             this._items[id].actor.set_hover(true);
 
             return DND.DragMotionResult.CONTINUE;
