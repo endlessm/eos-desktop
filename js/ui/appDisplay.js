@@ -284,23 +284,20 @@ const AllView = new Lang.Class({
         }
 
         // If we are not over our last hovered icon, remove its hover state
-        if (this._onIconIdx |= null && idx != this._onIconIdx){
-            id = this._getItemId(this._allItems[this._onIconIdx]);
-            this._items[id].actor.set_hover(false);
+        if (this._onIconIdx != null && idx != this._onIconIdx){
+            this._setHoverStateOf(this._onIconIdx, false)
         }
 
         this._onIcon = onIcon;
         this._onIconIdx = idx;
 
         if (onIcon || idx == -1) {
+            this._setHoverStateOf(this._onIconIdx, true);
+
             if (this._insertIdx != -1) {
                 this._grid.removeItem(this._insertActor);
                 this._insertIdx = -1;
             }
-
-            // Set the item hovered state
-            id = this._getItemId(this._allItems[this._onIconIdx]);
-            this._items[id].actor.set_hover(true);
 
             return DND.DragMotionResult.CONTINUE;
         }
@@ -321,6 +318,15 @@ const AllView = new Lang.Class({
         this._grid.addItem(this._insertActor, idx);
 
         return DND.DragMotionResult.COPY_DROP;
+    },
+
+    _setHoverStateOf: function(item, state){
+        let item = this._allItems[this._onIconIdx];
+
+        // If the item cannot be found, ignore it
+        if(item != null){
+            this._items[this._getItemId(item)].actor.set_hover(state);
+        }
     },
 
     acceptDrop: function(source, actor, x, y, time) {
