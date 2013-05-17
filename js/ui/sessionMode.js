@@ -110,8 +110,8 @@ const _modes = {
         panel: {
             left: ['appIcons'],
             center: [],
-            right: ['dateMenu', 'socialBar', 'a11y', 'keyboard', 'volume', 'bluetooth',
-                    'network', 'battery', 'userMenu']
+            right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
+                    'network', 'battery', 'socialBar', 'userMenu']
         }
     }
 };
