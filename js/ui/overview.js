@@ -734,6 +734,11 @@ const Overview = new Lang.Class({
         this._showOrSwitchPage(ViewSelector.ViewPage.WINDOWS);
     },
 
+    focusSearch: function() {
+        this.showApps();
+        this._viewSelector.focusSearch();
+    },
+
     fadeInDesktop: function() {
             this._desktopFade.opacity = 0;
             this._desktopFade.show();
