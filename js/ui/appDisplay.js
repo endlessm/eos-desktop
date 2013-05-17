@@ -1191,6 +1191,8 @@ const AppStoreIcon = new Lang.Class({
 
         let id = app.get_id();
 
+        IconGridLayout.layout.repositionIcon("", id, 0, null)
+
         Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this,
             function () {
                 return false;
