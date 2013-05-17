@@ -284,7 +284,7 @@ const AllView = new Lang.Class({
         }
 
         // If we are not over our last hovered icon, remove its hover state
-        if (this._onIconIdx != null && idx != this._onIconIdx){
+        if (this._onIconIdx != null && idx != this._onIconIdx) {
             this._setHoverStateOf(this._onIconIdx, false)
         }
 
@@ -320,11 +320,11 @@ const AllView = new Lang.Class({
         return DND.DragMotionResult.COPY_DROP;
     },
 
-    _setHoverStateOf: function(item, state){
-        let item = this._allItems[this._onIconIdx];
+    _setHoverStateOf: function(itemIdx, state) {
+        let item = this._allItems[itemIdx];
 
         // If the item cannot be found, ignore it
-        if(item != null){
+        if (item != null) {
             this._items[this._getItemId(item)].actor.set_hover(state);
         }
     },
