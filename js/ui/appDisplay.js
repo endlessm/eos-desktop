@@ -277,22 +277,29 @@ const AllView = new Lang.Class({
         // Ask grid can we drop here
         let [idx, onIcon] = this._grid.canDropAt(dragEvent.x, dragEvent.y,
                                                  this._insertIdx);
+
+        // Take into account hidden icon if present
+        if (idx >= this._originalIdx) {
+            idx += 1;
+        }
+
+        // If we are not over our last hovered icon, remove its hover state
+        if (this._onIconIdx != null && idx != this._onIconIdx) {
+            this._setHoverStateOf(this._onIconIdx, false)
+        }
+
         this._onIcon = onIcon;
         this._onIconIdx = idx;
 
         if (onIcon || idx == -1) {
+            this._setHoverStateOf(this._onIconIdx, true);
+
             if (this._insertIdx != -1) {
                 this._grid.removeItem(this._insertActor);
                 this._insertIdx = -1;
             }
-            return DND.DragMotionResult.CONTINUE;
-        }
 
-        // If the idx > originalIdx, then we need to take the hidden icon
-        // into consideration
-        if (idx > this._originalIdx) {
-            this._onIconIdx += 1;
-            idx += 1;
+            return DND.DragMotionResult.CONTINUE;
         }
 
         if (this._insertIdx == idx) {
@@ -311,6 +318,15 @@ const AllView = new Lang.Class({
         this._grid.addItem(this._insertActor, idx);
 
         return DND.DragMotionResult.COPY_DROP;
+    },
+
+    _setHoverStateOf: function(itemIdx, state) {
+        let item = this._allItems[itemIdx];
+
+        // If the item cannot be found, ignore it
+        if (item != null) {
+            this._items[this._getItemId(item)].actor.set_hover(state);
+        }
     },
 
     acceptDrop: function(source, actor, x, y, time) {
