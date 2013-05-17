@@ -111,7 +111,7 @@ const _modes = {
             left: ['appIcons'],
             center: [],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
-                    'network', 'battery', 'userMenu']
+                    'network', 'battery', 'socialBar', 'userMenu']
         }
     }
 };
