@@ -277,14 +277,20 @@ const AllView = new Lang.Class({
         // Ask grid can we drop here
         let [idx, onIcon] = this._grid.canDropAt(dragEvent.x, dragEvent.y,
                                                  this._insertIdx);
-        this._onIcon = onIcon;
-        this._onIconIdx = idx;
 
         // Take into account hidden icon if present
         if (idx >= this._originalIdx) {
-            this._onIconIdx += 1;
             idx += 1;
         }
+
+        // If we are not over our last hovered icon, remove its hover state
+	if (this._onIconIdx |= null && idx != this._onIconIdx){
+	    id = this._getItemId(this._allItems[this._onIconIdx]);
+	    this._items[id].actor.set_hover(false);
+        }
+
+        this._onIcon = onIcon;
+        this._onIconIdx = idx;
 
         if (onIcon || idx == -1) {
             if (this._insertIdx != -1) {
@@ -292,22 +298,12 @@ const AllView = new Lang.Class({
                 this._insertIdx = -1;
             }
 
-            let id = this._getItemId(this._allItems[this._onIconIdx]);
-
-            // If we had a previously hovered item set hover to false
-            if (id != this._lastHoveredItem){
-                this._unsetLastItemHoverState();
-            }
-
             // Set the item hovered state
+	    id = this._getItemId(this._allItems[this._onIconIdx]);
             this._items[id].actor.set_hover(true);
-            this._lastHoveredItem = id;
 
             return DND.DragMotionResult.CONTINUE;
         }
-
-        // If we are not over any icon, don't have any hover state
-        this._unsetLastItemHoverState();
 
         if (this._insertIdx == idx) {
             return DND.DragMotionResult.COPY_DROP;
@@ -325,13 +321,6 @@ const AllView = new Lang.Class({
         this._grid.addItem(this._insertActor, idx);
 
         return DND.DragMotionResult.COPY_DROP;
-    },
-
-    _unsetLastItemHoverState: function() {
-        if (this._lastHoveredItem != null){
-                this._items[this._lastHoveredItem].actor.set_hover(false);
-                this._lastHoveredItem = null;
-        }
     },
 
     acceptDrop: function(source, actor, x, y, time) {
