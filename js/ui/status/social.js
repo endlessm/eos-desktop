@@ -20,9 +20,7 @@ const SocialBarButton = new Lang.Class({
     _init: function() {
         this.parent(null, _("Social Bar"));
 
-        // FIXME: this will be replaced by a proper recolorable
-        // SVG asset as soon as it's available
-        let iconFile = Gio.File.new_for_path(global.datadir + '/theme/social-bar.png');
+        let iconFile = Gio.File.new_for_path(global.datadir + '/theme/social-bar-symbolic.svg');
         let gicon = new Gio.FileIcon({ file: iconFile });
         this.setGIcon(gicon);
 

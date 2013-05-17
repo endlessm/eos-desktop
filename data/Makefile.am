@@ -65,7 +65,7 @@ dist_theme_DATA =				\
 	theme/panel-button-highlight-wide.svg	\
 	theme/process-working.svg		\
 	theme/running-indicator.svg		\
-	theme/social-bar.png			\
+	theme/social-bar-symbolic.svg		\
 	theme/source-button-border.svg		\
 	theme/summary-counter.svg		\
 	theme/toggle-off-us.svg			\
