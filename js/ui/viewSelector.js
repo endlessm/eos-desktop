@@ -21,11 +21,9 @@ const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
 const Wanda = imports.ui.wanda;
 const WorkspacesView = imports.ui.workspacesView;
-const Util = imports.misc.util;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 
-const BROWSER_LAUNCHER = 'x-www-browser';
 const BASE_SEARCH_URI = 'http://www.google.com/';
 const QUERY_URI_PATH = 'search?q=';
 
@@ -174,7 +172,7 @@ const ViewSelector = new Lang.Class({
            uri = uri + QUERY_URI_PATH + encodeURI(terms.join(" ")); 
         }
 
-        Util.spawn([BROWSER_LAUNCHER, uri]);
+        Gio.AppInfo.launch_default_for_uri(uri, null);
     },
 
     _toggleAppsPage: function() {
