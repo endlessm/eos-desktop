@@ -24,6 +24,9 @@ const WorkspacesView = imports.ui.workspacesView;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 
+const BASE_SEARCH_URI = 'http://www.google.com/';
+const QUERY_URI_PATH = 'search?q=';
+
 const ViewPage = {
     WINDOWS: 1,
     APPS: 2,
@@ -94,6 +97,8 @@ const ViewSelector = new Lang.Class({
                                                  'google-logo-symbolic.svg');
         this._entry.set_hint_actor(hintActor);
 
+        this._entry.connect('primary-icon-clicked', Lang.bind(this, this._activateDefaultSearch));
+
         this._iconClickedId = 0;
         this._capturedEventId = 0;
 
@@ -158,6 +163,16 @@ const ViewSelector = new Lang.Class({
                               Lang.bind(this, this._toggleAppsPage));
 
         Main.overview.connect('show-apps-request', Lang.bind(this, this._toggleAppsPage));
+    },
+
+    _activateDefaultSearch: function() {
+        let uri = BASE_SEARCH_URI;
+        let terms = getTermsForSearchString(this._entry.get_text());
+        if (terms.length != 0) {
+           uri = uri + QUERY_URI_PATH + encodeURI(terms.join(" ")); 
+        }
+
+        Gio.AppInfo.launch_default_for_uri(uri, null);
     },
 
     _toggleAppsPage: function() {
