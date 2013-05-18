@@ -47,7 +47,6 @@ void     shell_global_end_modal              (ShellGlobal         *global,
 
 typedef enum {
   SHELL_STAGE_INPUT_MODE_NORMAL,
-  SHELL_STAGE_INPUT_MODE_FOCUSED,
   SHELL_STAGE_INPUT_MODE_FULLSCREEN
 } ShellStageInputMode;
 
