@@ -45,13 +45,6 @@ gboolean shell_global_begin_modal            (ShellGlobal         *global,
 void     shell_global_end_modal              (ShellGlobal         *global,
                                               guint32              timestamp);
 
-typedef enum {
-  SHELL_STAGE_INPUT_MODE_NORMAL,
-  SHELL_STAGE_INPUT_MODE_FULLSCREEN
-} ShellStageInputMode;
-
-void     shell_global_set_stage_input_mode   (ShellGlobal         *global,
-                                              ShellStageInputMode  mode);
 void     shell_global_set_stage_input_region (ShellGlobal         *global,
                                               GSList              *rectangles);
 
