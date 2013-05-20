@@ -461,7 +461,7 @@ const ViewSelector = new Lang.Class({
                     Mainloop.source_remove(this._searchTimeoutId);
                     this._doSearch();
                 }
-                this._searchResults.activateDefault();
+                this._activateDefaultSearch();
                 return true;
             }
         }
