@@ -511,27 +511,11 @@ const UserMenuButton = new Lang.Class({
         this._iconBox = new St.Bin();
         box.add(this._iconBox, { y_align: St.Align.MIDDLE, y_fill: false });
 
-        let textureCache = St.TextureCache.get_default();
-        this._offlineIcon = new St.Icon({ icon_name: 'user-offline-symbolic',
-                                          style_class: 'popup-menu-icon' });
-        this._availableIcon = new St.Icon({ icon_name: 'user-available-symbolic',
-                                            style_class: 'popup-menu-icon' });
-        this._busyIcon = new St.Icon({ icon_name: 'user-busy-symbolic',
-                                       style_class: 'popup-menu-icon' });
-        this._invisibleIcon = new St.Icon({ icon_name: 'user-invisible-symbolic',
-                                            style_class: 'popup-menu-icon' });
-        this._awayIcon = new St.Icon({ icon_name: 'user-away-symbolic',
-                                       style_class: 'popup-menu-icon' });
-        this._idleIcon = new St.Icon({ icon_name: 'user-idle-symbolic',
-                                       style_class: 'popup-menu-icon' });
-        this._pendingIcon = new St.Icon({ icon_name: 'user-status-pending-symbolic',
-                                          style_class: 'popup-menu-icon' });
-        this._lockedIcon = new St.Icon({ icon_name: 'changes-prevent-symbolic',
+        let iconFile = Gio.File.new_for_path(global.datadir + '/theme/settings-symbolic.svg');
+        let gicon = new Gio.FileIcon({ file: iconFile });
+        let settingsIcon = new St.Icon({ gicon: gicon,
                                          style_class: 'popup-menu-icon' });
-
-        // Load the settings icon asset
-        this._settingsIcon = new St.Icon({ icon_name: 'settings-symbolic',
-                                           style_class: 'popup-menu-icon' });
+        this._iconBox.child = settingsIcon;
 
         this._accountMgr.connect('most-available-presence-changed',
                                   Lang.bind(this, this._updatePresenceIcon));
@@ -713,8 +697,8 @@ const UserMenuButton = new Lang.Class({
     },
 
     _updatePresenceIcon: function(accountMgr, presence, status, message) {
-        // Ignore the presence and simply use the settings icon
-        this._iconBox.child = this._settingsIcon;
+        // We only use the simple settings icon,
+        // so no need to change the icon here based on the presence
 
         if (Main.sessionMode.isLocked)
             this._iconBox.visible = Main.screenShield.locked;
@@ -756,9 +740,7 @@ const UserMenuButton = new Lang.Class({
             }
         }
 
-        if (changing) {
-            this._iconBox.child = this._pendingIcon;
-        } else {
+        if (!changing) {
             let [presence, s, msg] = this._accountMgr.get_most_available_presence();
             this._updatePresenceIcon(this._accountMgr, presence, s, msg);
         }
