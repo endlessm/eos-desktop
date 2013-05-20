@@ -511,9 +511,11 @@ const UserMenuButton = new Lang.Class({
         this._iconBox = new St.Bin();
         box.add(this._iconBox, { y_align: St.Align.MIDDLE, y_fill: false });
 
-        this._settingsIcon = new St.Icon({ icon_name: 'settings-symbolic',
-                                           style_class: 'popup-menu-icon' });
-        this._iconBox.child = this._settingsIcon;
+        let iconFile = Gio.File.new_for_path(global.datadir + '/theme/settings-symbolic.svg');
+        let gicon = new Gio.FileIcon({ file: iconFile });
+        let settingsIcon = new St.Icon({ gicon: gicon,
+                                         style_class: 'popup-menu-icon' });
+        this._iconBox.child = settingsIcon;
 
         this._accountMgr.connect('most-available-presence-changed',
                                   Lang.bind(this, this._updatePresenceIcon));
