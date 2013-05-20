@@ -740,10 +740,7 @@ const UserMenuButton = new Lang.Class({
             }
         }
 
-        if (changing) {
-            // Nothing to do, since we use the simple settings icon
-            // that is independent of presence
-        } else {
+        if (!changing) {
             let [presence, s, msg] = this._accountMgr.get_most_available_presence();
             this._updatePresenceIcon(this._accountMgr, presence, s, msg);
         }
