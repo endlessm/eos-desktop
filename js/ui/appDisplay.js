@@ -244,7 +244,13 @@ const AllView = new Lang.Class({
         this._originalIdx = this._grid.indexOf(source.actor);
 
         this._insertIdx = -1;
+
         source.actor.hide();
+        this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
+                                            can_focus: false,
+                                            x_fill: true,
+                                            y_fill: true });
+        this._grid.addItem(this._insertActor, this._originalIdx);
 
         this._eventBlocker.hide();
 
@@ -271,6 +277,10 @@ const AllView = new Lang.Class({
 
     _onDragCancelled: function(overview, source) {
         source.actor.show();
+        if (this._insertActor != null) {
+            this._grid.removeItem(this._insertActor);
+        }
+
         this._onDragEnd(overview, source);
     },
 
@@ -278,11 +288,6 @@ const AllView = new Lang.Class({
         // Ask grid can we drop here
         let [idx, onIcon] = this._grid.canDropAt(dragEvent.x, dragEvent.y,
                                                  this._insertIdx);
-
-        // Take into account hidden icon if present
-        if (idx >= this._originalIdx) {
-            idx += 1;
-        }
 
         // If we are not over our last hovered icon, remove its hover state
         if (this._onIconIdx != null && idx != this._onIconIdx) {
@@ -292,33 +297,21 @@ const AllView = new Lang.Class({
         this._onIcon = onIcon;
         this._onIconIdx = idx;
 
-        if (onIcon || idx == -1) {
-            this._setHoverStateOf(this._onIconIdx, true);
-
-            if (this._insertIdx != -1) {
-                this._grid.removeItem(this._insertActor);
-                this._insertIdx = -1;
-            }
+        if (this._originalIdx == this._onIconIdx) {
+            this._insertIdx = -1;
 
             return DND.DragMotionResult.CONTINUE;
         }
 
-        if (this._insertIdx == idx) {
+        if (onIcon) {
+            this._setHoverStateOf(this._onIconIdx, true);
+
             return DND.DragMotionResult.COPY_DROP;
         }
 
-        if (this._insertActor != null) {
-            this._grid.removeItem(this._insertActor);
-        }
-
         this._insertIdx = idx;
-        this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
-                                            can_focus: false,
-                                            x_fill: true,
-                                            y_fill: true });
-        this._grid.addItem(this._insertActor, idx);
 
-        return DND.DragMotionResult.COPY_DROP;
+        return DND.DragMotionResult.CONTINUE;
     },
 
     _setHoverStateOf: function(itemIdx, state) {
@@ -331,10 +324,11 @@ const AllView = new Lang.Class({
     },
 
     acceptDrop: function(source, actor, x, y, time) {
-        let originalId = this._getItemId(this._allItems[this._originalIdx]);
+        let originalId = this._getIdFromIndex(this._originalIdx);
+
         if (this._onIcon) {
             // Find out what icon the drop is under
-            let id = this._getItemId(this._allItems[this._onIconIdx]);
+            let id = this._getIdFromIndex(this._onIconIdx);
             if (!id) {
                 source.actor.show();
                 return true;
@@ -346,9 +340,10 @@ const AllView = new Lang.Class({
                 return true;
             }
 
+            let insertId = this._getIdFromIndex(this._insertIdx);
             let newFolder = dropIcon._dir.get_name();
             IconGridLayout.layout.repositionIcon("", originalId,
-                                                 this._insertIdx,
+                                                 insertId,
                                                  newFolder);
             return true;
         } else {
@@ -356,11 +351,20 @@ const AllView = new Lang.Class({
                 source.actor.show();
                 return false;
             } else {
+                let insertId = this._getIdFromIndex(this._insertIdx);
                 IconGridLayout.layout.repositionIcon("", originalId,
-                                                     this._insertIdx, "");
+                                                     insertId, "");
                 return true;
             }
         }
+    },
+
+    _getIdFromIndex: function(index){
+       item = this._allItems[index];
+       if (item) {
+           return this._getItemId(item);
+       }
+       return null;
     },
 
     _createItemIcon: function(item) {

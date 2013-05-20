@@ -439,7 +439,7 @@ const IconGrid = new Lang.Class({
 
         // If we're outside the start of the grid, then we want to place at 0,0
         if (childIdx < 0) {
-            return [0, false];
+            return [-1, false];
         }
 
         // If we're outside the end of the grid, add icon to the end

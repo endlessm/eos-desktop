@@ -52,7 +52,7 @@ const IconGridLayout = new Lang.Class({
         return id && this._iconTree[id];
     },
 
-    repositionIcon: function(folder, id, position, newFolder) {
+    repositionIcon: function(folder, id, insertId, newFolder) {
         folder = folder || "";
 
         let icons = this._iconTree[folder];
@@ -70,8 +70,9 @@ const IconGridLayout = new Lang.Class({
                 return;
             }
 
-            icons.splice(position, 0, id);
+            icons.splice(icons.indexOf(insertId), 0, id);
         }
+
 
         // recreate GVariant from iconTree
         let newLayout = GLib.Variant.new("a{sas}", this._iconTree);
