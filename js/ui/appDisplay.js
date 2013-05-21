@@ -1193,21 +1193,21 @@ const AppStoreIcon = new Lang.Class({
         let id = app.get_id();
 
         let dialog = new ModalDialog.ModalDialog();
-        let subjectLabel = new St.Label({ text:_("Delete?") });
+        let subjectLabel = new St.Label({ text: _("Delete?") });
         dialog.contentLayout.add(subjectLabel, { y_fill: true,
                                                  y_align: St.Align.START });
         let noButton = { label: _("No"),
-                             action: Lang.bind(this, function() {
-                                 dialog.close();
-                                 source.actor.show();
-                             }),
-                             key: Clutter.Escape };
+                         action: Lang.bind(this, function() {
+                             dialog.close();
+                             source.actor.show();
+                         }),
+                         key: Clutter.Escape };
         let yesButton = { label: _("Yes"),
-                             action: Lang.bind(this, function() {
-                                 dialog.close();
-                                 IconGridLayout.layout.repositionIcon("", id, 0, null);
-                             }),
-                           default: true };
+                          action: Lang.bind(this, function() {
+                              dialog.close();
+                              IconGridLayout.layout.repositionIcon("", id, 0, null);
+                          }),
+                          default: true };
         dialog.setButtons([yesButton, noButton]);
         dialog.open();
 
