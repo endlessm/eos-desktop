@@ -437,9 +437,9 @@ const IconGrid = new Lang.Class({
 
         childIdx = Math.min((row * nColumns) + column, children.length);
 
-        // If we're outside the start of the grid, then we want to place at 0,0
+        // If we're outside the start of the grid, we are in an invalid drop location
         if (childIdx < 0) {
-            return [0, false];
+            return [-1, false];
         }
 
         // If we're outside the end of the grid, add icon to the end

@@ -240,11 +240,19 @@ const AllView = new Lang.Class({
     },
 
     _onDragBegin: function(overview, source) {
+        // Save the currently dragged item info
         this._dragItem = source;
         this._originalIdx = this._grid.indexOf(source.actor);
 
         this._insertIdx = -1;
+
+        // Replace the dragged icon with an empty placeholder
         source.actor.hide();
+        this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
+                                            can_focus: false,
+                                            x_fill: true,
+                                            y_fill: true });
+        this._grid.addItem(this._insertActor, this._originalIdx);
 
         this._eventBlocker.hide();
 
@@ -271,6 +279,11 @@ const AllView = new Lang.Class({
 
     _onDragCancelled: function(overview, source) {
         source.actor.show();
+        if (this._insertActor != null) {
+            this._grid.removeItem(this._insertActor);
+            this._insertActor = null;
+        }
+
         this._onDragEnd(overview, source);
     },
 
@@ -279,46 +292,34 @@ const AllView = new Lang.Class({
         let [idx, onIcon] = this._grid.canDropAt(dragEvent.x, dragEvent.y,
                                                  this._insertIdx);
 
-        // Take into account hidden icon if present
-        if (idx >= this._originalIdx) {
-            idx += 1;
-        }
-
         // If we are not over our last hovered icon, remove its hover state
         if (this._onIconIdx != null && idx != this._onIconIdx) {
             this._setHoverStateOf(this._onIconIdx, false)
         }
 
+        // Update our insert index and if we are currently on an icon
         this._onIcon = onIcon;
         this._onIconIdx = idx;
 
-        if (onIcon || idx == -1) {
-            this._setHoverStateOf(this._onIconIdx, true);
-
-            if (this._insertIdx != -1) {
-                this._grid.removeItem(this._insertActor);
-                this._insertIdx = -1;
-            }
+        // If we are hovering over our own icon placeholder, ignore it
+        if (this._originalIdx == this._onIconIdx) {
+            this._insertIdx = -1;
 
             return DND.DragMotionResult.CONTINUE;
         }
 
-        if (this._insertIdx == idx) {
+        // If we are hovering over an icon, make sure that it has focus
+        if (onIcon) {
+            this._setHoverStateOf(this._onIconIdx, true);
+
             return DND.DragMotionResult.COPY_DROP;
         }
 
-        if (this._insertActor != null) {
-            this._grid.removeItem(this._insertActor);
-        }
-
+        // If we are not over any icon, update the insert index so that
+        // if the icon is released we know where to place it
         this._insertIdx = idx;
-        this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
-                                            can_focus: false,
-                                            x_fill: true,
-                                            y_fill: true });
-        this._grid.addItem(this._insertActor, idx);
 
-        return DND.DragMotionResult.COPY_DROP;
+        return DND.DragMotionResult.CONTINUE;
     },
 
     _setHoverStateOf: function(itemIdx, state) {
@@ -331,36 +332,54 @@ const AllView = new Lang.Class({
     },
 
     acceptDrop: function(source, actor, x, y, time) {
-        let originalId = this._getItemId(this._allItems[this._originalIdx]);
+        // Get the id of the icon dragged
+        let originalId = this._getIdFromIndex(this._originalIdx);
+
         if (this._onIcon) {
             // Find out what icon the drop is under
-            let id = this._getItemId(this._allItems[this._onIconIdx]);
+            let id = this._getIdFromIndex(this._onIconIdx);
             if (!id) {
                 source.actor.show();
                 return true;
             }
 
+            // If we are dropping an icon on another icon, cancel the request
             let dropIcon = this._items[id];
             if (!(dropIcon instanceof FolderIcon)) {
                 source.actor.show();
                 return true;
             }
 
+            // If we are hovering over a folder, the icon needs to be moved
+            let insertId = this._getIdFromIndex(this._insertIdx);
             let newFolder = dropIcon._dir.get_name();
             IconGridLayout.layout.repositionIcon("", originalId,
-                                                 this._insertIdx,
+                                                 insertId,
                                                  newFolder);
             return true;
         } else {
+            // If we are not over an icon and we are outside of the grid area,
+            // ignore the request to move
             if (this._insertIdx == -1) {
                 source.actor.show();
                 return false;
             } else {
+                // If we are not over an icon but within the grid, shift the
+                // grid around to accomodate it
+                let insertId = this._getIdFromIndex(this._insertIdx);
                 IconGridLayout.layout.repositionIcon("", originalId,
-                                                     this._insertIdx, "");
+                                                     insertId, "");
                 return true;
             }
         }
+    },
+
+    _getIdFromIndex: function(index){
+       let item = this._allItems[index];
+       if (item) {
+           return this._getItemId(item);
+       }
+       return null;
     },
 
     _createItemIcon: function(item) {

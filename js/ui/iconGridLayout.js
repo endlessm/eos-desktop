@@ -52,7 +52,7 @@ const IconGridLayout = new Lang.Class({
         return id && this._iconTree[id];
     },
 
-    repositionIcon: function(folder, id, position, newFolder) {
+    repositionIcon: function(folder, id, insertId, newFolder) {
         folder = folder || "";
 
         let icons = this._iconTree[folder];
@@ -70,13 +70,17 @@ const IconGridLayout = new Lang.Class({
                 return;
             }
 
-            icons.splice(position, 0, id);
+            // We use the insert Id instead of the index here since gsettings
+            // includes the full application list that the desktop may have.
+            // Relying on the position leads to faulty behaviour if some
+            // apps are not present on the system
+            icons.splice(icons.indexOf(insertId), 0, id);
         }
 
-        // recreate GVariant from iconTree
+        // Recreate GVariant from iconTree
         let newLayout = GLib.Variant.new("a{sas}", this._iconTree);
 
-        // store gsetting
+        // Store gsetting
         global.settings.set_value(SCHEMA_KEY, newLayout);
     }
 });
