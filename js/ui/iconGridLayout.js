@@ -69,19 +69,31 @@ const IconGridLayout = new Lang.Class({
                 // invalid destination folder
                 return;
             }
-
-            // We use the insert Id instead of the index here since gsettings
-            // includes the full application list that the desktop may have.
-            // Relying on the position leads to faulty behaviour if some
-            // apps are not present on the system
-            icons.splice(icons.indexOf(insertId), 0, id);
         }
+
+        // Make the changes on the list
+        this._insertIcon(icons, id, insertId);
 
         // Recreate GVariant from iconTree
         let newLayout = GLib.Variant.new("a{sas}", this._iconTree);
 
         // Store gsetting
         global.settings.set_value(SCHEMA_KEY, newLayout);
+    },
+
+    // We use the insert Id instead of the index here since gsettings
+    // includes the full application list that the desktop may have.
+    // Relying on the position leads to faulty behaviour if some
+    // apps are not present on the system
+    _insertIcon: function(icons, id, insertId) {
+        let insertIdx = icons.indexOf(insertId);
+
+        // We were dropped to the left of the trashcan
+        if (insertIdx == -1) {
+            insertIdx = icons.length;
+        }
+
+        icons.splice(insertIdx, 0, id);
     }
 });
 Signals.addSignalMethods(IconGridLayout.prototype);

@@ -432,19 +432,20 @@ const IconGrid = new Lang.Class({
             row += 1;
 
             childIdx = Math.min((row * nColumns) + column, children.length);
-            return [childIdx, false];
+            if (childIdx >= children.length) {
+                // If we are to the right of the bottom-most row, move is invalid
+                return [-1, false];
+            } else {
+                // Otherwise attach the icon at the end of the row
+                return [childIdx, false];
+            }
         }
 
         childIdx = Math.min((row * nColumns) + column, children.length);
 
-        // If we're outside the start of the grid, we are in an invalid drop location
-        if (childIdx < 0) {
+        // If we're outside of the grid vertically, we are in an invalid drop location
+        if (childIdx < 0 || childIdx >= children.length) {
             return [-1, false];
-        }
-
-        // If we're outside the end of the grid, add icon to the end
-        if (childIdx >= children.length) {
-            return [children.length, false];
         }
 
         let child = children[childIdx];
