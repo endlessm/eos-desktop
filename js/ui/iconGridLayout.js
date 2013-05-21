@@ -70,14 +70,17 @@ const IconGridLayout = new Lang.Class({
                 return;
             }
 
+            // We use the insert Id instead of the index here since gsettings
+            // includes the full application list that the desktop may have.
+            // Relying on the position leads to faulty behaviour if some
+            // apps are not present on the system
             icons.splice(icons.indexOf(insertId), 0, id);
         }
 
-
-        // recreate GVariant from iconTree
+        // Recreate GVariant from iconTree
         let newLayout = GLib.Variant.new("a{sas}", this._iconTree);
 
-        // store gsetting
+        // Store gsetting
         global.settings.set_value(SCHEMA_KEY, newLayout);
     }
 });
