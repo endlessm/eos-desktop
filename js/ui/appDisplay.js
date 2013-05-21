@@ -279,6 +279,7 @@ const AllView = new Lang.Class({
         source.actor.show();
         if (this._insertActor != null) {
             this._grid.removeItem(this._insertActor);
+            this._insertActor = null;
         }
 
         this._onDragEnd(overview, source);
@@ -360,7 +361,7 @@ const AllView = new Lang.Class({
     },
 
     _getIdFromIndex: function(index){
-       item = this._allItems[index];
+       let item = this._allItems[index];
        if (item) {
            return this._getItemId(item);
        }
