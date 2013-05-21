@@ -5,7 +5,7 @@
 Source: eos-shell
 Section: gnome
 Priority: optional
-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Maintainer: Endless Mobile <maintainers@endlessm.com>
 Uploaders: Emilio Pozuelo Monfort <pochu@debian.org>, Jeremy Bicha <jbicha@ubuntu.com>, Sjoerd Simons <sjoerd@debian.org>
 Build-Depends: autotools-dev,
                cdbs,
