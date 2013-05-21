@@ -245,13 +245,13 @@ const Overview = new Lang.Class({
         let monitor = Main.layoutManager.primaryMonitor;
 
         this._desktopFade = new St.Bin();
-        global.overlay_group.add_actor(this._desktopFade);
+        Main.layoutManager.overviewGroup.add_child(this._desktopFade);
 
         // this._allMonitorsGroup is a simple actor that covers all monitors,
         // used to install actions that apply to all monitors
         this._allMonitorsGroup = new Clutter.Actor({ reactive: true });
         this._allMonitorsGroup.add_constraint(
-            new Clutter.BindConstraint({ source: global.overlay_group,
+            new Clutter.BindConstraint({ source: Main.layoutManager.overviewGroup,
                                          coordinate: Clutter.BindCoordinate.ALL }));
         this._allMonitorsGroup.hide();
 
@@ -284,7 +284,7 @@ const Overview = new Lang.Class({
         this._groupStack.add_actor(this._group);
 
         this._backgroundGroup = new Meta.BackgroundGroup();
-        global.overlay_group.add_child(this._backgroundGroup);
+        Main.layoutManager.overviewGroup.add_child(this._backgroundGroup);
         this._backgroundGroup.hide();
         this._bgManagers = [];
 
@@ -308,7 +308,7 @@ const Overview = new Lang.Class({
         this._overview.add_actor(this._coverPane);
         this._coverPane.connect('event', Lang.bind(this, function (actor, event) { return true; }));
 
-        global.overlay_group.add_actor(this._allMonitorsGroup);
+        Main.layoutManager.overviewGroup.add_child(this._allMonitorsGroup);
 
         this._coverPane.hide();
 
@@ -360,7 +360,7 @@ const Overview = new Lang.Class({
             screenDecorator.add_child(new Clutter.Actor({ x_expand: true }));
             screenDecorator.add_child(topRightCorner.actor);
 
-            global.overlay_group.add_actor(screenDecorator);
+            Main.layoutManager.overviewGroup.add_actor(screenDecorator);
 
             // Set the size and position
             let monitorWorkArea = Main.layoutManager.getWorkAreaForMonitor(i);
