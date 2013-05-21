@@ -315,6 +315,35 @@ const AllView = new Lang.Class({
     },
 
     _onDragMotion: function(dragEvent) {
+        // If the icon is dragged to the top or the bottom of the application
+        // well, then we want to scroll it - if possible
+        let [ gridX, gridY ] = this.actor.get_transformed_position();
+        let [ gridW, gridH ] = this.actor.get_transformed_size();
+
+        // we should probably have a "grace" area instead of using
+        // the actual edge of the grid
+        if (dragEvent.y <= gridY || dragEvent.y >= gridH) {
+            let adjustment = this.actor.vscroll.adjustment;
+
+            if (dragEvent.y <= gridY &&
+                adjustment.value >= adjustment.page_size) {
+                // should we tween?
+                adjustment.value -= adjustment.page_size;
+
+                return DND.DragMotionResult.CONTINUE;
+            }
+
+            if (dragEvent.y >= gridH &&
+                adjustment.value <= adjustment.upper - adjustment.page_size) {
+                // should we tween?
+                adjustment.value += adjustment.page_size;
+
+                return DND.DragMotionResult.CONTINUE;
+            }
+        }
+
+        // Ask grid can we drop here
+
         // Handle motion over grid
         if (this.actor.contains(dragEvent.targetActor)) {
             this._dragView = this;
