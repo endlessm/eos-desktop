@@ -28,6 +28,9 @@
 /* This is also hard-coded in mutter and GDK */
 #define VIRTUAL_CORE_POINTER_ID 2
 
+#define A11Y_APPS_SCHEMA "org.gnome.desktop.a11y.applications"
+#define MAGNIFIER_ACTIVE_KEY "screen-magnifier-enabled"
+
 typedef enum {
   RECORDER_STATE_CLOSED,
   RECORDER_STATE_RECORDING
@@ -68,6 +71,7 @@ struct _ShellRecorder {
 
   CoglHandle recording_icon; /* icon shown while playing */
 
+  GSettings *a11y_settings;
   gboolean draw_cursor;
   MetaCursorTracker *cursor_tracker;
   cairo_surface_t *cursor_image;
@@ -280,6 +284,8 @@ shell_recorder_init (ShellRecorder *recorder)
   recorder->recording_icon = create_recording_icon ();
   recorder->memory_target = get_memory_target();
 
+  recorder->a11y_settings = g_settings_new (A11Y_APPS_SCHEMA);
+
   recorder->state = RECORDER_STATE_CLOSED;
   recorder->framerate = DEFAULT_FRAMES_PER_SECOND;
   recorder->draw_cursor = TRUE;
@@ -303,6 +309,8 @@ shell_recorder_finalize (GObject  *object)
   recorder_set_file_template (recorder, NULL);
 
   cogl_handle_unref (recorder->recording_icon);
+
+  g_clear_object (&recorder->a11y_settings);
 
   G_OBJECT_CLASS (shell_recorder_parent_class)->finalize (object);
 }
@@ -571,7 +579,8 @@ recorder_record_frame (ShellRecorder *recorder)
 
   GST_BUFFER_PTS(buffer) = now - recorder->start_time;
 
-  if (recorder->draw_cursor)
+  if (recorder->draw_cursor &&
+      !g_settings_get_boolean (recorder->a11y_settings, MAGNIFIER_ACTIVE_KEY))
     recorder_draw_cursor (recorder, buffer);
 
   shell_recorder_src_add_buffer (SHELL_RECORDER_SRC (recorder->current_pipeline->src), buffer);
