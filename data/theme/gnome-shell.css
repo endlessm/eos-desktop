@@ -235,10 +235,6 @@ StScrollBar StButton#vhandle:active {
     -slider-handle-radius: 0.5em;
 }
 
-.popup-device-menu-item {
-    spacing: .5em;
-}
-
 .popup-status-menu-item {
     font-weight: normal;
     color: #999;
@@ -270,10 +266,6 @@ StScrollBar StButton#vhandle:active {
     width: 1px;
     height: 30px;
     icon-size: 30px
-}
-
-.popup-battery-percentage {
-    padding-left: 24px;
 }
 
 .popup-options-menu-item {
