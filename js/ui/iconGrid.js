@@ -475,7 +475,7 @@ const IconGrid = new Lang.Class({
         }
 
         // If we're below the grid vertically, we are in an invalid drop location
-        if (childIdx >= children.length) {
+        if (childIdx >= children.length - 1) {
             return [-1, false];
         }
 
