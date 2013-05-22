@@ -255,12 +255,11 @@ const IconGrid = new Lang.Class({
             return;
 
         let children = this._getVisibleChildren();
-        let nColumns, spacing;
+        let nColumns;
         if (forWidth < 0) {
             nColumns = children.length;
-            spacing = this._spacing;
         } else {
-            [nColumns, , spacing] = this._computeLayout(forWidth);
+            [nColumns, ] = this._computeLayout(forWidth);
         }
 
         let nRows;
@@ -270,7 +269,7 @@ const IconGrid = new Lang.Class({
             nRows = 0;
         if (this._rowLimit)
             nRows = Math.min(nRows, this._rowLimit);
-        let totalSpacing = Math.max(0, nRows - 1) * spacing;
+        let totalSpacing = Math.max(0, nRows - 1) * this._spacing;
         let height = nRows * this._vItemSize + totalSpacing;
         alloc.min_size = height;
         alloc.natural_size = height;
@@ -288,7 +287,7 @@ const IconGrid = new Lang.Class({
         let availWidth = box.x2 - box.x1;
         let availHeight = box.y2 - box.y1;
 
-        let [nColumns, usedWidth, spacing] = this._computeLayout(availWidth);
+        let [nColumns, usedWidth] = this._computeLayout(availWidth);
 
         let leftPadding;
         switch(this._xAlign) {
@@ -345,10 +344,10 @@ const IconGrid = new Lang.Class({
             }
 
             if (columnIndex == 0) {
-                y += this._vItemSize + spacing;
+                y += this._vItemSize + this._spacing;
                 x = box.x1 + leftPadding;
             } else {
-                x += this._hItemSize + spacing;
+                x += this._hItemSize + this._spacing;
             }
         }
     },
@@ -364,18 +363,17 @@ const IconGrid = new Lang.Class({
     _computeLayout: function (forWidth) {
         let nColumns = 0;
         let usedWidth = 0;
-        let spacing = this._spacing;
 
         while ((this._colLimit == null || nColumns < this._colLimit) &&
                (usedWidth + this._hItemSize <= forWidth)) {
-            usedWidth += this._hItemSize + spacing;
+            usedWidth += this._hItemSize + this._spacing;
             nColumns += 1;
         }
 
         if (nColumns > 0)
-            usedWidth -= spacing;
+            usedWidth -= this._spacing;
 
-        return [nColumns, usedWidth, spacing];
+        return [nColumns, usedWidth];
     },
 
     _onStyleChanged: function() {
@@ -469,14 +467,14 @@ const IconGrid = new Lang.Class({
         let [sw, sh] = this.actor.get_transformed_size();
         let [ok, sx, sy] = this.actor.transform_stage_point(x, y);
 
-        let [nColumns, usedWidth, spacing] = this._computeLayout(sw);
+        let [nColumns, usedWidth] = this._computeLayout(sw);
 
-        let row = Math.floor(sy / (this._vItemSize + spacing));
+        let row = Math.floor(sy / (this._vItemSize + this._spacing));
 
         // Correct sx to handle the left padding
         // to correctly calculate the column
         let gridx = sx - this._leftPadding;
-        let column = Math.floor(gridx / (this._hItemSize + spacing));
+        let column = Math.floor(gridx / (this._hItemSize + this._spacing));
 
         let children = this._getVisibleChildren();
         let childIdx;
