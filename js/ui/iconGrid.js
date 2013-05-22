@@ -3,6 +3,7 @@
 const Clutter = imports.gi.Clutter;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
+const Tweener = imports.ui.tweener;
 
 const Lang = imports.lang;
 const Params = imports.misc.params;
@@ -11,6 +12,8 @@ const ICON_SIZE = 48;
 
 const LEFT_DIVIDER_LEEWAY = 30;
 const RIGHT_DIVIDER_LEEWAY = 20;
+
+const NUDGE_ANIMATION_TIME = 0.35;
 
 const BaseIcon = new Lang.Class({
     Name: 'BaseIcon',
@@ -389,6 +392,31 @@ const IconGrid = new Lang.Class({
 
     getItemAtIndex: function(index) {
         return this._grid.get_child_at_index(index);
+    },
+
+    nudgeItemsAtIndex: function(index) {
+        let leftItem = this.getItemAtIndex(index - 1);
+        this._animateNudge(leftItem, -ICON_SIZE / 3);
+
+        let rightItem = this.getItemAtIndex(index);
+        this._animateNudge(rightItem, ICON_SIZE / 3);
+    },
+
+    removeNudgeTransforms: function() {
+        let children = this._getVisibleChildren();
+        for (let index = 0; index < this._getVisibleChildren().length; index++) {
+            this._animateNudge(children[index], 0);
+        }
+    },
+
+    _animateNudge: function(item, offset) {
+        if (item != null) {
+            Tweener.removeTweens(item);
+            Tweener.addTween(item, { translation_x: offset,
+                                     time: NUDGE_ANIMATION_TIME,
+                                     transition: 'easeOutQuint'
+                                    });
+        }
     },
 
     indexOf: function(item) {

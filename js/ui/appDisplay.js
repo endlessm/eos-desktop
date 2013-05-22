@@ -271,6 +271,7 @@ const AllView = new Lang.Class({
     },
 
     _onDragEnd: function(overview, source) {
+        this._grid.removeNudgeTransforms();
         this._eventBlocker.show();
 
         source.actor.show();
@@ -311,6 +312,10 @@ const AllView = new Lang.Class({
             this._setHoverStateOf(this._onIconIdx, false)
         }
 
+        if (idx != this._insertIdx) {
+            this._grid.removeNudgeTransforms();
+        }
+
         // Update our insert index and if we are currently on an icon
         this._onIcon = onIcon;
         this._onIconIdx = idx;
@@ -336,10 +341,15 @@ const AllView = new Lang.Class({
         // If we are outside of the grid make sure that our DnD icon is NO_DROP
         if (this._insertIdx == -1) {
             return DND.DragMotionResult.NO_DROP;
-        } else {
-            // If we are within the grid our icon should show that the move is allowed
-            return DND.DragMotionResult.MOVE_DROP;
         }
+
+        let nudgeIdx = idx;
+        if (nudgeIdx >= this._originalIdx) {
+            nudgeIdx++;
+        }
+        this._grid.nudgeItemsAtIndex(nudgeIdx);
+
+        return DND.DragMotionResult.CONTINUE;
     },
 
     _setHoverStateOf: function(itemIdx, state) {
