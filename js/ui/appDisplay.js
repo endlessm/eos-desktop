@@ -305,7 +305,7 @@ const AllView = new Lang.Class({
         if (this._originalIdx == this._onIconIdx) {
             this._insertIdx = -1;
 
-            return DND.DragMotionResult.CONTINUE;
+            return DND.DragMotionResult.NO_DROP;
         }
 
         // If we are hovering over an icon, make sure that it has focus
@@ -319,7 +319,13 @@ const AllView = new Lang.Class({
         // if the icon is released we know where to place it
         this._insertIdx = idx;
 
-        return DND.DragMotionResult.CONTINUE;
+        // If we are outside of the grid make sure that our DnD icon is NO_DROP
+        if (this._insertIdx == -1) {
+            return DND.DragMotionResult.NO_DROP;
+        } else {
+            // If we are within the grid our icon should show that the move is allowed
+            return DND.DragMotionResult.MOVE_DROP;
+        }
     },
 
     _setHoverStateOf: function(itemIdx, state) {
