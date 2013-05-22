@@ -425,26 +425,30 @@ const IconGrid = new Lang.Class({
         let children = this._getVisibleChildren();
         let childIdx;
 
+        // If we're outside of the grid, find out where we should be
         if (gridx < 0) {
             column = 0;
         } else if (gridx > usedWidth) {
             column = 0;
             row += 1;
-
-            childIdx = Math.min((row * nColumns) + column, children.length);
-            if (childIdx >= children.length) {
-                // If we are to the right of the bottom-most row, move is invalid
-                return [-1, false];
-            } else {
-                // Otherwise attach the icon at the end of the row
-                return [childIdx, false];
-            }
         }
 
         childIdx = Math.min((row * nColumns) + column, children.length);
 
-        // If we're outside of the grid vertically, we are in an invalid drop location
-        if (childIdx < 0 || childIdx >= children.length) {
+        // If we're above the grid vertically, we are in an invalid drop location
+        if (childIdx < 0) {
+            return [-1, false];
+        }
+
+        // If we're to the right of the screen, we assume icon is wanted on
+        // the right edge. We also need to make sure that we don't return a bad
+        // location if the childIdx >= children.length
+        if (gridx > usedWidth) {
+            return [childIdx, false];
+        }
+
+        // If we're below the grid vertically, we are in an invalid drop location
+        if (childIdx >= children.length) {
             return [-1, false];
         }
 
