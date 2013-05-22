@@ -313,9 +313,9 @@ const IconGrid = new Lang.Class({
                 = children[i].get_preferred_size();
 
             /* Center the item in its allocation horizontally */
-            let width = Math.min(this._hItemSize, childNaturalWidth);
+            let width = Math.max(this._hItemSize, childNaturalWidth);
             let childXSpacing = Math.max(0, width - childNaturalWidth) / 2;
-            let height = Math.min(this._vItemSize, childNaturalHeight);
+            let height = Math.max(this._vItemSize, childNaturalHeight);
             let childYSpacing = Math.max(0, height - childNaturalHeight) / 2;
 
             let childBox = new Clutter.ActorBox();
@@ -326,8 +326,8 @@ const IconGrid = new Lang.Class({
                 childBox.x1 = Math.floor(x + childXSpacing);
             }
             childBox.y1 = Math.floor(y + childYSpacing);
-            childBox.x2 = childBox.x1 + width;
-            childBox.y2 = childBox.y1 + height;
+            childBox.x2 = childBox.x1 + childNaturalWidth;
+            childBox.y2 = childBox.y1 + childNaturalHeight;
 
             if (this._rowLimit && rowIndex >= this._rowLimit ||
                 this._fillParent && childBox.y2 > availHeight) {
@@ -511,7 +511,7 @@ const IconGrid = new Lang.Class({
         let [cx, cy] = child.get_position();
 
         // This is the width of the icon inside the 128x128 grid square
-        let childIconWidth = Math.min(this._hItemSize, childNaturalWidth);
+        let childIconWidth = Math.max(this._hItemSize, childNaturalWidth);
 
         // childIconWidth is used to determine whether or not a drag point
         // is inside the icon or the divider.
