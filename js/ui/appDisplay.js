@@ -349,7 +349,7 @@ const AllView = new Lang.Class({
         }
         this._grid.nudgeItemsAtIndex(nudgeIdx);
 
-        return DND.DragMotionResult.CONTINUE;
+        return DND.DragMotionResult.MOVE_DROP;
     },
 
     _setHoverStateOf: function(itemIdx, state) {

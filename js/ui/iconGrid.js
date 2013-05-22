@@ -396,10 +396,10 @@ const IconGrid = new Lang.Class({
 
     nudgeItemsAtIndex: function(index) {
         let leftItem = this.getItemAtIndex(index - 1);
-        this._animateNudge(leftItem, -ICON_SIZE / 3);
+        this._animateNudge(leftItem, -this._hItemSize / 5);
 
         let rightItem = this.getItemAtIndex(index);
-        this._animateNudge(rightItem, ICON_SIZE / 3);
+        this._animateNudge(rightItem, this._hItemSize / 5);
     },
 
     removeNudgeTransforms: function() {
@@ -411,7 +411,6 @@ const IconGrid = new Lang.Class({
 
     _animateNudge: function(item, offset) {
         if (item != null) {
-            Tweener.removeTweens(item);
             Tweener.addTween(item, { translation_x: offset,
                                      time: NUDGE_ANIMATION_TIME,
                                      transition: 'easeOutQuint'
