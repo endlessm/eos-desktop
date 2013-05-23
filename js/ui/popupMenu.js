@@ -2317,7 +2317,7 @@ const PopupMenuManager = new Lang.Class({
 
     _onMenuOpenState: function(menu, open) {
         if (open) {
-            this._grabHelper.grab({ actor: menu.actor, modal: true, focus: menu.sourceActor,
+            this._grabHelper.grab({ actor: menu.actor, focus: menu.sourceActor,
                                     onUngrab: Lang.bind(this, this._closeMenu, menu) });
         } else {
             this._grabHelper.ungrab({ actor: menu.actor });
