@@ -240,32 +240,40 @@ const AllView = new Lang.Class({
     },
 
     _onDragBegin: function(overview, source) {
-        // Save the currently dragged item info
-        this._dragItem = source;
-        this._originalIdx = this._grid.indexOf(source.actor);
+        let index = this._grid.indexOf(source.actor);
+        if (index == -1) {
+            // Dragging an icon from dash
+            this._eventBlocker.hide();
+        } else {
+            // Dragging an icon from grid
+            // Save the currently dragged item info
+            this._dragItem = source;
+            this._originalIdx = index;
 
-        this._insertIdx = -1;
+            this._insertIdx = -1;
 
-        // Replace the dragged icon with an empty placeholder
-        source.actor.hide();
-        this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
-                                            can_focus: false,
-                                            x_fill: true,
-                                            y_fill: true });
-        this._grid.addItem(this._insertActor, this._originalIdx);
+            // Replace the dragged icon with an empty placeholder
+            source.actor.hide();
+            this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
+                                                can_focus: false,
+                                                x_fill: true,
+                                                y_fill: true });
+            this._grid.addItem(this._insertActor, this._originalIdx);
 
-        this._eventBlocker.hide();
+            this._eventBlocker.hide();
 
-        this._dragCancelled = false;
-        this._dragMonitor = {
-            dragMotion: Lang.bind(this, this._onDragMotion)
-        };
-        DND.addDragMonitor(this._dragMonitor);
+            this._dragCancelled = false;
+            this._dragMonitor = {
+                dragMotion: Lang.bind(this, this._onDragMotion)
+            };
+            DND.addDragMonitor(this._dragMonitor);
+        }
     },
 
     _onDragEnd: function(overview, source) {
         this._eventBlocker.show();
 
+        source.actor.show();
         if (this._insertActor != null) {
             this._grid.removeItem(this._insertActor);
             this._insertActor = null;
@@ -289,6 +297,12 @@ const AllView = new Lang.Class({
 
     _onDragMotion: function(dragEvent) {
         // Ask grid can we drop here
+
+        // Handle motion over grid
+        if(!this.actor.contains(dragEvent.targetActor)) {
+            return DND.DragMotionResult.CONTINUE;
+        }
+
         let [idx, onIcon] = this._grid.canDropAt(dragEvent.x, dragEvent.y,
                                                  this._insertIdx);
 
