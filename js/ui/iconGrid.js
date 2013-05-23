@@ -13,7 +13,11 @@ const ICON_SIZE = 48;
 const LEFT_DIVIDER_LEEWAY = 30;
 const RIGHT_DIVIDER_LEEWAY = 20;
 
-const NUDGE_ANIMATION_TIME = 0.35;
+const NUDGE_ANIMATION_TYPE = 'easeOutElastic';
+const NUDGE_DURATION = 1.2;
+
+const NUDGE_RETURN_ANIMATION_TYPE = 'easeOutQuint';
+const NUDGE_RETURN_DURATION = 0.3;
 
 const BaseIcon = new Lang.Class({
     Name: 'BaseIcon',
@@ -396,24 +400,24 @@ const IconGrid = new Lang.Class({
 
     nudgeItemsAtIndex: function(index) {
         let leftItem = this.getItemAtIndex(index - 1);
-        this._animateNudge(leftItem, -this._hItemSize / 5);
+        this._animateNudge(leftItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION, -this._hItemSize / 5);
 
         let rightItem = this.getItemAtIndex(index);
-        this._animateNudge(rightItem, this._hItemSize / 5);
+        this._animateNudge(rightItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION, this._hItemSize / 5);
     },
 
     removeNudgeTransforms: function() {
         let children = this._getVisibleChildren();
         for (let index = 0; index < this._getVisibleChildren().length; index++) {
-            this._animateNudge(children[index], 0);
+            this._animateNudge(children[index], NUDGE_RETURN_ANIMATION_TYPE, NUDGE_RETURN_DURATION, 0);
         }
     },
 
-    _animateNudge: function(item, offset) {
+    _animateNudge: function(item, animationType, duration, offset) {
         if (item != null) {
             Tweener.addTween(item, { translation_x: offset,
-                                     time: NUDGE_ANIMATION_TIME,
-                                     transition: 'easeOutQuint'
+                                     time: duration,
+                                     transition: animationType
                                     });
         }
     },

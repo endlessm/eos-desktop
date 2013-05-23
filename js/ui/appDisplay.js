@@ -312,7 +312,10 @@ const AllView = new Lang.Class({
             this._setHoverStateOf(this._onIconIdx, false)
         }
 
+        // If we are in a new spot, remove the previous nudges
+        let isNewPosition = false;
         if (idx != this._insertIdx) {
+            isNewPosition = true;
             this._grid.removeNudgeTransforms();
         }
 
@@ -343,13 +346,21 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.NO_DROP;
         }
 
-        let nudgeIdx = idx;
-        if (nudgeIdx >= this._originalIdx) {
-            nudgeIdx++;
-        }
-        this._grid.nudgeItemsAtIndex(nudgeIdx);
+        this._nudgeItemsAtIndex(this._insertIdx, this._originalIdx, isNewPosition);
 
         return DND.DragMotionResult.MOVE_DROP;
+    },
+
+    _nudgeItemsAtIndex: function(index, originalIdx, isNewPosition) {
+        // Take into account placeholder icon
+        if (index >= originalIdx) {
+            index++;
+        }
+
+        // Only animate if we are at a new position
+        if (isNewPosition) {
+            this._grid.nudgeItemsAtIndex(index);
+        }
     },
 
     _setHoverStateOf: function(itemIdx, state) {
