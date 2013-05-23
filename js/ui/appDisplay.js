@@ -123,7 +123,7 @@ const FolderView = new Lang.Class({
     },
 
     _createItemIcon: function(item) {
-        return new AppIcon(item);
+        return new AppIcon(item, null, { showMenu: false });
     },
 
     addApp: function(app) {
@@ -404,7 +404,7 @@ const AllView = new Lang.Class({
 
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
-            return new AppIcon(item);
+            return new AppIcon(item, null, { showMenu: false });
         } else {
             return new FolderIcon(item, this);
         }
