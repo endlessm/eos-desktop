@@ -1098,7 +1098,7 @@ const AppStore = new Lang.Class({
     },
 
     activate: function(){
-        Util.spawn(["eos_app_store"]);
+        Util.spawn(["eos-app-store"]);
     }
 });
 
