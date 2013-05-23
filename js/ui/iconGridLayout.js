@@ -59,7 +59,7 @@ const IconGridLayout = new Lang.Class({
         if (icons) {
             let oldPos = icons.indexOf(id);
             if (oldPos != -1) {
-                icons.splice(oldPos, 1);
+                icons.splice(oldPos, 0);
             }
         }
 
@@ -71,8 +71,13 @@ const IconGridLayout = new Lang.Class({
             }
         }
 
-        // Make the changes on the list
-        this._insertIcon(icons, id, insertId);
+        // If the icon was over the trashcan, remove it
+        if (insertId == 0) {
+            icons.splice(icons.indexOf(id), 1);
+        } else {
+            // Otherwise insert it into the new position
+            this._insertIcon(icons, id, insertId);
+        }
 
         // Recreate GVariant from iconTree
         let newLayout = GLib.Variant.new("a{sas}", this._iconTree);

@@ -479,7 +479,7 @@ const IconGrid = new Lang.Class({
         }
 
         // If we're below the grid vertically, we are in an invalid drop location
-        if (childIdx >= children.length - 1) {
+        if (childIdx >= children.length) {
             return [-1, false];
         }
 
@@ -507,7 +507,8 @@ const IconGrid = new Lang.Class({
             return [childIdx, true];
         } else if (sx < iconX){
             return [childIdx, false];
-        } else if (sx > cx + iconWidth) {
+        // We also need to eliminate area to the right of the trashcan
+        } else if (sx > cx + iconWidth && childIdx < children.length - 1) {
             return [childIdx + 1, false];
         }
 
