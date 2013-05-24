@@ -71,8 +71,10 @@ const IconGridLayout = new Lang.Class({
             }
         }
 
-        // Make the changes on the list
-        this._insertIcon(icons, id, insertId);
+        // If the icon was not over the trashcan, insert it
+        if (insertId != 0) {
+            this._insertIcon(icons, id, insertId);
+        }
 
         // Recreate GVariant from iconTree
         let newLayout = GLib.Variant.new("a{sas}", this._iconTree);

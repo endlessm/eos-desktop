@@ -3,6 +3,7 @@
 const Clutter = imports.gi.Clutter;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
+const Tweener = imports.ui.tweener;
 
 const Lang = imports.lang;
 const Params = imports.misc.params;
@@ -11,6 +12,19 @@ const ICON_SIZE = 48;
 
 const LEFT_DIVIDER_LEEWAY = 30;
 const RIGHT_DIVIDER_LEEWAY = 20;
+
+const NUDGE_ANIMATION_TYPE = 'easeOutElastic';
+const NUDGE_DURATION = 1.2;
+
+const NUDGE_RETURN_ANIMATION_TYPE = 'easeOutQuint';
+const NUDGE_RETURN_DURATION = 0.3;
+
+const CursorLocation = {
+    DEFAULT: 0,
+    ON_ICON: 1,
+    LEFT_EDGE: 2,
+    RIGHT_EDGE: 3
+}
 
 const BaseIcon = new Lang.Class({
     Name: 'BaseIcon',
@@ -391,6 +405,48 @@ const IconGrid = new Lang.Class({
         return this._grid.get_child_at_index(index);
     },
 
+    nudgeItemsAtIndex: function(index, cursorLocation, isAfterPlaceholder) {
+        let nudgeIdx = index;
+        if (isAfterPlaceholder) {
+            nudgeIdx++;
+        }
+
+        if (cursorLocation != CursorLocation.LEFT_EDGE) {
+            let leftItem = this.getItemAtIndex(nudgeIdx - 1);
+            this._animateNudge(leftItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION,
+                               -this._hItemSize / 5
+                              );
+        }
+
+        // Nudge the icon to the right if we are the first item or not at the
+        // end of row
+        if (cursorLocation != CursorLocation.RIGHT_EDGE) {
+            let rightItem = this.getItemAtIndex(nudgeIdx);
+            this._animateNudge(rightItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION,
+                               this._hItemSize / 5
+                              );
+        }
+    },
+
+    removeNudgeTransforms: function() {
+        let children = this._grid.get_children();
+        for (let index = 0; index < children.length; index++) {
+            this._animateNudge(children[index], NUDGE_RETURN_ANIMATION_TYPE,
+                               NUDGE_RETURN_DURATION,
+                               0
+                              );
+        }
+    },
+
+    _animateNudge: function(item, animationType, duration, offset) {
+        if (item != null) {
+            Tweener.addTween(item, { translation_x: offset,
+                                     time: duration,
+                                     transition: animationType
+                                    });
+        }
+    },
+
     indexOf: function(item) {
         let children = this._getVisibleChildren();
         for (let i = 0; i < children.length; i++) {
@@ -437,19 +493,19 @@ const IconGrid = new Lang.Class({
 
         // If we're above the grid vertically, we are in an invalid drop location
         if (childIdx < 0) {
-            return [-1, false];
+            return [-1, CursorLocation.DEFAULT];
         }
 
         // If we're to the right of the screen, we assume icon is wanted on
         // the right edge. We also need to make sure that we don't return a bad
         // location if the childIdx >= children.length
         if (gridx > usedWidth) {
-            return [childIdx, false];
+            return [childIdx, CursorLocation.RIGHT_EDGE];
         }
 
         // If we're below the grid vertically, we are in an invalid drop location
         if (childIdx >= children.length) {
-            return [-1, false];
+            return [-1, CursorLocation.DEFAULT];
         }
 
         let child = children[childIdx];
@@ -472,16 +528,27 @@ const IconGrid = new Lang.Class({
         // to putting icons in folders vs rearranging them on the desktop
         let iconX = cx + LEFT_DIVIDER_LEEWAY;
         let iconWidth = childIconWidth - RIGHT_DIVIDER_LEEWAY;
+        let iconRightEdge = cx + LEFT_DIVIDER_LEEWAY + childIconWidth + RIGHT_DIVIDER_LEEWAY
+        let leftEdge = this._leftPadding + LEFT_DIVIDER_LEEWAY;
+
         if (sx >= iconX && sx <= cx + iconWidth) {
-            return [childIdx, true];
-        } else if (sx < iconX){
-            return [childIdx, false];
-        } else if (sx > cx + iconWidth) {
-            return [childIdx + 1, false];
+            // We are on an icon in the grid
+            return [childIdx, CursorLocation.ON_ICON];
+        } else if (sx < iconX && sx > leftEdge){
+            // We are between two icons in the grid
+            return [childIdx, CursorLocation.DEFAULT];
+        } else if (sx > cx + iconWidth && childIdx < children.length - 1) {
+            // We are on the right side of an icon
+            let cursorLocation = CursorLocation.DEFAULT;
+            if (iconRightEdge > usedWidth) {
+                // We are beyond the rightmost icon on the grid
+                cursorLocation = CursorLocation.RIGHT_EDGE;
+            }
+
+            return [childIdx + 1, cursorLocation];
         }
 
-        // This should never be reached, but Javascript complains
-        // if it is not here.
-        return [-1, false];
+        // We are left of the leftmost icon on the row
+        return [childIdx, CursorLocation.LEFT_EDGE];
     }
 });
