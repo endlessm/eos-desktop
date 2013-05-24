@@ -304,8 +304,10 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.CONTINUE;
         }
 
-        let [idx, onIcon] = this._grid.canDropAt(dragEvent.x, dragEvent.y,
-                                                 this._insertIdx);
+        let [idx, cursorLocation] = this._grid.canDropAt(dragEvent.x,
+                                                         dragEvent.y,
+                                                         this._insertIdx
+                                                        );
 
         // If we are not over our last hovered icon, remove its hover state
         if (this._onIconIdx != null && idx != this._onIconIdx) {
@@ -320,7 +322,7 @@ const AllView = new Lang.Class({
         }
 
         // Update our insert index and if we are currently on an icon
-        this._onIcon = onIcon;
+        this._onIcon = cursorLocation == IconGrid.CursorLocation.ON_ICON;
         this._onIconIdx = idx;
 
         // If we are hovering over our own icon placeholder, ignore it
@@ -331,7 +333,7 @@ const AllView = new Lang.Class({
         }
 
         // If we are hovering over an icon, make sure that it has focus
-        if (onIcon) {
+        if (this._onIcon) {
             this._setHoverStateOf(this._onIconIdx, true);
 
             return DND.DragMotionResult.COPY_DROP;
@@ -346,20 +348,21 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.NO_DROP;
         }
 
-        this._nudgeItemsAtIndex(this._insertIdx, this._originalIdx, isNewPosition);
+        this._nudgeItemsAtIndex(this._insertIdx,
+                                this._originalIdx,
+                                cursorLocation,
+                                isNewPosition
+                               );
 
         return DND.DragMotionResult.MOVE_DROP;
     },
 
-    _nudgeItemsAtIndex: function(index, originalIdx, isNewPosition) {
-        // Take into account placeholder icon
-        if (index >= originalIdx) {
-            index++;
-        }
-
+    _nudgeItemsAtIndex: function(index, originalIdx, cursorLocation, isNewPosition) {
         // Only animate if we are at a new position
         if (isNewPosition) {
-            this._grid.nudgeItemsAtIndex(index);
+            // Take into account placeholder icon
+            let isAfterPlaceholder = index >= originalIdx;
+            this._grid.nudgeItemsAtIndex(index, cursorLocation, isAfterPlaceholder);
         }
     },
 
