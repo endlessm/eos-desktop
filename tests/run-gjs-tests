@@ -147,14 +147,23 @@ let _getFilesToTest = function(testDirectory){
 let _executeAllTests = function(filesToTest) {
     let results = Array();
     filesToTest.forEach(function(file){
-        let dirName = '-shell/';
+        let dirName1 = '-shell/';
         let dirName2 = '-shell-test/';
+        let dirName3 = '-shell-dev/';
+        let dirName4 = '-shell-test-dev/';
         let filePath = "";
 
-        if (file.indexOf(dirName) > 0){
-            filePath = file.substring(file.indexOf(dirName) + dirName.length - 1, file.length);
-        } else {
+        if (file.indexOf(dirName1) > 0) {
+            filePath = file.substring(file.indexOf(dirName1) + dirName1.length - 1, file.length);
+        } else if (file.indexOf(dirName2) > 0) {
             filePath = file.substring(file.indexOf(dirName2) + dirName2.length - 1, file.length);
+        } else if (file.indexOf(dirName3) > 0) {
+            filePath = file.substring(file.indexOf(dirName3) + dirName3.length - 1, file.length);
+        } else if (file.indexOf(dirName4) > 0) {
+            filePath = file.substring(file.indexOf(dirName4) + dirName4.length - 1, file.length);
+        } else {
+            print("Unexpected file path: " + file);
+            filePath = file;
         }
 
         print("Testing: " + file);
