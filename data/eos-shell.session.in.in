@@ -1,6 +1,4 @@
 [GNOME Session]
 _Name=EndlessOS
 RequiredComponents=eos-shell;gnome-settings-daemon;
-IsRunnableHelper=@LIBDIR@/gnome-session/gnome-session-check-accelerated
-FallbackSession=gnome-fallback
 DesktopName=GNOME

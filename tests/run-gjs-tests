@@ -37,6 +37,19 @@ window.C_=function(type,text){
 window._=window.C_;
 window.global={};
 
+//Overrides for EOS custom methods
+window.global.settings={};
+window.global.settings.connect=function() {};
+
+let mock_value={};
+mock_value.n_children=function() {
+                         return 0;
+                     };
+
+window.global.settings.get_value=function() {
+                                     return mock_value;
+                                 };
+
 let _printColorized = function(color, text){
     print(color + text + ANSI_CLOSE);
 }
@@ -134,8 +147,25 @@ let _getFilesToTest = function(testDirectory){
 let _executeAllTests = function(filesToTest) {
     let results = Array();
     filesToTest.forEach(function(file){
-        let dirName = '-shell/'
-        let filePath =  file.substring(file.indexOf(dirName) + dirName.length - 1, file.length);
+        let dirName1 = '-shell/';
+        let dirName2 = '-shell-test/';
+        let dirName3 = '-shell-dev/';
+        let dirName4 = '-shell-test-dev/';
+        let filePath = "";
+
+        if (file.indexOf(dirName1) > 0) {
+            filePath = file.substring(file.indexOf(dirName1) + dirName1.length - 1, file.length);
+        } else if (file.indexOf(dirName2) > 0) {
+            filePath = file.substring(file.indexOf(dirName2) + dirName2.length - 1, file.length);
+        } else if (file.indexOf(dirName3) > 0) {
+            filePath = file.substring(file.indexOf(dirName3) + dirName3.length - 1, file.length);
+        } else if (file.indexOf(dirName4) > 0) {
+            filePath = file.substring(file.indexOf(dirName4) + dirName4.length - 1, file.length);
+        } else {
+            print("Unexpected file path: " + file);
+            filePath = file;
+        }
+
         print("Testing: " + file);
         results = results.concat(_executeTestsForFile(filePath));
     });

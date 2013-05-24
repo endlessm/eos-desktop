@@ -9,6 +9,8 @@ const Params = imports.misc.params;
 
 const ICON_SIZE = 48;
 
+const LEFT_DIVIDER_LEEWAY = 30;
+const RIGHT_DIVIDER_LEEWAY = 20;
 
 const BaseIcon = new Lang.Class({
     Name: 'BaseIcon',
@@ -286,6 +288,9 @@ const IconGrid = new Lang.Class({
                 leftPadding = availWidth - usedWidth;
         }
 
+        // Store this so we know where the icon grid starts
+        this._leftPadding = leftPadding;
+
         let x = box.x1 + leftPadding;
         let y = box.y1;
         let columnIndex = 0;
@@ -378,11 +383,105 @@ const IconGrid = new Lang.Class({
             this._grid.add_actor(actor);
     },
 
+    removeItem: function(actor) {
+        this._grid.remove_actor(actor);
+    },
+
     getItemAtIndex: function(index) {
         return this._grid.get_child_at_index(index);
     },
 
+    indexOf: function(item) {
+        let children = this._getVisibleChildren();
+        for (let i = 0; i < children.length; i++) {
+            if (item == children[i]) {
+                return i;
+            }
+        }
+
+        return -1;
+    },
+
     visibleItemsCount: function() {
         return this._grid.get_n_children() - this._grid.get_n_skip_paint();
+    },
+
+    // DnD support
+
+    // Returns the drop point index or -1 if we can't drop there
+    canDropAt: function(x, y, currentInsertIdx) {
+        let [sw, sh] = this.actor.get_transformed_size();
+        let [ok, sx, sy] = this.actor.transform_stage_point(x, y);
+
+        let [nColumns, usedWidth, spacing] = this._computeLayout(sw);
+
+        let row = Math.floor(sy / (this._vItemSize + spacing));
+
+        // Correct sx to handle the left padding
+        // to correctly calculate the column
+        let gridx = sx - this._leftPadding;
+        let column = Math.floor(gridx / (this._hItemSize + spacing));
+
+        let children = this._getVisibleChildren();
+        let childIdx;
+
+        // If we're outside of the grid, find out where we should be
+        if (gridx < 0) {
+            column = 0;
+        } else if (gridx > usedWidth) {
+            column = 0;
+            row += 1;
+        }
+
+        childIdx = Math.min((row * nColumns) + column, children.length);
+
+        // If we're above the grid vertically, we are in an invalid drop location
+        if (childIdx < 0) {
+            return [-1, false];
+        }
+
+        // If we're to the right of the screen, we assume icon is wanted on
+        // the right edge. We also need to make sure that we don't return a bad
+        // location if the childIdx >= children.length
+        if (gridx > usedWidth) {
+            return [childIdx, false];
+        }
+
+        // If we're below the grid vertically, we are in an invalid drop location
+        if (childIdx >= children.length) {
+            return [-1, false];
+        }
+
+        let child = children[childIdx];
+        let [childMinWidth, childMinHeight, childNaturalWidth, childNaturalHeight] = child.get_preferred_size();
+        let [cx, cy] = child.get_position();
+
+        // This is the width of the icon inside the 128x128 grid square
+        let childIconWidth = Math.min(this._hItemSize, childNaturalWidth);
+
+        // childIconWidth is used to determine whether or not a drag point
+        // is inside the icon or the divider.
+
+        // Reduce the size of the icon area further by only having it start
+        // further in. if the drop point is in those initial pixels
+        // then the drop point is the current icon
+        //
+        // Increasing cx and decreasing childIconWidth gives a greater priority
+        // to rearranging icons on the desktop vs putting them into folders
+        // Decreasing cx and increasing childIconWidth gives a greater priority
+        // to putting icons in folders vs rearranging them on the desktop
+        let iconX = cx + LEFT_DIVIDER_LEEWAY;
+        let iconWidth = childIconWidth - RIGHT_DIVIDER_LEEWAY;
+        if (sx >= iconX && sx <= cx + iconWidth) {
+            return [childIdx, true];
+        } else if (sx < iconX){
+            return [childIdx, false];
+        } else if (sx > cx + iconWidth) {
+            return [childIdx + 1, false];
+        }
+
+        // This should never be reached, but Javascript complains
+        // if it is not here.
+        return [-1, false];
     }
 });

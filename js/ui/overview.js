@@ -434,15 +434,15 @@ const Overview = new Lang.Class({
     //// Public methods ////
 
     beginItemDrag: function(source) {
-        this.emit('item-drag-begin');
+        this.emit('item-drag-begin', source);
     },
 
     cancelledItemDrag: function(source) {
-        this.emit('item-drag-cancelled');
+        this.emit('item-drag-cancelled', source);
     },
 
     endItemDrag: function(source) {
-        this.emit('item-drag-end');
+        this.emit('item-drag-end', source);
     },
 
     beginWindowDrag: function(source) {

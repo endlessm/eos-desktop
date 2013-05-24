@@ -439,7 +439,7 @@ StScrollBar StButton#vhandle:active {
 #panel {
     background-color: black;
     font-weight: bold;
-    height: 1.86em;
+    height: 30px;
 }
 
 #panel.lock-screen {
@@ -465,6 +465,7 @@ StScrollBar StButton#vhandle:active {
 
 #panelRight:ltr {
     padding-left: 4px;
+    padding-right: 6px;
 }
 
 #panelRight:rtl {
@@ -516,11 +517,15 @@ StScrollBar StButton#vhandle:active {
 }
 
 .panel-button {
-    -natural-hpadding: 12px;
-    -minimum-hpadding: 6px;
+    -natural-hpadding: 10px;
+    -minimum-hpadding: 10px;
     font-weight: bold;
     color: #ccc;
     transition-duration: 100ms;
+}
+
+#appIconBar {
+    padding-left: 6px;
 }
 
 #panel.unlock-screen .panel-button,
@@ -863,7 +868,7 @@ StScrollBar StButton#vhandle:active {
 /* Application Launchers, Grid and List results */
 
 .icon-grid {
-    spacing: 0px;
+    spacing: 10px;
     -shell-grid-horizontal-item-size: 118px;
     -shell-grid-vertical-item-size: 118px;
 }

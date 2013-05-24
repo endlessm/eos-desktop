@@ -5,7 +5,6 @@ const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
-const GMenu = imports.gi.GMenu;
 const Shell = imports.gi.Shell;
 const Lang = imports.lang;
 const Signals = imports.signals;
@@ -16,15 +15,17 @@ const Atk = imports.gi.Atk;
 
 const AppFavorites = imports.ui.appFavorites;
 const BoxPointer = imports.ui.boxpointer;
+const ButtonConstants = imports.ui.buttonConstants;
 const DND = imports.ui.dnd;
 const IconGrid = imports.ui.iconGrid;
+const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
+const ModalDialog = imports.ui.modalDialog;
 const Overview = imports.ui.overview;
 const OverviewControls = imports.ui.overviewControls;
 const PopupMenu = imports.ui.popupMenu;
 const Tweener = imports.ui.tweener;
 const Workspace = imports.ui.workspace;
-const ButtonConstants = imports.ui.buttonConstants;
 const Params = imports.misc.params;
 const Util = imports.misc.util;
 
@@ -34,34 +35,6 @@ const MAX_COLUMNS = 7;
 
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
-
-// Recursively load a GMenuTreeDirectory; we could put this in ShellAppSystem too
-function _loadCategory(dir, view) {
-    let iter = dir.iter();
-    let appSystem = Shell.AppSystem.get_default();
-    let nextType;
-    while ((nextType = iter.next()) != GMenu.TreeItemType.INVALID) {
-        if (nextType == GMenu.TreeItemType.ENTRY) {
-            let entry = iter.get_entry();
-            let app = appSystem.lookup_app_by_tree_entry(entry);
-            if (!entry.get_app_info().get_nodisplay())
-                view.addApp(app);
-        } else if (nextType == GMenu.TreeItemType.DIRECTORY) {
-            let itemDir = iter.get_directory();
-            if (!itemDir.get_is_nodisplay())
-                _loadCategory(itemDir, view);
-        }
-    }
-
-};
-
-function getAppFromSource(source) {
-    if (source instanceof AppIcon) {
-        return source.app;
-    } else {
-        return null;
-    }
-}
 
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
@@ -85,14 +58,10 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     _getItemId: function(item) {
-        throw new Error('Not implemented');
+        return item.get_id();
     },
 
     _createItemIcon: function(item) {
-        throw new Error('Not implemented');
-    },
-
-    _compareItems: function(a, b) {
         throw new Error('Not implemented');
     },
 
@@ -101,11 +70,35 @@ const EndlessApplicationView = new Lang.Class({
         if (this._items[id] !== undefined) {
             return null;
         }
+
         let itemIcon = this._createItemIcon(item);
         this._allItems.push(item);
         this._items[id] = itemIcon;
 
         return itemIcon;
+    },
+
+    _removeItem: function(item) {
+        let id = this._getItemId(item);
+        if (this._items[id] === undefined) {
+            return;
+        }
+
+        delete this._items[id];
+
+        let idx = this._allItems.indexOf(item);
+        if (idx != -1) {
+            this._allItems.splice(idx, 1);
+        }
+    },
+
+    _showItem: function(item) {
+        let id = this._getItemId(item);
+        if (this._items[id] === undefined) {
+            return;
+        }
+
+        this._items[id].actor.show();
     },
 
     loadGrid: function() {
@@ -129,16 +122,8 @@ const FolderView = new Lang.Class({
         this.actor = this._grid.actor;
     },
 
-    _getItemId: function(item) {
-        return item.get_id();
-    },
-
     _createItemIcon: function(item) {
-        return new AppIcon(item);
-    },
-
-    _compareItems: function(a, b) {
-        return a.compare_by_name(b);
+        return new AppIcon(item, null, { showMenu: false });
     },
 
     addApp: function(app) {
@@ -217,6 +202,8 @@ const AllView = new Lang.Class({
                                          y_expand: true,
                                          overlay_scrollbars: true,
                                          style_class: 'all-apps vfade' });
+        this.actor._delegate = this;
+
         this.actor.add_actor(box);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         let action = new Clutter.PanAction({ interpolate: true });
@@ -225,6 +212,7 @@ const AllView = new Lang.Class({
 
         Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
+        Main.overview.connect('item-drag-cancelled', Lang.bind(this, this._onDragCancelled));
 
         this._clickAction = new Clutter.ClickAction();
         this._clickAction.connect('clicked', Lang.bind(this, function() {
@@ -240,8 +228,6 @@ const AllView = new Lang.Class({
 
         }));
         this._eventBlocker.add_action(this._clickAction);
-
-        this._appStoreIcon = new AppStoreIcon();
     },
 
     _onPan: function(action) {
@@ -253,48 +239,181 @@ const AllView = new Lang.Class({
         return false;
     },
 
-    _getItemId: function(item) {
-        if (item instanceof Shell.App) {
-            return item.get_id();
-        } else if (item instanceof GMenu.TreeDirectory) {
-            return item.get_menu_id();
+    _onDragBegin: function(overview, source) {
+        let index = this._grid.indexOf(source.actor);
+        if (index == -1) {
+            // Dragging an icon from dash
+            this._eventBlocker.hide();
         } else {
-            return null;
+            // Dragging an icon from grid
+            // Save the currently dragged item info
+            this._dragItem = source;
+            this._originalIdx = index;
+
+            this._insertIdx = -1;
+
+            // Replace the dragged icon with an empty placeholder
+            source.actor.hide();
+            this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
+                                                can_focus: false,
+                                                x_fill: true,
+                                                y_fill: true });
+            this._grid.addItem(this._insertActor, this._originalIdx);
+
+            this._eventBlocker.hide();
+
+            this._dragCancelled = false;
+            this._dragMonitor = {
+                dragMotion: Lang.bind(this, this._onDragMotion)
+            };
+            DND.addDragMonitor(this._dragMonitor);
         }
     },
-    _onDragBegin: function() {
-        this._eventBlocker.hide();
-    },
-    _onDragEnd: function() {
+
+    _onDragEnd: function(overview, source) {
         this._eventBlocker.show();
+
+        source.actor.show();
+        if (this._insertActor != null) {
+            this._grid.removeItem(this._insertActor);
+            this._insertActor = null;
+            this._insertIdx = -1;
+            this._originalIdx = -1;
+            this._dragItem = undefined;
+        }
+
+        DND.removeDragMonitor(this._dragMonitor);
     },
+
+    _onDragCancelled: function(overview, source) {
+        source.actor.show();
+        if (this._insertActor != null) {
+            this._grid.removeItem(this._insertActor);
+            this._insertActor = null;
+        }
+
+        this._onDragEnd(overview, source);
+    },
+
+    _onDragMotion: function(dragEvent) {
+        // Ask grid can we drop here
+
+        // Handle motion over grid
+        if(!this.actor.contains(dragEvent.targetActor)) {
+            return DND.DragMotionResult.CONTINUE;
+        }
+
+        let [idx, onIcon] = this._grid.canDropAt(dragEvent.x, dragEvent.y,
+                                                 this._insertIdx);
+
+        // If we are not over our last hovered icon, remove its hover state
+        if (this._onIconIdx != null && idx != this._onIconIdx) {
+            this._setHoverStateOf(this._onIconIdx, false)
+        }
+
+        // Update our insert index and if we are currently on an icon
+        this._onIcon = onIcon;
+        this._onIconIdx = idx;
+
+        // If we are hovering over our own icon placeholder, ignore it
+        if (this._originalIdx == this._onIconIdx) {
+            this._insertIdx = -1;
+
+            return DND.DragMotionResult.NO_DROP;
+        }
+
+        // If we are hovering over an icon, make sure that it has focus
+        if (onIcon) {
+            this._setHoverStateOf(this._onIconIdx, true);
+
+            return DND.DragMotionResult.COPY_DROP;
+        }
+
+        // If we are not over any icon, update the insert index so that
+        // if the icon is released we know where to place it
+        this._insertIdx = idx;
+
+        // If we are outside of the grid make sure that our DnD icon is NO_DROP
+        if (this._insertIdx == -1) {
+            return DND.DragMotionResult.NO_DROP;
+        } else {
+            // If we are within the grid our icon should show that the move is allowed
+            return DND.DragMotionResult.MOVE_DROP;
+        }
+    },
+
+    _setHoverStateOf: function(itemIdx, state) {
+        let item = this._allItems[itemIdx];
+
+        // If the item cannot be found, ignore it
+        if (item != null) {
+            this._items[this._getItemId(item)].actor.set_hover(state);
+        }
+    },
+
+    acceptDrop: function(source, actor, x, y, time) {
+        // Get the id of the icon dragged
+        let originalId = this._getIdFromIndex(this._originalIdx);
+
+        if (this._onIcon) {
+            // Find out what icon the drop is under
+            let id = this._getIdFromIndex(this._onIconIdx);
+            if (!id) {
+                source.actor.show();
+                return true;
+            }
+
+            // If we are dropping an icon on another icon, cancel the request
+            let dropIcon = this._items[id];
+            if (!(dropIcon instanceof FolderIcon)) {
+                source.actor.show();
+                return true;
+            }
+
+            // If we are hovering over a folder, the icon needs to be moved
+            let insertId = this._getIdFromIndex(this._insertIdx);
+            let newFolder = dropIcon._dir.get_name();
+            IconGridLayout.layout.repositionIcon("", originalId,
+                                                 insertId,
+                                                 newFolder);
+            return true;
+        } else {
+            // If we are not over an icon and we are outside of the grid area,
+            // ignore the request to move
+            if (this._insertIdx == -1) {
+                source.actor.show();
+                return false;
+            } else {
+                // If we are not over an icon but within the grid, shift the
+                // grid around to accomodate it
+                let insertId = this._getIdFromIndex(this._insertIdx);
+                IconGridLayout.layout.repositionIcon("", originalId,
+                                                     insertId, "");
+                return true;
+            }
+        }
+    },
+
+    _getIdFromIndex: function(index){
+       let item = this._allItems[index];
+       if (item) {
+           return this._getItemId(item);
+       }
+       return null;
+    },
+
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
-            return new AppIcon(item);
-        } else if (item instanceof GMenu.TreeDirectory) {
-            return new FolderIcon(item, this);
+            return new AppIcon(item, null, { showMenu: false });
         } else {
-            return null;
+            return new FolderIcon(item, this);
         }
-    },
-
-    _compareItems: function(itemA, itemB) {
-        // bit of a hack: rely on both ShellApp and GMenuTreeDirectory
-        // having a get_name() method
-        if (itemA.get_name() == "")
-            return 1;
-        if (itemB.get_name() == "")
-            return -1;
-
-        let nameA = GLib.utf8_collate_key(itemA.get_name(), -1);
-        let nameB = GLib.utf8_collate_key(itemB.get_name(), -1);
-        return (nameA > nameB) ? 1 : (nameA < nameB ? -1 : 0);
     },
 
     loadGrid: function() {
         this.parent();
 
-        this._grid.addItem(this._appStoreIcon.actor);
+        this._grid.addItem((new AppStoreIcon()).actor);
     },
 
     addApp: function(app) {
@@ -385,6 +504,10 @@ const AppDisplay = new Lang.Class({
             Main.queueDeferredWork(this._allAppsWorkId);
         }));
 
+        IconGridLayout.layout.connect('changed', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+
         this._views = [];
 
         let view, button;
@@ -465,25 +588,23 @@ const AppDisplay = new Lang.Class({
 
     _redisplayAllApps: function() {
         let view = this._views[Views.ALL].view;
-
         view.removeAll();
 
-        let tree = this._appSystem.get_tree();
-        let root = tree.get_root_directory();
+        let topLevelIcons = IconGridLayout.layout.getIcons();
 
-        let iter = root.iter();
-        let nextType;
-        let folderCategories = global.settings.get_strv('app-folder-categories');
-        while ((nextType = iter.next()) != GMenu.TreeItemType.INVALID) {
-            if (nextType == GMenu.TreeItemType.DIRECTORY) {
-                let dir = iter.get_directory();
-                if (dir.get_is_nodisplay())
-                    continue;
+        for (let i = 0; i < topLevelIcons.length; i++) {
+            let itemId = topLevelIcons[i];
 
-                if (folderCategories.indexOf(dir.get_menu_id()) != -1)
-                    view.addFolder(dir);
-                else
-                    _loadCategory(dir, view);
+            if (IconGridLayout.layout.iconIsFolder(itemId)) {
+                view.addFolder({
+                    get_id: function() { return itemId; },
+                    get_name: function() { return itemId; },
+                });
+            } else {
+                let app = this._appSystem.lookup_app(itemId);
+                if (app) {
+                    view.addApp(app);
+                }
             }
         }
         view.loadGrid();
@@ -577,7 +698,7 @@ const FolderIcon = new Lang.Class({
 
         this.view = new FolderView();
         this.view.actor.reactive = false;
-        _loadCategory(dir, this.view);
+        this._loadCategory(dir, this.view);
         this.view.loadGrid();
 
         this.actor.connect('clicked', Lang.bind(this,
@@ -590,6 +711,22 @@ const FolderIcon = new Lang.Class({
                 if (!this.actor.mapped && this._popup)
                     this._popup.popdown();
             }));
+    },
+
+    _loadCategory: function(dir) {
+        let appSystem = Shell.AppSystem.get_default();
+
+        let icons = IconGridLayout.layout.getIcons(dir.get_id());
+        if (! icons) {
+            return;
+        }
+
+        for (let i = 0; i < icons.length; i++) {
+            let app = appSystem.lookup_app(icons[i]);
+            if (app) {
+                this.view.addApp(app);
+            }
+        }
     },
 
     _createIcon: function(size) {
@@ -956,7 +1093,7 @@ const AppIcon = new Lang.Class({
     // we show as the item is being dragged.
     getDragActorSource: function() {
         return this.icon.icon;
-    }
+    },
 });
 Signals.addSignalMethods(AppIcon.prototype);
 
@@ -975,7 +1112,7 @@ const AppStore = new Lang.Class({
     },
 
     activate: function(){
-        Util.spawn(["eos_app_store"]);
+        Util.spawn(["eos-app-store"]);
     }
 });
 
@@ -1038,6 +1175,14 @@ const AppStoreIcon = new Lang.Class({
         return false;
     },
 
+    _getAppFromSource: function(source) {
+        if (source instanceof AppIcon) {
+            return source.app;
+        } else {
+            return null;
+        }
+    },
+
     _onDragBegin: function() {
         this.actor.set_child(this.empty_trash_icon.actor);
         this._dragCancelled = false;
@@ -1053,7 +1198,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onDragMotion: function(dragEvent) {
-        let app = getAppFromSource(dragEvent.source);
+        let app = this._getAppFromSource(dragEvent.source);
         if (app == null) {
             return DND.DragMotionResult.CONTINUE;
         }
@@ -1070,7 +1215,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     handleDragOver: function(source, actor, x, y, time) {
-        let app = getAppFromSource(source);
+        let app = this._getAppFromSource(source);
         if (app == null) {
             return DND.DragMotionResult.NO_DROP;
         }
@@ -1086,13 +1231,32 @@ const AppStoreIcon = new Lang.Class({
 
         let id = app.get_id();
 
+        let dialog = new ModalDialog.ModalDialog();
+        let subjectLabel = new St.Label({ text: _("Delete?") });
+        dialog.contentLayout.add(subjectLabel, { y_fill: true,
+                                                 y_align: St.Align.START });
+        let noButton = { label: _("No"),
+                         action: Lang.bind(this, function() {
+                             dialog.close();
+                             source.actor.show();
+                         }),
+                         key: Clutter.Escape };
+        let yesButton = { label: _("Yes"),
+                          action: Lang.bind(this, function() {
+                              dialog.close();
+                              IconGridLayout.layout.repositionIcon("", id, 0, null);
+                          }),
+                          default: true };
+        dialog.setButtons([yesButton, noButton]);
+        dialog.open();
+
         Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this,
             function () {
                 return false;
             }));
 
         return true;
-    }
+    },
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
 

@@ -57,6 +57,7 @@ nobase_dist_js_DATA = 	\
 	ui/ibusCandidatePopup.js\
 	ui/grabHelper.js	\
 	ui/iconGrid.js		\
+	ui/iconGridLayout.js	\
 	ui/keyboard.js		\
 	ui/layout.js		\
 	ui/lightbox.js		\
@@ -93,6 +94,7 @@ nobase_dist_js_DATA = 	\
 	ui/status/power.js	\
 	ui/status/volume.js	\
 	ui/status/bluetooth.js	\
+	ui/status/social.js	\
 	ui/switcherPopup.js	\
 	ui/tweener.js		\
 	ui/unlockDialog.js	\
