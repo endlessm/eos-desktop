@@ -59,7 +59,7 @@ const IconGridLayout = new Lang.Class({
         if (icons) {
             let oldPos = icons.indexOf(id);
             if (oldPos != -1) {
-                icons.splice(oldPos, 0);
+                icons.splice(oldPos, 1);
             }
         }
 
@@ -71,11 +71,8 @@ const IconGridLayout = new Lang.Class({
             }
         }
 
-        // If the icon was over the trashcan, remove it
-        if (insertId == 0) {
-            icons.splice(icons.indexOf(id), 1);
-        } else {
-            // Otherwise insert it into the new position
+        // If the icon was not over the trashcan, insert it
+        if (insertId != 0) {
             this._insertIcon(icons, id, insertId);
         }
 
