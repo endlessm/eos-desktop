@@ -405,11 +405,8 @@ const IconGrid = new Lang.Class({
         return this._grid.get_child_at_index(index);
     },
 
-    nudgeItemsAtIndex: function(index, cursorLocation, isAfterPlaceholder) {
+    nudgeItemsAtIndex: function(index, cursorLocation) {
         let nudgeIdx = index;
-        if (isAfterPlaceholder) {
-            nudgeIdx++;
-        }
 
         if (cursorLocation != CursorLocation.LEFT_EDGE) {
             let leftItem = this.getItemAtIndex(nudgeIdx - 1);

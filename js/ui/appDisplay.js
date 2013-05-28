@@ -248,17 +248,17 @@ const AllView = new Lang.Class({
             // Dragging an icon from grid
             // Save the currently dragged item info
             this._dragItem = source;
+            this._dragActor = source.actor.get_child();
             this._originalIdx = index;
 
             this._insertIdx = -1;
 
             // Replace the dragged icon with an empty placeholder
-            source.actor.hide();
             this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
                                                 can_focus: false,
                                                 x_fill: true,
                                                 y_fill: true });
-            this._grid.addItem(this._insertActor, this._originalIdx);
+            source.actor.set_child(this._insertActor);
 
             this._eventBlocker.hide();
 
@@ -274,20 +274,21 @@ const AllView = new Lang.Class({
         this._grid.removeNudgeTransforms();
         this._eventBlocker.show();
 
-        source.actor.show();
+        source.actor.set_child(this._dragActor);
         if (this._insertActor != null) {
             this._grid.removeItem(this._insertActor);
             this._insertActor = null;
             this._insertIdx = -1;
             this._originalIdx = -1;
             this._dragItem = undefined;
+            this._dragActor = undefined;
         }
 
         DND.removeDragMonitor(this._dragMonitor);
     },
 
     _onDragCancelled: function(overview, source) {
-        source.actor.show();
+        source.actor.set_child(this._dragActor);
         if (this._insertActor != null) {
             this._grid.removeItem(this._insertActor);
             this._insertActor = null;
@@ -348,22 +349,11 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.NO_DROP;
         }
 
-        this._nudgeItemsAtIndex(this._insertIdx,
-                                this._originalIdx,
-                                cursorLocation,
-                                isNewPosition
-                               );
+        if (isNewPosition) {
+            this._grid.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
+        }
 
         return DND.DragMotionResult.MOVE_DROP;
-    },
-
-    _nudgeItemsAtIndex: function(index, originalIdx, cursorLocation, isNewPosition) {
-        // Only animate if we are at a new position
-        if (isNewPosition) {
-            // Take into account placeholder icon
-            let isAfterPlaceholder = index >= originalIdx;
-            this._grid.nudgeItemsAtIndex(index, cursorLocation, isAfterPlaceholder);
-        }
     },
 
     _setHoverStateOf: function(itemIdx, state) {
@@ -383,14 +373,14 @@ const AllView = new Lang.Class({
             // Find out what icon the drop is under
             let id = this._getIdFromIndex(this._onIconIdx);
             if (!id) {
-                source.actor.show();
+                source.actor.set_child(this._dragActor);
                 return true;
             }
 
             // If we are dropping an icon on another icon, cancel the request
             let dropIcon = this._items[id];
             if (!(dropIcon instanceof FolderIcon)) {
-                source.actor.show();
+                source.actor.set_child(this._dragActor);
                 return true;
             }
 
@@ -405,7 +395,7 @@ const AllView = new Lang.Class({
             // If we are not over an icon and we are outside of the grid area,
             // ignore the request to move
             if (this._insertIdx == -1) {
-                source.actor.show();
+                source.actor.set_child(this._dragActor);
                 return false;
             } else {
                 // If we are not over an icon but within the grid, shift the
@@ -1262,7 +1252,6 @@ const AppStoreIcon = new Lang.Class({
         let noButton = { label: _("No"),
                          action: Lang.bind(this, function() {
                              dialog.close();
-                             source.actor.show();
                          }),
                          key: Clutter.Escape };
         let yesButton = { label: _("Yes"),
