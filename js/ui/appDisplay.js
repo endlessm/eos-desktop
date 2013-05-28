@@ -397,7 +397,7 @@ const AllView = new Lang.Class({
             // If we are hovering over a folder, the icon needs to be moved
             let insertId = this._getIdFromIndex(this._insertIdx);
             let newFolder = dropIcon._dir.get_name();
-            IconGridLayout.layout.repositionIcon("", originalId,
+            IconGridLayout.layout.repositionIcon(originalId,
                                                  insertId,
                                                  newFolder);
             return true;
@@ -411,7 +411,7 @@ const AllView = new Lang.Class({
                 // If we are not over an icon but within the grid, shift the
                 // grid around to accomodate it
                 let insertId = this._getIdFromIndex(this._insertIdx);
-                IconGridLayout.layout.repositionIcon("", originalId,
+                IconGridLayout.layout.repositionIcon(originalId,
                                                      insertId, "");
                 return true;
             }
@@ -1268,7 +1268,7 @@ const AppStoreIcon = new Lang.Class({
         let yesButton = { label: _("Yes"),
                           action: Lang.bind(this, function() {
                               dialog.close();
-                              IconGridLayout.layout.repositionIcon("", id, 0, null);
+                              IconGridLayout.layout.repositionIcon(id, 0, null);
                           }),
                           default: true };
         dialog.setButtons([yesButton, noButton]);

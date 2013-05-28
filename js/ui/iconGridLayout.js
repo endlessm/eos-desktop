@@ -52,14 +52,14 @@ const IconGridLayout = new Lang.Class({
         return id && this._iconTree[id];
     },
 
-    repositionIcon: function(folder, id, insertId, newFolder) {
-        folder = folder || "";
-
-        let icons = this._iconTree[folder];
-        if (icons) {
+    repositionIcon: function(id, insertId, newFolder) {
+        let icons;
+        for (let i in this._iconTree) {
+            icons = this._iconTree[i];
             let oldPos = icons.indexOf(id);
             if (oldPos != -1) {
                 icons.splice(oldPos, 1);
+                break;
             }
         }
 
@@ -69,11 +69,10 @@ const IconGridLayout = new Lang.Class({
                 // invalid destination folder
                 return;
             }
-        }
-
-        // If the icon was not over the trashcan, insert it
-        if (insertId != 0) {
-            this._insertIcon(icons, id, insertId);
+            // If the icon was not over the trashcan, insert it
+            if (insertId != 0) {
+                this._insertIcon(icons, id, insertId);
+            }
         }
 
         // Recreate GVariant from iconTree
