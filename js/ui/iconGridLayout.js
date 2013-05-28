@@ -69,10 +69,7 @@ const IconGridLayout = new Lang.Class({
                 // invalid destination folder
                 return;
             }
-            // If the icon was not over the trashcan, insert it
-            if (insertId != 0) {
-                this._insertIcon(icons, id, insertId);
-            }
+            this._insertIcon(icons, id, insertId);
         }
 
         // Recreate GVariant from iconTree

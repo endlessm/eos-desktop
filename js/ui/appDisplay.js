@@ -118,8 +118,9 @@ const FolderView = new Lang.Class({
     Name: 'FolderView',
     Extends: EndlessApplicationView,
 
-    _init: function() {
+    _init: function(folderIcon) {
         this.parent();
+        this.folderIcon = folderIcon;
         this.actor = this._grid.actor;
     },
 
@@ -251,6 +252,7 @@ const AllView = new Lang.Class({
             this._dragItem = source;
             this._dragActor = source.actor.get_child();
             this._originalIdx = index;
+            this._dragView = undefined;
 
             this._insertIdx = -1;
 
@@ -272,7 +274,7 @@ const AllView = new Lang.Class({
     },
 
     _onDragEnd: function(overview, source) {
-        this._grid.removeNudgeTransforms();
+        source.parentView._grid.removeNudgeTransforms();
         this._eventBlocker.show();
 
         source.actor.set_child(this._dragActor);
@@ -283,6 +285,7 @@ const AllView = new Lang.Class({
             this._originalIdx = -1;
             this._dragItem = undefined;
             this._dragActor = undefined;
+            this._dragView = undefined;
         }
 
         DND.removeDragMonitor(this._dragMonitor);
@@ -299,37 +302,34 @@ const AllView = new Lang.Class({
     },
 
     _onDragMotion: function(dragEvent) {
-        /* Let's ignore for now moving icons inside the popup folder */
-        if (this._dragItem.parentView != this &&
-            this._dragItem.parentView.actor.contains(dragEvent.targetActor)) {
+        /* Handle motion over grid */
+        if (this.actor.contains(dragEvent.targetActor)) {
+            this._dragView = this;
+        }
+
+        if (this._dragItem.parentView.actor.contains(dragEvent.targetActor)) {
+            this._dragView = this._dragItem.parentView;
+        }
+
+        if (this._dragView == undefined) {
             return DND.DragMotionResult.CONTINUE;
         }
 
-        // Handle motion over grid
-        if(!this.actor.contains(dragEvent.targetActor)) {
-            return DND.DragMotionResult.CONTINUE;
-        }
-
-        /* Ignore when hovering over the opened folder */
-        if (this._popup && this._popup._view.actor.contains(dragEvent.targetActor)) {
-            return DND.DragMotionResult.CONTINUE;
-        }
-
-        let [idx, cursorLocation] = this._grid.canDropAt(dragEvent.x,
-                                                         dragEvent.y,
-                                                         this._insertIdx
-                                                        );
+        let [idx, cursorLocation] = this._dragView._grid.canDropAt(dragEvent.x,
+                                                                   dragEvent.y,
+                                                                   this._insertIdx
+                                                                  );
 
         // If we are not over our last hovered icon, remove its hover state
         if (this._onIconIdx != null && idx != this._onIconIdx) {
-            this._setHoverStateOf(this._onIconIdx, false)
+            this._setHoverStateOf(this._dragView, this._onIconIdx, false)
         }
 
         // If we are in a new spot, remove the previous nudges
         let isNewPosition = false;
         if (idx != this._insertIdx) {
             isNewPosition = true;
-            this._grid.removeNudgeTransforms();
+            this._dragView._grid.removeNudgeTransforms();
         }
 
         // Update our insert index and if we are currently on an icon
@@ -345,7 +345,7 @@ const AllView = new Lang.Class({
 
         // If we are hovering over an icon, make sure that it has focus
         if (this._onIcon) {
-            this._setHoverStateOf(this._onIconIdx, true);
+            this._setHoverStateOf(this._dragView, this._onIconIdx, true);
 
             return DND.DragMotionResult.COPY_DROP;
         }
@@ -360,18 +360,18 @@ const AllView = new Lang.Class({
         }
 
         if (isNewPosition) {
-            this._grid.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
+            this._dragView._grid.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
         }
 
         return DND.DragMotionResult.MOVE_DROP;
     },
 
-    _setHoverStateOf: function(itemIdx, state) {
-        let item = this._allItems[itemIdx];
+    _setHoverStateOf: function(view, itemIdx, state) {
+        let item = view._allItems[itemIdx];
 
         // If the item cannot be found, ignore it
         if (item != null) {
-            this._items[this._getItemId(item)].actor.set_hover(state);
+            view._items[view._getItemId(item)].actor.set_hover(state);
         }
     },
 
@@ -381,24 +381,23 @@ const AllView = new Lang.Class({
 
         if (this._onIcon) {
             // Find out what icon the drop is under
-            let id = this._getIdFromIndex(this, this._onIconIdx);
+            let id = this._getIdFromIndex(this._dragView, this._onIconIdx);
             if (!id) {
                 source.actor.set_child(this._dragActor);
                 return true;
             }
 
             // If we are dropping an icon on another icon, cancel the request
-            let dropIcon = this._items[id];
+            let dropIcon = this._dragView._items[id];
             if (!(dropIcon instanceof FolderIcon)) {
                 source.actor.set_child(this._dragActor);
                 return true;
             }
 
             // If we are hovering over a folder, the icon needs to be moved
-            let insertId = this._getIdFromIndex(this, this._insertIdx);
             let newFolder = dropIcon._dir.get_name();
             IconGridLayout.layout.repositionIcon(originalId,
-                                                 insertId,
+                                                 null,
                                                  newFolder);
             return true;
         } else {
@@ -410,9 +409,15 @@ const AllView = new Lang.Class({
             } else {
                 // If we are not over an icon but within the grid, shift the
                 // grid around to accomodate it
-                let insertId = this._getIdFromIndex(this, this._insertIdx);
+                let insertId = this._getIdFromIndex(this._dragView, this._insertIdx);
+                let newFolder;
+                if (this._dragView == this) {
+                    newFolder = "";
+                } else {
+                    newFolder = this._dragView.folderIcon._dir.get_name();
+                }
                 IconGridLayout.layout.repositionIcon(originalId,
-                                                     insertId, "");
+                                                     insertId, newFolder);
                 return true;
             }
         }
@@ -720,7 +725,7 @@ const FolderIcon = new Lang.Class({
         this.actor.set_child(this.icon.actor);
         this.actor.label_actor = this.icon.label;
 
-        this.view = new FolderView();
+        this.view = new FolderView(this);
         this.view.actor.reactive = false;
 
         this.view.removeAll();
