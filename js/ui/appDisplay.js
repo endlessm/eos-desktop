@@ -795,7 +795,6 @@ const FolderIcon = new Lang.Class({
     _reposition: function(side, spaceTop, spaceBottom) {
         let [sourceX, sourceY] = this.actor.get_transformed_position();
         let [sourceXP, sourceYP] = this._parentView.actor.get_transformed_position();
-        let newPosY = sourceY - sourceYP + this.actor.height;
 
         let iconGridHeight = this.actor.get_parent().get_parent().height;
 
