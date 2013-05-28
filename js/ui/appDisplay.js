@@ -72,6 +72,7 @@ const EndlessApplicationView = new Lang.Class({
         }
 
         let itemIcon = this._createItemIcon(item);
+        itemIcon.parentView = this;
         this._allItems.push(item);
         this._items[id] = itemIcon;
 
@@ -240,11 +241,11 @@ const AllView = new Lang.Class({
     },
 
     _onDragBegin: function(overview, source) {
-        let index = this._grid.indexOf(source.actor);
-        if (index == -1) {
+        if (source.parentView == undefined) {
             // Dragging an icon from dash
             this._eventBlocker.hide();
         } else {
+            let index = source.parentView._grid.indexOf(source.actor);
             // Dragging an icon from grid
             // Save the currently dragged item info
             this._dragItem = source;
@@ -298,10 +299,19 @@ const AllView = new Lang.Class({
     },
 
     _onDragMotion: function(dragEvent) {
-        // Ask grid can we drop here
+        /* Let's ignore for now moving icons inside the popup folder */
+        if (this._dragItem.parentView != this &&
+            this._dragItem.parentView.actor.contains(dragEvent.targetActor)) {
+            return DND.DragMotionResult.CONTINUE;
+        }
 
         // Handle motion over grid
         if(!this.actor.contains(dragEvent.targetActor)) {
+            return DND.DragMotionResult.CONTINUE;
+        }
+
+        /* Ignore when hovering over the opened folder */
+        if (this._popup && this._popup._view.actor.contains(dragEvent.targetActor)) {
             return DND.DragMotionResult.CONTINUE;
         }
 
@@ -367,11 +377,11 @@ const AllView = new Lang.Class({
 
     acceptDrop: function(source, actor, x, y, time) {
         // Get the id of the icon dragged
-        let originalId = this._getIdFromIndex(this._originalIdx);
+        let originalId = this._getIdFromIndex(source.parentView, this._originalIdx);
 
         if (this._onIcon) {
             // Find out what icon the drop is under
-            let id = this._getIdFromIndex(this._onIconIdx);
+            let id = this._getIdFromIndex(this, this._onIconIdx);
             if (!id) {
                 source.actor.set_child(this._dragActor);
                 return true;
@@ -385,7 +395,7 @@ const AllView = new Lang.Class({
             }
 
             // If we are hovering over a folder, the icon needs to be moved
-            let insertId = this._getIdFromIndex(this._insertIdx);
+            let insertId = this._getIdFromIndex(this, this._insertIdx);
             let newFolder = dropIcon._dir.get_name();
             IconGridLayout.layout.repositionIcon(originalId,
                                                  insertId,
@@ -400,7 +410,7 @@ const AllView = new Lang.Class({
             } else {
                 // If we are not over an icon but within the grid, shift the
                 // grid around to accomodate it
-                let insertId = this._getIdFromIndex(this._insertIdx);
+                let insertId = this._getIdFromIndex(this, this._insertIdx);
                 IconGridLayout.layout.repositionIcon(originalId,
                                                      insertId, "");
                 return true;
@@ -408,10 +418,10 @@ const AllView = new Lang.Class({
         }
     },
 
-    _getIdFromIndex: function(index){
-       let item = this._allItems[index];
+    _getIdFromIndex: function(view, index){
+       let item = view._allItems[index];
        if (item) {
-           return this._getItemId(item);
+           return view._getItemId(item);
        }
        return null;
     },
@@ -712,7 +722,9 @@ const FolderIcon = new Lang.Class({
 
         this.view = new FolderView();
         this.view.actor.reactive = false;
-        this._loadCategory(dir, this.view);
+
+        this.view.removeAll();
+        this._loadCategory(this._dir, this.view);
         this.view.loadGrid();
 
         this.actor.connect('clicked', Lang.bind(this,
@@ -1257,6 +1269,7 @@ const AppStoreIcon = new Lang.Class({
         let yesButton = { label: _("Yes"),
                           action: Lang.bind(this, function() {
                               dialog.close();
+                              source.parentView._grid.removeItem(source.actor);
                               IconGridLayout.layout.repositionIcon(id, 0, null);
                           }),
                           default: true };
