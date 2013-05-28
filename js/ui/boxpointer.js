@@ -118,12 +118,13 @@ const BoxPointer = new Lang.Class({
     hide: function(animate, onComplete) {
         let xOffset = 0;
         let yOffset = 0;
-        let themeNode = this.actor.get_theme_node();
-        let rise = themeNode.get_length('-arrow-rise');
         let fade = (animate & PopupAnimation.FADE);
         let animationTime = (animate & PopupAnimation.FULL) ? POPUP_ANIMATION_TIME : 0;
 
-        if (animate & PopupAnimation.SLIDE) {
+        if (animate & PopupAnimation.SLIDE &&
+            this.actor.get_parent() != null) {
+            let themeNode = this.actor.get_theme_node();
+            let rise = themeNode.get_length('-arrow-rise');
             switch (this._arrowSide) {
                 case St.Side.TOP:
                     yOffset = rise;
