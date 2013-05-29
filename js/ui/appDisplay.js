@@ -83,6 +83,10 @@ const AppSearchProvider = new Lang.Class({
         callback(metas);
     },
 
+    filterResults: function(results, maxNumber) {
+        return results.slice(0, maxNumber);
+    },
+
     getInitialResultSet: function(terms) {
         let query = terms.join(' ');
         let groups = Gio.DesktopAppInfo.search(query);
