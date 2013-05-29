@@ -832,6 +832,7 @@ const AppFolderPopup = new Lang.Class({
         this.parentOffset = 0;
 
         this.actor = new St.Widget({ layout_manager: new Clutter.BinLayout(),
+                                     style_class: 'app-folder-popup-stack',
                                      visible: true,
                                      // We don't want to expand really, but look
                                      // at the layout manager of our parent...
