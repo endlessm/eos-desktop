@@ -455,8 +455,6 @@ const ViewSelector = new Lang.Class({
                 this._searchResults.navigateFocus(nextDirection);
                 return true;
             } else if (symbol == Clutter.Return || symbol == Clutter.KP_Enter) {
-                // We can't connect to 'activate' here because search providers
-                // might want to do something with the modifiers in activateDefault.
                 if (this._searchTimeoutId > 0) {
                     Mainloop.source_remove(this._searchTimeoutId);
                     this._doSearch();
