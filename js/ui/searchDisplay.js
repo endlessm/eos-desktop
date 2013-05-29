@@ -370,9 +370,6 @@ const SearchResults = new Lang.Class({
         for (let i = 0; i < this._providers.length; i++) {
             this.createProviderMeta(this._providers[i]);
         }
-
-        this._highlightDefault = false;
-        this._defaultResult = null;
     },
 
     _onPan: function(action) {
@@ -445,7 +442,6 @@ const SearchResults = new Lang.Class({
         this._searchSystem.reset();
         this._statusBin.hide();
         this._clearDisplay();
-        this._defaultResult = null;
     },
 
     startingSearch: function() {
@@ -456,32 +452,6 @@ const SearchResults = new Lang.Class({
 
     _metaForProvider: function(provider) {
         return this._providerMeta[this._providers.indexOf(provider)];
-    },
-
-    _maybeSetInitialSelection: function() {
-        let newDefaultResult = null;
-
-        for (let i = 0; i < this._providerMeta.length; i++) {
-            let meta = this._providerMeta[i];
-
-            if (!meta.actor.visible)
-                continue;
-
-            let firstResult = meta.resultDisplay.getFirstResult();
-            if (firstResult) {
-                newDefaultResult = firstResult;
-                break; // select this one!
-            }
-        }
-
-        if (newDefaultResult != this._defaultResult) {
-            if (this._defaultResult)
-                this._defaultResult.setSelected(false);
-            if (newDefaultResult)
-                newDefaultResult.setSelected(this._highlightDefault);
-
-            this._defaultResult = newDefaultResult;
-        }
     },
 
     _updateStatusText: function () {
@@ -509,7 +479,6 @@ const SearchResults = new Lang.Class({
         if (providerResults.length == 0) {
             this._clearDisplayForProvider(provider);
             meta.resultDisplay.setResults([], []);
-            this._maybeSetInitialSelection();
             this._updateStatusText();
         } else {
             meta.resultDisplay.setResults(providerResults, terms);
@@ -532,7 +501,6 @@ const SearchResults = new Lang.Class({
                 this._content.hide();
 
                 meta.resultDisplay.renderResults(metas);
-                this._maybeSetInitialSelection();
                 this._updateStatusText();
 
                 this._content.show();
@@ -540,17 +508,6 @@ const SearchResults = new Lang.Class({
                     global.stage.set_key_focus(focus);
             }));
         }
-    },
-
-    activateDefault: function() {
-        if (this._defaultResult)
-            this._defaultResult.activate();
-    },
-
-    highlightDefault: function(highlight) {
-        this._highlightDefault = highlight;
-        if (this._defaultResult)
-            this._defaultResult.setSelected(highlight);
     },
 
     navigateFocus: function(direction) {
@@ -563,8 +520,7 @@ const SearchResults = new Lang.Class({
             return;
         }
 
-        let from = this._defaultResult ? this._defaultResult.actor : null;
-        this.actor.navigate_focus(from, direction, false);
+        this.actor.navigate_focus(null, direction, false);
     }
 });
 
