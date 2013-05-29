@@ -943,6 +943,17 @@ StScrollBar StButton#vhandle:active {
     text-align: center;
 }
 
+.app-folder-popup-stack {
+    /* keep this in sync with -shell-close-overlap in .notification-close */
+    padding-right: 14px;
+    padding-left: 0px;
+}
+
+.app-folder-popup-stack:rtl {
+    padding-left: 14px;
+    padding-right: 0px;
+}
+
 .app-folder-popup {
     -arrow-border-radius: 8px;
     -arrow-background-color: black;

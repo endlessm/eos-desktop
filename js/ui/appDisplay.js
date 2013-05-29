@@ -214,6 +214,9 @@ const AllView = new Lang.Class({
     _init: function() {
         this.parent();
 
+        this._grid.actor.y_expand = true;
+        this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
+
         let box = new St.BoxLayout({ vertical: true });
         this._stack = new St.Widget({ layout_manager: new AllViewLayout() });
         this._stack.add_actor(this._grid.actor);
@@ -487,9 +490,13 @@ const AllView = new Lang.Class({
                 this._eventBlocker.reactive = isOpen;
                 this._currentPopup = isOpen ? popup : null;
                 this._updateIconOpacities(isOpen);
-                if (isOpen)
+
+                if (isOpen) {
                     this._ensureIconVisible(popup.actor);
-                this._grid.actor.queue_relayout();
+                    this._grid.actor.y = popup.parentOffset;
+                } else {
+                    this._grid.actor.y = 0;
+                }
             }));
     },
 
@@ -798,56 +805,45 @@ const FolderIcon = new Lang.Class({
 
         this._popup = new AppFolderPopup(this, side);
         this._parentView.addFolderPopup(this._popup);
-        this._reposition(side, spaceTop, spaceBottom);
+        this._reposition(side);
 
         this._popup.connect('open-state-changed', Lang.bind(this,
             function(popup, isOpen) {
                 if (!isOpen)
                     this.actor.checked = false;
             }));
-
-        // Glue the popup to the top/bottom of the folder icon
-        let constraint;
-        if (side == St.Side.TOP) {
-            constraint = new Clutter.BindConstraint({ source: this.actor.get_parent().get_parent(),
-                                                      coordinate: Clutter.BindCoordinate.Y,
-                                                      offset: this.actor.height + this.actor.y });
-        } else {
-            constraint = new Clutter.BindConstraint({ source: this.actor.get_parent().get_parent(),
-                                                      coordinate: Clutter.BindCoordinate.Y,
-                                                      offset: -this._popup.actor.height + this.actor.y });
-        }
-        this._popup.actor.add_constraint(constraint);
     },
 
-    _reposition: function(side, spaceTop, spaceBottom) {
-        let [sourceX, sourceY] = this.actor.get_transformed_position();
-        let [sourceXP, sourceYP] = this._parentView.actor.get_transformed_position();
-        let newPosY = sourceY - sourceYP + this.actor.height;
-
-        let iconGridHeight = this.actor.get_parent().get_parent().height;
-
-        // Reposition the popup to ensure that the content will grow later when
-        // using a binding constraint. It takes in account that when this
-        // happens, the icon pointed by the popup will be repositioned in more
-        // or less in the middle of the screen (icon grid is always centered)
-        if ((side == St.Side.TOP && this._popup.actor.height > spaceBottom) ||
-            (side == St.Side.BOTTOM && this._popup.actor.height > spaceTop)) {
-            this._popup.actor.y = sourceYP + this._popup.actor.height + this.actor.y + this.actor.height + iconGridHeight;
-        }
+    _reposition: function(side) {
+        let [iconX, ] = this.actor.get_transformed_position();
 
         // If folder icon is not enterily above or below the app folder, move
-        // the later so the pointer can point correctly to the icon
-        let sourceAllocation = Shell.util_get_transformed_allocation(this._popup.actor);
-        let actorLeft = sourceX;
-        let actorRight = sourceX + this.actor.width;
-        let popupLeft = sourceAllocation.x1;
-        let popupRight = sourceAllocation.x2;
+        // the latter so the pointer can point correctly to the icon
+        let popupAllocation = Shell.util_get_transformed_allocation(this._popup.actor);
+        let actorLeft = iconX;
+        let actorRight = iconX + this.actor.width;
+        let popupLeft = popupAllocation.x1;
+        let popupRight = popupAllocation.x2;
         if (actorLeft < popupLeft) {
             this._popup.actor.set_anchor_point(Math.max(0, popupLeft - actorLeft), 0);
         }
         if (actorRight > popupRight) {
             this._popup.actor.set_anchor_point(-Math.max(0, actorRight - popupRight), 0);
+        }
+
+        let closeButtonOffset = -this._popup.closeButton.translation_y;
+        let grid = this.actor.get_parent().get_parent();
+
+        // Position the popup above or below the source icon
+        if (side == St.Side.BOTTOM) {
+            this._popup.actor.show();
+            let y = grid.y + this.actor.y - this._popup.actor.height;
+            let yWithButton = y - closeButtonOffset;
+            this._popup.parentOffset = yWithButton < 0 ? -yWithButton : 0;
+            this._popup.actor.y = Math.max(y, closeButtonOffset);
+            this._popup.actor.hide();
+        } else {
+            this._popup.actor.y = grid.y + this.actor.y + this.actor.height + closeButtonOffset;
         }
     },
 
@@ -865,8 +861,10 @@ const AppFolderPopup = new Lang.Class({
         this._arrowSide = side;
 
         this._isOpen = false;
+        this.parentOffset = 0;
 
         this.actor = new St.Widget({ layout_manager: new Clutter.BinLayout(),
+                                     style_class: 'app-folder-popup-stack',
                                      visible: true,
                                      // We don't want to expand really, but look
                                      // at the layout manager of our parent...
@@ -888,11 +886,11 @@ const AppFolderPopup = new Lang.Class({
         this.actor.add_actor(this._boxPointer.actor);
         this._boxPointer.bin.set_child(this._view.actor);
 
-        let closeButton = Util.makeCloseButton();
-        closeButton.connect('clicked', Lang.bind(this, this.popdown));
-        this.actor.add_actor(closeButton);
+        this.closeButton = Util.makeCloseButton();
+        this.closeButton.connect('clicked', Lang.bind(this, this.popdown));
+        this.actor.add_actor(this.closeButton);
 
-        this._boxPointer.actor.bind_property('opacity', closeButton, 'opacity',
+        this._boxPointer.actor.bind_property('opacity', this.closeButton, 'opacity',
                                              GObject.BindingFlags.SYNC_CREATE);
 
         source.actor.connect('destroy', Lang.bind(this,
