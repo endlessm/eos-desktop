@@ -303,7 +303,6 @@ const AllView = new Lang.Class({
 
         source.actor.set_child(this._dragActor);
         if (this._insertActor != null) {
-            this._grid.removeItem(this._insertActor);
             this._insertActor = null;
             this._insertIdx = -1;
             this._originalIdx = -1;
@@ -318,7 +317,6 @@ const AllView = new Lang.Class({
     _onDragCancelled: function(overview, source) {
         source.actor.set_child(this._dragActor);
         if (this._insertActor != null) {
-            this._grid.removeItem(this._insertActor);
             this._insertActor = null;
         }
 
