@@ -477,29 +477,15 @@ const IconGrid = new Lang.Class({
         let childIdx;
 
         // If we're outside of the grid, find out where we should be
-        if (gridx < 0) {
-            column = 0;
-        } else if (gridx > usedWidth) {
-            column = 0;
-            row += 1;
+        if (gridx < 0 || gridx > usedWidth) {
+            return [-1, CursorLocation.DEFAULT];
         }
 
         childIdx = Math.min((row * nColumns) + column, children.length);
 
-        // If we're above the grid vertically, we are in an invalid drop location
-        if (childIdx < 0) {
-            return [-1, CursorLocation.DEFAULT];
-        }
-
-        // If we're to the right of the screen, we assume icon is wanted on
-        // the right edge. We also need to make sure that we don't return a bad
-        // location if the childIdx >= children.length
-        if (gridx > usedWidth) {
-            return [childIdx, CursorLocation.RIGHT_EDGE];
-        }
-
-        // If we're below the grid vertically, we are in an invalid drop location
-        if (childIdx >= children.length) {
+        // If we're above/below the grid vertically or to the right of the grid, 
+        // we are in an invalid drop location
+        if (childIdx < 0 || childIdx >= children.length) {
             return [-1, CursorLocation.DEFAULT];
         }
 
@@ -533,7 +519,7 @@ const IconGrid = new Lang.Class({
             // We are between two icons in the grid
             return [childIdx, CursorLocation.DEFAULT];
         } else if (sx > cx + iconWidth && childIdx < children.length - 1) {
-            // We are on the right side of an icon
+            // We are on the right side of an icon but not past the last one
             let cursorLocation = CursorLocation.DEFAULT;
             if (iconRightEdge > usedWidth) {
                 // We are beyond the rightmost icon on the grid
@@ -541,6 +527,9 @@ const IconGrid = new Lang.Class({
             }
 
             return [childIdx + 1, cursorLocation];
+        } else if (childIdx == children.length - 1) {
+            // We are beyond the last rightmost valid icon
+            return [-1, CursorLocation.DEFAULT];
         }
 
         // We are left of the leftmost icon on the row
