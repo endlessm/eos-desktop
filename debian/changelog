@@ -1,3 +1,9 @@
+eos-shell (555~rc444) unstable; urgency=low
+
+  * Updating version to 555~rc444
+
+ -- Srdjan Grubor <sgnn7@sgnn7.org>  Wed, 29 May 2013 10:06:33 -0700
+
 eos-shell (1.1.1~rc3) unstable; urgency=low
 
   * Updating version to 1.1.1~rc3
