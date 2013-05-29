@@ -57,6 +57,10 @@ const EndlessApplicationView = new Lang.Class({
         this._allItems = [];
     },
 
+    removeItem: function(item) {
+        this._grid.removeItem(item.actor);
+    },
+
     _getItemId: function(item) {
         return item.get_id();
     },
@@ -111,6 +115,26 @@ const EndlessApplicationView = new Lang.Class({
 
             this._grid.addItem(this._items[id].actor);
         }
+    },
+
+    indexOf: function(item) {
+        return this._grid.indexOf(item.actor);
+    },
+
+    nudgeItemsAtIndex: function(index, location) {
+        this._grid.nudgeItemsAtIndex(index, location);
+    },
+
+    removeNudgeTransforms: function() {
+        this._grid.removeNudgeTransforms();
+    },
+
+    canDropAt: function(x, y, index) {
+        return this._grid.canDropAt(x, y, index);
+    },
+
+    getItem: function(id) {
+        return this._items[id];
     }
 });
 
@@ -246,7 +270,7 @@ const AllView = new Lang.Class({
             // Dragging an icon from dash
             this._eventBlocker.hide();
         } else {
-            let index = source.parentView._grid.indexOf(source.actor);
+            let index = source.parentView.indexOf(source);
             // Dragging an icon from grid
             // Save the currently dragged item info
             this._dragItem = source;
@@ -274,7 +298,7 @@ const AllView = new Lang.Class({
     },
 
     _onDragEnd: function(overview, source) {
-        source.parentView._grid.removeNudgeTransforms();
+        source.parentView.removeNudgeTransforms();
         this._eventBlocker.show();
 
         source.actor.set_child(this._dragActor);
@@ -315,10 +339,9 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.CONTINUE;
         }
 
-        let [idx, cursorLocation] = this._dragView._grid.canDropAt(dragEvent.x,
-                                                                   dragEvent.y,
-                                                                   this._insertIdx
-                                                                  );
+        let [idx, cursorLocation] = this._dragView.canDropAt(dragEvent.x,
+                                                             dragEvent.y,
+                                                             this._insertIdx);
 
         // If we are not over our last hovered icon, remove its hover state
         if (this._onIconIdx != null && idx != this._onIconIdx) {
@@ -329,7 +352,7 @@ const AllView = new Lang.Class({
         let isNewPosition = false;
         if (idx != this._insertIdx) {
             isNewPosition = true;
-            this._dragView._grid.removeNudgeTransforms();
+            this._dragView.removeNudgeTransforms();
         }
 
         // Update our insert index and if we are currently on an icon
@@ -360,7 +383,7 @@ const AllView = new Lang.Class({
         }
 
         if (isNewPosition) {
-            this._dragView._grid.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
+            this._dragView.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
         }
 
         return DND.DragMotionResult.MOVE_DROP;
@@ -388,14 +411,14 @@ const AllView = new Lang.Class({
             }
 
             // If we are dropping an icon on another icon, cancel the request
-            let dropIcon = this._dragView._items[id];
+            let dropIcon = this._dragView.getItem(id);
             if (!(dropIcon instanceof FolderIcon)) {
                 source.actor.set_child(this._dragActor);
                 return true;
             }
 
             // If we are hovering over a folder, the icon needs to be moved
-            let newFolder = dropIcon._dir.get_name();
+            let newFolder = dropIcon.getName();
             IconGridLayout.layout.repositionIcon(originalId,
                                                  null,
                                                  newFolder);
@@ -414,7 +437,7 @@ const AllView = new Lang.Class({
                 if (this._dragView == this) {
                     newFolder = "";
                 } else {
-                    newFolder = this._dragView.folderIcon._dir.get_name();
+                    newFolder = this._dragView.folderIcon.getName();
                 }
                 IconGridLayout.layout.repositionIcon(originalId,
                                                      insertId, newFolder);
@@ -829,6 +852,10 @@ const FolderIcon = new Lang.Class({
             this._popup.actor.set_anchor_point(-Math.max(0, actorRight - popupRight), 0);
         }
     },
+
+    getName: function() {
+        return this._dir.get_name();
+    }
 });
 
 const AppFolderPopup = new Lang.Class({
@@ -1274,7 +1301,7 @@ const AppStoreIcon = new Lang.Class({
         let yesButton = { label: _("Yes"),
                           action: Lang.bind(this, function() {
                               dialog.close();
-                              source.parentView._grid.removeItem(source.actor);
+                              source.parentView.removeItem(source);
                               IconGridLayout.layout.repositionIcon(id, 0, null);
                           }),
                           default: true };
