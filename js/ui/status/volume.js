@@ -303,12 +303,6 @@ const Indicator = new Lang.Class({
             this.actor.visible = (icon != null);
             this.setIcon(icon);
         }));
-        this._volumeMenu.connect('headphones-changed', Lang.bind(this, function(menu, value) {
-            this._headphoneIcon.visible = value;
-        }));
-
-        this._headphoneIcon = this.addIcon(new Gio.ThemedIcon({ name: 'headphones-symbolic' }));
-        this._headphoneIcon.visible = false;
 
         this.menu.addMenuItem(this._volumeMenu);
 
