@@ -398,7 +398,11 @@ const AllView = new Lang.Class({
 
         // If the item cannot be found, ignore it
         if (item != null) {
-            view._items[view._getItemId(item)].actor.set_hover(state);
+            let viewItem = view._items[view._getItemId(item)];
+            if ((viewItem instanceof FolderIcon) ||
+                (viewItem instanceof AppStoreIcon)) {
+                viewItem.actor.set_hover(state);
+            }
         }
     },
 
