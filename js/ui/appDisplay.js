@@ -359,8 +359,16 @@ const AllView = new Lang.Class({
             this._dragView.removeNudgeTransforms();
         }
 
+        // If we were previously over the icon target and no longer are,
+        // consider this a new position to force the nudge to reactivate
+        // even if we are still over the same icon cell
+        let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
+        if ((idx >= 0) && this._onIcon && !onIcon) {
+            isNewPosition = true;
+        }
+
         // Update our insert index and if we are currently on an icon
-        this._onIcon = cursorLocation == IconGrid.CursorLocation.ON_ICON;
+        this._onIcon = onIcon;
         this._onIconIdx = idx;
 
         // If we are hovering over our own icon placeholder, ignore it
