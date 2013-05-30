@@ -466,12 +466,14 @@ const IconGrid = new Lang.Class({
 
         let [nColumns, usedWidth] = this._computeLayout(sw);
 
-        let row = Math.floor(sy / (this._vItemSize + this._spacing));
+        let rowHeight = this._vItemSize + this._spacing;
+        let row = Math.floor(sy / rowHeight);
 
         // Correct sx to handle the left padding
         // to correctly calculate the column
         let gridx = sx - this._leftPadding;
-        let column = Math.floor(gridx / (this._hItemSize + this._spacing));
+        let columnWidth = this._hItemSize + this._spacing;
+        let column = Math.floor(gridx / columnWidth);
 
         // If we're outside of the grid, we are in an invalid drop location
         if (gridx < 0 || gridx > usedWidth) {
@@ -489,7 +491,9 @@ const IconGrid = new Lang.Class({
 
         let child = children[childIdx];
         let [childMinWidth, childMinHeight, childNaturalWidth, childNaturalHeight] = child.get_preferred_size();
-        let [cx, cy] = child.get_position();
+
+        // Calculate the original position of the child icon (prior to nudging)
+        let cx = this._leftPadding + (childIdx % nColumns) * columnWidth;
 
         // This is the width of the cell that contains the icon
         // (excluding spacing between cells)
