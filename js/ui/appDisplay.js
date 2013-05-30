@@ -344,20 +344,31 @@ const AllView = new Lang.Class({
                                                              dragEvent.y,
                                                              this._insertIdx);
 
+        let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
+
         // If we are not over our last hovered icon, remove its hover state
-        if (this._onIconIdx != null && idx != this._onIconIdx) {
+        if (this._onIconIdx != null &&
+            ((idx != this._onIconIdx) || !onIcon)) {
             this._setHoverStateOf(this._dragView, this._onIconIdx, false)
         }
 
         // If we are in a new spot, remove the previous nudges
         let isNewPosition = false;
-        if (idx != this._insertIdx) {
+        if ((idx != this._insertIdx) || onIcon) {
             isNewPosition = true;
             this._dragView.removeNudgeTransforms();
         }
 
+        // If we were previously over the icon target (this._onIcon)
+        // but no longer are over the icon target (!onIcon),
+        // consider this a new position to force the nudge to reactivate
+        // even if we are still over the same icon cell
+        if ((idx >= 0) && this._onIcon && !onIcon) {
+            isNewPosition = true;
+        }
+
         // Update our insert index and if we are currently on an icon
-        this._onIcon = cursorLocation == IconGrid.CursorLocation.ON_ICON;
+        this._onIcon = onIcon;
         this._onIconIdx = idx;
 
         // If we are hovering over our own icon placeholder, ignore it
@@ -369,34 +380,54 @@ const AllView = new Lang.Class({
 
         // If we are hovering over an icon, make sure that it has focus
         if (this._onIcon) {
-            this._setHoverStateOf(this._dragView, this._onIconIdx, true);
-
-            return DND.DragMotionResult.COPY_DROP;
+            let validIcon = this._setHoverStateOf(this._dragView, 
+                                                  this._onIconIdx, true);
+            if (validIcon) {
+                return DND.DragMotionResult.MOVE;
+            } else {
+                // Propagate the signal in case we are hovering
+                // over the trash can
+                return DND.DragMotionResult.CONTINUE;
+            }
         }
 
         // If we are not over any icon, update the insert index so that
         // if the icon is released we know where to place it
         this._insertIdx = idx;
 
-        // If we are outside of the grid make sure that our DnD icon is NO_DROP
+        // If we are outside of the grid, let the drag motion signal
+        // propagate in case we had been hovering over the trash can
         if (this._insertIdx == -1) {
-            return DND.DragMotionResult.NO_DROP;
+            return DND.DragMotionResult.CONTINUE;
         }
 
-        if (isNewPosition) {
+        // If we are between icons at a new position
+        // (but not immediately to the left of the original position),
+        // nudge the icons apart
+        let isLeftOfOrig = (this._onIconIdx == this._originalIdx + 1);
+        if (isNewPosition && !isLeftOfOrig) {
             this._dragView.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
         }
 
-        return DND.DragMotionResult.MOVE_DROP;
+        // Let the drag motion signal propagate in case we had
+        // been hovering over the trash can
+        return DND.DragMotionResult.CONTINUE;
     },
 
     _setHoverStateOf: function(view, itemIdx, state) {
         let item = view._allItems[itemIdx];
 
-        // If the item cannot be found, ignore it
-        if (item != null) {
-            view._items[view._getItemId(item)].actor.set_hover(state);
+        // Note that the app store icon is not in the all items array
+        let validItem = (item != null);
+
+        if (validItem) {
+            let viewItem = view._items[view._getItemId(item)];
+            if (viewItem instanceof FolderIcon) {
+                viewItem.actor.set_hover(state);
+            }
         }
+
+        return validItem;
     },
 
     acceptDrop: function(source, actor, x, y, time) {
@@ -1261,8 +1292,10 @@ const AppStoreIcon = new Lang.Class({
 
         if (showAppsHovered) {
             this.actor.set_child(this.full_trash_icon.actor);
+            this.actor.set_hover(true);
         } else {
             this.actor.set_child(this.empty_trash_icon.actor);
+            this.actor.set_hover(false);
         }
 
         return DND.DragMotionResult.CONTINUE;

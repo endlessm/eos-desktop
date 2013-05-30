@@ -11,7 +11,7 @@ const Params = imports.misc.params;
 const ICON_SIZE = 48;
 
 const LEFT_DIVIDER_LEEWAY = 30;
-const RIGHT_DIVIDER_LEEWAY = 20;
+const RIGHT_DIVIDER_LEEWAY = 30;
 
 const NUDGE_ANIMATION_TYPE = 'easeOutElastic';
 const NUDGE_DURATION = 1.2;
@@ -466,84 +466,91 @@ const IconGrid = new Lang.Class({
 
         let [nColumns, usedWidth] = this._computeLayout(sw);
 
-        let row = Math.floor(sy / (this._vItemSize + this._spacing));
+        let rowHeight = this._vItemSize + this._spacing;
+        let row = Math.floor(sy / rowHeight);
 
         // Correct sx to handle the left padding
         // to correctly calculate the column
         let gridx = sx - this._leftPadding;
-        let column = Math.floor(gridx / (this._hItemSize + this._spacing));
+        let columnWidth = this._hItemSize + this._spacing;
+        let column = Math.floor(gridx / columnWidth);
 
-        let children = this._getVisibleChildren();
-        let childIdx;
-
-        // If we're outside of the grid, find out where we should be
-        if (gridx < 0) {
-            column = 0;
-        } else if (gridx > usedWidth) {
-            column = 0;
-            row += 1;
-        }
-
-        childIdx = Math.min((row * nColumns) + column, children.length);
-
-        // If we're above the grid vertically, we are in an invalid drop location
-        if (childIdx < 0) {
+        // If we're outside of the grid, we are in an invalid drop location
+        if (gridx < 0 || gridx > usedWidth) {
             return [-1, CursorLocation.DEFAULT];
         }
 
-        // If we're to the right of the screen, we assume icon is wanted on
-        // the right edge. We also need to make sure that we don't return a bad
-        // location if the childIdx >= children.length
-        if (gridx > usedWidth) {
-            return [childIdx, CursorLocation.RIGHT_EDGE];
-        }
+        let children = this._getVisibleChildren();
+        let childIdx = Math.min((row * nColumns) + column, children.length);
 
-        // If we're below the grid vertically, we are in an invalid drop location
-        if (childIdx >= children.length) {
+        // If we're above/below the grid vertically or to the right of the grid, 
+        // we are in an invalid drop location
+        if (childIdx < 0 || childIdx >= children.length) {
             return [-1, CursorLocation.DEFAULT];
         }
 
         let child = children[childIdx];
         let [childMinWidth, childMinHeight, childNaturalWidth, childNaturalHeight] = child.get_preferred_size();
-        let [cx, cy] = child.get_position();
 
-        // This is the width of the icon inside the 128x128 grid square
+        // Calculate the original position of the child icon (prior to nudging)
+        let cx = this._leftPadding + (childIdx % nColumns) * columnWidth;
+
+        // This is the width of the cell that contains the icon
+        // (excluding spacing between cells)
         let childIconWidth = Math.max(this._hItemSize, childNaturalWidth);
 
         // childIconWidth is used to determine whether or not a drag point
         // is inside the icon or the divider.
 
         // Reduce the size of the icon area further by only having it start
-        // further in. if the drop point is in those initial pixels
+        // further in.  If the drop point is in those initial pixels
         // then the drop point is the current icon
         //
         // Increasing cx and decreasing childIconWidth gives a greater priority
         // to rearranging icons on the desktop vs putting them into folders
         // Decreasing cx and increasing childIconWidth gives a greater priority
         // to putting icons in folders vs rearranging them on the desktop
-        let iconX = cx + LEFT_DIVIDER_LEEWAY;
-        let iconWidth = childIconWidth - RIGHT_DIVIDER_LEEWAY;
-        let iconRightEdge = cx + LEFT_DIVIDER_LEEWAY + childIconWidth + RIGHT_DIVIDER_LEEWAY
+        let iconLeftX = cx + LEFT_DIVIDER_LEEWAY;
+        let iconRightX = cx + childIconWidth - RIGHT_DIVIDER_LEEWAY;
         let leftEdge = this._leftPadding + LEFT_DIVIDER_LEEWAY;
+        let rightEdge = this._leftPadding + usedWidth - RIGHT_DIVIDER_LEEWAY;
 
-        if (sx >= iconX && sx <= cx + iconWidth) {
-            // We are on an icon in the grid
-            return [childIdx, CursorLocation.ON_ICON];
-        } else if (sx < iconX && sx > leftEdge){
-            // We are between two icons in the grid
-            return [childIdx, CursorLocation.DEFAULT];
-        } else if (sx > cx + iconWidth && childIdx < children.length - 1) {
-            // We are on the right side of an icon
-            let cursorLocation = CursorLocation.DEFAULT;
-            if (iconRightEdge > usedWidth) {
-                // We are beyond the rightmost icon on the grid
-                cursorLocation = CursorLocation.RIGHT_EDGE;
+        let dropIdx;
+        let cursorLocation;
+
+        if (sx < iconLeftX) {
+            // We are to the left of the icon target
+            if (sx < leftEdge) {
+                // We are before the leftmost icon on the grid
+                dropIdx = childIdx;
+                cursorLocation = CursorLocation.LEFT_EDGE;
+            } else {
+                // We are between the previous icon and this one
+                dropIdx = childIdx;
+                cursorLocation = CursorLocation.DEFAULT;
             }
-
-            return [childIdx + 1, cursorLocation];
+        } else if (sx >= iconRightX) {
+            // We are to the right of the icon target
+            if (childIdx >= children.length - 1) {
+                // We are beyond the last valid icon
+                // (to the right of the trash can)
+                dropIdx = -1;
+                cursorLocation = CursorLocation.DEFAULT;
+            } else if (sx >= rightEdge) {
+                // We are beyond the rightmost icon on the grid
+                dropIdx = childIdx + 1;
+                cursorLocation = CursorLocation.RIGHT_EDGE;
+            } else {
+                // We are between this icon and the next one
+                dropIdx = childIdx + 1;
+                cursorLocation = CursorLocation.DEFAULT;
+            }
+        } else {
+            // We are over the icon target area
+            dropIdx = childIdx;
+            cursorLocation = CursorLocation.ON_ICON;
         }
 
-        // We are left of the leftmost icon on the row
-        return [childIdx, CursorLocation.LEFT_EDGE];
+        return [dropIdx, cursorLocation];
     }
 });
