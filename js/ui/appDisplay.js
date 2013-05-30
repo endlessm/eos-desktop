@@ -820,7 +820,10 @@ const FolderIcon = new Lang.Class({
     },
 
     _createIcon: function(size) {
-        return this.view.createFolderIcon(size);
+        let name = this._dir.get_name();
+        let iconName = 'eos-folder-' + name.toLowerCase();
+        return new St.Icon({ icon_size: size,
+                             icon_name: iconName });
     },
 
     _ensurePopup: function() {

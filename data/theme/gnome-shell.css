@@ -971,10 +971,6 @@ StScrollBar StButton#vhandle:active {
     background-size: contain;
 }
 
-.app-well-app.app-folder > .overview-icon {
-    background-color: rgba(0,0,0,0.5);
-}
-
 .app-well-app:hover > .overview-icon,
 .show-apps:hover > .overview-icon,
 .search-provider-icon:hover,
