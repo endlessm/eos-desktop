@@ -345,7 +345,9 @@ const AllView = new Lang.Class({
                                                              this._insertIdx);
 
         // If we are not over our last hovered icon, remove its hover state
-        if (this._onIconIdx != null && idx != this._onIconIdx) {
+        if (this._onIconIdx != null &&
+            ((idx != this._onIconIdx) ||
+             (cursorLocation != IconGrid.CursorLocation.ON_ICON))) {
             this._setHoverStateOf(this._dragView, this._onIconIdx, false)
         }
 
