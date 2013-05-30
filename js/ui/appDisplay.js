@@ -380,7 +380,15 @@ const AllView = new Lang.Class({
 
         // If we are hovering over an icon, make sure that it has focus
         if (this._onIcon) {
-            return this._setHoverStateOf(this._dragView, this._onIconIdx, true);
+            let validIcon = this._setHoverStateOf(this._dragView, 
+                                                  this._onIconIdx, true);
+            if (validIcon) {
+                return DND.DragMotionResult.MOVE;
+            } else {
+                // Propagate the signal in case we are hovering
+                // over the trash can
+                return DND.DragMotionResult.CONTINUE;
+            }
         }
 
         // If we are not over any icon, update the insert index so that
@@ -405,17 +413,17 @@ const AllView = new Lang.Class({
     _setHoverStateOf: function(view, itemIdx, state) {
         let item = view._allItems[itemIdx];
 
-        if (item != null) {
+        // Note that the app store icon is not in the all items array
+        let validItem = (item != null);
+
+        if (validItem) {
             let viewItem = view._items[view._getItemId(item)];
-            if ((viewItem instanceof FolderIcon) ||
-                (viewItem instanceof AppStoreIcon)) {
+            if (viewItem instanceof FolderIcon) {
                 viewItem.actor.set_hover(state);
             }
-            return DND.DragMotionResult.COPY_DROP;
-        } else {
-            // Propagate the drag motion signal to the app store icon
-            return DND.DragMotionResult.CONTINUE;
         }
+
+        return validItem;
     },
 
     acceptDrop: function(source, actor, x, y, time) {
