@@ -1288,8 +1288,10 @@ const AppStoreIcon = new Lang.Class({
 
         if (showAppsHovered) {
             this.actor.set_child(this.full_trash_icon.actor);
+            this.actor.set_hover(true);
         } else {
             this.actor.set_child(this.empty_trash_icon.actor);
+            this.actor.set_hover(false);
         }
 
         return DND.DragMotionResult.CONTINUE;
