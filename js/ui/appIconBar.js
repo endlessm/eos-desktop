@@ -13,8 +13,8 @@ const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
-const PANEL_ICON_SIZE = 22;
-const PANEL_ICON_PADDING = 10;
+const PANEL_ICON_SIZE = 28;
+const PANEL_ICON_PADDING = 14;
 
 const PANEL_WINDOW_MENU_THUMBNAIL_SIZE = 128;
 
