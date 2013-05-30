@@ -380,37 +380,41 @@ const AllView = new Lang.Class({
 
         // If we are hovering over an icon, make sure that it has focus
         if (this._onIcon) {
-            this._setHoverStateOf(this._dragView, this._onIconIdx, true);
-
-            return DND.DragMotionResult.COPY_DROP;
+            return this._setHoverStateOf(this._dragView, this._onIconIdx, true);
         }
 
         // If we are not over any icon, update the insert index so that
         // if the icon is released we know where to place it
         this._insertIdx = idx;
 
-        // If we are outside of the grid make sure that our DnD icon is NO_DROP
+        // If we are outside of the grid, let the drag motion signal
+        // propagate in case we had been hovering over the trash can
         if (this._insertIdx == -1) {
-            return DND.DragMotionResult.NO_DROP;
+            return DND.DragMotionResult.CONTINUE;
         }
 
         if (isNewPosition) {
             this._dragView.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
         }
 
-        return DND.DragMotionResult.MOVE_DROP;
+        // Let the drag motion signal propagate in case we had
+        // been hovering over the trash can
+        return DND.DragMotionResult.CONTINUE;
     },
 
     _setHoverStateOf: function(view, itemIdx, state) {
         let item = view._allItems[itemIdx];
 
-        // If the item cannot be found, ignore it
         if (item != null) {
             let viewItem = view._items[view._getItemId(item)];
             if ((viewItem instanceof FolderIcon) ||
                 (viewItem instanceof AppStoreIcon)) {
                 viewItem.actor.set_hover(state);
             }
+            return DND.DragMotionResult.COPY_DROP;
+        } else {
+            // Propagate the drag motion signal to the app store icon
+            return DND.DragMotionResult.CONTINUE;
         }
     },
 
