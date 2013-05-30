@@ -344,25 +344,25 @@ const AllView = new Lang.Class({
                                                              dragEvent.y,
                                                              this._insertIdx);
 
+        let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
+
         // If we are not over our last hovered icon, remove its hover state
         if (this._onIconIdx != null &&
-            ((idx != this._onIconIdx) ||
-             (cursorLocation != IconGrid.CursorLocation.ON_ICON))) {
+            ((idx != this._onIconIdx) || !onIcon)) {
             this._setHoverStateOf(this._dragView, this._onIconIdx, false)
         }
 
         // If we are in a new spot, remove the previous nudges
         let isNewPosition = false;
-        if ((idx != this._insertIdx) ||
-            (cursorLocation == IconGrid.CursorLocation.ON_ICON)) {
+        if ((idx != this._insertIdx) || onIcon) {
             isNewPosition = true;
             this._dragView.removeNudgeTransforms();
         }
 
-        // If we were previously over the icon target and no longer are,
+        // If we were previously over the icon target (this._onIcon)
+        // but no longer are over the icon target (!onIcon),
         // consider this a new position to force the nudge to reactivate
         // even if we are still over the same icon cell
-        let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
         if ((idx >= 0) && this._onIcon && !onIcon) {
             isNewPosition = true;
         }
@@ -401,7 +401,11 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.CONTINUE;
         }
 
-        if (isNewPosition && (this._onIconIdx != this._originalIdx + 1)) {
+        // If we are between icons at a new position
+        // (but not immediately to the left of the original position),
+        // nudge the icons apart
+        let isLeftOfOrig = (this._onIconIdx == this._originalIdx + 1);
+        if (isNewPosition && !isLeftOfOrig) {
             this._dragView.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
         }
 
