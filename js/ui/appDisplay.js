@@ -353,7 +353,8 @@ const AllView = new Lang.Class({
 
         // If we are in a new spot, remove the previous nudges
         let isNewPosition = false;
-        if (idx != this._insertIdx) {
+        if ((idx != this._insertIdx) ||
+            (cursorLocation == IconGrid.CursorLocation.ON_ICON)) {
             isNewPosition = true;
             this._dragView.removeNudgeTransforms();
         }
