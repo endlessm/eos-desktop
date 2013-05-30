@@ -139,6 +139,7 @@ const OsdWindow = new Lang.Class({
             Meta.disable_unredirect_for_screen(global.screen);
             this.actor.show();
             this.actor.opacity = 0;
+            this.actor.get_parent().set_child_above_sibling(this.actor, null);
 
             Tweener.addTween(this.actor,
                              { opacity: 255,
