@@ -401,7 +401,7 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.CONTINUE;
         }
 
-        if (isNewPosition) {
+        if (isNewPosition && (this._onIconIdx != this._originalIdx + 1)) {
             this._dragView.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
         }
 
