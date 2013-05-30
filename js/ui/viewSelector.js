@@ -77,12 +77,6 @@ const ViewSelector = new Lang.Class({
         this._text = this._entry.clutter_text;
         this._text.connect('text-changed', Lang.bind(this, this._onTextChanged));
         this._text.connect('key-press-event', Lang.bind(this, this._onKeyPress));
-        this._text.connect('key-focus-in', Lang.bind(this, function() {
-            this._searchResults.highlightDefault(true);
-        }));
-        this._text.connect('key-focus-out', Lang.bind(this, function() {
-            this._searchResults.highlightDefault(false);
-        }));
         this._entry.connect('notify::mapped', Lang.bind(this, this._onMapped));
         global.stage.connect('notify::key-focus', Lang.bind(this, this._onStageKeyFocusChanged));
 
@@ -455,8 +449,6 @@ const ViewSelector = new Lang.Class({
                 this._searchResults.navigateFocus(nextDirection);
                 return true;
             } else if (symbol == Clutter.Return || symbol == Clutter.KP_Enter) {
-                // We can't connect to 'activate' here because search providers
-                // might want to do something with the modifiers in activateDefault.
                 if (this._searchTimeoutId > 0) {
                     Mainloop.source_remove(this._searchTimeoutId);
                     this._doSearch();
