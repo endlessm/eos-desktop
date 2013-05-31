@@ -1,5 +1,8 @@
-/* GIO - GLib Input, Output and Streaming Library
+/* EOS Shell desktop directory information
  *
+ * Copyright © 2013 Endless Mobile, Inc.
+ *
+ * Based on https://git.gnome.org/browse/glib/tree/gio/gdesktopappinfo.h
  * Copyright (C) 2006-2007 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -16,143 +19,104 @@
  * Public License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
- *
- * Author: Alexander Larsson <alexl@redhat.com>
  */
 
-#ifndef __G_DESKTOP_APP_INFO_H__
-#define __G_DESKTOP_APP_INFO_H__
+#ifndef __SHELL_DESKTOP_DIR_INFO_H__
+#define __SHELL_DESKTOP_DIR_INFO_H__
 
 #include <gio/gio.h>
 
 G_BEGIN_DECLS
 
-#define G_TYPE_DESKTOP_APP_INFO         (g_desktop_app_info_get_type ())
-#define G_DESKTOP_APP_INFO(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), G_TYPE_DESKTOP_APP_INFO, GDesktopAppInfo))
-#define G_DESKTOP_APP_INFO_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), G_TYPE_DESKTOP_APP_INFO, GDesktopAppInfoClass))
-#define G_IS_DESKTOP_APP_INFO(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), G_TYPE_DESKTOP_APP_INFO))
-#define G_IS_DESKTOP_APP_INFO_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), G_TYPE_DESKTOP_APP_INFO))
-#define G_DESKTOP_APP_INFO_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), G_TYPE_DESKTOP_APP_INFO, GDesktopAppInfoClass))
+#define G_TYPE_DESKTOP_DIR_INFO         (g_desktop_dir_info_get_type ())
+#define G_DESKTOP_DIR_INFO(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), G_TYPE_DESKTOP_DIR_INFO, GDesktopDirInfo))
+#define G_DESKTOP_DIR_INFO_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), G_TYPE_DESKTOP_DIR_INFO, GDesktopDirInfoClass))
+#define G_IS_DESKTOP_DIR_INFO(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), G_TYPE_DESKTOP_DIR_INFO))
+#define G_IS_DESKTOP_DIR_INFO_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), G_TYPE_DESKTOP_DIR_INFO))
+#define G_DESKTOP_DIR_INFO_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), G_TYPE_DESKTOP_DIR_INFO, GDesktopDirInfoClass))
 
-typedef struct _GDesktopAppInfo        GDesktopAppInfo;
-typedef struct _GDesktopAppInfoClass   GDesktopAppInfoClass;
+typedef struct _GDesktopDirInfo        GDesktopDirInfo;
+typedef struct _GDesktopDirInfoClass   GDesktopDirInfoClass;
 
-struct _GDesktopAppInfoClass
+struct _GDesktopDirInfoClass
 {
   GObjectClass parent_class;
 };
 
 
 GLIB_AVAILABLE_IN_ALL
-GType            g_desktop_app_info_get_type          (void) G_GNUC_CONST;
+GType            g_desktop_dir_info_get_type          (void) G_GNUC_CONST;
 
 GLIB_AVAILABLE_IN_ALL
-GDesktopAppInfo *g_desktop_app_info_new_from_filename (const char      *filename);
-GLIB_AVAILABLE_IN_ALL
-GDesktopAppInfo *g_desktop_app_info_new_from_keyfile  (GKeyFile        *key_file);
+GDesktopDirInfo *g_desktop_dir_info_new_from_filename (const char      *filename);
 
 GLIB_AVAILABLE_IN_ALL
-const char *     g_desktop_app_info_get_filename      (GDesktopAppInfo *info);
+GDesktopDirInfo *g_desktop_dir_info_new_from_keyfile  (GKeyFile        *key_file);
+
+GLIB_AVAILABLE_IN_ALL
+const char *     g_desktop_dir_info_get_filename      (GDesktopDirInfo *info);
 
 GLIB_AVAILABLE_IN_2_30
-const char *     g_desktop_app_info_get_generic_name  (GDesktopAppInfo *info);
+const char *     g_desktop_dir_info_get_generic_name  (GDesktopDirInfo *info);
+
 GLIB_AVAILABLE_IN_2_30
-const char *     g_desktop_app_info_get_categories    (GDesktopAppInfo *info);
+gboolean         g_desktop_dir_info_get_nodisplay     (GDesktopDirInfo *info);
+
 GLIB_AVAILABLE_IN_2_30
-const char * const *g_desktop_app_info_get_keywords   (GDesktopAppInfo *info);
-GLIB_AVAILABLE_IN_2_30
-gboolean         g_desktop_app_info_get_nodisplay     (GDesktopAppInfo *info);
-GLIB_AVAILABLE_IN_2_30
-gboolean         g_desktop_app_info_get_show_in       (GDesktopAppInfo *info,
+gboolean         g_desktop_dir_info_get_show_in       (GDesktopDirInfo *info,
                                                        const gchar     *desktop_env);
-GLIB_AVAILABLE_IN_2_34
-const char *     g_desktop_app_info_get_startup_wm_class (GDesktopAppInfo *info);
 
 GLIB_AVAILABLE_IN_ALL
-GDesktopAppInfo *g_desktop_app_info_new               (const char      *desktop_id);
-GLIB_AVAILABLE_IN_ALL
-gboolean         g_desktop_app_info_get_is_hidden     (GDesktopAppInfo *info);
+GDesktopDirInfo *g_desktop_dir_info_new               (const char      *desktop_id);
 
 GLIB_AVAILABLE_IN_ALL
-void             g_desktop_app_info_set_desktop_env   (const char      *desktop_env);
+gboolean         g_desktop_dir_info_get_is_hidden     (GDesktopDirInfo *info);
+
+GLIB_AVAILABLE_IN_ALL
+void             g_desktop_dir_info_set_desktop_env   (const char      *desktop_env);
 
 GLIB_AVAILABLE_IN_2_36
-gboolean         g_desktop_app_info_has_key           (GDesktopAppInfo *info,
+gboolean         g_desktop_dir_info_has_key           (GDesktopDirInfo *info,
                                                        const char      *key);
+
 GLIB_AVAILABLE_IN_2_36
-char *           g_desktop_app_info_get_string        (GDesktopAppInfo *info,
+char *           g_desktop_dir_info_get_string        (GDesktopDirInfo *info,
                                                        const char      *key);
+
 GLIB_AVAILABLE_IN_2_36
-gboolean         g_desktop_app_info_get_boolean       (GDesktopAppInfo *info,
+gboolean         g_desktop_dir_info_get_boolean       (GDesktopDirInfo *info,
                                                        const char      *key);
 
 #ifndef G_DISABLE_DEPRECATED
 
-#define G_TYPE_DESKTOP_APP_INFO_LOOKUP           (g_desktop_app_info_lookup_get_type ())
-#define G_DESKTOP_APP_INFO_LOOKUP(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), G_TYPE_DESKTOP_APP_INFO_LOOKUP, GDesktopAppInfoLookup))
-#define G_IS_DESKTOP_APP_INFO_LOOKUP(obj)	 (G_TYPE_CHECK_INSTANCE_TYPE ((obj), G_TYPE_DESKTOP_APP_INFO_LOOKUP))
-#define G_DESKTOP_APP_INFO_LOOKUP_GET_IFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), G_TYPE_DESKTOP_APP_INFO_LOOKUP, GDesktopAppInfoLookupIface))
+#define G_TYPE_DESKTOP_DIR_INFO_LOOKUP           (g_desktop_dir_info_lookup_get_type ())
+#define G_DESKTOP_DIR_INFO_LOOKUP(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), G_TYPE_DESKTOP_DIR_INFO_LOOKUP, GDesktopDirInfoLookup))
+#define G_IS_DESKTOP_DIR_INFO_LOOKUP(obj)	 (G_TYPE_CHECK_INSTANCE_TYPE ((obj), G_TYPE_DESKTOP_DIR_INFO_LOOKUP))
+#define G_DESKTOP_DIR_INFO_LOOKUP_GET_IFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), G_TYPE_DESKTOP_DIR_INFO_LOOKUP, GDesktopDirInfoLookupIface))
 
 /**
- * G_DESKTOP_APP_INFO_LOOKUP_EXTENSION_POINT_NAME:
+ * G_DESKTOP_DIR_INFO_LOOKUP_EXTENSION_POINT_NAME:
  *
  * Extension point for default handler to URI association. See
  * <link linkend="extending-gio">Extending GIO</link>.
  */
-#define G_DESKTOP_APP_INFO_LOOKUP_EXTENSION_POINT_NAME "gio-desktop-app-info-lookup"
+#define G_DESKTOP_DIR_INFO_LOOKUP_EXTENSION_POINT_NAME "gio-desktop-dir-info-lookup"
 
 #endif /* G_DISABLE_DEPRECATED */
 
 /**
- * GDesktopAppInfoLookup:
+ * GDesktopDirInfoLookup:
  *
  * Interface that is used by backends to associate default
  * handlers with URI schemes.
  */
-typedef struct _GDesktopAppInfoLookup GDesktopAppInfoLookup;
-typedef struct _GDesktopAppInfoLookupIface GDesktopAppInfoLookupIface;
-
-struct _GDesktopAppInfoLookupIface
-{
-  GTypeInterface g_iface;
-
-  GAppInfo * (* get_default_for_uri_scheme) (GDesktopAppInfoLookup *lookup,
-                                             const char            *uri_scheme);
-};
+typedef struct _GDesktopDirInfoLookup GDesktopDirInfoLookup;
+typedef struct _GDesktopDirInfoLookupIface GDesktopDirInfoLookupIface;
 
 GLIB_DEPRECATED
-GType     g_desktop_app_info_lookup_get_type                   (void) G_GNUC_CONST;
-
-GLIB_DEPRECATED
-GAppInfo *g_desktop_app_info_lookup_get_default_for_uri_scheme (GDesktopAppInfoLookup *lookup,
-                                                                const char            *uri_scheme);
-
-/**
- * GDesktopAppLaunchCallback:
- * @appinfo: a #GDesktopAppInfo
- * @pid: Process identifier
- * @user_data: User data
- *
- * During invocation, g_desktop_app_info_launch_uris_as_manager() may
- * create one or more child processes.  This callback is invoked once
- * for each, providing the process ID.
- */
-typedef void (*GDesktopAppLaunchCallback) (GDesktopAppInfo  *appinfo,
-					   GPid              pid,
-					   gpointer          user_data);
-
-GLIB_AVAILABLE_IN_2_28
-gboolean    g_desktop_app_info_launch_uris_as_manager (GDesktopAppInfo            *appinfo,
-						       GList                      *uris,
-						       GAppLaunchContext          *launch_context,
-						       GSpawnFlags                 spawn_flags,
-						       GSpawnChildSetupFunc        user_setup,
-						       gpointer                    user_setup_data,
-						       GDesktopAppLaunchCallback   pid_callback,
-						       gpointer                    pid_callback_data,
-						       GError                    **error);
+GType     g_desktop_dir_info_lookup_get_type                   (void) G_GNUC_CONST;
 
 
 G_END_DECLS
 
-#endif /* __G_DESKTOP_APP_INFO_H__ */
+#endif /* __SHELL_DESKTOP_DIR_INFO_H__ */
