@@ -32,9 +32,10 @@
 #endif
 
 #include "shell-desktop-dir-info.h"
+#include "shell-dir-info.h"
 
 #include <glib.h>
-#include <glib/gio.h>
+#include <glib/gi18n.h>
 
 
 /**
@@ -824,24 +825,17 @@ g_desktop_dir_info_delete (GDirInfo *dirinfo)
  *
  * Creates a new #GDirInfo from the given information.
  *
- * Note that for @commandline, the quoting rules of the Exec key of the
- * <ulink url="http://freedesktop.org/Standards/desktop-entry-spec">freedesktop.org Desktop
- * Entry Specification</ulink> are applied. For example, if the @commandline contains
- * percent-encoded URIs, the percent-character must be doubled in order to prevent it from
- * being swallowed by Exec key unquoting. See the specification for exact quoting rules.
- *
- * Returns: (transfer full): new #GDirInfo for given command.
+ * Returns: (transfer full): new #GDirInfo for given directory name.
  **/
 GDirInfo *
 g_dir_info_create_from_directory_name (const char           *directory_name,
-				       GDirInfoCreateFlags   flags,
 				       GError              **error)
 {
   char **split;
   char *basename;
   GDesktopDirInfo *info;
 
-  g_return_val_if_fail (commandline, NULL);
+  g_return_val_if_fail (directory_name, NULL);
 
   info = g_object_new (G_TYPE_DESKTOP_DIR_INFO, NULL);
 
@@ -1009,20 +1003,6 @@ append_desktop_entry (GList      *list,
   
   return list;
 }
-
-/* GDesktopDirInfoLookup interface: */
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-typedef GDesktopDirInfoLookupIface GDesktopDirInfoLookupInterface;
-G_DEFINE_INTERFACE (GDesktopDirInfoLookup, g_desktop_dir_info_lookup, G_TYPE_OBJECT)
-
-static void
-g_desktop_dir_info_lookup_default_init (GDesktopDirInfoLookupInterface *iface)
-{
-}
-
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * g_desktop_dir_info_get_string:
