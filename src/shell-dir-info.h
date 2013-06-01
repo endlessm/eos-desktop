@@ -21,19 +21,19 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __G_DIR_INFO_H__
-#define __G_DIR_INFO_H__
+#ifndef __SHELL_DIR_INFO_H__
+#define __SHELL_DIR_INFO_H__
 
 #include <gio/gio.h>
 
 G_BEGIN_DECLS
 
+typedef struct _GDirInfo GDirInfo;
+
 #define G_TYPE_DIR_INFO            (g_dir_info_get_type ())
 #define G_DIR_INFO(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), G_TYPE_DIR_INFO, GDirInfo))
 #define G_IS_DIR_INFO(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), G_TYPE_DIR_INFO))
 #define G_DIR_INFO_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), G_TYPE_DIR_INFO, GDirInfoIface))
-
-typedef struct _GDirInfo                      GDirInfo; /* Dummy typedef */
 
 
 /**
@@ -79,47 +79,34 @@ struct _GDirInfoIface
   const char * (* get_display_name)             (GDirInfo           *dirinfo);
 };
 
-GLIB_AVAILABLE_IN_ALL
 GType       g_dir_info_get_type                     (void) G_GNUC_CONST;
 
-GLIB_AVAILABLE_IN_ALL
 GDirInfo *  g_dir_info_create_from_directory_name   (const char           *directory_name,
                                                      GError              **error);
 
-GLIB_AVAILABLE_IN_ALL
 GDirInfo *  g_dir_info_dup                          (GDirInfo             *dirinfo);
 
-GLIB_AVAILABLE_IN_ALL
 gboolean    g_dir_info_equal                        (GDirInfo             *dirinfo1,
                                                      GDirInfo             *dirinfo2);
 
-GLIB_AVAILABLE_IN_ALL
 const char *g_dir_info_get_id                       (GDirInfo             *dirinfo);
 
-GLIB_AVAILABLE_IN_ALL
 const char *g_dir_info_get_name                     (GDirInfo             *dirinfo);
 
-GLIB_AVAILABLE_IN_ALL
 const char *g_dir_info_get_display_name             (GDirInfo             *dirinfo);
 
-GLIB_AVAILABLE_IN_ALL
 const char *g_dir_info_get_description              (GDirInfo             *dirinfo);
 
-GLIB_AVAILABLE_IN_ALL
 GIcon *     g_dir_info_get_icon                     (GDirInfo             *dirinfo);
 
-GLIB_AVAILABLE_IN_ALL
 gboolean    g_dir_info_should_show                  (GDirInfo             *dirinfo);
 
-GLIB_AVAILABLE_IN_ALL
 gboolean    g_dir_info_can_delete                   (GDirInfo   *dirinfo);
 
-GLIB_AVAILABLE_IN_ALL
 gboolean    g_dir_info_delete                       (GDirInfo   *dirinfo);
 
-GLIB_AVAILABLE_IN_ALL
-GList *   g_dir_info_get_all                     (void);
+GList *     g_dir_info_get_all                      (void);
 
 G_END_DECLS
 
-#endif /* __G_DIR_INFO_H__ */
+#endif /* __SHELL_DIR_INFO_H__ */

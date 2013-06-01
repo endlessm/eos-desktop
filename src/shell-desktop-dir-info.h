@@ -28,6 +28,9 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GDesktopDirInfo        GDesktopDirInfo;
+typedef struct _GDesktopDirInfoClass   GDesktopDirInfoClass;
+
 #define G_TYPE_DESKTOP_DIR_INFO         (g_desktop_dir_info_get_type ())
 #define G_DESKTOP_DIR_INFO(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), G_TYPE_DESKTOP_DIR_INFO, GDesktopDirInfo))
 #define G_DESKTOP_DIR_INFO_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), G_TYPE_DESKTOP_DIR_INFO, GDesktopDirInfoClass))
@@ -35,58 +38,41 @@ G_BEGIN_DECLS
 #define G_IS_DESKTOP_DIR_INFO_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), G_TYPE_DESKTOP_DIR_INFO))
 #define G_DESKTOP_DIR_INFO_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), G_TYPE_DESKTOP_DIR_INFO, GDesktopDirInfoClass))
 
-typedef struct _GDesktopDirInfo        GDesktopDirInfo;
-typedef struct _GDesktopDirInfoClass   GDesktopDirInfoClass;
-
 struct _GDesktopDirInfoClass
 {
   GObjectClass parent_class;
 };
 
 
-GLIB_AVAILABLE_IN_ALL
 GType            g_desktop_dir_info_get_type          (void) G_GNUC_CONST;
 
-GLIB_AVAILABLE_IN_ALL
 GDesktopDirInfo *g_desktop_dir_info_new_from_filename (const char      *filename);
 
-GLIB_AVAILABLE_IN_ALL
 GDesktopDirInfo *g_desktop_dir_info_new_from_keyfile  (GKeyFile        *key_file);
 
-GLIB_AVAILABLE_IN_ALL
 const char *     g_desktop_dir_info_get_filename      (GDesktopDirInfo *info);
 
-GLIB_AVAILABLE_IN_2_30
 const char *     g_desktop_dir_info_get_generic_name  (GDesktopDirInfo *info);
 
-GLIB_AVAILABLE_IN_2_30
 gboolean         g_desktop_dir_info_get_nodisplay     (GDesktopDirInfo *info);
 
-GLIB_AVAILABLE_IN_2_30
 gboolean         g_desktop_dir_info_get_show_in       (GDesktopDirInfo *info,
                                                        const gchar     *desktop_env);
 
-GLIB_AVAILABLE_IN_ALL
 GDesktopDirInfo *g_desktop_dir_info_new               (const char      *desktop_id);
 
-GLIB_AVAILABLE_IN_ALL
 gboolean         g_desktop_dir_info_get_is_hidden     (GDesktopDirInfo *info);
 
-GLIB_AVAILABLE_IN_ALL
 void             g_desktop_dir_info_set_desktop_env   (const char      *desktop_env);
 
-GLIB_AVAILABLE_IN_2_36
 gboolean         g_desktop_dir_info_has_key           (GDesktopDirInfo *info,
                                                        const char      *key);
 
-GLIB_AVAILABLE_IN_2_36
 char *           g_desktop_dir_info_get_string        (GDesktopDirInfo *info,
                                                        const char      *key);
 
-GLIB_AVAILABLE_IN_2_36
 gboolean         g_desktop_dir_info_get_boolean       (GDesktopDirInfo *info,
                                                        const char      *key);
-
 
 G_END_DECLS
 
