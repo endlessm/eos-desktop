@@ -26,15 +26,14 @@
 
 #include <gio/gio.h>
 
-typedef struct _GDirInfo                      GDirInfo; /* Dummy typedef */
-
-
 G_BEGIN_DECLS
 
 #define G_TYPE_DIR_INFO            (g_dir_info_get_type ())
 #define G_DIR_INFO(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), G_TYPE_DIR_INFO, GDirInfo))
 #define G_IS_DIR_INFO(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), G_TYPE_DIR_INFO))
 #define G_DIR_INFO_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), G_TYPE_DIR_INFO, GDirInfoIface))
+
+typedef struct _GDirInfo                      GDirInfo; /* Dummy typedef */
 
 
 /**

@@ -87,35 +87,6 @@ GLIB_AVAILABLE_IN_2_36
 gboolean         g_desktop_dir_info_get_boolean       (GDesktopDirInfo *info,
                                                        const char      *key);
 
-#ifndef G_DISABLE_DEPRECATED
-
-#define G_TYPE_DESKTOP_DIR_INFO_LOOKUP           (g_desktop_dir_info_lookup_get_type ())
-#define G_DESKTOP_DIR_INFO_LOOKUP(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), G_TYPE_DESKTOP_DIR_INFO_LOOKUP, GDesktopDirInfoLookup))
-#define G_IS_DESKTOP_DIR_INFO_LOOKUP(obj)	 (G_TYPE_CHECK_INSTANCE_TYPE ((obj), G_TYPE_DESKTOP_DIR_INFO_LOOKUP))
-#define G_DESKTOP_DIR_INFO_LOOKUP_GET_IFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), G_TYPE_DESKTOP_DIR_INFO_LOOKUP, GDesktopDirInfoLookupIface))
-
-/**
- * G_DESKTOP_DIR_INFO_LOOKUP_EXTENSION_POINT_NAME:
- *
- * Extension point for default handler to URI association. See
- * <link linkend="extending-gio">Extending GIO</link>.
- */
-#define G_DESKTOP_DIR_INFO_LOOKUP_EXTENSION_POINT_NAME "gio-desktop-dir-info-lookup"
-
-#endif /* G_DISABLE_DEPRECATED */
-
-/**
- * GDesktopDirInfoLookup:
- *
- * Interface that is used by backends to associate default
- * handlers with URI schemes.
- */
-typedef struct _GDesktopDirInfoLookup GDesktopDirInfoLookup;
-typedef struct _GDesktopDirInfoLookupIface GDesktopDirInfoLookupIface;
-
-GLIB_DEPRECATED
-GType     g_desktop_dir_info_lookup_get_type                   (void) G_GNUC_CONST;
-
 
 G_END_DECLS
 
