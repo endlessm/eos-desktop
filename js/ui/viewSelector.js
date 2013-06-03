@@ -330,7 +330,6 @@ const ViewSelector = new Lang.Class({
     _onTextChanged: function (se, prop) {
         let terms = getTermsForSearchString(this._entry.get_text());
 
-        let searchPreviouslyActive = this._searchActive;
         this._searchActive = (terms.length > 0);
 
         if (this._searchActive) {
