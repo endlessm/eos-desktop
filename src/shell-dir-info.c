@@ -28,72 +28,72 @@
 
 
 /**
- * SECTION:gdirinfo
+ * SECTION:shelldirinfo
  * @short_description: Desktop directory information
  * @include: gio/gio.h
  * 
- * #GDirInfo is used for describing directories on the desktop.
+ * #ShellDirInfo is used for describing directories on the desktop.
  *
  **/
 
-typedef GDirInfoIface GDirInfoInterface;
-G_DEFINE_INTERFACE (GDirInfo, g_dir_info, G_TYPE_OBJECT)
+typedef ShellDirInfoIface ShellDirInfoInterface;
+G_DEFINE_INTERFACE (ShellDirInfo, shell_dir_info, G_TYPE_OBJECT)
 
 static void
-g_dir_info_default_init (GDirInfoInterface *iface)
+shell_dir_info_default_init (ShellDirInfoInterface *iface)
 {
 }
 
 
 /**
- * g_dir_info_dup:
- * @dirinfo: a #GDirInfo.
+ * shell_dir_info_dup:
+ * @dirinfo: a #ShellDirInfo.
  * 
- * Creates a duplicate of a #GDirInfo.
+ * Creates a duplicate of a #ShellDirInfo.
  *
  * Returns: (transfer full): a duplicate of @dirinfo.
  **/
-GDirInfo *
-g_dir_info_dup (GDirInfo *dirinfo)
+ShellDirInfo *
+shell_dir_info_dup (ShellDirInfo *dirinfo)
 {
-  GDirInfoIface *iface;
+  ShellDirInfoIface *iface;
 
-  g_return_val_if_fail (G_IS_DIR_INFO (dirinfo), NULL);
+  g_return_val_if_fail (SHELL_IS_DIR_INFO (dirinfo), NULL);
 
-  iface = G_DIR_INFO_GET_IFACE (dirinfo);
+  iface = SHELL_DIR_INFO_GET_IFACE (dirinfo);
 
   return (* iface->dup) (dirinfo);
 }
 
 /**
- * g_dir_info_equal:
- * @dirinfo1: the first #GDirInfo.
- * @dirinfo2: the second #GDirInfo.
+ * shell_dir_info_equal:
+ * @dirinfo1: the first #ShellDirInfo.
+ * @dirinfo2: the second #ShellDirInfo.
  *
- * Checks if two #GDirInfo<!-- -->s are equal.
+ * Checks if two #ShellDirInfo<!-- -->s are equal.
  *
  * Returns: %TRUE if @dirinfo1 is equal to @dirinfo2. %FALSE otherwise.
  **/
 gboolean
-g_dir_info_equal (GDirInfo *dirinfo1,
-		  GDirInfo *dirinfo2)
+shell_dir_info_equal (ShellDirInfo *dirinfo1,
+		      ShellDirInfo *dirinfo2)
 {
-  GDirInfoIface *iface;
+  ShellDirInfoIface *iface;
 
-  g_return_val_if_fail (G_IS_DIR_INFO (dirinfo1), FALSE);
-  g_return_val_if_fail (G_IS_DIR_INFO (dirinfo2), FALSE);
+  g_return_val_if_fail (SHELL_IS_DIR_INFO (dirinfo1), FALSE);
+  g_return_val_if_fail (SHELL_IS_DIR_INFO (dirinfo2), FALSE);
 
   if (G_TYPE_FROM_INSTANCE (dirinfo1) != G_TYPE_FROM_INSTANCE (dirinfo2))
     return FALSE;
   
-  iface = G_DIR_INFO_GET_IFACE (dirinfo1);
+  iface = SHELL_DIR_INFO_GET_IFACE (dirinfo1);
 
   return (* iface->equal) (dirinfo1, dirinfo2);
 }
 
 /**
- * g_dir_info_get_id:
- * @dirinfo: a #GDirInfo.
+ * shell_dir_info_get_id:
+ * @dirinfo: a #ShellDirInfo.
  * 
  * Gets the ID of a directory. An id is a string that
  * identifies the directory. The exact format of the id is
@@ -106,40 +106,40 @@ g_dir_info_equal (GDirInfo *dirinfo1,
  * Returns: a string containing the directory's ID.
  **/
 const char *
-g_dir_info_get_id (GDirInfo *dirinfo)
+shell_dir_info_get_id (ShellDirInfo *dirinfo)
 {
-  GDirInfoIface *iface;
+  ShellDirInfoIface *iface;
   
-  g_return_val_if_fail (G_IS_DIR_INFO (dirinfo), NULL);
+  g_return_val_if_fail (SHELL_IS_DIR_INFO (dirinfo), NULL);
 
-  iface = G_DIR_INFO_GET_IFACE (dirinfo);
+  iface = SHELL_DIR_INFO_GET_IFACE (dirinfo);
 
   return (* iface->get_id) (dirinfo);
 }
 
 /**
- * g_dir_info_get_name:
- * @dirinfo: a #GDirInfo.
+ * shell_dir_info_get_name:
+ * @dirinfo: a #ShellDirInfo.
  * 
  * Gets the name of the directory. 
  *
  * Returns: the name of the directory for @dirinfo.
  **/
 const char *
-g_dir_info_get_name (GDirInfo *dirinfo)
+shell_dir_info_get_name (ShellDirInfo *dirinfo)
 {
-  GDirInfoIface *iface;
+  ShellDirInfoIface *iface;
   
-  g_return_val_if_fail (G_IS_DIR_INFO (dirinfo), NULL);
+  g_return_val_if_fail (SHELL_IS_DIR_INFO (dirinfo), NULL);
 
-  iface = G_DIR_INFO_GET_IFACE (dirinfo);
+  iface = SHELL_DIR_INFO_GET_IFACE (dirinfo);
 
   return (* iface->get_name) (dirinfo);
 }
 
 /**
- * g_dir_info_get_display_name:
- * @dirinfo: a #GDirInfo.
+ * shell_dir_info_get_display_name:
+ * @dirinfo: a #ShellDirInfo.
  *
  * Gets the display name of the directory. The display name is often more
  * descriptive to the user than the name itself.
@@ -150,13 +150,13 @@ g_dir_info_get_name (GDirInfo *dirinfo)
  * Since: 2.24
  **/
 const char *
-g_dir_info_get_display_name (GDirInfo *dirinfo)
+shell_dir_info_get_display_name (ShellDirInfo *dirinfo)
 {
-  GDirInfoIface *iface;
+  ShellDirInfoIface *iface;
 
-  g_return_val_if_fail (G_IS_DIR_INFO (dirinfo), NULL);
+  g_return_val_if_fail (SHELL_IS_DIR_INFO (dirinfo), NULL);
 
-  iface = G_DIR_INFO_GET_IFACE (dirinfo);
+  iface = SHELL_DIR_INFO_GET_IFACE (dirinfo);
 
   if (iface->get_display_name == NULL)
     return (* iface->get_name) (dirinfo);
@@ -165,8 +165,8 @@ g_dir_info_get_display_name (GDirInfo *dirinfo)
 }
 
 /**
- * g_dir_info_get_description:
- * @dirinfo: a #GDirInfo.
+ * shell_dir_info_get_description:
+ * @dirinfo: a #ShellDirInfo.
  * 
  * Gets a human-readable description of a directory.
  *
@@ -174,21 +174,21 @@ g_dir_info_get_display_name (GDirInfo *dirinfo)
  * directory @dirinfo, or %NULL if none. 
  **/
 const char *
-g_dir_info_get_description (GDirInfo *dirinfo)
+shell_dir_info_get_description (ShellDirInfo *dirinfo)
 {
-  GDirInfoIface *iface;
+  ShellDirInfoIface *iface;
   
-  g_return_val_if_fail (G_IS_DIR_INFO (dirinfo), NULL);
+  g_return_val_if_fail (SHELL_IS_DIR_INFO (dirinfo), NULL);
 
-  iface = G_DIR_INFO_GET_IFACE (dirinfo);
+  iface = SHELL_DIR_INFO_GET_IFACE (dirinfo);
 
   return (* iface->get_description) (dirinfo);
 }
 
 
 /**
- * g_dir_info_get_icon:
- * @dirinfo: a #GDirInfo.
+ * shell_dir_info_get_icon:
+ * @dirinfo: a #ShellDirInfo.
  * 
  * Gets the icon for the directory.
  *
@@ -196,21 +196,21 @@ g_dir_info_get_description (GDirInfo *dirinfo)
  * if there is no default icon.
  **/
 GIcon *
-g_dir_info_get_icon (GDirInfo *dirinfo)
+shell_dir_info_get_icon (ShellDirInfo *dirinfo)
 {
-  GDirInfoIface *iface;
+  ShellDirInfoIface *iface;
   
-  g_return_val_if_fail (G_IS_DIR_INFO (dirinfo), NULL);
+  g_return_val_if_fail (SHELL_IS_DIR_INFO (dirinfo), NULL);
 
-  iface = G_DIR_INFO_GET_IFACE (dirinfo);
+  iface = SHELL_DIR_INFO_GET_IFACE (dirinfo);
 
   return (* iface->get_icon) (dirinfo);
 }
 
 
 /**
- * g_dir_info_should_show:
- * @dirinfo: a #GDirInfo.
+ * shell_dir_info_should_show:
+ * @dirinfo: a #ShellDirInfo.
  *
  * Checks if the directory info should be shown in menus that 
  * list available directories.
@@ -218,37 +218,37 @@ g_dir_info_get_icon (GDirInfo *dirinfo)
  * Returns: %TRUE if the @dirinfo should be shown, %FALSE otherwise.
  **/
 gboolean
-g_dir_info_should_show (GDirInfo *dirinfo)
+shell_dir_info_should_show (ShellDirInfo *dirinfo)
 {
-  GDirInfoIface *iface;
+  ShellDirInfoIface *iface;
   
-  g_return_val_if_fail (G_IS_DIR_INFO (dirinfo), FALSE);
+  g_return_val_if_fail (SHELL_IS_DIR_INFO (dirinfo), FALSE);
 
-  iface = G_DIR_INFO_GET_IFACE (dirinfo);
+  iface = SHELL_DIR_INFO_GET_IFACE (dirinfo);
 
   return (* iface->should_show) (dirinfo);
 }
 
 
 /**
- * g_dir_info_can_delete:
- * @dirinfo: a #GDirInfo
+ * shell_dir_info_can_delete:
+ * @dirinfo: a #ShellDirInfo
  *
- * Obtains the information whether the #GDirInfo can be deleted.
- * See g_dir_info_delete().
+ * Obtains the information whether the #ShellDirInfo can be deleted.
+ * See shell_dir_info_delete().
  *
  * Returns: %TRUE if @dirinfo can be deleted
  *
  * Since: 2.20
  */
 gboolean
-g_dir_info_can_delete (GDirInfo *dirinfo)
+shell_dir_info_can_delete (ShellDirInfo *dirinfo)
 {
-  GDirInfoIface *iface;
+  ShellDirInfoIface *iface;
   
-  g_return_val_if_fail (G_IS_DIR_INFO (dirinfo), FALSE);
+  g_return_val_if_fail (SHELL_IS_DIR_INFO (dirinfo), FALSE);
 
-  iface = G_DIR_INFO_GET_IFACE (dirinfo);
+  iface = SHELL_DIR_INFO_GET_IFACE (dirinfo);
 
   if (iface->can_delete)
     return (* iface->can_delete) (dirinfo);
@@ -258,14 +258,14 @@ g_dir_info_can_delete (GDirInfo *dirinfo)
 
 
 /**
- * g_dir_info_delete:
- * @dirinfo: a #GDirInfo
+ * shell_dir_info_delete:
+ * @dirinfo: a #ShellDirInfo
  *
- * Tries to delete a #GDirInfo.
+ * Tries to delete a #ShellDirInfo.
  *
  * On some platforms, there may be a difference between user-defined
- * #GDirInfo<!-- -->s which can be deleted, and system-wide ones which
- * cannot. See g_dir_info_can_delete().
+ * #ShellDirInfo<!-- -->s which can be deleted, and system-wide ones which
+ * cannot. See shell_dir_info_can_delete().
  *
  * Virtual: do_delete
  * Returns: %TRUE if @dirinfo has been deleted
@@ -273,13 +273,13 @@ g_dir_info_can_delete (GDirInfo *dirinfo)
  * Since: 2.20
  */
 gboolean
-g_dir_info_delete (GDirInfo *dirinfo)
+shell_dir_info_delete (ShellDirInfo *dirinfo)
 {
-  GDirInfoIface *iface;
+  ShellDirInfoIface *iface;
   
-  g_return_val_if_fail (G_IS_DIR_INFO (dirinfo), FALSE);
+  g_return_val_if_fail (SHELL_IS_DIR_INFO (dirinfo), FALSE);
 
-  iface = G_DIR_INFO_GET_IFACE (dirinfo);
+  iface = SHELL_DIR_INFO_GET_IFACE (dirinfo);
 
   if (iface->do_delete)
     return (* iface->do_delete) (dirinfo);

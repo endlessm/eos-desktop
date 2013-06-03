@@ -28,51 +28,51 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GDesktopDirInfo        GDesktopDirInfo;
-typedef struct _GDesktopDirInfoClass   GDesktopDirInfoClass;
+typedef struct _ShellDesktopDirInfo        ShellDesktopDirInfo;
+typedef struct _ShellDesktopDirInfoClass   ShellDesktopDirInfoClass;
 
-#define G_TYPE_DESKTOP_DIR_INFO         (g_desktop_dir_info_get_type ())
-#define G_DESKTOP_DIR_INFO(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), G_TYPE_DESKTOP_DIR_INFO, GDesktopDirInfo))
-#define G_DESKTOP_DIR_INFO_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), G_TYPE_DESKTOP_DIR_INFO, GDesktopDirInfoClass))
-#define G_IS_DESKTOP_DIR_INFO(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), G_TYPE_DESKTOP_DIR_INFO))
-#define G_IS_DESKTOP_DIR_INFO_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), G_TYPE_DESKTOP_DIR_INFO))
-#define G_DESKTOP_DIR_INFO_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), G_TYPE_DESKTOP_DIR_INFO, GDesktopDirInfoClass))
+#define SHELL_TYPE_DESKTOP_DIR_INFO         (shell_desktop_dir_info_get_type ())
+#define SHELL_DESKTOP_DIR_INFO(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), SHELL_TYPE_DESKTOP_DIR_INFO, ShellDesktopDirInfo))
+#define SHELL_DESKTOP_DIR_INFO_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), SHELL_TYPE_DESKTOP_DIR_INFO, ShellDesktopDirInfoClass))
+#define SHELL_IS_DESKTOP_DIR_INFO(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), SHELL_TYPE_DESKTOP_DIR_INFO))
+#define SHELL_IS_DESKTOP_DIR_INFO_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), SHELL_TYPE_DESKTOP_DIR_INFO))
+#define SHELL_DESKTOP_DIR_INFO_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), SHELL_TYPE_DESKTOP_DIR_INFO, ShellDesktopDirInfoClass))
 
-struct _GDesktopDirInfoClass
+struct _ShellDesktopDirInfoClass
 {
   GObjectClass parent_class;
 };
 
 
-GType            g_desktop_dir_info_get_type          (void) G_GNUC_CONST;
+GType            shell_desktop_dir_info_get_type          (void) G_GNUC_CONST;
 
-GDesktopDirInfo *g_desktop_dir_info_new_from_filename (const char      *filename);
+ShellDesktopDirInfo *shell_desktop_dir_info_new_from_filename (const char      *filename);
 
-GDesktopDirInfo *g_desktop_dir_info_new_from_keyfile  (GKeyFile        *key_file);
+ShellDesktopDirInfo *shell_desktop_dir_info_new_from_keyfile  (GKeyFile        *key_file);
 
-const char *     g_desktop_dir_info_get_filename      (GDesktopDirInfo *info);
+const char *     shell_desktop_dir_info_get_filename      (ShellDesktopDirInfo *info);
 
-const char *     g_desktop_dir_info_get_generic_name  (GDesktopDirInfo *info);
+const char *     shell_desktop_dir_info_get_generic_name  (ShellDesktopDirInfo *info);
 
-gboolean         g_desktop_dir_info_get_nodisplay     (GDesktopDirInfo *info);
+gboolean         shell_desktop_dir_info_get_nodisplay     (ShellDesktopDirInfo *info);
 
-gboolean         g_desktop_dir_info_get_show_in       (GDesktopDirInfo *info,
-                                                       const gchar     *desktop_env);
+gboolean         shell_desktop_dir_info_get_show_in       (ShellDesktopDirInfo *info,
+                                                           const gchar     *desktop_env);
 
-GDesktopDirInfo *g_desktop_dir_info_new               (const char      *desktop_id);
+ShellDesktopDirInfo *shell_desktop_dir_info_new           (const char      *desktop_id);
 
-gboolean         g_desktop_dir_info_get_is_hidden     (GDesktopDirInfo *info);
+gboolean         shell_desktop_dir_info_get_is_hidden     (ShellDesktopDirInfo *info);
 
-void             g_desktop_dir_info_set_desktop_env   (const char      *desktop_env);
+void             shell_desktop_dir_info_set_desktop_env   (const char      *desktop_env);
 
-gboolean         g_desktop_dir_info_has_key           (GDesktopDirInfo *info,
-                                                       const char      *key);
+gboolean         shell_desktop_dir_info_has_key           (ShellDesktopDirInfo *info,
+                                                           const char      *key);
 
-char *           g_desktop_dir_info_get_string        (GDesktopDirInfo *info,
-                                                       const char      *key);
+char *           shell_desktop_dir_info_get_string        (ShellDesktopDirInfo *info,
+                                                           const char      *key);
 
-gboolean         g_desktop_dir_info_get_boolean       (GDesktopDirInfo *info,
-                                                       const char      *key);
+gboolean         shell_desktop_dir_info_get_boolean       (ShellDesktopDirInfo *info,
+                                                           const char      *key);
 
 G_END_DECLS
 

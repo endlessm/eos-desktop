@@ -5,7 +5,8 @@
  * Based on https://git.gnome.org/browse/glib/tree/gio/gdesktopappinfo.c
  * Copyright (C) 2006-2007 Red Hat, Inc.
  * Copyright © 2007 Ryan Lortie
- * * This library is free software; you can redistribute it and/or
+ *
+ * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
@@ -39,17 +40,13 @@
 
 
 /**
- * SECTION:gdesktopdirinfo
- * @title: GDesktopDirInfo
+ * SECTION:shelldesktopdirinfo
+ * @title: ShellDesktopDirInfo
  * @short_description: Directory information from desktop files
- * @include: gio/gdesktopdirinfo.h
+ * @include: shell-desktop-dir-info.h
  *
- * #GDesktopDirInfo is an implementation of #GDirInfo based on
+ * #ShellDesktopDirInfo is an implementation of #ShellDirInfo based on
  * desktop files.
- *
- * Note that <filename>&lt;gio/gdesktopdirinfo.h&gt;</filename> belongs to
- * the UNIX-specific GIO interfaces, thus you have to use the
- * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
  */
 
 #define GENERIC_NAME_KEY            "GenericName"
@@ -60,16 +57,16 @@ enum {
   PROP_FILENAME
 };
 
-static void     g_desktop_dir_info_iface_init         (GDirInfoIface    *iface);
-static gboolean g_desktop_dir_info_ensure_saved       (GDesktopDirInfo  *info,
-						       GError          **error);
+static void     shell_desktop_dir_info_iface_init         (ShellDirInfoIface    *iface);
+static gboolean shell_desktop_dir_info_ensure_saved       (ShellDesktopDirInfo  *info,
+                                                           GError          **error);
 
 /**
- * GDesktopDirInfo:
+ * ShellDesktopDirInfo:
  * 
  * Information about a desktop directory from a desktop file.
  */
-struct _GDesktopDirInfo
+struct _ShellDesktopDirInfo
 {
   GObject parent_instance;
 
@@ -91,12 +88,12 @@ struct _GDesktopDirInfo
   guint hidden          : 1;
 };
 
-G_DEFINE_TYPE_WITH_CODE (GDesktopDirInfo, g_desktop_dir_info, G_TYPE_OBJECT,
-			 G_IMPLEMENT_INTERFACE (G_TYPE_DIR_INFO,
-						g_desktop_dir_info_iface_init))
+G_DEFINE_TYPE_WITH_CODE (ShellDesktopDirInfo, shell_desktop_dir_info, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (SHELL_TYPE_DIR_INFO,
+                                                shell_desktop_dir_info_iface_init))
 
-G_LOCK_DEFINE_STATIC (g_desktop_env);
-static gchar *g_desktop_env = NULL;
+G_LOCK_DEFINE_STATIC (shell_desktop_env);
+static gchar *shell_desktop_env = NULL;
 
 static gpointer
 search_path_init (gpointer data)
@@ -116,7 +113,7 @@ search_path_init (gpointer data)
   args[j++] = g_build_filename (user_data_dir, "desktop-directories", NULL);
   for (i = 0; i < length; i++)
     args[j++] = g_build_filename (data_dirs[i],
-				  "desktop-directories", NULL);
+                                  "desktop-directories", NULL);
   args[j++] = NULL;
   
   return args;
@@ -130,11 +127,11 @@ get_directories_search_path (void)
 }
 
 static void
-g_desktop_dir_info_finalize (GObject *object)
+shell_desktop_dir_info_finalize (GObject *object)
 {
-  GDesktopDirInfo *info;
+  ShellDesktopDirInfo *info;
 
-  info = G_DESKTOP_DIR_INFO (object);
+  info = SHELL_DESKTOP_DIR_INFO (object);
 
   g_free (info->desktop_id);
   g_free (info->filename);
@@ -152,16 +149,16 @@ g_desktop_dir_info_finalize (GObject *object)
   g_strfreev (info->only_show_in);
   g_strfreev (info->not_show_in);
   
-  G_OBJECT_CLASS (g_desktop_dir_info_parent_class)->finalize (object);
+  G_OBJECT_CLASS (shell_desktop_dir_info_parent_class)->finalize (object);
 }
 
 static void
-g_desktop_dir_info_set_property(GObject         *object,
-				guint            prop_id,
-				const GValue    *value,
-				GParamSpec      *pspec)
+shell_desktop_dir_info_set_property(GObject         *object,
+                                    guint            prop_id,
+				    const GValue    *value,
+				    GParamSpec      *pspec)
 {
-  GDesktopDirInfo *self = G_DESKTOP_DIR_INFO (object);
+  ShellDesktopDirInfo *self = SHELL_DESKTOP_DIR_INFO (object);
 
   switch (prop_id)
     {
@@ -176,12 +173,12 @@ g_desktop_dir_info_set_property(GObject         *object,
 }
 
 static void
-g_desktop_dir_info_get_property (GObject    *object,
-                                 guint       prop_id,
-                                 GValue     *value,
-                                 GParamSpec *pspec)
+shell_desktop_dir_info_get_property (GObject    *object,
+				     guint       prop_id,
+				     GValue     *value,
+				     GParamSpec *pspec)
 {
-  GDesktopDirInfo *self = G_DESKTOP_DIR_INFO (object);
+  ShellDesktopDirInfo *self = SHELL_DESKTOP_DIR_INFO (object);
 
   switch (prop_id)
     {
@@ -195,34 +192,34 @@ g_desktop_dir_info_get_property (GObject    *object,
 }
 
 static void
-g_desktop_dir_info_class_init (GDesktopDirInfoClass *klass)
+shell_desktop_dir_info_class_init (ShellDesktopDirInfoClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   
-  gobject_class->get_property = g_desktop_dir_info_get_property;
-  gobject_class->set_property = g_desktop_dir_info_set_property;
-  gobject_class->finalize = g_desktop_dir_info_finalize;
+  gobject_class->get_property = shell_desktop_dir_info_get_property;
+  gobject_class->set_property = shell_desktop_dir_info_set_property;
+  gobject_class->finalize = shell_desktop_dir_info_finalize;
 
   /**
-   * GDesktopDirInfo:filename:
+   * ShellDesktopDirInfo:filename:
    *
-   * The origin filename of this #GDesktopDirInfo
+   * The origin filename of this #ShellDesktopDirInfo
    */
   g_object_class_install_property (gobject_class,
                                    PROP_FILENAME,
                                    g_param_spec_string ("filename", "Filename", "",
-							NULL,
+                                                        NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void
-g_desktop_dir_info_init (GDesktopDirInfo *local)
+shell_desktop_dir_info_init (ShellDesktopDirInfo *local)
 {
 }
 
 static gboolean
-g_desktop_dir_info_load_from_keyfile (GDesktopDirInfo *info, 
-				      GKeyFile        *key_file)
+shell_desktop_dir_info_load_from_keyfile (ShellDesktopDirInfo *info, 
+					  GKeyFile        *key_file)
 {
   char *start_group;
   char *type;
@@ -260,13 +257,13 @@ g_desktop_dir_info_load_from_keyfile (GDesktopDirInfo *info,
   if (info->icon_name)
     {
       if (g_path_is_absolute (info->icon_name))
-	{
-	  GFile *file;
-	  
-	  file = g_file_new_for_path (info->icon_name);
-	  info->icon = g_file_icon_new (file);
-	  g_object_unref (file);
-	}
+        {
+          GFile *file;
+          
+          file = g_file_new_for_path (info->icon_name);
+          info->icon = g_file_icon_new (file);
+          g_object_unref (file);
+        }
       else
         {
           char *p;
@@ -278,7 +275,7 @@ g_desktop_dir_info_load_from_keyfile (GDesktopDirInfo *info,
                strcmp (p, ".svg") == 0)) 
             *p = 0;
 
-	  info->icon = g_themed_icon_new (info->icon_name);
+          info->icon = g_themed_icon_new (info->icon_name);
         }
     }
   
@@ -288,7 +285,7 @@ g_desktop_dir_info_load_from_keyfile (GDesktopDirInfo *info,
 }
 
 static gboolean
-g_desktop_dir_info_load_file (GDesktopDirInfo *self)
+shell_desktop_dir_info_load_file (ShellDesktopDirInfo *self)
 {
   GKeyFile *key_file;
   gboolean retval = FALSE;
@@ -300,11 +297,11 @@ g_desktop_dir_info_load_file (GDesktopDirInfo *self)
   key_file = g_key_file_new ();
 
   if (g_key_file_load_from_file (key_file,
-				 self->filename,
-				 G_KEY_FILE_NONE,
-				 NULL))
+                                 self->filename,
+                                 G_KEY_FILE_NONE,
+                                 NULL))
     {
-      retval = g_desktop_dir_info_load_from_keyfile (self, key_file);
+      retval = shell_desktop_dir_info_load_from_keyfile (self, key_file);
     }
 
   g_key_file_unref (key_file);
@@ -312,23 +309,23 @@ g_desktop_dir_info_load_file (GDesktopDirInfo *self)
 }
 
 /**
- * g_desktop_dir_info_new_from_keyfile:
+ * shell_desktop_dir_info_new_from_keyfile:
  * @key_file: an opened #GKeyFile
  *
- * Creates a new #GDesktopDirInfo.
+ * Creates a new #ShellDesktopDirInfo.
  *
- * Returns: a new #GDesktopDirInfo or %NULL on error.
+ * Returns: a new #ShellDesktopDirInfo or %NULL on error.
  *
  * Since: 2.18
  **/
-GDesktopDirInfo *
-g_desktop_dir_info_new_from_keyfile (GKeyFile *key_file)
+ShellDesktopDirInfo *
+shell_desktop_dir_info_new_from_keyfile (GKeyFile *key_file)
 {
-  GDesktopDirInfo *info;
+  ShellDesktopDirInfo *info;
 
-  info = g_object_new (G_TYPE_DESKTOP_DIR_INFO, NULL);
+  info = g_object_new (SHELL_TYPE_DESKTOP_DIR_INFO, NULL);
   info->filename = NULL;
-  if (!g_desktop_dir_info_load_from_keyfile (info, key_file))
+  if (!shell_desktop_dir_info_load_from_keyfile (info, key_file))
     {
       g_object_unref (info);
       return NULL;
@@ -337,20 +334,20 @@ g_desktop_dir_info_new_from_keyfile (GKeyFile *key_file)
 }
 
 /**
- * g_desktop_dir_info_new_from_filename:
+ * shell_desktop_dir_info_new_from_filename:
  * @filename: the path of a desktop file, in the GLib filename encoding
  * 
- * Creates a new #GDesktopDirInfo.
+ * Creates a new #ShellDesktopDirInfo.
  *
- * Returns: a new #GDesktopDirInfo or %NULL on error.
+ * Returns: a new #ShellDesktopDirInfo or %NULL on error.
  **/
-GDesktopDirInfo *
-g_desktop_dir_info_new_from_filename (const char *filename)
+ShellDesktopDirInfo *
+shell_desktop_dir_info_new_from_filename (const char *filename)
 {
-  GDesktopDirInfo *info = NULL;
+  ShellDesktopDirInfo *info = NULL;
 
-  info = g_object_new (G_TYPE_DESKTOP_DIR_INFO, "filename", filename, NULL);
-  if (!g_desktop_dir_info_load_file (info))
+  info = g_object_new (SHELL_TYPE_DESKTOP_DIR_INFO, "filename", filename, NULL);
+  if (!shell_desktop_dir_info_load_file (info))
     {
       g_object_unref (info);
       return NULL;
@@ -359,10 +356,10 @@ g_desktop_dir_info_new_from_filename (const char *filename)
 }
 
 /**
- * g_desktop_dir_info_new:
+ * shell_desktop_dir_info_new:
  * @desktop_id: the desktop file id
  * 
- * Creates a new #GDesktopDirInfo based on a desktop file id. 
+ * Creates a new #ShellDesktopDirInfo based on a desktop file id. 
  *
  * A desktop file id is the basename of the desktop file, including the 
  * .directory extension. GIO is looking for a desktop file with this name 
@@ -374,12 +371,12 @@ g_desktop_dir_info_new_from_filename (const char *filename)
  * (i.e. a desktop id of kde-foo.directory will match
  * <filename>/usr/share/desktop-directories/kde/foo.directory</filename>).
  * 
- * Returns: a new #GDesktopDirInfo, or %NULL if no desktop file with that id
+ * Returns: a new #ShellDesktopDirInfo, or %NULL if no desktop file with that id
  */
-GDesktopDirInfo *
-g_desktop_dir_info_new (const char *desktop_id)
+ShellDesktopDirInfo *
+shell_desktop_dir_info_new (const char *desktop_id)
 {
-  GDesktopDirInfo *dirinfo;
+  ShellDesktopDirInfo *dirinfo;
   const char * const *dirs;
   char *basename;
   int i;
@@ -394,24 +391,24 @@ g_desktop_dir_info_new (const char *desktop_id)
       char *p;
 
       filename = g_build_filename (dirs[i], desktop_id, NULL);
-      dirinfo = g_desktop_dir_info_new_from_filename (filename);
+      dirinfo = shell_desktop_dir_info_new_from_filename (filename);
       g_free (filename);
       if (dirinfo != NULL)
-	goto found;
+        goto found;
 
       p = basename;
       while ((p = strchr (p, '-')) != NULL)
-	{
-	  *p = '/';
+        {
+          *p = '/';
 
-	  filename = g_build_filename (dirs[i], basename, NULL);
-	  dirinfo = g_desktop_dir_info_new_from_filename (filename);
-	  g_free (filename);
-	  if (dirinfo != NULL)
-	    goto found;
-	  *p = '-';
-	  p++;
-	}
+          filename = g_build_filename (dirs[i], basename, NULL);
+          dirinfo = shell_desktop_dir_info_new_from_filename (filename);
+          g_free (filename);
+          if (dirinfo != NULL)
+            goto found;
+          *p = '-';
+          p++;
+        }
     }
 
   g_free (basename);
@@ -423,7 +420,7 @@ g_desktop_dir_info_new (const char *desktop_id)
   g_free (dirinfo->desktop_id);
   dirinfo->desktop_id = g_strdup (desktop_id);
 
-  if (g_desktop_dir_info_get_is_hidden (dirinfo))
+  if (shell_desktop_dir_info_get_is_hidden (dirinfo))
     {
       g_object_unref (dirinfo);
       dirinfo = NULL;
@@ -432,13 +429,13 @@ g_desktop_dir_info_new (const char *desktop_id)
   return dirinfo;
 }
 
-static GDirInfo *
-g_desktop_dir_info_dup (GDirInfo *dirinfo)
+static ShellDirInfo *
+shell_desktop_dir_info_dup (ShellDirInfo *dirinfo)
 {
-  GDesktopDirInfo *info = G_DESKTOP_DIR_INFO (dirinfo);
-  GDesktopDirInfo *new_info;
+  ShellDesktopDirInfo *info = SHELL_DESKTOP_DIR_INFO (dirinfo);
+  ShellDesktopDirInfo *new_info;
   
-  new_info = g_object_new (G_TYPE_DESKTOP_DIR_INFO, NULL);
+  new_info = g_object_new (SHELL_TYPE_DESKTOP_DIR_INFO, NULL);
 
   new_info->filename = g_strdup (info->filename);
   new_info->desktop_id = g_strdup (info->desktop_id);
@@ -458,15 +455,15 @@ g_desktop_dir_info_dup (GDirInfo *dirinfo)
   new_info->not_show_in = g_strdupv (info->not_show_in);
   new_info->hidden = info->hidden;
   
-  return G_DIR_INFO (new_info);
+  return SHELL_DIR_INFO (new_info);
 }
 
 static gboolean
-g_desktop_dir_info_equal (GDirInfo *dirinfo1,
-			  GDirInfo *dirinfo2)
+shell_desktop_dir_info_equal (ShellDirInfo *dirinfo1,
+			      ShellDirInfo *dirinfo2)
 {
-  GDesktopDirInfo *info1 = G_DESKTOP_DIR_INFO (dirinfo1);
-  GDesktopDirInfo *info2 = G_DESKTOP_DIR_INFO (dirinfo2);
+  ShellDesktopDirInfo *info1 = SHELL_DESKTOP_DIR_INFO (dirinfo1);
+  ShellDesktopDirInfo *info2 = SHELL_DESKTOP_DIR_INFO (dirinfo2);
 
   if (info1->desktop_id == NULL ||
       info2->desktop_id == NULL)
@@ -476,17 +473,17 @@ g_desktop_dir_info_equal (GDirInfo *dirinfo1,
 }
 
 static const char *
-g_desktop_dir_info_get_id (GDirInfo *dirinfo)
+shell_desktop_dir_info_get_id (ShellDirInfo *dirinfo)
 {
-  GDesktopDirInfo *info = G_DESKTOP_DIR_INFO (dirinfo);
+  ShellDesktopDirInfo *info = SHELL_DESKTOP_DIR_INFO (dirinfo);
 
   return info->desktop_id;
 }
 
 static const char *
-g_desktop_dir_info_get_name (GDirInfo *dirinfo)
+shell_desktop_dir_info_get_name (ShellDirInfo *dirinfo)
 {
-  GDesktopDirInfo *info = G_DESKTOP_DIR_INFO (dirinfo);
+  ShellDesktopDirInfo *info = SHELL_DESKTOP_DIR_INFO (dirinfo);
 
   if (info->name == NULL)
     return _("Unnamed");
@@ -494,18 +491,18 @@ g_desktop_dir_info_get_name (GDirInfo *dirinfo)
 }
 
 static const char *
-g_desktop_dir_info_get_display_name (GDirInfo *dirinfo)
+shell_desktop_dir_info_get_display_name (ShellDirInfo *dirinfo)
 {
-  GDesktopDirInfo *info = G_DESKTOP_DIR_INFO (dirinfo);
+  ShellDesktopDirInfo *info = SHELL_DESKTOP_DIR_INFO (dirinfo);
 
   if (info->fullname == NULL)
-    return g_desktop_dir_info_get_name (dirinfo);
+    return shell_desktop_dir_info_get_name (dirinfo);
   return info->fullname;
 }
 
 /**
- * g_desktop_dir_info_get_is_hidden:
- * @info: a #GDesktopDirInfo.
+ * shell_desktop_dir_info_get_is_hidden:
+ * @info: a #ShellDesktopDirInfo.
  *
  * A desktop file is hidden if the Hidden key in it is
  * set to True.
@@ -513,79 +510,79 @@ g_desktop_dir_info_get_display_name (GDirInfo *dirinfo)
  * Returns: %TRUE if hidden, %FALSE otherwise. 
  **/
 gboolean
-g_desktop_dir_info_get_is_hidden (GDesktopDirInfo *info)
+shell_desktop_dir_info_get_is_hidden (ShellDesktopDirInfo *info)
 {
   return info->hidden;
 }
 
 /**
- * g_desktop_dir_info_get_filename:
- * @info: a #GDesktopDirInfo
+ * shell_desktop_dir_info_get_filename:
+ * @info: a #ShellDesktopDirInfo
  *
  * When @info was created from a known filename, return it.  In some
- * situations such as the #GDesktopDirInfo returned from
- * g_desktop_dir_info_new_from_keyfile(), this function will return %NULL.
+ * situations such as the #ShellDesktopDirInfo returned from
+ * shell_desktop_dir_info_new_from_keyfile(), this function will return %NULL.
  *
  * Returns: The full path to the file for @info, or %NULL if not known.
  * Since: 2.24
  */
 const char *
-g_desktop_dir_info_get_filename (GDesktopDirInfo *info)
+shell_desktop_dir_info_get_filename (ShellDesktopDirInfo *info)
 {
   return info->filename;
 }
 
 static const char *
-g_desktop_dir_info_get_description (GDirInfo *dirinfo)
+shell_desktop_dir_info_get_description (ShellDirInfo *dirinfo)
 {
-  GDesktopDirInfo *info = G_DESKTOP_DIR_INFO (dirinfo);
+  ShellDesktopDirInfo *info = SHELL_DESKTOP_DIR_INFO (dirinfo);
   
   return info->comment;
 }
 
 static GIcon *
-g_desktop_dir_info_get_icon (GDirInfo *dirinfo)
+shell_desktop_dir_info_get_icon (ShellDirInfo *dirinfo)
 {
-  GDesktopDirInfo *info = G_DESKTOP_DIR_INFO (dirinfo);
+  ShellDesktopDirInfo *info = SHELL_DESKTOP_DIR_INFO (dirinfo);
 
   return info->icon;
 }
 
 /**
- * g_desktop_dir_info_get_generic_name:
- * @info: a #GDesktopDirInfo
+ * shell_desktop_dir_info_get_generic_name:
+ * @info: a #ShellDesktopDirInfo
  *
  * Gets the generic name from the destkop file.
  *
  * Returns: The value of the GenericName key
  */
 const char *
-g_desktop_dir_info_get_generic_name (GDesktopDirInfo *info)
+shell_desktop_dir_info_get_generic_name (ShellDesktopDirInfo *info)
 {
   return info->generic_name;
 }
 
 /**
- * g_desktop_dir_info_get_nodisplay:
- * @info: a #GDesktopDirInfo
+ * shell_desktop_dir_info_get_nodisplay:
+ * @info: a #ShellDesktopDirInfo
  *
  * Gets the value of the NoDisplay key, which helps determine if the
  * directory info should be shown in menus. See
- * #G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY and g_dir_info_should_show().
+ * #G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY and shell_dir_info_should_show().
  *
  * Returns: The value of the NoDisplay key
  *
  * Since: 2.30
  */
 gboolean
-g_desktop_dir_info_get_nodisplay (GDesktopDirInfo *info)
+shell_desktop_dir_info_get_nodisplay (ShellDesktopDirInfo *info)
 {
   return info->nodisplay;
 }
 
 /**
- * g_desktop_dir_info_get_show_in:
- * @info: a #GDesktopDirInfo
+ * shell_desktop_dir_info_get_show_in:
+ * @info: a #ShellDesktopDirInfo
  * @desktop_env: a string specifying a desktop name
  *
  * Checks if the directory info should be shown in menus that list available
@@ -593,9 +590,9 @@ g_desktop_dir_info_get_nodisplay (GDesktopDirInfo *info)
  * <literal>OnlyShowIn</literal> and <literal>NotShowIn</literal> keys.
  *
  * If @desktop_env is %NULL, then the name of the desktop set with
- * g_desktop_dir_info_set_desktop_env() is used.
+ * shell_desktop_dir_info_set_desktop_env() is used.
  *
- * Note that g_dir_info_should_show() for @info will include this check (with
+ * Note that shell_dir_info_should_show() for @info will include this check (with
  * %NULL for @desktop_env) as well as additional checks.
  *
  * Returns: %TRUE if the @info should be shown in @desktop_env according to the
@@ -605,59 +602,59 @@ g_desktop_dir_info_get_nodisplay (GDesktopDirInfo *info)
  * Since: 2.30
  */
 gboolean
-g_desktop_dir_info_get_show_in (GDesktopDirInfo *info,
-                                const gchar     *desktop_env)
+shell_desktop_dir_info_get_show_in (ShellDesktopDirInfo *info,
+				    const gchar     *desktop_env)
 {
   gboolean found;
   int i;
 
-  g_return_val_if_fail (G_IS_DESKTOP_DIR_INFO (info), FALSE);
+  g_return_val_if_fail (SHELL_IS_DESKTOP_DIR_INFO (info), FALSE);
 
   if (!desktop_env) {
-    G_LOCK (g_desktop_env);
-    desktop_env = g_desktop_env;
-    G_UNLOCK (g_desktop_env);
+    G_LOCK (shell_desktop_env);
+    desktop_env = shell_desktop_env;
+    G_UNLOCK (shell_desktop_env);
   }
 
   if (info->only_show_in)
     {
       if (desktop_env == NULL)
-	return FALSE;
+        return FALSE;
 
       found = FALSE;
       for (i = 0; info->only_show_in[i] != NULL; i++)
-	{
-	  if (strcmp (info->only_show_in[i], desktop_env) == 0)
-	    {
-	      found = TRUE;
-	      break;
-	    }
-	}
+        {
+          if (strcmp (info->only_show_in[i], desktop_env) == 0)
+            {
+              found = TRUE;
+              break;
+            }
+        }
       if (!found)
-	return FALSE;
+        return FALSE;
     }
 
   if (info->not_show_in && desktop_env)
     {
       for (i = 0; info->not_show_in[i] != NULL; i++)
-	{
-	  if (strcmp (info->not_show_in[i], desktop_env) == 0)
-	    return FALSE;
-	}
+        {
+          if (strcmp (info->not_show_in[i], desktop_env) == 0)
+            return FALSE;
+        }
     }
 
   return TRUE;
 }
 
 static gboolean
-g_desktop_dir_info_should_show (GDirInfo *dirinfo)
+shell_desktop_dir_info_should_show (ShellDirInfo *dirinfo)
 {
-  GDesktopDirInfo *info = G_DESKTOP_DIR_INFO (dirinfo);
+  ShellDesktopDirInfo *info = SHELL_DESKTOP_DIR_INFO (dirinfo);
 
   if (info->nodisplay)
     return FALSE;
 
-  return g_desktop_dir_info_get_show_in (info, NULL);
+  return shell_desktop_dir_info_get_show_in (info, NULL);
 }
 
 static char *
@@ -685,8 +682,8 @@ ensure_dir (GError  **error)
 }
 
 static gboolean
-g_desktop_dir_info_ensure_saved (GDesktopDirInfo  *info,
-				 GError          **error)
+shell_desktop_dir_info_ensure_saved (ShellDesktopDirInfo  *info,
+				     GError          **error)
 {
   GKeyFile *key_file;
   char *dirname;
@@ -700,7 +697,7 @@ g_desktop_dir_info_ensure_saved (GDesktopDirInfo  *info,
     return TRUE;
 
   /* This is only used for object created with
-   * g_dir_info_create_from_directory_name. All other
+   * shell_dir_info_create_from_directory_name. All other
    * object should have a filename
    */
   
@@ -711,32 +708,32 @@ g_desktop_dir_info_ensure_saved (GDesktopDirInfo  *info,
   key_file = g_key_file_new ();
 
   g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-			 "Encoding", "UTF-8");
+                         "Encoding", "UTF-8");
   g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-			 G_KEY_FILE_DESKTOP_KEY_VERSION, "1.0");
+                         G_KEY_FILE_DESKTOP_KEY_VERSION, "1.0");
   g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-			 G_KEY_FILE_DESKTOP_KEY_TYPE,
+                         G_KEY_FILE_DESKTOP_KEY_TYPE,
                          G_KEY_FILE_DESKTOP_TYPE_DIRECTORY);
   if (info->nodisplay)
     g_key_file_set_boolean (key_file, G_KEY_FILE_DESKTOP_GROUP,
-			    G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY, TRUE);
+                            G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY, TRUE);
 
   g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-			 G_KEY_FILE_DESKTOP_KEY_NAME, info->name);
+                         G_KEY_FILE_DESKTOP_KEY_NAME, info->name);
 
   if (info->generic_name != NULL)
     g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-			   GENERIC_NAME_KEY, info->generic_name);
+                           GENERIC_NAME_KEY, info->generic_name);
 
   if (info->fullname != NULL)
     g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-			   FULL_NAME_KEY, info->fullname);
+                           FULL_NAME_KEY, info->fullname);
 
   g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-			 G_KEY_FILE_DESKTOP_KEY_COMMENT, info->comment);
+                         G_KEY_FILE_DESKTOP_KEY_COMMENT, info->comment);
   
   g_key_file_set_boolean (key_file, G_KEY_FILE_DESKTOP_GROUP,
-			  G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY, TRUE);
+                          G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY, TRUE);
 
   data = g_key_file_to_data (key_file, &data_size, NULL);
   g_key_file_free (key_file);
@@ -753,7 +750,7 @@ g_desktop_dir_info_ensure_saved (GDesktopDirInfo  *info,
 
       display_name = g_filename_display_name (filename);
       g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-		   _("Can't create user desktop file %s"), display_name);
+                   _("Can't create user desktop file %s"), display_name);
       g_free (display_name);
       g_free (filename);
       g_free (data);
@@ -783,9 +780,9 @@ g_desktop_dir_info_ensure_saved (GDesktopDirInfo  *info,
 }
 
 static gboolean
-g_desktop_dir_info_can_delete (GDirInfo *dirinfo)
+shell_desktop_dir_info_can_delete (ShellDirInfo *dirinfo)
 {
-  GDesktopDirInfo *info = G_DESKTOP_DIR_INFO (dirinfo);
+  ShellDesktopDirInfo *info = SHELL_DESKTOP_DIR_INFO (dirinfo);
 
   if (info->filename)
     {
@@ -797,9 +794,9 @@ g_desktop_dir_info_can_delete (GDirInfo *dirinfo)
 }
 
 static gboolean
-g_desktop_dir_info_delete (GDirInfo *dirinfo)
+shell_desktop_dir_info_delete (ShellDirInfo *dirinfo)
 {
-  GDesktopDirInfo *info = G_DESKTOP_DIR_INFO (dirinfo);
+  ShellDesktopDirInfo *info = SHELL_DESKTOP_DIR_INFO (dirinfo);
   
   if (info->filename)
     { 
@@ -818,26 +815,25 @@ g_desktop_dir_info_delete (GDirInfo *dirinfo)
 }
 
 /**
- * g_dir_info_create_from_directory_name:
+ * shell_dir_info_create_from_directory_name:
  * @directory_name: the directory name
- * @flags: flags that can specify details of the created #GDirInfo
  * @error: a #GError location to store the error occurring, %NULL to ignore.
  *
- * Creates a new #GDirInfo from the given information.
+ * Creates a new #ShellDirInfo from the given information.
  *
- * Returns: (transfer full): new #GDirInfo for given directory name.
+ * Returns: (transfer full): new #ShellDirInfo for given directory name.
  **/
-GDirInfo *
-g_dir_info_create_from_directory_name (const char           *directory_name,
-				       GError              **error)
+ShellDirInfo *
+shell_dir_info_create_from_directory_name (const char           *directory_name,
+					   GError              **error)
 {
   char **split;
   char *basename;
-  GDesktopDirInfo *info;
+  ShellDesktopDirInfo *info;
 
   g_return_val_if_fail (directory_name, NULL);
 
-  info = g_object_new (G_TYPE_DESKTOP_DIR_INFO, NULL);
+  info = g_object_new (SHELL_TYPE_DESKTOP_DIR_INFO, NULL);
 
   info->filename = NULL;
   info->desktop_id = NULL;
@@ -848,32 +844,32 @@ g_dir_info_create_from_directory_name (const char           *directory_name,
   info->name = g_strdup (directory_name);
   info->comment = g_strdup_printf (_("Custom definition for %s"), info->name);
   
-  return G_DIR_INFO (info);
+  return SHELL_DIR_INFO (info);
 }
 
 static void
-g_desktop_dir_info_iface_init (GDirInfoIface *iface)
+shell_desktop_dir_info_iface_init (ShellDirInfoIface *iface)
 {
-  iface->dup = g_desktop_dir_info_dup;
-  iface->equal = g_desktop_dir_info_equal;
-  iface->get_id = g_desktop_dir_info_get_id;
-  iface->get_name = g_desktop_dir_info_get_name;
-  iface->get_description = g_desktop_dir_info_get_description;
-  iface->get_icon = g_desktop_dir_info_get_icon;
-  iface->should_show = g_desktop_dir_info_should_show;
-  iface->can_delete = g_desktop_dir_info_can_delete;
-  iface->do_delete = g_desktop_dir_info_delete;
-  iface->get_display_name = g_desktop_dir_info_get_display_name;
+  iface->dup = shell_desktop_dir_info_dup;
+  iface->equal = shell_desktop_dir_info_equal;
+  iface->get_id = shell_desktop_dir_info_get_id;
+  iface->get_name = shell_desktop_dir_info_get_name;
+  iface->get_description = shell_desktop_dir_info_get_description;
+  iface->get_icon = shell_desktop_dir_info_get_icon;
+  iface->should_show = shell_desktop_dir_info_should_show;
+  iface->can_delete = shell_desktop_dir_info_can_delete;
+  iface->do_delete = shell_desktop_dir_info_delete;
+  iface->get_display_name = shell_desktop_dir_info_get_display_name;
 }
 
 static gboolean
-dir_info_in_list (GDirInfo *info, 
+dir_info_in_list (ShellDirInfo *info, 
                   GList    *list)
 {
   while (list != NULL)
     {
-      if (g_dir_info_equal (info, list->data))
-	return TRUE;
+      if (shell_dir_info_equal (info, list->data))
+        return TRUE;
       list = list->next;
     }
   return FALSE;
@@ -881,70 +877,70 @@ dir_info_in_list (GDirInfo *info,
 
 static void
 get_entries_from_dir (GHashTable *entries, 
-		      const char *dirname, 
-		      const char *prefix)
+                      const char *dirname, 
+                      const char *prefix)
 {
   GDir *dir;
   const char *basename;
   char *filename, *subprefix, *desktop_id;
   gboolean hidden;
-  GDesktopDirInfo *dirinfo;
+  ShellDesktopDirInfo *dirinfo;
   
   dir = g_dir_open (dirname, 0, NULL);
   if (dir)
     {
       while ((basename = g_dir_read_name (dir)) != NULL)
-	{
-	  filename = g_build_filename (dirname, basename, NULL);
-	  if (g_str_has_suffix (basename, ".directory"))
-	    {
-	      desktop_id = g_strconcat (prefix, basename, NULL);
+        {
+          filename = g_build_filename (dirname, basename, NULL);
+          if (g_str_has_suffix (basename, ".directory"))
+            {
+              desktop_id = g_strconcat (prefix, basename, NULL);
 
-	      /* Use _extended so we catch NULLs too (hidden) */
-	      if (!g_hash_table_lookup_extended (entries, desktop_id, NULL, NULL))
-		{
-		  dirinfo = g_desktop_dir_info_new_from_filename (filename);
+              /* Use _extended so we catch NULLs too (hidden) */
+              if (!g_hash_table_lookup_extended (entries, desktop_id, NULL, NULL))
+                {
+                  dirinfo = shell_desktop_dir_info_new_from_filename (filename);
                   hidden = FALSE;
 
-		  if (dirinfo && g_desktop_dir_info_get_is_hidden (dirinfo))
-		    {
-		      g_object_unref (dirinfo);
-		      dirinfo = NULL;
-		      hidden = TRUE;
-		    }
-				      
-		  if (dirinfo || hidden)
-		    {
-		      g_hash_table_insert (entries, g_strdup (desktop_id), dirinfo);
+                  if (dirinfo && shell_desktop_dir_info_get_is_hidden (dirinfo))
+                    {
+                      g_object_unref (dirinfo);
+                      dirinfo = NULL;
+                      hidden = TRUE;
+                    }
+                                      
+                  if (dirinfo || hidden)
+                    {
+                      g_hash_table_insert (entries, g_strdup (desktop_id), dirinfo);
 
-		      if (dirinfo)
-			{
-			  /* Reuse instead of strdup here */
-			  dirinfo->desktop_id = desktop_id;
-			  desktop_id = NULL;
-			}
-		    }
-		}
-	      g_free (desktop_id);
-	    }
-	  else
-	    {
-	      if (g_file_test (filename, G_FILE_TEST_IS_DIR))
-		{
-		  subprefix = g_strconcat (prefix, basename, "-", NULL);
-		  get_entries_from_dir (entries, filename, subprefix);
-		  g_free (subprefix);
-		}
-	    }
-	  g_free (filename);
-	}
+                      if (dirinfo)
+                        {
+                          /* Reuse instead of strdup here */
+                          dirinfo->desktop_id = desktop_id;
+                          desktop_id = NULL;
+                        }
+                    }
+                }
+              g_free (desktop_id);
+            }
+          else
+            {
+              if (g_file_test (filename, G_FILE_TEST_IS_DIR))
+                {
+                  subprefix = g_strconcat (prefix, basename, "-", NULL);
+                  get_entries_from_dir (entries, filename, subprefix);
+                  g_free (subprefix);
+                }
+            }
+          g_free (filename);
+        }
       g_dir_close (dir);
     }
 }
 
 
 /**
- * g_dir_info_get_all:
+ * shell_dir_info_get_all:
  *
  * Gets a list of all of the desktop directories currently registered 
  * on this system.
@@ -952,14 +948,14 @@ get_entries_from_dir (GHashTable *entries,
  * For desktop files, this includes directories that have 
  * <literal>NoDisplay=true</literal> set or are excluded from 
  * display by means of <literal>OnlyShowIn</literal> or
- * <literal>NotShowIn</literal>. See g_dir_info_should_show().
+ * <literal>NotShowIn</literal>. See shell_dir_info_should_show().
  * The returned list does not include directories which have
  * the <literal>Hidden</literal> key set. 
  * 
- * Returns: (element-type GDirInfo) (transfer full): a newly allocated #GList of references to #GDirInfo<!---->s.
+ * Returns: (element-type ShellDirInfo) (transfer full): a newly allocated #GList of references to #ShellDirInfo<!---->s.
  **/
 GList *
-g_dir_info_get_all (void)
+shell_dir_info_get_all (void)
 {
   const char * const *dirs;
   GHashTable *entries;
@@ -971,7 +967,7 @@ g_dir_info_get_all (void)
   dirs = get_directories_search_path ();
 
   entries = g_hash_table_new_full (g_str_hash, g_str_equal,
-				   g_free, NULL);
+                                   g_free, NULL);
 
   
   for (i = 0; dirs[i] != NULL; i++)
@@ -994,7 +990,7 @@ g_dir_info_get_all (void)
 static GList *
 append_desktop_entry (GList      *list, 
                       const char *desktop_entry,
-		      GList      *removed_entries)
+                      GList      *removed_entries)
 {
   /* Add if not already in list, and valid */
   if (!g_list_find_custom (list, desktop_entry, (GCompareFunc) strcmp) &&
@@ -1005,8 +1001,8 @@ append_desktop_entry (GList      *list,
 }
 
 /**
- * g_desktop_dir_info_get_string:
- * @info: a #GDesktopDirInfo
+ * shell_desktop_dir_info_get_string:
+ * @info: a #ShellDesktopDirInfo
  * @key: the key to look up
  *
  * Looks up a string value in the keyfile backing @info.
@@ -1019,18 +1015,18 @@ append_desktop_entry (GList      *list,
  * Since: 2.36
  */
 char *
-g_desktop_dir_info_get_string (GDesktopDirInfo *info,
-                               const char      *key)
+shell_desktop_dir_info_get_string (ShellDesktopDirInfo *info,
+				   const char      *key)
 {
-  g_return_val_if_fail (G_IS_DESKTOP_DIR_INFO (info), NULL);
+  g_return_val_if_fail (SHELL_IS_DESKTOP_DIR_INFO (info), NULL);
 
   return g_key_file_get_string (info->keyfile,
                                 G_KEY_FILE_DESKTOP_GROUP, key, NULL);
 }
 
 /**
- * g_desktop_dir_info_get_boolean:
- * @info: a #GDesktopDirInfo
+ * shell_desktop_dir_info_get_boolean:
+ * @info: a #ShellDesktopDirInfo
  * @key: the key to look up
  *
  * Looks up a boolean value in the keyfile backing @info.
@@ -1043,18 +1039,18 @@ g_desktop_dir_info_get_string (GDesktopDirInfo *info,
  * Since: 2.36
  */
 gboolean
-g_desktop_dir_info_get_boolean (GDesktopDirInfo *info,
-                                const char      *key)
+shell_desktop_dir_info_get_boolean (ShellDesktopDirInfo *info,
+				    const char      *key)
 {
-  g_return_val_if_fail (G_IS_DESKTOP_DIR_INFO (info), FALSE);
+  g_return_val_if_fail (SHELL_IS_DESKTOP_DIR_INFO (info), FALSE);
 
   return g_key_file_get_boolean (info->keyfile,
                                  G_KEY_FILE_DESKTOP_GROUP, key, NULL);
 }
 
 /**
- * g_desktop_dir_info_has_key:
- * @info: a #GDesktopDirInfo
+ * shell_desktop_dir_info_has_key:
+ * @info: a #ShellDesktopDirInfo
  * @key: the key to look up
  *
  * Returns whether @key exists in the "Desktop Entry" group
@@ -1065,10 +1061,10 @@ g_desktop_dir_info_get_boolean (GDesktopDirInfo *info,
  * Since: 2.26
  */
 gboolean
-g_desktop_dir_info_has_key (GDesktopDirInfo *info,
-                            const char      *key)
+shell_desktop_dir_info_has_key (ShellDesktopDirInfo *info,
+				const char      *key)
 {
-  g_return_val_if_fail (G_IS_DESKTOP_DIR_INFO (info), FALSE);
+  g_return_val_if_fail (SHELL_IS_DESKTOP_DIR_INFO (info), FALSE);
 
   return g_key_file_has_key (info->keyfile,
                              G_KEY_FILE_DESKTOP_GROUP, key, NULL);
