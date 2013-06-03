@@ -14,9 +14,6 @@ const AppDisplay = imports.ui.appDisplay;
 const Main = imports.ui.main;
 const OverviewControls = imports.ui.overviewControls;
 const Params = imports.misc.params;
-const RemoteSearch = imports.ui.remoteSearch;
-const Search = imports.ui.search;
-const SearchDisplay = imports.ui.searchDisplay;
 const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
 const Wanda = imports.ui.wanda;
@@ -30,7 +27,6 @@ const QUERY_URI_PATH = 'search?q=';
 const ViewPage = {
     WINDOWS: 1,
     APPS: 2,
-    SEARCH: 3
 };
 
 const FocusTrap = new Lang.Class({
@@ -67,9 +63,6 @@ const ViewSelector = new Lang.Class({
         this._activePage = null;
 
         this._searchActive = false;
-        this._searchTimeoutId = 0;
-
-        this._searchSystem = new Search.SearchSystem();
 
         this._entry = searchEntry;
         ShellEntry.addContextMenu(this._entry);
@@ -104,24 +97,6 @@ const ViewSelector = new Lang.Class({
         this._appsPage = this._addPage(this._appDisplay.actor,
                                        _("Applications"), 'view-grid-symbolic');
 
-        this._searchResults = new SearchDisplay.SearchResults(this._searchSystem);
-        this._searchPage = this._addPage(this._searchResults.actor,
-                                         _("Search"), 'edit-find-symbolic',
-                                         { a11yFocus: this._entry });
-
-        this._searchSettings = new Gio.Settings({ schema: Search.SEARCH_PROVIDERS_SCHEMA });
-        this._searchSettings.connect('changed::disabled', Lang.bind(this, this._reloadRemoteProviders));
-        this._searchSettings.connect('changed::disable-external', Lang.bind(this, this._reloadRemoteProviders));
-        this._searchSettings.connect('changed::sort-order', Lang.bind(this, this._reloadRemoteProviders));
-
-        // Default search providers
-        // Wanda comes obviously first
-        this.addSearchProvider(new Wanda.WandaSearchProvider());
-        this.addSearchProvider(new AppDisplay.AppSearchProvider());
-
-        // Load remote search providers provided by applications
-        RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, this.addSearchProvider));
-
         // Since the entry isn't inside the results container we install this
         // dummy widget as the last results container child so that we can
         // include the entry in the keynav tab path
@@ -129,9 +104,6 @@ const ViewSelector = new Lang.Class({
         this._focusTrap.connect('key-focus-in', Lang.bind(this, function() {
             this._entry.grab_key_focus();
         }));
-        this._searchResults.actor.add_actor(this._focusTrap);
-
-        global.focus_manager.add_group(this._searchResults.actor);
 
         this._stageKeyPressId = 0;
         Main.overview.connect('showing', Lang.bind(this,
@@ -179,7 +151,6 @@ const ViewSelector = new Lang.Class({
 
         this.reset();
         this._appsPage.hide();
-        this._searchPage.hide();
         this._workspacesDisplay.show();
 
         if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
@@ -310,9 +281,6 @@ const ViewSelector = new Lang.Class({
     },
 
     _searchCancelled: function() {
-        this._showPage(this._showAppsButton.checked ? this._appsPage
-                                                    : this._workspacesPage);
-
         // Leave the entry focused when it doesn't have any text;
         // when replacing a selected search term, Clutter emits
         // two 'text-changed' signals, one for deleting the previous
@@ -334,8 +302,7 @@ const ViewSelector = new Lang.Class({
 
     _onStageKeyFocusChanged: function() {
         let focus = global.stage.get_key_focus();
-        let appearFocused = (this._entry.contains(focus) ||
-                             this._searchResults.actor.contains(focus));
+        let appearFocused = this._entry.contains(focus);
 
         this._text.set_cursor_visible(appearFocused);
 
@@ -387,29 +354,16 @@ const ViewSelector = new Lang.Class({
         let searchPreviouslyActive = this._searchActive;
         this._searchActive = (terms.length > 0);
 
-        let startSearch = this._searchActive && !searchPreviouslyActive;
-        if (startSearch)
-            this._searchResults.startingSearch();
-
         if (this._searchActive) {
             this._entry.set_secondary_icon(this._clearIcon);
 
             if (this._iconClickedId == 0)
                 this._iconClickedId = this._entry.connect('secondary-icon-clicked',
                     Lang.bind(this, this.reset));
-
-            if (this._searchTimeoutId == 0)
-                this._searchTimeoutId = Mainloop.timeout_add(150,
-                    Lang.bind(this, this._doSearch));
         } else {
             if (this._iconClickedId > 0) {
                 this._entry.disconnect(this._iconClickedId);
                 this._iconClickedId = 0;
-            }
-
-            if (this._searchTimeoutId > 0) {
-                Mainloop.source_remove(this._searchTimeoutId);
-                this._searchTimeoutId = 0;
             }
 
             this._entry.set_secondary_icon(null);
@@ -434,25 +388,9 @@ const ViewSelector = new Lang.Class({
                 nextDirection = Gtk.DirectionType.RIGHT;
             }
 
-            if (symbol == Clutter.Tab) {
-                this._searchResults.navigateFocus(Gtk.DirectionType.TAB_FORWARD);
-                return true;
-            } else if (symbol == Clutter.ISO_Left_Tab) {
-                this._focusTrap.can_focus = false;
-                this._searchResults.navigateFocus(Gtk.DirectionType.TAB_BACKWARD);
-                this._focusTrap.can_focus = true;
-                return true;
-            } else if (symbol == Clutter.Down) {
-                this._searchResults.navigateFocus(Gtk.DirectionType.DOWN);
-                return true;
-            } else if (symbol == arrowNext && this._text.position == -1) {
-                this._searchResults.navigateFocus(nextDirection);
+            if (symbol == arrowNext && this._text.position == -1) {
                 return true;
             } else if (symbol == Clutter.Return || symbol == Clutter.KP_Enter) {
-                if (this._searchTimeoutId > 0) {
-                    Mainloop.source_remove(this._searchTimeoutId);
-                    this._doSearch();
-                }
                 this._activateDefaultSearch();
                 return true;
             }
@@ -475,57 +413,11 @@ const ViewSelector = new Lang.Class({
         return false;
     },
 
-    _doSearch: function () {
-        this._searchTimeoutId = 0;
-
-        let terms = getTermsForSearchString(this._entry.get_text());
-
-        this._searchSystem.updateSearchResults(terms);
-        this._showPage(this._searchPage);
-    },
-
-    _shouldUseSearchProvider: function(provider) {
-        // the disable-external GSetting only affects remote providers
-        if (!provider.isRemoteProvider)
-            return true;
-
-        if (this._searchSettings.get_boolean('disable-external'))
-            return false;
-
-        let appId = provider.appInfo.get_id();
-        let disable = this._searchSettings.get_strv('disabled');
-        return disable.indexOf(appId) == -1;
-    },
-
-    _reloadRemoteProviders: function() {
-        // removeSearchProvider() modifies the provider list we iterate on,
-        // so make a copy first
-        let remoteProviders = this._searchSystem.getRemoteProviders().slice(0);
-
-        remoteProviders.forEach(Lang.bind(this, this.removeSearchProvider));
-        RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, this.addSearchProvider));
-    },
-
-    addSearchProvider: function(provider) {
-        if (!this._shouldUseSearchProvider(provider))
-            return;
-
-        this._searchSystem.registerProvider(provider);
-        this._searchResults.createProviderMeta(provider);
-    },
-
-    removeSearchProvider: function(provider) {
-        this._searchSystem.unregisterProvider(provider);
-        this._searchResults.destroyProviderMeta(provider);
-    },
-
     getActivePage: function() {
         if (this._activePage == this._workspacesPage)
             return ViewPage.WINDOWS;
-        else if (this._activePage == this._appsPage)
+        else (this._activePage == this._appsPage)
             return ViewPage.APPS;
-        else
-            return ViewPage.SEARCH;
     },
 
     fadeIn: function() {
