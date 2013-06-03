@@ -286,14 +286,6 @@ const Overview = new Lang.Class({
         this._relayout();
     },
 
-    addSearchProvider: function(provider) {
-        this._viewSelector.addSearchProvider(provider);
-    },
-
-    removeSearchProvider: function(provider) {
-        this._viewSelector.removeSearchProvider(provider);
-    },
-
     //
     // options:
     //  - undoCallback (function): the callback to be called if undo support is needed
