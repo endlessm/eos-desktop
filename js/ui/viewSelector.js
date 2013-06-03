@@ -28,18 +28,6 @@ const ViewPage = {
     APPS: 2,
 };
 
-const FocusTrap = new Lang.Class({
-    Name: 'FocusTrap',
-    Extends: St.Widget,
-
-    vfunc_navigate_focus: function(from, direction) {
-        if (direction == Gtk.DirectionType.TAB_FORWARD ||
-            direction == Gtk.DirectionType.TAB_BACKWARD)
-            return this.parent(from, direction);
-        return false;
-    }
-});
-
 function getTermsForSearchString(searchString) {
     searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
     if (searchString == '')
@@ -95,14 +83,6 @@ const ViewSelector = new Lang.Class({
         this._appDisplay = new AppDisplay.AppDisplay();
         this._appsPage = this._addPage(this._appDisplay.actor,
                                        _("Applications"), 'view-grid-symbolic');
-
-        // Since the entry isn't inside the results container we install this
-        // dummy widget as the last results container child so that we can
-        // include the entry in the keynav tab path
-        this._focusTrap = new FocusTrap({ can_focus: true });
-        this._focusTrap.connect('key-focus-in', Lang.bind(this, function() {
-            this._entry.grab_key_focus();
-        }));
 
         this._stageKeyPressId = 0;
         Main.overview.connect('showing', Lang.bind(this,
