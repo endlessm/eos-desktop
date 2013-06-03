@@ -394,7 +394,7 @@ const ViewSelector = new Lang.Class({
     getActivePage: function() {
         if (this._activePage == this._workspacesPage)
             return ViewPage.WINDOWS;
-        else (this._activePage == this._appsPage)
+        else
             return ViewPage.APPS;
     },
 
