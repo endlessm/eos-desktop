@@ -31,9 +31,7 @@ gnomesession_DATA = eos-shell.session gdm-eos-shell.session
 
 introspectiondir = $(datadir)/dbus-1/interfaces
 introspection_DATA =				\
-	org.gnome.Shell.Screenshot.xml		\
-	org.gnome.ShellSearchProvider.xml	\
-	org.gnome.ShellSearchProvider2.xml
+	org.gnome.Shell.Screenshot.xml
 
 themedir = $(pkgdatadir)/theme
 dist_theme_DATA =				\
