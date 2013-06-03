@@ -16,7 +16,6 @@ const OverviewControls = imports.ui.overviewControls;
 const Params = imports.misc.params;
 const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
-const Wanda = imports.ui.wanda;
 const WorkspacesView = imports.ui.workspacesView;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';

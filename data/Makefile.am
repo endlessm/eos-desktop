@@ -1,6 +1,3 @@
-wandadir = $(pkgdatadir)
-dist_wanda_DATA = wanda.png
-
 desktopdir=$(datadir)/applications
 desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop
 

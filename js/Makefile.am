@@ -101,7 +101,6 @@ nobase_dist_js_DATA = 	\
 	ui/userMenu.js		\
 	ui/userWidget.js	\
 	ui/viewSelector.js	\
-	ui/wanda.js		\
 	ui/windowAttentionHandler.js	\
 	ui/windowManager.js	\
 	ui/workspace.js		\
