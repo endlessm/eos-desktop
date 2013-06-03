@@ -686,7 +686,10 @@ const AppDisplay = new Lang.Class({
             if (IconGridLayout.layout.iconIsFolder(itemId)) {
                 view.addFolder({
                     get_id: function() { return itemId; },
-                    get_name: function() { return itemId; },
+                    get_name: function() {
+                        let dirInfo = Shell.DesktopDirInfo.new(itemId);
+                        let name = dirInfo.get_name();
+                        return name; },
                 });
             } else {
                 let app = this._appSystem.lookup_app(itemId);
@@ -820,10 +823,11 @@ const FolderIcon = new Lang.Class({
     },
 
     _createIcon: function(size) {
-        let name = this._dir.get_name();
-        let iconName = 'eos-folder-' + name.toLowerCase();
+        let desktopId = this._dir.get_id();
+        let dirInfo = Shell.DesktopDirInfo.new(desktopId);
+        let icon = dirInfo.get_icon();
         return new St.Icon({ icon_size: size,
-                             icon_name: iconName });
+                             gicon: icon });
     },
 
     _ensurePopup: function() {
