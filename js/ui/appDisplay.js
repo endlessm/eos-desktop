@@ -707,62 +707,6 @@ const AppDisplay = new Lang.Class({
     }
 });
 
-const AppSearchProvider = new Lang.Class({
-    Name: 'AppSearchProvider',
-
-    _init: function() {
-        this._appSys = Shell.AppSystem.get_default();
-        this.id = 'applications';
-    },
-
-    getResultMetas: function(apps, callback) {
-        let metas = [];
-        for (let i = 0; i < apps.length; i++) {
-            let app = apps[i];
-            metas.push({ 'id': app,
-                         'name': app.get_name(),
-                         'createIcon': function(size) {
-                             return app.create_icon_texture(size);
-                         }
-                       });
-        }
-        callback(metas);
-    },
-
-    getInitialResultSet: function(terms) {
-        this.searchSystem.pushResults(this, this._appSys.initial_search(terms));
-    },
-
-    getSubsearchResultSet: function(previousResults, terms) {
-        this.searchSystem.pushResults(this, this._appSys.subsearch(previousResults, terms));
-    },
-
-    activateResult: function(app) {
-        let event = Clutter.get_current_event();
-        let modifiers = event ? event.get_state() : 0;
-        let openNewWindow = modifiers & Clutter.ModifierType.CONTROL_MASK;
-
-        if (openNewWindow)
-            app.open_new_window(-1);
-        else
-            app.activate();
-    },
-
-    dragActivateResult: function(id, params) {
-        params = Params.parse(params, { workspace: -1,
-                                        timestamp: 0 });
-
-        let app = this._appSys.lookup_app(id);
-        app.open_new_window(workspace);
-    },
-
-    createResultActor: function (resultMeta, terms) {
-        let app = resultMeta['id'];
-        let icon = new AppIcon(app);
-        return icon.actor;
-    }
-});
-
 const FolderIcon = new Lang.Class({
     Name: 'FolderIcon',
 

@@ -79,13 +79,10 @@ nobase_dist_js_DATA = 	\
 	ui/panelMenu.js		\
 	ui/pointerWatcher.js    \
 	ui/popupMenu.js		\
-	ui/remoteSearch.js	\
 	ui/runDialog.js		\
 	ui/screenshot.js	\
         ui/screenShield.js	\
 	ui/scripting.js		\
-	ui/search.js		\
-	ui/searchDisplay.js	\
 	ui/shellDBus.js		\
 	ui/status/accessibility.js	\
 	ui/status/keyboard.js	\
@@ -101,7 +98,6 @@ nobase_dist_js_DATA = 	\
 	ui/userMenu.js		\
 	ui/userWidget.js	\
 	ui/viewSelector.js	\
-	ui/wanda.js		\
 	ui/windowAttentionHandler.js	\
 	ui/windowManager.js	\
 	ui/workspace.js		\

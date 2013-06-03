@@ -39,7 +39,6 @@ js/ui/panel.js
 js/ui/popupMenu.js
 js/ui/runDialog.js
 js/ui/screenShield.js
-js/ui/searchDisplay.js
 js/ui/shellEntry.js
 js/ui/shellMountOperation.js
 js/ui/status/accessibility.js
@@ -52,7 +51,6 @@ js/ui/status/volume.js
 js/ui/unlockDialog.js
 js/ui/userMenu.js
 js/ui/viewSelector.js
-js/ui/wanda.js
 js/ui/windowAttentionHandler.js
 src/calendar-server/evolution-calendar.desktop.in.in
 src/gvc/gvc-mixer-control.c
