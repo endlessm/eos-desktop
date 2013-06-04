@@ -58,8 +58,6 @@ enum {
 };
 
 static void     shell_desktop_dir_info_iface_init         (ShellDirInfoIface    *iface);
-static gboolean shell_desktop_dir_info_ensure_saved       (ShellDesktopDirInfo  *info,
-                                                           GError          **error);
 
 /**
  * ShellDesktopDirInfo:
@@ -155,8 +153,8 @@ shell_desktop_dir_info_finalize (GObject *object)
 static void
 shell_desktop_dir_info_set_property(GObject         *object,
                                     guint            prop_id,
-				    const GValue    *value,
-				    GParamSpec      *pspec)
+                                    const GValue    *value,
+                                    GParamSpec      *pspec)
 {
   ShellDesktopDirInfo *self = SHELL_DESKTOP_DIR_INFO (object);
 
@@ -174,9 +172,9 @@ shell_desktop_dir_info_set_property(GObject         *object,
 
 static void
 shell_desktop_dir_info_get_property (GObject    *object,
-				     guint       prop_id,
-				     GValue     *value,
-				     GParamSpec *pspec)
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
 {
   ShellDesktopDirInfo *self = SHELL_DESKTOP_DIR_INFO (object);
 
@@ -219,7 +217,7 @@ shell_desktop_dir_info_init (ShellDesktopDirInfo *local)
 
 static gboolean
 shell_desktop_dir_info_load_from_keyfile (ShellDesktopDirInfo *info, 
-					  GKeyFile        *key_file)
+                                          GKeyFile        *key_file)
 {
   char *start_group;
   char *type;
@@ -315,8 +313,6 @@ shell_desktop_dir_info_load_file (ShellDesktopDirInfo *self)
  * Creates a new #ShellDesktopDirInfo.
  *
  * Returns: a new #ShellDesktopDirInfo or %NULL on error.
- *
- * Since: 2.18
  **/
 ShellDesktopDirInfo *
 shell_desktop_dir_info_new_from_keyfile (GKeyFile *key_file)
@@ -460,7 +456,7 @@ shell_desktop_dir_info_dup (ShellDirInfo *dirinfo)
 
 static gboolean
 shell_desktop_dir_info_equal (ShellDirInfo *dirinfo1,
-			      ShellDirInfo *dirinfo2)
+                              ShellDirInfo *dirinfo2)
 {
   ShellDesktopDirInfo *info1 = SHELL_DESKTOP_DIR_INFO (dirinfo1);
   ShellDesktopDirInfo *info2 = SHELL_DESKTOP_DIR_INFO (dirinfo2);
@@ -524,7 +520,6 @@ shell_desktop_dir_info_get_is_hidden (ShellDesktopDirInfo *info)
  * shell_desktop_dir_info_new_from_keyfile(), this function will return %NULL.
  *
  * Returns: The full path to the file for @info, or %NULL if not known.
- * Since: 2.24
  */
 const char *
 shell_desktop_dir_info_get_filename (ShellDesktopDirInfo *info)
@@ -571,8 +566,6 @@ shell_desktop_dir_info_get_generic_name (ShellDesktopDirInfo *info)
  * #G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY and shell_dir_info_should_show().
  *
  * Returns: The value of the NoDisplay key
- *
- * Since: 2.30
  */
 gboolean
 shell_desktop_dir_info_get_nodisplay (ShellDesktopDirInfo *info)
@@ -598,19 +591,17 @@ shell_desktop_dir_info_get_nodisplay (ShellDesktopDirInfo *info)
  * Returns: %TRUE if the @info should be shown in @desktop_env according to the
  * <literal>OnlyShowIn</literal> and <literal>NotShowIn</literal> keys, %FALSE
  * otherwise.
- *
- * Since: 2.30
  */
 gboolean
 shell_desktop_dir_info_get_show_in (ShellDesktopDirInfo *info,
-				    const gchar     *desktop_env)
+                                    const gchar         *desktop_env)
 {
   gboolean found;
   int i;
 
   g_return_val_if_fail (SHELL_IS_DESKTOP_DIR_INFO (info), FALSE);
 
-  if (!desktop_env) {
+  if (!desktop_env  ) {
     G_LOCK (shell_desktop_env);
     desktop_env = shell_desktop_env;
     G_UNLOCK (shell_desktop_env);
@@ -646,6 +637,39 @@ shell_desktop_dir_info_get_show_in (ShellDesktopDirInfo *info,
   return TRUE;
 }
 
+/**
+ * shell_desktop_dir_info_set_desktop_env:
+ * @desktop_env: a string specifying what desktop this is
+ *
+ * Sets the name of the desktop that the application is running in.
+ * This is used by shell_dir_info_should_show() and
+ * shell_desktop_dir_info_get_show_in() to evaluate the
+ * <literal>OnlyShowIn</literal> and <literal>NotShowIn</literal>
+ * desktop entry fields.
+ *
+ * The <ulink url="http://standards.freedesktop.org/menu-spec/latest/">Desktop
+ * Menu specification</ulink> recognizes the following:
+ * <simplelist>
+ *   <member>GNOME</member>
+ *   <member>KDE</member>
+ *   <member>ROX</member>
+ *   <member>XFCE</member>
+ *   <member>LXDE</member>
+ *   <member>Unity</member>
+ *   <member>Old</member>
+ * </simplelist>
+ *
+ * Should be called only once; subsequent calls are ignored.
+ */
+void
+shell_desktop_dir_info_set_desktop_env (const gchar *desktop_env)
+{
+  G_LOCK (shell_desktop_env);
+  if (!shell_desktop_env)
+    shell_desktop_env = g_strdup (desktop_env);
+  G_UNLOCK (shell_desktop_env);
+}
+
 static gboolean
 shell_desktop_dir_info_should_show (ShellDirInfo *dirinfo)
 {
@@ -655,128 +679,6 @@ shell_desktop_dir_info_should_show (ShellDirInfo *dirinfo)
     return FALSE;
 
   return shell_desktop_dir_info_get_show_in (info, NULL);
-}
-
-static char *
-ensure_dir (GError  **error)
-{
-  char *path, *display_name;
-  int errsv;
-
-  path = g_build_filename (g_get_user_data_dir (), "desktop-directories", NULL);
-
-  errno = 0;
-  if (g_mkdir_with_parents (path, 0700) == 0)
-    return path;
-
-  errsv = errno;
-  display_name = g_filename_display_name (path);
-  g_set_error (error, G_IO_ERROR, g_io_error_from_errno (errsv),
-               _("Can't create user directory configuration folder %s: %s"),
-               display_name, g_strerror (errsv));
-
-  g_free (display_name);
-  g_free (path);
-
-  return NULL;
-}
-
-static gboolean
-shell_desktop_dir_info_ensure_saved (ShellDesktopDirInfo  *info,
-				     GError          **error)
-{
-  GKeyFile *key_file;
-  char *dirname;
-  char *filename;
-  char *data, *desktop_id;
-  gsize data_size;
-  int fd;
-  gboolean res;
-  
-  if (info->filename != NULL)
-    return TRUE;
-
-  /* This is only used for object created with
-   * shell_dir_info_create_from_directory_name. All other
-   * object should have a filename
-   */
-  
-  dirname = ensure_dir (error);
-  if (!dirname)
-    return FALSE;
-  
-  key_file = g_key_file_new ();
-
-  g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-                         "Encoding", "UTF-8");
-  g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-                         G_KEY_FILE_DESKTOP_KEY_VERSION, "1.0");
-  g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-                         G_KEY_FILE_DESKTOP_KEY_TYPE,
-                         G_KEY_FILE_DESKTOP_TYPE_DIRECTORY);
-  if (info->nodisplay)
-    g_key_file_set_boolean (key_file, G_KEY_FILE_DESKTOP_GROUP,
-                            G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY, TRUE);
-
-  g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-                         G_KEY_FILE_DESKTOP_KEY_NAME, info->name);
-
-  if (info->generic_name != NULL)
-    g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-                           GENERIC_NAME_KEY, info->generic_name);
-
-  if (info->fullname != NULL)
-    g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-                           FULL_NAME_KEY, info->fullname);
-
-  g_key_file_set_string (key_file, G_KEY_FILE_DESKTOP_GROUP,
-                         G_KEY_FILE_DESKTOP_KEY_COMMENT, info->comment);
-  
-  g_key_file_set_boolean (key_file, G_KEY_FILE_DESKTOP_GROUP,
-                          G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY, TRUE);
-
-  data = g_key_file_to_data (key_file, &data_size, NULL);
-  g_key_file_free (key_file);
-
-  desktop_id = g_strdup_printf ("userdir-%s-XXXXXX.directory", info->name);
-  filename = g_build_filename (dirname, desktop_id, NULL);
-  g_free (desktop_id);
-  g_free (dirname);
-  
-  fd = g_mkstemp (filename);
-  if (fd == -1)
-    {
-      char *display_name;
-
-      display_name = g_filename_display_name (filename);
-      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-                   _("Can't create user desktop file %s"), display_name);
-      g_free (display_name);
-      g_free (filename);
-      g_free (data);
-      return FALSE;
-    }
-
-  desktop_id = g_path_get_basename (filename);
-
-  /* FIXME - actually handle error */
-  (void) g_close (fd, NULL);
-  
-  res = g_file_set_contents (filename, data, data_size, error);
-  g_free (data);
-  if (!res)
-    {
-      g_free (desktop_id);
-      g_free (filename);
-      return FALSE;
-    }
-
-  info->filename = filename;
-  info->desktop_id = desktop_id;
-  
-  run_update_command ("update-desktop-database", "desktop-directories");
-  
-  return TRUE;
 }
 
 static gboolean
@@ -825,7 +727,7 @@ shell_desktop_dir_info_delete (ShellDirInfo *dirinfo)
  **/
 ShellDirInfo *
 shell_dir_info_create_from_directory_name (const char           *directory_name,
-					   GError              **error)
+                                           GError              **error)
 {
   char **split;
   char *basename;
@@ -1011,12 +913,10 @@ append_desktop_entry (GList      *list,
  *
  * Returns: a newly allocated string, or %NULL if the key
  *     is not found
- *
- * Since: 2.36
  */
 char *
 shell_desktop_dir_info_get_string (ShellDesktopDirInfo *info,
-				   const char      *key)
+                                   const char      *key)
 {
   g_return_val_if_fail (SHELL_IS_DESKTOP_DIR_INFO (info), NULL);
 
@@ -1035,12 +935,10 @@ shell_desktop_dir_info_get_string (ShellDesktopDirInfo *info,
  *
  * Returns: the boolean value, or %FALSE if the key
  *     is not found
- *
- * Since: 2.36
  */
 gboolean
 shell_desktop_dir_info_get_boolean (ShellDesktopDirInfo *info,
-				    const char      *key)
+                                    const char      *key)
 {
   g_return_val_if_fail (SHELL_IS_DESKTOP_DIR_INFO (info), FALSE);
 
@@ -1057,12 +955,10 @@ shell_desktop_dir_info_get_boolean (ShellDesktopDirInfo *info,
  * of the keyfile backing @info.
  *
  * Returns: %TRUE if the @key exists
- *
- * Since: 2.26
  */
 gboolean
 shell_desktop_dir_info_has_key (ShellDesktopDirInfo *info,
-				const char      *key)
+                                const char      *key)
 {
   g_return_val_if_fail (SHELL_IS_DESKTOP_DIR_INFO (info), FALSE);
 

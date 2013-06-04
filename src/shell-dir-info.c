@@ -76,7 +76,7 @@ shell_dir_info_dup (ShellDirInfo *dirinfo)
  **/
 gboolean
 shell_dir_info_equal (ShellDirInfo *dirinfo1,
-		      ShellDirInfo *dirinfo2)
+                      ShellDirInfo *dirinfo2)
 {
   ShellDirInfoIface *iface;
 
@@ -146,8 +146,6 @@ shell_dir_info_get_name (ShellDirInfo *dirinfo)
  *
  * Returns: the display name of the directory for @dirinfo, or the name if
  * no display name is available.
- *
- * Since: 2.24
  **/
 const char *
 shell_dir_info_get_display_name (ShellDirInfo *dirinfo)
@@ -238,8 +236,6 @@ shell_dir_info_should_show (ShellDirInfo *dirinfo)
  * See shell_dir_info_delete().
  *
  * Returns: %TRUE if @dirinfo can be deleted
- *
- * Since: 2.20
  */
 gboolean
 shell_dir_info_can_delete (ShellDirInfo *dirinfo)
@@ -269,8 +265,6 @@ shell_dir_info_can_delete (ShellDirInfo *dirinfo)
  *
  * Virtual: do_delete
  * Returns: %TRUE if @dirinfo has been deleted
- *
- * Since: 2.20
  */
 gboolean
 shell_dir_info_delete (ShellDirInfo *dirinfo)
