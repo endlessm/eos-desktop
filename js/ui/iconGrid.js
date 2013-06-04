@@ -7,6 +7,7 @@ const Tweener = imports.ui.tweener;
 
 const Lang = imports.lang;
 const Params = imports.misc.params;
+const Signals = imports.signals;
 
 const ICON_SIZE = 48;
 
@@ -35,7 +36,8 @@ const BaseIcon = new Lang.Class({
     _init : function(label, params) {
         params = Params.parse(params, { createIcon: null,
                                         setSizeManually: false,
-                                        showLabel: true });
+                                        showLabel: true,
+                                        editableLabel: false, });
         this.actor = new St.Bin({ style_class: 'overview-icon',
                                   x_fill: true,
                                   y_fill: true });
@@ -65,6 +67,14 @@ const BaseIcon = new Lang.Class({
             this.label = new St.Label({ text: label,
                                         style_class: 'overview-icon-label' });
             box.add_actor(this.label);
+
+            if (params.editableLabel) {
+              let click_action = new Clutter.ClickAction();
+              click_action.connect('clicked', Lang.bind(this, this._onLabelClicked));
+              this.label.add_action('labelClickAction', click_action);
+
+              global.stage.connect('notify::key-focus', Lang.bind(this, this._onStageKeyFocusChanged));
+            }
         } else {
             this.label = null;
         }
@@ -194,8 +204,114 @@ const BaseIcon = new Lang.Class({
 
     _onIconThemeChanged: function() {
         this._createIconTexture(this.iconSize);
-    }
+    },
+
+    _onLabelClicked: function() {
+        // we change the editability on key focus changes
+        global.stage.set_key_focus(this.label);
+    },
+
+    _onStageKeyFocusChanged: function() {
+        let focus = global.stage.get_key_focus();
+        let appearFocused = this.label.contains(focus);
+
+        this.label.clutter_text.editable = appearFocused;
+        this.label.clutter_text.set_cursor_visible(appearFocused);
+
+        if (appearFocused) {
+            // save the current contents of the label, in case we
+            // need to roll back
+            this._oldLabelText = this.label.get_text();
+
+            this.label.add_style_pseudo_class('focus');
+
+            // monitor key and pointer events so we can determine whether
+            // the editing has been successful or cancelled
+            this.label._keyPressId = this.label.connect('key-press-event',
+                                                        Lang.bind(this, this._onLabelKeyPress));
+            this.label._buttonPressId = this.label.connect('button-press-event',
+                                                           Lang.bind(this, this._onLabelButtonPress));
+
+            // we need a grab in place, so we can detect pointer events
+            // like button-press outside of the label and abort editing. I
+            // am using a shotgun, here, with Clutter.grab_pointer(), but
+            // I'm not entirely sure how well will this play with the window
+            // manager; we may need to use grabHelper() instead if this breaks
+            // other things
+            Clutter.grab_pointer(this.label);
+        }
+        else {
+            if (this.label._keyPressId) {
+                this.label.disconnect(this.label._keyPressId);
+                this.label._keyPressId = 0;
+            }
+
+            if (this.label._buttonPressId) {
+                this.label.disconnect(this.label._buttonPressId)
+                this.label._buttonPressId = 0;
+            }
+
+            this.label.remove_style_pseudo_class('focus');
+
+            this.label._oldLabelText = null;
+
+            Clutter.ungrab_pointer();
+        }
+    },
+
+    _cancelEditing: function() {
+        global.stage.set_key_focus(null);
+
+        this.label.text = this._oldLabelText;
+        this.emit('label-edit-cancel');
+    },
+
+    _confirmEditing: function() {
+        global.stage.set_key_focus(null);
+
+        this.emit('label-edit-udpate');
+    },
+
+    _onLabelButtonPress: function(actor, event) {
+        // this should really be fixed in Clutter
+        let [stageX, stageY] = event.get_coords();
+        let target = global.stage.get_actor_at_pos(Clutter.PickMode.ALL,
+                                                   stageX,
+                                                   stageY);
+
+        if (target != this.label) {
+            this._cancelEditing();
+        }
+
+        return false;
+    },
+
+    _onLabelKeyPress: function(actor, event) {
+        let symbol = event.get_key_symbol();
+
+        // abort editing
+        if (symbol == Clutter.KEY_Escape ||
+            symbol == Clutter.KEY_Tab ||
+            symbol == Clutter.KEY_Down ||
+            symbol == Clutter.KEY_Tab ||
+            symbol == Clutter.KEY_ISO_Left_Tab) {
+            this._cancelEditing();
+            return false;
+        }
+
+        // confirm editing
+        if (symbol == Clutter.KEY_Return ||
+            symbol == Clutter.KEY_KP_Enter ||
+            symbol == Clutter.KEY_ISO_Enter) {
+            this._confirmEditing();
+            return false;
+        }
+
+        return false;
+    },
 });
+
+Signals.addSignalMethods(BaseIcon.prototype);
 
 const IconGrid = new Lang.Class({
     Name: 'IconGrid',
