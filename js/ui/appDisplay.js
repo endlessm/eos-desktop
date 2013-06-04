@@ -930,6 +930,7 @@ const AppIcon = new Lang.Class({
             iconParams = {};
 
         iconParams['createIcon'] = Lang.bind(this, this._createIcon);
+        iconParams['editableLabel'] = true;
         this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
         this.actor.set_child(this.icon.actor);
 
