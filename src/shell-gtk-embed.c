@@ -101,9 +101,9 @@ shell_gtk_embed_window_created_cb (MetaDisplay   *display,
          windows and the guard window is repeatedly lowered to the
          bottom of the stack. */
       empty_region = cairo_region_create ();
-      gdk_window_input_shape_combine_region (gdk_window,
-                                             empty_region,
-                                             0, 0 /* offset x/y */);
+      /* gdk_window_input_shape_combine_region (gdk_window, */
+      /*                                        empty_region, */
+      /*                                        0, 0 /\* offset x/y *\/); */
       cairo_region_destroy (empty_region);
 
       /* Now that we've found the window we don't need to listen for

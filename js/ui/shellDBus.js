@@ -13,6 +13,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Hash = imports.misc.hash;
 const Main = imports.ui.main;
 const Screenshot = imports.ui.screenshot;
+const SocialBarEmbed = imports.ui.socialBarEmbed;
 
 const GnomeShellIface = <interface name="org.gnome.Shell">
 <method name="Eval">

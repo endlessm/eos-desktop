@@ -33,6 +33,7 @@ const Scripting = imports.ui.scripting;
 const SessionMode = imports.ui.sessionMode;
 const ShellDBus = imports.ui.shellDBus;
 const ShellMountOperation = imports.ui.shellMountOperation;
+const SocialBarEmbed = imports.ui.socialBarEmbed;
 const WindowManager = imports.ui.windowManager;
 const WorkspaceMonitor = imports.ui.workspaceMonitor;
 const Magnifier = imports.ui.magnifier;
@@ -58,6 +59,7 @@ let sessionMode = null;
 let shellDBusService = null;
 let shellMountOpDBusService = null;
 let screenSaverDBus = null;
+let socialBarService = null;
 let modalCount = 0;
 let keybindingMode = Shell.KeyBindingMode.NONE;
 let modalActorFocusStack = [];
@@ -112,6 +114,7 @@ function _sessionsLoaded() {
 
     shellDBusService = new ShellDBus.GnomeShell();
     shellMountOpDBusService = new ShellMountOperation.GnomeShellMountOpHandler();
+    socialBarService = new SocialBarEmbed.SocialBarManager();
 
     _sessionUpdated();
 }
