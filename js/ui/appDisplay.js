@@ -302,6 +302,9 @@ const AllView = new Lang.Class({
 
     _onDragEnd: function(overview, source) {
         source.parentView.removeNudgeTransforms();
+        if (source.parentView != this) {
+            this._grid.removeNudgeTransforms();
+        }
         this._eventBlocker.show();
 
         source.actor.set_child(this._dragActor);
