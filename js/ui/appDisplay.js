@@ -688,8 +688,7 @@ const AppDisplay = new Lang.Class({
 
             if (IconGridLayout.layout.iconIsFolder(itemId)) {
                 view.addFolder({
-                    get_id: function() { return itemId; },
-                    get_name: function() { return itemId; },
+                    get_id: function() { return itemId; }
                 });
             } else {
                 let app = this._appSystem.lookup_app(itemId);
@@ -715,6 +714,9 @@ const FolderIcon = new Lang.Class({
 
     _init: function(dir, parentView) {
         this._dir = dir;
+
+        this._dirInfo = Shell.DesktopDirInfo.new(this._dir.get_id());
+
         this._parentView = parentView;
 
         this.actor = new St.Button({ style_class: 'app-well-app app-folder',
@@ -725,7 +727,7 @@ const FolderIcon = new Lang.Class({
                                      y_fill: true });
         this.actor._delegate = this;
 
-        let label = this._dir.get_name();
+        let label = this.getName();
         this.icon = new IconGrid.BaseIcon(label,
                                           { createIcon: Lang.bind(this, this._createIcon) });
         this.actor.set_child(this.icon.actor);
@@ -767,10 +769,9 @@ const FolderIcon = new Lang.Class({
     },
 
     _createIcon: function(size) {
-        let name = this._dir.get_name();
-        let iconName = 'eos-folder-' + name.toLowerCase();
+        let icon = this._dirInfo.get_icon();
         return new St.Icon({ icon_size: size,
-                             icon_name: iconName });
+                             gicon: icon });
     },
 
     _ensurePopup: function() {
@@ -829,7 +830,7 @@ const FolderIcon = new Lang.Class({
     },
 
     getName: function() {
-        return this._dir.get_name();
+        return this._dirInfo.get_name();
     }
 });
 
