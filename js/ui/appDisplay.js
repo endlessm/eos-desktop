@@ -386,7 +386,7 @@ const AllView = new Lang.Class({
             let validIcon = this._setHoverStateOf(this._dragView, 
                                                   this._onIconIdx, true);
             if (validIcon) {
-                return DND.DragMotionResult.MOVE;
+                return DND.DragMotionResult.MOVE_DROP;
             } else {
                 // Propagate the signal in case we are hovering
                 // over the trash can
