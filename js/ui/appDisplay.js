@@ -1031,7 +1031,6 @@ const AppIcon = new Lang.Class({
             this.app.open_new_window(-1);
             Main.overview.hide();
         }
-        return false;
     },
 
     _onKeyboardPopupMenu: function() {
