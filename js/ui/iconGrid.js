@@ -37,7 +37,7 @@ const BaseIcon = new Lang.Class({
         params = Params.parse(params, { createIcon: null,
                                         setSizeManually: false,
                                         showLabel: true,
-                                        editableLabel: false, });
+                                        editableLabel: false });
         this.actor = new St.Bin({ style_class: 'overview-icon',
                                   x_fill: true,
                                   y_fill: true });
@@ -69,9 +69,9 @@ const BaseIcon = new Lang.Class({
             box.add_actor(this.label);
 
             if (params.editableLabel) {
-              let clickAction = new Clutter.ClickAction();
-              clickAction.connect('clicked', Lang.bind(this, this._onLabelClicked));
-              this.label.add_action(clickAction);
+                let clickAction = new Clutter.ClickAction();
+                clickAction.connect('clicked', Lang.bind(this, this._onLabelClicked));
+                this.label.add_action(clickAction);
 
               global.stage.connect('notify::key-focus', Lang.bind(this, this._onStageKeyFocusChanged));
             }
@@ -239,8 +239,7 @@ const BaseIcon = new Lang.Class({
             // manager; we may need to use grabHelper() instead if this breaks
             // other things
             Clutter.grab_pointer(this.label);
-        }
-        else {
+        } else {
             if (this.label._keyPressId) {
                 this.label.disconnect(this.label._keyPressId);
                 this.label._keyPressId = 0;
