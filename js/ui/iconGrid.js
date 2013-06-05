@@ -48,6 +48,7 @@ const BaseIcon = new Lang.Class({
                            Lang.bind(this, this._onDestroy));
 
         this._spacing = 0;
+        this._keyFocusId = 0;
 
         let box = new Shell.GenericContainer();
         box.connect('allocate', Lang.bind(this, this._allocate));
@@ -73,7 +74,8 @@ const BaseIcon = new Lang.Class({
                 clickAction.connect('clicked', Lang.bind(this, this._onLabelClicked));
                 this.label.add_action(clickAction);
 
-              global.stage.connect('notify::key-focus', Lang.bind(this, this._onStageKeyFocusChanged));
+                this._keyFocusId = global.stage.connect('notify::key-focus',
+                    Lang.bind(this, this._onStageKeyFocusChanged));
             }
         } else {
             this.label = null;
@@ -199,6 +201,11 @@ const BaseIcon = new Lang.Class({
             let cache = St.TextureCache.get_default();
             cache.disconnect(this._iconThemeChangedId);
             this._iconThemeChangedId = 0;
+        }
+
+        if (this._keyFocusId > 0) {
+            global.stage.disconnect(this._keyFocusId);
+            this._keyFocusId = 0;
         }
     },
 
