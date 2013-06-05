@@ -297,7 +297,6 @@ const BaseIcon = new Lang.Class({
 
         // abort editing
         if (symbol == Clutter.KEY_Escape ||
-            symbol == Clutter.KEY_Tab ||
             symbol == Clutter.KEY_Down ||
             symbol == Clutter.KEY_Tab ||
             symbol == Clutter.KEY_ISO_Left_Tab) {
