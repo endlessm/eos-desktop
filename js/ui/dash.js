@@ -669,8 +669,6 @@ const Dash = new Lang.Class({
     _redisplay: function () {
         let favorites = AppFavorites.getAppFavorites().getFavoriteMap();
 
-        let running = this._appSystem.get_running();
-
         let children = this._box.get_children().filter(function(actor) {
                 return actor.child &&
                        actor.child._delegate &&
@@ -685,13 +683,6 @@ const Dash = new Lang.Class({
 
         for (let id in favorites)
             newApps.push(favorites[id]);
-
-        for (let i = 0; i < running.length; i++) {
-            let app = running[i];
-            if (app.get_id() in favorites)
-                continue;
-            newApps.push(app);
-        }
 
         // Figure out the actual changes to the list of items; we iterate
         // over both the list of items currently in the dash and the list

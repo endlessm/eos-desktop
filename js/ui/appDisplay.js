@@ -57,6 +57,10 @@ const EndlessApplicationView = new Lang.Class({
         this._allItems = [];
     },
 
+    removeItem: function(item) {
+        this._grid.removeItem(item.actor);
+    },
+
     _getItemId: function(item) {
         return item.get_id();
     },
@@ -72,6 +76,7 @@ const EndlessApplicationView = new Lang.Class({
         }
 
         let itemIcon = this._createItemIcon(item);
+        itemIcon.parentView = this;
         this._allItems.push(item);
         this._items[id] = itemIcon;
 
@@ -110,6 +115,26 @@ const EndlessApplicationView = new Lang.Class({
 
             this._grid.addItem(this._items[id].actor);
         }
+    },
+
+    indexOf: function(item) {
+        return this._grid.indexOf(item.actor);
+    },
+
+    nudgeItemsAtIndex: function(index, location) {
+        this._grid.nudgeItemsAtIndex(index, location);
+    },
+
+    removeNudgeTransforms: function() {
+        this._grid.removeNudgeTransforms();
+    },
+
+    canDropAt: function(x, y, index) {
+        return this._grid.canDropAt(x, y, index);
+    },
+
+    getItem: function(id) {
+        return this._items[id];
     }
 });
 
@@ -117,8 +142,9 @@ const FolderView = new Lang.Class({
     Name: 'FolderView',
     Extends: EndlessApplicationView,
 
-    _init: function() {
+    _init: function(folderIcon) {
         this.parent();
+        this.folderIcon = folderIcon;
         this.actor = this._grid.actor;
     },
 
@@ -188,6 +214,9 @@ const AllView = new Lang.Class({
     _init: function() {
         this.parent();
 
+        this._grid.actor.y_expand = true;
+        this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
+
         let box = new St.BoxLayout({ vertical: true });
         this._stack = new St.Widget({ layout_manager: new AllViewLayout() });
         this._stack.add_actor(this._grid.actor);
@@ -212,7 +241,6 @@ const AllView = new Lang.Class({
 
         Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
-        Main.overview.connect('item-drag-cancelled', Lang.bind(this, this._onDragCancelled));
 
         this._clickAction = new Clutter.ClickAction();
         this._clickAction.connect('clicked', Lang.bind(this, function() {
@@ -240,25 +268,24 @@ const AllView = new Lang.Class({
     },
 
     _onDragBegin: function(overview, source) {
-        let index = this._grid.indexOf(source.actor);
-        if (index == -1) {
+        if (source.parentView == undefined) {
             // Dragging an icon from dash
             this._eventBlocker.hide();
         } else {
+            let index = source.parentView.indexOf(source);
             // Dragging an icon from grid
             // Save the currently dragged item info
             this._dragItem = source;
+            this._dragIcon = source.icon;
             this._originalIdx = index;
+            this._dragView = undefined;
 
             this._insertIdx = -1;
 
             // Replace the dragged icon with an empty placeholder
-            source.actor.hide();
-            this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
-                                                can_focus: false,
-                                                x_fill: true,
-                                                y_fill: true });
-            this._grid.addItem(this._insertActor, this._originalIdx);
+            this._insertActor = new IconGrid.BaseIcon("", { createIcon: this._createEmptyIcon });
+            source.icon = this._insertActor;
+            source.actor.set_child(this._insertActor.actor);
 
             this._eventBlocker.hide();
 
@@ -270,59 +297,74 @@ const AllView = new Lang.Class({
         }
     },
 
+    _createEmptyIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize });
+    },
+
     _onDragEnd: function(overview, source) {
-        this._grid.removeNudgeTransforms();
+        source.parentView.removeNudgeTransforms();
+        if (source.parentView != this) {
+            this._grid.removeNudgeTransforms();
+        }
         this._eventBlocker.show();
 
-        source.actor.show();
+        source.icon = this._dragIcon;
+        source.actor.set_child(source.icon.actor);
         if (this._insertActor != null) {
-            this._grid.removeItem(this._insertActor);
             this._insertActor = null;
             this._insertIdx = -1;
             this._originalIdx = -1;
             this._dragItem = undefined;
+            this._dragView = undefined;
+            this._dragIcon = undefined;
         }
 
         DND.removeDragMonitor(this._dragMonitor);
     },
 
-    _onDragCancelled: function(overview, source) {
-        source.actor.show();
-        if (this._insertActor != null) {
-            this._grid.removeItem(this._insertActor);
-            this._insertActor = null;
+    _onDragMotion: function(dragEvent) {
+        /* Handle motion over grid */
+        if (this.actor.contains(dragEvent.targetActor)) {
+            this._dragView = this;
         }
 
-        this._onDragEnd(overview, source);
-    },
+        if (this._dragItem.parentView.actor.contains(dragEvent.targetActor)) {
+            this._dragView = this._dragItem.parentView;
+        }
 
-    _onDragMotion: function(dragEvent) {
-        // Ask grid can we drop here
-
-        // Handle motion over grid
-        if(!this.actor.contains(dragEvent.targetActor)) {
+        if (this._dragView == undefined) {
             return DND.DragMotionResult.CONTINUE;
         }
 
-        let [idx, cursorLocation] = this._grid.canDropAt(dragEvent.x,
-                                                         dragEvent.y,
-                                                         this._insertIdx
-                                                        );
+        let [idx, cursorLocation] = this._dragView.canDropAt(dragEvent.x,
+                                                             dragEvent.y,
+                                                             this._insertIdx);
+
+        let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
 
         // If we are not over our last hovered icon, remove its hover state
-        if (this._onIconIdx != null && idx != this._onIconIdx) {
-            this._setHoverStateOf(this._onIconIdx, false)
+        if (this._onIconIdx != null &&
+            ((idx != this._onIconIdx) || !onIcon)) {
+            this._setHoverStateOf(this._dragView, this._onIconIdx, false)
         }
 
         // If we are in a new spot, remove the previous nudges
         let isNewPosition = false;
-        if (idx != this._insertIdx) {
+        if ((idx != this._insertIdx) || onIcon) {
             isNewPosition = true;
-            this._grid.removeNudgeTransforms();
+            this._dragView.removeNudgeTransforms();
+        }
+
+        // If we were previously over the icon target (this._onIcon)
+        // but no longer are over the icon target (!onIcon),
+        // consider this a new position to force the nudge to reactivate
+        // even if we are still over the same icon cell
+        if ((idx >= 0) && this._onIcon && !onIcon) {
+            isNewPosition = true;
         }
 
         // Update our insert index and if we are currently on an icon
-        this._onIcon = cursorLocation == IconGrid.CursorLocation.ON_ICON;
+        this._onIcon = onIcon;
         this._onIconIdx = idx;
 
         // If we are hovering over our own icon placeholder, ignore it
@@ -334,94 +376,105 @@ const AllView = new Lang.Class({
 
         // If we are hovering over an icon, make sure that it has focus
         if (this._onIcon) {
-            this._setHoverStateOf(this._onIconIdx, true);
-
-            return DND.DragMotionResult.COPY_DROP;
+            let validIcon = this._setHoverStateOf(this._dragView, 
+                                                  this._onIconIdx, true);
+            if (validIcon) {
+                return DND.DragMotionResult.MOVE_DROP;
+            } else {
+                // Propagate the signal in case we are hovering
+                // over the trash can
+                return DND.DragMotionResult.CONTINUE;
+            }
         }
 
         // If we are not over any icon, update the insert index so that
         // if the icon is released we know where to place it
         this._insertIdx = idx;
 
-        // If we are outside of the grid make sure that our DnD icon is NO_DROP
+        // If we are outside of the grid, let the drag motion signal
+        // propagate in case we had been hovering over the trash can
         if (this._insertIdx == -1) {
-            return DND.DragMotionResult.NO_DROP;
+            return DND.DragMotionResult.CONTINUE;
         }
 
-        this._nudgeItemsAtIndex(this._insertIdx,
-                                this._originalIdx,
-                                cursorLocation,
-                                isNewPosition
-                               );
+        // If we are between icons at a new position
+        // (but not immediately to the left of the original position),
+        // nudge the icons apart
+        let isLeftOfOrig = (this._onIconIdx == this._originalIdx + 1);
+        if (isNewPosition && !isLeftOfOrig) {
+            this._dragView.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
+        }
 
-        return DND.DragMotionResult.MOVE_DROP;
+        // Let the drag motion signal propagate in case we had
+        // been hovering over the trash can
+        return DND.DragMotionResult.CONTINUE;
     },
 
-    _nudgeItemsAtIndex: function(index, originalIdx, cursorLocation, isNewPosition) {
-        // Only animate if we are at a new position
-        if (isNewPosition) {
-            // Take into account placeholder icon
-            let isAfterPlaceholder = index >= originalIdx;
-            this._grid.nudgeItemsAtIndex(index, cursorLocation, isAfterPlaceholder);
-        }
-    },
+    _setHoverStateOf: function(view, itemIdx, state) {
+        let item = view._allItems[itemIdx];
 
-    _setHoverStateOf: function(itemIdx, state) {
-        let item = this._allItems[itemIdx];
+        // Note that the app store icon is not in the all items array
+        let validItem = (item != null);
 
-        // If the item cannot be found, ignore it
-        if (item != null) {
-            this._items[this._getItemId(item)].actor.set_hover(state);
+        if (validItem) {
+            let viewItem = view._items[view._getItemId(item)];
+            if (viewItem instanceof FolderIcon) {
+                viewItem.actor.set_hover(state);
+            }
         }
+
+        return validItem;
     },
 
     acceptDrop: function(source, actor, x, y, time) {
         // Get the id of the icon dragged
-        let originalId = this._getIdFromIndex(this._originalIdx);
+        let originalId = this._getIdFromIndex(source.parentView, this._originalIdx);
 
         if (this._onIcon) {
             // Find out what icon the drop is under
-            let id = this._getIdFromIndex(this._onIconIdx);
+            let id = this._getIdFromIndex(this._dragView, this._onIconIdx);
             if (!id) {
-                source.actor.show();
                 return true;
             }
 
             // If we are dropping an icon on another icon, cancel the request
-            let dropIcon = this._items[id];
+            let dropIcon = this._dragView.getItem(id);
             if (!(dropIcon instanceof FolderIcon)) {
-                source.actor.show();
                 return true;
             }
 
             // If we are hovering over a folder, the icon needs to be moved
-            let insertId = this._getIdFromIndex(this._insertIdx);
-            let newFolder = dropIcon._dir.get_name();
-            IconGridLayout.layout.repositionIcon("", originalId,
-                                                 insertId,
+            let newFolder = dropIcon.getName();
+            IconGridLayout.layout.repositionIcon(originalId,
+                                                 null,
                                                  newFolder);
             return true;
         } else {
             // If we are not over an icon and we are outside of the grid area,
             // ignore the request to move
             if (this._insertIdx == -1) {
-                source.actor.show();
                 return false;
             } else {
                 // If we are not over an icon but within the grid, shift the
                 // grid around to accomodate it
-                let insertId = this._getIdFromIndex(this._insertIdx);
-                IconGridLayout.layout.repositionIcon("", originalId,
-                                                     insertId, "");
+                let insertId = this._getIdFromIndex(this._dragView, this._insertIdx);
+                let newFolder;
+                if (this._dragView == this) {
+                    newFolder = "";
+                } else {
+                    newFolder = this._dragView.folderIcon.getName();
+                }
+                IconGridLayout.layout.repositionIcon(originalId,
+                                                     insertId, newFolder);
                 return true;
             }
         }
     },
 
-    _getIdFromIndex: function(index){
-       let item = this._allItems[index];
+    _getIdFromIndex: function(view, index){
+       let item = view._allItems[index];
        if (item) {
-           return this._getItemId(item);
+           return view._getItemId(item);
        }
        return null;
     },
@@ -461,9 +514,13 @@ const AllView = new Lang.Class({
                 this._eventBlocker.reactive = isOpen;
                 this._currentPopup = isOpen ? popup : null;
                 this._updateIconOpacities(isOpen);
-                if (isOpen)
+
+                if (isOpen) {
                     this._ensureIconVisible(popup.actor);
-                this._grid.actor.queue_relayout();
+                    this._grid.actor.y = popup.parentOffset;
+                } else {
+                    this._grid.actor.y = 0;
+                }
             }));
     },
 
@@ -621,8 +678,7 @@ const AppDisplay = new Lang.Class({
 
             if (IconGridLayout.layout.iconIsFolder(itemId)) {
                 view.addFolder({
-                    get_id: function() { return itemId; },
-                    get_name: function() { return itemId; },
+                    get_id: function() { return itemId; }
                 });
             } else {
                 let app = this._appSystem.lookup_app(itemId);
@@ -643,67 +699,14 @@ const AppDisplay = new Lang.Class({
     }
 });
 
-const AppSearchProvider = new Lang.Class({
-    Name: 'AppSearchProvider',
-
-    _init: function() {
-        this._appSys = Shell.AppSystem.get_default();
-        this.id = 'applications';
-    },
-
-    getResultMetas: function(apps, callback) {
-        let metas = [];
-        for (let i = 0; i < apps.length; i++) {
-            let app = apps[i];
-            metas.push({ 'id': app,
-                         'name': app.get_name(),
-                         'createIcon': function(size) {
-                             return app.create_icon_texture(size);
-                         }
-                       });
-        }
-        callback(metas);
-    },
-
-    getInitialResultSet: function(terms) {
-        this.searchSystem.pushResults(this, this._appSys.initial_search(terms));
-    },
-
-    getSubsearchResultSet: function(previousResults, terms) {
-        this.searchSystem.pushResults(this, this._appSys.subsearch(previousResults, terms));
-    },
-
-    activateResult: function(app) {
-        let event = Clutter.get_current_event();
-        let modifiers = event ? event.get_state() : 0;
-        let openNewWindow = modifiers & Clutter.ModifierType.CONTROL_MASK;
-
-        if (openNewWindow)
-            app.open_new_window(-1);
-        else
-            app.activate();
-    },
-
-    dragActivateResult: function(id, params) {
-        params = Params.parse(params, { workspace: -1,
-                                        timestamp: 0 });
-
-        let app = this._appSys.lookup_app(id);
-        app.open_new_window(workspace);
-    },
-
-    createResultActor: function (resultMeta, terms) {
-        let app = resultMeta['id'];
-        let icon = new AppIcon(app);
-        return icon.actor;
-    }
-});
-
 const FolderIcon = new Lang.Class({
     Name: 'FolderIcon',
 
     _init: function(dir, parentView) {
         this._dir = dir;
+
+        this._dirInfo = Shell.DesktopDirInfo.new(this._dir.get_id());
+
         this._parentView = parentView;
 
         this.actor = new St.Button({ style_class: 'app-well-app app-folder',
@@ -714,15 +717,17 @@ const FolderIcon = new Lang.Class({
                                      y_fill: true });
         this.actor._delegate = this;
 
-        let label = this._dir.get_name();
+        let label = this.getName();
         this.icon = new IconGrid.BaseIcon(label,
                                           { createIcon: Lang.bind(this, this._createIcon) });
         this.actor.set_child(this.icon.actor);
         this.actor.label_actor = this.icon.label;
 
-        this.view = new FolderView();
+        this.view = new FolderView(this);
         this.view.actor.reactive = false;
-        this._loadCategory(dir, this.view);
+
+        this.view.removeAll();
+        this._loadCategory(this._dir, this.view);
         this.view.loadGrid();
 
         this.actor.connect('clicked', Lang.bind(this,
@@ -754,7 +759,9 @@ const FolderIcon = new Lang.Class({
     },
 
     _createIcon: function(size) {
-        return this.view.createFolderIcon(size);
+        let icon = this._dirInfo.get_icon();
+        return new St.Icon({ icon_size: size,
+                             gicon: icon });
     },
 
     _ensurePopup: function() {
@@ -770,58 +777,51 @@ const FolderIcon = new Lang.Class({
 
         this._popup = new AppFolderPopup(this, side);
         this._parentView.addFolderPopup(this._popup);
-        this._reposition(side, spaceTop, spaceBottom);
+        this._reposition(side);
 
         this._popup.connect('open-state-changed', Lang.bind(this,
             function(popup, isOpen) {
                 if (!isOpen)
                     this.actor.checked = false;
             }));
-
-        // Glue the popup to the top/bottom of the folder icon
-        let constraint;
-        if (side == St.Side.TOP) {
-            constraint = new Clutter.BindConstraint({ source: this.actor.get_parent().get_parent(),
-                                                      coordinate: Clutter.BindCoordinate.Y,
-                                                      offset: this.actor.height + this.actor.y });
-        } else {
-            constraint = new Clutter.BindConstraint({ source: this.actor.get_parent().get_parent(),
-                                                      coordinate: Clutter.BindCoordinate.Y,
-                                                      offset: -this._popup.actor.height + this.actor.y });
-        }
-        this._popup.actor.add_constraint(constraint);
     },
 
-    _reposition: function(side, spaceTop, spaceBottom) {
-        let [sourceX, sourceY] = this.actor.get_transformed_position();
-        let [sourceXP, sourceYP] = this._parentView.actor.get_transformed_position();
-        let newPosY = sourceY - sourceYP + this.actor.height;
-
-        let iconGridHeight = this.actor.get_parent().get_parent().height;
-
-        // Reposition the popup to ensure that the content will grow later when
-        // using a binding constraint. It takes in account that when this
-        // happens, the icon pointed by the popup will be repositioned in more
-        // or less in the middle of the screen (icon grid is always centered)
-        if ((side == St.Side.TOP && this._popup.actor.height > spaceBottom) ||
-            (side == St.Side.BOTTOM && this._popup.actor.height > spaceTop)) {
-            this._popup.actor.y = sourceYP + this._popup.actor.height + this.actor.y + this.actor.height + iconGridHeight;
-        }
+    _reposition: function(side) {
+        let [iconX, ] = this.actor.get_transformed_position();
 
         // If folder icon is not enterily above or below the app folder, move
-        // the later so the pointer can point correctly to the icon
-        let sourceAllocation = Shell.util_get_transformed_allocation(this._popup.actor);
-        let actorLeft = sourceX;
-        let actorRight = sourceX + this.actor.width;
-        let popupLeft = sourceAllocation.x1;
-        let popupRight = sourceAllocation.x2;
+        // the latter so the pointer can point correctly to the icon
+        let popupAllocation = Shell.util_get_transformed_allocation(this._popup.actor);
+        let actorLeft = iconX;
+        let actorRight = iconX + this.actor.width;
+        let popupLeft = popupAllocation.x1;
+        let popupRight = popupAllocation.x2;
         if (actorLeft < popupLeft) {
             this._popup.actor.set_anchor_point(Math.max(0, popupLeft - actorLeft), 0);
         }
         if (actorRight > popupRight) {
             this._popup.actor.set_anchor_point(-Math.max(0, actorRight - popupRight), 0);
         }
+
+        let closeButtonOffset = -this._popup.closeButton.translation_y;
+        let grid = this.actor.get_parent().get_parent();
+
+        // Position the popup above or below the source icon
+        if (side == St.Side.BOTTOM) {
+            this._popup.actor.show();
+            let y = grid.y + this.actor.y - this._popup.actor.height;
+            let yWithButton = y - closeButtonOffset;
+            this._popup.parentOffset = yWithButton < 0 ? -yWithButton : 0;
+            this._popup.actor.y = Math.max(y, closeButtonOffset);
+            this._popup.actor.hide();
+        } else {
+            this._popup.actor.y = grid.y + this.actor.y + this.actor.height + closeButtonOffset;
+        }
     },
+
+    getName: function() {
+        return this._dirInfo.get_name();
+    }
 });
 
 const AppFolderPopup = new Lang.Class({
@@ -833,8 +833,10 @@ const AppFolderPopup = new Lang.Class({
         this._arrowSide = side;
 
         this._isOpen = false;
+        this.parentOffset = 0;
 
         this.actor = new St.Widget({ layout_manager: new Clutter.BinLayout(),
+                                     style_class: 'app-folder-popup-stack',
                                      visible: true,
                                      // We don't want to expand really, but look
                                      // at the layout manager of our parent...
@@ -856,11 +858,11 @@ const AppFolderPopup = new Lang.Class({
         this.actor.add_actor(this._boxPointer.actor);
         this._boxPointer.bin.set_child(this._view.actor);
 
-        let closeButton = Util.makeCloseButton();
-        closeButton.connect('clicked', Lang.bind(this, this.popdown));
-        this.actor.add_actor(closeButton);
+        this.closeButton = Util.makeCloseButton();
+        this.closeButton.connect('clicked', Lang.bind(this, this.popdown));
+        this.actor.add_actor(this.closeButton);
 
-        this._boxPointer.actor.bind_property('opacity', closeButton, 'opacity',
+        this._boxPointer.actor.bind_property('opacity', this.closeButton, 'opacity',
                                              GObject.BindingFlags.SYNC_CREATE);
 
         source.actor.connect('destroy', Lang.bind(this,
@@ -1231,8 +1233,10 @@ const AppStoreIcon = new Lang.Class({
 
         if (showAppsHovered) {
             this.actor.set_child(this.full_trash_icon.actor);
+            this.actor.set_hover(true);
         } else {
             this.actor.set_child(this.empty_trash_icon.actor);
+            this.actor.set_hover(false);
         }
 
         return DND.DragMotionResult.CONTINUE;
@@ -1262,13 +1266,13 @@ const AppStoreIcon = new Lang.Class({
         let noButton = { label: _("No"),
                          action: Lang.bind(this, function() {
                              dialog.close();
-                             source.actor.show();
                          }),
                          key: Clutter.Escape };
         let yesButton = { label: _("Yes"),
                           action: Lang.bind(this, function() {
                               dialog.close();
-                              IconGridLayout.layout.repositionIcon("", id, 0, null);
+                              source.parentView.removeItem(source);
+                              IconGridLayout.layout.repositionIcon(id, 0, null);
                           }),
                           default: true };
         dialog.setButtons([yesButton, noButton]);
