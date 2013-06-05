@@ -241,7 +241,6 @@ const AllView = new Lang.Class({
 
         Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
-        Main.overview.connect('item-drag-cancelled', Lang.bind(this, this._onDragCancelled));
 
         this._clickAction = new Clutter.ClickAction();
         this._clickAction.connect('clicked', Lang.bind(this, function() {
@@ -277,18 +276,16 @@ const AllView = new Lang.Class({
             // Dragging an icon from grid
             // Save the currently dragged item info
             this._dragItem = source;
-            this._dragActor = source.actor.get_child();
+            this._dragIcon = source.icon;
             this._originalIdx = index;
             this._dragView = undefined;
 
             this._insertIdx = -1;
 
             // Replace the dragged icon with an empty placeholder
-            this._insertActor = new St.Button({ style_class: 'app-well-insert-icon',
-                                                can_focus: false,
-                                                x_fill: true,
-                                                y_fill: true });
-            source.actor.set_child(this._insertActor);
+            this._insertActor = new IconGrid.BaseIcon("", { createIcon: this._createEmptyIcon });
+            source.icon = this._insertActor;
+            source.actor.set_child(this._insertActor.actor);
 
             this._eventBlocker.hide();
 
@@ -300,6 +297,10 @@ const AllView = new Lang.Class({
         }
     },
 
+    _createEmptyIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize });
+    },
+
     _onDragEnd: function(overview, source) {
         source.parentView.removeNudgeTransforms();
         if (source.parentView != this) {
@@ -307,26 +308,18 @@ const AllView = new Lang.Class({
         }
         this._eventBlocker.show();
 
-        source.actor.set_child(this._dragActor);
+        source.icon = this._dragIcon;
+        source.actor.set_child(source.icon.actor);
         if (this._insertActor != null) {
             this._insertActor = null;
             this._insertIdx = -1;
             this._originalIdx = -1;
             this._dragItem = undefined;
-            this._dragActor = undefined;
             this._dragView = undefined;
+            this._dragIcon = undefined;
         }
 
         DND.removeDragMonitor(this._dragMonitor);
-    },
-
-    _onDragCancelled: function(overview, source) {
-        source.actor.set_child(this._dragActor);
-        if (this._insertActor != null) {
-            this._insertActor = null;
-        }
-
-        this._onDragEnd(overview, source);
     },
 
     _onDragMotion: function(dragEvent) {
@@ -441,14 +434,12 @@ const AllView = new Lang.Class({
             // Find out what icon the drop is under
             let id = this._getIdFromIndex(this._dragView, this._onIconIdx);
             if (!id) {
-                source.actor.set_child(this._dragActor);
                 return true;
             }
 
             // If we are dropping an icon on another icon, cancel the request
             let dropIcon = this._dragView.getItem(id);
             if (!(dropIcon instanceof FolderIcon)) {
-                source.actor.set_child(this._dragActor);
                 return true;
             }
 
@@ -462,7 +453,6 @@ const AllView = new Lang.Class({
             // If we are not over an icon and we are outside of the grid area,
             // ignore the request to move
             if (this._insertIdx == -1) {
-                source.actor.set_child(this._dragActor);
                 return false;
             } else {
                 // If we are not over an icon but within the grid, shift the
