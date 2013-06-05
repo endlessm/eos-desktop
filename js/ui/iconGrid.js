@@ -69,9 +69,9 @@ const BaseIcon = new Lang.Class({
             box.add_actor(this.label);
 
             if (params.editableLabel) {
-              let click_action = new Clutter.ClickAction();
-              click_action.connect('clicked', Lang.bind(this, this._onLabelClicked));
-              this.label.add_action('labelClickAction', click_action);
+              let clickAction = new Clutter.ClickAction();
+              clickAction.connect('clicked', Lang.bind(this, this._onLabelClicked));
+              this.label.add_action(clickAction);
 
               global.stage.connect('notify::key-focus', Lang.bind(this, this._onStageKeyFocusChanged));
             }
