@@ -1268,6 +1268,7 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
       g_warning ("Unable to create '%s': %s", new_path, g_strerror (saved_errno));
 
       g_free (new_path);
+      g_free (buf);
 
       return FALSE;
     }
@@ -1283,11 +1284,13 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
 
       g_error_free (internal_error);
       g_free (new_path);
+      g_free (buf);
 
       return FALSE;
     }
 
   g_free (new_path);
+  g_free (buf);
 
   return TRUE;
 }
