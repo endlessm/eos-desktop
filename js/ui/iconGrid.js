@@ -330,7 +330,7 @@ const BaseIcon = new Lang.Class({
         // ignore empty labels
         let text = this.label.get_text();
         if (text && text.length > 0) {
-            this.emit('label-edit-udpate');
+            this.emit('label-edit-udpate', text);
         }
         else {
             this.label.set_text(oldText);

@@ -999,9 +999,8 @@ const AppIcon = new Lang.Class({
         }
     },
 
-    _onLabelUpdate: function() {
-        log('New label for app: ' + this.app.get_name() + ' is: ' + this.icon.label.get_text());
-        this.app.create_custom_launcher_with_name(this.app, this.icon.label.get_text());
+    _onLabelUpdate: function(newLabel) {
+        this.app.create_custom_launcher_with_name(this.app, newLabel);
     },
 
     _onButtonPress: function(actor, event) {
