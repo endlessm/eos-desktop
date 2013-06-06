@@ -3,6 +3,7 @@
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 
+const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 
 const SocialBarIface =
@@ -35,6 +36,7 @@ const SocialBarButton = new Lang.Class({
     // overrides default implementation from PanelMenu.Button
     _onButtonPress: function(actor, event) {
         try {
+            Main.overview.hide();
             this._socialBarProxy.toggleRemote();
         } catch(e) {
             log('Unable to toggle social bar visibility: ' + e.message);
