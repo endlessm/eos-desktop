@@ -154,25 +154,6 @@ const FolderView = new Lang.Class({
 
     addApp: function(app) {
         this._addItem(app);
-    },
-
-    createFolderIcon: function(size) {
-        let icon = new St.Widget({ layout_manager: new Clutter.BinLayout(),
-                                   style_class: 'app-folder-icon',
-                                   width: size, height: size });
-        let subSize = Math.floor(FOLDER_SUBICON_FRACTION * size);
-
-        let aligns = [ Clutter.ActorAlign.START, Clutter.ActorAlign.END ];
-        for (let i = 0; i < Math.min(this._allItems.length, 4); i++) {
-            let texture = this._allItems[i].create_icon_texture(subSize);
-            let bin = new St.Bin({ child: texture,
-                                   x_expand: true, y_expand: true });
-            bin.set_x_align(aligns[i % 2]);
-            bin.set_y_align(aligns[Math.floor(i / 2)]);
-            icon.add_actor(bin);
-        }
-
-        return icon;
     }
 });
 
