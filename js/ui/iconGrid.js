@@ -74,8 +74,7 @@ const BaseIcon = new Lang.Class({
                 this.label.clutter_text.editable = false;
                 this.label.clutter_text.x_align = Clutter.ActorAlign.CENTER;
 
-                this._editStartId = this.label.connect('button-press-event',
-                    Lang.bind(this, this._onLabelEditStart));
+                this._editStartId = this.label.connect('button-press-event', Lang.bind(this, this._onLabelEditStart));
             } else {
                 this.label = new St.Label({ text: label,
                                             style_class: 'overview-icon-label' });
@@ -229,18 +228,16 @@ const BaseIcon = new Lang.Class({
             this._editStartId = 0;
         }
 
-        this._keyFocusId = global.stage.connect('notify::key-focus',
-            Lang.bind(this, this._onStageKeyFocusChanged));
+        this._keyFocusId = global.stage.connect('notify::key-focus', Lang.bind(this, this._onStageKeyFocusChanged));
 
         // we change the editability on key focus changes
-        global.stage.set_key_focus(this.label);
+        this.label.grab_key_focus();
 
         return true;
     },
 
     _startEditing: function() {
         this.label.clutter_text.editable = true;
-        this.label.clutter_text.cursor_visible = true;
 
         this.label.add_style_pseudo_class('focus');
 
@@ -250,12 +247,9 @@ const BaseIcon = new Lang.Class({
 
         // monitor key and pointer events so we can determine whether
         // the editing has been successful or cancelled
-        this.label._keyPressId = this.label.connect('key-press-event',
-            Lang.bind(this, this._onLabelGrabKeyPress));
-        this.label._buttonPressId = this.label.connect('button-press-event',
-            Lang.bind(this, this._onLabelGrabButtonPress));
-        this.label._activateId = this.label.clutter_text.connect('activate',
-            Lang.bind(this, this._confirmEditing));
+        this.label._keyPressId = this.label.connect('key-press-event', Lang.bind(this, this._onLabelGrabKeyPress));
+        this.label._buttonPressId = this.label.connect('button-press-event', Lang.bind(this, this._onLabelGrabButtonPress));
+        this.label._activateId = this.label.clutter_text.connect('activate', Lang.bind(this, this._confirmEditing));
 
         // we need a grab in place, so we can detect pointer events
         // like button-press outside of the label and abort editing. I
@@ -268,7 +262,6 @@ const BaseIcon = new Lang.Class({
 
     _endEditing: function() {
         this.label.clutter_text.editable = false;
-        this.label.clutter_text.cursor_visible = false;
 
         this.label.remove_style_pseudo_class('focus');
         this.label._oldLabelText = null;
@@ -288,7 +281,7 @@ const BaseIcon = new Lang.Class({
             this.label._activateId = 0;
         }
 
-        if (this._keyFocusId > 0) {
+        if (this._keyFocusId) {
             global.stage.disconnect(this._keyFocusId);
             this._keyFocusId = 0;
         }
@@ -296,8 +289,7 @@ const BaseIcon = new Lang.Class({
         Clutter.ungrab_pointer();
 
         // reconnect signal to enter editing mode
-        this._editStartId = this.label.connect('button-press-event',
-            Lang.bind(this, this._onLabelEditStart));
+        this._editStartId = this.label.connect('button-press-event', Lang.bind(this, this._onLabelEditStart));
     },
 
     _onStageKeyFocusChanged: function() {
