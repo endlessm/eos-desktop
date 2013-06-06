@@ -283,7 +283,7 @@ const AllView = new Lang.Class({
             this._insertIdx = -1;
 
             // Replace the dragged icon with an empty placeholder
-            this._insertActor = new IconGrid.BaseIcon("", { createIcon: this._createEmptyIcon });
+            this._insertActor = new IconGrid.BaseIcon('', { createIcon: this._createEmptyIcon });
             source.icon = this._insertActor;
             source.actor.set_child(this._insertActor.actor);
 
@@ -345,7 +345,7 @@ const AllView = new Lang.Class({
         // If we are not over our last hovered icon, remove its hover state
         if (this._onIconIdx != null &&
             ((idx != this._onIconIdx) || !onIcon)) {
-            this._setHoverStateOf(this._dragView, this._onIconIdx, false)
+            this._setHoverStateOf(this._dragView, this._onIconIdx, false);
         }
 
         // If we are in a new spot, remove the previous nudges
@@ -376,7 +376,7 @@ const AllView = new Lang.Class({
 
         // If we are hovering over an icon, make sure that it has focus
         if (this._onIcon) {
-            let validIcon = this._setHoverStateOf(this._dragView, 
+            let validIcon = this._setHoverStateOf(this._dragView,
                                                   this._onIconIdx, true);
             if (validIcon) {
                 return DND.DragMotionResult.MOVE_DROP;
