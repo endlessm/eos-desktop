@@ -3,6 +3,7 @@
 #include "config.h"
 
 #include <string.h>
+#include <errno.h>
 
 #include <glib/gi18n-lib.h>
 
@@ -1203,6 +1204,92 @@ GMenuTreeEntry *
 shell_app_get_tree_entry (ShellApp *app)
 {
   return app->entry;
+}
+
+gboolean
+shell_app_create_custom_launcher_with_name (ShellApp *app,
+                                            const char *label)
+{
+  GDesktopAppInfo *appinfo;
+  GError *internal_error;
+  const char *filename;
+  char *new_path, *buf;
+  GKeyFile *keyfile;
+  gsize len;
+
+  if (app->entry == NULL)
+    return FALSE;
+
+  filename = gmenu_tree_entry_get_desktop_file_path (app->entry);
+  if (filename == NULL || *filename == '\0')
+    return FALSE;
+
+  keyfile = g_key_file_new ();
+
+  internal_error = NULL;
+
+  /* we ignore comments and translations */
+  g_key_file_load_from_file (keyfile, filename, 0, &internal_error);
+  if (internal_error != NULL)
+    {
+      g_warning ("Unable to load desktop file '%s': %s", filename, internal_error->message);
+
+      g_error_free (internal_error);
+      g_key_file_unref (keyfile);
+
+      return FALSE;
+    }
+
+  /* replace the 'Name' key with the new one */
+  g_key_file_set_string (keyfile,
+                         G_KEY_FILE_DESKTOP_GROUP,
+                         G_KEY_FILE_DESKTOP_KEY_NAME,
+                         label);
+
+  buf = g_key_file_to_data (keyfile, &len, &internal_error);
+  if (internal_error != NULL)
+    {
+      g_warning ("Unable to save desktop file: %s", internal_error->message);
+
+      g_error_free (internal_error);
+      g_key_file_unref (keyfile);
+
+      return FALSE;
+    }
+
+  g_key_file_unref (keyfile);
+
+  new_path = g_build_filename (g_get_user_data_dir (), "applications", NULL);
+
+  if (g_mkdir_with_parents (new_path, 0755) < 0)
+    {
+      int saved_errno = errno;
+
+      g_warning ("Unable to create '%s': %s", new_path, g_strerror (saved_errno));
+
+      g_free (new_path);
+
+      return FALSE;
+    }
+
+  g_free (new_path);
+
+  new_path = g_build_filename (g_get_user_data_dir (), "applications", shell_app_get_id (app), NULL);
+
+  g_file_set_contents (new_path, buf, len, &internal_error);
+  if (internal_error != NULL)
+    {
+      g_warning ("Unable to write desktop file '%s': %s", new_path, internal_error->message);
+
+      g_error_free (internal_error);
+      g_free (new_path);
+
+      return FALSE;
+    }
+
+  g_free (new_path);
+
+  return TRUE;
 }
 
 static void
