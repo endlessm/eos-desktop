@@ -356,10 +356,7 @@ const BaseIcon = new Lang.Class({
         let symbol = event.get_key_symbol();
 
         // abort editing
-        if (symbol == Clutter.KEY_Escape ||
-            symbol == Clutter.KEY_Down ||
-            symbol == Clutter.KEY_Tab ||
-            symbol == Clutter.KEY_ISO_Left_Tab) {
+        if (symbol == Clutter.KEY_Escape) {
             this._cancelEditing();
             return true;
         }
