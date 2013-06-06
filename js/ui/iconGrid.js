@@ -346,7 +346,7 @@ const BaseIcon = new Lang.Class({
                                                    stageY);
 
         if (target != this.label) {
-            this._cancelEditing();
+            this._confirmEditing();
         }
 
         return false;
