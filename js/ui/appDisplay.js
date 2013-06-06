@@ -932,7 +932,7 @@ const AppIcon = new Lang.Class({
         iconParams['createIcon'] = Lang.bind(this, this._createIcon);
         iconParams['editableLabel'] = true;
         this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
-        this.icon.connect('label-edit-confirm', Lang.bind(this, this._onLabelEditConfirm));
+        this.icon.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
         this.actor.set_child(this.icon.actor);
 
         this.actor.label_actor = this.icon.label;
@@ -999,8 +999,9 @@ const AppIcon = new Lang.Class({
         }
     },
 
-    _onLabelEditConfirm: function() {
+    _onLabelUpdate: function() {
         log('New label for app: ' + this.app.get_name() + ' is: ' + this.icon.label.get_text());
+        this.app.create_custom_launcher_with_name(this.app, this.icon.label.get_text());
     },
 
     _onButtonPress: function(actor, event) {
