@@ -270,7 +270,8 @@ const BaseIcon = new Lang.Class({
         this.label.clutter_text.editable = false;
 
         this.label.remove_style_pseudo_class('focus');
-        this.label._oldLabelText = null;
+
+        this._oldLabelText = null;
 
         if (this.label._keyPressId) {
             this.label.disconnect(this.label._keyPressId);
@@ -311,16 +312,30 @@ const BaseIcon = new Lang.Class({
     },
 
     _cancelEditing: function() {
+        // set_key_focus() below will unset oldLabelText
+        let oldText = this._oldLabelText;
+
         global.stage.set_key_focus(null);
 
-        this.label.text = this._oldLabelText;
+        this.label.set_text(oldText);
         this.emit('label-edit-cancel');
     },
 
     _confirmEditing: function() {
+        // set_key_focus() below will unset oldLabelText
+        let oldText = this._oldLabelText;
+
         global.stage.set_key_focus(null);
 
-        this.emit('label-edit-udpate');
+        // ignore empty labels
+        let text = this.label.get_text();
+        if (text && text.length > 0) {
+            this.emit('label-edit-udpate');
+        }
+        else {
+            this.label.set_text(oldText);
+            this.emit('label-edit-cancel');
+        }
     },
 
     _onLabelGrabButtonPress: function(actor, event) {
