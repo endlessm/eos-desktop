@@ -434,20 +434,17 @@ const AllView = new Lang.Class({
             // Find out what icon the drop is under
             let id = this._getIdFromIndex(this._dragView, this._onIconIdx);
             if (!id) {
-                return true;
+                return false;
             }
 
             // If we are dropping an icon on another icon, cancel the request
             let dropIcon = this._dragView.getItem(id);
             if (!(dropIcon instanceof FolderIcon)) {
-                return true;
+                return false;
             }
 
             // If we are hovering over a folder, the icon needs to be moved
-            let newFolder = dropIcon.getName();
-            IconGridLayout.layout.repositionIcon(originalId,
-                                                 null,
-                                                 newFolder);
+            IconGridLayout.layout.repositionIcon(originalId, null, id);
             return true;
         } else {
             // If we are not over an icon and we are outside of the grid area,
@@ -458,14 +455,15 @@ const AllView = new Lang.Class({
                 // If we are not over an icon but within the grid, shift the
                 // grid around to accomodate it
                 let insertId = this._getIdFromIndex(this._dragView, this._insertIdx);
-                let newFolder;
+
+                let folderId;
                 if (this._dragView == this) {
-                    newFolder = "";
+                    folderId = '';
                 } else {
-                    newFolder = this._dragView.folderIcon.getName();
+                    folderId = this._dragView.folderIcon.getId();
                 }
-                IconGridLayout.layout.repositionIcon(originalId,
-                                                     insertId, newFolder);
+
+                IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
                 return true;
             }
         }
@@ -717,7 +715,7 @@ const FolderIcon = new Lang.Class({
                                      y_fill: true });
         this.actor._delegate = this;
 
-        let label = this.getName();
+        let label = this._dirInfo.get_name();
         this.icon = new IconGrid.BaseIcon(label,
                                           { createIcon: Lang.bind(this, this._createIcon) });
         this.actor.set_child(this.icon.actor);
@@ -819,8 +817,8 @@ const FolderIcon = new Lang.Class({
         }
     },
 
-    getName: function() {
-        return this._dirInfo.get_name();
+    getId: function() {
+        return this._dir.get_id();
     }
 });
 
