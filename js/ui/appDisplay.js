@@ -434,13 +434,13 @@ const AllView = new Lang.Class({
             // Find out what icon the drop is under
             let id = this._getIdFromIndex(this._dragView, this._onIconIdx);
             if (!id) {
-                return true;
+                return false;
             }
 
             // If we are dropping an icon on another icon, cancel the request
             let dropIcon = this._dragView.getItem(id);
             if (!(dropIcon instanceof FolderIcon)) {
-                return true;
+                return false;
             }
 
             // If we are hovering over a folder, the icon needs to be moved
