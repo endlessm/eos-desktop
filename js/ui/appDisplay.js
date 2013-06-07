@@ -361,17 +361,11 @@ const AllView = new Lang.Class({
             this._onIconIdx = -1;
             this._insertIdx = idx;
 
-            // If we are outside of the grid, let the drag motion signal
-            // propagate in case we had been hovering over the trash can
-            if (this._insertIdx == -1) {
-                return DND.DragMotionResult.CONTINUE;
-            }
-
             // If we are between icons at a new position
             // (but not immediately to the left of the original position),
             // nudge the icons apart
             let isLeftOfOrig = (this._insertIdx == this._originalIdx + 1);
-            if (isNewPosition && !isLeftOfOrig) {
+            if (this._insertIdx != -1 && isNewPosition && !isLeftOfOrig) {
                 this._dragView.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
             }
 
