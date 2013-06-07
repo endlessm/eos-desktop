@@ -398,8 +398,9 @@ const AllView = new Lang.Class({
         
         if (item) {
             let viewItem = this._dragView._items[item.get_id()];
-            // We can only move into folders
-            validHoverDrop = (viewItem instanceof FolderIcon);
+            // We can only move applications into folders
+            validHoverDrop = (viewItem instanceof FolderIcon &&
+                              this._dropItem instanceof AppIcon);
         }
 
         if (validHoverDrop) {
@@ -730,6 +731,21 @@ const FolderIcon = new Lang.Class({
                 if (!this.actor.mapped && this._popup)
                     this._popup.popdown();
             }));
+
+        // DND implementation
+        this._draggable = DND.makeDraggable(this.actor);
+        this._draggable.connect('drag-begin', Lang.bind(this,
+            function () {
+                Main.overview.beginItemDrag(this);
+            }));
+        this._draggable.connect('drag-cancelled', Lang.bind(this,
+            function () {
+                Main.overview.cancelledItemDrag(this);
+            }));
+        this._draggable.connect('drag-end', Lang.bind(this,
+            function () {
+                Main.overview.endItemDrag(this);
+            }));
     },
 
     _loadCategory: function(dir) {
@@ -811,6 +827,16 @@ const FolderIcon = new Lang.Class({
 
     getId: function() {
         return this._dir.get_id();
+    },
+
+    getDragActor: function() {
+        let icon = this._dirInfo.get_icon();
+        let textureCache = St.TextureCache.get_default();
+        return textureCache.load_gicon(null, icon, Main.overview.dashIconSize);
+    },
+
+    getDragActorSource: function() {
+        return this.icon.icon;
     }
 });
 
