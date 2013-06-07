@@ -403,7 +403,7 @@ const AllView = new Lang.Class({
             let viewItem = this._dragView._items[item.get_id()];
             // We can only move applications into folders
             validHoverDrop = (viewItem instanceof FolderIcon &&
-                              this._dropItem instanceof AppIcon);
+                              this._dragItem instanceof AppIcon);
         }
 
         if (validHoverDrop) {
