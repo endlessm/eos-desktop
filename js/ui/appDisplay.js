@@ -455,14 +455,15 @@ const AllView = new Lang.Class({
                 // If we are not over an icon but within the grid, shift the
                 // grid around to accomodate it
                 let insertId = this._getIdFromIndex(this._dragView, this._insertIdx);
-                let newFolder;
+
+                let folderId;
                 if (this._dragView == this) {
-                    newFolder = "";
+                    folderId = '';
                 } else {
-                    newFolder = this._dragView.folderIcon.getName();
+                    folderId = this._dragView.folderIcon.getId();
                 }
-                IconGridLayout.layout.repositionIcon(originalId,
-                                                     insertId, newFolder);
+
+                IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
                 return true;
             }
         }
@@ -818,6 +819,10 @@ const FolderIcon = new Lang.Class({
 
     getName: function() {
         return this._dirInfo.get_name();
+    },
+
+    getId: function() {
+        return this._dir.get_id();
     }
 });
 
