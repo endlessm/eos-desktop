@@ -715,7 +715,7 @@ const FolderIcon = new Lang.Class({
                                      y_fill: true });
         this.actor._delegate = this;
 
-        let label = this.getName();
+        let label = this._dirInfo.get_name();
         this.icon = new IconGrid.BaseIcon(label,
                                           { createIcon: Lang.bind(this, this._createIcon) });
         this.actor.set_child(this.icon.actor);
@@ -815,10 +815,6 @@ const FolderIcon = new Lang.Class({
         } else {
             this._popup.actor.y = grid.y + this.actor.y + this.actor.height + closeButtonOffset;
         }
-    },
-
-    getName: function() {
-        return this._dirInfo.get_name();
     },
 
     getId: function() {
