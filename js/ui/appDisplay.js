@@ -350,16 +350,13 @@ const AllView = new Lang.Class({
             this._onIconIdx = idx;
             this._insertIdx = -1;
 
-            // If we are hovering over our own icon placeholder, ignore it
-            if (this._onIconIdx == this._originalIdx) {
-                return DND.DragMotionResult.NO_DROP;
+            let hoverResult = this._getDragHoverResult();
+            if (hoverResult == DND.DragMotionResult.MOVE_DROP) {
+                // If we are hovering over a drop target, set its hover state
+                this._setDragHoverState(true);
             }
 
-            // If we are hovering over an icon, set its hover state
-            let validIcon = this._setDragHoverState(true);
-            if (validIcon) {
-                return DND.DragMotionResult.MOVE_DROP;
-            }
+            return hoverResult;
         } else {
             this._onIconIdx = -1;
             this._insertIdx = idx;
@@ -377,27 +374,43 @@ const AllView = new Lang.Class({
             if (isNewPosition && !isLeftOfOrig) {
                 this._dragView.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
             }
+
+            // Propagate the signal in case we are hovering
+            // over the trash can
+            return DND.DragMotionResult.CONTINUE;
+        }
+    },
+
+    _getDragHoverResult: function() {
+        // If we are hovering over our own icon placeholder, ignore it
+        if (this._onIconIdx == this._originalIdx) {
+            return DND.DragMotionResult.NO_DROP;
         }
 
-        // Propagate the signal in case we are hovering
-        // over the trash can
-        return DND.DragMotionResult.CONTINUE;
+        // Note that the app store icon is not in the all items array
+        let item = this._dragView._allItems[this._onIconIdx];
+        let validHoverDrop = false;
+        
+        if (item) {
+            let viewItem = this._dragView._items[item.get_id()];
+            // We can only move into folders
+            validHoverDrop = (viewItem instanceof FolderIcon);
+        }
+
+        if (validHoverDrop) {
+            return DND.DragMotionResult.MOVE_DROP;
+        } else {
+            return DND.DragMotionResult.CONTINUE;
+        }
     },
 
     _setDragHoverState: function(state) {
         let item = this._dragView._allItems[this._onIconIdx];
 
-        // Note that the app store icon is not in the all items array
-        let validItem = (item != null);
-
-        if (validItem) {
-            let viewItem = this._dragView._items[this._dragView._getItemId(item)];
-            if (viewItem instanceof FolderIcon) {
-                viewItem.actor.set_hover(state);
-            }
+        if (item) {
+            let viewItem = this._dragView._items[item.get_id()];
+            viewItem.actor.set_hover(state);
         }
-
-        return validItem;
     },
 
     acceptDrop: function(source, actor, x, y, time) {
