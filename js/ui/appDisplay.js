@@ -361,18 +361,29 @@ const AllView = new Lang.Class({
             this._onIconIdx = -1;
             this._insertIdx = idx;
 
-            // If we are between icons at a new position
-            // (but not immediately to the left of the original position),
-            // nudge the icons apart
-            let isLeftOfOrig = (this._insertIdx == this._originalIdx + 1);
-            if (this._insertIdx != -1 && isNewPosition && !isLeftOfOrig) {
+            if (this._shouldNudgeItems(isNewPosition)) {
                 this._dragView.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
             }
 
-            // Propagate the signal in case we are hovering
-            // over the trash can
+            // Propagate the signal in any case when moving icons
             return DND.DragMotionResult.CONTINUE;
         }
+    },
+
+    _shouldNudgeItems: function(isNewPosition) {
+        if (this._insertIdx == -1) {
+            return false;
+        }
+
+        if (this._insertIdx == this._originalIdx) {
+            return false;
+        }
+
+        // If we are between icons at a new position
+        // (but not immediately to the left of the original position),
+        // nudge the icons apart
+        let isLeftOfOrig = (this._insertIdx == this._originalIdx + 1);
+        return (isNewPosition && !isLeftOfOrig);
     },
 
     _getDragHoverResult: function() {
