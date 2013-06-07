@@ -444,10 +444,7 @@ const AllView = new Lang.Class({
             }
 
             // If we are hovering over a folder, the icon needs to be moved
-            let newFolder = dropIcon.getName();
-            IconGridLayout.layout.repositionIcon(originalId,
-                                                 null,
-                                                 newFolder);
+            IconGridLayout.layout.repositionIcon(originalId, null, id);
             return true;
         } else {
             // If we are not over an icon and we are outside of the grid area,
