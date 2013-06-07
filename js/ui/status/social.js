@@ -29,6 +29,8 @@ const SocialBarButton = new Lang.Class({
         this._socialBarProxy = new SocialBarProxy(Gio.DBus.session,
             SOCIAL_BAR_NAME, SOCIAL_BAR_PATH, Lang.bind(this, this._onProxyConstructed));
         this._socialBarProxy.connect('g-properties-changed', Lang.bind(this, this._onPropertiesChanged));
+
+        Main.overview.connect('showing', Lang.bind(this, this._onOverviewShowing));
     },
 
     _onProxyConstructed: function() {
@@ -50,6 +52,14 @@ const SocialBarButton = new Lang.Class({
             if (visibleWindows == 0) {
                 Main.overview.showApps();
             }
+        }
+    },
+
+    _onOverviewShowing: function() {
+        let visible = this._socialBarProxy.Visible;
+
+        if (visible) {
+            this._socialBarProxy.toggleRemote();
         }
     },
 
