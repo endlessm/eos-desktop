@@ -375,20 +375,23 @@ const AllView = new Lang.Class({
             return false;
         }
 
-        if (this._insertIdx == this._originalIdx) {
+        if (this._insertIdx == this._originalIdx &&
+            this._dragView == this._dragItem.parentView) {
             return false;
         }
 
         // If we are between icons at a new position
         // (but not immediately to the left of the original position),
         // nudge the icons apart
-        let isLeftOfOrig = (this._insertIdx == this._originalIdx + 1);
+        let isLeftOfOrig = (this._insertIdx == this._originalIdx + 1 &&
+                            this._dragView == this._dragItem.parentView);
         return (isNewPosition && !isLeftOfOrig);
     },
 
     _getDragHoverResult: function() {
         // If we are hovering over our own icon placeholder, ignore it
-        if (this._onIconIdx == this._originalIdx) {
+        if (this._onIconIdx == this._originalIdx &&
+            this._dragView == this._dragItem.parentView) {
             return DND.DragMotionResult.NO_DROP;
         }
 
