@@ -9,6 +9,7 @@ const PanelMenu = imports.ui.panelMenu;
 const SocialBarIface =
     <interface name="com.endlessm.SocialBar">
     <method name="toggle"/>
+    <property name="Visible" type="b" access="read"/>
     </interface>;
 const SOCIAL_BAR_NAME = 'com.endlessm.SocialBar';
 const SOCIAL_BAR_PATH = '/com/endlessm/SocialBar';
@@ -27,10 +28,29 @@ const SocialBarButton = new Lang.Class({
 
         this._socialBarProxy = new SocialBarProxy(Gio.DBus.session,
             SOCIAL_BAR_NAME, SOCIAL_BAR_PATH, Lang.bind(this, this._onProxyConstructed));
+        this._socialBarProxy.connect('g-properties-changed', Lang.bind(this, this._onPropertiesChanged));
     },
 
     _onProxyConstructed: function() {
         // nothing to do
+    },
+
+    _onPropertiesChanged: function(proxy, changedProps, invalidatedProps) {
+        let propsDict = changedProps.deep_unpack();
+        if (propsDict.hasOwnProperty('Visible')) {
+            this._onVisibilityChanged();
+        }
+    },
+
+    _onVisibilityChanged: function() {
+        let visible = this._socialBarProxy.Visible;
+
+        if (!visible) {
+            let visibleWindows = Main.workspaceMonitor.visibleWindows;
+            if (visibleWindows == 0) {
+                Main.overview.showApps();
+            }
+        }
     },
 
     // overrides default implementation from PanelMenu.Button
