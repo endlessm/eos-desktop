@@ -579,10 +579,16 @@ const Overview = new Lang.Class({
         if (this.isDummy)
             return;
 
-        if (this.visible)
-            this.hideOrShowApps();
-        else
+        if (this.visible) {
+            // if we're already showing the apps launcher then we don't need
+            // to do anything else
+            if (this._viewSelector.getActivePage() != ViewSelector.ViewPage.APPS) {
+                this.hideOrShowApps();
+            }
+        }
+        else {
             this.show();
+        }
     },
 
     // Checks if the Activities button is currently sensitive to
