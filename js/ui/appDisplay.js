@@ -154,25 +154,6 @@ const FolderView = new Lang.Class({
 
     addApp: function(app) {
         this._addItem(app);
-    },
-
-    createFolderIcon: function(size) {
-        let icon = new St.Widget({ layout_manager: new Clutter.BinLayout(),
-                                   style_class: 'app-folder-icon',
-                                   width: size, height: size });
-        let subSize = Math.floor(FOLDER_SUBICON_FRACTION * size);
-
-        let aligns = [ Clutter.ActorAlign.START, Clutter.ActorAlign.END ];
-        for (let i = 0; i < Math.min(this._allItems.length, 4); i++) {
-            let texture = this._allItems[i].create_icon_texture(subSize);
-            let bin = new St.Bin({ child: texture,
-                                   x_expand: true, y_expand: true });
-            bin.set_x_align(aligns[i % 2]);
-            bin.set_y_align(aligns[Math.floor(i / 2)]);
-            icon.add_actor(bin);
-        }
-
-        return icon;
     }
 });
 
@@ -267,63 +248,72 @@ const AllView = new Lang.Class({
         return false;
     },
 
-    _onDragBegin: function(overview, source) {
-        if (source.parentView == undefined) {
-            // Dragging an icon from dash
-            this._eventBlocker.hide();
-        } else {
-            let index = source.parentView.indexOf(source);
-            // Dragging an icon from grid
-            // Save the currently dragged item info
-            this._dragItem = source;
-            this._dragIcon = source.icon;
-            this._originalIdx = index;
-            this._dragView = undefined;
-
-            this._insertIdx = -1;
-
-            // Replace the dragged icon with an empty placeholder
-            this._insertActor = new IconGrid.BaseIcon("", { createIcon: this._createEmptyIcon });
-            source.icon = this._insertActor;
-            source.actor.set_child(this._insertActor.actor);
-
-            this._eventBlocker.hide();
-
-            this._dragCancelled = false;
-            this._dragMonitor = {
-                dragMotion: Lang.bind(this, this._onDragMotion)
-            };
-            DND.addDragMonitor(this._dragMonitor);
-        }
-    },
-
     _createEmptyIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize });
+    },
+
+    _setupDragState: function(source) {
+        this._dragItem = source;
+        this._dragView = undefined;
+
+        this._dragMonitor = {
+            dragMotion: Lang.bind(this, this._onDragMotion)
+        };
+        DND.addDragMonitor(this._dragMonitor);
+
+        this._insertIdx = -1;
+        this._onIconIdx = -1;
+        this._onIcon = false;
+        this._originalIdx = source.parentView.indexOf(source);
+
+        // Replace the dragged icon with an empty placeholder
+        this._originalSourceIcon = source.icon;
+
+        let insertActor = new IconGrid.BaseIcon('', { createIcon: this._createEmptyIcon });
+        source.icon = insertActor;
+        source.actor.set_child(insertActor.actor);
+    },
+
+    _clearDragState: function(source) {
+        source.icon = this._originalSourceIcon;
+        source.actor.set_child(source.icon.actor);
+        this._originalSourceIcon = null;
+
+        this._insertIdx = -1;
+        this._onIconIdx = -1;
+        this._onIcon = false;
+        this._originalIdx = -1;
+
+        this._dragItem = null;
+        this._dragView = null;
+
+        DND.removeDragMonitor(this._dragMonitor);
+        this._dragMonitor = null;
+    },
+
+    _onDragBegin: function(overview, source) {
+        if (source.parentView) {
+            // Dragging an icon from grid
+            // Save the currently dragged item info
+            this._setupDragState(source);
+        }
+
+        // Hide the event blocker in all cases to allow for dash DnD
+        this._eventBlocker.hide();
     },
 
     _onDragEnd: function(overview, source) {
         source.parentView.removeNudgeTransforms();
         if (source.parentView != this) {
-            this._grid.removeNudgeTransforms();
+            this.removeNudgeTransforms();
         }
+
         this._eventBlocker.show();
-
-        source.icon = this._dragIcon;
-        source.actor.set_child(source.icon.actor);
-        if (this._insertActor != null) {
-            this._insertActor = null;
-            this._insertIdx = -1;
-            this._originalIdx = -1;
-            this._dragItem = undefined;
-            this._dragView = undefined;
-            this._dragIcon = undefined;
-        }
-
-        DND.removeDragMonitor(this._dragMonitor);
+        this._clearDragState(source);
     },
 
     _onDragMotion: function(dragEvent) {
-        /* Handle motion over grid */
+        // Handle motion over grid
         if (this.actor.contains(dragEvent.targetActor)) {
             this._dragView = this;
         }
@@ -332,7 +322,7 @@ const AllView = new Lang.Class({
             this._dragView = this._dragItem.parentView;
         }
 
-        if (this._dragView == undefined) {
+        if (!this._dragView) {
             return DND.DragMotionResult.CONTINUE;
         }
 
@@ -341,89 +331,95 @@ const AllView = new Lang.Class({
                                                              this._insertIdx);
 
         let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
+        let isNewPosition = (!onIcon && idx != this._insertIdx) || (onIcon != this._onIcon);
 
         // If we are not over our last hovered icon, remove its hover state
-        if (this._onIconIdx != null &&
+        if (this._onIconIdx != -1 &&
             ((idx != this._onIconIdx) || !onIcon)) {
-            this._setHoverStateOf(this._dragView, this._onIconIdx, false)
+            this._setDragHoverState(false);
         }
 
         // If we are in a new spot, remove the previous nudges
-        let isNewPosition = false;
-        if ((idx != this._insertIdx) || onIcon) {
-            isNewPosition = true;
+        if (isNewPosition) {
             this._dragView.removeNudgeTransforms();
         }
 
-        // If we were previously over the icon target (this._onIcon)
-        // but no longer are over the icon target (!onIcon),
-        // consider this a new position to force the nudge to reactivate
-        // even if we are still over the same icon cell
-        if ((idx >= 0) && this._onIcon && !onIcon) {
-            isNewPosition = true;
-        }
-
-        // Update our insert index and if we are currently on an icon
+        // Update our insert/hover index and if we are currently on an icon
         this._onIcon = onIcon;
-        this._onIconIdx = idx;
-
-        // If we are hovering over our own icon placeholder, ignore it
-        if (this._originalIdx == this._onIconIdx) {
+        if (this._onIcon) {
+            this._onIconIdx = idx;
             this._insertIdx = -1;
 
-            return DND.DragMotionResult.NO_DROP;
-        }
-
-        // If we are hovering over an icon, make sure that it has focus
-        if (this._onIcon) {
-            let validIcon = this._setHoverStateOf(this._dragView, 
-                                                  this._onIconIdx, true);
-            if (validIcon) {
-                return DND.DragMotionResult.MOVE_DROP;
-            } else {
-                // Propagate the signal in case we are hovering
-                // over the trash can
-                return DND.DragMotionResult.CONTINUE;
+            let hoverResult = this._getDragHoverResult();
+            if (hoverResult == DND.DragMotionResult.MOVE_DROP) {
+                // If we are hovering over a drop target, set its hover state
+                this._setDragHoverState(true);
             }
+
+            return hoverResult;
+        } else {
+            this._onIconIdx = -1;
+            this._insertIdx = idx;
+
+            if (this._shouldNudgeItems(isNewPosition)) {
+                this._dragView.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
+            }
+
+            // Propagate the signal in any case when moving icons
+            return DND.DragMotionResult.CONTINUE;
+        }
+    },
+
+    _shouldNudgeItems: function(isNewPosition) {
+        if (this._insertIdx == -1) {
+            return false;
         }
 
-        // If we are not over any icon, update the insert index so that
-        // if the icon is released we know where to place it
-        this._insertIdx = idx;
-
-        // If we are outside of the grid, let the drag motion signal
-        // propagate in case we had been hovering over the trash can
-        if (this._insertIdx == -1) {
-            return DND.DragMotionResult.CONTINUE;
+        if (this._insertIdx == this._originalIdx &&
+            this._dragView == this._dragItem.parentView) {
+            return false;
         }
 
         // If we are between icons at a new position
         // (but not immediately to the left of the original position),
         // nudge the icons apart
-        let isLeftOfOrig = (this._onIconIdx == this._originalIdx + 1);
-        if (isNewPosition && !isLeftOfOrig) {
-            this._dragView.nudgeItemsAtIndex(this._insertIdx, cursorLocation);
-        }
-
-        // Let the drag motion signal propagate in case we had
-        // been hovering over the trash can
-        return DND.DragMotionResult.CONTINUE;
+        let isLeftOfOrig = (this._insertIdx == this._originalIdx + 1 &&
+                            this._dragView == this._dragItem.parentView);
+        return (isNewPosition && !isLeftOfOrig);
     },
 
-    _setHoverStateOf: function(view, itemIdx, state) {
-        let item = view._allItems[itemIdx];
-
-        // Note that the app store icon is not in the all items array
-        let validItem = (item != null);
-
-        if (validItem) {
-            let viewItem = view._items[view._getItemId(item)];
-            if (viewItem instanceof FolderIcon) {
-                viewItem.actor.set_hover(state);
-            }
+    _getDragHoverResult: function() {
+        // If we are hovering over our own icon placeholder, ignore it
+        if (this._onIconIdx == this._originalIdx &&
+            this._dragView == this._dragItem.parentView) {
+            return DND.DragMotionResult.NO_DROP;
         }
 
-        return validItem;
+        // Note that the app store icon is not in the all items array
+        let item = this._dragView._allItems[this._onIconIdx];
+        let validHoverDrop = false;
+        
+        if (item) {
+            let viewItem = this._dragView._items[item.get_id()];
+            // We can only move applications into folders
+            validHoverDrop = (viewItem instanceof FolderIcon &&
+                              this._dragItem instanceof AppIcon);
+        }
+
+        if (validHoverDrop) {
+            return DND.DragMotionResult.MOVE_DROP;
+        } else {
+            return DND.DragMotionResult.CONTINUE;
+        }
+    },
+
+    _setDragHoverState: function(state) {
+        let item = this._dragView._allItems[this._onIconIdx];
+
+        if (item) {
+            let viewItem = this._dragView._items[item.get_id()];
+            viewItem.actor.set_hover(state);
+        }
     },
 
     acceptDrop: function(source, actor, x, y, time) {
@@ -434,6 +430,11 @@ const AllView = new Lang.Class({
             // Find out what icon the drop is under
             let id = this._getIdFromIndex(this._dragView, this._onIconIdx);
             if (!id) {
+                return false;
+            }
+
+            // Folders are drop targets, not sources
+            if (source instanceof FolderIcon) {
                 return false;
             }
 
@@ -738,6 +739,21 @@ const FolderIcon = new Lang.Class({
                 if (!this.actor.mapped && this._popup)
                     this._popup.popdown();
             }));
+
+        // DND implementation
+        this._draggable = DND.makeDraggable(this.actor);
+        this._draggable.connect('drag-begin', Lang.bind(this,
+            function () {
+                Main.overview.beginItemDrag(this);
+            }));
+        this._draggable.connect('drag-cancelled', Lang.bind(this,
+            function () {
+                Main.overview.cancelledItemDrag(this);
+            }));
+        this._draggable.connect('drag-end', Lang.bind(this,
+            function () {
+                Main.overview.endItemDrag(this);
+            }));
     },
 
     _loadCategory: function(dir) {
@@ -819,6 +835,16 @@ const FolderIcon = new Lang.Class({
 
     getId: function() {
         return this._dir.get_id();
+    },
+
+    getDragActor: function() {
+        let icon = this._dirInfo.get_icon();
+        let textureCache = St.TextureCache.get_default();
+        return textureCache.load_gicon(null, icon, Main.overview.dashIconSize);
+    },
+
+    getDragActorSource: function() {
+        return this.icon.icon;
     }
 });
 
