@@ -999,9 +999,9 @@ const AppIcon = new Lang.Class({
         }
     },
 
-    _onLabelUpdate: function(newLabel) {
+    _onLabelUpdate: function(icon, newLabel) {
         try {
-            this.app.create_custom_launcher_with_name(this.app, newLabel);
+            this.app.create_custom_launcher_with_name(newLabel);
         } catch(e) {
             logError(e, 'error while creating a custom launcher for: '
                       + this.app.get_name()
