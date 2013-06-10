@@ -100,13 +100,6 @@ const ViewSelector = new Lang.Class({
                 }
             }));
 
-        Main.wm.addKeybinding('toggle-application-view',
-                              new Gio.Settings({ schema: SHELL_KEYBINDINGS_SCHEMA }),
-                              Meta.KeyBindingFlags.NONE,
-                              Shell.KeyBindingMode.NORMAL |
-                              Shell.KeyBindingMode.OVERVIEW,
-                              Lang.bind(this, this._toggleAppsPage));
-
         Main.overview.connect('show-apps-request', Lang.bind(this, this._toggleAppsPage));
     },
 
@@ -238,13 +231,10 @@ const ViewSelector = new Lang.Class({
         let symbol = event.get_key_symbol();
 
         if (symbol == Clutter.Escape) {
-            if (this._searchActive)
+            if (this._searchActive) {
                 this.reset();
-            else if (this._showAppsButton.checked)
-                this._showAppsButton.checked = false;
-            else
-                Main.overview.hide();
-            return true;
+                return true;
+            }
         } else if (this._shouldTriggerSearch(symbol)) {
             this.startSearch(event);
         } else if (!this._searchActive) {
