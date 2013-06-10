@@ -8,7 +8,9 @@ const PanelMenu = imports.ui.panelMenu;
 
 const SocialBarIface =
     <interface name="com.endlessm.SocialBar">
-    <method name="toggle"/>
+    <method name="toggle">
+    <arg type="u" direction="in" name="timestamp"/>
+    </method>
     <property name="Visible" type="b" access="read"/>
     </interface>;
 const SOCIAL_BAR_NAME = 'com.endlessm.SocialBar';
@@ -59,7 +61,7 @@ const SocialBarButton = new Lang.Class({
         let visible = this._socialBarProxy.Visible;
 
         if (visible) {
-            this._socialBarProxy.toggleRemote();
+            this._socialBarProxy.toggleRemote(global.get_current_time());
         }
     },
 
@@ -67,7 +69,7 @@ const SocialBarButton = new Lang.Class({
     _onButtonPress: function(actor, event) {
         try {
             Main.overview.hide();
-            this._socialBarProxy.toggleRemote();
+            this._socialBarProxy.toggleRemote(global.get_current_time());
         } catch(e) {
             log('Unable to toggle social bar visibility: ' + e.message);
         }
