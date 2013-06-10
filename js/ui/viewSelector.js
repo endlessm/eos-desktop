@@ -101,6 +101,17 @@ const ViewSelector = new Lang.Class({
             }));
 
         Main.overview.connect('show-apps-request', Lang.bind(this, this._toggleAppsPage));
+
+        if (Main.screenShield) {
+            Main.screenShield.connect('locked-changed', Lang.bind(this, this._onShieldLock));
+        }
+    },
+
+    _onShieldLock: function() {
+        if (Main.screenShield) {
+            Main.overview.show();
+            this._showAppsButton.checked = !Main.screenShield.locked;
+        }
     },
 
     _activateDefaultSearch: function() {
