@@ -84,7 +84,7 @@ int shell_app_compare (ShellApp *app, ShellApp *other);
 void shell_app_update_window_actions (ShellApp *app, MetaWindow *window);
 void shell_app_update_app_menu       (ShellApp *app, MetaWindow *window);
 
-gboolean shell_app_create_custom_launcher_with_name (ShellApp *app, const char *label);
+gboolean shell_app_create_custom_launcher_with_name (ShellApp *app, const char *label, GError **error);
 
 G_END_DECLS
 

@@ -1208,7 +1208,8 @@ shell_app_get_tree_entry (ShellApp *app)
 
 gboolean
 shell_app_create_custom_launcher_with_name (ShellApp *app,
-                                            const char *label)
+                                            const char *label,
+                                            GError **error)
 {
   GDesktopAppInfo *appinfo;
   GError *internal_error;
@@ -1232,9 +1233,7 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   g_key_file_load_from_file (keyfile, filename, 0, &internal_error);
   if (internal_error != NULL)
     {
-      g_warning ("Unable to load desktop file '%s': %s", filename, internal_error->message);
-
-      g_error_free (internal_error);
+      g_propagate_error (error, internal_error);
       g_key_file_unref (keyfile);
 
       return FALSE;
@@ -1249,9 +1248,7 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   buf = g_key_file_to_data (keyfile, &len, &internal_error);
   if (internal_error != NULL)
     {
-      g_warning ("Unable to save desktop file: %s", internal_error->message);
-
-      g_error_free (internal_error);
+      g_propagate_error (error, internal_error);
       g_key_file_unref (keyfile);
 
       return FALSE;
@@ -1265,7 +1262,11 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
     {
       int saved_errno = errno;
 
-      g_warning ("Unable to create '%s': %s", new_path, g_strerror (saved_errno));
+      g_set_error (error, G_FILE_ERROR,
+                   G_FILE_ERROR_FAILED,
+                   "Unable to create '%s': %s",
+                   new_path,
+                   g_strerror (saved_errno));
 
       g_free (new_path);
       g_free (buf);
@@ -1280,9 +1281,7 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   g_file_set_contents (new_path, buf, len, &internal_error);
   if (internal_error != NULL)
     {
-      g_warning ("Unable to write desktop file '%s': %s", new_path, internal_error->message);
-
-      g_error_free (internal_error);
+      g_propagate_error (error, internal_error);
       g_free (new_path);
       g_free (buf);
 
