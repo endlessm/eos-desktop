@@ -433,6 +433,11 @@ const AllView = new Lang.Class({
                 return false;
             }
 
+            // Folders are drop targets, not sources
+            if (source instanceof FolderIcon) {
+                return false;
+            }
+
             // If we are dropping an icon on another icon, cancel the request
             let dropIcon = this._dragView.getItem(id);
             if (!(dropIcon instanceof FolderIcon)) {
