@@ -829,7 +829,7 @@ StScrollBar StButton#vhandle:active {
 
 .icon-grid .overview-icon {
     icon-size: 64px;
-    spacing: 6px;
+    spacing: 8px;
 }
 
 .overview-icon-label {
