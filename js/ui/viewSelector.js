@@ -281,11 +281,10 @@ const ViewSelector = new Lang.Class({
         let symbol = event.get_key_symbol();
 
         if (symbol == Clutter.Escape) {
-            if (this._searchActive)
+            if (this._searchActive) {
                 this.reset();
-            else
-                Main.overview.hide();
-            return true;
+                return true;
+            }
         } else if (this._shouldTriggerSearch(symbol)) {
             this.startSearch(event);
         } else if (!this._searchActive) {
