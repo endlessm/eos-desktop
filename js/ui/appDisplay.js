@@ -1275,11 +1275,6 @@ const AppStoreIcon = new Lang.Class({
         dialog.setButtons([yesButton, noButton]);
         dialog.open();
 
-        Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this,
-            function () {
-                return false;
-            }));
-
         return true;
     },
 });
