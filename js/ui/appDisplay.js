@@ -1147,37 +1147,28 @@ const AppIcon = new Lang.Class({
 });
 Signals.addSignalMethods(AppIcon.prototype);
 
-// FIXME: this should be removed once we install the app
-// store application with its desktop file and everything
-const AppStore = new Lang.Class({
-    Name: 'AppStore',
-    Extends: Shell.App,
-
-    get_name: function() {
-        return _("Add");
-    },
-
-    get_id: function() {
-        return "appstoreid";
-    },
-
-    activate: function(){
-        Util.spawn(["eos-app-store"]);
-    }
-});
-
 const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
     Extends: AppIcon,
 
     _init : function() {
-        this.parent(new AppStore(),
-                    { createIcon: this._createIcon },
+        let appSystem = Shell.AppSystem.get_default();
+        let app = appSystem.lookup_app('eos-app-store.desktop');
+
+        this.parent(app, null,
                     { showMenu: false,
                       isDraggable: false });
 
+        // For now, let's use the normal icon for the pressed state,
+        // for consistency with the other app selector icons,
+        // which just use the wells to represent the pressed state.
+        // In the future, we may want to use the 'add_down' icon instead.
+        // If so, the return to the normal state after the user
+        // moves off the icon to cancel should be made more responsive;
+        // the current implementation takes about a second for the change
+        // back to the normal icon to occur.
         this.pressed_icon = new IconGrid.BaseIcon(_("Add"),
-                                                  { createIcon: this._createPressedIcon });
+                                                  { createIcon: Lang.bind(this, this._createIcon) });
         this.empty_trash_icon = new IconGrid.BaseIcon(_("Delete"),
                                                       { createIcon: this._createTrashIcon });
         this.full_trash_icon = new IconGrid.BaseIcon(_("Delete"),
@@ -1187,24 +1178,6 @@ const AppStoreIcon = new Lang.Class({
 
         Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
-    },
-
-    _createPressedIcon: function(iconSize) {
-        // For now, let's use the normal icon for the pressed state,
-        // for consistency with the other app selector icons,
-        // which just use the wells to represent the pressed state.
-        // In the future, we may want to use the 'add_down' icon instead.
-        // If so, the return to the normal state after the user
-        // moves off the icon to cancel should be made more responsive;
-        // the current implementation takes about a second for the change
-        // back to the normal icon to occur.
-        return new St.Icon({ icon_size: iconSize,
-                             icon_name: 'add_normal'});
-    },
-
-    _createIcon: function(iconSize) {
-        return new St.Icon({ icon_size: iconSize,
-                             icon_name: 'add_normal'});
     },
 
     _createTrashIcon: function(iconSize) {
