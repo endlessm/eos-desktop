@@ -1182,12 +1182,12 @@ const AppStoreIcon = new Lang.Class({
 
     _createTrashIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
-                             icon_name: 'trash-can_normal'});
+                             icon_name: 'eos-app-store-remove'});
     },
 
     _createFullTrashIcon: function(iconSize) {
         return new St.Icon({ icon_size: iconSize,
-                             icon_name: 'trash-can_hover'});
+                             icon_name: 'eos-app-store-remove-hover'});
     },
 
     _onButtonPress: function(actor, event) {
