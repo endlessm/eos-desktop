@@ -398,7 +398,6 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.NO_DROP;
         }
 
-        // Note that the app store icon is not in the all items array
         let item = this._dragView.getItemForIndex(this._onIconIdx);
         let validHoverDrop = false;
         
@@ -476,16 +475,14 @@ const AllView = new Lang.Class({
 
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
-            return new AppIcon(item, null, { showMenu: false });
+            if (item == this._appStore) {
+                return new AppStoreIcon(item);
+            } else {
+                return new AppIcon(item, null, { showMenu: false });
+            }
         } else {
             return new FolderIcon(item, this);
         }
-    },
-
-    loadGrid: function() {
-        this.parent();
-
-        this._grid.addItem((new AppStoreIcon()).actor);
     },
 
     addApp: function(app) {
@@ -500,6 +497,13 @@ const AllView = new Lang.Class({
         if (folderIcon)
             folderIcon.actor.connect('key-focus-in',
                                      Lang.bind(this, this._ensureIconVisible));
+    },
+
+    addAppStore: function() {
+        let appSystem = Shell.AppSystem.get_default();
+        this._appStore = appSystem.lookup_app('eos-app-store.desktop');
+
+        this.addApp(this._appStore);
     },
 
     addFolderPopup: function(popup) {
@@ -582,6 +586,7 @@ const AppDisplay = new Lang.Class({
                 }
             }
         }
+        this._view.addAppStore();
         this._view.loadGrid();
 
         if (this._focusDummy) {
@@ -1047,10 +1052,7 @@ const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
     Extends: AppIcon,
 
-    _init : function() {
-        let appSystem = Shell.AppSystem.get_default();
-        let app = appSystem.lookup_app('eos-app-store.desktop');
-
+    _init : function(app) {
         this.parent(app, null,
                     { showMenu: false,
                       isDraggable: false });
