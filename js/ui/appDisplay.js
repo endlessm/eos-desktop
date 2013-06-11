@@ -540,38 +540,6 @@ const AllView = new Lang.Class({
     }
 });
 
-const FrequentView = new Lang.Class({
-    Name: 'FrequentView',
-
-    _init: function() {
-        this._grid = new IconGrid.IconGrid({ xAlign: St.Align.MIDDLE,
-                                             fillParent: true,
-                                             columnLimit: MAX_COLUMNS });
-        this.actor = new St.Widget({ style_class: 'frequent-apps',
-                                     x_expand: true, y_expand: true });
-        this.actor.add_actor(this._grid.actor);
-
-        this._usage = Shell.AppUsage.get_default();
-    },
-
-    removeAll: function() {
-        this._grid.removeAll();
-    },
-
-    loadApps: function() {
-        let mostUsed = this._usage.get_most_used ("");
-        for (let i = 0; i < mostUsed.length; i++) {
-            let appIcon = new AppIcon(mostUsed[i]);
-            this._grid.addItem(appIcon.actor, -1);
-        }
-    }
-});
-
-const Views = {
-    FREQUENT: 0,
-    ALL: 1
-};
-
 const AppDisplay = new Lang.Class({
     Name: 'AppDisplay',
 
@@ -579,9 +547,6 @@ const AppDisplay = new Lang.Class({
         this._appSystem = Shell.AppSystem.get_default();
         this._appSystem.connect('installed-changed', Lang.bind(this, function() {
             Main.queueDeferredWork(this._allAppsWorkId);
-        }));
-        Main.overview.connect('showing', Lang.bind(this, function() {
-            Main.queueDeferredWork(this._frequentAppsWorkId);
         }));
         global.settings.connect('changed::app-folder-categories', Lang.bind(this, function() {
             Main.queueDeferredWork(this._allAppsWorkId);
@@ -591,87 +556,22 @@ const AppDisplay = new Lang.Class({
             Main.queueDeferredWork(this._allAppsWorkId);
         }));
 
-        this._views = [];
-
-        let view, button;
-        view = new FrequentView();
-        button = new St.Button({ label: _("Frequent"),
-                                 style_class: 'app-view-control',
-                                 can_focus: true,
-                                 x_expand: true });
-        this._views[Views.FREQUENT] = { 'view': view, 'control': button };
-
-        view = new AllView();
-        button = new St.Button({ label: _("All"),
-                                 style_class: 'app-view-control',
-                                 can_focus: true,
-                                 x_expand: true });
-        this._views[Views.ALL] = { 'view': view, 'control': button };
-
-        this.actor = new St.BoxLayout({ style_class: 'app-display',
-                                        vertical: true,
-                                        x_expand: true, y_expand: true });
-
-        this._viewStack = new St.Widget({ layout_manager: new Clutter.BinLayout(),
-                                          x_expand: true, y_expand: true });
-        this.actor.add(this._viewStack, { expand: true });
-
-        for (let i = 0; i < this._views.length; i++) {
-            this._viewStack.add_actor(this._views[i].view.actor);
-
-            let viewIndex = i;
-            this._views[i].control.connect('clicked', Lang.bind(this,
-                function(actor) {
-                    this._showView(viewIndex);
-                }));
-        }
-
-        // Default to all apps rather than frequently used
-        this._showView(Views.ALL);
+        this._view = new AllView();
+        this.actor = new St.Widget({ layout_manager: new Clutter.BinLayout(),
+                                     x_expand: true, y_expand: true });
+        this.actor.add_actor(this._view.actor);
 
         // We need a dummy actor to catch the keyboard focus if the
         // user Ctrl-Alt-Tabs here before the deferred work creates
         // our real contents
         this._focusDummy = new St.Bin({ can_focus: true });
-        this._viewStack.add_actor(this._focusDummy);
+        this.actor.add_actor(this._focusDummy);
 
-        this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplayAllApps));
-        this._frequentAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplayFrequentApps));
-    },
-
-    _showView: function(activeIndex) {
-        for (let i = 0; i < this._views.length; i++) {
-            let actor = this._views[i].view.actor;
-            let params = { time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
-                           opacity: (i == activeIndex) ? 255 : 0 };
-            if (i == activeIndex)
-                actor.visible = true;
-            else
-                params.onComplete = function() { actor.hide(); };
-            Tweener.addTween(actor, params);
-
-            if (i == activeIndex)
-                this._views[i].control.add_style_pseudo_class('checked');
-            else
-                this._views[i].control.remove_style_pseudo_class('checked');
-        }
+        this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplay));
     },
 
     _redisplay: function() {
-        this._redisplayFrequentApps();
-        this._redisplayAllApps();
-    },
-
-    _redisplayFrequentApps: function() {
-        let view = this._views[Views.FREQUENT].view;
-
-        view.removeAll();
-        view.loadApps();
-    },
-
-    _redisplayAllApps: function() {
-        let view = this._views[Views.ALL].view;
-        view.removeAll();
+        this._view.removeAll();
 
         let topLevelIcons = IconGridLayout.layout.getIcons();
 
@@ -679,17 +579,17 @@ const AppDisplay = new Lang.Class({
             let itemId = topLevelIcons[i];
 
             if (IconGridLayout.layout.iconIsFolder(itemId)) {
-                view.addFolder({
+                this._view.addFolder({
                     get_id: function() { return itemId; }
                 });
             } else {
                 let app = this._appSystem.lookup_app(itemId);
                 if (app) {
-                    view.addApp(app);
+                    this._view.addApp(app);
                 }
             }
         }
-        view.loadGrid();
+        this._view.loadGrid();
 
         if (this._focusDummy) {
             let focused = this._focusDummy.has_key_focus();
