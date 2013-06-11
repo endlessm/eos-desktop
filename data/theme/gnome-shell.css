@@ -635,6 +635,11 @@ StScrollBar StButton#vhandle:active {
     icon-size: 1.09em;
 }
 
+.system-status-social-icon {
+    icon-size: 28px;
+}
+
+
 /* Overview */
 
 #overview {
