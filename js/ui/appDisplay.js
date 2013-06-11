@@ -73,7 +73,6 @@ const EndlessApplicationView = new Lang.Class({
         }
 
         let itemIcon = this._createItemIcon(item);
-        itemIcon.parentView = this;
         this._allItems.push(item);
         this._icons[id] = itemIcon;
 
@@ -150,7 +149,8 @@ const FolderView = new Lang.Class({
     },
 
     _createItemIcon: function(item) {
-        return new AppIcon(item, null, { showMenu: false });
+        return new AppIcon(item, null, { showMenu: false,
+                                         parentView: this });
     },
 
     addApp: function(app) {
@@ -485,9 +485,10 @@ const AllView = new Lang.Class({
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
             if (item == this._appStore) {
-                return new AppStoreIcon(item);
+                return new AppStoreIcon(item, this);
             } else {
-                return new AppIcon(item, null, { showMenu: false });
+                return new AppIcon(item, null, { showMenu: false,
+                                                 parentView: this });
             }
         } else {
             return new FolderIcon(item, this);
@@ -608,15 +609,23 @@ const AppDisplay = new Lang.Class({
     }
 });
 
+const ViewIcon = new Lang.Class({
+    Name: 'ViewIcon',
+
+    _init: function(parentView) {
+        this.parentView = parentView;
+    }
+});
+
 const FolderIcon = new Lang.Class({
     Name: 'FolderIcon',
+    Extends: ViewIcon,
 
     _init: function(dir, parentView) {
+        this.parent(parentView);
+
         this._dir = dir;
-
         this._dirInfo = Shell.DesktopDirInfo.new(this._dir.get_id());
-
-        this._parentView = parentView;
 
         this.actor = new St.Button({ style_class: 'app-well-app app-folder',
                                      button_mask: St.ButtonMask.ONE,
@@ -693,14 +702,14 @@ const FolderIcon = new Lang.Class({
             return;
 
         let [sourceX, sourceY] = this.actor.get_transformed_position();
-        let [sourceXP, sourceYP] = this._parentView.actor.get_transformed_position();
+        let [sourceXP, sourceYP] = this.parentView.actor.get_transformed_position();
         let relY = sourceY - sourceYP;
         let spaceTop = relY;
-        let spaceBottom = this._parentView.actor.height - (relY + this.actor.height);
+        let spaceBottom = this.parentView.actor.height - (relY + this.actor.height);
         let side = spaceTop > spaceBottom ? St.Side.BOTTOM : St.Side.TOP;
 
         this._popup = new AppFolderPopup(this, side);
-        this._parentView.addFolderPopup(this._popup);
+        this.parentView.addFolderPopup(this._popup);
         this._reposition(side);
 
         this._popup.connect('open-state-changed', Lang.bind(this,
@@ -843,10 +852,14 @@ Signals.addSignalMethods(AppFolderPopup.prototype);
 
 const AppIcon = new Lang.Class({
     Name: 'AppIcon',
+    Extends: ViewIcon,
 
     _init : function(app, iconParams, params) {
         params = Params.parse(params, { showMenu: true,
-                                        isDraggable: true });
+                                        isDraggable: true,
+                                        parentView: null });
+
+        this.parent(params.parentView);
 
         this.app = app;
         this._showMenu = params.showMenu;
@@ -1061,10 +1074,11 @@ const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
     Extends: AppIcon,
 
-    _init : function(app) {
+    _init : function(app, parentView) {
         this.parent(app, null,
                     { showMenu: false,
-                      isDraggable: false });
+                      isDraggable: false,
+                      parentView: parentView });
 
         // For now, let's use the normal icon for the pressed state,
         // for consistency with the other app selector icons,
