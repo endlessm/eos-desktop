@@ -402,8 +402,9 @@ const AllView = new Lang.Class({
         
         if (item) {
             let viewIcon = this._dragView.getIcon(item.get_id());
-            // We can only move applications into folders
-            validHoverDrop = (viewIcon instanceof FolderIcon &&
+            // We can only move applications into folders or the app store
+            validHoverDrop = ((viewIcon instanceof FolderIcon ||
+                               viewIcon instanceof AppStoreIcon) &&
                               this._dragIcon instanceof AppIcon);
         }
 
@@ -420,6 +421,10 @@ const AllView = new Lang.Class({
         if (item) {
             let viewIcon = this._dragView.getIcon(item.get_id());
             viewIcon.actor.set_hover(state);
+
+            if (viewIcon instanceof AppStoreIcon) {
+                viewIcon.setDragHoverState(state);
+            }
         }
     },
 
@@ -441,6 +446,11 @@ const AllView = new Lang.Class({
 
             // If we are dropping an icon on another icon, cancel the request
             let dropIcon = this._dragView.getIcon(item.get_id());
+
+            if (dropIcon instanceof AppStoreIcon) {
+                return dropIcon.handleIconDrop(source);
+            }
+
             if (!(dropIcon instanceof FolderIcon)) {
                 return false;
             }
@@ -1095,59 +1105,23 @@ const AppStoreIcon = new Lang.Class({
         return false;
     },
 
-    _getAppFromSource: function(source) {
-        if (source instanceof AppIcon) {
-            return source.app;
-        } else {
-            return null;
-        }
-    },
-
     _onDragBegin: function() {
         this.actor.set_child(this.empty_trash_icon.actor);
-        this._dragCancelled = false;
-        this._dragMonitor = {
-            dragMotion: Lang.bind(this, this._onDragMotion)
-        };
-        DND.addDragMonitor(this._dragMonitor);
     },
 
     _onDragEnd: function(actor, event) {
         this.actor.set_child(this.icon.actor);
-        DND.removeDragMonitor(this._dragMonitor);
     },
 
-    _onDragMotion: function(dragEvent) {
-        let app = this._getAppFromSource(dragEvent.source);
-        if (app == null) {
-            return DND.DragMotionResult.CONTINUE;
-        }
-
-        let showAppsHovered = this.actor.contains(dragEvent.targetActor);
-
-        if (showAppsHovered) {
+    setDragHoverState: function(state) {
+        if (state) {
             this.actor.set_child(this.full_trash_icon.actor);
-            this.actor.set_hover(true);
-            dragEvent.dragActor.opacity = DRAG_OVER_FOLDER_OPACITY;
         } else {
             this.actor.set_child(this.empty_trash_icon.actor);
-            this.actor.set_hover(false);
-            dragEvent.dragActor.opacity = 255;
         }
-
-        return DND.DragMotionResult.CONTINUE;
     },
 
-    handleDragOver: function(source, actor, x, y, time) {
-        let app = this._getAppFromSource(source);
-        if (app == null) {
-            return DND.DragMotionResult.NO_DROP;
-        }
-        let id = app.get_id();
-        return DND.DragMotionResult.MOVE_DROP;
-    },
-
-    acceptDrop: function(source, actor, x, y, time) {
+    handleIconDrop: function(source) {
         let app = source.app;
         if (app == null) {
             return false;
