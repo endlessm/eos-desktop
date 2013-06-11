@@ -132,6 +132,10 @@ const EndlessApplicationView = new Lang.Class({
 
     getIcon: function(id) {
         return this._icons[id];
+    },
+
+    getItemForIndex: function(index) {
+        return this._allItems[index];
     }
 });
 
@@ -395,11 +399,11 @@ const AllView = new Lang.Class({
         }
 
         // Note that the app store icon is not in the all items array
-        let item = this._dragView._allItems[this._onIconIdx];
+        let item = this._dragView.getItemForIndex(this._onIconIdx);
         let validHoverDrop = false;
         
         if (item) {
-            let viewIcon = this._dragView._icons[item.get_id()];
+            let viewIcon = this._dragView.getIcon(item.get_id());
             // We can only move applications into folders
             validHoverDrop = (viewIcon instanceof FolderIcon &&
                               this._dragIcon instanceof AppIcon);
@@ -413,22 +417,22 @@ const AllView = new Lang.Class({
     },
 
     _setDragHoverState: function(state) {
-        let item = this._dragView._allItems[this._onIconIdx];
+        let item = this._dragView.getItemForIndex(this._onIconIdx);
 
         if (item) {
-            let viewIcon = this._dragView._icons[item.get_id()];
+            let viewIcon = this._dragView.getIcon(item.get_id());
             viewIcon.actor.set_hover(state);
         }
     },
 
     acceptDrop: function(source, actor, x, y, time) {
         // Get the id of the icon dragged
-        let originalId = this._getIdFromIndex(source.parentView, this._originalIdx);
+        let originalId = source.getId();
 
         if (this._onIcon) {
             // Find out what icon the drop is under
-            let id = this._getIdFromIndex(this._dragView, this._onIconIdx);
-            if (!id) {
+            let item = this._dragView.getItemForIndex(this._onIconIdx);
+            if (!item) {
                 return false;
             }
 
@@ -438,13 +442,13 @@ const AllView = new Lang.Class({
             }
 
             // If we are dropping an icon on another icon, cancel the request
-            let dropIcon = this._dragView.getIcon(id);
+            let dropIcon = this._dragView.getIcon(item.get_id());
             if (!(dropIcon instanceof FolderIcon)) {
                 return false;
             }
 
             // If we are hovering over a folder, the icon needs to be moved
-            IconGridLayout.layout.repositionIcon(originalId, null, id);
+            IconGridLayout.layout.repositionIcon(originalId, null, item.get_id());
             return true;
         } else {
             // If we are not over an icon and we are outside of the grid area,
@@ -454,7 +458,8 @@ const AllView = new Lang.Class({
             } else {
                 // If we are not over an icon but within the grid, shift the
                 // grid around to accomodate it
-                let insertId = this._getIdFromIndex(this._dragView, this._insertIdx);
+                let item = this._dragView.getItemForIndex(this._insertIdx);
+                let insertId = item ? item.get_id() : null;
 
                 let folderId;
                 if (this._dragView == this) {
@@ -467,14 +472,6 @@ const AllView = new Lang.Class({
                 return true;
             }
         }
-    },
-
-    _getIdFromIndex: function(view, index){
-       let item = view._allItems[index];
-       if (item) {
-           return item.get_id();
-       }
-       return null;
     },
 
     _createItemIcon: function(item) {
