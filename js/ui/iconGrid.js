@@ -460,7 +460,7 @@ const IconGrid = new Lang.Class({
     // DnD support
 
     // Returns the drop point index or -1 if we can't drop there
-    canDropAt: function(x, y, currentInsertIdx) {
+    canDropAt: function(x, y) {
         let [sw, sh] = this.actor.get_transformed_size();
         let [ok, sx, sy] = this.actor.transform_stage_point(x, y);
 

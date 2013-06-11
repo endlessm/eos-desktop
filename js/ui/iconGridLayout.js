@@ -84,12 +84,15 @@ const IconGridLayout = new Lang.Class({
     // Relying on the position leads to faulty behaviour if some
     // apps are not present on the system
     _insertIcon: function(icons, id, insertId) {
-        let insertIdx;
+        let insertIdx = -1;
 
         if (insertId != null) {
             insertIdx = icons.indexOf(insertId);
-        } else {
-            // We were dropped to the left of the trashcan
+        }
+
+        // We were dropped to the left of the trashcan,
+        // or we were asked to append
+        if (insertIdx == -1) {
             insertIdx = icons.length;
         }
 
