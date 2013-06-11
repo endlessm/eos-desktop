@@ -328,8 +328,7 @@ const AllView = new Lang.Class({
         }
 
         let [idx, cursorLocation] = this._dragView.canDropAt(dragEvent.x,
-                                                             dragEvent.y,
-                                                             this._insertIdx);
+                                                             dragEvent.y);
 
         let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
         let isNewPosition = (!onIcon && idx != this._insertIdx) || (onIcon != this._onIcon);
