@@ -292,34 +292,34 @@ const NMDevice = new Lang.Class({
 
     _setDevice: function(device) {
         if (device) {
-            this.device = device;
-            this.device._delegate = this;
-            this._stateChangedId = this.device.connect('state-changed', Lang.bind(this, this._deviceStateChanged));
-            this._activeConnectionChangedId = this.device.connect('notify::active-connection', Lang.bind(this, this._activeConnectionChanged));
-        } else if (this.device) {
-            this.device._delegate = null;
+            this._device = device;
+            this._device._delegate = this;
+            this._stateChangedId = this._device.connect('state-changed', Lang.bind(this, this._deviceStateChanged));
+            this._activeConnectionChangedId = this._device.connect('notify::active-connection', Lang.bind(this, this._activeConnectionChanged));
+        } else if (this._device) {
+            this._device._delegate = null;
 
             if (this._stateChangedId) {
                 // Need to go through GObject.Object.prototype because
                 // nm_device_disconnect conflicts with g_signal_disconnect
-                GObject.Object.prototype.disconnect.call(this.device, this._stateChangedId);
+                GObject.Object.prototype.disconnect.call(this._device, this._stateChangedId);
                 this._stateChangedId = 0;
             }
             if (this._activeConnectionChangedId) {
-                GObject.Object.prototype.disconnect.call(this.device, this._activeConnectionChangedId);
+                GObject.Object.prototype.disconnect.call(this._device, this._activeConnectionChangedId);
                 this._stateChangedId = 0;
             }
             if (this._firmwareChangedId) {
-                GObject.Object.prototype.disconnect.call(this.device, this._firmwareChangedId);
+                GObject.Object.prototype.disconnect.call(this._device, this._firmwareChangedId);
                 this._firmwareChangedId = 0;
             }
 
-            this.device = null;
+            this._device = null;
         }
     },
 
     deactivate: function() {
-        this.device.disconnect(null);
+        this._device.disconnect(null);
         return true;
     },
 
@@ -332,7 +332,7 @@ const NMDevice = new Lang.Class({
         // Otherwise, if no connection is currently configured,
         // try automatic configuration (or summon the config dialog)
         if (this._connections.length == 1) {
-            this._client.activate_connection(this._connections[0].connection, this.device || null, null, null);
+            this._client.activate_connection(this._connections[0].connection, this._device || null, null, null);
             return true;
         } else if (this._connections.length == 0) {
             return this._activateAutomaticConnection();
@@ -343,16 +343,16 @@ const NMDevice = new Lang.Class({
 
     _activateAutomaticConnection: function() {
         let connection = new NetworkManager.Connection();
-        this._client.add_and_activate_connection(connection, this.device, null, null);
+        this._client.add_and_activate_connection(connection, this._device, null, null);
         return true;
     },
 
     get connected() {
-        return this.device && this.device.state == NetworkManager.DeviceState.ACTIVATED;
+        return this._device && this._device.state == NetworkManager.DeviceState.ACTIVATED;
     },
 
     _activeConnectionChanged: function() {
-        let activeConnection = this.device.active_connection;
+        let activeConnection = this._device.active_connection;
 
         if (activeConnection == this._activeConnection)
             // nothing to do
@@ -370,7 +370,7 @@ const NMDevice = new Lang.Class({
     },
 
     connectionValid: function(connection) {
-        return this.device.connection_valid(connection);
+        return this._device.connection_valid(connection);
     },
 
     setEnabled: function(enabled) {
@@ -379,10 +379,10 @@ const NMDevice = new Lang.Class({
     },
 
     getStatusLabel: function() {
-        if (!this.device)
+        if (!this._device)
             return null;
 
-        switch(this.device.state) {
+        switch(this._device.state) {
         case NetworkManager.DeviceState.DISCONNECTED:
         case NetworkManager.DeviceState.ACTIVATED:
             return null;
@@ -406,8 +406,8 @@ const NMDevice = new Lang.Class({
             // firmware missing), that are exposed by different properties (whose state may
             // or may not updated when we receive state-changed).
             if (!this._firmwareChangedId)
-                this._firmwareChangedId = this.device.connect('notify::firmware-missing', Lang.bind(this, this._substateChanged));
-            if (this.device.firmware_missing) {
+                this._firmwareChangedId = this._device.connect('notify::firmware-missing', Lang.bind(this, this._substateChanged));
+            if (this._device.firmware_missing) {
                 /* Translators: this is for devices that require some kind of firmware or kernel
                    module, which is missing */
                 return _("firmware missing");
@@ -418,14 +418,14 @@ const NMDevice = new Lang.Class({
         case NetworkManager.DeviceState.FAILED:
             return _("connection failed");
         default:
-            log('Device state invalid, is %d'.format(this.device.state));
+            log('Device state invalid, is %d'.format(this._device.state));
             return 'invalid';
         }
     },
 
     syncDescription: function() {
-        if (this.device && this.device._description)
-            this.statusItem.label.text = this.device._description;
+        if (this._device && this._device._description)
+            this.statusItem.label.text = this._device._description;
     },
 
     _queueCreateSection: function() {
@@ -446,7 +446,7 @@ const NMDevice = new Lang.Class({
     },
 
     _shouldShowConnectionList: function() {
-        return (this.device.state >= NetworkManager.DeviceState.DISCONNECTED);
+        return (this._device.state >= NetworkManager.DeviceState.DISCONNECTED);
     },
 
     _createSection: function() {
@@ -484,7 +484,7 @@ const NMDevice = new Lang.Class({
         let item = new PopupMenu.PopupMenuItem(obj.name);
 
         item.connect('activate', Lang.bind(this, function() {
-            this._client.activate_connection(connection, this.device, null, null);
+            this._client.activate_connection(connection, this._device, null, null);
         }));
         return item;
     },
@@ -525,7 +525,7 @@ const NMDevice = new Lang.Class({
 
     _updateStatusItem: function() {
         if (this._firmwareChangedId) {
-            GObject.Object.prototype.disconnect.call(this.device, this._firmwareChangedId);
+            GObject.Object.prototype.disconnect.call(this._device, this._firmwareChangedId);
             this._firmwareChangedId = 0;
         }
 
@@ -575,7 +575,7 @@ const NMDeviceWired = new Lang.Class({
     },
 
     getIndicatorIcon: function() {
-        if (this.device.active_connection.state == NetworkManager.ActiveConnectionState.ACTIVATING)
+        if (this._device.active_connection.state == NetworkManager.ActiveConnectionState.ACTIVATING)
             return 'network-wired-acquiring-symbolic';
         else
             return 'network-wired-symbolic';
@@ -640,7 +640,7 @@ const NMDeviceModem = new Lang.Class({
     },
 
     get connected() {
-        return this._enabled && this.device.state == NetworkManager.DeviceState.ACTIVATED;
+        return this._enabled && this._device.state == NetworkManager.DeviceState.ACTIVATED;
     },
 
     destroy: function() {
@@ -688,13 +688,13 @@ const NMDeviceModem = new Lang.Class({
         // is handled by the network panel
         Main.overview.hide();
         Util.spawn(['gnome-control-center', 'network',
-                    'connect-3g', this.device.get_path()],
+                    'connect-3g', this._device.get_path()],
                     Main.notifyError);
         return true;
     },
 
     getIndicatorIcon: function() {
-        if (this.device.active_connection.state == NetworkManager.ActiveConnectionState.ACTIVATING)
+        if (this._device.active_connection.state == NetworkManager.ActiveConnectionState.ACTIVATING)
             return 'network-cellular-acquiring-symbolic';
 
         if (!this.mobileDevice) {
@@ -729,7 +729,7 @@ const NMDeviceBluetooth = new Lang.Class({
     },
 
     getIndicatorIcon: function() {
-        if (this.device.active_connection.state == NetworkManager.ActiveConnectionState.ACTIVATING)
+        if (this._device.active_connection.state == NetworkManager.ActiveConnectionState.ACTIVATING)
             return 'network-wired-acquiring-symbolic';
         else
             return 'network-wired-symbolic';
@@ -750,7 +750,7 @@ const NMDeviceWireless = new Lang.Class({
 
         let accessPoints = device.get_access_points() || [ ];
         accessPoints.forEach(Lang.bind(this, function(ap) {
-            this._accessPointAdded(this.device, ap);
+            this._accessPointAdded(this._device, ap);
         }));
 
         this._activeApChanged();
@@ -764,17 +764,17 @@ const NMDeviceWireless = new Lang.Class({
     destroy: function() {
         if (this._apChangedId) {
             // see above for this HACK
-            GObject.Object.prototype.disconnect.call(this.device, this._apChangedId);
+            GObject.Object.prototype.disconnect.call(this._device, this._apChangedId);
             this._apChangedId = 0;
         }
 
         if (this._apAddedId) {
-            GObject.Object.prototype.disconnect.call(this.device, this._apAddedId);
+            GObject.Object.prototype.disconnect.call(this._device, this._apAddedId);
             this._apAddedId = 0;
         }
 
         if (this._apRemovedId) {
-            GObject.Object.prototype.disconnect.call(this.device, this._apRemovedId);
+            GObject.Object.prototype.disconnect.call(this._device, this._apRemovedId);
             this._apRemovedId = 0;
         }
 
@@ -802,14 +802,14 @@ const NMDeviceWireless = new Lang.Class({
         if (accessPoint.get_ssid() != null) {
             accessPoint.disconnect(accessPoint._notifySsidId);
             accessPoint._notifySsidId = 0;
-            this._accessPointAdded(this.device, accessPoint);
+            this._accessPointAdded(this._device, accessPoint);
         }
     },
 
     _activeApChanged: function() {
         this._activeNetwork = null;
 
-        let activeAp = this.device.active_access_point;
+        let activeAp = this._device.active_access_point;
 
         if (activeAp) {
             let res = this._findExistingNetwork(activeAp);
@@ -1142,7 +1142,7 @@ const NMDeviceWireless = new Lang.Class({
         else
             title = _("Connected (private)");
 
-        this._activeConnectionItem = new NMNetworkMenuItem(this.device.active_access_point);
+        this._activeConnectionItem = new NMNetworkMenuItem(this._device.active_access_point);
         this._activeConnectionItem.setSensitive(false);
         this._activeConnectionItem.setOrnament(PopupMenu.Ornament.DOT);
     },
@@ -1161,7 +1161,7 @@ const NMDeviceWireless = new Lang.Class({
                 let accessPoints = network.accessPoints;
                 for (let i = 0; i < accessPoints.length; i++) {
                     if (accessPoints[i].connection_valid(connection)) {
-                        this._client.activate_connection(connection, this.device, accessPoints[i].dbus_path, null);
+                        this._client.activate_connection(connection, this._device, accessPoints[i].dbus_path, null);
                         break;
                     }
                 }
@@ -1175,11 +1175,11 @@ const NMDeviceWireless = new Lang.Class({
                     // handled in gnome-control-center
                     Main.overview.hide();
                     Util.spawn(['gnome-control-center', 'network', 'connect-8021x-wifi',
-                                this.device.get_path(), accessPoints[0].dbus_path],
+                                this._device.get_path(), accessPoints[0].dbus_path],
                                 Main.notifyError);
                 } else {
                     let connection = new NetworkManager.Connection();
-                    this._client.add_and_activate_connection(connection, this.device, accessPoints[0].dbus_path, null)
+                    this._client.add_and_activate_connection(connection, this._device, accessPoints[0].dbus_path, null)
                 }
             }));
         }
@@ -1221,7 +1221,7 @@ const NMDeviceWireless = new Lang.Class({
     },
 
     _updateAccessPoint: function() {
-        let ap = this.device.active_access_point;
+        let ap = this._device.active_access_point;
         if (this._activeAccessPoint == ap)
             return;
 
@@ -1245,12 +1245,12 @@ const NMDeviceWireless = new Lang.Class({
     },
 
     getIndicatorIcon: function() {
-        if (this.device.active_connection.state == NetworkManager.ActiveConnectionState.ACTIVATING)
+        if (this._device.active_connection.state == NetworkManager.ActiveConnectionState.ACTIVATING)
             return 'network-wireless-acquiring-symbolic';
 
-        let ap = this.device.active_access_point;
+        let ap = this._device.active_access_point;
         if (!ap) {
-            if (this.device.mode != NM80211Mode.ADHOC)
+            if (this._device.mode != NM80211Mode.ADHOC)
                 log('An active wireless connection, in infrastructure mode, involves no access point?');
 
             return 'network-wireless-connected-symbolic';
@@ -1279,7 +1279,7 @@ const NMDeviceVirtual = new Lang.Class({
     },
 
     addConnection: function(connection) {
-        if (!this.device && !this.hasConnections())
+        if (!this._device && !this.hasConnections())
             this.statusItem.label.text = NMGtk.utils_get_connection_device_name(connection);
 
         this.parent(connection);
@@ -1298,7 +1298,7 @@ const NMDeviceVirtual = new Lang.Class({
     },
 
     removeDevice: function(device) {
-        if (device == this.device) {
+        if (device == this._device) {
             this._setDevice(null);
             this._updateStatusItem();
             this.emit('state-changed');
@@ -1310,7 +1310,7 @@ const NMDeviceVirtual = new Lang.Class({
     },
 
     getIndicatorIcon: function() {
-        if (this.device.active_connection.state == NetworkManager.ActiveConnectionState.ACTIVATING)
+        if (this._device.active_connection.state == NetworkManager.ActiveConnectionState.ACTIVATING)
             return 'network-wired-acquiring-symbolic';
         else
             return 'network-wired-connected-symbolic';
