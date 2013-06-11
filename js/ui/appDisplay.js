@@ -62,16 +62,12 @@ const EndlessApplicationView = new Lang.Class({
         this._grid.removeItem(item.actor);
     },
 
-    _getItemId: function(item) {
-        return item.get_id();
-    },
-
     _createItemIcon: function(item) {
         throw new Error('Not implemented');
     },
 
     _addItem: function(item) {
-        let id = this._getItemId(item);
+        let id = item.get_id();
         if (this._items[id] !== undefined) {
             return null;
         }
@@ -85,7 +81,7 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     _removeItem: function(item) {
-        let id = this._getItemId(item);
+        let id = item.get_id();
         if (this._items[id] === undefined) {
             return;
         }
@@ -99,7 +95,7 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     _showItem: function(item) {
-        let id = this._getItemId(item);
+        let id = item.get_id();
         if (this._items[id] === undefined) {
             return;
         }
@@ -109,7 +105,7 @@ const EndlessApplicationView = new Lang.Class({
 
     loadGrid: function() {
         for (let i = 0; i < this._allItems.length; i++) {
-            let id = this._getItemId(this._allItems[i]);
+            let id = this._allItems[i].get_id();
             if (!id) {
                 continue;
             }
@@ -476,7 +472,7 @@ const AllView = new Lang.Class({
     _getIdFromIndex: function(view, index){
        let item = view._allItems[index];
        if (item) {
-           return view._getItemId(item);
+           return item.get_id();
        }
        return null;
     },
