@@ -27,6 +27,7 @@ const SocialBarButton = new Lang.Class({
         let iconFile = Gio.File.new_for_path(global.datadir + '/theme/social-bar-symbolic.svg');
         let gicon = new Gio.FileIcon({ file: iconFile });
         this.setGIcon(gicon);
+        this.mainIcon.add_style_class_name('system-status-social-icon');
 
         this._socialBarProxy = new SocialBarProxy(Gio.DBus.session,
             SOCIAL_BAR_NAME, SOCIAL_BAR_PATH, Lang.bind(this, this._onProxyConstructed));
