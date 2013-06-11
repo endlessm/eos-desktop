@@ -249,11 +249,11 @@ const AllView = new Lang.Class({
         return false;
     },
 
-    _createEmptyIcon: function(iconSize) {
-        return new St.Icon({ icon_size: iconSize });
-    },
-
     _setupDragState: function(source) {
+        if (!source.handleViewDragBegin) {
+            return;
+        }
+
         this._dragIcon = source;
         this._dragView = undefined;
 
@@ -267,18 +267,13 @@ const AllView = new Lang.Class({
         this._onIcon = false;
         this._originalIdx = source.parentView.indexOf(source);
 
-        // Replace the dragged icon with an empty placeholder
-        this._originalSourceIcon = source.icon;
-
-        let insertActor = new IconGrid.BaseIcon('', { createIcon: this._createEmptyIcon });
-        source.icon = insertActor;
-        source.actor.set_child(insertActor.actor);
+        source.handleViewDragBegin();
     },
 
     _clearDragState: function(source) {
-        source.icon = this._originalSourceIcon;
-        source.actor.set_child(source.icon.actor);
-        this._originalSourceIcon = null;
+        if (!source.handleViewDragEnd) {
+            return;
+        }
 
         this._insertIdx = -1;
         this._onIconIdx = -1;
@@ -290,14 +285,13 @@ const AllView = new Lang.Class({
 
         DND.removeDragMonitor(this._dragMonitor);
         this._dragMonitor = null;
+
+        source.handleViewDragEnd();
     },
 
     _onDragBegin: function(overview, source) {
-        if (source.parentView) {
-            // Dragging an icon from grid
-            // Save the currently dragged item info
-            this._setupDragState(source);
-        }
+        // Save the currently dragged item info
+        this._setupDragState(source);
 
         // Hide the event blocker in all cases to allow for dash DnD
         this._eventBlocker.hide();
@@ -403,9 +397,7 @@ const AllView = new Lang.Class({
         if (item) {
             let viewIcon = this._dragView.getIcon(item.get_id());
             // We can only move applications into folders or the app store
-            validHoverDrop = ((viewIcon instanceof FolderIcon ||
-                               viewIcon instanceof AppStoreIcon) &&
-                              this._dragIcon instanceof AppIcon);
+            validHoverDrop = viewIcon.canDrop && this._dragIcon.canDragOver;
         }
 
         if (validHoverDrop) {
@@ -420,11 +412,7 @@ const AllView = new Lang.Class({
 
         if (item) {
             let viewIcon = this._dragView.getIcon(item.get_id());
-            viewIcon.actor.set_hover(state);
-
-            if (viewIcon instanceof AppStoreIcon) {
-                viewIcon.setDragHoverState(state);
-            }
+            viewIcon.setDragHoverState(state);
         }
     },
 
@@ -439,25 +427,16 @@ const AllView = new Lang.Class({
                 return false;
             }
 
-            // Folders are drop targets, not sources
-            if (source instanceof FolderIcon) {
+            if (!source.canDragOver) {
                 return false;
             }
 
-            // If we are dropping an icon on another icon, cancel the request
             let dropIcon = this._dragView.getIcon(item.get_id());
-
-            if (dropIcon instanceof AppStoreIcon) {
-                return dropIcon.handleIconDrop(source);
-            }
-
-            if (!(dropIcon instanceof FolderIcon)) {
+            if (!dropIcon.canDrop) {
                 return false;
             }
 
-            // If we are hovering over a folder, the icon needs to be moved
-            IconGridLayout.layout.repositionIcon(originalId, null, item.get_id());
-            return true;
+            return dropIcon.handleIconDrop(source);
         } else {
             // If we are not over an icon and we are outside of the grid area,
             // ignore the request to move
@@ -614,6 +593,40 @@ const ViewIcon = new Lang.Class({
 
     _init: function(parentView) {
         this.parentView = parentView;
+
+        this.canDrop = false;
+        this.canDragOver = false;
+
+        this._origIcon = null;
+    },
+
+    handleViewDragBegin: function() {
+        // Replace the dragged icon with an empty placeholder
+        this._origIcon = this.icon;
+
+        let dragBeginIcon = this.getDragBeginIcon();
+        this.icon = dragBeginIcon;
+        this.actor.set_child(dragBeginIcon.actor);
+    },
+
+    handleViewDragEnd: function() {
+        this.icon = this._origIcon;
+        this.actor.set_child(this.icon.actor);
+        this._origIcon = null;
+    },
+
+    getDragBeginIcon: function() {
+        return new IconGrid.BaseIcon('', { createIcon: function(iconSize) {
+            return new St.Icon({ icon_size: iconSize });
+        }});
+    },
+
+    setDragHoverState: function(state) {
+        this.actor.set_hover(state);
+    },
+
+    handleIconDrop: function(source) {
+        logError('handleIconDrop not implemented');
     }
 });
 
@@ -623,6 +636,7 @@ const FolderIcon = new Lang.Class({
 
     _init: function(dir, parentView) {
         this.parent(parentView);
+        this.canDrop = true;
 
         this._dir = dir;
         this._dirInfo = Shell.DesktopDirInfo.new(this._dir.get_id());
@@ -756,6 +770,12 @@ const FolderIcon = new Lang.Class({
         return this._dir.get_id();
     },
 
+    handleIconDrop: function(source) {
+        // Move the source icon into this folder
+        IconGridLayout.layout.repositionIcon(source.getId(), null, this.getId());
+        return true;
+    },
+
     getDragActor: function() {
         let icon = this._dirInfo.get_icon();
         let textureCache = St.TextureCache.get_default();
@@ -860,6 +880,7 @@ const AppIcon = new Lang.Class({
                                         parentView: null });
 
         this.parent(params.parentView);
+        this.canDragOver = true;
 
         this.app = app;
         this._showMenu = params.showMenu;
@@ -1080,6 +1101,8 @@ const AppStoreIcon = new Lang.Class({
                       isDraggable: false,
                       parentView: parentView });
 
+        this.canDrop = true;
+
         // For now, let's use the normal icon for the pressed state,
         // for consistency with the other app selector icons,
         // which just use the wells to represent the pressed state.
@@ -1096,9 +1119,6 @@ const AppStoreIcon = new Lang.Class({
                                                      { createIcon: this._createFullTrashIcon });
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
-
-        Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
-        Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
     },
 
     _createTrashIcon: function(iconSize) {
@@ -1119,15 +1139,13 @@ const AppStoreIcon = new Lang.Class({
         return false;
     },
 
-    _onDragBegin: function() {
-        this.actor.set_child(this.empty_trash_icon.actor);
-    },
-
-    _onDragEnd: function(actor, event) {
-        this.actor.set_child(this.icon.actor);
+    getDragBeginIcon: function() {
+        return this.empty_trash_icon.actor;
     },
 
     setDragHoverState: function(state) {
+        this.parent(state);
+
         if (state) {
             this.actor.set_child(this.full_trash_icon.actor);
         } else {
