@@ -48,13 +48,13 @@ const EndlessApplicationView = new Lang.Class({
         // Standard hack for ClutterBinLayout
         this._grid.actor.x_expand = true;
 
-        this._items = {};
+        this._icons = {};
         this._allItems = [];
     },
 
     removeAll: function() {
         this._grid.removeAll();
-        this._items = {};
+        this._icons = {};
         this._allItems = [];
     },
 
@@ -68,25 +68,25 @@ const EndlessApplicationView = new Lang.Class({
 
     _addItem: function(item) {
         let id = item.get_id();
-        if (this._items[id] !== undefined) {
+        if (this._icons[id] !== undefined) {
             return null;
         }
 
         let itemIcon = this._createItemIcon(item);
         itemIcon.parentView = this;
         this._allItems.push(item);
-        this._items[id] = itemIcon;
+        this._icons[id] = itemIcon;
 
         return itemIcon;
     },
 
     _removeItem: function(item) {
         let id = item.get_id();
-        if (this._items[id] === undefined) {
+        if (this._icons[id] === undefined) {
             return;
         }
 
-        delete this._items[id];
+        delete this._icons[id];
 
         let idx = this._allItems.indexOf(item);
         if (idx != -1) {
@@ -96,11 +96,11 @@ const EndlessApplicationView = new Lang.Class({
 
     _showItem: function(item) {
         let id = item.get_id();
-        if (this._items[id] === undefined) {
+        if (this._icons[id] === undefined) {
             return;
         }
 
-        this._items[id].actor.show();
+        this._icons[id].actor.show();
     },
 
     loadGrid: function() {
@@ -110,7 +110,7 @@ const EndlessApplicationView = new Lang.Class({
                 continue;
             }
 
-            this._grid.addItem(this._items[id].actor);
+            this._grid.addItem(this._icons[id].actor);
         }
     },
 
@@ -130,8 +130,8 @@ const EndlessApplicationView = new Lang.Class({
         return this._grid.canDropAt(x, y, index);
     },
 
-    getItem: function(id) {
-        return this._items[id];
+    getIcon: function(id) {
+        return this._icons[id];
     }
 });
 
@@ -250,7 +250,7 @@ const AllView = new Lang.Class({
     },
 
     _setupDragState: function(source) {
-        this._dragItem = source;
+        this._dragIcon = source;
         this._dragView = undefined;
 
         this._dragMonitor = {
@@ -281,7 +281,7 @@ const AllView = new Lang.Class({
         this._onIcon = false;
         this._originalIdx = -1;
 
-        this._dragItem = null;
+        this._dragIcon = null;
         this._dragView = null;
 
         DND.removeDragMonitor(this._dragMonitor);
@@ -315,8 +315,8 @@ const AllView = new Lang.Class({
             this._dragView = this;
         }
 
-        if (this._dragItem.parentView.actor.contains(dragEvent.targetActor)) {
-            this._dragView = this._dragItem.parentView;
+        if (this._dragIcon.parentView.actor.contains(dragEvent.targetActor)) {
+            this._dragView = this._dragIcon.parentView;
         }
 
         if (!this._dragView) {
@@ -375,7 +375,7 @@ const AllView = new Lang.Class({
         }
 
         if (this._insertIdx == this._originalIdx &&
-            this._dragView == this._dragItem.parentView) {
+            this._dragView == this._dragIcon.parentView) {
             return false;
         }
 
@@ -383,14 +383,14 @@ const AllView = new Lang.Class({
         // (but not immediately to the left of the original position),
         // nudge the icons apart
         let isLeftOfOrig = (this._insertIdx == this._originalIdx + 1 &&
-                            this._dragView == this._dragItem.parentView);
+                            this._dragView == this._dragIcon.parentView);
         return (isNewPosition && !isLeftOfOrig);
     },
 
     _getDragHoverResult: function() {
         // If we are hovering over our own icon placeholder, ignore it
         if (this._onIconIdx == this._originalIdx &&
-            this._dragView == this._dragItem.parentView) {
+            this._dragView == this._dragIcon.parentView) {
             return DND.DragMotionResult.NO_DROP;
         }
 
@@ -399,10 +399,10 @@ const AllView = new Lang.Class({
         let validHoverDrop = false;
         
         if (item) {
-            let viewItem = this._dragView._items[item.get_id()];
+            let viewIcon = this._dragView._icons[item.get_id()];
             // We can only move applications into folders
-            validHoverDrop = (viewItem instanceof FolderIcon &&
-                              this._dragItem instanceof AppIcon);
+            validHoverDrop = (viewIcon instanceof FolderIcon &&
+                              this._dragIcon instanceof AppIcon);
         }
 
         if (validHoverDrop) {
@@ -416,8 +416,8 @@ const AllView = new Lang.Class({
         let item = this._dragView._allItems[this._onIconIdx];
 
         if (item) {
-            let viewItem = this._dragView._items[item.get_id()];
-            viewItem.actor.set_hover(state);
+            let viewIcon = this._dragView._icons[item.get_id()];
+            viewIcon.actor.set_hover(state);
         }
     },
 
@@ -438,7 +438,7 @@ const AllView = new Lang.Class({
             }
 
             // If we are dropping an icon on another icon, cancel the request
-            let dropIcon = this._dragView.getItem(id);
+            let dropIcon = this._dragView.getIcon(id);
             if (!(dropIcon instanceof FolderIcon)) {
                 return false;
             }
@@ -527,11 +527,11 @@ const AllView = new Lang.Class({
     },
 
     _updateIconOpacities: function(folderOpen) {
-        for (let id in this._items) {
-            if (folderOpen && !this._items[id].actor.checked)
-                this._items[id].actor.opacity = INACTIVE_GRID_OPACITY;
+        for (let id in this._icons) {
+            if (folderOpen && !this._icons[id].actor.checked)
+                this._icons[id].actor.opacity = INACTIVE_GRID_OPACITY;
             else
-                this._items[id].actor.opacity = 255;
+                this._icons[id].actor.opacity = 255;
         }
     }
 });
