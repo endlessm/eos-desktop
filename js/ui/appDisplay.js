@@ -33,6 +33,7 @@ const MAX_APPLICATION_WORK_MILLIS = 75;
 const MENU_POPUP_TIMEOUT = 600;
 const MAX_COLUMNS = 7;
 
+const DRAG_OVER_FOLDER_OPACITY = 77;
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
 
@@ -337,6 +338,7 @@ const AllView = new Lang.Class({
         if (this._onIconIdx != -1 &&
             ((idx != this._onIconIdx) || !onIcon)) {
             this._setDragHoverState(false);
+            dragEvent.dragActor.opacity = 255;
         }
 
         // If we are in a new spot, remove the previous nudges
@@ -354,6 +356,7 @@ const AllView = new Lang.Class({
             if (hoverResult == DND.DragMotionResult.MOVE_DROP) {
                 // If we are hovering over a drop target, set its hover state
                 this._setDragHoverState(true);
+                dragEvent.dragActor.opacity = DRAG_OVER_FOLDER_OPACITY;
             }
 
             return hoverResult;
@@ -1258,9 +1261,11 @@ const AppStoreIcon = new Lang.Class({
         if (showAppsHovered) {
             this.actor.set_child(this.full_trash_icon.actor);
             this.actor.set_hover(true);
+            dragEvent.dragActor.opacity = DRAG_OVER_FOLDER_OPACITY;
         } else {
             this.actor.set_child(this.empty_trash_icon.actor);
             this.actor.set_hover(false);
+            dragEvent.dragActor.opacity = 255;
         }
 
         return DND.DragMotionResult.CONTINUE;
