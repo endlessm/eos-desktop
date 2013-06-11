@@ -715,11 +715,12 @@ const FolderIcon = new Lang.Class({
         if (this._popup)
             return;
 
+        let grid = this.actor.get_parent().get_parent();
         let [sourceX, sourceY] = this.actor.get_transformed_position();
-        let [sourceXP, sourceYP] = this.parentView.actor.get_transformed_position();
+        let [sourceXP, sourceYP] = grid.get_transformed_position();
         let relY = sourceY - sourceYP;
         let spaceTop = relY;
-        let spaceBottom = this.parentView.actor.height - (relY + this.actor.height);
+        let spaceBottom = grid.height - (relY + this.actor.height);
         let side = spaceTop > spaceBottom ? St.Side.BOTTOM : St.Side.TOP;
 
         this._popup = new AppFolderPopup(this, side);
