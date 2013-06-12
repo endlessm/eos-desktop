@@ -66,7 +66,7 @@ Depends: ${gir:Depends},
          eos-theme,
          eos-app-store,
          gdm (>= 3.5.90) | gdm3,
-         gnome-shell-common (= ${source:Version}),
+         eos-shell-common (= ${source:Version}),
          gir1.2-accountsservice-1.0,
          gir1.2-caribou-1.0 (>= 0.4.8),
          gir1.2-clutter-1.0 (>= 1.11.11),
@@ -121,7 +121,7 @@ Description: graphical shell for the GNOME desktop
  GNOME. The GNOME Shell has rich visual effects enabled by new
  graphical technologies.
 
-Package: gnome-shell-common
+Package: eos-shell-common
 Architecture: all
 Depends: ${misc:Depends}
 Replaces: gnome-shell (<< 3.2.1-6)
@@ -137,6 +137,8 @@ Priority: extra
 Depends: eos-shell (= ${binary:Version}),
          ${misc:Depends}
 Recommends: mutter-dbg
+Provides: gnome-shell-common
+Replaces: gnome-shell-common
 Description: Debugging symbols for GNOME Shell
  The GNOME Shell redefines user interactions with the GNOME desktop.
  In particular, it offers new paradigms for launching applications,
