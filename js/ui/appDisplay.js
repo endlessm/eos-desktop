@@ -505,9 +505,15 @@ const AllView = new Lang.Class({
 
                 if (isOpen) {
                     this._ensureIconVisible(popup.actor);
-                    this._grid.actor.y = popup.parentOffset;
+                    this._grid.actor.y += popup.parentOffset;
+                    // In order for the parent offset to be interpreted
+                    // properly, we have to temporarily disable the
+                    // centering of the grid
+                    this._grid.actor.y_align = Clutter.ActorAlign.START;
                 } else {
                     this._grid.actor.y = 0;
+                    // Reinstate the centering once the folder is closed
+                    this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
                 }
             }));
     },
@@ -756,14 +762,19 @@ const FolderIcon = new Lang.Class({
 
         // Position the popup above or below the source icon
         if (side == St.Side.BOTTOM) {
-            this._popup.actor.show();
             let y = grid.y + this.actor.y - this._popup.actor.height;
-            let yWithButton = y - closeButtonOffset;
-            this._popup.parentOffset = yWithButton < 0 ? -yWithButton : 0;
             this._popup.actor.y = Math.max(y, closeButtonOffset);
-            this._popup.actor.hide();
+            this._popup.parentOffset = this._popup.actor.y - y;
         } else {
-            this._popup.actor.y = grid.y + this.actor.y + this.actor.height + closeButtonOffset;
+            let y = grid.y + this.actor.y + this.actor.height;
+            let view = grid.get_parent();
+            let viewBottom = view.y + view.height;
+            let yBottom = y + this._popup.actor.height;
+            this._popup.actor.y = y;
+            // Because the folder extends the size of the grid
+            // while it is centered, the offset we need is actually
+            // half what might be expected
+            this._popup.parentOffset = Math.min(viewBottom - yBottom, 0) / 2;
         }
     },
 
