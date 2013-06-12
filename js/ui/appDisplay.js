@@ -1190,9 +1190,8 @@ const AppStoreIcon = new Lang.Class({
         }
     },
 
-    _acceptAppDrop: function(source) {
-        let app = source.app;
-        let id = app.get_id();
+    _showDeleteConfirmation: function(source, deleteCallback) {
+        let id = source.getId();
 
         let dialog = new ModalDialog.ModalDialog();
         let subjectLabel = new St.Label({ text: _("Delete?") });
@@ -1208,10 +1207,18 @@ const AppStoreIcon = new Lang.Class({
                               dialog.close();
                               source.parentView.removeItem(source);
                               IconGridLayout.layout.repositionIcon(id, 0, null);
+
+                              if (deleteCallback) {
+                                  deleteCallback();
+                              }
                           }),
                           default: true };
         dialog.setButtons([yesButton, noButton]);
         dialog.open();
+    },
+
+    _acceptAppDrop: function(source) {
+        this._showDeleteConfirmation(source);
     },
 
     _acceptFolderDrop: function(source) {
@@ -1230,12 +1237,12 @@ const AppStoreIcon = new Lang.Class({
         }
 
         if (isEmpty) {
-            source.parentView.removeItem(source);
-            IconGridLayout.layout.repositionIcon(id, 0, null);
-
-            if (folder.can_delete()) {
-                folder.delete();
-            }
+            this._showDeleteConfirmation(source,
+                function() {
+                    if (folder.can_delete()) {
+                        folder.delete();
+                    }
+                });
 
             return;
         }
