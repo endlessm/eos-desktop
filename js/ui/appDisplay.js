@@ -7,6 +7,7 @@ const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
 const Shell = imports.gi.Shell;
 const Lang = imports.lang;
+const Pango = imports.gi.Pango;
 const Signals = imports.signals;
 const Meta = imports.gi.Meta;
 const St = imports.gi.St;
@@ -268,7 +269,7 @@ const AllView = new Lang.Class({
         this._originalIdx = source.parentView.indexOf(source);
 
         source.handleViewDragBegin();
-        if (source.canDragOver) {
+        if (source.canDragOver(this._appStoreIcon)) {
             this._appStoreIcon.handleViewDragBegin();
         }
     },
@@ -290,7 +291,7 @@ const AllView = new Lang.Class({
         this._dragMonitor = null;
 
         source.handleViewDragEnd();
-        if (source.canDragOver) {
+        if (source.canDragOver(this._appStoreIcon)) {
             this._appStoreIcon.handleViewDragEnd();
         }
     },
@@ -403,7 +404,7 @@ const AllView = new Lang.Class({
         if (item) {
             let viewIcon = this._dragView.getIcon(item.get_id());
             // We can only move applications into folders or the app store
-            validHoverDrop = viewIcon.canDrop && this._dragIcon.canDragOver;
+            validHoverDrop = viewIcon.canDrop && this._dragIcon.canDragOver(viewIcon);
         }
 
         if (validHoverDrop) {
@@ -418,7 +419,7 @@ const AllView = new Lang.Class({
 
         if (item) {
             let viewIcon = this._dragView.getIcon(item.get_id());
-            if (this._dragIcon.canDragOver) {
+            if (this._dragIcon.canDragOver(viewIcon)) {
                 viewIcon.setDragHoverState(state);
             }
         }
@@ -435,12 +436,12 @@ const AllView = new Lang.Class({
                 return false;
             }
 
-            if (!source.canDragOver) {
+            let dropIcon = this._dragView.getIcon(item.get_id());
+            if (!dropIcon.canDrop) {
                 return false;
             }
 
-            let dropIcon = this._dragView.getIcon(item.get_id());
-            if (!dropIcon.canDrop) {
+            if (!source.canDragOver(dropIcon)) {
                 return false;
             }
 
@@ -610,7 +611,6 @@ const ViewIcon = new Lang.Class({
         this.parentView = parentView;
 
         this.canDrop = false;
-        this.canDragOver = false;
 
         this._origIcon = null;
     },
@@ -642,6 +642,10 @@ const ViewIcon = new Lang.Class({
 
     handleIconDrop: function(source) {
         logError('handleIconDrop not implemented');
+    },
+
+    canDragOver: function(dest) {
+        return false;
     }
 });
 
@@ -653,6 +657,7 @@ const FolderIcon = new Lang.Class({
         this.parent(parentView);
         this.canDrop = true;
 
+        this.folder = dir;
         this._dir = dir;
         this._dirInfo = Shell.DesktopDirInfo.new(this._dir.get_id());
 
@@ -805,6 +810,15 @@ const FolderIcon = new Lang.Class({
 
     getDragActorSource: function() {
         return this.icon.icon;
+    },
+
+    canDragOver: function(dest) {
+        // Can't drag folders over other folders
+        if (dest.folder) {
+            return false;
+        }
+
+        return true;
     }
 });
 
@@ -901,7 +915,6 @@ const AppIcon = new Lang.Class({
                                         parentView: null });
 
         this.parent(params.parentView);
-        this.canDragOver = true;
 
         this.app = app;
         this._showMenu = params.showMenu;
@@ -1100,6 +1113,10 @@ const AppIcon = new Lang.Class({
         this.app.open_new_window(params.workspace);
     },
 
+    canDragOver: function(dest) {
+        return true;
+    },
+
     getDragActor: function() {
         return this.app.create_icon_texture(Main.overview.dashIconSize);
     },
@@ -1174,12 +1191,8 @@ const AppStoreIcon = new Lang.Class({
         }
     },
 
-    handleIconDrop: function(source) {
+    _acceptAppDrop: function(source) {
         let app = source.app;
-        if (app == null) {
-            return false;
-        }
-
         let id = app.get_id();
 
         let dialog = new ModalDialog.ModalDialog();
@@ -1200,8 +1213,72 @@ const AppStoreIcon = new Lang.Class({
                           default: true };
         dialog.setButtons([yesButton, noButton]);
         dialog.open();
+    },
 
-        return true;
+    _acceptFolderDrop: function(source) {
+        let folder = source.folder;
+        let id = folder.get_id();
+
+        let icons = IconGridLayout.layout.getIcons(id);
+        let isEmpty = (icons.length == 0);
+        if (!isEmpty) {
+            // ensure the applications in the folder actually exist
+            // on the system
+            let appSystem = Shell.AppSystem.get_default();
+            isEmpty = !icons.every(function(icon) {
+                return appSystem.lookup_app(icon) != null;
+            });
+        }
+
+        if (isEmpty) {
+            source.parentView.removeItem(source);
+            IconGridLayout.layout.repositionIcon(id, 0, null);
+            return;
+        }
+
+        let dialog = new ModalDialog.ModalDialog();
+
+        let subjectLabel = new St.Label({ text: _("Warning"),
+                                          style_class: 'delete-folder-dialog-subject',
+                                          x_align: Clutter.ActorAlign.CENTER });
+        dialog.contentLayout.add(subjectLabel, { y_fill: false,
+                                                 y_align: St.Align.START });
+
+        let descriptionLabel = new St.Label({ text: _("To delete a folder you have to remove all " +
+                                                      "of the items inside of it first."),
+                                              style_class: 'delete-folder-dialog-description' });
+        dialog.contentLayout.add(descriptionLabel, { y_fill: true });
+        descriptionLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        descriptionLabel.clutter_text.line_wrap = true;
+
+        let safeLabel = new St.Label({ text: _("We are just trying to keep you safe."),
+                                              style_class: 'delete-folder-dialog-safe' });
+        dialog.contentLayout.add(safeLabel, { y_fill: true });
+        safeLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        safeLabel.clutter_text.line_wrap = true;
+
+        let okButton = { label: _("OK"),
+                         action: Lang.bind(this, function() {
+                             dialog.close();
+                         }),
+                         key: Clutter.Escape,
+                         default: true };
+        dialog.setButtons([okButton]);
+        dialog.open();
+    },
+
+    handleIconDrop: function(source) {
+        if (source.app) {
+            this._acceptAppDrop(source);
+            return true;
+        }
+
+        if (source.folder) {
+            this._acceptFolderDrop(source);
+            return true;
+        }
+
+        return false;
     }
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
