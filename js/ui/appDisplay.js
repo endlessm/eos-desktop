@@ -657,9 +657,8 @@ const FolderIcon = new Lang.Class({
         this.parent(parentView);
         this.canDrop = true;
 
-        this.folder = dir;
         this._dir = dir;
-        this._dirInfo = Shell.DesktopDirInfo.new(this._dir.get_id());
+        this.folder = Shell.DesktopDirInfo.new(this._dir.get_id());
 
         this.actor = new St.Button({ style_class: 'app-well-app app-folder',
                                      button_mask: St.ButtonMask.ONE,
@@ -669,7 +668,7 @@ const FolderIcon = new Lang.Class({
                                      y_fill: true });
         this.actor._delegate = this;
 
-        let label = this._dirInfo.get_name();
+        let label = this.folder.get_name();
         this.icon = new IconGrid.BaseIcon(label,
                                           { createIcon: Lang.bind(this, this._createIcon) });
         this.actor.set_child(this.icon.actor);
@@ -726,7 +725,7 @@ const FolderIcon = new Lang.Class({
     },
 
     _createIcon: function(size) {
-        let icon = this._dirInfo.get_icon();
+        let icon = this.folder.get_icon();
         return new St.Icon({ icon_size: size,
                              gicon: icon });
     },
@@ -803,7 +802,7 @@ const FolderIcon = new Lang.Class({
     },
 
     getDragActor: function() {
-        let icon = this._dirInfo.get_icon();
+        let icon = this.folder.get_icon();
         let textureCache = St.TextureCache.get_default();
         return textureCache.load_gicon(null, icon, Main.overview.dashIconSize);
     },
