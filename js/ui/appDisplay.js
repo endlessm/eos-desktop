@@ -1232,6 +1232,11 @@ const AppStoreIcon = new Lang.Class({
         if (isEmpty) {
             source.parentView.removeItem(source);
             IconGridLayout.layout.repositionIcon(id, 0, null);
+
+            if (folder.can_delete()) {
+                folder.delete();
+            }
+
             return;
         }
 
