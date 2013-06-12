@@ -492,8 +492,8 @@ const AllView = new Lang.Class({
         return appIcon;
     },
 
-    addFolder: function(dir) {
-        let folderIcon = this._addItem(dir);
+    addFolder: function(dirInfo) {
+        let folderIcon = this._addItem(dirInfo);
         if (folderIcon)
             folderIcon.actor.connect('key-focus-in',
                                      Lang.bind(this, this._ensureIconVisible));
@@ -581,9 +581,10 @@ const AppDisplay = new Lang.Class({
             let itemId = topLevelIcons[i];
 
             if (IconGridLayout.layout.iconIsFolder(itemId)) {
-                this._view.addFolder({
-                    get_id: function() { return itemId; }
-                });
+                let dirInfo = Shell.DesktopDirInfo.new(itemId);
+                if (dirInfo) {
+                    this._view.addFolder(dirInfo);
+                }
             } else {
                 let app = this._appSystem.lookup_app(itemId);
                 if (app) {
@@ -653,12 +654,11 @@ const FolderIcon = new Lang.Class({
     Name: 'FolderIcon',
     Extends: ViewIcon,
 
-    _init: function(dir, parentView) {
+    _init: function(dirInfo, parentView) {
         this.parent(parentView);
         this.canDrop = true;
 
-        this._dir = dir;
-        this.folder = Shell.DesktopDirInfo.new(this._dir.get_id());
+        this.folder = dirInfo;
 
         this.actor = new St.Button({ style_class: 'app-well-app app-folder',
                                      button_mask: St.ButtonMask.ONE,
@@ -678,7 +678,7 @@ const FolderIcon = new Lang.Class({
         this.view.actor.reactive = false;
 
         this.view.removeAll();
-        this._loadCategory(this._dir, this.view);
+        this._loadCategory();
         this.view.loadGrid();
 
         this.actor.connect('clicked', Lang.bind(this,
@@ -708,10 +708,10 @@ const FolderIcon = new Lang.Class({
             }));
     },
 
-    _loadCategory: function(dir) {
+    _loadCategory: function() {
         let appSystem = Shell.AppSystem.get_default();
 
-        let icons = IconGridLayout.layout.getIcons(dir.get_id());
+        let icons = IconGridLayout.layout.getIcons(this.folder.get_id());
         if (! icons) {
             return;
         }
@@ -792,7 +792,7 @@ const FolderIcon = new Lang.Class({
     },
 
     getId: function() {
-        return this._dir.get_id();
+        return this.folder.get_id();
     },
 
     handleIconDrop: function(source) {
@@ -1190,9 +1190,8 @@ const AppStoreIcon = new Lang.Class({
         }
     },
 
-    _acceptAppDrop: function(source) {
-        let app = source.app;
-        let id = app.get_id();
+    _showDeleteConfirmation: function(source, deleteCallback) {
+        let id = source.getId();
 
         let dialog = new ModalDialog.ModalDialog();
         let subjectLabel = new St.Label({ text: _("Delete?") });
@@ -1208,10 +1207,18 @@ const AppStoreIcon = new Lang.Class({
                               dialog.close();
                               source.parentView.removeItem(source);
                               IconGridLayout.layout.repositionIcon(id, 0, null);
+
+                              if (deleteCallback) {
+                                  deleteCallback();
+                              }
                           }),
                           default: true };
         dialog.setButtons([yesButton, noButton]);
         dialog.open();
+    },
+
+    _acceptAppDrop: function(source) {
+        this._showDeleteConfirmation(source);
     },
 
     _acceptFolderDrop: function(source) {
@@ -1224,18 +1231,18 @@ const AppStoreIcon = new Lang.Class({
             // ensure the applications in the folder actually exist
             // on the system
             let appSystem = Shell.AppSystem.get_default();
-            isEmpty = !icons.every(function(icon) {
+            isEmpty = !icons.some(function(icon) {
                 return appSystem.lookup_app(icon) != null;
             });
         }
 
         if (isEmpty) {
-            source.parentView.removeItem(source);
-            IconGridLayout.layout.repositionIcon(id, 0, null);
-
-            if (folder.can_delete()) {
-                folder.delete();
-            }
+            this._showDeleteConfirmation(source,
+                function() {
+                    if (folder.can_delete()) {
+                        folder.delete();
+                    }
+                });
 
             return;
         }
