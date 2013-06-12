@@ -19,6 +19,8 @@ const NUDGE_DURATION = 1.2;
 const NUDGE_RETURN_ANIMATION_TYPE = 'easeOutQuint';
 const NUDGE_RETURN_DURATION = 0.3;
 
+const NUDGE_FACTOR = 0.2;
+
 const CursorLocation = {
     DEFAULT: 0,
     ON_ICON: 1,
@@ -409,7 +411,7 @@ const IconGrid = new Lang.Class({
         if (cursorLocation != CursorLocation.LEFT_EDGE) {
             let leftItem = this.getItemAtIndex(nudgeIdx - 1);
             this._animateNudge(leftItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION,
-                               -this._hItemSize / 5
+                               -this._hItemSize * NUDGE_FACTOR
                               );
         }
 
@@ -418,7 +420,7 @@ const IconGrid = new Lang.Class({
         if (cursorLocation != CursorLocation.RIGHT_EDGE) {
             let rightItem = this.getItemAtIndex(nudgeIdx);
             this._animateNudge(rightItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION,
-                               this._hItemSize / 5
+                               this._hItemSize * NUDGE_FACTOR
                               );
         }
     },
