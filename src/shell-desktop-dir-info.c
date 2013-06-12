@@ -687,10 +687,7 @@ shell_desktop_dir_info_can_delete (ShellDirInfo *dirinfo)
   ShellDesktopDirInfo *info = SHELL_DESKTOP_DIR_INFO (dirinfo);
 
   if (info->filename)
-    {
-      if (strstr (info->filename, "/userdir-"))
-        return g_access (info->filename, W_OK) == 0;
-    }
+    return g_access (info->filename, W_OK) == 0;
 
   return FALSE;
 }
