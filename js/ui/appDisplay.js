@@ -1224,7 +1224,7 @@ const AppStoreIcon = new Lang.Class({
             // ensure the applications in the folder actually exist
             // on the system
             let appSystem = Shell.AppSystem.get_default();
-            isEmpty = !icons.every(function(icon) {
+            isEmpty = !icons.some(function(icon) {
                 return appSystem.lookup_app(icon) != null;
             });
         }
