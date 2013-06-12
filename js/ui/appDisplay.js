@@ -268,6 +268,9 @@ const AllView = new Lang.Class({
         this._originalIdx = source.parentView.indexOf(source);
 
         source.handleViewDragBegin();
+        if (source.canDragOver) {
+            this._appStoreIcon.handleViewDragBegin();
+        }
     },
 
     _clearDragState: function(source) {
@@ -287,6 +290,9 @@ const AllView = new Lang.Class({
         this._dragMonitor = null;
 
         source.handleViewDragEnd();
+        if (source.canDragOver) {
+            this._appStoreIcon.handleViewDragEnd();
+        }
     },
 
     _onDragBegin: function(overview, source) {
@@ -412,7 +418,9 @@ const AllView = new Lang.Class({
 
         if (item) {
             let viewIcon = this._dragView.getIcon(item.get_id());
-            viewIcon.setDragHoverState(state);
+            if (this._dragIcon.canDragOver) {
+                viewIcon.setDragHoverState(state);
+            }
         }
     },
 
@@ -479,6 +487,8 @@ const AllView = new Lang.Class({
         if (appIcon)
             appIcon.actor.connect('key-focus-in',
                                   Lang.bind(this, this._ensureIconVisible));
+
+        return appIcon;
     },
 
     addFolder: function(dir) {
@@ -491,8 +501,7 @@ const AllView = new Lang.Class({
     addAppStore: function() {
         let appSystem = Shell.AppSystem.get_default();
         this._appStore = appSystem.lookup_app('eos-app-store.desktop');
-
-        this.addApp(this._appStore);
+        this._appStoreIcon = this.addApp(this._appStore);
     },
 
     addFolderPopup: function(popup) {
@@ -1140,7 +1149,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     getDragBeginIcon: function() {
-        return this.empty_trash_icon.actor;
+        return this.empty_trash_icon;
     },
 
     setDragHoverState: function(state) {
@@ -1181,7 +1190,7 @@ const AppStoreIcon = new Lang.Class({
         dialog.open();
 
         return true;
-    },
+    }
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
 
