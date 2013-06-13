@@ -14,7 +14,8 @@ const LEFT_DIVIDER_LEEWAY = 30;
 const RIGHT_DIVIDER_LEEWAY = 30;
 
 const NUDGE_ANIMATION_TYPE = 'easeOutElastic';
-const NUDGE_DURATION = 1.2;
+const NUDGE_DURATION = 0.8;
+const NUDGE_PERIOD = 0.7;
 
 const NUDGE_RETURN_ANIMATION_TYPE = 'easeOutQuint';
 const NUDGE_RETURN_DURATION = 0.3;
@@ -439,7 +440,8 @@ const IconGrid = new Lang.Class({
         if (item != null) {
             Tweener.addTween(item, { translation_x: offset,
                                      time: duration,
-                                     transition: animationType
+                                     transition: animationType,
+                                     transitionParams: { period: duration * 1000 * NUDGE_PERIOD }
                                     });
         }
     },
