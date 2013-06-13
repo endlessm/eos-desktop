@@ -568,7 +568,8 @@ const Overview = new Lang.Class({
     },
 
     toggleByKey: function() {
-        if (this._viewSelector.getActivePage() != ViewSelector.ViewPage.APPS) {
+        if (!this.visible ||
+            this._viewSelector.getActivePage() != ViewSelector.ViewPage.APPS) {
             this.toggle();
         }
     },
