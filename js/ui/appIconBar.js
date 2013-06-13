@@ -7,13 +7,14 @@ const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
 
+const BoxPointer = imports.ui.boxpointer;
 const ButtonConstants = imports.ui.buttonConstants;
 const Hash = imports.misc.hash;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
-const PANEL_ICON_SIZE = 28;
+const PANEL_ICON_SIZE = 26;
 const PANEL_ICON_PADDING = 14;
 
 const PANEL_WINDOW_MENU_THUMBNAIL_SIZE = 128;
@@ -75,6 +76,43 @@ const WindowMenuItem = new Lang.Class({
     }
 });
 
+const ScrollMenuItem = new Lang.Class({
+    Name: 'ScrollMenuItem',
+    Extends: PopupMenu.PopupSubMenuMenuItem,
+
+    _init: function() {
+        this.parent('');
+
+        // remove all the stock style classes
+        this.actor.remove_style_class_name('popup-submenu-menu-item');
+        this.actor.remove_style_class_name('popup-menu-item');
+
+        // remove all the stock actors
+        this.removeActor(this.label);
+        this.removeActor(this._triangle);
+        this.menu.destroy();
+
+        this.label = null;
+        this._triangle = null;
+
+        this.menu = new PopupMenu.PopupSubMenu(this.actor, new St.Label({ text: '' }));
+        this.menu.actor.remove_style_class_name('popup-sub-menu');
+    },
+
+    _onKeyPressEvent: function(actor, event) {
+        // no special handling
+        return false;
+    },
+
+    activate: function(event) {
+        // override to do nothing
+    },
+
+    _onButtonReleaseEvent: function(actor) {
+        // override to do nothing
+    }
+});
+
 const APP_ICON_MENU_ARROW_XALIGN = 0.5;
 
 const AppIconMenu = new Lang.Class({
@@ -84,12 +122,14 @@ const AppIconMenu = new Lang.Class({
     _init: function(app, parentActor) {
         this.parent(parentActor, APP_ICON_MENU_ARROW_XALIGN, St.Side.BOTTOM);
 
+        this._submenuItem = new ScrollMenuItem();
+        this.addMenuItem(this._submenuItem);
+        this._submenuItem.menu.connect('activate', Lang.bind(this, this._onActivate));
+
         // We want to popdown the menu when clicked on the source icon itself
         this.blockSourceEvents = true;
 
         this._app = app;
-
-        this.connect('activate', Lang.bind(this, this._onActivate));
 
         // Chain our visibility and lifecycle to that of the source
         parentActor.connect('notify::mapped', Lang.bind(this, function () {
@@ -103,7 +143,7 @@ const AppIconMenu = new Lang.Class({
     },
 
     _redisplay: function() {
-        this.removeAll();
+        this._submenuItem.menu.removeAll();
 
         let tracker = Shell.WindowTracker.get_default();
         let activeWorkspace = global.screen.get_active_workspace();
@@ -155,21 +195,21 @@ const AppIconMenu = new Lang.Class({
     _appendOtherWorkspacesLabel: function () {
         let label = new PopupMenu.PopupMenuItem(_("Other workspaces"));
         label.label.add_style_class_name('panel-window-menu-workspace-label');
-        this.addMenuItem(label);
+        this._submenuItem.menu.addMenuItem(label);
     },
 
     _appendCurrentWorkspaceSeparator: function () {
         let separator = new PopupMenu.PopupSeparatorMenuItem();
-        this.addMenuItem(separator);
+        this._submenuItem.menu.addMenuItem(separator);
 
         let label = new PopupMenu.PopupMenuItem(_("Current workspace"));
         label.label.add_style_class_name('panel-window-menu-workspace-label');
-        this.addMenuItem(label);
+        this._submenuItem.menu.addMenuItem(label);
     },
 
     _appendMenuItem: function(window, hasOtherWindows) {
         let item = new WindowMenuItem(window);
-        this.addMenuItem(item);
+        this._submenuItem.menu.addMenuItem(item);
 
         if (hasOtherWindows) {
             item.cloneBin.add_style_pseudo_class('indented');
@@ -179,6 +219,7 @@ const AppIconMenu = new Lang.Class({
     popup: function() {
         this._redisplay();
         this.open();
+        this._submenuItem.menu.open(BoxPointer.PopupAnimation.NONE);
     },
 
     _onActivate: function (actor, item) {
@@ -272,6 +313,15 @@ const AppIconButton = new Lang.Class({
 
         this._menu = new AppIconMenu(this._app, this.actor);
         this._menuManager.addMenu(this._menu);
+
+        this._menu.connect('open-state-changed', Lang.bind(this,
+            function(menu, open) {
+                // Setting the max-height won't do any good if the minimum height of the
+                // menu is higher then the screen; it's useful if part of the menu is
+                // scrollable so the minimum height is smaller than the natural height
+                let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
+                this._menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
+            }));
     }
 });
 

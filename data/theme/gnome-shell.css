@@ -290,8 +290,7 @@ StScrollBar StButton#vhandle:active {
 .notification-icon-button,
 .hotplug-notification-item,
 .hotplug-resident-eject-button,
-.modal-dialog-button,
-.app-view-control {
+.modal-dialog-button {
     border: 1px solid #8b8b8b;
     background-gradient-direction: vertical;
     background-gradient-start: rgba(255, 255, 255, 0.2);
@@ -315,18 +314,8 @@ StScrollBar StButton#vhandle:active {
 .notification-button:focus,
 .notification-icon-button:focus,
 .hotplug-notification-item:focus,
-.modal-dialog-button:focus,
-.app-view-control:focus {
+.modal-dialog-button:focus {
     border-width: 2px;
-}
-
-.app-view-control:focus {
-    padding: 3px;
-}
-
-.app-view-control:first-child:ltr:focus,
-.app-view-control:last-child:rtl:focus {
-    border-right-width: 1px;
 }
 
 .candidate-page-button:active,
@@ -336,8 +325,7 @@ StScrollBar StButton#vhandle:active {
 .hotplug-notification-item:active,
 .hotplug-resident-eject-button:active,
 .modal-dialog-button:active,
-.modal-dialog-button:pressed,
-.app-view-control:checked {
+.modal-dialog-button:pressed {
     background-gradient-start: rgba(255, 255, 255, 0);
     background-gradient-end: rgba(255, 255, 255, 0.2);
 }
@@ -357,20 +345,8 @@ StScrollBar StButton#vhandle:active {
 #searchEntry,
 .modal-dialog-button,
 .notification-button,
-.hotplug-notification-item,
-.app-view-controls {
+.hotplug-notification-item {
     border-radius: 18px;
-}
-
-.app-view-control:first-child:ltr,
-.app-view-control:last-child:rtl {
-    border-radius: 18px 0px 0px 18px;
-    border-right-width: 0px;
-}
-
-.app-view-control:last-child:ltr,
-.app-view-control:first-child:rtl {
-    border-radius: 0px 18px 18px 0px;
 }
 
 /* Entries */
@@ -635,6 +611,11 @@ StScrollBar StButton#vhandle:active {
     icon-size: 1.09em;
 }
 
+.system-status-social-icon {
+    icon-size: 28px;
+}
+
+
 /* Overview */
 
 #overview {
@@ -829,29 +810,14 @@ StScrollBar StButton#vhandle:active {
 
 .icon-grid .overview-icon {
     icon-size: 64px;
-    spacing: 6px;
+    spacing: 8px;
 }
 
 .overview-icon-label {
     width: 118px;
 }
 
-.app-display {
-    padding: 8px;
-    spacing: 20px;
-}
-
-.app-view-controls {
-    width: 250px;
-    padding-bottom: 32px;
-}
-
-.app-view-control {
-    padding: 4px 16px;
-}
-
-.all-apps > StBoxLayout,
-.frequent-apps > StBoxLayout {
+.all-apps > StBoxLayout {
     /* horizontal padding to make sure scrollbars or dash don't overlap content */
     padding: 0px 88px;
 }
@@ -909,7 +875,7 @@ StScrollBar StButton#vhandle:active {
     color:white;
 }
 
-.app-display .app-well-app > .overview-icon {
+.all-apps .app-well-app > .overview-icon {
     border-radius: 10px;
 }
 
@@ -2486,4 +2452,21 @@ StScrollBar StButton#vhandle:active {
     font-size: 10pt;
     font-weight: bold;
     color: #999;
+}
+
+.delete-folder-dialog-subject {
+    font-weight: bold;
+    color: #999;
+    font-size: 12pt;
+
+    padding-bottom: 32px;
+}
+
+.delete-folder-dialog-description {
+    width: 20em;
+    padding-bottom: 20px;
+}
+
+.delete-folder-dialog-safe {
+    width: 20em;
 }
