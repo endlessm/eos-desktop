@@ -6,6 +6,6 @@ stamp*
 cdbs-*-list
 files
 autoreconf.*
-gnome-shell-common/*
+eos-shell-common/*
 eos-shell/*
 eos-shell-dbg/*
