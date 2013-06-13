@@ -440,10 +440,8 @@ const Panel = new Lang.Class({
 
         this.menuManager = new PopupMenu.PopupMenuManager(this);
 
-        this._leftBox = new St.BoxLayout({ name: 'panelLeft' });
+        this._leftBox = new St.BoxLayout({ name: 'panelLeft', x_expand: true });
         this.actor.add_actor(this._leftBox);
-        this._centerBox = new St.BoxLayout({ name: 'panelCenter' });
-        this.actor.add_actor(this._centerBox);
         this._rightBox = new St.BoxLayout({ name: 'panelRight' });
         this.actor.add_actor(this._rightBox);
 
@@ -488,44 +486,28 @@ const Panel = new Lang.Class({
         let allocWidth = box.x2 - box.x1;
         let allocHeight = box.y2 - box.y1;
 
-        let [leftMinWidth, leftNaturalWidth] = this._leftBox.get_preferred_width(-1);
-        let [centerMinWidth, centerNaturalWidth] = this._centerBox.get_preferred_width(-1);
         let [rightMinWidth, rightNaturalWidth] = this._rightBox.get_preferred_width(-1);
-
-        let sideWidth, centerWidth;
-        centerWidth = centerNaturalWidth;
-        sideWidth = (allocWidth - centerWidth) / 2;
 
         let childBox = new Clutter.ActorBox();
 
         childBox.y1 = 0;
         childBox.y2 = allocHeight;
         if (this.actor.get_text_direction() == Clutter.TextDirection.RTL) {
-            childBox.x1 = allocWidth - Math.min(Math.floor(sideWidth),
-                                                leftNaturalWidth);
+            childBox.x1 = rightNaturalWidth;
             childBox.x2 = allocWidth;
         } else {
             childBox.x1 = 0;
-            childBox.x2 = Math.min(Math.floor(sideWidth),
-                                   leftNaturalWidth);
+            childBox.x2 = allocWidth - rightNaturalWidth;
         }
         this._leftBox.allocate(childBox, flags);
-
-        childBox.x1 = Math.ceil(sideWidth);
-        childBox.y1 = 0;
-        childBox.x2 = childBox.x1 + centerWidth;
-        childBox.y2 = allocHeight;
-        this._centerBox.allocate(childBox, flags);
 
         childBox.y1 = 0;
         childBox.y2 = allocHeight;
         if (this.actor.get_text_direction() == Clutter.TextDirection.RTL) {
             childBox.x1 = 0;
-            childBox.x2 = Math.min(Math.floor(sideWidth),
-                                   rightNaturalWidth);
+            childBox.x2 = rightNaturalWidth;
         } else {
-            childBox.x1 = allocWidth - Math.min(Math.floor(sideWidth),
-                                                rightNaturalWidth);
+            childBox.x1 = allocWidth - rightNaturalWidth;
             childBox.x2 = allocWidth;
         }
         this._rightBox.allocate(childBox, flags);
@@ -597,8 +579,6 @@ const Panel = new Lang.Class({
 
         this._leftBox.opacity = value;
         this._leftBox.reactive = isReactive;
-        this._centerBox.opacity = value;
-        this._centerBox.reactive = isReactive;
         this._rightBox.opacity = value;
         this._rightBox.reactive = isReactive;
     },
@@ -611,7 +591,6 @@ const Panel = new Lang.Class({
         let panel = Main.sessionMode.panel;
         this._hideIndicators();
         this._updateBox(panel.left, this._leftBox);
-        this._updateBox(panel.center, this._centerBox);
         this._updateBox(panel.right, this._rightBox);
 
         if (this._sessionStyle)
@@ -697,7 +676,6 @@ const Panel = new Lang.Class({
         position = position || 0;
         let boxes = {
             left: this._leftBox,
-            center: this._centerBox,
             right: this._rightBox
         };
         let boxContainer = boxes[box] || this._rightBox;

@@ -426,20 +426,20 @@ StScrollBar StButton#vhandle:active {
     background-color: transparent;
 }
 
-#panelLeft, #panelCenter {
-    spacing: 4px;
+#panelLeft {
+    spacing: 0px;
 }
 
 #panelLeft:ltr {
-    padding-right: 4px;
+    padding-right: 0px;
 }
 
 #panelLeft:rtl {
-    padding-left: 4px;
+    padding-left: 10px;
 }
 
 #panelRight:ltr {
-    padding-left: 4px;
+    padding-left: 10px;
     padding-right: 6px;
 }
 
@@ -448,7 +448,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .panel-corner {
-    -panel-corner-radius: 6px;
+    -panel-corner-radius: 0px;
     -panel-corner-background-color: black;
     -panel-corner-border-width: 2px;
     -panel-corner-border-color: transparent;
@@ -481,7 +481,17 @@ StScrollBar StButton#vhandle:active {
 }
 
 #appIconBar {
-    padding-left: 6px;
+    padding-left: 4px;
+    padding-right: 0px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+
+.app-icon-bar.panel-button {
+    -minimum-hpadding: 0;
+    -natural-hpadding: 0;
+    -icon-size: 26px;
+    -icon-spacing: 10px;
 }
 
 #panel.unlock-screen .panel-button,
@@ -505,6 +515,22 @@ StScrollBar StButton#vhandle:active {
 .panel-button:hover {
     color: white;
     text-shadow: black 0px 2px 2px;
+}
+
+.app-bar-nav-icon {
+    spacing: 8px;
+    icon-size: 15px;
+    color: #555;
+    transition-duration: 100ms;
+}
+
+.app-bar-nav-button:active .app-bar-nav-icon,
+.app-bar-nav-button:hover:active  .app-bar-nav-icon {
+    color: #383838;
+}
+
+.app-bar-nav-button:hover .app-bar-nav-icon {
+    color: #aaa;
 }
 
 .panel-button:active,
