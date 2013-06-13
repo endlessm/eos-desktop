@@ -35,6 +35,8 @@ introspection_DATA =				\
 
 themedir = $(pkgdatadir)/theme
 dist_theme_DATA =				\
+	theme/app-bar-back.svg		\
+	theme/app-bar-forward.svg		\
 	theme/calendar-arrow-left.svg		\
 	theme/calendar-arrow-right.svg		\
 	theme/calendar-today.svg		\
