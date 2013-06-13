@@ -233,82 +233,6 @@ const TextShadower = new Lang.Class({
     }
 });
 
-const ActivitiesButton = new Lang.Class({
-    Name: 'ActivitiesButton',
-    Extends: PanelMenu.Button,
-
-    _init: function() {
-        this.parent(0.0, null, true);
-        this.actor.accessible_role = Atk.Role.TOGGLE_BUTTON;
-
-        this.actor.name = 'panelActivities';
-
-        /* Translators: If there is no suitable word for "Activities"
-           in your language, you can use the word for "Overview". */
-        this._label = new St.Label({ text: _("Activities") });
-        this.actor.add_actor(this._label);
-
-        this.actor.label_actor = this._label;
-
-        this.actor.connect('captured-event', Lang.bind(this, this._onCapturedEvent));
-        this.actor.connect_after('button-release-event', Lang.bind(this, this._onButtonRelease));
-        this.actor.connect_after('key-release-event', Lang.bind(this, this._onKeyRelease));
-
-        Main.overview.connect('showing', Lang.bind(this, function() {
-            this.actor.add_style_pseudo_class('overview');
-            this.actor.add_accessible_state (Atk.StateType.CHECKED);
-        }));
-        Main.overview.connect('hiding', Lang.bind(this, function() {
-            this.actor.remove_style_pseudo_class('overview');
-            this.actor.remove_accessible_state (Atk.StateType.CHECKED);
-        }));
-
-        this._xdndTimeOut = 0;
-    },
-
-    handleDragOver: function(source, actor, x, y, time) {
-        if (source != Main.xdndHandler)
-            return DND.DragMotionResult.CONTINUE;
-
-        if (this._xdndTimeOut != 0)
-            Mainloop.source_remove(this._xdndTimeOut);
-        this._xdndTimeOut = Mainloop.timeout_add(BUTTON_DND_ACTIVATION_TIMEOUT,
-                                                 Lang.bind(this, this._xdndToggleOverview, actor));
-
-        return DND.DragMotionResult.CONTINUE;
-    },
-
-    _onCapturedEvent: function(actor, event) {
-        if (event.type() == Clutter.EventType.BUTTON_PRESS) {
-            if (!Main.overview.shouldToggleByCornerOrButton())
-                return true;
-        }
-        return false;
-    },
-
-    _onButtonRelease: function() {
-        Main.overview.toggle();
-    },
-
-    _onKeyRelease: function(actor, event) {
-        let symbol = event.get_key_symbol();
-        if (symbol == Clutter.KEY_Return || symbol == Clutter.KEY_space) {
-            Main.overview.toggle();
-        }
-    },
-
-    _xdndToggleOverview: function(actor) {
-        let [x, y, mask] = global.get_pointer();
-        let pickedActor = global.stage.get_actor_at_pos(Clutter.PickMode.REACTIVE, x, y);
-
-        if (pickedActor == this.actor && Main.overview.shouldToggleByCornerOrButton())
-            Main.overview.toggle();
-
-        Mainloop.source_remove(this._xdndTimeOut);
-        this._xdndTimeOut = 0;
-    }
-});
-
 const PanelCorner = new Lang.Class({
     Name: 'PanelCorner',
 
@@ -477,7 +401,6 @@ const PanelCorner = new Lang.Class({
 });
 
 const PANEL_ITEM_IMPLEMENTATIONS = {
-    'activities': ActivitiesButton,
     'appIcons': imports.ui.appIconBar.AppIconBar,
     'dateMenu': imports.ui.dateMenu.DateMenuButton,
     'a11y': imports.ui.status.accessibility.ATIndicator,
