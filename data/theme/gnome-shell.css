@@ -467,28 +467,9 @@ StScrollBar StButton#vhandle:active {
     -panel-corner-border-color: transparent;
 }
 
-#appMenu {
-    spacing: 4px;
-}
-
 /* used for the app menu header only */
 .label-shadow {
     color: rgba(0,0,0,0.5);
-}
-
-.panel-button #appMenuIcon {
-    app-icon-bottom-clip: 1px;
-}
-
-.panel-button:active #appMenuIcon,
-.panel-button:checked #appMenuIcon,
-.panel-button:focus #appMenuIcon {
-    app-icon-bottom-clip: 2px;
-}
-
-.app-menu-icon {
-    width: 24px;
-    height: 24px;
 }
 
 .panel-button {

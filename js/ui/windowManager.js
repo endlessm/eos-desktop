@@ -169,12 +169,6 @@ const WindowManager = new Lang.Class({
                                         Shell.KeyBindingMode.LOGIN_SCREEN,
                                         Lang.bind(this, this._startA11ySwitcher));
 
-        this.addKeybinding('open-application-menu',
-                           new Gio.Settings({ schema: SHELL_KEYBINDINGS_SCHEMA }),
-                           Meta.KeyBindingFlags.NONE,
-                           Shell.KeyBindingMode.NORMAL,
-                           Lang.bind(this, this._openAppMenu));
-
         Main.overview.connect('showing', Lang.bind(this, function() {
             for (let i = 0; i < this._dimmedWindows.length; i++)
                 this._undimWindow(this._dimmedWindows[i]);
@@ -677,10 +671,6 @@ const WindowManager = new Lang.Class({
         let modifiers = binding.get_modifiers();
         let backwards = modifiers & Meta.VirtualModifier.SHIFT_MASK;
         Main.ctrlAltTabManager.popup(backwards, binding.get_name(), binding.get_mask());
-    },
-
-    _openAppMenu : function(display, screen, window, event, binding) {
-        Main.panel.openAppMenu();
     },
 
     _showWorkspaceSwitcher : function(display, screen, window, binding) {
