@@ -575,6 +575,12 @@ const Overview = new Lang.Class({
         }
     },
 
+    toggleByKey: function() {
+        if (this._viewSelector.getActivePage() != viewSelector.ViewPage.APPS) {
+            this.toggle();
+        }
+    },
+
     toggle: function() {
         if (this.isDummy)
             return;
