@@ -78,7 +78,7 @@ function _sessionUpdated() {
     wm.setCustomKeybindingHandler('panel-main-menu',
                                   Shell.KeyBindingMode.NORMAL |
                                   Shell.KeyBindingMode.OVERVIEW,
-                                  sessionMode.hasOverview ? Lang.bind(overview, overview.toggle) : null);
+                                  sessionMode.hasOverview ? Lang.bind(overview, overview.toggleByKey) : null);
     wm.allowKeybinding('overlay-key', Shell.KeyBindingMode.NORMAL |
                                       Shell.KeyBindingMode.OVERVIEW);
 
@@ -163,7 +163,7 @@ function _initializeUI() {
 
     global.screen.override_workspace_layout(Meta.ScreenCorner.TOPLEFT,
                                             false, -1, 1);
-    global.display.connect('overlay-key', Lang.bind(overview, overview.toggle));
+    global.display.connect('overlay-key', Lang.bind(overview, overview.toggleByKey));
     global.display.connect('window-created', _windowCreated);
 
     // Provide the bus object for gnome-session to
