@@ -33,6 +33,7 @@ const Scripting = imports.ui.scripting;
 const SessionMode = imports.ui.sessionMode;
 const ShellDBus = imports.ui.shellDBus;
 const ShellMountOperation = imports.ui.shellMountOperation;
+const SocialBar = imports.ui.socialBar;
 const WindowManager = imports.ui.windowManager;
 const WorkspaceMonitor = imports.ui.workspaceMonitor;
 const Magnifier = imports.ui.magnifier;
@@ -58,6 +59,7 @@ let sessionMode = null;
 let shellDBusService = null;
 let shellMountOpDBusService = null;
 let screenSaverDBus = null;
+let socialBar = null;
 let modalCount = 0;
 let keybindingMode = Shell.KeyBindingMode.NONE;
 let modalActorFocusStack = [];
@@ -149,6 +151,7 @@ function _initializeUI() {
     if (LoginManager.canLock())
         screenShield = new ScreenShield.ScreenShield();
 
+    socialBar = new SocialBar.SocialBar();
     panel = new Panel.Panel();
     messageTray = new MessageTray.MessageTray();
     keyboard = new Keyboard.Keyboard();
