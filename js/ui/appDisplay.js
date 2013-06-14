@@ -769,7 +769,7 @@ const FolderIcon = new Lang.Class({
         } catch(e) {
             logError(e, 'error while creating a custom dirInfo for: '
                       + this.folder.get_name()
-                      + 'using new name: '
+                      + ' using new name: '
                       + newLabel);
         }
     },
@@ -1055,7 +1055,7 @@ const AppIcon = new Lang.Class({
         } catch(e) {
             logError(e, 'error while creating a custom launcher for: '
                       + this.app.get_name()
-                      + 'using new name: '
+                      + ' using new name: '
                       + newLabel);
         }
     },
