@@ -6,6 +6,7 @@ const St = imports.gi.St;
 const Shell = imports.gi.Shell;
 
 const BoxPointer = imports.ui.boxpointer;
+const ButtonConstants = imports.ui.buttonConstants;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 
@@ -51,8 +52,14 @@ function addBackgroundMenu(actor) {
         return true;
     });
     clickAction.connect('clicked', function(action) {
-        if (action.get_button() == 3)
+        let button = action.get_button();
+        if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
             openMenu();
+        } else if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+            if (Main.socialBar.proxy.Visible) {
+                Main.socialBar.proxy.toggleRemote(global.get_current_time());
+            }
+        }
     });
     actor.add_action(clickAction);
 }
