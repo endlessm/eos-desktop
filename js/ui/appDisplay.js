@@ -38,6 +38,8 @@ const DRAG_OVER_FOLDER_OPACITY = 128;
 const INACTIVE_GRID_OPACITY = 77;
 const FOLDER_SUBICON_FRACTION = .4;
 
+const DRAG_SCROLL_PIXELS_PER_SEC = 800;
+
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,
@@ -315,29 +317,33 @@ const AllView = new Lang.Class({
     },
 
     _onDragMotion: function(dragEvent) {
-        // If the icon is dragged to the top or the bottom of the application
-        // well, then we want to scroll it - if possible
+        // If the icon is dragged to the top or the bottom of the grid,
+        // we want to scroll it, if possible
         let [ gridX, gridY ] = this.actor.get_transformed_position();
         let [ gridW, gridH ] = this.actor.get_transformed_size();
         let gridBottom = gridY + gridH;
 
-        // we should probably have a "grace" area instead of using
-        // the actual edge of the grid
         if (dragEvent.y <= gridY || dragEvent.y >= gridBottom) {
             let adjustment = this.actor.vscroll.adjustment;
 
             if (dragEvent.y <= gridY &&
-                adjustment.value >= 0) {
-                // should we tween?
-                adjustment.value = 0;
+                adjustment.value > 0) {
+                let seconds = adjustment.value / DRAG_SCROLL_PIXELS_PER_SEC;
+                Tweener.addTween(adjustment, { value: 0,
+                                               time: seconds,
+                                               transition: 'linear' });
 
                 return DND.DragMotionResult.CONTINUE;
             }
 
+            let maxAdjust = adjustment.upper - adjustment.page_size;
             if (dragEvent.y >= gridBottom &&
-                adjustment.value <= adjustment.upper - adjustment.page_size) {
-                // should we tween?
-                adjustment.value += adjustment.page_size;
+                adjustment.value < maxAdjust) {
+                let seconds = (maxAdjust - adjustment.value) /
+                    DRAG_SCROLL_PIXELS_PER_SEC;
+                Tweener.addTween(adjustment, { value: maxAdjust,
+                                               time: seconds,
+                                               transition: 'linear' });
 
                 return DND.DragMotionResult.CONTINUE;
             }
