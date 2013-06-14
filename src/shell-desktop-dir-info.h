@@ -74,6 +74,10 @@ char *           shell_desktop_dir_info_get_string        (ShellDesktopDirInfo *
 gboolean         shell_desktop_dir_info_get_boolean       (ShellDesktopDirInfo *info,
                                                            const char      *key);
 
+gboolean         shell_desktop_dir_info_create_custom_with_name (ShellDesktopDirInfo *info,
+                                                                 const char          *name,
+                                                                 GError             **error);
+
 G_END_DECLS
 
 #endif /* __SHELL_DESKTOP_DIR_INFO_H__ */

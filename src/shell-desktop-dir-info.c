@@ -965,3 +965,79 @@ shell_desktop_dir_info_has_key (ShellDesktopDirInfo *info,
   return g_key_file_has_key (info->keyfile,
                              G_KEY_FILE_DESKTOP_GROUP, key, NULL);
 }
+
+gboolean
+shell_desktop_dir_info_create_custom_with_name (ShellDesktopDirInfo *info,
+                                                const char          *name,
+                                                GError             **error)
+{
+  GError *internal_error = NULL;
+  char *user_path, *buf;
+  gsize len;
+
+  g_free (info->name);
+  info->name = g_strdup (name);
+
+  /* no keyfile, we just store it in the DirInfo */
+  if (info->keyfile == NULL)
+    return TRUE;
+
+  /* update the keyfile storage as well */
+  g_key_file_set_string (info->keyfile,
+                         G_KEY_FILE_DESKTOP_GROUP,
+                         G_KEY_FILE_DESKTOP_KEY_NAME,
+                         name);
+
+  buf = g_key_file_to_data (info->keyfile, &len, &internal_error);
+  if (internal_error != NULL)
+    {
+      g_propagate_error (error, internal_error);
+      return FALSE;
+    }
+
+  user_path = g_build_filename (g_get_user_data_dir (),
+                                "desktop-directories",
+                                NULL);
+
+  if (g_mkdir_with_parents (user_path, 0755) < 0)
+    {
+      int saved_errno = errno;
+
+      g_set_error (error, G_FILE_ERROR,
+                   G_FILE_ERROR_FAILED,
+                   "Unable to create '%s': %s",
+                   user_path,
+                   g_strerror (saved_errno));
+
+      g_free (user_path);
+      g_free (buf);
+
+      return FALSE;
+    }
+
+  g_free (user_path);
+
+  /* store the keyfile in the user's data directory; it will take
+   * precedence over the system one when we reload the list of
+   * folders
+   */
+  user_path = g_build_filename (g_get_user_data_dir (),
+                                "desktop-directories",
+                                info->desktop_id,
+                                NULL);
+
+  g_file_set_contents (user_path, buf, len, &internal_error);
+  if (internal_error != NULL)
+    {
+      g_propagate_error (error, internal_error);
+      g_free (user_path);
+      g_free (buf);
+
+      return FALSE;
+    }
+
+  g_free (user_path);
+  g_free (buf);
+
+  return TRUE;
+}

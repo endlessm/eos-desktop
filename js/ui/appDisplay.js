@@ -706,7 +706,10 @@ const FolderIcon = new Lang.Class({
 
         let label = this.folder.get_name();
         this.icon = new IconGrid.BaseIcon(label,
-                                          { createIcon: Lang.bind(this, this._createIcon) });
+                                          { createIcon: Lang.bind(this, this._createIcon),
+                                            editableLabel: true });
+        this.icon.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
+
         this.actor.set_child(this.icon.actor);
         this.actor.label_actor = this.icon.label;
 
@@ -757,6 +760,17 @@ const FolderIcon = new Lang.Class({
             if (app) {
                 this.view.addApp(app);
             }
+        }
+    },
+
+    _onLabelUpdate: function(icon, newLabel) {
+        try {
+            this.folder.create_custom_with_name(newLabel);
+        } catch(e) {
+            logError(e, 'error while creating a custom dirInfo for: '
+                      + this.folder.get_name()
+                      + 'using new name: '
+                      + newLabel);
         }
     },
 
@@ -966,7 +980,9 @@ const AppIcon = new Lang.Class({
             iconParams = {};
 
         iconParams['createIcon'] = Lang.bind(this, this._createIcon);
+        iconParams['editableLabel'] = true;
         this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
+        this.icon.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
         this.actor.set_child(this.icon.actor);
 
         this.actor.label_actor = this.icon.label;
@@ -1033,6 +1049,17 @@ const AppIcon = new Lang.Class({
         }
     },
 
+    _onLabelUpdate: function(icon, newLabel) {
+        try {
+            this.app.create_custom_launcher_with_name(newLabel);
+        } catch(e) {
+            logError(e, 'error while creating a custom launcher for: '
+                      + this.app.get_name()
+                      + 'using new name: '
+                      + newLabel);
+        }
+    },
+
     _onButtonPress: function(actor, event) {
         let button = event.get_button();
         if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
@@ -1061,7 +1088,6 @@ const AppIcon = new Lang.Class({
             this.app.open_new_window(-1);
             Main.overview.hide();
         }
-        return false;
     },
 
     _onKeyboardPopupMenu: function() {
