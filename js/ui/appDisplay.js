@@ -670,7 +670,10 @@ const FolderIcon = new Lang.Class({
 
         let label = this.folder.get_name();
         this.icon = new IconGrid.BaseIcon(label,
-                                          { createIcon: Lang.bind(this, this._createIcon) });
+                                          { createIcon: Lang.bind(this, this._createIcon),
+                                            editableLabel: true });
+        this.icon.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
+
         this.actor.set_child(this.icon.actor);
         this.actor.label_actor = this.icon.label;
 
@@ -721,6 +724,17 @@ const FolderIcon = new Lang.Class({
             if (app) {
                 this.view.addApp(app);
             }
+        }
+    },
+
+    _onLabelUpdate: function(icon, newLabel) {
+        try {
+            this._dirInfo.create_custom_with_label(newLabel);
+        } catch(e) {
+            logError(e, 'error while creating a custom dirInfo for: '
+                      + this._dirInfo.get_name()
+                      + 'using new name: '
+                      + newLabel);
         }
     },
 
