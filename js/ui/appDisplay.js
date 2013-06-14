@@ -319,21 +319,22 @@ const AllView = new Lang.Class({
         // well, then we want to scroll it - if possible
         let [ gridX, gridY ] = this.actor.get_transformed_position();
         let [ gridW, gridH ] = this.actor.get_transformed_size();
+        let gridBottom = gridY + gridH;
 
         // we should probably have a "grace" area instead of using
         // the actual edge of the grid
-        if (dragEvent.y <= gridY || dragEvent.y >= gridH) {
+        if (dragEvent.y <= gridY || dragEvent.y >= gridBottom) {
             let adjustment = this.actor.vscroll.adjustment;
 
             if (dragEvent.y <= gridY &&
-                adjustment.value >= adjustment.page_size) {
+                adjustment.value >= 0) {
                 // should we tween?
-                adjustment.value -= adjustment.page_size;
+                adjustment.value = 0;
 
                 return DND.DragMotionResult.CONTINUE;
             }
 
-            if (dragEvent.y >= gridH &&
+            if (dragEvent.y >= gridBottom &&
                 adjustment.value <= adjustment.upper - adjustment.page_size) {
                 // should we tween?
                 adjustment.value += adjustment.page_size;
