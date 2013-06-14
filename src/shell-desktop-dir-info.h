@@ -65,9 +65,6 @@ gboolean         shell_desktop_dir_info_get_is_hidden     (ShellDesktopDirInfo *
 
 void             shell_desktop_dir_info_set_desktop_env   (const char      *desktop_env);
 
-void             shell_desktop_dir_info_set_name          (ShellDesktopDirInfo *info,
-                                                           const char      *name);
-
 gboolean         shell_desktop_dir_info_has_key           (ShellDesktopDirInfo *info,
                                                            const char      *key);
 
