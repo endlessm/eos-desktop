@@ -729,10 +729,10 @@ const FolderIcon = new Lang.Class({
 
     _onLabelUpdate: function(icon, newLabel) {
         try {
-            this._dirInfo.create_custom_with_label(newLabel);
+            this.folder.create_custom_with_name(newLabel);
         } catch(e) {
             logError(e, 'error while creating a custom dirInfo for: '
-                      + this._dirInfo.get_name()
+                      + this.folder.get_name()
                       + 'using new name: '
                       + newLabel);
         }
