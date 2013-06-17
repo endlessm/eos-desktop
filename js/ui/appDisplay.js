@@ -70,6 +70,10 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     _addItem: function(item) {
+        if (item == undefined) {
+            return null;
+        }
+
         let id = item.get_id();
         if (this._icons[id] !== undefined) {
             return null;
