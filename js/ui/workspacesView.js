@@ -433,18 +433,6 @@ const WorkspacesDisplay = new Lang.Class({
         this.actor.connect('notify::allocation', Lang.bind(this, this._updateWorkspacesGeometry));
         this.actor.connect('parent-set', Lang.bind(this, this._parentSet));
 
-        let clickAction = new Clutter.ClickAction()
-        clickAction.connect('clicked', Lang.bind(this, function(action) {
-            // Only switch to the workspace when there's no application
-            // windows open. The problem is that it's too easy to miss
-            // an app window and get the wrong one focused.
-            if (action.get_button() == 1 &&
-                this._getPrimaryView().getActiveWorkspace().isEmpty())
-                Main.overview.hide();
-        }));
-        Main.overview.addAction(clickAction);
-        this.actor.bind_property('mapped', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
-
         let panAction = new Clutter.PanAction();
         panAction.connect('pan', Lang.bind(this, this._onPan));
         panAction.connect('gesture-begin', Lang.bind(this, function() {
@@ -453,12 +441,10 @@ const WorkspacesDisplay = new Lang.Class({
             return true;
         }));
         panAction.connect('gesture-cancel', Lang.bind(this, function() {
-            clickAction.release();
             for (let i = 0; i < this._workspacesViews.length; i++)
                 this._workspacesViews[i].endSwipeScroll();
         }));
         panAction.connect('gesture-end', Lang.bind(this, function() {
-            clickAction.release();
             for (let i = 0; i < this._workspacesViews.length; i++)
                 this._workspacesViews[i].endSwipeScroll();
         }));

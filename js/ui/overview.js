@@ -120,8 +120,18 @@ const Overview = new Lang.Class({
         global.overlay_group.add_actor(this._desktopFade);
 
         let layout = new Clutter.BinLayout();
-        this._stack = new Clutter.Actor({ layout_manager: layout });
-        this._stack.add_constraint(new LayoutManager.MonitorConstraint({ primary: true }));
+        this._primaryStack = new Clutter.Actor({ layout_manager: layout });
+        this._primaryStack.add_constraint(new LayoutManager.MonitorConstraint({ primary: true }));
+
+        this._stack = new St.Bin({ x_expand: true,
+                                   y_expand: true,
+                                   reactive: true
+                                 });
+        this._stack.add_actor(this._primaryStack);
+
+        let clickAction = new Clutter.ClickAction();
+        clickAction.connect('clicked', Lang.bind(this, this._showAllApps));
+        this._stack.add_action(clickAction);
 
         /* Translators: This is the main view to select
            activities. See also note for "Activities" string. */
@@ -163,7 +173,7 @@ const Overview = new Lang.Class({
         this._coverPane.connect('event', Lang.bind(this, function (actor, event) { return true; }));
 
         this._stack.hide();
-        this._stack.add_actor(this._overview);
+        this._primaryStack.add_actor(this._overview);
         global.overlay_group.add_actor(this._stack);
 
         this._coverPane.hide();
@@ -187,6 +197,12 @@ const Overview = new Lang.Class({
 
         if (this._initCalled)
             this.init();
+    },
+
+    _showAllApps: function() {
+        if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.WINDOWS) {
+            this._dash.showAppsButton.set_checked(true);
+        }
     },
 
     _updateBackgrounds: function() {
@@ -273,7 +289,7 @@ const Overview = new Lang.Class({
         this._overview.add_actor(this._searchEntryBin);
         this._overview.add_actor(this._bottomGhost);
 
-        this._stack.add_actor(this._controls.indicatorActor);
+        this._primaryStack.add_actor(this._controls.indicatorActor);
 
         // TODO - recalculate everything when desktop size changes
         this.dashIconSize = this._dash.iconSize;
