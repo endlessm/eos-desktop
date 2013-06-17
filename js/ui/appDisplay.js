@@ -330,9 +330,9 @@ const AllView = new Lang.Class({
         let [ gridW, gridH ] = this.actor.get_transformed_size();
         let gridBottom = gridY + gridH;
 
-        if (dragEvent.y <= gridY || dragEvent.y >= gridBottom) {
-            let adjustment = this.actor.vscroll.adjustment;
+        let adjustment = this.actor.vscroll.adjustment;
 
+        if (dragEvent.y <= gridY || dragEvent.y >= gridBottom) {
             if (dragEvent.y <= gridY &&
                 adjustment.value > 0) {
                 let seconds = adjustment.value / DRAG_SCROLL_PIXELS_PER_SEC;
@@ -354,6 +354,12 @@ const AllView = new Lang.Class({
 
                 return DND.DragMotionResult.CONTINUE;
             }
+        }
+
+        // Once the user moves away from the edge,
+        // cancel any existing scrolling
+        if (Tweener.isTweening(adjustment)) {
+            Tweener.removeTweens(adjustment);
         }
 
         // Ask grid can we drop here
