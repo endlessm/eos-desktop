@@ -68,6 +68,13 @@ dist_theme_DATA =				\
 	theme/toggle-off-intl.svg		\
 	theme/toggle-on-us.svg			\
 	theme/toggle-on-intl.svg		\
+	theme/trash-can_release-pop-up.png	\
+	theme/trash-pop-up_cancel-btn_hover.png	\
+	theme/trash-pop-up_cancel-btn_normal.png	\
+	theme/trash-pop-up_cancel-btn_pressed.png	\
+	theme/trash-pop-up_ok-btn_hover.png	\
+	theme/trash-pop-up_ok-btn_normal.png	\
+	theme/trash-pop-up_ok-btn_pressed.png	\
 	theme/ws-switch-arrow-up.png		\
 	theme/ws-switch-arrow-down.png
 

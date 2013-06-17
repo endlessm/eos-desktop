@@ -18,6 +18,7 @@ const AppFavorites = imports.ui.appFavorites;
 const BoxPointer = imports.ui.boxpointer;
 const ButtonConstants = imports.ui.buttonConstants;
 const DND = imports.ui.dnd;
+const GrabHelper = imports.ui.grabHelper;
 const IconGrid = imports.ui.iconGrid;
 const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
@@ -285,6 +286,11 @@ const AllView = new Lang.Class({
             return;
         }
 
+        if (this._dragMonitor) {
+            DND.removeDragMonitor(this._dragMonitor);
+            this._dragMonitor = null;
+        }
+
         this._insertIdx = -1;
         this._onIconIdx = -1;
         this._onIcon = false;
@@ -292,9 +298,6 @@ const AllView = new Lang.Class({
 
         this._dragIcon = null;
         this._dragView = null;
-
-        DND.removeDragMonitor(this._dragMonitor);
-        this._dragMonitor = null;
 
         source.handleViewDragEnd();
         if (source.canDragOver(this._appStoreIcon)) {
@@ -485,7 +488,14 @@ const AllView = new Lang.Class({
                 return false;
             }
 
-            return dropIcon.handleIconDrop(source);
+            let accepted  = dropIcon.handleIconDrop(source)
+
+            if (accepted && this._currentPopup) {
+                this._eventBlocker.reactive = false;
+                this._currentPopup.popdown();
+            }
+
+            return accepted;
         } else {
             // If we are not over an icon and we are outside of the grid area,
             // ignore the request to move
@@ -652,6 +662,7 @@ const ViewIcon = new Lang.Class({
         this.parentView = parentView;
 
         this.canDrop = false;
+        this.blockHandler = false;
 
         this._origIcon = null;
     },
@@ -666,9 +677,11 @@ const ViewIcon = new Lang.Class({
     },
 
     handleViewDragEnd: function() {
-        this.icon = this._origIcon;
-        this.actor.set_child(this.icon.actor);
-        this._origIcon = null;
+        if (!this.blockHandler) {
+            this.icon = this._origIcon;
+            this.actor.set_child(this.icon.actor);
+            this._origIcon = null;
+        }
     },
 
     getDragBeginIcon: function() {
@@ -1256,31 +1269,33 @@ const AppStoreIcon = new Lang.Class({
         }
     },
 
-    _showDeleteConfirmation: function(source, deleteCallback) {
-        let id = source.getId();
+    _showDeleteConfirmation: function(draggedSource, id, deleteCallback) {
+        draggedSource.blockHandler = true;
+        this.blockHandler = true;
+        let trashPopup = new TrashPopup({
+            onCancel: Lang.bind(this, function() {
+                this._restoreTrash(trashPopup, draggedSource);
+            }),
+            onAccept: Lang.bind(this, function() {
+                this._restoreTrash(trashPopup, draggedSource);
+                draggedSource.parentView.removeItem(draggedSource);
+                IconGridLayout.layout.repositionIcon(draggedSource.getId(), 0, null);
+                if (deleteCallback) {
+                    deleteCallback();
+                }
+            }),
+        });
+        this.actor.set_child(trashPopup.actor);
+    },
 
-        let dialog = new ModalDialog.ModalDialog();
-        let subjectLabel = new St.Label({ text: _("Delete?") });
-        dialog.contentLayout.add(subjectLabel, { y_fill: true,
-                                                 y_align: St.Align.START });
-        let noButton = { label: _("No"),
-                         action: Lang.bind(this, function() {
-                             dialog.close();
-                         }),
-                         key: Clutter.Escape };
-        let yesButton = { label: _("Yes"),
-                          action: Lang.bind(this, function() {
-                              dialog.close();
-                              source.parentView.removeItem(source);
-                              IconGridLayout.layout.repositionIcon(id, 0, null);
-
-                              if (deleteCallback) {
-                                  deleteCallback();
-                              }
-                          }),
-                          default: true };
-        dialog.setButtons([yesButton, noButton]);
-        dialog.open();
+    _restoreTrash: function(trashPopup, source) {
+        trashPopup.actor.visible = false;
+        source.blockHandler = false;
+        this.blockHandler = false;
+        if (source.handleViewDragEnd) {
+            source.handleViewDragEnd();
+        }
+        this.handleViewDragEnd();
     },
 
     _acceptAppDrop: function(source) {
@@ -1289,9 +1304,9 @@ const AppStoreIcon = new Lang.Class({
 
     _acceptFolderDrop: function(source) {
         let folder = source.folder;
-        let id = folder.get_id();
+        let sourceId = folder.get_id();
 
-        let icons = IconGridLayout.layout.getIcons(id);
+        let icons = IconGridLayout.layout.getIcons(sourceId);
         let isEmpty = (icons.length == 0);
         if (!isEmpty) {
             // ensure the applications in the folder actually exist
@@ -1304,12 +1319,11 @@ const AppStoreIcon = new Lang.Class({
 
         if (isEmpty) {
             this._showDeleteConfirmation(source,
-                function() {
-                    if (folder.can_delete()) {
-                        folder.delete();
-                    }
-                });
-
+                                         function() {
+                                             if (folder.can_delete()) {
+                                                 folder.delete();
+                                             }
+                                         });
             return;
         }
 
@@ -1359,6 +1373,68 @@ const AppStoreIcon = new Lang.Class({
     }
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
+
+const TrashPopup = new Lang.Class({
+    Name: 'TrashPopup',
+
+    _init: function(params) {
+        this.actor = new St.BoxLayout({ style_class: 'trash-popup',
+                                        vertical: true });
+
+        this._label = new St.Label({ text: _("Delete?"),
+                                     style_class: 'trash-popup-label'
+                                   });
+
+        this._buttonsLayout = new St.BoxLayout({ style_class: 'trash-popup-buttons',
+                                                 vertical: false
+                                               });
+
+        this.actor.add(this._label);
+        this.actor.add(this._buttonsLayout, { expand: true });
+
+        this._acceptButton = new St.Button({ style_class: 'trash-popup-accept' });
+        this._cancelButton = new St.Button({ style_class: 'trash-popup-cancel' });
+
+        this._buttonsLayout.add(this._cancelButton, { expand: true,
+                                                      x_fill: false,
+                                                      y_fill: false,
+                                                      x_align: St.Align.START,
+                                                      y_align: St.Align.END
+                                                    });
+        this._buttonsLayout.add(this._acceptButton, { expand: true,
+                                                      x_fill: false,
+                                                      y_fill: false,
+                                                      x_align: St.Align.END,
+                                                      y_align: St.Align.END
+                                                    });
+
+        this._grabHelper = new GrabHelper.GrabHelper(this.actor);
+        this._grabHelper.addActor(this.actor);
+        this._grabHelper.grab({ actor: this.actor,
+                                focus: this.actor,
+                                modal: true,
+                                onUngrab: Lang.bind(this, this._onPopupUngrab)
+                              });
+
+        this._acceptButton.connect('clicked', params['onAccept']);
+        this._cancelButton.connect('clicked', params['onCancel']);
+
+        this.actor.connect('hide', Lang.bind(this, function() {
+            this._grabHelper.ungrab({ actor: this.actor });
+        }));
+    },
+
+    _onPopupUngrab: function(isUser) {
+        if (isUser) {
+            /* Re-new grab */
+            this._grabHelper.grab({ actor: this.actor,
+                                    focus: this.actor,
+                                    modal: true,
+                                    onUngrab: Lang.bind(this, this._onPopupUngrab)
+                                  });
+        }
+    }
+});
 
 const AppIconMenu = new Lang.Class({
     Name: 'AppIconMenu',
