@@ -600,7 +600,7 @@ StScrollBar StButton#vhandle:active {
 /* Overview */
 
 #overview {
-    spacing: 24px;
+    spacing: 56px;
 }
 
 .overview-controls {
