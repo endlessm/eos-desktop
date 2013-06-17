@@ -1232,6 +1232,59 @@ StScrollBar StButton#vhandle:active {
     link-color: #ccccff;
 }
 
+/* Trash popup dialog */
+.trash-popup {
+    width: 92px;
+    height: 92px;
+    background: url("trash-can_release-pop-up.png");
+    background-size: contain;
+}
+
+.trash-popup-buttons {
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 18px;
+}
+
+.trash-popup-label {
+    padding-top: 19px;
+    font-size: 14px;
+    font-family: benton, sans-serif;
+    font-weight: bold;
+    color: #FFFFFFF;
+    text-align: center;
+}
+
+.trash-popup-accept {
+    width: 28px;
+    height: 28px;
+    background-image: url("trash-pop-up_ok-btn_normal.png");
+    background-size: contain;
+}
+
+.trash-popup-accept:hover {
+    background-image: url("trash-pop-up_ok-btn_hover.png");
+}
+
+.trash-popup-accept:pressed {
+    background-image: url("trash-pop-up_ok-btn_pressed.png");
+}
+
+.trash-popup-cancel {
+    width: 28px;
+    height: 28px;
+    background-image: url("trash-pop-up_cancel-btn_normal.png");
+    background-size: contain;
+}
+
+.trash-popup-cancel:hover {
+    background-image: url("trash-pop-up_cancel-btn_hover.png");
+}
+
+.trash-popup-cancel:pressed {
+    background-image: url("trash-pop-up_cancel-btn_pressed.png");
+}
+
 /* Message Tray */
 #message-tray {
     background: #2e3436 url(message-tray-background.png);
