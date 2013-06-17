@@ -1241,13 +1241,13 @@ StScrollBar StButton#vhandle:active {
 }
 
 .trash-popup-buttons {
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 13px;
+    padding-right: 13px;
     padding-bottom: 18px;
 }
 
 .trash-popup-label {
-    padding-top: 19px;
+    padding-top: 20px;
     font-size: 14px;
     font-family: benton, sans-serif;
     font-weight: bold;
