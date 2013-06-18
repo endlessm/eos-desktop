@@ -433,6 +433,14 @@ const WorkspacesDisplay = new Lang.Class({
         this.actor.connect('notify::allocation', Lang.bind(this, this._updateWorkspacesGeometry));
         this.actor.connect('parent-set', Lang.bind(this, this._parentSet));
 
+        let clickAction = new Clutter.ClickAction();
+        clickAction.connect('clicked', Lang.bind(this,
+            function() {
+                this.emit('empty-space-clicked');
+            }));
+        Main.overview.addAction(clickAction);
+        this.actor.bind_property('mapped', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
+
         let panAction = new Clutter.PanAction();
         panAction.connect('pan', Lang.bind(this, this._onPan));
         panAction.connect('gesture-begin', Lang.bind(this, function() {

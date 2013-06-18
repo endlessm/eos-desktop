@@ -77,6 +77,7 @@ const ViewSelector = new Lang.Class({
         this._capturedEventId = 0;
 
         this._workspacesDisplay = new WorkspacesView.WorkspacesDisplay();
+        this._workspacesDisplay.connect('empty-space-clicked', Lang.bind(this, this._toggleAppsPage));
         this._workspacesPage = this._addPage(this._workspacesDisplay.actor,
                                              _("Windows"), 'emblem-documents-symbolic');
 
