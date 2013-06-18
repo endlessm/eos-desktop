@@ -41,6 +41,8 @@ const FOLDER_SUBICON_FRACTION = .4;
 
 const DRAG_SCROLL_PIXELS_PER_SEC = 800;
 
+const ICON_SHUFFLE_TIME_MS = 250;
+
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,
@@ -601,6 +603,10 @@ const AllView = new Lang.Class({
             else
                 this._icons[id].actor.opacity = 255;
         }
+    },
+
+    animateMovement: function(moveList) {
+        this._grid.animateShuffling(moveList);
     }
 });
 
@@ -635,12 +641,54 @@ const AppDisplay = new Lang.Class({
     },
 
     _redisplay: function() {
-        this._view.removeAll();
-
         let topLevelIcons = IconGridLayout.layout.getIcons();
 
-        for (let i = 0; i < topLevelIcons.length; i++) {
-            let itemId = topLevelIcons[i];
+        if (this._toplevelIcons != topLevelIcons) {
+            let movedIcons = this._findMovedIcons(this._toplevelIcons, topLevelIcons);
+            this._view.animateMovement(movedIcons);
+            this._toplevelIcons = topLevelIcons.slice(0);
+        }
+
+        GLib.timeout_add(GLib.PRIORITY_DEFAULT, ICON_SHUFFLE_TIME_MS, Lang.bind(this, this._addIcons));
+    },
+
+    _findMovedIcons: function(oldItemLayout, newItemLayout) {
+        oldItemLayout = this._trimInvisible(oldItemLayout);
+        newItemLayout = this._trimInvisible(newItemLayout);
+
+        let moveList = {};
+
+        for (oldItemIdx in oldItemLayout) {
+            let oldItem = oldItemLayout[oldItemIdx];
+            let newItemIndex = newItemLayout.indexOf(oldItem);
+
+            // Did this icon move
+            if (newItemIndex != -1 && oldItemIdx != newItemIndex) {
+                // Find out from where to where did we go
+                moveList[oldItemIdx] = newItemIndex;
+            }
+        }
+
+        return moveList;
+    },
+
+    _trimInvisible: function(items) {
+        let visibleItems = [];
+        for (itemIndex in items) {
+            let item = items[itemIndex];
+            if (IconGridLayout.layout.iconIsFolder(item) || this._appSystem.lookup_app(item)) {
+                visibleItems.push(item);
+            }
+        }
+
+        return visibleItems;
+    },
+
+    _addIcons: function() {
+        this._view.removeAll();
+
+        for (let i = 0; i < this._toplevelIcons.length; i++) {
+            let itemId = this._toplevelIcons[i];
 
             if (IconGridLayout.layout.iconIsFolder(itemId)) {
                 let dirInfo = Shell.DesktopDirInfo.new(itemId);

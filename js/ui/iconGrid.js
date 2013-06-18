@@ -575,6 +575,45 @@ const IconGrid = new Lang.Class({
         }
     },
 
+    animateShuffling: function(changedItems) {
+        let children = this._grid.get_children();
+        let movementMatrix = {};
+
+        // Find out where icons need to move
+        for (sourceIndex in changedItems) {
+            let targetIndex = changedItems[sourceIndex];
+            movementMatrix[sourceIndex] = this._findOffset(children[sourceIndex], children[targetIndex]);
+        }
+
+        for (sourceIndex in changedItems) {
+            this._moveIcon(this._grid.get_children()[sourceIndex], movementMatrix[sourceIndex]);
+        }
+    },
+
+    _findOffset: function(source, target) {
+        let [x1, y1] = source.get_transformed_position();
+        x1 = x1 - source.translation_x;
+        y1 = y1 - source.translation_y;
+
+        let [x2, y2] = target.get_transformed_position();
+        x2 = x2 - target.translation_x;
+        y2 = y2 - target.translation_y;
+
+        return [x2-x1, y2-y1];
+    },
+
+    _moveIcon: function(icon, destPoint) {
+        Tweener.removeTweens(icon);
+        icon.translation_x = 0;
+        icon.translation_y = 0;
+
+        Tweener.addTween(icon, { translation_x: destPoint[0],
+                                 translation_y: destPoint[1],
+                                 time: 0.25,
+                                 transition: 'easeInOutCubic'
+                                });
+    },
+
     removeNudgeTransforms: function() {
         let children = this._grid.get_children();
         for (let index = 0; index < children.length; index++) {
