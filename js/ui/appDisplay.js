@@ -41,7 +41,7 @@ const FOLDER_SUBICON_FRACTION = .4;
 
 const DRAG_SCROLL_PIXELS_PER_SEC = 800;
 
-const ICON_SHUFFLE_TIME_MS = 250;
+const ICON_SHUFFLE_TIME_MS = 300;
 
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
@@ -224,6 +224,8 @@ const AllView = new Lang.Class({
                                          overlay_scrollbars: true,
                                          style_class: 'all-apps vfade' });
         this.actor._delegate = this;
+
+        this._repositionedIndex = null;
 
         this.actor.add_actor(box);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -522,6 +524,7 @@ const AllView = new Lang.Class({
                     folderId = this._dragView.folderIcon.getId();
                 }
 
+                this._repositionedIndex = this._originalIdx;
                 IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
                 return true;
             }
@@ -606,7 +609,10 @@ const AllView = new Lang.Class({
     },
 
     animateMovement: function(moveList) {
-        this._grid.animateShuffling(moveList);
+        if (this._repositionedIndex != null) {
+            this._grid.animateShuffling(moveList, this._repositionedIndex);
+            this._repositionedIndex = null;
+        }
     }
 });
 
@@ -641,13 +647,11 @@ const AppDisplay = new Lang.Class({
     },
 
     _redisplay: function() {
-        let topLevelIcons = IconGridLayout.layout.getIcons();
+        let topLevelIds = IconGridLayout.layout.getIcons();
 
-        if (this._toplevelIcons != topLevelIcons) {
-            let movedIcons = this._findMovedIcons(this._toplevelIcons, topLevelIcons);
-            this._view.animateMovement(movedIcons);
-            this._toplevelIcons = topLevelIcons.slice(0);
-        }
+        let movedIcons = this._findMovedIcons(this._topLevelIds, topLevelIds);
+        this._view.animateMovement(movedIcons);
+        this._topLevelIds = topLevelIds.slice(0);
 
         GLib.timeout_add(GLib.PRIORITY_DEFAULT, ICON_SHUFFLE_TIME_MS, Lang.bind(this, this._addIcons));
     },
@@ -658,7 +662,7 @@ const AppDisplay = new Lang.Class({
 
         let moveList = {};
 
-        for (oldItemIdx in oldItemLayout) {
+        for (let oldItemIdx in oldItemLayout) {
             let oldItem = oldItemLayout[oldItemIdx];
             let newItemIndex = newItemLayout.indexOf(oldItem);
 
@@ -687,8 +691,8 @@ const AppDisplay = new Lang.Class({
     _addIcons: function() {
         this._view.removeAll();
 
-        for (let i = 0; i < this._toplevelIcons.length; i++) {
-            let itemId = this._toplevelIcons[i];
+        for (let i = 0; i < this._topLevelIds.length; i++) {
+            let itemId = this._topLevelIds[i];
 
             if (IconGridLayout.layout.iconIsFolder(itemId)) {
                 let dirInfo = Shell.DesktopDirInfo.new(itemId);

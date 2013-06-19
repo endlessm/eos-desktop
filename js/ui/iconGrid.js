@@ -25,6 +25,9 @@ const NUDGE_RETURN_DURATION = 0.3;
 
 const NUDGE_FACTOR = 0.2;
 
+const SHUFFLE_ANIMATION_TIME = 0.250;
+const FADE_IN_ANIMATION_TIME = 0.300;
+
 const CursorLocation = {
     DEFAULT: 0,
     ON_ICON: 1,
@@ -575,20 +578,39 @@ const IconGrid = new Lang.Class({
         }
     },
 
-    animateShuffling: function(changedItems) {
+    animateShuffling: function(changedItems, originalIndex) {
         let children = this._grid.get_children();
         let movementMatrix = {};
 
         // Find out where icons need to move
-        for (sourceIndex in changedItems) {
+        for (let sourceIndex in changedItems) {
             let targetIndex = changedItems[sourceIndex];
             movementMatrix[sourceIndex] = this._findOffset(children[sourceIndex], children[targetIndex]);
         }
 
-        for (sourceIndex in changedItems) {
+        // Make the original icon look like it faded in
+        let originalIcon = this._grid.get_children()[originalIndex];
+        this._fadeInIcon(originalIcon, movementMatrix[originalIndex]);
+        delete changedItems[String(originalIndex)];
+
+        // Move the other ones
+        for (let sourceIndex in changedItems) {
             this._moveIcon(this._grid.get_children()[sourceIndex], movementMatrix[sourceIndex]);
         }
     },
+
+    _fadeInIcon: function(sourceIcon, coordinates) {
+        Tweener.removeTweens(sourceIcon);
+
+        sourceIcon.opacity = 50;
+        sourceIcon.translation_x = coordinates[0];
+        sourceIcon.translation_y = coordinates[1];
+
+        Tweener.addTween(sourceIcon, { opacity: 255,
+                                       time: FADE_IN_ANIMATION_TIME,
+                                       transition: 'linear'
+                                      });
+     },
 
     _findOffset: function(source, target) {
         let [x1, y1] = source.get_transformed_position();
@@ -609,7 +631,7 @@ const IconGrid = new Lang.Class({
 
         Tweener.addTween(icon, { translation_x: destPoint[0],
                                  translation_y: destPoint[1],
-                                 time: 0.25,
+                                 time: SHUFFLE_ANIMATION_TIME,
                                  transition: 'easeInOutCubic'
                                 });
     },
