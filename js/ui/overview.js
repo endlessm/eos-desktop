@@ -123,6 +123,12 @@ const Overview = new Lang.Class({
         this._stack = new Clutter.Actor({ layout_manager: layout });
         this._stack.add_constraint(new LayoutManager.MonitorConstraint({ primary: true }));
 
+        this._allMonitorsGroup = new Clutter.Actor({ reactive: true });
+        this._allMonitorsGroup.add_constraint(
+            new Clutter.BindConstraint({ source: global.overlay_group,
+                                         coordinate: Clutter.BindCoordinate.ALL }));
+        this._allMonitorsGroup.add_actor(this._stack);
+
         /* Translators: This is the main view to select
            activities. See also note for "Activities" string. */
         this._overview = new St.BoxLayout({ name: 'overview',
@@ -162,9 +168,9 @@ const Overview = new Lang.Class({
         this._overview.add_actor(this._coverPane);
         this._coverPane.connect('event', Lang.bind(this, function (actor, event) { return true; }));
 
-        this._stack.hide();
+        this._allMonitorsGroup.hide();
         this._stack.add_actor(this._overview);
-        global.overlay_group.add_actor(this._stack);
+        global.overlay_group.add_actor(this._allMonitorsGroup);
 
         this._coverPane.hide();
 
@@ -374,11 +380,15 @@ const Overview = new Lang.Class({
         this.emit('scroll-event', event);
     },
 
-    addAction: function(action) {
+    addAction: function(action, isPrimary) {
         if (this.isDummy)
             return;
 
-        this._overview.add_action(action);
+        if (isPrimary) {
+            this._overview.add_action(action);
+        } else {
+            this._allMonitorsGroup.add_action(action);
+        }
     },
 
     _getDesktopClone: function() {
@@ -510,7 +520,7 @@ const Overview = new Lang.Class({
         //
         // Disable unredirection while in the overview
         Meta.disable_unredirect_for_screen(global.screen);
-        this._stack.show();
+        this._allMonitorsGroup.show();
         this._backgroundGroup.show();
         this._viewSelector.show();
 
@@ -677,7 +687,7 @@ const Overview = new Lang.Class({
         this._viewSelector.hide();
         this._desktopFade.hide();
         this._backgroundGroup.hide();
-        this._stack.hide();
+        this._allMonitorsGroup.hide();
 
         this.visible = false;
         this.animationInProgress = false;
