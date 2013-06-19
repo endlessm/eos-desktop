@@ -127,7 +127,7 @@ const ViewSelector = new Lang.Class({
 
     _toggleAppsPage: function() {
         Main.overview.show();
-        this._showAppsButton.checked = !this._showAppsButton.checked;
+        this._showAppsButton.set_checked(true);
     },
 
     show: function() {

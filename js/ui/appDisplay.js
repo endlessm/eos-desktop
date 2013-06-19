@@ -559,8 +559,14 @@ const AllView = new Lang.Class({
         let appSystem = Shell.AppSystem.get_default();
         this._appStore = appSystem.lookup_app('eos-app-store.desktop');
         this._appStoreIcon = this.addApp(this._appStore);
+        this._appStore.connect('windows-changed', Lang.bind(this, this._appStoreWindowsChanged));
     },
 
+    _appStoreWindowsChanged: function() {
+        if (this._appStore.get_state() == Shell.AppState.STOPPED) {
+            Main.overview.showApps();
+        }
+    },
     addFolderPopup: function(popup) {
         this._stack.add_actor(popup.actor);
         popup.connect('open-state-changed', Lang.bind(this,
