@@ -438,7 +438,7 @@ const WorkspacesDisplay = new Lang.Class({
             function() {
                 this.emit('empty-space-clicked');
             }));
-        Main.overview.addAction(clickAction);
+        Main.overview.addAction(clickAction, false);
         this.actor.bind_property('mapped', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
 
         let panAction = new Clutter.PanAction();
@@ -456,7 +456,7 @@ const WorkspacesDisplay = new Lang.Class({
             for (let i = 0; i < this._workspacesViews.length; i++)
                 this._workspacesViews[i].endSwipeScroll();
         }));
-        Main.overview.addAction(panAction);
+        Main.overview.addAction(panAction, true);
         this.actor.bind_property('mapped', panAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
 
         this._primaryIndex = Main.layoutManager.primaryIndex;
