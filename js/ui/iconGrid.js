@@ -10,7 +10,6 @@ const ButtonConstants = imports.ui.buttonConstants;
 const GrabHelper = imports.ui.grabHelper;
 const Lang = imports.lang;
 const Params = imports.misc.params;
-const Signals = imports.signals;
 
 const ICON_SIZE = 48;
 
@@ -222,14 +221,6 @@ const BaseIcon = new Lang.Class({
             if (params.editableLabel) {
                 this.label = new EditableLabel({ text: label,
                                                  style_class: 'overview-icon-label' });
-                this.label.connect('label-edit-update', Lang.bind(this,
-                    function(label, newText) {
-                        this.emit('label-edit-update', newText);
-                    }));
-                this.label.connect('label-edit-cancel', Lang.bind(this,
-                    function() {
-                        this.emit('label-edit-cancel');
-                    }));
             } else {
                 this.label = new St.Label({ text: label,
                                             style_class: 'overview-icon-label' });
@@ -371,7 +362,6 @@ const BaseIcon = new Lang.Class({
         this._createIconTexture(this.iconSize);
     }
 });
-Signals.addSignalMethods(BaseIcon.prototype);
 
 const IconGrid = new Lang.Class({
     Name: 'IconGrid',
