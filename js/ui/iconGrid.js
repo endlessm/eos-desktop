@@ -4,6 +4,7 @@ const Clutter = imports.gi.Clutter;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 const Tweener = imports.ui.tweener;
+const Mainloop = imports.mainloop;
 
 const ButtonConstants = imports.ui.buttonConstants;
 const GrabHelper = imports.ui.grabHelper;
@@ -578,7 +579,7 @@ const IconGrid = new Lang.Class({
         }
     },
 
-    animateShuffling: function(changedItems, originalIndex) {
+    animateShuffling: function(changedItems, originalIndex, callback) {
         let children = this._grid.get_children();
         let movementMatrix = {};
 
@@ -589,7 +590,7 @@ const IconGrid = new Lang.Class({
         }
 
         // Make the original icon look like it faded in
-        let originalIcon = this._grid.get_children()[originalIndex];
+        let originalIcon = children[originalIndex];
         this._fadeInIcon(originalIcon, movementMatrix[originalIndex]);
         delete changedItems[String(originalIndex)];
 
@@ -597,6 +598,8 @@ const IconGrid = new Lang.Class({
         for (let sourceIndex in changedItems) {
             this._moveIcon(this._grid.get_children()[sourceIndex], movementMatrix[sourceIndex]);
         }
+
+        Mainloop.timeout_add(SHUFFLE_ANIMATION_TIME * 1000, callback);
     },
 
     _fadeInIcon: function(sourceIcon, coordinates) {

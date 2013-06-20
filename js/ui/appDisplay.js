@@ -41,8 +41,6 @@ const FOLDER_SUBICON_FRACTION = .4;
 
 const DRAG_SCROLL_PIXELS_PER_SEC = 800;
 
-const ICON_SHUFFLE_TIME_MS = 300;
-
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,
@@ -145,6 +143,10 @@ const EndlessApplicationView = new Lang.Class({
 
     getItemForIndex: function(index) {
         return this._allItems[index];
+    },
+
+    getAllItems: function(index) {
+        return this._allItems;
     }
 });
 
@@ -608,9 +610,9 @@ const AllView = new Lang.Class({
         }
     },
 
-    animateMovement: function(moveList) {
+    animateMovement: function(moveList, callback) {
         if (this._repositionedIndex != null) {
-            this._grid.animateShuffling(moveList, this._repositionedIndex);
+            this._grid.animateShuffling(moveList, this._repositionedIndex, callback);
             this._repositionedIndex = null;
         }
     }
@@ -647,28 +649,26 @@ const AppDisplay = new Lang.Class({
     },
 
     _redisplay: function() {
-        let topLevelIds = IconGridLayout.layout.getIcons();
-
-        let movedIcons = this._findMovedIcons(this._topLevelIds, topLevelIds);
-        this._view.animateMovement(movedIcons);
-        this._topLevelIds = topLevelIds.slice(0);
-
-        GLib.timeout_add(GLib.PRIORITY_DEFAULT, ICON_SHUFFLE_TIME_MS, Lang.bind(this, this._addIcons));
+        if (this._view.getAllItems().length == 0) {
+            this._addIcons();
+        } else {
+            let movedIcons = this._findMovedIcons(this._view.getAllItems());
+            this._view.animateMovement(movedIcons, Lang.bind(this, this._addIcons));
+        }
     },
 
-    _findMovedIcons: function(oldItemLayout, newItemLayout) {
-        oldItemLayout = this._trimInvisible(oldItemLayout);
-        newItemLayout = this._trimInvisible(newItemLayout);
+    _findMovedIcons: function(oldItemLayout) {
+        let ids = IconGridLayout.layout.getIcons();
+        let newItemLayout = this._trimInvisible(ids);
 
         let moveList = {};
-
         for (let oldItemIdx in oldItemLayout) {
-            let oldItem = oldItemLayout[oldItemIdx];
+            let oldItem = oldItemLayout[oldItemIdx].get_id();
             let newItemIndex = newItemLayout.indexOf(oldItem);
 
-            // Did this icon move
+            // Did this icon move?
             if (newItemIndex != -1 && oldItemIdx != newItemIndex) {
-                // Find out from where to where did we go
+                // Find out from where to where did it move
                 moveList[oldItemIdx] = newItemIndex;
             }
         }
@@ -678,7 +678,7 @@ const AppDisplay = new Lang.Class({
 
     _trimInvisible: function(items) {
         let visibleItems = [];
-        for (itemIndex in items) {
+        for (let itemIndex in items) {
             let item = items[itemIndex];
             if (IconGridLayout.layout.iconIsFolder(item) || this._appSystem.lookup_app(item)) {
                 visibleItems.push(item);
@@ -691,8 +691,10 @@ const AppDisplay = new Lang.Class({
     _addIcons: function() {
         this._view.removeAll();
 
-        for (let i = 0; i < this._topLevelIds.length; i++) {
-            let itemId = this._topLevelIds[i];
+        let ids = IconGridLayout.layout.getIcons();
+
+        for (let i = 0; i < ids.length; i++) {
+            let itemId = ids[i];
 
             if (IconGridLayout.layout.iconIsFolder(itemId)) {
                 let dirInfo = Shell.DesktopDirInfo.new(itemId);
