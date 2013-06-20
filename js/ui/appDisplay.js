@@ -738,6 +738,7 @@ const FolderIcon = new Lang.Class({
                                           { createIcon: Lang.bind(this, this._createIcon),
                                             editableLabel: true });
         this.icon.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
+        this.icon.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
 
         this.actor.set_child(this.icon.actor);
         this.actor.label_actor = this.icon.label;
@@ -790,6 +791,10 @@ const FolderIcon = new Lang.Class({
                 this.view.addApp(app);
             }
         }
+    },
+
+    _onLabelCancel: function() {
+        this.actor.sync_hover();
     },
 
     _onLabelUpdate: function(icon, newLabel) {
@@ -1012,6 +1017,7 @@ const AppIcon = new Lang.Class({
         iconParams['editableLabel'] = true;
         this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
         this.icon.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
+        this.icon.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
         this.actor.set_child(this.icon.actor);
 
         this.actor.label_actor = this.icon.label;
@@ -1076,6 +1082,10 @@ const AppIcon = new Lang.Class({
         } else {
             this.actor.remove_style_class_name('running');
         }
+    },
+
+    _onLabelCancel: function() {
+        this.actor.sync_hover();
     },
 
     _onLabelUpdate: function(icon, newLabel) {

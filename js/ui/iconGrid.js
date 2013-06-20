@@ -171,17 +171,15 @@ const EditableLabel = new Lang.Class({
     _confirmEditing: function() {
         // _endEditing() below will unset oldLabelText
         let oldText = this._oldLabelText;
+        let text = this.get_text();
+
+        if (!text || text == oldText) {
+            this._cancelEditing();
+            return;
+        }
 
         this._endEditing();
-
-        // ignore empty labels
-        let text = this.get_text();
-        if (text && text.length > 0) {
-            this.emit('label-edit-update', text);
-        } else {
-            this.set_text(oldText);
-            this.emit('label-edit-cancel');
-        }
+        this.emit('label-edit-update', text);
     }
 });
 
