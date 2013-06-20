@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const GObject = imports.gi.GObject;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 const Tweener = imports.ui.tweener;
@@ -31,6 +32,158 @@ const CursorLocation = {
     LEFT_EDGE: 2,
     RIGHT_EDGE: 3
 }
+
+const EditableLabel = new Lang.Class({
+    Name: 'EditableLabel',
+    Extends: St.Entry,
+    Signals: {
+        'label-edit-update': { param_types: [ GObject.TYPE_STRING ] },
+        'label-edit-cancel': { }
+    },
+
+    _init: function(params) {
+        this.parent(params);
+
+        this.clutter_text.editable = false;
+        this.clutter_text.x_align = Clutter.ActorAlign.CENTER;
+
+        this._activateId = 0;
+        this._keyFocusId = 0;
+        this._oldLabelText = null;
+
+        this._grabHelper = new GrabHelper.GrabHelper(this);
+        this._grabHelper.addActor(this);
+
+        this._editStartId = this.connect('button-press-event',
+            Lang.bind(this, this._onButtonPressEvent));
+    },
+
+    _onButtonPressEvent: function(label, event) {
+        let button = event.get_button();
+        if (button != ButtonConstants.LEFT_MOUSE_BUTTON) {
+            return false;
+        }
+
+        // disconnect the signal that enters editing mode
+        if (this._editStartId > 0) {
+            this.disconnect(this._editStartId);
+            this._editStartId = 0;
+        }
+
+        this._keyFocusId = this.connect('key-focus-in',
+            Lang.bind(this, this._startEditing));
+        this._grabHelper.grab({ actor: this,
+                                focus: this,
+                                modal: true,
+                                onUngrab: Lang.bind(this, this._onEditUngrab) });
+
+        return true;
+    },
+
+    _onEditUngrab: function(isUser) {
+        // edit has already been completed and this is an explicit
+        // ungrab from endEditing()
+        if (!isUser) {
+            return;
+        }
+
+        let event = Clutter.get_current_event();
+        let eventType;
+
+        if (event) {
+            eventType = event.type();
+        }
+
+        if (eventType == Clutter.EventType.KEY_PRESS) {
+            let symbol = event.get_key_symbol();
+
+            // abort editing
+            if (symbol == Clutter.KEY_Escape) {
+                this._cancelEditing();
+            }
+
+            return;
+        }
+
+        if (eventType == Clutter.EventType.BUTTON_PRESS) {
+            let [stageX, stageY] = event.get_coords();
+            let target = global.stage.get_actor_at_pos(Clutter.PickMode.REACTIVE,
+                                                       stageX,
+                                                       stageY);
+
+            if (this.contains(target)) {
+                this._cancelEditing();
+            } else {
+                this._confirmEditing();
+            }
+
+            return;
+        }
+
+        this._cancelEditing();
+    },
+
+    _startEditing: function() {
+        this.clutter_text.editable = true;
+
+        // save the current contents of the label, in case we
+        // need to roll back
+        this._oldLabelText = this.get_text();
+
+        this._activateId = this.clutter_text.connect('activate',
+            Lang.bind(this, this._confirmEditing));
+    },
+
+    _endEditing: function() {
+        this.clutter_text.editable = false;
+
+        this._oldLabelText = null;
+
+        if (this._activateId) {
+            this.clutter_text.disconnect(this._activateId);
+            this._activateId = 0;
+        }
+
+        if (this._keyFocusId) {
+            this.disconnect(this._keyFocusId);
+            this._keyFocusId = 0;
+        }
+
+        if (this._grabHelper.grabbed) {
+            this._grabHelper.ungrab({ actor: this });
+        }
+
+        // reconnect signal to enter editing mode
+        this._editStartId = this.connect('button-press-event',
+            Lang.bind(this, this._onButtonPressEvent));
+    },
+
+    _cancelEditing: function() {
+        // _endEditing() below will unset oldLabelText
+        let oldText = this._oldLabelText;
+
+        this._endEditing();
+
+        this.set_text(oldText);
+        this.emit('label-edit-cancel');
+    },
+
+    _confirmEditing: function() {
+        // _endEditing() below will unset oldLabelText
+        let oldText = this._oldLabelText;
+
+        this._endEditing();
+
+        // ignore empty labels
+        let text = this.get_text();
+        if (text && text.length > 0) {
+            this.emit('label-edit-update', text);
+        } else {
+            this.set_text(oldText);
+            this.emit('label-edit-cancel');
+        }
+    }
+});
 
 const BaseIcon = new Lang.Class({
     Name: 'BaseIcon',
@@ -69,24 +222,21 @@ const BaseIcon = new Lang.Class({
 
         if (params.showLabel) {
             if (params.editableLabel) {
-                this.label = new St.Entry({ text: label,
-                                            style_class: 'overview-icon-label' });
-                this.label.clutter_text.editable = false;
-                this.label.clutter_text.x_align = Clutter.ActorAlign.CENTER;
-
-                this._editStartId =
-                  this.label.connect('button-press-event',
-                                     Lang.bind(this, this._onLabelEditStart));
+                this.label = new EditableLabel({ text: label,
+                                                 style_class: 'overview-icon-label' });
+                this.label.connect('label-edit-update', Lang.bind(this,
+                    function(label, newText) {
+                        this.emit('label-edit-update', newText);
+                    }));
+                this.label.connect('label-edit-cancel', Lang.bind(this,
+                    function() {
+                        this.emit('label-edit-cancel');
+                    }));
             } else {
                 this.label = new St.Label({ text: label,
                                             style_class: 'overview-icon-label' });
             }
             box.add_actor(this.label);
-
-            if (params.editableLabel) {
-                this._grabHelper = new GrabHelper.GrabHelper(this.label);
-                this._grabHelper.addActor(this.label);
-            }
         } else {
             this.label = null;
         }
@@ -221,127 +371,6 @@ const BaseIcon = new Lang.Class({
 
     _onIconThemeChanged: function() {
         this._createIconTexture(this.iconSize);
-    },
-
-    _onLabelEditStart: function(label, event) {
-        let button = event.get_button();
-        if (button != ButtonConstants.LEFT_MOUSE_BUTTON) {
-            return false;
-        }
-
-        // disconnect the signal that enters editing mode
-        if (this._editStartId > 0) {
-            this.label.disconnect(this._editStartId);
-            this._editStartId = 0;
-        }
-
-        this.label.connect('key-focus-in', Lang.bind(this, this._startEditing));
-        this._grabHelper.grab({ actor: this.label,
-                                focus: this.label,
-                                modal: true,
-                                onUngrab: Lang.bind(this, this._onEditUngrab) });
-
-        return true;
-    },
-
-    _startEditing: function() {
-        this.label.clutter_text.editable = true;
-
-        // save the current contents of the label, in case we
-        // need to roll back
-        this._oldLabelText = this.label.get_text();
-
-        this.label._activateId =
-            this.label.clutter_text.connect('activate', Lang.bind(this, this._confirmEditing));
-    },
-
-    _endEditing: function() {
-        this.label.clutter_text.editable = false;
-
-        this._oldLabelText = null;
-
-        if (this.label._activateId) {
-            this.label.clutter_text.disconnect(this.label._activateId);
-            this.label._activateId = 0;
-        }
-
-        if (this._grabHelper.grabbed) {
-            this._grabHelper.ungrab({ actor: this.label });
-        }
-
-        // reconnect signal to enter editing mode
-        this._editStartId =
-          this.label.connect('button-press-event', Lang.bind(this, this._onLabelEditStart));
-    },
-
-    _onEditUngrab: function(isUser) {
-        // edit has already been completed and this is an explicit
-        // ungrab from endEditing()
-        if (!isUser) {
-            return;
-        }
-
-        let event = Clutter.get_current_event();
-        let eventType;
-
-        if (event) {
-            eventType = event.type();
-        }
-
-        if (eventType == Clutter.EventType.KEY_PRESS) {
-            let symbol = event.get_key_symbol();
-
-            // abort editing
-            if (symbol == Clutter.KEY_Escape) {
-                this._cancelEditing();
-            }
-
-            return;
-        }
-
-        if (eventType == Clutter.EventType.BUTTON_PRESS) {
-            let [stageX, stageY] = event.get_coords();
-            let target = global.stage.get_actor_at_pos(Clutter.PickMode.REACTIVE,
-                                                       stageX,
-                                                       stageY);
-
-            if (this.label.contains(target)) {
-                this._cancelEditing();
-            } else {
-                this._confirmEditing();
-            }
-
-            return;
-        }
-
-        this._cancelEditing();
-    },
-
-    _cancelEditing: function() {
-        // _endEditing() below will unset oldLabelText
-        let oldText = this._oldLabelText;
-
-        this._endEditing();
-
-        this.label.set_text(oldText);
-        this.emit('label-edit-cancel');
-    },
-
-    _confirmEditing: function() {
-        // _endEditing() below will unset oldLabelText
-        let oldText = this._oldLabelText;
-
-        this._endEditing();
-
-        // ignore empty labels
-        let text = this.label.get_text();
-        if (text && text.length > 0) {
-            this.emit('label-edit-update', text);
-        }
-        else {
-            this.label.set_text(oldText);
-            this.emit('label-edit-cancel');
-        }
     }
 });
 Signals.addSignalMethods(BaseIcon.prototype);
