@@ -567,6 +567,7 @@ const AllView = new Lang.Class({
             Main.overview.showApps();
         }
     },
+
     addFolderPopup: function(popup) {
         this._stack.add_actor(popup.actor);
         popup.connect('open-state-changed', Lang.bind(this,
@@ -751,7 +752,7 @@ const FolderIcon = new Lang.Class({
 
         this.actor.connect('clicked', Lang.bind(this,
             function() {
-                this._ensurePopup();
+                this._createPopup();
                 this._popup.toggle();
             }));
         this.actor.connect('notify::mapped', Lang.bind(this,
@@ -809,10 +810,7 @@ const FolderIcon = new Lang.Class({
                              gicon: icon });
     },
 
-    _ensurePopup: function() {
-        if (this._popup)
-            return;
-
+    _createPopup: function() {
         let grid = this.actor.get_parent().get_parent();
         let [sourceX, sourceY] = this.actor.get_transformed_position();
         let [sourceXP, sourceYP] = grid.get_transformed_position();
@@ -827,8 +825,18 @@ const FolderIcon = new Lang.Class({
 
         this._popup.connect('open-state-changed', Lang.bind(this,
             function(popup, isOpen) {
-                if (!isOpen)
+                if (!isOpen) {
                     this.actor.checked = false;
+
+                    // save the view for future reuse before destroying
+                    // the popup
+                    let viewActor = this.view.actor;
+                    let viewParent = viewActor.get_parent();
+                    viewParent.remove_actor(viewActor);
+
+                    this._popup.actor.destroy();
+                    this._popup = null;
+                }
             }));
     },
 
