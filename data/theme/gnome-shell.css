@@ -811,6 +811,17 @@ StScrollBar StButton#vhandle:active {
     box-shadow: inset 0px 1px 2px rgba(0,0,0,0.6);
 }
 
+.overview-icon-label:highlighted,
+.overview-icon-label:focus:highlighted {
+    border-radius: 4px;
+    background-color: #d2d2d2;
+    background-gradient-direction: none;
+
+    color: #333;
+
+    box-shadow: none;
+}
+
 .all-apps > StBoxLayout {
     /* horizontal padding to make sure scrollbars or dash don't overlap content */
     padding: 0px 88px;

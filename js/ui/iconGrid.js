@@ -48,12 +48,13 @@ const EditableLabel = new Lang.Class({
 
         this._activateId = 0;
         this._keyFocusId = 0;
+        this._highlightMode = false;
         this._oldLabelText = null;
 
         this._grabHelper = new GrabHelper.GrabHelper(this);
         this._grabHelper.addActor(this);
 
-        this._editStartId = this.connect('button-press-event',
+        this._buttonPressId = this.connect('button-press-event',
             Lang.bind(this, this._onButtonPressEvent));
     },
 
@@ -63,10 +64,42 @@ const EditableLabel = new Lang.Class({
             return false;
         }
 
-        // disconnect the signal that enters editing mode
-        if (this._editStartId > 0) {
-            this.disconnect(this._editStartId);
-            this._editStartId = 0;
+        // enter highlight mode if this is the first click
+        if (!this._highlightMode) {
+            this._highlightMode = true;
+            this.add_style_pseudo_class('highlighted');
+
+            this._grabHelper.grab({ actor: this,
+                                    modal: true,
+                                    onUngrab: Lang.bind(this, this._onHighlightUngrab) });
+
+            return true;
+        }
+
+        // while in highlight mode, another extra click enters the
+        // actual edit mode, which we handle from the highlight ungrab
+        if (this._grabHelper.grabbed) {
+            this._grabHelper.ungrab({ actor: this });
+        }
+
+        return true;
+    },
+
+    _onHighlightUngrab: function(isUser) {
+        // exit highlight mode
+        this._highlightMode = false;
+        this.remove_style_pseudo_class('highlighted');
+
+        // clicked outside the label - cancel the edit
+        if (isUser) {
+            this.emit('label-edit-cancel');
+            return;
+        }
+
+        // disconnect from label signals while in editing mode
+        if (this._buttonPressId > 0) {
+            this.disconnect(this._buttonPressId);
+            this._buttonPressId = 0;
         }
 
         this._keyFocusId = this.connect('key-focus-in',
@@ -75,8 +108,6 @@ const EditableLabel = new Lang.Class({
                                 focus: this,
                                 modal: true,
                                 onUngrab: Lang.bind(this, this._onEditUngrab) });
-
-        return true;
     },
 
     _onEditUngrab: function(isUser) {
@@ -123,11 +154,16 @@ const EditableLabel = new Lang.Class({
     },
 
     _startEditing: function() {
+        let text = this.get_text();
+
+        // select the current text when editing starts
         this.clutter_text.editable = true;
+        this.clutter_text.cursor_position = 0;
+        this.clutter_text.selection_bound = text.length;
 
         // save the current contents of the label, in case we
         // need to roll back
-        this._oldLabelText = this.get_text();
+        this._oldLabelText = text;
 
         this._activateId = this.clutter_text.connect('activate',
             Lang.bind(this, this._confirmEditing));
@@ -153,7 +189,7 @@ const EditableLabel = new Lang.Class({
         }
 
         // reconnect signal to enter editing mode
-        this._editStartId = this.connect('button-press-event',
+        this._buttonPressId = this.connect('button-press-event',
             Lang.bind(this, this._onButtonPressEvent));
     },
 
