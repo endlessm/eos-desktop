@@ -216,6 +216,7 @@ function _initializeUI() {
                               // workspace monitor may want to hide/show
                               // the overview
                               workspaceMonitor.updateOverview();
+                              overview.showApps();
                           });
 }
 
