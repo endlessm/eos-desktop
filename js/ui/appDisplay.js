@@ -428,22 +428,24 @@ const AllView = new Lang.Class({
         }
     },
 
-    _shouldNudgeItems: function(isNewPosition) {
+    _positionReallyMoved: function() {
         if (this._insertIdx == -1) {
             return false;
         }
 
-        if (this._insertIdx == this._originalIdx &&
+        // If we're immediately right of the original position,
+        // we didn't really move
+        if ((this._insertIdx == this._originalIdx ||
+             this._insertIdx == this._originalIdx + 1) &&
             this._dragView == this._dragIcon.parentView) {
             return false;
         }
 
-        // If we are between icons at a new position
-        // (but not immediately to the left of the original position),
-        // nudge the icons apart
-        let isLeftOfOrig = (this._insertIdx == this._originalIdx + 1 &&
-                            this._dragView == this._dragIcon.parentView);
-        return (isNewPosition && !isLeftOfOrig);
+        return true;
+    },
+
+    _shouldNudgeItems: function(isNewPosition) {
+        return (isNewPosition && this._positionReallyMoved());
     },
 
     _getDragHoverResult: function() {
@@ -509,9 +511,9 @@ const AllView = new Lang.Class({
 
             return accepted;
         } else {
-            // If we are not over an icon and we are outside of the grid area,
-            // ignore the request to move
-            if (this._insertIdx == -1) {
+            if (!this._positionReallyMoved()) {
+                // If we are outside of the grid area, or didn't actually change
+                // position, ignore the request to move
                 return false;
             } else {
                 // If we are not over an icon but within the grid, shift the
