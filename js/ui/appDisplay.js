@@ -143,6 +143,10 @@ const EndlessApplicationView = new Lang.Class({
 
     getItemForIndex: function(index) {
         return this._allItems[index];
+    },
+
+    getAllItems: function(index) {
+        return this._allItems;
     }
 });
 
@@ -222,6 +226,8 @@ const AllView = new Lang.Class({
                                          overlay_scrollbars: true,
                                          style_class: 'all-apps vfade' });
         this.actor._delegate = this;
+
+        this._repositionedIndex = null;
 
         this.actor.add_actor(box);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -520,6 +526,7 @@ const AllView = new Lang.Class({
                     folderId = this._dragView.folderIcon.getId();
                 }
 
+                this._repositionedIndex = this._originalIdx;
                 IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
                 return true;
             }
@@ -601,6 +608,13 @@ const AllView = new Lang.Class({
             else
                 this._icons[id].actor.opacity = 255;
         }
+    },
+
+    animateMovement: function(moveList, callback) {
+        if (this._repositionedIndex != null) {
+            this._grid.animateShuffling(moveList, this._repositionedIndex, callback);
+            this._repositionedIndex = null;
+        }
     }
 });
 
@@ -635,12 +649,52 @@ const AppDisplay = new Lang.Class({
     },
 
     _redisplay: function() {
+        if (this._view.getAllItems().length == 0) {
+            this._addIcons();
+        } else {
+            let movedIcons = this._findMovedIcons(this._view.getAllItems());
+            this._view.animateMovement(movedIcons, Lang.bind(this, this._addIcons));
+        }
+    },
+
+    _findMovedIcons: function(oldItemLayout) {
+        let ids = IconGridLayout.layout.getIcons();
+        let newItemLayout = this._trimInvisible(ids);
+
+        let moveList = {};
+        for (let oldItemIdx in oldItemLayout) {
+            let oldItem = oldItemLayout[oldItemIdx].get_id();
+            let newItemIndex = newItemLayout.indexOf(oldItem);
+
+            // Did this icon move?
+            if (newItemIndex != -1 && oldItemIdx != newItemIndex) {
+                // Find out from where to where did it move
+                moveList[oldItemIdx] = newItemIndex;
+            }
+        }
+
+        return moveList;
+    },
+
+    _trimInvisible: function(items) {
+        let visibleItems = [];
+        for (let itemIndex in items) {
+            let item = items[itemIndex];
+            if (IconGridLayout.layout.iconIsFolder(item) || this._appSystem.lookup_app(item)) {
+                visibleItems.push(item);
+            }
+        }
+
+        return visibleItems;
+    },
+
+    _addIcons: function() {
         this._view.removeAll();
 
-        let topLevelIcons = IconGridLayout.layout.getIcons();
+        let ids = IconGridLayout.layout.getIcons();
 
-        for (let i = 0; i < topLevelIcons.length; i++) {
-            let itemId = topLevelIcons[i];
+        for (let i = 0; i < ids.length; i++) {
+            let itemId = ids[i];
 
             if (IconGridLayout.layout.iconIsFolder(itemId)) {
                 let dirInfo = Shell.DesktopDirInfo.new(itemId);
