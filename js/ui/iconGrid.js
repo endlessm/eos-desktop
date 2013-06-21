@@ -32,6 +32,12 @@ const CursorLocation = {
     RIGHT_EDGE: 3
 }
 
+const EditableLabelMode = {
+    DISPLAY: 0,
+    HIGHLIGHT: 1,
+    EDIT: 2
+};
+
 const EditableLabel = new Lang.Class({
     Name: 'EditableLabel',
     Extends: St.Entry,
@@ -48,13 +54,13 @@ const EditableLabel = new Lang.Class({
 
         this._activateId = 0;
         this._keyFocusId = 0;
-        this._highlightMode = false;
+        this._labelMode = EditableLabelMode.DISPLAY;
         this._oldLabelText = null;
 
         this._grabHelper = new GrabHelper.GrabHelper(this);
         this._grabHelper.addActor(this);
 
-        this._buttonPressId = this.connect('button-press-event',
+        this.connect('button-press-event',
             Lang.bind(this, this._onButtonPressEvent));
     },
 
@@ -65,8 +71,8 @@ const EditableLabel = new Lang.Class({
         }
 
         // enter highlight mode if this is the first click
-        if (!this._highlightMode) {
-            this._highlightMode = true;
+        if (this._labelMode == EditableLabelMode.DISPLAY) {
+            this._labelMode = EditableLabelMode.HIGHLIGHT;
             this.add_style_pseudo_class('highlighted');
 
             this._grabHelper.grab({ actor: this,
@@ -76,31 +82,39 @@ const EditableLabel = new Lang.Class({
             return true;
         }
 
-        // while in highlight mode, another extra click enters the
-        // actual edit mode, which we handle from the highlight ungrab
-        if (this._grabHelper.grabbed) {
-            this._grabHelper.ungrab({ actor: this });
+        if (this._labelMode == EditableLabelMode.HIGHLIGHT) {
+            // while in highlight mode, another extra click enters the
+            // actual edit mode, which we handle from the highlight ungrab
+            if (this._grabHelper.grabbed) {
+                this._grabHelper.ungrab({ actor: this });
+            }
+
+            return true;
         }
 
+        // this._labelMode == EditableLableMode.EDIT:
+        //
+        // ensure focus stays in the text field when clicking
+        // on the entry empty space
+        this.grab_key_focus();
+
+        // eat button press events on the entry empty space in this mode
         return true;
     },
 
     _onHighlightUngrab: function(isUser) {
         // exit highlight mode
-        this._highlightMode = false;
         this.remove_style_pseudo_class('highlighted');
 
         // clicked outside the label - cancel the edit
         if (isUser) {
+            this._labelMode = EditableLabelMode.DISPLAY;
             this.emit('label-edit-cancel');
             return;
         }
 
-        // disconnect from label signals while in editing mode
-        if (this._buttonPressId > 0) {
-            this.disconnect(this._buttonPressId);
-            this._buttonPressId = 0;
-        }
+        // now prepare for editing...
+        this._labelMode = EditableLabelMode.EDIT;
 
         this._keyFocusId = this.connect('key-focus-in',
             Lang.bind(this, this._startEditing));
@@ -135,21 +149,13 @@ const EditableLabel = new Lang.Class({
             return;
         }
 
+        // confirm editing when clicked outside the label
         if (eventType == Clutter.EventType.BUTTON_PRESS) {
-            let [stageX, stageY] = event.get_coords();
-            let target = global.stage.get_actor_at_pos(Clutter.PickMode.REACTIVE,
-                                                       stageX,
-                                                       stageY);
-
-            if (this.contains(target)) {
-                this._cancelEditing();
-            } else {
-                this._confirmEditing();
-            }
-
+            this._confirmEditing();
             return;
         }
 
+        // abort editing for other grab-breaking events
         this._cancelEditing();
     },
 
@@ -188,9 +194,7 @@ const EditableLabel = new Lang.Class({
             this._grabHelper.ungrab({ actor: this });
         }
 
-        // reconnect signal to enter editing mode
-        this._buttonPressId = this.connect('button-press-event',
-            Lang.bind(this, this._onButtonPressEvent));
+        this._labelMode = EditableLabelMode.DISPLAY;
     },
 
     _cancelEditing: function() {
