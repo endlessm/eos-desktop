@@ -98,6 +98,17 @@ const EditableLabel = new Lang.Class({
         // on the entry empty space
         this.grab_key_focus();
 
+        let [stageX, stageY] = event.get_coords();
+        let [textX, textY] = this.clutter_text.get_transformed_position();
+
+        if (stageX < textX) {
+            this.clutter_text.cursor_position = 0;
+            this.clutter_text.set_selection(0, 0);
+        } else {
+            this.clutter_text.cursor_position = -1;
+            this.clutter_text.selection_bound = -1;
+        }
+
         // eat button press events on the entry empty space in this mode
         return true;
     },
