@@ -793,7 +793,8 @@ const FolderIcon = new Lang.Class({
         this.icon = new IconGrid.BaseIcon(label,
                                           { createIcon: Lang.bind(this, this._createIcon),
                                             editableLabel: true });
-        this.icon.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
+        this.icon.label.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
+        this.icon.label.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
 
         this.actor.set_child(this.icon.actor);
         this.actor.label_actor = this.icon.label;
@@ -848,14 +849,18 @@ const FolderIcon = new Lang.Class({
         }
     },
 
-    _onLabelUpdate: function(icon, newLabel) {
+    _onLabelCancel: function() {
+        this.actor.sync_hover();
+    },
+
+    _onLabelUpdate: function(label, newText) {
         try {
-            this.folder.create_custom_with_name(newLabel);
+            this.folder.create_custom_with_name(newText);
         } catch(e) {
             logError(e, 'error while creating a custom dirInfo for: '
                       + this.folder.get_name()
                       + ' using new name: '
-                      + newLabel);
+                      + newText);
         }
     },
 
@@ -1067,7 +1072,10 @@ const AppIcon = new Lang.Class({
         iconParams['createIcon'] = Lang.bind(this, this._createIcon);
         iconParams['editableLabel'] = true;
         this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
-        this.icon.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
+        if (iconParams['showLabel'] !== false) {
+            this.icon.label.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
+            this.icon.label.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
+        }
         this.actor.set_child(this.icon.actor);
 
         this.actor.label_actor = this.icon.label;
@@ -1134,14 +1142,18 @@ const AppIcon = new Lang.Class({
         }
     },
 
-    _onLabelUpdate: function(icon, newLabel) {
+    _onLabelCancel: function() {
+        this.actor.sync_hover();
+    },
+
+    _onLabelUpdate: function(label, newText) {
         try {
-            this.app.create_custom_launcher_with_name(newLabel);
+            this.app.create_custom_launcher_with_name(newText);
         } catch(e) {
             logError(e, 'error while creating a custom launcher for: '
                       + this.app.get_name()
                       + ' using new name: '
-                      + newLabel);
+                      + newText);
         }
     },
 
