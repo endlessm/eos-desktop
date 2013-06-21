@@ -239,8 +239,7 @@ const AllView = new Lang.Class({
         let clickAction = new Clutter.ClickAction();
         clickAction.connect('clicked', Lang.bind(this, this._closePopup));
         Main.overview.addAction(clickAction, false);
-        this._eventBlocker.bind_property('visible', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
-
+        this._eventBlocker.bind_property('reactive', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
     },
 
     _closePopup: function() {
