@@ -1392,7 +1392,6 @@ const AppStoreIcon = new Lang.Class({
             }),
             onAccept: Lang.bind(this, function() {
                 this._restoreTrash(trashPopup, draggedSource);
-                draggedSource.parentView.removeItem(draggedSource);
                 IconGridLayout.layout.repositionIcon(draggedSource.getId(), 0, null);
                 if (deleteCallback) {
                     deleteCallback();
