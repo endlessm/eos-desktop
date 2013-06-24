@@ -647,10 +647,10 @@ const IconGrid = new Lang.Class({
         }
     },
 
-    animateShuffling: function(changedItems, originalIndex, callback) {
+    animateShuffling: function(changedItems, removedItems, originalIndex, callback) {
         let children = this._grid.get_children();
-        let movementMatrix = {};
 
+        let movementMatrix = {};
         // Find out where icons need to move
         for (let sourceIndex in changedItems) {
             let targetIndex = changedItems[sourceIndex];
@@ -659,14 +659,22 @@ const IconGrid = new Lang.Class({
 
         // Make the original icon look like it faded in
         let originalIcon = children[originalIndex];
-        this._fadeInIcon(originalIcon, movementMatrix[originalIndex]);
-        delete changedItems[String(originalIndex)];
+        if (originalIndex in movementMatrix) {
+            this._fadeInIcon(originalIcon, movementMatrix[originalIndex]);
+            delete changedItems[String(originalIndex)];
+        }
 
         // Move the other ones
         for (let sourceIndex in changedItems) {
-            this._moveIcon(this._grid.get_children()[sourceIndex], movementMatrix[sourceIndex]);
+            this._moveIcon(children[sourceIndex], movementMatrix[sourceIndex]);
         }
 
+        // Hide any removed icons (only temporary)
+        for (let removedIndex in removedItems) {
+            children[removedItems[removedIndex]].opacity = 0;
+        }
+
+        // Make sure that everything gets redrawn after the animation
         Mainloop.timeout_add(SHUFFLE_ANIMATION_TIME * 1000, callback);
     },
 

@@ -147,6 +147,10 @@ const EndlessApplicationView = new Lang.Class({
 
     getAllItems: function(index) {
         return this._allItems;
+    },
+
+    getAllIds: function(index) {
+        return this._allItems.map(function(item) { return item.get_id(); });
     }
 });
 
@@ -510,6 +514,8 @@ const AllView = new Lang.Class({
 
             let accepted  = dropIcon.handleIconDrop(source)
 
+            this._repositionedIndex = this._originalIdx;
+
             if (accepted && this._currentPopup) {
                 this._eventBlocker.reactive = false;
                 this._currentPopup.popdown();
@@ -619,9 +625,9 @@ const AllView = new Lang.Class({
         }
     },
 
-    animateMovement: function(moveList, callback) {
+    animateMovement: function(movedList, removedList, callback) {
         if (this._repositionedIndex != null) {
-            this._grid.animateShuffling(moveList, this._repositionedIndex, callback);
+            this._grid.animateShuffling(movedList, removedList, this._repositionedIndex, callback);
             this._repositionedIndex = null;
         }
     }
@@ -661,28 +667,42 @@ const AppDisplay = new Lang.Class({
         if (this._view.getAllItems().length == 0) {
             this._addIcons();
         } else {
-            let movedIcons = this._findMovedIcons(this._view.getAllItems());
-            this._view.animateMovement(movedIcons, Lang.bind(this, this._addIcons));
+            let [movedIconIndexes, removedIconIndexes] = this._findIconChanges(this._view.getAllIds());
+            this._view.animateMovement(movedIconIndexes, removedIconIndexes, Lang.bind(this, this._addIcons));
         }
     },
 
-    _findMovedIcons: function(oldItemLayout) {
+    _findIconChanges: function(oldItemLayout) {
         let ids = IconGridLayout.layout.getIcons();
         let newItemLayout = this._trimInvisible(ids);
 
-        let moveList = {};
+        let movedList = {};
+        let removedList = [];
         for (let oldItemIdx in oldItemLayout) {
-            let oldItem = oldItemLayout[oldItemIdx].get_id();
-            let newItemIndex = newItemLayout.indexOf(oldItem);
+            let oldItem = oldItemLayout[oldItemIdx];
+            let newItemIdx = newItemLayout.indexOf(oldItem);
 
             // Did this icon move?
-            if (newItemIndex != -1 && oldItemIdx != newItemIndex) {
-                // Find out from where to where did it move
-                moveList[oldItemIdx] = newItemIndex;
+            if (newItemIdx != -1 && oldItemIdx != newItemIdx) {
+                movedList[oldItemIdx] = newItemIdx;
+            // Did it get removed but is not the app store?
+            } else if (newItemIdx == -1 && oldItemIdx != oldItemLayout.length - 1) {
+                removedList.push(oldItemIdx);
             }
         }
 
-        return moveList;
+        // Make sure that the app store icon moves as well. However,
+        // if we have items added, don't animate it but instead hide it
+        // since we would have to redraw everything to find its destination
+        // coordinates. Since a folder is open during this time, the effect is
+        // not noticable
+        if (newItemLayout.length < oldItemLayout.length) {
+            movedList[oldItemLayout.length - 1] = newItemLayout.length;
+        } else {
+            removedList.push(newItemLayout.length - 1);
+        }
+
+        return [movedList, removedList];
     },
 
     _trimInvisible: function(items) {
