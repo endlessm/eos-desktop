@@ -180,7 +180,7 @@ const ViewSelector = new Lang.Class({
         this.emit('page-changed');
     },
 
-    _fadePageIn: function(oldPage) {
+    _fadePageIn: function(oldPage, noFade) {
         if (oldPage) {
             oldPage.opacity = 0;
             oldPage.hide();
@@ -189,11 +189,15 @@ const ViewSelector = new Lang.Class({
         this.emit('page-empty');
 
         this._activePage.show();
-        Tweener.addTween(this._activePage,
-            { opacity: 255,
-              time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
-              transition: 'easeOutQuad'
-            });
+        if (noFade) {
+            this._activePage.opacity = 255;
+        } else {
+            Tweener.addTween(this._activePage,
+                { opacity: 255,
+                  time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
+                  transition: 'easeOutQuad'
+                });
+        }
     },
 
     _showPage: function(page, noFade) {
@@ -211,11 +215,11 @@ const ViewSelector = new Lang.Class({
                                transition: 'easeOutQuad',
                                onComplete: Lang.bind(this,
                                    function() {
-                                       this._fadePageIn(oldPage);
+                                       this._fadePageIn(oldPage, noFade);
                                    })
                              });
         else
-            this._fadePageIn(oldPage);
+            this._fadePageIn(oldPage, noFade);
     },
 
     _a11yFocusPage: function(page) {
