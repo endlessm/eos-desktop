@@ -116,7 +116,7 @@ const ViewSelector = new Lang.Class({
         let uri = BASE_SEARCH_URI;
         let terms = getTermsForSearchString(this._entry.get_text());
         if (terms.length != 0) {
-           uri = uri + QUERY_URI_PATH + encodeURI(terms.join(" ")); 
+           uri = uri + QUERY_URI_PATH + encodeURI(terms.join(' '));
         }
 
         Gio.AppInfo.launch_default_for_uri(uri, null);
