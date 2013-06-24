@@ -626,7 +626,11 @@ const AllView = new Lang.Class({
     },
 
     animateMovement: function(movedList, removedList, callback) {
-        this._grid.animateShuffling(movedList, removedList, this._repositionedIndex, callback);
+        this._grid.animateShuffling(movedList,
+                                    removedList,
+                                    this._repositionedIndex,
+                                    callback
+                                   );
     }
 });
 
@@ -664,8 +668,12 @@ const AppDisplay = new Lang.Class({
         if (this._view.getAllItems().length == 0) {
             this._addIcons();
         } else {
-            let [movedIconIndexes, removedIconIndexes] = this._findIconChanges(this._view.getAllIds());
-            this._view.animateMovement(movedIconIndexes, removedIconIndexes, Lang.bind(this, this._addIcons));
+            let ids = this._view.getAllIds()
+            let [movedIndexes, removedIndexes] = this._findIconChanges(ids);
+            this._view.animateMovement(movedIndexes,
+                                       removedIndexes,
+                                       Lang.bind(this, this._addIcons)
+                                      );
         }
     },
 
