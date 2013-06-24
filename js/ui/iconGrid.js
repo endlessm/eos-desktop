@@ -654,7 +654,12 @@ const IconGrid = new Lang.Class({
         // Find out where icons need to move
         for (let sourceIndex in changedItems) {
             let targetIndex = changedItems[sourceIndex];
-            movementMatrix[sourceIndex] = this._findOffset(children[sourceIndex], children[targetIndex]);
+            if (targetIndex < children.length) {
+                movementMatrix[sourceIndex] = this._findOffset(children[sourceIndex], children[targetIndex]);
+            } else {
+                delete changedItems[sourceIndex];
+                removedItems.push(sourceIndex);
+            }
         }
 
         // Make the original icon look like it faded in

@@ -514,11 +514,13 @@ const AllView = new Lang.Class({
 
             let accepted  = dropIcon.handleIconDrop(source)
 
-            this._repositionedIndex = this._originalIdx;
+            if (accepted) {
+                this._repositionedIndex = this._originalIdx;
 
-            if (accepted && this._currentPopup) {
-                this._eventBlocker.reactive = false;
-                this._currentPopup.popdown();
+                if (this._currentPopup) {
+                    this._eventBlocker.reactive = false;
+                    this._currentPopup.popdown();
+                }
             }
 
             return accepted;
@@ -668,7 +670,7 @@ const AppDisplay = new Lang.Class({
         if (this._view.getAllItems().length == 0) {
             this._addIcons();
         } else {
-            let ids = this._view.getAllIds()
+            let ids = this._view.getAllIds();
             let [movedIndexes, removedIndexes] = this._findIconChanges(ids);
             this._view.animateMovement(movedIndexes,
                                        removedIndexes,
@@ -681,6 +683,8 @@ const AppDisplay = new Lang.Class({
         let ids = IconGridLayout.layout.getIcons();
         let newItemLayout = this._trimInvisible(ids);
 
+        newItemLayout.push(oldItemLayout[oldItemLayout.length - 1]);
+
         let movedList = {};
         let removedList = [];
         for (let oldItemIdx in oldItemLayout) {
@@ -690,21 +694,10 @@ const AppDisplay = new Lang.Class({
             // Did this icon move?
             if (newItemIdx != -1 && oldItemIdx != newItemIdx) {
                 movedList[oldItemIdx] = newItemIdx;
-            // Did it get removed but is not the app store?
-            } else if (newItemIdx == -1 && oldItemIdx != oldItemLayout.length - 1) {
+            // Did it get removed?
+            } else if (newItemIdx == -1) {
                 removedList.push(oldItemIdx);
             }
-        }
-
-        // Make sure that the app store icon moves as well. However,
-        // if we have items added, don't animate it but instead hide it
-        // since we would have to redraw everything to find its destination
-        // coordinates. Since a folder is open during this time, the effect is
-        // not noticable
-        if (newItemLayout.length < oldItemLayout.length) {
-            movedList[oldItemLayout.length - 1] = newItemLayout.length;
-        } else {
-            removedList.push(newItemLayout.length - 1);
         }
 
         return [movedList, removedList];
