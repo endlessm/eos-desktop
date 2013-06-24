@@ -239,19 +239,25 @@ const AllView = new Lang.Class({
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
 
         this._clickAction = new Clutter.ClickAction();
-        this._clickAction.connect('clicked', Lang.bind(this, function() {
-            if (!this._currentPopup) {
-                return;
-            }
-
-            let [x, y] = this._clickAction.get_coords();
-            let actor = global.stage.get_actor_at_pos(Clutter.PickMode.ALL, x, y);
-            if (!this._currentPopup.actor.contains(actor)) {
-                this._currentPopup.popdown();
-            }
-
-        }));
+        this._clickAction.connect('clicked', Lang.bind(this, this._closePopup));
         this._eventBlocker.add_action(this._clickAction);
+
+        let clickAction = new Clutter.ClickAction();
+        clickAction.connect('clicked', Lang.bind(this, this._closePopup));
+        Main.overview.addAction(clickAction, false);
+        this._eventBlocker.bind_property('reactive', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
+    },
+
+    _closePopup: function() {
+        if (!this._currentPopup) {
+            return;
+        }
+
+        let [x, y] = this._clickAction.get_coords();
+        let actor = global.stage.get_actor_at_pos(Clutter.PickMode.ALL, x, y);
+        if (!this._currentPopup.actor.contains(actor)) {
+            this._currentPopup.popdown();
+        }
     },
 
     _onPan: function(action) {
