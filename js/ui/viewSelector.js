@@ -76,7 +76,7 @@ const ViewSelector = new Lang.Class({
         this._capturedEventId = 0;
 
         this._workspacesDisplay = new WorkspacesView.WorkspacesDisplay();
-        this._workspacesDisplay.connect('empty-space-clicked', Lang.bind(this, this._toggleAppsPage));
+        this._workspacesDisplay.connect('empty-space-clicked', Lang.bind(this, this._onEmptySpaceClicked));
         this._workspacesPage = this._addPage(this._workspacesDisplay.actor,
                                              _("Windows"), 'emblem-documents-symbolic');
 
@@ -98,7 +98,7 @@ const ViewSelector = new Lang.Class({
                 }
             }));
 
-        Main.overview.connect('show-apps-request', Lang.bind(this, this._toggleAppsPage));
+        Main.overview.connect('show-apps-request', Lang.bind(this, this._onShowAppsRequest));
 
         if (Main.screenShield) {
             Main.screenShield.connect('locked-changed', Lang.bind(this, this._onShieldLock));
@@ -122,9 +122,13 @@ const ViewSelector = new Lang.Class({
         Gio.AppInfo.launch_default_for_uri(uri, null);
     },
 
-    _toggleAppsPage: function() {
+    _onEmptySpaceClicked: function() {
+        this._showPage(this._appsPage);
+    },
+
+    _onShowAppsRequest: function() {
         Main.overview.show();
-        this._showAppsButton.set_checked(true);
+        this._showPage(this._appsPage, true);
     },
 
     show: function() {
