@@ -181,8 +181,10 @@ const ViewSelector = new Lang.Class({
     },
 
     _fadePageIn: function(oldPage) {
-        if (oldPage)
+        if (oldPage) {
+            oldPage.opacity = 0;
             oldPage.hide();
+        }
 
         this.emit('page-empty');
 
