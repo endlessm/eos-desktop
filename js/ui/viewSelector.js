@@ -43,7 +43,6 @@ const ViewSelector = new Lang.Class({
     _init : function(searchEntry, showAppsButton) {
         this.actor = new Shell.Stack({ name: 'viewSelector' });
 
-        this._showAppsBlocked = false;
         this._showAppsButton = showAppsButton;
         this._showAppsButton.connect('notify::checked', Lang.bind(this, this._onShowAppsButtonToggled));
 
@@ -88,13 +87,11 @@ const ViewSelector = new Lang.Class({
         this._stageKeyPressId = 0;
         Main.overview.connect('showing', Lang.bind(this,
             function () {
-                this._resetShowAppsButton();
                 this._stageKeyPressId = global.stage.connect('key-press-event',
                                                              Lang.bind(this, this._onStageKeyPress));
             }));
         Main.overview.connect('hiding', Lang.bind(this,
             function () {
-                this._resetShowAppsButton();
                 if (this._stageKeyPressId != 0) {
                     global.stage.disconnect(this._stageKeyPressId);
                     this._stageKeyPressId = 0;
@@ -131,10 +128,7 @@ const ViewSelector = new Lang.Class({
     },
 
     show: function() {
-        this._activePage = this._workspacesPage;
-
         this.reset();
-        this._appsPage.hide();
         this._workspacesDisplay.show();
 
         if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
@@ -176,6 +170,16 @@ const ViewSelector = new Lang.Class({
         return page;
     },
 
+    _pageChanged: function() {
+        if (this._activePage == this._appsPage) {
+            this._showAppsButton.checked = true;
+        } else {
+            this._showAppsButton.checked = false;
+        }
+
+        this.emit('page-changed');
+    },
+
     _fadePageIn: function(oldPage) {
         if (oldPage)
             oldPage.hide();
@@ -196,7 +200,7 @@ const ViewSelector = new Lang.Class({
 
         let oldPage = this._activePage;
         this._activePage = page;
-        this.emit('page-changed');
+        this._pageChanged();
 
         if (oldPage && !noFade)
             Tweener.addTween(oldPage,
@@ -218,19 +222,8 @@ const ViewSelector = new Lang.Class({
     },
 
     _onShowAppsButtonToggled: function() {
-        if (this._showAppsBlocked)
-            return;
-
         this._showPage(this._showAppsButton.checked ?
                        this._appsPage : this._workspacesPage);
-    },
-
-    _resetShowAppsButton: function() {
-        this._showAppsBlocked = true;
-        this._showAppsButton.checked = false;
-        this._showAppsBlocked = false;
-
-        this._showPage(this._workspacesPage, true);
     },
 
     _onStageKeyPress: function(actor, event) {
