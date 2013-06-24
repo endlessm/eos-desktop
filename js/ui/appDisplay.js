@@ -626,10 +626,7 @@ const AllView = new Lang.Class({
     },
 
     animateMovement: function(movedList, removedList, callback) {
-        if (this._repositionedIndex != null) {
-            this._grid.animateShuffling(movedList, removedList, this._repositionedIndex, callback);
-            this._repositionedIndex = null;
-        }
+        this._grid.animateShuffling(movedList, removedList, this._repositionedIndex, callback);
     }
 });
 
