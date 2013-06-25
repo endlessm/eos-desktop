@@ -468,7 +468,7 @@ const AllView = new Lang.Class({
 
         let item = this._dragView.getItemForIndex(this._onIconIdx);
         let validHoverDrop = false;
-        
+
         if (item) {
             let viewIcon = this._dragView.getIcon(item.get_id());
             // We can only move applications into folders or the app store
@@ -514,40 +514,41 @@ const AllView = new Lang.Class({
                 return false;
             }
 
-            let accepted  = dropIcon.handleIconDrop(source)
-
-            if (accepted) {
-                this._repositionedIconData = [ this._originalIdx, position ];
-
-                if (this._currentPopup) {
-                    this._eventBlocker.reactive = false;
-                    this._currentPopup.popdown();
-                }
-            }
-
-            return accepted;
-        } else {
-            if (!this._positionReallyMoved()) {
-                // If we are outside of the grid area, or didn't actually change
-                // position, ignore the request to move
+            let accepted  = dropIcon.handleIconDrop(source);
+            if (!accepted) {
                 return false;
-            } else {
-                // If we are not over an icon but within the grid, shift the
-                // grid around to accomodate it
-                let item = this._dragView.getItemForIndex(this._insertIdx);
-                let insertId = item ? item.get_id() : null;
-
-                let folderId;
-                if (this._dragView == this) {
-                    folderId = '';
-                } else {
-                    folderId = this._dragView.folderIcon.getId();
-                }
-
-                this._repositionedIconData = [ this._originalIdx, position ];
-                IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
-                return true;
             }
+
+            this._repositionedIconData = [ this._originalIdx, position ];
+
+            if (this._currentPopup) {
+                this._eventBlocker.reactive = false;
+                this._currentPopup.popdown();
+            }
+
+            return true;
+        } else {
+            // If we are outside of the grid area, or didn't actually change
+            // position, ignore the request to move
+            if (!this._positionReallyMoved()) {
+                return false;
+            }
+
+            // If we are not over an icon but within the grid, shift the
+            // grid around to accomodate it
+            let item = this._dragView.getItemForIndex(this._insertIdx);
+            let insertId = item ? item.get_id() : null;
+
+            let folderId;
+            if (this._dragView == this) {
+                folderId = '';
+            } else {
+                folderId = this._dragView.folderIcon.getId();
+            }
+
+            this._repositionedIconData = [ this._originalIdx, position ];
+            IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
+            return true;
         }
     },
 
