@@ -916,16 +916,22 @@ const FolderIcon = new Lang.Class({
             function(popup, isOpen) {
                 if (!isOpen) {
                     this.actor.checked = false;
-
-                    // save the view for future reuse before destroying
-                    // the popup
-                    let viewActor = this.view.actor;
-                    let viewParent = viewActor.get_parent();
-                    viewParent.remove_actor(viewActor);
-
-                    this._popup.actor.destroy();
-                    this._popup = null;
                 }
+            }));
+        this._popup.actor.connect('notify::visible', Lang.bind(this,
+            function() {
+                if (this._popup.actor.visible) {
+                    return;
+                }
+
+                // save the view for future reuse before destroying
+                // the popup
+                let viewActor = this.view.actor;
+                let viewParent = viewActor.get_parent();
+                viewParent.remove_actor(viewActor);
+
+                this._popup.actor.destroy();
+                this._popup = null;
             }));
     },
 
