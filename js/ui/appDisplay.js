@@ -1068,9 +1068,9 @@ const AppFolderPopup = new Lang.Class({
                               BoxPointer.PopupAnimation.SLIDE,
                               Lang.bind(this, function () {
                                   this.actor.hide();
-                                  this.emit('open-state-changed', false);
                               }));
         this._isOpen = false;
+        this.emit('open-state-changed', false);
     }
 });
 Signals.addSignalMethods(AppFolderPopup.prototype);
