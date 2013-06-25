@@ -1037,11 +1037,6 @@ const AppFolderPopup = new Lang.Class({
 
         this._boxPointer.actor.bind_property('opacity', this.closeButton, 'opacity',
                                              GObject.BindingFlags.SYNC_CREATE);
-
-        source.actor.connect('destroy', Lang.bind(this,
-            function() {
-                this.actor.destroy();
-            }));
     },
 
     toggle: function() {
