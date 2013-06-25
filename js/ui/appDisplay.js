@@ -101,15 +101,6 @@ const EndlessApplicationView = new Lang.Class({
         }
     },
 
-    _showItem: function(item) {
-        let id = item.get_id();
-        if (this._icons[id] === undefined) {
-            return;
-        }
-
-        this._icons[id].actor.show();
-    },
-
     loadGrid: function() {
         for (let i = 0; i < this._allItems.length; i++) {
             let id = this._allItems[i].get_id();
