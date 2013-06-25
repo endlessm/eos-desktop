@@ -1291,6 +1291,7 @@ const AppIcon = new Lang.Class({
             this.app.open_new_window(-1);
         } else {
             this.app.activate();
+            Main.wm.minimizeAllWindows();
         }
 
         Main.overview.hide();

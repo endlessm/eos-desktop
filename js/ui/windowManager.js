@@ -208,6 +208,17 @@ const WindowManager = new Lang.Class({
         this._animationBlockCount = Math.max(0, this._animationBlockCount - 1);
     },
 
+    minimizeAllWindows: function() {
+        let appSystem = Shell.AppSystem.get_default();
+        let runningApps = appSystem.get_running();
+        for (let r in runningApps) {
+            let appWindows = runningApps[r].get_windows();
+            for (let w in appWindows) {
+                appWindows[w].minimize();
+            }
+        }
+    },
+
     _shouldAnimate: function() {
         return !(Main.overview.visible || this._animationBlockCount > 0);
     },
