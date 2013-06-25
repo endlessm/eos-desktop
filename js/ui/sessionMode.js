@@ -32,7 +32,6 @@ const _modes = {
         components: [],
         panel: {
             left: [],
-            center: [],
             right: []
         },
         panelStyle: null
@@ -46,7 +45,6 @@ const _modes = {
         components: ['polkitAgent'],
         panel: {
             left: ['logo'],
-            center: [],
             right: ['dateMenu', 'a11yGreeter', 'display', 'keyboard',
                     'volume', 'battery', 'powerMenu']
         },
@@ -64,7 +62,6 @@ const _modes = {
         components: ['polkitAgent', 'telepathyClient'],
         panel: {
             left: [],
-            center: [],
             right: ['lockScreen']
         },
         panelStyle: 'lock-screen'
@@ -76,7 +73,6 @@ const _modes = {
         components: ['polkitAgent', 'telepathyClient'],
         panel: {
             left: [],
-            center: [],
             right: ['a11y', 'keyboard', 'lockScreen']
         },
         panelStyle: 'unlock-screen'
@@ -88,7 +84,6 @@ const _modes = {
         components: ['keyring'],
         panel: {
             left: [],
-            center: [],
             right: ['dateMenu', 'a11yGreeter', 'keyboard', 'volume', 'battery']
         }
     },
@@ -109,7 +104,6 @@ const _modes = {
                      'keyring', 'recorder', 'autorunManager', 'automountManager'],
         panel: {
             left: ['appIcons'],
-            center: [],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
                     'network', 'battery', 'socialBar', 'userMenu']
         }

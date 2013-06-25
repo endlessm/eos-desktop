@@ -6,6 +6,7 @@ const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
+const Gio = imports.gi.Gio;
 
 const BoxPointer = imports.ui.boxpointer;
 const ButtonConstants = imports.ui.buttonConstants;
@@ -14,8 +15,8 @@ const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
-const PANEL_ICON_SIZE = 26;
-const PANEL_ICON_PADDING = 14;
+const ICON_SIZE = 26;
+const NAV_BUTTON_SIZE = 15;
 
 const PANEL_WINDOW_MENU_THUMBNAIL_SIZE = 128;
 
@@ -236,12 +237,15 @@ Signals.addSignalMethods(AppIconMenu.prototype);
 const AppIconButton = new Lang.Class({
     Name: 'AppIconButton',
 
-    _init: function(app) {
+    _init: function(app, iconSize) {
         this._app = app;
 
-        let icon = app.create_icon_texture(PANEL_ICON_SIZE);
+        let icon = app.create_icon_texture(iconSize);
 
-        this.actor = new St.Button({ child: icon, button_mask: St.ButtonMask.ONE });
+        this.actor = new St.Button({ style_class: 'app-icon-button',
+                                     child: icon,
+                                     button_mask: St.ButtonMask.ONE
+                                   });
         this.actor.reactive = true;
 
         // Handle the menu-on-press case for multiple windows
@@ -280,6 +284,12 @@ const AppIconButton = new Lang.Class({
             this._updateIconGeometry));
         this.actor.connect('destroy', Lang.bind(this,
             this._resetIconGeometry));
+    },
+
+    setIconSize: function(iconSize) {
+        let icon = this._app.create_icon_texture(iconSize);
+
+        this.actor.set_child(icon);
     },
 
     _resetIconGeometry: function() {
@@ -325,6 +335,48 @@ const AppIconButton = new Lang.Class({
     }
 });
 
+/** AppIconBarNavButton:
+ *
+ * This class handles the nav buttons on the app bar
+ */
+const AppIconBarNavButton = Lang.Class({
+    Name: 'AppIconBarNavButton',
+    Extends: St.Button,
+
+    _init: function(imagePath, pressHandler) {
+        let iconFile = Gio.File.new_for_path(global.datadir + imagePath);
+        let gicon = new Gio.FileIcon({ file: iconFile });
+
+        this._icon = new St.Icon({ style_class: 'app-bar-nav-icon',
+                                   gicon: gicon
+                                 });
+        this._icon.connect('style-changed', Lang.bind(this, this._updateStyle));
+
+        this.parent({ style_class: 'app-bar-nav-button',
+                      child: this._icon,
+                      can_focus: true,
+                      reactive: true,
+                      track_hover: true,
+                      button_mask: St.ButtonMask.ONE
+                    });
+
+        this.connect('clicked', pressHandler);
+    },
+
+    _updateStyle: function(actor, forHeight, alloc) {
+        this._size = this._icon.get_theme_node().get_length('icon-size');
+        this._spacing = this._icon.get_theme_node().get_length('spacing');
+    },
+
+    getSize: function(actor, forHeight, alloc) {
+        return this._size;
+    },
+
+    getSpacing: function() {
+        return this._spacing;
+    }
+});
+
 /** AppIconBar:
  *
  * This class handles positioning all the application icons and listening
@@ -336,8 +388,12 @@ const AppIconBar = new Lang.Class({
 
     _init: function() {
         this.parent(0.0, null, true);
+        this.actor.add_style_class_name('app-icon-bar');
 
-        let bin = new St.Bin({ name: 'appIconBar' });
+        let bin = new St.Bin({ name: 'appIconBar',
+                               x_fill: true });
+        this.actor.connect('style-changed', Lang.bind(this, this._updateStyleConstants));
+
         this.actor.add_actor(bin);
 
         this._container = new Shell.GenericContainer();
@@ -348,9 +404,21 @@ const AppIconBar = new Lang.Class({
         this._container.connect('allocate', Lang.bind(this, this._contentAllocate));
 
         this._numberOfApps = 0;
+        this._currentPage = 0;
+        this._appsPerPage = -1;
         this._runningApps = new Hash.Map();
 
+        this._iconSize = ICON_SIZE;
+        this._iconSpacing = 0;
+        this._navButtonSize = 0;
+        this._navButtonSpacing = 0;
+
         let appSys = Shell.AppSystem.get_default();
+
+        this._backButton = new AppIconBarNavButton('/theme/app-bar-back-symbolic.svg', Lang.bind(this, this._previousPageSelected));
+        this._forwardButton = new AppIconBarNavButton('/theme/app-bar-forward-symbolic.svg', Lang.bind(this, this._nextPageSelected));
+
+        this._container.add_actor(this._backButton);
 
         // Update for any apps running before the system started
         // (after a crash or a restart)
@@ -358,60 +426,143 @@ const AppIconBar = new Lang.Class({
         for (let i = 0; i < currentlyRunning.length; i++) {
             let app = currentlyRunning[i];
 
-            let newChild = new AppIconButton(app);
+            let newChild = new AppIconButton(app, this._iconSize);
             this._runningApps.set(app, newChild);
             this._numberOfApps++;
             this._container.add_actor(newChild.actor);
         }
+
+        this._container.add_actor(this._forwardButton);
+
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
     },
 
+    _previousPageSelected: function() {
+        this._currentPage = this._currentPage - 1;
+        this._updateCurrentAppPage();
+    },
+
+    _nextPageSelected: function() {
+        this._currentPage = this._currentPage + 1;
+        this._updateCurrentAppPage();
+    },
+
+    _updateCurrentAppPage: function() {
+        let [visibleApps, runningApps] = this._getAppsOnPage(this._currentPage, this._appsPerPage);
+
+        for (app in runningApps) {
+            let isAppHidden = visibleApps.indexOf(runningApps[app]) == -1;
+            let [key, child] = runningApps[app];
+
+            this._container.set_skip_paint(child.actor, isAppHidden);
+        }
+
+        this._container.set_skip_paint(this._backButton, this._currentPage == 0);
+        this._container.set_skip_paint(this._forwardButton, this._currentPage == this._numberOfPages - 1);
+    },
+
     _getContentPreferredWidth: function(actor, forHeight, alloc) {
-        alloc.min_size = PANEL_ICON_SIZE * this._numberOfApps;
-        alloc.natural_size = alloc.min_size + (PANEL_ICON_PADDING * (this._numberOfApps - 1));
+        alloc.min_size = 2 * this._navButtonSize + 2 * this._navButtonSpacing + this._iconSize;
+
+        let iconArea = 0;
+        if (this._numberOfApps > 0) {
+            let iconSpacing = this._iconSpacing * (this._numberOfApps - 1);
+            iconArea = (this._iconSize  * (this._numberOfApps - 1)) + iconSpacing;
+        }
+
+        alloc.natural_size = alloc.min_size + iconArea;
     },
 
     _getContentPreferredHeight: function(actor, forWidth, alloc) {
-        alloc.min_size = PANEL_ICON_SIZE;
-        alloc.natural_size = PANEL_ICON_SIZE;
+        alloc.min_size = Math.max(this._iconSize, this._navButtonSize);
+        alloc.natural_size = alloc.min_size;
+    },
+
+    _updateStyleConstants: function() {
+        let node = this.actor.get_theme_node();
+
+        this._iconSize = node.get_length("-icon-size");
+        this._runningApps.items().forEach( Lang.bind(this,
+            function(app) {
+                app[1].setIconSize(this._iconSize);
+            }));
+
+        this._iconSpacing = node.get_length("-icon-spacing");
+        this._navButtonSize = this._backButton.getSize();
+        this._navButtonSpacing = this._backButton.getSpacing();
     },
 
     _contentAllocate: function(actor, box, flags) {
         let allocWidth = box.x2 - box.x1;
         let allocHeight = box.y2 - box.y1;
 
-        let childBox = new Clutter.ActorBox();
-
         let [minWidth, minHeight, naturalWidth, naturalHeight] = this._container.get_preferred_size();
-
-        let direction = this.actor.get_text_direction();
-
         let yPadding = Math.floor(Math.max(0, allocHeight - naturalHeight) / 2);
+
+        let childBox = new Clutter.ActorBox();
         childBox.y1 = yPadding;
-        childBox.y2 = childBox.y1 + Math.min(naturalHeight, allocWidth);
+        childBox.y2 = childBox.y1 + Math.min(naturalHeight, allocHeight);
 
-        let children = this._runningApps.items();
+        let [numOfPages, appsPerPage] = this._calculateNumberOfPages(allocWidth);
 
-	// Calculate the spacing between the icons based on
-	// the splitting the difference between the width the bar has been
-	// allocated, and the minimum width we can handle over each of the
-	// icons
-	// Normally padding will be 5 but we can handle right down to 0
-	let spacing;
-	if ((children.length - 1) == 0) {
-	    spacing = 0;
-	} else {
-            spacing = (allocWidth - minWidth) / (children.length - 1);
-	}
+        this._appsPerPage = appsPerPage;
+        this._numberOfPages = numOfPages;
 
-        for (let i = 0; i < children.length; i++) {
-            let [key, child] = children[i];
+        // If we are on a page that is out of bounds when the resolution changes
+        // we need to clip its value
+        this._currentPage = Math.min(this._currentPage, this._numberOfPages - 1);
+        this._updateCurrentAppPage();
 
-            childBox.x1 = (PANEL_ICON_SIZE + spacing) * i;
-            childBox.x2 = childBox.x1 + PANEL_ICON_SIZE;
+        let [visibleApps, runningApps] = this._getAppsOnPage(this._currentPage, this._appsPerPage);
+        childBox.x1 = 0;
+        childBox.x2 = childBox.x1 + this._navButtonSize;
+        this._backButton.allocate(childBox, flags);
+
+        let iconListStart = childBox.x2 + this._navButtonSpacing;
+
+        for (index in visibleApps) {
+            let [key, child] = visibleApps[index];
+            childBox.x1 = iconListStart + index * (this._iconSize + this._iconSpacing);
+            childBox.x2 = childBox.x1 + this._iconSize;
 
             child.actor.allocate(childBox, flags);
         }
+
+        childBox.x1 = childBox.x2 + this._navButtonSpacing;
+        childBox.x2 = childBox.x1 + this._navButtonSize;
+        this._forwardButton.allocate(childBox, flags);
+    },
+
+    _calculateNumberOfPages: function(width){
+        let netWidth = width - (2 * this._navButtonSize) - (2 * this._navButtonSpacing);
+        let minimumIconWidth = this._iconSize + this._iconSpacing;
+
+        // We need to clip the net width since initially may be 0
+        netWidth = Math.max(0, netWidth);
+
+        // We need to add one icon space to net width here so that the division
+        // takes into account the fact that the last icon does not use iconSpacing
+        let iconsPerPage = Math.floor((netWidth + this._iconSpacing) / minimumIconWidth);
+        iconsPerPage = Math.max(1, iconsPerPage);
+
+        let pages = Math.ceil(this._runningApps.items().length / iconsPerPage);
+
+        // If we only have one page, previous calculations will return 0 so
+        // we clip the value here
+        pages = Math.max(1, pages);
+
+        return [pages, iconsPerPage];
+    },
+
+    _getAppsOnPage: function(pageNum, appsPerPage){
+        let apps = this._runningApps.items();
+
+        let startIndex = appsPerPage * pageNum;
+        let endIndex = Math.min(startIndex + appsPerPage, apps.length);
+
+        let appsOnPage = apps.slice(startIndex, endIndex);
+
+        return [appsOnPage, apps];
     },
 
     _onAppStateChanged: function(appSys, app) {
@@ -419,20 +570,20 @@ const AppIconBar = new Lang.Class({
 
         switch(state) {
         case Shell.AppState.STARTING:
-            let newChild = new AppIconButton(app);
+            let newChild = new AppIconButton(app, this._iconSize);
             this._runningApps.set(app, newChild);
             this._numberOfApps++;
             this._container.add_actor(newChild.actor);
             break;
 
         case Shell.AppState.RUNNING:
-	    // The normal sequence of events appears to be
-	    // STARTING -> STOPPED -> RUNNING -> STOPPED
-	    // but sometimes it can go STARTING -> RUNNING -> STOPPED
-	    // So we only want to add an app here if we don't already
-	    // have an icon for @app
+            // The normal sequence of events appears to be
+            // STARTING -> STOPPED -> RUNNING -> STOPPED
+            // but sometimes it can go STARTING -> RUNNING -> STOPPED
+            // So we only want to add an app here if we don't already
+            // have an icon for @app
             if (!this._runningApps.has(app)) {
-                let newChild = new AppIconButton(app);
+                let newChild = new AppIconButton(app, this._iconSize);
                 this._runningApps.set(app, newChild);
                 this._numberOfApps++;
                 this._container.add_actor(newChild.actor);
@@ -441,12 +592,15 @@ const AppIconBar = new Lang.Class({
 
         case Shell.AppState.STOPPED:
             let oldChild = this._runningApps.get(app);
-	    if (oldChild) {
+            if (oldChild) {
                 this._container.remove_actor(oldChild.actor);
                 this._runningApps.delete(app);
                 this._numberOfApps--;
             }
             break;
         }
+
+        // Make sure that our app list is updated
+        this._updateCurrentAppPage();
     }
 });
