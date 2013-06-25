@@ -624,10 +624,17 @@ const AllView = new Lang.Class({
 
     _updateIconOpacities: function(folderOpen) {
         for (let id in this._icons) {
-            if (folderOpen && !this._icons[id].actor.checked)
-                this._icons[id].actor.opacity = INACTIVE_GRID_OPACITY;
-            else
-                this._icons[id].actor.opacity = 255;
+            let opacity = 255;
+            let transition = 'easeInQuad';
+
+            if (folderOpen && !this._icons[id].actor.checked) {
+                opacity = INACTIVE_GRID_OPACITY;
+                transition = 'easeOutQuad';
+            }
+
+            Tweener.addTween(this._icons[id].actor, { opacity: opacity,
+                                                      time: BoxPointer.POPUP_ANIMATION_TIME,
+                                                      transition: transition });
         }
     },
 
