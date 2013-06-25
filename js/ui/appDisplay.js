@@ -62,10 +62,6 @@ const EndlessApplicationView = new Lang.Class({
         this._allItems = [];
     },
 
-    removeItem: function(item) {
-        this._grid.removeItem(item.actor);
-    },
-
     _createItemIcon: function(item) {
         throw new Error('Not implemented');
     },
@@ -84,31 +80,21 @@ const EndlessApplicationView = new Lang.Class({
         this._allItems.push(item);
         this._icons[id] = itemIcon;
 
+        this._grid.addItem(itemIcon.actor);
         return itemIcon;
     },
 
     _removeItem: function(item) {
-        let id = item.get_id();
-        if (this._icons[id] === undefined) {
-            return;
-        }
-
-        delete this._icons[id];
-
         let idx = this._allItems.indexOf(item);
         if (idx != -1) {
             this._allItems.splice(idx, 1);
         }
-    },
 
-    loadGrid: function() {
-        for (let i = 0; i < this._allItems.length; i++) {
-            let id = this._allItems[i].get_id();
-            if (!id) {
-                continue;
-            }
-
-            this._grid.addItem(this._icons[id].actor);
+        let id = item.get_id();
+        let itemIcon = this._icons[id];
+        if (itemIcon) {
+            delete this._icons[id];
+            this._grid.removeItem(itemIcon.actor);
         }
     },
 
@@ -734,7 +720,6 @@ const AppDisplay = new Lang.Class({
             }
         }
         this._view.addAppStore();
-        this._view.loadGrid();
 
         if (this._focusDummy) {
             let focused = this._focusDummy.has_key_focus();
@@ -824,10 +809,7 @@ const FolderIcon = new Lang.Class({
 
         this.view = new FolderView(this);
         this.view.actor.reactive = false;
-
-        this.view.removeAll();
         this._loadCategory();
-        this.view.loadGrid();
 
         this.actor.connect('clicked', Lang.bind(this,
             function() {
