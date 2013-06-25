@@ -716,15 +716,10 @@ const AppDisplay = new Lang.Class({
     },
 
     _trimInvisible: function(items) {
-        let visibleItems = [];
-        for (let itemIndex in items) {
-            let item = items[itemIndex];
-            if (IconGridLayout.layout.iconIsFolder(item) || this._appSystem.lookup_app(item)) {
-                visibleItems.push(item);
-            }
-        }
-
-        return visibleItems;
+        return items.filter(Lang.bind(this,
+            function(itemId) {
+                return IconGridLayout.layout.iconIsFolder(itemId) || this._appSystem.lookup_app(itemId);
+            }));
     },
 
     _addIcons: function() {
