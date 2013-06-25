@@ -212,10 +212,8 @@ function _initializeUI() {
                                   keybindingMode = Shell.KeyBindingMode.NORMAL;
                               }
 
-                              // Now that we've completed startup, the
-                              // workspace monitor may want to hide/show
-                              // the overview
-                              workspaceMonitor.updateOverview();
+                              // Now that we've completed startup,
+                              // show the overview
                               overview.showApps();
                           });
 }

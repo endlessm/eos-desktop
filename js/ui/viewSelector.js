@@ -43,7 +43,6 @@ const ViewSelector = new Lang.Class({
     _init : function(searchEntry, showAppsButton) {
         this.actor = new Shell.Stack({ name: 'viewSelector' });
 
-        this._showAppsBlocked = false;
         this._showAppsButton = showAppsButton;
         this._showAppsButton.connect('notify::checked', Lang.bind(this, this._onShowAppsButtonToggled));
 
@@ -77,7 +76,7 @@ const ViewSelector = new Lang.Class({
         this._capturedEventId = 0;
 
         this._workspacesDisplay = new WorkspacesView.WorkspacesDisplay();
-        this._workspacesDisplay.connect('empty-space-clicked', Lang.bind(this, this._toggleAppsPage));
+        this._workspacesDisplay.connect('empty-space-clicked', Lang.bind(this, this._onEmptySpaceClicked));
         this._workspacesPage = this._addPage(this._workspacesDisplay.actor,
                                              _("Windows"), 'emblem-documents-symbolic');
 
@@ -88,53 +87,41 @@ const ViewSelector = new Lang.Class({
         this._stageKeyPressId = 0;
         Main.overview.connect('showing', Lang.bind(this,
             function () {
-                this._resetShowAppsButton();
                 this._stageKeyPressId = global.stage.connect('key-press-event',
                                                              Lang.bind(this, this._onStageKeyPress));
             }));
         Main.overview.connect('hiding', Lang.bind(this,
             function () {
-                this._resetShowAppsButton();
                 if (this._stageKeyPressId != 0) {
                     global.stage.disconnect(this._stageKeyPressId);
                     this._stageKeyPressId = 0;
                 }
             }));
 
-        Main.overview.connect('show-apps-request', Lang.bind(this, this._toggleAppsPage));
-
-        if (Main.screenShield) {
-            Main.screenShield.connect('locked-changed', Lang.bind(this, this._onShieldLock));
-        }
-    },
-
-    _onShieldLock: function() {
-        if (Main.screenShield) {
-            Main.overview.show();
-            this._showAppsButton.checked = !Main.screenShield.locked;
-        }
+        Main.overview.connect('show-apps-request', Lang.bind(this, this._onShowAppsRequest));
     },
 
     _activateDefaultSearch: function() {
         let uri = BASE_SEARCH_URI;
         let terms = getTermsForSearchString(this._entry.get_text());
         if (terms.length != 0) {
-           uri = uri + QUERY_URI_PATH + encodeURI(terms.join(" ")); 
+           uri = uri + QUERY_URI_PATH + encodeURI(terms.join(' '));
         }
 
         Gio.AppInfo.launch_default_for_uri(uri, null);
     },
 
-    _toggleAppsPage: function() {
+    _onEmptySpaceClicked: function() {
+        this._showPage(this._appsPage);
+    },
+
+    _onShowAppsRequest: function() {
         Main.overview.show();
-        this._showAppsButton.set_checked(true);
+        this._showPage(this._appsPage, true);
     },
 
     show: function() {
-        this._activePage = this._workspacesPage;
-
         this.reset();
-        this._appsPage.hide();
         this._workspacesDisplay.show();
 
         if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
@@ -176,18 +163,34 @@ const ViewSelector = new Lang.Class({
         return page;
     },
 
-    _fadePageIn: function(oldPage) {
-        if (oldPage)
+    _pageChanged: function() {
+        if (this._activePage == this._appsPage) {
+            this._showAppsButton.checked = true;
+        } else {
+            this._showAppsButton.checked = false;
+        }
+
+        this.emit('page-changed');
+    },
+
+    _fadePageIn: function(oldPage, noFade) {
+        if (oldPage) {
+            oldPage.opacity = 0;
             oldPage.hide();
+        }
 
         this.emit('page-empty');
 
         this._activePage.show();
-        Tweener.addTween(this._activePage,
-            { opacity: 255,
-              time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
-              transition: 'easeOutQuad'
-            });
+        if (noFade) {
+            this._activePage.opacity = 255;
+        } else {
+            Tweener.addTween(this._activePage,
+                { opacity: 255,
+                  time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
+                  transition: 'easeOutQuad'
+                });
+        }
     },
 
     _showPage: function(page, noFade) {
@@ -196,7 +199,7 @@ const ViewSelector = new Lang.Class({
 
         let oldPage = this._activePage;
         this._activePage = page;
-        this.emit('page-changed');
+        this._pageChanged();
 
         if (oldPage && !noFade)
             Tweener.addTween(oldPage,
@@ -205,11 +208,11 @@ const ViewSelector = new Lang.Class({
                                transition: 'easeOutQuad',
                                onComplete: Lang.bind(this,
                                    function() {
-                                       this._fadePageIn(oldPage);
+                                       this._fadePageIn(oldPage, noFade);
                                    })
                              });
         else
-            this._fadePageIn(oldPage);
+            this._fadePageIn(oldPage, noFade);
     },
 
     _a11yFocusPage: function(page) {
@@ -218,19 +221,8 @@ const ViewSelector = new Lang.Class({
     },
 
     _onShowAppsButtonToggled: function() {
-        if (this._showAppsBlocked)
-            return;
-
         this._showPage(this._showAppsButton.checked ?
                        this._appsPage : this._workspacesPage);
-    },
-
-    _resetShowAppsButton: function() {
-        this._showAppsBlocked = true;
-        this._showAppsButton.checked = false;
-        this._showAppsBlocked = false;
-
-        this._showPage(this._workspacesPage, true);
     },
 
     _onStageKeyPress: function(actor, event) {

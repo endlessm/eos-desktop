@@ -834,7 +834,6 @@ const UserMenuButton = new Lang.Class({
 
     _onLockScreenActivate: function() {
         this.menu.close(BoxPointer.PopupAnimation.NONE);
-        Main.overview.hide();
         Main.screenShield.lock(true);
     },
 
