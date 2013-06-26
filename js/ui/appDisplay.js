@@ -389,9 +389,13 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.CONTINUE;
         }
 
+        let draggingWithinFolder =
+            this._currentPopup && (this._dragView == this._dragIcon.parentView);
+        let canDropPastEnd = draggingWithinFolder || !this._appStoreIcon;
+
         let [idx, cursorLocation] = this._dragView.canDropAt(dragEvent.x,
                                                              dragEvent.y,
-                                                             !this._appStoreIcon);
+                                                             canDropPastEnd);
 
         let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
         let isNewPosition = (!onIcon && idx != this._insertIdx) || (onIcon != this._onIcon);
