@@ -632,7 +632,7 @@ const IconGrid = new Lang.Class({
         if (cursorLocation != CursorLocation.LEFT_EDGE) {
             let leftItem = this.getItemAtIndex(nudgeIdx - 1);
             this._animateNudge(leftItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION,
-                               -this._hItemSize * NUDGE_FACTOR
+                               Math.floor(-this._hItemSize * NUDGE_FACTOR)
                               );
         }
 
@@ -641,7 +641,7 @@ const IconGrid = new Lang.Class({
         if (cursorLocation != CursorLocation.RIGHT_EDGE) {
             let rightItem = this.getItemAtIndex(nudgeIdx);
             this._animateNudge(rightItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION,
-                               this._hItemSize * NUDGE_FACTOR
+                               Math.floor(this._hItemSize * NUDGE_FACTOR)
                               );
         }
     },
