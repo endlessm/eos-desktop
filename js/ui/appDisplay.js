@@ -133,8 +133,8 @@ const EndlessApplicationView = new Lang.Class({
         this._grid.removeNudgeTransforms();
     },
 
-    canDropAt: function(x, y, index) {
-        return this._grid.canDropAt(x, y, index);
+    canDropAt: function(x, y, appStoreIcon) {
+        return this._grid.canDropAt(x, y, appStoreIcon);
     },
 
     getIcon: function(id) {
@@ -288,7 +288,7 @@ const AllView = new Lang.Class({
         this._originalIdx = source.parentView.indexOf(source);
 
         source.handleViewDragBegin();
-        if (source.canDragOver(this._appStoreIcon)) {
+        if (this._appStoreIcon && (source.canDragOver(this._appStoreIcon))) {
             this._appStoreIcon.handleViewDragBegin();
         }
     },
@@ -312,7 +312,7 @@ const AllView = new Lang.Class({
         this._dragView = null;
 
         source.handleViewDragEnd();
-        if (source.canDragOver(this._appStoreIcon)) {
+        if (this._appStoreIcon && (source.canDragOver(this._appStoreIcon))) {
             this._appStoreIcon.handleViewDragEnd();
         }
     },
@@ -390,7 +390,8 @@ const AllView = new Lang.Class({
         }
 
         let [idx, cursorLocation] = this._dragView.canDropAt(dragEvent.x,
-                                                             dragEvent.y);
+                                                             dragEvent.y,
+                                                             this._appStoreIcon);
 
         let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
         let isNewPosition = (!onIcon && idx != this._insertIdx) || (onIcon != this._onIcon);
@@ -577,8 +578,10 @@ const AllView = new Lang.Class({
     addAppStore: function() {
         let appSystem = Shell.AppSystem.get_default();
         this._appStore = appSystem.lookup_app('eos-app-store.desktop');
-        this._appStoreIcon = this.addApp(this._appStore);
-        this._appStore.connect('windows-changed', Lang.bind(this, this._appStoreWindowsChanged));
+        if (this._appStore) {
+            this._appStoreIcon = this.addApp(this._appStore);
+            this._appStore.connect('windows-changed', Lang.bind(this, this._appStoreWindowsChanged));
+        }
     },
 
     _appStoreWindowsChanged: function() {
