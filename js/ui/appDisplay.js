@@ -133,8 +133,8 @@ const EndlessApplicationView = new Lang.Class({
         this._grid.removeNudgeTransforms();
     },
 
-    canDropAt: function(x, y, appStoreIcon) {
-        return this._grid.canDropAt(x, y, appStoreIcon);
+    canDropAt: function(x, y, canDropPastEnd) {
+        return this._grid.canDropAt(x, y, canDropPastEnd);
     },
 
     getIcon: function(id) {
@@ -391,7 +391,7 @@ const AllView = new Lang.Class({
 
         let [idx, cursorLocation] = this._dragView.canDropAt(dragEvent.x,
                                                              dragEvent.y,
-                                                             this._appStoreIcon);
+                                                             !this._appStoreIcon);
 
         let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
         let isNewPosition = (!onIcon && idx != this._insertIdx) || (onIcon != this._onIcon);

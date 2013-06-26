@@ -758,7 +758,7 @@ const IconGrid = new Lang.Class({
     // DnD support
 
     // Returns the drop point index or -1 if we can't drop there
-    canDropAt: function(x, y, appStoreIcon) {
+    canDropAt: function(x, y, canDropPastEnd) {
         let [sw, sh] = this.actor.get_transformed_size();
         let [ok, sx, sy] = this.actor.transform_stage_point(x, y);
 
@@ -829,7 +829,7 @@ const IconGrid = new Lang.Class({
             }
         } else if (sx >= iconRightX) {
             // We are to the right of the icon target
-            if (childIdx >= children.length - (appStoreIcon ? 1 : 0)) {
+            if (childIdx >= children.length - (canDropPastEnd ? 0 : 1)) {
                 // We are beyond the last valid icon
                 // (to the right of the app store / trash can, if present)
                 dropIdx = -1;
