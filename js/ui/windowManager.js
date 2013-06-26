@@ -211,12 +211,12 @@ const WindowManager = new Lang.Class({
     minimizeAllWindows: function() {
         let appSystem = Shell.AppSystem.get_default();
         let runningApps = appSystem.get_running();
-        for (let r in runningApps) {
-            let appWindows = runningApps[r].get_windows();
-            for (let w in appWindows) {
-                appWindows[w].minimize();
-            }
-        }
+        runningApps.forEach(function (app) {
+            let appWindows = app.get_windows();
+            appWindows.forEach(function (window) {
+                window.minimize();
+            });
+        });
     },
 
     _shouldAnimate: function() {
