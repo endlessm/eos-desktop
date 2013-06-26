@@ -41,6 +41,8 @@ const FOLDER_SUBICON_FRACTION = .4;
 
 const DRAG_SCROLL_PIXELS_PER_SEC = 800;
 
+const EOS_APP_STORE_ID = 'eos-app-store.desktop';
+
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,
@@ -223,6 +225,12 @@ const AllView = new Lang.Class({
         this._clickAction.connect('clicked', Lang.bind(this, this._closePopup));
         Main.overview.addAction(this._clickAction, false);
         this._eventBlocker.bind_property('reactive', this._clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
+
+        let appSystem = Shell.AppSystem.get_default();
+        this._appStore = appSystem.lookup_app(EOS_APP_STORE_ID);
+        if (this._appStore) {
+            this._appStore.connect('windows-changed', Lang.bind(this, this._appStoreWindowsChanged));
+        }
     },
 
     _closePopup: function() {
@@ -559,11 +567,8 @@ const AllView = new Lang.Class({
     },
 
     addAppStore: function() {
-        let appSystem = Shell.AppSystem.get_default();
-        this._appStore = appSystem.lookup_app('eos-app-store.desktop');
         if (this._appStore) {
             this._appStoreIcon = this.addApp(this._appStore);
-            this._appStore.connect('windows-changed', Lang.bind(this, this._appStoreWindowsChanged));
         }
     },
 
