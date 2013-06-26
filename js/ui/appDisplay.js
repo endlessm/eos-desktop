@@ -231,7 +231,7 @@ const AllView = new Lang.Class({
                                          style_class: 'all-apps vfade' });
         this.actor._delegate = this;
 
-        this._repositionedIndex = null;
+        this._repositionedIconData = [ null, null ];
 
         this.actor.add_actor(box);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -495,6 +495,7 @@ const AllView = new Lang.Class({
     acceptDrop: function(source, actor, x, y, time) {
         // Get the id of the icon dragged
         let originalId = source.getId();
+        let position = [x, y];
 
         if (this._onIcon) {
             // Find out what icon the drop is under
@@ -515,7 +516,7 @@ const AllView = new Lang.Class({
             let accepted  = dropIcon.handleIconDrop(source)
 
             if (accepted) {
-                this._repositionedIndex = this._originalIdx;
+                this._repositionedIconData = [ this._originalIdx, position ];
 
                 if (this._currentPopup) {
                     this._eventBlocker.reactive = false;
@@ -542,7 +543,7 @@ const AllView = new Lang.Class({
                     folderId = this._dragView.folderIcon.getId();
                 }
 
-                this._repositionedIndex = this._originalIdx;
+                this._repositionedIconData = [ this._originalIdx, position ];
                 IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
                 return true;
             }
@@ -630,7 +631,7 @@ const AllView = new Lang.Class({
     animateMovement: function(movedList, removedList, callback) {
         this._grid.animateShuffling(movedList,
                                     removedList,
-                                    this._repositionedIndex,
+                                    this._repositionedIconData,
                                     callback
                                    );
     }
