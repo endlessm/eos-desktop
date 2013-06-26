@@ -130,6 +130,11 @@ const EndlessApplicationView = new Lang.Class({
 
     getAllIds: function(index) {
         return this._allItems.map(function(item) { return item.get_id(); });
+    },
+
+    getLayoutIds: function() {
+        let viewId = this.getViewId();
+        return IconGridLayout.layout.getIcons(viewId).slice();
     }
 });
 
@@ -139,8 +144,26 @@ const FolderView = new Lang.Class({
 
     _init: function(folderIcon) {
         this.parent();
-        this.folderIcon = folderIcon;
+        this._folderIcon = folderIcon;
         this.actor = this._grid.actor;
+
+        this._loadFolder();
+    },
+
+    _loadFolder: function() {
+        let appSystem = Shell.AppSystem.get_default();
+
+        let icons = this.getLayoutIds();
+        if (!icons) {
+            return;
+        }
+
+        for (let i = 0; i < icons.length; i++) {
+            let app = appSystem.lookup_app(icons[i]);
+            if (app) {
+                this._addItem(app);
+            }
+        }
     },
 
     _createItemIcon: function(item) {
@@ -148,8 +171,8 @@ const FolderView = new Lang.Class({
                                          parentView: this });
     },
 
-    addApp: function(app) {
-        this._addItem(app);
+    getViewId: function() {
+        return this._folderIcon.getId();
     }
 });
 
@@ -523,13 +546,7 @@ const AllView = new Lang.Class({
             // grid around to accomodate it
             let item = this._dragView.getItemForIndex(this._insertIdx);
             let insertId = item ? item.get_id() : null;
-
-            let folderId;
-            if (this._dragView == this) {
-                folderId = '';
-            } else {
-                folderId = this._dragView.folderIcon.getId();
-            }
+            let folderId = this._dragView.getViewId();
 
             this._repositionedIconData = [ this._originalIdx, position ];
             IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
@@ -548,6 +565,10 @@ const AllView = new Lang.Class({
         } else {
             return new FolderIcon(item, this);
         }
+    },
+
+    getViewId: function() {
+        return '';
     },
 
     addApp: function(app) {
@@ -814,7 +835,6 @@ const FolderIcon = new Lang.Class({
 
         this.view = new FolderView(this);
         this.view.actor.reactive = false;
-        this._loadCategory();
 
         this.actor.connect('clicked', Lang.bind(this,
             function() {
@@ -841,22 +861,6 @@ const FolderIcon = new Lang.Class({
             function () {
                 Main.overview.endItemDrag(this);
             }));
-    },
-
-    _loadCategory: function() {
-        let appSystem = Shell.AppSystem.get_default();
-
-        let icons = IconGridLayout.layout.getIcons(this.folder.get_id());
-        if (! icons) {
-            return;
-        }
-
-        for (let i = 0; i < icons.length; i++) {
-            let app = appSystem.lookup_app(icons[i]);
-            if (app) {
-                this.view.addApp(app);
-            }
-        }
     },
 
     _onLabelCancel: function() {
