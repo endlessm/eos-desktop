@@ -55,6 +55,7 @@ const EndlessApplicationView = new Lang.Class({
         this._grid.actor.x_expand = true;
 
         this._allIcons = [];
+        this.repositionedIconData = [ null, null ];
     },
 
     removeAll: function() {
@@ -114,6 +115,47 @@ const EndlessApplicationView = new Lang.Class({
     getLayoutIds: function() {
         let viewId = this.getViewId();
         return IconGridLayout.layout.getIcons(viewId).slice();
+    },
+
+    _trimInvisible: function(items) {
+        let appSystem = Shell.AppSystem.get_default();
+        return items.filter(Lang.bind(this,
+            function(itemId) {
+                return IconGridLayout.layout.iconIsFolder(itemId) || appSystem.lookup_app(itemId);
+            }));
+    },
+
+    _findIconChanges: function() {
+        let oldItemLayout = this.getAllIds();
+        let newItemLayout = this.getLayoutIds();
+        newItemLayout = this._trimInvisible(newItemLayout);
+
+        let movedList = {};
+        let removedList = [];
+        for (let oldItemIdx in oldItemLayout) {
+            let oldItem = oldItemLayout[oldItemIdx];
+            let newItemIdx = newItemLayout.indexOf(oldItem);
+
+            // Did this icon move?
+            if (newItemIdx != -1 && oldItemIdx != newItemIdx) {
+                movedList[oldItemIdx] = newItemIdx;
+            // Did it get removed?
+            } else if (newItemIdx == -1) {
+                removedList.push(oldItemIdx);
+            }
+        }
+
+        return [movedList, removedList];
+    },
+
+    animateMovement: function(callback) {
+        let [movedList, removedList] = this._findIconChanges();
+        this._grid.animateShuffling(movedList,
+                                    removedList,
+                                    this.repositionedIconData,
+                                    callback
+                                   );
+        this.repositionedIconData = [ null, null ];
     }
 });
 
@@ -213,8 +255,6 @@ const AllView = new Lang.Class({
                                          style_class: 'all-apps vfade' });
         this.actor._delegate = this;
 
-        this._repositionedIconData = [ null, null ];
-
         this.actor.add_actor(box);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         let action = new Clutter.PanAction({ interpolate: true });
@@ -263,7 +303,7 @@ const AllView = new Lang.Class({
         }
 
         this._dragIcon = source;
-        this._dragView = undefined;
+        this._dragView = null;
 
         this._dragMonitor = {
             dragMotion: Lang.bind(this, this._onDragMotion)
@@ -498,7 +538,7 @@ const AllView = new Lang.Class({
                 return false;
             }
 
-            this._repositionedIconData = [ this._originalIdx, position ];
+            this._dragView.repositionedIconData = [ this._originalIdx, position ];
 
             if (this._currentPopup) {
                 this._eventBlocker.reactive = false;
@@ -519,7 +559,8 @@ const AllView = new Lang.Class({
             let insertId = icon ? icon.getId() : null;
             let folderId = this._dragView.getViewId();
 
-            this._repositionedIconData = [ this._originalIdx, position ];
+            this._dragView.repositionedIconData = [ this._originalIdx, position ];
+            this.repositionedView = this._dragView;
             IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
             return true;
         }
@@ -536,6 +577,12 @@ const AllView = new Lang.Class({
         } else {
             return new FolderIcon(item, this);
         }
+    },
+
+    getLayoutIds: function() {
+        let ids = this.parent();
+        ids.push(EOS_APP_STORE_ID);
+        return ids;
     },
 
     getViewId: function() {
@@ -612,14 +659,6 @@ const AllView = new Lang.Class({
                                                  time: BoxPointer.POPUP_ANIMATION_TIME,
                                                  transition: transition });
         }
-    },
-
-    animateMovement: function(movedList, removedList, callback) {
-        this._grid.animateShuffling(movedList,
-                                    removedList,
-                                    this._repositionedIconData,
-                                    callback
-                                   );
     }
 });
 
@@ -657,48 +696,18 @@ const AppDisplay = new Lang.Class({
         if (this._view.getAllIcons().length == 0) {
             this._addIcons();
         } else {
-            let ids = this._view.getAllIds();
-            let [movedIndexes, removedIndexes] = this._findIconChanges(ids);
-            this._view.animateMovement(movedIndexes,
-                                       removedIndexes,
-                                       Lang.bind(this, this._addIcons)
-                                      );
-        }
-    },
-
-    _findIconChanges: function(oldItemLayout) {
-        let ids = IconGridLayout.layout.getIcons();
-        let newItemLayout = this._trimInvisible(ids);
-
-        newItemLayout.push(oldItemLayout[oldItemLayout.length - 1]);
-
-        let movedList = {};
-        let removedList = [];
-        for (let oldItemIdx in oldItemLayout) {
-            let oldItem = oldItemLayout[oldItemIdx];
-            let newItemIdx = newItemLayout.indexOf(oldItem);
-
-            // Did this icon move?
-            if (newItemIdx != -1 && oldItemIdx != newItemIdx) {
-                movedList[oldItemIdx] = newItemIdx;
-            // Did it get removed?
-            } else if (newItemIdx == -1) {
-                removedList.push(oldItemIdx);
+            let animateView = this._view.repositionedView;
+            if (!animateView) {
+                animateView = this._view;
             }
+
+            animateView.animateMovement(Lang.bind(this, this._addIcons));
         }
-
-        return [movedList, removedList];
-    },
-
-    _trimInvisible: function(items) {
-        return items.filter(Lang.bind(this,
-            function(itemId) {
-                return IconGridLayout.layout.iconIsFolder(itemId) || this._appSystem.lookup_app(itemId);
-            }));
     },
 
     _addIcons: function() {
         this._view.removeAll();
+        this._view.repositionedView = null;
 
         let ids = IconGridLayout.layout.getIcons();
 
