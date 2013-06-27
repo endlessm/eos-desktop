@@ -148,14 +148,43 @@ const EndlessApplicationView = new Lang.Class({
         return [movedList, removedList];
     },
 
-    animateMovement: function(callback) {
+    animateMovement: function() {
         let [movedList, removedList] = this._findIconChanges();
         this._grid.animateShuffling(movedList,
                                     removedList,
                                     this.repositionedIconData,
-                                    callback
+                                    Lang.bind(this, this.addIcons)
                                    );
         this.repositionedIconData = [ null, null ];
+    },
+
+    _ensureIconVisible: function(icon) {
+        Util.ensureActorVisibleInScrollView(this.actor, icon);
+    },
+
+    addIcons: function() {
+        this.removeAll();
+
+        let ids = this.getLayoutIds();
+        let appSystem = Shell.AppSystem.get_default();
+
+        for (let i = 0; i < ids.length; i++) {
+            let itemId = ids[i];
+            let item = null;
+
+            if (IconGridLayout.layout.iconIsFolder(itemId)) {
+                item = Shell.DesktopDirInfo.new(itemId);
+            } else {
+                item = appSystem.lookup_app(itemId);
+            }
+
+            if (item) {
+                let icon = this._createItemIcon(item);
+                this.addIcon(icon);
+                icon.actor.connect('key-focus-in',
+                                   Lang.bind(this, this._ensureIconVisible));
+            }
+        }
     }
 });
 
@@ -168,24 +197,7 @@ const FolderView = new Lang.Class({
         this._folderIcon = folderIcon;
         this.actor = this._grid.actor;
 
-        this._loadFolder();
-    },
-
-    _loadFolder: function() {
-        let appSystem = Shell.AppSystem.get_default();
-
-        let icons = this.getLayoutIds();
-        if (!icons) {
-            return;
-        }
-
-        for (let i = 0; i < icons.length; i++) {
-            let app = appSystem.lookup_app(icons[i]);
-            if (app) {
-                let appIcon = this._createItemIcon(app);
-                this.addIcon(appIcon);
-            }
-        }
+        this.addIcons();
     },
 
     _createItemIcon: function(item) {
@@ -569,7 +581,8 @@ const AllView = new Lang.Class({
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
             if (item == this._appStore) {
-                return new AppStoreIcon(item, this);
+                this._appStoreIcon = new AppStoreIcon(item, this);
+                return this._appStoreIcon;
             } else {
                 return new AppIcon(item, null, { showMenu: false,
                                                  parentView: this });
@@ -587,28 +600,6 @@ const AllView = new Lang.Class({
 
     getViewId: function() {
         return '';
-    },
-
-    addApp: function(app) {
-        let appIcon = this._createItemIcon(app);
-        this.addIcon(appIcon);
-        appIcon.actor.connect('key-focus-in',
-                              Lang.bind(this, this._ensureIconVisible));
-
-        return appIcon;
-    },
-
-    addFolder: function(dirInfo) {
-        let folderIcon = this._createItemIcon(dirInfo);
-        this.addIcon(folderIcon);
-        folderIcon.actor.connect('key-focus-in',
-                                 Lang.bind(this, this._ensureIconVisible));
-    },
-
-    addAppStore: function() {
-        if (this._appStore) {
-            this._appStoreIcon = this.addApp(this._appStore);
-        }
     },
 
     _appStoreWindowsChanged: function() {
@@ -638,10 +629,6 @@ const AllView = new Lang.Class({
                     this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
                 }
             }));
-    },
-
-    _ensureIconVisible: function(icon) {
-        Util.ensureActorVisibleInScrollView(this.actor, icon);
     },
 
     _updateIconOpacities: function(folderOpen) {
@@ -692,48 +679,30 @@ const AppDisplay = new Lang.Class({
         this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplay));
     },
 
+    _checkFocusDummy: function() {
+        if (!this._focusDummy) {
+            return;
+        }
+
+        let focused = this._focusDummy.has_key_focus();
+        this._focusDummy.destroy();
+        this._focusDummy = null;
+        if (focused) {
+            this.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
+        }
+    },
+
     _redisplay: function() {
         if (this._view.getAllIcons().length == 0) {
-            this._addIcons();
+            this._view.addIcons();
+            this._checkFocusDummy();
         } else {
             let animateView = this._view.repositionedView;
             if (!animateView) {
                 animateView = this._view;
             }
 
-            animateView.animateMovement(Lang.bind(this, this._addIcons));
-        }
-    },
-
-    _addIcons: function() {
-        this._view.removeAll();
-        this._view.repositionedView = null;
-
-        let ids = IconGridLayout.layout.getIcons();
-
-        for (let i = 0; i < ids.length; i++) {
-            let itemId = ids[i];
-
-            if (IconGridLayout.layout.iconIsFolder(itemId)) {
-                let dirInfo = Shell.DesktopDirInfo.new(itemId);
-                if (dirInfo) {
-                    this._view.addFolder(dirInfo);
-                }
-            } else {
-                let app = this._appSystem.lookup_app(itemId);
-                if (app) {
-                    this._view.addApp(app);
-                }
-            }
-        }
-        this._view.addAppStore();
-
-        if (this._focusDummy) {
-            let focused = this._focusDummy.has_key_focus();
-            this._focusDummy.destroy();
-            this._focusDummy = null;
-            if (focused)
-                this.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
+            animateView.animateMovement();
         }
     }
 });
