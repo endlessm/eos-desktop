@@ -27,7 +27,6 @@ const NUDGE_RETURN_DURATION = 0.3;
 const NUDGE_FACTOR = 0.2;
 
 const SHUFFLE_ANIMATION_TIME = 0.250;
-const FADE_IN_ANIMATION_TIME = 0.300;
 
 const CursorLocation = {
     DEFAULT: 0,
@@ -647,7 +646,7 @@ const IconGrid = new Lang.Class({
         }
     },
 
-    animateShuffling: function(changedItems, removedItems, originalIndex, callback) {
+    animateShuffling: function(changedItems, removedItems, originalItemData, callback) {
         let children = this._grid.get_children();
 
         let movementMatrix = {};
@@ -655,21 +654,33 @@ const IconGrid = new Lang.Class({
         for (let sourceIndex in changedItems) {
             let targetIndex = changedItems[sourceIndex];
             if (targetIndex < children.length) {
-                movementMatrix[sourceIndex] = this._findOffset(children[sourceIndex], children[targetIndex]);
+                movementMatrix[sourceIndex] = this._findActorOffset(children[sourceIndex], children[targetIndex]);
             } else {
                 delete changedItems[sourceIndex];
                 removedItems.push(sourceIndex);
             }
         }
 
-        // Make the original icon look like it faded in
+        // Make the original icon look like it fell into its place
+        let [originalIndex, dndDropPosition] = originalItemData;
         let originalIcon = children[originalIndex];
         if (originalIndex in movementMatrix) {
-            this._fadeInIcon(originalIcon, movementMatrix[originalIndex]);
-            delete changedItems[String(originalIndex)];
+            let oldIcon = children[originalIndex];
+            let newIcon = children[changedItems[originalIndex]];
+
+            // We need to know what the coordinates of the icon center are
+            dndDropPosition[0] -= Math.floor(oldIcon.get_size()[0] / 2);
+            dndDropPosition[1] += Math.floor(oldIcon.get_size()[1] / 2);
+
+            // Draw it at the location where DnD accept occured
+            let releaseOffset = this._findRelativeOffset(oldIcon, dndDropPosition);
+            oldIcon.translation_x = releaseOffset[0];
+            oldIcon.translation_y = releaseOffset[1];
+
+            movementMatrix[originalIndex] = this._findActorOffset(oldIcon, newIcon);
         }
 
-        // Move the other ones
+        // Move icons that need animating
         for (let sourceIndex in changedItems) {
             this._moveIcon(children[sourceIndex], movementMatrix[sourceIndex]);
         }
@@ -680,38 +691,29 @@ const IconGrid = new Lang.Class({
         }
 
         // Make sure that everything gets redrawn after the animation
-        Mainloop.timeout_add(SHUFFLE_ANIMATION_TIME * 1000, callback);
+        Mainloop.timeout_add(SHUFFLE_ANIMATION_TIME * 1000 * St.get_slow_down_factor(), callback);
     },
 
-    _fadeInIcon: function(sourceIcon, coordinates) {
-        Tweener.removeTweens(sourceIcon);
+    _findRelativeOffset: function(source, targetCoords) {
+        let [x2, y2] = targetCoords;
 
-        sourceIcon.opacity = 50;
-        sourceIcon.translation_x = coordinates[0];
-        sourceIcon.translation_y = coordinates[1];
-
-        Tweener.addTween(sourceIcon, { opacity: 255,
-                                       time: FADE_IN_ANIMATION_TIME,
-                                       transition: 'linear'
-                                      });
-     },
-
-    _findOffset: function(source, target) {
         let [x1, y1] = source.get_transformed_position();
         x1 = x1 - source.translation_x;
         y1 = y1 - source.translation_y;
 
-        let [x2, y2] = target.get_transformed_position();
-        x2 = x2 - target.translation_x;
-        y2 = y2 - target.translation_y;
-
         return [x2-x1, y2-y1];
+    },
+
+    _findActorOffset: function(source, target) {
+        let [x, y] = target.get_transformed_position();
+        x = x - target.translation_x;
+        y = y - target.translation_y;
+
+        return this._findRelativeOffset(source, [x, y]);
     },
 
     _moveIcon: function(icon, destPoint) {
         Tweener.removeTweens(icon);
-        icon.translation_x = 0;
-        icon.translation_y = 0;
 
         Tweener.addTween(icon, { translation_x: destPoint[0],
                                  translation_y: destPoint[1],
