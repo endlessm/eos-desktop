@@ -54,54 +54,41 @@ const EndlessApplicationView = new Lang.Class({
         // Standard hack for ClutterBinLayout
         this._grid.actor.x_expand = true;
 
-        this._icons = {};
-        this._allItems = [];
+        this._allIcons = [];
     },
 
     removeAll: function() {
         this._grid.removeAll();
-        this._icons = {};
-        this._allItems = [];
+        this._allIcons = [];
     },
 
     _createItemIcon: function(item) {
         throw new Error('Not implemented');
     },
 
-    _addItem: function(item) {
-        if (item == undefined) {
-            return null;
+    addIcon: function(icon) {
+        let idx = this._allIcons.indexOf(icon);
+        if (idx == -1) {
+            this._allIcons.push(icon);
+            this._grid.addItem(icon.actor);
         }
-
-        let id = item.get_id();
-        if (this._icons[id] !== undefined) {
-            return null;
-        }
-
-        let itemIcon = this._createItemIcon(item);
-        this._allItems.push(item);
-        this._icons[id] = itemIcon;
-
-        this._grid.addItem(itemIcon.actor);
-        return itemIcon;
     },
 
-    _removeItem: function(item) {
-        let idx = this._allItems.indexOf(item);
+    removeIcon: function(icon) {
+        let idx = this._allIcons.indexOf(icon);
         if (idx != -1) {
-            this._allItems.splice(idx, 1);
+            this._allIcons.splice(idx, 1);
         }
 
-        let id = item.get_id();
-        let itemIcon = this._icons[id];
-        if (itemIcon) {
-            delete this._icons[id];
-            this._grid.removeItem(itemIcon.actor);
-        }
+        this._grid.removeItem(icon.actor);
     },
 
-    indexOf: function(item) {
-        return this._grid.indexOf(item.actor);
+    indexOf: function(icon) {
+        return this._grid.indexOf(icon.actor);
+    },
+
+    getIconForIndex: function(index) {
+        return this._allIcons[index];
     },
 
     nudgeItemsAtIndex: function(index, location) {
@@ -116,20 +103,12 @@ const EndlessApplicationView = new Lang.Class({
         return this._grid.canDropAt(x, y, canDropPastEnd);
     },
 
-    getIcon: function(id) {
-        return this._icons[id];
+    getAllIcons: function() {
+        return this._allIcons;
     },
 
-    getItemForIndex: function(index) {
-        return this._allItems[index];
-    },
-
-    getAllItems: function(index) {
-        return this._allItems;
-    },
-
-    getAllIds: function(index) {
-        return this._allItems.map(function(item) { return item.get_id(); });
+    getAllIds: function() {
+        return this._allIcons.map(function(icon) { return icon.getId(); });
     },
 
     getLayoutIds: function() {
@@ -161,7 +140,8 @@ const FolderView = new Lang.Class({
         for (let i = 0; i < icons.length; i++) {
             let app = appSystem.lookup_app(icons[i]);
             if (app) {
-                this._addItem(app);
+                let appIcon = this._createItemIcon(app);
+                this.addIcon(appIcon);
             }
         }
     },
@@ -474,11 +454,10 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.NO_DROP;
         }
 
-        let item = this._dragView.getItemForIndex(this._onIconIdx);
         let validHoverDrop = false;
+        let viewIcon = this._dragView.getIconForIndex(this._onIconIdx);
 
-        if (item) {
-            let viewIcon = this._dragView.getIcon(item.get_id());
+        if (viewIcon) {
             // We can only move applications into folders or the app store
             validHoverDrop = viewIcon.canDrop && this._dragIcon.canDragOver(viewIcon);
         }
@@ -491,13 +470,10 @@ const AllView = new Lang.Class({
     },
 
     _setDragHoverState: function(state) {
-        let item = this._dragView.getItemForIndex(this._onIconIdx);
+        let viewIcon = this._dragView.getIconForIndex(this._onIconIdx);
 
-        if (item) {
-            let viewIcon = this._dragView.getIcon(item.get_id());
-            if (this._dragIcon.canDragOver(viewIcon)) {
-                viewIcon.setDragHoverState(state);
-            }
+        if (viewIcon && this._dragIcon.canDragOver(viewIcon)) {
+            viewIcon.setDragHoverState(state);
         }
     },
 
@@ -508,13 +484,8 @@ const AllView = new Lang.Class({
 
         if (this._onIcon) {
             // Find out what icon the drop is under
-            let item = this._dragView.getItemForIndex(this._onIconIdx);
-            if (!item) {
-                return false;
-            }
-
-            let dropIcon = this._dragView.getIcon(item.get_id());
-            if (!dropIcon.canDrop) {
+            let dropIcon = this._dragView.getIconForIndex(this._onIconIdx);
+            if (!dropIcon || !dropIcon.canDrop) {
                 return false;
             }
 
@@ -544,8 +515,8 @@ const AllView = new Lang.Class({
 
             // If we are not over an icon but within the grid, shift the
             // grid around to accomodate it
-            let item = this._dragView.getItemForIndex(this._insertIdx);
-            let insertId = item ? item.get_id() : null;
+            let icon = this._dragView.getIconForIndex(this._insertIdx);
+            let insertId = icon ? icon.getId() : null;
             let folderId = this._dragView.getViewId();
 
             this._repositionedIconData = [ this._originalIdx, position ];
@@ -572,19 +543,19 @@ const AllView = new Lang.Class({
     },
 
     addApp: function(app) {
-        let appIcon = this._addItem(app);
-        if (appIcon)
-            appIcon.actor.connect('key-focus-in',
-                                  Lang.bind(this, this._ensureIconVisible));
+        let appIcon = this._createItemIcon(app);
+        this.addIcon(appIcon);
+        appIcon.actor.connect('key-focus-in',
+                              Lang.bind(this, this._ensureIconVisible));
 
         return appIcon;
     },
 
     addFolder: function(dirInfo) {
-        let folderIcon = this._addItem(dirInfo);
-        if (folderIcon)
-            folderIcon.actor.connect('key-focus-in',
-                                     Lang.bind(this, this._ensureIconVisible));
+        let folderIcon = this._createItemIcon(dirInfo);
+        this.addIcon(folderIcon);
+        folderIcon.actor.connect('key-focus-in',
+                                 Lang.bind(this, this._ensureIconVisible));
     },
 
     addAppStore: function() {
@@ -627,18 +598,19 @@ const AllView = new Lang.Class({
     },
 
     _updateIconOpacities: function(folderOpen) {
-        for (let id in this._icons) {
+        let icons = this.getAllIcons();
+        for (let idx = 0; idx < icons.length; idx++) {
             let opacity = 255;
             let transition = 'easeInQuad';
 
-            if (folderOpen && !this._icons[id].actor.checked) {
+            if (folderOpen && !icons[idx].actor.checked) {
                 opacity = INACTIVE_GRID_OPACITY;
                 transition = 'easeOutQuad';
             }
 
-            Tweener.addTween(this._icons[id].actor, { opacity: opacity,
-                                                      time: BoxPointer.POPUP_ANIMATION_TIME,
-                                                      transition: transition });
+            Tweener.addTween(icons[idx].actor, { opacity: opacity,
+                                                 time: BoxPointer.POPUP_ANIMATION_TIME,
+                                                 transition: transition });
         }
     },
 
@@ -682,7 +654,7 @@ const AppDisplay = new Lang.Class({
     },
 
     _redisplay: function() {
-        if (this._view.getAllItems().length == 0) {
+        if (this._view.getAllIcons().length == 0) {
             this._addIcons();
         } else {
             let ids = this._view.getAllIds();
