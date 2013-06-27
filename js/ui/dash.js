@@ -21,6 +21,8 @@ const DASH_ITEM_LABEL_SHOW_TIME = 0.15;
 const DASH_ITEM_LABEL_HIDE_TIME = 0.1;
 const DASH_ITEM_HOVER_TIMEOUT = 300;
 
+const ICON_SIZE = 64;
+
 function getAppFromSource(source) {
     if (source instanceof AppDisplay.AppIcon) {
         return source.app;
@@ -381,7 +383,7 @@ const Dash = new Lang.Class({
 
     _init : function() {
         this._maxHeight = -1;
-        this.iconSize = 64;
+        this.iconSize = ICON_SIZE;
         this._shownInitially = false;
 
         this._dragPlaceholder = null;
@@ -469,8 +471,30 @@ const Dash = new Lang.Class({
         let showAppsHovered =
                 this._showAppsIcon.contains(dragEvent.targetActor);
 
-        if (!this._box.contains(dragEvent.targetActor) || showAppsHovered)
-            this._clearDragPlaceholder();
+
+        let childrenOnDash = this._box.get_children();
+        let numChildren = childrenOnDash.length;
+
+        if (this._dragPlaceHolder) {
+            numChildren--;
+        }
+
+        if (numChildren > 0) {
+            if (!this._box.contains(dragEvent.targetActor) || showAppsHovered)
+                this._clearDragPlaceholder();
+        } else {
+            if (showAppsHovered) {
+                if (!this._dragPlaceholder) {
+                    this._dragPlaceholder = new DragPlaceholderItem();
+                    this._dragPlaceholder.child.set_width(ICON_SIZE);
+                    this._dragPlaceholder.child.set_height(ICON_SIZE/2);
+                    this._box.insert_child_at_index(this._dragPlaceholder, 0);
+                    this._dragPlaceholder.show(true);
+                }
+            } else {
+                this._clearDragPlaceholder();
+            }
+        }
 
         if (showAppsHovered)
             this._showAppsIcon.setDragApp(app);
