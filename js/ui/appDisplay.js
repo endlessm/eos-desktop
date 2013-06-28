@@ -379,40 +379,8 @@ const AllView = new Lang.Class({
     _onDragMotion: function(dragEvent) {
         // If the icon is dragged to the top or the bottom of the grid,
         // we want to scroll it, if possible
-        let [ gridX, gridY ] = this.actor.get_transformed_position();
-        let [ gridW, gridH ] = this.actor.get_transformed_size();
-        let gridBottom = gridY + gridH;
-
-        let adjustment = this.actor.vscroll.adjustment;
-
-        if (dragEvent.y <= gridY || dragEvent.y >= gridBottom) {
-            if (dragEvent.y <= gridY &&
-                adjustment.value > 0) {
-                let seconds = adjustment.value / DRAG_SCROLL_PIXELS_PER_SEC;
-                Tweener.addTween(adjustment, { value: 0,
-                                               time: seconds,
-                                               transition: 'linear' });
-
-                return DND.DragMotionResult.CONTINUE;
-            }
-
-            let maxAdjust = adjustment.upper - adjustment.page_size;
-            if (dragEvent.y >= gridBottom &&
-                adjustment.value < maxAdjust) {
-                let seconds = (maxAdjust - adjustment.value) /
-                    DRAG_SCROLL_PIXELS_PER_SEC;
-                Tweener.addTween(adjustment, { value: maxAdjust,
-                                               time: seconds,
-                                               transition: 'linear' });
-
-                return DND.DragMotionResult.CONTINUE;
-            }
-        }
-
-        // Once the user moves away from the edge,
-        // cancel any existing scrolling
-        if (Tweener.isTweening(adjustment)) {
-            Tweener.removeTweens(adjustment);
+        if (this._handleDragOvershoot(dragEvent)) {
+            return DND.DragMotionResult.CONTINUE;
         }
 
         // Ask grid can we drop here
@@ -478,6 +446,48 @@ const AllView = new Lang.Class({
             // Propagate the signal in any case when moving icons
             return DND.DragMotionResult.CONTINUE;
         }
+    },
+
+    _handleDragOvershoot: function(dragEvent) {
+        let [ gridX, gridY ] = this.actor.get_transformed_position();
+        let [ gridW, gridH ] = this.actor.get_transformed_size();
+        let gridBottom = gridY + gridH;
+
+        if (dragEvent.y > gridY && dragEvent.y < gridBottom) {
+            // We're within the grid boundaries - cancel any existing
+            // scrolling
+            if (Tweener.isTweening(adjustment)) {
+                Tweener.removeTweens(adjustment);
+            }
+
+            return false;
+        }
+
+        let adjustment = this.actor.vscroll.adjustment;
+
+        if (dragEvent.y <= gridY &&
+            adjustment.value > 0) {
+            let seconds = adjustment.value / DRAG_SCROLL_PIXELS_PER_SEC;
+            Tweener.addTween(adjustment, { value: 0,
+                                           time: seconds,
+                                           transition: 'linear' });
+
+            return true;
+        }
+
+        let maxAdjust = adjustment.upper - adjustment.page_size;
+        if (dragEvent.y >= gridBottom &&
+            adjustment.value < maxAdjust) {
+            let seconds = (maxAdjust - adjustment.value) /
+                DRAG_SCROLL_PIXELS_PER_SEC;
+            Tweener.addTween(adjustment, { value: maxAdjust,
+                                           time: seconds,
+                                           transition: 'linear' });
+
+            return true;
+        }
+
+        return false;
     },
 
     _positionReallyMoved: function() {
