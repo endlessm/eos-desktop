@@ -367,10 +367,7 @@ const AllView = new Lang.Class({
     },
 
     _onDragEnd: function(overview, source) {
-        source.parentView.removeNudgeTransforms();
-        if (source.parentView != this) {
-            this.removeNudgeTransforms();
-        }
+        this._resetNudgeState();
 
         this._eventBlocker.show();
         this._clearDragState(source);
@@ -380,18 +377,23 @@ const AllView = new Lang.Class({
         // If the icon is dragged to the top or the bottom of the grid,
         // we want to scroll it, if possible
         if (this._handleDragOvershoot(dragEvent)) {
+            this._resetNudgeState();
             return DND.DragMotionResult.CONTINUE;
         }
 
-        // Ask grid can we drop here
-
         // Handle motion over grid
+        let dragView = null;
         if (this.actor.contains(dragEvent.targetActor)) {
-            this._dragView = this;
+            dragView = this;
         }
 
         if (this._dragIcon.parentView.actor.contains(dragEvent.targetActor)) {
-            this._dragView = this._dragIcon.parentView;
+            dragView = this._dragIcon.parentView;
+        }
+
+        if (dragView != this._dragView) {
+            this._resetNudgeState();
+            this._dragView = dragView;
         }
 
         if (!this._dragView) {
@@ -402,6 +404,7 @@ const AllView = new Lang.Class({
             this._currentPopup && (this._dragView == this._dragIcon.parentView);
         let canDropPastEnd = draggingWithinFolder || !this._appStoreIcon;
 
+        // Ask grid can we drop here
         let [idx, cursorLocation] = this._dragView.canDropAt(dragEvent.x,
                                                              dragEvent.y,
                                                              canDropPastEnd);
@@ -418,7 +421,7 @@ const AllView = new Lang.Class({
 
         // If we are in a new spot, remove the previous nudges
         if (isNewPosition) {
-            this._dragView.removeNudgeTransforms();
+            this._resetNudgeState();
         }
 
         // Update our insert/hover index and if we are currently on an icon
@@ -504,6 +507,12 @@ const AllView = new Lang.Class({
         }
 
         return true;
+    },
+
+    _resetNudgeState: function() {
+        if (this._dragView) {
+            this._dragView.removeNudgeTransforms();
+        }
     },
 
     _shouldNudgeItems: function(isNewPosition) {
