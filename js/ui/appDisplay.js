@@ -285,6 +285,8 @@ const AllView = new Lang.Class({
         if (this._appStore) {
             this._appStore.connect('windows-changed', Lang.bind(this, this._appStoreWindowsChanged));
         }
+
+        this.repositionedView = null;
     },
 
     _closePopup: function() {
@@ -700,6 +702,7 @@ const AppDisplay = new Lang.Class({
             if (!animateView) {
                 animateView = this._view;
             }
+            this._view.repositionedView = null;
 
             animateView.animateMovement();
         }
