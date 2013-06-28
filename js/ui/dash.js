@@ -310,7 +310,12 @@ const ShowAppsIcon = new Lang.Class({
 
         Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this,
             function () {
-                AppFavorites.getAppFavorites().removeFavorite(id);
+                let favorites = AppFavorites.getAppFavorites().getFavorites();
+                if (favorites.length == 0) {
+                    AppFavorites.getAppFavorites().addFavoriteAtPos(id, 0);
+                } else {
+                    AppFavorites.getAppFavorites().removeFavorite(id);
+                }
                 return false;
             }));
 
