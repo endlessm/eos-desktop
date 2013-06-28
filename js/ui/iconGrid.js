@@ -783,10 +783,20 @@ const IconGrid = new Lang.Class({
         let children = this._getVisibleChildren();
         let childIdx = Math.min((row * nColumns) + column, children.length);
 
-        // If we're above/below the grid vertically or to the right of the grid, 
+        // If we're above the grid vertically,
         // we are in an invalid drop location
-        if (childIdx < 0 || childIdx >= children.length) {
+        if (childIdx < 0) {
             return [-1, CursorLocation.DEFAULT];
+        }
+
+        // If we're past the last visible element in the grid,
+        // we might be allowed to drop there.
+        if (childIdx >= children.length) {
+            if (canDropPastEnd) {
+                return [children.length, CursorLocation.RIGHT_EDGE];
+            } else {
+                return [-1, CursorLocation.DEFAULT];
+            }
         }
 
         let child = children[childIdx];
