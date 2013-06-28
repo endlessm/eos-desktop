@@ -420,7 +420,7 @@ const AllView = new Lang.Class({
         }
 
         // If we are in a new spot, remove the previous nudges
-        if (isNewPosition) {
+        if (isNewPosition || (cursorLocation == IconGrid.CursorLocation.EMPTY_AREA)) {
             this._resetNudgeState();
         }
 

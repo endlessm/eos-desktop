@@ -32,7 +32,8 @@ const CursorLocation = {
     DEFAULT: 0,
     ON_ICON: 1,
     LEFT_EDGE: 2,
-    RIGHT_EDGE: 3
+    RIGHT_EDGE: 3,
+    EMPTY_AREA: 4
 }
 
 const EditableLabelMode = {
@@ -628,6 +629,11 @@ const IconGrid = new Lang.Class({
     },
 
     nudgeItemsAtIndex: function(index, cursorLocation) {
+        // No nudging when the cursor is in an empty area
+        if (cursorLocation == CursorLocation.EMPTY_AREA) {
+            return;
+        }
+
         let nudgeIdx = index;
 
         if (cursorLocation != CursorLocation.LEFT_EDGE) {
@@ -801,7 +807,7 @@ const IconGrid = new Lang.Class({
         // we might be allowed to drop there.
         if (childIdx >= children.length) {
             if (canDropPastEnd) {
-                return [children.length, CursorLocation.RIGHT_EDGE];
+                return [children.length, CursorLocation.EMPTY_AREA];
             } else {
                 return [-1, CursorLocation.DEFAULT];
             }
