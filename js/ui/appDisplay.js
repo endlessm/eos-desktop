@@ -37,9 +37,14 @@ const MAX_COLUMNS = 7;
 
 const DRAG_OVER_FOLDER_OPACITY = 128;
 const INACTIVE_GRID_OPACITY = 77;
-const FOLDER_SUBICON_FRACTION = .4;
+const ACTIVE_GRID_OPACITY = 255;
+
+const INACTIVE_GRID_TRANSITION = 'easeOutQuad';
+const ACTIVE_GRID_TRANSITION = 'easeInQuad';
 
 const DRAG_SCROLL_PIXELS_PER_SEC = 800;
+
+const EOS_APP_STORE_ID = 'eos-app-store.desktop';
 
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
@@ -52,77 +57,42 @@ const EndlessApplicationView = new Lang.Class({
         // Standard hack for ClutterBinLayout
         this._grid.actor.x_expand = true;
 
-        this._icons = {};
-        this._allItems = [];
+        this._allIcons = [];
+        this.repositionedIconData = [ null, null ];
     },
 
     removeAll: function() {
         this._grid.removeAll();
-        this._icons = {};
-        this._allItems = [];
-    },
-
-    removeItem: function(item) {
-        this._grid.removeItem(item.actor);
+        this._allIcons = [];
     },
 
     _createItemIcon: function(item) {
         throw new Error('Not implemented');
     },
 
-    _addItem: function(item) {
-        if (item == undefined) {
-            return null;
+    addIcon: function(icon) {
+        let idx = this._allIcons.indexOf(icon);
+        if (idx == -1) {
+            this._allIcons.push(icon);
+            this._grid.addItem(icon.actor);
         }
-
-        let id = item.get_id();
-        if (this._icons[id] !== undefined) {
-            return null;
-        }
-
-        let itemIcon = this._createItemIcon(item);
-        this._allItems.push(item);
-        this._icons[id] = itemIcon;
-
-        return itemIcon;
     },
 
-    _removeItem: function(item) {
-        let id = item.get_id();
-        if (this._icons[id] === undefined) {
-            return;
-        }
-
-        delete this._icons[id];
-
-        let idx = this._allItems.indexOf(item);
+    removeIcon: function(icon) {
+        let idx = this._allIcons.indexOf(icon);
         if (idx != -1) {
-            this._allItems.splice(idx, 1);
-        }
-    },
-
-    _showItem: function(item) {
-        let id = item.get_id();
-        if (this._icons[id] === undefined) {
-            return;
+            this._allIcons.splice(idx, 1);
         }
 
-        this._icons[id].actor.show();
+        this._grid.removeItem(icon.actor);
     },
 
-    loadGrid: function() {
-        for (let i = 0; i < this._allItems.length; i++) {
-            let id = this._allItems[i].get_id();
-            if (!id) {
-                continue;
-            }
-
-            this._grid.addItem(this._icons[id].actor);
-        }
+    indexOf: function(icon) {
+        return this._grid.indexOf(icon.actor);
     },
 
-    indexOf: function(item) {
-        return this._grid.indexOf(item.actor);
+    getIconForIndex: function(index) {
+        return this._allIcons[index];
     },
 
     nudgeItemsAtIndex: function(index, location) {
@@ -137,20 +107,83 @@ const EndlessApplicationView = new Lang.Class({
         return this._grid.canDropAt(x, y, canDropPastEnd);
     },
 
-    getIcon: function(id) {
-        return this._icons[id];
+    getAllIcons: function() {
+        return this._allIcons;
     },
 
-    getItemForIndex: function(index) {
-        return this._allItems[index];
+    getLayoutIds: function() {
+        let viewId = this.getViewId();
+        return IconGridLayout.layout.getIcons(viewId).slice();
     },
 
-    getAllItems: function(index) {
-        return this._allItems;
+    _trimInvisible: function(items) {
+        let appSystem = Shell.AppSystem.get_default();
+        return items.filter(Lang.bind(this,
+            function(itemId) {
+                return IconGridLayout.layout.iconIsFolder(itemId) || appSystem.lookup_app(itemId);
+            }));
     },
 
-    getAllIds: function(index) {
-        return this._allItems.map(function(item) { return item.get_id(); });
+    _findIconChanges: function() {
+        let oldItemLayout = this._allIcons.map(function(icon) { return icon.getId(); });
+        let newItemLayout = this.getLayoutIds();
+        newItemLayout = this._trimInvisible(newItemLayout);
+
+        let movedList = {};
+        let removedList = [];
+        for (let oldItemIdx in oldItemLayout) {
+            let oldItem = oldItemLayout[oldItemIdx];
+            let newItemIdx = newItemLayout.indexOf(oldItem);
+
+            // Did this icon move?
+            if (newItemIdx != -1 && oldItemIdx != newItemIdx) {
+                movedList[oldItemIdx] = newItemIdx;
+            // Did it get removed?
+            } else if (newItemIdx == -1) {
+                removedList.push(oldItemIdx);
+            }
+        }
+
+        return [movedList, removedList];
+    },
+
+    animateMovement: function() {
+        let [movedList, removedList] = this._findIconChanges();
+        this._grid.animateShuffling(movedList,
+                                    removedList,
+                                    this.repositionedIconData,
+                                    Lang.bind(this, this.addIcons)
+                                   );
+        this.repositionedIconData = [ null, null ];
+    },
+
+    _ensureIconVisible: function(icon) {
+        Util.ensureActorVisibleInScrollView(this.actor, icon);
+    },
+
+    addIcons: function() {
+        this.removeAll();
+
+        let ids = this.getLayoutIds();
+        let appSystem = Shell.AppSystem.get_default();
+
+        for (let i = 0; i < ids.length; i++) {
+            let itemId = ids[i];
+            let item = null;
+
+            if (IconGridLayout.layout.iconIsFolder(itemId)) {
+                item = Shell.DesktopDirInfo.new(itemId);
+            } else {
+                item = appSystem.lookup_app(itemId);
+            }
+
+            if (item) {
+                let icon = this._createItemIcon(item);
+                this.addIcon(icon);
+                icon.actor.connect('key-focus-in',
+                                   Lang.bind(this, this._ensureIconVisible));
+            }
+        }
     }
 });
 
@@ -160,8 +193,10 @@ const FolderView = new Lang.Class({
 
     _init: function(folderIcon) {
         this.parent();
-        this.folderIcon = folderIcon;
+        this._folderIcon = folderIcon;
         this.actor = this._grid.actor;
+
+        this.addIcons();
     },
 
     _createItemIcon: function(item) {
@@ -169,8 +204,8 @@ const FolderView = new Lang.Class({
                                          parentView: this });
     },
 
-    addApp: function(app) {
-        this._addItem(app);
+    getViewId: function() {
+        return this._folderIcon.getId();
     }
 });
 
@@ -231,8 +266,6 @@ const AllView = new Lang.Class({
                                          style_class: 'all-apps vfade' });
         this.actor._delegate = this;
 
-        this._repositionedIconData = [ null, null ];
-
         this.actor.add_actor(box);
         this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         let action = new Clutter.PanAction({ interpolate: true });
@@ -246,6 +279,12 @@ const AllView = new Lang.Class({
         this._clickAction.connect('clicked', Lang.bind(this, this._closePopup));
         Main.overview.addAction(this._clickAction, false);
         this._eventBlocker.bind_property('reactive', this._clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
+
+        let appSystem = Shell.AppSystem.get_default();
+        this._appStore = appSystem.lookup_app(EOS_APP_STORE_ID);
+        if (this._appStore) {
+            this._appStore.connect('windows-changed', Lang.bind(this, this._appStoreWindowsChanged));
+        }
     },
 
     _closePopup: function() {
@@ -275,7 +314,7 @@ const AllView = new Lang.Class({
         }
 
         this._dragIcon = source;
-        this._dragView = undefined;
+        this._dragView = null;
 
         this._dragMonitor = {
             dragMotion: Lang.bind(this, this._onDragMotion)
@@ -404,7 +443,7 @@ const AllView = new Lang.Class({
         if (this._onIconIdx != -1 &&
             ((idx != this._onIconIdx) || !onIcon)) {
             this._setDragHoverState(false);
-            dragEvent.dragActor.opacity = 255;
+            dragEvent.dragActor.opacity = ACTIVE_GRID_OPACITY;
         }
 
         // If we are in a new spot, remove the previous nudges
@@ -466,11 +505,10 @@ const AllView = new Lang.Class({
             return DND.DragMotionResult.NO_DROP;
         }
 
-        let item = this._dragView.getItemForIndex(this._onIconIdx);
         let validHoverDrop = false;
-        
-        if (item) {
-            let viewIcon = this._dragView.getIcon(item.get_id());
+        let viewIcon = this._dragView.getIconForIndex(this._onIconIdx);
+
+        if (viewIcon) {
             // We can only move applications into folders or the app store
             validHoverDrop = viewIcon.canDrop && this._dragIcon.canDragOver(viewIcon);
         }
@@ -483,13 +521,10 @@ const AllView = new Lang.Class({
     },
 
     _setDragHoverState: function(state) {
-        let item = this._dragView.getItemForIndex(this._onIconIdx);
+        let viewIcon = this._dragView.getIconForIndex(this._onIconIdx);
 
-        if (item) {
-            let viewIcon = this._dragView.getIcon(item.get_id());
-            if (this._dragIcon.canDragOver(viewIcon)) {
-                viewIcon.setDragHoverState(state);
-            }
+        if (viewIcon && this._dragIcon.canDragOver(viewIcon)) {
+            viewIcon.setDragHoverState(state);
         }
     },
 
@@ -500,13 +535,8 @@ const AllView = new Lang.Class({
 
         if (this._onIcon) {
             // Find out what icon the drop is under
-            let item = this._dragView.getItemForIndex(this._onIconIdx);
-            if (!item) {
-                return false;
-            }
-
-            let dropIcon = this._dragView.getIcon(item.get_id());
-            if (!dropIcon.canDrop) {
+            let dropIcon = this._dragView.getIconForIndex(this._onIconIdx);
+            if (!dropIcon || !dropIcon.canDrop) {
                 return false;
             }
 
@@ -514,47 +544,44 @@ const AllView = new Lang.Class({
                 return false;
             }
 
-            let accepted  = dropIcon.handleIconDrop(source)
-
-            if (accepted) {
-                this._repositionedIconData = [ this._originalIdx, position ];
-
-                if (this._currentPopup) {
-                    this._eventBlocker.reactive = false;
-                    this._currentPopup.popdown();
-                }
-            }
-
-            return accepted;
-        } else {
-            if (!this._positionReallyMoved()) {
-                // If we are outside of the grid area, or didn't actually change
-                // position, ignore the request to move
+            let accepted  = dropIcon.handleIconDrop(source);
+            if (!accepted) {
                 return false;
-            } else {
-                // If we are not over an icon but within the grid, shift the
-                // grid around to accomodate it
-                let item = this._dragView.getItemForIndex(this._insertIdx);
-                let insertId = item ? item.get_id() : null;
-
-                let folderId;
-                if (this._dragView == this) {
-                    folderId = '';
-                } else {
-                    folderId = this._dragView.folderIcon.getId();
-                }
-
-                this._repositionedIconData = [ this._originalIdx, position ];
-                IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
-                return true;
             }
+
+            this._dragView.repositionedIconData = [ this._originalIdx, position ];
+
+            if (this._currentPopup) {
+                this._eventBlocker.reactive = false;
+                this._currentPopup.popdown();
+            }
+
+            return true;
+        } else {
+            // If we are outside of the grid area, or didn't actually change
+            // position, ignore the request to move
+            if (!this._positionReallyMoved()) {
+                return false;
+            }
+
+            // If we are not over an icon but within the grid, shift the
+            // grid around to accomodate it
+            let icon = this._dragView.getIconForIndex(this._insertIdx);
+            let insertId = icon ? icon.getId() : null;
+            let folderId = this._dragView.getViewId();
+
+            this._dragView.repositionedIconData = [ this._originalIdx, position ];
+            this.repositionedView = this._dragView;
+            IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
+            return true;
         }
     },
 
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
             if (item == this._appStore) {
-                return new AppStoreIcon(item, this);
+                this._appStoreIcon = new AppStoreIcon(item, this);
+                return this._appStoreIcon;
             } else {
                 return new AppIcon(item, null, { showMenu: false,
                                                  parentView: this });
@@ -564,29 +591,14 @@ const AllView = new Lang.Class({
         }
     },
 
-    addApp: function(app) {
-        let appIcon = this._addItem(app);
-        if (appIcon)
-            appIcon.actor.connect('key-focus-in',
-                                  Lang.bind(this, this._ensureIconVisible));
-
-        return appIcon;
+    getLayoutIds: function() {
+        let ids = this.parent();
+        ids.push(EOS_APP_STORE_ID);
+        return ids;
     },
 
-    addFolder: function(dirInfo) {
-        let folderIcon = this._addItem(dirInfo);
-        if (folderIcon)
-            folderIcon.actor.connect('key-focus-in',
-                                     Lang.bind(this, this._ensureIconVisible));
-    },
-
-    addAppStore: function() {
-        let appSystem = Shell.AppSystem.get_default();
-        this._appStore = appSystem.lookup_app('eos-app-store.desktop');
-        if (this._appStore) {
-            this._appStoreIcon = this.addApp(this._appStore);
-            this._appStore.connect('windows-changed', Lang.bind(this, this._appStoreWindowsChanged));
-        }
+    getViewId: function() {
+        return '';
     },
 
     _appStoreWindowsChanged: function() {
@@ -618,25 +630,21 @@ const AllView = new Lang.Class({
             }));
     },
 
-    _ensureIconVisible: function(icon) {
-        Util.ensureActorVisibleInScrollView(this.actor, icon);
-    },
-
     _updateIconOpacities: function(folderOpen) {
-        for (let id in this._icons) {
-            if (folderOpen && !this._icons[id].actor.checked)
-                this._icons[id].actor.opacity = INACTIVE_GRID_OPACITY;
-            else
-                this._icons[id].actor.opacity = 255;
-        }
-    },
+        let icons = this.getAllIcons();
+        for (let idx = 0; idx < icons.length; idx++) {
+            let opacity = ACTIVE_GRID_OPACITY;
+            let transition = ACTIVE_GRID_TRANSITION;
 
-    animateMovement: function(movedList, removedList, callback) {
-        this._grid.animateShuffling(movedList,
-                                    removedList,
-                                    this._repositionedIconData,
-                                    callback
-                                   );
+            if (folderOpen && !icons[idx].actor.checked) {
+                opacity = INACTIVE_GRID_OPACITY;
+                transition = INACTIVE_GRID_TRANSITION;
+            }
+
+            Tweener.addTween(icons[idx].actor, { opacity: opacity,
+                                                 time: BoxPointer.POPUP_ANIMATION_TIME,
+                                                 transition: transition });
+        }
     }
 });
 
@@ -670,84 +678,30 @@ const AppDisplay = new Lang.Class({
         this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplay));
     },
 
+    _checkFocusDummy: function() {
+        if (!this._focusDummy) {
+            return;
+        }
+
+        let focused = this._focusDummy.has_key_focus();
+        this._focusDummy.destroy();
+        this._focusDummy = null;
+        if (focused) {
+            this.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
+        }
+    },
+
     _redisplay: function() {
-        if (this._view.getAllItems().length == 0) {
-            this._addIcons();
+        if (this._view.getAllIcons().length == 0) {
+            this._view.addIcons();
+            this._checkFocusDummy();
         } else {
-            let ids = this._view.getAllIds();
-            let [movedIndexes, removedIndexes] = this._findIconChanges(ids);
-            this._view.animateMovement(movedIndexes,
-                                       removedIndexes,
-                                       Lang.bind(this, this._addIcons)
-                                      );
-        }
-    },
-
-    _findIconChanges: function(oldItemLayout) {
-        let ids = IconGridLayout.layout.getIcons();
-        let newItemLayout = this._trimInvisible(ids);
-
-        newItemLayout.push(oldItemLayout[oldItemLayout.length - 1]);
-
-        let movedList = {};
-        let removedList = [];
-        for (let oldItemIdx in oldItemLayout) {
-            let oldItem = oldItemLayout[oldItemIdx];
-            let newItemIdx = newItemLayout.indexOf(oldItem);
-
-            // Did this icon move?
-            if (newItemIdx != -1 && oldItemIdx != newItemIdx) {
-                movedList[oldItemIdx] = newItemIdx;
-            // Did it get removed?
-            } else if (newItemIdx == -1) {
-                removedList.push(oldItemIdx);
+            let animateView = this._view.repositionedView;
+            if (!animateView) {
+                animateView = this._view;
             }
-        }
 
-        return [movedList, removedList];
-    },
-
-    _trimInvisible: function(items) {
-        let visibleItems = [];
-        for (let itemIndex in items) {
-            let item = items[itemIndex];
-            if (IconGridLayout.layout.iconIsFolder(item) || this._appSystem.lookup_app(item)) {
-                visibleItems.push(item);
-            }
-        }
-
-        return visibleItems;
-    },
-
-    _addIcons: function() {
-        this._view.removeAll();
-
-        let ids = IconGridLayout.layout.getIcons();
-
-        for (let i = 0; i < ids.length; i++) {
-            let itemId = ids[i];
-
-            if (IconGridLayout.layout.iconIsFolder(itemId)) {
-                let dirInfo = Shell.DesktopDirInfo.new(itemId);
-                if (dirInfo) {
-                    this._view.addFolder(dirInfo);
-                }
-            } else {
-                let app = this._appSystem.lookup_app(itemId);
-                if (app) {
-                    this._view.addApp(app);
-                }
-            }
-        }
-        this._view.addAppStore();
-        this._view.loadGrid();
-
-        if (this._focusDummy) {
-            let focused = this._focusDummy.has_key_focus();
-            this._focusDummy.destroy();
-            this._focusDummy = null;
-            if (focused)
-                this.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
+            animateView.animateMovement();
         }
     }
 });
@@ -831,10 +785,6 @@ const FolderIcon = new Lang.Class({
         this.view = new FolderView(this);
         this.view.actor.reactive = false;
 
-        this.view.removeAll();
-        this._loadCategory();
-        this.view.loadGrid();
-
         this.actor.connect('clicked', Lang.bind(this,
             function() {
                 this._createPopup();
@@ -860,22 +810,6 @@ const FolderIcon = new Lang.Class({
             function () {
                 Main.overview.endItemDrag(this);
             }));
-    },
-
-    _loadCategory: function() {
-        let appSystem = Shell.AppSystem.get_default();
-
-        let icons = IconGridLayout.layout.getIcons(this.folder.get_id());
-        if (! icons) {
-            return;
-        }
-
-        for (let i = 0; i < icons.length; i++) {
-            let app = appSystem.lookup_app(icons[i]);
-            if (app) {
-                this.view.addApp(app);
-            }
-        }
     },
 
     _onLabelCancel: function() {
@@ -916,16 +850,22 @@ const FolderIcon = new Lang.Class({
             function(popup, isOpen) {
                 if (!isOpen) {
                     this.actor.checked = false;
-
-                    // save the view for future reuse before destroying
-                    // the popup
-                    let viewActor = this.view.actor;
-                    let viewParent = viewActor.get_parent();
-                    viewParent.remove_actor(viewActor);
-
-                    this._popup.actor.destroy();
-                    this._popup = null;
                 }
+            }));
+        this._popup.actor.connect('notify::visible', Lang.bind(this,
+            function() {
+                if (this._popup.actor.visible) {
+                    return;
+                }
+
+                // save the view for future reuse before destroying
+                // the popup
+                let viewActor = this.view.actor;
+                let viewParent = viewActor.get_parent();
+                viewParent.remove_actor(viewActor);
+
+                this._popup.actor.destroy();
+                this._popup = null;
             }));
     },
 
@@ -1037,11 +977,6 @@ const AppFolderPopup = new Lang.Class({
 
         this._boxPointer.actor.bind_property('opacity', this.closeButton, 'opacity',
                                              GObject.BindingFlags.SYNC_CREATE);
-
-        source.actor.connect('destroy', Lang.bind(this,
-            function() {
-                this.actor.destroy();
-            }));
     },
 
     toggle: function() {
@@ -1073,9 +1008,9 @@ const AppFolderPopup = new Lang.Class({
                               BoxPointer.PopupAnimation.SLIDE,
                               Lang.bind(this, function () {
                                   this.actor.hide();
-                                  this.emit('open-state-changed', false);
                               }));
         this._isOpen = false;
+        this.emit('open-state-changed', false);
     }
 });
 Signals.addSignalMethods(AppFolderPopup.prototype);
