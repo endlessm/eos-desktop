@@ -108,10 +108,6 @@ const EndlessApplicationView = new Lang.Class({
         return this._allIcons;
     },
 
-    getAllIds: function() {
-        return this._allIcons.map(function(icon) { return icon.getId(); });
-    },
-
     getLayoutIds: function() {
         let viewId = this.getViewId();
         return IconGridLayout.layout.getIcons(viewId).slice();
@@ -126,7 +122,7 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     _findIconChanges: function() {
-        let oldItemLayout = this.getAllIds();
+        let oldItemLayout = this._allIcons.map(function(icon) { return icon.getId(); });
         let newItemLayout = this.getLayoutIds();
         newItemLayout = this._trimInvisible(newItemLayout);
 
