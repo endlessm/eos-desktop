@@ -261,19 +261,11 @@ const _Draggable = new Lang.Class({
             // to know what was the drag actor source.
             if (this.actor._delegate.getDragActorSource) {
                 this._dragActorSource = this.actor._delegate.getDragActorSource();
-                // If the user dragged from the source, then position
-                // the dragActor over it. Otherwise, center it
-                // around the pointer
+                // Position the actor in the middle of the pointer
                 let [sourceX, sourceY] = this._dragActorSource.get_transformed_position();
-                let x, y;
-                if (stageX > sourceX && stageX <= sourceX + this._dragActor.width &&
-                    stageY > sourceY && stageY <= sourceY + this._dragActor.height) {
-                    x = sourceX;
-                    y = sourceY;
-                } else {
-                    x = stageX - this._dragActor.width / 2;
-                    y = stageY - this._dragActor.height / 2;
-                }
+                let x = stageX - this._dragActor.width / 2;
+                let y = stageY - this._dragActor.height / 2;
+
                 this._dragActor.set_position(x, y);
             } else {
                 this._dragActorSource = this.actor;
