@@ -37,7 +37,10 @@ const MAX_COLUMNS = 7;
 
 const DRAG_OVER_FOLDER_OPACITY = 128;
 const INACTIVE_GRID_OPACITY = 77;
-const FOLDER_SUBICON_FRACTION = .4;
+const ACTIVE_GRID_OPACITY = 255;
+
+const INACTIVE_GRID_TRANSITION = 'easeOutQuad';
+const ACTIVE_GRID_TRANSITION = 'easeInQuad';
 
 const DRAG_SCROLL_PIXELS_PER_SEC = 800;
 
@@ -440,7 +443,7 @@ const AllView = new Lang.Class({
         if (this._onIconIdx != -1 &&
             ((idx != this._onIconIdx) || !onIcon)) {
             this._setDragHoverState(false);
-            dragEvent.dragActor.opacity = 255;
+            dragEvent.dragActor.opacity = ACTIVE_GRID_OPACITY;
         }
 
         // If we are in a new spot, remove the previous nudges
@@ -630,12 +633,12 @@ const AllView = new Lang.Class({
     _updateIconOpacities: function(folderOpen) {
         let icons = this.getAllIcons();
         for (let idx = 0; idx < icons.length; idx++) {
-            let opacity = 255;
-            let transition = 'easeInQuad';
+            let opacity = ACTIVE_GRID_OPACITY;
+            let transition = ACTIVE_GRID_TRANSITION;
 
             if (folderOpen && !icons[idx].actor.checked) {
                 opacity = INACTIVE_GRID_OPACITY;
-                transition = 'easeOutQuad';
+                transition = INACTIVE_GRID_TRANSITION;
             }
 
             Tweener.addTween(icons[idx].actor, { opacity: opacity,
