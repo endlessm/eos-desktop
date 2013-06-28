@@ -524,9 +524,6 @@ const IconGrid = new Lang.Class({
                 leftPadding = availWidth - usedWidth;
         }
 
-        // Store this so we know where the icon grid starts
-        this._leftPadding = leftPadding;
-
         let x = box.x1 + leftPadding;
         let y = box.y1;
         let columnIndex = 0;
@@ -573,6 +570,10 @@ const IconGrid = new Lang.Class({
                 x += this._hItemSize + this._spacing;
             }
         }
+
+        // Store some information about the allocated layout
+        this._leftPadding = leftPadding;
+        this._allocatedColumns = nColumns;
     },
 
     childrenInRow: function(rowWidth) {
@@ -764,7 +765,14 @@ const IconGrid = new Lang.Class({
         let [sw, sh] = this.actor.get_transformed_size();
         let [ok, sx, sy] = this.actor.transform_stage_point(x, y);
 
-        let [nColumns, usedWidth] = this._computeLayout(sw);
+        let usedWidth = sw;
+
+        // Undo the align translation from _allocate()
+        if (this._xAlign == St.Align.MIDDLE) {
+            usedWidth -= 2 * this._leftPadding;
+        } else if (this._xAlign == St.Align.END) {
+            usedWidth -= this._leftPadding;
+        }
 
         let rowHeight = this._vItemSize + this._spacing;
         let row = Math.floor(sy / rowHeight);
@@ -781,7 +789,7 @@ const IconGrid = new Lang.Class({
         }
 
         let children = this._getVisibleChildren();
-        let childIdx = Math.min((row * nColumns) + column, children.length);
+        let childIdx = Math.min((row * this._allocatedColumns) + column, children.length);
 
         // If we're above the grid vertically,
         // we are in an invalid drop location
@@ -803,7 +811,7 @@ const IconGrid = new Lang.Class({
         let [childMinWidth, childMinHeight, childNaturalWidth, childNaturalHeight] = child.get_preferred_size();
 
         // Calculate the original position of the child icon (prior to nudging)
-        let cx = this._leftPadding + (childIdx % nColumns) * columnWidth;
+        let cx = this._leftPadding + (childIdx % this._allocatedColumns) * columnWidth;
 
         // This is the width of the cell that contains the icon
         // (excluding spacing between cells)
