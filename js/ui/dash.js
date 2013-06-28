@@ -475,7 +475,7 @@ const Dash = new Lang.Class({
         let childrenOnDash = this._box.get_children();
         let numChildren = childrenOnDash.length;
 
-        if (this._dragPlaceHolder) {
+        if (this._dragPlaceholder) {
             numChildren--;
         }
 
