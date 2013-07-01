@@ -28,6 +28,7 @@ const NUDGE_RETURN_DURATION = 0.3;
 const NUDGE_FACTOR = 0.2;
 
 const SHUFFLE_ANIMATION_TIME = 0.250;
+const SHUFFLE_ANIMATION_OPACITY = 255;
 
 const CursorLocation = {
     DEFAULT: 0,
@@ -655,6 +656,10 @@ const IconGrid = new Lang.Class({
     },
 
     animateShuffling: function(changedItems, removedItems, originalItemData, callback) {
+        // We need to repaint the grid since the last icon added might not be
+        // drawn yet
+        this._grid.paint();
+
         let children = this._grid.get_children();
 
         let movementMatrix = {};
@@ -727,6 +732,8 @@ const IconGrid = new Lang.Class({
 
     _moveIcon: function(icon, destPoint) {
         Tweener.removeTweens(icon);
+
+        icon.opacity = SHUFFLE_ANIMATION_OPACITY;
 
         Tweener.addTween(icon, { translation_x: destPoint[0],
                                  translation_y: destPoint[1],
