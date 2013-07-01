@@ -6,6 +6,7 @@ const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 const Tweener = imports.ui.tweener;
 const Mainloop = imports.mainloop;
+const Main = imports.ui.main;
 
 const ButtonConstants = imports.ui.buttonConstants;
 const GrabHelper = imports.ui.grabHelper;
@@ -674,6 +675,11 @@ const IconGrid = new Lang.Class({
         if (originalIndex in movementMatrix) {
             let oldIcon = children[originalIndex];
             let newIcon = children[changedItems[originalIndex]];
+
+            // Adjust for multiple-monitor setups
+            let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
+            dndDropPosition[0] += workArea.x;
+            dndDropPosition[1] += workArea.y;
 
             // We need to know what the coordinates of the icon center are
             dndDropPosition[0] -= Math.floor(oldIcon.get_size()[0] / 2);
