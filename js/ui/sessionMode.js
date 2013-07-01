@@ -60,7 +60,7 @@ const _modes = {
         components: ['polkitAgent', 'telepathyClient'],
         panel: {
             left: [],
-            right: ['a11y', 'keyboard', 'lockScreen']
+            right: ['dateMenu', 'a11y', 'keyboard', 'lockScreen']
         },
         panelStyle: 'unlock-screen'
     },
