@@ -384,7 +384,7 @@ const AllView = new Lang.Class({
         // If the icon is dragged to the top or the bottom of the grid,
         // we want to scroll it, if possible
         if (this._handleDragOvershoot(dragEvent)) {
-            this._resetNudgeState();
+            this._resetDragViewState();
             return DND.DragMotionResult.CONTINUE;
         }
 
@@ -398,7 +398,7 @@ const AllView = new Lang.Class({
         }
 
         if (dragView != this._dragView) {
-            this._resetNudgeState();
+            this._resetDragViewState();
             this._dragView = dragView;
         }
 
