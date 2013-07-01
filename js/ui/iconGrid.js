@@ -6,6 +6,7 @@ const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 const Tweener = imports.ui.tweener;
 const Mainloop = imports.mainloop;
+const Main = imports.ui.main;
 
 const ButtonConstants = imports.ui.buttonConstants;
 const GrabHelper = imports.ui.grabHelper;
@@ -27,6 +28,7 @@ const NUDGE_RETURN_DURATION = 0.3;
 const NUDGE_FACTOR = 0.2;
 
 const SHUFFLE_ANIMATION_TIME = 0.250;
+const SHUFFLE_ANIMATION_OPACITY = 255;
 
 const CursorLocation = {
     DEFAULT: 0,
@@ -654,6 +656,10 @@ const IconGrid = new Lang.Class({
     },
 
     animateShuffling: function(changedItems, removedItems, originalItemData, callback) {
+        // We need to repaint the grid since the last icon added might not be
+        // drawn yet
+        this._grid.paint();
+
         let children = this._grid.get_children();
 
         let movementMatrix = {};
@@ -674,6 +680,11 @@ const IconGrid = new Lang.Class({
         if (originalIndex in movementMatrix) {
             let oldIcon = children[originalIndex];
             let newIcon = children[changedItems[originalIndex]];
+
+            // Adjust for multiple-monitor setups
+            let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
+            dndDropPosition[0] += workArea.x;
+            dndDropPosition[1] += workArea.y;
 
             // We need to know what the coordinates of the icon center are
             dndDropPosition[0] -= Math.floor(oldIcon.get_size()[0] / 2);
@@ -721,6 +732,8 @@ const IconGrid = new Lang.Class({
 
     _moveIcon: function(icon, destPoint) {
         Tweener.removeTweens(icon);
+
+        icon.opacity = SHUFFLE_ANIMATION_OPACITY;
 
         Tweener.addTween(icon, { translation_x: destPoint[0],
                                  translation_y: destPoint[1],

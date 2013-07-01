@@ -593,6 +593,26 @@ const AllView = new Lang.Class({
 
         this._dragView.repositionedIconData = [ this._originalIdx, position ];
         this.repositionedView = this._dragView;
+
+        // If we dropped the icon outside of the folder, close the popup and
+        // add the icon to the main view
+        let droppedOutsideOfFolder = this._currentPopup && (this._dragView != this._dragIcon.parentView);
+        if (droppedOutsideOfFolder) {
+            source.blockHandler = true;
+            this._eventBlocker.reactive = false;
+            this._currentPopup.popdown();
+
+            // Append the inserted icon to the end of the grid
+            let appSystem = Shell.AppSystem.get_default();
+            let item = appSystem.lookup_app(source.getId());
+            let icon = this._dragView._createItemIcon(item);
+            this._dragView.addIcon(icon);
+
+            // Set it as the repositioned icon
+            let desktopIcons = this._dragView.getAllIcons();
+            this._dragView.repositionedIconData = [ desktopIcons.length - 1, position ];
+        }
+
         IconGridLayout.layout.repositionIcon(source.getId(), insertId, folderId);
         return true;
     },
