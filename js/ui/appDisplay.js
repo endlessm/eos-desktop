@@ -310,23 +310,35 @@ const AllView = new Lang.Class({
         return false;
     },
 
+    _resetNudgeState: function() {
+        if (this._dragView) {
+            this._dragView.removeNudgeTransforms();
+        }
+    },
+
+    _resetDragViewState: function() {
+        this._resetNudgeState();
+
+        this._insertIdx = -1;
+        this._onIconIdx = -1;
+        this._lastCursorLocation = -1;
+        this._dragView = null;
+    },
+
     _setupDragState: function(source) {
         if (!source.handleViewDragBegin) {
             return;
         }
 
         this._dragIcon = source;
-        this._dragView = null;
+        this._originalIdx = source.parentView.indexOf(source);
 
         this._dragMonitor = {
             dragMotion: Lang.bind(this, this._onDragMotion)
         };
         DND.addDragMonitor(this._dragMonitor);
 
-        this._insertIdx = -1;
-        this._onIconIdx = -1;
-        this._onIcon = false;
-        this._originalIdx = source.parentView.indexOf(source);
+        this._resetDragViewState();
 
         source.handleViewDragBegin();
         if (this._appStoreIcon && (source.canDragOver(this._appStoreIcon))) {
@@ -339,18 +351,15 @@ const AllView = new Lang.Class({
             return;
         }
 
+        this._dragIcon = null;
+        this._originalIdx = -1;
+
         if (this._dragMonitor) {
             DND.removeDragMonitor(this._dragMonitor);
             this._dragMonitor = null;
         }
 
-        this._insertIdx = -1;
-        this._onIconIdx = -1;
-        this._onIcon = false;
-        this._originalIdx = -1;
-
-        this._dragIcon = null;
-        this._dragView = null;
+        this._resetDragViewState();
 
         source.handleViewDragEnd();
         if (this._appStoreIcon && (source.canDragOver(this._appStoreIcon))) {
@@ -367,11 +376,6 @@ const AllView = new Lang.Class({
     },
 
     _onDragEnd: function(overview, source) {
-        source.parentView.removeNudgeTransforms();
-        if (source.parentView != this) {
-            this.removeNudgeTransforms();
-        }
-
         this._eventBlocker.show();
         this._clearDragState(source);
     },
@@ -379,51 +383,23 @@ const AllView = new Lang.Class({
     _onDragMotion: function(dragEvent) {
         // If the icon is dragged to the top or the bottom of the grid,
         // we want to scroll it, if possible
-        let [ gridX, gridY ] = this.actor.get_transformed_position();
-        let [ gridW, gridH ] = this.actor.get_transformed_size();
-        let gridBottom = gridY + gridH;
-
-        let adjustment = this.actor.vscroll.adjustment;
-
-        if (dragEvent.y <= gridY || dragEvent.y >= gridBottom) {
-            if (dragEvent.y <= gridY &&
-                adjustment.value > 0) {
-                let seconds = adjustment.value / DRAG_SCROLL_PIXELS_PER_SEC;
-                Tweener.addTween(adjustment, { value: 0,
-                                               time: seconds,
-                                               transition: 'linear' });
-
-                return DND.DragMotionResult.CONTINUE;
-            }
-
-            let maxAdjust = adjustment.upper - adjustment.page_size;
-            if (dragEvent.y >= gridBottom &&
-                adjustment.value < maxAdjust) {
-                let seconds = (maxAdjust - adjustment.value) /
-                    DRAG_SCROLL_PIXELS_PER_SEC;
-                Tweener.addTween(adjustment, { value: maxAdjust,
-                                               time: seconds,
-                                               transition: 'linear' });
-
-                return DND.DragMotionResult.CONTINUE;
-            }
+        if (this._handleDragOvershoot(dragEvent)) {
+            this._resetDragViewState();
+            return DND.DragMotionResult.CONTINUE;
         }
-
-        // Once the user moves away from the edge,
-        // cancel any existing scrolling
-        if (Tweener.isTweening(adjustment)) {
-            Tweener.removeTweens(adjustment);
-        }
-
-        // Ask grid can we drop here
 
         // Handle motion over grid
-        if (this.actor.contains(dragEvent.targetActor)) {
-            this._dragView = this;
-        }
+        let dragView = null;
 
         if (this._dragIcon.parentView.actor.contains(dragEvent.targetActor)) {
-            this._dragView = this._dragIcon.parentView;
+            dragView = this._dragIcon.parentView;
+        } else if (this.actor.contains(dragEvent.targetActor)) {
+            dragView = this;
+        }
+
+        if (dragView != this._dragView) {
+            this._resetDragViewState();
+            this._dragView = dragView;
         }
 
         if (!this._dragView) {
@@ -434,12 +410,14 @@ const AllView = new Lang.Class({
             this._currentPopup && (this._dragView == this._dragIcon.parentView);
         let canDropPastEnd = draggingWithinFolder || !this._appStoreIcon;
 
+        // Ask grid can we drop here
         let [idx, cursorLocation] = this._dragView.canDropAt(dragEvent.x,
                                                              dragEvent.y,
                                                              canDropPastEnd);
 
         let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
-        let isNewPosition = (!onIcon && idx != this._insertIdx) || (onIcon != this._onIcon);
+        let isNewPosition = (!onIcon && idx != this._insertIdx) ||
+            (cursorLocation != this._lastCursorLocation);
 
         // If we are not over our last hovered icon, remove its hover state
         if (this._onIconIdx != -1 &&
@@ -450,12 +428,12 @@ const AllView = new Lang.Class({
 
         // If we are in a new spot, remove the previous nudges
         if (isNewPosition) {
-            this._dragView.removeNudgeTransforms();
+            this._resetNudgeState();
         }
 
-        // Update our insert/hover index and if we are currently on an icon
-        this._onIcon = onIcon;
-        if (this._onIcon) {
+        // Update our insert/hover index and the last cursor location
+        this._lastCursorLocation = cursorLocation;
+        if (onIcon) {
             this._onIconIdx = idx;
             this._insertIdx = -1;
 
@@ -478,6 +456,48 @@ const AllView = new Lang.Class({
             // Propagate the signal in any case when moving icons
             return DND.DragMotionResult.CONTINUE;
         }
+    },
+
+    _handleDragOvershoot: function(dragEvent) {
+        let [ gridX, gridY ] = this.actor.get_transformed_position();
+        let [ gridW, gridH ] = this.actor.get_transformed_size();
+        let gridBottom = gridY + gridH;
+
+        if (dragEvent.y > gridY && dragEvent.y < gridBottom) {
+            // We're within the grid boundaries - cancel any existing
+            // scrolling
+            if (Tweener.isTweening(adjustment)) {
+                Tweener.removeTweens(adjustment);
+            }
+
+            return false;
+        }
+
+        let adjustment = this.actor.vscroll.adjustment;
+
+        if (dragEvent.y <= gridY &&
+            adjustment.value > 0) {
+            let seconds = adjustment.value / DRAG_SCROLL_PIXELS_PER_SEC;
+            Tweener.addTween(adjustment, { value: 0,
+                                           time: seconds,
+                                           transition: 'linear' });
+
+            return true;
+        }
+
+        let maxAdjust = adjustment.upper - adjustment.page_size;
+        if (dragEvent.y >= gridBottom &&
+            adjustment.value < maxAdjust) {
+            let seconds = (maxAdjust - adjustment.value) /
+                DRAG_SCROLL_PIXELS_PER_SEC;
+            Tweener.addTween(adjustment, { value: maxAdjust,
+                                           time: seconds,
+                                           transition: 'linear' });
+
+            return true;
+        }
+
+        return false;
     },
 
     _positionReallyMoved: function() {
@@ -531,11 +551,9 @@ const AllView = new Lang.Class({
     },
 
     acceptDrop: function(source, actor, x, y, time) {
-        // Get the id of the icon dragged
-        let originalId = source.getId();
         let position = [x, y];
 
-        if (this._onIcon) {
+        if (this._onIconIdx != -1) {
             // Find out what icon the drop is under
             let dropIcon = this._dragView.getIconForIndex(this._onIconIdx);
             if (!dropIcon || !dropIcon.canDrop) {
@@ -559,24 +577,24 @@ const AllView = new Lang.Class({
             }
 
             return true;
-        } else {
-            // If we are outside of the grid area, or didn't actually change
-            // position, ignore the request to move
-            if (!this._positionReallyMoved()) {
-                return false;
-            }
-
-            // If we are not over an icon but within the grid, shift the
-            // grid around to accomodate it
-            let icon = this._dragView.getIconForIndex(this._insertIdx);
-            let insertId = icon ? icon.getId() : null;
-            let folderId = this._dragView.getViewId();
-
-            this._dragView.repositionedIconData = [ this._originalIdx, position ];
-            this.repositionedView = this._dragView;
-            IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
-            return true;
         }
+
+        // If we are outside of the grid area, or didn't actually change
+        // position, ignore the request to move
+        if (!this._positionReallyMoved()) {
+            return false;
+        }
+
+        // If we are not over an icon but within the grid, shift the
+        // grid around to accomodate it
+        let icon = this._dragView.getIconForIndex(this._insertIdx);
+        let insertId = icon ? icon.getId() : null;
+        let folderId = this._dragView.getViewId();
+
+        this._dragView.repositionedIconData = [ this._originalIdx, position ];
+        this.repositionedView = this._dragView;
+        IconGridLayout.layout.repositionIcon(source.getId(), insertId, folderId);
+        return true;
     },
 
     _createItemIcon: function(item) {
