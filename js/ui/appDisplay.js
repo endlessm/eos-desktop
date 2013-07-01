@@ -390,12 +390,11 @@ const AllView = new Lang.Class({
 
         // Handle motion over grid
         let dragView = null;
-        if (this.actor.contains(dragEvent.targetActor)) {
-            dragView = this;
-        }
 
         if (this._dragIcon.parentView.actor.contains(dragEvent.targetActor)) {
             dragView = this._dragIcon.parentView;
+        } else if (this.actor.contains(dragEvent.targetActor)) {
+            dragView = this;
         }
 
         if (dragView != this._dragView) {
