@@ -383,13 +383,7 @@ const ScreenSaverDBus = new Lang.Class({
         Gio.DBus.session.own_name('org.gnome.ScreenSaver', Gio.BusNameOwnerFlags.REPLACE, null, null);
     },
 
-    LockAsync: function(parameters, invocation) {
-        let tmpId = this._screenShield.connect('lock-screen-shown', Lang.bind(this, function() {
-            this._screenShield.disconnect(tmpId);
-
-            invocation.return_value(null);
-        }));
-
+    Lock: function() {
         this._screenShield.lock(true);
     },
 
