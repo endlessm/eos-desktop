@@ -321,7 +321,7 @@ const AllView = new Lang.Class({
 
         this._insertIdx = -1;
         this._onIconIdx = -1;
-        this._onIcon = false;
+        this._lastCursorLocation = -1;
         this._dragView = null;
     },
 
@@ -416,7 +416,8 @@ const AllView = new Lang.Class({
                                                              canDropPastEnd);
 
         let onIcon = (cursorLocation == IconGrid.CursorLocation.ON_ICON);
-        let isNewPosition = (!onIcon && idx != this._insertIdx) || (onIcon != this._onIcon);
+        let isNewPosition = (!onIcon && idx != this._insertIdx) ||
+            (cursorLocation != this._lastCursorLocation);
 
         // If we are not over our last hovered icon, remove its hover state
         if (this._onIconIdx != -1 &&
@@ -426,13 +427,13 @@ const AllView = new Lang.Class({
         }
 
         // If we are in a new spot, remove the previous nudges
-        if (isNewPosition || (cursorLocation == IconGrid.CursorLocation.EMPTY_AREA)) {
+        if (isNewPosition) {
             this._resetNudgeState();
         }
 
-        // Update our insert/hover index and if we are currently on an icon
-        this._onIcon = onIcon;
-        if (this._onIcon) {
+        // Update our insert/hover index and the last cursor location
+        this._lastCursorLocation = cursorLocation;
+        if (onIcon) {
             this._onIconIdx = idx;
             this._insertIdx = -1;
 
@@ -550,11 +551,9 @@ const AllView = new Lang.Class({
     },
 
     acceptDrop: function(source, actor, x, y, time) {
-        // Get the id of the icon dragged
-        let originalId = source.getId();
         let position = [x, y];
 
-        if (this._onIcon) {
+        if (this._onIconIdx != -1) {
             // Find out what icon the drop is under
             let dropIcon = this._dragView.getIconForIndex(this._onIconIdx);
             if (!dropIcon || !dropIcon.canDrop) {
@@ -578,24 +577,24 @@ const AllView = new Lang.Class({
             }
 
             return true;
-        } else {
-            // If we are outside of the grid area, or didn't actually change
-            // position, ignore the request to move
-            if (!this._positionReallyMoved()) {
-                return false;
-            }
-
-            // If we are not over an icon but within the grid, shift the
-            // grid around to accomodate it
-            let icon = this._dragView.getIconForIndex(this._insertIdx);
-            let insertId = icon ? icon.getId() : null;
-            let folderId = this._dragView.getViewId();
-
-            this._dragView.repositionedIconData = [ this._originalIdx, position ];
-            this.repositionedView = this._dragView;
-            IconGridLayout.layout.repositionIcon(originalId, insertId, folderId);
-            return true;
         }
+
+        // If we are outside of the grid area, or didn't actually change
+        // position, ignore the request to move
+        if (!this._positionReallyMoved()) {
+            return false;
+        }
+
+        // If we are not over an icon but within the grid, shift the
+        // grid around to accomodate it
+        let icon = this._dragView.getIconForIndex(this._insertIdx);
+        let insertId = icon ? icon.getId() : null;
+        let folderId = this._dragView.getViewId();
+
+        this._dragView.repositionedIconData = [ this._originalIdx, position ];
+        this.repositionedView = this._dragView;
+        IconGridLayout.layout.repositionIcon(source.getId(), insertId, folderId);
+        return true;
     },
 
     _createItemIcon: function(item) {
