@@ -310,23 +310,35 @@ const AllView = new Lang.Class({
         return false;
     },
 
+    _resetNudgeState: function() {
+        if (this._dragView) {
+            this._dragView.removeNudgeTransforms();
+        }
+    },
+
+    _resetDragViewState: function() {
+        this._resetNudgeState();
+
+        this._insertIdx = -1;
+        this._onIconIdx = -1;
+        this._onIcon = false;
+        this._dragView = null;
+    },
+
     _setupDragState: function(source) {
         if (!source.handleViewDragBegin) {
             return;
         }
 
         this._dragIcon = source;
-        this._dragView = null;
+        this._originalIdx = source.parentView.indexOf(source);
 
         this._dragMonitor = {
             dragMotion: Lang.bind(this, this._onDragMotion)
         };
         DND.addDragMonitor(this._dragMonitor);
 
-        this._insertIdx = -1;
-        this._onIconIdx = -1;
-        this._onIcon = false;
-        this._originalIdx = source.parentView.indexOf(source);
+        this._resetDragViewState();
 
         source.handleViewDragBegin();
         if (this._appStoreIcon && (source.canDragOver(this._appStoreIcon))) {
@@ -339,18 +351,15 @@ const AllView = new Lang.Class({
             return;
         }
 
+        this._dragIcon = null;
+        this._originalIdx = -1;
+
         if (this._dragMonitor) {
             DND.removeDragMonitor(this._dragMonitor);
             this._dragMonitor = null;
         }
 
-        this._insertIdx = -1;
-        this._onIconIdx = -1;
-        this._onIcon = false;
-        this._originalIdx = -1;
-
-        this._dragIcon = null;
-        this._dragView = null;
+        this._resetDragViewState();
 
         source.handleViewDragEnd();
         if (this._appStoreIcon && (source.canDragOver(this._appStoreIcon))) {
@@ -367,8 +376,6 @@ const AllView = new Lang.Class({
     },
 
     _onDragEnd: function(overview, source) {
-        this._resetNudgeState();
-
         this._eventBlocker.show();
         this._clearDragState(source);
     },
@@ -507,12 +514,6 @@ const AllView = new Lang.Class({
         }
 
         return true;
-    },
-
-    _resetNudgeState: function() {
-        if (this._dragView) {
-            this._dragView.removeNudgeTransforms();
-        }
     },
 
     _shouldNudgeItems: function(isNewPosition) {
