@@ -77,7 +77,7 @@ const WorkspaceMonitor = new Lang.Class({
             }
         }
 
-        this.updateOverview();
+        this._updateOverview();
     },
 
     _untrackWorkspace: function() {
@@ -163,7 +163,7 @@ const WorkspaceMonitor = new Lang.Class({
         }
 
         this._visibleWindows -= 1;
-        this.updateOverview();
+        this._updateOverview();
     },
 
     _minimizeWindow: function(shellwm, actor) {
@@ -175,7 +175,7 @@ const WorkspaceMonitor = new Lang.Class({
         // windows hashtable. Something has gone wrong and we've got
         // another minimize event without the window being remapped.
         if (this._windowIsMinimized(actor.meta_window)) {
-            this.updateOverview();
+            this._updateOverview();
             return;
         }
 
@@ -183,7 +183,7 @@ const WorkspaceMonitor = new Lang.Class({
         this._visibleWindows -= 1;
 
         this._addMinimizedWindow(actor.meta_window);
-        this.updateOverview();
+        this._updateOverview();
     },
 
     _realMapWindow: function(metaWindow) {
@@ -199,14 +199,14 @@ const WorkspaceMonitor = new Lang.Class({
 
         this._visibleWindows += 1;
 
-        this.updateOverview();
+        this._updateOverview();
     },
 
     _mapWindow: function(shellwm, actor) {
         this._realMapWindow(actor.meta_window);
     },
 
-    updateOverview: function() {
+    _updateOverview: function() {
         // Check if the count has become messed up somehow
         if (this._visibleWindows < 0) {
             this._visibleWindows = 0;
