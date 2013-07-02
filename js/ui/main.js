@@ -215,7 +215,6 @@ function _initializeUI() {
                               // Now that we've completed startup,
                               // show the overview
                               overview.showApps();
-                              wm.minimizeAllWindows();
                           });
 }
 
