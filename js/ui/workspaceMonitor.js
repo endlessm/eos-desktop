@@ -212,7 +212,9 @@ const WorkspaceMonitor = new Lang.Class({
             this._visibleWindows = 0;
         }
 
-        Main.overview.hideOrShowApps();
+        if (this._visibleWindows == 0) {
+            Main.overview.showApps();
+        }
     },
 
     get visibleWindows() {

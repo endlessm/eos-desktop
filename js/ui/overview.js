@@ -564,19 +564,6 @@ const Overview = new Lang.Class({
         this._syncInputMode();
     },
 
-    hideOrShowApps: function() {
-        if (!this._initCalled) {
-            return;
-        }
-
-        let visibleWindows = Main.workspaceMonitor.visibleWindows;
-        if (visibleWindows == 0) {
-            this.showApps();
-        } else {
-            this.hide();
-        }
-    },
-
     toggleByKey: function() {
         if (!this.visible ||
             this._viewSelector.getActivePage() != ViewSelector.ViewPage.APPS) {
@@ -588,10 +575,15 @@ const Overview = new Lang.Class({
         if (this.isDummy)
             return;
 
-        if (this.visible)
-            this.hideOrShowApps();
-        else
+        if (this.visible) {
+            if (Main.workspaceMonitor.visibleWindows == 0) {
+                this.showApps();
+            } else {
+                this.hide();
+            }
+        } else {
             this.show();
+        }
     },
 
     // Checks if the Activities button is currently sensitive to
