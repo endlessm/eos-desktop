@@ -403,9 +403,6 @@ const EndSessionDialog = new Lang.Class({
         this._stopTimer();
         this._dbusImpl.emit_signal('Canceled', null);
         this.close();
-
-        // Go back to the overview
-        Main.overview.hideOrShowApps();
     },
 
     _confirm: function(signal) {

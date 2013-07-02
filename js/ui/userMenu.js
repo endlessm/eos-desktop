@@ -846,7 +846,6 @@ const UserMenuButton = new Lang.Class({
     },
 
     _onQuitSessionActivate: function() {
-        Main.overview.hide();
         this._session.LogoutRemote(0);
     },
 
@@ -925,8 +924,6 @@ const UserMenuButton = new Lang.Class({
     },
 
     _onSuspendOrPowerOffActivate: function() {
-        Main.overview.hide();
-
         if (this._haveShutdown &&
             this._suspendOrPowerOffItem.state == PopupMenu.PopupAlternatingMenuItemState.DEFAULT) {
             this._loginManager.listSessions(Lang.bind(this,
