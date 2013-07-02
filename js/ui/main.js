@@ -204,7 +204,6 @@ function _initializeUI() {
     if (sessionMode.isGreeter && screenShield) {
         layoutManager.connect('startup-prepared', function() {
             screenShield.showDialog();
-            wm.minimizeAllWindows();
         });
     }
 
