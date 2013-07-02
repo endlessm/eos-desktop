@@ -443,23 +443,23 @@ StScrollBar StButton#vhandle:active {
     padding-right: 4px;
 }
 
-.panel-corner {
-    -panel-corner-radius: 0px;
-    -panel-corner-background-color: black;
-    -panel-corner-border-width: 2px;
-    -panel-corner-border-color: transparent;
+.rounded-corner {
+    -rounded-corner-radius: 6px;
+    -rounded-corner-background-color: black;
+    -rounded-corner-border-width: 2px;
+    -rounded-corner-border-color: transparent;
 }
 
-.panel-corner:active,
-.panel-corner:overview,
-.panel-corner:focus {
-    -panel-corner-border-color: rgba(255,255,255,0.8);
+.rounded-corner:active,
+.rounded-corner:overview,
+.rounded-corner:focus {
+    -rounded-corner-border-color: rgba(255,255,255,0.8);
 }
 
-.panel-corner.unlock-screen,
-.panel-corner.login-screen {
-    -panel-corner-background-color: transparent;
-    -panel-corner-border-color: transparent;
+.rounded-corner.unlock-screen,
+.rounded-corner.login-screen {
+    -rounded-corner-background-color: transparent;
+    -rounded-corner-border-color: transparent;
 }
 
 /* used for the app menu header only */

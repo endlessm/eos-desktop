@@ -1,6 +1,5 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
-const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
@@ -30,49 +29,6 @@ const BUTTON_DND_ACTIVATION_TIMEOUT = 250;
 
 const ANIMATED_ICON_UPDATE_TIMEOUT = 100;
 const SPINNER_ANIMATION_TIME = 0.2;
-
-// To make sure the panel corners blend nicely with the panel,
-// we draw background and borders the same way, e.g. drawing
-// them as filled shapes from the outside inwards instead of
-// using cairo stroke(). So in order to give the border the
-// appearance of being drawn on top of the background, we need
-// to blend border and background color together.
-// For that purpose we use the following helper methods, taken
-// from st-theme-node-drawing.c
-function _norm(x) {
-    return Math.round(x / 255);
-}
-
-function _over(srcColor, dstColor) {
-    let src = _premultiply(srcColor);
-    let dst = _premultiply(dstColor);
-    let result = new Clutter.Color();
-
-    result.alpha = src.alpha + _norm((255 - src.alpha) * dst.alpha);
-    result.red = src.red + _norm((255 - src.alpha) * dst.red);
-    result.green = src.green + _norm((255 - src.alpha) * dst.green);
-    result.blue = src.blue + _norm((255 - src.alpha) * dst.blue);
-
-    return _unpremultiply(result);
-}
-
-function _premultiply(color) {
-    return new Clutter.Color({ red: _norm(color.red * color.alpha),
-                               green: _norm(color.green * color.alpha),
-                               blue: _norm(color.blue * color.alpha),
-                               alpha: color.alpha });
-};
-
-function _unpremultiply(color) {
-    if (color.alpha == 0)
-        return new Clutter.Color();
-
-    let red = Math.min((color.red * 255 + 127) / color.alpha, 255);
-    let green = Math.min((color.green * 255 + 127) / color.alpha, 255);
-    let blue = Math.min((color.blue * 255 + 127) / color.alpha, 255);
-    return new Clutter.Color({ red: red, green: green,
-                               blue: blue, alpha: color.alpha });
-};
 
 const Animation = new Lang.Class({
     Name: 'Animation',
@@ -233,173 +189,6 @@ const TextShadower = new Lang.Class({
     }
 });
 
-const PanelCorner = new Lang.Class({
-    Name: 'PanelCorner',
-
-    _init: function(side) {
-        this._side = side;
-
-        this.actor = new St.DrawingArea({ style_class: 'panel-corner' });
-        this.actor.connect('style-changed', Lang.bind(this, this._styleChanged));
-        this.actor.connect('repaint', Lang.bind(this, this._repaint));
-    },
-
-    _findRightmostButton: function(container) {
-        if (!container.get_children)
-            return null;
-
-        let children = container.get_children();
-
-        if (!children || children.length == 0)
-            return null;
-
-        // Start at the back and work backward
-        let index;
-        for (index = children.length - 1; index >= 0; index--) {
-            if (children[index].visible)
-                break;
-        }
-        if (index < 0)
-            return null;
-
-        if (!(children[index].has_style_class_name('panel-menu')) &&
-            !(children[index].has_style_class_name('panel-button')))
-            return this._findRightmostButton(children[index]);
-
-        return children[index];
-    },
-
-    _findLeftmostButton: function(container) {
-        if (!container.get_children)
-            return null;
-
-        let children = container.get_children();
-
-        if (!children || children.length == 0)
-            return null;
-
-        // Start at the front and work forward
-        let index;
-        for (index = 0; index < children.length; index++) {
-            if (children[index].visible)
-                break;
-        }
-        if (index == children.length)
-            return null;
-
-        if (!(children[index].has_style_class_name('panel-menu')) &&
-            !(children[index].has_style_class_name('panel-button')))
-            return this._findLeftmostButton(children[index]);
-
-        return children[index];
-    },
-
-    setStyleParent: function(box) {
-        let side = this._side;
-
-        let rtlAwareContainer = box instanceof St.BoxLayout;
-        if (rtlAwareContainer &&
-            box.get_text_direction() == Clutter.TextDirection.RTL) {
-            if (this._side == St.Side.LEFT)
-                side = St.Side.RIGHT;
-            else if (this._side == St.Side.RIGHT)
-                side = St.Side.LEFT;
-        }
-
-        let button;
-        if (side == St.Side.LEFT)
-            button = this._findLeftmostButton(box);
-        else if (side == St.Side.RIGHT)
-            button = this._findRightmostButton(box);
-
-        if (button) {
-            if (this._button && this._buttonStyleChangedSignalId) {
-                this._button.disconnect(this._buttonStyleChangedSignalId);
-                this._button.style = null;
-            }
-
-            this._button = button;
-
-            button.connect('destroy', Lang.bind(this,
-                function() {
-                    if (this._button == button) {
-                        this._button = null;
-                        this._buttonStyleChangedSignalId = 0;
-                    }
-                }));
-
-            // Synchronize the locate button's pseudo classes with this corner
-            this._buttonStyleChangedSignalId = button.connect('style-changed', Lang.bind(this,
-                function(actor) {
-                    let pseudoClass = button.get_style_pseudo_class();
-                    this.actor.set_style_pseudo_class(pseudoClass);
-                }));
-
-            // The corner doesn't support theme transitions, so override
-            // the .panel-button default
-            button.style = 'transition-duration: 0ms';
-        }
-    },
-
-    _repaint: function() {
-        let node = this.actor.get_theme_node();
-
-        let cornerRadius = node.get_length("-panel-corner-radius");
-        let borderWidth = node.get_length('-panel-corner-border-width');
-
-        let backgroundColor = node.get_color('-panel-corner-background-color');
-        let borderColor = node.get_color('-panel-corner-border-color');
-
-        let overlap = borderColor.alpha != 0;
-        let offsetY = overlap ? 0 : borderWidth;
-
-        let cr = this.actor.get_context();
-        cr.setOperator(Cairo.Operator.SOURCE);
-
-        cr.moveTo(0, offsetY);
-        if (this._side == St.Side.LEFT)
-            cr.arc(cornerRadius,
-                   borderWidth + cornerRadius,
-                   cornerRadius, Math.PI, 3 * Math.PI / 2);
-        else
-            cr.arc(0,
-                   borderWidth + cornerRadius,
-                   cornerRadius, 3 * Math.PI / 2, 2 * Math.PI);
-        cr.lineTo(cornerRadius, offsetY);
-        cr.closePath();
-
-        let savedPath = cr.copyPath();
-
-        let xOffsetDirection = this._side == St.Side.LEFT ? -1 : 1;
-        let over = _over(borderColor, backgroundColor);
-        Clutter.cairo_set_source_color(cr, over);
-        cr.fill();
-
-        if (overlap) {
-            let offset = borderWidth;
-            Clutter.cairo_set_source_color(cr, backgroundColor);
-
-            cr.save();
-            cr.translate(xOffsetDirection * offset, - offset);
-            cr.appendPath(savedPath);
-            cr.fill();
-            cr.restore();
-        }
-
-        cr.$dispose();
-    },
-
-    _styleChanged: function() {
-        let node = this.actor.get_theme_node();
-
-        let cornerRadius = node.get_length("-panel-corner-radius");
-        let borderWidth = node.get_length('-panel-corner-border-width');
-
-        this.actor.set_size(cornerRadius, borderWidth + cornerRadius);
-        this.actor.set_anchor_point(0, borderWidth);
-    }
-});
-
 const PANEL_ITEM_IMPLEMENTATIONS = {
     'appIcons': imports.ui.appIconBar.AppIconBar,
     'dateMenu': imports.ui.dateMenu.DateMenuButton,
@@ -444,12 +233,6 @@ const Panel = new Lang.Class({
         this.actor.add_actor(this._leftBox);
         this._rightBox = new St.BoxLayout({ name: 'panelRight' });
         this.actor.add_actor(this._rightBox);
-
-        this._leftCorner = new PanelCorner(St.Side.LEFT);
-        this.actor.add_actor(this._leftCorner.actor);
-
-        this._rightCorner = new PanelCorner(St.Side.RIGHT);
-        this.actor.add_actor(this._rightCorner.actor);
 
         this.actor.connect('get-preferred-width', Lang.bind(this, this._getPreferredWidth));
         this.actor.connect('get-preferred-height', Lang.bind(this, this._getPreferredHeight));
@@ -511,25 +294,6 @@ const Panel = new Lang.Class({
             childBox.x2 = allocWidth;
         }
         this._rightBox.allocate(childBox, flags);
-
-        let cornerMinWidth, cornerMinHeight;
-        let cornerWidth, cornerHeight;
-
-        [cornerMinWidth, cornerWidth] = this._leftCorner.actor.get_preferred_width(-1);
-        [cornerMinHeight, cornerHeight] = this._leftCorner.actor.get_preferred_height(-1);
-        childBox.x1 = 0;
-        childBox.x2 = cornerWidth;
-        childBox.y1 = allocHeight;
-        childBox.y2 = allocHeight + cornerHeight;
-        this._leftCorner.actor.allocate(childBox, flags);
-
-        [cornerMinWidth, cornerWidth] = this._rightCorner.actor.get_preferred_width(-1);
-        [cornerMinHeight, cornerHeight] = this._rightCorner.actor.get_preferred_height(-1);
-        childBox.x1 = allocWidth - cornerWidth;
-        childBox.x2 = allocWidth;
-        childBox.y1 = allocHeight;
-        childBox.y2 = allocHeight + cornerHeight;
-        this._rightCorner.actor.allocate(childBox, flags);
     },
 
     _onButtonPress: function(actor, event) {
@@ -599,14 +363,6 @@ const Panel = new Lang.Class({
         this._sessionStyle = Main.sessionMode.panelStyle;
         if (this._sessionStyle)
             this._addStyleClassName(this._sessionStyle);
-
-        if (this.actor.get_text_direction() == Clutter.TextDirection.RTL) {
-            this._leftCorner.setStyleParent(this._rightBox);
-            this._rightCorner.setStyleParent(this._leftBox);
-        } else {
-            this._leftCorner.setStyleParent(this._leftBox);
-            this._rightCorner.setStyleParent(this._rightBox);
-        }
     },
 
     _hideIndicators: function() {
@@ -686,13 +442,9 @@ const Panel = new Lang.Class({
 
     _addStyleClassName: function(className) {
         this.actor.add_style_class_name(className);
-        this._rightCorner.actor.add_style_class_name(className);
-        this._leftCorner.actor.add_style_class_name(className);
     },
 
     _removeStyleClassName: function(className) {
         this.actor.remove_style_class_name(className);
-        this._rightCorner.actor.remove_style_class_name(className);
-        this._leftCorner.actor.remove_style_class_name(className);
     }
 });
