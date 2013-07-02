@@ -1,7 +1,5 @@
 NULL =
-
-EXTRA_DIST = misc/config.js.in
-CLEANFILES = misc/config.js
+BUILT_SOURCES =
 
 misc/config.js: misc/config.js.in Makefile
 	[ -d $(@D) ] || $(mkdir_p) $(@D) ; \
@@ -14,119 +12,26 @@ misc/config.js: misc/config.js.in Makefile
 	    -e "s|[@]sysconfdir@|$(sysconfdir)|g" \
                $< > $@
 
-jsdir = $(pkgdatadir)/js
+js_resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(srcdir)/js-resources.gresource.xml)
+js-resources.h: js-resources.gresource.xml $(js_resource_files) misc/config.js
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate --c-name shell_js_resources $<
+js-resources.c: js-resources.gresource.xml $(js_resource_files) misc/config.js
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate --c-name shell_js_resources $<
 
-nobase_dist_js_DATA = 	\
-	gdm/batch.js		\
-	gdm/fingerprint.js	\
-	gdm/loginDialog.js	\
-	gdm/powerMenu.js	\
-	gdm/realmd.js		\
-	gdm/util.js		\
-	extensionPrefs/main.js	\
-	misc/actorVisibility.js \
-	misc/config.js		\
-	misc/coreEnvironment.js \
-	misc/eos-launch.js	\
-	misc/extensionUtils.js	\
-	misc/fileUtils.js	\
-	misc/gnomeSession.js	\
-	misc/hash.js		\
-	misc/history.js		\
-	misc/jsParse.js		\
-	misc/loginManager.js	\
-	misc/modemManager.js	\
-	misc/params.js		\
-	misc/util.js		\
-	perf/core.js		\
-	ui/altTab.js		\
-	ui/appActivation.js	\
-	ui/appDisplay.js	\
-	ui/appFavorites.js	\
-	ui/appIconBar.js	\
-	ui/backgroundMenu.js	\
-	ui/background.js	\
-	ui/boxpointer.js	\
-	ui/buttonConstants.js	\
-	ui/calendar.js		\
-	ui/checkBox.js		\
-	ui/closeButton.js \
-	ui/ctrlAltTab.js	\
-	ui/dash.js		\
-	ui/dateMenu.js		\
-	ui/dnd.js		\
-	ui/endSessionDialog.js	\
-	ui/extensionSystem.js	\
-	ui/extensionDownloader.js \
-	ui/environment.js	\
-	ui/ibusCandidatePopup.js\
-	ui/grabHelper.js	\
-	ui/iconGrid.js		\
-	ui/iconGridLayout.js	\
-	ui/keyboard.js		\
-	ui/layout.js		\
-	ui/lightbox.js		\
-	ui/lookingGlass.js	\
-	ui/magnifier.js		\
-	ui/magnifierDBus.js	\
-	ui/main.js		\
-	ui/messageTray.js	\
-	ui/messageTrayMarkup.js \
-	ui/modalDialog.js	\
-	ui/panelSeparator.js	\
-	ui/remoteSearch.js	\
-	ui/search.js		\
-	ui/searchDisplay.js	\
-	ui/separator.js		\
-	ui/sessionMode.js	\
-	ui/shellEntry.js	\
-	ui/shellMountOperation.js \
-	ui/notificationDaemon.js \
-	ui/osdWindow.js		\
-	ui/overview.js		\
-	ui/overviewControls.js	\
-	ui/panel.js		\
-	ui/panelMenu.js		\
-	ui/pointerWatcher.js    \
-	ui/popupMenu.js		\
-	ui/runDialog.js		\
-	ui/screencast.js	\
-	ui/screenshot.js	\
-        ui/screenShield.js	\
-	ui/scripting.js		\
-	ui/shellDBus.js		\
-	ui/sideComponent.js	\
-	ui/status/accessibility.js	\
-	ui/status/chat.js	\
-	ui/status/keyboard.js	\
-	ui/status/lockScreenMenu.js	\
-	ui/status/network.js	\
-	ui/status/power.js	\
-	ui/status/volume.js	\
-	ui/status/bluetooth.js	\
-	ui/status/social.js	\
-	ui/switcherPopup.js	\
-	ui/tweener.js		\
-	ui/unlockDialog.js	\
-	ui/userMenu.js		\
-	ui/userWidget.js	\
-	ui/viewSelector.js	\
-	ui/windowAttentionHandler.js	\
-	ui/windowManager.js	\
-	ui/workspace.js		\
-	ui/workspaceMonitor.js	\
-	ui/workspaceThumbnail.js	\
-	ui/workspacesView.js	\
-	ui/workspaceSwitcherPopup.js    \
-	ui/xdndHandler.js	\
-	ui/components/__init__.js		\
-	ui/components/appStore.js		\
-	ui/components/autorunManager.js		\
-	ui/components/automountManager.js	\
-	ui/components/keyring.js		\
-	ui/components/networkAgent.js		\
-	ui/components/polkitAgent.js		\
-	ui/components/socialBar.js		\
-	ui/components/telepathyClient.js	\
-	ui/components/updaterManager.js		\
+js_built_sources = js-resources.c js-resources.h
+
+BUILT_SOURCES += $(js_built_sources)
+
+all-local: $(js_built_sources)
+
+js_resource_dist_files = $(filter-out misc/config.js, $(js_resource_files))
+
+eoslaunchdir = $(pkgdatadir)
+dist_eoslaunch_DATA = misc/eos-launch.js
+
+EXTRA_DIST = \
+	$(js_resource_dist_files) \
+	js-resources.gresource.xml \
+	misc/config.js.in \
+	misc/eos-launch.js \
 	$(NULL)

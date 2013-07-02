@@ -93,7 +93,6 @@ eos_shell_cflags =				\
 	-DGNOME_SHELL_LIBEXECDIR=\"$(libexecdir)\"	\
 	-DGNOME_SHELL_DATADIR=\"$(pkgdatadir)\"	\
 	-DGNOME_SHELL_PKGLIBDIR=\"$(pkglibdir)\" \
-	-DJSDIR=\"$(pkgdatadir)/js\"		\
 	-DMUTTER_TYPELIB_DIR=\"$(MUTTER_TYPELIB_DIR)\"
 
 privlibdir = $(pkglibdir)
@@ -181,6 +180,8 @@ libeos_shell_la_SOURCES =		\
 	shell-util.c			\
 	shell-window-tracker.c		\
 	shell-wm.c			\
+	../js/js-resources.c		\
+	../js/js-resources.h		\
 	$(NULL)
 
 libeos_shell_la_gir_sources = \
@@ -196,7 +197,7 @@ eos_shell_real_DEPENDENCIES = libeos-shell.la
 
 libeos_shell_js_la_SOURCES =		\
 	shell-js.h			\
-	shell-js.cpp		\
+	shell-js.cpp			\
 	$(NULL)
 
 libeos_shell_js_la_LIBADD =		\
