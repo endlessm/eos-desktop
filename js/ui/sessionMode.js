@@ -54,26 +54,13 @@ const _modes = {
     // Note: since the user menu now simply has the settings icon,
     // it does not make sense to display it as part of the
     // lock screen or the unlock dialog.
-
-    'lock-screen': {
-        isLocked: true,
-        isGreeter: undefined,
-        unlockDialog: undefined,
-        components: ['polkitAgent', 'telepathyClient'],
-        panel: {
-            left: [],
-            right: ['lockScreen']
-        },
-        panelStyle: 'lock-screen'
-    },
-
     'unlock-dialog': {
         isLocked: true,
         unlockDialog: undefined,
         components: ['polkitAgent', 'telepathyClient'],
         panel: {
             left: [],
-            right: ['a11y', 'keyboard', 'lockScreen']
+            right: ['dateMenu', 'a11y', 'keyboard', 'lockScreen']
         },
         panelStyle: 'unlock-screen'
     },
