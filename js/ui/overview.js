@@ -548,33 +548,10 @@ const Overview = new Lang.Class({
         if (!this._shown)
             return;
 
-        let event = Clutter.get_current_event();
-        if (event) {
-            let type = event.type();
-            let button = (type == Clutter.EventType.BUTTON_PRESS ||
-                          type == Clutter.EventType.BUTTON_RELEASE);
-            let ctrl = (event.get_state() & Clutter.ModifierType.CONTROL_MASK) != 0;
-            if (button && ctrl)
-                return;
-        }
-
         this._animateNotVisible();
 
         this._shown = false;
         this._syncInputMode();
-    },
-
-    hideOrShowApps: function() {
-        if (!this._initCalled) {
-            return;
-        }
-
-        let visibleWindows = Main.workspaceMonitor.visibleWindows;
-        if (visibleWindows == 0) {
-            this.showApps();
-        } else {
-            this.hide();
-        }
     },
 
     toggleByKey: function() {
@@ -588,10 +565,15 @@ const Overview = new Lang.Class({
         if (this.isDummy)
             return;
 
-        if (this.visible)
-            this.hideOrShowApps();
-        else
+        if (this.visible) {
+            if (Main.workspaceMonitor.visibleWindows == 0) {
+                this.showApps();
+            } else {
+                this.hide();
+            }
+        } else {
             this.show();
+        }
     },
 
     // Checks if the Activities button is currently sensitive to

@@ -204,7 +204,6 @@ function _initializeUI() {
     if (sessionMode.isGreeter && screenShield) {
         layoutManager.connect('startup-prepared', function() {
             screenShield.showDialog();
-            wm.minimizeAllWindows();
         });
     }
 
@@ -216,7 +215,14 @@ function _initializeUI() {
                               // Now that we've completed startup,
                               // show the overview
                               overview.showApps();
-                              wm.minimizeAllWindows();
+
+                              // Start the browser, without exiting the overview,
+                              // if it's not running already
+                              let appSystem = Shell.AppSystem.get_default();
+                              let browser = appSystem.lookup_app('eos-app-epiphany.desktop');
+                              if (browser && browser.get_state() != Shell.AppState.RUNNING) {
+                                  browser.activate();
+                              }
                           });
 }
 

@@ -18,7 +18,8 @@
 /* Vendor prefixes are something that can be preprended to a .desktop
  * file name.  Undo this.
  */
-static const char*const vendor_prefixes[] = { "gnome-",
+static const char*const vendor_prefixes[] = { "eos-app-",
+                                              "gnome-",
                                               "fedora-",
                                               "mozilla-",
                                               "debian-",
@@ -504,10 +505,7 @@ shell_app_system_lookup_heuristic_basename (ShellAppSystem *system,
   ShellApp *result;
   GSList *prefix;
 
-  result = shell_app_system_lookup_app (system, name);
-  if (result != NULL)
-    return result;
-
+  /* Lookup for vendor-prefixed desktop files first */
   for (prefix = system->priv->known_vendor_prefixes; prefix; prefix = g_slist_next (prefix))
     {
       char *tmpid = g_strconcat ((char*)prefix->data, name, NULL);
@@ -516,6 +514,11 @@ shell_app_system_lookup_heuristic_basename (ShellAppSystem *system,
       if (result != NULL)
         return result;
     }
+
+  /* Otherwise, just look for the desktop file as-is */
+  result = shell_app_system_lookup_app (system, name);
+  if (result != NULL)
+    return result;
 
   return NULL;
 }

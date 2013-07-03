@@ -1264,14 +1264,22 @@ const AppIcon = new Lang.Class({
 
     _onActivate: function (event) {
         this.emit('launching');
-        let modifiers = event.get_state();
 
-        if (modifiers & Clutter.ModifierType.CONTROL_MASK
-            && this.app.state == Shell.AppState.RUNNING) {
-            this.app.open_new_window(-1);
+        if (this.app.state == Shell.AppState.RUNNING) {
+            let modifiers = event.get_state();
+            if (modifiers & Clutter.ModifierType.CONTROL_MASK) {
+                this.app.open_new_window(-1);
+            } else {
+                this.app.activate();
+            }
         } else {
             this.app.activate();
-            Main.wm.minimizeAllWindows();
+            let newWindowId = this.app.connect('windows-changed', Lang.bind(this,
+                function() {
+                    this.app.disconnect(newWindowId);
+                    let newWindow = this.app.get_windows()[0];
+                    Util.minimizeOtherWindows(newWindow);
+                }));
         }
 
         Main.overview.hide();

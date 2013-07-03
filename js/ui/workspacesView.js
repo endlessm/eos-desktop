@@ -615,15 +615,18 @@ const WorkspacesDisplay = new Lang.Class({
                 // appear as parent of this.actor, though in reality it
                 // is added directly to overlay_group
                 this._notifyOpacityId = newParent.connect('notify::opacity',
-                    Lang.bind(this, function() {
-                        let opacity = this.actor.get_parent().opacity;
-                        let primaryView = this._getPrimaryView();
-                        if (!primaryView)
-                            return;
-                        primaryView.actor.opacity = opacity;
-                        primaryView.actor.visible = opacity != 0;
-                    }));
+                    Lang.bind(this, this._updateOpacityFromParent));
+                this._updateOpacityFromParent();
         }));
+    },
+
+    _updateOpacityFromParent: function() {
+        let opacity = this.actor.get_parent().opacity;
+        let primaryView = this._getPrimaryView();
+        if (!primaryView)
+            return;
+        primaryView.actor.opacity = opacity;
+        primaryView.actor.visible = opacity != 0;
     },
 
     _updateWorkspacesGeometry: function() {
