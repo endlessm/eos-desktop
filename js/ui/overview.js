@@ -548,16 +548,6 @@ const Overview = new Lang.Class({
         if (!this._shown)
             return;
 
-        let event = Clutter.get_current_event();
-        if (event) {
-            let type = event.type();
-            let button = (type == Clutter.EventType.BUTTON_PRESS ||
-                          type == Clutter.EventType.BUTTON_RELEASE);
-            let ctrl = (event.get_state() & Clutter.ModifierType.CONTROL_MASK) != 0;
-            if (button && ctrl)
-                return;
-        }
-
         this._animateNotVisible();
 
         this._shown = false;
