@@ -2,6 +2,7 @@
 
 const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
+const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const Main = imports.ui.main;
@@ -272,4 +273,17 @@ function ensureActorVisibleInScrollView(scrollView, actor) {
                      { value: value,
                        time: SCROLL_TIME,
                        transition: 'easeOutQuad' });
+}
+
+function minimizeOtherWindows(metaWindow) {
+    let appSystem = Shell.AppSystem.get_default();
+    let runningApps = appSystem.get_running();
+    runningApps.forEach(function (app) {
+        let appWindows = app.get_windows();
+        appWindows.forEach(function (window) {
+            if (window != metaWindow) {
+                window.minimize();
+            }
+        });
+    });
 }
