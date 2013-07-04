@@ -451,7 +451,10 @@ const AppSwitcher = new Lang.Class({
         this._arrows = [];
 
         let windowTracker = Shell.WindowTracker.get_default();
-        let allWindows = global.display.get_tab_list(Meta.TabList.NORMAL, null);
+        let settings = new Gio.Settings({ schema: 'org.gnome.shell.app-switcher' });
+        let workspace = settings.get_boolean('current-workspace-only') ? global.screen.get_active_workspace()
+                                                                       : null;
+        let allWindows = global.display.get_tab_list(Meta.TabList.NORMAL, workspace);
 
         // Construct the AppIcons, add to the popup
         for (let i = 0; i < apps.length; i++) {
@@ -461,7 +464,9 @@ const AppSwitcher = new Lang.Class({
             appIcon.cachedWindows = allWindows.filter(function(w) {
                 return windowTracker.get_window_app (w) == appIcon.app;
             });
-            this._addIcon(appIcon);
+            if (workspace == null || appIcon.cachedWindows.length > 0) {
+                this._addIcon(appIcon);
+            }
         }
 
         this._curApp = -1;
