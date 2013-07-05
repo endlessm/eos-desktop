@@ -52,6 +52,29 @@ function findUrls(str) {
     return res;
 }
 
+// http://stackoverflow.com/questions/4691070/validate-url-without-www-or-http
+const _searchUrlRegexp = new RegExp(
+    '^([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)\\.+[A-Za-z0-9\.\/%&=\?\-_]+$',
+    'gi');
+
+// findSearchUrls:
+// @terms: list of searchbar terms to find URLs in
+//
+// Similar to "findUrls", but for use only with terms from the searchbar.
+// The regex for these URLs matches strings such as "google.com" (note the
+// lack of preceding scheme).
+//
+// Return value: the list of URLs found in the string
+function findSearchUrls(terms) {
+    let res = [], match;
+    for (i in terms) {
+        while ((match = _searchUrlRegexp.exec(terms[i]))) {
+            res.push(match[0]);
+        }
+    }
+    return res;
+}
+
 // spawn:
 // @argv: an argv array
 //

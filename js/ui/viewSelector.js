@@ -2,6 +2,7 @@
 
 const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
@@ -16,6 +17,7 @@ const OverviewControls = imports.ui.overviewControls;
 const Params = imports.misc.params;
 const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
+const Util = imports.misc.util;
 const WorkspacesView = imports.ui.workspacesView;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
@@ -105,7 +107,18 @@ const ViewSelector = new Lang.Class({
         let uri = BASE_SEARCH_URI;
         let terms = getTermsForSearchString(this._entry.get_text());
         if (terms.length != 0) {
-           uri = uri + QUERY_URI_PATH + encodeURI(terms.join(' '));
+            let searchedUris = Util.findSearchUrls(terms);
+            // Make sure search contains only a uri
+            // Avoid cases like "what is github.com"
+            if (searchedUris.length == 1 && terms.length == 1) {
+                uri = searchedUris[0];
+                // Ensure all uri has a scheme name
+                if(!GLib.uri_parse_scheme(uri)) {
+                    uri = "http://" + uri;
+                }
+            } else {
+                uri = uri + QUERY_URI_PATH + encodeURI(terms.join(' '));
+            }
         }
 
         Gio.AppInfo.launch_default_for_uri(uri, null);
