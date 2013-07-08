@@ -121,7 +121,13 @@ const ViewSelector = new Lang.Class({
             }
         }
 
-        Gio.AppInfo.launch_default_for_uri(uri, null);
+        try {
+            Gio.AppInfo.launch_default_for_uri(uri, null);
+            Main.overview.hide();
+        } catch (e) {
+            logError(e, 'error while launching the browser for uri: '
+                     + uri);
+        }
     },
 
     _onEmptySpaceClicked: function() {
