@@ -9,6 +9,7 @@ imports.gi.versions.Gtk = '3.0';
 const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
+const Lang = imports.lang;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
@@ -40,6 +41,28 @@ function _patchContainerClass(containerClass) {
     };
 }
 
+function _patchLayoutClass(layoutClass, styleProps) {
+    if (styleProps)
+        layoutClass.prototype.hookup_style = function(container) {
+            container.connect('style-changed', Lang.bind(this, function() {
+                let node = container.get_theme_node();
+                for (let prop in styleProps)
+                    this[prop] = node.get_length(styleProps[prop]);
+            }));
+        };
+    layoutClass.prototype.child_set = function(actor, props) {
+        let meta = this.get_child_meta(actor.get_parent(), actor);
+        for (let prop in props)
+            meta[prop] = props[prop];
+    };
+}
+
+function _makeLoggingFunc(func) {
+    return function() {
+        return func([].join.call(arguments, ', '));
+    };
+}
+
 function init() {
     CoreEnvironment.coreInit();
 
@@ -50,6 +73,12 @@ function init() {
     // Miscellaneous monkeypatching
     _patchContainerClass(St.BoxLayout);
     _patchContainerClass(St.Table);
+
+    _patchLayoutClass(Clutter.TableLayout, { row_spacing: 'spacing-rows',
+                                             column_spacing: 'spacing-columns' });
+    _patchLayoutClass(Clutter.GridLayout, { row_spacing: 'spacing-rows',
+                                            column_spacing: 'spacing-columns' });
+    _patchLayoutClass(Clutter.BoxLayout, { spacing: 'spacing' });
 
     Clutter.Actor.prototype.toString = function() {
         return St.describe_actor(this);
