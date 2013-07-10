@@ -444,7 +444,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .rounded-corner {
-    -rounded-corner-radius: 6px;
+    -rounded-corner-radius: 4px;
     -rounded-corner-background-color: black;
     -rounded-corner-border-width: 2px;
     -rounded-corner-border-color: transparent;
