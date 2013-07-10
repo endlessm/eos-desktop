@@ -409,8 +409,6 @@ const Overview = new Lang.Class({
         this._overview.add_actor(this._searchEntryBin);
         this._overview.add_actor(this._bottomGhost);
 
-        this._stack.add_actor(this._controls.indicatorActor);
-
         // TODO - recalculate everything when desktop size changes
         this.dashIconSize = this._dash.iconSize;
         this._dash.connect('icon-size-changed',
