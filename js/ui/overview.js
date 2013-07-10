@@ -233,31 +233,35 @@ const Overview = new Lang.Class({
         this._desktopFade = new St.Bin();
         global.overlay_group.add_actor(this._desktopFade);
 
-        let layout = new Clutter.BinLayout();
-        this._stack = new Clutter.Actor({ layout_manager: layout });
-        this._stack.add_constraint(new LayoutManager.MonitorConstraint({ primary: true }));
-
+        // this._allMonitorsGroup is a simple actor that covers all monitors,
+        // used to install actions that apply to all monitors
         this._allMonitorsGroup = new Clutter.Actor({ reactive: true });
         this._allMonitorsGroup.add_constraint(
             new Clutter.BindConstraint({ source: global.overlay_group,
                                          coordinate: Clutter.BindCoordinate.ALL }));
-        this._allMonitorsGroup.add_actor(this._stack);
+        this._allMonitorsGroup.hide();
+
+        // this._overview is a vertical box that holds the main actors, together
+        // with a ghost of the bottom panel. It covers the primary monitor only
 
         /* Translators: This is the main view to select
            activities. See also note for "Activities" string. */
         this._overview = new St.BoxLayout({ name: 'overview',
                                             accessible_name: _("Overview"),
                                             reactive: true,
-                                            vertical: true,
-                                            x_expand: true,
-                                            y_expand: true });
+                                            vertical: true });
         this._overview._delegate = this;
+        this._overview.add_constraint(new LayoutManager.MonitorConstraint({ primary: true }));
+        this._allMonitorsGroup.add_actor(this._overview);
 
+        // this._groupStack is a BinLayout that holds the main actor group, and allows
+        // overlaying other elements on top of that
         this._groupStack = new St.Widget({ layout_manager: new Clutter.BinLayout(),
                                            x_expand: true, y_expand: true,
                                            clip_to_allocation: true });
-        this._group = new St.BoxLayout({ name: 'overview-group',
-                                         reactive: true,
+
+        // this._group is the horizontal box holding the main overview actors
+        this._group = new St.BoxLayout({ reactive: true,
                                          x_expand: true, y_expand: true });
         this._groupStack.add_actor(this._group);
 
@@ -282,9 +286,6 @@ const Overview = new Lang.Class({
         this._overview.add_actor(this._coverPane);
         this._coverPane.connect('event', Lang.bind(this, function (actor, event) { return true; }));
 
-        this._allMonitorsGroup.hide();
-        this._stack.add_actor(this._overview);
-
         let screenDecoratorLayout = new Clutter.BoxLayout();
         this._screenDecorator = new St.Widget({ layout_manager: screenDecoratorLayout,
                                                 x_expand: true
@@ -299,7 +300,6 @@ const Overview = new Lang.Class({
         this._screenDecorator.add_child(this._topRightCorner.actor);
 
         global.overlay_group.add_actor(this._screenDecorator);
-
         global.overlay_group.add_actor(this._allMonitorsGroup);
 
         this._coverPane.hide();
@@ -654,8 +654,8 @@ const Overview = new Lang.Class({
         this._backgroundGroup.show();
         this._viewSelector.show();
 
-        this._stack.opacity = 0;
-        Tweener.addTween(this._stack,
+        this._overview.opacity = 0;
+        Tweener.addTween(this._overview,
                          { opacity: 255,
                            transition: 'easeOutQuad',
                            time: ANIMATION_TIME,
@@ -765,7 +765,7 @@ const Overview = new Lang.Class({
         this._viewSelector.zoomFromOverview();
 
         // Make other elements fade out.
-        Tweener.addTween(this._stack,
+        Tweener.addTween(this._overview,
                          { opacity: 0,
                            transition: 'easeOutQuad',
                            time: ANIMATION_TIME,
