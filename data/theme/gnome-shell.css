@@ -616,15 +616,6 @@ StScrollBar StButton#vhandle:active {
 
 
 /* Overview */
-
-#overview {
-    spacing: 56px;
-}
-
-.overview-controls {
-    padding-bottom: 32px;
-}
-
 .workspace-thumbnails-background {
     border: 1px solid rgba(128, 128, 128, 0.4);
     border-right: 0px;
@@ -776,6 +767,10 @@ StScrollBar StButton#vhandle:active {
 }
 
 /* Application Launchers, Grid and List results */
+#appDisplay {
+    padding-bottom: 56px;
+    spacing: 56px;
+}
 
 .icon-grid {
     spacing: 10px;

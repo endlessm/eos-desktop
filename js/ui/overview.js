@@ -369,21 +369,9 @@ const Overview = new Lang.Class({
                                       reactive: false,
                                       opacity: 0 });
 
-        this._searchEntry = new St.Entry({ name: 'searchEntry',
-                                           /* Translators: this is the text displayed
-                                              in the search entry when no search is
-                                              active; it should not exceed ~30
-                                              characters. */
-                                           hint_text: _("Type to search…"),
-                                           track_hover: true,
-                                           can_focus: true });
-        this._searchEntryBin = new St.Bin({ child: this._searchEntry,
-                                            x_align: St.Align.MIDDLE });
-
         // Create controls
         this._dash = new Dash.Dash();
-        this._viewSelector = new ViewSelector.ViewSelector(this._searchEntry,
-                                                           this._dash.showAppsButton);
+        this._viewSelector = new ViewSelector.ViewSelector(this._dash.showAppsButton);
         this._thumbnailsBox = new WorkspaceThumbnail.ThumbnailsBox();
         this._controls = new OverviewControls.ControlsManager(this._dash,
                                                               this._thumbnailsBox,
@@ -401,12 +389,10 @@ const Overview = new Lang.Class({
                                                     expand: true });
         this._group.add_actor(this._controls.thumbnailsActor);
 
-        // Add our same-line elements after the search entry
+        // Add the group to the overview box
         this._overview.add(this._groupStack, { y_fill: true, expand: true });
 
-        // Add the search bar below the view selector and the panel
-        // ghost to give some spacing
-        this._overview.add_actor(this._searchEntryBin);
+        // Add the panel ghost to give some spacing
         this._overview.add_actor(this._bottomGhost);
 
         // TODO - recalculate everything when desktop size changes

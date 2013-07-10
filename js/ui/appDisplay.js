@@ -692,6 +692,23 @@ const AppDisplay = new Lang.Class({
     Name: 'AppDisplay',
 
     _init: function() {
+        this.actor = new St.BoxLayout({ vertical: true,
+                                        name: 'appDisplay' });
+
+        this._view = new AllView();
+        this.actor.add(this._view.actor, { expand: true });
+
+        this.entry = new St.Entry({ name: 'searchEntry',
+                                    /* Translators: this is the text displayed
+                                       in the search entry when no search is
+                                       active; it should not exceed ~30
+                                       characters. */
+                                    hint_text: _("Type to search…"),
+                                    track_hover: true,
+                                    can_focus: true,
+                                    x_align: Clutter.ActorAlign.CENTER });
+        this.actor.add_actor(this.entry);
+
         this._appSystem = Shell.AppSystem.get_default();
         this._appSystem.connect('installed-changed', Lang.bind(this, function() {
             Main.queueDeferredWork(this._allAppsWorkId);
@@ -704,37 +721,12 @@ const AppDisplay = new Lang.Class({
             Main.queueDeferredWork(this._allAppsWorkId);
         }));
 
-        this._view = new AllView();
-        this.actor = new St.Widget({ layout_manager: new Clutter.BinLayout(),
-                                     x_expand: true, y_expand: true });
-        this.actor.add_actor(this._view.actor);
-
-        // We need a dummy actor to catch the keyboard focus if the
-        // user Ctrl-Alt-Tabs here before the deferred work creates
-        // our real contents
-        this._focusDummy = new St.Bin({ can_focus: true });
-        this.actor.add_actor(this._focusDummy);
-
         this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplay));
-    },
-
-    _checkFocusDummy: function() {
-        if (!this._focusDummy) {
-            return;
-        }
-
-        let focused = this._focusDummy.has_key_focus();
-        this._focusDummy.destroy();
-        this._focusDummy = null;
-        if (focused) {
-            this.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
-        }
     },
 
     _redisplay: function() {
         if (this._view.getAllIcons().length == 0) {
             this._view.addIcons();
-            this._checkFocusDummy();
         } else {
             let animateView = this._view.repositionedView;
             if (!animateView) {
