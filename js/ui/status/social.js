@@ -17,6 +17,8 @@ const SocialBarButton = new Lang.Class({
         let gicon = new Gio.FileIcon({ file: iconFile });
         this.setGIcon(gicon);
         this.mainIcon.add_style_class_name('system-status-social-icon');
+        // Remove menu entirely to prevent social bar button from closing other menus
+        this.setMenu(null);
     },
 
     // overrides default implementation from PanelMenu.Button
