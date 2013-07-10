@@ -707,9 +707,8 @@ StScrollBar StButton#vhandle:active {
 .window-picker {
     -horizontal-spacing: 32px;
     -vertical-spacing: 32px;
-    padding-left: 32px;
-    padding-right: 32px;
-    padding-bottom: 48px;
+    padding: 32px;
+    padding-top: 0px;
 }
 
 .window-picker.external-monitor {
