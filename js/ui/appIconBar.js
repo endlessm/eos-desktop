@@ -274,7 +274,11 @@ const AppIconButton = new Lang.Class({
                 // The multiple windows case is handled in button-press-event
                 let windows = app.get_windows();
                 if (windows.length == 1) {
-                    Main.activateWindow(windows[0]);
+                    if (windows[0].has_focus()) {
+                        windows[0].minimize();
+                    } else {
+                        Main.activateWindow(windows[0]);
+                    }
                 }
             }));
 
