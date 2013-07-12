@@ -731,13 +731,14 @@ StScrollBar StButton#vhandle:active {
 }
 
 /* Search Box */
-
 #searchEntry {
     width: 320px;
 
     border-color: rgba(245,245,245,0.3);
     color: rgb(187,188,183);
     caret-color: rgb(187,188,183);
+
+    -minimum-vpadding: 24px;
 }
 
 #searchEntry:focus {
@@ -767,11 +768,6 @@ StScrollBar StButton#vhandle:active {
 }
 
 /* Application Launchers, Grid and List results */
-#appDisplay {
-    padding-bottom: 56px;
-    spacing: 56px;
-}
-
 .icon-grid {
     spacing: 10px;
     -shell-grid-horizontal-item-size: 118px;
