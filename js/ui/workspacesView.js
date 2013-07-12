@@ -624,11 +624,11 @@ const WorkspacesDisplay = new Lang.Class({
 
     _updateOpacityFromParent: function() {
         let opacity = this.actor.get_parent().opacity;
-        let primaryView = this._getPrimaryView();
-        if (!primaryView)
-            return;
-        primaryView.actor.opacity = opacity;
-        primaryView.actor.visible = opacity != 0;
+        for (let i = 0; i < this._workspacesViews.length; i++) {
+            let view = this._workspacesViews[i];
+            view.actor.opacity = opacity;
+            view.actor.visible = (opacity != 0);
+        }
     },
 
     _updateWorkspacesGeometry: function() {
