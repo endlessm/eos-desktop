@@ -600,6 +600,10 @@ const _Draggable = new Lang.Class({
             this._lastEnterActor = null;
         }
 
+        if (this.actor) {
+            this._syncHover(this.actor);
+        }
+
         this._dragActor = undefined;
         currentDraggable = null;
     }
