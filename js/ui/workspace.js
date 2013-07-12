@@ -1595,8 +1595,6 @@ const Workspace = new Lang.Class({
     handleDragOver : function(source, actor, x, y, time) {
         if (source.realWindow && !this._isMyWindow(source.realWindow))
             return DND.DragMotionResult.MOVE_DROP;
-        if (source.shellWorkspaceLaunch)
-            return DND.DragMotionResult.COPY_DROP;
 
         return DND.DragMotionResult.CONTINUE;
     },
@@ -1627,10 +1625,6 @@ const Workspace = new Lang.Class({
             metaWindow.change_workspace_by_index(index,
                                                  false, // don't create workspace
                                                  time);
-            return true;
-        } else if (source.shellWorkspaceLaunch) {
-            source.shellWorkspaceLaunch({ workspace: this.metaWorkspace ? this.metaWorkspace.index() : -1,
-                                          timestamp: time });
             return true;
         }
 
