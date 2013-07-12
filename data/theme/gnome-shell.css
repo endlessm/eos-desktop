@@ -46,6 +46,7 @@ stage {
 .dash-label,
 .window-caption,
 .switcher-list, 
+.overview-icon.dnd,
 .app-well-app > .overview-icon,
 .show-apps > .overview-icon {
     font-size: 9pt;
@@ -806,6 +807,7 @@ StScrollBar StButton#vhandle:active {
     -shell-grid-vertical-item-size: 118px;
 }
 
+.overview-icon.dnd,
 .icon-grid .overview-icon {
     icon-size: 64px;
     spacing: 8px;
@@ -852,6 +854,7 @@ StScrollBar StButton#vhandle:active {
     padding: 4px 8px;
 }
 
+.overview-icon.dnd,
 .app-well-app > .overview-icon,
 .show-apps > .overview-icon {
     border-radius: 4px;
@@ -887,6 +890,10 @@ StScrollBar StButton#vhandle:active {
     text-shadow: black 0px 2px 2px;
     background-image: url("running-indicator.svg");
     background-size: contain;
+}
+
+.app-well-app.running > .overview-icon.dnd-begin {
+    background: none;
 }
 
 .app-well-app:hover > .overview-icon,
