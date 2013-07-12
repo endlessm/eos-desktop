@@ -792,6 +792,19 @@ const ViewIcon = new Lang.Class({
 
     canDragOver: function(dest) {
         return false;
+    },
+
+    getDragActor: function() {
+        let iconParams = { 'createIcon': Lang.bind(this, this._createIcon) };
+        let icon = new IconGrid.BaseIcon(this.getName(), iconParams);
+        icon.actor.add_style_class_name('dnd');
+        return icon.actor;
+    },
+
+    // Returns the original actor that should align with the actor
+    // we show as the item is being dragged.
+    getDragActorSource: function() {
+        return this.icon.actor;
     }
 });
 
@@ -813,7 +826,7 @@ const FolderIcon = new Lang.Class({
                                      y_fill: true });
         this.actor._delegate = this;
 
-        let label = this.folder.get_name();
+        let label = this.getName();
         this.icon = new IconGrid.BaseIcon(label,
                                           { createIcon: Lang.bind(this, this._createIcon),
                                             editableLabel: true });
@@ -862,7 +875,7 @@ const FolderIcon = new Lang.Class({
             this.folder.create_custom_with_name(newText);
         } catch(e) {
             logError(e, 'error while creating a custom dirInfo for: '
-                      + this.folder.get_name()
+                      + this.getName()
                       + ' using new name: '
                       + newText);
         }
@@ -952,20 +965,14 @@ const FolderIcon = new Lang.Class({
         return this.folder.get_id();
     },
 
+    getName: function() {
+        return this.folder.get_name();
+    },
+
     handleIconDrop: function(source) {
         // Move the source icon into this folder
         IconGridLayout.layout.repositionIcon(source.getId(), null, this.getId());
         return true;
-    },
-
-    getDragActor: function() {
-        let icon = this.folder.get_icon();
-        let textureCache = St.TextureCache.get_default();
-        return textureCache.load_gicon(null, icon, Main.overview.dashIconSize);
-    },
-
-    getDragActorSource: function() {
-        return this.icon.icon;
     },
 
     canDragOver: function(dest) {
@@ -1083,7 +1090,7 @@ const AppIcon = new Lang.Class({
 
         iconParams['createIcon'] = Lang.bind(this, this._createIcon);
         iconParams['editableLabel'] = true;
-        this.icon = new IconGrid.BaseIcon(app.get_name(), iconParams);
+        this.icon = new IconGrid.BaseIcon(this.getName(), iconParams);
         if (iconParams['showLabel'] !== false) {
             this.icon.label.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
             this.icon.label.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
@@ -1163,7 +1170,7 @@ const AppIcon = new Lang.Class({
             this.app.create_custom_launcher_with_name(newText);
         } catch(e) {
             logError(e, 'error while creating a custom launcher for: '
-                      + this.app.get_name()
+                      + this.getName()
                       + ' using new name: '
                       + newText);
         }
@@ -1210,6 +1217,10 @@ const AppIcon = new Lang.Class({
 
     getId: function() {
         return this.app.get_id();
+    },
+
+    getName: function() {
+        return this.app.get_name();
     },
 
     popupMenu: function() {
@@ -1294,17 +1305,7 @@ const AppIcon = new Lang.Class({
 
     canDragOver: function(dest) {
         return true;
-    },
-
-    getDragActor: function() {
-        return this.app.create_icon_texture(Main.overview.dashIconSize);
-    },
-
-    // Returns the original actor that should align with the actor
-    // we show as the item is being dragged.
-    getDragActorSource: function() {
-        return this.icon.icon;
-    },
+    }
 });
 Signals.addSignalMethods(AppIcon.prototype);
 
