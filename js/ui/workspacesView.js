@@ -128,6 +128,8 @@ const WorkspacesView = new Lang.Class({
                            monitors[i].y,
                            monitors[i].width,
                            monitors[i].height);
+            this.actor.bind_property('opacity', ws.actor, 'opacity',
+                                     GObject.BindingFlags.SYNC_CREATE);
             global.overlay_group.add_actor(ws.actor);
             this._extraWorkspaces.push(ws);
         }
