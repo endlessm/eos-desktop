@@ -128,6 +128,8 @@ const WorkspacesView = new Lang.Class({
                            monitors[i].y,
                            monitors[i].width,
                            monitors[i].height);
+            this.actor.bind_property('opacity', ws.actor, 'opacity',
+                                     GObject.BindingFlags.SYNC_CREATE);
             global.overlay_group.add_actor(ws.actor);
             this._extraWorkspaces.push(ws);
         }
@@ -622,11 +624,11 @@ const WorkspacesDisplay = new Lang.Class({
 
     _updateOpacityFromParent: function() {
         let opacity = this.actor.get_parent().opacity;
-        let primaryView = this._getPrimaryView();
-        if (!primaryView)
-            return;
-        primaryView.actor.opacity = opacity;
-        primaryView.actor.visible = opacity != 0;
+        for (let i = 0; i < this._workspacesViews.length; i++) {
+            let view = this._workspacesViews[i];
+            view.actor.opacity = opacity;
+            view.actor.visible = (opacity != 0);
+        }
     },
 
     _updateWorkspacesGeometry: function() {
