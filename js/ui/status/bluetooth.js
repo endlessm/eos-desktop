@@ -13,13 +13,6 @@ const NotificationDaemon = imports.ui.notificationDaemon;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
-const ConnectionState = {
-    DISCONNECTED: 0,
-    CONNECTED: 1,
-    DISCONNECTING: 2,
-    CONNECTING: 3
-}
-
 const Indicator = new Lang.Class({
     Name: 'BTIndicator',
     Extends: PanelMenu.SystemStatusButton,
@@ -42,47 +35,9 @@ const Indicator = new Lang.Class({
                 this._killswitch.setToggleState(false);
         }));
 
-        this._discoverable = new PopupMenu.PopupSwitchMenuItem(_("Visibility"), this._applet.discoverable);
-        this._applet.connect('notify::discoverable', Lang.bind(this, function() {
-            this._discoverable.setToggleState(this._applet.discoverable);
-        }));
-        this._discoverable.connect('toggled', Lang.bind(this, function() {
-            this._applet.discoverable = this._discoverable.state;
-        }));
-
         this._updateKillswitch();
         this.menu.addMenuItem(this._killswitch);
-        this.menu.addMenuItem(this._discoverable);
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-
-        this._fullMenuItems = [new PopupMenu.PopupSeparatorMenuItem(),
-                               new PopupMenu.PopupMenuItem(_("Send Files to Device…")),
-                               new PopupMenu.PopupMenuItem(_("Set Up a New Device…")),
-                               new PopupMenu.PopupSeparatorMenuItem()];
-        this._hasDevices = false;
-
-        this._fullMenuItems[1].connect('activate', function() {
-            Main.overview.hide();
-            GLib.spawn_command_line_async('bluetooth-sendto');
-        });
-        this._fullMenuItems[2].connect('activate', function() {
-            Main.overview.hide();
-            GLib.spawn_command_line_async('bluetooth-wizard');
-        });
-
-        for (let i = 0; i < this._fullMenuItems.length; i++) {
-            let item = this._fullMenuItems[i];
-            this.menu.addMenuItem(item);
-        }
-
-        this._deviceItemPosition = 3;
-        this._deviceItems = [];
-        this._applet.connect('devices-changed', Lang.bind(this, this._updateDevices));
-        this._updateDevices();
-
-        this._applet.connect('notify::show-full-menu', Lang.bind(this, this._updateFullMenu));
-        this._updateFullMenu();
-
         this.menu.addSettingsAction(_("Bluetooth Settings"), 'gnome-bluetooth-panel.desktop');
 
         this._applet.connect('pincode-request', Lang.bind(this, this._pinRequest));
@@ -109,182 +64,10 @@ const Indicator = new Lang.Class({
         this.actor.visible = has_adapter;
 
         if (on) {
-            this._discoverable.actor.show();
             this.setIcon('bluetooth-active-symbolic');
         } else {
-            this._discoverable.actor.hide();
             this.setIcon('bluetooth-disabled-symbolic');
         }
-    },
-
-    _updateDevices: function() {
-        let devices = this._applet.get_devices();
-
-        let newlist = [ ];
-        for (let i = 0; i < this._deviceItems.length; i++) {
-            let item = this._deviceItems[i];
-            let destroy = true;
-            for (let j = 0; j < devices.length; j++) {
-                if (item._device.device_path == devices[j].device_path) {
-                    this._updateDeviceItem(item, devices[j]);
-                    destroy = false;
-                    break;
-                }
-            }
-            if (destroy)
-                item.destroy();
-            else
-                newlist.push(item);
-        }
-
-        this._deviceItems = newlist;
-        this._hasDevices = newlist.length > 0;
-        for (let i = 0; i < devices.length; i++) {
-            let d = devices[i];
-            if (d._item)
-                continue;
-            let item = this._createDeviceItem(d);
-            if (item) {
-                this.menu.addMenuItem(item, this._deviceItemPosition + this._deviceItems.length);
-                this._deviceItems.push(item);
-                this._hasDevices = true;
-            }
-        }
-    },
-
-    _updateDeviceItem: function(item, device) {
-        if (!device.can_connect && device.capabilities == GnomeBluetoothApplet.Capabilities.NONE) {
-            item.destroy();
-            return;
-        }
-
-        let prevDevice = item._device;
-        let prevCapabilities = prevDevice.capabilities;
-        let prevCanConnect = prevDevice.can_connect;
-
-        // adopt the new device object
-        item._device = device;
-        device._item = item;
-
-        // update properties
-        item.label.text = device.alias;
-
-        if (prevCapabilities != device.capabilities ||
-            prevCanConnect != device.can_connect) {
-            // need to rebuild the submenu
-            item.menu.removeAll();
-            this._buildDeviceSubMenu(item, device);
-        }
-
-        // update connected property
-        if (device.can_connect)
-            item._connectedMenuItem.setToggleState(device.connected);
-    },
-
-    _createDeviceItem: function(device) {
-        if (!device.can_connect && device.capabilities == GnomeBluetoothApplet.Capabilities.NONE)
-            return null;
-        let item = new PopupMenu.PopupSubMenuMenuItem(device.alias);
-
-        // adopt the device object, and add a back link
-        item._device = device;
-        device._item = item;
-
-        this._buildDeviceSubMenu(item, device);
-
-        return item;
-    },
-
-    _buildDeviceSubMenu: function(item, device) {
-        if (device.can_connect) {
-            let menuitem = new PopupMenu.PopupSwitchMenuItem(_("Connection"), device.connected);
-            item._connected = device.connected;
-            item._connectedMenuItem = menuitem;
-            menuitem.connect('toggled', Lang.bind(this, function() {
-                if (item._connected > ConnectionState.CONNECTED) {
-                    // operation already in progress, revert
-                    // (should not happen anyway)
-                    menuitem.setToggleState(menuitem.state);
-                }
-                if (item._connected) {
-                    item._connected = ConnectionState.DISCONNECTING;
-                    menuitem.setStatus(_("disconnecting..."));
-                    this._applet.disconnect_device(item._device.device_path, function(applet, success) {
-                        if (success) { // apply
-                            item._connected = ConnectionState.DISCONNECTED;
-                            menuitem.setToggleState(false);
-                        } else { // revert
-                            item._connected = ConnectionState.CONNECTED;
-                            menuitem.setToggleState(true);
-                        }
-                        menuitem.setStatus(null);
-                    });
-                } else {
-                    item._connected = ConnectionState.CONNECTING;
-                    menuitem.setStatus(_("connecting..."));
-                    this._applet.connect_device(item._device.device_path, function(applet, success) {
-                        if (success) { // apply
-                            item._connected = ConnectionState.CONNECTED;
-                            menuitem.setToggleState(true);
-                        } else { // revert
-                            item._connected = ConnectionState.DISCONNECTED;
-                            menuitem.setToggleState(false);
-                        }
-                        menuitem.setStatus(null);
-                    });
-                }
-            }));
-
-            item.menu.addMenuItem(menuitem);
-        }
-
-        if (device.capabilities & GnomeBluetoothApplet.Capabilities.OBEX_PUSH) {
-            item.menu.addAction(_("Send Files…"), Lang.bind(this, function() {
-                this._applet.send_to_address(device.bdaddr, device.alias);
-            }));
-        }
-
-        switch (device.type) {
-        case GnomeBluetoothApplet.Type.KEYBOARD:
-            item.menu.addSettingsAction(_("Keyboard Settings"), 'gnome-keyboard-panel.desktop');
-            break;
-        case GnomeBluetoothApplet.Type.MOUSE:
-            item.menu.addSettingsAction(_("Mouse Settings"), 'gnome-mouse-panel.desktop');
-            break;
-        case GnomeBluetoothApplet.Type.HEADSET:
-        case GnomeBluetoothApplet.Type.HEADPHONES:
-        case GnomeBluetoothApplet.Type.OTHER_AUDIO:
-            item.menu.addSettingsAction(_("Sound Settings"), 'gnome-sound-panel.desktop');
-            break;
-        default:
-            break;
-        }
-    },
-
-    _updateFullMenu: function() {
-        if (this._applet.show_full_menu) {
-            this._showAll(this._fullMenuItems);
-            if (this._hasDevices)
-                this._showAll(this._deviceItems);
-        } else {
-            this._hideAll(this._fullMenuItems);
-            this._hideAll(this._deviceItems);
-        }
-    },
-
-    _showAll: function(items) {
-        for (let i = 0; i < items.length; i++)
-            items[i].actor.show();
-    },
-
-    _hideAll: function(items) {
-        for (let i = 0; i < items.length; i++)
-            items[i].actor.hide();
-    },
-
-    _destroyAll: function(items) {
-        for (let i = 0; i < items.length; i++)
-            items[i].destroy();
     },
 
     _ensureSource: function() {
