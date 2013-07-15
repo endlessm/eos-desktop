@@ -1276,9 +1276,9 @@ StScrollBar StButton#vhandle:active {
 }
 
 .trash-popup-buttons {
-    padding-left: 13px;
-    padding-right: 13px;
-    padding-bottom: 18px;
+    padding-left: 11px;
+    padding-right: 11px;
+    padding-bottom: 16px;
 }
 
 .trash-popup-label {
@@ -1291,8 +1291,8 @@ StScrollBar StButton#vhandle:active {
 }
 
 .trash-popup-accept {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     background-image: url("trash-pop-up_ok-btn_normal.png");
     background-size: contain;
 }
@@ -1306,8 +1306,8 @@ StScrollBar StButton#vhandle:active {
 }
 
 .trash-popup-cancel {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     background-image: url("trash-pop-up_cancel-btn_normal.png");
     background-size: contain;
 }
