@@ -454,7 +454,7 @@ const AppIconBar = new Lang.Class({
     _updateCurrentAppPage: function() {
         let [visibleApps, runningApps] = this._getAppsOnPage(this._currentPage, this._appsPerPage);
 
-        for (app in runningApps) {
+        for (let app in runningApps) {
             let isAppHidden = visibleApps.indexOf(runningApps[app]) == -1;
             let [key, child] = runningApps[app];
 
@@ -524,7 +524,7 @@ const AppIconBar = new Lang.Class({
 
         let iconListStart = childBox.x2 + this._navButtonSpacing;
 
-        for (index in visibleApps) {
+        for (let index in visibleApps) {
             let [key, child] = visibleApps[index];
             childBox.x1 = iconListStart + index * (this._iconSize + this._iconSpacing);
             childBox.x2 = childBox.x1 + this._iconSize;
