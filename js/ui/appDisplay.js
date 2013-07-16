@@ -1373,7 +1373,7 @@ const AppStoreIcon = new Lang.Class({
         }
     },
 
-    _showDeleteConfirmation: function(draggedSource, id, deleteCallback) {
+    _showDeleteConfirmation: function(draggedSource, deleteCallback) {
         draggedSource.blockHandler = true;
         this.blockHandler = true;
         let trashPopup = new TrashPopup({
