@@ -882,7 +882,7 @@ const FolderIcon = new Lang.Class({
     },
 
     _createPopup: function() {
-        let grid = this.actor.get_parent().get_parent();
+        let grid = this.actor.get_parent();
         let [sourceX, sourceY] = this.actor.get_transformed_position();
         let [sourceXP, sourceYP] = grid.get_transformed_position();
         let relY = sourceY - sourceYP;
@@ -935,7 +935,7 @@ const FolderIcon = new Lang.Class({
         }
 
         let closeButtonOffset = -this._popup.closeButton.translation_y;
-        let grid = this.actor.get_parent().get_parent();
+        let grid = this.actor.get_parent();
 
         // Position the popup above or below the source icon
         if (side == St.Side.BOTTOM) {
