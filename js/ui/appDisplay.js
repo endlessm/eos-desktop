@@ -251,11 +251,11 @@ const AllView = new Lang.Class({
         this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
 
         let box = new St.BoxLayout({ vertical: true });
-        this._stack = new St.Widget({ layout_manager: new AllViewLayout() });
-        this._stack.add_actor(this._grid.actor);
+        this.stack = new St.Widget({ layout_manager: new AllViewLayout() });
+        this.stack.add_actor(this._grid.actor);
         this._eventBlocker = new St.Widget({ x_expand: true, y_expand: true });
-        this._stack.add_actor(this._eventBlocker);
-        box.add(this._stack, { y_align: St.Align.START, expand: true });
+        this.stack.add_actor(this._eventBlocker);
+        box.add(this.stack, { y_align: St.Align.START, expand: true });
 
         this.actor = new St.ScrollView({ x_fill: true,
                                          y_fill: false,
@@ -648,7 +648,7 @@ const AllView = new Lang.Class({
     },
 
     addFolderPopup: function(popup) {
-        this._stack.add_actor(popup.actor);
+        this.stack.add_actor(popup.actor);
         popup.connect('open-state-changed', Lang.bind(this,
             function(popup, isOpen) {
                 this._eventBlocker.reactive = isOpen;
@@ -882,12 +882,11 @@ const FolderIcon = new Lang.Class({
     },
 
     _createPopup: function() {
-        let grid = this.actor.get_parent();
         let [sourceX, sourceY] = this.actor.get_transformed_position();
-        let [sourceXP, sourceYP] = grid.get_transformed_position();
+        let [sourceXP, sourceYP] = this.parentView.stack.get_transformed_position();
         let relY = sourceY - sourceYP;
         let spaceTop = relY;
-        let spaceBottom = grid.height - (relY + this.actor.height);
+        let spaceBottom = this.parentView.stack.height - (relY + this.actor.height);
         let side = spaceTop > spaceBottom ? St.Side.BOTTOM : St.Side.TOP;
 
         this._popup = new AppFolderPopup(this, side);
@@ -935,17 +934,20 @@ const FolderIcon = new Lang.Class({
         }
 
         let closeButtonOffset = -this._popup.closeButton.translation_y;
-        let grid = this.actor.get_parent();
+
+        // Get the actor coordinates relative to the scrolled content
+        let edgePoint = new Clutter.Vertex({ x: 0, y: 0, z: 0 });
+        let actorCoords = this.actor.apply_relative_transform_to_point(this.parentView.stack,
+                                                                       edgePoint);
 
         // Position the popup above or below the source icon
         if (side == St.Side.BOTTOM) {
-            let y = grid.y + this.actor.y - this._popup.actor.height;
+            let y = actorCoords.y - this._popup.actor.height;
             this._popup.actor.y = Math.max(y, closeButtonOffset);
             this._popup.parentOffset = this._popup.actor.y - y;
         } else {
-            let y = grid.y + this.actor.y + this.actor.height;
-            let view = grid.get_parent();
-            let viewBottom = view.y + view.height;
+            let y = actorCoords.y + this.actor.height;
+            let viewBottom = this.parentView.stack.y + this.parentView.stack.height;
             let yBottom = y + this._popup.actor.height;
             this._popup.actor.y = y;
             // Because the folder extends the size of the grid
