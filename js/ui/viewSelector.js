@@ -42,17 +42,47 @@ function getTermsForSearchString(searchString) {
 const ViewSelector = new Lang.Class({
     Name: 'ViewSelector',
 
-    _init : function(searchEntry, showAppsButton) {
-        this.actor = new Shell.Stack({ name: 'viewSelector' });
+    _init : function(showAppsButton) {
+        this.actor = new Shell.Stack({ name: 'viewSelector',
+                                       x_expand: true,
+                                       y_expand: true });
 
         this._showAppsButton = showAppsButton;
         this._showAppsButton.connect('notify::checked', Lang.bind(this, this._onShowAppsButtonToggled));
 
         this._activePage = null;
 
-        this._searchActive = false;
+        this._workspacesDisplay = new WorkspacesView.WorkspacesDisplay();
+        this._workspacesDisplay.connect('empty-space-clicked', Lang.bind(this, this._onEmptySpaceClicked));
+        this._workspacesPage = this._addPage(this._workspacesDisplay.actor,
+                                             _("Windows"), 'emblem-documents-symbolic');
 
-        this._entry = searchEntry;
+        this._appDisplay = new AppDisplay.AppDisplay();
+        this._appsPage = this._addPage(this._appDisplay.actor,
+                                       _("Applications"), 'view-grid-symbolic');
+        this._setupSearchEntry();
+
+        this._stageKeyPressId = 0;
+        Main.overview.connect('showing', Lang.bind(this,
+            function () {
+                this._stageKeyPressId = global.stage.connect('key-press-event',
+                                                             Lang.bind(this, this._onStageKeyPress));
+            }));
+        Main.overview.connect('hiding', Lang.bind(this,
+            function () {
+                if (this._stageKeyPressId != 0) {
+                    global.stage.disconnect(this._stageKeyPressId);
+                    this._stageKeyPressId = 0;
+                }
+            }));
+
+        Main.overview.connect('show-apps-request', Lang.bind(this, this._onShowAppsRequest));
+    },
+
+    _setupSearchEntry: function() {
+        this._entry = this._appDisplay.entry;
+
+        this._searchActive = false;
         ShellEntry.addContextMenu(this._entry);
 
         this._text = this._entry.clutter_text;
@@ -76,31 +106,6 @@ const ViewSelector = new Lang.Class({
 
         this._iconClickedId = 0;
         this._capturedEventId = 0;
-
-        this._workspacesDisplay = new WorkspacesView.WorkspacesDisplay();
-        this._workspacesDisplay.connect('empty-space-clicked', Lang.bind(this, this._onEmptySpaceClicked));
-        this._workspacesPage = this._addPage(this._workspacesDisplay.actor,
-                                             _("Windows"), 'emblem-documents-symbolic');
-
-        this._appDisplay = new AppDisplay.AppDisplay();
-        this._appsPage = this._addPage(this._appDisplay.actor,
-                                       _("Applications"), 'view-grid-symbolic');
-
-        this._stageKeyPressId = 0;
-        Main.overview.connect('showing', Lang.bind(this,
-            function () {
-                this._stageKeyPressId = global.stage.connect('key-press-event',
-                                                             Lang.bind(this, this._onStageKeyPress));
-            }));
-        Main.overview.connect('hiding', Lang.bind(this,
-            function () {
-                if (this._stageKeyPressId != 0) {
-                    global.stage.disconnect(this._stageKeyPressId);
-                    this._stageKeyPressId = 0;
-                }
-            }));
-
-        Main.overview.connect('show-apps-request', Lang.bind(this, this._onShowAppsRequest));
     },
 
     _activateDefaultSearch: function() {

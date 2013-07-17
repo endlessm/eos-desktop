@@ -34,6 +34,7 @@ const Util = imports.misc.util;
 const MAX_APPLICATION_WORK_MILLIS = 75;
 const MENU_POPUP_TIMEOUT = 600;
 const MAX_COLUMNS = 7;
+const ROWS_FOR_ENTRY = 4;
 
 const DRAG_OVER_FOLDER_OPACITY = 128;
 const INACTIVE_GRID_OPACITY = 77;
@@ -251,11 +252,11 @@ const AllView = new Lang.Class({
         this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
 
         let box = new St.BoxLayout({ vertical: true });
-        this._stack = new St.Widget({ layout_manager: new AllViewLayout() });
-        this._stack.add_actor(this._grid.actor);
+        this.stack = new St.Widget({ layout_manager: new AllViewLayout() });
+        this.stack.add_actor(this._grid.actor);
         this._eventBlocker = new St.Widget({ x_expand: true, y_expand: true });
-        this._stack.add_actor(this._eventBlocker);
-        box.add(this._stack, { y_align: St.Align.START, expand: true });
+        this.stack.add_actor(this._eventBlocker);
+        box.add(this.stack, { y_align: St.Align.START, expand: true });
 
         this.actor = new St.ScrollView({ x_fill: true,
                                          y_fill: false,
@@ -648,7 +649,7 @@ const AllView = new Lang.Class({
     },
 
     addFolderPopup: function(popup) {
-        this._stack.add_actor(popup.actor);
+        this.stack.add_actor(popup.actor);
         popup.connect('open-state-changed', Lang.bind(this,
             function(popup, isOpen) {
                 this._eventBlocker.reactive = isOpen;
@@ -685,6 +686,87 @@ const AllView = new Lang.Class({
                                                  time: BoxPointer.POPUP_ANIMATION_TIME,
                                                  transition: transition });
         }
+    },
+
+    getEntryAnchor: function() {
+        return this._grid.getHeightForRows(ROWS_FOR_ENTRY);
+    },
+
+    getHeightForEntry: function(forWidth) {
+        let gridHeight = this._grid.actor.get_preferred_height(forWidth);
+        gridHeight[1] = Math.max(gridHeight[1], this.getEntryAnchor());
+
+        return gridHeight;
+    }
+});
+
+const AppDisplayLayout = new Lang.Class({
+    Name: 'AppDisplayLayout',
+    Extends: Clutter.BinLayout,
+
+    _init: function(allView, entry) {
+        this.parent();
+
+        this._allView = allView;
+        this._allView.actor.connect('style-changed', Lang.bind(this, this._onStyleChanged));
+
+        this._entry = entry;
+        this._entry.connect('style-changed', Lang.bind(this, this._onStyleChanged));
+    },
+
+    _onStyleChanged: function() {
+        this.layout_changed();
+    },
+
+    vfunc_allocate: function(container, box, flags) {
+        this.parent(container, box, flags);
+
+        let viewActor = this._allView.actor;
+        let entry = this._entry;
+
+        let availWidth = box.x2 - box.x1;
+        let availHeight = box.y2 - box.y1;
+
+        let viewHeight = viewActor.get_preferred_height(availWidth);
+        viewHeight[1] = Math.max(viewHeight[1], this._allView.getEntryAnchor());
+
+        let themeNode = entry.get_theme_node();
+        let entryMinPadding = themeNode.get_length('-minimum-vpadding');
+        let entryHeight = entry.get_preferred_height(availWidth);
+        entryHeight[0] += entryMinPadding * 2;
+        entryHeight[1] += entryMinPadding * 2;
+
+        let entryBox = box.copy();
+        let viewBox = box.copy();
+
+        // Always give the view the whole allocation, unless
+        // doing so wouldn't fit the entry
+        let extraSpace = availHeight - viewHeight[1];
+        let viewAllocHeight = viewHeight[1];
+
+        if (extraSpace / 2 < entryHeight[0]) {
+            extraSpace = 0;
+            viewAllocHeight = availHeight - entryHeight[0];
+        }
+
+        viewBox.y1 = Math.floor(extraSpace / 2);
+        viewBox.y2 = viewBox.y1 + viewAllocHeight;
+
+        viewActor.allocate(viewBox, flags);
+
+        // Now center the entry in the space below the grid
+        let gridHeight = this._allView.getHeightForEntry(availWidth);
+
+        extraSpace = availHeight - gridHeight[1];
+        viewAllocHeight = gridHeight[1];
+
+        if (extraSpace / 2 < entryHeight[0]) {
+            extraSpace = 0;
+            viewAllocHeight = availHeight - entryHeight[0];
+        }
+
+        entryBox.y1 = Math.floor(extraSpace / 2) + viewAllocHeight;
+        entry.allocate(entryBox, flags);
     }
 });
 
@@ -692,6 +774,27 @@ const AppDisplay = new Lang.Class({
     Name: 'AppDisplay',
 
     _init: function() {
+        this._view = new AllView();
+
+        this.entry = new St.Entry({ name: 'searchEntry',
+                                    /* Translators: this is the text displayed
+                                       in the search entry when no search is
+                                       active; it should not exceed ~30
+                                       characters. */
+                                    hint_text: _("Type to search…"),
+                                    track_hover: true,
+                                    can_focus: true,
+                                    x_align: Clutter.ActorAlign.CENTER,
+                                    y_align: Clutter.ActorAlign.CENTER });
+
+        let layoutManager = new AppDisplayLayout(this._view, this.entry);
+        this.actor = new St.Widget({ layout_manager: layoutManager,
+                                     x_expand: true,
+                                     y_expand: true });
+
+        this.actor.add_actor(this.entry);
+        this.actor.add_actor(this._view.actor);
+
         this._appSystem = Shell.AppSystem.get_default();
         this._appSystem.connect('installed-changed', Lang.bind(this, function() {
             Main.queueDeferredWork(this._allAppsWorkId);
@@ -704,37 +807,12 @@ const AppDisplay = new Lang.Class({
             Main.queueDeferredWork(this._allAppsWorkId);
         }));
 
-        this._view = new AllView();
-        this.actor = new St.Widget({ layout_manager: new Clutter.BinLayout(),
-                                     x_expand: true, y_expand: true });
-        this.actor.add_actor(this._view.actor);
-
-        // We need a dummy actor to catch the keyboard focus if the
-        // user Ctrl-Alt-Tabs here before the deferred work creates
-        // our real contents
-        this._focusDummy = new St.Bin({ can_focus: true });
-        this.actor.add_actor(this._focusDummy);
-
         this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplay));
-    },
-
-    _checkFocusDummy: function() {
-        if (!this._focusDummy) {
-            return;
-        }
-
-        let focused = this._focusDummy.has_key_focus();
-        this._focusDummy.destroy();
-        this._focusDummy = null;
-        if (focused) {
-            this.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
-        }
     },
 
     _redisplay: function() {
         if (this._view.getAllIcons().length == 0) {
             this._view.addIcons();
-            this._checkFocusDummy();
         } else {
             let animateView = this._view.repositionedView;
             if (!animateView) {
@@ -890,12 +968,11 @@ const FolderIcon = new Lang.Class({
     },
 
     _createPopup: function() {
-        let grid = this.actor.get_parent().get_parent();
         let [sourceX, sourceY] = this.actor.get_transformed_position();
-        let [sourceXP, sourceYP] = grid.get_transformed_position();
+        let [sourceXP, sourceYP] = this.parentView.stack.get_transformed_position();
         let relY = sourceY - sourceYP;
         let spaceTop = relY;
-        let spaceBottom = grid.height - (relY + this.actor.height);
+        let spaceBottom = this.parentView.stack.height - (relY + this.actor.height);
         let side = spaceTop > spaceBottom ? St.Side.BOTTOM : St.Side.TOP;
 
         this._popup = new AppFolderPopup(this, side);
@@ -943,17 +1020,20 @@ const FolderIcon = new Lang.Class({
         }
 
         let closeButtonOffset = -this._popup.closeButton.translation_y;
-        let grid = this.actor.get_parent().get_parent();
+
+        // Get the actor coordinates relative to the scrolled content
+        let edgePoint = new Clutter.Vertex({ x: 0, y: 0, z: 0 });
+        let actorCoords = this.actor.apply_relative_transform_to_point(this.parentView.stack,
+                                                                       edgePoint);
 
         // Position the popup above or below the source icon
         if (side == St.Side.BOTTOM) {
-            let y = grid.y + this.actor.y - this._popup.actor.height;
+            let y = actorCoords.y - this._popup.actor.height;
             this._popup.actor.y = Math.max(y, closeButtonOffset);
             this._popup.parentOffset = this._popup.actor.y - y;
         } else {
-            let y = grid.y + this.actor.y + this.actor.height;
-            let view = grid.get_parent();
-            let viewBottom = view.y + view.height;
+            let y = actorCoords.y + this.actor.height;
+            let viewBottom = this.parentView.stack.y + this.parentView.stack.height;
             let yBottom = y + this._popup.actor.height;
             this._popup.actor.y = y;
             // Because the folder extends the size of the grid

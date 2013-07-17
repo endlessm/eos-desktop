@@ -616,15 +616,6 @@ StScrollBar StButton#vhandle:active {
 
 
 /* Overview */
-
-#overview {
-    spacing: 56px;
-}
-
-.overview-controls {
-    padding-bottom: 32px;
-}
-
 .workspace-thumbnails-background {
     border: 1px solid rgba(128, 128, 128, 0.4);
     border-right: 0px;
@@ -707,36 +698,12 @@ StScrollBar StButton#vhandle:active {
 .window-picker {
     -horizontal-spacing: 32px;
     -vertical-spacing: 32px;
-    padding-left: 32px;
-    padding-right: 32px;
-    padding-bottom: 48px;
+    padding: 32px;
+    padding-top: 0px;
 }
 
 .window-picker.external-monitor {
     padding: 32px;
-}
-
-.messages-indicator {
-    color: #999999;
-    height: 32px;
-}
-
-.messages-indicator-contents {
-    spacing: 12px;
-    padding-bottom: 12px;
-}
-
-.messages-indicator-contents:hover {
-    color: white;
-    text-shadow: black 0px 2px 2px;
-}
-
-.messages-indicator-highlight {
-    background-gradient-start: transparent;
-    background-gradient-end: #999999;
-    background-gradient-direction: vertical;
-
-    height: 6px;
 }
 
 /* Dash */
@@ -764,13 +731,14 @@ StScrollBar StButton#vhandle:active {
 }
 
 /* Search Box */
-
 #searchEntry {
     width: 320px;
 
     border-color: rgba(245,245,245,0.3);
     color: rgb(187,188,183);
     caret-color: rgb(187,188,183);
+
+    -minimum-vpadding: 24px;
 }
 
 #searchEntry:focus {
@@ -800,7 +768,6 @@ StScrollBar StButton#vhandle:active {
 }
 
 /* Application Launchers, Grid and List results */
-
 .icon-grid {
     spacing: 10px;
     -shell-grid-horizontal-item-size: 118px;

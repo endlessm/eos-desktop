@@ -433,19 +433,15 @@ const IconGrid = new Lang.Class({
         this._xAlign = params.xAlign;
         this._fillParent = params.fillParent;
 
-        this.actor = new St.BoxLayout({ style_class: 'icon-grid',
-                                        vertical: true });
-
         // Pulled from CSS, but hardcode some defaults here
         this._spacing = 0;
         this._hItemSize = this._vItemSize = ICON_SIZE;
-        this._grid = new Shell.GenericContainer();
-        this.actor.add(this._grid, { expand: true, y_align: St.Align.START });
-        this.actor.connect('style-changed', Lang.bind(this, this._onStyleChanged));
+        this.actor = new Shell.GenericContainer({ style_class: 'icon-grid' });
 
-        this._grid.connect('get-preferred-width', Lang.bind(this, this._getPreferredWidth));
-        this._grid.connect('get-preferred-height', Lang.bind(this, this._getPreferredHeight));
-        this._grid.connect('allocate', Lang.bind(this, this._allocate));
+        this.actor.connect('style-changed', Lang.bind(this, this._onStyleChanged));
+        this.actor.connect('get-preferred-width', Lang.bind(this, this._getPreferredWidth));
+        this.actor.connect('get-preferred-height', Lang.bind(this, this._getPreferredHeight));
+        this.actor.connect('allocate', Lang.bind(this, this._allocate));
     },
 
     _getPreferredWidth: function (grid, forHeight, alloc) {
@@ -454,7 +450,7 @@ const IconGrid = new Lang.Class({
             // later we'll allocate as many children as fit the parent
             return;
 
-        let children = this._grid.get_children();
+        let children = this.actor.get_children();
         let nColumns = this._colLimit ? Math.min(this._colLimit,
                                                  children.length)
                                       : children.length;
@@ -467,7 +463,7 @@ const IconGrid = new Lang.Class({
     },
 
     _getVisibleChildren: function() {
-        let children = this._grid.get_children();
+        let children = this.actor.get_children();
         children = children.filter(function(actor) {
             return actor.visible;
         });
@@ -495,18 +491,21 @@ const IconGrid = new Lang.Class({
             nRows = 0;
         if (this._rowLimit)
             nRows = Math.min(nRows, this._rowLimit);
-        let totalSpacing = Math.max(0, nRows - 1) * this._spacing;
-        let height = nRows * this._vItemSize + totalSpacing;
+        let height = this.getHeightForRows(nRows);
         alloc.min_size = height;
         alloc.natural_size = height;
+    },
+
+    getHeightForRows: function(nRows) {
+        let totalSpacing = Math.max(0, nRows - 1) * this._spacing;
+        return nRows * this._vItemSize + totalSpacing;
     },
 
     _allocate: function (grid, box, flags) {
         if (this._fillParent) {
             // Reset the passed in box to fill the parent
-            let parentBox = this.actor.get_parent().allocation;
-            let gridBox = this.actor.get_theme_node().get_content_box(parentBox);
-            box = this._grid.get_theme_node().get_content_box(gridBox);
+            let parentBox = this.actor.allocation;
+            box = this.actor.get_theme_node().get_content_box(parentBox);
         }
 
         let children = this._getVisibleChildren();
@@ -554,10 +553,10 @@ const IconGrid = new Lang.Class({
 
             if (this._rowLimit && rowIndex >= this._rowLimit ||
                 this._fillParent && childBox.y2 > availHeight) {
-                this._grid.set_skip_paint(children[i], true);
+                this.actor.set_skip_paint(children[i], true);
             } else {
                 children[i].allocate(childBox, flags);
-                this._grid.set_skip_paint(children[i], false);
+                this.actor.set_skip_paint(children[i], false);
             }
 
             columnIndex++;
@@ -608,26 +607,26 @@ const IconGrid = new Lang.Class({
         this._spacing = themeNode.get_length('spacing');
         this._hItemSize = themeNode.get_length('-shell-grid-horizontal-item-size') || ICON_SIZE;
         this._vItemSize = themeNode.get_length('-shell-grid-vertical-item-size') || ICON_SIZE;
-        this._grid.queue_relayout();
+        this.actor.queue_relayout();
     },
 
     removeAll: function() {
-        this._grid.destroy_all_children();
+        this.actor.destroy_all_children();
     },
 
     addItem: function(actor, index) {
         if (index !== undefined)
-            this._grid.insert_child_at_index(actor, index);
+            this.actor.insert_child_at_index(actor, index);
         else
-            this._grid.add_actor(actor);
+            this.actor.add_actor(actor);
     },
 
     removeItem: function(actor) {
-        this._grid.remove_actor(actor);
+        this.actor.remove_actor(actor);
     },
 
     getItemAtIndex: function(index) {
-        return this._grid.get_child_at_index(index);
+        return this.actor.get_child_at_index(index);
     },
 
     nudgeItemsAtIndex: function(index, cursorLocation) {
@@ -658,9 +657,9 @@ const IconGrid = new Lang.Class({
     animateShuffling: function(changedItems, removedItems, originalItemData, callback) {
         // We need to repaint the grid since the last icon added might not be
         // drawn yet
-        this._grid.paint();
+        this.actor.paint();
 
-        let children = this._grid.get_children();
+        let children = this.actor.get_children();
 
         let movementMatrix = {};
         // Find out where icons need to move
@@ -743,7 +742,7 @@ const IconGrid = new Lang.Class({
     },
 
     removeNudgeTransforms: function() {
-        let children = this._grid.get_children();
+        let children = this.actor.get_children();
         for (let index = 0; index < children.length; index++) {
             this._animateNudge(children[index], NUDGE_RETURN_ANIMATION_TYPE,
                                NUDGE_RETURN_DURATION,
@@ -774,7 +773,7 @@ const IconGrid = new Lang.Class({
     },
 
     visibleItemsCount: function() {
-        return this._grid.get_n_children() - this._grid.get_n_skip_paint();
+        return this.actor.get_n_children() - this.actor.get_n_skip_paint();
     },
 
     // DnD support
