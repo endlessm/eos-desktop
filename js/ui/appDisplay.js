@@ -1401,8 +1401,24 @@ const AppStoreIcon = new Lang.Class({
         this.handleViewDragEnd();
     },
 
+    _canDelete: function(item) {
+        let canDelete = false;
+        let filename = item.get_filename();
+        let userDir = GLib.get_user_data_dir();
+        if (filename && userDir && filename.startsWith(userDir)) {
+            canDelete = true;
+        }
+        return canDelete;
+    },
+
     _acceptAppDrop: function(source) {
-        this._showDeleteConfirmation(source);
+        let appInfo = source.app.get_app_info();
+        this._showDeleteConfirmation(source,
+                                     Lang.bind(this, function() {
+                                         if (this._canDelete(appInfo)) {
+                                             appInfo.delete();
+                                         }
+                                     }));
     },
 
     _acceptFolderDrop: function(source) {
@@ -1422,11 +1438,11 @@ const AppStoreIcon = new Lang.Class({
 
         if (isEmpty) {
             this._showDeleteConfirmation(source,
-                                         function() {
-                                             if (folder.can_delete()) {
+                                         Lang.bind(this, function() {
+                                             if (this._canDelete(folder)) {
                                                  folder.delete();
                                              }
-                                         });
+                                         }));
             return;
         }
 
