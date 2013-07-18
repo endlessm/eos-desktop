@@ -188,17 +188,17 @@ const LayoutManager = new Lang.Class({
                                                });
         this.addChrome(this.screenShieldGroup);
 
+        this.trayBox = new St.Widget({ name: 'trayBox',
+                                       layout_manager: new Clutter.BinLayout() }); 
+        this.addChrome(this.trayBox);
+        this._setupTrayPressure();
+
         this.panelBox = new St.BoxLayout({ name: 'panelBox',
                                            vertical: true });
         this.addChrome(this.panelBox, { affectsStruts: true,
                                         trackFullscreen: true });
         this.panelBox.connect('allocation-changed',
                               Lang.bind(this, this._panelBoxChanged));
-
-        this.trayBox = new St.Widget({ name: 'trayBox',
-                                       layout_manager: new Clutter.BinLayout() }); 
-        this.addChrome(this.trayBox);
-        this._setupTrayPressure();
 
         this.keyboardBox = new St.BoxLayout({ name: 'keyboardBox',
                                               reactive: true,
@@ -403,7 +403,7 @@ const LayoutManager = new Lang.Class({
             this.keyboardIndex = this.primaryIndex;
 
         this.trayBox.set_position(this.bottomMonitor.x,
-                                  this.bottomMonitor.y + this.bottomMonitor.height);
+                                  this.bottomMonitor.y + this.bottomMonitor.height - this.panelBox.height);
         this.trayBox.set_size(this.bottomMonitor.width, -1);
     },
 
@@ -414,6 +414,9 @@ const LayoutManager = new Lang.Class({
         this.hotCorners.forEach(function(corner) {
             corner.setBarrierSize(size);
         });
+
+        this.trayBox.set_position(this.bottomMonitor.x,
+                                  this.bottomMonitor.y + this.bottomMonitor.height - size);
     },
 
     _updatePanelBarrier: function() {
