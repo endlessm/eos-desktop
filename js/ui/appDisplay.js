@@ -327,6 +327,10 @@ const AllView = new Lang.Class({
     },
 
     _setupDragState: function(source) {
+        if (!source.parentView) {
+            return;
+        }
+
         if (!source.handleViewDragBegin) {
             return;
         }
@@ -348,6 +352,10 @@ const AllView = new Lang.Class({
     },
 
     _clearDragState: function(source) {
+        if (!source.parentView) {
+            return;
+        }
+
         if (!source.handleViewDragEnd) {
             return;
         }
