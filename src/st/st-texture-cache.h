@@ -68,13 +68,16 @@ GType st_texture_cache_get_type (void) G_GNUC_CONST;
 
 StTextureCache* st_texture_cache_get_default (void);
 
-ClutterActor *
-st_texture_cache_load_sliced_image (StTextureCache *cache,
-                                    const gchar    *path,
-                                    gint            grid_width,
-                                    gint            grid_height,
-                                    GFunc           load_callback,
-                                    gpointer        user_data);
+void st_texture_cache_load_sliced_image_async (StTextureCache      *cache,
+                                               const gchar         *path,
+                                               gint                 grid_width,
+                                               gint                 grid_height,
+                                               GAsyncReadyCallback  callback,
+                                               gpointer             user_data);
+
+GList * st_texture_cache_load_sliced_image_finish (StTextureCache *cache,
+                                                   GAsyncResult   *result,
+                                                   GError        **error);
 
 ClutterActor *st_texture_cache_bind_pixbuf_property (StTextureCache    *cache,
                                                      GObject           *object,
