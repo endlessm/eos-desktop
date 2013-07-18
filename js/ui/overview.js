@@ -274,6 +274,7 @@ const Overview = new Lang.Class({
 
         this.visible = false;           // animating to overview, in overview, animating out
         this._shown = false;            // show() and not hide()
+        this._showAppsDeferred = false; // showApps() called while animating
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
         this.visibleTarget = false;
@@ -592,7 +593,11 @@ const Overview = new Lang.Class({
     },
 
     showApps : function() {
-        this.emit('show-apps-request');
+        if (this.animationInProgress) {
+            this._showAppsDeferred = true;
+        } else {
+            this.emit('show-apps-request');
+        }
     },
 
     fadeInDesktop: function() {
@@ -771,6 +776,12 @@ const Overview = new Lang.Class({
 
         this.emit('shown');
 
+        // Handle any calls to showApps() while we were showing
+        if (this._showAppsDeferred) {
+            this._showAppsDeferred = false;
+            this.showApps();
+        }
+
         // Handle any calls to hide() while we were showing
         if (!this._shown) {
             this._animateNotVisible();
@@ -795,6 +806,12 @@ const Overview = new Lang.Class({
         this._coverPane.hide();
 
         this.emit('hidden');
+
+        // Handle any calls to showApps() while we were hiding
+        if (this._showAppsDeferred) {
+            this._showAppsDeferred = false;
+            this.showApps();
+        }
 
         // Handle any calls to show() while we were hiding
         if (this._shown) {
