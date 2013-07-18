@@ -53,19 +53,26 @@ const Animation = new Lang.Class({
             if (this._frame == 0)
                 this._showFrame(0);
 
-            this._timeoutId = Mainloop.timeout_add(this._speed, Lang.bind(this, this._update));
+            this._setTimeoutSource();
         }
 
         this._isPlaying = true;
     },
 
     stop: function() {
+        this._clearTimeoutSource();
+        this._isPlaying = false;
+    },
+
+    _clearTimeoutSource: function() {
         if (this._timeoutId > 0) {
             Mainloop.source_remove(this._timeoutId);
             this._timeoutId = 0;
         }
+    },
 
-        this._isPlaying = false;
+    _setTimeoutSource: function() {
+        this._timeoutId = Mainloop.timeout_add(this._speed, Lang.bind(this, this._update));
     },
 
     _showFrame: function(frame) {
@@ -95,6 +102,64 @@ const Animation = new Lang.Class({
 
     _onDestroy: function() {
         this.stop();
+    }
+});
+
+const VariableSpeedAnimation = new Lang.Class({
+    Name: 'VariableSpeedAnimation',
+    Extends: Animation,
+
+    _init: function(name, size, initialTimeout) {
+        this.parent(global.datadir + '/theme/' + name, size, size, initialTimeout);
+    },
+
+    _updateSpeed: function(newSpeed) {
+        if (newSpeed == this._speed) {
+            return;
+        }
+
+        this._clearTimeoutSource();
+        this._speed = newSpeed;
+        this._setTimeoutSource();
+    },
+
+    completeInTime: function(time, callback) {
+        let frameTime = Math.floor(time / (this._frames.length - this._frame));
+        this._updateSpeed(frameTime);
+
+        this._completeCallback = callback;
+        this._completeTimeGoal = time;
+        this._completeStartTime = GLib.get_monotonic_time();
+        this._completeStartFrame = this._frame;
+    },
+
+    _update: function() {
+        if (!this._completeCallback) {
+            return this.parent();
+        }
+
+        if (this._frame == (this._frames.length - 1)) {
+            // we finished
+            this.stop();
+
+            this._completeCallback();
+            this._completeCallback = null;
+
+            return false;
+        }
+        
+        let elapsedTime = (GLib.get_monotonic_time() - this._completeStartTime) / 1000;
+        let percentage =  Math.min(1, elapsedTime / this._completeTimeGoal);
+        let frameNum = this._completeStartFrame +
+            Math.floor((this._frames.length - this._completeStartFrame) * percentage);
+
+        if (frameNum == this._frames.length) {
+            frameNum--;
+        }
+
+        this._showFrame(frameNum);
+
+        return true;
     }
 });
 
