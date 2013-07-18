@@ -366,8 +366,8 @@ const Overview = new Lang.Class({
         this._overview.add_actor(this._topGhost);
 
         this._bottomGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
-                                      reactive: false,
-                                      opacity: 0 });
+                                         reactive: false,
+                                         opacity: 0 });
 
         // Create controls
         this._dash = new Dash.Dash();
@@ -770,9 +770,11 @@ const Overview = new Lang.Class({
         this._coverPane.hide();
 
         this.emit('shown');
-        // Handle any calls to hide* while we were showing
-        if (!this._shown)
+
+        // Handle any calls to hide() while we were showing
+        if (!this._shown) {
             this._animateNotVisible();
+        }
 
         this._syncInputMode();
         global.sync_pointer();
@@ -793,9 +795,11 @@ const Overview = new Lang.Class({
         this._coverPane.hide();
 
         this.emit('hidden');
-        // Handle any calls to show* while we were hiding
-        if (this._shown)
+
+        // Handle any calls to show() while we were hiding
+        if (this._shown) {
             this._animateVisible();
+        }
 
         this._syncInputMode();
 
