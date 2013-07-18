@@ -476,6 +476,11 @@ const Dash = new Lang.Class({
         let showAppsHovered =
                 this._showAppsIcon.contains(dragEvent.targetActor);
 
+        let dragPlaceholderHovered = false;
+        if (this._dragPlaceholder &&
+            this._dragPlaceholder.contains (dragEvent.targetActor)) {
+            dragPlaceholderHovered = true;
+        }
 
         let childrenOnDash = this._box.get_children();
         let numChildren = childrenOnDash.length;
@@ -488,7 +493,7 @@ const Dash = new Lang.Class({
             if (!this._box.contains(dragEvent.targetActor) || showAppsHovered)
                 this._clearDragPlaceholder();
         } else {
-            if (showAppsHovered) {
+            if (showAppsHovered || dragPlaceholderHovered) {
                 if (!this._dragPlaceholder) {
                     this._dragPlaceholder = new DragPlaceholderItem();
                     this._dragPlaceholder.child.set_width(ICON_SIZE);
@@ -842,12 +847,39 @@ const Dash = new Lang.Class({
         // Keep the placeholder out of the index calculation; assuming that
         // the remove target has the same size as "normal" items, we don't
         // need to do the same adjustment there.
+
+        // We need also to update the "y" value, depending if the placeholder is
+        // present, and where. Note we need to know the position of the element
+        // we are hovering, so we add the placeholder before or after, depending
+        // if mouse pointer is near top or bottom of the element. And to do all
+        // of this, we do not want to consider the placeholder in the
+        // computations.
+
         if (this._dragPlaceholder) {
             boxHeight -= this._dragPlaceholder.height;
             numChildren--;
         }
 
-        let pos = Math.floor(y * numChildren / boxHeight);
+        // Let's compute the size per element
+        let childSize = 0;
+        if (numChildren > 0) {
+            childSize = Math.floor(boxHeight / numChildren);
+        }
+
+        // Let's check if placeholder is before mouse pointer; if so, as we
+        // don't want to consider the placeholder in our computations, so let's
+        // decrease "y"
+        if (this._dragPlaceholder && this._dragPlaceholderPos*childSize < y) {
+            y -= this._dragPlaceholder.height;
+        }
+
+        // Let's compute the new position for the placeholder
+        let pos;
+        if (childSize > 0) {
+            pos = Math.floor(y / childSize + 0.5);
+        } else {
+            pos = 0;
+        }
 
         if (pos != this._dragPlaceholderPos && pos <= numFavorites && this._animatingPlaceholdersCount == 0) {
             this._dragPlaceholderPos = pos;
@@ -863,6 +895,7 @@ const Dash = new Lang.Class({
                         }));
                 }
                 this._dragPlaceholder = null;
+                this._dragPlaceholderPos = -1;
 
                 return DND.DragMotionResult.CONTINUE;
             }
