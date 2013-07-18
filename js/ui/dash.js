@@ -21,6 +21,8 @@ const DASH_ITEM_LABEL_SHOW_TIME = 0.15;
 const DASH_ITEM_LABEL_HIDE_TIME = 0.1;
 const DASH_ITEM_HOVER_TIMEOUT = 300;
 
+const ICON_SIZE = 64;
+
 function getAppFromSource(source) {
     if (source instanceof AppDisplay.AppIcon) {
         return source.app;
@@ -308,7 +310,12 @@ const ShowAppsIcon = new Lang.Class({
 
         Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this,
             function () {
-                AppFavorites.getAppFavorites().removeFavorite(id);
+                let favorites = AppFavorites.getAppFavorites().getFavorites();
+                if (favorites.length == 0) {
+                    AppFavorites.getAppFavorites().addFavoriteAtPos(id, 0);
+                } else {
+                    AppFavorites.getAppFavorites().removeFavorite(id);
+                }
                 return false;
             }));
 
@@ -381,7 +388,7 @@ const Dash = new Lang.Class({
 
     _init : function() {
         this._maxHeight = -1;
-        this.iconSize = 64;
+        this.iconSize = ICON_SIZE;
         this._shownInitially = false;
 
         this._dragPlaceholder = null;
@@ -469,8 +476,35 @@ const Dash = new Lang.Class({
         let showAppsHovered =
                 this._showAppsIcon.contains(dragEvent.targetActor);
 
-        if (!this._box.contains(dragEvent.targetActor) || showAppsHovered)
-            this._clearDragPlaceholder();
+        let dragPlaceholderHovered = false;
+        if (this._dragPlaceholder &&
+            this._dragPlaceholder.contains (dragEvent.targetActor)) {
+            dragPlaceholderHovered = true;
+        }
+
+        let childrenOnDash = this._box.get_children();
+        let numChildren = childrenOnDash.length;
+
+        if (this._dragPlaceholder) {
+            numChildren--;
+        }
+
+        if (numChildren > 0) {
+            if (!this._box.contains(dragEvent.targetActor) || showAppsHovered)
+                this._clearDragPlaceholder();
+        } else {
+            if (showAppsHovered || dragPlaceholderHovered) {
+                if (!this._dragPlaceholder) {
+                    this._dragPlaceholder = new DragPlaceholderItem();
+                    this._dragPlaceholder.child.set_width(ICON_SIZE);
+                    this._dragPlaceholder.child.set_height(ICON_SIZE/2);
+                    this._box.insert_child_at_index(this._dragPlaceholder, 0);
+                    this._dragPlaceholder.show(true);
+                }
+            } else {
+                this._clearDragPlaceholder();
+            }
+        }
 
         if (showAppsHovered)
             this._showAppsIcon.setDragApp(app);
@@ -813,12 +847,39 @@ const Dash = new Lang.Class({
         // Keep the placeholder out of the index calculation; assuming that
         // the remove target has the same size as "normal" items, we don't
         // need to do the same adjustment there.
+
+        // We need also to update the "y" value, depending if the placeholder is
+        // present, and where. Note we need to know the position of the element
+        // we are hovering, so we add the placeholder before or after, depending
+        // if mouse pointer is near top or bottom of the element. And to do all
+        // of this, we do not want to consider the placeholder in the
+        // computations.
+
         if (this._dragPlaceholder) {
             boxHeight -= this._dragPlaceholder.height;
             numChildren--;
         }
 
-        let pos = Math.floor(y * numChildren / boxHeight);
+        // Let's compute the size per element
+        let childSize = 0;
+        if (numChildren > 0) {
+            childSize = Math.floor(boxHeight / numChildren);
+        }
+
+        // Let's check if placeholder is before mouse pointer; if so, as we
+        // don't want to consider the placeholder in our computations, so let's
+        // decrease "y"
+        if (this._dragPlaceholder && this._dragPlaceholderPos*childSize < y) {
+            y -= this._dragPlaceholder.height;
+        }
+
+        // Let's compute the new position for the placeholder
+        let pos;
+        if (childSize > 0) {
+            pos = Math.floor(y / childSize + 0.5);
+        } else {
+            pos = 0;
+        }
 
         if (pos != this._dragPlaceholderPos && pos <= numFavorites && this._animatingPlaceholdersCount == 0) {
             this._dragPlaceholderPos = pos;
@@ -834,6 +895,7 @@ const Dash = new Lang.Class({
                         }));
                 }
                 this._dragPlaceholder = null;
+                this._dragPlaceholderPos = -1;
 
                 return DND.DragMotionResult.CONTINUE;
             }

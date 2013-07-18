@@ -115,7 +115,7 @@ const AppFavorites = new Lang.Class({
         let pos = ids.indexOf(appId);
 
         let app = this._favorites[appId];
-        if (!this._removeFavorite(appId))
+        if (!app || !this._removeFavorite(appId))
             return;
 
         Main.overview.setMessage(_("%s has been removed from your favorites.").format(app.get_name()),
