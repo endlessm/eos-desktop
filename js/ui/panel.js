@@ -34,7 +34,7 @@ const Animation = new Lang.Class({
     Name: 'Animation',
 
     _init: function(filename, width, height, speed) {
-        this.actor = new St.Bin();
+        this.actor = new St.Bin({ width: width, height: height });
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
         this._speed = speed;
 
@@ -42,9 +42,10 @@ const Animation = new Lang.Class({
         this._isPlaying = false;
         this._timeoutId = 0;
         this._frame = 0;
-        this._animations = St.TextureCache.get_default().load_sliced_image (filename, width, height,
-                                                                            Lang.bind(this, this._animationsLoaded));
-        this.actor.set_child(this._animations);
+        this._frames = null;
+
+        St.TextureCache.get_default().load_sliced_image_async(filename, width, height,
+                                                              Lang.bind(this, this._animationsLoaded));
     },
 
     play: function() {
@@ -68,15 +69,9 @@ const Animation = new Lang.Class({
     },
 
     _showFrame: function(frame) {
-        let oldFrameActor = this._animations.get_child_at_index(this._frame);
-        if (oldFrameActor)
-            oldFrameActor.hide();
-
-        this._frame = (frame % this._animations.get_n_children());
-
-        let newFrameActor = this._animations.get_child_at_index(this._frame);
-        if (newFrameActor)
-            newFrameActor.show();
+        this._frame = (frame % this._frames.length);
+        let newFrame = this._frames[this._frame];
+        this.actor.set_content(newFrame);
     },
 
     _update: function() {
@@ -84,7 +79,14 @@ const Animation = new Lang.Class({
         return true;
     },
 
-    _animationsLoaded: function() {
+    _animationsLoaded: function(cache, res) {
+        try {
+            this._frames = cache.load_sliced_image_finish(res);
+        } catch (e) {
+            logError(e, ' Unable to load sliced image for animation');
+            return;
+        }
+
         this._isLoaded = true;
 
         if (this._isPlaying)
