@@ -200,7 +200,7 @@ shell_app_create_icon_texture (ShellApp   *app,
 
   if (ret == NULL)
     {
-      icon = g_themed_icon_new ("application-x-executable");
+      icon = g_themed_icon_new ("generic-app");
       ret = st_texture_cache_load_gicon (st_texture_cache_get_default (), NULL, icon, size);
       g_object_unref (icon);
     }
