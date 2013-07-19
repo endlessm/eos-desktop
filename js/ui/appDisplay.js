@@ -1367,12 +1367,6 @@ const AppIcon = new Lang.Class({
             }
         } else {
             this.app.activate();
-            let newWindowId = this.app.connect('windows-changed', Lang.bind(this,
-                function() {
-                    this.app.disconnect(newWindowId);
-                    let newWindow = this.app.get_windows()[0];
-                    Util.minimizeOtherWindows(newWindow);
-                }));
         }
 
         Main.overview.hide();
