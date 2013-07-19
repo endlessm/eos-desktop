@@ -12,6 +12,7 @@ const AltTab = imports.ui.altTab;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
+const Util = imports.misc.util;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 const WINDOW_ANIMATION_TIME = 0.25;
@@ -229,7 +230,24 @@ const WindowManager = new Lang.Class({
         return false;
     },
 
+    _minimizeOtherWindowsConditionally : function(metaWindow) {
+        // If the current window is maximized,
+        // closing or minimizing it should display the app selector,
+        // so we need to minimize all other windows.
+        // If the current window has been resized so it is not maximized,
+        // we want to leave all other windows alone.
+        let isMaximized = (metaWindow.maximized_horizontally &&
+                           metaWindow.maximized_vertically);
+        if (isMaximized) {
+            Util.minimizeOtherWindows(metaWindow);
+        }
+    },
+
     _minimizeWindow : function(shellwm, actor) {
+        let window = actor.meta_window;
+
+        this._minimizeOtherWindowsConditionally(window);
+
         if (!this._shouldAnimateActor(actor)) {
             shellwm.completed_minimize(actor);
             return;
@@ -239,7 +257,7 @@ const WindowManager = new Lang.Class({
 
         this._minimizing.push(actor);
 
-        if (actor.meta_window.is_monitor_sized()) {
+        if (window.is_monitor_sized()) {
             Tweener.addTween(actor,
                          { opacity: 0,
                            time: WINDOW_ANIMATION_TIME,
@@ -253,14 +271,14 @@ const WindowManager = new Lang.Class({
                          });
         } else {
             let xDest, yDest, xScale, yScale;
-            let [success, geom] = actor.meta_window.get_icon_geometry();
+            let [success, geom] = window.get_icon_geometry();
             if (success) {
                 xDest = geom.x;
                 yDest = geom.y;
                 xScale = geom.width / actor.width;
                 yScale = geom.height / actor.height;
             } else {
-                let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+                let monitor = Main.layoutManager.monitors[window.get_monitor()];
                 xDest = monitor.x;
                 yDest = monitor.y + monitor.height;
                 if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
@@ -452,6 +470,9 @@ const WindowManager = new Lang.Class({
 
     _destroyWindow : function(shellwm, actor) {
         let window = actor.meta_window;
+
+        this._minimizeOtherWindowsConditionally(window);
+
         if (actor._notifyWindowTypeSignalId) {
             window.disconnect(actor._notifyWindowTypeSignalId);
             actor._notifyWindowTypeSignalId = 0;
