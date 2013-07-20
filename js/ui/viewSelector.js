@@ -142,12 +142,12 @@ const ViewSelector = new Lang.Class({
 
     _onShowAppsRequest: function() {
         Main.overview.show();
-        this._showPage(this._appsPage, true);
+        this._showPage(this._appsPage);
     },
 
     _onShowWorkspacesRequest: function() {
         Main.overview.show();
-        this._showPage(this._workspacesPage, true);
+        this._showPage(this._workspacesPage);
     },
 
     show: function() {
