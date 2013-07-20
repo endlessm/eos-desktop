@@ -275,6 +275,8 @@ const Overview = new Lang.Class({
         this.visible = false;           // animating to overview, in overview, animating out
         this._shown = false;            // show() and not hide()
         this._showAppsDeferred = false; // showApps() called while animating
+        this._showWorkspacesDeferred = false; // showWorkspaces() called while animating
+        this._toggledFromApp = false;   // was the last call to toggle from an app?
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
         this.visibleTarget = false;
@@ -600,6 +602,14 @@ const Overview = new Lang.Class({
         }
     },
 
+    showWorkspaces : function() {
+        if (this.animationInProgress) {
+            this._showWorkspacesDeferred = true;
+        } else {
+            this.emit('show-workspaces-request');
+        }
+    },
+
     fadeInDesktop: function() {
             this._desktopFade.opacity = 0;
             this._desktopFade.show();
@@ -676,10 +686,7 @@ const Overview = new Lang.Class({
     },
 
     toggleByKey: function() {
-        if (!this.visible ||
-            this._viewSelector.getActivePage() != ViewSelector.ViewPage.APPS) {
-            this.toggle();
-        }
+        this.toggle();
     },
 
     toggle: function() {
@@ -687,14 +694,26 @@ const Overview = new Lang.Class({
             return;
 
         if (this.visible) {
-            if (Main.workspaceMonitor.visibleWindows == 0) {
-                this.showApps();
+            if (this._toggledFromApp) {
+                this._toggledFromApp = false;
+                if (Main.workspaceMonitor.visibleWindows > 0) {
+                    this.hide();
+                }
             } else {
-                this.hide();
+                if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.APPS) {
+                    this.showWorkspaces();
+                } else {
+                    this.showApps();
+                }
             }
         } else {
+            this._toggledFromApp = true;
             this.show();
         }
+    },
+
+    resetToggledState: function() {
+        this._toggledFromApp = false;
     },
 
     // Checks if the Activities button is currently sensitive to
@@ -782,6 +801,12 @@ const Overview = new Lang.Class({
             this.showApps();
         }
 
+        // Handle any calls to showWorkspaces() while we were showing
+        if (this._showWorkspacesDeferred) {
+            this._showWorkspacesDeferred = false;
+            this.showWorkspaces();
+        }
+
         // Handle any calls to hide() while we were showing
         if (!this._shown) {
             this._animateNotVisible();
@@ -811,6 +836,12 @@ const Overview = new Lang.Class({
         if (this._showAppsDeferred) {
             this._showAppsDeferred = false;
             this.showApps();
+        }
+
+        // Handle any calls to showWorkspaces() while we were hiding
+        if (this._showWorkspacesDeferred) {
+            this._showWorkspacesDeferred = false;
+            this.showWorkspaces();
         }
 
         // Handle any calls to show() while we were hiding

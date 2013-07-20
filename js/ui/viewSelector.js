@@ -77,6 +77,7 @@ const ViewSelector = new Lang.Class({
             }));
 
         Main.overview.connect('show-apps-request', Lang.bind(this, this._onShowAppsRequest));
+        Main.overview.connect('show-workspaces-request', Lang.bind(this, this._onShowWorkspacesRequest));
     },
 
     _setupSearchEntry: function() {
@@ -142,6 +143,11 @@ const ViewSelector = new Lang.Class({
     _onShowAppsRequest: function() {
         Main.overview.show();
         this._showPage(this._appsPage, true);
+    },
+
+    _onShowWorkspacesRequest: function() {
+        Main.overview.show();
+        this._showPage(this._workspacesPage, true);
     },
 
     show: function() {
@@ -245,8 +251,12 @@ const ViewSelector = new Lang.Class({
     },
 
     _onShowAppsButtonToggled: function() {
-        this._showPage(this._showAppsButton.checked ?
-                       this._appsPage : this._workspacesPage);
+        if (this._showAppsButton.checked) {
+            Main.overview.resetToggledState();
+            this._showPage(this._appsPage);
+        } else {
+            this._showPage(this._workspacesPage);
+        }
     },
 
     _onStageKeyPress: function(actor, event) {
