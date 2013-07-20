@@ -974,6 +974,8 @@ shell_desktop_dir_info_create_custom_with_name (ShellDesktopDirInfo *info,
   GError *internal_error = NULL;
   char *user_path, *buf;
   gsize len;
+  char **keys;
+  gsize i;
 
   g_free (info->name);
   info->name = g_strdup (name);
@@ -982,7 +984,24 @@ shell_desktop_dir_info_create_custom_with_name (ShellDesktopDirInfo *info,
   if (info->keyfile == NULL)
     return TRUE;
 
-  /* update the keyfile storage as well */
+  /* remove all translated 'Name' keys */
+  keys = g_key_file_get_keys (info->keyfile,
+                              G_KEY_FILE_DESKTOP_GROUP,
+                              &len,
+                              NULL);
+  for (i = 0; i < len; i++)
+    {
+      if (strncmp (keys[i], G_KEY_FILE_DESKTOP_KEY_NAME,
+                   strlen(G_KEY_FILE_DESKTOP_KEY_NAME)) == 0)
+        {
+          g_key_file_remove_key (info->keyfile,
+                                 G_KEY_FILE_DESKTOP_GROUP,
+                                 keys[i],
+                                 NULL);
+        }
+    }
+
+  /* create a new 'Name' key with the new name */
   g_key_file_set_string (info->keyfile,
                          G_KEY_FILE_DESKTOP_GROUP,
                          G_KEY_FILE_DESKTOP_KEY_NAME,

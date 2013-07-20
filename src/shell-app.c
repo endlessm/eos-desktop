@@ -1217,6 +1217,8 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   char *new_path, *buf;
   GKeyFile *keyfile;
   gsize len;
+  char **keys;
+  gsize i;
 
   if (app->entry == NULL)
     return FALSE;
@@ -1239,7 +1241,24 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
       return FALSE;
     }
 
-  /* replace the 'Name' key with the new one */
+  /* remove all translated 'Name' keys */
+  keys = g_key_file_get_keys (keyfile,
+                              G_KEY_FILE_DESKTOP_GROUP,
+                              &len,
+                              NULL);
+  for (i = 0; i < len; i++)
+    {
+      if (strncmp (keys[i], G_KEY_FILE_DESKTOP_KEY_NAME,
+                   strlen(G_KEY_FILE_DESKTOP_KEY_NAME)) == 0)
+        {
+          g_key_file_remove_key (keyfile,
+                                 G_KEY_FILE_DESKTOP_GROUP,
+                                 keys[i],
+                                 NULL);
+        }
+    }
+
+  /* create a new 'Name' key with the new name */
   g_key_file_set_string (keyfile,
                          G_KEY_FILE_DESKTOP_GROUP,
                          G_KEY_FILE_DESKTOP_KEY_NAME,
