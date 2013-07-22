@@ -162,6 +162,7 @@ const ViewSelector = new Lang.Class({
         params = Params.parse(params, { a11yFocus: null });
 
         let page = new St.Bin({ child: actor,
+                                opacity: 0,
                                 x_align: St.Align.START,
                                 y_align: St.Align.START,
                                 x_fill: true,
