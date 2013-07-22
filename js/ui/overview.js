@@ -598,7 +598,8 @@ const Overview = new Lang.Class({
         if (this.animationInProgress) {
             this._showAppsDeferred = true;
         } else {
-            this.emit('show-apps-request');
+            this.show();
+            this._viewSelector.setActivePage(ViewSelector.ViewPage.APPS);
         }
     },
 
@@ -606,7 +607,8 @@ const Overview = new Lang.Class({
         if (this.animationInProgress) {
             this._showWorkspacesDeferred = true;
         } else {
-            this.emit('show-workspaces-request');
+            this.show();
+            this._viewSelector.setActivePage(ViewSelector.ViewPage.WINDOWS);
         }
     },
 

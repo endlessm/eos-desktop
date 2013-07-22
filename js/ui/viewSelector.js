@@ -75,9 +75,6 @@ const ViewSelector = new Lang.Class({
                     this._stageKeyPressId = 0;
                 }
             }));
-
-        Main.overview.connect('show-apps-request', Lang.bind(this, this._onShowAppsRequest));
-        Main.overview.connect('show-workspaces-request', Lang.bind(this, this._onShowWorkspacesRequest));
     },
 
     _setupSearchEntry: function() {
@@ -138,16 +135,6 @@ const ViewSelector = new Lang.Class({
 
     _onEmptySpaceClicked: function() {
         this.setActivePage(ViewPage.APPS);
-    },
-
-    _onShowAppsRequest: function() {
-        Main.overview.show();
-        this._showPage(this._appsPage);
-    },
-
-    _onShowWorkspacesRequest: function() {
-        Main.overview.show();
-        this._showPage(this._workspacesPage);
     },
 
     show: function() {
