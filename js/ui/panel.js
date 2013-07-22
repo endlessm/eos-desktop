@@ -72,7 +72,8 @@ const Animation = new Lang.Class({
     },
 
     _setTimeoutSource: function() {
-        this._timeoutId = Mainloop.timeout_add(this._speed, Lang.bind(this, this._update));
+        this._timeoutId = Mainloop.timeout_add(this._speed * St.get_slow_down_factor(),
+                                               Lang.bind(this, this._update));
     },
 
     _showFrame: function(frame) {
