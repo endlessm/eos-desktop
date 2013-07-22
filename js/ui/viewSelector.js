@@ -75,8 +75,6 @@ const ViewSelector = new Lang.Class({
                     this._stageKeyPressId = 0;
                 }
             }));
-
-        Main.overview.connect('show-apps-request', Lang.bind(this, this._onShowAppsRequest));
     },
 
     _setupSearchEntry: function() {
@@ -136,22 +134,41 @@ const ViewSelector = new Lang.Class({
     },
 
     _onEmptySpaceClicked: function() {
-        this._showPage(this._appsPage);
+        this.setActivePage(ViewPage.APPS);
     },
 
-    _onShowAppsRequest: function() {
-        Main.overview.show();
-        this._showPage(this._appsPage, true);
+    _pageFromViewPage: function(viewPage) {
+        let page;
+
+        if (viewPage == ViewPage.WINDOWS) {
+            page = this._workspacesPage;
+        } else {
+            page = this._appsPage;
+        }
+
+        return page;
     },
 
-    show: function() {
+    _viewPageFromPage: function(page) {
+        let viewPage;
+
+        if (page == this._workspacesPage) {
+            viewPage = ViewPage.WINDOWS;
+        } else {
+            viewPage = ViewPage.APPS;
+        }
+
+        return viewPage;
+    },
+
+    show: function(viewPage) {
         this.reset();
         this._workspacesDisplay.show();
 
         if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
             Main.overview.fadeOutDesktop();
 
-        this._showPage(this._workspacesPage, true);
+        this._showPage(this._pageFromViewPage(viewPage), true);
     },
 
     zoomFromOverview: function() {
@@ -169,6 +186,7 @@ const ViewSelector = new Lang.Class({
         params = Params.parse(params, { a11yFocus: null });
 
         let page = new St.Bin({ child: actor,
+                                opacity: 0,
                                 x_align: St.Align.START,
                                 y_align: St.Align.START,
                                 x_fill: true,
@@ -245,8 +263,12 @@ const ViewSelector = new Lang.Class({
     },
 
     _onShowAppsButtonToggled: function() {
-        this._showPage(this._showAppsButton.checked ?
-                       this._appsPage : this._workspacesPage);
+        if (this._showAppsButton.checked) {
+            Main.overview.resetToggledState();
+            this.setActivePage(ViewPage.APPS);
+        } else {
+            this.setActivePage(ViewPage.WINDOWS);
+        }
     },
 
     _onStageKeyPress: function(actor, event) {
@@ -410,10 +432,11 @@ const ViewSelector = new Lang.Class({
     },
 
     getActivePage: function() {
-        if (this._activePage == this._workspacesPage)
-            return ViewPage.WINDOWS;
-        else
-            return ViewPage.APPS;
+        return this._viewPageFromPage(this._activePage);
+    },
+
+    setActivePage: function(viewPage) {
+        this._showPage(this._pageFromViewPage(viewPage));
     },
 
     fadeIn: function() {

@@ -963,7 +963,8 @@ const Workspace = new Lang.Class({
             return false;
         }));
 
-        this.positionWindows(WindowPositionFlags.NONE);
+        this.positionWindows(Main.overview.animationInProgress ?
+                             WindowPositionFlags.ANIMATE : WindowPositionFlags.NONE);
     },
 
     _lookupIndex: function (metaWindow) {

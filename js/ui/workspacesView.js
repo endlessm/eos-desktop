@@ -557,6 +557,7 @@ const WorkspacesDisplay = new Lang.Class({
         }
 
         this._updateWorkspacesGeometry();
+        this._updateOpacityFromParent();
 
         for (let i = 0; i < this._workspacesViews.length; i++)
             global.overlay_group.add_actor(this._workspacesViews[i].actor);
