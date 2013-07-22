@@ -103,8 +103,6 @@ const SlidingControl = new Lang.Class({
                                      style_class: 'overview-controls',
                                      clip_to_allocation: true });
 
-        Main.overview.connect('showing', Lang.bind(this, this._onOverviewShowing));
-
         Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
         Main.overview.connect('item-drag-cancelled', Lang.bind(this, this._onDragEnd));
@@ -160,14 +158,6 @@ const SlidingControl = new Lang.Class({
                                        time: SIDE_CONTROLS_ANIMATION_TIME,
                                        transition: 'easeOutQuad'
                                      });
-    },
-
-    _onOverviewShowing: function() {
-        // reset any translation and make sure the actor is visible when
-        // entering the overview
-        this.visible = true;
-        this.layout.slideX = this.getSlide();
-        this.actor.translation_x = 0;
     },
 
     _onWindowDragBegin: function() {

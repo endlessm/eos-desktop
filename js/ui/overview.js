@@ -274,9 +274,8 @@ const Overview = new Lang.Class({
 
         this.visible = false;           // animating to overview, in overview, animating out
         this._shown = false;            // show() and not hide()
-        this._showAppsDeferred = false; // showApps() called while animating
-        this._showWorkspacesDeferred = false; // showWorkspaces() called while animating
         this._toggledFromApp = false;   // was the last call to toggle from an app?
+        this._targetPage = null;        // do we have a target page to animate to?
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
         this.visibleTarget = false;
@@ -594,22 +593,21 @@ const Overview = new Lang.Class({
         this._animateVisible();
     },
 
-    showApps : function() {
-        if (this.animationInProgress) {
-            this._showAppsDeferred = true;
+    _showOrSwitchPage: function(page) {
+        if (this.visible) {
+            this._viewSelector.setActivePage(page);
         } else {
+            this._targetPage = page;
             this.show();
-            this._viewSelector.setActivePage(ViewSelector.ViewPage.APPS);
         }
     },
 
-    showWorkspaces : function() {
-        if (this.animationInProgress) {
-            this._showWorkspacesDeferred = true;
-        } else {
-            this.show();
-            this._viewSelector.setActivePage(ViewSelector.ViewPage.WINDOWS);
-        }
+    showApps: function() {
+        this._showOrSwitchPage(ViewSelector.ViewPage.APPS);
+    },
+
+    showWorkspaces: function() {
+        this._showOrSwitchPage(ViewSelector.ViewPage.WINDOWS);
     },
 
     fadeInDesktop: function() {
@@ -655,7 +653,13 @@ const Overview = new Lang.Class({
         Meta.disable_unredirect_for_screen(global.screen);
         this._allMonitorsGroup.show();
         this._backgroundGroup.show();
-        this._viewSelector.show();
+
+        if (!this._targetPage) {
+            this._targetPage = ViewSelector.ViewPage.WINDOWS;
+        }
+
+        this._viewSelector.show(this._targetPage);
+        this._targetPage = null;
 
         this._overview.opacity = 0;
         Tweener.addTween(this._overview,
@@ -710,7 +714,7 @@ const Overview = new Lang.Class({
             }
         } else {
             this._toggledFromApp = true;
-            this.show();
+            this.showWorkspaces();
         }
     },
 
@@ -797,18 +801,6 @@ const Overview = new Lang.Class({
 
         this.emit('shown');
 
-        // Handle any calls to showApps() while we were showing
-        if (this._showAppsDeferred) {
-            this._showAppsDeferred = false;
-            this.showApps();
-        }
-
-        // Handle any calls to showWorkspaces() while we were showing
-        if (this._showWorkspacesDeferred) {
-            this._showWorkspacesDeferred = false;
-            this.showWorkspaces();
-        }
-
         // Handle any calls to hide() while we were showing
         if (!this._shown) {
             this._animateNotVisible();
@@ -833,18 +825,6 @@ const Overview = new Lang.Class({
         this._coverPane.hide();
 
         this.emit('hidden');
-
-        // Handle any calls to showApps() while we were hiding
-        if (this._showAppsDeferred) {
-            this._showAppsDeferred = false;
-            this.showApps();
-        }
-
-        // Handle any calls to showWorkspaces() while we were hiding
-        if (this._showWorkspacesDeferred) {
-            this._showWorkspacesDeferred = false;
-            this.showWorkspaces();
-        }
 
         // Handle any calls to show() while we were hiding
         if (this._shown) {

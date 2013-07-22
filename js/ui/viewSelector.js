@@ -137,14 +137,38 @@ const ViewSelector = new Lang.Class({
         this.setActivePage(ViewPage.APPS);
     },
 
-    show: function() {
+    _pageFromViewPage: function(viewPage) {
+        let page;
+
+        if (viewPage == ViewPage.WINDOWS) {
+            page = this._workspacesPage;
+        } else {
+            page = this._appsPage;
+        }
+
+        return page;
+    },
+
+    _viewPageFromPage: function(page) {
+        let viewPage;
+
+        if (page == this._workspacesPage) {
+            viewPage = ViewPage.WINDOWS;
+        } else {
+            viewPage = ViewPage.APPS;
+        }
+
+        return viewPage;
+    },
+
+    show: function(viewPage) {
         this.reset();
         this._workspacesDisplay.show();
 
         if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
             Main.overview.fadeOutDesktop();
 
-        this._showPage(this._workspacesPage, true);
+        this._showPage(this._pageFromViewPage(viewPage), true);
     },
 
     zoomFromOverview: function() {
@@ -408,22 +432,11 @@ const ViewSelector = new Lang.Class({
     },
 
     getActivePage: function() {
-        if (this._activePage == this._workspacesPage)
-            return ViewPage.WINDOWS;
-        else
-            return ViewPage.APPS;
+        return this._viewPageFromPage(this._activePage);
     },
 
     setActivePage: function(viewPage) {
-        let page;
-
-        if (viewPage == ViewPage.WINDOWS) {
-            page = this._workspacesPage;
-        } else {
-            page = this._appsPage;
-        }
-
-        this._showPage(page);
+        this._showPage(this._pageFromViewPage(viewPage));
     },
 
     fadeIn: function() {
