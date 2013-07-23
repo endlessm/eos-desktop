@@ -392,13 +392,12 @@ const ScrolledIconList = new Lang.Class({
 
     _init: function() {
         this.actor = new St.ScrollView({ hscrollbar_policy: Gtk.PolicyType.NEVER,
-                                         reactive: true,
                                          style_class: 'scrolled-icon-list hfade',
                                          vscrollbar_policy: Gtk.PolicyType.NEVER,
                                          x_fill: true,
                                          y_fill: true });
 
-        this._container = new St.BoxLayout({style_class: 'scrolled-icon-container'});
+        this._container = new St.BoxLayout({ style_class: 'scrolled-icon-container' });
         this.actor.add_actor(this._container);
 
         this._iconSize = ICON_SIZE;
@@ -509,15 +508,26 @@ const ScrolledIconList = new Lang.Class({
         this._iconSpacing = node.get_length("spacing");
     },
 
+    _ensureIsVisible: function(app) {
+        let itemIndex = this._runningApps.items().indexOf(app);
+        if (itemIndex != -1) {
+            this._currentPage = Math.floor(itemIndex / this._appsPerPage);
+        } else {
+            this._currentPage = this._numberOfPages - 1;
+        }
+
+        this._updatePage();
+    },
+
     _onAppStateChanged: function(appSys, app) {
         let state = app.state;
-
         switch(state) {
         case Shell.AppState.STARTING:
             let newChild = new AppIconButton(app, this._iconSize);
             this._runningApps.set(app, newChild);
             this._numberOfApps++;
             this._container.add_actor(newChild.actor);
+            this._ensureIsVisible(app);
             break;
 
         case Shell.AppState.RUNNING:
@@ -532,6 +542,7 @@ const ScrolledIconList = new Lang.Class({
                 this._numberOfApps++;
                 this._container.add_actor(newChild.actor);
             }
+            this._ensureIsVisible(app);
             break;
 
         case Shell.AppState.STOPPED:
@@ -547,15 +558,15 @@ const ScrolledIconList = new Lang.Class({
         this._updatePage();
     },
 
-    _calculateNumberOfPages: function(netWidth){
+    _calculateNumberOfPages: function(forWidth){
         let minimumIconWidth = this._iconSize + this._iconSpacing;
 
         // We need to clip the net width since initially may be 0
-        netWidth = Math.max(0, netWidth);
+        forWidth = Math.max(0, forWidth);
 
         // We need to add one icon space to net width here so that the division
         // takes into account the fact that the last icon does not use iconSpacing
-        let iconsPerPage = Math.floor((netWidth + this._iconSpacing) / minimumIconWidth);
+        let iconsPerPage = Math.floor((forWidth + this._iconSpacing) / minimumIconWidth);
         iconsPerPage = Math.max(1, iconsPerPage);
 
         let pages = Math.ceil(this._runningApps.items().length / iconsPerPage);
