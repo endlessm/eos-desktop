@@ -488,9 +488,13 @@ StScrollBar StButton#vhandle:active {
     -natural-hpadding: 0;
 }
 
-.scrolled-icon-list {
+.scrolled-icon-container {
     -icon-size: 26px;
     spacing: 10px;
+}
+
+.scrolled-icon-list.hfade {
+    -st-hfade-offset: 10px;
 }
 
 #panel.unlock-screen .panel-button,
@@ -513,7 +517,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .app-bar-nav-icon {
-    spacing: 8px;
+    spacing: 5px;
     icon-size: 15px;
     color: #555;
     transition-duration: 100ms;

@@ -393,11 +393,12 @@ const ScrolledIconList = new Lang.Class({
     _init: function() {
         this.actor = new St.ScrollView({ hscrollbar_policy: Gtk.PolicyType.NEVER,
                                          reactive: true,
+                                         style_class: 'scrolled-icon-list hfade',
                                          vscrollbar_policy: Gtk.PolicyType.NEVER,
                                          x_fill: true,
                                          y_fill: true });
 
-        this._container = new St.BoxLayout({style_class: 'scrolled-icon-list'});
+        this._container = new St.BoxLayout({style_class: 'scrolled-icon-container'});
         this.actor.add_actor(this._container);
 
         this._iconSize = ICON_SIZE;
