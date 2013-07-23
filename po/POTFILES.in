@@ -3,8 +3,10 @@
 [encoding: UTF-8]
 data/50-gnome-shell-screenshot.xml.in
 data/50-gnome-shell-system.xml.in
+data/eos-session.desktop.in.in
 data/eos-shell.desktop.in.in
 data/eos-shell-extension-prefs.desktop.in.in
+data/gdm-eos-shell.desktop.in.in
 data/org.gnome.shell.gschema.xml.in.in
 js/extensionPrefs/main.js
 js/gdm/loginDialog.js
@@ -57,6 +59,7 @@ src/gvc/gvc-mixer-control.c
 src/main.c
 src/shell-app.c
 src/shell-app-system.c
+src/shell-desktop-dir-info.c
 src/shell-global.c
 src/shell-keyring-prompt.c
 src/shell-polkit-authentication-agent.c
