@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-09 14:00-0700\n"
+"POT-Creation-Date: 2013-07-22 22:40-0700\n"
 "PO-Revision-Date: 2013-03-12 22:35+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -46,12 +46,14 @@ msgstr "Apresentar todas as aplicações"
 msgid "Open the application menu"
 msgstr "Abrir o menu de aplicações"
 
-#: ../data/eos-shell.desktop.in.in.h:1
+#: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
+#: ../data/gdm-eos-shell.desktop.in.in.h:1
 #, fuzzy
 msgid "EOS Shell"
 msgstr "Interface GNOME"
 
-#: ../data/eos-shell.desktop.in.in.h:2
+#: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
+#: ../data/gdm-eos-shell.desktop.in.in.h:2
 msgid "Window management and application launching"
 msgstr "Gestão de janelas e iniciação de aplicações"
 
@@ -469,6 +471,14 @@ msgstr "Incapaz de processar o comando:"
 msgid "Execution of '%s' failed:"
 msgstr "Falha ao executar '%s':"
 
+#. Translators: this is the text displayed
+#. in the search entry when no search is
+#. active; it should not exceed ~30
+#. characters.
+#: ../js/ui/appDisplay.js:792
+msgid "Type to search…"
+msgstr "Escreva para procurar…"
+
 #. For now, let's use the normal icon for the pressed state,
 #. for consistency with the other app selector icons,
 #. which just use the wells to represent the pressed state.
@@ -477,43 +487,45 @@ msgstr "Falha ao executar '%s':"
 #. moves off the icon to cancel should be made more responsive;
 #. the current implementation takes about a second for the change
 #. back to the normal icon to occur.
-#: ../js/ui/appDisplay.js:1331
+#: ../js/ui/appDisplay.js:1416
 msgid "Add"
 msgstr "Adicionar"
 
-#: ../js/ui/appDisplay.js:1333 ../js/ui/appDisplay.js:1335
+#: ../js/ui/appDisplay.js:1418 ../js/ui/appDisplay.js:1420
 msgid "Delete"
 msgstr "Excluir"
 
-#: ../js/ui/appDisplay.js:1432
+#: ../js/ui/appDisplay.js:1533
 msgid "Warning"
-msgstr ""
+msgstr "Aviso"
 
-#: ../js/ui/appDisplay.js:1438
-msgid "To delete a folder you have to remove all "
+#: ../js/ui/appDisplay.js:1539
+msgid ""
+"To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
+"Para apagar uma pasta que você tem que remover todos os itens dentro do primeiro."
 
-#: ../js/ui/appDisplay.js:1445
+#: ../js/ui/appDisplay.js:1545
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "Estamos tratando de mantener la seguridad de sus datos."
 
-#: ../js/ui/appDisplay.js:1451 ../js/ui/status/bluetooth.js:414
+#: ../js/ui/appDisplay.js:1551 ../js/ui/status/bluetooth.js:414
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1484
+#: ../js/ui/appDisplay.js:1584
 msgid "Delete?"
-msgstr ""
+msgstr "Excluir?"
 
-#: ../js/ui/appDisplay.js:1594
+#: ../js/ui/appDisplay.js:1694
 msgid "New Window"
 msgstr "Nova Janela"
 
-#: ../js/ui/appDisplay.js:1597 ../js/ui/dash.js:284
+#: ../js/ui/appDisplay.js:1697 ../js/ui/dash.js:286
 msgid "Remove from Favorites"
 msgstr "Remover dos Favoritos"
 
-#: ../js/ui/appDisplay.js:1598
+#: ../js/ui/appDisplay.js:1698
 msgid "Add to Favorites"
 msgstr "Adicionar aos Favoritos"
 
@@ -1055,17 +1067,17 @@ msgstr "Visualizar a conta"
 msgid "Unknown reason"
 msgstr "Motivo desconhecido"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:83
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:58
 msgid "Windows"
 msgstr "Janelas"
 
-#: ../js/ui/dash.js:248 ../js/ui/dash.js:286
+#: ../js/ui/dash.js:250 ../js/ui/dash.js:288
 msgid "Show Applications"
 msgstr "Apresentar Aplicações"
 
 #. Translators: this is the name of the dock/favorites area on
 #. the left of the overview
-#: ../js/ui/dash.js:435
+#: ../js/ui/dash.js:442
 msgid "Dash"
 msgstr "Atalhos"
 
@@ -1274,30 +1286,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Desconhecida"
 
-#: ../js/ui/overviewControls.js:465
-#, c-format
-msgid "%d new message"
-msgid_plural "%d new messages"
-msgstr[0] "%d nova mensagem"
-msgstr[1] "%d novas mensagens"
-
-#: ../js/ui/overview.js:84
+#: ../js/ui/overview.js:85
 msgid "Undo"
 msgstr "Desfazer"
 
-#: ../js/ui/overview.js:135
+#: ../js/ui/overview.js:250
 msgid "Overview"
 msgstr "Resumo"
 
-#. Translators: this is the text displayed
-#. in the search entry when no search is
-#. active; it should not exceed ~30
-#. characters.
-#: ../js/ui/overview.js:247
-msgid "Type to search…"
-msgstr "Escreva para procurar…"
-
-#: ../js/ui/panel.js:467
+#: ../js/ui/panel.js:250
 msgid "Top Bar"
 msgstr "Barra Superior"
 
@@ -1848,7 +1845,7 @@ msgstr "%s (remoto)"
 msgid "%s (console)"
 msgstr "%s (consola)"
 
-#: ../js/ui/viewSelector.js:87
+#: ../js/ui/viewSelector.js:62
 msgid "Applications"
 msgstr "Aplicações"
 
@@ -1905,6 +1902,15 @@ msgstr "Listar modos possíveis"
 msgid "Failed to launch '%s'"
 msgstr "Falha ao iniciar '%s'"
 
+#: ../src/shell-desktop-dir-info.c:485
+msgid "Unnamed"
+msgstr ""
+
+#: ../src/shell-desktop-dir-info.c:747
+#, c-format
+msgid "Custom definition for %s"
+msgstr ""
+
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."
 msgstr "Senhas não coincidem."
@@ -1916,6 +1922,11 @@ msgstr "A senha não pode ser vazia"
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
 msgstr "O diálogo de autenticação foi fechado pelo utilizador"
+
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "%d nova mensagem"
+#~ msgstr[1] "%d novas mensagens"
 
 #~ msgid "Frequent"
 #~ msgstr "Frequente"
