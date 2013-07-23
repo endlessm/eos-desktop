@@ -15,6 +15,7 @@ const Mainloop = imports.mainloop;
 const Atk = imports.gi.Atk;
 
 const AppFavorites = imports.ui.appFavorites;
+const Background = imports.ui.background;
 const BoxPointer = imports.ui.boxpointer;
 const ButtonConstants = imports.ui.buttonConstants;
 const DND = imports.ui.dnd;
@@ -25,8 +26,10 @@ const Main = imports.ui.main;
 const ModalDialog = imports.ui.modalDialog;
 const Overview = imports.ui.overview;
 const OverviewControls = imports.ui.overviewControls;
+const Panel = imports.ui.panel;
 const PopupMenu = imports.ui.popupMenu;
 const Tweener = imports.ui.tweener;
+const WindowManager = imports.ui.windowManager;
 const Workspace = imports.ui.workspace;
 const Params = imports.misc.params;
 const Util = imports.misc.util;
@@ -44,6 +47,11 @@ const INACTIVE_GRID_TRANSITION = 'easeOutQuad';
 const ACTIVE_GRID_TRANSITION = 'easeInQuad';
 
 const DRAG_SCROLL_PIXELS_PER_SEC = 800;
+
+const SPLASH_CIRCLE_INITIAL_TIMEOUT = 100;
+const SPLASH_SCREEN_TIMEOUT = 700;
+const SPLASH_SCREEN_FADE_OUT = 0.2;
+const SPLASH_SCREEN_COMPLETE_TIME = 250;
 
 const EOS_APP_STORE_ID = 'eos-app-store.desktop';
 
@@ -1153,6 +1161,188 @@ const AppFolderPopup = new Lang.Class({
 });
 Signals.addSignalMethods(AppFolderPopup.prototype);
 
+const AppActivationContext = new Lang.Class({
+    Name: 'AppActivationContext',
+
+    _init: function(app) {
+        this._app = app;
+
+        this._cover = null;
+        this._splash = null;
+
+        this._appStateId = 0;
+        this._splashId = 0;
+    },
+
+    activate: function() {
+        try {
+            this._app.activate();
+        } catch (e) {
+            logError(e, 'error while activating: ' + this._app.get_name());
+            return;
+        }
+
+        this._animateSplash();
+
+        let newWindowId = this._app.connect('windows-changed', Lang.bind(this,
+            function() {
+                this._app.disconnect(newWindowId);
+
+                let newWindow = this._app.get_windows()[0];
+                Util.minimizeOtherWindows(newWindow);
+            }));
+
+        // We can't fully trust windows-changed to be emitted with the
+        // same ShellApp we called activate() on, as WMClass matching might
+        // fail. For this reason, just pick to the first application that
+        // will flip its state to running
+        let appSystem = Shell.AppSystem.get_default();
+        this._appStateId = appSystem.connect('app-state-changed',
+            Lang.bind(this, this._onAppStateChanged));
+    },
+
+    _getCoverPage: function() {
+        let bgGroup = new Meta.BackgroundGroup();
+        let bgManager = new Background.BackgroundManager({
+                container: bgGroup,
+                monitorIndex: Main.layoutManager.primaryIndex });
+
+        bgGroup._bgManager = bgManager;
+        return bgGroup;
+    },
+
+    _animateSplash: function() {
+        this._cover = this._getCoverPage();
+        Main.uiGroup.insert_child_below(this._cover, Main.layoutManager.panelBox);
+
+        this._splash = new AppSplashPage(this._app);;
+        Main.uiGroup.add_actor(this._splash);
+
+        this._splash.translation_y = this._splash.height;
+        Tweener.addTween(this._splash, { translation_y: 0,
+                                         time: Overview.ANIMATION_TIME,
+                                         transition: 'linear',
+                                         onComplete: Lang.bind(this, function() {
+                                             this._splash.spin();
+                                             this._splashId = Mainloop.timeout_add(SPLASH_SCREEN_TIMEOUT,
+                                                 Lang.bind(this, this._checkSplash));
+                                         })
+                                       });
+    },
+
+    _clearSplash: function() {
+        if (this._cover) {
+            this._cover._bgManager.destroy();
+            this._cover.destroy();
+            this._cover = null;
+        }
+
+        if (this._splash) {
+            this._splash.completeInTime(SPLASH_SCREEN_COMPLETE_TIME, Lang.bind(this,
+                function() {
+                    Tweener.addTween(this._splash, { opacity: 0,
+                                                     time: SPLASH_SCREEN_FADE_OUT,
+                                                     transition: 'linear',
+                                                     onComplete: Lang.bind(this,
+                                                         function() {
+                                                             this._splash.destroy();
+                                                             this._splash = null;
+                                                         })
+                                                   });
+                }));
+        }
+    },
+
+    _checkSplash: function() {
+        this._splashId = 0;
+
+        // FIXME: we can't rely on windows-changed being emited on the same
+        // desktop file, as web apps right now all open tabs in the default browser
+        let isLink = (this._app.get_id().indexOf('eos-link-') != -1);
+
+        // (appStateId == 0) => window already created
+        if (this._appStateId == 0 || isLink) {
+            this._clearSplash();
+        }
+
+        return false;
+    },
+
+    _onAppStateChanged: function(appSystem, app) {
+        if (app.state != Shell.AppState.RUNNING) {
+            return;
+        }
+
+        appSystem.disconnect(this._appStateId);
+        this._appStateId = 0;
+
+        // (splashId == 0) => the window took more than the stock
+        // splash timeout to display
+        if (this._splashId == 0) {
+            // Wait for the minimize animation to complete in this case
+            Mainloop.timeout_add(WindowManager.WINDOW_ANIMATION_TIME, Lang.bind(this,
+                function() {
+                    this._clearSplash();
+                    return false;
+                }));
+        }
+    }
+});
+
+const AppSplashPage = new Lang.Class({
+    Name: 'AppSplashPage',
+    Extends: St.Widget,
+
+    _init: function(app) {
+        let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
+        this.parent({ x: workArea.x,
+                      y: workArea.y,
+                      width: workArea.width,
+                      height: workArea.height,
+                      layout_manager: new Clutter.BinLayout(),
+                      style_class: 'app-splash-page' });
+
+        this._app = app;
+        this._spinner = null;
+
+        let background = new St.Widget({ style_class: 'app-splash-page-background',
+                                         x_expand: true,
+                                         y_expand: true });
+        this.add_child(background);
+    },
+
+    vfunc_style_changed: function() {
+        if (this._spinner) {
+            this._spinner.actor.destroy();
+            this._spinner = null;
+        }
+
+        let themeNode = this.get_theme_node();
+        let iconSize = themeNode.get_length('icon-size');
+
+        let appIcon = this._app.create_icon_texture(iconSize);
+        appIcon.x_align = Clutter.ActorAlign.CENTER;
+        appIcon.y_align = Clutter.ActorAlign.CENTER;
+        this.add_child(appIcon);
+
+        let animationSize = themeNode.get_length('-animation-size');
+        this._spinner = new Panel.VariableSpeedAnimation('splash-circle-animation.png',
+                                                         animationSize,
+                                                         SPLASH_CIRCLE_INITIAL_TIMEOUT);
+        this._spinner.actor.x_align = Clutter.ActorAlign.CENTER;
+        this._spinner.actor.y_align = Clutter.ActorAlign.CENTER;
+        this.add_child(this._spinner.actor);
+    },
+
+    spin: function() {
+        this._spinner.play();
+    },
+
+    completeInTime: function(time, callback) {
+        this._spinner.completeInTime(time, callback);
+    }
+});
+
 const AppIcon = new Lang.Class({
     Name: 'AppIcon',
     Extends: ViewIcon,
@@ -1374,7 +1564,8 @@ const AppIcon = new Lang.Class({
                 this.app.activate();
             }
         } else {
-            this.app.activate();
+            let activationContext = new AppActivationContext(this.app);
+            activationContext.activate();
         }
 
         Main.overview.hide();

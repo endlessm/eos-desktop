@@ -34,7 +34,7 @@ const Animation = new Lang.Class({
     Name: 'Animation',
 
     _init: function(filename, width, height, speed) {
-        this.actor = new St.Bin();
+        this.actor = new St.Bin({ width: width, height: height });
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
         this._speed = speed;
 
@@ -42,9 +42,10 @@ const Animation = new Lang.Class({
         this._isPlaying = false;
         this._timeoutId = 0;
         this._frame = 0;
-        this._animations = St.TextureCache.get_default().load_sliced_image (filename, width, height,
-                                                                            Lang.bind(this, this._animationsLoaded));
-        this.actor.set_child(this._animations);
+        this._frames = null;
+
+        St.TextureCache.get_default().load_sliced_image_async(filename, width, height,
+                                                              Lang.bind(this, this._animationsLoaded));
     },
 
     play: function() {
@@ -52,31 +53,33 @@ const Animation = new Lang.Class({
             if (this._frame == 0)
                 this._showFrame(0);
 
-            this._timeoutId = Mainloop.timeout_add(this._speed, Lang.bind(this, this._update));
+            this._setTimeoutSource();
         }
 
         this._isPlaying = true;
     },
 
     stop: function() {
+        this._clearTimeoutSource();
+        this._isPlaying = false;
+    },
+
+    _clearTimeoutSource: function() {
         if (this._timeoutId > 0) {
             Mainloop.source_remove(this._timeoutId);
             this._timeoutId = 0;
         }
+    },
 
-        this._isPlaying = false;
+    _setTimeoutSource: function() {
+        this._timeoutId = Mainloop.timeout_add(this._speed * St.get_slow_down_factor(),
+                                               Lang.bind(this, this._update));
     },
 
     _showFrame: function(frame) {
-        let oldFrameActor = this._animations.get_child_at_index(this._frame);
-        if (oldFrameActor)
-            oldFrameActor.hide();
-
-        this._frame = (frame % this._animations.get_n_children());
-
-        let newFrameActor = this._animations.get_child_at_index(this._frame);
-        if (newFrameActor)
-            newFrameActor.show();
+        this._frame = (frame % this._frames.length);
+        let newFrame = this._frames[this._frame];
+        this.actor.set_content(newFrame);
     },
 
     _update: function() {
@@ -84,7 +87,14 @@ const Animation = new Lang.Class({
         return true;
     },
 
-    _animationsLoaded: function() {
+    _animationsLoaded: function(cache, res) {
+        try {
+            this._frames = cache.load_sliced_image_finish(res);
+        } catch (e) {
+            logError(e, ' Unable to load sliced image for animation');
+            return;
+        }
+
         this._isLoaded = true;
 
         if (this._isPlaying)
@@ -93,6 +103,64 @@ const Animation = new Lang.Class({
 
     _onDestroy: function() {
         this.stop();
+    }
+});
+
+const VariableSpeedAnimation = new Lang.Class({
+    Name: 'VariableSpeedAnimation',
+    Extends: Animation,
+
+    _init: function(name, size, initialTimeout) {
+        this.parent(global.datadir + '/theme/' + name, size, size, initialTimeout);
+    },
+
+    _updateSpeed: function(newSpeed) {
+        if (newSpeed == this._speed) {
+            return;
+        }
+
+        this._clearTimeoutSource();
+        this._speed = newSpeed;
+        this._setTimeoutSource();
+    },
+
+    completeInTime: function(time, callback) {
+        let frameTime = Math.floor(time / (this._frames.length - this._frame));
+        this._updateSpeed(frameTime);
+
+        this._completeCallback = callback;
+        this._completeTimeGoal = time;
+        this._completeStartTime = GLib.get_monotonic_time();
+        this._completeStartFrame = this._frame;
+    },
+
+    _update: function() {
+        if (!this._completeCallback) {
+            return this.parent();
+        }
+
+        if (this._frame == (this._frames.length - 1)) {
+            // we finished
+            this.stop();
+
+            this._completeCallback();
+            this._completeCallback = null;
+
+            return false;
+        }
+        
+        let elapsedTime = (GLib.get_monotonic_time() - this._completeStartTime) / 1000;
+        let percentage =  Math.min(1, elapsedTime / this._completeTimeGoal);
+        let frameNum = this._completeStartFrame +
+            Math.floor((this._frames.length - this._completeStartFrame) * percentage);
+
+        if (frameNum == this._frames.length) {
+            frameNum--;
+        }
+
+        this._showFrame(frameNum);
+
+        return true;
     }
 });
 

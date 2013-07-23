@@ -1036,26 +1036,6 @@ st_texture_cache_load_gicon_at_size (StTextureCache    *cache,
                                  theme_node ? st_theme_node_get_icon_colors (theme_node) : NULL);
 }
 
-static ClutterActor *
-load_from_pixbuf (GdkPixbuf *pixbuf)
-{
-  ClutterTexture *texture;
-  CoglHandle texdata;
-  int width = gdk_pixbuf_get_width (pixbuf);
-  int height = gdk_pixbuf_get_height (pixbuf);
-
-  texture = create_default_texture ();
-
-  clutter_actor_set_size (CLUTTER_ACTOR (texture), width, height);
-
-  texdata = pixbuf_to_cogl_handle (pixbuf, FALSE);
-
-  set_texture_cogl_texture (texture, texdata);
-
-  cogl_handle_unref (texdata);
-  return CLUTTER_ACTOR (texture);
-}
-
 static void
 file_changed_cb (GFileMonitor      *monitor,
                  GFile             *file,
@@ -1105,53 +1085,17 @@ ensure_monitor_for_uri (StTextureCache *cache,
 typedef struct {
   gchar *path;
   gint   grid_width, grid_height;
-  ClutterActor *actor;
-  GFunc load_callback;
-  gpointer load_callback_data;
+  GList *subpixbufs;
 } AsyncImageData;
 
 static void
 on_data_destroy (gpointer data)
 {
   AsyncImageData *d = (AsyncImageData *)data;
+
+  g_list_free_full (d->subpixbufs, (GDestroyNotify) g_object_unref);
   g_free (d->path);
-  g_object_unref (d->actor);
   g_free (d);
-}
-
-static void
-on_sliced_image_loaded (GObject *source_object,
-                        GAsyncResult *res,
-                        gpointer user_data)
-{
-  GObject *cache = source_object;
-  AsyncImageData *data = (AsyncImageData *)user_data;
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
-  GList *list;
-
-  if (g_simple_async_result_propagate_error (simple, NULL))
-    return;
-
-  for (list = g_simple_async_result_get_op_res_gpointer (simple); list; list = g_list_next (list))
-    {
-      ClutterActor *actor = load_from_pixbuf (GDK_PIXBUF (list->data));
-      clutter_actor_hide (actor);
-      clutter_actor_add_child (data->actor, actor);
-    }
-
-  if (data->load_callback != NULL)
-    data->load_callback (cache, data->load_callback_data);
-}
-
-static void
-free_glist_unref_gobjects (gpointer p)
-{
-  GList *list = p;
-  GList *iter;
-
-  for (iter = list; iter; iter = iter->next)
-    g_object_unref (iter->data);
-  g_list_free (list);
 }
 
 static void
@@ -1163,14 +1107,19 @@ load_sliced_image (GSimpleAsyncResult *result,
   GList *res = NULL;
   GdkPixbuf *pix;
   gint width, height, y, x;
+  GError *error = NULL;
 
   g_assert (!cancellable);
 
   data = g_object_get_data (G_OBJECT (result), "load_sliced_image");
   g_assert (data);
 
-  if (!(pix = gdk_pixbuf_new_from_file (data->path, NULL)))
-    return;
+  if (!(pix = gdk_pixbuf_new_from_file (data->path, &error)))
+    {
+      g_simple_async_result_take_error (result, error);
+      g_simple_async_result_complete_in_idle (result);
+      return;
+    }
 
   width = gdk_pixbuf_get_width (pix);
   height = gdk_pixbuf_get_height (pix);
@@ -1178,62 +1127,99 @@ load_sliced_image (GSimpleAsyncResult *result,
     {
       for (x = 0; x < width; x += data->grid_width)
         {
-          GdkPixbuf *pixbuf = gdk_pixbuf_new_subpixbuf (pix, x, y, data->grid_width, data->grid_height);
-          g_assert (pixbuf != NULL);
-          res = g_list_append (res, pixbuf);
+          GdkPixbuf *subpixbuf;
+          subpixbuf = gdk_pixbuf_new_subpixbuf (pix, x, y,
+                                                data->grid_width, data->grid_height);
+          res = g_list_prepend (res, subpixbuf);
         }
     }
-  /* We don't need the original pixbuf anymore, though the subpixbufs
-     will hold a reference. */
+
   g_object_unref (pix);
-  g_simple_async_result_set_op_res_gpointer (result, res, free_glist_unref_gobjects);
+  data->subpixbufs = res;
 }
 
 /**
- * st_texture_cache_load_sliced_image:
+ * st_texture_cache_load_sliced_image_finish:
+ * @cache: A #StTextureCache
+ * @result: A #GAsyncResult
+ * @error: A #GError, or %NULL
+ *
+ * Returns the sliced images as a list of #ClutterImage objects
+ *
+ * Returns: (transfer full) (element-type Clutter.Image): a #GList of #ClutterImage objects.
+ *    You must free the list with g_list_free_full() and g_object_unref() when done.
+ */
+GList *
+st_texture_cache_load_sliced_image_finish (StTextureCache *cache,
+                                           GAsyncResult   *result,
+                                           GError        **error)
+{
+  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (result);
+  AsyncImageData *data;
+  GList *images = NULL, *l;
+
+  if (g_simple_async_result_propagate_error (simple, error))
+    return NULL;
+
+  data = g_object_get_data (G_OBJECT (result), "load_sliced_image");
+  g_assert (data);
+
+  for (l = data->subpixbufs; l != NULL; l = l->next)
+    {
+      GdkPixbuf *pix = l->data;
+      ClutterImage *image = CLUTTER_IMAGE (clutter_image_new ());
+      
+      clutter_image_set_data (image, gdk_pixbuf_get_pixels (pix),
+                              gdk_pixbuf_get_has_alpha (pix) ?
+                              COGL_PIXEL_FORMAT_RGBA_8888 : COGL_PIXEL_FORMAT_RGB_888,
+                              gdk_pixbuf_get_width (pix),
+                              gdk_pixbuf_get_height (pix),
+                              gdk_pixbuf_get_rowstride (pix),
+                              NULL);
+
+      images = g_list_prepend (images, image);
+    }
+
+  return images;
+}
+
+/**
+ * st_texture_cache_load_sliced_image_async:
  * @cache: A #StTextureCache
  * @path: Path to a filename
  * @grid_width: Width in pixels
  * @grid_height: Height in pixels
- * @load_callback: (scope async) (allow-none): Function called when the image is loaded, or %NULL
- * @user_data: Data to pass to the load callback
+ * @callback: (scope async): Function called when the image is loaded
+ * @user_data: (closure): Data to pass to the load callback
  *
  * This function reads a single image file which contains multiple images internally.
  * The image file will be divided using @grid_width and @grid_height;
  * note that the dimensions of the image loaded from @path 
  * should be a multiple of the specified grid dimensions.
- *
- * Returns: (transfer none): A new #ClutterActor
  */
-ClutterActor *
-st_texture_cache_load_sliced_image (StTextureCache *cache,
-                                    const gchar    *path,
-                                    gint            grid_width,
-                                    gint            grid_height,
-                                    GFunc           load_callback,
-                                    gpointer        user_data)
+void
+st_texture_cache_load_sliced_image_async (StTextureCache      *cache,
+                                          const gchar         *path,
+                                          gint                 grid_width,
+                                          gint                 grid_height,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
 {
   AsyncImageData *data;
   GSimpleAsyncResult *result;
-  ClutterActor *actor = clutter_actor_new ();
 
   data = g_new0 (AsyncImageData, 1);
   data->grid_width = grid_width;
   data->grid_height = grid_height;
   data->path = g_strdup (path);
-  data->actor = actor;
-  data->load_callback = load_callback;
-  data->load_callback_data = user_data;
-  g_object_ref (G_OBJECT (actor));
 
-  result = g_simple_async_result_new (G_OBJECT (cache), on_sliced_image_loaded, data, st_texture_cache_load_sliced_image);
+  result = g_simple_async_result_new (G_OBJECT (cache), callback, user_data,
+                                      st_texture_cache_load_sliced_image_async);
 
   g_object_set_data_full (G_OBJECT (result), "load_sliced_image", data, on_data_destroy);
   g_simple_async_result_run_in_thread (result, load_sliced_image, G_PRIORITY_DEFAULT, NULL);
 
   g_object_unref (result);
-
-  return actor;
 }
 
 /**

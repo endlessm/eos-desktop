@@ -775,8 +775,13 @@ StScrollBar StButton#vhandle:active {
 }
 
 .overview-icon.dnd,
-.icon-grid .overview-icon {
+.icon-grid .overview-icon,
+.app-splash-page {
     icon-size: 64px;
+}
+
+.overview-icon.dnd,
+.icon-grid .overview-icon {
     spacing: 8px;
 }
 
@@ -2518,4 +2523,13 @@ StScrollBar StButton#vhandle:active {
 
 .delete-folder-dialog-safe {
     width: 20em;
+}
+
+.app-splash-page {
+    -animation-size: 246px;
+}
+
+.app-splash-page-background {
+    background: #e6e4e4 url(splash-noise-texture.png);
+    background-repeat: repeat;
 }
