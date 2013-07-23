@@ -1184,14 +1184,6 @@ const AppActivationContext = new Lang.Class({
 
         this._animateSplash();
 
-        let newWindowId = this._app.connect('windows-changed', Lang.bind(this,
-            function() {
-                this._app.disconnect(newWindowId);
-
-                let newWindow = this._app.get_windows()[0];
-                Util.minimizeOtherWindows(newWindow);
-            }));
-
         // We can't fully trust windows-changed to be emitted with the
         // same ShellApp we called activate() on, as WMClass matching might
         // fail. For this reason, just pick to the first application that
