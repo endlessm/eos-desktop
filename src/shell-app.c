@@ -188,19 +188,28 @@ shell_app_create_icon_texture (ShellApp   *app,
 {
   GIcon *icon;
   ClutterActor *ret;
+  GAppInfo *info;
+  const gchar *executable;
 
   ret = NULL;
 
   if (app->entry == NULL)
     return window_backed_app_get_icon (app, size);
 
-  icon = g_app_info_get_icon (G_APP_INFO (gmenu_tree_entry_get_app_info (app->entry)));
+  info = G_APP_INFO (gmenu_tree_entry_get_app_info (app->entry));
+  icon = g_app_info_get_icon (info);
   if (icon != NULL)
     ret = st_texture_cache_load_gicon (st_texture_cache_get_default (), NULL, icon, size);
 
   if (ret == NULL)
     {
-      icon = g_themed_icon_new ("generic-app");
+      executable = g_app_info_get_executable (info);
+      if (g_strcmp0 (executable, "epiphany") == 0 ||
+          g_strcmp0 (executable, "epiphany-browser") == 0)
+        icon = g_themed_icon_new ("generic-link");
+      else
+        icon = g_themed_icon_new ("generic-app");
+
       ret = st_texture_cache_load_gicon (st_texture_cache_get_default (), NULL, icon, size);
       g_object_unref (icon);
     }
