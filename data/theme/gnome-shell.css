@@ -486,8 +486,11 @@ StScrollBar StButton#vhandle:active {
 .app-icon-bar.panel-button {
     -minimum-hpadding: 0;
     -natural-hpadding: 0;
+}
+
+.scrolled-icon-list {
     -icon-size: 26px;
-    -icon-spacing: 10px;
+    spacing: 10px;
 }
 
 #panel.unlock-screen .panel-button,
