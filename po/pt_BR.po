@@ -58,9 +58,8 @@ msgid "Open the application menu"
 msgstr "Abre o menu do aplicativo"
 
 #: ../data/eos-shell.desktop.in.in.h:1
-#, fuzzy
 msgid "EOS Shell"
-msgstr "GNOME Shell"
+msgstr "EOS Shell"
 
 #: ../data/eos-shell.desktop.in.in.h:2
 msgid "Window management and application launching"
