@@ -1536,15 +1536,14 @@ const AppStoreIcon = new Lang.Class({
         dialog.contentLayout.add(subjectLabel, { y_fill: false,
                                                  y_align: St.Align.START });
 
-        let descriptionLabel = new St.Label({ text: _("To delete a folder you have to remove all " +
-                                                      "of the items inside of it first."),
+        let descriptionLabel = new St.Label({ text: _("To delete a folder you have to remove all of the items inside of it first."),
                                               style_class: 'delete-folder-dialog-description' });
         dialog.contentLayout.add(descriptionLabel, { y_fill: true });
         descriptionLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
         descriptionLabel.clutter_text.line_wrap = true;
 
         let safeLabel = new St.Label({ text: _("We are just trying to keep you safe."),
-                                              style_class: 'delete-folder-dialog-safe' });
+                                       style_class: 'delete-folder-dialog-safe' });
         dialog.contentLayout.add(safeLabel, { y_fill: true });
         safeLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
         safeLabel.clutter_text.line_wrap = true;

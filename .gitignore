@@ -54,8 +54,8 @@ m4/
 man/gnome-shell.1
 omf.make
 po/*.gmo
-po/gnome-shell.pot
 po/*.header
+po/*.pot
 po/*.sed
 po/*.sin
 po/.intltool-merge-cache
