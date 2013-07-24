@@ -11,6 +11,7 @@ const ExtensionSystem = imports.ui.extensionSystem;
 const ExtensionDownloader = imports.ui.extensionDownloader;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Hash = imports.misc.hash;
+const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
 const Screenshot = imports.ui.screenshot;
 
@@ -43,6 +44,12 @@ const GnomeShellIface = <interface name="org.gnome.Shell">
 <property name="Mode" type="s" access="read" />
 <property name="OverviewActive" type="b" access="readwrite" />
 <property name="ShellVersion" type="s" access="read" />
+<method name="AddApplication">
+    <arg type="s" direction="in" name="id" />
+</method>
+<method name="RemoveApplication">
+    <arg type="s" direction="id" name="id" />
+</method>
 </interface>;
 
 const ScreenSaverIface = <interface name="org.gnome.ScreenSaver">
@@ -207,6 +214,20 @@ const GnomeShell = new Lang.Class({
         }
         Gio.bus_unwatch_name(this._grabbers.get(name));
         this._grabbers.delete(name);
+    },
+
+    AddApplication: function(params) {
+        for (let param in params)
+            params[param] = params[param].deep_unpack();
+
+        IconGridLayout.layout.appendIcon(params['id']);
+    },
+
+    RemoveApplication: function(params) {
+        for (let param in params)
+            params[param] = params[param].deep_unpack();
+
+        IconGridLayout.layout.removeIcon(params['id']);
     },
 
 

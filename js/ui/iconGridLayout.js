@@ -52,6 +52,26 @@ const IconGridLayout = new Lang.Class({
         return id && this._iconTree[id];
     },
 
+    appendIcon: function(id) {
+        this.repositionIcon(id, -1, null);
+    },
+
+    removeIcon: function(id) {
+        let icons;
+        for (let i in this._iconTree) {
+            icon = this._iconTree[i];
+            let oldPos = icons.indexOf(id);
+            if (oldPos != -1) {
+                icons.splice(oldPos, 1);
+                break;
+            }
+        }
+
+        let newLayout = GLib.Variant.new("a{sas}", this._iconTree);
+
+        global.settings.set_value(SCHEMA_KEY, newLayout);
+    },
+
     repositionIcon: function(id, insertId, newFolder) {
         let icons;
         for (let i in this._iconTree) {
