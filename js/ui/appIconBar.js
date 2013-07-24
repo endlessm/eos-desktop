@@ -447,12 +447,18 @@ const ScrolledIconList = new Lang.Class({
         let iconArea = 0;
         if (this._numberOfApps > 0) {
             let iconSpacing = this._iconSpacing * (this._numberOfApps + 1);
-            iconArea = this._iconSize * this._numberOfApps;
+            iconArea = this._iconSize * this._numberOfApps + iconSpacing;
         }
         return iconArea;
     },
 
     _updatePage: function() {
+        // Clip the values of the iconOffset
+        let lastIconOffset = this._numberOfApps - 1;
+        let movableIconsPerPage = this._appsPerPage - 1;
+        this._iconOffset = Math.max(0, this._iconOffset);
+        this._iconOffset = Math.min(lastIconOffset - movableIconsPerPage, this._iconOffset);
+
         let relativeAnimationTime = ICON_SCROLL_ANIMATION_TIME;
 
         let iconFullWidth = this._iconSize + this._iconSpacing;
@@ -476,15 +482,12 @@ const ScrolledIconList = new Lang.Class({
     },
 
     pageBack: function() {
-        this._iconOffset = Math.max(0, this._iconOffset - (this._appsPerPage - 1));
+        this._iconOffset -= this._appsPerPage - 1;
         this._updatePage();
     },
 
     pageForward: function() {
-        // We need to clip the value to the beginning of last page icon
-        let lastIconOffset = this._numberOfApps - 1;
-        let movableIconsPerPage = this._appsPerPage - 1;
-        this._iconOffset = Math.min(lastIconOffset - movableIconsPerPage, this._iconOffset + movableIconsPerPage);
+        this._iconOffset += this._appsPerPage - 1;
         this._updatePage();
     },
 
