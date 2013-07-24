@@ -17,6 +17,8 @@ const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
+const MAX_OPACITY = 255;
+
 const ICON_SIZE = 26;
 const NAV_BUTTON_SIZE = 15;
 
@@ -403,7 +405,7 @@ const ScrolledIconList = new Lang.Class({
         this._iconSize = ICON_SIZE;
         this._iconSpacing = 0;
 
-        this._currentPage = 0;
+        this._iconOffset = 0;
         this._numberOfApps = 0;
         this._appsPerPage = -1;
 
@@ -449,7 +451,7 @@ const ScrolledIconList = new Lang.Class({
         let hadjustment = this.actor.hscroll.adjustment;
 
         let currentOffset = this.actor.hscroll.adjustment.get_value();
-        let targetOffset = Math.min(this._currentPage * pageSize, hadjustment.upper);
+        let targetOffset = Math.min(this._iconOffset * iconFullWidth, hadjustment.upper);
 
         let distanceToTravel = Math.abs(targetOffset - currentOffset);
         if (distanceToTravel < pageSize) {
@@ -461,24 +463,28 @@ const ScrolledIconList = new Lang.Class({
                                             time: relativeAnimationTime,
                                             transition: ICON_SCROLL_ANIMATION_TYPE });
         }
+        this.emit('icons-scrolled');
     },
 
     pageBack: function() {
-        this._currentPage = this._currentPage - 1;
+        this._iconOffset = Math.max(0, this._iconOffset - (this._appsPerPage - 1));
         this._updatePage();
     },
 
     pageForward: function() {
-        this._currentPage = this._currentPage + 1;
+        // We need to clip the value to the beginning of last page icon
+        let lastIconOffset = this._numberOfApps - 1;
+        let movableIconsPerPage = this._appsPerPage - 1;
+        this._iconOffset = Math.min(lastIconOffset - movableIconsPerPage, this._iconOffset + movableIconsPerPage);
         this._updatePage();
     },
 
     isBackAllowed: function() {
-        return this._currentPage > 0;
+        return this._iconOffset > 0;
     },
 
     isForwardAllowed: function() {
-        return this._currentPage < this._numberOfPages - 1;
+        return this._iconOffset < this._numberOfApps - this._appsPerPage;
     },
 
     calculateNaturalSize: function(maxWidth) {
@@ -487,9 +493,6 @@ const ScrolledIconList = new Lang.Class({
         this._appsPerPage = appsPerPage;
         this._numberOfPages = numOfPages;
 
-        // If we are on a page that is out of bounds when the resolution changes
-        // we need to clip its value
-        this._currentPage = Math.min(this._currentPage, this._numberOfPages - 1);
         this._updatePage();
 
         let iconFullSize = this._iconSize + this._iconSpacing;
@@ -500,7 +503,7 @@ const ScrolledIconList = new Lang.Class({
         let node = this._container.get_theme_node();
 
         this._iconSize = node.get_length("-icon-size");
-        this._runningApps.items().forEach( Lang.bind(this,
+        this._runningApps.items().forEach(Lang.bind(this,
             function(app) {
                 app[1].setIconSize(this._iconSize);
             }));
@@ -511,9 +514,9 @@ const ScrolledIconList = new Lang.Class({
     _ensureIsVisible: function(app) {
         let itemIndex = this._runningApps.items().indexOf(app);
         if (itemIndex != -1) {
-            this._currentPage = Math.floor(itemIndex / this._appsPerPage);
+            this._iconOffset = itemIndex;
         } else {
-            this._currentPage = this._numberOfPages - 1;
+            this._iconOffset = this._numberOfApps - this._appsPerPage
         }
 
         this._updatePage();
@@ -589,6 +592,7 @@ const ScrolledIconList = new Lang.Class({
         return [appsOnPage, apps];
     }
 });
+Signals.addSignalMethods(ScrolledIconList.prototype);
 
 /** AppIconBar:
  *
@@ -624,9 +628,11 @@ const AppIconBar = new Lang.Class({
 
         this._scrolledIconList = new ScrolledIconList();
 
-        this._container.add_actor(this._backButton);
         this._container.add_actor(this._scrolledIconList.actor);
+        this._container.add_actor(this._backButton);
         this._container.add_actor(this._forwardButton);
+
+        this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, this._updateNavButtonState));
     },
 
     _previousPageSelected: function() {
@@ -640,8 +646,18 @@ const AppIconBar = new Lang.Class({
     },
 
     _updateNavButtonState: function() {
-        this._container.set_skip_paint(this._backButton, !this._scrolledIconList.isBackAllowed());
-        this._container.set_skip_paint(this._forwardButton, !this._scrolledIconList.isForwardAllowed());
+        let backButtonOpacity = MAX_OPACITY;
+        if (!this._scrolledIconList.isBackAllowed()) {
+            backButtonOpacity = 0;
+        }
+
+        let forwardButtonOpacity = MAX_OPACITY;
+        if (!this._scrolledIconList.isForwardAllowed()) {
+            forwardButtonOpacity = 0;
+        }
+
+        this._backButton.opacity = backButtonOpacity;
+        this._forwardButton.opacity = forwardButtonOpacity;
     },
 
     _getContentPreferredWidth: function(actor, forHeight, alloc) {
