@@ -570,7 +570,8 @@ const LayoutManager = new Lang.Class({
         global.stage_input_mode = Shell.StageInputMode.FULLSCREEN;
 
         if (Main.sessionMode.isGreeter) {
-            this.panelBox.translation_y = -this.panelBox.height;
+            this.trayBox.hide();
+            this.panelBox.translation_y = this.panelBox.height;
         } else {
             // We need to force an update of the regions now before we scale
             // the UI group to get the coorect allocation for the struts.
