@@ -1182,6 +1182,11 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
+        // Don't show splash screen for the app store
+        if (this._app.get_id() == EOS_APP_STORE_ID) {
+            return;
+        }
+
         this._animateSplash();
 
         // We can't fully trust windows-changed to be emitted with the
