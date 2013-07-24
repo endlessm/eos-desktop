@@ -289,12 +289,6 @@ const AllView = new Lang.Class({
         Main.overview.addAction(this._clickAction, false);
         this._eventBlocker.bind_property('reactive', this._clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
 
-        let appSystem = Shell.AppSystem.get_default();
-        this._appStore = appSystem.lookup_app(EOS_APP_STORE_ID);
-        if (this._appStore) {
-            this._appStore.connect('windows-changed', Lang.bind(this, this._appStoreWindowsChanged));
-        }
-
         this.repositionedView = null;
     },
 
@@ -636,7 +630,7 @@ const AllView = new Lang.Class({
 
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
-            if (item == this._appStore) {
+            if (item.get_id() == EOS_APP_STORE_ID) {
                 this._appStoreIcon = new AppStoreIcon(item, this);
                 return this._appStoreIcon;
             } else {
@@ -656,12 +650,6 @@ const AllView = new Lang.Class({
 
     getViewId: function() {
         return '';
-    },
-
-    _appStoreWindowsChanged: function() {
-        if (this._appStore.get_state() == Shell.AppState.STOPPED) {
-            Main.overview.showApps();
-        }
     },
 
     addFolderPopup: function(popup) {
