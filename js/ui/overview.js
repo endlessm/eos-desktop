@@ -153,22 +153,19 @@ const RoundedCorner = new Lang.Class({
         let backgroundColor = node.get_color('-rounded-corner-background-color');
         let borderColor = node.get_color('-rounded-corner-border-color');
 
-        let overlap = borderColor.alpha != 0;
-        let offsetY = overlap ? 0 : borderWidth;
-
         let cr = this.actor.get_context();
         cr.setOperator(Cairo.Operator.SOURCE);
 
-        cr.moveTo(0, offsetY);
+        cr.moveTo(0, 0);
         if (this._side == St.Side.LEFT)
             cr.arc(cornerRadius,
-                   borderWidth + cornerRadius,
+                   cornerRadius,
                    cornerRadius, Math.PI, 3 * Math.PI / 2);
         else
             cr.arc(0,
-                   borderWidth + cornerRadius,
+                   cornerRadius,
                    cornerRadius, 3 * Math.PI / 2, 2 * Math.PI);
-        cr.lineTo(cornerRadius, offsetY);
+        cr.lineTo(cornerRadius, 0);
         cr.closePath();
 
         let savedPath = cr.copyPath();
@@ -178,7 +175,7 @@ const RoundedCorner = new Lang.Class({
         Clutter.cairo_set_source_color(cr, over);
         cr.fill();
 
-        if (overlap) {
+        if (borderColor.alpha != 0) {
             let offset = borderWidth;
             Clutter.cairo_set_source_color(cr, backgroundColor);
 
@@ -198,8 +195,7 @@ const RoundedCorner = new Lang.Class({
         let cornerRadius = node.get_length("-rounded-corner-radius");
         let borderWidth = node.get_length('-rounded-corner-border-width');
 
-        this.actor.set_size(cornerRadius, borderWidth + cornerRadius);
-        this.actor.set_anchor_point(0, borderWidth);
+        this.actor.set_size(cornerRadius, cornerRadius);
     }
 });
 
@@ -279,6 +275,7 @@ const Overview = new Lang.Class({
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
         this.visibleTarget = false;
+        this._screenDecorators = [];
 
         // During transitions, we raise this to the top to avoid having the overview
         // area be reactive; it causes too many issues such as double clicks on
@@ -288,20 +285,6 @@ const Overview = new Lang.Class({
         this._overview.add_actor(this._coverPane);
         this._coverPane.connect('event', Lang.bind(this, function (actor, event) { return true; }));
 
-        let screenDecoratorLayout = new Clutter.BoxLayout();
-        this._screenDecorator = new St.Widget({ layout_manager: screenDecoratorLayout,
-                                                x_expand: true
-                                              });
-
-        this._topLeftCorner = new RoundedCorner(St.Side.LEFT);
-        this._topRightCorner = new RoundedCorner(St.Side.RIGHT);
-
-        this._screenDecorator.add_child(this._topLeftCorner.actor);
-        // We add a spacer here to push the right corner to the right edge
-        this._screenDecorator.add_child(new Clutter.Actor({ x_expand: true }));
-        this._screenDecorator.add_child(this._topRightCorner.actor);
-
-        global.overlay_group.add_actor(this._screenDecorator);
         global.overlay_group.add_actor(this._allMonitorsGroup);
 
         this._coverPane.hide();
@@ -325,6 +308,40 @@ const Overview = new Lang.Class({
 
         if (this._initCalled)
             this.init();
+    },
+
+    _updateDecorators: function() {
+        // Remove old decorators
+        for (let i = 0; i < this._screenDecorators.length; i++) {
+            this._screenDecorators[i].destroy();
+        }
+
+        this._screenDecorators = [];
+
+        // Add new deorators
+        for (let i = 0; i < Main.layoutManager.monitors.length; i++) {
+            let screenDecoratorLayout = new Clutter.BoxLayout();
+            let screenDecorator = new St.Widget({ layout_manager: screenDecoratorLayout,
+                                                    x_expand: true
+                                                  });
+
+            let topLeftCorner = new RoundedCorner(St.Side.LEFT);
+            let topRightCorner = new RoundedCorner(St.Side.RIGHT);
+
+            screenDecorator.add_child(topLeftCorner.actor);
+            // We add a spacer here to push the right corner to the right edge
+            screenDecorator.add_child(new Clutter.Actor({ x_expand: true }));
+            screenDecorator.add_child(topRightCorner.actor);
+
+            global.overlay_group.add_actor(screenDecorator);
+
+            // Set the size and position
+            let monitorWorkArea = Main.layoutManager.getWorkAreaForMonitor(i);
+            screenDecorator.set_size(monitorWorkArea.width, -1);
+            screenDecorator.set_position(monitorWorkArea.x, monitorWorkArea.y);
+
+            this._screenDecorators.push(screenDecorator);
+        }
     },
 
     _updateBackgrounds: function() {
@@ -405,6 +422,7 @@ const Overview = new Lang.Class({
                            }));
 
         Main.layoutManager.connect('monitors-changed', Lang.bind(this, this._relayout));
+        global.screen.connect('workareas-changed', Lang.bind(this, this._relayout));
         this._relayout();
     },
 
@@ -534,7 +552,7 @@ const Overview = new Lang.Class({
         this._coverPane.set_position(0, workArea.y);
         this._coverPane.set_size(workArea.width, workArea.height);
 
-        this._screenDecorator.set_size(workArea.width, -1);
+        this._updateDecorators();
 
         this._updateBackgrounds();
     },
