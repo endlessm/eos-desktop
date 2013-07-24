@@ -473,11 +473,9 @@ const ScrolledIconList = new Lang.Class({
             relativeAnimationTime = relativeAnimationTime * distanceToTravel / pageSize;
         }
 
-        if (currentOffset != targetOffset) {
-            Tweener.addTween(hadjustment, { value: targetOffset,
-                                            time: relativeAnimationTime,
-                                            transition: ICON_SCROLL_ANIMATION_TYPE });
-        }
+        Tweener.addTween(hadjustment, { value: targetOffset,
+                                        time: relativeAnimationTime,
+                                        transition: ICON_SCROLL_ANIMATION_TYPE });
         this.emit('icons-scrolled');
     },
 
@@ -524,11 +522,9 @@ const ScrolledIconList = new Lang.Class({
     },
 
     _ensureIsVisible: function(app) {
-        let itemIndex = this._runningApps.items().indexOf(app);
+        let itemIndex = this._runningApps.keys().indexOf(app);
         if (itemIndex != -1) {
             this._iconOffset = itemIndex;
-        } else {
-            this._iconOffset = this._numberOfApps - this._appsPerPage
         }
 
         this._updatePage();
