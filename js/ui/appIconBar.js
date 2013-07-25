@@ -399,8 +399,22 @@ const ScrolledIconList = new Lang.Class({
                                          x_fill: true,
                                          y_fill: true });
 
-        this._container = new St.BoxLayout({ style_class: 'scrolled-icon-container' });
-        this.actor.add_actor(this._container);
+        // Due to the interactions with StScrollView,
+        // StBoxLayout clips its painting to the content box, effectively
+        // clipping out the side paddings we want to set on the actual icons
+        // container. We need to go through some hoops and set the padding
+        // on an intermediate spacer child instead
+        let scrollChild = new St.BoxLayout();
+        this.actor.add_actor(scrollChild);
+
+        let spacerBin = new St.Widget({ style_class: 'scrolled-icon-spacer',
+                                        layout_manager: new Clutter.BinLayout() });
+        scrollChild.add_actor(spacerBin);
+
+        this._container = new St.BoxLayout({ style_class: 'scrolled-icon-container',
+                                             x_expand: true,
+                                             y_expand: true });
+        spacerBin.add_actor(this._container);
 
         this._iconSize = ICON_SIZE;
         this._iconSpacing = 0;
@@ -412,11 +426,6 @@ const ScrolledIconList = new Lang.Class({
         this._container.connect('style-changed', Lang.bind(this, this._updateStyleConstants));
 
         let appSys = Shell.AppSystem.get_default();
-
-        // Workaround for the fact that padding-left does not work as intended
-        // since setting it removes the hfade for that distance, so we add a
-        // placeholder actor that offsets the first icon by this._iconSpacing
-        this._container.add(new Clutter.Actor());
 
         // Update for any apps running before the system started
         // (after a crash or a restart)

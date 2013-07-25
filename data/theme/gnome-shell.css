@@ -491,6 +491,10 @@ StScrollBar StButton#vhandle:active {
 .scrolled-icon-container {
     -icon-size: 26px;
     spacing: 10px;
+}
+
+.scrolled-icon-spacer {
+    padding-left: 10px;
     padding-right: 10px;
 }
 
