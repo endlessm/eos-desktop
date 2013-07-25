@@ -44,6 +44,7 @@ const GnomeShellIface = <interface name="org.gnome.Shell">
 <signal name="AcceleratorActivated">
     <arg name="action" type="u" />
     <arg name="deviceid" type="u" />
+    <arg name="timestamp" type="u" />
 </signal>
 <property name="Mode" type="s" access="read" />
 <property name="OverviewActive" type="b" access="readwrite" />
@@ -84,8 +85,8 @@ const GnomeShell = new Lang.Class({
         this._grabbers = new Hash.Map();
 
         global.display.connect('accelerator-activated', Lang.bind(this,
-            function(display, action, deviceid) {
-                this._emitAcceleratorActivated(action, deviceid);
+            function(display, action, deviceid, timestamp) {
+                this._emitAcceleratorActivated(action, deviceid, timestamp);
             }));
     },
 
@@ -171,7 +172,7 @@ const GnomeShell = new Lang.Class({
         return invocation.return_value(GLib.Variant.new('(b)', [ungrabSucceeded]));
     },
 
-    _emitAcceleratorActivated: function(action, deviceid) {
+    _emitAcceleratorActivated: function(action, deviceid, timestamp) {
         let destination = this._grabbedAccelerators.get(action);
         if (!destination)
             return;
@@ -182,7 +183,7 @@ const GnomeShell = new Lang.Class({
                                this._dbusImpl.get_object_path(),
                                info ? info.name : null,
                                'AcceleratorActivated',
-                               GLib.Variant.new('(uu)', [action, deviceid]));
+                               GLib.Variant.new('(uuu)', [action, deviceid, timestamp]));
     },
 
     _grabAcceleratorForSender: function(accelerator, flags, sender) {
