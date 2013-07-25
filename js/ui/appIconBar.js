@@ -7,6 +7,8 @@ const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
 const Gio = imports.gi.Gio;
+const Gtk = imports.gi.Gtk;
+const Tweener = imports.ui.tweener;
 
 const BoxPointer = imports.ui.boxpointer;
 const ButtonConstants = imports.ui.buttonConstants;
@@ -15,8 +17,13 @@ const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
+const MAX_OPACITY = 255;
+
 const ICON_SIZE = 26;
 const NAV_BUTTON_SIZE = 15;
+
+const ICON_SCROLL_ANIMATION_TIME = 0.3;
+const ICON_SCROLL_ANIMATION_TYPE = 'linear';
 
 const PANEL_WINDOW_MENU_THUMBNAIL_SIZE = 128;
 
@@ -372,7 +379,7 @@ const AppIconBarNavButton = Lang.Class({
         this._spacing = this._icon.get_theme_node().get_length('spacing');
     },
 
-    getSize: function(actor, forHeight, alloc) {
+    getSize: function() {
         return this._size;
     },
 
@@ -380,6 +387,229 @@ const AppIconBarNavButton = Lang.Class({
         return this._spacing;
     }
 });
+
+
+const ScrolledIconList = new Lang.Class({
+    Name: 'ScrolledIconList',
+
+    _init: function() {
+        this.actor = new St.ScrollView({ hscrollbar_policy: Gtk.PolicyType.NEVER,
+                                         style_class: 'scrolled-icon-list hfade',
+                                         vscrollbar_policy: Gtk.PolicyType.NEVER,
+                                         x_fill: true,
+                                         y_fill: true });
+
+        // Due to the interactions with StScrollView,
+        // StBoxLayout clips its painting to the content box, effectively
+        // clipping out the side paddings we want to set on the actual icons
+        // container. We need to go through some hoops and set the padding
+        // on an intermediate spacer child instead
+        let scrollChild = new St.BoxLayout();
+        this.actor.add_actor(scrollChild);
+
+        let spacerBin = new St.Widget({ style_class: 'scrolled-icon-spacer',
+                                        layout_manager: new Clutter.BinLayout() });
+        scrollChild.add_actor(spacerBin);
+
+        this._container = new St.BoxLayout({ style_class: 'scrolled-icon-container',
+                                             x_expand: true,
+                                             y_expand: true });
+        spacerBin.add_actor(this._container);
+
+        this._iconSize = ICON_SIZE;
+        this._iconSpacing = 0;
+
+        this._iconOffset = 0;
+        this._numberOfApps = 0;
+        this._appsPerPage = -1;
+
+        this._container.connect('style-changed', Lang.bind(this, this._updateStyleConstants));
+
+        let appSys = Shell.AppSystem.get_default();
+
+        // Update for any apps running before the system started
+        // (after a crash or a restart)
+        let currentlyRunning = appSys.get_running();
+        this._runningApps = new Hash.Map();
+
+        for (let i = 0; i < currentlyRunning.length; i++) {
+            let app = currentlyRunning[i];
+
+            let newChild = new AppIconButton(app, this._iconSize);
+            this._runningApps.set(app, newChild);
+            this._numberOfApps++;
+            this._container.add(newChild.actor);
+        }
+
+        appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
+    },
+
+    getIconSize: function() {
+        return this._iconSize;
+    },
+
+    getMinWidth: function() {
+        return this._iconSize + 2 * this._iconSpacing;
+    },
+
+    getNaturalWidth: function() {
+        let iconArea = 0;
+        if (this._numberOfApps > 0) {
+            let iconSpacing = this._iconSpacing * (this._numberOfApps + 1);
+            iconArea = this._iconSize * this._numberOfApps + iconSpacing;
+        }
+        return iconArea;
+    },
+
+    _updatePage: function() {
+        // Clip the values of the iconOffset
+        let lastIconOffset = this._numberOfApps - 1;
+        let movableIconsPerPage = this._appsPerPage - 1;
+        this._iconOffset = Math.max(0, this._iconOffset);
+        this._iconOffset = Math.min(lastIconOffset - movableIconsPerPage, this._iconOffset);
+
+        let relativeAnimationTime = ICON_SCROLL_ANIMATION_TIME;
+
+        let iconFullWidth = this._iconSize + this._iconSpacing;
+        let pageSize = this._appsPerPage * iconFullWidth;
+        let hadjustment = this.actor.hscroll.adjustment;
+
+        let currentOffset = this.actor.hscroll.adjustment.get_value();
+        let targetOffset = Math.min(this._iconOffset * iconFullWidth, hadjustment.upper);
+
+        let distanceToTravel = Math.abs(targetOffset - currentOffset);
+        if (distanceToTravel < pageSize) {
+            relativeAnimationTime = relativeAnimationTime * distanceToTravel / pageSize;
+        }
+
+        Tweener.addTween(hadjustment, { value: targetOffset,
+                                        time: relativeAnimationTime,
+                                        transition: ICON_SCROLL_ANIMATION_TYPE });
+        this.emit('icons-scrolled');
+    },
+
+    pageBack: function() {
+        this._iconOffset -= this._appsPerPage - 1;
+        this._updatePage();
+    },
+
+    pageForward: function() {
+        this._iconOffset += this._appsPerPage - 1;
+        this._updatePage();
+    },
+
+    isBackAllowed: function() {
+        return this._iconOffset > 0;
+    },
+
+    isForwardAllowed: function() {
+        return this._iconOffset < this._numberOfApps - this._appsPerPage;
+    },
+
+    calculateNaturalSize: function(forWidth) {
+        let [numOfPages, appsPerPage] = this._calculateNumberOfPages(forWidth);
+
+        this._appsPerPage = appsPerPage;
+        this._numberOfPages = numOfPages;
+
+        this._updatePage();
+
+        let iconFullSize = this._iconSize + this._iconSpacing;
+        return this._appsPerPage * iconFullSize + this._iconSpacing;
+    },
+
+    _updateStyleConstants: function() {
+        let node = this._container.get_theme_node();
+
+        this._iconSize = node.get_length("-icon-size");
+        this._runningApps.items().forEach(Lang.bind(this,
+            function(app) {
+                app[1].setIconSize(this._iconSize);
+            }));
+
+        this._iconSpacing = node.get_length("spacing");
+    },
+
+    _ensureIsVisible: function(app) {
+        let itemIndex = this._runningApps.keys().indexOf(app);
+        if (itemIndex != -1) {
+            this._iconOffset = itemIndex;
+        }
+
+        this._updatePage();
+    },
+
+    _onAppStateChanged: function(appSys, app) {
+        let state = app.state;
+        switch(state) {
+        case Shell.AppState.STARTING:
+            let newChild = new AppIconButton(app, this._iconSize);
+            this._runningApps.set(app, newChild);
+            this._numberOfApps++;
+            this._container.add_actor(newChild.actor);
+            this._ensureIsVisible(app);
+            break;
+
+        case Shell.AppState.RUNNING:
+            // The normal sequence of events appears to be
+            // STARTING -> STOPPED -> RUNNING -> STOPPED
+            // but sometimes it can go STARTING -> RUNNING -> STOPPED
+            // So we only want to add an app here if we don't already
+            // have an icon for @app
+            if (!this._runningApps.has(app)) {
+                let newChild = new AppIconButton(app, this._iconSize);
+                this._runningApps.set(app, newChild);
+                this._numberOfApps++;
+                this._container.add_actor(newChild.actor);
+            }
+            this._ensureIsVisible(app);
+            break;
+
+        case Shell.AppState.STOPPED:
+            let oldChild = this._runningApps.get(app);
+            if (oldChild) {
+                this._container.remove_actor(oldChild.actor);
+                this._runningApps.delete(app);
+                this._numberOfApps--;
+            }
+            break;
+        }
+
+        this._updatePage();
+    },
+
+    _calculateNumberOfPages: function(forWidth){
+        let minimumIconWidth = this._iconSize + this._iconSpacing;
+
+        // We need to clip the net width since initially may be 0
+        forWidth = Math.max(0, forWidth);
+
+        // We need to add one icon space to net width here so that the division
+        // takes into account the fact that the last icon does not use iconSpacing
+        let iconsPerPage = Math.floor((forWidth + this._iconSpacing) / minimumIconWidth);
+        iconsPerPage = Math.max(1, iconsPerPage);
+
+        let pages = Math.ceil(this._runningApps.items().length / iconsPerPage);
+
+        // If we only have one page, previous calculations will return 0 so
+        // we clip the value here
+        pages = Math.max(1, pages);
+
+        return [pages, iconsPerPage];
+    },
+
+    _getAppsOnPage: function(pageNum, appsPerPage){
+        let apps = this._runningApps.items();
+
+        let startIndex = appsPerPage * pageNum;
+        let endIndex = Math.min(startIndex + appsPerPage, apps.length);
+
+        let appsOnPage = apps.slice(startIndex, endIndex);
+
+        return [appsOnPage, apps];
+    }
+});
+Signals.addSignalMethods(ScrolledIconList.prototype);
 
 /** AppIconBar:
  *
@@ -407,91 +637,57 @@ const AppIconBar = new Lang.Class({
         this._container.connect('get-preferred-height', Lang.bind(this, this._getContentPreferredHeight));
         this._container.connect('allocate', Lang.bind(this, this._contentAllocate));
 
-        this._numberOfApps = 0;
-        this._currentPage = 0;
-        this._appsPerPage = -1;
-        this._runningApps = new Hash.Map();
-
-        this._iconSize = ICON_SIZE;
-        this._iconSpacing = 0;
         this._navButtonSize = 0;
         this._navButtonSpacing = 0;
-
-        let appSys = Shell.AppSystem.get_default();
 
         this._backButton = new AppIconBarNavButton('/theme/app-bar-back-symbolic.svg', Lang.bind(this, this._previousPageSelected));
         this._forwardButton = new AppIconBarNavButton('/theme/app-bar-forward-symbolic.svg', Lang.bind(this, this._nextPageSelected));
 
+        this._scrolledIconList = new ScrolledIconList();
+
+        this._container.add_actor(this._scrolledIconList.actor);
         this._container.add_actor(this._backButton);
-
-        // Update for any apps running before the system started
-        // (after a crash or a restart)
-        let currentlyRunning = appSys.get_running();
-        for (let i = 0; i < currentlyRunning.length; i++) {
-            let app = currentlyRunning[i];
-
-            let newChild = new AppIconButton(app, this._iconSize);
-            this._runningApps.set(app, newChild);
-            this._numberOfApps++;
-            this._container.add_actor(newChild.actor);
-        }
-
         this._container.add_actor(this._forwardButton);
 
-        appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
+        this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, this._updateNavButtonState));
     },
 
     _previousPageSelected: function() {
-        this._currentPage = this._currentPage - 1;
-        this._updateCurrentAppPage();
+        this._scrolledIconList.pageBack();
+        this._updateNavButtonState();
     },
 
     _nextPageSelected: function() {
-        this._currentPage = this._currentPage + 1;
-        this._updateCurrentAppPage();
+        this._scrolledIconList.pageForward();
+        this._updateNavButtonState();
     },
 
-    _updateCurrentAppPage: function() {
-        let [visibleApps, runningApps] = this._getAppsOnPage(this._currentPage, this._appsPerPage);
-
-        for (let app in runningApps) {
-            let isAppHidden = visibleApps.indexOf(runningApps[app]) == -1;
-            let [key, child] = runningApps[app];
-
-            this._container.set_skip_paint(child.actor, isAppHidden);
+    _updateNavButtonState: function() {
+        let backButtonOpacity = MAX_OPACITY;
+        if (!this._scrolledIconList.isBackAllowed()) {
+            backButtonOpacity = 0;
         }
 
-        this._container.set_skip_paint(this._backButton, this._currentPage == 0);
-        this._container.set_skip_paint(this._forwardButton, this._currentPage == this._numberOfPages - 1);
+        let forwardButtonOpacity = MAX_OPACITY;
+        if (!this._scrolledIconList.isForwardAllowed()) {
+            forwardButtonOpacity = 0;
+        }
+
+        this._backButton.opacity = backButtonOpacity;
+        this._forwardButton.opacity = forwardButtonOpacity;
     },
 
     _getContentPreferredWidth: function(actor, forHeight, alloc) {
-        alloc.min_size = 2 * this._navButtonSize + 2 * this._navButtonSpacing + this._iconSize;
-
-        let iconArea = 0;
-        if (this._numberOfApps > 0) {
-            let iconSpacing = this._iconSpacing * (this._numberOfApps - 1);
-            iconArea = (this._iconSize  * (this._numberOfApps - 1)) + iconSpacing;
-        }
-
-        alloc.natural_size = alloc.min_size + iconArea;
+        alloc.min_size = 2 * this._navButtonSize + 2 * this._navButtonSpacing + this._scrolledIconList.getMinWidth();
+        alloc.natural_size = 2 * this._navButtonSize + 2 * this._navButtonSpacing + this._scrolledIconList.getNaturalWidth();
     },
 
     _getContentPreferredHeight: function(actor, forWidth, alloc) {
-        alloc.min_size = Math.max(this._iconSize, this._navButtonSize);
+        alloc.min_size = Math.max(this._scrolledIconList.getIconSize(), this._navButtonSize);
         alloc.natural_size = alloc.min_size;
     },
 
     _updateStyleConstants: function() {
-        let node = this.actor.get_theme_node();
-
-        this._iconSize = node.get_length("-icon-size");
-        this._runningApps.items().forEach( Lang.bind(this,
-            function(app) {
-                app[1].setIconSize(this._iconSize);
-            }));
-
-        this._iconSpacing = node.get_length("-icon-spacing");
         this._navButtonSize = this._backButton.getSize();
         this._navButtonSpacing = this._backButton.getSpacing();
     },
@@ -507,104 +703,20 @@ const AppIconBar = new Lang.Class({
         childBox.y1 = yPadding;
         childBox.y2 = childBox.y1 + Math.min(naturalHeight, allocHeight);
 
-        let [numOfPages, appsPerPage] = this._calculateNumberOfPages(allocWidth);
-
-        this._appsPerPage = appsPerPage;
-        this._numberOfPages = numOfPages;
-
-        // If we are on a page that is out of bounds when the resolution changes
-        // we need to clip its value
-        this._currentPage = Math.min(this._currentPage, this._numberOfPages - 1);
-        this._updateCurrentAppPage();
-
-        let [visibleApps, runningApps] = this._getAppsOnPage(this._currentPage, this._appsPerPage);
         childBox.x1 = 0;
         childBox.x2 = childBox.x1 + this._navButtonSize;
         this._backButton.allocate(childBox, flags);
 
-        let iconListStart = childBox.x2 + this._navButtonSpacing;
+        let iconListStart = childBox.x2;
+        let maxIconSpace = allocWidth - 2 * (this._navButtonSize + this._navButtonSpacing);
+        childBox.x1 = iconListStart;
+        childBox.x2 = childBox.x1 + this._scrolledIconList.calculateNaturalSize(maxIconSpace);
+        this._scrolledIconList.actor.allocate(childBox, flags);
 
-        for (let index in visibleApps) {
-            let [key, child] = visibleApps[index];
-            childBox.x1 = iconListStart + index * (this._iconSize + this._iconSpacing);
-            childBox.x2 = childBox.x1 + this._iconSize;
-
-            child.actor.allocate(childBox, flags);
-        }
-
-        childBox.x1 = childBox.x2 + this._navButtonSpacing;
+        childBox.x1 = childBox.x2;
         childBox.x2 = childBox.x1 + this._navButtonSize;
         this._forwardButton.allocate(childBox, flags);
-    },
 
-    _calculateNumberOfPages: function(width){
-        let netWidth = width - (2 * this._navButtonSize) - (2 * this._navButtonSpacing);
-        let minimumIconWidth = this._iconSize + this._iconSpacing;
-
-        // We need to clip the net width since initially may be 0
-        netWidth = Math.max(0, netWidth);
-
-        // We need to add one icon space to net width here so that the division
-        // takes into account the fact that the last icon does not use iconSpacing
-        let iconsPerPage = Math.floor((netWidth + this._iconSpacing) / minimumIconWidth);
-        iconsPerPage = Math.max(1, iconsPerPage);
-
-        let pages = Math.ceil(this._runningApps.items().length / iconsPerPage);
-
-        // If we only have one page, previous calculations will return 0 so
-        // we clip the value here
-        pages = Math.max(1, pages);
-
-        return [pages, iconsPerPage];
-    },
-
-    _getAppsOnPage: function(pageNum, appsPerPage){
-        let apps = this._runningApps.items();
-
-        let startIndex = appsPerPage * pageNum;
-        let endIndex = Math.min(startIndex + appsPerPage, apps.length);
-
-        let appsOnPage = apps.slice(startIndex, endIndex);
-
-        return [appsOnPage, apps];
-    },
-
-    _onAppStateChanged: function(appSys, app) {
-        let state = app.state;
-
-        switch(state) {
-        case Shell.AppState.STARTING:
-            let newChild = new AppIconButton(app, this._iconSize);
-            this._runningApps.set(app, newChild);
-            this._numberOfApps++;
-            this._container.add_actor(newChild.actor);
-            break;
-
-        case Shell.AppState.RUNNING:
-            // The normal sequence of events appears to be
-            // STARTING -> STOPPED -> RUNNING -> STOPPED
-            // but sometimes it can go STARTING -> RUNNING -> STOPPED
-            // So we only want to add an app here if we don't already
-            // have an icon for @app
-            if (!this._runningApps.has(app)) {
-                let newChild = new AppIconButton(app, this._iconSize);
-                this._runningApps.set(app, newChild);
-                this._numberOfApps++;
-                this._container.add_actor(newChild.actor);
-            }
-            break;
-
-        case Shell.AppState.STOPPED:
-            let oldChild = this._runningApps.get(app);
-            if (oldChild) {
-                this._container.remove_actor(oldChild.actor);
-                this._runningApps.delete(app);
-                this._numberOfApps--;
-            }
-            break;
-        }
-
-        // Make sure that our app list is updated
-        this._updateCurrentAppPage();
+        this._updateNavButtonState();
     }
 });
