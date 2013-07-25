@@ -422,8 +422,8 @@ const Overview = new Lang.Class({
                            }));
 
         Main.layoutManager.connect('monitors-changed', Lang.bind(this, this._relayout));
-        global.screen.connect('workareas-changed', Lang.bind(this, this._relayout));
-        this._relayout();
+        global.screen.connect('workareas-changed', Lang.bind(this, this._relayoutNoHide));
+        this._relayoutNoHide();
     },
 
     //
@@ -547,13 +547,16 @@ const Overview = new Lang.Class({
         // when it is next shown.
         this.hide();
 
+        this._relayoutNoHide();
+    },
+
+    _relayoutNoHide: function() {
         let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
 
         this._coverPane.set_position(0, workArea.y);
         this._coverPane.set_size(workArea.width, workArea.height);
 
         this._updateDecorators();
-
         this._updateBackgrounds();
     },
 
