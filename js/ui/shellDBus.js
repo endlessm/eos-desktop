@@ -414,7 +414,7 @@ const AppStoreIface = <interface name="org.gnome.Shell.AppStore">
     <arg type="s" direction="in" name="id" />
 </method>
 <method name="RemoveApplication">
-    <arg type="s" direction="id" name="id" />
+    <arg type="s" direction="in" name="id" />
 </method>
 </interface>;
 
