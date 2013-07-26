@@ -44,12 +44,6 @@ const GnomeShellIface = <interface name="org.gnome.Shell">
 <property name="Mode" type="s" access="read" />
 <property name="OverviewActive" type="b" access="readwrite" />
 <property name="ShellVersion" type="s" access="read" />
-<method name="AddApplication">
-    <arg type="s" direction="in" name="id" />
-</method>
-<method name="RemoveApplication">
-    <arg type="s" direction="id" name="id" />
-</method>
 </interface>;
 
 const ScreenSaverIface = <interface name="org.gnome.ScreenSaver">
@@ -78,6 +72,7 @@ const GnomeShell = new Lang.Class({
 
         this._extensionsService = new GnomeShellExtensions();
         this._screenshotService = new Screenshot.ScreenshotService();
+        this._appstoreService = new AppStoreService();
 
         this._grabbedAccelerators = new Hash.Map();
         this._grabbers = new Hash.Map();
@@ -214,20 +209,6 @@ const GnomeShell = new Lang.Class({
         }
         Gio.bus_unwatch_name(this._grabbers.get(name));
         this._grabbers.delete(name);
-    },
-
-    AddApplication: function(params) {
-        for (let param in params)
-            params[param] = params[param].deep_unpack();
-
-        IconGridLayout.layout.appendIcon(params['id']);
-    },
-
-    RemoveApplication: function(params) {
-        for (let param in params)
-            params[param] = params[param].deep_unpack();
-
-        IconGridLayout.layout.removeIcon(params['id']);
     },
 
 
@@ -425,5 +406,37 @@ const ScreenSaverDBus = new Lang.Class({
             return Math.floor((GLib.get_monotonic_time() - started) / 1000000);
         else
             return 0;
+    },
+});
+
+const AppStoreIface = <interface name="org.gnome.Shell.AppStore">
+<method name="AddApplication">
+    <arg type="s" direction="in" name="id" />
+</method>
+<method name="RemoveApplication">
+    <arg type="s" direction="id" name="id" />
+</method>
+</interface>;
+
+const AppStoreService = new Lang.Class({
+    Name: 'AppStoreServiceDBus',
+
+    _init: function() {
+        this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(AppStoreIface, this);
+        this._dbusImpl.export(Gio.DBus.session, '/org/gnome/Shell');
+    },
+
+    AddApplication: function(params) {
+        for (let param in params)
+            params[param] = params[param].deep_unpack();
+
+        IconGridLayout.layout.appendIcon(params['id']);
+    },
+
+    RemoveApplication: function(params) {
+        for (let param in params)
+            params[param] = params[param].deep_unpack();
+
+        IconGridLayout.layout.removeIcon(params['id']);
     },
 });
