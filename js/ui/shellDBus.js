@@ -426,17 +426,11 @@ const AppStoreService = new Lang.Class({
         this._dbusImpl.export(Gio.DBus.session, '/org/gnome/Shell');
     },
 
-    AddApplication: function(params) {
-        for (let param in params)
-            params[param] = params[param].deep_unpack();
-
-        IconGridLayout.layout.appendIcon(params['id']);
+    AddApplication: function(id) {
+        IconGridLayout.layout.appendIcon(id);
     },
 
-    RemoveApplication: function(params) {
-        for (let param in params)
-            params[param] = params[param].deep_unpack();
-
-        IconGridLayout.layout.removeIcon(params['id']);
+    RemoveApplication: function(id) {
+        IconGridLayout.layout.removeIcon(id);
     },
 });
