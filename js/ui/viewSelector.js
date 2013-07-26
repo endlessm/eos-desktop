@@ -187,6 +187,7 @@ const ViewSelector = new Lang.Class({
 
         let page = new St.Bin({ child: actor,
                                 opacity: 0,
+                                visible: false,
                                 x_align: St.Align.START,
                                 y_align: St.Align.START,
                                 x_fill: true,
