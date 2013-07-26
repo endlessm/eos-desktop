@@ -1670,7 +1670,7 @@ const AppStoreIcon = new Lang.Class({
         let canDelete = false;
         let filename = item.get_filename();
         let userDir = GLib.get_user_data_dir();
-        if (filename && userDir && filename.startsWith(userDir)) {
+        if (filename && userDir && GLib.str_has_prefix(filename, userDir)) {
             canDelete = true;
         }
         return canDelete;
