@@ -199,6 +199,8 @@ const LayoutManager = new Lang.Class({
                                         trackFullscreen: true });
         this.panelBox.connect('allocation-changed',
                               Lang.bind(this, this._panelBoxChanged));
+        this.panelBox.connect('notify::visible',
+                              Lang.bind(this, this._updateTrayBox));
 
         this.keyboardBox = new St.BoxLayout({ name: 'keyboardBox',
                                               reactive: true,
@@ -392,6 +394,14 @@ const LayoutManager = new Lang.Class({
         }
     },
 
+    _updateTrayBox: function() {
+        let panelHeight = this.panelBox.visible ? this.panelBox.height : 0;
+
+        this.trayBox.set_position(this.bottomMonitor.x,
+                                  this.bottomMonitor.y + this.bottomMonitor.height - panelHeight);
+        this.trayBox.set_size(this.bottomMonitor.width, -1);
+    },
+
     _updateBoxes: function() {
         this.screenShieldGroup.set_position(0, 0);
         this.screenShieldGroup.set_size(global.screen_width, global.screen_height);
@@ -402,9 +412,7 @@ const LayoutManager = new Lang.Class({
         if (this.keyboardIndex < 0)
             this.keyboardIndex = this.primaryIndex;
 
-        this.trayBox.set_position(this.bottomMonitor.x,
-                                  this.bottomMonitor.y + this.bottomMonitor.height - this.panelBox.height);
-        this.trayBox.set_size(this.bottomMonitor.width, -1);
+        this._updateTrayBox();
     },
 
     _panelBoxChanged: function() {
@@ -415,8 +423,7 @@ const LayoutManager = new Lang.Class({
             corner.setBarrierSize(size);
         });
 
-        this.trayBox.set_position(this.bottomMonitor.x,
-                                  this.bottomMonitor.y + this.bottomMonitor.height - size);
+        this._updateTrayBox();
     },
 
     _updatePanelBarrier: function() {
