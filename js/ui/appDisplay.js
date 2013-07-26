@@ -54,6 +54,7 @@ const SPLASH_SCREEN_FADE_OUT = 0.2;
 const SPLASH_SCREEN_COMPLETE_TIME = 250;
 
 const EOS_APP_STORE_ID = 'eos-app-store.desktop';
+const ALL_VIEW_ID = '';
 
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
@@ -655,7 +656,7 @@ const AllView = new Lang.Class({
     },
 
     getViewId: function() {
-        return '';
+        return ALL_VIEW_ID;
     },
 
     _appStoreWindowsChanged: function() {
@@ -1069,7 +1070,7 @@ const FolderIcon = new Lang.Class({
 
     handleIconDrop: function(source) {
         // Move the source icon into this folder
-        IconGridLayout.layout.repositionIcon(source.getId(), null, this.getId());
+        IconGridLayout.layout.appendIcon(source.getId(), null, this.getId());
         return true;
     },
 

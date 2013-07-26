@@ -6,6 +6,7 @@ const Lang = imports.lang;
 const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 
+const AppDisplay = imports.ui.appDisplay;
 const Config = imports.misc.config;
 const ExtensionSystem = imports.ui.extensionSystem;
 const ExtensionDownloader = imports.ui.extensionDownloader;
@@ -427,7 +428,7 @@ const AppStoreService = new Lang.Class({
     },
 
     AddApplication: function(id) {
-        IconGridLayout.layout.appendIcon(id);
+        IconGridLayout.layout.appendIcon(id, AppDisplay.ALL_VIEW_ID);
     },
 
     RemoveApplication: function(id) {

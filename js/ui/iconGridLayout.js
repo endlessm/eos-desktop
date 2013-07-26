@@ -52,8 +52,8 @@ const IconGridLayout = new Lang.Class({
         return id && this._iconTree[id];
     },
 
-    appendIcon: function(id) {
-        this.repositionIcon(id, null, '');
+    appendIcon: function(id, folderId) {
+        this.repositionIcon(id, null, folderId);
     },
 
     removeIcon: function(id) {
