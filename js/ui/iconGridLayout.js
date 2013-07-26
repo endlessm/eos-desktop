@@ -52,6 +52,14 @@ const IconGridLayout = new Lang.Class({
         return id && this._iconTree[id];
     },
 
+    appendIcon: function(id, folderId) {
+        this.repositionIcon(id, null, folderId);
+    },
+
+    removeIcon: function(id) {
+        this.repositionIcon(id, null, null);
+    },
+
     repositionIcon: function(id, insertId, newFolder) {
         let icons;
         for (let i in this._iconTree) {

@@ -54,6 +54,7 @@ const SPLASH_SCREEN_FADE_OUT = 0.2;
 const SPLASH_SCREEN_COMPLETE_TIME = 250;
 
 const EOS_APP_STORE_ID = 'eos-app-store.desktop';
+const ALL_VIEW_ID = '';
 
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
@@ -649,7 +650,7 @@ const AllView = new Lang.Class({
     },
 
     getViewId: function() {
-        return '';
+        return ALL_VIEW_ID;
     },
 
     addFolderPopup: function(popup) {
@@ -1057,7 +1058,7 @@ const FolderIcon = new Lang.Class({
 
     handleIconDrop: function(source) {
         // Move the source icon into this folder
-        IconGridLayout.layout.repositionIcon(source.getId(), null, this.getId());
+        IconGridLayout.layout.appendIcon(source.getId(), null, this.getId());
         return true;
     },
 
@@ -1640,7 +1641,7 @@ const AppStoreIcon = new Lang.Class({
             }),
             onAccept: Lang.bind(this, function() {
                 this._restoreTrash(trashPopup, draggedSource);
-                IconGridLayout.layout.repositionIcon(draggedSource.getId(), 0, null);
+                IconGridLayout.layout.removeIcon(draggedSource.getId());
                 if (deleteCallback) {
                     deleteCallback();
                 }
@@ -1663,7 +1664,7 @@ const AppStoreIcon = new Lang.Class({
         let canDelete = false;
         let filename = item.get_filename();
         let userDir = GLib.get_user_data_dir();
-        if (filename && userDir && filename.startsWith(userDir)) {
+        if (filename && userDir && GLib.str_has_prefix(filename, userDir)) {
             canDelete = true;
         }
         return canDelete;
