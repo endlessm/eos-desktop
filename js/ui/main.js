@@ -238,8 +238,8 @@ let _checkWorkspacesId = 0;
 const LAST_WINDOW_GRACE_TIME = 1000;
 
 function _windowCreated(metaDisplay, metaWindow) {
-    // Don't maximize if full screen windows are disabled
-    if (global.settings.get_boolean(WindowManager.NO_DEFAULT_FULLSCREEN_KEY)) {
+    // Don't maximize if key to disable default maximize is set
+    if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
         return;
     }
 

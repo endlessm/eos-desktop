@@ -1176,8 +1176,8 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
-        // Don't show splash screen if full screen windows are disabled
-        if (global.settings.get_boolean(WindowManager.NO_DEFAULT_FULLSCREEN_KEY)) {
+        // Don't show splash screen if default maximize is disabled
+        if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
             return;
         }
 
