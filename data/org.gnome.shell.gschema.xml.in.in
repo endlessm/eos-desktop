@@ -11,6 +11,18 @@
         using the Alt-F2 dialog.
       </_description>
     </key>
+      <key name="no-default-fullscreen" type="b">
+      <default>false</default>
+      <_summary>
+        Prevent apps from being automatically maximized on launch
+      </_summary>
+      <_description>
+        Makes window management more like standard Gnome.
+        Hides application splash screens, prevents applications from being forced
+        to open maximized, and does not automatically switch to the app selector
+        when a window is minimized.
+      </_description>
+    </key>
     <key name="enabled-extensions" type="as">
       <default>[]</default>
       <_summary>Uuids of extensions to enable</_summary>

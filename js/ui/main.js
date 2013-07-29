@@ -238,6 +238,11 @@ let _checkWorkspacesId = 0;
 const LAST_WINDOW_GRACE_TIME = 1000;
 
 function _windowCreated(metaDisplay, metaWindow) {
+    // Don't maximize if full screen windows are disabled
+    if (global.settings.get_boolean(WindowManager.NO_DEFAULT_FULLSCREEN_KEY)) {
+        return;
+    }
+
     let tracker = Shell.WindowTracker.get_default();
     if (tracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
         metaWindow.maximize(Meta.MaximizeFlags.HORIZONTAL |
