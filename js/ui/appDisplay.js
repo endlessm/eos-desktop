@@ -1176,6 +1176,11 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
+        // Don't show splash screen if default maximize is disabled
+        if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
+            return;
+        }
+
         this._animateSplash();
 
         // We can't fully trust windows-changed to be emitted with the

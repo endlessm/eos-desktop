@@ -15,6 +15,7 @@ const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
+const NO_DEFAULT_MAXIMIZE_KEY = 'no-default-maximize';
 const WINDOW_ANIMATION_TIME = 0.25;
 const DIM_BRIGHTNESS = -0.3;
 const DIM_TIME = 0.500;
@@ -231,6 +232,11 @@ const WindowManager = new Lang.Class({
     },
 
     _minimizeOtherWindowsConditionally : function(metaWindow) {
+        // Don't minimize other windows if default maximize is disabled
+        if (global.settings.get_boolean(NO_DEFAULT_MAXIMIZE_KEY)) {
+            return;
+        }
+
         // If the current window is maximized,
         // closing or minimizing it should display the app selector,
         // so we need to minimize all other windows.
