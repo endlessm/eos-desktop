@@ -126,6 +126,11 @@ const BackgroundCache = new Lang.Class({
     },
 
     removeImageContent: function(content) {
+        let filename = content.get_filename();
+
+        if (filename && this._fileMonitors[filename])
+            delete this._fileMonitors[filename];
+
         this._removeContent(this._images, content);
     },
 
@@ -137,23 +142,20 @@ const BackgroundCache = new Lang.Class({
                                         cancellable: null,
                                         onFinished: null });
 
-        for (let i = 0; i < this._pendingFileLoads.length; i++) {
-            if (this._pendingFileLoads[i].filename == params.filename &&
-                this._pendingFileLoads[i].style == params.style) {
-                this._pendingFileLoads[i].callers.push({ shouldCopy: true,
-                                                         monitorIndex: params.monitorIndex,
-                                                         effects: params.effects,
-                                                         onFinished: params.onFinished });
-                return;
-            }
-        }
+        let fileLoad = { filename: params.filename,
+                         style: params.style,
+                         shouldCopy: false,
+                         monitorIndex: params.monitorIndex,
+                         effects: params.effects,
+                         onFinished: params.onFinished,
+                         cancellable: new Gio.Cancellable(), };
+        this._pendingFileLoads.push(fileLoad);
 
-        this._pendingFileLoads.push({ filename: params.filename,
-                                      style: params.style,
-                                      callers: [{ shouldCopy: false,
-                                                  monitorIndex: params.monitorIndex,
-                                                  effects: params.effects,
-                                                  onFinished: params.onFinished }] });
+        if (params.cancellable) {
+            params.cancellable.connect(Lang.bind(this, function(c) {
+               fileLoad.cancellable.cancel();
+            }));
+        }
 
         let content = new Meta.Background({ meta_screen: global.screen,
                                             monitor: params.monitorIndex,
@@ -161,9 +163,19 @@ const BackgroundCache = new Lang.Class({
 
         content.load_file_async(params.filename,
                                 params.style,
-                                params.cancellable,
+                                fileLoad.cancellable,
                                 Lang.bind(this,
                                           function(object, result) {
+                                              if (fileLoad.cancellable.is_cancelled()) {
+                                                  if (params.cancellable && params.cancellable.is_cancelled()) {
+                                                      if (params.onFinished)
+                                                          params.onFinished(null);
+                                                      this._removePendingFileLoad(fileLoad);
+                                                      return;
+                                                  }
+                                                  return;
+                                              }
+
                                               try {
                                                   content.load_file_finish(result);
 
@@ -173,27 +185,39 @@ const BackgroundCache = new Lang.Class({
                                                   content = null;
                                               }
 
+                                              let needsCopy = false;
                                               for (let i = 0; i < this._pendingFileLoads.length; i++) {
                                                   let pendingLoad = this._pendingFileLoads[i];
                                                   if (pendingLoad.filename != params.filename ||
                                                       pendingLoad.style != params.style)
                                                       continue;
 
-                                                  for (let j = 0; j < pendingLoad.callers.length; j++) {
-                                                      if (pendingLoad.callers[j].onFinished) {
-                                                          if (content && pendingLoad.callers[j].shouldCopy) {
-                                                              content = object.copy(pendingLoad.callers[j].monitorIndex,
-                                                                                    pendingLoad.callers[j].effects);
+                                                  if (pendingLoad.cancellable.is_cancelled())
+                                                      continue;
 
-                                                          }
-
-                                                          pendingLoad.callers[j].onFinished(content);
+                                                  pendingLoad.cancellable.cancel();
+                                                  if (pendingLoad.onFinished) {
+                                                      if (content && needsCopy) {
+                                                          content = object.copy(pendingLoad.monitorIndex,
+                                                                                pendingLoad.effects);
                                                       }
+
+                                                      needsCopy = true;
+                                                      pendingLoad.onFinished(content);
                                                   }
 
                                                   this._pendingFileLoads.splice(i, 1);
                                               }
                                           }));
+    },
+
+    _removePendingFileLoad: function(fileLoad) {
+        for (let i = 0; i < this._pendingFileLoads.length; i++) {
+            if (this._pendingFileLoads[i].cancellable == fileLoad.cancellable) {
+                this._pendingFileLoads.splice(i, 1);
+                break;
+            }
+        }
     },
 
     getImageContent: function(params) {
@@ -241,6 +265,8 @@ const BackgroundCache = new Lang.Class({
         } else {
             this._loadImageContent({ filename: params.filename,
                                      style: params.style,
+                                     effects: params.effects,
+                                     monitorIndex: params.monitorIndex,
                                      cancellable: params.cancellable,
                                      onFinished: params.onFinished });
 
@@ -424,7 +450,7 @@ const Background = new Lang.Class({
         content.brightness = this._brightness;
         content.vignette_sharpness = this._vignetteSharpness;
 
-        this._cache.removeImageContent(content);
+        this._cache.removeImageContent(this._images[index].content);
         this._images[index].content = content;
         this._watchCacheFile(filename);
     },
@@ -740,11 +766,15 @@ const BackgroundManager = new Lang.Class({
                                    time: FADE_ANIMATION_TIME,
                                    transition: 'easeOutQuad',
                                    onComplete: Lang.bind(this, function() {
-                                       if (this.background == background) {
+                                       if (this._newBackground == newBackground) {
                                            this.background = newBackground;
                                            this._newBackground = null;
-                                           background.actor.destroy();
+                                       } else {
+                                           newBackground.actor.destroy();
                                        }
+
+                                       background.actor.destroy();
+
                                        this.emit('changed');
                                    })
                                  });
