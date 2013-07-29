@@ -204,8 +204,7 @@ shell_app_create_icon_texture (ShellApp   *app,
   if (ret == NULL)
     {
       executable = g_app_info_get_executable (info);
-      if (g_strcmp0 (executable, "epiphany") == 0 ||
-          g_strcmp0 (executable, "epiphany-browser") == 0)
+      if (g_strcmp0 (executable, "eos-browser") == 0)
         icon = g_themed_icon_new ("generic-link");
       else
         icon = g_themed_icon_new ("generic-app");
