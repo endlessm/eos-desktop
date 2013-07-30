@@ -420,7 +420,6 @@ const ScrolledIconList = new Lang.Class({
         this._iconSpacing = 0;
 
         this._iconOffset = 0;
-        this._numberOfApps = 0;
         this._appsPerPage = -1;
 
         this._container.connect('style-changed', Lang.bind(this, this._updateStyleConstants));
@@ -437,7 +436,6 @@ const ScrolledIconList = new Lang.Class({
 
             let newChild = new AppIconButton(app, this._iconSize);
             this._runningApps.set(app, newChild);
-            this._numberOfApps++;
             this._container.add(newChild.actor);
         }
 
@@ -454,16 +452,17 @@ const ScrolledIconList = new Lang.Class({
 
     getNaturalWidth: function() {
         let iconArea = 0;
-        if (this._numberOfApps > 0) {
-            let iconSpacing = this._iconSpacing * (this._numberOfApps + 1);
-            iconArea = this._iconSize * this._numberOfApps + iconSpacing;
+        let nApps = this._runningApps.size();
+        if (nApps > 0) {
+            let iconSpacing = this._iconSpacing * (nApps + 1);
+            iconArea = this._iconSize * nApps + iconSpacing;
         }
         return iconArea;
     },
 
     _updatePage: function() {
         // Clip the values of the iconOffset
-        let lastIconOffset = this._numberOfApps - 1;
+        let lastIconOffset = this._runningApps.size() - 1;
         let movableIconsPerPage = this._appsPerPage - 1;
         this._iconOffset = Math.max(0, this._iconOffset);
         this._iconOffset = Math.min(lastIconOffset - movableIconsPerPage, this._iconOffset);
@@ -503,7 +502,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     isForwardAllowed: function() {
-        return this._iconOffset < this._numberOfApps - this._appsPerPage;
+        return this._iconOffset < this._runningApps.size() - this._appsPerPage;
     },
 
     calculateNaturalSize: function(forWidth) {
@@ -545,7 +544,6 @@ const ScrolledIconList = new Lang.Class({
         case Shell.AppState.STARTING:
             let newChild = new AppIconButton(app, this._iconSize);
             this._runningApps.set(app, newChild);
-            this._numberOfApps++;
             this._container.add_actor(newChild.actor);
             this._ensureIsVisible(app);
             break;
@@ -559,7 +557,6 @@ const ScrolledIconList = new Lang.Class({
             if (!this._runningApps.has(app)) {
                 let newChild = new AppIconButton(app, this._iconSize);
                 this._runningApps.set(app, newChild);
-                this._numberOfApps++;
                 this._container.add_actor(newChild.actor);
             }
             this._ensureIsVisible(app);
@@ -570,7 +567,6 @@ const ScrolledIconList = new Lang.Class({
             if (oldChild) {
                 this._container.remove_actor(oldChild.actor);
                 this._runningApps.delete(app);
-                this._numberOfApps--;
             }
             break;
         }
