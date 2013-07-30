@@ -280,7 +280,10 @@ const AppIconButton = new Lang.Class({
             function() {
                 // The multiple windows case is handled in button-press-event
                 let windows = app.get_windows();
-                if (windows.length == 1) {
+                if (windows.length == 0) {
+                    app.activate();
+                    Main.overview.hide();
+                } else if (windows.length == 1) {
                     if (windows[0].has_focus() && !Main.overview.visible) {
                         windows[0].minimize();
                     } else {
@@ -429,18 +432,24 @@ const ScrolledIconList = new Lang.Class({
         this._container.connect('style-changed', Lang.bind(this, this._updateStyleConstants));
 
         let appSys = Shell.AppSystem.get_default();
+        this._runningApps = new Hash.Map();
+
+        let browserApp = appSys.lookup_app('eos-app-eos-browser.desktop');
+        let browserChild = new AppIconButton(browserApp, this._iconSize);
+        this._runningApps.set(browserApp, browserChild);
+        this._container.add(browserChild.actor);
 
         // Update for any apps running before the system started
         // (after a crash or a restart)
         let currentlyRunning = appSys.get_running();
-        this._runningApps = new Hash.Map();
-
         for (let i = 0; i < currentlyRunning.length; i++) {
             let app = currentlyRunning[i];
 
             let newChild = new AppIconButton(app, this._iconSize);
-            this._runningApps.set(app, newChild);
-            this._container.add(newChild.actor);
+            if (!this._runningApps.has(app)) {
+                this._runningApps.set(app, newChild);
+                this._container.add(newChild.actor);
+            }
         }
 
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
@@ -546,9 +555,11 @@ const ScrolledIconList = new Lang.Class({
         let state = app.state;
         switch(state) {
         case Shell.AppState.STARTING:
-            let newChild = new AppIconButton(app, this._iconSize);
-            this._runningApps.set(app, newChild);
-            this._container.add_actor(newChild.actor);
+            if (!this._runningApps.has(app)) {
+                let newChild = new AppIconButton(app, this._iconSize);
+                this._runningApps.set(app, newChild);
+                this._container.add_actor(newChild.actor);
+            }
             this._ensureIsVisible(app);
             break;
 
@@ -567,6 +578,11 @@ const ScrolledIconList = new Lang.Class({
             break;
 
         case Shell.AppState.STOPPED:
+            let browserApp = appSys.lookup_app('eos-app-eos-browser.desktop');
+            if (app == browserApp) {
+                break;
+            }
+
             let oldChild = this._runningApps.get(app);
             if (oldChild) {
                 this._container.remove_actor(oldChild.actor);
