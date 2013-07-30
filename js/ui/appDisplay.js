@@ -46,6 +46,9 @@ const ACTIVE_GRID_OPACITY = 255;
 const INACTIVE_GRID_TRANSITION = 'easeOutQuad';
 const ACTIVE_GRID_TRANSITION = 'easeInQuad';
 
+const INACTIVE_GRID_SATURATION = 1;
+const ACTIVE_GRID_SATURATION = 0;
+
 const DRAG_SCROLL_PIXELS_PER_SEC = 800;
 
 const SPLASH_CIRCLE_INITIAL_TIMEOUT = 100;
@@ -681,15 +684,20 @@ const AllView = new Lang.Class({
         for (let idx = 0; idx < icons.length; idx++) {
             let opacity = ACTIVE_GRID_OPACITY;
             let transition = ACTIVE_GRID_TRANSITION;
+            let saturation = ACTIVE_GRID_SATURATION;
 
             if (folderOpen && !icons[idx].actor.checked) {
                 opacity = INACTIVE_GRID_OPACITY;
                 transition = INACTIVE_GRID_TRANSITION;
+                saturation = INACTIVE_GRID_SATURATION;
             }
 
             Tweener.addTween(icons[idx].actor, { opacity: opacity,
                                                  time: BoxPointer.POPUP_ANIMATION_TIME,
                                                  transition: transition });
+            Tweener.addTween(icons[idx].saturation, { factor: saturation,
+                                                      time: BoxPointer.POPUP_ANIMATION_TIME,
+                                                      transition: transition });
         }
     },
 
@@ -847,6 +855,9 @@ const ViewIcon = new Lang.Class({
         this.actor.can_focus = true;
 
         this.actor._delegate = this;
+
+        this.saturation = new Clutter.DesaturateEffect({ factor: 0 });
+        this.actor.add_effect(this.saturation);
     },
 
     handleViewDragBegin: function() {
