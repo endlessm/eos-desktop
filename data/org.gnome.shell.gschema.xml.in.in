@@ -23,6 +23,15 @@
         when a window is minimized.
       </_description>
     </key>
+    <key name="enable-app-store" type="b">
+      <default>true</default>
+      <_summary>
+        Whether the app store is displayed
+      </_summary>
+      <_description>
+        Whether the application grid displays the app store icon.
+      </_description>
+    </key>
     <key name="enabled-extensions" type="as">
       <default>[]</default>
       <_summary>Uuids of extensions to enable</_summary>

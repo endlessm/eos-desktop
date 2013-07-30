@@ -53,6 +53,7 @@ const SPLASH_SCREEN_TIMEOUT = 700;
 const SPLASH_SCREEN_FADE_OUT = 0.2;
 const SPLASH_SCREEN_COMPLETE_TIME = 250;
 
+const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'eos-app-store.desktop';
 const ALL_VIEW_ID = '';
 
@@ -645,7 +646,9 @@ const AllView = new Lang.Class({
 
     getLayoutIds: function() {
         let ids = this.parent();
-        ids.push(EOS_APP_STORE_ID);
+        if (global.settings.get_boolean(ENABLE_APP_STORE_KEY)) {
+            ids.push(EOS_APP_STORE_ID);
+        }
         return ids;
     },
 
@@ -809,6 +812,9 @@ const AppDisplay = new Lang.Class({
         }));
 
         IconGridLayout.layout.connect('changed', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+        global.settings.connect('changed::enable-app-store', Lang.bind(this, function() {
             Main.queueDeferredWork(this._allAppsWorkId);
         }));
 
