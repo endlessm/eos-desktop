@@ -833,13 +833,20 @@ const AppDisplay = new Lang.Class({
 const ViewIcon = new Lang.Class({
     Name: 'ViewIcon',
 
-    _init: function(parentView) {
+    _init: function(parentView, buttonParams) {
         this.parentView = parentView;
 
         this.canDrop = false;
         this.blockHandler = false;
 
         this._origIcon = null;
+
+        this.actor = new St.Button(buttonParams);
+        this.actor.x_fill = true;
+        this.actor.y_fill = true;
+        this.actor.can_focus = true;
+
+        this.actor._delegate = this;
     },
 
     handleViewDragBegin: function() {
@@ -898,18 +905,12 @@ const FolderIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init: function(dirInfo, parentView) {
-        this.parent(parentView);
+        this.parent(parentView, { style_class: 'app-well-app app-folder',
+                                  button_mask: St.ButtonMask.ONE,
+                                  toggle_mode: true });
         this.canDrop = true;
 
         this.folder = dirInfo;
-
-        this.actor = new St.Button({ style_class: 'app-well-app app-folder',
-                                     button_mask: St.ButtonMask.ONE,
-                                     toggle_mode: true,
-                                     can_focus: true,
-                                     x_fill: true,
-                                     y_fill: true });
-        this.actor._delegate = this;
 
         let label = this.getName();
         this.icon = new IconGrid.BaseIcon(label,
@@ -1343,18 +1344,11 @@ const AppIcon = new Lang.Class({
                                         isDraggable: true,
                                         parentView: null });
 
-        this.parent(params.parentView);
+        this.parent(params.parentView, { style_class: 'app-well-app',
+                                         button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO });
 
         this.app = app;
         this._showMenu = params.showMenu;
-
-        this.actor = new St.Button({ style_class: 'app-well-app',
-                                     reactive: true,
-                                     button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO,
-                                     can_focus: true,
-                                     x_fill: true,
-                                     y_fill: true });
-        this.actor._delegate = this;
 
         if (!iconParams)
             iconParams = {};
