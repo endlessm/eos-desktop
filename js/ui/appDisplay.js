@@ -841,7 +841,7 @@ const AppDisplay = new Lang.Class({
 const ViewIcon = new Lang.Class({
     Name: 'ViewIcon',
 
-    _init: function(parentView, buttonParams) {
+    _init: function(parentView, buttonParams, iconParams) {
         this.parentView = parentView;
 
         this.canDrop = false;
@@ -858,6 +858,19 @@ const ViewIcon = new Lang.Class({
 
         this.saturation = new Clutter.DesaturateEffect({ factor: 0 });
         this.actor.add_effect(this.saturation);
+
+        this.icon = new IconGrid.BaseIcon(this.getName(), iconParams);
+        if (iconParams['showLabel'] !== false) {
+            this.icon.label.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
+            this.icon.label.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
+        }
+        this.actor.set_child(this.icon.actor);
+
+        this.actor.label_actor = this.icon.label;
+    },
+
+    _onLabelCancel: function() {
+        this.actor.sync_hover();
     },
 
     handleViewDragBegin: function() {
@@ -916,22 +929,16 @@ const FolderIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init: function(dirInfo, parentView) {
-        this.parent(parentView, { style_class: 'app-well-app app-folder',
-                                  button_mask: St.ButtonMask.ONE,
-                                  toggle_mode: true });
-        this.canDrop = true;
+        let buttonParams = { style_class: 'app-well-app app-folder',
+                             button_mask: St.ButtonMask.ONE,
+                             toggle_mode: true };
+        let iconParams = { createIcon: Lang.bind(this, this._createIcon),
+                           editableLabel: true };
 
         this.folder = dirInfo;
+        this.parent(parentView, buttonParams, iconParams);
 
-        let label = this.getName();
-        this.icon = new IconGrid.BaseIcon(label,
-                                          { createIcon: Lang.bind(this, this._createIcon),
-                                            editableLabel: true });
-        this.icon.label.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
-        this.icon.label.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
-
-        this.actor.set_child(this.icon.actor);
-        this.actor.label_actor = this.icon.label;
+        this.canDrop = true;
 
         this.view = new FolderView(this);
         this.view.actor.reactive = false;
@@ -961,10 +968,6 @@ const FolderIcon = new Lang.Class({
             function () {
                 Main.overview.endItemDrag(this);
             }));
-    },
-
-    _onLabelCancel: function() {
-        this.actor.sync_hover();
     },
 
     _onLabelUpdate: function(label, newText) {
@@ -1355,25 +1358,20 @@ const AppIcon = new Lang.Class({
                                         isDraggable: true,
                                         parentView: null });
 
-        this.parent(params.parentView, { style_class: 'app-well-app',
-                                         button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO });
-
         this.app = app;
         this._showMenu = params.showMenu;
 
-        if (!iconParams)
+        if (!iconParams) {
             iconParams = {};
+        }
 
         iconParams['createIcon'] = Lang.bind(this, this._createIcon);
         iconParams['editableLabel'] = true;
-        this.icon = new IconGrid.BaseIcon(this.getName(), iconParams);
-        if (iconParams['showLabel'] !== false) {
-            this.icon.label.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
-            this.icon.label.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
-        }
-        this.actor.set_child(this.icon.actor);
 
-        this.actor.label_actor = this.icon.label;
+        let buttonParams = { style_class: 'app-well-app',
+                             button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
+
+        this.parent(params.parentView, buttonParams, iconParams);
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
         this.actor.connect('clicked', Lang.bind(this, this._onClicked));
@@ -1435,10 +1433,6 @@ const AppIcon = new Lang.Class({
         } else {
             this.actor.remove_style_class_name('running');
         }
-    },
-
-    _onLabelCancel: function() {
-        this.actor.sync_hover();
     },
 
     _onLabelUpdate: function(label, newText) {
