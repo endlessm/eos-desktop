@@ -312,6 +312,10 @@ const AppIconButton = new Lang.Class({
     },
 
     _updateIconGeometry: function() {
+        if (!this.actor.mapped) {
+            return;
+        }
+
         let rect = new Meta.Rectangle();
         [rect.x, rect.y] = this.actor.get_transformed_position();
         [rect.width, rect.height] = this.actor.get_transformed_size();
