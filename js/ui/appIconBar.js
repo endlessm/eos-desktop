@@ -16,6 +16,7 @@ const Hash = imports.misc.hash;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
+const Util = imports.misc.util;
 
 const MAX_OPACITY = 255;
 
@@ -434,7 +435,7 @@ const ScrolledIconList = new Lang.Class({
         let appSys = Shell.AppSystem.get_default();
         this._runningApps = new Hash.Map();
 
-        let browserApp = appSys.lookup_app('eos-app-eos-browser.desktop');
+        let browserApp = Util.getBrowserApp();
         let browserChild = new AppIconButton(browserApp, this._iconSize);
         this._runningApps.set(browserApp, browserChild);
         this._container.add(browserChild.actor);
@@ -578,7 +579,7 @@ const ScrolledIconList = new Lang.Class({
             break;
 
         case Shell.AppState.STOPPED:
-            let browserApp = appSys.lookup_app('eos-app-eos-browser.desktop');
+            let browserApp = Util.getBrowserApp();
             if (app == browserApp) {
                 break;
             }
