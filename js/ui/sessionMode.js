@@ -90,9 +90,9 @@ const _modes = {
         components: ['networkAgent', 'polkitAgent', 'telepathyClient',
                      'keyring', 'recorder', 'autorunManager', 'automountManager'],
         panel: {
-            left: ['appIcons'],
+            left: ['userMenu', 'appIcons'],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
-                    'network', 'battery', 'socialBar', 'userMenu']
+                    'network', 'battery', 'socialBar']
         }
     }
 };
