@@ -2322,7 +2322,7 @@ const MessageTray = new Lang.Class({
 
         this.emit('showing');
         this._tween(this.actor, '_trayState', State.SHOWN,
-                    { y: -this.actor.height,
+                    { y: -this.actor.height - Main.layoutManager.panelBox.height,
                       time: ANIMATION_TIME,
                       transition: 'easeOutQuad'
                     });
