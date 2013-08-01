@@ -10,6 +10,8 @@ const Tweener = imports.ui.tweener;
 
 const SCROLL_TIME = 0.1;
 
+const BROWSER_DESKTOP_ENTRY = 'eos-app-eos-browser.desktop';
+
 // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
 const _balancedParens = '\\((?:[^\\s()<>]+|(?:\\(?:[^\\s()<>]+\\)))*\\)';
 const _leadingJunk = '[\\s`(\\[{\'\\"<\u00AB\u201C\u2018]';
@@ -309,4 +311,10 @@ function minimizeOtherWindows(metaWindow) {
             }
         });
     });
+}
+
+function getBrowserApp() {
+    let appSystem = Shell.AppSystem.get_default();
+    let browserApp = appSystem.lookup_app(BROWSER_DESKTOP_ENTRY);
+    return browserApp;
 }

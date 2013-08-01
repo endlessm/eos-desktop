@@ -218,8 +218,7 @@ function _initializeUI() {
 
                               // Start the browser, without exiting the overview,
                               // if it's not running already
-                              let appSystem = Shell.AppSystem.get_default();
-                              let browser = appSystem.lookup_app('eos-app-eos-browser.desktop');
+                              let browser = Util.getBrowserApp();
                               if (browser && browser.get_state() != Shell.AppState.RUNNING) {
                                   browser.activate();
                               }

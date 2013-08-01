@@ -16,6 +16,7 @@ const Hash = imports.misc.hash;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
+const Util = imports.misc.util;
 
 const MAX_OPACITY = 255;
 const MAX_ANGLE = 360;
@@ -291,7 +292,10 @@ const AppIconButton = new Lang.Class({
             function() {
                 // The multiple windows case is handled in button-press-event
                 let windows = app.get_windows();
-                if (windows.length == 1) {
+                if (windows.length == 0) {
+                    app.activate();
+                    Main.overview.hide();
+                } else if (windows.length == 1) {
                     if (windows[0].has_focus() && !Main.overview.visible) {
                         windows[0].minimize();
                     } else {
@@ -354,6 +358,10 @@ const AppIconButton = new Lang.Class({
     },
 
     _updateIconGeometry: function() {
+        if (!this.actor.mapped) {
+            return;
+        }
+
         let rect = new Meta.Rectangle();
         [rect.x, rect.y] = this.actor.get_transformed_position();
         [rect.width, rect.height] = this.actor.get_transformed_size();
@@ -462,25 +470,29 @@ const ScrolledIconList = new Lang.Class({
         this._iconSpacing = 0;
 
         this._iconOffset = 0;
-        this._numberOfApps = 0;
         this._appsPerPage = -1;
 
         this._container.connect('style-changed', Lang.bind(this, this._updateStyleConstants));
 
         let appSys = Shell.AppSystem.get_default();
+        this._runningApps = new Hash.Map();
+
+        let browserApp = Util.getBrowserApp();
+        let browserChild = new AppIconButton(browserApp, this._iconSize);
+        this._runningApps.set(browserApp, browserChild);
+        this._container.add(browserChild.actor);
 
         // Update for any apps running before the system started
         // (after a crash or a restart)
         let currentlyRunning = appSys.get_running();
-        this._runningApps = new Hash.Map();
-
         for (let i = 0; i < currentlyRunning.length; i++) {
             let app = currentlyRunning[i];
 
             let newChild = new AppIconButton(app, this._iconSize);
-            this._runningApps.set(app, newChild);
-            this._numberOfApps++;
-            this._container.add(newChild.actor);
+            if (!this._runningApps.has(app)) {
+                this._runningApps.set(app, newChild);
+                this._container.add(newChild.actor);
+            }
         }
 
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
@@ -496,16 +508,17 @@ const ScrolledIconList = new Lang.Class({
 
     getNaturalWidth: function() {
         let iconArea = 0;
-        if (this._numberOfApps > 0) {
-            let iconSpacing = this._iconSpacing * (this._numberOfApps + 1);
-            iconArea = this._iconSize * this._numberOfApps + iconSpacing;
+        let nApps = this._runningApps.size();
+        if (nApps > 0) {
+            let iconSpacing = this._iconSpacing * (nApps + 1);
+            iconArea = this._iconSize * nApps + iconSpacing;
         }
         return iconArea;
     },
 
     _updatePage: function() {
         // Clip the values of the iconOffset
-        let lastIconOffset = this._numberOfApps - 1;
+        let lastIconOffset = this._runningApps.size() - 1;
         let movableIconsPerPage = this._appsPerPage - 1;
         this._iconOffset = Math.max(0, this._iconOffset);
         this._iconOffset = Math.min(lastIconOffset - movableIconsPerPage, this._iconOffset);
@@ -545,7 +558,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     isForwardAllowed: function() {
-        return this._iconOffset < this._numberOfApps - this._appsPerPage;
+        return this._iconOffset < this._runningApps.size() - this._appsPerPage;
     },
 
     calculateNaturalSize: function(forWidth) {
@@ -585,10 +598,11 @@ const ScrolledIconList = new Lang.Class({
         let state = app.state;
         switch(state) {
         case Shell.AppState.STARTING:
-            let newChild = new AppIconButton(app, this._iconSize);
-            this._runningApps.set(app, newChild);
-            this._numberOfApps++;
-            this._container.add_actor(newChild.actor);
+            if (!this._runningApps.has(app)) {
+                let newChild = new AppIconButton(app, this._iconSize);
+                this._runningApps.set(app, newChild);
+                this._container.add_actor(newChild.actor);
+            }
             this._ensureIsVisible(app);
             break;
 
@@ -601,18 +615,21 @@ const ScrolledIconList = new Lang.Class({
             if (!this._runningApps.has(app)) {
                 let newChild = new AppIconButton(app, this._iconSize);
                 this._runningApps.set(app, newChild);
-                this._numberOfApps++;
                 this._container.add_actor(newChild.actor);
             }
             this._ensureIsVisible(app);
             break;
 
         case Shell.AppState.STOPPED:
+            let browserApp = Util.getBrowserApp();
+            if (app == browserApp) {
+                break;
+            }
+
             let oldChild = this._runningApps.get(app);
             if (oldChild) {
                 this._container.remove_actor(oldChild.actor);
                 this._runningApps.delete(app);
-                this._numberOfApps--;
             }
             break;
         }
