@@ -21,8 +21,8 @@
 
 /* default text style */
 stage {
-    font-family: cantarell, sans-serif;
-    font-size: 11pt;
+    font-family: sourcesanspro, sans-serif;
+    font-size: 13pt;
     color: white;
 }
 
@@ -39,7 +39,7 @@ stage {
 /* small */
 .app-well-menu,
 .run-dialog-error-label {
-    font-size: 9pt;
+    font-size: 11pt;
 }
 
 /* small bold */
@@ -49,7 +49,7 @@ stage {
 .overview-icon.dnd,
 .app-well-app > .overview-icon,
 .show-apps > .overview-icon {
-    font-size: 9pt;
+    font-size: 11pt;
     font-weight: bold;
 }
 
@@ -357,7 +357,7 @@ StScrollBar StButton#vhandle:active {
 .modal-dialog StEntry {
     color: rgb(64, 64, 64);
     caret-color: rgb(64, 64, 64);
-    font-size: 12pt;
+    font-size: 14pt;
     caret-size: 1px;
     selected-color: white;
     padding: 4px 12px;
@@ -723,7 +723,7 @@ StScrollBar StButton#vhandle:active {
 
 #dash {
     color: #5f5f5f;
-    font-size: 9pt;
+    font-size: 11pt;
     padding: 4px 0px;
     background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(128, 128, 128, 0.4);
@@ -1071,7 +1071,7 @@ StScrollBar StButton#vhandle:active {
 
 .calendar-month-label {
     color: #888a85;
-    font-size: 9.5pt;
+    font-size: 11.5pt;
     font-weight: bold;
     padding-bottom: 8px;
     padding-top: 8px;
@@ -1121,7 +1121,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .calendar-day-base {
-    font-size: 9pt;
+    font-size: 11pt;
     text-align: center;
     width: 2.4em;
     height: 2.4em;
@@ -1132,7 +1132,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .calendar-day-base:active {
-    font-size: 9pt;
+    font-size: 11pt;
     background-color: #555555;
     color: white;
 }
@@ -1268,8 +1268,8 @@ StScrollBar StButton#vhandle:active {
 
 .trash-popup-label {
     padding-top: 20px;
-    font-size: 14px;
-    font-family: benton, sans-serif;
+    font-size: 16px;
+    font-family: sourcesanspro, sans-serif;
     font-weight: bold;
     color: #FFFFFFF;
     text-align: center;
@@ -1317,8 +1317,8 @@ StScrollBar StButton#vhandle:active {
 }
 
 .no-messages-label {
-    font-family: cantarell, sans-serif;
-    font-size: 11pt;
+    font-family: sourcesanspro, sans-serif;
+    font-size: 13pt;
     color: #999999;
 }
 
@@ -1331,7 +1331,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .notification, #notification-container {
-    font-size: 11pt;
+    font-size: 13pt;
     width: 34em;
 }
 
@@ -1522,7 +1522,7 @@ StScrollBar StButton#vhandle:active {
 
 .chat-meta-message {
     padding-left: 4px;
-    font-size: 9pt;
+    font-size: 11pt;
     color: #bbbbbb;
 }
 
@@ -1573,7 +1573,7 @@ StScrollBar StButton#vhandle:active {
 .summary-source-counter {
     background-image: url("summary-counter.svg");
     background-size: 2.4em;
-    font-size: 10pt;
+    font-size: 12pt;
     font-weight: bold;
     height: 2.4em;
     width: 2.4em;
@@ -1730,7 +1730,7 @@ StScrollBar StButton#vhandle:active {
 .show-processes-dialog-subject,
 .mount-question-dialog-subject,
 .end-session-dialog-subject {
-    font-size: 14pt;
+    font-size: 16pt;
     font-weight: bold;
     color: #999999;
 }
@@ -1764,7 +1764,7 @@ StScrollBar StButton#vhandle:active {
 /* Run Dialog */
 
 .run-dialog-label {
-    font-size: 12pt;
+    font-size: 14pt;
     font-weight: bold;
     color: #999999;
     padding-bottom: .4em;
@@ -1826,7 +1826,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .end-session-dialog-app-list {
-    font-size: 10pt;
+    font-size: 12pt;
     max-height: 200px;
     padding-top: 42px;
     padding-left: 49px;
@@ -1863,11 +1863,11 @@ StScrollBar StButton#vhandle:active {
 }
 
 .end-session-dialog-app-list-item-name {
-    font-size: 10pt;
+    font-size: 12pt;
 }
 
 .end-session-dialog-app-list-item-description {
-    font-size: 8pt;
+    font-size: 10pt;
     color: #444444;
 }
 
@@ -1914,7 +1914,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .show-processes-dialog-app-list {
-    font-size: 10pt;
+    font-size: 12pt;
     max-height: 200px;
     padding-top: 24px;
     padding-left: 49px;
@@ -1951,7 +1951,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .show-processes-dialog-app-list-item-name {
-    font-size: 10pt;
+    font-size: 12pt;
 }
 
 /* Password or Authentication Dialog */
@@ -1970,7 +1970,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .prompt-dialog-headline {
-    font-size: 12pt;
+    font-size: 14pt;
     font-weight: bold;
     color: #666666;
 }
@@ -1981,13 +1981,13 @@ StScrollBar StButton#vhandle:active {
 }
 
 .prompt-dialog-error-label {
-    font-size: 10pt;
+    font-size: 12pt;
     color: #ffff00;
     padding-bottom: 8px;
 }
 
 .prompt-dialog-info-label {
-    font-size: 10pt;
+    font-size: 12pt;
     padding-bottom: 8px;
 }
 
@@ -1996,7 +1996,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .prompt-dialog-null-label {
-    font-size: 10pt;
+    font-size: 12pt;
     padding-bottom: 8px;
 }
 
@@ -2067,7 +2067,7 @@ StScrollBar StButton#vhandle:active {
     background-gradient-start: rgba(255,245,245,0.4);
     background-gradient-end: rgba(105,105,105,0.1);
     background-gradient-direction: vertical;
-    font-size: 14pt;
+    font-size: 16pt;
     font-weight: bold;
     border-radius: 10px;
     border: 2px solid #a0a0a0;
@@ -2154,7 +2154,7 @@ StScrollBar StButton#vhandle:active {
 /* Login Dialog */
 
 .login-dialog-banner {
-    font-size: 10pt;
+    font-size: 12pt;
     font-weight: bold;
     text-align: center;
     color: #666666;
@@ -2162,7 +2162,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .login-dialog-title {
-    font-size: 14pt;
+    font-size: 16pt;
     font-weight: bold;
     color: #666666;
     padding-bottom: 2em;
@@ -2183,7 +2183,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .login-dialog-prompt-login-hint-message {
-    font-size: 10.5pt;
+    font-size: 12.5pt;
 }
 
 .login-dialog-user-list-view {
@@ -2209,7 +2209,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .login-dialog-user-list-item .login-dialog-user-list-item-name {
-    font-size: 20pt;
+    font-size: 22pt;
     padding-left: 1em;
 }
 
@@ -2259,7 +2259,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .login-dialog-not-listed-label {
-    font-size: 10.5pt;
+    font-size: 12.5pt;
     font-weight: bold;
     color: #666666;
     padding-top: 1em;
@@ -2271,7 +2271,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .login-dialog-username {
-    font-size: 16pt;
+    font-size: 18pt;
     font-weight: bold;
     text-align: left;
     padding-left: 15px;
@@ -2286,7 +2286,7 @@ StScrollBar StButton#vhandle:active {
 
 .login-dialog-prompt-label {
     color: #eeeeee;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .login-dialog-prompt-entry {
@@ -2295,7 +2295,7 @@ StScrollBar StButton#vhandle:active {
 
 .login-dialog-session-list {
     color: #ffffff;
-    font-size: 10.5pt;
+    font-size: 12.5pt;
 }
 
 .login-dialog-session-list-button {
@@ -2392,7 +2392,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .user-widget-label {
-    font-size: 16pt;
+    font-size: 18pt;
     font-weight: bold;
     text-align: left;
     padding-left: 15px;
@@ -2436,12 +2436,12 @@ StScrollBar StButton#vhandle:active {
 }
 
 .screen-shield-clock-time {
-    font-size: 72pt;
+    font-size: 74pt;
     text-shadow: 0px 2px 2px rgba(0,0,0,0.4);
 }
 
 .screen-shield-clock-date {
-    font-size: 28pt;
+    font-size: 30pt;
 }
 
 #screenShieldNotifications {
@@ -2490,7 +2490,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .input-source-switcher-symbol {
-   font-size: 34pt;
+   font-size: 36pt;
    width: 96px;
    height: 96px;
 }
@@ -2516,7 +2516,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .panel-window-menu-workspace-label {
-    font-size: 10pt;
+    font-size: 12pt;
     font-weight: bold;
     color: #999;
 }
@@ -2524,7 +2524,7 @@ StScrollBar StButton#vhandle:active {
 .delete-folder-dialog-subject {
     font-weight: bold;
     color: #999;
-    font-size: 12pt;
+    font-size: 14pt;
 
     padding-bottom: 32px;
 }
