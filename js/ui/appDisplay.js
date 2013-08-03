@@ -1079,7 +1079,7 @@ const FolderIcon = new Lang.Class({
 
     handleIconDrop: function(source) {
         // Move the source icon into this folder
-        IconGridLayout.layout.appendIcon(source.getId(), null, this.getId());
+        IconGridLayout.layout.appendIcon(source.getId(), this.getId());
         return true;
     },
 
