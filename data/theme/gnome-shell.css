@@ -523,7 +523,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .app-bar-nav-icon {
-    spacing: 5px;
+    spacing: 10px;
     icon-size: 15px;
     color: #555;
     transition-duration: 100ms;
