@@ -106,6 +106,8 @@ gschemas.compiled: $(gsettings_SCHEMAS:.xml=.valid)
 
 all-local: gschemas.compiled
 
+bin_SCRIPTS = resfix
+
 convertdir = $(datadir)/GConf/gsettings
 convert_DATA = gnome-shell-overrides.convert
 
