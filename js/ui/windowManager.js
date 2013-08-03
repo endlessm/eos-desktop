@@ -237,6 +237,10 @@ const WindowManager = new Lang.Class({
             return;
         }
 
+        if (metaWindow.get_title() == 'WebKitPluginProcess') {
+            return;
+        }
+
         // If the current window is maximized,
         // closing or minimizing it should display the app selector,
         // so we need to minimize all other windows.
