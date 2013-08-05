@@ -569,9 +569,12 @@ const AllView = new Lang.Class({
     acceptDrop: function(source, actor, x, y, time) {
         let position = [x, y];
 
-        if (this._onIconIdx != -1) {
+        let droppedOutsideOfFolder = this._currentPopup && (this._dragView != this._dragIcon.parentView);
+        let dropIcon = this._dragView.getIconForIndex(this._onIconIdx);
+        let droppedOnAppOutsideOfFolder = droppedOutsideOfFolder && dropIcon && !dropIcon.canDrop;
+
+        if (this._onIconIdx != -1 && !droppedOnAppOutsideOfFolder) {
             // Find out what icon the drop is under
-            let dropIcon = this._dragView.getIconForIndex(this._onIconIdx);
             if (!dropIcon || !dropIcon.canDrop) {
                 return false;
             }
@@ -595,9 +598,10 @@ const AllView = new Lang.Class({
             return true;
         }
 
-        // If we are outside of the grid area, or didn't actually change
-        // position, ignore the request to move
-        if (!this._positionReallyMoved()) {
+        // If we are not dropped outside of a folder (allowed move) and we're
+        // outside of the grid area, or didn't actually change position, ignore
+        // the request to move
+        if (!this._positionReallyMoved() && !droppedOutsideOfFolder) {
             return false;
         }
 
@@ -612,7 +616,6 @@ const AllView = new Lang.Class({
 
         // If we dropped the icon outside of the folder, close the popup and
         // add the icon to the main view
-        let droppedOutsideOfFolder = this._currentPopup && (this._dragView != this._dragIcon.parentView);
         if (droppedOutsideOfFolder) {
             source.blockHandler = true;
             this._eventBlocker.reactive = false;
