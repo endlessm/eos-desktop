@@ -478,9 +478,11 @@ const ScrolledIconList = new Lang.Class({
         this._runningApps = new Hash.Map();
 
         let browserApp = Util.getBrowserApp();
-        let browserChild = new AppIconButton(browserApp, this._iconSize);
-        this._runningApps.set(browserApp, browserChild);
-        this._container.add(browserChild.actor);
+        if (browserApp != null) {
+            let browserChild = new AppIconButton(browserApp, this._iconSize);
+            this._runningApps.set(browserApp, browserChild);
+            this._container.add(browserChild.actor);
+        }
 
         // Update for any apps running before the system started
         // (after a crash or a restart)
