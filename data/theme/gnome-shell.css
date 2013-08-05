@@ -416,12 +416,17 @@ StScrollBar StButton#vhandle:active {
     background-color: black;
     font-weight: bold;
     height: 30px;
+    transition-duration: 250ms;
+}
+
+#panel:overview {
+    background-color: rgba(0, 0, 0, 0.9);
+    transition-duration: 250ms;
 }
 
 #panel.unlock-screen,
 #panel.login-screen {
-    background: #2e3436 url(noise-texture.png);
-    background-repeat: repeat;
+    background-color: transparent;
 }
 
 #panelLeft {

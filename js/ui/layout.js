@@ -390,10 +390,8 @@ const LayoutManager = new Lang.Class({
     },
 
     _updateTrayBox: function() {
-        let panelHeight = this.panelBox.visible ? this.panelBox.height : 0;
-
         this.trayBox.set_position(this.bottomMonitor.x,
-                                  this.bottomMonitor.y + this.bottomMonitor.height - panelHeight);
+                                  this.bottomMonitor.y + this.bottomMonitor.height);
         this.trayBox.set_size(this.bottomMonitor.width, -1);
     },
 
