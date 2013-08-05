@@ -503,14 +503,14 @@ const ScrolledIconList = new Lang.Class({
     },
 
     getMinWidth: function() {
-        return this._iconSize + 2 * this._iconSpacing;
+        return this._iconSize;
     },
 
     getNaturalWidth: function() {
         let iconArea = 0;
         let nApps = this._runningApps.size();
         if (nApps > 0) {
-            let iconSpacing = this._iconSpacing * (nApps + 1);
+            let iconSpacing = this._iconSpacing * (nApps - 1);
             iconArea = this._iconSize * nApps + iconSpacing;
         }
         return iconArea;
@@ -570,7 +570,7 @@ const ScrolledIconList = new Lang.Class({
         this._updatePage();
 
         let iconFullSize = this._iconSize + this._iconSpacing;
-        return this._appsPerPage * iconFullSize + this._iconSpacing;
+        return this._appsPerPage * iconFullSize - this._iconSpacing;
     },
 
     _updateStyleConstants: function() {
@@ -769,7 +769,7 @@ const AppIconBar = new Lang.Class({
         let iconListStart = childBox.x2;
         let maxIconSpace = allocWidth - 2 * (this._navButtonSize + this._navButtonSpacing);
         childBox.x1 = iconListStart;
-        childBox.x2 = childBox.x1 + this._scrolledIconList.calculateNaturalSize(maxIconSpace);
+        childBox.x2 = childBox.x1 + this._scrolledIconList.calculateNaturalSize(maxIconSpace) + 2 * this._navButtonSpacing;
         this._scrolledIconList.actor.allocate(childBox, flags);
 
         childBox.x1 = childBox.x2;
