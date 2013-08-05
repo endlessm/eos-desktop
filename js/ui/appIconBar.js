@@ -267,6 +267,10 @@ const AppIconButton = new Lang.Class({
                                    });
         this.actor.reactive = true;
 
+        this._label = new St.Label({ text: this._app.get_name(),
+                                     style_class: 'app-icon-hover-label' });
+        this._label.connect('style-changed', Lang.bind(this, this._updateStyle));
+
         // Handle the menu-on-press case for multiple windows
         this.actor.connect('button-press-event', Lang.bind(this,
             function(actor, event) {
@@ -310,10 +314,34 @@ const AppIconButton = new Lang.Class({
             this._updateIconGeometry));
         this.actor.connect('destroy', Lang.bind(this,
             this._resetIconGeometry));
-        this.actor.connect('enter-event', Lang.bind(this, this._animateHover));
+        this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
+        this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
     },
 
-    _animateHover: function() {
+    _hideHoverState: function() {
+        if (this._label.get_parent() != null) {
+            Main.uiGroup.remove_actor(this._label);
+        }
+    },
+
+    _showHoverState: function() {
+        // Show label only if it's not already visible
+        if (!this._label.get_parent()) {
+            Main.uiGroup.add_actor(this._label);
+
+            // Calculate location of the label only if we're not tweening as the
+            // values will be inaccurate
+            if (!Tweener.isTweening(this.actor)) {
+                let iconMidpoint = this.actor.get_transformed_position()[0] + this.actor.width / 2;
+                this._label.translation_x = Math.floor(iconMidpoint - this._label.width / 2);
+                this._label.translation_y = Math.floor(this.actor.get_transformed_position()[1] - this._labelOffsetY);
+
+                // Clip left edge to be the left edge of the screen
+                this._label.translation_x = Math.max(this._label.translation_x, 0);
+            }
+        }
+
+        // Animate hover state
         let rotationCenter = new Clutter.Vertex();
         rotationCenter.x = this._iconSize / 2;
         this.actor.rotation_center_x = rotationCenter;
@@ -371,6 +399,10 @@ const AppIconButton = new Lang.Class({
             function(win) {
                 win.set_icon_geometry(rect);
             }));
+    },
+
+    _updateStyle: function(actor, forHeight, alloc) {
+        this._labelOffsetY = this._label.get_theme_node().get_length('-label-offset-y');
     },
 
     _ensureMenu: function() {
