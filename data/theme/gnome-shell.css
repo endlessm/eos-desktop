@@ -418,6 +418,10 @@ StScrollBar StButton#vhandle:active {
     height: 30px;
 }
 
+#panel:overview {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
 #panel.unlock-screen,
 #panel.login-screen {
     background: #2e3436 url(noise-texture.png);
