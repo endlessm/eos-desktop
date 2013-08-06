@@ -277,6 +277,8 @@ const AppIconButton = new Lang.Class({
                 let button = event.get_button();
 
                 if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+                    this._hideHoverState();
+
                     let windows = app.get_windows();
                     if (windows.length > 1) {
                         this._ensureMenu();
