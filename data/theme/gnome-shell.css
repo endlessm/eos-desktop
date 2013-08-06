@@ -499,6 +499,17 @@ StScrollBar StButton#vhandle:active {
     spacing: 10px;
 }
 
+.app-icon-hover-label {
+    -label-offset-y: 37px;
+    font-size: 11pt;
+    font-weight: bold;
+    border: 1px solid black;
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 4px;
+}
+
 .scrolled-icon-spacer {
     padding-left: 10px;
     padding-right: 10px;
