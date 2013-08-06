@@ -252,6 +252,10 @@ StScrollBar StButton#vhandle:active {
     icon-size: 1.09em;
 }
 
+.settings-menu-icon {
+    icon-size: 34px;
+}
+
 .popup-battery-percentage {
     padding-left: 24px;
 }
