@@ -285,6 +285,8 @@ const AppIconButton = new Lang.Class({
                         this._menu.popup();
                         this._menuManager.ignoreRelease();
 
+                        this._animateRotation();
+
                         // This will block the clicked signal from being emitted
                         return true;
                     }
