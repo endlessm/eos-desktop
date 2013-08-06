@@ -569,9 +569,19 @@ const AllView = new Lang.Class({
     acceptDrop: function(source, actor, x, y, time) {
         let position = [x, y];
 
-        if (this._onIconIdx != -1) {
+        // This makes sure that if we dropped an icon outside of the grid,
+        // we use the root grid as our target. This can only happen when
+        // dragging an icon out of a folder
+        if (this._dragView == null) {
+            this._dragView = this;
+        }
+
+        let droppedOutsideOfFolder = this._currentPopup && (this._dragView != this._dragIcon.parentView);
+        let dropIcon = this._dragView.getIconForIndex(this._onIconIdx);
+        let droppedOnAppOutsideOfFolder = droppedOutsideOfFolder && dropIcon && !dropIcon.canDrop;
+
+        if (this._onIconIdx != -1 && !droppedOnAppOutsideOfFolder) {
             // Find out what icon the drop is under
-            let dropIcon = this._dragView.getIconForIndex(this._onIconIdx);
             if (!dropIcon || !dropIcon.canDrop) {
                 return false;
             }
@@ -595,9 +605,10 @@ const AllView = new Lang.Class({
             return true;
         }
 
-        // If we are outside of the grid area, or didn't actually change
-        // position, ignore the request to move
-        if (!this._positionReallyMoved()) {
+        // If we are not dropped outside of a folder (allowed move) and we're
+        // outside of the grid area, or didn't actually change position, ignore
+        // the request to move
+        if (!this._positionReallyMoved() && !droppedOutsideOfFolder) {
             return false;
         }
 
@@ -612,7 +623,6 @@ const AllView = new Lang.Class({
 
         // If we dropped the icon outside of the folder, close the popup and
         // add the icon to the main view
-        let droppedOutsideOfFolder = this._currentPopup && (this._dragView != this._dragIcon.parentView);
         if (droppedOutsideOfFolder) {
             source.blockHandler = true;
             this._eventBlocker.reactive = false;
@@ -811,6 +821,10 @@ const AppDisplay = new Lang.Class({
         this.actor.add_actor(this.entry);
         this.actor.add_actor(this._view.actor);
 
+        // This makes sure that any DnD ops get channeled to the icon grid logic
+        // otherwise dropping an item outside of the grid bounds fails
+        this.actor._delegate = this;
+
         this._appSystem = Shell.AppSystem.get_default();
         this._appSystem.connect('installed-changed', Lang.bind(this, function() {
             Main.queueDeferredWork(this._allAppsWorkId);
@@ -827,6 +841,11 @@ const AppDisplay = new Lang.Class({
         }));
 
         this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplay));
+    },
+
+    acceptDrop: function(source, actor, x, y, time) {
+        // Forward all DnD releases to the scrollview
+        this._view.acceptDrop(source, actor, x, y, time);
     },
 
     _redisplay: function() {
