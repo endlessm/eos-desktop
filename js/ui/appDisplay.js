@@ -1229,6 +1229,7 @@ const AppActivationContext = new Lang.Class({
 
         this._splash = new AppSplashPage(this._app);;
         Main.uiGroup.add_actor(this._splash);
+        this._splash.connect('close-clicked', Lang.bind(this, this._clearSplash));
 
         this._splash.translation_y = this._splash.height;
         Tweener.addTween(this._splash, { translation_y: 0,
@@ -1321,6 +1322,29 @@ const AppSplashPage = new Lang.Class({
                                          x_expand: true,
                                          y_expand: true });
         this.add_child(background);
+        this.add_child(this._createCloseButton());
+    },
+
+    _createCloseButton: function() {
+        let closeButton = new St.Button({ style_class: 'splash-close'});
+        closeButton.set_x_align(Clutter.ActorAlign.END);
+        closeButton.set_y_align(Clutter.ActorAlign.START);
+
+        // XXX Clutter 2.0 workaround: ClutterBinLayout needs expand
+        // to respect the alignments.
+        closeButton.set_x_expand(true);
+        closeButton.set_y_expand(true);
+
+        closeButton.connect('clicked', Lang.bind(this, function() { this.emit('close-clicked'); }));
+        closeButton.connect('style-changed', Lang.bind(this, this._closeButtonStyleChanged));
+
+        return closeButton;
+    },
+
+    _closeButtonStyleChanged: function(closeButton) {
+        let themeNode = closeButton.get_theme_node();
+        closeButton.translation_x = themeNode.get_length('-splash-close-overlap-x');
+        closeButton.translation_y = themeNode.get_length('-splash-close-overlap-y');
     },
 
     vfunc_style_changed: function() {
@@ -1354,6 +1378,7 @@ const AppSplashPage = new Lang.Class({
         this._spinner.completeInTime(time, callback);
     }
 });
+Signals.addSignalMethods(AppSplashPage.prototype);
 
 const AppIcon = new Lang.Class({
     Name: 'AppIcon',
