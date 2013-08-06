@@ -27,14 +27,14 @@ const NAV_BUTTON_SIZE = 15;
 const ICON_SCROLL_ANIMATION_TIME = 0.3;
 const ICON_SCROLL_ANIMATION_TYPE = 'linear';
 
-const ICON_HOVER_ANIMATION_TIME = 0.1;
-const ICON_HOVER_ANIMATION_TYPE_1 = 'linear';
-const ICON_HOVER_ANIMATION_TYPE_2 = 'easeOutSine';
+const ICON_ROTATE_ANIMATION_TIME = 0.1;
+const ICON_ROTATE_ANIMATION_TYPE_1 = 'linear';
+const ICON_ROTATE_ANIMATION_TYPE_2 = 'easeOutSine';
 
-const ICON_HOVER_ROT_1_END = 100;
-const ICON_HOVER_ROT_2_START = 280;
+const ICON_ROTATE_1_END_ANGLE = 100;
+const ICON_ROTATE_2_START_ANGLE = 280;
 
-const ICON_HOVER_MIN_OPACITY = 80;
+const ICON_ROTATE_MIN_OPACITY = 80;
 
 const PANEL_WINDOW_MENU_THUMBNAIL_SIZE = 128;
 
@@ -306,6 +306,7 @@ const AppIconButton = new Lang.Class({
                         Main.activateWindow(windows[0]);
                     }
                 }
+                this._animateRotation();
             }));
 
         Main.layoutManager.connect('startup-complete', Lang.bind(this,
@@ -340,8 +341,9 @@ const AppIconButton = new Lang.Class({
                 this._label.translation_x = Math.max(this._label.translation_x, 0);
             }
         }
+    },
 
-        // Animate hover state
+    _animateRotation: function() {
         let rotationCenter = new Clutter.Vertex();
         rotationCenter.x = this._iconSize / 2;
         this.actor.rotation_center_x = rotationCenter;
@@ -349,19 +351,21 @@ const AppIconButton = new Lang.Class({
 
         if (!Tweener.isTweening(this.actor)) {
             // Animate page rotating counter-clockwise until icon is 0 pixels wide
-            let tweenParams1 = { rotation_angle_y: ICON_HOVER_ROT_1_END,
-                                 opacity: ICON_HOVER_MIN_OPACITY,
-                                 time: ICON_HOVER_ANIMATION_TIME,
-                                 transition: ICON_HOVER_ANIMATION_TYPE_1,
-                                 onComplete: function() { this.rotation_angle_y = ICON_HOVER_ROT_2_START; }
+            let tweenParams1 = { rotation_angle_y: ICON_ROTATE_1_END_ANGLE,
+                                 opacity: ICON_ROTATE_MIN_OPACITY,
+                                 time: ICON_ROTATE_ANIMATION_TIME,
+                                 transition: ICON_ROTATE_ANIMATION_TYPE_1,
+                                 onComplete: function() {
+                                     this.rotation_angle_y = ICON_ROTATE_2_START_ANGLE;
+                                 }
                                }
 
             // Continue animating rotation but skip showing the inveted texture
             let tweenParams2 = { rotation_angle_y: MAX_ANGLE,
                                  opacity: MAX_OPACITY,
-                                 delay: ICON_HOVER_ANIMATION_TIME,
-                                 time: ICON_HOVER_ANIMATION_TIME,
-                                 transition: ICON_HOVER_ANIMATION_TYPE_2,
+                                 delay: ICON_ROTATE_ANIMATION_TIME,
+                                 time: ICON_ROTATE_ANIMATION_TIME,
+                                 transition: ICON_ROTATE_ANIMATION_TYPE_2,
                                  onComplete: function() { this.rotation_angle_y = 0; }
                                }
 
