@@ -66,6 +66,7 @@ dist_theme_DATA =				\
 	theme/social-bar-symbolic.svg		\
 	theme/source-button-border.svg		\
 	theme/splash-circle-animation.png	\
+	theme/splash-close.png			\
 	theme/splash-noise-texture.png		\
 	theme/summary-counter.svg		\
 	theme/toggle-off-us.svg			\
