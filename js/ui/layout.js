@@ -12,6 +12,7 @@ const St = imports.gi.St;
 
 const Background = imports.ui.background;
 const BackgroundMenu = imports.ui.backgroundMenu;
+const ButtonConstants = imports.ui.buttonConstants;
 
 const DND = imports.ui.dnd;
 const Main = imports.ui.main;
@@ -343,10 +344,32 @@ const LayoutManager = new Lang.Class({
         this.emit('hot-corners-changed');
     },
 
+    _addBackgroundClickHandler: function(actor) {
+        actor.reactive = true;
+        let clickAction = new Clutter.ClickAction();
+
+        // Background menu should be added back here
+
+        clickAction.connect('clicked', function(action) {
+            let button = action.get_button();
+            if (button == ButtonConstants.LEFT_MOUSE_BUTTON &&
+                       Main.socialBar.proxy.Visible) {
+                Main.socialBar.proxy.toggleRemote(global.get_current_time());
+            }
+        });
+        actor.add_action(clickAction);
+    },
+
     _createBackground: function(monitorIndex) {
         let bgManager = new Background.BackgroundManager({ container: this._backgroundGroup,
                                                            layoutManager: this,
                                                            monitorIndex: monitorIndex });
+
+        this._addBackgroundClickHandler(bgManager.background.actor);
+
+        bgManager.connect('changed', Lang.bind(this, function() {
+                              this._addBackgroundClickHandler(bgManager.background.actor);
+                          }));
 
         this._bgManagers.push(bgManager);
 

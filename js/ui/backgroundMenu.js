@@ -28,7 +28,7 @@ const BackgroundMenu = new Lang.Class({
     }
 });
 
-function addBackgroundMenu(actor) {
+function addBackgroundMenu(actor, clickAction) {
     let cursor = new St.Bin({ opacity: 0 });
     Main.uiGroup.add_actor(cursor);
 
@@ -43,7 +43,6 @@ function addBackgroundMenu(actor) {
         actor._backgroundMenu.open(BoxPointer.PopupAnimation.NONE);
     }
 
-    let clickAction = new Clutter.ClickAction();
     clickAction.connect('long-press', function(action, actor, state) {
         if (state == Clutter.LongPressState.QUERY)
             return action.get_button() == 1 && !actor._backgroundMenu.isOpen;
@@ -55,10 +54,6 @@ function addBackgroundMenu(actor) {
         let button = action.get_button();
         if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
             openMenu();
-        } else if (button == ButtonConstants.LEFT_MOUSE_BUTTON &&
-                   Main.socialBar.proxy.Visible) {
-            Main.socialBar.proxy.toggleRemote(global.get_current_time());
         }
     });
-    actor.add_action(clickAction);
 }
