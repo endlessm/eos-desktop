@@ -63,7 +63,8 @@ dist_theme_DATA =				\
 	theme/panel-button-highlight-wide.svg	\
 	theme/process-working.svg		\
 	theme/running-indicator.svg		\
-	theme/settings-symbolic.svg		\
+	theme/settings-hover.png		\
+	theme/settings-normal.png		\
 	theme/social-bar-symbolic.svg		\
 	theme/source-button-border.svg		\
 	theme/splash-circle-animation.png	\

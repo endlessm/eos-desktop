@@ -511,11 +511,21 @@ const UserMenuButton = new Lang.Class({
         this._iconBox = new St.Bin();
         box.add(this._iconBox, { y_align: St.Align.MIDDLE, y_fill: false });
 
-        let iconFile = Gio.File.new_for_path(global.datadir + '/theme/settings-symbolic.svg');
-        let gicon = new Gio.FileIcon({ file: iconFile });
-        let settingsIcon = new St.Icon({ gicon: gicon,
-                                         style_class: 'popup-menu-icon' });
-        this._iconBox.child = settingsIcon;
+        let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/settings-normal.png');
+        let giconNormal = new Gio.FileIcon({ file: iconFileNormal });
+        this._settingsIconNormal = new St.Icon({ gicon: giconNormal,
+                                                 style_class: 'settings-menu-icon' });
+
+        let iconFileHover = Gio.File.new_for_path(global.datadir + '/theme/settings-hover.png');
+        let giconHover = new Gio.FileIcon({ file: iconFileHover });
+        this._settingsIconHover = new St.Icon({ gicon: giconHover,
+                                                style_class: 'settings-menu-icon' });
+
+        this._iconBox.child = this._settingsIconNormal;
+
+        this.actor.connect('notify::hover', Lang.bind(this, function() {
+            this._onHoverChanged(this.actor);
+        }));
 
         this._accountMgr.connect('most-available-presence-changed',
                                   Lang.bind(this, this._updatePresenceIcon));
@@ -965,6 +975,14 @@ const UserMenuButton = new Lang.Class({
         } else {
             this.menu.close(BoxPointer.PopupAnimation.NONE);
             this._loginManager.suspend();
+        }
+    },
+
+    _onHoverChanged: function(actor) {
+        if (actor.get_hover()) {
+            this._iconBox.child = this._settingsIconHover;
+        } else {
+            this._iconBox.child = this._settingsIconNormal;
         }
     }
 });
