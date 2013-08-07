@@ -198,6 +198,12 @@ const EndlessApplicationView = new Lang.Class({
                                    Lang.bind(this, this._ensureIconVisible));
             }
         }
+    },
+
+    reloadIconNames: function() {
+        for (let i = 0; i < this._allIcons.length; i++) {
+            this._allIcons[i].reloadName();
+        }        
     }
 });
 
@@ -828,6 +834,7 @@ const AppDisplay = new Lang.Class({
 
         this._appSystem = Shell.AppSystem.get_default();
         this._appSystem.connect('installed-changed', Lang.bind(this, function() {
+            this._view.reloadIconNames();
             Main.queueDeferredWork(this._allAppsWorkId);
         }));
         global.settings.connect('changed::app-folder-categories', Lang.bind(this, function() {
@@ -962,6 +969,7 @@ const FolderIcon = new Lang.Class({
                            editableLabel: true };
 
         this.folder = dirInfo;
+        this._name = this.folder.get_name();
         this.parent(parentView, buttonParams, iconParams);
 
         this.canDrop = true;
@@ -999,6 +1007,7 @@ const FolderIcon = new Lang.Class({
     _onLabelUpdate: function(label, newText) {
         try {
             this.folder.create_custom_with_name(newText);
+            this._name = newText;
         } catch(e) {
             logError(e, 'error while creating a custom dirInfo for: '
                       + this.getName()
@@ -1094,7 +1103,7 @@ const FolderIcon = new Lang.Class({
     },
 
     getName: function() {
-        return this.folder.get_name();
+        return this._name;
     },
 
     handleIconDrop: function(source) {
@@ -1110,6 +1119,10 @@ const FolderIcon = new Lang.Class({
         }
 
         return true;
+    },
+
+    reloadName: function() {
+        this._name = this.folder.get_name();
     }
 });
 
@@ -1208,7 +1221,7 @@ const AppActivationContext = new Lang.Class({
         try {
             this._app.activate();
         } catch (e) {
-            logError(e, 'error while activating: ' + this._app.get_name());
+            logError(e, 'error while activating: ' + this._name);
             return;
         }
 
@@ -1410,6 +1423,7 @@ const AppIcon = new Lang.Class({
                                         parentView: null });
 
         this.app = app;
+        this._name = this.app.get_name();
         this._showMenu = params.showMenu;
 
         if (!iconParams) {
@@ -1489,6 +1503,7 @@ const AppIcon = new Lang.Class({
     _onLabelUpdate: function(label, newText) {
         try {
             this.app.create_custom_launcher_with_name(newText);
+            this._name = newText;
         } catch(e) {
             logError(e, 'error while creating a custom launcher for: '
                       + this.getName()
@@ -1541,7 +1556,7 @@ const AppIcon = new Lang.Class({
     },
 
     getName: function() {
-        return this.app.get_name();
+        return this._name;
     },
 
     popupMenu: function() {
@@ -1621,6 +1636,10 @@ const AppIcon = new Lang.Class({
 
     canDragOver: function(dest) {
         return true;
+    },
+
+    reloadName: function() {
+        this._name = this.app.get_name();
     }
 });
 Signals.addSignalMethods(AppIcon.prototype);
