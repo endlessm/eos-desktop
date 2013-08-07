@@ -54,6 +54,9 @@ dist_theme_DATA =				\
 	theme/filter-selected-rtl.svg		\
 	theme/gnome-shell.css			\
 	theme/google-logo-symbolic.svg		\
+	theme/internet-hover.png		\
+	theme/internet-normal.png		\
+	theme/internet-pressed.png		\
 	theme/logged-in-indicator.svg		\
 	theme/message-tray-background.png	\
 	theme/more-results.svg			\
