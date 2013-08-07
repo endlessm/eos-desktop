@@ -809,6 +809,7 @@ const AppDisplay = new Lang.Class({
                                        characters. */
                                     hint_text: _("Type to search…"),
                                     track_hover: true,
+                                    reactive: true,
                                     can_focus: true,
                                     x_align: Clutter.ActorAlign.CENTER,
                                     y_align: Clutter.ActorAlign.CENTER });
