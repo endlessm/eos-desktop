@@ -71,6 +71,7 @@ dist_theme_DATA =				\
 	theme/social-bar-hover.png		\
 	theme/social-bar-normal.png		\
 	theme/social-bar-pressed.png		\
+	theme/separator.png			\
 	theme/source-button-border.svg		\
 	theme/splash-circle-animation.png	\
 	theme/splash-noise-texture.png		\
