@@ -65,7 +65,9 @@ dist_theme_DATA =				\
 	theme/running-indicator.svg		\
 	theme/settings-hover.png		\
 	theme/settings-normal.png		\
-	theme/social-bar-symbolic.svg		\
+	theme/social-bar-hover.png		\
+	theme/social-bar-normal.png		\
+	theme/social-bar-pressed.png		\
 	theme/source-button-border.svg		\
 	theme/splash-circle-animation.png	\
 	theme/splash-noise-texture.png		\
