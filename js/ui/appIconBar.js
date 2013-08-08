@@ -27,14 +27,8 @@ const NAV_BUTTON_SIZE = 15;
 const ICON_SCROLL_ANIMATION_TIME = 0.3;
 const ICON_SCROLL_ANIMATION_TYPE = 'linear';
 
-const ICON_ROTATE_ANIMATION_TIME = 0.1;
-const ICON_ROTATE_ANIMATION_TYPE_1 = 'linear';
-const ICON_ROTATE_ANIMATION_TYPE_2 = 'easeOutSine';
-
-const ICON_ROTATE_1_END_ANGLE = 100;
-const ICON_ROTATE_2_START_ANGLE = 280;
-
-const ICON_ROTATE_MIN_OPACITY = 80;
+const ICON_ROTATE_ANIMATION_TIME = 0.2;
+const ICON_ROTATE_ANIMATION_TYPE = 'easeOutInSine';
 
 const PANEL_WINDOW_MENU_THUMBNAIL_SIZE = 128;
 
@@ -248,6 +242,53 @@ const AppIconMenu = new Lang.Class({
 });
 Signals.addSignalMethods(AppIconMenu.prototype);
 
+const MyClutterEffect = new Lang.Class({
+    Name: 'MyClutterEffect',
+    Extends: Clutter.DeformEffect,
+
+    MAX_ANGLE: 360,
+
+    _init: function() {
+        this.parent();
+        this.angle = 0;
+        this._xMiddlepoint = null;
+        this._yMiddlepoint = null;
+    },
+
+    vfunc_deform_vertex: function(width, height, vertex) {
+        if (this._xMiddlepoint == null) {
+            this._xMiddlepoint = width / 2;
+        }
+
+        if (this._yMiddlepoint == null) {
+            this._yMiddlepoint = height / 2;
+        }
+
+        let scaledAngle = this.angle / this.MAX_ANGLE;
+
+        let distanceFromAnchor = vertex.x;
+        if (scaledAngle > 0.5) {
+            distanceFromAnchor = width - distanceFromAnchor;
+        }
+
+        let yTranslation =  Math.sin(scaledAngle * 3.14) * distanceFromAnchor / (2*3.14);
+        if (vertex.y > this._yMiddlepoint) {
+            yTranslation = -yTranslation;
+        }
+        vertex.y += yTranslation;
+
+        let scaledAngleX = 1 - Math.abs(scaledAngle * 2 - 1.0);
+        let origDistanceFromMiddle = vertex.x - this._xMiddlepoint;
+        let xTranslation = scaledAngleX * origDistanceFromMiddle;
+        vertex.x -= xTranslation;
+
+    },
+
+    vfunc_notify: function() {
+        print("stuff");
+    }
+});
+
 /** AppIconButton:
  *
  * This class handles the application icon
@@ -349,33 +390,18 @@ const AppIconButton = new Lang.Class({
     },
 
     _animateRotation: function() {
-        let rotationCenter = new Clutter.Vertex();
-        rotationCenter.x = this._iconSize / 2;
-        this.actor.rotation_center_x = rotationCenter;
-        this.actor.rotation_center_y = rotationCenter;
-
         if (!Tweener.isTweening(this.actor)) {
-            // Animate page rotating counter-clockwise until icon is 0 pixels wide
-            let tweenParams1 = { rotation_angle_y: ICON_ROTATE_1_END_ANGLE,
-                                 opacity: ICON_ROTATE_MIN_OPACITY,
-                                 time: ICON_ROTATE_ANIMATION_TIME,
-                                 transition: ICON_ROTATE_ANIMATION_TYPE_1,
-                                 onComplete: function() {
-                                     this.rotation_angle_y = ICON_ROTATE_2_START_ANGLE;
-                                 }
-                               }
+             let effect = this.actor.get_effect('page_flip');
+             if (effect == null) {
+                 effect = new MyClutterEffect( {x_tiles: 1, y_tiles: 1});
+                 this.actor.add_effect_with_name('page_flip', effect);
+             }
 
-            // Continue animating rotation but skip showing the inveted texture
-            let tweenParams2 = { rotation_angle_y: MAX_ANGLE,
-                                 opacity: MAX_OPACITY,
-                                 delay: ICON_ROTATE_ANIMATION_TIME,
-                                 time: ICON_ROTATE_ANIMATION_TIME,
-                                 transition: ICON_ROTATE_ANIMATION_TYPE_2,
-                                 onComplete: function() { this.rotation_angle_y = 0; }
-                               }
-
-            Tweener.addTween(this.actor, tweenParams1);
-            Tweener.addTween(this.actor, tweenParams2);
+             Tweener.addTween(effect, { angle: MAX_ANGLE,
+                                        time: ICON_ROTATE_ANIMATION_TIME,
+                                        onUpdate: function() { this.invalidate(); },
+                                        transition: ICON_ROTATE_ANIMATION_TYPE,
+                                        onComplete: function() { this.angle = 0; }});
         }
     },
 
