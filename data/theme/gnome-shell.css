@@ -485,11 +485,6 @@ StScrollBar StButton#vhandle:active {
     transition-duration: 100ms;
 }
 
-.social-icon.panel-button {
-    -minimum-hpadding: 1px;
-    -natural-hpadding: 1px;
-}
-
 #appIconBar {
     padding-left: 4px;
     padding-right: 0px;
