@@ -446,7 +446,7 @@ StScrollBar StButton#vhandle:active {
 
 #panelRight:ltr {
     padding-left: 10px;
-    padding-right: 6px;
+    padding-right: 0px;
 }
 
 #panelRight:rtl {
@@ -478,11 +478,16 @@ StScrollBar StButton#vhandle:active {
 }
 
 .panel-button {
-    -natural-hpadding: 10px;
-    -minimum-hpadding: 10px;
+    -natural-hpadding: 6px;
+    -minimum-hpadding: 6px;
     font-weight: bold;
     color: #ccc;
     transition-duration: 100ms;
+}
+
+.social-icon.panel-button {
+    -minimum-hpadding: 1px;
+    -natural-hpadding: 1px;
 }
 
 #appIconBar {
@@ -643,7 +648,8 @@ StScrollBar StButton#vhandle:active {
 }
 
 .system-status-social-icon {
-    icon-size: 28px;
+    icon-size: 30px;
+    padding-right: 6px;
 }
 
 
