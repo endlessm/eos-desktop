@@ -446,7 +446,7 @@ StScrollBar StButton#vhandle:active {
 
 #panelRight:ltr {
     padding-left: 10px;
-    padding-right: 6px;
+    padding-right: 0px;
 }
 
 #panelRight:rtl {
