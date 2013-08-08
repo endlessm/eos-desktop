@@ -503,6 +503,11 @@ StScrollBar StButton#vhandle:active {
     -natural-hpadding: 0;
 }
 
+.browser-icon {
+    padding-bottom: 1px;
+    icon-size: 26px;
+}
+
 .scrolled-icon-container {
     -icon-size: 24px;
     spacing: 10px;
