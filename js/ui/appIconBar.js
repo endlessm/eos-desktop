@@ -272,46 +272,8 @@ const AppIconButton = new Lang.Class({
         this._label.connect('style-changed', Lang.bind(this, this._updateStyle));
 
         // Handle the menu-on-press case for multiple windows
-        this.actor.connect('button-press-event', Lang.bind(this,
-            function(actor, event) {
-                let button = event.get_button();
-
-                if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
-                    this._hideHoverState();
-
-                    let windows = app.get_windows();
-                    if (windows.length > 1) {
-                        this._ensureMenu();
-                        this._menu.popup();
-                        this._menuManager.ignoreRelease();
-
-                        this._animateRotation();
-
-                        // This will block the clicked signal from being emitted
-                        return true;
-                    }
-                }
-
-                this.actor.sync_hover();
-                return false;
-            }));
-
-        this.actor.connect('clicked', Lang.bind(this,
-            function() {
-                // The multiple windows case is handled in button-press-event
-                let windows = app.get_windows();
-                if (windows.length == 0) {
-                    app.activate();
-                    Main.overview.hide();
-                } else if (windows.length == 1) {
-                    if (windows[0].has_focus() && !Main.overview.visible) {
-                        windows[0].minimize();
-                    } else {
-                        Main.activateWindow(windows[0]);
-                    }
-                }
-                this._animateRotation();
-            }));
+        this.actor.connect('button-press-event', Lang.bind(this, this._handleButtonPressEvent));
+        this.actor.connect('clicked', Lang.bind(this, this._handleClickEvent));
 
         Main.layoutManager.connect('startup-complete', Lang.bind(this,
             this._updateIconGeometry));
@@ -321,6 +283,45 @@ const AppIconButton = new Lang.Class({
             this._resetIconGeometry));
         this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
         this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
+    },
+
+    _handleButtonPressEvent: function(actor, event) {
+        let button = event.get_button();
+
+        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+            this._hideHoverState();
+
+            let windows = this._app.get_windows();
+            if (windows.length > 1) {
+                this._ensureMenu();
+                this._menu.popup();
+                this._menuManager.ignoreRelease();
+
+                this._animateRotation();
+
+                // This will block the clicked signal from being emitted
+                return true;
+            }
+        }
+
+        this.actor.sync_hover();
+        return false;
+    },
+
+    _handleClickEvent: function() {
+        // The multiple windows case is handled in button-press-event
+        let windows = this._app.get_windows();
+        if (windows.length == 0) {
+            this._app.activate();
+            Main.overview.hide();
+        } else if (windows.length == 1) {
+            if (windows[0].has_focus() && !Main.overview.visible) {
+                windows[0].minimize();
+            } else {
+                Main.activateWindow(windows[0]);
+            }
+        }
+        this._animateRotation();
     },
 
     _hideHoverState: function() {
@@ -482,7 +483,7 @@ const AppIconBarNavButton = Lang.Class({
 const ScrolledIconList = new Lang.Class({
     Name: 'ScrolledIconList',
 
-    _init: function() {
+    _init: function(excludedApps) {
         this.actor = new St.ScrollView({ hscrollbar_policy: Gtk.PolicyType.NEVER,
                                          style_class: 'scrolled-icon-list hfade',
                                          vscrollbar_policy: Gtk.PolicyType.NEVER,
@@ -517,11 +518,9 @@ const ScrolledIconList = new Lang.Class({
         let appSys = Shell.AppSystem.get_default();
         this._runningApps = new Hash.Map();
 
-        let browserApp = Util.getBrowserApp();
-        if (browserApp != null) {
-            let browserChild = new AppIconButton(browserApp, this._iconSize);
-            this._runningApps.set(browserApp, browserChild);
-            this._container.add(browserChild.actor);
+        // Exclusions are added to the base list
+        for (appIndex in excludedApps) {
+            this._runningApps.set(excludedApps[appIndex], null);
         }
 
         // Update for any apps running before the system started
@@ -621,7 +620,10 @@ const ScrolledIconList = new Lang.Class({
         this._iconSize = node.get_length("-icon-size");
         this._runningApps.items().forEach(Lang.bind(this,
             function(app) {
-                app[1].setIconSize(this._iconSize);
+                let appButton = app[1];
+                if (appButton != null) {
+                    appButton.setIconSize(this._iconSize);
+                }
             }));
 
         this._iconSpacing = node.get_length("spacing");
@@ -712,6 +714,69 @@ const ScrolledIconList = new Lang.Class({
 });
 Signals.addSignalMethods(ScrolledIconList.prototype);
 
+const BrowserButton = new Lang.Class({
+    Name: 'BrowserButton',
+    Extends: AppIconButton,
+
+    _init: function(app, iconSize) {
+        this._app = app;
+
+        let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/internet-normal.png');
+        this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
+
+        let iconFileHover = Gio.File.new_for_path(global.datadir + '/theme/internet-hover.png');
+        this._giconHover = new Gio.FileIcon({ file: iconFileHover });
+
+        this._iconSize = iconSize;
+        this._icon = new St.Icon({ style_class: 'browser-icon' });
+        this._setGIcon(this._giconNormal);
+
+        this.actor = new St.Button({ style_class: 'app-icon-button',
+                                     child: this._icon,
+                                     button_mask: St.ButtonMask.ONE
+                                   });
+        this.actor.reactive = true;
+
+        this._label = new St.Label({ text: this._app.get_name(),
+                                     style_class: 'app-icon-hover-label' });
+        this._label.connect('style-changed', Lang.bind(this, this._updateStyle));
+
+        // Handle the menu-on-press case for multiple windows
+        this.actor.connect('button-press-event', Lang.bind(this, this._handleButtonPressEvent));
+        this.actor.connect('clicked', Lang.bind(this, this._handleClickEvent));
+
+        Main.layoutManager.connect('startup-complete', Lang.bind(this,
+            this._updateIconGeometry));
+        this.actor.connect('notify::allocation', Lang.bind(this,
+            this._updateIconGeometry));
+        this.actor.connect('destroy', Lang.bind(this,
+            this._resetIconGeometry));
+        this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
+        this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
+
+        this.actor.add_style_class_name('browser-icon');
+
+        this.actor.connect('notify::hover', Lang.bind(this, this._onHoverChanged));
+    },
+
+    // overrides default implementation
+    setIconSize: function(iconSize) {
+        return
+    },
+
+    _onHoverChanged: function(actor) {
+        if (actor.get_hover()) {
+            this._setGIcon(this._giconHover);
+        } else {
+            this._setGIcon(this._giconNormal);
+        }
+    },
+
+    _setGIcon: function(gicon) {
+        this._icon.set_gicon(gicon);
+    }
+});
+
 /** AppIconBar:
  *
  * This class handles positioning all the application icons and listening
@@ -744,7 +809,14 @@ const AppIconBar = new Lang.Class({
         this._backButton = new AppIconBarNavButton('/theme/app-bar-back-symbolic.svg', Lang.bind(this, this._previousPageSelected));
         this._forwardButton = new AppIconBarNavButton('/theme/app-bar-forward-symbolic.svg', Lang.bind(this, this._nextPageSelected));
 
-        this._scrolledIconList = new ScrolledIconList();
+        this._browserButton = null;
+        let browserApp = Util.getBrowserApp();
+        if (browserApp != null) {
+            this._browserButton = new BrowserButton(browserApp, ICON_SIZE);
+            this._container.add_actor(this._browserButton.actor);
+        }
+
+        this._scrolledIconList = new ScrolledIconList([browserApp]);
 
         this._container.add_actor(this._scrolledIconList.actor);
         this._container.add_actor(this._backButton);
@@ -779,8 +851,12 @@ const AppIconBar = new Lang.Class({
     },
 
     _getContentPreferredWidth: function(actor, forHeight, alloc) {
-        alloc.min_size = 2 * this._navButtonSize + 2 * this._navButtonSpacing + this._scrolledIconList.getMinWidth();
-        alloc.natural_size = 2 * this._navButtonSize + 2 * this._navButtonSpacing + this._scrolledIconList.getNaturalWidth();
+        alloc.min_size = 2 * this._navButtonSize + 2 * this._navButtonSpacing +
+                             this._scrolledIconList.getMinWidth() +
+                             this._scrolledIconList.getIconSize();
+        alloc.natural_size = 2 * this._navButtonSize + 2 * this._navButtonSpacing +
+                                 this._scrolledIconList.getNaturalWidth() +
+                                 this._scrolledIconList.getIconSize();
     },
 
     _getContentPreferredHeight: function(actor, forWidth, alloc) {
@@ -807,6 +883,10 @@ const AppIconBar = new Lang.Class({
         childBox.x1 = 0;
         childBox.x2 = childBox.x1 + this._navButtonSize;
         this._backButton.allocate(childBox, flags);
+
+        childBox.x1 = childBox.x2;
+        childBox.x2 = childBox.x1 + this._scrolledIconList.getIconSize();
+        this._browserButton.actor.allocate(childBox, flags);
 
         let iconListStart = childBox.x2;
         let maxIconSpace = allocWidth - 2 * (this._navButtonSize + this._navButtonSpacing);
