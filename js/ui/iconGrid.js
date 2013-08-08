@@ -687,7 +687,7 @@ const IconGrid = new Lang.Class({
 
             // We need to know what the coordinates of the icon center are
             dndDropPosition[0] -= Math.floor(oldIcon.get_size()[0] / 2);
-            dndDropPosition[1] += Math.floor(oldIcon.get_size()[1] / 2);
+            dndDropPosition[1] -= Math.floor(oldIcon.get_size()[1] / 2);
 
             // Draw it at the location where DnD accept occured
             let releaseOffset = this._findRelativeOffset(oldIcon, dndDropPosition);
