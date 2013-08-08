@@ -722,14 +722,11 @@ const BrowserButton = new Lang.Class({
         this._app = app;
 
         let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/internet-normal.png');
-        this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
-
-        let iconFileHover = Gio.File.new_for_path(global.datadir + '/theme/internet-hover.png');
-        this._giconHover = new Gio.FileIcon({ file: iconFileHover });
+        let giconNormal = new Gio.FileIcon({ file: iconFileNormal });
 
         this._iconSize = iconSize;
-        this._icon = new St.Icon({ style_class: 'browser-icon' });
-        this._setGIcon(this._giconNormal);
+        this._icon = new St.Icon({ gicon: giconNormal,
+                                   style_class: 'browser-icon' });
 
         this.actor = new St.Button({ style_class: 'app-icon-button',
                                      child: this._icon,
@@ -755,26 +752,12 @@ const BrowserButton = new Lang.Class({
         this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
 
         this.actor.add_style_class_name('browser-icon');
-
-        this.actor.connect('notify::hover', Lang.bind(this, this._onHoverChanged));
     },
 
     // overrides default implementation
     setIconSize: function(iconSize) {
         return
     },
-
-    _onHoverChanged: function(actor) {
-        if (actor.get_hover()) {
-            this._setGIcon(this._giconHover);
-        } else {
-            this._setGIcon(this._giconNormal);
-        }
-    },
-
-    _setGIcon: function(gicon) {
-        this._icon.set_gicon(gicon);
-    }
 });
 
 /** AppIconBar:
