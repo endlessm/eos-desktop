@@ -552,7 +552,7 @@ shell_app_system_lookup_heuristic_basename (ShellAppSystem *system,
 /**
  * shell_app_system_lookup_desktop_wmclass:
  * @system: a #ShellAppSystem
- * @wmclass: A WM_CLASS value
+ * @wmclass: (allow-none): A WM_CLASS value
  *
  * Find a valid application whose .desktop file, without the extension
  * and properly canonicalized, matches @wmclass.
@@ -589,7 +589,7 @@ shell_app_system_lookup_desktop_wmclass (ShellAppSystem *system,
 /**
  * shell_app_system_lookup_startup_wmclass:
  * @system: a #ShellAppSystem
- * @wmclass: A WM_CLASS value
+ * @wmclass: (allow-none): A WM_CLASS value
  *
  * Find a valid application whose .desktop file contains a
  * StartupWMClass entry matching @wmclass.
@@ -600,6 +600,9 @@ ShellApp *
 shell_app_system_lookup_startup_wmclass (ShellAppSystem *system,
                                          const char     *wmclass)
 {
+  if (wmclass == NULL)
+    return NULL;
+
   return g_hash_table_lookup (system->priv->startup_wm_class_to_app, wmclass);
 }
 
