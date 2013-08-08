@@ -367,7 +367,6 @@ StScrollBar StButton#vhandle:active {
     padding: 4px 12px;
 }
 
-#searchEntry,
 .run-dialog-entry,
 .notification StEntry {
     border: 2px solid rgba(245,245,245,0.2);
@@ -776,24 +775,31 @@ StScrollBar StButton#vhandle:active {
 #searchEntry {
     width: 320px;
 
-    border-color: rgba(245,245,245,0.3);
-    color: rgb(187,188,183);
-    caret-color: rgb(187,188,183);
+    font-family: sourcesanspro, sans-serif;
+    font-size: 15px;
+
+    color: #c5bcb6;
+    caret-color: #ffffff;
+    border: 1px solid rgba(245,245,245,0.15);
+    background-color: rgba(30,30,30,0.70);
+    box-shadow: inset 0px 1px 4px rgba(0,0,0,0.8);
 
     -minimum-vpadding: 24px;
 }
 
 #searchEntry:focus {
-    font-weight: bold;
+    color: #ffffff;
+    background-color: rgba(30,30,30,0.65);
     transition-duration: 0ms;
+}
+
+#searchEntry:hover {
+    color: #ffffff;
+    background-color: rgba(30,30,30,0.65);
 }
 
 .search-entry-icon {
     icon-size: 1em;
-}
-
-.search-entry-icon:hover {
-    color: rgb(255,255,255);
 }
 
 .search-entry-hint {
