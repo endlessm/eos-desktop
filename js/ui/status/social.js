@@ -12,6 +12,7 @@ const SocialBarButton = new Lang.Class({
 
     _init: function() {
         this.parent(null, _("Social Bar"));
+        this.actor.add_style_class_name('social-icon');
 
         let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/social-bar-normal.png');
         this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
