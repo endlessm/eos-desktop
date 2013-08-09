@@ -540,9 +540,11 @@ const ScrolledIconList = new Lang.Class({
         let appSys = Shell.AppSystem.get_default();
         this._runningApps = new Hash.Map();
 
+        this._numExcludedApps = 0;
         // Exclusions are added to the base list
         for (let appIndex in excludedApps) {
             this._runningApps.set(excludedApps[appIndex], null);
+            this._numExcludedApps += 1;
         }
 
         // Update for any apps running before the system started
@@ -581,7 +583,7 @@ const ScrolledIconList = new Lang.Class({
 
     _updatePage: function() {
         // Clip the values of the iconOffset
-        let lastIconOffset = this._runningApps.size() - 1;
+        let lastIconOffset = this._runningApps.size() - this._numExcludedApps - 1;
         let movableIconsPerPage = this._appsPerPage - 1;
         this._iconOffset = Math.max(0, this._iconOffset);
         this._iconOffset = Math.min(lastIconOffset - movableIconsPerPage, this._iconOffset);
@@ -621,7 +623,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     isForwardAllowed: function() {
-        return this._iconOffset < this._runningApps.size() - this._appsPerPage;
+        return this._iconOffset < this._runningApps.size() - this._appsPerPage - this._numExcludedApps;
     },
 
     calculateNaturalSize: function(forWidth) {
@@ -654,7 +656,7 @@ const ScrolledIconList = new Lang.Class({
     _ensureIsVisible: function(app) {
         let itemIndex = this._runningApps.keys().indexOf(app);
         if (itemIndex != -1) {
-            this._iconOffset = itemIndex;
+            this._iconOffset = itemIndex - this._numExcludedApps;
         }
 
         this._updatePage();
@@ -714,7 +716,7 @@ const ScrolledIconList = new Lang.Class({
         let iconsPerPage = Math.floor((forWidth + this._iconSpacing) / minimumIconWidth);
         iconsPerPage = Math.max(1, iconsPerPage);
 
-        let pages = Math.ceil(this._runningApps.items().length / iconsPerPage);
+        let pages = Math.ceil((this._runningApps.items().length - this._numExcludedApps) / iconsPerPage);
 
         // If we only have one page, previous calculations will return 0 so
         // we clip the value here
@@ -726,7 +728,7 @@ const ScrolledIconList = new Lang.Class({
     _getAppsOnPage: function(pageNum, appsPerPage){
         let apps = this._runningApps.items();
 
-        let startIndex = appsPerPage * pageNum;
+        let startIndex = appsPerPage * pageNum + this._numExcludedApps;
         let endIndex = Math.min(startIndex + appsPerPage, apps.length);
 
         let appsOnPage = apps.slice(startIndex, endIndex);
@@ -814,6 +816,8 @@ const AppIconBar = new Lang.Class({
         this._backButton = new AppIconBarNavButton('/theme/app-bar-back-symbolic.svg', Lang.bind(this, this._previousPageSelected));
         this._forwardButton = new AppIconBarNavButton('/theme/app-bar-forward-symbolic.svg', Lang.bind(this, this._nextPageSelected));
 
+        this._container.add_actor(this._backButton);
+
         this._browserButton = null;
         let browserApp = Util.getBrowserApp();
         if (browserApp != null) {
@@ -822,9 +826,8 @@ const AppIconBar = new Lang.Class({
         }
 
         this._scrolledIconList = new ScrolledIconList([browserApp]);
-
         this._container.add_actor(this._scrolledIconList.actor);
-        this._container.add_actor(this._backButton);
+
         this._container.add_actor(this._forwardButton);
 
         this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, this._updateNavButtonState));
@@ -856,10 +859,10 @@ const AppIconBar = new Lang.Class({
     },
 
     _getContentPreferredWidth: function(actor, forHeight, alloc) {
-        alloc.min_size = 2 * this._navButtonSize + 2 * this._navButtonSpacing +
+        alloc.min_size = 2 * this._navButtonSize + 3 * this._navButtonSpacing +
                              this._scrolledIconList.getMinWidth() +
                              this._scrolledIconList.getIconSize();
-        alloc.natural_size = 2 * this._navButtonSize + 2 * this._navButtonSpacing +
+        alloc.natural_size = 2 * this._navButtonSize + 3 * this._navButtonSpacing +
                                  this._scrolledIconList.getNaturalWidth() +
                                  this._scrolledIconList.getIconSize();
     },
@@ -886,8 +889,14 @@ const AppIconBar = new Lang.Class({
         childBox.y2 = childBox.y1 + Math.min(naturalHeight, allocHeight);
 
         childBox.x1 = 0;
-        childBox.x2 = childBox.x1 + this._navButtonSize;
-        this._backButton.allocate(childBox, flags);
+        childBox.x2 = 0;
+
+        if (this._scrolledIconList.isBackAllowed()) {
+            childBox.x2 = childBox.x1 + this._navButtonSize;
+            this._backButton.allocate(childBox, flags);
+
+            childBox.x2 += this._navButtonSpacing;
+        }
 
         childBox.x1 = childBox.x2;
         childBox.x2 = childBox.x1 + this._scrolledIconList.getIconSize();

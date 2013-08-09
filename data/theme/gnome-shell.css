@@ -256,6 +256,12 @@ StScrollBar StButton#vhandle:active {
     icon-size: 30px;
 }
 
+.panel-separator-icon {
+    width: 1px;
+    height: 30px;
+    icon-size: 30px
+}
+
 .popup-battery-percentage {
     padding-left: 24px;
 }
@@ -487,15 +493,20 @@ StScrollBar StButton#vhandle:active {
 }
 
 #appIconBar {
-    padding-left: 4px;
+    padding-left: 2px;
     padding-right: 0px;
     padding-bottom: 2px;
     padding-top: 2px;
 }
 
 .app-icon-bar.panel-button {
-    -minimum-hpadding: 0;
-    -natural-hpadding: 0;
+    -minimum-hpadding: 6px;
+    -natural-hpadding: 6px;
+}
+
+.user-menu-icon.panel-button {
+    -minimum-hpadding: 10px;
+    -natural-hpadding: 10px;
 }
 
 .browser-icon {
@@ -506,6 +517,12 @@ StScrollBar StButton#vhandle:active {
 .scrolled-icon-container {
     -icon-size: 24px;
     spacing: 10px;
+}
+
+.panel-separator {
+    spacing: 0px
+    width: 1px;
+    height: 10px;
 }
 
 .app-icon-hover-label {
@@ -598,7 +615,8 @@ StScrollBar StButton#vhandle:active {
 /* User Menu */
 
 #panelUserMenu {
-    spacing: 4px;
+    padding-left: 6px;
+    width: 34px;
 }
 
 .status-chooser {
