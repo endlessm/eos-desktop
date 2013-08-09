@@ -282,10 +282,6 @@ const MyClutterEffect = new Lang.Class({
         let xTranslation = scaledAngleX * origDistanceFromMiddle;
         vertex.x -= xTranslation;
 
-    },
-
-    vfunc_notify: function() {
-        print("stuff");
     }
 });
 
