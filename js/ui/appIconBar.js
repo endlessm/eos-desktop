@@ -541,7 +541,7 @@ const ScrolledIconList = new Lang.Class({
         this._runningApps = new Hash.Map();
 
         // Exclusions are added to the base list
-        for (appIndex in excludedApps) {
+        for (let appIndex in excludedApps) {
             this._runningApps.set(excludedApps[appIndex], null);
         }
 
