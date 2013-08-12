@@ -148,7 +148,7 @@ const DateMenuButton = new Lang.Class({
 
         // Done with hbox for calendar and event list
 
-        this._clock = new GnomeDesktop.WallClock();
+        this._clock = new GnomeDesktop.WallClock({'time_only' : true});
         this._clock.connect('notify::clock', Lang.bind(this, this._updateClockAndDate));
         this._updateClockAndDate();
 
