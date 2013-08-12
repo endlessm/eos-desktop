@@ -505,8 +505,8 @@ StScrollBar StButton#vhandle:active {
 }
 
 .user-menu-icon.panel-button {
-    -minimum-hpadding: 10px;
-    -natural-hpadding: 10px;
+    -minimum-hpadding: 4px;
+    -natural-hpadding: 4px;
 }
 
 .browser-icon {
