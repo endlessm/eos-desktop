@@ -269,7 +269,8 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'keyboard': imports.ui.status.keyboard.InputSourceIndicator,
     'powerMenu': imports.gdm.powerMenu.PowerMenuButton,
     'userMenu': imports.ui.userMenu.UserMenuButton,
-    'socialBar': imports.ui.status.social.SocialBarButton
+    'socialBar': imports.ui.status.social.SocialBarButton,
+    'panelSeparator': imports.ui.panelSeparator.PanelSeparator
 };
 
 if (Config.HAVE_BLUETOOTH)

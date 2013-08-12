@@ -486,6 +486,8 @@ const UserMenuButton = new Lang.Class({
     _init: function() {
         this.parent(0.0);
 
+        this.actor.add_style_class_name('user-menu-icon');
+
         this.actor.accessible_role = Atk.Role.MENU;
 
         let box = new St.BoxLayout({ name: 'panelUserMenu' });
