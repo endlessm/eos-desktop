@@ -1023,6 +1023,10 @@ const FolderIcon = new Lang.Class({
     },
 
     _createPopup: function() {
+        if (this._popup) {
+            return;
+        }
+
         let [sourceX, sourceY] = this.actor.get_transformed_position();
         let [sourceXP, sourceYP] = this.parentView.stack.get_transformed_position();
         let relY = sourceY - sourceYP;
