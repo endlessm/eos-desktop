@@ -485,6 +485,8 @@ const AllView = new Lang.Class({
         let [ gridW, gridH ] = this.actor.get_transformed_size();
         let gridBottom = gridY + gridH;
 
+        let adjustment = this.actor.vscroll.adjustment;
+
         if (dragEvent.y > gridY && dragEvent.y < gridBottom) {
             // We're within the grid boundaries - cancel any existing
             // scrolling
@@ -494,8 +496,6 @@ const AllView = new Lang.Class({
 
             return false;
         }
-
-        let adjustment = this.actor.vscroll.adjustment;
 
         if (dragEvent.y <= gridY &&
             adjustment.value > 0) {
