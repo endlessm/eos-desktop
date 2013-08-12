@@ -1,3 +1,9 @@
+eos-shell (1.1.4~dev1) unstable; urgency=low
+
+  * Updating version to 1.1.4~dev1
+
+ -- Roddy Shuler <roddy@endlessm.com>  Mon, 12 Aug 2013 15:40:09 -0500
+
 eos-shell (1.1.2~dev2) unstable; urgency=low
 
   * Updating version to 1.1.2~dev2
