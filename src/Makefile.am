@@ -130,8 +130,7 @@ shell_public_headers_h =		\
 	shell-tray-manager.h		\
 	shell-util.h			\
 	shell-window-tracker.h		\
-	shell-wm.h			\
-	shell-xfixes-cursor.h
+	shell-wm.h
 
 shell_private_sources = \
 	gactionmuxer.h			\
@@ -182,7 +181,6 @@ libeos_shell_la_SOURCES =		\
 	shell-util.c			\
 	shell-window-tracker.c		\
 	shell-wm.c			\
-	shell-xfixes-cursor.c		\
 	$(NULL)
 
 libeos_shell_la_gir_sources = \

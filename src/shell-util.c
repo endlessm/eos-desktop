@@ -402,3 +402,13 @@ shell_util_create_pixbuf_from_data (const guchar      *data,
                                    bits_per_sample, width, height, rowstride,
                                    (GdkPixbufDestroyNotify) g_free, NULL);
 }
+
+void
+shell_util_cursor_tracker_to_clutter (MetaCursorTracker *tracker,
+                                      ClutterTexture    *texture)
+{
+  CoglTexture *sprite;
+
+  sprite = meta_cursor_tracker_get_sprite (tracker);
+  clutter_texture_set_cogl_texture (texture, sprite);
+}
