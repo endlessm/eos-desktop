@@ -7,7 +7,10 @@ const Mainloop = imports.mainloop;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
-const A11Y_SCHEMA = 'org.gnome.desktop.a11y.keyboard';
+const A11Y_SCHEMA = 'org.gnome.desktop.a11y'
+const KEY_ALWAYS_SHOW = 'always-show-universal-access-status';
+
+const A11Y_KEYBOARD_SCHEMA = 'org.gnome.desktop.a11y.keyboard'
 const KEY_STICKY_KEYS_ENABLED = 'stickykeys-enable';
 const KEY_BOUNCE_KEYS_ENABLED = 'bouncekeys-enable';
 const KEY_SLOW_KEYS_ENABLED   = 'slowkeys-enable';
@@ -35,6 +38,9 @@ const ATIndicator = new Lang.Class({
     _init: function() {
         this.parent('preferences-desktop-accessibility-symbolic', _("Accessibility"));
 
+        this._a11ySettings = new Gio.Settings({ schema: A11Y_SCHEMA });
+        this._a11ySettings.connect('changed::' + KEY_ALWAYS_SHOW, Lang.bind(this, this._queueSyncMenuVisibility));
+
         let highContrast = this._buildHCItem();
         this.menu.addMenuItem(highContrast);
 
@@ -56,16 +62,16 @@ const ATIndicator = new Lang.Class({
         let visualBell = this._buildItem(_("Visual Alerts"), WM_SCHEMA, KEY_VISUAL_BELL);
         this.menu.addMenuItem(visualBell);
 
-        let stickyKeys = this._buildItem(_("Sticky Keys"), A11Y_SCHEMA, KEY_STICKY_KEYS_ENABLED);
+        let stickyKeys = this._buildItem(_("Sticky Keys"), A11Y_KEYBOARD_SCHEMA, KEY_STICKY_KEYS_ENABLED);
         this.menu.addMenuItem(stickyKeys);
 
-        let slowKeys = this._buildItem(_("Slow Keys"), A11Y_SCHEMA, KEY_SLOW_KEYS_ENABLED);
+        let slowKeys = this._buildItem(_("Slow Keys"), A11Y_KEYBOARD_SCHEMA, KEY_SLOW_KEYS_ENABLED);
         this.menu.addMenuItem(slowKeys);
 
-        let bounceKeys = this._buildItem(_("Bounce Keys"), A11Y_SCHEMA, KEY_BOUNCE_KEYS_ENABLED);
+        let bounceKeys = this._buildItem(_("Bounce Keys"), A11Y_KEYBOARD_SCHEMA, KEY_BOUNCE_KEYS_ENABLED);
         this.menu.addMenuItem(bounceKeys);
 
-        let mouseKeys = this._buildItem(_("Mouse Keys"), A11Y_SCHEMA, KEY_MOUSE_KEYS_ENABLED);
+        let mouseKeys = this._buildItem(_("Mouse Keys"), A11Y_KEYBOARD_SCHEMA, KEY_MOUSE_KEYS_ENABLED);
         this.menu.addMenuItem(mouseKeys);
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
@@ -77,9 +83,10 @@ const ATIndicator = new Lang.Class({
     _syncMenuVisibility: function() {
         this._syncMenuVisibilityIdle = 0;
 
+        let alwaysShow = this._a11ySettings.get_boolean(KEY_ALWAYS_SHOW);
         let items = this.menu._getMenuItems();
 
-        this.actor.visible = items.some(function(f) { return !!f.state; });
+        this.actor.visible = alwaysShow || items.some(function(f) { return !!f.state; });
 
         return false;
     },
