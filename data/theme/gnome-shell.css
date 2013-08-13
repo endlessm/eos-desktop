@@ -495,8 +495,8 @@ StScrollBar StButton#vhandle:active {
 #appIconBar {
     padding-left: 2px;
     padding-right: 0px;
-    padding-bottom: 2px;
-    padding-top: 2px;
+    padding-bottom: 0px;
+    padding-top: 0px;
 }
 
 .app-icon-bar.panel-button {
@@ -516,6 +516,7 @@ StScrollBar StButton#vhandle:active {
 
 .scrolled-icon-container {
     -icon-size: 24px;
+    height: 30px;
     spacing: 10px;
 }
 
