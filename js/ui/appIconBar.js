@@ -362,6 +362,7 @@ const AppIconButton = new Lang.Class({
     },
 
     _hideHoverState: function() {
+        this.actor.fake_release();
         if (this._label.get_parent() != null) {
             Main.uiGroup.remove_actor(this._label);
         }
@@ -369,6 +370,7 @@ const AppIconButton = new Lang.Class({
 
     _showHoverState: function() {
         // Show label only if it's not already visible
+        this.actor.fake_release();
         if (!this._label.get_parent()) {
             Main.uiGroup.add_actor(this._label);
 
