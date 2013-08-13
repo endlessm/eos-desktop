@@ -59,6 +59,9 @@ const SPLASH_SCREEN_COMPLETE_TIME = 250;
 // Don't show the flash frame until the final spinner cycle
 const SPLASH_CIRCLE_SKIP_END_FRAMES = 1;
 
+const FOLDER_POPUP_ANIMATION_TIME = 0.3;
+const FOLDER_POPUP_ANIMATION_TYPE = 'linear';
+
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'eos-app-store.desktop';
 const ALL_VIEW_ID = '';
@@ -688,15 +691,38 @@ const AllView = new Lang.Class({
 
                 if (isOpen) {
                     this._ensureIconVisible(popup.actor);
-                    this._grid.actor.y += popup.parentOffset;
+
+                    // Save the current offset before we switch off centered mode
+                    let currentY = this._grid.actor.get_allocation_box().y1;
+                    let targetY = this._grid.actor.y + popup.parentOffset;
+
                     // In order for the parent offset to be interpreted
                     // properly, we have to temporarily disable the
                     // centering of the grid
                     this._grid.actor.y_align = Clutter.ActorAlign.START;
+                    this._grid.actor.y = currentY;
+
+                    Tweener.addTween(this._grid.actor, { y: targetY,
+                                                         time: FOLDER_POPUP_ANIMATION_TIME,
+                                                         transition: FOLDER_POPUP_ANIMATION_TYPE });
                 } else {
-                    this._grid.actor.y = 0;
+                    // Save the current offset
+                    let currentY = this._grid.actor.get_allocation_box().y1;
+
                     // Reinstate the centering once the folder is closed
+                    this._grid.actor.y = 0;
                     this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
+
+                    // Calculate how far to offset the centered grid
+                    let newY = this._grid.actor.get_allocation_box().y1;
+                    let offset = currentY - newY;
+
+                    this._grid.actor.y = offset + popup.parentOffset;
+
+                    Tweener.addTween(this._grid.actor, { y: 0,
+                                                         time: FOLDER_POPUP_ANIMATION_TIME,
+                                                         transition: FOLDER_POPUP_ANIMATION_TYPE
+                                                        });
                 }
             }));
     },
