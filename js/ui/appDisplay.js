@@ -59,8 +59,8 @@ const SPLASH_SCREEN_COMPLETE_TIME = 250;
 // Don't show the flash frame until the final spinner cycle
 const SPLASH_CIRCLE_SKIP_END_FRAMES = 1;
 
-const FOLDER_POPUP_ANIMATION_TIME = 0.3;
-const FOLDER_POPUP_ANIMATION_TYPE = 'linear';
+const FOLDER_POPUP_ANIMATION_TIME = 0.25;
+const FOLDER_POPUP_ANIMATION_TYPE = 'easeOutQuad';
 
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'eos-app-store.desktop';
