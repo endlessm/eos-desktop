@@ -1689,7 +1689,7 @@ const MessageTray = new Lang.Class({
 
         this._userActiveWhileNotificationShown = false;
 
-        this.idleMonitor = new GnomeDesktop.IdleMonitor();
+        this.idleMonitor = Meta.IdleMonitor.get_core();
 
         this._grabHelper = new GrabHelper.GrabHelper(this.actor,
                                                      { keybindingMode: Shell.KeyBindingMode.MESSAGE_TRAY });

@@ -8,6 +8,7 @@ const GLib = imports.gi.GLib;
 const GnomeDesktop = imports.gi.GnomeDesktop;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
+const Meta = imports.gi.Meta;
 const Signals = imports.signals;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
@@ -144,7 +145,7 @@ const UnlockDialog = new Lang.Class({
 
         Main.ctrlAltTabManager.addGroup(this.dialogLayout, _("Unlock Window"), 'dialog-password-symbolic');
 
-        this._idleMonitor = new GnomeDesktop.IdleMonitor();
+        this._idleMonitor = Meta.IdleMonitor.get_core();
         this._idleWatchId = this._idleMonitor.add_idle_watch(IDLE_TIMEOUT * 1000, Lang.bind(this, this._escape));
     },
 
