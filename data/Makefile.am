@@ -37,6 +37,9 @@ themedir = $(pkgdatadir)/theme
 dist_theme_DATA =				\
 	theme/app-bar-back-symbolic.svg		\
 	theme/app-bar-forward-symbolic.svg	\
+	theme/app-shadow-hover.png		\
+	theme/app-shadow-normal.png		\
+	theme/app-shadow-pressed.png		\
 	theme/calendar-arrow-left.svg		\
 	theme/calendar-arrow-right.svg		\
 	theme/calendar-today.svg		\
@@ -52,6 +55,8 @@ dist_theme_DATA =				\
 	theme/dash-placeholder.svg		\
 	theme/filter-selected-ltr.svg		\
 	theme/filter-selected-rtl.svg		\
+	theme/folder-shadow-hover.png		\
+	theme/folder-shadow-pressed.png		\
 	theme/gnome-shell.css			\
 	theme/google-logo-symbolic.svg		\
 	theme/internet-hover.png		\

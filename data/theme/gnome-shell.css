@@ -931,6 +931,15 @@ StScrollBar StButton#vhandle:active {
     padding: 15px;
 }
 
+.app-well-app .shadow-icon {
+    background-image: url("app-shadow-normal.png");
+    background-size: 64px;
+}
+
+.overview-icon.dnd-begin .shadow-icon {
+    background: none;
+}
+
 .app-well-app.running > .overview-icon {
     text-shadow: black 0px 2px 2px;
     background-image: url("running-indicator.svg");
@@ -941,12 +950,24 @@ StScrollBar StButton#vhandle:active {
     background: none;
 }
 
-.app-well-app:hover > .overview-icon,
+.app-well-app:hover > .overview-icon {
+}
+
+.app-well-app:hover .shadow-icon {
+    background-image: url("app-shadow-hover.png");
+    background-size: 64px;
+}
+
+.app-well-app.app-folder:hover .shadow-icon {
+    background-image: url("folder-shadow-hover.png");
+    background-size: 64px;
+}
+
 .show-apps:hover > .overview-icon {
     background-color: rgba(255,255,255,0.1);
     text-shadow: black 0px 2px 2px;
     transition-duration: 100ms;
-    color:white;
+    color: white;
 }
 
 .all-apps .app-well-app > .overview-icon {
@@ -966,7 +987,21 @@ StScrollBar StButton#vhandle:active {
 }
 
 .app-well-app:checked > .overview-icon,
-.app-well-app:active > .overview-icon,
+.app-well-app:active > .overview-icon {
+}
+
+.app-well-app:checked .shadow-icon,
+.app-well-app:active .shadow-icon {
+    background-image: url("app-shadow-pressed.png");
+    background-size: 64px;
+}
+
+.app-well-app.app-folder:checked .shadow-icon,
+.app-well-app.app-folder:active .shadow-icon {
+    background-image: url("folder-shadow-pressed.png");
+    background-size: 64px;
+}
+
 .show-apps:checked > .overview-icon,
 .show-apps:active > .overview-icon {
     background-gradient-start: rgba(255, 255, 255, .05);
