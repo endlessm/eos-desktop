@@ -278,10 +278,23 @@ const BaseIcon = new Lang.Class({
         this.actor.set_child(box);
 
         this.iconSize = ICON_SIZE;
+        this._layeredIcon = new St.Widget({ layout_manager: new Clutter.BinLayout(),
+                                            visible: true,
+                                            x_align: Clutter.ActorAlign.CENTER,
+                                            y_align: Clutter.ActorAlign.CENTER,
+                                            x_expand: true,
+                                            y_expand: true });
+        box.add_actor(this._layeredIcon);
+
         this._iconBin = new St.Bin({ x_align: St.Align.MIDDLE,
                                      y_align: St.Align.MIDDLE });
 
-        box.add_actor(this._iconBin);
+        let shadowBin = new St.Bin({ style_class: 'shadow-icon',
+                                     width: 64,
+                                     height: 64 });
+
+        this._layeredIcon.add_actor(this._iconBin);
+        this._layeredIcon.add_actor(shadowBin);
 
         if (params.showLabel) {
             if (params.editableLabel) {
@@ -344,7 +357,7 @@ const BaseIcon = new Lang.Class({
         childBox.y1 = Math.floor((iconSize - iconNatHeight) / 2);
         childBox.x2 = childBox.x1 + iconNatWidth;
         childBox.y2 = childBox.y1 + iconNatHeight;
-        this._iconBin.allocate(childBox, flags);
+        this._layeredIcon.allocate(childBox, flags);
     },
 
     _getPreferredWidth: function(actor, forHeight, alloc) {
