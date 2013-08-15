@@ -936,6 +936,10 @@ StScrollBar StButton#vhandle:active {
     background-size: 64px;
 }
 
+.app-well-app.app-folder .shadow-icon {
+    background: none;
+}
+
 .overview-icon.dnd-begin .shadow-icon {
     background: none;
 }
