@@ -431,6 +431,9 @@ const AppIconButton = new Lang.Class({
         windows.forEach(Lang.bind(this,
             function(win) {
                 win.set_icon_geometry(rect);
+                win.connect('focus', Lang.bind (this, function() {
+                    this.emit('focus');
+                }));
             }));
     },
 
@@ -460,6 +463,7 @@ const AppIconButton = new Lang.Class({
             }));
     }
 });
+Signals.addSignalMethods(AppIconButton.prototype);
 
 /** AppIconBarNavButton:
  *
@@ -559,10 +563,27 @@ const ScrolledIconList = new Lang.Class({
             if (!this._runningApps.has(app)) {
                 this._runningApps.set(app, newChild);
                 this._container.add(newChild.actor);
+                newChild.connect('focus', Lang.bind(this, function() {
+                    this._setIconActive(newChild);
+                }));
             }
         }
 
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
+    },
+
+    _setIconActive: function(iconButton) {
+        this._runningApps.values().forEach(Lang.bind(this, function(icon) {
+            if (icon == null) {
+                return;
+            }
+
+            if (icon == iconButton) {
+                icon.actor.add_style_pseudo_class('active');
+            } else {
+                icon.actor.remove_style_pseudo_class('active');
+            }
+        }));
     },
 
     getIconSize: function() {
@@ -672,6 +693,9 @@ const ScrolledIconList = new Lang.Class({
                 let newChild = new AppIconButton(app, this._iconSize);
                 this._runningApps.set(app, newChild);
                 this._container.add_actor(newChild.actor);
+                newChild.connect('focus', Lang.bind(this, function() {
+                    this._setIconActive(newChild);
+                }));
             }
             this._ensureIsVisible(app);
             break;
@@ -686,6 +710,9 @@ const ScrolledIconList = new Lang.Class({
                 let newChild = new AppIconButton(app, this._iconSize);
                 this._runningApps.set(app, newChild);
                 this._container.add_actor(newChild.actor);
+                newChild.connect('focus', Lang.bind(this, function() {
+                    this._setIconActive(newChild);
+                }));
             }
             this._ensureIsVisible(app);
             break;
