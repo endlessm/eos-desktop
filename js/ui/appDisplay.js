@@ -1424,7 +1424,8 @@ const AppIcon = new Lang.Class({
     _init : function(app, iconParams, params) {
         params = Params.parse(params, { showMenu: true,
                                         isDraggable: true,
-                                        parentView: null });
+                                        parentView: null,
+                                        style_class: 'app-well-app' });
 
         this.app = app;
         this._name = this.app.get_name();
@@ -1437,7 +1438,7 @@ const AppIcon = new Lang.Class({
         iconParams['createIcon'] = Lang.bind(this, this._createIcon);
         iconParams['editableLabel'] = true;
 
-        let buttonParams = { style_class: 'app-well-app',
+        let buttonParams = { style_class: params['style_class'],
                              button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
 
         this.parent(params.parentView, buttonParams, iconParams);
@@ -1656,7 +1657,8 @@ const AppStoreIcon = new Lang.Class({
         this.parent(app, null,
                     { showMenu: false,
                       isDraggable: false,
-                      parentView: parentView });
+                      parentView: parentView,
+                      style_class: 'app-well-app app-folder' });
 
         this.canDrop = true;
 
