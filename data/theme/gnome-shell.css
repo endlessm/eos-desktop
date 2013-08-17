@@ -812,13 +812,12 @@ StScrollBar StButton#vhandle:active {
     -minimum-vpadding: 24px;
 }
 
-#searchEntry:focus {
+#searchEntry:hover {
     color: #ffffff;
     background-color: rgba(30,30,30,0.65);
-    transition-duration: 0ms;
 }
 
-#searchEntry:hover {
+#searchEntry:focus {
     color: #ffffff;
     background-color: rgba(30,30,30,0.65);
 }
