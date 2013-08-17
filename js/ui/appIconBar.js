@@ -867,6 +867,10 @@ const AppIconBar = new Lang.Class({
                 this._setIconActive(icon);
         }));
 
+        Main.overview.connect('showing', Lang.bind(this, function() {
+            this._setIconActive(null);
+        }));
+
         this._container.add_actor(this._forwardButton);
 
         this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, this._updateNavButtonState));
