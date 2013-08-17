@@ -564,7 +564,7 @@ const ScrolledIconList = new Lang.Class({
                 this._runningApps.set(app, newChild);
                 this._container.add(newChild.actor);
                 newChild.connect('focus', Lang.bind(this, function() {
-                    this._setIconActive(newChild);
+                    this.emit('focus', newChild);
                 }));
             }
         }
@@ -572,7 +572,7 @@ const ScrolledIconList = new Lang.Class({
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
     },
 
-    _setIconActive: function(iconButton) {
+    setIconActive: function(iconButton) {
         this._runningApps.values().forEach(Lang.bind(this, function(icon) {
             if (icon == null) {
                 return;
@@ -694,7 +694,7 @@ const ScrolledIconList = new Lang.Class({
                 this._runningApps.set(app, newChild);
                 this._container.add_actor(newChild.actor);
                 newChild.connect('focus', Lang.bind(this, function() {
-                    this._setIconActive(newChild);
+                    this.emit('focus', newChild);
                 }));
             }
             this._ensureIsVisible(app);
@@ -711,7 +711,7 @@ const ScrolledIconList = new Lang.Class({
                 this._runningApps.set(app, newChild);
                 this._container.add_actor(newChild.actor);
                 newChild.connect('focus', Lang.bind(this, function() {
-                    this._setIconActive(newChild);
+                    this.emit('focus', newChild);
                 }));
             }
             this._ensureIsVisible(app);
@@ -857,9 +857,30 @@ const AppIconBar = new Lang.Class({
         this._scrolledIconList = new ScrolledIconList([browserApp]);
         this._container.add_actor(this._scrolledIconList.actor);
 
+        if (this._browserButton != null) {
+            this._browserButton.connect('focus', Lang.bind(this, function() {
+                this._setIconActive(this._browserButton);
+            }));
+        }
+
+        this._scrolledIconList.connect('focus', Lang.bind(this, function(source, icon) {
+                this._setIconActive(icon);
+        }));
+
         this._container.add_actor(this._forwardButton);
 
         this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, this._updateNavButtonState));
+    },
+
+    _setIconActive: function(activeIcon) {
+        if (this._browserButton != null) {
+            if (this._browserButton == activeIcon) {
+                this._browserButton.actor.add_style_pseudo_class('active');
+            } else {
+                this._browserButton.actor.remove_style_pseudo_class('active');
+            }
+        }
+        this._scrolledIconList.setIconActive(activeIcon);
     },
 
     _previousPageSelected: function() {
