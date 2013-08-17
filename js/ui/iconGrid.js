@@ -48,6 +48,7 @@ const EditableLabel = new Lang.Class({
     Name: 'EditableLabel',
     Extends: St.Entry,
     Signals: {
+        'label-edit-begin': { },
         'label-edit-update': { param_types: [ GObject.TYPE_STRING ] },
         'label-edit-cancel': { }
     },
@@ -55,6 +56,7 @@ const EditableLabel = new Lang.Class({
     _init: function(params) {
         this.parent(params);
 
+        this._disposed = false;
         this.clutter_text.editable = false;
         this.clutter_text.x_align = Clutter.ActorAlign.CENTER;
 
@@ -68,15 +70,14 @@ const EditableLabel = new Lang.Class({
 
         this.connect('button-press-event',
             Lang.bind(this, this._onButtonPressEvent));
+    },
 
-        this._blockLabelEditing = false;
+    vfunc_dispose: function() {
+        this._disposed = true;
+        this.parent();
     },
 
     _onButtonPressEvent: function(label, event) {
-        if (this._blockLabelEditing) {
-            return false;
-        }
-
         let button = event.get_button();
         if (button != ButtonConstants.LEFT_MOUSE_BUTTON) {
             return false;
@@ -126,6 +127,10 @@ const EditableLabel = new Lang.Class({
     },
 
     _onHighlightUngrab: function(isUser) {
+        if (this._disposed) {
+            return;
+        }
+
         // exit highlight mode
         this.remove_style_pseudo_class('highlighted');
 
@@ -148,6 +153,10 @@ const EditableLabel = new Lang.Class({
     },
 
     _onEditUngrab: function(isUser) {
+        if (this._disposed) {
+            return;
+        }
+
         // edit has already been completed and this is an explicit
         // ungrab from endEditing()
         if (!isUser) {
@@ -194,20 +203,20 @@ const EditableLabel = new Lang.Class({
         // need to roll back
         this._oldLabelText = text;
 
+        this.emit('label-edit-begin');
+
         this._activateId = this.clutter_text.connect('activate',
             Lang.bind(this, this._confirmEditing));
     },
 
     _endEditing: function() {
-        if (this.clutter_text) {
-            this.clutter_text.editable = false;
+        this.clutter_text.editable = false;
 
-            this._oldLabelText = null;
+        this._oldLabelText = null;
 
-            if (this._activateId) {
-                this.clutter_text.disconnect(this._activateId);
-                this._activateId = 0;
-            }
+        if (this._activateId) {
+            this.clutter_text.disconnect(this._activateId);
+            this._activateId = 0;
         }
 
         if (this._keyFocusId) {
@@ -243,7 +252,6 @@ const EditableLabel = new Lang.Class({
         }
 
         this._endEditing();
-        this._blockLabelEditing = true;
         this.emit('label-edit-update', text);
     }
 });

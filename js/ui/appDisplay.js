@@ -204,14 +204,9 @@ const EndlessApplicationView = new Lang.Class({
                                    Lang.bind(this, this._ensureIconVisible));
             }
         }
-    },
-
-    reloadIconNames: function() {
-        for (let i = 0; i < this._allIcons.length; i++) {
-            this._allIcons[i].reloadName();
-        }        
     }
 });
+Signals.addSignalMethods(EndlessApplicationView.prototype);
 
 const FolderView = new Lang.Class({
     Name: 'FolderView',
@@ -872,18 +867,21 @@ const AppDisplay = new Lang.Class({
         this.actor.add_actor(this.entry);
         this.actor.add_actor(this._view.actor);
 
+        this._view.connect('label-edit-begin', Lang.bind(this, this._onLabelEditBegin));
+        this._view.connect('label-edit-end', Lang.bind(this, this._onLabelEditEnd));
+
         // This makes sure that any DnD ops get channeled to the icon grid logic
         // otherwise dropping an item outside of the grid bounds fails
         this.actor._delegate = this;
 
+        this._editPreventRedisplay = false;
         this._draggedPreventRedisplay = false;
-        this._dragRedisplayPending = false;
+        this._redisplayPending = false;
         Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
 
         this._appSystem = Shell.AppSystem.get_default();
         this._appSystem.connect('installed-changed', Lang.bind(this, function() {
-            this._view.reloadIconNames();
             Main.queueDeferredWork(this._allAppsWorkId);
         }));
         global.settings.connect('changed::app-folder-categories', Lang.bind(this, function() {
@@ -912,18 +910,26 @@ const AppDisplay = new Lang.Class({
     _onDragEnd: function(overview, source) {
         this._draggedPreventRedisplay = false;
 
-        if (this._dragRedisplayPending) {
+        if (this._redisplayPending) {
             Main.queueDeferredWork(this._allAppsWorkId);
         }
     },
 
+    _onLabelEditBegin: function() {
+        this._editPreventRedisplay  = true;
+    },
+
+    _onLabelEditEnd: function() {
+        this._editPreventRedisplay = false;
+    },
+
     _redisplay: function() {
-        // Check if a redisplays are blocked due to DnD
-        if (this._draggedPreventRedisplay) {
-            this._dragRedisplayPending = true;
+        // Check if a redisplays are blocked due to DnD or label editing
+        if (this._draggedPreventRedisplay || this._editPreventRedisplay) {
+            this._redisplayPending = true;
             return;
         }
-        this._dragRedisplayPending = false;
+        this._redisplayPending = false;
 
         if (this._view.getAllIcons().length == 0) {
             this._view.addIcons();
@@ -962,6 +968,10 @@ const ViewIcon = new Lang.Class({
 
         this.icon = new IconGrid.BaseIcon(this.getName(), iconParams, buttonParams);
         if (iconParams['showLabel'] !== false) {
+            this.icon.label.connect('label-edit-begin', Lang.bind(this, function() { this.parentView.emit('label-edit-begin'); }));
+            this.icon.label.connect('label-edit-update', Lang.bind(this, function() { this.parentView.emit('label-edit-end'); }));
+            this.icon.label.connect('label-edit-cancel', Lang.bind(this, function() { this.parentView.emit('label-edit-end'); }));            
+
             this.icon.label.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
             this.icon.label.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
         }
@@ -1201,10 +1211,6 @@ const FolderIcon = new Lang.Class({
         }
 
         return true;
-    },
-
-    reloadName: function() {
-        this._name = this.folder.get_name();
     }
 });
 
@@ -1718,10 +1724,6 @@ const AppIcon = new Lang.Class({
 
     canDragOver: function(dest) {
         return true;
-    },
-
-    reloadName: function() {
-        this._name = this.app.get_name();
     }
 });
 Signals.addSignalMethods(AppIcon.prototype);
