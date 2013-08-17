@@ -77,6 +77,9 @@ static gboolean              gnome_shell_plugin_xevent_filter (MetaPlugin *plugi
 
 static gboolean              gnome_shell_plugin_keybinding_filter (MetaPlugin *plugin,
                                                                    MetaKeyBinding *binding);
+
+static void gnome_shell_plugin_confirm_display_change (MetaPlugin *plugin);
+
 static const MetaPluginInfo *gnome_shell_plugin_plugin_info   (MetaPlugin *plugin);
 
 
@@ -135,6 +138,9 @@ gnome_shell_plugin_class_init (GnomeShellPluginClass *klass)
 
   plugin_class->xevent_filter     = gnome_shell_plugin_xevent_filter;
   plugin_class->keybinding_filter = gnome_shell_plugin_keybinding_filter;
+
+  plugin_class->confirm_display_change = gnome_shell_plugin_confirm_display_change;
+
   plugin_class->plugin_info       = gnome_shell_plugin_plugin_info;
 }
 
@@ -408,6 +414,12 @@ gnome_shell_plugin_keybinding_filter (MetaPlugin     *plugin,
                                       MetaKeyBinding *binding)
 {
   return _shell_wm_filter_keybinding (get_shell_wm (), binding);
+}
+
+static void
+gnome_shell_plugin_confirm_display_change (MetaPlugin *plugin)
+{
+  _shell_wm_confirm_display_change (get_shell_wm ());
 }
 
 static const
