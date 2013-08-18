@@ -305,6 +305,20 @@ shell_app_system_lookup_desktop_wmclass (ShellAppSystem *system,
   if (wmclass == NULL)
     return NULL;
 
+  /* First try without changing the case (this handles
+     org.example.Foo.Bar.desktop applications)
+
+     Note that is slightly wrong in that Gtk+ would set
+     the WM_CLASS to Org.example.Foo.Bar, but it also
+     sets the instance part to org.example.Foo.Bar, so we're ok
+  */
+  desktop_file = g_strconcat (wmclass, ".desktop", NULL);
+  app = shell_app_system_lookup_heuristic_basename (system, desktop_file);
+  g_free (desktop_file);
+
+  if (app)
+    return app;
+
   canonicalized = canonicalize_and_sanitize_wmclass (wmclass);
   desktop_file = g_strconcat (canonicalized, ".desktop", NULL);
 
