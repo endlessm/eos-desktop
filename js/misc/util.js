@@ -292,12 +292,13 @@ function ensureActorVisibleInScrollView(scrollView, actor) {
     else if (y2 > value + pageSize - offset)
         value = Math.min(upper, y2 + offset - pageSize);
     else
-        return;
+        return false;
 
     Tweener.addTween(adjustment,
                      { value: value,
                        time: SCROLL_TIME,
                        transition: 'easeOutQuad' });
+    return true;
 }
 
 function minimizeOtherWindows(metaWindow) {

@@ -59,7 +59,7 @@ const SPLASH_SCREEN_COMPLETE_TIME = 250;
 // Don't show the flash frame until the final spinner cycle
 const SPLASH_CIRCLE_SKIP_END_FRAMES = 1;
 
-const FOLDER_POPUP_ANIMATION_TIME = 0.25;
+const FOLDER_POPUP_ANIMATION_PIXELS_PER_SEC = 100;
 const FOLDER_POPUP_ANIMATION_TYPE = 'easeOutQuad';
 
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
@@ -178,7 +178,7 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     _ensureIconVisible: function(icon) {
-        Util.ensureActorVisibleInScrollView(this.actor, icon);
+        return Util.ensureActorVisibleInScrollView(this.actor, icon);
     },
 
     addIcons: function() {
@@ -689,42 +689,59 @@ const AllView = new Lang.Class({
                 this._currentPopup = isOpen ? popup : null;
                 this._updateIconOpacities(isOpen);
 
+                // Removing the tweening is mandatory to have the correct
+                // tweening parameters set on the next tweener
+                let wasTweening = Tweener.removeTweens(this._grid.actor, "y");
+
                 if (isOpen) {
                     this._ensureIconVisible(popup.actor);
 
                     // Save the current offset before we switch off centered mode
                     let currentY = this._grid.actor.get_allocation_box().y1;
-                    let targetY = this._grid.actor.y + popup.parentOffset;
 
-                    // In order for the parent offset to be interpreted
-                    // properly, we have to temporarily disable the
-                    // centering of the grid
-                    this._grid.actor.y_align = Clutter.ActorAlign.START;
-                    this._grid.actor.y = currentY;
+                    if (!wasTweening) {
+                        this._centeredAbsOffset = currentY;
+
+                        // In order for the parent offset to be interpreted
+                        // properly, we have to temporarily disable the
+                        // centering of the grid
+                        this._grid.actor.y_align = Clutter.ActorAlign.START;
+                        this._grid.actor.y = currentY;
+                    }
+
+                    let targetY = this._centeredAbsOffset + popup.parentOffset;
+                    let distance = Math.abs(targetY - this._grid.actor.y);
+
+                    if (this._grid.actor.y == targetY) {
+                        return;
+                    }
 
                     Tweener.addTween(this._grid.actor, { y: targetY,
-                                                         time: FOLDER_POPUP_ANIMATION_TIME,
+                                                         time: distance / FOLDER_POPUP_ANIMATION_PIXELS_PER_SEC,
                                                          transition: FOLDER_POPUP_ANIMATION_TYPE });
-                } else {
-                    // Save the current offset
-                    let currentY = this._grid.actor.get_allocation_box().y1;
+                } else { 
+                    if (this._grid.actor.y == this._centeredAbsOffset) {
+                        this._resetGrid();
+                        return;
+                    }
 
-                    // Reinstate the centering once the folder is closed
-                    this._grid.actor.y = 0;
-                    this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
-
-                    // Calculate how far to offset the centered grid
-                    let newY = this._grid.actor.get_allocation_box().y1;
-                    let offset = currentY - newY;
-
-                    this._grid.actor.y = offset + popup.parentOffset;
-
-                    Tweener.addTween(this._grid.actor, { y: 0,
-                                                         time: FOLDER_POPUP_ANIMATION_TIME,
-                                                         transition: FOLDER_POPUP_ANIMATION_TYPE
+                    let distance = Math.abs(this._centeredAbsOffset - this._grid.actor.y);
+                    Tweener.addTween(this._grid.actor, { y: this._centeredAbsOffset,
+                                                         time: distance / FOLDER_POPUP_ANIMATION_PIXELS_PER_SEC,
+                                                         transition: FOLDER_POPUP_ANIMATION_TYPE,
+                                                         onComplete: Lang.bind(this, this._resetGrid)
                                                         });
                 }
             }));
+    },
+
+    _resetGrid: function() {
+        this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
+        this._grid.actor.y = 0;
+    },
+
+    isAnimatingGrid: function() {
+        return Tweener.isTweening(this._grid.actor);
     },
 
     _updateIconOpacities: function(folderOpen) {
@@ -1032,8 +1049,9 @@ const FolderIcon = new Lang.Class({
 
         this.actor.connect('clicked', Lang.bind(this,
             function() {
-                this._createPopup();
-                this._popup.toggle();
+                if (this._createPopup()) {
+                    this._popup.toggle();
+                }
             }));
         this.actor.connect('notify::mapped', Lang.bind(this,
             function() {
@@ -1076,8 +1094,8 @@ const FolderIcon = new Lang.Class({
     },
 
     _createPopup: function() {
-        if (this._popup) {
-            return;
+        if (this._popup || this.parentView.isAnimatingGrid()) {
+            return false;
         }
 
         let [sourceX, sourceY] = this.actor.get_transformed_position();
@@ -1112,6 +1130,7 @@ const FolderIcon = new Lang.Class({
                 this._popup.actor.destroy();
                 this._popup = null;
             }));
+        return true;
     },
 
     _reposition: function(side) {
@@ -1146,8 +1165,10 @@ const FolderIcon = new Lang.Class({
         } else {
             let y = actorCoords.y + this.actor.height;
             let viewBottom = this.parentView.stack.y + this.parentView.stack.height;
+       
             let yBottom = y + this._popup.actor.height;
             this._popup.actor.y = y;
+
             // Because the folder extends the size of the grid
             // while it is centered, the offset we need is actually
             // half what might be expected
