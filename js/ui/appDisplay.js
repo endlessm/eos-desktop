@@ -832,6 +832,11 @@ const AppDisplay = new Lang.Class({
         // otherwise dropping an item outside of the grid bounds fails
         this.actor._delegate = this;
 
+        this._draggedPreventRedisplay = false;
+        this._dragRedisplayPending = false;
+        Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
+        Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
+
         this._appSystem = Shell.AppSystem.get_default();
         this._appSystem.connect('installed-changed', Lang.bind(this, function() {
             this._view.reloadIconNames();
@@ -856,7 +861,26 @@ const AppDisplay = new Lang.Class({
         this._view.acceptDrop(source, actor, x, y, time);
     },
 
+    _onDragBegin: function(overview, source) {
+        this._draggedPreventRedisplay = true;
+    },
+
+    _onDragEnd: function(overview, source) {
+        this._draggedPreventRedisplay = false;
+
+        if (this._dragRedisplayPending) {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }
+    },
+
     _redisplay: function() {
+        // Check if a redisplays are blocked due to DnD
+        if (this._draggedPreventRedisplay) {
+            this._dragRedisplayPending = true;
+            return;
+        }
+        this._dragRedisplayPending = false;
+
         if (this._view.getAllIcons().length == 0) {
             this._view.addIcons();
         } else {
