@@ -7,49 +7,82 @@ const Gtk = imports.gi.Gtk;
 
 const System = imports.system;
 
-Gtk.init(null, null);
-let screen = Gdk.Screen.get_default();
-let rrScreen = null;
+const TIMEOUT_PRIORITY = 1;
+const WINDOW_HOLD_TIME = 100;
 
-try {
-    rrScreen = GnomeDesktop.RRScreen.new(screen);
-} catch(e) {
-    logError(e, 'Can\'t create RRScreen for default GdkScreen');
-    System.exit(-1);
+const exitGtkMainLoop = function() {
+    Gtk.main_quit();
 }
 
-let config = null;
+// Fix for some apps that use OpenGL and don't register a window. This allows them
+// to be identified by the shell and eventing to work properly
+const createNamedWindow = function(name) {
+    let trackingWindow = new Gtk.Window({ type: Gtk.WindowType.TOPLEVEL });
 
-try {
-    config = GnomeDesktop.RRConfig.new_current(rrScreen);
-} catch(e) {
-    logError(e, 'Can\'t create RRConfig for current configuration');
-    System.exit(-1);
+    trackingWindow.connect("destroy", exitGtkMainLoop);
+    trackingWindow.connect("realize", function() { GLib.timeout_add(TIMEOUT_PRIORITY,
+                                                                    WINDOW_HOLD_TIME,
+                                                                    exitGtkMainLoop); });
+
+    trackingWindow.resize(1, 1);
+    trackingWindow.set_wmclass(name, name);
+    trackingWindow.set_decorated(false);
+    trackingWindow.set_resizable(false);
+    trackingWindow.show_all();
+
+    Gtk.main();
 }
 
-let cmdline = ARGV.join(' ');
-let status = 0;
-let stdOut = null;
-let stdErr = null;
+const fixResolution = function(args) {
+    Gtk.init(null, null);
+    let screen = Gdk.Screen.get_default();
+    let rrScreen = null;
 
-try {
-    [, stdOut, stdErr, status] = GLib.spawn_command_line_sync(cmdline);
-} catch(e) {
-    logError(e, 'Can\'t spawn command line');
-    System.exit(-1);
+    try {
+        rrScreen = GnomeDesktop.RRScreen.new(screen);
+    } catch(e) {
+        logError(e, 'Can\'t create RRScreen for default GdkScreen');
+        System.exit(-1);
+    }
+
+    let config = null;
+
+    try {
+        config = GnomeDesktop.RRConfig.new_current(rrScreen);
+    } catch(e) {
+        logError(e, 'Can\'t create RRConfig for current configuration');
+        System.exit(-1);
+    }
+
+    let cmdline = args.join(' ');
+    let status = 0;
+    let stdOut = null;
+    let stdErr = null;
+
+    createNamedWindow(args[0]);
+
+    try {
+        [, stdOut, stdErr, status] = GLib.spawn_command_line_sync(cmdline);
+    } catch(e) {
+        logError(e, 'Can\'t spawn command line');
+        System.exit(-1);
+    }
+
+    if (status == 0) {
+        log('\nProcess exited cleanly\nstdout:\n' + stdOut + 'stderr:\n' + stdErr);
+    } else {
+        log('\nProcess exited with error\nstdout:\n' + stdOut + 'stderr:\n' + stdErr);
+    }
+
+    try {
+        config.apply_with_time(rrScreen, 0);
+    } catch(e) {
+        logError(e, 'Failed to apply the last configuration');
+        System.exit(-1);
+    }
+
+    System.exit(status);
 }
 
-if (status == 0) {
-    log('\nProcess exited cleanly\nstdout:\n' + stdOut + 'stderr:\n' + stdErr);
-} else {
-    log('\nProcess exited with error\nstdout:\n' + stdOut + 'stderr:\n' + stdErr);
-}
-
-try {
-    config.apply_with_time(rrScreen, 0);
-} catch(e) {
-    logError(e, 'Failed to apply the last configuration');
-    System.exit(-1);
-}
-
-System.exit(status);
+// Run the script
+fixResolution(ARGV);
