@@ -251,7 +251,7 @@ const EditableLabel = new Lang.Class({
 const BaseIcon = new Lang.Class({
     Name: 'BaseIcon',
 
-    _init : function(label, params) {
+    _init : function(label, params, buttonParams) {
         params = Params.parse(params, { createIcon: null,
                                         setSizeManually: false,
                                         showLabel: true,
@@ -286,14 +286,16 @@ const BaseIcon = new Lang.Class({
                                             y_expand: true });
         box.add_actor(this._layeredIcon);
 
-        this._iconBin = new St.Bin({ x_align: St.Align.MIDDLE,
-                                     y_align: St.Align.MIDDLE });
+        buttonParams = Params.parse(buttonParams, { x_align: St.Align.MIDDLE,
+                                                    y_align: St.Align.MIDDLE },
+                                    true);
+        this.iconButton = new St.Button(buttonParams);
 
         let shadowBin = new St.Bin({ style_class: 'shadow-icon',
                                      width: 64,
                                      height: 64 });
 
-        this._layeredIcon.add_actor(this._iconBin);
+        this._layeredIcon.add_actor(this.iconButton);
         this._layeredIcon.add_actor(shadowBin);
 
         if (params.showLabel) {
@@ -325,8 +327,8 @@ const BaseIcon = new Lang.Class({
 
         let iconSize = availHeight;
 
-        let [iconMinHeight, iconNatHeight] = this._iconBin.get_preferred_height(-1);
-        let [iconMinWidth, iconNatWidth] = this._iconBin.get_preferred_width(-1);
+        let [iconMinHeight, iconNatHeight] = this.iconButton.get_preferred_height(-1);
+        let [iconMinWidth, iconNatWidth] = this.iconButton.get_preferred_width(-1);
         let preferredHeight = iconNatHeight;
 
         let childBox = new Clutter.ActorBox();
@@ -365,7 +367,7 @@ const BaseIcon = new Lang.Class({
     },
 
     _getPreferredHeight: function(actor, forWidth, alloc) {
-        let [iconMinHeight, iconNatHeight] = this._iconBin.get_preferred_height(forWidth);
+        let [iconMinHeight, iconNatHeight] = this.iconButton.get_preferred_height(forWidth);
         alloc.min_size = iconMinHeight;
         alloc.natural_size = iconNatHeight;
 
@@ -398,12 +400,12 @@ const BaseIcon = new Lang.Class({
         this.iconSize = size;
         this.icon = this.createIcon(this.iconSize);
 
-        this._iconBin.child = this.icon;
+        this.iconButton.child = this.icon;
 
         // The icon returned by createIcon() might actually be smaller than
         // the requested icon size (for instance StTextureCache does this
         // for fallback icons), so set the size explicitly.
-        this._iconBin.set_size(this.iconSize, this.iconSize);
+        this.iconButton.set_size(this.iconSize, this.iconSize);
     },
 
     _onStyleChanged: function() {
@@ -418,7 +420,7 @@ const BaseIcon = new Lang.Class({
             size = found ? len : ICON_SIZE;
         }
 
-        if (this.iconSize == size && this._iconBin.child)
+        if (this.iconSize == size && this.iconButton.child)
             return;
 
         this._createIconTexture(size);
