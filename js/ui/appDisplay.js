@@ -59,7 +59,7 @@ const SPLASH_SCREEN_COMPLETE_TIME = 250;
 // Don't show the flash frame until the final spinner cycle
 const SPLASH_CIRCLE_SKIP_END_FRAMES = 1;
 
-const FOLDER_POPUP_ANIMATION_PIXELS_PER_SEC = 100;
+const FOLDER_POPUP_ANIMATION_PIXELS_PER_SEC = 600;
 const FOLDER_POPUP_ANIMATION_TYPE = 'easeOutQuad';
 
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
