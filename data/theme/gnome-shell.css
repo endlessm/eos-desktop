@@ -957,12 +957,14 @@ StScrollBar StButton#vhandle:active {
 .app-well-app:hover > .overview-icon {
 }
 
-.app-well-app:hover .shadow-icon {
+/*.app-well-app:hover .shadow-icon {*/
+.app-well-app .shadow-icon:hover {
     background-image: url("app-shadow-hover.png");
     background-size: 64px;
 }
 
-.app-well-app.app-folder:hover .shadow-icon {
+/*.app-icon-button.app-folder:hover .shadow-icon {*/
+.app-well-app.app-folder .shadow-icon:hover {
     background-image: url("folder-shadow-hover.png");
     background-size: 64px;
 }
@@ -994,14 +996,14 @@ StScrollBar StButton#vhandle:active {
 .app-well-app:active > .overview-icon {
 }
 
-.app-well-app:checked .shadow-icon,
-.app-well-app:active .shadow-icon {
+.app-well-app .shadow-icon:checked,
+.app-well-app .shadow-icon:active {
     background-image: url("app-shadow-pressed.png");
     background-size: 64px;
 }
 
-.app-well-app.app-folder:checked .shadow-icon,
-.app-well-app.app-folder:active .shadow-icon {
+.app-well-app.app-folder .shadow-icon:checked,
+.app-well-app.app-folder .shadow-icon:active {
     background-image: url("folder-shadow-pressed.png");
     background-size: 64px;
 }

@@ -287,16 +287,15 @@ const BaseIcon = new Lang.Class({
         box.add_actor(this._layeredIcon);
 
         buttonParams = Params.parse(buttonParams, { x_align: St.Align.MIDDLE,
-                                                    y_align: St.Align.MIDDLE },
+                                                    y_align: St.Align.MIDDLE,
+                                                    width: 64,
+                                                    height: 64 },
                                     true);
-        this.iconButton = new St.Button(buttonParams);
 
-        let shadowBin = new St.Bin({ style_class: 'shadow-icon',
-                                     width: 64,
-                                     height: 64 });
+        this.iconButton = new St.Button(buttonParams);
+        this.iconButton.add_style_class_name('shadow-icon');
 
         this._layeredIcon.add_actor(this.iconButton);
-        this._layeredIcon.add_actor(shadowBin);
 
         if (params.showLabel) {
             if (params.editableLabel) {
