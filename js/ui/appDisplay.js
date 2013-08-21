@@ -56,6 +56,9 @@ const SPLASH_SCREEN_TIMEOUT = 700;
 const SPLASH_SCREEN_FADE_OUT = 0.2;
 const SPLASH_SCREEN_COMPLETE_TIME = 250;
 
+// Don't show the flash frame until the final spinner cycle
+const SPLASH_CIRCLE_SKIP_END_FRAMES = 1;
+
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'eos-app-store.desktop';
 const ALL_VIEW_ID = '';
@@ -1425,7 +1428,8 @@ const AppSplashPage = new Lang.Class({
         let animationSize = themeNode.get_length('-animation-size');
         this._spinner = new Panel.VariableSpeedAnimation('splash-circle-animation.png',
                                                          animationSize,
-                                                         SPLASH_CIRCLE_INITIAL_TIMEOUT);
+                                                         SPLASH_CIRCLE_INITIAL_TIMEOUT,
+                                                         SPLASH_CIRCLE_SKIP_END_FRAMES);
         this._spinner.actor.x_align = Clutter.ActorAlign.CENTER;
         this._spinner.actor.y_align = Clutter.ActorAlign.CENTER;
         this.add_child(this._spinner.actor);
