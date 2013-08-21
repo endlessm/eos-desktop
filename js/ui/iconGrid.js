@@ -287,9 +287,7 @@ const BaseIcon = new Lang.Class({
         box.add_actor(this._layeredIcon);
 
         buttonParams = Params.parse(buttonParams, { x_align: St.Align.MIDDLE,
-                                                    y_align: St.Align.MIDDLE,
-                                                    width: 64,
-                                                    height: 64 },
+                                                    y_align: St.Align.MIDDLE },
                                     true);
         buttonParams.style_class = 'shadow-icon';
 
