@@ -291,9 +291,9 @@ const BaseIcon = new Lang.Class({
                                                     width: 64,
                                                     height: 64 },
                                     true);
+        buttonParams.style_class = 'shadow-icon';
 
         this.iconButton = new St.Button(buttonParams);
-        this.iconButton.add_style_class_name('shadow-icon');
 
         this._layeredIcon.add_actor(this.iconButton);
 
