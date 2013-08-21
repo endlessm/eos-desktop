@@ -33,10 +33,11 @@ const SPINNER_ANIMATION_TIME = 0.2;
 const Animation = new Lang.Class({
     Name: 'Animation',
 
-    _init: function(filename, width, height, speed) {
+    _init: function(filename, width, height, speed, skipEndFrames = 0) {
         this.actor = new St.Bin({ width: width, height: height });
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
         this._speed = speed;
+        this._skipEndFrames = skipEndFrames;
 
         this._isLoaded = false;
         this._isPlaying = false;
@@ -83,7 +84,14 @@ const Animation = new Lang.Class({
     },
 
     _update: function() {
-        this._showFrame(this._frame + 1);
+        let showFrameNum = this._frame + 1;
+
+        // Skip a number of frames at the end of the sequence if desired
+        if (showFrameNum == this._frames.length - this._skipEndFrames) {
+            showFrameNum = this._frames.length;
+        }
+
+        this._showFrame(showFrameNum);
         return true;
     },
 
@@ -110,8 +118,9 @@ const VariableSpeedAnimation = new Lang.Class({
     Name: 'VariableSpeedAnimation',
     Extends: Animation,
 
-    _init: function(name, size, initialTimeout) {
-        this.parent(global.datadir + '/theme/' + name, size, size, initialTimeout);
+    _init: function(name, size, initialTimeout, skipEndFrames = 0) {
+        this.parent(global.datadir + '/theme/' + name, size, size,
+                    initialTimeout, skipEndFrames);
     },
 
     _updateSpeed: function(newSpeed) {
@@ -125,6 +134,8 @@ const VariableSpeedAnimation = new Lang.Class({
     },
 
     completeInTime: function(time, callback) {
+        // Note: the skipEndFrames does not apply to the final steps
+        // in the sequence once this method is called
         let frameTime = Math.floor(time / (this._frames.length - this._frame));
         this._updateSpeed(frameTime);
 
