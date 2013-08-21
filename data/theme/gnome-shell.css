@@ -957,13 +957,11 @@ StScrollBar StButton#vhandle:active {
 .app-well-app:hover > .overview-icon {
 }
 
-/*.app-well-app:hover .shadow-icon {*/
 .app-well-app .shadow-icon:hover {
     background-image: url("app-shadow-hover.png");
     background-size: 64px;
 }
 
-/*.app-icon-button.app-folder:hover .shadow-icon {*/
 .app-well-app.app-folder .shadow-icon:hover {
     background-image: url("folder-shadow-hover.png");
     background-size: 64px;
