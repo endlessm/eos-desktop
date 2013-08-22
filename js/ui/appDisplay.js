@@ -754,8 +754,6 @@ const AppDisplayLayout = new Lang.Class({
     },
 
     vfunc_allocate: function(container, box, flags) {
-        this.parent(container, box, flags);
-
         let viewActor = this._allView.actor;
         let entry = this._entry;
 
