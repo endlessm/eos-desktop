@@ -902,9 +902,11 @@ const AppIconBar = new Lang.Class({
             childBox.x2 += this._navButtonSpacing;
         }
 
-        childBox.x1 = childBox.x2;
-        childBox.x2 = childBox.x1 + this._scrolledIconList.getIconSize();
-        this._browserButton.actor.allocate(childBox, flags);
+        if (this._browserButton) {
+            childBox.x1 = childBox.x2;
+            childBox.x2 = childBox.x1 + this._scrolledIconList.getIconSize();
+            this._browserButton.actor.allocate(childBox, flags);
+        }
 
         let iconListStart = childBox.x2;
         let maxIconSpace = allocWidth - 2 * (this._navButtonSize + this._navButtonSpacing);
