@@ -68,7 +68,7 @@ const _modes = {
     'initial-setup': {
         hasWindows: true,
         isPrimary: true,
-        components: ['keyring'],
+        components: [ 'networkAgent', 'keyring'],
         panel: {
             left: [],
             right: ['dateMenu', 'a11yGreeter', 'keyboard', 'volume', 'battery']
