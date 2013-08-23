@@ -233,6 +233,7 @@ const _Draggable = new Lang.Class({
     startDrag: function (stageX, stageY, time) {
         currentDraggable = this;
         this._dragInProgress = true;
+        this._dragCancellable = true;
 
         // Special-case St.Button: the pointer grab messes with the internal
         // state, so force a reset to a reasonable state here
@@ -509,12 +510,18 @@ const _Draggable = new Lang.Class({
         let [snapBackX, snapBackY, snapBackScale] = this._getRestoreLocation();
 
         if (this._actorDestroyed) {
-            global.unset_cursor();
-            if (!this._buttonDown)
-                this._dragComplete();
-            this.emit('drag-end', eventTime, false);
-            if (!this._dragOrigParent)
+            if (this._dragOrigParent) {
+                this._dragActor.reparent(this._dragOrigParent);
+                this._dragActor.set_scale(this._dragOrigScale, this._dragOrigScale);
+                this._dragActor.set_position(this._dragOrigX, this._dragOrigY);
+            } else {
                 this._dragActor.destroy();
+            }
+            global.unset_cursor();
+            this.emit('drag-end', eventTime, false);
+            if (!this._buttonDown) {
+                this._dragComplete();
+            }
 
             return;
         }

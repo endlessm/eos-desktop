@@ -181,7 +181,81 @@ const EndlessApplicationView = new Lang.Class({
         return Util.ensureActorVisibleInScrollView(this.actor, icon);
     },
 
+    _iconsNeedRedraw: function() {
+        // Check if the icons moved around
+        let [movedList, removedList] = this._findIconChanges();
+        let movedLength = Object.keys(movedList).length
+        if (movedLength != 0 || removedList.length != 0) {
+            return true;
+        }
+
+        // Create a map from app ids to icon objects
+        let iconTable = {}
+         for (let i = 0; i < this._allIcons.length; i++) {
+            iconTable[this._allIcons[i].getId()] = this._allIcons[i];
+        }       
+
+        let layoutIds = this.getLayoutIds();
+        let appSystem = Shell.AppSystem.get_default();
+
+        // Iterate through all visible icons
+        for (let i = 0; i < layoutIds.length; i++) {
+            let itemId = layoutIds[i];
+
+            let item = null;
+            let isFolder = false;
+            if (IconGridLayout.layout.iconIsFolder(itemId)) {
+                item = Shell.DesktopDirInfo.new(itemId);
+                isFolder = true;
+            } else {
+                item = appSystem.lookup_app(itemId);
+            }
+
+            if (item) {
+                let currentIcon = iconTable[itemId];
+
+                if (!currentIcon) {
+                    // This icon is new
+                    return true;
+                }
+                if (currentIcon.getName() != item.get_name()) {
+                    // This icon was renamed
+                    return true;
+                }
+
+                // Check if the actual icon image changed
+                let oldIconInfo = null;
+                let newIconInfo = null;
+
+                if (isFolder) {
+                    // Check if the items in the folder changed
+                    if (currentIcon.view._iconsNeedRedraw()) {
+                        return true;
+                    }
+
+                    oldIconInfo = currentIcon.folder.get_icon();
+                    newIconInfo = item.get_icon();
+                } else {
+                    oldIconInfo = currentIcon.getAppInfo().get_icon();
+                    newIconInfo = item.get_app_info().get_icon();
+                }
+
+                if (!newIconInfo.equal(oldIconInfo)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    },
+
     addIcons: function() {
+        // Don't do anything if we don't have more up-to-date information, since
+        // re-adding icons unnecessarily can cause UX problems
+        if (!this._iconsNeedRedraw()) {
+            return;
+        }
+
         this.removeAll();
 
         let ids = this.getLayoutIds();
@@ -867,18 +941,9 @@ const AppDisplay = new Lang.Class({
         this.actor.add_actor(this.entry);
         this.actor.add_actor(this._view.actor);
 
-        this._view.connect('label-edit-begin', Lang.bind(this, this._onLabelEditBegin));
-        this._view.connect('label-edit-end', Lang.bind(this, this._onLabelEditEnd));
-
         // This makes sure that any DnD ops get channeled to the icon grid logic
         // otherwise dropping an item outside of the grid bounds fails
         this.actor._delegate = this;
-
-        this._editPreventRedisplay = false;
-        this._draggedPreventRedisplay = false;
-        this._redisplayPending = false;
-        Main.overview.connect('item-drag-begin', Lang.bind(this, this._onDragBegin));
-        Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
 
         this._appSystem = Shell.AppSystem.get_default();
         this._appSystem.connect('installed-changed', Lang.bind(this, function() {
@@ -903,34 +968,7 @@ const AppDisplay = new Lang.Class({
         this._view.acceptDrop(source, actor, x, y, time);
     },
 
-    _onDragBegin: function(overview, source) {
-        this._draggedPreventRedisplay = true;
-    },
-
-    _onDragEnd: function(overview, source) {
-        this._draggedPreventRedisplay = false;
-
-        if (this._redisplayPending) {
-            Main.queueDeferredWork(this._allAppsWorkId);
-        }
-    },
-
-    _onLabelEditBegin: function() {
-        this._editPreventRedisplay  = true;
-    },
-
-    _onLabelEditEnd: function() {
-        this._editPreventRedisplay = false;
-    },
-
     _redisplay: function() {
-        // Check if a redisplays are blocked due to DnD or label editing
-        if (this._draggedPreventRedisplay || this._editPreventRedisplay) {
-            this._redisplayPending = true;
-            return;
-        }
-        this._redisplayPending = false;
-
         if (this._view.getAllIcons().length == 0) {
             this._view.addIcons();
         } else {
@@ -1513,6 +1551,7 @@ const AppIcon = new Lang.Class({
 
         this.app = app;
         this._name = this.app.get_name();
+        this._appInfo = this.app.get_app_info();
         this._showMenu = params.showMenu;
 
         if (!iconParams) {
@@ -1645,6 +1684,10 @@ const AppIcon = new Lang.Class({
 
     getName: function() {
         return this._name;
+    },
+
+    getAppInfo: function() {
+        return this._appInfo;
     },
 
     popupMenu: function() {
