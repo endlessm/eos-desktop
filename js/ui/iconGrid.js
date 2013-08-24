@@ -48,7 +48,6 @@ const EditableLabel = new Lang.Class({
     Name: 'EditableLabel',
     Extends: St.Entry,
     Signals: {
-        'label-edit-begin': { },
         'label-edit-update': { param_types: [ GObject.TYPE_STRING ] },
         'label-edit-cancel': { }
     },
@@ -202,8 +201,6 @@ const EditableLabel = new Lang.Class({
         // save the current contents of the label, in case we
         // need to roll back
         this._oldLabelText = text;
-
-        this.emit('label-edit-begin');
 
         this._activateId = this.clutter_text.connect('activate',
             Lang.bind(this, this._confirmEditing));

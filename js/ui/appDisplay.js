@@ -280,7 +280,6 @@ const EndlessApplicationView = new Lang.Class({
         }
     }
 });
-Signals.addSignalMethods(EndlessApplicationView.prototype);
 
 const FolderView = new Lang.Class({
     Name: 'FolderView',
@@ -1006,10 +1005,6 @@ const ViewIcon = new Lang.Class({
 
         this.icon = new IconGrid.BaseIcon(this.getName(), iconParams, buttonParams);
         if (iconParams['showLabel'] !== false) {
-            this.icon.label.connect('label-edit-begin', Lang.bind(this, function() { this.parentView.emit('label-edit-begin'); }));
-            this.icon.label.connect('label-edit-update', Lang.bind(this, function() { this.parentView.emit('label-edit-end'); }));
-            this.icon.label.connect('label-edit-cancel', Lang.bind(this, function() { this.parentView.emit('label-edit-end'); }));            
-
             this.icon.label.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
             this.icon.label.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
         }
