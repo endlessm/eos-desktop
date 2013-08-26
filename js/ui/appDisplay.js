@@ -950,7 +950,7 @@ const ViewIcon = new Lang.Class({
 
         this._origIcon = null;
 
-        this.actor = new St.Button(buttonParams);
+        this.actor = new St.Bin({ style_class: 'app-well-app' });
         this.actor.x_fill = true;
         this.actor.y_fill = true;
         this.actor.can_focus = true;
@@ -960,7 +960,7 @@ const ViewIcon = new Lang.Class({
         this.saturation = new Clutter.DesaturateEffect({ factor: 0 });
         this.actor.add_effect(this.saturation);
 
-        this.icon = new IconGrid.BaseIcon(this.getName(), iconParams);
+        this.icon = new IconGrid.BaseIcon(this.getName(), iconParams, buttonParams);
         if (iconParams['showLabel'] !== false) {
             this.icon.label.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
             this.icon.label.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
@@ -968,6 +968,8 @@ const ViewIcon = new Lang.Class({
         this.actor.set_child(this.icon.actor);
 
         this.actor.label_actor = this.icon.label;
+
+        this._iconButton = this.icon.iconButton;
     },
 
     _onLabelCancel: function() {
@@ -1030,8 +1032,7 @@ const FolderIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init: function(dirInfo, parentView) {
-        let buttonParams = { style_class: 'app-well-app app-folder',
-                             button_mask: St.ButtonMask.ONE,
+        let buttonParams = { button_mask: St.ButtonMask.ONE,
                              toggle_mode: true };
         let iconParams = { createIcon: Lang.bind(this, this._createIcon),
                            editableLabel: true };
@@ -1040,17 +1041,20 @@ const FolderIcon = new Lang.Class({
         this._name = this.folder.get_name();
         this.parent(parentView, buttonParams, iconParams);
 
+        this.actor.add_style_class_name('app-folder');
+
         this.canDrop = true;
 
         this.view = new FolderView(this);
         this.view.actor.reactive = false;
 
-        this.actor.connect('clicked', Lang.bind(this,
+        this._iconButton.connect('clicked', Lang.bind(this,
             function() {
                 if (this._createPopup()) {
                     this._popup.toggle();
                 }
             }));
+
         this.actor.connect('notify::mapped', Lang.bind(this,
             function() {
                 if (!this.actor.mapped && this._popup)
@@ -1497,8 +1501,7 @@ const AppIcon = new Lang.Class({
     _init : function(app, iconParams, params) {
         params = Params.parse(params, { showMenu: true,
                                         isDraggable: true,
-                                        parentView: null,
-                                        style_class: 'app-well-app' });
+                                        parentView: null });
 
         this.app = app;
         this._name = this.app.get_name();
@@ -1511,13 +1514,12 @@ const AppIcon = new Lang.Class({
         iconParams['createIcon'] = Lang.bind(this, this._createIcon);
         iconParams['editableLabel'] = true;
 
-        let buttonParams = { style_class: params['style_class'],
-                             button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
+        let buttonParams = { button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
 
         this.parent(params.parentView, buttonParams, iconParams);
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
-        this.actor.connect('clicked', Lang.bind(this, this._onClicked));
+        this._iconButton.connect('clicked', Lang.bind(this, this._onClicked));
         this.actor.connect('popup-menu', Lang.bind(this, this._onKeyboardPopupMenu));
 
         this._menu = null;
@@ -1730,8 +1732,9 @@ const AppStoreIcon = new Lang.Class({
         this.parent(app, null,
                     { showMenu: false,
                       isDraggable: false,
-                      parentView: parentView,
-                      style_class: 'app-well-app app-folder' });
+                      parentView: parentView });
+
+        this.actor.add_style_class_name('app-folder');
 
         this.canDrop = true;
 
