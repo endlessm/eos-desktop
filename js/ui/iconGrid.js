@@ -55,7 +55,6 @@ const EditableLabel = new Lang.Class({
     _init: function(params) {
         this.parent(params);
 
-        this._disposed = false;
         this.clutter_text.editable = false;
         this.clutter_text.x_align = Clutter.ActorAlign.CENTER;
 
@@ -71,8 +70,9 @@ const EditableLabel = new Lang.Class({
             Lang.bind(this, this._onButtonPressEvent));
     },
 
-    vfunc_dispose: function() {
-        this._disposed = true;
+    vfunc_destroy: function() {
+        this._endEditing();
+
         this.parent();
     },
 
@@ -126,10 +126,6 @@ const EditableLabel = new Lang.Class({
     },
 
     _onHighlightUngrab: function(isUser) {
-        if (this._disposed) {
-            return;
-        }
-
         // exit highlight mode
         this.remove_style_pseudo_class('highlighted');
 
@@ -152,10 +148,6 @@ const EditableLabel = new Lang.Class({
     },
 
     _onEditUngrab: function(isUser) {
-        if (this._disposed) {
-            return;
-        }
-
         // edit has already been completed and this is an explicit
         // ungrab from endEditing()
         if (!isUser) {

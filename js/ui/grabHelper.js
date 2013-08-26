@@ -58,14 +58,8 @@ const GrabHelper = new Lang.Class({
     // process events during a grab.
     removeActor: function(actor) {
         let index = this._actors.indexOf(actor);
-        if (index != -1) {
-            // Ungrab if grabbed
-            let stackIndex = this._findStackIndex(actor)
-            if (stackIndex != -1) {
-                this.ungrab( {actor: actor} );
-            }
+        if (index != -1)
             this._actors.splice(index, 1);
-        }
         if (actor.__grabHelperDestroyId) {
             actor.disconnect(actor.__grabHelperDestroyId);
             delete actor.__grabHelperDestroyId;
