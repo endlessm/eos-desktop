@@ -33,9 +33,10 @@ const SPINNER_ANIMATION_TIME = 0.2;
 const Animation = new Lang.Class({
     Name: 'Animation',
 
-    _init: function(filename, width, height, speed, skipEndFrames = 0) {
+    _init: function(filename, width, height, speed, skipEndFrames) {
         this.actor = new St.Bin({ width: width, height: height });
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+
         this._speed = speed;
         this._skipEndFrames = skipEndFrames;
 
@@ -118,7 +119,7 @@ const VariableSpeedAnimation = new Lang.Class({
     Name: 'VariableSpeedAnimation',
     Extends: Animation,
 
-    _init: function(name, size, initialTimeout, skipEndFrames = 0) {
+    _init: function(name, size, initialTimeout, skipEndFrames) {
         this.parent(global.datadir + '/theme/' + name, size, size,
                     initialTimeout, skipEndFrames);
     },
@@ -180,7 +181,7 @@ const AnimatedIcon = new Lang.Class({
     Extends: Animation,
 
     _init: function(name, size) {
-        this.parent(global.datadir + '/theme/' + name, size, size, ANIMATED_ICON_UPDATE_TIMEOUT);
+        this.parent(global.datadir + '/theme/' + name, size, size, ANIMATED_ICON_UPDATE_TIMEOUT, 0);
     }
 });
 
