@@ -493,6 +493,18 @@ st_entry_allocate (ClutterActor          *actor,
   gfloat icon_w, icon_h;
   gfloat hint_w, hint_h;
   gfloat entry_h, min_h, pref_h, avail_h;
+  ClutterActor *left_icon, *right_icon;
+
+  if (clutter_actor_get_text_direction (actor) == CLUTTER_TEXT_DIRECTION_RTL)
+    {
+      right_icon = priv->primary_icon;
+      left_icon = priv->secondary_icon;
+    }
+  else
+    {
+      left_icon = priv->primary_icon;
+      right_icon = priv->secondary_icon;
+    }
 
   clutter_actor_set_allocation (actor, box, flags);
 
@@ -503,12 +515,10 @@ st_entry_allocate (ClutterActor          *actor,
   child_box.x1 = content_box.x1;
   child_box.x2 = content_box.x2;
 
-  if (priv->primary_icon)
+  if (left_icon)
     {
-      clutter_actor_get_preferred_width (priv->primary_icon,
-                                         -1, NULL, &icon_w);
-      clutter_actor_get_preferred_height (priv->primary_icon,
-                                          -1, NULL, &icon_h);
+      clutter_actor_get_preferred_width (left_icon, -1, NULL, &icon_w);
+      clutter_actor_get_preferred_height (left_icon, -1, NULL, &icon_h);
 
       icon_box.x1 = content_box.x1;
       icon_box.x2 = icon_box.x1 + icon_w;
@@ -516,20 +526,16 @@ st_entry_allocate (ClutterActor          *actor,
       icon_box.y1 = (int) (content_box.y1 + avail_h / 2 - icon_h / 2);
       icon_box.y2 = icon_box.y1 + icon_h;
 
-      clutter_actor_allocate (priv->primary_icon,
-                              &icon_box,
-                              flags);
+      clutter_actor_allocate (left_icon, &icon_box, flags);
 
       /* reduce the size for the entry */
       child_box.x1 = MIN (child_box.x2, child_box.x1 + icon_w + priv->spacing);
     }
 
-  if (priv->secondary_icon)
+  if (right_icon)
     {
-      clutter_actor_get_preferred_width (priv->secondary_icon,
-                                         -1, NULL, &icon_w);
-      clutter_actor_get_preferred_height (priv->secondary_icon,
-                                          -1, NULL, &icon_h);
+      clutter_actor_get_preferred_width (right_icon, -1, NULL, &icon_w);
+      clutter_actor_get_preferred_height (right_icon, -1, NULL, &icon_h);
 
       icon_box.x2 = content_box.x2;
       icon_box.x1 = icon_box.x2 - icon_w;
@@ -537,9 +543,7 @@ st_entry_allocate (ClutterActor          *actor,
       icon_box.y1 = (int) (content_box.y1 + avail_h / 2 - icon_h / 2);
       icon_box.y2 = icon_box.y1 + icon_h;
 
-      clutter_actor_allocate (priv->secondary_icon,
-                              &icon_box,
-                              flags);
+      clutter_actor_allocate (right_icon, &icon_box, flags);
 
       /* reduce the size for the entry */
       child_box.x2 = MAX (child_box.x1, child_box.x2 - icon_w + priv->spacing);
