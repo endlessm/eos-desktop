@@ -48,9 +48,9 @@ struct _ShellPageFlipEffect
 
   gdouble angle;
 
-  gboolean middlePointValid;
-  gfloat xMiddlePoint;
-  gfloat yMiddlePoint;
+  gboolean middle_point_valid;
+  gfloat x_middle_point;
+  gfloat y_middle_point;
 };
 
 struct _ShellPageFlipEffectClass
@@ -80,35 +80,35 @@ shell_page_flip_effect_deform_vertex (ClutterDeformEffect *effect,
                                       CoglTextureVertex   *vertex)
 {
   ShellPageFlipEffect *self = SHELL_PAGE_FLIP_EFFECT (effect);
-  if (!self->middlePointValid) {
-    self->xMiddlePoint = width / 2;
-    self->yMiddlePoint = height / 2;
-  }
+  if (!self->middle_point_valid)
+    {
+      self->x_middle_point = width / 2;
+      self->y_middle_point = height / 2;
+    }
 
-  gfloat scaledAngle = self->angle / MAX_ANGLE;
+  gfloat scaled_angle = self->angle / MAX_ANGLE;
 
-  gfloat xDistanceFromAnchor = vertex->x;
-  if (scaledAngle > 0.5) {
-      xDistanceFromAnchor = width - xDistanceFromAnchor;
-  }
+  gfloat x_distance_from_anchor = vertex->x;
+  if (scaled_angle > 0.5)
+    x_distance_from_anchor = width - x_distance_from_anchor;
 
   // Scale vertically
-  gfloat maxYScaleFactor = xDistanceFromAnchor / (width * 3);
-  gfloat yScale = 1 - sin(scaledAngle * M_PI) * maxYScaleFactor;
-  gfloat yOffsetFromMiddle = vertex->y - self->yMiddlePoint;
-  vertex->y = self->yMiddlePoint + yOffsetFromMiddle * yScale;
+  gfloat max_y_scale_factor = x_distance_from_anchor / (width * 3);
+  gfloat y_scale = 1 - sin(scaled_angle * M_PI) * max_y_scale_factor;
+  gfloat y_offset_from_middle = vertex->y - self->y_middle_point;
+  vertex->y = self->y_middle_point + y_offset_from_middle * y_scale;
 
   // Scale horizontally proportional to the cosine
-  gfloat xScale = fabs(cos(scaledAngle * M_PI));
-  gfloat xOffsetFromMiddle = vertex->x - self->xMiddlePoint;
-  gfloat xScaledOffset = xOffsetFromMiddle * xScale;
+  gfloat x_scale = fabs(cos(scaled_angle * M_PI));
+  gfloat x_offset_from_middle = vertex->x - self->x_middle_point;
+  gfloat x_scaled_offset = x_offset_from_middle * x_scale;
 
   // Give the icon a bit of "thickness" even when pointing away
-  if (fabs(xScaledOffset) < 1) {
+  if (fabs(x_scaled_offset) < 1)
     // Offsetting by 2 is a bit of a hack to get the icon centered
-    xScaledOffset  = xScaledOffset > 0 ? 2 : 0;
-  }
-  vertex->x = self->xMiddlePoint + xScaledOffset;
+    x_scaled_offset  = x_scaled_offset > 0 ? 2 : 0;
+
+  vertex->x = self->x_middle_point + x_scaled_offset;
 }
 
 static void
@@ -184,7 +184,7 @@ static void
 shell_page_flip_effect_init (ShellPageFlipEffect *self)
 {
   self->angle = 0.0;
-  self->middlePointValid = FALSE;
+  self->middle_point_valid = FALSE;
 }
 
 /**
