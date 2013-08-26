@@ -181,19 +181,19 @@ const EndlessApplicationView = new Lang.Class({
         return Util.ensureActorVisibleInScrollView(this.actor, icon);
     },
 
-    _iconsNeedRedraw: function() {
+    iconsNeedRedraw: function() {
         // Check if the icons moved around
         let [movedList, removedList] = this._findIconChanges();
-        let movedLength = Object.keys(movedList).length
-        if (movedLength != 0 || removedList.length != 0) {
+        let movedLength = Object.keys(movedList).length;
+        if (movedLength > 0 || removedList.length > 0) {
             return true;
         }
 
         // Create a map from app ids to icon objects
-        let iconTable = {}
-         for (let i = 0; i < this._allIcons.length; i++) {
+        let iconTable = {};
+        for (let i = 0; i < this._allIcons.length; i++) {
             iconTable[this._allIcons[i].getId()] = this._allIcons[i];
-        }       
+        }
 
         let layoutIds = this.getLayoutIds();
         let appSystem = Shell.AppSystem.get_default();
@@ -211,39 +211,42 @@ const EndlessApplicationView = new Lang.Class({
                 item = appSystem.lookup_app(itemId);
             }
 
-            if (item) {
-                let currentIcon = iconTable[itemId];
+            if (!item) {
+                continue;
+            }
 
-                if (!currentIcon) {
-                    // This icon is new
-                    return true;
-                }
-                if (currentIcon.getName() != item.get_name()) {
-                    // This icon was renamed
-                    return true;
-                }
+            let currentIcon = iconTable[itemId];
 
-                // Check if the actual icon image changed
-                let oldIconInfo = null;
-                let newIconInfo = null;
+            if (!currentIcon) {
+                // This icon is new
+                return true;
+            }
 
-                if (isFolder) {
-                    // Check if the items in the folder changed
-                    if (currentIcon.view._iconsNeedRedraw()) {
-                        return true;
-                    }
+            if (currentIcon.getName() != item.get_name()) {
+                // This icon was renamed
+                return true;
+            }
 
-                    oldIconInfo = currentIcon.folder.get_icon();
-                    newIconInfo = item.get_icon();
-                } else {
-                    let appInfo = currentIcon.app.get_app_info();
-                    oldIconInfo = appInfo.get_icon();
-                    newIconInfo = item.get_app_info().get_icon();
-                }
+            if (isFolder && currentIcon.view.iconsNeedRedraw()) {
+                // Items inside the folder changed
+                return true;
+            }
 
-                if (!newIconInfo.equal(oldIconInfo)) {
-                    return true;
-                }
+            let oldIconInfo = null;
+            let newIconInfo = null;
+
+            if (isFolder) {
+                oldIconInfo = currentIcon.folder.get_icon();
+                newIconInfo = item.get_icon();
+            } else {
+                let appInfo = currentIcon.app.get_app_info();
+                oldIconInfo = appInfo.get_icon();
+                newIconInfo = item.get_app_info().get_icon();
+            }
+
+            if (!newIconInfo.equal(oldIconInfo)) {
+                // The icon image changed
+                return true;
             }
         }
 
@@ -253,7 +256,7 @@ const EndlessApplicationView = new Lang.Class({
     addIcons: function() {
         // Don't do anything if we don't have more up-to-date information, since
         // re-adding icons unnecessarily can cause UX problems
-        if (!this._iconsNeedRedraw()) {
+        if (!this.iconsNeedRedraw()) {
             return;
         }
 
