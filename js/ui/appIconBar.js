@@ -252,6 +252,7 @@ const AppIconButton = new Lang.Class({
     _init: function(app, iconSize) {
         this._app = app;
 
+        this._flipEffect = null;
         this._iconSize = iconSize;
         let icon = app.create_icon_texture(iconSize);
 
@@ -346,17 +347,14 @@ const AppIconButton = new Lang.Class({
 
     _animateRotation: function() {
         if (!Tweener.isTweening(this.actor)) {
-             let effect = this.actor.get_effect('page_flip');
-             if (effect == null) {
-                 effect = new Shell.PageFlipEffect({"x-tiles": 3, "y-tiles": 1});
-                 this.actor.add_effect_with_name('page_flip', effect);
-             }
+            if (!this._flipEffect) {
+                this._flipEffect = new Shell.PageFlipEffect({ x_tiles: 3, y_tiles: 1 });
+                this.actor.add_effect(this._flipEffect);
+            }
 
-             Tweener.addTween(effect, { angle: MAX_ANGLE,
-                                        time: ICON_ROTATE_ANIMATION_TIME,
-                                        onUpdate: function() { this.invalidate(); },
-                                        transition: ICON_ROTATE_ANIMATION_TYPE,
-                                        onComplete: function() { this.angle = 0; }});
+            Tweener.addTween(this._flipEffect, { angle: MAX_ANGLE,
+                                                 time: ICON_ROTATE_ANIMATION_TIME,
+                                                 transition: ICON_ROTATE_ANIMATION_TYPE });
         }
     },
 
