@@ -214,10 +214,13 @@ shell_page_flip_effect_set_angle (ShellPageFlipEffect *effect,
   g_return_if_fail (SHELL_IS_PAGE_FLIP_EFFECT (effect));
   g_return_if_fail (angle >= 0.0 && angle <= MAX_ANGLE);
 
-  effect->angle = angle;
-  clutter_deform_effect_invalidate (CLUTTER_DEFORM_EFFECT (effect));
+  if (angle != effect->angle)
+    {
+      effect->angle = angle;
+      clutter_deform_effect_invalidate (CLUTTER_DEFORM_EFFECT (effect));
 
-  g_object_notify_by_pspec (G_OBJECT (effect), obj_props[PROP_ANGLE]);
+      g_object_notify_by_pspec (G_OBJECT (effect), obj_props[PROP_ANGLE]);
+    }
 }
 
 /**
