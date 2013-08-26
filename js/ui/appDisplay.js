@@ -970,6 +970,7 @@ const ViewIcon = new Lang.Class({
         this.actor.label_actor = this.icon.label;
 
         this._iconButton = this.icon.iconButton;
+        this._iconButton._delegate = this;
     },
 
     _onLabelCancel: function() {
@@ -1014,7 +1015,8 @@ const ViewIcon = new Lang.Class({
     },
 
     getDragActor: function() {
-        let iconParams = { 'createIcon': Lang.bind(this, this._createIcon) };
+        let iconParams = { 'createIcon': Lang.bind(this, this._createIcon),
+                           'showLabel': (this.icon.label != null) };
         let icon = new IconGrid.BaseIcon(this.getName(), iconParams);
         icon.actor.add_style_class_name('dnd');
         return icon.actor;
@@ -1062,7 +1064,7 @@ const FolderIcon = new Lang.Class({
             }));
 
         // DND implementation
-        this._draggable = DND.makeDraggable(this.actor);
+        this._draggable = DND.makeDraggable(this._iconButton);
         this._draggable.connect('drag-begin', Lang.bind(this,
             function () {
                 Main.overview.beginItemDrag(this);
@@ -1526,7 +1528,7 @@ const AppIcon = new Lang.Class({
         this._menuManager = new PopupMenu.PopupMenuManager(this);
 
         if (params.isDraggable) {
-            this._draggable = DND.makeDraggable(this.actor);
+            this._draggable = DND.makeDraggable(this._iconButton);
             this._draggable.connect('drag-begin', Lang.bind(this,
                 function () {
                     // Notify view that something is dragging
