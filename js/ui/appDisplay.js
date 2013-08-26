@@ -1015,7 +1015,8 @@ const ViewIcon = new Lang.Class({
     },
 
     getDragActor: function() {
-        let iconParams = { 'createIcon': Lang.bind(this, this._createIcon) };
+        let iconParams = { 'createIcon': Lang.bind(this, this._createIcon),
+                           'showLabel': (this.icon.label != null) };
         let icon = new IconGrid.BaseIcon(this.getName(), iconParams);
         icon.actor.add_style_class_name('dnd');
         return icon.actor;
