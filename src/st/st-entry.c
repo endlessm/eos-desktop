@@ -779,6 +779,32 @@ st_entry_crossing_event (ClutterActor         *actor,
   return FALSE;
 }
 
+static gboolean
+st_entry_enter_event (ClutterActor         *actor,
+                      ClutterCrossingEvent *event)
+{
+  gboolean ret;
+
+  ret = CLUTTER_ACTOR_CLASS (st_entry_parent_class)->enter_event (actor, event);
+
+  st_entry_crossing_event (actor, event);
+
+  return ret;
+}
+
+static gboolean
+st_entry_leave_event (ClutterActor         *actor,
+                      ClutterCrossingEvent *event)
+{
+  gboolean ret;
+
+  ret = CLUTTER_ACTOR_CLASS (st_entry_parent_class)->leave_event (actor, event);
+
+  st_entry_crossing_event (actor, event);
+
+  return ret;
+}
+
 static void
 st_entry_unmap (ClutterActor *actor)
 {
@@ -811,8 +837,8 @@ st_entry_class_init (StEntryClass *klass)
   actor_class->key_press_event = st_entry_key_press_event;
   actor_class->key_focus_in = st_entry_key_focus_in;
 
-  actor_class->enter_event = st_entry_crossing_event;
-  actor_class->leave_event = st_entry_crossing_event;
+  actor_class->enter_event = st_entry_enter_event;
+  actor_class->leave_event = st_entry_leave_event;
 
   widget_class->style_changed = st_entry_style_changed;
   widget_class->navigate_focus = st_entry_navigate_focus;

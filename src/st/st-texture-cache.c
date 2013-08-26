@@ -263,6 +263,8 @@ typedef struct {
   GtkIconInfo *icon_info;
   StIconColors *colors;
   char *uri;
+
+  GSList *async_results;
 } AsyncTextureLoadData;
 
 static void
@@ -284,6 +286,9 @@ texture_load_data_free (gpointer p)
 
   if (data->textures)
     g_slist_free_full (data->textures, (GDestroyNotify) g_object_unref);
+
+  if (data->async_results)
+    g_slist_free_full (data->async_results, (GDestroyNotify) g_object_unref);
 
   g_free (data);
 }
@@ -630,6 +635,12 @@ finish_texture_load (AsyncTextureLoadData *data,
       set_texture_cogl_texture (texture, texdata);
     }
 
+  for (iter = data->async_results; iter; iter = iter->next)
+    {
+      GSimpleAsyncResult *async_result = iter->data;
+      g_simple_async_result_complete (async_result);
+    }
+
 out:
   if (texdata)
     cogl_handle_unref (texdata);
@@ -906,12 +917,14 @@ ensure_request (StTextureCache        *cache,
 }
 
 static ClutterActor *
-load_gicon_with_colors (StTextureCache    *cache,
-                        GIcon             *icon,
-                        gint               width,
-                        gint               height,
-                        gboolean           force_square,
-                        StIconColors      *colors)
+load_gicon_with_colors (StTextureCache     *cache,
+                        GIcon              *icon,
+                        gint                width,
+                        gint                height,
+                        gboolean            force_square,
+                        StIconColors       *colors,
+                        GAsyncReadyCallback callback,
+                        gpointer            user_data)
 {
   AsyncTextureLoadData *request;
   ClutterActor *texture;
@@ -921,6 +934,7 @@ load_gicon_with_colors (StTextureCache    *cache,
   GtkIconTheme *theme;
   GtkIconInfo *info;
   StTextureCachePolicy policy;
+  GSimpleAsyncResult *async_result;
 
   /* Do theme lookups in the main thread to avoid thread-unsafety */
   theme = cache->priv->icon_theme;
@@ -958,11 +972,21 @@ load_gicon_with_colors (StTextureCache    *cache,
   texture = (ClutterActor *) create_default_texture ();
   clutter_actor_set_size (texture, width, height);
 
+  async_result = g_simple_async_result_new (G_OBJECT (cache), callback, user_data, NULL);
+  request = NULL;
   if (ensure_request (cache, key, policy, &request, texture))
     {
       /* If there's an outstanding request, we've just added ourselves to it */
       gtk_icon_info_free (info);
       g_free (key);
+
+      /* If the request is outstanding, add our callback to its list,
+       * otherwise just complete the async result in an idle.
+       */
+      if (request != NULL)
+        request->async_results = g_slist_prepend (request->async_results, g_object_ref (async_result));
+      else
+        g_simple_async_result_complete_in_idle (async_result);
     }
   else
     {
@@ -977,9 +1001,12 @@ load_gicon_with_colors (StTextureCache    *cache,
       request->width = width;
       request->height = height;
       request->enforced_square = force_square;
+      request->async_results = g_slist_prepend (request->async_results, g_object_ref (async_result));
 
       load_texture_async (cache, request);
     }
+
+  g_object_unref (async_result);
 
   return CLUTTER_ACTOR (texture);
 }
@@ -1006,34 +1033,41 @@ st_texture_cache_load_gicon (StTextureCache    *cache,
 {
   return load_gicon_with_colors (cache, icon,
                                  size, size, TRUE,
-                                 theme_node ? st_theme_node_get_icon_colors (theme_node) : NULL);
+                                 theme_node ? st_theme_node_get_icon_colors (theme_node) : NULL,
+                                 NULL, NULL);
 }
 
 /**
- * st_texture_cache_load_gicon_at_size:
+ * st_texture_cache_load_gicon_full:
  * @cache: The texture cache instance
  * @theme_node: (allow-none): The #StThemeNode to use for colors, or NULL
  *                            if the icon must not be recolored
  * @icon: the #GIcon to load
  * @available_width: available width for the image, can be -1 if not limited
  * @available_height: available height for the image, can be -1 if not limited
+ * @callback: (scope async): a function to call when the texture is loaded
+ * @user_data: (closure): the data to pass to the callback function
  *
  * This method returns a new #ClutterActor for a given #GIcon. If the
  * icon isn't loaded already, the texture will be filled
- * asynchronously.
+ * asynchronously. If @callback is provided, it will be called when the
+ * icon is loaded, or in an idle if the icon is already loaded.
  *
  * Return Value: (transfer none): A new #ClutterActor for the icon, or %NULL if not found
  */
 ClutterActor *
-st_texture_cache_load_gicon_at_size (StTextureCache    *cache,
-                                     StThemeNode       *theme_node,
-                                     GIcon             *icon,
-                                     gint               available_width,
-                                     gint               available_height)
+st_texture_cache_load_gicon_full (StTextureCache     *cache,
+                                  StThemeNode        *theme_node,
+                                  GIcon              *icon,
+                                  gint                available_width,
+                                  gint                available_height,
+                                  GAsyncReadyCallback callback,
+                                  gpointer            user_data)
 {
   return load_gicon_with_colors (cache, icon,
                                  available_width, available_height, FALSE,
-                                 theme_node ? st_theme_node_get_icon_colors (theme_node) : NULL);
+                                 theme_node ? st_theme_node_get_icon_colors (theme_node) : NULL,
+                                 callback, user_data);
 }
 
 static void

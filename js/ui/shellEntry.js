@@ -131,6 +131,9 @@ const EntryMenu = new Lang.Class({
     }
 });
 
+const ENTRY_HINT_ASSET_WIDTH = 57;
+const ENTRY_HINT_ASSET_HEIGHT = 21;
+
 const EntryHint = new Lang.Class({
     Name: 'EntryHint',
     Extends: St.Bin,
@@ -156,9 +159,12 @@ const EntryHint = new Lang.Class({
         }
 
         let textureCache = St.TextureCache.get_default();
-        let actor = textureCache.load_gicon_at_size(themeNode, this._gicon, -1, -1);
-
-        this.set_child(actor);
+        let actor = textureCache.load_gicon_full(themeNode, this._gicon,
+                                                 ENTRY_HINT_ASSET_WIDTH,
+                                                 ENTRY_HINT_ASSET_HEIGHT,
+                                                 Lang.bind(this, function() {
+                                                     this.set_child(actor);
+                                                 }));
     }
 });
 
