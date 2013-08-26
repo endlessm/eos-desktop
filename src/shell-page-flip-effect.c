@@ -214,6 +214,9 @@ shell_page_flip_effect_set_angle (ShellPageFlipEffect *effect,
   g_return_if_fail (SHELL_IS_PAGE_FLIP_EFFECT (effect));
   g_return_if_fail (angle >= 0.0 && angle <= MAX_ANGLE);
 
+  if (angle == MAX_ANGLE)
+    angle = 0.0;
+
   if (angle != effect->angle)
     {
       effect->angle = angle;
