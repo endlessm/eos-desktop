@@ -242,19 +242,23 @@ const ShowAppsIcon = new Lang.Class({
     _init: function() {
         this.parent();
 
-        this.toggleButton = new St.Button({ style_class: 'show-apps',
-                                            track_hover: true,
-                                            can_focus: true,
-                                            toggle_mode: true });
         this._iconActor = null;
+
+        let iconParams = { setSizeManually: true,
+                           showLabel: false,
+                           createIcon: Lang.bind(this, this._createIcon) };
+        let buttonParams = { style_class: 'show-apps',
+                             track_hover: true,
+                             can_focus: true,
+                             toggle_mode: true };
         this.icon = new IconGrid.BaseIcon(_("Show Applications"),
-                                           { setSizeManually: true,
-                                             showLabel: false,
-                                             createIcon: Lang.bind(this, this._createIcon) });
-        this.toggleButton.add_actor(this.icon.actor);
+                                          iconParams,
+                                          buttonParams);
+
+        this.toggleButton = this.icon.iconButton;
         this.toggleButton._delegate = this;
 
-        this.setChild(this.toggleButton);
+        this.setChild(this.icon.actor);
         this.setDragApp(null);
     },
 
@@ -526,6 +530,9 @@ const Dash = new Lang.Class({
     },
 
     _hookUpLabel: function(item) {
+        item.child.reactive = true;
+        item.child.track_hover = true;
+
         item.child.connect('notify::hover', Lang.bind(this, function() {
             this._onHover(item);
         }));
