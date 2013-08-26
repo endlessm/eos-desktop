@@ -236,7 +236,8 @@ const EndlessApplicationView = new Lang.Class({
                     oldIconInfo = currentIcon.folder.get_icon();
                     newIconInfo = item.get_icon();
                 } else {
-                    oldIconInfo = currentIcon.getAppInfo().get_icon();
+                    let appInfo = currentIcon.app.get_app_info();
+                    oldIconInfo = appInfo.get_icon();
                     newIconInfo = item.get_app_info().get_icon();
                 }
 
@@ -1546,7 +1547,6 @@ const AppIcon = new Lang.Class({
 
         this.app = app;
         this._name = this.app.get_name();
-        this._appInfo = this.app.get_app_info();
         this._showMenu = params.showMenu;
 
         if (!iconParams) {
@@ -1679,10 +1679,6 @@ const AppIcon = new Lang.Class({
 
     getName: function() {
         return this._name;
-    },
-
-    getAppInfo: function() {
-        return this._appInfo;
     },
 
     popupMenu: function() {

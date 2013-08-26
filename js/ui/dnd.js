@@ -233,7 +233,6 @@ const _Draggable = new Lang.Class({
     startDrag: function (stageX, stageY, time) {
         currentDraggable = this;
         this._dragInProgress = true;
-        this._dragCancellable = true;
 
         // Special-case St.Button: the pointer grab messes with the internal
         // state, so force a reset to a reasonable state here
