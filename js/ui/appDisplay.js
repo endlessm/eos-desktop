@@ -90,6 +90,21 @@ const EndlessApplicationView = new Lang.Class({
         throw new Error('Not implemented');
     },
 
+    _createItemForId: function(itemId) {
+        let appSystem = Shell.AppSystem.get_default();
+        let isFolder = false;
+        let item = null;
+
+        if (IconGridLayout.layout.iconIsFolder(itemId)) {
+            item = Shell.DesktopDirInfo.new(itemId);
+            isFolder = true;
+        } else {
+            item = appSystem.lookup_app(itemId);
+        }
+
+        return [item, isFolder];
+    },
+
     addIcon: function(icon) {
         let idx = this._allIcons.indexOf(icon);
         if (idx == -1) {
@@ -196,20 +211,11 @@ const EndlessApplicationView = new Lang.Class({
         }
 
         let layoutIds = this.getLayoutIds();
-        let appSystem = Shell.AppSystem.get_default();
 
         // Iterate through all visible icons
         for (let idx in layoutIds) {
             let itemId = layoutIds[idx];
-
-            let item = null;
-            let isFolder = false;
-            if (IconGridLayout.layout.iconIsFolder(itemId)) {
-                item = Shell.DesktopDirInfo.new(itemId);
-                isFolder = true;
-            } else {
-                item = appSystem.lookup_app(itemId);
-            }
+            let [item, isFolder] = this._createItemForId(itemId);
 
             if (!item) {
                 continue;
@@ -259,17 +265,10 @@ const EndlessApplicationView = new Lang.Class({
         this.removeAll();
 
         let ids = this.getLayoutIds();
-        let appSystem = Shell.AppSystem.get_default();
 
         for (let i = 0; i < ids.length; i++) {
             let itemId = ids[i];
-            let item = null;
-
-            if (IconGridLayout.layout.iconIsFolder(itemId)) {
-                item = Shell.DesktopDirInfo.new(itemId);
-            } else {
-                item = appSystem.lookup_app(itemId);
-            }
+            let [item, ] = this._createItemForId(itemId);
 
             if (item) {
                 let icon = this._createItemIcon(item);
