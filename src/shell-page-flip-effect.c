@@ -47,10 +47,6 @@ struct _ShellPageFlipEffect
   ClutterDeformEffect parent_instance;
 
   gdouble angle;
-
-  gboolean middle_point_valid;
-  gfloat x_middle_point;
-  gfloat y_middle_point;
 };
 
 struct _ShellPageFlipEffectClass
@@ -80,13 +76,13 @@ shell_page_flip_effect_deform_vertex (ClutterDeformEffect *effect,
                                       CoglTextureVertex   *vertex)
 {
   ShellPageFlipEffect *self = SHELL_PAGE_FLIP_EFFECT (effect);
-  if (!self->middle_point_valid)
-    {
-      self->x_middle_point = width / 2;
-      self->y_middle_point = height / 2;
-    }
+  gfloat x_middle_point, y_middle_point;
+  gfloat scaled_angle;
 
-  gfloat scaled_angle = self->angle / MAX_ANGLE;
+  x_middle_point = width * 0.5;
+  y_middle_point = height * 0.5;
+
+  scaled_angle = self->angle / MAX_ANGLE;
 
   gfloat x_distance_from_anchor = vertex->x;
   if (scaled_angle > 0.5)
@@ -95,12 +91,12 @@ shell_page_flip_effect_deform_vertex (ClutterDeformEffect *effect,
   // Scale vertically
   gfloat max_y_scale_factor = x_distance_from_anchor / (width * 3);
   gfloat y_scale = 1 - sin(scaled_angle * M_PI) * max_y_scale_factor;
-  gfloat y_offset_from_middle = vertex->y - self->y_middle_point;
-  vertex->y = self->y_middle_point + y_offset_from_middle * y_scale;
+  gfloat y_offset_from_middle = vertex->y - y_middle_point;
+  vertex->y = y_middle_point + y_offset_from_middle * y_scale;
 
   // Scale horizontally proportional to the cosine
   gfloat x_scale = fabs(cos(scaled_angle * M_PI));
-  gfloat x_offset_from_middle = vertex->x - self->x_middle_point;
+  gfloat x_offset_from_middle = vertex->x - x_middle_point;
   gfloat x_scaled_offset = x_offset_from_middle * x_scale;
 
   // Give the icon a bit of "thickness" even when pointing away
@@ -108,7 +104,7 @@ shell_page_flip_effect_deform_vertex (ClutterDeformEffect *effect,
     // Offsetting by 2 is a bit of a hack to get the icon centered
     x_scaled_offset  = x_scaled_offset > 0 ? 2 : 0;
 
-  vertex->x = self->x_middle_point + x_scaled_offset;
+  vertex->x = x_middle_point + x_scaled_offset;
 }
 
 static void
@@ -184,7 +180,6 @@ static void
 shell_page_flip_effect_init (ShellPageFlipEffect *self)
 {
   self->angle = 0.0;
-  self->middle_point_valid = FALSE;
 }
 
 /**
