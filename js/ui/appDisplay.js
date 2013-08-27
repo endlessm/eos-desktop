@@ -191,16 +191,16 @@ const EndlessApplicationView = new Lang.Class({
 
         // Create a map from app ids to icon objects
         let iconTable = {};
-        for (let i = 0; i < this._allIcons.length; i++) {
-            iconTable[this._allIcons[i].getId()] = this._allIcons[i];
+        for (let idx in this._allIcons) {
+            iconTable[this._allIcons[idx].getId()] = this._allIcons[idx];
         }
 
         let layoutIds = this.getLayoutIds();
         let appSystem = Shell.AppSystem.get_default();
 
         // Iterate through all visible icons
-        for (let i = 0; i < layoutIds.length; i++) {
-            let itemId = layoutIds[i];
+        for (let idx in layoutIds) {
+            let itemId = layoutIds[idx];
 
             let item = null;
             let isFolder = false;
@@ -217,13 +217,9 @@ const EndlessApplicationView = new Lang.Class({
 
             let currentIcon = iconTable[itemId];
 
-            if (!currentIcon) {
-                // This icon is new
-                return true;
-            }
-
-            if (currentIcon.getName() != item.get_name()) {
-                // This icon was renamed
+            if (!currentIcon ||
+                currentIcon.getName() != item.get_name()) {
+                // This icon is new or was renamed
                 return true;
             }
 
