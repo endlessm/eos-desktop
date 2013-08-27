@@ -868,6 +868,7 @@ StScrollBar StButton#vhandle:active {
 
 .overview-icon-label {
     width: 118px;
+    text-shadow: black 0px 2px 2px;
 }
 
 .overview-icon-label:focus {
@@ -892,6 +893,7 @@ StScrollBar StButton#vhandle:active {
     color: #333;
 
     box-shadow: none;
+    text-shadow: none;
 }
 
 .all-apps > StBoxLayout {
