@@ -76,7 +76,11 @@ shell_page_flip_effect_deform_vertex (ClutterDeformEffect *effect,
                                       CoglTextureVertex   *vertex)
 {
   ShellPageFlipEffect *self = SHELL_PAGE_FLIP_EFFECT (effect);
+  gfloat x_anchor;
   gfloat x_middle_point, y_middle_point;
+  gfloat x_offset, y_offset;
+  gfloat x_scale, y_scale;
+  gfloat y_max_scale;
   gfloat scaled_angle;
 
   x_middle_point = width * 0.5;
@@ -84,20 +88,20 @@ shell_page_flip_effect_deform_vertex (ClutterDeformEffect *effect,
 
   scaled_angle = self->angle / MAX_ANGLE;
 
-  gfloat x_distance_from_anchor = vertex->x;
+  x_anchor = vertex->x;
   if (scaled_angle > 0.5)
-    x_distance_from_anchor = width - x_distance_from_anchor;
+    x_anchor = width - x_anchor;
 
   // Scale vertically
-  gfloat max_y_scale_factor = x_distance_from_anchor / (width * 3);
-  gfloat y_scale = 1 - sin(scaled_angle * M_PI) * max_y_scale_factor;
-  gfloat y_offset_from_middle = vertex->y - y_middle_point;
-  vertex->y = y_middle_point + y_offset_from_middle * y_scale;
+  y_max_scale = x_anchor / (width * 3);
+  y_scale = 1 - sin(scaled_angle * M_PI) * y_max_scale;
+  y_offset = vertex->y - y_middle_point;
+  vertex->y = y_middle_point + y_offset * y_scale;
 
   // Scale horizontally proportional to the cosine
-  gfloat x_scale = fabs(cos(scaled_angle * M_PI));
-  gfloat x_offset_from_middle = vertex->x - x_middle_point;
-  vertex->x = x_middle_point + x_offset_from_middle * x_scale;
+  x_scale = fabs(cos(scaled_angle * M_PI));
+  x_offset = vertex->x - x_middle_point;
+  vertex->x = x_middle_point + x_offset * x_scale;
 }
 
 static void
