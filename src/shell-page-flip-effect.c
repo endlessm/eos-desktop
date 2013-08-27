@@ -92,13 +92,13 @@ shell_page_flip_effect_deform_vertex (ClutterDeformEffect *effect,
   if (scaled_angle > 0.5)
     x_anchor = width - x_anchor;
 
-  // Scale vertically
+  /* Scale vertically */
   y_max_scale = x_anchor / (width * 3);
   y_scale = 1 - sin(scaled_angle * M_PI) * y_max_scale;
   y_offset = vertex->y - y_middle_point;
   vertex->y = y_middle_point + y_offset * y_scale;
 
-  // Scale horizontally proportional to the cosine
+  /* Scale horizontally proportional to the cosine */
   x_scale = fabs(cos(scaled_angle * M_PI));
   x_offset = vertex->x - x_middle_point;
   vertex->x = x_middle_point + x_offset * x_scale;
