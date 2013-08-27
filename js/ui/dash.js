@@ -254,9 +254,9 @@ const ShowAppsIcon = new Lang.Class({
         this.icon = new IconGrid.BaseIcon(_("Show Applications"),
                                           iconParams,
                                           buttonParams);
+        this.icon.actor._delegate = this;
 
         this.toggleButton = this.icon.iconButton;
-        this.toggleButton._delegate = this;
 
         this.setChild(this.icon.actor);
         this.setDragApp(null);
