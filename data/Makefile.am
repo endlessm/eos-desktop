@@ -64,6 +64,7 @@ dist_theme_DATA =				\
 	theme/internet-pressed.png		\
 	theme/logged-in-indicator.svg		\
 	theme/message-tray-background.png	\
+	theme/mini-icon-active-indicator.png    \
 	theme/more-results.svg			\
 	theme/noise-texture.png			\
 	theme/panel-button-border.svg		\
