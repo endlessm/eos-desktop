@@ -37,6 +37,7 @@
 #include "shell-page-flip-effect.h"
 
 #define MAX_ANGLE 360.0
+#define MAX_SIZE_MULT 3
 
 #define SHELL_PAGE_FLIP_EFFECT_CLASS(k)       (G_TYPE_CHECK_CLASS_CAST ((k), SHELL_TYPE_PAGE_FLIP_EFFECT, ShellPageFilpEffectClass))
 #define SHELL_IS_PAGE_FLIP_EFFECT_CLASS(k)    (G_TYPE_CHECK_CLASS_TYPE ((k), SHELL_TYPE_PAGE_FLIP_EFFECT))
@@ -93,7 +94,7 @@ shell_page_flip_effect_deform_vertex (ClutterDeformEffect *effect,
     x_anchor = width - x_anchor;
 
   /* Scale vertically */
-  y_max_scale = x_anchor / (width * 3);
+  y_max_scale = x_anchor / (width * MAX_SIZE_MULT);
   y_scale = 1 - sin(scaled_angle * M_PI) * y_max_scale;
   y_offset = vertex->y - y_middle_point;
   vertex->y = y_middle_point + y_offset * y_scale;
