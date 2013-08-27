@@ -736,7 +736,7 @@ const Source = new Lang.Class({
             return app;
 
         if (this.trayIcon) {
-            app = Shell.AppSystem.get_default().lookup_wmclass(this.trayIcon.wm_class);
+            app = Shell.AppSystem.get_default().lookup_desktop_wmclass(this.trayIcon.wm_class);
             if (app != null)
                 return app;
         }
