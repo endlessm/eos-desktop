@@ -289,9 +289,9 @@ const BaseIcon = new Lang.Class({
         buttonParams = Params.parse(buttonParams, { x_align: St.Align.MIDDLE,
                                                     y_align: St.Align.MIDDLE },
                                     true);
-        buttonParams.style_class = 'shadow-icon';
 
         this.iconButton = new St.Button(buttonParams);
+        this.iconButton.add_style_class_name('shadow-icon');
 
         this._layeredIcon.add_actor(this.iconButton);
 

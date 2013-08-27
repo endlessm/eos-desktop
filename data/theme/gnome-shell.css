@@ -48,7 +48,7 @@ stage {
 .switcher-list, 
 .overview-icon.dnd,
 .app-well-app > .overview-icon,
-.show-apps > .overview-icon {
+.overview-icon .show-apps {
     font-size: 11pt;
     font-weight: bold;
 }
@@ -903,18 +903,18 @@ StScrollBar StButton#vhandle:active {
     padding: 5px;
 }
 
-.dash-item-container > StButton {
-    padding: 4px 8px;
-}
-
 .overview-icon.dnd,
 .app-well-app > .overview-icon,
-.show-apps > .overview-icon {
+.overview-icon .show-apps {
     border-radius: 4px;
     padding: 3px;
     border: 1px rgba(0,0,0,0);
     transition-duration: 100ms;
     text-align: center;
+}
+
+.dash-item-container .overview-icon {
+    padding: 7px 11px;
 }
 
 .app-folder-popup-stack {
@@ -975,7 +975,7 @@ StScrollBar StButton#vhandle:active {
     background-size: 64px;
 }
 
-.show-apps:hover > .overview-icon {
+.overview-icon .show-apps:hover {
     background-color: rgba(255,255,255,0.1);
     text-shadow: black 0px 2px 2px;
     transition-duration: 100ms;
@@ -984,10 +984,6 @@ StScrollBar StButton#vhandle:active {
 
 .all-apps .app-well-app > .overview-icon {
     border-radius: 10px;
-}
-
-.show-apps {
-    padding: 4px 0;
 }
 
 .show-apps-icon {
@@ -1014,8 +1010,8 @@ StScrollBar StButton#vhandle:active {
     background-size: 64px;
 }
 
-.show-apps:checked > .overview-icon,
-.show-apps:active > .overview-icon {
+.overview-icon .show-apps:checked,
+.overview-icon .show-apps:active {
     background-gradient-start: rgba(255, 255, 255, .05);
     background-gradient-end: rgba(255, 255, 255, .15);
     background-gradient-direction: vertical;
@@ -1031,7 +1027,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .app-well-app:focus > .overview-icon,
-.show-apps:focus > .overview-icon,
+.overview-icon .show-apps:focus,
 .app-well-app:selected > .overview-icon {
     background-color: rgba(255,255,255,0.33);
 }
