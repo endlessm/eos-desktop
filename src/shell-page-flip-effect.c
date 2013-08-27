@@ -97,14 +97,7 @@ shell_page_flip_effect_deform_vertex (ClutterDeformEffect *effect,
   // Scale horizontally proportional to the cosine
   gfloat x_scale = fabs(cos(scaled_angle * M_PI));
   gfloat x_offset_from_middle = vertex->x - x_middle_point;
-  gfloat x_scaled_offset = x_offset_from_middle * x_scale;
-
-  // Give the icon a bit of "thickness" even when pointing away
-  if (fabs(x_scaled_offset) < 1)
-    // Offsetting by 2 is a bit of a hack to get the icon centered
-    x_scaled_offset  = x_scaled_offset > 0 ? 2 : 0;
-
-  vertex->x = x_middle_point + x_scaled_offset;
+  vertex->x = x_middle_point + x_offset_from_middle * x_scale;
 }
 
 static void
