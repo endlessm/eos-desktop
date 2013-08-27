@@ -238,7 +238,7 @@ st_entry_dispose (GObject *object)
       priv->entry = NULL;
     }
 
-  if (priv->text_shadow_material)
+  if (priv->text_shadow_material != COGL_INVALID_HANDLE)
     {
       cogl_handle_unref (priv->text_shadow_material);
       priv->text_shadow_material = COGL_INVALID_HANDLE;
