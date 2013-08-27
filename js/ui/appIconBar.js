@@ -242,49 +242,6 @@ const AppIconMenu = new Lang.Class({
 });
 Signals.addSignalMethods(AppIconMenu.prototype);
 
-const MyClutterEffect = new Lang.Class({
-    Name: 'MyClutterEffect',
-    Extends: Clutter.DeformEffect,
-
-    MAX_ANGLE: 360,
-
-    _init: function() {
-        this.parent();
-        this.angle = 0;
-        this._xMiddlepoint = null;
-        this._yMiddlepoint = null;
-    },
-
-    vfunc_deform_vertex: function(width, height, vertex) {
-        if (this._xMiddlepoint == null) {
-            this._xMiddlepoint = width / 2;
-        }
-
-        if (this._yMiddlepoint == null) {
-            this._yMiddlepoint = height / 2;
-        }
-
-        let scaledAngle = this.angle / this.MAX_ANGLE;
-
-        let distanceFromAnchor = vertex.x;
-        if (scaledAngle > 0.5) {
-            distanceFromAnchor = width - distanceFromAnchor;
-        }
-
-        let yTranslation =  Math.sin(scaledAngle * 3.14) * distanceFromAnchor / (2*3.14);
-        if (vertex.y > this._yMiddlepoint) {
-            yTranslation = -yTranslation;
-        }
-        vertex.y += yTranslation;
-
-        let scaledAngleX = 1 - Math.abs(scaledAngle * 2 - 1.0);
-        let origDistanceFromMiddle = vertex.x - this._xMiddlepoint;
-        let xTranslation = scaledAngleX * origDistanceFromMiddle;
-        vertex.x -= xTranslation;
-
-    }
-});
-
 /** AppIconButton:
  *
  * This class handles the application icon
@@ -295,6 +252,7 @@ const AppIconButton = new Lang.Class({
     _init: function(app, iconSize) {
         this._app = app;
 
+        this._flipEffect = null;
         this._iconSize = iconSize;
         let icon = app.create_icon_texture(iconSize);
 
@@ -389,17 +347,14 @@ const AppIconButton = new Lang.Class({
 
     _animateRotation: function() {
         if (!Tweener.isTweening(this.actor)) {
-             let effect = this.actor.get_effect('page_flip');
-             if (effect == null) {
-                 effect = new MyClutterEffect( {x_tiles: 1, y_tiles: 1});
-                 this.actor.add_effect_with_name('page_flip', effect);
-             }
+            if (!this._flipEffect) {
+                this._flipEffect = new Shell.PageFlipEffect({ x_tiles: 3, y_tiles: 1 });
+                this.actor.add_effect(this._flipEffect);
+            }
 
-             Tweener.addTween(effect, { angle: MAX_ANGLE,
-                                        time: ICON_ROTATE_ANIMATION_TIME,
-                                        onUpdate: function() { this.invalidate(); },
-                                        transition: ICON_ROTATE_ANIMATION_TYPE,
-                                        onComplete: function() { this.angle = 0; }});
+            Tweener.addTween(this._flipEffect, { angle: MAX_ANGLE,
+                                                 time: ICON_ROTATE_ANIMATION_TIME,
+                                                 transition: ICON_ROTATE_ANIMATION_TYPE });
         }
     },
 

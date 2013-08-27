@@ -119,6 +119,7 @@ shell_public_headers_h =		\
 	shell-keybinding-modes.h	\
 	shell-mount-operation.h		\
 	shell-network-agent.h		\
+	shell-page-flip-effect.h	\
 	shell-perf-log.h		\
 	shell-screenshot.h		\
 	shell-slicer.h			\
@@ -164,6 +165,7 @@ libeos_shell_la_SOURCES =		\
 	shell-keyring-prompt.c		\
 	shell-mount-operation.c		\
 	shell-network-agent.c		\
+	shell-page-flip-effect.c	\
 	shell-perf-log.c		\
 	shell-polkit-authentication-agent.h	\
 	shell-polkit-authentication-agent.c	\
