@@ -509,12 +509,19 @@ const _Draggable = new Lang.Class({
         let [snapBackX, snapBackY, snapBackScale] = this._getRestoreLocation();
 
         if (this._actorDestroyed) {
+            let dragActor = this._dragActor;
+
             global.unset_cursor();
             if (!this._buttonDown)
                 this._dragComplete();
             this.emit('drag-end', eventTime, false);
-            if (!this._dragOrigParent)
-                this._dragActor.destroy();
+            if (this._dragOrigParent) {
+                dragActor.reparent(this._dragOrigParent);
+                dragActor.set_scale(this._dragOrigScale, this._dragOrigScale);
+                dragActor.set_position(this._dragOrigX, this._dragOrigY);
+            } else {
+                dragActor.destroy();
+            }
 
             return;
         }

@@ -68,15 +68,15 @@ const EditableLabel = new Lang.Class({
 
         this.connect('button-press-event',
             Lang.bind(this, this._onButtonPressEvent));
+    },
 
-        this._blockLabelEditing = false;
+    vfunc_destroy: function() {
+        this._endEditing();
+
+        this.parent();
     },
 
     _onButtonPressEvent: function(label, event) {
-        if (this._blockLabelEditing) {
-            return false;
-        }
-
         let button = event.get_button();
         if (button != ButtonConstants.LEFT_MOUSE_BUTTON) {
             return false;
@@ -199,15 +199,13 @@ const EditableLabel = new Lang.Class({
     },
 
     _endEditing: function() {
-        if (this.clutter_text) {
-            this.clutter_text.editable = false;
+        this.clutter_text.editable = false;
 
-            this._oldLabelText = null;
+        this._oldLabelText = null;
 
-            if (this._activateId) {
-                this.clutter_text.disconnect(this._activateId);
-                this._activateId = 0;
-            }
+        if (this._activateId) {
+            this.clutter_text.disconnect(this._activateId);
+            this._activateId = 0;
         }
 
         if (this._keyFocusId) {
@@ -243,7 +241,6 @@ const EditableLabel = new Lang.Class({
         }
 
         this._endEditing();
-        this._blockLabelEditing = true;
         this.emit('label-edit-update', text);
     }
 });
