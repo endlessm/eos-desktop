@@ -701,11 +701,6 @@ const IconGrid = new Lang.Class({
             let oldIcon = children[originalIndex];
             let newIcon = children[changedItems[originalIndex]];
 
-            // Adjust for multiple-monitor setups
-            let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
-            dndDropPosition[0] += workArea.x;
-            dndDropPosition[1] += workArea.y;
-
             // We need to know what the coordinates of the icon center are
             dndDropPosition[0] -= Math.floor(oldIcon.get_size()[0] / 2);
             dndDropPosition[1] -= Math.floor(oldIcon.get_size()[1] / 2);
