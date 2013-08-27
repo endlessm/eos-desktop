@@ -829,6 +829,7 @@ st_entry_paint (ClutterActor *actor)
 
   StThemeNode *theme_node = st_widget_get_theme_node (ST_WIDGET (actor));
   StShadow *shadow_spec = st_theme_node_get_text_shadow (theme_node);
+  ClutterActorClass *parent_class;
 
   st_widget_paint_background (ST_WIDGET (actor));
 
@@ -866,7 +867,12 @@ st_entry_paint (ClutterActor *actor)
                                        clutter_actor_get_paint_opacity (priv->entry));
     }
 
-  clutter_actor_paint (priv->entry);
+  /* Since we paint the background ourselves, chain to the parent class
+   * of StWidget, to avoid painting it twice.
+   * This is needed as we still want to paint children.
+   */
+  parent_class = g_type_class_peek_parent (st_entry_parent_class);
+  parent_class->paint (actor);
 }
 
 static void
