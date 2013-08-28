@@ -999,6 +999,8 @@ const ViewIcon = new Lang.Class({
 
         this.actor._delegate = this;
 
+        this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+
         this.saturation = new Clutter.DesaturateEffect({ factor: 0 });
         this.actor.add_effect(this.saturation);
 
@@ -1015,6 +1017,14 @@ const ViewIcon = new Lang.Class({
         this._iconButton._delegate = this;
     },
 
+    _onDestroy: function() {
+        if (this._origIcon) {
+            let origIcon = this._origIcon;
+            this._origIcon = null;
+            origIcon.actor.destroy();
+        }
+    },
+
     _onLabelCancel: function() {
         this.actor.sync_hover();
     },
@@ -1029,7 +1039,7 @@ const ViewIcon = new Lang.Class({
     },
 
     handleViewDragEnd: function() {
-        if (!this.blockHandler) {
+        if (!this.blockHandler && this._origIcon) {
             this.icon = this._origIcon;
             this.actor.set_child(this.icon.actor);
             this._origIcon = null;
@@ -1584,8 +1594,6 @@ const AppIcon = new Lang.Class({
                 }));
         }
 
-        this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
-
         this._menuTimeoutId = 0;
         this._stateChangedId = this.app.connect('notify::state',
                                                 Lang.bind(this,
@@ -1594,6 +1602,8 @@ const AppIcon = new Lang.Class({
     },
 
     _onDestroy: function() {
+        this.parent();
+
         if (this._stateChangedId > 0) {
             this.app.disconnect(this._stateChangedId);
         }
