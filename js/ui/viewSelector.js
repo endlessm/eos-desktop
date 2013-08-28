@@ -311,9 +311,17 @@ const ViewSelector = new Lang.Class({
             this._resetSearch();
     },
 
-    _resetSearch: function () {
-        global.stage.set_key_focus(null);
+    _startSearch: function(event) {
+        global.stage.set_key_focus(this._text);
+        this._text.event(event, true);
+    },
 
+    _stopSearch: function() {
+        global.stage.set_key_focus(null);
+    },
+
+    _resetSearch: function () {
+        this._stopSearch();
         this._entry.text = '';
 
         this._text.set_cursor_visible(true);
@@ -356,11 +364,6 @@ const ViewSelector = new Lang.Class({
             return true;
 
         return symbol == Clutter.BackSpace && this._searchActive;
-    },
-
-    _startSearch: function(event) {
-        global.stage.set_key_focus(this._text);
-        this._text.event(event, true);
     },
 
     // the entry does not show the hint
@@ -420,12 +423,18 @@ const ViewSelector = new Lang.Class({
     _onCapturedEvent: function(actor, event) {
         if (event.type() == Clutter.EventType.BUTTON_PRESS) {
             let source = event.get_source();
-            if (source != this._text && this._text.text == '' &&
+            if (source != this._text &&
                 !Main.layoutManager.keyboardBox.contains(source)) {
-                // the user clicked outside after activating the entry, but
-                // with no search term entered and no keyboard button pressed
-                // - cancel the search
-                this._resetSearch();
+                // If the user clicked outside after activating the entry,
+                // drop the focus from the search bar, but avoid resetting
+                // the entry state.
+                // If no search terms entered were entered, also reset the
+                // entry to its initial state.
+                if (this._text.text == '') {
+                    this._resetSearch();
+                } else {
+                    this._stopSearch();
+                }
             }
         }
 
