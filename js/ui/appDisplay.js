@@ -1509,7 +1509,7 @@ const AppSplashPage = new Lang.Class({
         let info = app.get_app_info();
         if (info !== undefined && info.has_key(DESKTOP_LAUNCH_BACKGROUND_FIELD)) {
             let bg_path = info.get_string(DESKTOP_LAUNCH_BACKGROUND_FIELD);
-            global.log('bg_path: ' + bg_path);
+            background.style_class = 'app-splash-page-custom-background';
             background.style = 'background-image: url("%s");'.format(bg_path);
         }
 
