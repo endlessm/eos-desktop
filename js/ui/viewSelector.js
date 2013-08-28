@@ -162,7 +162,7 @@ const ViewSelector = new Lang.Class({
     },
 
     show: function(viewPage) {
-        this.reset();
+        this._resetSearch();
         this._workspacesDisplay.show();
 
         if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
@@ -283,11 +283,11 @@ const ViewSelector = new Lang.Class({
 
         if (symbol == Clutter.Escape) {
             if (this._searchActive) {
-                this.reset();
+                this._resetSearch();
                 return true;
             }
         } else if (this._shouldTriggerSearch(symbol)) {
-            this.startSearch(event);
+            this._startSearch(event);
         } else if (!this._searchActive) {
             if (symbol == Clutter.Tab || symbol == Clutter.Down) {
                 this._activePage.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
@@ -308,10 +308,10 @@ const ViewSelector = new Lang.Class({
         // incorrectly when we remove focus
         // (https://bugzilla.gnome.org/show_bug.cgi?id=636341) */
         if (this._text.text != '')
-            this.reset();
+            this._resetSearch();
     },
 
-    reset: function () {
+    _resetSearch: function () {
         global.stage.set_key_focus(null);
 
         this._entry.text = '';
@@ -358,7 +358,7 @@ const ViewSelector = new Lang.Class({
         return symbol == Clutter.BackSpace && this._searchActive;
     },
 
-    startSearch: function(event) {
+    _startSearch: function(event) {
         global.stage.set_key_focus(this._text);
         this._text.event(event, true);
     },
@@ -378,7 +378,7 @@ const ViewSelector = new Lang.Class({
 
             if (this._iconClickedId == 0)
                 this._iconClickedId = this._entry.connect('secondary-icon-clicked',
-                    Lang.bind(this, this.reset));
+                    Lang.bind(this, this._resetSearch));
         } else {
             if (this._iconClickedId > 0) {
                 this._entry.disconnect(this._iconClickedId);
@@ -394,7 +394,7 @@ const ViewSelector = new Lang.Class({
         let symbol = event.get_key_symbol();
         if (symbol == Clutter.Escape) {
             if (this._isActivated()) {
-                this.reset();
+                this._resetSearch();
                 return true;
             }
         } else if (this._searchActive) {
@@ -425,7 +425,7 @@ const ViewSelector = new Lang.Class({
                 // the user clicked outside after activating the entry, but
                 // with no search term entered and no keyboard button pressed
                 // - cancel the search
-                this.reset();
+                this._resetSearch();
             }
         }
 
