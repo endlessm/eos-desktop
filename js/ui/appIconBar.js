@@ -254,7 +254,7 @@ const AppIconButton = new Lang.Class({
 
         this._flipEffect = null;
         this._iconSize = iconSize;
-        let icon = app.create_icon_texture(iconSize);
+        let icon = this._createIcon();
 
         this.actor = new St.Button({ style_class: 'app-icon-button',
                                      child: icon,
@@ -278,6 +278,10 @@ const AppIconButton = new Lang.Class({
             this._resetIconGeometry));
         this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
         this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
+    },
+
+    _createIcon: function() {
+        return this._app.create_icon_texture(this._iconSize);
     },
 
     _handleButtonPressEvent: function(actor, event) {
@@ -727,39 +731,15 @@ const BrowserButton = new Lang.Class({
     Extends: AppIconButton,
 
     _init: function(app, iconSize) {
-        this._app = app;
+        this.parent(app, iconSize);
+        this.actor.add_style_class_name('browser-icon');
+    },
 
+    _createIcon: function() {
         let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/internet-normal.png');
         let giconNormal = new Gio.FileIcon({ file: iconFileNormal });
-
-        this._iconSize = iconSize;
-        this._icon = new St.Icon({ gicon: giconNormal,
-                                   style_class: 'browser-icon' });
-
-        this.actor = new St.Button({ style_class: 'app-icon-button',
-                                     child: this._icon,
-                                     button_mask: St.ButtonMask.ONE
-                                   });
-        this.actor.reactive = true;
-
-        this._label = new St.Label({ text: this._app.get_name(),
-                                     style_class: 'app-icon-hover-label' });
-        this._label.connect('style-changed', Lang.bind(this, this._updateStyle));
-
-        // Handle the menu-on-press case for multiple windows
-        this.actor.connect('button-press-event', Lang.bind(this, this._handleButtonPressEvent));
-        this.actor.connect('clicked', Lang.bind(this, this._handleClickEvent));
-
-        Main.layoutManager.connect('startup-complete', Lang.bind(this,
-            this._updateIconGeometry));
-        this.actor.connect('notify::allocation', Lang.bind(this,
-            this._updateIconGeometry));
-        this.actor.connect('destroy', Lang.bind(this,
-            this._resetIconGeometry));
-        this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
-        this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
-
-        this.actor.add_style_class_name('browser-icon');
+        return new St.Icon({ gicon: giconNormal,
+                             style_class: 'browser-icon' });
     },
 
     // overrides default implementation
