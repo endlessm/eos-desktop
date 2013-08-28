@@ -1131,6 +1131,11 @@ const FolderIcon = new Lang.Class({
             }));
     },
 
+    _onDestroy: function() {
+        this.parent();
+        this.view.actor.destroy();
+    },
+
     _onLabelUpdate: function(label, newText) {
         try {
             this.folder.create_custom_with_name(newText);
