@@ -248,7 +248,7 @@ const WindowManager = new Lang.Class({
         // we want to leave all other windows alone.
         let isMaximized = (metaWindow.maximized_horizontally &&
                            metaWindow.maximized_vertically);
-        if (isMaximized) {
+        if (isMaximized && metaWindow.has_focus()) {
             Util.minimizeOtherWindows(metaWindow);
         }
     },
