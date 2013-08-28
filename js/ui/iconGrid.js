@@ -213,7 +213,7 @@ const EditableLabel = new Lang.Class({
             this._keyFocusId = 0;
         }
 
-        if (this._grabHelper.grabbed) {
+        if (this._grabHelper.isActorGrabbed(this)) {
             this._grabHelper.ungrab({ actor: this });
         }
 
