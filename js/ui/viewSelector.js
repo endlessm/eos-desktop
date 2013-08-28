@@ -345,8 +345,12 @@ const ViewSelector = new Lang.Class({
             // Enable 'find-as-you-type'
             this._capturedEventId = global.stage.connect('captured-event',
                                  Lang.bind(this, this._onCapturedEvent));
+
             this._text.set_cursor_visible(true);
-            this._text.set_selection(0, 0);
+            // Move the cursor at the end of the current text
+            let buffer = this._text.get_buffer();
+            let nChars = buffer.get_length();
+            this._text.set_selection(nChars, nChars);
         } else {
             // Disable 'find-as-you-type'
             if (this._capturedEventId > 0)
