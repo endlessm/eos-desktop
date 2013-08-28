@@ -2650,4 +2650,5 @@ StScrollBar StButton#vhandle:active {
 .app-splash-page-background {
     background: #e6e4e4 url(splash-noise-texture.png);
     background-repeat: repeat;
+    background-position: 0px 0px;
 }
