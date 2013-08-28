@@ -232,12 +232,6 @@ st_entry_dispose (GObject *object)
   StEntryPrivate *priv = entry->priv;
   GdkKeymap *keymap;
 
-  if (priv->entry)
-    {
-      clutter_actor_destroy (priv->entry);
-      priv->entry = NULL;
-    }
-
   if (priv->text_shadow_material != COGL_INVALID_HANDLE)
     {
       cogl_handle_unref (priv->text_shadow_material);
