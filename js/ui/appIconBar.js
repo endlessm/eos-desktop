@@ -534,9 +534,9 @@ const ScrolledIconList = new Lang.Class({
                 }
 
                 if (app == runningApp) {
-                    appButton.actor.add_style_pseudo_class('active');
+                    appButton.actor.add_style_pseudo_class('highlighted');
                 } else {
-                    appButton.actor.remove_style_pseudo_class('active');
+                    appButton.actor.remove_style_pseudo_class('highlighted');
                 }
             }));
     },
@@ -809,9 +809,9 @@ const AppIconBar = new Lang.Class({
     _setActiveApp: function(app) {
         if (this._browserButton != null) {
             if (app == this._browserApp) {
-                this._browserButton.actor.add_style_pseudo_class('active');
+                this._browserButton.actor.add_style_pseudo_class('highlighted');
             } else {
-                this._browserButton.actor.remove_style_pseudo_class('active');
+                this._browserButton.actor.remove_style_pseudo_class('highlighted');
             }
         }
 
