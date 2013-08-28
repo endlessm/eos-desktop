@@ -223,9 +223,21 @@ const EndlessApplicationView = new Lang.Class({
 
             let currentIcon = iconTable[itemId];
 
-            if (!currentIcon ||
-                currentIcon.getName() != item.get_name()) {
-                // This icon is new or was renamed
+            if (!currentIcon) {
+                // This icon is new
+                return true;
+            }
+
+            if (currentIcon.customName &&
+                currentIcon.getName() == item.get_name()) {
+                // Rename was confirmed, fall through the
+                // other checks
+                currentIcon.customName = false;
+            }
+
+            if (currentIcon.getName() != item.get_name() &&
+                !currentIcon.customName) {
+                // This icon was renamed out of band
                 return true;
             }
 
@@ -988,6 +1000,7 @@ const ViewIcon = new Lang.Class({
         this.parentView = parentView;
 
         this.canDrop = false;
+        this.customName = false;
         this.blockHandler = false;
 
         this._origIcon = null;
@@ -1140,6 +1153,7 @@ const FolderIcon = new Lang.Class({
         try {
             this.folder.create_custom_with_name(newText);
             this._name = newText;
+            this.customName = true;
         } catch(e) {
             logError(e, 'error while creating a custom dirInfo for: '
                       + this.getName()
@@ -1356,7 +1370,7 @@ const AppActivationContext = new Lang.Class({
         try {
             this._app.activate();
         } catch (e) {
-            logError(e, 'error while activating: ' + this._name);
+            logError(e, 'error while activating: ' + this._app.get_id());
             return;
         }
 
@@ -1639,6 +1653,7 @@ const AppIcon = new Lang.Class({
         try {
             this.app.create_custom_launcher_with_name(newText);
             this._name = newText;
+            this.customName = true;
         } catch(e) {
             logError(e, 'error while creating a custom launcher for: '
                       + this.getName()

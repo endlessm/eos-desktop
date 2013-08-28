@@ -63,17 +63,17 @@ const EditableLabel = new Lang.Class({
         this._labelMode = EditableLabelMode.DISPLAY;
         this._oldLabelText = null;
 
-        this._grabHelper = new GrabHelper.GrabHelper(this);
-        this._grabHelper.addActor(this);
-
         this.connect('button-press-event',
             Lang.bind(this, this._onButtonPressEvent));
+        this.connect('destroy',
+            Lang.bind(this, this._onDestroy));
+
+        this._grabHelper = new GrabHelper.GrabHelper(this);
+        this._grabHelper.addActor(this);
     },
 
-    vfunc_destroy: function() {
-        this._endEditing();
-
-        this.parent();
+    _onDestroy: function() {
+        this._cancelEditing();
     },
 
     _onButtonPressEvent: function(label, event) {
@@ -213,7 +213,7 @@ const EditableLabel = new Lang.Class({
             this._keyFocusId = 0;
         }
 
-        if (this._grabHelper.grabbed) {
+        if (this._grabHelper.isActorGrabbed(this)) {
             this._grabHelper.ungrab({ actor: this });
         }
 

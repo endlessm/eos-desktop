@@ -69,7 +69,7 @@ const _searchUrlRegexp = new RegExp(
 // Return value: the list of URLs found in the string
 function findSearchUrls(terms) {
     let res = [], match;
-    for (i in terms) {
+    for (let i in terms) {
         while ((match = _searchUrlRegexp.exec(terms[i]))) {
             res.push(match[0]);
         }
