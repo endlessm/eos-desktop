@@ -2655,4 +2655,5 @@ StScrollBar StButton#vhandle:active {
 .app-splash-page-custom-background {
     background-repeat: no-repeat;
     background-position: 0px 0px;
+    background-size: 100% 100%;
 }

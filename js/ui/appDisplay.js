@@ -1508,9 +1508,11 @@ const AppSplashPage = new Lang.Class({
 
         let info = app.get_app_info();
         if (info !== undefined && info.has_key(DESKTOP_LAUNCH_BACKGROUND_FIELD)) {
-            let bg_path = info.get_string(DESKTOP_LAUNCH_BACKGROUND_FIELD);
-            background.style_class = 'app-splash-page-custom-background';
-            background.style = 'background-image: url("%s");'.format(bg_path);
+            background.connect('allocation-changed', Lang.bind(this, function(actor, box, flags) {
+                let bg_path = info.get_string(DESKTOP_LAUNCH_BACKGROUND_FIELD);
+                background.style_class = 'app-splash-page-custom-background';
+                background.style = 'background-image: url("%s");background-size: %dpx %dpx'.format(bg_path, box.x2 - box.x1, box.y2 - box.y1);
+            }));
         }
 
         this.add_child(background);
