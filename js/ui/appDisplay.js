@@ -1370,7 +1370,7 @@ const AppActivationContext = new Lang.Class({
         try {
             this._app.activate();
         } catch (e) {
-            logError(e, 'error while activating: ' + this._name);
+            logError(e, 'error while activating: ' + this._app.get_id());
             return;
         }
 
