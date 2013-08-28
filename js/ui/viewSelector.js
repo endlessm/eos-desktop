@@ -356,6 +356,10 @@ const ViewSelector = new Lang.Class({
     },
 
     _shouldTriggerSearch: function(symbol) {
+        if (this._activePage != this._appsPage) {
+            return false;
+        }
+
         let unicode = Clutter.keysym_to_unicode(symbol);
         if (unicode == 0)
             return false;
