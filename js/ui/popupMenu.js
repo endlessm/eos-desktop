@@ -1424,6 +1424,7 @@ const PopupSubMenu = new Lang.Class({
                                time: 0.25,
                                onCompleteScope: this,
                                onComplete: function() {
+                                   this.actor.vscrollbar_policy = Gtk.PolicyType.NEVER;
                                    this.actor.hide();
                                    this.actor.set_height(-1);
 
@@ -1436,6 +1437,7 @@ const PopupSubMenu = new Lang.Class({
                              });
             } else {
                 this._arrow.rotation_angle_z = 0;
+                this.actor.vscrollbar_policy = Gtk.PolicyType.NEVER;
                 this.actor.hide();
 
                 this.isOpen = false;
