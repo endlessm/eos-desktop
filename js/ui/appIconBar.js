@@ -254,7 +254,7 @@ const AppIconButton = new Lang.Class({
 
         this._flipEffect = null;
         this._iconSize = iconSize;
-        let icon = app.create_icon_texture(iconSize);
+        let icon = this._createIcon();
 
         this.actor = new St.Button({ style_class: 'app-icon-button',
                                      child: icon,
@@ -278,6 +278,10 @@ const AppIconButton = new Lang.Class({
             this._resetIconGeometry));
         this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
         this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
+    },
+
+    _createIcon: function() {
+        return this._app.create_icon_texture(this._iconSize);
     },
 
     _handleButtonPressEvent: function(actor, event) {
@@ -386,9 +390,6 @@ const AppIconButton = new Lang.Class({
         windows.forEach(Lang.bind(this,
             function(win) {
                 win.set_icon_geometry(rect);
-                win.connect('focus', Lang.bind (this, function() {
-                    this.emit('focus');
-                }));
             }));
     },
 
@@ -518,27 +519,26 @@ const ScrolledIconList = new Lang.Class({
             if (!this._runningApps.has(app)) {
                 this._runningApps.set(app, newChild);
                 this._container.add(newChild.actor);
-                newChild.connect('focus', Lang.bind(this, function() {
-                    this.emit('focus', newChild);
-                }));
             }
         }
 
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
     },
 
-    setIconActive: function(iconButton) {
-        this._runningApps.values().forEach(Lang.bind(this, function(icon) {
-            if (icon == null) {
-                return;
-            }
+    setActiveApp: function(app) {
+        this._runningApps.items().forEach(Lang.bind(this,
+            function(item) {
+                let [runningApp, appButton] = item;
+                if (!appButton) {
+                    return;
+                }
 
-            if (icon == iconButton) {
-                icon.actor.add_style_pseudo_class('active');
-            } else {
-                icon.actor.remove_style_pseudo_class('active');
-            }
-        }));
+                if (app == runningApp) {
+                    appButton.actor.add_style_pseudo_class('highlighted');
+                } else {
+                    appButton.actor.remove_style_pseudo_class('highlighted');
+                }
+            }));
     },
 
     getIconSize: function() {
@@ -648,9 +648,6 @@ const ScrolledIconList = new Lang.Class({
                 let newChild = new AppIconButton(app, this._iconSize);
                 this._runningApps.set(app, newChild);
                 this._container.add_actor(newChild.actor);
-                newChild.connect('focus', Lang.bind(this, function() {
-                    this.emit('focus', newChild);
-                }));
             }
             this._ensureIsVisible(app);
             break;
@@ -665,16 +662,12 @@ const ScrolledIconList = new Lang.Class({
                 let newChild = new AppIconButton(app, this._iconSize);
                 this._runningApps.set(app, newChild);
                 this._container.add_actor(newChild.actor);
-                newChild.connect('focus', Lang.bind(this, function() {
-                    this.emit('focus', newChild);
-                }));
             }
             this._ensureIsVisible(app);
             break;
 
         case Shell.AppState.STOPPED:
-            let browserApp = Util.getBrowserApp();
-            if (app == browserApp) {
+            if (app == this._browserApp) {
                 break;
             }
 
@@ -727,39 +720,15 @@ const BrowserButton = new Lang.Class({
     Extends: AppIconButton,
 
     _init: function(app, iconSize) {
-        this._app = app;
+        this.parent(app, iconSize);
+        this.actor.add_style_class_name('browser-icon');
+    },
 
+    _createIcon: function() {
         let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/internet-normal.png');
         let giconNormal = new Gio.FileIcon({ file: iconFileNormal });
-
-        this._iconSize = iconSize;
-        this._icon = new St.Icon({ gicon: giconNormal,
-                                   style_class: 'browser-icon' });
-
-        this.actor = new St.Button({ style_class: 'app-icon-button',
-                                     child: this._icon,
-                                     button_mask: St.ButtonMask.ONE
-                                   });
-        this.actor.reactive = true;
-
-        this._label = new St.Label({ text: this._app.get_name(),
-                                     style_class: 'app-icon-hover-label' });
-        this._label.connect('style-changed', Lang.bind(this, this._updateStyle));
-
-        // Handle the menu-on-press case for multiple windows
-        this.actor.connect('button-press-event', Lang.bind(this, this._handleButtonPressEvent));
-        this.actor.connect('clicked', Lang.bind(this, this._handleClickEvent));
-
-        Main.layoutManager.connect('startup-complete', Lang.bind(this,
-            this._updateIconGeometry));
-        this.actor.connect('notify::allocation', Lang.bind(this,
-            this._updateIconGeometry));
-        this.actor.connect('destroy', Lang.bind(this,
-            this._resetIconGeometry));
-        this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
-        this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
-
-        this.actor.add_style_class_name('browser-icon');
+        return new St.Icon({ gicon: giconNormal,
+                             style_class: 'browser-icon' });
     },
 
     // overrides default implementation
@@ -803,43 +772,50 @@ const AppIconBar = new Lang.Class({
         this._container.add_actor(this._backButton);
 
         this._browserButton = null;
-        let browserApp = Util.getBrowserApp();
-        if (browserApp != null) {
-            this._browserButton = new BrowserButton(browserApp, ICON_SIZE);
+        this._browserApp = Util.getBrowserApp();
+        if (this._browserApp) {
+            this._browserButton = new BrowserButton(this._browserApp, ICON_SIZE);
             this._container.add_actor(this._browserButton.actor);
         }
 
-        this._scrolledIconList = new ScrolledIconList([browserApp]);
+        this._scrolledIconList = new ScrolledIconList([this._browserApp]);
         this._container.add_actor(this._scrolledIconList.actor);
-
-        if (this._browserButton != null) {
-            this._browserButton.connect('focus', Lang.bind(this, function() {
-                this._setIconActive(this._browserButton);
-            }));
-        }
-
-        this._scrolledIconList.connect('focus', Lang.bind(this, function(source, icon) {
-                this._setIconActive(icon);
-        }));
-
-        Main.overview.connect('showing', Lang.bind(this, function() {
-            this._setIconActive(null);
-        }));
 
         this._container.add_actor(this._forwardButton);
 
         this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, this._updateNavButtonState));
+
+        this._windowTracker = Shell.WindowTracker.get_default();
+        this._windowTracker.connect('notify::focus-app', Lang.bind(this, this._updateActiveApp));
+        Main.overview.connect('showing', Lang.bind(this, this._updateActiveApp));
+        Main.overview.connect('hidden', Lang.bind(this, this._updateActiveApp));
+
+        this._updateActiveApp();
     },
 
-    _setIconActive: function(activeIcon) {
+    _updateActiveApp: function() {
+        if (Main.overview.visible) {
+            this._setActiveApp(null);
+            return;
+        }
+
+        let focusApp = this._windowTracker.focus_app;
+        if (!focusApp) {
+            return;
+        }
+        this._setActiveApp(focusApp);
+    },
+
+    _setActiveApp: function(app) {
         if (this._browserButton != null) {
-            if (this._browserButton == activeIcon) {
-                this._browserButton.actor.add_style_pseudo_class('active');
+            if (app == this._browserApp) {
+                this._browserButton.actor.add_style_pseudo_class('highlighted');
             } else {
-                this._browserButton.actor.remove_style_pseudo_class('active');
+                this._browserButton.actor.remove_style_pseudo_class('highlighted');
             }
         }
-        this._scrolledIconList.setIconActive(activeIcon);
+
+        this._scrolledIconList.setActiveApp(app);
     },
 
     _previousPageSelected: function() {

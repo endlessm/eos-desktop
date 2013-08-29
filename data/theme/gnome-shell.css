@@ -513,14 +513,19 @@ StScrollBar StButton#vhandle:active {
     background: none;
 }
 
-.app-icon-button:active {
+.app-icon-button:highlighted {
     background-image: url("mini-icon-active-indicator.png");
-    background-size: cover;
+    background-size: 20px 6px;
+    background-position: 2px 24px;
 }
 
 .browser-icon {
     padding-bottom: 1px;
     icon-size: 28px;
+}
+
+.browser-icon:highlighted { 
+    background-position: 3px 24px;
 }
 
 .scrolled-icon-container {
