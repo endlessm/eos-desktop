@@ -68,6 +68,8 @@ const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'eos-app-store.desktop';
 const ALL_VIEW_ID = '';
 
+const DESKTOP_LAUNCH_BACKGROUND_FIELD = 'X-Endless-launch-background';
+
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,
@@ -1507,6 +1509,14 @@ const AppSplashPage = new Lang.Class({
         let background = new St.Widget({ style_class: 'app-splash-page-background',
                                          x_expand: true,
                                          y_expand: true });
+
+        let info = app.get_app_info();
+        if (info !== undefined && info.has_key(DESKTOP_LAUNCH_BACKGROUND_FIELD)) {
+            let bg_path = info.get_string(DESKTOP_LAUNCH_BACKGROUND_FIELD);
+            background.style_class = 'app-splash-page-custom-background';
+            background.style = 'background-image: url("%s");'.format(bg_path);
+        }
+
         this.add_child(background);
         this.add_child(this._createCloseButton());
     },
