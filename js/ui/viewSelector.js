@@ -162,7 +162,7 @@ const ViewSelector = new Lang.Class({
     },
 
     show: function(viewPage) {
-        this.reset();
+        this._resetSearch();
         this._workspacesDisplay.show();
 
         if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
@@ -283,11 +283,11 @@ const ViewSelector = new Lang.Class({
 
         if (symbol == Clutter.Escape) {
             if (this._searchActive) {
-                this.reset();
+                this._resetSearch();
                 return true;
             }
         } else if (this._shouldTriggerSearch(symbol)) {
-            this.startSearch(event);
+            this._startSearch(event);
         } else if (!this._searchActive) {
             if (symbol == Clutter.Tab || symbol == Clutter.Down) {
                 this._activePage.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
@@ -308,12 +308,20 @@ const ViewSelector = new Lang.Class({
         // incorrectly when we remove focus
         // (https://bugzilla.gnome.org/show_bug.cgi?id=636341) */
         if (this._text.text != '')
-            this.reset();
+            this._resetSearch();
     },
 
-    reset: function () {
-        global.stage.set_key_focus(null);
+    _startSearch: function(event) {
+        global.stage.set_key_focus(this._text);
+        this._text.event(event, true);
+    },
 
+    _stopSearch: function() {
+        global.stage.set_key_focus(null);
+    },
+
+    _resetSearch: function () {
+        this._stopSearch();
         this._entry.text = '';
 
         this._text.set_cursor_visible(true);
@@ -337,8 +345,12 @@ const ViewSelector = new Lang.Class({
             // Enable 'find-as-you-type'
             this._capturedEventId = global.stage.connect('captured-event',
                                  Lang.bind(this, this._onCapturedEvent));
+
             this._text.set_cursor_visible(true);
-            this._text.set_selection(0, 0);
+            // Move the cursor at the end of the current text
+            let buffer = this._text.get_buffer();
+            let nChars = buffer.get_length();
+            this._text.set_selection(nChars, nChars);
         } else {
             // Disable 'find-as-you-type'
             if (this._capturedEventId > 0)
@@ -348,6 +360,10 @@ const ViewSelector = new Lang.Class({
     },
 
     _shouldTriggerSearch: function(symbol) {
+        if (this._activePage != this._appsPage) {
+            return false;
+        }
+
         let unicode = Clutter.keysym_to_unicode(symbol);
         if (unicode == 0)
             return false;
@@ -356,11 +372,6 @@ const ViewSelector = new Lang.Class({
             return true;
 
         return symbol == Clutter.BackSpace && this._searchActive;
-    },
-
-    startSearch: function(event) {
-        global.stage.set_key_focus(this._text);
-        this._text.event(event, true);
     },
 
     // the entry does not show the hint
@@ -378,7 +389,7 @@ const ViewSelector = new Lang.Class({
 
             if (this._iconClickedId == 0)
                 this._iconClickedId = this._entry.connect('secondary-icon-clicked',
-                    Lang.bind(this, this.reset));
+                    Lang.bind(this, this._resetSearch));
         } else {
             if (this._iconClickedId > 0) {
                 this._entry.disconnect(this._iconClickedId);
@@ -394,7 +405,7 @@ const ViewSelector = new Lang.Class({
         let symbol = event.get_key_symbol();
         if (symbol == Clutter.Escape) {
             if (this._isActivated()) {
-                this.reset();
+                this._resetSearch();
                 return true;
             }
         } else if (this._searchActive) {
@@ -420,12 +431,18 @@ const ViewSelector = new Lang.Class({
     _onCapturedEvent: function(actor, event) {
         if (event.type() == Clutter.EventType.BUTTON_PRESS) {
             let source = event.get_source();
-            if (source != this._text && this._text.text == '' &&
+            if (source != this._text &&
                 !Main.layoutManager.keyboardBox.contains(source)) {
-                // the user clicked outside after activating the entry, but
-                // with no search term entered and no keyboard button pressed
-                // - cancel the search
-                this.reset();
+                // If the user clicked outside after activating the entry,
+                // drop the focus from the search bar, but avoid resetting
+                // the entry state.
+                // If no search terms entered were entered, also reset the
+                // entry to its initial state.
+                if (this._text.text == '') {
+                    this._resetSearch();
+                } else {
+                    this._stopSearch();
+                }
             }
         }
 
