@@ -62,6 +62,8 @@ const SPLASH_CIRCLE_SKIP_END_FRAMES = 1;
 const FOLDER_POPUP_ANIMATION_PIXELS_PER_SEC = 600;
 const FOLDER_POPUP_ANIMATION_TYPE = 'easeOutQuad';
 
+const SPLASH_SCREEN_DESKTOP_KEY = 'X-Endless-Splash-Screen';
+
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'eos-app-store.desktop';
 const ALL_VIEW_ID = '';
@@ -1303,8 +1305,10 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
-        // Don't show splash screen for the app store
-        if (this._app.get_id() == EOS_APP_STORE_ID) {
+        // Don't show splash screen if the splash screen key is false
+        let info = this._app.get_app_info();
+
+        if (info && info.has_key(SPLASH_SCREEN_DESKTOP_KEY) && !info.get_boolean(SPLASH_SCREEN_DESKTOP_KEY)) {
             return;
         }
 
