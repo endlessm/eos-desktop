@@ -92,7 +92,6 @@ Depends: ${gir:Depends},
          gnome-icon-theme-symbolic (>= 2.91),
          gnome-menus (>= 3.8.0),
          gnome-settings-daemon (>= 3.4.0),
-         gnome-themes-standard,
          gsettings-desktop-schemas (>= 3.7.4),
          python (>= 2.6),
          telepathy-mission-control-5,
@@ -107,10 +106,11 @@ Breaks: fglrx-driver (<< 1:11-10),
         gnome-session (<< 3.0),
         gnome-tweak-tool (<< 3.5),
         gdm (<< 3.5.90)
-Conflicts: gnome-screensaver (<< 3.6), 
-           gnome-shell
+Conflicts: gnome-shell,
+           gnome-screensaver
 Provides: gnome-shell
-Replaces: gnome-shell
+Replaces: gnome-shell,
+          gnome-screensaver
 Description: graphical shell for the GNOME desktop
  The GNOME Shell redefines user interactions with the GNOME desktop.
  In particular, it offers new paradigms for launching applications,
