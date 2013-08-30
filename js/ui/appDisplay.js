@@ -833,19 +833,20 @@ const AllView = new Lang.Class({
             let opacity = ACTIVE_GRID_OPACITY;
             let transition = ACTIVE_GRID_TRANSITION;
             let saturation = ACTIVE_GRID_SATURATION;
+            let icon = icons[idx];
 
-            if (folderOpen && !icons[idx].actor.checked) {
+            if (folderOpen && !icon.actor.checked) {
                 opacity = INACTIVE_GRID_OPACITY;
                 transition = INACTIVE_GRID_TRANSITION;
                 saturation = INACTIVE_GRID_SATURATION;
             }
 
-            Tweener.addTween(icons[idx].actor, { opacity: opacity,
-                                                 time: BoxPointer.POPUP_ANIMATION_TIME,
-                                                 transition: transition });
-            Tweener.addTween(icons[idx].saturation, { factor: saturation,
-                                                      time: BoxPointer.POPUP_ANIMATION_TIME,
-                                                      transition: transition });
+            Tweener.addTween(icon.actor, { opacity: opacity,
+                                           time: BoxPointer.POPUP_ANIMATION_TIME,
+                                           transition: transition });
+            Tweener.addTween(icon.saturation, { factor: saturation,
+                                                time: BoxPointer.POPUP_ANIMATION_TIME,
+                                                transition: transition });
         }
     },
 
