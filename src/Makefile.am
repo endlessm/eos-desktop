@@ -113,6 +113,7 @@ shell_public_headers_h =		\
 	shell-dir-info.h		\
 	shell-embedded-window.h		\
 	shell-generic-container.h	\
+	shell-grid-desaturate-effect.h	\
 	shell-gtk-embed.h		\
 	shell-global.h			\
 	shell-invert-lightness-effect.h	\
@@ -160,6 +161,7 @@ libeos_shell_la_SOURCES =		\
 	shell-generic-container.c	\
 	shell-gtk-embed.c		\
 	shell-global.c			\
+	shell-grid-desaturate-effect.c  \
 	shell-invert-lightness-effect.c	\
 	shell-keyring-prompt.h		\
 	shell-keyring-prompt.c		\
