@@ -197,67 +197,20 @@ get_app_from_window_wmclass (MetaWindow  *window)
 {
   ShellApp *app;
   ShellAppSystem *appsys;
-  char *appid;
   const char *wm_class;
   const char *wm_instance;
-  char *with_desktop;
 
   appsys = shell_app_system_get_default ();
-
-  /* Notes on the heuristics used here:
-     much of the complexity here comes from the desire to support
-     Chrome apps.
-
-     From https://bugzilla.gnome.org/show_bug.cgi?id=673657#c13
-
-     Currently chrome sets WM_CLASS as follows (the first string is the 'instance',
-     the second one is the 'class':
-
-     For the normal browser:
-     WM_CLASS(STRING) = "chromium", "Chromium"
-
-     For a bookmarked page (through 'Tools -> Create application shortcuts')
-     WM_CLASS(STRING) = "wiki.gnome.org__GnomeShell_ApplicationBased", "Chromium"
-
-     For an application from the chrome store (with a .desktop file created through
-     right click, "Create shortcuts" from Chrome's apps overview)
-     WM_CLASS(STRING) = "crx_blpcfgokakmgnkcojhhkbfbldkacnbeo", "Chromium"
-
-     The .desktop file has a matching StartupWMClass, but the name differs, e.g. for
-     the store app (youtube) there is
-
-     .local/share/applications/chrome-blpcfgokakmgnkcojhhkbfbldkacnbeo-Default.desktop
-
-     with
-
-     StartupWMClass=crx_blpcfgokakmgnkcojhhkbfbldkacnbeo
-
-     Note that chromium (but not google-chrome!) includes a StartupWMClass=chromium
-     in their .desktop file, so we must match the instance first.
-
-     Also note that in the good case (regular gtk+ app without hacks), instance and
-     class are the same except for case and there is no StartupWMClass at all.
-  */
-
-  /* first try a match from WM_CLASS (instance part) to StartupWMClass */
-  wm_instance = meta_window_get_wm_class_instance (window);
-  app = shell_app_system_lookup_startup_wmclass (appsys, wm_instance);
-  if (app != NULL)
-    return g_object_ref (app);
-
-  /* then try a match from WM_CLASS to StartupWMClass */
   wm_class = meta_window_get_wm_class (window);
-  app = shell_app_system_lookup_startup_wmclass (appsys, wm_class);
+  wm_instance = meta_window_get_wm_class_instance (window);
+
+  /* try a match from WM_CLASS to .desktop */
+  app = shell_app_system_lookup_desktop_wmclass (appsys, wm_class);
   if (app != NULL)
     return g_object_ref (app);
 
   /* then try a match from WM_CLASS (instance part) to .desktop */
   app = shell_app_system_lookup_desktop_wmclass (appsys, wm_instance);
-  if (app != NULL)
-    return g_object_ref (app);
-
-  /* finally, try a match from WM_CLASS to .desktop */
-  app = shell_app_system_lookup_desktop_wmclass (appsys, wm_class);
   if (app != NULL)
     return g_object_ref (app);
 
