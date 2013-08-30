@@ -275,7 +275,11 @@ StScrollBar StButton#vhandle:active {
     border-radius: 3px;
 }
 
-.popup-options-menu-item-button-holder {
+.popup-options-menu-item-button-holder:active {
+    background-gradient-direction: vertical;
+    background-gradient-start: rgba(255, 255, 255, 0.32);
+    background-gradient-end: rgba(255, 255, 255, 0.14);
+    background-size: contain;
 }
 
 .popup-options-menu-item-button {
