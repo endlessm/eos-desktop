@@ -749,16 +749,47 @@ const MenuItemOption = new Lang.Class({
                                   accessible_role: Atk.Role.PUSH_BUTTON,
                                   can_focus: true
                                 });
+        this.actor.connect('key-focus-in', Lang.bind(this, this._onKeyFocusIn));
+        this.actor.connect('key-focus-out', Lang.bind(this, this._onKeyFocusOut));
 
         let buttonLabel = new St.Label({ text: text,
                                          style_class: 'popup-options-menu-item-button',
                                          y_align: Clutter.ActorAlign.CENTER,
                                          x_align: Clutter.ActorAlign.CENTER,
                                        });
+        buttonLabel.connect('enter-event', Lang.bind(this, this._onEnter));
 
         this.actor.set_child(buttonLabel);
+    },
+
+    _onEnter: function() {
+        this.emit('hovered');
+        print ("hovered");
+        return true;
+    },
+
+    _onKeyFocusIn: function() {
+        this.actor.add_style_pseudo_class('active');
+        return true;
+    },
+
+    _onKeyFocusOut: function() {
+        this.actor.remove_style_pseudo_class('active');
+        return true;
+    },
+
+    activate: function() {
+        print("igonring activate");
+        return
+        this.emit('activate');
+        return true;
+    },
+
+    updateText: function() {
+        print("doing nothing on text change");
     }
 });
+Signals.addSignalMethods(MenuItemOption.prototype);
 
 const PopupOptionsMenuItem = new Lang.Class({
     Name: 'PopupOptionsMenuItem',
@@ -767,13 +798,18 @@ const PopupOptionsMenuItem = new Lang.Class({
     _init: function(options, params) {
         this.parent(params);
 
+        this._options = options;
+        this._selectedOptionIndex = 0;
+
         this._container = new St.BoxLayout({ style_class: 'popup-options-menu-item' });
+        this._container.connect('key-press-event', Lang.bind(this, this._onKeyPressEvent));
 
         for (let optionIndex in options) {
             let option = options[optionIndex];
 
             if (option instanceof MenuItemOption) {
                 this._container.add(option.actor, { expand: true });
+                option.connect('hovered', Lang.bind(this, this._onOptionHovered));
             } else {
                 throw TypeError("Invalid argument to PopupOptionsMenuItem constructor");
             }
@@ -784,16 +820,46 @@ const PopupOptionsMenuItem = new Lang.Class({
                                        });
     },
 
-    // TODO: Do something useful here
-    activate: function(event) {
-        print("activated. TODO!");
-        return;
+    _onKeyPressEvent: function(actor, event) {
+        let symbol = event.get_key_symbol();
 
-        // we allow pressing space to toggle the switch
-        // without closing the menu
-        if (event.type() == Clutter.EventType.KEY_PRESS &&
-            event.get_key_symbol() == Clutter.KEY_space)
+        if (symbol == Clutter.KEY_Right) {
+            this._updateSelection(this._selectedOptionIndex + 1);
+            return true;
+        } else if (symbol == Clutter.KEY_Left) {
+            this._updateSelection(this._selectedOptionIndex - 1);
+            return true;
+        }
+
+        return this.parent(actor, event);
+    },
+
+    _onOptionHovered: function(actor) {
+        let index = this._options.indexOf(actor);
+        this._updateSelection(index);
+    },
+
+    _updateSelection: function(index) {
+        if (index == null) {
             return;
+        }
+
+        // Clamp value to valid selections
+        index = Math.max(0, Math.min(this._options.length - 1, index));
+        this._selectedOptionIndex = index;
+
+        print("updating selection to " + index);
+
+       this._options[index].actor.grab_key_focus()
+    },
+
+    activate: function(event) {
+        if (this._selectedOptionIndex != null) {
+            let selectedOption = this._options[this._selectedOptionIndex];
+            selectedOption.activate();
+        } else {
+            print("Noting to activate - Ignoring");
+        }
 
         this.parent(event);
     },
@@ -817,6 +883,9 @@ const PopupOptionsMenuItem = new Lang.Class({
             if (active) {
                 if (params.grabKeyboard)
                     this.actor.grab_key_focus();
+                this._updateSelection(0);
+            } else {
+                this._updateSelection(null);
             }
             this.emit('active-changed', active);
         }

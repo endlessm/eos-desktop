@@ -676,7 +676,7 @@ const UserMenuButton = new Lang.Class({
 
     _updateInstallUpdates: function() {
         let haveUpdates = this._updatesFile.query_exists(null);
-        this._installUpdatesItem.actor.visible = haveUpdates && this._haveShutdown;
+        //this._installUpdatesItem.actor.visible = haveUpdates && this._haveShutdown;
     },
 
     _updateHaveShutdown: function() {
@@ -699,19 +699,19 @@ const UserMenuButton = new Lang.Class({
     },
 
     _updateSuspendOrPowerOff: function() {
-        if (!this._suspendOrPowerOffItem)
+        if (!this._suspendOrPowerOffOption)
             return;
 
-        this._suspendOrPowerOffItem.actor.visible = this._haveShutdown || this._haveSuspend;
+        this._suspendOrPowerOffOption.actor.visible = this._haveShutdown || this._haveSuspend;
 
         // If we can't power off show Suspend instead
         // and disable the alt key
         if (!this._haveShutdown) {
-            this._suspendOrPowerOffItem.updateText(SUSPEND_TEXT, null);
+            this._suspendOrPowerOffOption.updateText(SUSPEND_TEXT, null);
         } else if (!this._haveSuspend) {
-            this._suspendOrPowerOffItem.updateText(TURN_OFF_TEXT, null);
+            this._suspendOrPowerOffOption.updateText(TURN_OFF_TEXT, null);
         } else {
-            this._suspendOrPowerOffItem.updateText(TURN_OFF_TEXT, SUSPEND_TEXT);
+            this._suspendOrPowerOffOption.updateText(TURN_OFF_TEXT, SUSPEND_TEXT);
         }
     },
 
@@ -811,18 +811,23 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(item);
         this._lockScreenItem = item;
 
+        this._suspendOrPowerOffOption = new PopupMenu.MenuItemOption(TURN_OFF_TEXT);
+        this._suspendOrPowerOffOption.connect('activate', Lang.bind(this, this._onSystemActionActivate));
 
-        let turnOffOption = new PopupMenu.MenuItemOption(TURN_OFF_TEXT);
         let restartOption = new PopupMenu.MenuItemOption(RESTART_TEXT);
-        let logoutOption = new PopupMenu.MenuItemOption(LOGOUT_TEXT);
+        restartOption.connect('activate', Lang.bind(this, this._onInstallUpdatesActivate));
 
-        item = new PopupMenu.PopupOptionsMenuItem([ turnOffOption,
+        this._logoutOption = new PopupMenu.MenuItemOption(LOGOUT_TEXT);
+        this._logoutOption.connect('activate', Lang.bind(this, this._onQuitSessionActivate));
+
+        item = new PopupMenu.PopupOptionsMenuItem([ this._suspendOrPowerOffOption,
                                                     restartOption,
-                                                    logoutOption ]);
+                                                    this._logoutOption ]);
         this.menu.addMenuItem(item);
 
         item = new PopupMenu.PopupAlternatingMenuItem(TURN_OFF_TEXT,
                                                       SUSPEND_TEXT);
+/*
         //this.menu.addMenuItem(item);
         item.connect('activate', Lang.bind(this, this._onSystemActionActivate));
         this._suspendOrPowerOffItem = item;
@@ -837,6 +842,7 @@ const UserMenuButton = new Lang.Class({
         item.connect('activate', Lang.bind(this, this._onQuitSessionActivate));
         //this.menu.addMenuItem(item);
         this._logoutItem = item;
+*/
     },
 
     _updatePresenceStatus: function(item, event) {
@@ -963,7 +969,7 @@ const UserMenuButton = new Lang.Class({
 
     _onSystemActionActivate: function() {
         if (this._haveShutdown &&
-            this._suspendOrPowerOffItem.state == PopupMenu.PopupAlternatingMenuItemState.DEFAULT) {
+            this._suspendOrPowerOffOption.state == PopupMenu.PopupAlternatingMenuItemState.DEFAULT) {
             this._loginManager.listSessions(Lang.bind(this,
                 function(result) {
                     let sessions = [];
