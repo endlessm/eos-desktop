@@ -801,9 +801,6 @@ const UserMenuButton = new Lang.Class({
         item = new PopupMenu.PopupMenuItem(FEEDBACK_TEXT);
         this.menu.addMenuItem(item);
 
-        item = new PopupMenu.PopupSeparatorMenuItem();
-        this.menu.addMenuItem(item);
-
         item = new PopupMenu.PopupMenuItem(_("Switch User"));
         item.connect('activate', Lang.bind(this, this._onLoginScreenActivate));
         this.menu.addMenuItem(item);
