@@ -799,11 +799,6 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(item);
         this._loginScreenItem = item;
 
-        item = new PopupMenu.PopupMenuItem(LOGOUT_TEXT);
-        item.connect('activate', Lang.bind(this, this._onQuitSessionActivate));
-        this.menu.addMenuItem(item);
-        this._logoutItem = item;
-
         item = new PopupMenu.PopupMenuItem(_("Lock"));
         item.connect('activate', Lang.bind(this, this._onLockScreenActivate));
         this.menu.addMenuItem(item);
@@ -823,6 +818,11 @@ const UserMenuButton = new Lang.Class({
         item.connect('activate', Lang.bind(this, this._onInstallUpdatesActivate));
         this.menu.addMenuItem(item);
         this._installUpdatesItem = item;
+
+        item = new PopupMenu.PopupMenuItem(LOGOUT_TEXT);
+        item.connect('activate', Lang.bind(this, this._onQuitSessionActivate));
+        this.menu.addMenuItem(item);
+        this._logoutItem = item;
     },
 
     _updatePresenceStatus: function(item, event) {
