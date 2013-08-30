@@ -35,6 +35,7 @@ const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
 const TURN_OFF_TEXT = _("TURN OFF");
 const SUSPEND_TEXT = _("SUSPEND");
 const RESTART_TEXT = _("RESTART");
+const LOGOUT_TEXT = _("LOGOUT");
 
 const DIALOG_ICON_SIZE = 64;
 
@@ -98,7 +99,8 @@ const UserAvatarWidget = new Lang.Class({
         } else {
             this.actor.style = null;
             this.actor.child = new St.Icon({ icon_name: 'avatar-default-symbolic',
-                                             icon_size: this._iconSize });
+                                             icon_size: this._iconSize
+                                           });
         }
     }
 });
@@ -660,7 +662,7 @@ const UserMenuButton = new Lang.Class({
         let multiUser = this._userManager.has_multiple_users;
         let multiSession = Gdm.get_session_ids().length > 1;
 
-        this._logoutItem.actor.visible = allowLogout && (alwaysShow || multiUser || multiSession || systemAccount || !localAccount);
+        this._logoutItem.actor.visible = true;allowLogout && (alwaysShow || multiUser || multiSession || systemAccount || !localAccount);
     },
 
     _updateLockScreen: function() {
@@ -797,7 +799,7 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(item);
         this._loginScreenItem = item;
 
-        item = new PopupMenu.PopupMenuItem(_("Log Out"));
+        item = new PopupMenu.PopupMenuItem(LOGOUT_TEXT);
         item.connect('activate', Lang.bind(this, this._onQuitSessionActivate));
         this.menu.addMenuItem(item);
         this._logoutItem = item;
