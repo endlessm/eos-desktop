@@ -1030,8 +1030,8 @@ const ViewIcon = new Lang.Class({
 
         this.actor.label_actor = this.icon.label;
 
-        this._iconButton = this.icon.iconButton;
-        this._iconButton._delegate = this;
+        this.iconButton = this.icon.iconButton;
+        this.iconButton._delegate = this;
     },
 
     _onDestroy: function() {
@@ -1119,7 +1119,7 @@ const FolderIcon = new Lang.Class({
         this.view = new FolderView(this);
         this.view.actor.reactive = false;
 
-        this._iconButton.connect('clicked', Lang.bind(this,
+        this.iconButton.connect('clicked', Lang.bind(this,
             function() {
                 if (this._createPopup()) {
                     this._popup.toggle();
@@ -1133,7 +1133,7 @@ const FolderIcon = new Lang.Class({
             }));
 
         // DND implementation
-        this._draggable = DND.makeDraggable(this._iconButton);
+        this._draggable = DND.makeDraggable(this.iconButton);
         this._draggable.connect('drag-begin', Lang.bind(this,
             function () {
                 Main.overview.beginItemDrag(this);
@@ -1602,14 +1602,14 @@ const AppIcon = new Lang.Class({
         this.parent(params.parentView, buttonParams, iconParams);
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
-        this._iconButton.connect('clicked', Lang.bind(this, this._onClicked));
+        this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
         this.actor.connect('popup-menu', Lang.bind(this, this._onKeyboardPopupMenu));
 
         this._menu = null;
         this._menuManager = new PopupMenu.PopupMenuManager(this);
 
         if (params.isDraggable) {
-            this._draggable = DND.makeDraggable(this._iconButton);
+            this._draggable = DND.makeDraggable(this.iconButton);
             this._draggable.connect('drag-begin', Lang.bind(this,
                 function () {
                     // Notify view that something is dragging
