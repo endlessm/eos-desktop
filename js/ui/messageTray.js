@@ -2465,7 +2465,7 @@ const MessageTray = new Lang.Class({
         // notification is being shown.
 
         let tweenParams = { opacity: 255,
-                            y: -this._notificationWidget.height,
+                            y: -this._notificationWidget.height - Main.layoutManager.panelBox.height,
                             time: ANIMATION_TIME,
                             transition: 'easeOutQuad',
                             onComplete: this._showNotificationCompleted,
@@ -2611,7 +2611,7 @@ const MessageTray = new Lang.Class({
     },
 
     _onNotificationExpanded: function() {
-        let expandedY = - this._notificationWidget.height;
+        let expandedY = - this._notificationWidget.height - Main.layoutManager.panelBox.height;
         this._closeButton.show();
 
         // Don't animate the notification to its new position if it has shrunk:
