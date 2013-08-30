@@ -266,6 +266,24 @@ StScrollBar StButton#vhandle:active {
     padding-left: 24px;
 }
 
+.popup-options-menu-item {
+    background-gradient-direction: vertical;
+    background-gradient-start: rgba(255, 255, 255, 0.2);
+    background-gradient-end: rgba(255, 255, 255, 0);
+    background-size: contain;
+    height: 22px;
+    border-radius: 3px;
+}
+
+.popup-options-menu-item-button-holder {
+}
+
+.popup-options-menu-item-button {
+    font-size: 11px;
+    font-weight: 600;
+    color: #ccc;
+}
+
 /* Switches */
 .toggle-switch {
     width: 65px;
