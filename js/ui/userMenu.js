@@ -801,7 +801,6 @@ const UserMenuButton = new Lang.Class({
         item = new PopupMenu.PopupMenuItem(FEEDBACK_TEXT);
         this.menu.addMenuItem(item);
 
-
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
 
@@ -814,9 +813,6 @@ const UserMenuButton = new Lang.Class({
         item.connect('activate', Lang.bind(this, this._onLockScreenActivate));
         this.menu.addMenuItem(item);
         this._lockScreenItem = item;
-
-        item = new PopupMenu.PopupSeparatorMenuItem();
-        this.menu.addMenuItem(item);
 
         item = new PopupMenu.PopupAlternatingMenuItem(TURN_OFF_TEXT,
                                                       SUSPEND_TEXT);
