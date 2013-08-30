@@ -835,7 +835,7 @@ const AllView = new Lang.Class({
             let saturation = ACTIVE_GRID_SATURATION;
             let icon = icons[idx];
 
-            if (folderOpen && !icon.actor.checked) {
+            if (folderOpen && !icon.iconButton.checked) {
                 opacity = INACTIVE_GRID_OPACITY;
                 transition = INACTIVE_GRID_TRANSITION;
                 saturation = INACTIVE_GRID_SATURATION;
@@ -1192,7 +1192,7 @@ const FolderIcon = new Lang.Class({
         this._popup.connect('open-state-changed', Lang.bind(this,
             function(popup, isOpen) {
                 if (!isOpen) {
-                    this.actor.checked = false;
+                    this.iconButton.checked = false;
                 }
             }));
         this._popup.actor.connect('notify::visible', Lang.bind(this,
