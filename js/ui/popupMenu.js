@@ -741,6 +741,88 @@ const Switch = new Lang.Class({
     }
 });
 
+const MenuItemOption = new Lang.Class({
+    Name: 'MenuItemOption',
+
+    _init: function(text) {
+        this.actor = new St.Bin({ style_class: 'popup-options-menu-item-button-holder',
+                                  accessible_role: Atk.Role.PUSH_BUTTON,
+                                  can_focus: true
+                                });
+
+        let buttonLabel = new St.Label({ text: text,
+                                         style_class: 'popup-options-menu-item-button',
+                                         y_align: Clutter.ActorAlign.CENTER,
+                                         x_align: Clutter.ActorAlign.CENTER,
+                                       });
+
+        this.actor.set_child(buttonLabel);
+    }
+});
+
+const PopupOptionsMenuItem = new Lang.Class({
+    Name: 'PopupOptionsMenuItem',
+    Extends: PopupBaseMenuItem,
+
+    _init: function(options, params) {
+        this.parent(params);
+
+        this._container = new St.BoxLayout({ style_class: 'popup-options-menu-item' });
+
+        for (let optionIndex in options) {
+            let option = options[optionIndex];
+
+            if (option instanceof MenuItemOption) {
+                this._container.add(option.actor, { expand: true });
+            } else {
+                throw TypeError("Invalid argument to PopupOptionsMenuItem constructor");
+            }
+        }
+
+        this.addActor(this._container, { expand: true,
+                                         span: -1
+                                       });
+    },
+
+    // TODO: Do something useful here
+    activate: function(event) {
+        print("activated. TODO!");
+        return;
+
+        // we allow pressing space to toggle the switch
+        // without closing the menu
+        if (event.type() == Clutter.EventType.KEY_PRESS &&
+            event.get_key_symbol() == Clutter.KEY_space)
+            return;
+
+        this.parent(event);
+    },
+
+    //TODO Fix this and implement correct toggle functionality
+    toggle: function() {
+        return
+        this._switch.toggle();
+        this.emit('toggled', this._switch.state);
+        this.checkAccessibleState();
+    },
+
+    // Override default focus handling to disable the selection highlight on
+    // the whole MenuItem line
+    setActive: function (active, params) {
+        let activeChanged = active != this.active;
+        params = Params.parse (params, { grabKeyboard: true });
+
+        if (activeChanged) {
+            this.active = active;
+            if (active) {
+                if (params.grabKeyboard)
+                    this.actor.grab_key_focus();
+            }
+            this.emit('active-changed', active);
+        }
+    }
+});
+
 const PopupSwitchMenuItem = new Lang.Class({
     Name: 'PopupSwitchMenuItem',
     Extends: PopupBaseMenuItem,

@@ -790,10 +790,10 @@ const UserMenuButton = new Lang.Class({
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
 
-        item = new PopupMenu.PopupMenuItem(TUTORIAL_TEXT);
+        item = new PopupMenu.PopupImageMenuItem(TUTORIAL_TEXT, 'tutorial.svg');
         this.menu.addMenuItem(item);
 
-        item = new PopupMenu.PopupMenuItem(OPTIONS_TEXT);
+        item = new PopupMenu.PopupImageMenuItem(OPTIONS_TEXT, 'settings.svg');
         item.connect('activate', Lang.bind(this, this._onPreferencesActivate));
         this.menu.addMenuItem(item);
         this._systemSettings = item;
@@ -811,21 +811,31 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(item);
         this._lockScreenItem = item;
 
+
+        let turnOffOption = new PopupMenu.MenuItemOption(TURN_OFF_TEXT);
+        let restartOption = new PopupMenu.MenuItemOption(RESTART_TEXT);
+        let logoutOption = new PopupMenu.MenuItemOption(LOGOUT_TEXT);
+
+        item = new PopupMenu.PopupOptionsMenuItem([ turnOffOption,
+                                                    restartOption,
+                                                    logoutOption ]);
+        this.menu.addMenuItem(item);
+
         item = new PopupMenu.PopupAlternatingMenuItem(TURN_OFF_TEXT,
                                                       SUSPEND_TEXT);
-        this.menu.addMenuItem(item);
-        item.connect('activate', Lang.bind(this, this._onSuspendOrPowerOffActivate));
+        //this.menu.addMenuItem(item);
+        item.connect('activate', Lang.bind(this, this._onSystemActionActivate));
         this._suspendOrPowerOffItem = item;
         this._updateSuspendOrPowerOff();
 
         item = new PopupMenu.PopupMenuItem(RESTART_TEXT);
         item.connect('activate', Lang.bind(this, this._onInstallUpdatesActivate));
-        this.menu.addMenuItem(item);
+        //this.menu.addMenuItem(item);
         this._installUpdatesItem = item;
 
         item = new PopupMenu.PopupMenuItem(LOGOUT_TEXT);
         item.connect('activate', Lang.bind(this, this._onQuitSessionActivate));
-        this.menu.addMenuItem(item);
+        //this.menu.addMenuItem(item);
         this._logoutItem = item;
     },
 
@@ -951,7 +961,7 @@ const UserMenuButton = new Lang.Class({
         dialog.open();
     },
 
-    _onSuspendOrPowerOffActivate: function() {
+    _onSystemActionActivate: function() {
         if (this._haveShutdown &&
             this._suspendOrPowerOffItem.state == PopupMenu.PopupAlternatingMenuItemState.DEFAULT) {
             this._loginManager.listSessions(Lang.bind(this,

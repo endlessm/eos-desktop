@@ -326,8 +326,8 @@ const Overview = new Lang.Class({
         for (let i = 0; i < Main.layoutManager.monitors.length; i++) {
             let screenDecoratorLayout = new Clutter.BoxLayout();
             let screenDecorator = new St.Widget({ layout_manager: screenDecoratorLayout,
-                                                    x_expand: true
-                                                  });
+                                                  x_expand: true
+                                                });
 
             let topLeftCorner = new RoundedCorner(St.Side.LEFT);
             let topRightCorner = new RoundedCorner(St.Side.RIGHT);
