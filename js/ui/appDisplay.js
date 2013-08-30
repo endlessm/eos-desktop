@@ -844,9 +844,17 @@ const AllView = new Lang.Class({
             Tweener.addTween(icon.actor, { opacity: opacity,
                                            time: BoxPointer.POPUP_ANIMATION_TIME,
                                            transition: transition });
+
+            icon.saturation.enabled = true;
             Tweener.addTween(icon.saturation, { factor: saturation,
                                                 time: BoxPointer.POPUP_ANIMATION_TIME,
-                                                transition: transition });
+                                                transition: transition,
+                                                onComplete: Lang.bind(this, function() {
+                                                    if (!folderOpen) {
+                                                        icon.saturation.enabled = false;
+                                                    }
+                                                })
+                                              });
         }
     },
 
@@ -1019,7 +1027,8 @@ const ViewIcon = new Lang.Class({
 
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
-        this.saturation = new Clutter.DesaturateEffect({ factor: 0 });
+        this.saturation = new Clutter.DesaturateEffect({ factor: 0,
+                                                         enabled: false });
         this.actor.add_effect(this.saturation);
 
         this.icon = new IconGrid.BaseIcon(this.getName(), iconParams, buttonParams);
