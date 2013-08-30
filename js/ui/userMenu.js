@@ -773,7 +773,11 @@ const UserMenuButton = new Lang.Class({
 
         item = new PopupMenu.PopupSwitchMenuItem(_("Notifications"));
         item.connect('toggled', Lang.bind(this, this._updatePresenceStatus));
-        this.menu.addMenuItem(item);
+
+        // Removing notification toggle from the user menu but keeping the code
+        // if we decide we need it
+        //this.menu.addMenuItem(item);
+
         this._notificationsSwitch = item;
 
         item = new PopupMenu.PopupSeparatorMenuItem();
