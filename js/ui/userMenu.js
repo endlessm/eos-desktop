@@ -32,6 +32,9 @@ const DISABLE_LOG_OUT_KEY = 'disable-log-out';
 const ALWAYS_SHOW_LOG_OUT_KEY = 'always-show-log-out';
 const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
 
+const TURN_OFF_TEXT = _("TURN OFF");
+const RESTART_TEXT = _("RESTART");
+
 const DIALOG_ICON_SIZE = 64;
 
 const MAX_USERS_IN_SESSION_DIALOG = 5;
@@ -697,9 +700,9 @@ const UserMenuButton = new Lang.Class({
         if (!this._haveShutdown) {
             this._suspendOrPowerOffItem.updateText(_("Suspend"), null);
         } else if (!this._haveSuspend) {
-            this._suspendOrPowerOffItem.updateText(_("Power Off"), null);
+            this._suspendOrPowerOffItem.updateText(TURN_OFF_TEXT, null);
         } else {
-            this._suspendOrPowerOffItem.updateText(_("Power Off"), _("Suspend"));
+            this._suspendOrPowerOffItem.updateText(TURN_OFF_TEXT, _("Suspend"));
         }
     },
 
@@ -800,14 +803,14 @@ const UserMenuButton = new Lang.Class({
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
 
-        item = new PopupMenu.PopupAlternatingMenuItem(_("Power Off"),
+        item = new PopupMenu.PopupAlternatingMenuItem(TURN_OFF_TEXT,
                                                       _("Suspend"));
         this.menu.addMenuItem(item);
         item.connect('activate', Lang.bind(this, this._onSuspendOrPowerOffActivate));
         this._suspendOrPowerOffItem = item;
         this._updateSuspendOrPowerOff();
 
-        item = new PopupMenu.PopupMenuItem(_("Install Updates & Restart"));
+        item = new PopupMenu.PopupMenuItem(RESTART_TEXT);
         item.connect('activate', Lang.bind(this, this._onInstallUpdatesActivate));
         this.menu.addMenuItem(item);
         this._installUpdatesItem = item;
@@ -925,7 +928,7 @@ const UserMenuButton = new Lang.Class({
                              action: function() { dialog.close(); },
                              key: Clutter.Escape };
 
-        let powerOffButton = { label: _("Power Off"),  action: Lang.bind(this, function() {
+        let powerOffButton = { label: TURN_OFF_TEXT,  action: Lang.bind(this, function() {
             dialog.close();
             this._session.ShutdownRemote();
         }), default: true };
