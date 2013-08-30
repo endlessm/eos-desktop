@@ -764,13 +764,13 @@ const AllView = new Lang.Class({
         return ALL_VIEW_ID;
     },
 
-    addFolderPopup: function(popup) {
+    addFolderPopup: function(popup, source) {
         this.stack.add_actor(popup.actor);
         popup.connect('open-state-changed', Lang.bind(this,
             function(popup, isOpen) {
                 this._eventBlocker.reactive = isOpen;
                 this._currentPopup = isOpen ? popup : null;
-                this._updateIconOpacities(isOpen);
+                this._updateIconOpacities(isOpen, source);
 
                 // Removing the tweening is mandatory to have the correct
                 // tweening parameters set on the next tweener
@@ -827,34 +827,45 @@ const AllView = new Lang.Class({
         return Tweener.isTweening(this._grid.actor);
     },
 
-    _updateIconOpacities: function(folderOpen) {
-        let icons = this.getAllIcons();
-        for (let idx = 0; idx < icons.length; idx++) {
-            let opacity = ACTIVE_GRID_OPACITY;
-            let transition = ACTIVE_GRID_TRANSITION;
-            let saturation = ACTIVE_GRID_SATURATION;
-            let icon = icons[idx];
+    _updateIconOpacities: function(folderOpen, sourceIcon) {
+        let opacity = folderOpen ?
+            INACTIVE_GRID_OPACITY : ACTIVE_GRID_OPACITY;
+        let transition = folderOpen ?
+            INACTIVE_GRID_TRANSITION : ACTIVE_GRID_TRANSITION;
+        let saturation = folderOpen ?
+            INACTIVE_GRID_SATURATION : ACTIVE_GRID_SATURATION;
 
-            if (folderOpen && !icon.iconButton.checked) {
-                opacity = INACTIVE_GRID_OPACITY;
-                transition = INACTIVE_GRID_TRANSITION;
-                saturation = INACTIVE_GRID_SATURATION;
+        let iconRect = new Clutter.Rect();
+        iconRect.origin.x = sourceIcon.actor.x;
+        iconRect.origin.y = sourceIcon.actor.y;
+        iconRect.size.width = sourceIcon.actor.width;
+        iconRect.size.height = sourceIcon.actor.height;
+
+        this._grid.saturation.enabled = true;
+        this._grid.saturation.unshaded_rect = iconRect;
+
+        Tweener.addTween(this._grid.saturation, { factor: saturation,
+                                                  time: BoxPointer.POPUP_ANIMATION_TIME,
+                                                  transition: transition,
+                                                  onComplete: Lang.bind(this, function() {
+                                                      if (!folderOpen) {
+                                                          this._grid.saturation.enabled = false;
+                                                      }
+                                                  })
+                                                });
+
+        // Now update opacities
+        // FIXME: maybe integrate the opacity setting into the shader?
+        let icons = this.getAllIcons();
+        for (let idx in icons) {
+            let icon = icons[idx];
+            if (icon == sourceIcon) {
+                continue;
             }
 
             Tweener.addTween(icon.actor, { opacity: opacity,
                                            time: BoxPointer.POPUP_ANIMATION_TIME,
                                            transition: transition });
-
-            icon.saturation.enabled = true;
-            Tweener.addTween(icon.saturation, { factor: saturation,
-                                                time: BoxPointer.POPUP_ANIMATION_TIME,
-                                                transition: transition,
-                                                onComplete: Lang.bind(this, function() {
-                                                    if (!folderOpen) {
-                                                        icon.saturation.enabled = false;
-                                                    }
-                                                })
-                                              });
         }
     },
 
@@ -1027,10 +1038,6 @@ const ViewIcon = new Lang.Class({
 
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
-        this.saturation = new Clutter.DesaturateEffect({ factor: 0,
-                                                         enabled: false });
-        this.actor.add_effect(this.saturation);
-
         this.icon = new IconGrid.BaseIcon(this.getName(), iconParams, buttonParams);
         if (iconParams['showLabel'] !== false) {
             this.icon.label.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
@@ -1195,7 +1202,7 @@ const FolderIcon = new Lang.Class({
         let side = spaceTop > spaceBottom ? St.Side.BOTTOM : St.Side.TOP;
 
         this._popup = new AppFolderPopup(this, side);
-        this.parentView.addFolderPopup(this._popup);
+        this.parentView.addFolderPopup(this._popup, this);
         this._reposition(side);
 
         this._popup.connect('open-state-changed', Lang.bind(this,
