@@ -33,6 +33,7 @@ const ALWAYS_SHOW_LOG_OUT_KEY = 'always-show-log-out';
 const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
 
 const TURN_OFF_TEXT = _("TURN OFF");
+const SUSPEND_TEXT = _("SUSPEND");
 const RESTART_TEXT = _("RESTART");
 
 const DIALOG_ICON_SIZE = 64;
@@ -700,11 +701,11 @@ const UserMenuButton = new Lang.Class({
         // If we can't power off show Suspend instead
         // and disable the alt key
         if (!this._haveShutdown) {
-            this._suspendOrPowerOffItem.updateText(_("Suspend"), null);
+            this._suspendOrPowerOffItem.updateText(SUSPEND_TEXT, null);
         } else if (!this._haveSuspend) {
             this._suspendOrPowerOffItem.updateText(TURN_OFF_TEXT, null);
         } else {
-            this._suspendOrPowerOffItem.updateText(TURN_OFF_TEXT, _("Suspend"));
+            this._suspendOrPowerOffItem.updateText(TURN_OFF_TEXT, SUSPEND_TEXT);
         }
     },
 
@@ -810,7 +811,7 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(item);
 
         item = new PopupMenu.PopupAlternatingMenuItem(TURN_OFF_TEXT,
-                                                      _("Suspend"));
+                                                      SUSPEND_TEXT);
         this.menu.addMenuItem(item);
         item.connect('activate', Lang.bind(this, this._onSuspendOrPowerOffActivate));
         this._suspendOrPowerOffItem = item;
