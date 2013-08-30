@@ -37,6 +37,10 @@ const SUSPEND_TEXT = _("SUSPEND");
 const RESTART_TEXT = _("RESTART");
 const LOGOUT_TEXT = _("LOGOUT");
 
+const OPTIONS_TEXT = _("Tutorial");
+const TUTORIAL_TEXT = _("Options");
+const FEEDBACK_TEXT = _("Give us Feedback");
+
 const DIALOG_ICON_SIZE = 64;
 
 const MAX_USERS_IN_SESSION_DIALOG = 5;
@@ -786,10 +790,17 @@ const UserMenuButton = new Lang.Class({
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
 
-        item = new PopupMenu.PopupMenuItem(_("Settings"));
+        item = new PopupMenu.PopupMenuItem(TUTORIAL_TEXT);
+        this.menu.addMenuItem(item);
+
+        item = new PopupMenu.PopupMenuItem(OPTIONS_TEXT);
         item.connect('activate', Lang.bind(this, this._onPreferencesActivate));
         this.menu.addMenuItem(item);
         this._systemSettings = item;
+
+        item = new PopupMenu.PopupMenuItem(FEEDBACK_TEXT);
+        this.menu.addMenuItem(item);
+
 
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
