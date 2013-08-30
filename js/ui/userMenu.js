@@ -189,7 +189,9 @@ const IMStatusChooserItem = new Lang.Class({
         this._section.addMenuItem(this._name);
 
         this._combo = new PopupMenu.PopupComboBoxMenuItem({ style_class: 'status-chooser-combo' });
-        this._section.addMenuItem(this._combo);
+
+        // Remove the online status combo but don't remove it from code
+        //this._section.addMenuItem(this._combo);
 
         let item;
 
