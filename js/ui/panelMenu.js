@@ -114,7 +114,7 @@ const Button = new Lang.Class({
         if (dontCreateMenu)
             this.menu = new PopupMenu.PopupDummyMenu(this.actor);
         else
-            this.setMenu(new PopupMenu.PopupMenu(this.actor, menuAlignment, St.Side.TOP));
+            this.setMenu(new PopupMenu.PopupMenu(this.actor, menuAlignment, St.Side.BOTTOM));
 
         this.setName(nameText);
     },
