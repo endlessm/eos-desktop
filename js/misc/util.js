@@ -319,3 +319,13 @@ function getBrowserApp() {
     let browserApp = appSystem.lookup_app(BROWSER_DESKTOP_ENTRY);
     return browserApp;
 }
+
+function getRectForActor(actor) {
+    let rect = new Clutter.Rect();
+    rect.origin.x = actor.x;
+    rect.origin.y = actor.y;
+    rect.size.width = actor.width;
+    rect.size.height = actor.height;
+
+    return rect;
+}
