@@ -20,8 +20,6 @@ const Tweener = imports.ui.tweener;
 
 const SLIDER_SCROLL_STEP = 0.05; /* Slider scrolling step in % */
 
-const PRESSED_OPTION_HANG_TIME = 200; /* Length of time to show option button "pressed" */
-
 function _ensureStyle(actor) {
     if (actor.get_children) {
         let children = actor.get_children();
@@ -746,69 +744,15 @@ const Switch = new Lang.Class({
 
 const MenuItemOption = new Lang.Class({
     Name: 'MenuItemOption',
+    Extends: St.Button,
 
     _init: function(text) {
-        this.actor = new St.Bin({ style_class: 'popup-options-menu-item-button-holder',
-                                  accessible_role: Atk.Role.PUSH_BUTTON,
-                                  can_focus: true,
-                                  track_hover: true,
-                                  reactive: true
-                                });
-
-        this.actor.connect('key-focus-in', Lang.bind(this, this._onKeyFocusIn));
-        this.actor.connect('key-focus-out', Lang.bind(this, this._onKeyFocusOut));
-
-        this.actor.connect('enter-event', Lang.bind(this, this._onEnter));
-        this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
-
-        this.actor.connect('button-release-event', Lang.bind(this, this._clearPressedState));
-        this.actor.connect('leave-event', Lang.bind(this, this._clearPressedState));
-
-        this._buttonLabel = new St.Label({ text: text,
-                                         style_class: 'popup-options-menu-item-button',
-                                         y_align: Clutter.ActorAlign.CENTER,
-                                         x_align: Clutter.ActorAlign.CENTER,
-                                       });
-
-        this.actor.set_child(this._buttonLabel);
-    },
-
-    _clearPressedState: function() {
-        this.actor.remove_style_pseudo_class('pressed');
-        this._buttonLabel.remove_style_pseudo_class('pressed');
-        return false;
-    },
-
-    _onButtonPress: function() {
-        this.actor.add_style_pseudo_class('pressed');
-        this._buttonLabel.add_style_pseudo_class('pressed');
-        return true;
-    },
-
-    _onEnter: function() {
-        this.emit('hovered');
-        return true;
-    },
-
-    _onKeyFocusIn: function() {
-        this.actor.add_style_pseudo_class('active');
-        return true;
-    },
-
-    _onKeyFocusOut: function() {
-        this.actor.remove_style_pseudo_class('active');
-        return true;
-    },
-
-    activate: function() {
-        this._onButtonPress()
-
-        this.emit('activate');
-
-        // When the menu is closed return label/button state to normal
-        Mainloop.timeout_add(PRESSED_OPTION_HANG_TIME, Lang.bind(this, this._clearPressedState));
-
-        return true;
+        this.parent({ label: text,
+                      style_class: 'popup-options-menu-item-button',
+                      track_hover: true,
+                      can_focus: true,
+                      reactive: true,
+                    });
     },
 
     // TODO handle Alt key to change some menu items (Poweroff vs Alt Suspend)
@@ -822,10 +766,11 @@ const PopupOptionsMenuItem = new Lang.Class({
     Extends: PopupBaseMenuItem,
 
     _init: function(options, params) {
+        params = Params.parse (params, { hover: false });
         this.parent(params);
 
         this._options = options;
-        this._selectedOptionIndex = 0;
+        this._selectedOptionIndex = null;
 
         this._container = new St.BoxLayout({ style_class: 'popup-options-menu-item' });
         this._container.connect('key-press-event', Lang.bind(this, this._onKeyPressEvent));
@@ -834,8 +779,9 @@ const PopupOptionsMenuItem = new Lang.Class({
             let option = options[optionIndex];
 
             if (option instanceof MenuItemOption) {
-                this._container.add(option.actor, { expand: true });
-                option.connect('hovered', Lang.bind(this, this._onOptionHovered));
+                this._container.add(option, { expand: true });
+                option.connect('notify::hover', Lang.bind(this, this._onOptionHovered));
+                option.connect('clicked', Lang.bind(this, this.activate));
             } else {
                 throw TypeError("Invalid argument to PopupOptionsMenuItem constructor");
             }
@@ -844,60 +790,40 @@ const PopupOptionsMenuItem = new Lang.Class({
         this.addActor(this._container, { expand: true,
                                          span: -1
                                        });
-
-        this._updateSelection(this._selectedOptionIndex);
     },
 
     _onKeyPressEvent: function(actor, event) {
         let symbol = event.get_key_symbol();
-
         if (symbol == Clutter.KEY_Right) {
-            this._shiftSelectedOption(1);
+            this._container.navigate_focus( this._options[this._selectedOptionIndex],
+                                            Gtk.DirectionType.TAB_FORWARD,
+                                            true
+                                          );
             return true;
         } else if (symbol == Clutter.KEY_Left) {
-            this._shiftSelectedOption(-1);
+            this._container.navigate_focus( this._options[this._selectedOptionIndex],
+                                            Gtk.DirectionType.TAB_BACKWARD,
+                                            true
+                                          );
             return true;
         }
 
         return this.parent(actor, event);
     },
 
-    // If we use arrow keys but have invisible items, skip and try to select
-    // the next available item
-    _shiftSelectedOption: function(amount) {
-        let numberOfOptions = this._options.length;
-        for (let index = 0; index < numberOfOptions; index++){
-            if (this._updateSelection(this._selectedOptionIndex + amount)){
-                return;
-            }
+    _onOptionHovered: function(actor, isHovering) {
+        if (isHovering) {
+            let index = this._options.indexOf(actor);
+            this._updateSelection(index);
         }
-    },
-
-    _onOptionHovered: function(actor) {
-        let index = this._options.indexOf(actor);
-        this._updateSelection(index);
     },
 
     _updateSelection: function(index) {
-        if (index == null) {
-            index = 0;
-        }
-
-        // Clamp value to valid selections. Not using Math.min/max since
-        // we want to wrap around
-        if (index >= this._options.length) {
-            index = 0;
-        }
-
-        if (index < 0) {
-            index = this._options.length - 1;
-        }
-
         this._selectedOptionIndex = index;
 
-        let option = this._options[index].actor;
+        let option = this._options[index];
         if (option.visible) {
-            this._options[index].actor.grab_key_focus();
+            this._options[index].grab_key_focus();
             return true;
         }
 
@@ -908,8 +834,6 @@ const PopupOptionsMenuItem = new Lang.Class({
         if (this._selectedOptionIndex != null) {
             let selectedOption = this._options[this._selectedOptionIndex];
             selectedOption.activate();
-        } else {
-            logError("Nothing to activate - Ignoring");
         }
 
         this.parent(event);
@@ -926,9 +850,7 @@ const PopupOptionsMenuItem = new Lang.Class({
             if (active) {
                 if (params.grabKeyboard) {
                     this.actor.grab_key_focus();
-                    this._updateSelection(this._selectedOptionIndex);
-                } else {
-                    this._selectedOptionIndex = null;
+                    this._updateSelection(0);
                 }
             }
             this.emit('active-changed', active);

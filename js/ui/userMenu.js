@@ -42,6 +42,9 @@ const TUTORIAL_TEXT = _("Tutorial");
 const OPTIONS_TEXT = _("Options");
 const FEEDBACK_TEXT = _("Give us Feedback");
 
+const FEEDBACK_LAUNCHER = "eos-app-feedback.desktop";
+const TUTORIAL_LAUNCHER = "eos-app-tutorial.desktop";
+
 const DIALOG_ICON_SIZE = 64;
 
 const MAX_USERS_IN_SESSION_DIALOG = 5;
@@ -667,7 +670,7 @@ const UserMenuButton = new Lang.Class({
         let multiUser = this._userManager.has_multiple_users;
         let multiSession = Gdm.get_session_ids().length > 1;
 
-        this._logoutOption.actor.visible = allowLogout && (alwaysShow || multiUser || multiSession || systemAccount || !localAccount);
+        this._logoutOption.visible = allowLogout && (alwaysShow || multiUser || multiSession || systemAccount || !localAccount);
     },
 
     _updateLockScreen: function() {
@@ -703,7 +706,7 @@ const UserMenuButton = new Lang.Class({
         if (!this._suspendOrPowerOffOption)
             return;
 
-        this._suspendOrPowerOffOption.actor.visible = this._haveShutdown || this._haveSuspend;
+        this._suspendOrPowerOffOption.visible = this._haveShutdown || this._haveSuspend;
 
         // If we can't power off show Suspend instead
         // and disable the alt key
@@ -791,15 +794,21 @@ const UserMenuButton = new Lang.Class({
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
 
-        item = new PopupMenu.PopupUserMenuItem(TUTORIAL_TEXT, '/theme/tutorial-symbolic.svg');
-        this.menu.addMenuItem(item);
+        if (this._haveLauncher(TUTORIAL_LAUNCHER)) {
+            item = new PopupMenu.PopupUserMenuItem(TUTORIAL_TEXT, '/theme/tutorial-symbolic.svg');
+            item.connect('activate', Lang.bind(this, this._onTutorialActivate));
+            this.menu.addMenuItem(item);
+        }
 
         this._systemSettings = new PopupMenu.PopupUserMenuItem(OPTIONS_TEXT, '/theme/settings-symbolic.svg');
         this._systemSettings.connect('activate', Lang.bind(this, this._onPreferencesActivate));
         this.menu.addMenuItem(this._systemSettings);
 
-        item = new PopupMenu.PopupUserMenuItem(FEEDBACK_TEXT, null);
-        this.menu.addMenuItem(item);
+        if (this._haveLauncher(FEEDBACK_LAUNCHER)) {
+            item = new PopupMenu.PopupUserMenuItem(FEEDBACK_TEXT, null);
+            item.connect('activate', Lang.bind(this, this._onFeedbackActivate));
+            this.menu.addMenuItem(item);
+        }
 
         item = new PopupMenu.PopupUserMenuItem(_("Switch User"), null);
         item.connect('activate', Lang.bind(this, this._onLoginScreenActivate));
@@ -843,6 +852,23 @@ const UserMenuButton = new Lang.Class({
         //this.menu.addMenuItem(item);
         this._logoutItem = item;
 */
+    },
+
+    _haveLauncher: function(launcher) {
+        let app = Shell.AppSystem.get_default().lookup_app(launcher);
+        return app != null;
+    },
+
+    _onTutorialActivate: function() {
+        Main.overview.hide();
+        let app = Shell.AppSystem.get_default().lookup_app(TUTORIAL_LAUNCHER);
+        app.activate();
+    },
+
+    _onFeedbackActivate: function() {
+        Main.overview.hide();
+        let app = Shell.AppSystem.get_default().lookup_app(FEEDBACK_LAUNCHER);
+        app.activate();
     },
 
     _updatePresenceStatus: function(item, event) {

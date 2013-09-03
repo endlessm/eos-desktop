@@ -281,19 +281,6 @@ StScrollBar StButton#vhandle:active {
     border: 1px solid #1c1c1c;
 }
 
-.popup-options-menu-item-button-holder:active {
-    background-gradient-direction: vertical;
-    background-gradient-start: #323232;
-    background-gradient-end: #141414;
-    background-size: contain;
-}
-
-.popup-options-menu-item-button-holder:pressed {
-    background-gradient-direction: vertical;
-    background-gradient-start: #0D0D0D;
-    background-gradient-end: #000;
-    background-size: contain;
-}
 
 .popup-options-menu-item-button {
     font-size: 11px;
@@ -301,7 +288,21 @@ StScrollBar StButton#vhandle:active {
     color: #ccc;
 }
 
-.popup-options-menu-item-button:pressed {
+.popup-options-menu-item-button:hover,
+.popup-options-menu-item-button:focus {
+    background-gradient-direction: vertical;
+    background-gradient-start: #323232;
+    background-gradient-end: #141414;
+    background-size: contain;
+
+}
+
+.popup-options-menu-item-button:active {
+    background-gradient-direction: vertical;
+    background-gradient-start: #0D0D0D;
+    background-gradient-end: #000;
+    background-size: contain;
+
     color: #555;
 }
 
