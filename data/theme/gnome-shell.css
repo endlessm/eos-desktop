@@ -615,6 +615,7 @@ StScrollBar StButton#vhandle:active {
     icon-shadow: black 0px 2px 2px;
 }
 
+.app-icon-menu,
 .panel-menu {
     -boxpointer-gap: 4px;
 }
