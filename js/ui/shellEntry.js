@@ -15,14 +15,97 @@ const EntryMenu = new Lang.Class({
     Name: 'ShellEntryMenu',
     Extends: PopupMenu.PopupMenu,
 
+    _init: function(actor, entry) {
+        this.parent(actor, 0, St.Side.TOP);
+
+        this._entry = entry;
+        this.actor.add_style_class_name('entry-context-menu');
+
+        Main.uiGroup.add_actor(this.actor);
+        this.actor.hide();
+    },
+
+    open: function(animate) {
+        this.parent(animate);
+        this._entry.add_style_pseudo_class('focus');
+
+        let direction = Gtk.DirectionType.TAB_FORWARD;
+        if (!this.actor.navigate_focus(null, direction, false))
+            this.actor.grab_key_focus();
+    },
+
+    close: function(animate) {
+        this._entry.grab_key_focus();
+        this.parent(animate);
+    }
+});
+
+const EntrySearchMenuState = {
+    GOOGLE: 1,
+    WIKIPEDIA: 2,
+    LOCAL: 3
+};
+
+const EntrySearchMenu = new Lang.Class({
+    Name: 'ShellEntrySearchMenu',
+    Extends: EntryMenu,
+
+    _init: function(actor, entry) {
+        this.parent(actor, entry);
+
+        this._state = EntrySearchMenuState.GOOGLE;
+
+        // Populate menu
+        let item;
+        item = new PopupMenu.PopupMenuItem(_("Google"));
+        item.connect('activate', Lang.bind(this, this._onGoogleActivated));
+        this.addMenuItem(item);
+        this._googleItem = item;
+
+        item = new PopupMenu.PopupMenuItem(_("Wikipedia"));
+        item.connect('activate', Lang.bind(this, this._onWikipediaActivated));
+        this.addMenuItem(item);
+        this._wikipediaItem = item;
+
+        item = new PopupMenu.PopupMenuItem(_("Local"));
+        item.connect('activate', Lang.bind(this, this._onLocalActivated));
+        this.addMenuItem(item);
+        this._localItem = item;
+
+        this._syncState();
+    },
+
+    _syncState: function() {
+        this._googleItem.setShowDot(this._state == EntrySearchMenuState.GOOGLE);
+        this._wikipediaItem.setShowDot(this._state == EntrySearchMenuState.WIKIPEDIA);
+        this._localItem.setShowDot(this._state == EntrySearchMenuState.LOCAL);
+    },
+
+    _onGoogleActivated: function() {
+        this._state = EntrySearchMenuState.GOOGLE;
+        this._syncState();
+    },
+
+    _onWikipediaActivated: function() {
+        this._state = EntrySearchMenuState.WIKIPEDIA;
+        this._syncState();
+    },
+
+    _onLocalActivated: function() {
+        this._state = EntrySearchMenuState.LOCAL;
+        this._syncState();
+    }
+});
+
+const EntryEditMenu = new Lang.Class({
+    Name: 'ShellEntryEditMenu',
+    Extends: EntryMenu,
+
     _init: function(entry, params) {
         params = Params.parse (params, { isPassword: false });
 
-        this.parent(entry, 0, St.Side.TOP);
+        this.parent(entry, entry);
 
-        this.actor.add_style_class_name('entry-context-menu');
-
-        this._entry = entry;
         this._clipboard = St.Clipboard.get_default();
 
         // Populate menu
@@ -40,9 +123,6 @@ const EntryMenu = new Lang.Class({
         this._passwordItem = null;
         if (params.isPassword)
 	    this._makePasswordItem();
-
-        Main.uiGroup.add_actor(this.actor);
-        this.actor.hide();
     },
 
     _makePasswordItem: function() {
@@ -75,16 +155,6 @@ const EntryMenu = new Lang.Class({
         if (this._passwordItem)
             this._updatePasswordItem();
 
-        this.parent(animate);
-        this._entry.add_style_pseudo_class('focus');
-
-        let direction = Gtk.DirectionType.TAB_FORWARD;
-        if (!this.actor.navigate_focus(null, direction, false))
-            this.actor.grab_key_focus();
-    },
-
-    close: function(animate) {
-        this._entry.grab_key_focus();
         this.parent(animate);
     },
 
@@ -198,7 +268,7 @@ function addContextMenu(entry, params) {
     if (entry.menu)
         return;
 
-    entry.menu = new EntryMenu(entry, params);
+    entry.menu = new EntryEditMenu(entry, params);
     entry._menuManager = new PopupMenu.PopupMenuManager({ actor: entry });
     entry._menuManager.addMenu(entry.menu);
 
@@ -209,4 +279,24 @@ function addContextMenu(entry, params) {
     entry.connect('button-press-event', Lang.bind(null, _onButtonPressEvent, entry));
 
     entry.connect('popup-menu', Lang.bind(null, _onPopup, entry));
+}
+
+function _popupSearchEntryMenu(entry) {
+    if (entry.searchMenu.isOpen) {
+        entry.searchMenu.close(BoxPointer.PopupAnimation.FULL);
+    } else {
+        entry.searchMenu.open(BoxPointer.PopupAnimation.FULL);
+    }
+}
+
+function addSearchMenu(entry) {
+    if (entry.searchMenu) {
+        return;
+    }
+
+    entry.searchMenu = new EntrySearchMenu(entry.primary_icon, entry);
+    entry._searchMenuManager = new PopupMenu.PopupMenuManager({ actor: entry.primary_icon });
+    entry._searchMenuManager.addMenu(entry.searchMenu);
+
+    entry.connect('primary-icon-clicked', _popupSearchEntryMenu);
 }

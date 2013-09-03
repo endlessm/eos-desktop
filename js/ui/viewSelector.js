@@ -92,6 +92,8 @@ const ViewSelector = new Lang.Class({
         this._entry.set_primary_icon(new St.Icon({ style_class: 'search-entry-icon',
                                                    icon_name: 'edit-find-symbolic',
                                                    track_hover: true }));
+        ShellEntry.addSearchMenu(this._entry);
+
         this._clearIcon = new St.Icon({ style_class: 'search-entry-icon',
                                         icon_name: 'edit-clear-symbolic',
                                         track_hover: true });
@@ -99,8 +101,6 @@ const ViewSelector = new Lang.Class({
         let hintActor = new ShellEntry.EntryHint('search-entry-hint',
                                                  'google-logo-symbolic.svg');
         this._entry.set_hint_actor(hintActor);
-
-        this._entry.connect('primary-icon-clicked', Lang.bind(this, this._activateDefaultSearch));
 
         this._iconClickedId = 0;
         this._capturedEventId = 0;
