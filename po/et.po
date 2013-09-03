@@ -838,7 +838,7 @@ msgid "Log Out %s"
 msgstr "%s väljalogimine"
 
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Väljalogimine"
 
 msgid "Click Log Out to quit these applications and log out of the system."
@@ -862,7 +862,7 @@ msgid "Logging out of the system."
 msgstr "Süsteemist väljalogimine"
 
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Logi välja"
 
 msgctxt "title"
@@ -1419,7 +1419,7 @@ msgstr "Märguanded"
 msgid "Switch User"
 msgstr "Vaheta kasutajat"
 
-msgid "Log Out"
+msgid "Logout"
 msgstr "Logi välja"
 
 msgid "Install Updates & Restart"

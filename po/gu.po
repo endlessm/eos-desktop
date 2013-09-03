@@ -1038,7 +1038,7 @@ msgstr "%s માંથી બહાર નીકળો"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "બહાર નીકળો"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1065,7 +1065,7 @@ msgstr "સિસ્ટમની બહાર નીકળી રહ્યા �
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "બહાર નીકળો"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1791,7 +1791,7 @@ msgid "Switch User"
 msgstr "વપરાશકર્તાને બદલો"
 
 #: ../js/ui/userMenu.js:802
-msgid "Log Out"
+msgid "Logout"
 msgstr "બહાર નીકળો"
 
 #: ../js/ui/userMenu.js:822

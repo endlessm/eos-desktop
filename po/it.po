@@ -1075,7 +1075,7 @@ msgstr "Termina sessione di %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Termina sessione"
 
 # oddio... abbandonare il sistema sembra la nave che affonda... (LF)
@@ -1105,7 +1105,7 @@ msgstr "Chiusura della sessione."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Termina sessione"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1833,7 +1833,7 @@ msgid "Switch User"
 msgstr "Cambia utente"
 
 #: ../js/ui/userMenu.js:800
-msgid "Log Out"
+msgid "Logout"
 msgstr "Termina sessione"
 
 #: ../js/ui/userMenu.js:820

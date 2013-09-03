@@ -1048,7 +1048,7 @@ msgstr "%s யிலிருந்து வெளியேறு"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "வெளியேறு"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1075,7 +1075,7 @@ msgstr "கணினியில் இருந்து வெளியேற�
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "வெளியேறு"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1806,7 +1806,7 @@ msgid "Switch User"
 msgstr "பயனர் மாற்று"
 
 #: ../js/ui/userMenu.js:802
-msgid "Log Out"
+msgid "Logout"
 msgstr "வெளியேறு"
 
 #: ../js/ui/userMenu.js:822

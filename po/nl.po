@@ -1061,7 +1061,7 @@ msgstr "%s afmelden"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Afmelden"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1090,7 +1090,7 @@ msgstr "Van het systeem afmelden…"
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Afmelden"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1811,7 +1811,7 @@ msgid "Switch User"
 msgstr "Gebruiker wisselen"
 
 #: ../js/ui/userMenu.js:802
-msgid "Log Out"
+msgid "Logout"
 msgstr "Afmelden"
 
 #: ../js/ui/userMenu.js:822

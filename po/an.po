@@ -409,7 +409,7 @@ msgid "Log Out %s"
 msgstr "Trancar a sesion %s"
 
 #: ../js/ui/endSessionDialog.js:64 ../js/ui/endSessionDialog.js:70
-msgid "Log Out"
+msgid "Logout"
 msgstr "Trancar sesion"
 
 #: ../js/ui/endSessionDialog.js:65

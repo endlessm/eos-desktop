@@ -1035,7 +1035,7 @@ msgstr "Amaitu %s(r)en saioa"
 
 #: ../js/ui/endSessionDialog.js:63
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Amaitu saioa"
 
 #: ../js/ui/endSessionDialog.js:64
@@ -1064,7 +1064,7 @@ msgstr "Sistemako saioa amaitzen."
 
 #: ../js/ui/endSessionDialog.js:77
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Amaitu saioa"
 
 #: ../js/ui/endSessionDialog.js:82
@@ -1782,7 +1782,7 @@ msgid "Switch User"
 msgstr "Aldatu erabiltzailea"
 
 #: ../js/ui/userMenu.js:799
-msgid "Log Out"
+msgid "Logout"
 msgstr "Amaitu saioa"
 
 #: ../js/ui/userMenu.js:819

@@ -536,7 +536,7 @@ msgid "Log Out %s"
 msgstr "Zarrar la sesión %s"
 
 #: ../js/ui/endSessionDialog.js:61 ../js/ui/endSessionDialog.js:75
-msgid "Log Out"
+msgid "Logout"
 msgstr "Zarrar la sesión"
 
 #: ../js/ui/endSessionDialog.js:62

@@ -1065,7 +1065,7 @@ msgstr "Saír da sesión %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Saír da sesión"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1094,7 +1094,7 @@ msgstr "Saíndo da sesión."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Saír da sesión"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1819,7 +1819,7 @@ msgid "Switch User"
 msgstr "Cambiar de usuario"
 
 #: ../js/ui/userMenu.js:800
-msgid "Log Out"
+msgid "Logout"
 msgstr "Saír da sesión"
 
 #: ../js/ui/userMenu.js:820

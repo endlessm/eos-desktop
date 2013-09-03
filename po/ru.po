@@ -1062,7 +1062,7 @@ msgstr "Завершение сеанса пользователя %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Выйти из системы"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1094,7 +1094,7 @@ msgstr "Выход из системы."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Выйти из системы"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1820,7 +1820,7 @@ msgid "Switch User"
 msgstr "Сменить пользователя"
 
 #: ../js/ui/userMenu.js:802
-msgid "Log Out"
+msgid "Logout"
 msgstr "Выйти из системы"
 
 #: ../js/ui/userMenu.js:822

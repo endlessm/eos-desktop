@@ -491,7 +491,7 @@ msgstr "Одјави го „%s“"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Одјави се"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -518,7 +518,7 @@ msgstr "Одјавување од системот."
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Одјави се"
 
 #: ../js/ui/endSessionDialog.js:81

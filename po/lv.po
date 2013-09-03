@@ -1066,7 +1066,7 @@ msgstr "Izrakstīt %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Izrakstīties"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1097,7 +1097,7 @@ msgstr "Izrakstās no sistēmas."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Izrakstīties"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1839,7 +1839,7 @@ msgid "Switch User"
 msgstr "Mainīt lietotāju"
 
 #: ../js/ui/userMenu.js:800
-msgid "Log Out"
+msgid "Logout"
 msgstr "Izrakstīties"
 
 #: ../js/ui/userMenu.js:820

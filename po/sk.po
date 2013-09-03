@@ -1076,7 +1076,7 @@ msgstr "Odhlásenie používateľa %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Odhlásenie"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1107,7 +1107,7 @@ msgstr "Prebieha odhlásenie zo systému."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Odhlásiť sa"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1843,7 +1843,7 @@ msgid "Switch User"
 msgstr "Prepnúť používateľa"
 
 #: ../js/ui/userMenu.js:802
-msgid "Log Out"
+msgid "Logout"
 msgstr "Odhlásiť sa"
 
 #: ../js/ui/userMenu.js:822

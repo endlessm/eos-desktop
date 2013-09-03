@@ -438,7 +438,7 @@ msgid "Log Out %s"
 msgstr "%s প্রস্থান করুন"
 
 #: ../js/ui/endSessionDialog.js:64 ../js/ui/endSessionDialog.js:70
-msgid "Log Out"
+msgid "Logout"
 msgstr "প্রস্থান করুন"
 
 #: ../js/ui/endSessionDialog.js:65

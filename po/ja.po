@@ -947,7 +947,7 @@ msgstr "%s のログアウト"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "ログアウト"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -972,7 +972,7 @@ msgstr "システムからログアウトします。"
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "ログアウト"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1680,7 +1680,7 @@ msgid "Switch User"
 msgstr "ユーザーの切り替え"
 
 #: ../js/ui/userMenu.js:802
-msgid "Log Out"
+msgid "Logout"
 msgstr "ログアウト"
 
 #: ../js/ui/userMenu.js:822

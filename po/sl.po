@@ -1053,7 +1053,7 @@ msgstr "Odjava %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Odjava"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1084,7 +1084,7 @@ msgstr "Odjavljanje iz sistema."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Odjava"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1819,7 +1819,7 @@ msgid "Switch User"
 msgstr "Preklopi uporabnika"
 
 #: ../js/ui/userMenu.js:801
-msgid "Log Out"
+msgid "Logout"
 msgstr "Odjava"
 
 #: ../js/ui/userMenu.js:821

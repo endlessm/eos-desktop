@@ -407,7 +407,7 @@ msgid "Log Out %s"
 msgstr "লগআউট %s"
 
 #: ../js/ui/endSessionDialog.js:64 ../js/ui/endSessionDialog.js:70
-msgid "Log Out"
+msgid "Logout"
 msgstr "লগআউট"
 
 #: ../js/ui/endSessionDialog.js:65

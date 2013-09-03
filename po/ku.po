@@ -506,7 +506,7 @@ msgid "Log Out %s"
 msgstr ""
 
 #: ../js/ui/endSessionDialog.js:61 ../js/ui/endSessionDialog.js:75
-msgid "Log Out"
+msgid "Logout"
 msgstr ""
 
 #: ../js/ui/endSessionDialog.js:62

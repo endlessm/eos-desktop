@@ -1065,7 +1065,7 @@ msgstr "Sortida %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Sortida"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1092,7 +1092,7 @@ msgstr "S'està sortint de la sessió."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Surt"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1809,7 +1809,7 @@ msgid "Switch User"
 msgstr "Canvia d'usuari"
 
 #: ../js/ui/userMenu.js:802
-msgid "Log Out"
+msgid "Logout"
 msgstr "Surt"
 
 #: ../js/ui/userMenu.js:822

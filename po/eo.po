@@ -556,7 +556,7 @@ msgstr "Elsaluti %s"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Elsaluti"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -584,7 +584,7 @@ msgstr "Elsalutanta de la sistemo."
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Elsaluti"
 
 #: ../js/ui/endSessionDialog.js:81

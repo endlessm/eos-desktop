@@ -510,7 +510,7 @@ msgstr "ඉවත් වන්න %s"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "පිටවීම"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -537,7 +537,7 @@ msgstr ""
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "ඉවත්වන්න"
 
 #: ../js/ui/endSessionDialog.js:81

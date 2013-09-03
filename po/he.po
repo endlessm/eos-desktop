@@ -933,7 +933,7 @@ msgstr "הוצאת %s"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "יציאה"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -962,7 +962,7 @@ msgstr "מתבצעת יציאה מהמערכת."
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "יציאה"
 
 #: ../js/ui/endSessionDialog.js:81
@@ -1692,7 +1692,7 @@ msgid "Switch User"
 msgstr "החלפת משתמש"
 
 #: ../js/ui/userMenu.js:780
-msgid "Log Out"
+msgid "Logout"
 msgstr "יציאה"
 
 #: ../js/ui/userMenu.js:800

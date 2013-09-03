@@ -526,7 +526,7 @@ msgstr "Logga ut %s"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Logga ut"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -553,7 +553,7 @@ msgstr "Loggar ut från systemet."
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Logga ut"
 
 #: ../js/ui/endSessionDialog.js:81

@@ -1067,7 +1067,7 @@ msgstr "%s पासून बाहेर पडा"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "बाहेर पडा"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1095,7 +1095,7 @@ msgstr "प्रणालीतून बाहेर पडत आहे."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "बाहेर पडा"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1829,7 +1829,7 @@ msgid "Switch User"
 msgstr "उपयोक्ता बदला"
 
 #: ../js/ui/userMenu.js:802
-msgid "Log Out"
+msgid "Logout"
 msgstr "बाहेर पडा"
 
 #: ../js/ui/userMenu.js:822

@@ -1078,7 +1078,7 @@ msgstr "Αποσύνδεση %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Αποσύνδεση"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1107,7 +1107,7 @@ msgstr "Αποσύνδεση από το σύστημα."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Αποσύνδεση"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1835,7 +1835,7 @@ msgid "Switch User"
 msgstr "Αλλαγή χρήστη"
 
 #: ../js/ui/userMenu.js:800
-msgid "Log Out"
+msgid "Logout"
 msgstr "Αποσύνδεση"
 
 #: ../js/ui/userMenu.js:820

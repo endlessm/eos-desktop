@@ -1024,7 +1024,7 @@ msgstr "Đăng xuất %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Đăng xuất"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1049,7 +1049,7 @@ msgstr "Đang xuất khỏi hệ thống."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "Đăng xuất"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1758,7 +1758,7 @@ msgid "Switch User"
 msgstr "Chuyển người dùng"
 
 #: ../js/ui/userMenu.js:800
-msgid "Log Out"
+msgid "Logout"
 msgstr "Đăng xuất"
 
 #: ../js/ui/userMenu.js:820

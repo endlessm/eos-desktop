@@ -1085,7 +1085,7 @@ msgstr "ଲଗଆଉଟ %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Log Out"
+msgid "Logout"
 msgstr "ଲଗ ଆଉଟ"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1114,7 +1114,7 @@ msgstr "ତନ୍ତ୍ରରୁ ଲଗ ଆଉଟ କରୁଅଛି।"
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Log Out"
+msgid "Logout"
 msgstr "ଲଗଆଉଟ"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1853,7 +1853,7 @@ msgid "Switch User"
 msgstr "ଚାଳକଙ୍କୁ ବଦଳାନ୍ତୁ"
 
 #: ../js/ui/userMenu.js:800
-msgid "Log Out"
+msgid "Logout"
 msgstr "ଲଗଆଉଟ କରନ୍ତୁ"
 
 #: ../js/ui/userMenu.js:820
