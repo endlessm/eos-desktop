@@ -191,6 +191,7 @@ const BoxPointer = new Lang.Class({
         let themeNode = this.actor.get_theme_node();
         let borderWidth = themeNode.get_length('-arrow-border-width');
         let rise = themeNode.get_length('-arrow-rise');
+        let gap = themeNode.get_length('-boxpointer-gap');
         let childBox = new Clutter.ActorBox();
         let availWidth = box.x2 - box.x1;
         let availHeight = box.y2 - box.y1;
@@ -199,6 +200,20 @@ const BoxPointer = new Lang.Class({
         childBox.y1 = 0;
         childBox.x2 = availWidth;
         childBox.y2 = availHeight;
+        switch (this._arrowSide) {
+            case St.Side.TOP:
+                childBox.y1 += gap;
+                break;
+            case St.Side.BOTTOM:
+                childBox.y2 -= gap;
+                break;
+            case St.Side.LEFT:
+                childBox.x1 += gap;
+                break;
+            case St.Side.RIGHT:
+                childBox.x2 -= gap;
+                break;
+        }
         this._border.allocate(childBox, flags);
 
         childBox.x1 = borderWidth;
@@ -207,16 +222,16 @@ const BoxPointer = new Lang.Class({
         childBox.y2 = availHeight - borderWidth;
         switch (this._arrowSide) {
             case St.Side.TOP:
-                childBox.y1 += rise;
+                childBox.y1 += rise + gap;
                 break;
             case St.Side.BOTTOM:
-                childBox.y2 -= rise;
+                childBox.y2 -= rise + gap;
                 break;
             case St.Side.LEFT:
-                childBox.x1 += rise;
+                childBox.x1 += rise + gap;
                 break;
             case St.Side.RIGHT:
-                childBox.x2 -= rise;
+                childBox.x2 -= rise + gap;
                 break;
         }
         this.bin.allocate(childBox, flags);
@@ -450,23 +465,22 @@ const BoxPointer = new Lang.Class({
         let borderRadius = themeNode.get_length('-arrow-border-radius');
         let margin = (4 * borderRadius + borderWidth + arrowBase);
 
-        let gap = themeNode.get_length('-boxpointer-gap');
         let padding = themeNode.get_length('-arrow-rise');
 
         let resX, resY;
 
         switch (this._arrowSide) {
         case St.Side.TOP:
-            resY = sourceAllocation.y2 + gap;
+            resY = sourceAllocation.y2;
             break;
         case St.Side.BOTTOM:
-            resY = sourceAllocation.y1 - natHeight - gap;
+            resY = sourceAllocation.y1 - natHeight;
             break;
         case St.Side.LEFT:
-            resX = sourceAllocation.x2 + gap;
+            resX = sourceAllocation.x2;
             break;
         case St.Side.RIGHT:
-            resX = sourceAllocation.x1 - natWidth - gap;
+            resX = sourceAllocation.x1 - natWidth;
             break;
         }
 
