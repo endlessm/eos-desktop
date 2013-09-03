@@ -38,8 +38,8 @@ const SUSPEND_TEXT = _("Suspend").toUpperCase();
 const RESTART_TEXT = _("Restart").toUpperCase();
 const LOGOUT_TEXT = _("Logout").toUpperCase();
 
-const OPTIONS_TEXT = _("Tutorial");
-const TUTORIAL_TEXT = _("Options");
+const TUTORIAL_TEXT = _("Tutorial");
+const OPTIONS_TEXT = _("Options");
 const FEEDBACK_TEXT = _("Give us Feedback");
 
 const DIALOG_ICON_SIZE = 64;
