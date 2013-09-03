@@ -791,10 +791,10 @@ const UserMenuButton = new Lang.Class({
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
 
-        item = new PopupMenu.PopupUserMenuItem(TUTORIAL_TEXT, '/theme/tutorial.svg');
+        item = new PopupMenu.PopupUserMenuItem(TUTORIAL_TEXT, '/theme/tutorial-symbolic.svg');
         this.menu.addMenuItem(item);
 
-        this._systemSettings = new PopupMenu.PopupUserMenuItem(OPTIONS_TEXT, '/theme/settings.svg');
+        this._systemSettings = new PopupMenu.PopupUserMenuItem(OPTIONS_TEXT, '/theme/settings-symbolic.svg');
         this._systemSettings.connect('activate', Lang.bind(this, this._onPreferencesActivate));
         this.menu.addMenuItem(this._systemSettings);
 

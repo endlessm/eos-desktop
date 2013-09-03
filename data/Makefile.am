@@ -72,9 +72,9 @@ dist_theme_DATA =				\
 	theme/panel-button-highlight-wide.svg	\
 	theme/process-working.svg		\
 	theme/running-indicator.svg		\
-	theme/settings.svg				\
 	theme/settings-hover.png		\
 	theme/settings-normal.png		\
+	theme/settings-symbolic.svg		\
 	theme/social-bar-hover.png		\
 	theme/social-bar-normal.png		\
 	theme/social-bar-pressed.png		\
@@ -94,7 +94,7 @@ dist_theme_DATA =				\
 	theme/trash-pop-up_ok-btn_hover.png	\
 	theme/trash-pop-up_ok-btn_normal.png	\
 	theme/trash-pop-up_ok-btn_pressed.png	\
-	theme/tutorial.svg				\
+	theme/tutorial-symbolic.svg		\
 	theme/ws-switch-arrow-up.png		\
 	theme/ws-switch-arrow-down.png
 
