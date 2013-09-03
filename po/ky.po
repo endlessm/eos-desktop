@@ -876,7 +876,7 @@ msgstr "%Y-ж. %B айынын %e %a"
 #: ../js/ui/endSessionDialog.js:61
 #, c-format
 msgctxt "title"
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "%s колдонуучусунун сеансын бүтүрүү"
 
 #: ../js/ui/endSessionDialog.js:62

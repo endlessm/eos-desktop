@@ -1070,7 +1070,7 @@ msgstr "%a %e %B %Y"
 #: ../js/ui/endSessionDialog.js:63
 #, c-format
 msgctxt "title"
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "Termina sessione di %s"
 
 #: ../js/ui/endSessionDialog.js:64

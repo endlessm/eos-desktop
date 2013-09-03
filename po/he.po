@@ -928,7 +928,7 @@ msgstr "%A ה־%e ב%B, %Y"
 #: ../js/ui/endSessionDialog.js:61
 #, c-format
 msgctxt "title"
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "הוצאת %s"
 
 #: ../js/ui/endSessionDialog.js:62

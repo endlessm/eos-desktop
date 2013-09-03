@@ -539,7 +539,7 @@ msgstr "ELEMENTE RECENTE"
 #: ../js/ui/endSessionDialog.js:61
 #, c-format
 msgctxt "title"
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "Ieșire din sesiune pentru %s"
 
 #: ../js/ui/endSessionDialog.js:62

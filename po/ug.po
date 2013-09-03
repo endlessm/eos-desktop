@@ -991,7 +991,7 @@ msgstr "%A %B %e، %Y"
 #: ../js/ui/endSessionDialog.js:63
 #, c-format
 msgctxt "title"
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "%s دىن چىقىش"
 
 #: ../js/ui/endSessionDialog.js:64

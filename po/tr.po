@@ -517,7 +517,7 @@ msgstr "SON KULLANILAN BELGELER"
 #: ../js/ui/endSessionDialog.js:61
 #, c-format
 msgctxt "title"
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "%s Oturumunu Kapat"
 
 #: ../js/ui/endSessionDialog.js:62

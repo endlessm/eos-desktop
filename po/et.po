@@ -834,7 +834,7 @@ msgstr "%A, %d. %B %Y"
 
 #, c-format
 msgctxt "title"
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "%s väljalogimine"
 
 msgctxt "title"

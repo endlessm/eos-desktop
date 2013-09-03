@@ -942,7 +942,7 @@ msgstr "%Y年%B%-e日 (%a)"
 #: ../js/ui/endSessionDialog.js:63
 #, c-format
 msgctxt "title"
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "%s のログアウト"
 
 #: ../js/ui/endSessionDialog.js:64

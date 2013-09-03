@@ -459,7 +459,7 @@ msgstr "ITEM TERBARU"
 
 #: ../js/ui/endSessionDialog.js:60
 #, c-format
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "Log Keluar %s"
 
 #: ../js/ui/endSessionDialog.js:61 ../js/ui/endSessionDialog.js:67

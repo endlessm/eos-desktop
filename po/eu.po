@@ -1030,7 +1030,7 @@ msgstr "%A, %Y(e)ko %Bren %e(a)"
 #: ../js/ui/endSessionDialog.js:62
 #, c-format
 msgctxt "title"
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "Amaitu %s(r)en saioa"
 
 #: ../js/ui/endSessionDialog.js:63

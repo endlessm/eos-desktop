@@ -434,7 +434,7 @@ msgstr "RECENT ITEMS"
 
 #: ../js/ui/endSessionDialog.js:63
 #, c-format
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "%s প্রস্থান করুন"
 
 #: ../js/ui/endSessionDialog.js:64 ../js/ui/endSessionDialog.js:70

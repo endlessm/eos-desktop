@@ -1018,7 +1018,7 @@ msgstr ""
 #: ../js/ui/endSessionDialog.js:61
 #, c-format
 msgctxt "title"
-msgid "Log Out %s"
+msgid "Logout %s"
 msgstr "Termine session di %s"
 
 #: ../js/ui/endSessionDialog.js:62
