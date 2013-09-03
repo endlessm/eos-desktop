@@ -460,6 +460,10 @@ const IconGrid = new Lang.Class({
         this.actor.connect('get-preferred-width', Lang.bind(this, this._getPreferredWidth));
         this.actor.connect('get-preferred-height', Lang.bind(this, this._getPreferredHeight));
         this.actor.connect('allocate', Lang.bind(this, this._allocate));
+
+        this.saturation = new Shell.GridDesaturateEffect({ factor: 0,
+                                                           enabled: false });
+        this.actor.add_effect(this.saturation);
     },
 
     _getPreferredWidth: function (grid, forHeight, alloc) {
