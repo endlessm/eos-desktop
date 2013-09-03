@@ -9,6 +9,7 @@ const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
 const Atk = imports.gi.Atk;
+const Mainloop = imports.mainloop;
 
 const BoxPointer = imports.ui.boxpointer;
 const GrabHelper = imports.ui.grabHelper;
@@ -18,6 +19,8 @@ const Separator = imports.ui.separator;
 const Tweener = imports.ui.tweener;
 
 const SLIDER_SCROLL_STEP = 0.05; /* Slider scrolling step in % */
+
+const PRESSED_OPTION_HANG_TIME = 200; /* Length of time to show option button "pressed" */
 
 function _ensureStyle(actor) {
     if (actor.get_children) {
@@ -754,15 +757,32 @@ const MenuItemOption = new Lang.Class({
 
         this.actor.connect('key-focus-in', Lang.bind(this, this._onKeyFocusIn));
         this.actor.connect('key-focus-out', Lang.bind(this, this._onKeyFocusOut));
-        this.actor.connect('enter-event', Lang.bind(this, this._onEnter));
 
-        let buttonLabel = new St.Label({ text: text,
+        this.actor.connect('enter-event', Lang.bind(this, this._onEnter));
+        this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
+
+        this.actor.connect('button-release-event', Lang.bind(this, this._clearPressedState));
+        this.actor.connect('leave-event', Lang.bind(this, this._clearPressedState));
+
+        this._buttonLabel = new St.Label({ text: text,
                                          style_class: 'popup-options-menu-item-button',
                                          y_align: Clutter.ActorAlign.CENTER,
                                          x_align: Clutter.ActorAlign.CENTER,
                                        });
 
-        this.actor.set_child(buttonLabel);
+        this.actor.set_child(this._buttonLabel);
+    },
+
+    _clearPressedState: function() {
+        this.actor.remove_style_pseudo_class('pressed');
+        this._buttonLabel.remove_style_pseudo_class('pressed');
+        return false;
+    },
+
+    _onButtonPress: function() {
+        this.actor.add_style_pseudo_class('pressed');
+        this._buttonLabel.add_style_pseudo_class('pressed');
+        return true;
     },
 
     _onEnter: function() {
@@ -781,7 +801,13 @@ const MenuItemOption = new Lang.Class({
     },
 
     activate: function() {
+        this._onButtonPress()
+
         this.emit('activate');
+
+        // When the menu is closed return label/button state to normal
+        Mainloop.timeout_add(PRESSED_OPTION_HANG_TIME, Lang.bind(this, this._clearPressedState));
+
         return true;
     },
 

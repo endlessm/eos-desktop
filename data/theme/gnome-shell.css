@@ -273,6 +273,7 @@ StScrollBar StButton#vhandle:active {
     background-size: contain;
     height: 22px;
     border-radius: 3px;
+    border: 1px solid #1c1c1c;
 }
 
 .popup-options-menu-item-button-holder:active {
@@ -282,10 +283,21 @@ StScrollBar StButton#vhandle:active {
     background-size: contain;
 }
 
+.popup-options-menu-item-button-holder:pressed {
+    background-gradient-direction: vertical;
+    background-gradient-start: #0D0D0D;
+    background-gradient-end: #000;
+    background-size: contain;
+}
+
 .popup-options-menu-item-button {
     font-size: 11px;
     font-weight: 600;
     color: #ccc;
+}
+
+.popup-options-menu-item-button:pressed {
+    color: #555;
 }
 
 /* Switches */
