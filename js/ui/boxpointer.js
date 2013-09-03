@@ -537,8 +537,8 @@ const BoxPointer = new Lang.Class({
             parent = parent.get_parent();
         }
 
-        this._xPosition = Math.floor(x);
-        this._yPosition = Math.floor(y);
+        this._xPosition = Math.round(x);
+        this._yPosition = Math.round(y);
         this._shiftActor();
     },
 
