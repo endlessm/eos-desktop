@@ -747,24 +747,26 @@ const MenuItemOption = new Lang.Class({
     _init: function(text) {
         this.actor = new St.Bin({ style_class: 'popup-options-menu-item-button-holder',
                                   accessible_role: Atk.Role.PUSH_BUTTON,
-                                  can_focus: true
+                                  can_focus: true,
+                                  track_hover: true,
+                                  reactive: true
                                 });
+
         this.actor.connect('key-focus-in', Lang.bind(this, this._onKeyFocusIn));
         this.actor.connect('key-focus-out', Lang.bind(this, this._onKeyFocusOut));
+        this.actor.connect('enter-event', Lang.bind(this, this._onEnter));
 
         let buttonLabel = new St.Label({ text: text,
                                          style_class: 'popup-options-menu-item-button',
                                          y_align: Clutter.ActorAlign.CENTER,
                                          x_align: Clutter.ActorAlign.CENTER,
                                        });
-        buttonLabel.connect('enter-event', Lang.bind(this, this._onEnter));
 
         this.actor.set_child(buttonLabel);
     },
 
     _onEnter: function() {
         this.emit('hovered');
-        print ("hovered");
         return true;
     },
 
@@ -779,12 +781,11 @@ const MenuItemOption = new Lang.Class({
     },
 
     activate: function() {
-        print("igonring activate");
-        return
         this.emit('activate');
         return true;
     },
 
+    // TODO handle Alt key to change some menu items (Poweroff vs Alt Suspend)
     updateText: function() {
         print("doing nothing on text change");
     }
@@ -818,6 +819,8 @@ const PopupOptionsMenuItem = new Lang.Class({
         this.addActor(this._container, { expand: true,
                                          span: -1
                                        });
+
+        this._updateSelection(this._selectedOptionIndex);
     },
 
     _onKeyPressEvent: function(actor, event) {
@@ -841,16 +844,14 @@ const PopupOptionsMenuItem = new Lang.Class({
 
     _updateSelection: function(index) {
         if (index == null) {
-            return;
+            index = 0;
         }
 
         // Clamp value to valid selections
         index = Math.max(0, Math.min(this._options.length - 1, index));
         this._selectedOptionIndex = index;
 
-        print("updating selection to " + index);
-
-       this._options[index].actor.grab_key_focus()
+        this._options[index].actor.grab_key_focus();
     },
 
     activate: function(event) {
@@ -858,13 +859,13 @@ const PopupOptionsMenuItem = new Lang.Class({
             let selectedOption = this._options[this._selectedOptionIndex];
             selectedOption.activate();
         } else {
-            print("Noting to activate - Ignoring");
+            logError("Nothing to activate - Ignoring");
         }
 
         this.parent(event);
     },
 
-    //TODO Fix this and implement correct toggle functionality
+    //TODO Fix this and implement correct toggle functionality (if any)
     toggle: function() {
         return
         this._switch.toggle();
@@ -881,11 +882,12 @@ const PopupOptionsMenuItem = new Lang.Class({
         if (activeChanged) {
             this.active = active;
             if (active) {
-                if (params.grabKeyboard)
+                if (params.grabKeyboard) {
                     this.actor.grab_key_focus();
-                this._updateSelection(0);
-            } else {
-                this._updateSelection(null);
+                    this._updateSelection(this._selectedOptionIndex);
+                } else {
+                    this._selectedOptionIndex = null;
+                }
             }
             this.emit('active-changed', active);
         }
