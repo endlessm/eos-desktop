@@ -168,8 +168,9 @@ const BoxPointer = new Lang.Class({
         if ((!isWidth && (this._arrowSide == St.Side.TOP || this._arrowSide == St.Side.BOTTOM))
             || (isWidth && (this._arrowSide == St.Side.LEFT || this._arrowSide == St.Side.RIGHT))) {
             let rise = themeNode.get_length('-arrow-rise');
-            alloc.min_size += rise;
-            alloc.natural_size += rise;
+            let gap = themeNode.get_length('-boxpointer-gap');
+            alloc.min_size += rise + gap;
+            alloc.natural_size += rise + gap;
         }
     },
 
