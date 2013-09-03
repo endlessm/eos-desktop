@@ -104,7 +104,7 @@ const UserAvatarWidget = new Lang.Class({
         } else {
             this.actor.style = null;
             this.actor.child = new St.Icon({ icon_name: 'avatar-default-symbolic',
-                                             icon_size: this._iconSize
+                                             style_class: 'status-chooser-default-avatar'
                                            });
         }
     }
