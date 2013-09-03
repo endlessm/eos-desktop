@@ -487,7 +487,7 @@ msgid "Logging out of the system."
 msgstr "Mengelog keluar daripada sistem"
 
 #: ../js/ui/endSessionDialog.js:72 ../js/ui/endSessionDialog.js:79
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Matikan"
 
 #: ../js/ui/endSessionDialog.js:73

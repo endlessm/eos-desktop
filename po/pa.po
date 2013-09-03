@@ -436,7 +436,7 @@ msgstr "ਮੁੜ-ਚਾਲੂ ਕਰੋ"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:696
 #: ../js/ui/userMenu.js:698 ../js/ui/userMenu.js:813 ../js/ui/userMenu.js:936
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "ਬੰਦ ਕਰੋ"
 
 #: ../js/gdm/util.js:182
@@ -1099,7 +1099,7 @@ msgstr "ਲਾਗਆਉਟ"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "ਬੰਦ ਕਰੋ"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1124,7 +1124,7 @@ msgstr "ਮੁੜ-ਚਾਲੂ ਕਰੋ"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "ਬੰਦ ਕਰੋ"
 
 #: ../js/ui/endSessionDialog.js:100

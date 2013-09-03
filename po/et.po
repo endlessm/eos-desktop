@@ -341,7 +341,7 @@ msgstr "Uinak"
 msgid "Restart"
 msgstr "Taaskäivita"
 
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Lülita välja"
 
 msgid "Authentication error"
@@ -866,7 +866,7 @@ msgid "Log Out"
 msgstr "Logi välja"
 
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Väljalülitamine"
 
 msgid "Click Power Off to quit these applications and power off the system."
@@ -888,7 +888,7 @@ msgid "Restart"
 msgstr "Taaskäivita"
 
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Lülita välja"
 
 msgctxt "title"

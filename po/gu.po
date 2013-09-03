@@ -398,7 +398,7 @@ msgstr "પ્રવેશ વિન્ડો"
 
 #. Translators: accessible name of the power menu in the login screen
 #: ../js/gdm/powerMenu.js:36
-#| msgid "Power Off"
+#| msgid "Turn Off"
 msgid "Power"
 msgstr "પાવર"
 
@@ -413,7 +413,7 @@ msgstr "પુન:શરૂ કરો"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:698
 #: ../js/ui/userMenu.js:700 ../js/ui/userMenu.js:815 ../js/ui/userMenu.js:942
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "પાવર બંધ"
 
 #: ../js/gdm/util.js:182
@@ -1070,7 +1070,7 @@ msgstr "બહાર નીકળો"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "પાવર બંધ"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1095,7 +1095,7 @@ msgstr "પુન:શરૂ કરો"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "પાવર બંધ"
 
 #: ../js/ui/endSessionDialog.js:100

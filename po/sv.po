@@ -216,7 +216,7 @@ msgid "Restart"
 msgstr "Starta om"
 
 #: ../js/gdm/powerMenu.js:165
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Stäng av"
 
 #: ../js/misc/util.js:92
@@ -558,7 +558,7 @@ msgstr "Logga ut"
 
 #: ../js/ui/endSessionDialog.js:81
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Stäng av"
 
 #: ../js/ui/endSessionDialog.js:82
@@ -584,7 +584,7 @@ msgstr "Starta om"
 
 #: ../js/ui/endSessionDialog.js:92
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Stäng av"
 
 #: ../js/ui/endSessionDialog.js:98

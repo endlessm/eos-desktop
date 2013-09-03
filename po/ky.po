@@ -262,7 +262,7 @@ msgstr "Кайта жүргүзүү"
 
 #: ../js/gdm/powerMenu.js:98 ../js/ui/userMenu.js:660 ../js/ui/userMenu.js:662
 #: ../js/ui/userMenu.js:772
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Өчүрүү"
 
 #: ../js/gdm/util.js:148
@@ -912,7 +912,7 @@ msgstr "Системадан чыгуу"
 
 #: ../js/ui/endSessionDialog.js:81
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Өчүрүү"
 
 #: ../js/ui/endSessionDialog.js:82
@@ -936,7 +936,7 @@ msgstr "Кайта жүргүзүү"
 
 #: ../js/ui/endSessionDialog.js:92
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Өчүрүү"
 
 #: ../js/ui/endSessionDialog.js:98

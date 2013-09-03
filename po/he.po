@@ -329,7 +329,7 @@ msgstr "הפעלה מחדש"
 #: ../js/ui/userMenu.js:681
 #: ../js/ui/userMenu.js:683
 #: ../js/ui/userMenu.js:793
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "כיבוי"
 
 #: ../js/gdm/util.js:152
@@ -967,7 +967,7 @@ msgstr "יציאה"
 
 #: ../js/ui/endSessionDialog.js:81
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "כיבוי"
 
 #: ../js/ui/endSessionDialog.js:82
@@ -994,7 +994,7 @@ msgstr "הפעלה מחדש"
 
 #: ../js/ui/endSessionDialog.js:92
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "כיבוי"
 
 #: ../js/ui/endSessionDialog.js:98

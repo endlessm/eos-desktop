@@ -432,7 +432,7 @@ msgstr "पुनः सुरू करा"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:698
 #: ../js/ui/userMenu.js:700 ../js/ui/userMenu.js:815 ../js/ui/userMenu.js:942
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "बंद करा"
 
 #: ../js/gdm/util.js:182
@@ -1100,7 +1100,7 @@ msgstr "बाहेर पडा"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "बंद करा"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1125,7 +1125,7 @@ msgstr "पुनः सुरू करा"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "बंद करा"
 
 #: ../js/ui/endSessionDialog.js:100

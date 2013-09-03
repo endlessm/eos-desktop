@@ -425,7 +425,7 @@ msgstr "Opnieuw opstarten"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:698
 #: ../js/ui/userMenu.js:700 ../js/ui/userMenu.js:815 ../js/ui/userMenu.js:942
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Uitschakelen"
 
 #: ../js/gdm/util.js:249
@@ -1095,7 +1095,7 @@ msgstr "Afmelden"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Uitschakelen"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1122,7 +1122,7 @@ msgstr "Opnieuw opstarten"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Uitschakelen"
 
 #: ../js/ui/endSessionDialog.js:100

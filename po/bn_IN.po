@@ -462,7 +462,7 @@ msgid "Logging out of the system."
 msgstr "সিস্টেম থেকে লগ-আউট করা হচ্ছে।"
 
 #: ../js/ui/endSessionDialog.js:75 ../js/ui/endSessionDialog.js:82
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "বন্ধ করুন"
 
 #: ../js/ui/endSessionDialog.js:76

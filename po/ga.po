@@ -256,7 +256,7 @@ msgstr "Atosaigh"
 
 #: ../js/gdm/powerMenu.js:99 ../js/ui/userMenu.js:662 ../js/ui/userMenu.js:664
 #: ../js/ui/userMenu.js:774
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Múch"
 
 #: ../js/gdm/util.js:148
@@ -914,7 +914,7 @@ msgstr "Logáil Amach"
 
 #: ../js/ui/endSessionDialog.js:81
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Múch"
 
 #: ../js/ui/endSessionDialog.js:82
@@ -943,7 +943,7 @@ msgstr "Atosaigh"
 
 #: ../js/ui/endSessionDialog.js:92
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Múch"
 
 #: ../js/ui/endSessionDialog.js:98

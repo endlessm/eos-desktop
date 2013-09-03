@@ -405,7 +405,7 @@ msgstr "ప్రవేశ కిటికీ"
 
 #. Translators: accessible name of the power menu in the login screen
 #: ../js/gdm/powerMenu.js:36
-#| msgid "Power Off"
+#| msgid "Turn Off"
 msgid "Power"
 msgstr "విద్యుత్"
 
@@ -420,7 +420,7 @@ msgstr "పునఃప్రారంభించు"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:698
 #: ../js/ui/userMenu.js:700 ../js/ui/userMenu.js:815 ../js/ui/userMenu.js:942
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "విద్యుత్ ఆపు"
 
 #: ../js/gdm/util.js:249
@@ -1085,7 +1085,7 @@ msgstr "నిష్క్రమించు"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "విద్యుత్ ఆపు"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1110,7 +1110,7 @@ msgstr "పునఃప్రారంభించు"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "విద్యుత్ ఆపు"
 
 #: ../js/ui/endSessionDialog.js:100

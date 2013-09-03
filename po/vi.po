@@ -397,7 +397,7 @@ msgstr "Khởi động lại"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:696
 #: ../js/ui/userMenu.js:698 ../js/ui/userMenu.js:813 ../js/ui/userMenu.js:936
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Tắt máy"
 
 #: ../js/gdm/util.js:182
@@ -1054,7 +1054,7 @@ msgstr "Đăng xuất"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Tắt máy"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1078,7 +1078,7 @@ msgstr "Khởi động lại"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Tắt máy"
 
 #: ../js/ui/endSessionDialog.js:100

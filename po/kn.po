@@ -448,7 +448,7 @@ msgstr "ಮರಳಿ ಆರಂಭಿಸು"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:698
 #: ../js/ui/userMenu.js:700 ../js/ui/userMenu.js:815 ../js/ui/userMenu.js:942
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "ಸ್ಥಗಿತಗೊಳಿಸು"
 
 #: ../js/gdm/util.js:182
@@ -1122,7 +1122,7 @@ msgstr "ನಿರ್ಗಮಿಸು"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "ಸ್ಥಗಿತಗೊಳಿಸು"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1148,7 +1148,7 @@ msgstr "ಮರಳಿ ಆರಂಭಿಸು"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "ಸ್ಥಗಿತಗೊಳಿಸು"
 
 #: ../js/ui/endSessionDialog.js:100

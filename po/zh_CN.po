@@ -403,7 +403,7 @@ msgstr "重启"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:677
 #: ../js/ui/userMenu.js:679 ../js/ui/userMenu.js:789
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "关机"
 
 #: ../js/gdm/util.js:152
@@ -1026,7 +1026,7 @@ msgstr "注销"
 
 #: ../js/ui/endSessionDialog.js:81
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "关机"
 
 #: ../js/ui/endSessionDialog.js:82
@@ -1050,7 +1050,7 @@ msgstr "重启"
 
 #: ../js/ui/endSessionDialog.js:92
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "关机"
 
 #: ../js/ui/endSessionDialog.js:98

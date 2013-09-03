@@ -420,7 +420,7 @@ msgstr "Berrabiarazi"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:695
 #: ../js/ui/userMenu.js:697 ../js/ui/userMenu.js:812 ../js/ui/userMenu.js:935
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Itzali"
 
 #: ../js/gdm/util.js:152
@@ -1069,7 +1069,7 @@ msgstr "Amaitu saioa"
 
 #: ../js/ui/endSessionDialog.js:82
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Itzali"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1095,7 +1095,7 @@ msgstr "Berrabiarazi"
 
 #: ../js/ui/endSessionDialog.js:93
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Itzali"
 
 #: ../js/ui/endSessionDialog.js:99

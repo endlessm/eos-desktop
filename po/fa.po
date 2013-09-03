@@ -430,7 +430,7 @@ msgstr "راه‌اندازی مجدد"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:696
 #: ../js/ui/userMenu.js:698 ../js/ui/userMenu.js:813 ../js/ui/userMenu.js:936
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "خاموش کردن"
 
 #: ../js/gdm/util.js:182
@@ -1098,7 +1098,7 @@ msgstr "خروج از سیستم"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "خاموش کردن"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1123,7 +1123,7 @@ msgstr "راه‌اندازی مجدد"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "خاموش کردن"
 
 #: ../js/ui/endSessionDialog.js:100

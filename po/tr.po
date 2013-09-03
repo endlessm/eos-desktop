@@ -214,7 +214,7 @@ msgid "Restart"
 msgstr "Yeniden Başlat"
 
 #: ../js/gdm/powerMenu.js:123
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Kapat"
 
 #: ../js/misc/util.js:92
@@ -552,7 +552,7 @@ msgstr "Çıkış"
 
 #: ../js/ui/endSessionDialog.js:81
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Bilgisayarı Kapat"
 
 #: ../js/ui/endSessionDialog.js:82
@@ -578,7 +578,7 @@ msgstr "Yeniden Başlat"
 
 #: ../js/ui/endSessionDialog.js:92
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Kapat"
 
 #: ../js/ui/endSessionDialog.js:98

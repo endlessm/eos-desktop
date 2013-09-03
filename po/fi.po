@@ -416,7 +416,7 @@ msgstr "Kirjautumisikkuna"
 
 #. Translators: accessible name of the power menu in the login screen
 #: ../js/gdm/powerMenu.js:36
-#| msgid "Power Off"
+#| msgid "Turn Off"
 msgid "Power"
 msgstr "Virta"
 
@@ -431,7 +431,7 @@ msgstr "Käynnistä uudelleen"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:696
 #: ../js/ui/userMenu.js:698 ../js/ui/userMenu.js:813 ../js/ui/userMenu.js:936
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Sammuta"
 
 #: ../js/gdm/util.js:182
@@ -1096,7 +1096,7 @@ msgstr "Kirjaudu ulos"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Sammuta"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1123,7 +1123,7 @@ msgstr "Käynnistä uudelleen"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Sammuta"
 
 #: ../js/ui/endSessionDialog.js:100

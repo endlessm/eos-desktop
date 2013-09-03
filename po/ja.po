@@ -326,7 +326,7 @@ msgstr "再起動"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:698
 #: ../js/ui/userMenu.js:700 ../js/ui/userMenu.js:815 ../js/ui/userMenu.js:942
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "電源オフ"
 
 #: ../js/gdm/util.js:249
@@ -977,7 +977,7 @@ msgstr "ログアウト"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "電源オフ"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1001,7 +1001,7 @@ msgstr "再起動"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "電源オフ"
 
 #: ../js/ui/endSessionDialog.js:100

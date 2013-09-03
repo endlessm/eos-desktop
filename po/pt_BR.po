@@ -448,7 +448,7 @@ msgstr "Reiniciar"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:688
 #: ../js/ui/userMenu.js:690 ../js/ui/userMenu.js:791 ../js/ui/userMenu.js:916
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Desligar"
 
 #: ../js/gdm/util.js:249
@@ -1141,7 +1141,7 @@ msgstr "Encerrar sessão"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Desligar"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1166,7 +1166,7 @@ msgstr "Reiniciar"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Desligar"
 
 #: ../js/ui/endSessionDialog.js:100

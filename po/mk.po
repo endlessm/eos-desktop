@@ -177,7 +177,7 @@ msgid "Restart"
 msgstr "Рестартирај се"
 
 #: ../js/gdm/powerMenu.js:123
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Исклучи се"
 
 #: ../js/misc/util.js:92
@@ -523,7 +523,7 @@ msgstr "Одјави се"
 
 #: ../js/ui/endSessionDialog.js:81
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Исклучи се"
 
 #: ../js/ui/endSessionDialog.js:82
@@ -549,7 +549,7 @@ msgstr "Рестартирај се"
 
 #: ../js/ui/endSessionDialog.js:92
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Исклучи се"
 
 #: ../js/ui/endSessionDialog.js:98

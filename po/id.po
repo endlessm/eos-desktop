@@ -434,7 +434,7 @@ msgstr "Nyalakan Ulang"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:697
 #: ../js/ui/userMenu.js:699 ../js/ui/userMenu.js:814 ../js/ui/userMenu.js:938
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Matikan"
 
 #: ../js/gdm/util.js:182
@@ -1101,7 +1101,7 @@ msgstr "Keluar"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Matikan"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1125,7 +1125,7 @@ msgstr "Nyalakan Ulang"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Power Off"
+msgid "Turn Off"
 msgstr "Matikan"
 
 #: ../js/ui/endSessionDialog.js:100
