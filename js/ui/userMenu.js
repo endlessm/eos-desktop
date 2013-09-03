@@ -32,10 +32,11 @@ const DISABLE_LOG_OUT_KEY = 'disable-log-out';
 const ALWAYS_SHOW_LOG_OUT_KEY = 'always-show-log-out';
 const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
 
-const TURN_OFF_TEXT = _("TURN OFF");
-const SUSPEND_TEXT = _("SUSPEND");
-const RESTART_TEXT = _("RESTART");
-const LOGOUT_TEXT = _("LOGOUT");
+// TODO These keys have changed names in PO files. We will need to updated them"
+const TURN_OFF_TEXT = _("Turn Off").toUpperCase();
+const SUSPEND_TEXT = _("Suspend").toUpperCase();
+const RESTART_TEXT = _("Restart").toUpperCase();
+const LOGOUT_TEXT = _("Logout").toUpperCase();
 
 const OPTIONS_TEXT = _("Tutorial");
 const TUTORIAL_TEXT = _("Options");

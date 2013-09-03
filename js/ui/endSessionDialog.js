@@ -60,8 +60,8 @@ const EndSessionDialogIface = <interface name="org.gnome.SessionManager.EndSessi
 </interface>;
 
 const logoutDialogContent = {
-    subjectWithUser: C_("title", "Log Out %s"),
-    subject: C_("title", "Log Out"),
+    subjectWithUser: C_("title", "Logout %s"),
+    subject: C_("title", "Logout"),
     inhibitedDescription: _("Click Log Out to quit these applications and log out of the system."),
     uninhibitedDescriptionWithUser: function(user, seconds) {
         return ngettext("%s will be logged out automatically in %d second.",
@@ -75,12 +75,12 @@ const logoutDialogContent = {
     },
     endDescription: _("Logging out of the system."),
     confirmButtons: [{ signal: 'ConfirmedLogout',
-                       label:  C_("button", "Log Out") }],
+                       label:  C_("button", "Logout") }],
     iconStyleClass: 'end-session-dialog-logout-icon'
 };
 
 const shutdownDialogContent = {
-    subject: C_("title", "Power Off"),
+    subject: C_("title", "Turn Off"),
     inhibitedDescription: _("Click Power Off to quit these applications and power off the system."),
     uninhibitedDescription: function(seconds) {
         return ngettext("The system will power off automatically in %d second.",
@@ -91,7 +91,7 @@ const shutdownDialogContent = {
     confirmButtons: [{ signal: 'ConfirmedReboot',
                        label:  C_("button", "Restart") },
                      { signal: 'ConfirmedShutdown',
-                       label:  C_("button", "Power Off") }],
+                       label:  C_("button", "Turn Off") }],
     iconName: 'system-shutdown-symbolic',
     iconStyleClass: 'end-session-dialog-shutdown-icon'
 };
