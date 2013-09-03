@@ -513,7 +513,7 @@ msgstr "%s ಅನ್ನು ನಿಮ್ಮ ಅಚ್ಚುಮೆಚ್ಚಿನ�
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:789
 #| msgid "Mouse Settings"
-msgid "Settings"
+msgid "Options"
 msgstr "ಸಿದ್ಧತೆಗಳು"
 
 #: ../js/ui/backgroundMenu.js:21

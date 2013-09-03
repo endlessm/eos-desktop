@@ -497,7 +497,7 @@ msgid "%s has been removed from your favorites."
 msgstr "%s ক আপোনাৰ পছন্দৰ পৰা আতৰোৱা হৈছে।"
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:788
-msgid "Settings"
+msgid "Options"
 msgstr "সংহতিসমূহ"
 
 #: ../js/ui/backgroundMenu.js:21

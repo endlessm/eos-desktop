@@ -485,7 +485,7 @@ msgstr "%s మీ ఇష్టాంశాల నుండి తీసివే
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:789
 #| msgid "Mouse Settings"
-msgid "Settings"
+msgid "Options"
 msgstr "అమరికలు"
 
 #: ../js/ui/backgroundMenu.js:21

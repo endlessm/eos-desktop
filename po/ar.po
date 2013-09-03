@@ -1720,7 +1720,7 @@ msgid "Notifications"
 msgstr "التنبيهات"
 
 #: ../js/ui/userMenu.js:763
-msgid "Settings"
+msgid "Options"
 msgstr "الإعدادات"
 
 #: ../js/ui/userMenu.js:771

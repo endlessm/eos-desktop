@@ -390,7 +390,7 @@ msgid "%s has been removed from your favorites."
 msgstr "%s をお気に入りから削除しました。"
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:789
-msgid "Settings"
+msgid "Options"
 msgstr "設定"
 
 #: ../js/ui/backgroundMenu.js:21

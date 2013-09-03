@@ -495,7 +495,7 @@ msgid "%s has been removed from your favorites."
 msgstr "Program %s został usunięty z ulubionych."
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:787
-msgid "Settings"
+msgid "Options"
 msgstr "Ustawienia"
 
 #: ../js/ui/backgroundMenu.js:21

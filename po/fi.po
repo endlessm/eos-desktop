@@ -496,7 +496,7 @@ msgstr "%s on poistettu suosikeista."
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:787
 #| msgid "Mouse Settings"
-msgid "Settings"
+msgid "Options"
 msgstr "Asetukset"
 
 #: ../js/ui/backgroundMenu.js:21

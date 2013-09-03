@@ -493,7 +493,7 @@ msgstr "%s ir izņemts no izlases."
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:787
 #| msgid "Mouse Settings"
-msgid "Settings"
+msgid "Options"
 msgstr "Iestatījumi"
 
 #: ../js/ui/backgroundMenu.js:21

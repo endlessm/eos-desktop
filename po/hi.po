@@ -513,7 +513,7 @@ msgstr "%s को आपकी पसंदीदा से हटाया ग�
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:789
 #| msgid "Mouse Settings"
-msgid "Settings"
+msgid "Options"
 msgstr "सेटिंग"
 
 #: ../js/ui/backgroundMenu.js:21

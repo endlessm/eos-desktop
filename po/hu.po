@@ -489,7 +489,7 @@ msgid "%s has been removed from your favorites."
 msgstr "%s eltávolítva a Kedvencek közül"
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:789
-msgid "Settings"
+msgid "Options"
 msgstr "Beállítások"
 
 #: ../js/ui/backgroundMenu.js:21

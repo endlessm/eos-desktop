@@ -508,7 +508,7 @@ msgid "%s has been removed from your favorites."
 msgstr "Tο %s αφαιρέθηκε από τα αγαπημένα σας."
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:787
-msgid "Settings"
+msgid "Options"
 msgstr "Ρυθμίσεις"
 
 #: ../js/ui/backgroundMenu.js:21

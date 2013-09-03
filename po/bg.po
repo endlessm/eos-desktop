@@ -1763,7 +1763,7 @@ msgid "Notifications"
 msgstr "Известия"
 
 #: ../js/ui/userMenu.js:772
-msgid "Settings"
+msgid "Options"
 msgstr "Настройки"
 
 #: ../js/ui/userMenu.js:780

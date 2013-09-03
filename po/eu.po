@@ -1774,7 +1774,7 @@ msgid "Notifications"
 msgstr "Jakinarazpenak"
 
 #: ../js/ui/userMenu.js:786
-msgid "Settings"
+msgid "Options"
 msgstr "Ezarpenak"
 
 #: ../js/ui/userMenu.js:794

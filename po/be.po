@@ -486,7 +486,7 @@ msgid "%s has been removed from your favorites."
 msgstr "%s выдалены з вашага спіса ўпадабанага."
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:789
-msgid "Settings"
+msgid "Options"
 msgstr "Настройкі"
 
 #: ../js/ui/backgroundMenu.js:21

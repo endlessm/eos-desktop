@@ -434,7 +434,7 @@ msgid "%s has been removed from your favorites."
 msgstr "%s 已經從你的喜好中移除。"
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:788
-msgid "Settings"
+msgid "Options"
 msgstr "設定值"
 
 #: ../js/ui/backgroundMenu.js:21

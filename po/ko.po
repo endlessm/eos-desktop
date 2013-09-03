@@ -462,7 +462,7 @@ msgid "%s has been removed from your favorites."
 msgstr "%s 프로그램을 즐겨찾기에서 제거했습니다."
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:787
-msgid "Settings"
+msgid "Options"
 msgstr "설정"
 
 #: ../js/ui/backgroundMenu.js:21

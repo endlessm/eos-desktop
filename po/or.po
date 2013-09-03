@@ -511,7 +511,7 @@ msgstr "%s କୁ ମନପସନ୍ଦରୁ ବାହାର କରିଦିଆ
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:787
 #| msgid "Mouse Settings"
-msgid "Settings"
+msgid "Options"
 msgstr "ବିନ୍ଯାସ"
 
 #: ../js/ui/backgroundMenu.js:21

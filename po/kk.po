@@ -448,7 +448,7 @@ msgid "%s has been removed from your favorites."
 msgstr "%s таңдамалыларыңыздан өшірілді."
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:788
-msgid "Settings"
+msgid "Options"
 msgstr "Баптаулар"
 
 #: ../js/ui/backgroundMenu.js:21

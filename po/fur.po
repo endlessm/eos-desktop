@@ -1749,7 +1749,7 @@ msgid "Notifications"
 msgstr "Notifichis"
 
 #: ../js/ui/userMenu.js:765
-msgid "Settings"
+msgid "Options"
 msgstr "Impostazions"
 
 #: ../js/ui/userMenu.js:773
