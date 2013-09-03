@@ -667,7 +667,7 @@ const UserMenuButton = new Lang.Class({
         let multiUser = this._userManager.has_multiple_users;
         let multiSession = Gdm.get_session_ids().length > 1;
 
-        this._logoutItem.actor.visible = true;allowLogout && (alwaysShow || multiUser || multiSession || systemAccount || !localAccount);
+        this._logoutOption.actor.visible = allowLogout && (alwaysShow || multiUser || multiSession || systemAccount || !localAccount);
     },
 
     _updateLockScreen: function() {
