@@ -690,16 +690,18 @@ StScrollBar StButton#vhandle:active {
     width: 40pt;
     height: 40pt;
     background-size: contain;
+    border: 1px solid #000;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .status-chooser-default-avatar {
     border-radius: 40px;
-    width: 40px;
-    height: 40px;
+    icon-size: 40px
+    border: 1px solid #000;
 }
 
 .status-chooser-user-icon:hover {
-    border: 1px solid #bbbbbb;
+    border: 1px solid #555;
 }
 
 .status-chooser-user-name {
