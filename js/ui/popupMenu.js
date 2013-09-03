@@ -1023,6 +1023,32 @@ const PopupImageMenuItem = new Lang.Class({
     }
 });
 
+const PopupUserMenuItem = new Lang.Class({
+    Name: 'PopupUserMenuItem',
+    Extends: PopupBaseMenuItem,
+
+    _init: function (text, imagePath, params) {
+        this.parent(params);
+
+        this._container = new St.BoxLayout({ style_class: 'popup-user-menu-item' });
+
+        if (imagePath) {
+            let iconFile = Gio.File.new_for_path(global.datadir + imagePath);
+            let gicon = new Gio.FileIcon({ file: iconFile });
+
+            this._icon = new St.Icon({ style_class: 'popup-user-menu-item-icon',
+                                       gicon: gicon
+                                     });
+            this._container.add(this._icon);
+        }
+
+        this.label = new St.Label({ text: text });
+        this._container.add(this.label);
+
+        this.addActor(this._container);
+    },
+});
+
 const PopupMenuBase = new Lang.Class({
     Name: 'PopupMenuBase',
     Abstract: true,

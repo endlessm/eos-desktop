@@ -791,23 +791,22 @@ const UserMenuButton = new Lang.Class({
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
 
-        item = new PopupMenu.PopupImageMenuItem(TUTORIAL_TEXT, 'tutorial.svg');
+        item = new PopupMenu.PopupUserMenuItem(TUTORIAL_TEXT, '/theme/tutorial.svg');
         this.menu.addMenuItem(item);
 
-        item = new PopupMenu.PopupImageMenuItem(OPTIONS_TEXT, 'settings.svg');
-        item.connect('activate', Lang.bind(this, this._onPreferencesActivate));
-        this.menu.addMenuItem(item);
-        this._systemSettings = item;
+        this._systemSettings = new PopupMenu.PopupUserMenuItem(OPTIONS_TEXT, '/theme/settings.svg');
+        this._systemSettings.connect('activate', Lang.bind(this, this._onPreferencesActivate));
+        this.menu.addMenuItem(this._systemSettings);
 
-        item = new PopupMenu.PopupMenuItem(FEEDBACK_TEXT);
+        item = new PopupMenu.PopupUserMenuItem(FEEDBACK_TEXT, null);
         this.menu.addMenuItem(item);
 
-        item = new PopupMenu.PopupMenuItem(_("Switch User"));
+        item = new PopupMenu.PopupUserMenuItem(_("Switch User"), null);
         item.connect('activate', Lang.bind(this, this._onLoginScreenActivate));
         this.menu.addMenuItem(item);
         this._loginScreenItem = item;
 
-        item = new PopupMenu.PopupMenuItem(_("Lock"));
+        item = new PopupMenu.PopupUserMenuItem(_("Lock"), null);
         item.connect('activate', Lang.bind(this, this._onLockScreenActivate));
         this.menu.addMenuItem(item);
         this._lockScreenItem = item;

@@ -252,6 +252,12 @@ StScrollBar StButton#vhandle:active {
     icon-size: 1.09em;
 }
 
+.popup-user-menu-item-icon {
+    icon-size: 18px;
+    color: #fff;
+    padding-right: 10px;
+}
+
 .settings-menu-icon {
     icon-size: 30px;
 }
