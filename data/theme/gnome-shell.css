@@ -268,7 +268,7 @@ StScrollBar StButton#vhandle:active {
 
 .popup-options-menu-item {
     background-gradient-direction: vertical;
-    background-gradient-start: rgba(255, 255, 255, 0.2);
+    background-gradient-start: rgba(255, 255, 255, 0.15);
     background-gradient-end: rgba(255, 255, 255, 0);
     background-size: contain;
     height: 22px;
@@ -278,8 +278,8 @@ StScrollBar StButton#vhandle:active {
 
 .popup-options-menu-item-button-holder:active {
     background-gradient-direction: vertical;
-    background-gradient-start: rgba(255, 255, 255, 0.32);
-    background-gradient-end: rgba(255, 255, 255, 0.14);
+    background-gradient-start: #323232;
+    background-gradient-end: #141414;
     background-size: contain;
 }
 
