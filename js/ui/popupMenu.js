@@ -813,7 +813,6 @@ const MenuItemOption = new Lang.Class({
 
     // TODO handle Alt key to change some menu items (Poweroff vs Alt Suspend)
     updateText: function() {
-        print("doing nothing on text change");
     }
 });
 Signals.addSignalMethods(MenuItemOption.prototype);
@@ -853,14 +852,25 @@ const PopupOptionsMenuItem = new Lang.Class({
         let symbol = event.get_key_symbol();
 
         if (symbol == Clutter.KEY_Right) {
-            this._updateSelection(this._selectedOptionIndex + 1);
+            this._shiftSelectedOption(1);
             return true;
         } else if (symbol == Clutter.KEY_Left) {
-            this._updateSelection(this._selectedOptionIndex - 1);
+            this._shiftSelectedOption(-1);
             return true;
         }
 
         return this.parent(actor, event);
+    },
+
+    // If we use arrow keys but have invisible items, skip and try to select
+    // the next available item
+    _shiftSelectedOption: function(amount) {
+        let numberOfOptions = this._options.length;
+        for (let index = 0; index < numberOfOptions; index++){
+            if (this._updateSelection(this._selectedOptionIndex + amount)){
+                return;
+            }
+        }
     },
 
     _onOptionHovered: function(actor) {
@@ -873,11 +883,25 @@ const PopupOptionsMenuItem = new Lang.Class({
             index = 0;
         }
 
-        // Clamp value to valid selections
-        index = Math.max(0, Math.min(this._options.length - 1, index));
+        // Clamp value to valid selections. Not using Math.min/max since
+        // we want to wrap around
+        if (index >= this._options.length) {
+            index = 0;
+        }
+
+        if (index < 0) {
+            index = this._options.length - 1;
+        }
+
         this._selectedOptionIndex = index;
 
-        this._options[index].actor.grab_key_focus();
+        let option = this._options[index].actor;
+        if (option.visible) {
+            this._options[index].actor.grab_key_focus();
+            return true;
+        }
+
+        return false;
     },
 
     activate: function(event) {
