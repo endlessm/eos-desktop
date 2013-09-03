@@ -915,14 +915,6 @@ const PopupOptionsMenuItem = new Lang.Class({
         this.parent(event);
     },
 
-    //TODO Fix this and implement correct toggle functionality (if any)
-    toggle: function() {
-        return
-        this._switch.toggle();
-        this.emit('toggled', this._switch.state);
-        this.checkAccessibleState();
-    },
-
     // Override default focus handling to disable the selection highlight on
     // the whole MenuItem line
     setActive: function (active, params) {
