@@ -12,6 +12,7 @@ const AppDisplay = imports.ui.appDisplay;
 const Main = imports.ui.main;
 const OverviewControls = imports.ui.overviewControls;
 const Params = imports.misc.params;
+const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
 const WorkspacesView = imports.ui.workspacesView;
 
@@ -21,6 +22,107 @@ const ViewPage = {
     WINDOWS: 1,
     APPS: 2,
 };
+
+const ViewsDisplayLayout = new Lang.Class({
+    Name: 'ViewsDisplayLayout',
+    Extends: Clutter.BinLayout,
+
+    _init: function(stack, entry, allView) {
+        this.parent();
+
+        this._stack = stack;
+
+        this._allView = allView;
+        this._allView.actor.connect('style-changed', Lang.bind(this, this._onStyleChanged));
+
+        this._entry = entry;
+        this._entry.connect('style-changed', Lang.bind(this, this._onStyleChanged));
+    },
+
+    _onStyleChanged: function() {
+        this.layout_changed();
+    },
+
+    vfunc_allocate: function(container, box, flags) {
+        let viewActor = this._stack;
+        let entry = this._entry;
+
+        let availWidth = box.x2 - box.x1;
+        let availHeight = box.y2 - box.y1;
+
+        let viewHeight = viewActor.get_preferred_height(availWidth);
+        viewHeight[1] = Math.max(viewHeight[1], this._allView.getEntryAnchor());
+
+        let themeNode = entry.get_theme_node();
+        let entryMinPadding = themeNode.get_length('-minimum-vpadding');
+        let entryHeight = entry.get_preferred_height(availWidth);
+        entryHeight[0] += entryMinPadding * 2;
+        entryHeight[1] += entryMinPadding * 2;
+
+        let entryBox = box.copy();
+        let viewBox = box.copy();
+
+        // Always give the view the whole allocation, unless
+        // doing so wouldn't fit the entry
+        let extraSpace = availHeight - viewHeight[1];
+        let viewAllocHeight = viewHeight[1];
+
+        if (extraSpace / 2 < entryHeight[0]) {
+            extraSpace = 0;
+            viewAllocHeight = availHeight - entryHeight[0];
+        }
+
+        viewBox.y1 = Math.floor(extraSpace / 2);
+        viewBox.y2 = viewBox.y1 + viewAllocHeight;
+
+        viewActor.allocate(viewBox, flags);
+
+        // Now center the entry in the space below the grid
+        let gridHeight = this._allView.getHeightForEntry(availWidth);
+
+        extraSpace = availHeight - gridHeight[1];
+        viewAllocHeight = gridHeight[1];
+
+        if (extraSpace / 2 < entryHeight[0]) {
+            extraSpace = 0;
+            viewAllocHeight = availHeight - entryHeight[0];
+        }
+
+        entryBox.y1 = Math.floor(extraSpace / 2) + viewAllocHeight;
+        entry.allocate(entryBox, flags);
+    }
+});
+
+const ViewsDisplay = new Lang.Class({
+    Name: 'ViewsDisplay',
+
+    _init: function() {
+        this._stack = new Shell.Stack({ x_expand: true,
+                                        y_expand: true });
+
+        this._allView = new AppDisplay.AllView();
+        this._stack.add_actor(this._allView.actor);
+
+        this.entry = new ShellEntry.OverviewEntry();
+
+        let layoutManager = new ViewsDisplayLayout(this._stack, this.entry, this._allView);
+        this.actor = new St.Widget({ layout_manager: layoutManager,
+                                     x_expand: true,
+                                     y_expand: true });
+
+        this.actor.add_actor(this.entry);
+        this.actor.add_actor(this._stack);
+
+        // This makes sure that any DnD ops get channeled to the icon grid logic
+        // otherwise dropping an item outside of the grid bounds fails
+        this.actor._delegate = this;
+    },
+
+    acceptDrop: function(source, actor, x, y, time) {
+        // Forward all DnD releases to the scrollview
+        this._allView.acceptDrop(source, actor, x, y, time);
+    }
+});
 
 const ViewSelector = new Lang.Class({
     Name: 'ViewSelector',
@@ -40,10 +142,10 @@ const ViewSelector = new Lang.Class({
         this._workspacesPage = this._addPage(this._workspacesDisplay.actor,
                                              _("Windows"), 'emblem-documents-symbolic');
 
-        this._appDisplay = new AppDisplay.AppDisplay();
-        this._appsPage = this._addPage(this._appDisplay.actor,
+        this._viewsDisplay = new ViewsDisplay();
+        this._appsPage = this._addPage(this._viewsDisplay.actor,
                                        _("Applications"), 'view-grid-symbolic');
-        this._entry = this._appDisplay.entry;
+        this._entry = this._viewsDisplay.entry;
 
         this._stageKeyPressId = 0;
     },

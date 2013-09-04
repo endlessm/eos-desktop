@@ -29,7 +29,6 @@ const Overview = imports.ui.overview;
 const OverviewControls = imports.ui.overviewControls;
 const Panel = imports.ui.panel;
 const PopupMenu = imports.ui.popupMenu;
-const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
 const WindowManager = imports.ui.windowManager;
 const Workspace = imports.ui.workspace;
@@ -942,101 +941,6 @@ const AllView = new Lang.Class({
         gridHeight[1] = Math.max(gridHeight[1], this.getEntryAnchor());
 
         return gridHeight;
-    }
-});
-
-const AppDisplayLayout = new Lang.Class({
-    Name: 'AppDisplayLayout',
-    Extends: Clutter.BinLayout,
-
-    _init: function(allView, entry) {
-        this.parent();
-
-        this._allView = allView;
-        this._allView.actor.connect('style-changed', Lang.bind(this, this._onStyleChanged));
-
-        this._entry = entry;
-        this._entry.connect('style-changed', Lang.bind(this, this._onStyleChanged));
-    },
-
-    _onStyleChanged: function() {
-        this.layout_changed();
-    },
-
-    vfunc_allocate: function(container, box, flags) {
-        let viewActor = this._allView.actor;
-        let entry = this._entry;
-
-        let availWidth = box.x2 - box.x1;
-        let availHeight = box.y2 - box.y1;
-
-        let viewHeight = viewActor.get_preferred_height(availWidth);
-        viewHeight[1] = Math.max(viewHeight[1], this._allView.getEntryAnchor());
-
-        let themeNode = entry.get_theme_node();
-        let entryMinPadding = themeNode.get_length('-minimum-vpadding');
-        let entryHeight = entry.get_preferred_height(availWidth);
-        entryHeight[0] += entryMinPadding * 2;
-        entryHeight[1] += entryMinPadding * 2;
-
-        let entryBox = box.copy();
-        let viewBox = box.copy();
-
-        // Always give the view the whole allocation, unless
-        // doing so wouldn't fit the entry
-        let extraSpace = availHeight - viewHeight[1];
-        let viewAllocHeight = viewHeight[1];
-
-        if (extraSpace / 2 < entryHeight[0]) {
-            extraSpace = 0;
-            viewAllocHeight = availHeight - entryHeight[0];
-        }
-
-        viewBox.y1 = Math.floor(extraSpace / 2);
-        viewBox.y2 = viewBox.y1 + viewAllocHeight;
-
-        viewActor.allocate(viewBox, flags);
-
-        // Now center the entry in the space below the grid
-        let gridHeight = this._allView.getHeightForEntry(availWidth);
-
-        extraSpace = availHeight - gridHeight[1];
-        viewAllocHeight = gridHeight[1];
-
-        if (extraSpace / 2 < entryHeight[0]) {
-            extraSpace = 0;
-            viewAllocHeight = availHeight - entryHeight[0];
-        }
-
-        entryBox.y1 = Math.floor(extraSpace / 2) + viewAllocHeight;
-        entry.allocate(entryBox, flags);
-    }
-});
-
-const AppDisplay = new Lang.Class({
-    Name: 'AppDisplay',
-
-    _init: function() {
-        this._view = new AllView();
-
-        this.entry = new ShellEntry.OverviewEntry();
-
-        let layoutManager = new AppDisplayLayout(this._view, this.entry);
-        this.actor = new St.Widget({ layout_manager: layoutManager,
-                                     x_expand: true,
-                                     y_expand: true });
-
-        this.actor.add_actor(this.entry);
-        this.actor.add_actor(this._view.actor);
-
-        // This makes sure that any DnD ops get channeled to the icon grid logic
-        // otherwise dropping an item outside of the grid bounds fails
-        this.actor._delegate = this;
-    },
-
-    acceptDrop: function(source, actor, x, y, time) {
-        // Forward all DnD releases to the scrollview
-        this._view.acceptDrop(source, actor, x, y, time);
     }
 });
 
