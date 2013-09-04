@@ -76,6 +76,18 @@ endif
 # e.g. HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/stock_about_24.png
 HTML_IMAGES=
 
+doc-gen-org.gnome.Shell.SearchProvider.xml: $(top_srcdir)/data/org.gnome.ShellSearchProvider.xml
+	gdbus-codegen 						\
+	--interface-prefix org.gnome.ShellSearchProvider. 	\
+	--generate-docbook doc-gen				\
+	$(top_srcdir)/data/org.gnome.ShellSearchProvider.xml
+
+doc-gen-org.gnome.Shell.SearchProvider2.xml: $(top_srcdir)/data/org.gnome.ShellSearchProvider2.xml
+	gdbus-codegen 						\
+	--interface-prefix org.gnome.ShellSearchProvider2. 	\
+	--generate-docbook doc-gen				\
+	$(top_srcdir)/data/org.gnome.ShellSearchProvider2.xml
+
 doc-gen-org.gnome.Shell.Screenshot.xml: $(top_srcdir)/data/org.gnome.Shell.Screenshot.xml
 	gdbus-codegen 						\
 	--interface-prefix org.gnome.Shell.Screenshot.		\
