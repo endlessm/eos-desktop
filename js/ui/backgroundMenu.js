@@ -10,6 +10,10 @@ const ButtonConstants = imports.ui.buttonConstants;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 
+ADD_APP_LAUNCHER = 'eos-app-store.desktop';
+ADD_LINK_LAUNCHER = 'eos-app-store.desktop';
+ADD_FOLDER_LAUNCHER = 'eos-app-store.desktop';
+
 const BackgroundMenu = new Lang.Class({
     Name: 'BackgroundMenu',
     Extends: PopupMenu.PopupMenu,
@@ -17,9 +21,13 @@ const BackgroundMenu = new Lang.Class({
     _init: function(source) {
         this.parent(source, 0, St.Side.TOP);
 
-        this.addSettingsAction(_("Settings"), 'gnome-control-center.desktop');
-        this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         this.addSettingsAction(_("Change Background…"), 'gnome-background-panel.desktop');
+
+        this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+        this.addSettingsAction(_("Add Application"), ADD_APP_LAUNCHER);
+        this.addSettingsAction(_("Add Website Link"), ADD_LINK_LAUNCHER);
+        this.addSettingsAction(_("Add Folder"), ADD_FOLDER_LAUNCHER);
 
         this.actor.add_style_class_name('background-menu');
 

@@ -365,7 +365,6 @@ const Overview = new Lang.Class({
                                                                monitorIndex: i });
 
             bgManager.connect('changed', Lang.bind(this, function() {
-                              print("changed");
                               this._addBackgroundClickMenu(this._overview);
                           }));
 
