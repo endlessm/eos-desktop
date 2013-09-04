@@ -402,7 +402,38 @@ const AllView = new Lang.Class({
         this.actor.bind_property('mapped', this._bgAction, 'enabled',
                                  GObject.BindingFlags.SYNC_CREATE);
 
-        this.repositionedView = null;
+        this._repositionedView = null;
+
+        this._appSystem = Shell.AppSystem.get_default();
+        this._appSystem.connect('installed-changed', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+        global.settings.connect('changed::app-folder-categories', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+
+        IconGridLayout.layout.connect('changed', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+        global.settings.connect('changed::enable-app-store', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+
+        this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplay));
+    },
+
+    _redisplay: function() {
+        if (this.getAllIcons().length == 0) {
+            this.addIcons();
+        } else {
+            let animateView = this._repositionedView;
+            if (!animateView) {
+                animateView = this;
+            }
+            this._repositionedView = null;
+
+            animateView.animateMovement();
+        }
     },
 
     _closePopup: function() {
@@ -727,7 +758,7 @@ const AllView = new Lang.Class({
         let folderId = this._dragView.getViewId();
 
         this._dragView.repositionedIconData = [ this._originalIdx, position ];
-        this.repositionedView = this._dragView;
+        this._repositionedView = this._dragView;
 
         // If we dropped the icon outside of the folder, close the popup and
         // add the icon to the main view
@@ -1001,42 +1032,11 @@ const AppDisplay = new Lang.Class({
         // This makes sure that any DnD ops get channeled to the icon grid logic
         // otherwise dropping an item outside of the grid bounds fails
         this.actor._delegate = this;
-
-        this._appSystem = Shell.AppSystem.get_default();
-        this._appSystem.connect('installed-changed', Lang.bind(this, function() {
-            Main.queueDeferredWork(this._allAppsWorkId);
-        }));
-        global.settings.connect('changed::app-folder-categories', Lang.bind(this, function() {
-            Main.queueDeferredWork(this._allAppsWorkId);
-        }));
-
-        IconGridLayout.layout.connect('changed', Lang.bind(this, function() {
-            Main.queueDeferredWork(this._allAppsWorkId);
-        }));
-        global.settings.connect('changed::enable-app-store', Lang.bind(this, function() {
-            Main.queueDeferredWork(this._allAppsWorkId);
-        }));
-
-        this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplay));
     },
 
     acceptDrop: function(source, actor, x, y, time) {
         // Forward all DnD releases to the scrollview
         this._view.acceptDrop(source, actor, x, y, time);
-    },
-
-    _redisplay: function() {
-        if (this._view.getAllIcons().length == 0) {
-            this._view.addIcons();
-        } else {
-            let animateView = this._view.repositionedView;
-            if (!animateView) {
-                animateView = this._view;
-            }
-            this._view.repositionedView = null;
-
-            animateView.animateMovement();
-        }
     }
 });
 
