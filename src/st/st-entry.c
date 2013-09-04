@@ -1336,10 +1336,8 @@ st_entry_set_hint_actor (StEntry      *entry,
       priv->hint_actor = hint_actor;
       clutter_actor_add_child (CLUTTER_ACTOR (entry), priv->hint_actor);
 
-      if (priv->hint_visible)
-        clutter_actor_show (hint_actor);
-      else
-        clutter_actor_hide (hint_actor);
+      /* refresh actor and hint text visibility */
+      st_entry_set_hint_visible (entry, priv->hint_visible);
     }
 
   clutter_actor_queue_relayout (CLUTTER_ACTOR (entry));
