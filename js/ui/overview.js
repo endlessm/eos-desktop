@@ -12,6 +12,8 @@ const Shell = imports.gi.Shell;
 const Gdk = imports.gi.Gdk;
 
 const Background = imports.ui.background;
+const BackgroundMenu = imports.ui.backgroundMenu;
+
 const Dash = imports.ui.dash;
 const DND = imports.ui.dnd;
 const LayoutManager = imports.ui.layout;
@@ -300,6 +302,8 @@ const Overview = new Lang.Class({
         global.screen.connect('restacked', Lang.bind(this, this._onRestacked));
         this._group.connect('scroll-event', Lang.bind(this, this._onScrollEvent));
 
+        this._addBackgroundClickMenu(this._overview);
+
         this._windowSwitchTimeoutId = 0;
         this._windowSwitchTimestamp = 0;
         this._lastActiveWorkspaceIndex = -1;
@@ -310,6 +314,10 @@ const Overview = new Lang.Class({
             this.init();
     },
 
+    _addBackgroundClickMenu: function(actor) {
+        BackgroundMenu.addBackgroundMenu(actor);
+    },
+
     _updateDecorators: function() {
         // Remove old decorators
         for (let i = 0; i < this._screenDecorators.length; i++) {
@@ -318,7 +326,7 @@ const Overview = new Lang.Class({
 
         this._screenDecorators = [];
 
-        // Add new deorators
+        // Add new decorators
         for (let i = 0; i < Main.layoutManager.monitors.length; i++) {
             let screenDecoratorLayout = new Clutter.BoxLayout();
             let screenDecorator = new St.Widget({ layout_manager: screenDecoratorLayout,
@@ -355,6 +363,12 @@ const Overview = new Lang.Class({
             // we always want to display the background without modification.
             let bgManager = new Background.BackgroundManager({ container: this._backgroundGroup,
                                                                monitorIndex: i });
+
+            bgManager.connect('changed', Lang.bind(this, function() {
+                              print("changed");
+                              this._addBackgroundClickMenu(this._overview);
+                          }));
+
             this._bgManagers.push(bgManager);
         }
     },

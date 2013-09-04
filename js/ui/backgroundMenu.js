@@ -28,8 +28,10 @@ const BackgroundMenu = new Lang.Class({
     }
 });
 
-function addBackgroundMenu(actor, clickAction) {
+function addBackgroundMenu(actor) {
+    let clickAction = new Clutter.ClickAction();
     let cursor = new St.Bin({ opacity: 0 });
+
     Main.uiGroup.add_actor(cursor);
 
     actor.reactive = true;
@@ -56,4 +58,6 @@ function addBackgroundMenu(actor, clickAction) {
             openMenu();
         }
     });
+
+    actor.add_action(clickAction);
 }
