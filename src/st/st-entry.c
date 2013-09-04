@@ -1308,6 +1308,13 @@ st_entry_get_secondary_icon (StEntry *entry)
   return priv->secondary_icon;
 }
 
+/**
+ * st_entry_set_hint_actor:
+ * @entry: a #StEntry
+ * @hint_actor: (allow-none): an #ClutterActor
+ *
+ * Set the hint actor of the entry to @hint_actor
+ */
 void
 st_entry_set_hint_actor (StEntry      *entry,
                          ClutterActor *hint_actor)
