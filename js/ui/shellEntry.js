@@ -10,6 +10,7 @@ const BoxPointer = imports.ui.boxpointer;
 const Main = imports.ui.main;
 const Params = imports.misc.params;
 const PopupMenu = imports.ui.popupMenu;
+const Util = imports.misc.util;
 
 const EntryMenu = new Lang.Class({
     Name: 'ShellEntryMenu',
@@ -81,19 +82,30 @@ const EntrySearchMenu = new Lang.Class({
         this._localItem.setShowDot(this._state == EntrySearchMenuState.LOCAL);
     },
 
-    _onGoogleActivated: function() {
-        this._state = EntrySearchMenuState.GOOGLE;
+    _setState: function(state) {
+        if (state == this._state) {
+            return;
+        }
+
+        this._state = state;
         this._syncState();
+        this.emit('search-state-changed');
+    },
+
+    _onGoogleActivated: function() {
+        this._setState(EntrySearchMenuState.GOOGLE);
     },
 
     _onWikipediaActivated: function() {
-        this._state = EntrySearchMenuState.WIKIPEDIA;
-        this._syncState();
+        this._setState(EntrySearchMenuState.WIKIPEDIA);
     },
 
     _onLocalActivated: function() {
-        this._state = EntrySearchMenuState.LOCAL;
-        this._syncState();
+        this._setState(EntrySearchMenuState.LOCAL);
+    },
+
+    get state() {
+        return this._state;
     }
 });
 
@@ -238,6 +250,300 @@ const EntryHint = new Lang.Class({
     }
 });
 
+const BASE_SEARCH_URI = 'http://www.google.com/';
+const QUERY_URI_PATH = 'search?q=';
+
+const OverviewEntry = new Lang.Class({
+    Name: 'OverviewEntry',
+    Extends: St.Entry,
+
+    _init: function() {
+        this._active = false;
+
+        this._capturedEventId = 0;
+        this._iconClickedId = 0;
+
+        let primaryIcon = new St.Icon({ style_class: 'search-entry-icon',
+                                        icon_name: 'edit-find-symbolic',
+                                        track_hover: true });
+
+        this._clearIcon = new St.Icon({ style_class: 'search-entry-icon',
+                                        icon_name: 'edit-clear-symbolic',
+                                        track_hover: true });
+
+        this.parent({ name: 'searchEntry',
+                      /* Translators: this is the text displayed
+                         in the search entry when no search is
+                         active; it should not exceed ~30
+                         characters. */
+                      track_hover: true,
+                      reactive: true,
+                      can_focus: true,
+                      primary_icon: primaryIcon,
+                      x_align: Clutter.ActorAlign.CENTER,
+                      y_align: Clutter.ActorAlign.CENTER });
+
+        addContextMenu(this);
+
+        this._searchMenu = new EntrySearchMenu(this.primary_icon, this);
+        this._searchMenuManager = new PopupMenu.PopupMenuManager({ actor: this.primary_icon });
+        this._searchMenuManager.addMenu(this._searchMenu);
+
+        this._googleHint = new EntryHint('search-entry-hint',
+                                         'google-logo-symbolic.svg');
+
+        this.connect('primary-icon-clicked', Lang.bind(this, this._popupSearchEntryMenu));
+        this._searchMenu.connect('search-state-changed', Lang.bind(this, this._onSearchStateChanged));
+        this._onSearchStateChanged();
+
+        this.connect('notify::mapped', Lang.bind(this, this._onMapped));
+        this.clutter_text.connect('key-press-event', Lang.bind(this, this._onKeyPress));
+        this.clutter_text.connect('text-changed', Lang.bind(this, this._onTextChanged));
+        global.stage.connect('notify::key-focus', Lang.bind(this, this._onStageKeyFocusChanged));
+    },
+
+    _popupSearchEntryMenu: function() {
+        if (this._searchMenu.isOpen) {
+            this._searchMenu.close(BoxPointer.PopupAnimation.FULL);
+        } else {
+            this._searchMenu.open(BoxPointer.PopupAnimation.FULL);
+        }
+    },
+
+    _onSearchStateChanged: function() {
+        this._syncSearchHint();
+    },
+
+    _syncSearchHint: function() {
+        let state = this._searchMenu.state;
+
+        if (state == EntrySearchMenuState.GOOGLE) {
+            this.hint_text = '';
+            this.hint_actor = this._googleHint;
+        } else if (state == EntrySearchMenuState.WIKIPEDIA) {
+            this.hint_actor = null;
+            this.hint_text = _("Type to search Wikipedia");
+        } else if (state == EntrySearchMenuState.LOCAL) {
+            this.hint_actor = null;
+            this.hint_text = _("Type to search your computer");
+        }
+    },
+
+    // the entry does not show the hint
+    _isActivated: function() {
+        return this.clutter_text.text == this.get_text();
+    },
+
+    _getTermsForSearchString: function(searchString) {
+        searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
+        if (searchString == '')
+            return [];
+
+        let terms = searchString.split(/\s+/);
+        return terms;
+    },
+
+    _activateDefaultSearch: function() {
+        let uri = BASE_SEARCH_URI;
+        let terms = this._getTermsForSearchString(this.get_text());
+        if (terms.length != 0) {
+            let searchedUris = Util.findSearchUrls(terms);
+            // Make sure search contains only a uri
+            // Avoid cases like "what is github.com"
+            if (searchedUris.length == 1 && terms.length == 1) {
+                uri = searchedUris[0];
+                // Ensure all uri has a scheme name
+                if(!GLib.uri_parse_scheme(uri)) {
+                    uri = "http://" + uri;
+                }
+            } else {
+                uri = uri + QUERY_URI_PATH + encodeURI(terms.join(' '));
+            }
+        }
+
+        try {
+            Gio.AppInfo.launch_default_for_uri(uri, null);
+            Main.overview.hide();
+        } catch (e) {
+            logError(e, 'error while launching the browser for uri: '
+                     + uri);
+        }
+    },
+
+    _onCapturedEvent: function(actor, event) {
+        if (event.type() == Clutter.EventType.BUTTON_PRESS) {
+            let source = event.get_source();
+            if (source != this.clutter_text &&
+                !Main.layoutManager.keyboardBox.contains(source)) {
+                // If the user clicked outside after activating the entry,
+                // drop the focus from the search bar, but avoid resetting
+                // the entry state.
+                // If no search terms entered were entered, also reset the
+                // entry to its initial state.
+                if (this.clutter_text.text == '') {
+                    this.resetSearch();
+                } else {
+                    this._stopSearch();
+                }
+            }
+        }
+
+        return false;
+    },
+
+    _onKeyPress: function(entry, event) {
+        let symbol = event.get_key_symbol();
+        if (symbol == Clutter.Escape) {
+            if (this._isActivated()) {
+                this.resetSearch();
+                return true;
+            }
+        } else if (this.active) {
+            let arrowNext, nextDirection;
+            if (entry.get_text_direction() == Clutter.TextDirection.RTL) {
+                arrowNext = Clutter.Left;
+                nextDirection = Gtk.DirectionType.LEFT;
+            } else {
+                arrowNext = Clutter.Right;
+                nextDirection = Gtk.DirectionType.RIGHT;
+            }
+
+            if (symbol == arrowNext && this.clutter_text.position == -1) {
+                return true;
+            } else if (symbol == Clutter.Return || symbol == Clutter.KP_Enter) {
+                this._activateDefaultSearch();
+                return true;
+            }
+        }
+        return false;
+    },
+
+    _onMapped: function() {
+        if (this.mapped) {
+            // Enable 'find-as-you-type'
+            this._capturedEventId = global.stage.connect('captured-event',
+                                 Lang.bind(this, this._onCapturedEvent));
+
+            this.clutter_text.set_cursor_visible(true);
+            // Move the cursor at the end of the current text
+            let buffer = this.clutter_text.get_buffer();
+            let nChars = buffer.get_length();
+            this.clutter_text.set_selection(nChars, nChars);
+        } else {
+            // Disable 'find-as-you-type'
+            if (this._capturedEventId > 0) {
+                global.stage.disconnect(this._capturedEventId);
+                this._capturedEventId = 0;
+            }
+        }
+    },
+
+    _onStageKeyFocusChanged: function() {
+        let focus = global.stage.get_key_focus();
+        let appearFocused = this.contains(focus);
+
+        this.clutter_text.set_cursor_visible(appearFocused);
+
+        if (appearFocused) {
+            this.add_style_pseudo_class('focus');
+        } else {
+            this.remove_style_pseudo_class('focus');
+        }
+    },
+
+    _onTextChanged: function (se, prop) {
+        let terms = this._getTermsForSearchString(this.get_text());
+        this.active = (terms.length > 0);
+    },
+
+    _searchCancelled: function() {
+        // Leave the entry focused when it doesn't have any text;
+        // when replacing a selected search term, Clutter emits
+        // two 'text-changed' signals, one for deleting the previous
+        // text and one for the new one - the second one is handled
+        // incorrectly when we remove focus
+        // (https://bugzilla.gnome.org/show_bug.cgi?id=636341) */
+        if (this.clutter_text.text != '') {
+            this.resetSearch();
+        }
+    },
+
+    _shouldTriggerSearch: function(symbol) {
+        let unicode = Clutter.keysym_to_unicode(symbol);
+        if (unicode == 0) {
+            return false;
+        }
+
+        if (this._getTermsForSearchString(String.fromCharCode(unicode)).length > 0) {
+            return true;
+        }
+
+        return symbol == Clutter.BackSpace && this.active;
+    },
+
+    _stopSearch: function() {
+        global.stage.set_key_focus(null);
+    },
+
+    _startSearch: function(event) {
+        global.stage.set_key_focus(this.clutter_text);
+        this.clutter_text.event(event, true);
+    },
+
+    resetSearch: function () {
+        this._stopSearch();
+        this.text = '';
+
+        this.clutter_text.set_cursor_visible(true);
+        this.clutter_text.set_selection(0, 0);
+    },
+
+    handleStageEvent: function(event) {
+        let symbol = event.get_key_symbol();
+
+        if (symbol == Clutter.Escape && this.active) {
+            this.resetSearch();
+            return true;
+        }
+
+        if (this._shouldTriggerSearch(symbol)) {
+            this._startSearch(event);
+            return true;
+        }
+
+        return false;
+    },
+
+    set active(value) {
+        if (value == this._active) {
+            return;
+        }
+
+        this._active = value;
+
+        if (this._active) {
+            this.set_secondary_icon(this._clearIcon);
+
+            if (this._iconClickedId == 0) {
+                this._iconClickedId = this.connect('secondary-icon-clicked',
+                    Lang.bind(this, this.resetSearch));
+            }
+        } else {
+            if (this._iconClickedId > 0) {
+                this.disconnect(this._iconClickedId);
+                this._iconClickedId = 0;
+            }
+
+            this.set_secondary_icon(null);
+            this._searchCancelled();
+        }
+    },
+
+    get active() {
+        return this._active;
+    }
+});
+
 function _setMenuAlignment(entry, stageX) {
     let [success, entryX, entryY] = entry.transform_stage_point(stageX, 0);
     if (success)
@@ -279,24 +585,4 @@ function addContextMenu(entry, params) {
     entry.connect('button-press-event', Lang.bind(null, _onButtonPressEvent, entry));
 
     entry.connect('popup-menu', Lang.bind(null, _onPopup, entry));
-}
-
-function _popupSearchEntryMenu(entry) {
-    if (entry.searchMenu.isOpen) {
-        entry.searchMenu.close(BoxPointer.PopupAnimation.FULL);
-    } else {
-        entry.searchMenu.open(BoxPointer.PopupAnimation.FULL);
-    }
-}
-
-function addSearchMenu(entry) {
-    if (entry.searchMenu) {
-        return;
-    }
-
-    entry.searchMenu = new EntrySearchMenu(entry.primary_icon, entry);
-    entry._searchMenuManager = new PopupMenu.PopupMenuManager({ actor: entry.primary_icon });
-    entry._searchMenuManager.addMenu(entry.searchMenu);
-
-    entry.connect('primary-icon-clicked', _popupSearchEntryMenu);
 }

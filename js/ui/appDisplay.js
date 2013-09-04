@@ -29,6 +29,7 @@ const Overview = imports.ui.overview;
 const OverviewControls = imports.ui.overviewControls;
 const Panel = imports.ui.panel;
 const PopupMenu = imports.ui.popupMenu;
+const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
 const WindowManager = imports.ui.windowManager;
 const Workspace = imports.ui.workspace;
@@ -987,17 +988,7 @@ const AppDisplay = new Lang.Class({
     _init: function() {
         this._view = new AllView();
 
-        this.entry = new St.Entry({ name: 'searchEntry',
-                                    /* Translators: this is the text displayed
-                                       in the search entry when no search is
-                                       active; it should not exceed ~30
-                                       characters. */
-                                    hint_text: _("Type to search…"),
-                                    track_hover: true,
-                                    reactive: true,
-                                    can_focus: true,
-                                    x_align: Clutter.ActorAlign.CENTER,
-                                    y_align: Clutter.ActorAlign.CENTER });
+        this.entry = new ShellEntry.OverviewEntry();
 
         let layoutManager = new AppDisplayLayout(this._view, this.entry);
         this.actor = new St.Widget({ layout_manager: layoutManager,
