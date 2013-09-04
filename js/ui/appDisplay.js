@@ -1455,7 +1455,11 @@ const AppActivationContext = new Lang.Class({
         this._cover = this._getCoverPage();
         Main.uiGroup.insert_child_below(this._cover, Main.layoutManager.panelBox);
 
-        this._splash = new AppSplashPage(this._app);;
+        this._splash = new AppSplashPage(this._app);
+
+        // Make sure that our events are captured
+        Main.pushModal(this._splash);
+
         Main.uiGroup.add_actor(this._splash);
         this._splash.connect('close-clicked', Lang.bind(this, this._clearSplash));
 
@@ -1486,6 +1490,9 @@ const AppActivationContext = new Lang.Class({
                                                      transition: 'linear',
                                                      onComplete: Lang.bind(this,
                                                          function() {
+                                                             // Release keybinding to overview again
+                                                             Main.popModal(this._splash);
+
                                                              this._splash.destroy();
                                                              this._splash = null;
                                                          })
