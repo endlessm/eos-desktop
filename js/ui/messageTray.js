@@ -1565,6 +1565,12 @@ const MessageTray = new Lang.Class({
                                      y_align: Clutter.ActorAlign.START,
                                    });
         this.actor.connect('notify::hover', Lang.bind(this, this._onTrayHoverChanged));
+        this._trayBox = new St.Widget ({ name: 'message-tray-box',
+                                         x_expand: true,
+                                         y_expand: true,
+                                         layout_manager: new Clutter.BinLayout(),
+                                         y_align: Clutter.ActorAlign.START });
+        this.actor.add_actor(this._trayBox);
 
         this._notificationWidget = new St.Widget({ name: 'notification-container',
                                                    y_align: Clutter.ActorAlign.START,
@@ -1574,7 +1580,7 @@ const MessageTray = new Lang.Class({
                                                    layout_manager: new Clutter.BinLayout() });
         this._notificationWidget.connect('key-release-event', Lang.bind(this, this._onNotificationKeyRelease));
 
-        this.actor.add_actor(this._notificationWidget);
+        this._trayBox.add_actor(this._notificationWidget);
 
         this._notificationBin = new St.Bin({ y_expand: true });
         this._notificationBin.set_y_align(Clutter.ActorAlign.START);
@@ -1596,7 +1602,7 @@ const MessageTray = new Lang.Class({
                                            x_expand: true,
                                            y_align: Clutter.ActorAlign.CENTER,
                                            y_expand: true });
-        this.actor.add_actor(this._summary);
+        this._trayBox.add_actor(this._summary);
 
         this._summaryMotionId = 0;
 
@@ -1716,7 +1722,7 @@ const MessageTray = new Lang.Class({
                                           x_expand: true,
                                           y_align: Clutter.ActorAlign.CENTER,
                                           y_expand: true });
-        this.actor.add_actor(this._noMessages);
+        this._trayBox.add_actor(this._noMessages);
         this._updateNoMessagesLabel();
 
         this._contextMenu = new MessageTrayContextMenu(this);
@@ -2322,7 +2328,7 @@ const MessageTray = new Lang.Class({
 
         this.emit('showing');
         this._tween(this.actor, '_trayState', State.SHOWN,
-                    { y: -this.actor.height - Main.layoutManager.panelBox.height,
+                    { y: -this.actor.height,
                       time: ANIMATION_TIME,
                       transition: 'easeOutQuad'
                     });
@@ -2359,7 +2365,7 @@ const MessageTray = new Lang.Class({
         this._desktopClone.show();
 
         this._tween(this._desktopClone, '_desktopCloneState', State.SHOWN,
-                    { y: -this.actor.height,
+                    { y: -this.actor.height + Main.layoutManager.panelBox.height,
                       time: ANIMATION_TIME,
                       transition: 'easeOutQuad',
                       onUpdate: Lang.bind(this, this._updateDesktopCloneClip)

@@ -332,7 +332,36 @@ const Panel = new Lang.Class({
                                         { sortGroup: CtrlAltTab.SortGroup.TOP });
 
         Main.sessionMode.connect('updated', Lang.bind(this, this._updatePanel));
+
+        global.window_manager.connect('unmaximize', Lang.bind(this, this._updateBackground));
+        global.window_manager.connect('map', Lang.bind(this, this._updateBackground));
+        global.window_manager.connect('maximize', Lang.bind(this, function() {
+            this.actor.remove_style_pseudo_class('unmaximized');
+        }));
+
+        let windowTracker = Shell.WindowTracker.get_default();
+        windowTracker.connect('tracked-windows-changed', Lang.bind(this, this._updateBackground));
+
         this._updatePanel();
+        this._updateBackground();
+    },
+
+    _updateBackground: function() {
+        let windows = global.get_window_actors().filter(function(window) {
+            return window.meta_window.get_window_type() == Meta.WindowType.NORMAL;
+        });
+
+        /* Check if all windows are unmaximized */
+        let allNotMaximized = windows.every(function(window) {
+            let isMaximized = (window.meta_window.maximized_horizontally &&
+                               window.meta_window.maximized_vertically);
+            return !isMaximized;
+        });
+        if (allNotMaximized) {
+            this.actor.add_style_pseudo_class('unmaximized');
+        } else {
+            this.actor.remove_style_pseudo_class('unmaximized');
+        }
     },
 
     _getPreferredWidth: function(actor, forHeight, alloc) {

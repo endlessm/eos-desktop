@@ -428,6 +428,7 @@ StScrollBar StButton#vhandle:active {
     transition-duration: 250ms;
 }
 
+#panel:unmaximized,
 #panel:overview {
     background-color: rgba(0, 0, 0, 0.9);
     transition-duration: 250ms;
@@ -1419,6 +1420,12 @@ StScrollBar StButton#vhandle:active {
 #message-tray {
     background: #2e3436 url(message-tray-background.png);
     background-repeat: repeat;
+    background-size: contain;
+    height: 102px;
+}
+
+#message-tray-box {
+    background: transparent;
     height: 72px;
 }
 
