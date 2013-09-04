@@ -10,9 +10,9 @@ const ButtonConstants = imports.ui.buttonConstants;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 
-ADD_APP_LAUNCHER = 'eos-app-store.desktop';
-ADD_LINK_LAUNCHER = 'eos-app-store.desktop';
-ADD_FOLDER_LAUNCHER = 'eos-app-store.desktop';
+const ADD_APP_LAUNCHER = 'eos-app-store.desktop';
+const ADD_LINK_LAUNCHER = 'eos-app-store.desktop';
+const ADD_FOLDER_LAUNCHER = 'eos-app-store.desktop';
 
 const BackgroundMenu = new Lang.Class({
     Name: 'BackgroundMenu',
