@@ -25,9 +25,14 @@ const BackgroundMenu = new Lang.Class({
 
         this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-        this.addSettingsAction(_("Add Application"), ADD_APP_LAUNCHER);
-        this.addSettingsAction(_("Add Website Link"), ADD_LINK_LAUNCHER);
-        this.addSettingsAction(_("Add Folder"), ADD_FOLDER_LAUNCHER);
+        // Removed until the app-store gets the capability to open on
+        // individual sections
+        //
+        // this.addSettingsAction(_("Add Application"), ADD_APP_LAUNCHER);
+        // this.addSettingsAction(_("Add Website Link"), ADD_LINK_LAUNCHER);
+        // this.addSettingsAction(_("Add Folder"), ADD_FOLDER_LAUNCHER);
+
+        this.addSettingsAction(_("Add..."), ADD_APP_LAUNCHER);
 
         this.actor.add_style_class_name('background-menu');
 
