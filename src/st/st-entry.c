@@ -961,6 +961,7 @@ st_entry_class_init (StEntryClass *klass)
                                "and the text property is empty",
                                CLUTTER_TYPE_ACTOR,
                                G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class, PROP_HINT_ACTOR, pspec);
 
   pspec = g_param_spec_string ("text",
                                "Text",
