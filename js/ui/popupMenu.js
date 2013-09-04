@@ -1085,8 +1085,7 @@ const PopupMenuBase = new Lang.Class({
         let columnWidths = [];
         let items = this.box.get_children();
         for (let i = 0; i < items.length; i++) {
-            if (!items[i].visible &&
-                !(items[i]._delegate instanceof PopupSubMenu && items[i-1].visible))
+            if (!items[i].visible)
                 continue;
             if (items[i]._delegate instanceof PopupBaseMenuItem || items[i]._delegate instanceof PopupMenuBase) {
                 let itemColumnWidths = items[i]._delegate.getColumnWidths();
@@ -1424,6 +1423,7 @@ const PopupSubMenu = new Lang.Class({
                                time: 0.25,
                                onCompleteScope: this,
                                onComplete: function() {
+                                   this.actor.vscrollbar_policy = Gtk.PolicyType.NEVER;
                                    this.actor.hide();
                                    this.actor.set_height(-1);
 
@@ -1436,6 +1436,7 @@ const PopupSubMenu = new Lang.Class({
                              });
             } else {
                 this._arrow.rotation_angle_z = 0;
+                this.actor.vscrollbar_policy = Gtk.PolicyType.NEVER;
                 this.actor.hide();
 
                 this.isOpen = false;

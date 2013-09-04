@@ -135,6 +135,8 @@ const AppIconMenu = new Lang.Class({
     _init: function(app, parentActor) {
         this.parent(parentActor, APP_ICON_MENU_ARROW_XALIGN, St.Side.BOTTOM);
 
+        this.actor.add_style_class_name('app-icon-menu');
+
         this._submenuItem = new ScrollMenuItem();
         this.addMenuItem(this._submenuItem);
         this._submenuItem.menu.connect('activate', Lang.bind(this, this._onActivate));
