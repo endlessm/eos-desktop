@@ -1085,8 +1085,7 @@ const PopupMenuBase = new Lang.Class({
         let columnWidths = [];
         let items = this.box.get_children();
         for (let i = 0; i < items.length; i++) {
-            if (!items[i].visible &&
-                !(items[i]._delegate instanceof PopupSubMenu && items[i-1].visible))
+            if (!items[i].visible)
                 continue;
             if (items[i]._delegate instanceof PopupBaseMenuItem || items[i]._delegate instanceof PopupMenuBase) {
                 let itemColumnWidths = items[i]._delegate.getColumnWidths();
