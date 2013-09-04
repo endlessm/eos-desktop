@@ -428,6 +428,7 @@ StScrollBar StButton#vhandle:active {
     transition-duration: 250ms;
 }
 
+#panel:unmaximized,
 #panel:overview {
     background-color: rgba(0, 0, 0, 0.9);
     transition-duration: 250ms;
