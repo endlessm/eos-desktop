@@ -2,6 +2,7 @@
 
 const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
+const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 const St = imports.gi.St;
@@ -256,6 +257,13 @@ const QUERY_URI_PATH = 'search?q=';
 const OverviewEntry = new Lang.Class({
     Name: 'OverviewEntry',
     Extends: St.Entry,
+    Signals: {
+        'search-activated': { },
+        'search-active-changed': { },
+        'search-navigate-focus': { param_types: [GObject.TYPE_INT] },
+        'search-state-changed': { },
+        'search-terms-changed': { }
+    },
 
     _init: function() {
         this._active = false;
@@ -312,6 +320,7 @@ const OverviewEntry = new Lang.Class({
 
     _onSearchStateChanged: function() {
         this._syncSearchHint();
+        this.emit('search-state-changed');
     },
 
     _syncSearchHint: function() {
@@ -341,33 +350,6 @@ const OverviewEntry = new Lang.Class({
 
         let terms = searchString.split(/\s+/);
         return terms;
-    },
-
-    _activateDefaultSearch: function() {
-        let uri = BASE_SEARCH_URI;
-        let terms = this._getTermsForSearchString(this.get_text());
-        if (terms.length != 0) {
-            let searchedUris = Util.findSearchUrls(terms);
-            // Make sure search contains only a uri
-            // Avoid cases like "what is github.com"
-            if (searchedUris.length == 1 && terms.length == 1) {
-                uri = searchedUris[0];
-                // Ensure all uri has a scheme name
-                if(!GLib.uri_parse_scheme(uri)) {
-                    uri = "http://" + uri;
-                }
-            } else {
-                uri = uri + QUERY_URI_PATH + encodeURI(terms.join(' '));
-            }
-        }
-
-        try {
-            Gio.AppInfo.launch_default_for_uri(uri, null);
-            Main.overview.hide();
-        } catch (e) {
-            logError(e, 'error while launching the browser for uri: '
-                     + uri);
-        }
     },
 
     _onCapturedEvent: function(actor, event) {
@@ -408,10 +390,16 @@ const OverviewEntry = new Lang.Class({
                 nextDirection = Gtk.DirectionType.RIGHT;
             }
 
-            if (symbol == arrowNext && this.clutter_text.position == -1) {
+            if (symbol == Clutter.Down) {
+                nextDirection = Gtk.DirectionType.DOWN;
+            }
+
+            if ((symbol == arrowNext && this.clutter_text.position == -1) ||
+                (symbol == Clutter.Down)) {
+                this.emit('search-navigate-focus', nextDirection);
                 return true;
             } else if (symbol == Clutter.Return || symbol == Clutter.KP_Enter) {
-                this._activateDefaultSearch();
+                this.emit('search-activated');
                 return true;
             }
         }
@@ -454,6 +442,10 @@ const OverviewEntry = new Lang.Class({
     _onTextChanged: function (se, prop) {
         let terms = this._getTermsForSearchString(this.get_text());
         this.active = (terms.length > 0);
+
+        if (this.active) {
+            this.emit('search-terms-changed');
+        }
     },
 
     _searchCancelled: function() {
@@ -537,10 +529,20 @@ const OverviewEntry = new Lang.Class({
             this.set_secondary_icon(null);
             this._searchCancelled();
         }
+
+        this.emit('search-active-changed');
     },
 
     get active() {
         return this._active;
+    },
+
+    getSearchState: function() {
+        return this._searchMenu.state;
+    },
+
+    getSearchTerms: function() {
+        return this._getTermsForSearchString(this.get_text());
     }
 });
 

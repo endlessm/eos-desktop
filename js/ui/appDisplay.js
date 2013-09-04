@@ -71,6 +71,74 @@ const ALL_VIEW_ID = '';
 
 const DESKTOP_LAUNCH_BACKGROUND_FIELD = 'X-Endless-launch-background';
 
+const AppSearchProvider = new Lang.Class({
+    Name: 'AppSearchProvider',
+
+    _init: function() {
+        this._appSys = Shell.AppSystem.get_default();
+        this.id = 'applications';
+    },
+
+    _filterLayoutIds: function(results) {
+        return results.filter(function(app) {
+            let appId = app.get_id();
+            return IconGridLayout.layout.hasIcon(appId);
+        });
+    },
+
+    getResultMetas: function(apps, callback) {
+        let metas = [];
+        for (let i = 0; i < apps.length; i++) {
+            let app = apps[i];
+            metas.push({ 'id': app,
+                         'name': app.get_name(),
+                         'createIcon': function(size) {
+                             return app.create_icon_texture(size);
+                         }
+                       });
+        }
+        callback(metas);
+    },
+
+    getInitialResultSet: function(terms) {
+        let results = this._appSys.initial_search(terms);
+        this.searchSystem.setResults(this, this._filterLayoutIds(results));
+    },
+
+    getSubsearchResultSet: function(previousResults, terms) {
+        let results = this._appSys.subsearch(previousResults, terms);
+        this.searchSystem.setResults(this, this._filterLayoutIds(results));
+    },
+
+    activateResult: function(app) {
+        let event = Clutter.get_current_event();
+        let modifiers = event ? event.get_state() : 0;
+        let openNewWindow = modifiers & Clutter.ModifierType.CONTROL_MASK;
+
+        if (openNewWindow) {
+            app.open_new_window(-1);
+        } else {
+            let activationContext = new AppActivationContext(app);
+            activationContext.activate();
+        }
+
+        Main.overview.hide();
+    },
+
+    dragActivateResult: function(id, params) {
+        params = Params.parse(params, { workspace: -1,
+                                        timestamp: 0 });
+
+        let app = this._appSys.lookup_app(id);
+        app.open_new_window(workspace);
+    },
+
+    createResultObject: function (resultMeta, terms) {
+        let app = resultMeta['id'];
+        return new AppIcon(app);
+    }
+});
+
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,

@@ -59,7 +59,7 @@ const SearchResult = new Lang.Class({
 
     activate: function() {
         this.provider.activateResult(this.metaInfo.id, this.terms);
-        Main.overview.toggle();
+        Main.overview.hide();
     },
 
     setSelected: function(selected) {
