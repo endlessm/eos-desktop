@@ -68,6 +68,9 @@ nobase_dist_js_DATA = 	\
 	ui/messageTray.js	\
 	ui/modalDialog.js	\
 	ui/panelSeparator.js	\
+	ui/remoteSearch.js	\
+	ui/search.js		\
+	ui/searchDisplay.js	\
 	ui/separator.js		\
 	ui/sessionMode.js	\
 	ui/shellEntry.js	\
