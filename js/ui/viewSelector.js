@@ -124,6 +124,7 @@ const ViewsDisplay = new Lang.Class({
         this._stack = new Shell.Stack({ x_expand: true,
                                         y_expand: true });
 
+        this._appSystem = Shell.AppSystem.get_default();
         this._allView = new AppDisplay.AllView();
         this._addPage(this._allView.actor);
 
@@ -331,8 +332,16 @@ const ViewsDisplay = new Lang.Class({
             return false;
         }
 
-        let appId = provider.appInfo.get_id();
+        let appId = provider.app.get_id();
         let disable = this._searchSettings.get_strv('disabled');
+        disable = disable.map(function(appId) {
+            let shellApp = this._appSystem.lookup_heuristic_basename(appId);
+            if (shellApp) {
+                return shellApp.get_id();
+            } else {
+                return null;
+            }
+        });
         return disable.indexOf(appId) == -1;
     },
 

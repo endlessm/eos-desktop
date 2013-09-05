@@ -411,7 +411,7 @@ const SearchResults = new Lang.Class({
     createProviderDisplay: function(provider) {
         let providerDisplay = null;
 
-        if (provider.appInfo) {
+        if (provider.app) {
             providerDisplay = new ListSearchResults(provider);
         } else {
             providerDisplay = new GridSearchResults(provider);
@@ -543,7 +543,7 @@ const ProviderIcon = new Lang.Class({
         this.parent({ style_class: 'search-provider-icon',
                       reactive: true,
                       can_focus: true,
-                      accessible_name: provider.appInfo.get_name(),
+                      accessible_name: provider.app.get_name(),
                       track_hover: true });
 
         this._content = new St.Widget({ layout_manager: new Clutter.BinLayout() });
@@ -558,8 +558,7 @@ const ProviderIcon = new Lang.Class({
                                         x_expand: true,
                                         y_expand: true });
 
-        let icon = new St.Icon({ icon_size: this.PROVIDER_ICON_SIZE,
-                                 gicon: provider.appInfo.get_icon() });
+        let icon = provider.app.create_icon_texture(this.PROVIDER_ICON_SIZE);
         this._content.add_actor(icon);
         this._content.add_actor(this.moreIcon);
     }
