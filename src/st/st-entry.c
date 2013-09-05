@@ -1274,7 +1274,7 @@ st_entry_get_primary_icon (StEntry *entry)
 /**
  * st_entry_set_secondary_icon:
  * @entry: a #StEntry
- * @icon: (allow-none): an #ClutterActor
+ * @icon: (allow-none): a #ClutterActor
  *
  * Set the secondary icon of the entry to @icon
  */
@@ -1311,7 +1311,7 @@ st_entry_get_secondary_icon (StEntry *entry)
 /**
  * st_entry_set_hint_actor:
  * @entry: a #StEntry
- * @hint_actor: (allow-none): an #ClutterActor
+ * @hint_actor: (allow-none): a #ClutterActor
  *
  * Set the hint actor of the entry to @hint_actor
  */
