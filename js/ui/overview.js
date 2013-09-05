@@ -302,7 +302,7 @@ const Overview = new Lang.Class({
         global.screen.connect('restacked', Lang.bind(this, this._onRestacked));
         this._group.connect('scroll-event', Lang.bind(this, this._onScrollEvent));
 
-        this._addBackgroundClickMenu(this._overview);
+        BackgroundMenu.addBackgroundMenu(this._overview);
 
         this._windowSwitchTimeoutId = 0;
         this._windowSwitchTimestamp = 0;
@@ -312,10 +312,6 @@ const Overview = new Lang.Class({
 
         if (this._initCalled)
             this.init();
-    },
-
-    _addBackgroundClickMenu: function(actor) {
-        BackgroundMenu.addBackgroundMenu(actor);
     },
 
     _updateDecorators: function() {
@@ -363,10 +359,6 @@ const Overview = new Lang.Class({
             // we always want to display the background without modification.
             let bgManager = new Background.BackgroundManager({ container: this._backgroundGroup,
                                                                monitorIndex: i });
-
-            bgManager.connect('changed', Lang.bind(this, function() {
-                              this._addBackgroundClickMenu(this._overview);
-                          }));
 
             this._bgManagers.push(bgManager);
         }

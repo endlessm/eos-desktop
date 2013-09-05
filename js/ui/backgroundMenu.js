@@ -32,7 +32,7 @@ const BackgroundMenu = new Lang.Class({
         // this.addSettingsAction(_("Add Website Link"), ADD_LINK_LAUNCHER);
         // this.addSettingsAction(_("Add Folder"), ADD_FOLDER_LAUNCHER);
 
-        this.addSettingsAction(_("Add..."), ADD_APP_LAUNCHER);
+        this.addSettingsAction(_("Add…"), ADD_APP_LAUNCHER);
 
         this.actor.add_style_class_name('background-menu');
 
