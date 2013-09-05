@@ -1402,6 +1402,7 @@ const AppActivationContext = new Lang.Class({
 
     _init: function(app) {
         this._app = app;
+        this._abort = false;
 
         this._cover = null;
         this._splash = null;
@@ -1461,7 +1462,15 @@ const AppActivationContext = new Lang.Class({
         Main.pushModal(this._splash);
 
         Main.uiGroup.add_actor(this._splash);
-        this._splash.connect('close-clicked', Lang.bind(this, this._clearSplash));
+        this._splash.connect('close-clicked', Lang.bind(this, function() {
+            /* If application doesn't quit very likely is because it
+             * didn't reach running state yet; so wait for it to
+             * finish */
+            this._clearSplash();
+            if (!this._app.request_quit()) {
+                this._abort = true;
+            }
+        }));
 
         this._splash.translation_y = this._splash.height;
         Tweener.addTween(this._splash, { translation_y: 0,
@@ -1523,6 +1532,12 @@ const AppActivationContext = new Lang.Class({
 
         appSystem.disconnect(this._appStateId);
         this._appStateId = 0;
+
+        if (this._abort) {
+            this._abort = false;
+            app.request_quit();
+            return;
+        }
 
         // (splashId == 0) => the window took more than the stock
         // splash timeout to display
