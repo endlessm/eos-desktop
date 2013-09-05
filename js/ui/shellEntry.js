@@ -54,6 +54,8 @@ const EntrySearchMenu = new Lang.Class({
     _init: function(actor, entry) {
         this.parent(actor, entry);
 
+        this.actor.add_style_class_name('entry-search-menu');
+
         this._state = EntrySearchMenuState.GOOGLE;
 
         // Populate menu

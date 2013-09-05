@@ -848,6 +848,10 @@ StScrollBar StButton#vhandle:active {
     padding-top: 2px;
 }
 
+.entry-search-menu {
+    -boxpointer-gap: 12px;
+}
+
 .dash-label {
     border-radius: 7px;
     padding: 4px 12px;
