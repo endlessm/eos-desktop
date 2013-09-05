@@ -11,6 +11,7 @@ const BoxPointer = imports.ui.boxpointer;
 const Main = imports.ui.main;
 const Params = imports.misc.params;
 const PopupMenu = imports.ui.popupMenu;
+const Util = imports.misc.util;
 
 const EntryMenu = new Lang.Class({
     Name: 'ShellEntryMenu',
@@ -65,10 +66,12 @@ const EntrySearchMenu = new Lang.Class({
         this.addMenuItem(item);
         this._googleItem = item;
 
-        item = new PopupMenu.PopupMenuItem(_("Wikipedia"));
-        item.connect('activate', Lang.bind(this, this._onWikipediaActivated));
-        this.addMenuItem(item);
-        this._wikipediaItem = item;
+        if (Util.getWikipediaApp()) {
+            item = new PopupMenu.PopupMenuItem(_("Wikipedia"));
+            item.connect('activate', Lang.bind(this, this._onWikipediaActivated));
+            this.addMenuItem(item);
+            this._wikipediaItem = item;
+        }
 
         item = new PopupMenu.PopupMenuItem(_("Local"));
         item.connect('activate', Lang.bind(this, this._onLocalActivated));
@@ -80,8 +83,11 @@ const EntrySearchMenu = new Lang.Class({
 
     _syncState: function() {
         this._googleItem.setShowDot(this._state == EntrySearchMenuState.GOOGLE);
-        this._wikipediaItem.setShowDot(this._state == EntrySearchMenuState.WIKIPEDIA);
         this._localItem.setShowDot(this._state == EntrySearchMenuState.LOCAL);
+
+        if (this._wikipediaItem) {
+            this._wikipediaItem.setShowDot(this._state == EntrySearchMenuState.WIKIPEDIA);
+        }
     },
 
     _setState: function(state) {
