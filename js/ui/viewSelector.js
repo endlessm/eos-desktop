@@ -258,7 +258,6 @@ const ViewsDisplay = new Lang.Class({
         }
     },
 
-
     _enterLocalSearch: function() {
         this._searchResults.startingSearch();
         this._queueLocalSearch();
@@ -306,7 +305,8 @@ const ViewsDisplay = new Lang.Class({
 
     _onSearchStateChanged: function() {
         let searchState = this.entry.getSearchState();
-        if (searchState == ShellEntry.EntrySearchMenuState.LOCAL) {
+        if (searchState == ShellEntry.EntrySearchMenuState.LOCAL &&
+            this.entry.active) {
             this._enterLocalSearch();
         } else {
             this._leaveLocalSearch();
