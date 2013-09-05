@@ -11,7 +11,6 @@ const BoxPointer = imports.ui.boxpointer;
 const Main = imports.ui.main;
 const Params = imports.misc.params;
 const PopupMenu = imports.ui.popupMenu;
-const Util = imports.misc.util;
 
 const EntryMenu = new Lang.Class({
     Name: 'ShellEntryMenu',
@@ -250,9 +249,6 @@ const EntryHint = new Lang.Class({
                                                  }));
     }
 });
-
-const BASE_SEARCH_URI = 'http://www.google.com/';
-const QUERY_URI_PATH = 'search?q=';
 
 const OverviewEntry = new Lang.Class({
     Name: 'OverviewEntry',

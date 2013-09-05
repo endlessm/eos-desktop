@@ -18,7 +18,11 @@ const Search = imports.ui.search;
 const SearchDisplay = imports.ui.searchDisplay;
 const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
+const Util = imports.misc.util;
 const WorkspacesView = imports.ui.workspacesView;
+
+const BASE_SEARCH_URI = 'http://www.google.com/';
+const QUERY_URI_PATH = 'search?q=';
 
 const SEARCH_TIMEOUT = 150;
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
