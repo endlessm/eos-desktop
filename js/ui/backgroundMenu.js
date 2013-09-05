@@ -10,6 +10,10 @@ const ButtonConstants = imports.ui.buttonConstants;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 
+const ADD_APP_LAUNCHER = 'eos-app-store.desktop';
+const ADD_LINK_LAUNCHER = 'eos-app-store.desktop';
+const ADD_FOLDER_LAUNCHER = 'eos-app-store.desktop';
+
 const BackgroundMenu = new Lang.Class({
     Name: 'BackgroundMenu',
     Extends: PopupMenu.PopupMenu,
@@ -17,9 +21,18 @@ const BackgroundMenu = new Lang.Class({
     _init: function(source) {
         this.parent(source, 0, St.Side.TOP);
 
-        this.addSettingsAction(_("Settings"), 'gnome-control-center.desktop');
-        this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         this.addSettingsAction(_("Change Background…"), 'gnome-background-panel.desktop');
+
+        this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+        // Removed until the app-store gets the capability to open on
+        // individual sections
+        //
+        // this.addSettingsAction(_("Add Application"), ADD_APP_LAUNCHER);
+        // this.addSettingsAction(_("Add Website Link"), ADD_LINK_LAUNCHER);
+        // this.addSettingsAction(_("Add Folder"), ADD_FOLDER_LAUNCHER);
+
+        this.addSettingsAction(_("Add…"), ADD_APP_LAUNCHER);
 
         this.actor.add_style_class_name('background-menu');
 
@@ -28,8 +41,10 @@ const BackgroundMenu = new Lang.Class({
     }
 });
 
-function addBackgroundMenu(actor, clickAction) {
+function addBackgroundMenu(actor) {
+    let clickAction = new Clutter.ClickAction();
     let cursor = new St.Bin({ opacity: 0 });
+
     Main.uiGroup.add_actor(cursor);
 
     actor.reactive = true;
@@ -56,4 +71,6 @@ function addBackgroundMenu(actor, clickAction) {
             openMenu();
         }
     });
+
+    actor.add_action(clickAction);
 }

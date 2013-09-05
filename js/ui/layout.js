@@ -348,8 +348,6 @@ const LayoutManager = new Lang.Class({
         actor.reactive = true;
         let clickAction = new Clutter.ClickAction();
 
-        // Background menu should be added back here
-
         clickAction.connect('clicked', function(action) {
             let button = action.get_button();
             if (button == ButtonConstants.LEFT_MOUSE_BUTTON &&
