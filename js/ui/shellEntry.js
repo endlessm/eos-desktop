@@ -278,10 +278,6 @@ const OverviewEntry = new Lang.Class({
                                         track_hover: true });
 
         this.parent({ name: 'searchEntry',
-                      /* Translators: this is the text displayed
-                         in the search entry when no search is
-                         active; it should not exceed ~30
-                         characters. */
                       track_hover: true,
                       reactive: true,
                       can_focus: true,
