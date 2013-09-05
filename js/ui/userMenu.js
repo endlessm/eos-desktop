@@ -199,10 +199,10 @@ const IMStatusChooserItem = new Lang.Class({
         this._name = new IMUserNameItem();
         this._section.addMenuItem(this._name);
 
-        this._combo = new PopupMenu.PopupComboBoxMenuItem({ style_class: 'status-chooser-combo' });
-
         // Remove the online status combo but don't remove it from code
-        //this._section.addMenuItem(this._combo);
+        /*
+        this._combo = new PopupMenu.PopupComboBoxMenuItem({ style_class: 'status-chooser-combo' });
+        this._section.addMenuItem(this._combo);
 
         let item;
 
@@ -226,16 +226,21 @@ const IMStatusChooserItem = new Lang.Class({
 
         this._combo.connect('active-item-changed',
                             Lang.bind(this, this._changeIMStatus));
+        */
 
+        /*
         this._presence = new GnomeSession.Presence();
         this._presence.connectSignal('StatusChanged', Lang.bind(this, function(proxy, senderName, [status]) {
             this._sessionStatusChanged(status);
         }));
+        */
 
         this._sessionPresenceRestored = false;
         this._imPresenceRestored = false;
         this._currentPresence = undefined;
 
+        // Remove the online status eventing
+        /*
         this._accountMgr = Tp.AccountManager.dup();
         this._accountMgr.connect('most-available-presence-changed',
                                  Lang.bind(this, this._IMStatusChanged));
@@ -256,6 +261,7 @@ const IMStatusChooserItem = new Lang.Class({
                 else
                     this._setComboboxPresence(Tp.ConnectionPresenceType.OFFLINE);
             }));
+        */
 
         this._networkMonitor = Gio.NetworkMonitor.get_default();
         this._networkMonitor.connect('network-changed',
@@ -569,10 +575,11 @@ const UserMenuButton = new Lang.Class({
 
         this._createSubMenu();
 
-        this._updateSwitch(this._presence.status);
-        this._presence.connectSignal('StatusChanged', Lang.bind(this, function (proxy, senderName, [status]) {
-            this._updateSwitch(status);
-        }));
+        // We don't use the switch at this time
+        // this._updateSwitch(this._presence.status);
+        // this._presence.connectSignal('StatusChanged', Lang.bind(this, function (proxy, senderName, [status]) {
+        //    this._updateSwitch(status);
+        // }));
 
         this._userManager.connect('notify::is-loaded',
                                   Lang.bind(this, this._updateMultiUser));
@@ -598,9 +605,10 @@ const UserMenuButton = new Lang.Class({
         this._updateLogout();
         this._updateLockScreen();
 
-        this._updatesFile = Gio.File.new_for_path('/var/lib/PackageKit/prepared-update');
-        this._updatesMonitor = this._updatesFile.monitor(Gio.FileMonitorFlags.NONE, null);
-        this._updatesMonitor.connect('changed', Lang.bind(this, this._updateInstallUpdates));
+        // Remove this since we don't pay attention to donloaded updates now
+        // this._updatesFile = Gio.File.new_for_path('/var/lib/PackageKit/prepared-update');
+        // this._updatesMonitor = this._updatesFile.monitor(Gio.FileMonitorFlags.NONE, null);
+        // this._updatesMonitor.connect('changed', Lang.bind(this, this._updateInstallUpdates));
 
         // Whether shutdown is available or not depends on both lockdown
         // settings (disable-log-out) and Polkit policy - the latter doesn't
@@ -678,9 +686,10 @@ const UserMenuButton = new Lang.Class({
         this._lockScreenItem.actor.visible = allowLockScreen && LoginManager.canLock();
     },
 
+    // Not called since the signal is no longer connected
     _updateInstallUpdates: function() {
         let haveUpdates = this._updatesFile.query_exists(null);
-        //this._installUpdatesItem.actor.visible = haveUpdates && this._haveShutdown;
+        this._installUpdatesItem.actor.visible = haveUpdates && this._haveShutdown;
     },
 
     _updateHaveShutdown: function() {
@@ -688,7 +697,7 @@ const UserMenuButton = new Lang.Class({
             function(result, error) {
                 if (!error) {
                     this._haveShutdown = result[0];
-                    this._updateInstallUpdates();
+                    // this._updateInstallUpdates();
                     this._updateSuspendOrPowerOff();
                 }
             }));
@@ -782,14 +791,12 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(item);
         this._statusChooser = item;
 
-        item = new PopupMenu.PopupSwitchMenuItem(_("Notifications"));
-        item.connect('toggled', Lang.bind(this, this._updatePresenceStatus));
-
         // Removing notification toggle from the user menu but keeping the code
         // if we decide we need it
-        //this.menu.addMenuItem(item);
-
-        this._notificationsSwitch = item;
+        // item = new PopupMenu.PopupSwitchMenuItem(_("Notifications"));
+        // item.connect('toggled', Lang.bind(this, this._updatePresenceStatus));
+        // this.menu.addMenuItem(item);
+        // this._notificationsSwitch = item;
 
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
@@ -833,25 +840,6 @@ const UserMenuButton = new Lang.Class({
                                                     restartOption,
                                                     this._logoutOption ]);
         this.menu.addMenuItem(item);
-
-        item = new PopupMenu.PopupAlternatingMenuItem(TURN_OFF_TEXT,
-                                                      SUSPEND_TEXT);
-/*
-        //this.menu.addMenuItem(item);
-        item.connect('activate', Lang.bind(this, this._onSystemActionActivate));
-        this._suspendOrPowerOffItem = item;
-        this._updateSuspendOrPowerOff();
-
-        item = new PopupMenu.PopupMenuItem(RESTART_TEXT);
-        item.connect('activate', Lang.bind(this, this._onInstallUpdatesActivate));
-        //this.menu.addMenuItem(item);
-        this._installUpdatesItem = item;
-
-        item = new PopupMenu.PopupMenuItem(LOGOUT_TEXT);
-        item.connect('activate', Lang.bind(this, this._onQuitSessionActivate));
-        //this.menu.addMenuItem(item);
-        this._logoutItem = item;
-*/
     },
 
     _haveLauncher: function(launcher) {
