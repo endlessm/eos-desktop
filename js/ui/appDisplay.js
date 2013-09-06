@@ -398,6 +398,8 @@ const AllView = new Lang.Class({
         BackgroundMenu.addBackgroundMenu(this._bgAction);
         this._clickAction.bind_property('enabled', this._bgAction, 'enabled',
                                         GObject.BindingFlags.SYNC_CREATE | GObject.BindingFlags.INVERT_BOOLEAN);
+        this.actor.bind_property('mapped', this._bgAction, 'enabled',
+                                 GObject.BindingFlags.SYNC_CREATE);
 
         this.repositionedView = null;
     },
