@@ -9,7 +9,6 @@ const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
 const Atk = imports.gi.Atk;
-const Mainloop = imports.mainloop;
 
 const BoxPointer = imports.ui.boxpointer;
 const GrabHelper = imports.ui.grabHelper;
