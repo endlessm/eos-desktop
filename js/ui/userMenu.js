@@ -904,10 +904,13 @@ const UserMenuButton = new Lang.Class({
     },
 
     _onQuitSessionActivate: function() {
+        this.menu.close(BoxPointer.PopupAnimation.NONE);
         this._session.LogoutRemote(0);
     },
 
     _onInstallUpdatesActivate: function() {
+        this.menu.close(BoxPointer.PopupAnimation.NONE);
+
         Main.overview.hide();
         Util.spawn(['pkexec', '/usr/libexec/pk-trigger-offline-update']);
 
@@ -984,6 +987,8 @@ const UserMenuButton = new Lang.Class({
     _onSystemActionActivate: function() {
         if (this._haveShutdown &&
             this._suspendOrPowerOffOption.state == PopupMenu.PopupAlternatingMenuItemState.DEFAULT) {
+            this.menu.close(BoxPointer.PopupAnimation.NONE);
+
             this._loginManager.listSessions(Lang.bind(this,
                 function(result) {
                     let sessions = [];
