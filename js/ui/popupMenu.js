@@ -759,7 +759,6 @@ const MenuItemOption = new Lang.Class({
     updateText: function() {
     }
 });
-Signals.addSignalMethods(MenuItemOption.prototype);
 
 const PopupOptionsMenuItem = new Lang.Class({
     Name: 'PopupOptionsMenuItem',
