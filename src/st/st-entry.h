@@ -74,12 +74,16 @@ void                  st_entry_set_hint_text    (StEntry     *entry,
                                                  const gchar *text);
 const gchar *         st_entry_get_hint_text    (StEntry     *entry);
 
-void st_entry_set_primary_icon             (StEntry      *entry,
-                                            ClutterActor *icon);
-void st_entry_set_secondary_icon           (StEntry      *entry,
-                                            ClutterActor *icon);
-void st_entry_set_hint_actor               (StEntry      *entry,
-                                            ClutterActor *hint_actor);
+void                 st_entry_set_primary_icon  (StEntry      *entry,
+                                                 ClutterActor *icon);
+ClutterActor *       st_entry_get_primary_icon  (StEntry      *entry);
+
+void                 st_entry_set_secondary_icon (StEntry      *entry,
+                                                  ClutterActor *icon);
+ClutterActor *       st_entry_get_secondary_icon (StEntry      *entry);
+
+void                 st_entry_set_hint_actor    (StEntry      *entry,
+                                                 ClutterActor *hint_actor);
 
 G_END_DECLS
 

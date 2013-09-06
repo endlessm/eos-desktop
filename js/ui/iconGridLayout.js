@@ -38,6 +38,24 @@ const IconGridLayout = new Lang.Class({
         }
     },
 
+    hasIcon: function(id) {
+        let toplevelIds = this._iconTree[''];
+        if (toplevelIds.indexOf(id) != -1) {
+            return true;
+        }
+
+        for (let idx in this._folderCategories) {
+            let folder = this._folderCategories[idx];
+            let folderIds = this._iconTree[folder];
+
+            if (folderIds.indexOf(id) != -1) {
+                return true;
+            }
+        }
+
+        return false;
+    },
+
     getIcons: function(folder) {
         folder = folder || "";
 

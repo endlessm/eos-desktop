@@ -4,10 +4,9 @@ const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
-const Mainloop = imports.mainloop;
-const Meta = imports.gi.Meta;
 const Signals = imports.signals;
 const Lang = imports.lang;
+const Mainloop = imports.mainloop;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
@@ -15,100 +14,202 @@ const AppDisplay = imports.ui.appDisplay;
 const Main = imports.ui.main;
 const OverviewControls = imports.ui.overviewControls;
 const Params = imports.misc.params;
+const RemoteSearch = imports.ui.remoteSearch;
+const Search = imports.ui.search;
+const SearchDisplay = imports.ui.searchDisplay;
 const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
 const WorkspacesView = imports.ui.workspacesView;
 
-const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
-
 const BASE_SEARCH_URI = 'http://www.google.com/';
 const QUERY_URI_PATH = 'search?q=';
+
+const SEARCH_TIMEOUT = 150;
+const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 
 const ViewPage = {
     WINDOWS: 1,
     APPS: 2,
 };
 
-function getTermsForSearchString(searchString) {
-    searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
-    if (searchString == '')
-        return [];
+const ViewsDisplayLayout = new Lang.Class({
+    Name: 'ViewsDisplayLayout',
+    Extends: Clutter.BinLayout,
 
-    let terms = searchString.split(/\s+/);
-    return terms;
-}
+    _init: function(stack, entry, allView) {
+        this.parent();
 
-const ViewSelector = new Lang.Class({
-    Name: 'ViewSelector',
+        this._stack = stack;
 
-    _init : function(showAppsButton) {
-        this.actor = new Shell.Stack({ name: 'viewSelector',
-                                       x_expand: true,
-                                       y_expand: true });
+        this._allView = allView;
+        this._allView.actor.connect('style-changed', Lang.bind(this, this._onStyleChanged));
 
-        this._showAppsButton = showAppsButton;
-        this._showAppsButton.connect('notify::checked', Lang.bind(this, this._onShowAppsButtonToggled));
+        this._entry = entry;
+        this._entry.connect('style-changed', Lang.bind(this, this._onStyleChanged));
+    },
 
+    _onStyleChanged: function() {
+        this.layout_changed();
+    },
+
+    vfunc_allocate: function(container, box, flags) {
+        let viewActor = this._stack;
+        let entry = this._entry;
+
+        let availWidth = box.x2 - box.x1;
+        let availHeight = box.y2 - box.y1;
+
+        let viewHeight = viewActor.get_preferred_height(availWidth);
+        viewHeight[1] = Math.max(viewHeight[1], this._allView.getEntryAnchor());
+
+        let themeNode = entry.get_theme_node();
+        let entryMinPadding = themeNode.get_length('-minimum-vpadding');
+        let entryHeight = entry.get_preferred_height(availWidth);
+        entryHeight[0] += entryMinPadding * 2;
+        entryHeight[1] += entryMinPadding * 2;
+
+        let entryBox = box.copy();
+        let viewBox = box.copy();
+
+        // Always give the view the whole allocation, unless
+        // doing so wouldn't fit the entry
+        let extraSpace = availHeight - viewHeight[1];
+        let viewAllocHeight = viewHeight[1];
+
+        if (extraSpace / 2 < entryHeight[0]) {
+            extraSpace = 0;
+            viewAllocHeight = availHeight - entryHeight[0];
+        }
+
+        viewBox.y1 = Math.floor(extraSpace / 2);
+        viewBox.y2 = viewBox.y1 + viewAllocHeight;
+
+        viewActor.allocate(viewBox, flags);
+
+        // Now center the entry in the space below the grid
+        let gridHeight = this._allView.getHeightForEntry(availWidth);
+
+        extraSpace = availHeight - gridHeight[1];
+        viewAllocHeight = gridHeight[1];
+
+        if (extraSpace / 2 < entryHeight[0]) {
+            extraSpace = 0;
+            viewAllocHeight = availHeight - entryHeight[0];
+        }
+
+        entryBox.y1 = Math.floor(extraSpace / 2) + viewAllocHeight;
+        entry.allocate(entryBox, flags);
+    }
+});
+
+const FocusTrap = new Lang.Class({
+    Name: 'FocusTrap',
+    Extends: St.Widget,
+
+    vfunc_navigate_focus: function(from, direction) {
+        if (direction == Gtk.DirectionType.TAB_FORWARD ||
+            direction == Gtk.DirectionType.TAB_BACKWARD)
+            return this.parent(from, direction);
+        return false;
+    }
+});
+
+const ViewsDisplay = new Lang.Class({
+    Name: 'ViewsDisplay',
+
+    _init: function() {
         this._activePage = null;
+        this._searchTimeoutId = 0;
 
-        this._workspacesDisplay = new WorkspacesView.WorkspacesDisplay();
-        this._workspacesDisplay.connect('empty-space-clicked', Lang.bind(this, this._onEmptySpaceClicked));
-        this._workspacesPage = this._addPage(this._workspacesDisplay.actor,
-                                             _("Windows"), 'emblem-documents-symbolic');
+        this._stack = new Shell.Stack({ x_expand: true,
+                                        y_expand: true });
 
-        this._appDisplay = new AppDisplay.AppDisplay();
-        this._appsPage = this._addPage(this._appDisplay.actor,
-                                       _("Applications"), 'view-grid-symbolic');
-        this._setupSearchEntry();
+        this._appSystem = Shell.AppSystem.get_default();
+        this._allView = new AppDisplay.AllView();
+        this._addPage(this._allView.actor);
 
-        this._stageKeyPressId = 0;
-        Main.overview.connect('showing', Lang.bind(this,
-            function () {
-                this._stageKeyPressId = global.stage.connect('key-press-event',
-                                                             Lang.bind(this, this._onStageKeyPress));
-            }));
-        Main.overview.connect('hiding', Lang.bind(this,
-            function () {
-                if (this._stageKeyPressId != 0) {
-                    global.stage.disconnect(this._stageKeyPressId);
-                    this._stageKeyPressId = 0;
-                }
-            }));
+        this._searchSystem = new Search.SearchSystem();
+        this._searchResults = new SearchDisplay.SearchResults(this._searchSystem);
+        this._addPage(this._searchResults.actor);
+
+        // Since the entry isn't inside the results container we install this
+        // dummy widget as the last results container child so that we can
+        // include the entry in the keynav tab path
+        this._focusTrap = new FocusTrap({ can_focus: true });
+        this._focusTrap.connect('key-focus-in', Lang.bind(this, function() {
+            this.entry.grab_key_focus();
+        }));
+        this._searchResults.actor.add_actor(this._focusTrap);
+
+        global.focus_manager.add_group(this._searchResults.actor);
+
+        this.entry = new ShellEntry.OverviewEntry();
+        this.entry.connect('search-activated', Lang.bind(this, this._onSearchActivated));
+        this.entry.connect('search-active-changed', Lang.bind(this, this._onSearchActiveChanged));
+        this.entry.connect('search-navigate-focus', Lang.bind(this, this._onSearchNavigateFocus));
+        this.entry.connect('search-state-changed', Lang.bind(this, this._onSearchStateChanged));
+        this.entry.connect('search-terms-changed', Lang.bind(this, this._onSearchTermsChanged));
+
+        this.entry.clutter_text.connect('key-focus-in', Lang.bind(this, function() {
+            this._searchResults.highlightDefault(true);
+        }));
+        this.entry.clutter_text.connect('key-focus-out', Lang.bind(this, function() {
+            this._searchResults.highlightDefault(false);
+        }));
+
+        let layoutManager = new ViewsDisplayLayout(this._stack, this.entry, this._allView);
+        this.actor = new St.Widget({ layout_manager: layoutManager,
+                                     x_expand: true,
+                                     y_expand: true });
+
+        this.actor.add_actor(this.entry);
+        this.actor.add_actor(this._stack);
+
+        // This makes sure that any DnD ops get channeled to the icon grid logic
+        // otherwise dropping an item outside of the grid bounds fails
+        this.actor._delegate = this;
+
+        // Setup search
+        this._searchSettings = new Gio.Settings({ schema: Search.SEARCH_PROVIDERS_SCHEMA });
+        this._searchSettings.connect('changed::disabled', Lang.bind(this, this._reloadRemoteProviders));
+        this._searchSettings.connect('changed::disable-external', Lang.bind(this, this._reloadRemoteProviders));
+        this._searchSettings.connect('changed::sort-order', Lang.bind(this, this._reloadRemoteProviders));
+
+        // Default search providers
+        this._addSearchProvider(new AppDisplay.AppSearchProvider());
+
+        // Load remote search providers provided by applications
+        RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, this._addSearchProvider));
+
+        this._showPage(this._allView.actor);
     },
 
-    _setupSearchEntry: function() {
-        this._entry = this._appDisplay.entry;
-
-        this._searchActive = false;
-        ShellEntry.addContextMenu(this._entry);
-
-        this._text = this._entry.clutter_text;
-        this._text.connect('text-changed', Lang.bind(this, this._onTextChanged));
-        this._text.connect('key-press-event', Lang.bind(this, this._onKeyPress));
-        this._entry.connect('notify::mapped', Lang.bind(this, this._onMapped));
-        global.stage.connect('notify::key-focus', Lang.bind(this, this._onStageKeyFocusChanged));
-
-        this._entry.set_primary_icon(new St.Icon({ style_class: 'search-entry-icon',
-                                                   icon_name: 'edit-find-symbolic',
-                                                   track_hover: true }));
-        this._clearIcon = new St.Icon({ style_class: 'search-entry-icon',
-                                        icon_name: 'edit-clear-symbolic',
-                                        track_hover: true });
-
-        let hintActor = new ShellEntry.EntryHint('search-entry-hint',
-                                                 'google-logo-symbolic.svg');
-        this._entry.set_hint_actor(hintActor);
-
-        this._entry.connect('primary-icon-clicked', Lang.bind(this, this._activateDefaultSearch));
-
-        this._iconClickedId = 0;
-        this._capturedEventId = 0;
+    _addPage: function(page) {
+        page.visible = false;
+        page.y_align = Clutter.ActorAlign.START;
+        this._stack.add_actor(page);
     },
 
-    _activateDefaultSearch: function() {
+    _showPage: function(page) {
+        if (page == this._activePage) {
+            return;
+        }
+
+        if (this._activePage) {
+            this._activePage.hide();
+        }
+
+        this._activePage = page;
+
+        if (this._activePage) {
+            this._activePage.show();
+        }
+    },
+
+    _activateGoogleSearch: function() {
         let uri = BASE_SEARCH_URI;
-        let terms = getTermsForSearchString(this._entry.get_text());
+        let terms = this.entry.getSearchTerms();
         if (terms.length != 0) {
             let searchedUris = Util.findSearchUrls(terms);
             // Make sure search contains only a uri
@@ -131,6 +232,195 @@ const ViewSelector = new Lang.Class({
             logError(e, 'error while launching the browser for uri: '
                      + uri);
         }
+    },
+
+    _activateWikipediaSearch: function() {
+        let wikipediaApp = Util.getWikipediaApp();
+        if (!wikipediaApp) {
+            return;
+        }
+
+        let wikipediaAppInfo = wikipediaApp.get_app_info();
+        let cmdline = wikipediaAppInfo.get_commandline() + ' --query ' +
+            this.entry.getSearchTerms().join(' ');
+
+        try {
+            let launchInfo = Gio.AppInfo.create_from_commandline(cmdline, null,
+                Gio.AppInfoCreateFlags.SUPPORTS_STARTUP_NOTIFICATION);
+            launchInfo.launch([], global.create_app_launch_context());
+            Main.overview.hide();
+        } catch (e) {
+            logError(e, 'Unable to launch wikipedia app');
+        }
+    },
+
+    _doLocalSearch: function() {
+        this._searchTimeoutId = 0;
+
+        let terms = this.entry.getSearchTerms();
+        this._searchSystem.updateSearchResults(terms);
+
+        return false;
+    },
+
+    _clearLocalSearch: function() {
+        if (this._searchTimeoutId > 0) {
+            Mainloop.source_remove(this._searchTimeout);
+            this._searchTimeoutId = 0;
+        }
+
+        this._searchResults.reset();
+    },
+
+    _queueLocalSearch: function() {
+        if (this._searchTimeoutId == 0) {
+            this._searchTimeoutId = Mainloop.timeout_add(SEARCH_TIMEOUT,
+                Lang.bind(this, this._doLocalSearch));
+        }
+    },
+
+    _enterLocalSearch: function() {
+        this._searchResults.startingSearch();
+        this._queueLocalSearch();
+        this._showPage(this._searchResults.actor);        
+    },
+
+    _leaveLocalSearch: function() {
+        this._clearLocalSearch();
+        this._showPage(this._allView.actor);
+    },
+
+    _onSearchActivated: function() {
+        let searchState = this.entry.getSearchState();
+        if (searchState == ShellEntry.EntrySearchMenuState.GOOGLE) {
+            this._activateGoogleSearch();
+        } else if (searchState == ShellEntry.EntrySearchMenuState.LOCAL) {
+            this._searchResults.activateDefault();
+        } else if (searchState == ShellEntry.EntrySearchMenuState.WIKIPEDIA) {
+            this._activateWikipediaSearch();
+        }
+    },
+
+    _onSearchActiveChanged: function() {
+        let searchState = this.entry.getSearchState();
+        if (searchState != ShellEntry.EntrySearchMenuState.LOCAL) {
+            return;
+        }
+
+        if (this.entry.active) {
+            this._enterLocalSearch();
+        } else {
+            this._leaveLocalSearch();
+        }
+    },
+
+    _onSearchNavigateFocus: function(entry, direction) {
+        let searchState = this.entry.getSearchState();
+        if (searchState != ShellEntry.EntrySearchMenuState.LOCAL) {
+            return;
+        }
+
+        this._searchResults.navigateFocus(direction);
+    },
+
+    _onSearchStateChanged: function() {
+        let searchState = this.entry.getSearchState();
+        if (searchState == ShellEntry.EntrySearchMenuState.LOCAL &&
+            this.entry.active) {
+            this._enterLocalSearch();
+        } else {
+            this._leaveLocalSearch();
+        }
+    },
+
+    _onSearchTermsChanged: function() {
+        let searchState = this.entry.getSearchState();
+        if (searchState != ShellEntry.EntrySearchMenuState.LOCAL) {
+            return;
+        }
+
+        this._queueLocalSearch();
+    },
+
+    _shouldUseSearchProvider: function(provider) {
+        // the disable-external GSetting only affects remote providers
+        if (!provider.isRemoteProvider) {
+            return true;
+        }
+
+        if (this._searchSettings.get_boolean('disable-external')) {
+            return false;
+        }
+
+        let appId = provider.app.get_id();
+        let disable = this._searchSettings.get_strv('disabled');
+        disable = disable.map(function(appId) {
+            let shellApp = this._appSystem.lookup_heuristic_basename(appId);
+            if (shellApp) {
+                return shellApp.get_id();
+            } else {
+                return null;
+            }
+        });
+        return disable.indexOf(appId) == -1;
+    },
+
+    _reloadRemoteProviders: function() {
+        // removeSearchProvider() modifies the provider list we iterate on,
+        // so make a copy first
+        let remoteProviders = this._searchSystem.getRemoteProviders().slice(0);
+
+        remoteProviders.forEach(Lang.bind(this, this._removeSearchProvider));
+        RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, this._addSearchProvider));
+    },
+
+    _addSearchProvider: function(provider) {
+        if (!this._shouldUseSearchProvider(provider)) {
+            return;
+        }
+
+        this._searchSystem.registerProvider(provider);
+        this._searchResults.createProviderDisplay(provider);
+    },
+
+    _removeSearchProvider: function(provider) {
+        this._searchSystem.unregisterProvider(provider);
+        this._searchResults.destroyProviderDisplay(provider);
+    },
+
+    acceptDrop: function(source, actor, x, y, time) {
+        // Forward all DnD releases to the scrollview if we're 
+        // displaying apps
+        if (this._activePage == this._allView.actor) {
+            this._allView.acceptDrop(source, actor, x, y, time);
+        }
+    }
+});
+
+const ViewSelector = new Lang.Class({
+    Name: 'ViewSelector',
+
+    _init : function(showAppsButton) {
+        this.actor = new Shell.Stack({ name: 'viewSelector',
+                                       x_expand: true,
+                                       y_expand: true });
+
+        this._showAppsButton = showAppsButton;
+        this._showAppsButton.connect('notify::checked', Lang.bind(this, this._onShowAppsButtonToggled));
+
+        this._activePage = null;
+
+        this._workspacesDisplay = new WorkspacesView.WorkspacesDisplay();
+        this._workspacesDisplay.connect('empty-space-clicked', Lang.bind(this, this._onEmptySpaceClicked));
+        this._workspacesPage = this._addPage(this._workspacesDisplay.actor,
+                                             _("Windows"), 'emblem-documents-symbolic');
+
+        this._viewsDisplay = new ViewsDisplay();
+        this._appsPage = this._addPage(this._viewsDisplay.actor,
+                                       _("Applications"), 'view-grid-symbolic');
+        this._entry = this._viewsDisplay.entry;
+
+        this._stageKeyPressId = 0;
     },
 
     _onEmptySpaceClicked: function() {
@@ -162,7 +452,7 @@ const ViewSelector = new Lang.Class({
     },
 
     show: function(viewPage) {
-        this._resetSearch();
+        this._entry.resetSearch();
         this._workspacesDisplay.show();
 
         if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
@@ -206,11 +496,25 @@ const ViewSelector = new Lang.Class({
         return page;
     },
 
+    _enableSearch: function() {
+        this._stageKeyPressId = global.stage.connect('key-press-event',
+            Lang.bind(this, this._onStageKeyPress));
+    },
+
+    _disableSearch: function() {
+        if (this._stageKeyPressId != 0) {
+            global.stage.disconnect(this._stageKeyPressId);
+            this._stageKeyPressId = 0;
+        }
+    },
+
     _pageChanged: function() {
         if (this._activePage == this._appsPage) {
             this._showAppsButton.checked = true;
+            this._enableSearch();
         } else {
             this._showAppsButton.checked = false;
+            this._disableSearch();
         }
 
         this.emit('page-changed');
@@ -278,172 +582,22 @@ const ViewSelector = new Lang.Class({
         if (Main.modalCount > 1)
             return false;
 
-        let modifiers = event.get_state();
-        let symbol = event.get_key_symbol();
-
-        if (symbol == Clutter.Escape) {
-            if (this._searchActive) {
-                this._resetSearch();
-                return true;
-            }
-        } else if (this._shouldTriggerSearch(symbol)) {
-            this._startSearch(event);
-        } else if (!this._searchActive) {
-            if (symbol == Clutter.Tab || symbol == Clutter.Down) {
-                this._activePage.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
-                return true;
-            } else if (symbol == Clutter.ISO_Left_Tab) {
-                this._activePage.navigate_focus(null, Gtk.DirectionType.TAB_BACKWARD, false);
-                return true;
-            }
-        }
-        return false;
-    },
-
-    _searchCancelled: function() {
-        // Leave the entry focused when it doesn't have any text;
-        // when replacing a selected search term, Clutter emits
-        // two 'text-changed' signals, one for deleting the previous
-        // text and one for the new one - the second one is handled
-        // incorrectly when we remove focus
-        // (https://bugzilla.gnome.org/show_bug.cgi?id=636341) */
-        if (this._text.text != '')
-            this._resetSearch();
-    },
-
-    _startSearch: function(event) {
-        global.stage.set_key_focus(this._text);
-        this._text.event(event, true);
-    },
-
-    _stopSearch: function() {
-        global.stage.set_key_focus(null);
-    },
-
-    _resetSearch: function () {
-        this._stopSearch();
-        this._entry.text = '';
-
-        this._text.set_cursor_visible(true);
-        this._text.set_selection(0, 0);
-    },
-
-    _onStageKeyFocusChanged: function() {
-        let focus = global.stage.get_key_focus();
-        let appearFocused = this._entry.contains(focus);
-
-        this._text.set_cursor_visible(appearFocused);
-
-        if (appearFocused)
-            this._entry.add_style_pseudo_class('focus');
-        else
-            this._entry.remove_style_pseudo_class('focus');
-    },
-
-    _onMapped: function() {
-        if (this._entry.mapped) {
-            // Enable 'find-as-you-type'
-            this._capturedEventId = global.stage.connect('captured-event',
-                                 Lang.bind(this, this._onCapturedEvent));
-
-            this._text.set_cursor_visible(true);
-            // Move the cursor at the end of the current text
-            let buffer = this._text.get_buffer();
-            let nChars = buffer.get_length();
-            this._text.set_selection(nChars, nChars);
-        } else {
-            // Disable 'find-as-you-type'
-            if (this._capturedEventId > 0)
-                global.stage.disconnect(this._capturedEventId);
-            this._capturedEventId = 0;
-        }
-    },
-
-    _shouldTriggerSearch: function(symbol) {
-        if (this._activePage != this._appsPage) {
-            return false;
-        }
-
-        let unicode = Clutter.keysym_to_unicode(symbol);
-        if (unicode == 0)
-            return false;
-
-        if (getTermsForSearchString(String.fromCharCode(unicode)).length > 0)
+        if (this._entry.handleStageEvent(event)) {
             return true;
-
-        return symbol == Clutter.BackSpace && this._searchActive;
-    },
-
-    // the entry does not show the hint
-    _isActivated: function() {
-        return this._text.text == this._entry.get_text();
-    },
-
-    _onTextChanged: function (se, prop) {
-        let terms = getTermsForSearchString(this._entry.get_text());
-
-        this._searchActive = (terms.length > 0);
-
-        if (this._searchActive) {
-            this._entry.set_secondary_icon(this._clearIcon);
-
-            if (this._iconClickedId == 0)
-                this._iconClickedId = this._entry.connect('secondary-icon-clicked',
-                    Lang.bind(this, this._resetSearch));
-        } else {
-            if (this._iconClickedId > 0) {
-                this._entry.disconnect(this._iconClickedId);
-                this._iconClickedId = 0;
-            }
-
-            this._entry.set_secondary_icon(null);
-            this._searchCancelled();
         }
-    },
 
-    _onKeyPress: function(entry, event) {
+        if (this._entry.active) {
+            return false;
+        }
+
         let symbol = event.get_key_symbol();
-        if (symbol == Clutter.Escape) {
-            if (this._isActivated()) {
-                this._resetSearch();
-                return true;
-            }
-        } else if (this._searchActive) {
-            let arrowNext, nextDirection;
-            if (entry.get_text_direction() == Clutter.TextDirection.RTL) {
-                arrowNext = Clutter.Left;
-                nextDirection = Gtk.DirectionType.LEFT;
-            } else {
-                arrowNext = Clutter.Right;
-                nextDirection = Gtk.DirectionType.RIGHT;
-            }
 
-            if (symbol == arrowNext && this._text.position == -1) {
-                return true;
-            } else if (symbol == Clutter.Return || symbol == Clutter.KP_Enter) {
-                this._activateDefaultSearch();
-                return true;
-            }
-        }
-        return false;
-    },
-
-    _onCapturedEvent: function(actor, event) {
-        if (event.type() == Clutter.EventType.BUTTON_PRESS) {
-            let source = event.get_source();
-            if (source != this._text &&
-                !Main.layoutManager.keyboardBox.contains(source)) {
-                // If the user clicked outside after activating the entry,
-                // drop the focus from the search bar, but avoid resetting
-                // the entry state.
-                // If no search terms entered were entered, also reset the
-                // entry to its initial state.
-                if (this._text.text == '') {
-                    this._resetSearch();
-                } else {
-                    this._stopSearch();
-                }
-            }
+        if (symbol == Clutter.Tab || symbol == Clutter.Down) {
+            this._activePage.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
+            return true;
+        } else if (symbol == Clutter.ISO_Left_Tab) {
+            this._activePage.navigate_focus(null, Gtk.DirectionType.TAB_BACKWARD, false);
+            return true;
         }
 
         return false;

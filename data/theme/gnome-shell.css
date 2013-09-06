@@ -48,7 +48,8 @@ stage {
 .switcher-list, 
 .overview-icon.dnd,
 .app-well-app > .overview-icon,
-.overview-icon .show-apps {
+.overview-icon .show-apps,
+.grid-search-result .overview-icon {
     font-size: 11pt;
     font-weight: bold;
 }
@@ -847,12 +848,90 @@ StScrollBar StButton#vhandle:active {
     padding-top: 2px;
 }
 
+.entry-search-menu {
+    -boxpointer-gap: 12px;
+}
+
 .dash-label {
     border-radius: 7px;
     padding: 4px 12px;
     background-color: rgba(0,0,0,0.5);
     text-align: center;
     -x-offset: 8px;
+}
+
+/* Search Results */
+
+#searchResults {
+    padding: 20px 10px 0px 10px;
+    spacing: 18px;
+}
+
+#searchResultsBin {
+    max-width: 1000px;
+}
+
+#searchResultsContent {
+    padding-left: 20px;
+    padding-right: 20px;
+    spacing: 16px;
+}
+
+.search-section {
+    /* This should be equal to #searchResultsContent spacing */
+    spacing: 16px;
+}
+
+.search-section-separator {
+    -gradient-height: 1px;
+    -gradient-start: rgba(255,255,255,0);
+    -gradient-end: rgba(255,255,255,0.5);
+    -margin-horizontal: 1.5em;
+    height: 1px;
+}
+
+.search-section-content {
+    /* This is the space between the provider icon and the results container */
+    spacing: 32px;
+}
+
+.search-statustext {
+    color: #efefef;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.list-search-results {
+    spacing: 3px;
+}
+
+.list-search-result-content {
+    spacing: 12px;
+    padding: 12px;
+}
+
+.list-search-result-title {
+    font-weight: bold;
+    font-size: 14pt;
+    color: white;
+}
+
+.list-search-result-description {
+    color: #eeeeec;
+}
+
+.search-provider-icon {
+    padding: 15px;
+}
+
+.search-provider-icon-more {
+    width: 16px;
+    height: 16px;
+    background-image: url("more-results.svg");
+}
+
+.list-search-result:hover .list-search-result-description {
+    text-shadow: rgba(0,0,0,0.8) 0px 1px 2px;
 }
 
 /* Application Launchers, Grid and List results */
@@ -903,6 +982,7 @@ StScrollBar StButton#vhandle:active {
     text-shadow: none;
 }
 
+.search-display > StBoxLayout,
 .all-apps > StBoxLayout {
     /* horizontal padding to make sure scrollbars or dash don't overlap content */
     padding: 0px 88px;
@@ -914,7 +994,9 @@ StScrollBar StButton#vhandle:active {
 
 .overview-icon.dnd,
 .app-well-app > .overview-icon,
-.overview-icon .show-apps {
+.overview-icon .show-apps,
+.list-search-result,
+.grid-search-result .overview-icon {
     border-radius: 4px;
     padding: 3px;
     border: 1px rgba(0,0,0,0);
@@ -984,6 +1066,9 @@ StScrollBar StButton#vhandle:active {
     background-size: 64px;
 }
 
+.search-provider-icon:hover,
+.list-search-result:hover,
+.grid-search-result:hover .overview-icon,
 .overview-icon .show-apps:hover {
     background-color: rgba(255,255,255,0.1);
     text-shadow: black 0px 2px 2px;
@@ -1019,6 +1104,8 @@ StScrollBar StButton#vhandle:active {
     background-size: 64px;
 }
 
+.search-provider-icon:active,
+.list-search-result:active,
 .overview-icon .show-apps:checked,
 .overview-icon .show-apps:active {
     background-gradient-start: rgba(255, 255, 255, .05);
@@ -1035,9 +1122,15 @@ StScrollBar StButton#vhandle:active {
     transition-duration: 100ms;
 }
 
+.grid-search-result:focus .overview-icon,
+.search-provider-icon:focus,
+.list-search-result:focus,
 .app-well-app:focus > .overview-icon,
 .overview-icon .show-apps:focus,
-.app-well-app:selected > .overview-icon {
+.app-well-app:selected > .overview-icon,
+.grid-search-result:selected .overview-icon,
+.search-provider-icon:selected,
+.list-search-result:selected {
     background-color: rgba(255,255,255,0.33);
 }
 

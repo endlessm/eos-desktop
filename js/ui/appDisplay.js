@@ -71,6 +71,74 @@ const ALL_VIEW_ID = '';
 
 const DESKTOP_LAUNCH_BACKGROUND_FIELD = 'X-Endless-launch-background';
 
+const AppSearchProvider = new Lang.Class({
+    Name: 'AppSearchProvider',
+
+    _init: function() {
+        this._appSys = Shell.AppSystem.get_default();
+        this.id = 'applications';
+    },
+
+    _filterLayoutIds: function(results) {
+        return results.filter(function(app) {
+            let appId = app.get_id();
+            return IconGridLayout.layout.hasIcon(appId);
+        });
+    },
+
+    getResultMetas: function(apps, callback) {
+        let metas = [];
+        for (let i = 0; i < apps.length; i++) {
+            let app = apps[i];
+            metas.push({ 'id': app,
+                         'name': app.get_name(),
+                         'createIcon': function(size) {
+                             return app.create_icon_texture(size);
+                         }
+                       });
+        }
+        callback(metas);
+    },
+
+    getInitialResultSet: function(terms) {
+        let results = this._appSys.initial_search(terms);
+        this.searchSystem.setResults(this, this._filterLayoutIds(results));
+    },
+
+    getSubsearchResultSet: function(previousResults, terms) {
+        let results = this._appSys.subsearch(previousResults, terms);
+        this.searchSystem.setResults(this, this._filterLayoutIds(results));
+    },
+
+    activateResult: function(app) {
+        let event = Clutter.get_current_event();
+        let modifiers = event ? event.get_state() : 0;
+        let openNewWindow = modifiers & Clutter.ModifierType.CONTROL_MASK;
+
+        if (openNewWindow) {
+            app.open_new_window(-1);
+        } else {
+            let activationContext = new AppActivationContext(app);
+            activationContext.activate();
+        }
+
+        Main.overview.hide();
+    },
+
+    dragActivateResult: function(id, params) {
+        params = Params.parse(params, { workspace: -1,
+                                        timestamp: 0 });
+
+        let app = this._appSys.lookup_app(id);
+        app.open_new_window(workspace);
+    },
+
+    createResultObject: function (resultMeta, terms) {
+        let app = resultMeta['id'];
+        return new AppIcon(app);
+    }
+});
+
 const EndlessApplicationView = new Lang.Class({
     Name: 'EndlessApplicationView',
     Abstract: true,
@@ -401,7 +469,38 @@ const AllView = new Lang.Class({
         this.actor.bind_property('mapped', this._bgAction, 'enabled',
                                  GObject.BindingFlags.SYNC_CREATE);
 
-        this.repositionedView = null;
+        this._repositionedView = null;
+
+        this._appSystem = Shell.AppSystem.get_default();
+        this._appSystem.connect('installed-changed', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+        global.settings.connect('changed::app-folder-categories', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+
+        IconGridLayout.layout.connect('changed', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+        global.settings.connect('changed::enable-app-store', Lang.bind(this, function() {
+            Main.queueDeferredWork(this._allAppsWorkId);
+        }));
+
+        this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplay));
+    },
+
+    _redisplay: function() {
+        if (this.getAllIcons().length == 0) {
+            this.addIcons();
+        } else {
+            let animateView = this._repositionedView;
+            if (!animateView) {
+                animateView = this;
+            }
+            this._repositionedView = null;
+
+            animateView.animateMovement();
+        }
     },
 
     _closePopup: function() {
@@ -726,7 +825,7 @@ const AllView = new Lang.Class({
         let folderId = this._dragView.getViewId();
 
         this._dragView.repositionedIconData = [ this._originalIdx, position ];
-        this.repositionedView = this._dragView;
+        this._repositionedView = this._dragView;
 
         // If we dropped the icon outside of the folder, close the popup and
         // add the icon to the main view
@@ -910,142 +1009,6 @@ const AllView = new Lang.Class({
         gridHeight[1] = Math.max(gridHeight[1], this.getEntryAnchor());
 
         return gridHeight;
-    }
-});
-
-const AppDisplayLayout = new Lang.Class({
-    Name: 'AppDisplayLayout',
-    Extends: Clutter.BinLayout,
-
-    _init: function(allView, entry) {
-        this.parent();
-
-        this._allView = allView;
-        this._allView.actor.connect('style-changed', Lang.bind(this, this._onStyleChanged));
-
-        this._entry = entry;
-        this._entry.connect('style-changed', Lang.bind(this, this._onStyleChanged));
-    },
-
-    _onStyleChanged: function() {
-        this.layout_changed();
-    },
-
-    vfunc_allocate: function(container, box, flags) {
-        let viewActor = this._allView.actor;
-        let entry = this._entry;
-
-        let availWidth = box.x2 - box.x1;
-        let availHeight = box.y2 - box.y1;
-
-        let viewHeight = viewActor.get_preferred_height(availWidth);
-        viewHeight[1] = Math.max(viewHeight[1], this._allView.getEntryAnchor());
-
-        let themeNode = entry.get_theme_node();
-        let entryMinPadding = themeNode.get_length('-minimum-vpadding');
-        let entryHeight = entry.get_preferred_height(availWidth);
-        entryHeight[0] += entryMinPadding * 2;
-        entryHeight[1] += entryMinPadding * 2;
-
-        let entryBox = box.copy();
-        let viewBox = box.copy();
-
-        // Always give the view the whole allocation, unless
-        // doing so wouldn't fit the entry
-        let extraSpace = availHeight - viewHeight[1];
-        let viewAllocHeight = viewHeight[1];
-
-        if (extraSpace / 2 < entryHeight[0]) {
-            extraSpace = 0;
-            viewAllocHeight = availHeight - entryHeight[0];
-        }
-
-        viewBox.y1 = Math.floor(extraSpace / 2);
-        viewBox.y2 = viewBox.y1 + viewAllocHeight;
-
-        viewActor.allocate(viewBox, flags);
-
-        // Now center the entry in the space below the grid
-        let gridHeight = this._allView.getHeightForEntry(availWidth);
-
-        extraSpace = availHeight - gridHeight[1];
-        viewAllocHeight = gridHeight[1];
-
-        if (extraSpace / 2 < entryHeight[0]) {
-            extraSpace = 0;
-            viewAllocHeight = availHeight - entryHeight[0];
-        }
-
-        entryBox.y1 = Math.floor(extraSpace / 2) + viewAllocHeight;
-        entry.allocate(entryBox, flags);
-    }
-});
-
-const AppDisplay = new Lang.Class({
-    Name: 'AppDisplay',
-
-    _init: function() {
-        this._view = new AllView();
-
-        this.entry = new St.Entry({ name: 'searchEntry',
-                                    /* Translators: this is the text displayed
-                                       in the search entry when no search is
-                                       active; it should not exceed ~30
-                                       characters. */
-                                    hint_text: _("Type to search…"),
-                                    track_hover: true,
-                                    reactive: true,
-                                    can_focus: true,
-                                    x_align: Clutter.ActorAlign.CENTER,
-                                    y_align: Clutter.ActorAlign.CENTER });
-
-        let layoutManager = new AppDisplayLayout(this._view, this.entry);
-        this.actor = new St.Widget({ layout_manager: layoutManager,
-                                     x_expand: true,
-                                     y_expand: true });
-
-        this.actor.add_actor(this.entry);
-        this.actor.add_actor(this._view.actor);
-
-        // This makes sure that any DnD ops get channeled to the icon grid logic
-        // otherwise dropping an item outside of the grid bounds fails
-        this.actor._delegate = this;
-
-        this._appSystem = Shell.AppSystem.get_default();
-        this._appSystem.connect('installed-changed', Lang.bind(this, function() {
-            Main.queueDeferredWork(this._allAppsWorkId);
-        }));
-        global.settings.connect('changed::app-folder-categories', Lang.bind(this, function() {
-            Main.queueDeferredWork(this._allAppsWorkId);
-        }));
-
-        IconGridLayout.layout.connect('changed', Lang.bind(this, function() {
-            Main.queueDeferredWork(this._allAppsWorkId);
-        }));
-        global.settings.connect('changed::enable-app-store', Lang.bind(this, function() {
-            Main.queueDeferredWork(this._allAppsWorkId);
-        }));
-
-        this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplay));
-    },
-
-    acceptDrop: function(source, actor, x, y, time) {
-        // Forward all DnD releases to the scrollview
-        this._view.acceptDrop(source, actor, x, y, time);
-    },
-
-    _redisplay: function() {
-        if (this._view.getAllIcons().length == 0) {
-            this._view.addIcons();
-        } else {
-            let animateView = this._view.repositionedView;
-            if (!animateView) {
-                animateView = this._view;
-            }
-            this._view.repositionedView = null;
-
-            animateView.animateMovement();
-        }
     }
 });
 

@@ -80,6 +80,8 @@ enum
   PROP_0,
 
   PROP_CLUTTER_TEXT,
+  PROP_PRIMARY_ICON,
+  PROP_SECONDARY_ICON,
   PROP_HINT_TEXT,
   PROP_HINT_ACTOR,
   PROP_TEXT,
@@ -135,6 +137,14 @@ st_entry_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
+    case PROP_PRIMARY_ICON:
+      st_entry_set_primary_icon (entry, g_value_get_object (value));
+      break;
+
+    case PROP_SECONDARY_ICON:
+      st_entry_set_secondary_icon (entry, g_value_get_object (value));
+      break;
+
     case PROP_HINT_TEXT:
       st_entry_set_hint_text (entry, g_value_get_string (value));
       break;
@@ -165,6 +175,14 @@ st_entry_get_property (GObject    *gobject,
     {
     case PROP_CLUTTER_TEXT:
       g_value_set_object (value, priv->entry);
+      break;
+
+    case PROP_PRIMARY_ICON:
+      g_value_set_object (value, priv->primary_icon);
+      break;
+
+    case PROP_SECONDARY_ICON:
+      g_value_set_object (value, priv->secondary_icon);
       break;
 
     case PROP_HINT_TEXT:
@@ -916,6 +934,20 @@ st_entry_class_init (StEntryClass *klass)
 			       G_PARAM_READABLE);
   g_object_class_install_property (gobject_class, PROP_CLUTTER_TEXT, pspec);
 
+  pspec = g_param_spec_object ("primary-icon",
+			       "Primary Icon",
+			       "Primary Icon actor",
+			       CLUTTER_TYPE_ACTOR,
+			       G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class, PROP_PRIMARY_ICON, pspec);
+
+  pspec = g_param_spec_object ("secondary-icon",
+			       "Secondary Icon",
+			       "Secondary Icon actor",
+			       CLUTTER_TYPE_ACTOR,
+			       G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class, PROP_SECONDARY_ICON, pspec);
+
   pspec = g_param_spec_string ("hint-text",
                                "Hint Text",
                                "Text to display when the entry is not focused "
@@ -929,6 +961,7 @@ st_entry_class_init (StEntryClass *klass)
                                "and the text property is empty",
                                CLUTTER_TYPE_ACTOR,
                                G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class, PROP_HINT_ACTOR, pspec);
 
   pspec = g_param_spec_string ("text",
                                "Text",
@@ -1147,9 +1180,9 @@ st_entry_get_hint_text (StEntry *entry)
 }
 
 static gboolean
-_st_entry_icon_press_cb (ClutterActor       *actor,
-                         ClutterButtonEvent *event,
-                         StEntry            *entry)
+_st_entry_icon_release_cb (ClutterActor       *actor,
+                           ClutterButtonEvent *event,
+                           StEntry            *entry)
 {
   StEntryPrivate *priv = entry->priv;
 
@@ -1159,6 +1192,17 @@ _st_entry_icon_press_cb (ClutterActor       *actor,
     g_signal_emit (entry, entry_signals[SECONDARY_ICON_CLICKED], 0);
 
   return FALSE;
+}
+
+static gboolean
+_st_entry_icon_press_cb (ClutterActor       *actor,
+                         ClutterButtonEvent *event,
+                         StEntry            *entry)
+{
+  /* Block press events on icons, since we handle internally
+   * clicks on release and emit our own signal.
+   */
+  return TRUE;
 }
 
 static void
@@ -1181,8 +1225,10 @@ _st_entry_set_icon (StEntry       *entry,
 
       clutter_actor_set_reactive (*icon, TRUE);
       clutter_actor_add_child (CLUTTER_ACTOR (entry), *icon);
-      g_signal_connect (*icon, "button-release-event",
+      g_signal_connect (*icon, "button-press-event",
                         G_CALLBACK (_st_entry_icon_press_cb), entry);
+      g_signal_connect (*icon, "button-release-event",
+                        G_CALLBACK (_st_entry_icon_release_cb), entry);
     }
 
   clutter_actor_queue_relayout (CLUTTER_ACTOR (entry));
@@ -1209,9 +1255,26 @@ st_entry_set_primary_icon (StEntry      *entry,
 }
 
 /**
+ * st_entry_get_primary_icon:
+ * @entry: a #StEntry
+ *
+ * Returns: (transfer none): a #ClutterActor
+ */
+ClutterActor *
+st_entry_get_primary_icon (StEntry *entry)
+{
+  StEntryPrivate *priv;
+
+  g_return_val_if_fail (ST_IS_ENTRY (entry), NULL);
+
+  priv = entry->priv;
+  return priv->primary_icon;
+}
+
+/**
  * st_entry_set_secondary_icon:
  * @entry: a #StEntry
- * @icon: (allow-none): an #ClutterActor
+ * @icon: (allow-none): a #ClutterActor
  *
  * Set the secondary icon of the entry to @icon
  */
@@ -1228,6 +1291,30 @@ st_entry_set_secondary_icon (StEntry      *entry,
   _st_entry_set_icon (entry, &priv->secondary_icon, icon);
 }
 
+/**
+ * st_entry_get_secondary_icon:
+ * @entry: a #StEntry
+ *
+ * Returns: (transfer none): a #ClutterActor
+ */
+ClutterActor *
+st_entry_get_secondary_icon (StEntry *entry)
+{
+  StEntryPrivate *priv;
+
+  g_return_val_if_fail (ST_IS_ENTRY (entry), NULL);
+
+  priv = entry->priv;
+  return priv->secondary_icon;
+}
+
+/**
+ * st_entry_set_hint_actor:
+ * @entry: a #StEntry
+ * @hint_actor: (allow-none): a #ClutterActor
+ *
+ * Set the hint actor of the entry to @hint_actor
+ */
 void
 st_entry_set_hint_actor (StEntry      *entry,
                          ClutterActor *hint_actor)
@@ -1249,10 +1336,8 @@ st_entry_set_hint_actor (StEntry      *entry,
       priv->hint_actor = hint_actor;
       clutter_actor_add_child (CLUTTER_ACTOR (entry), priv->hint_actor);
 
-      if (priv->hint_visible)
-        clutter_actor_show (hint_actor);
-      else
-        clutter_actor_hide (hint_actor);
+      /* refresh actor and hint text visibility */
+      st_entry_set_hint_visible (entry, priv->hint_visible);
     }
 
   clutter_actor_queue_relayout (CLUTTER_ACTOR (entry));

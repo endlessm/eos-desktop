@@ -11,6 +11,7 @@ const Tweener = imports.ui.tweener;
 const SCROLL_TIME = 0.1;
 
 const BROWSER_DESKTOP_ENTRY = 'eos-app-chromium-browser.desktop';
+const WIKIPEDIA_DESKTOP_ENTRY = 'eos-app-com.endlessm.wikipedia.desktop';
 
 // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
 const _balancedParens = '\\((?:[^\\s()<>]+|(?:\\(?:[^\\s()<>]+\\)))*\\)';
@@ -318,6 +319,12 @@ function getBrowserApp() {
     let appSystem = Shell.AppSystem.get_default();
     let browserApp = appSystem.lookup_app(BROWSER_DESKTOP_ENTRY);
     return browserApp;
+}
+
+function getWikipediaApp() {
+    let appSystem = Shell.AppSystem.get_default();
+    let wikipediaApp = appSystem.lookup_app(WIKIPEDIA_DESKTOP_ENTRY);
+    return wikipediaApp;
 }
 
 function getRectForActor(actor) {
