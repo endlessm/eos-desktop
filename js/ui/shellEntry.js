@@ -279,9 +279,9 @@ const OverviewEntry = new Lang.Class({
                                         icon_name: 'edit-find-symbolic',
                                         track_hover: true });
 
-        this._clearIcon = new St.Icon({ style_class: 'search-entry-icon',
-                                        icon_name: 'edit-clear-symbolic',
-                                        track_hover: true });
+        this._goIcon = new St.Icon({ style_class: 'search-entry-icon',
+                                     icon_name: 'go-next-symbolic',
+                                     track_hover: true });
 
         this.parent({ name: 'searchEntry',
                       track_hover: true,
@@ -399,7 +399,7 @@ const OverviewEntry = new Lang.Class({
                 this.emit('search-navigate-focus', nextDirection);
                 return true;
             } else if (symbol == Clutter.Return || symbol == Clutter.KP_Enter) {
-                this.emit('search-activated');
+                this._activateSearch();
                 return true;
             }
         }
@@ -473,6 +473,10 @@ const OverviewEntry = new Lang.Class({
         return symbol == Clutter.BackSpace && this.active;
     },
 
+    _activateSearch: function() {
+        this.emit('search-activated');
+    },
+
     _stopSearch: function() {
         global.stage.set_key_focus(null);
     },
@@ -514,11 +518,11 @@ const OverviewEntry = new Lang.Class({
         this._active = value;
 
         if (this._active) {
-            this.set_secondary_icon(this._clearIcon);
+            this.set_secondary_icon(this._goIcon);
 
             if (this._iconClickedId == 0) {
                 this._iconClickedId = this.connect('secondary-icon-clicked',
-                    Lang.bind(this, this.resetSearch));
+                    Lang.bind(this, this._activateSearch));
             }
         } else {
             if (this._iconClickedId > 0) {
