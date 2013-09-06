@@ -261,7 +261,6 @@ const IMStatusChooserItem = new Lang.Class({
                 else
                     this._setComboboxPresence(Tp.ConnectionPresenceType.OFFLINE);
             }));
-        */
 
         this._networkMonitor = Gio.NetworkMonitor.get_default();
         this._networkMonitor.connect('network-changed',
@@ -271,6 +270,7 @@ const IMStatusChooserItem = new Lang.Class({
                 if (available && !this._imPresenceRestored)
                     this._restorePresence();
             }));
+        */
 
         this._userLoadedId = this._user.connect('notify::is-loaded',
                                                 Lang.bind(this,
