@@ -781,7 +781,6 @@ const PopupOptionsMenuItem = new Lang.Class({
             if (option instanceof MenuItemOption) {
                 this._container.add(option, { expand: true });
                 option.connect('notify::hover', Lang.bind(this, this._onOptionHovered));
-                option.connect('clicked', Lang.bind(this, this.activate));
             } else {
                 throw TypeError("Invalid argument to PopupOptionsMenuItem constructor");
             }
