@@ -736,12 +736,12 @@ StScrollBar StButton#vhandle:active {
 }
 
 .splash-close {
-    -splash-close-overlap-x: -12px;
-    -splash-close-overlap-y: 6px;
     background-image: url("close-splash.png");
     background-size: 20px;
-    height: 20px;
-    width: 20px;
+    padding-top: 6px;
+    padding-right: 12px;
+    height: 26px;
+    width: 32px;
 }
 
 .window-close {
