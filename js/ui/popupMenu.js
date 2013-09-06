@@ -417,20 +417,13 @@ const PopupAlternatingMenuItemState = {
     ALTERNATIVE: 1
 }
 
-const PopupAlternatingMenuItem = new Lang.Class({
-    Name: 'PopupAlternatingMenuItem',
+const PopupAlternatingBaseMenuItem = new Lang.Class({
+    Name: 'PopupAlternatingBaseMenuItem',
     Extends: PopupBaseMenuItem,
 
     _init: function(text, alternateText, params) {
         this.parent(params);
         this.actor.add_style_class_name('popup-alternating-menu-item');
-
-        this._text = text;
-        this._alternateText = alternateText;
-        this.label = new St.Label({ text: text });
-        this.state = PopupAlternatingMenuItemState.DEFAULT;
-        this.addActor(this.label);
-        this.actor.label_actor = this.label;
 
         this.actor.connect('notify::mapped', Lang.bind(this, this._onMapped));
     },
@@ -450,11 +443,11 @@ const PopupAlternatingMenuItem = new Lang.Class({
 
     _setState: function(state) {
         if (this.state != state) {
-            if (state == PopupAlternatingMenuItemState.ALTERNATIVE && !this._canAlternate())
+            if (state == PopupAlternatingMenuItemState.ALTERNATIVE && !this.canAlternate())
                 return;
 
             this.state = state;
-            this._updateLabel();
+            this.stateChanged();
         }
     },
 
@@ -482,9 +475,31 @@ const PopupAlternatingMenuItem = new Lang.Class({
             this._updateStateFromModifiers();
 
         return false;
+    }
+});
+
+const PopupAlternatingMenuItem = new Lang.Class({
+    Name: 'PopupAlternatingMenuItem',
+    Extends: PopupAlternatingBaseMenuItem,
+
+    _init: function(text, alternateText, params) {
+        this.parent(params);
+
+        this._text = text;
+        this._alternateText = alternateText;
+        this.label = new St.Label({ text: text });
+        this.state = PopupAlternatingMenuItemState.DEFAULT;
+        this.addActor(this.label);
+        this.actor.label_actor = this.label;
     },
 
-    _updateLabel: function() {
+    canAlternate: function() {
+        if (this.state == PopupAlternatingMenuItemState.DEFAULT && !this._alternateText)
+            return false;
+        return true;
+    },
+
+    stateChanged: function() {
         if (this.state == PopupAlternatingMenuItemState.ALTERNATIVE) {
             this.actor.add_style_pseudo_class('alternate');
             this.label.set_text(this._alternateText);
@@ -494,20 +509,14 @@ const PopupAlternatingMenuItem = new Lang.Class({
         }
     },
 
-    _canAlternate: function() {
-        if (this.state == PopupAlternatingMenuItemState.DEFAULT && !this._alternateText)
-            return false;
-        return true;
-    },
-
     updateText: function(text, alternateText) {
         this._text = text;
         this._alternateText = alternateText;
 
-        if (!this._canAlternate())
+        if (!this.canAlternate())
             this._setState(PopupAlternatingMenuItemState.DEFAULT);
 
-        this._updateLabel();
+        this.updateState();
     }
 });
 
@@ -746,7 +755,11 @@ const MenuItemOption = new Lang.Class({
     Name: 'MenuItemOption',
     Extends: St.Button,
 
-    _init: function(text) {
+    _init: function(text, alternateText) {
+        this._text = text;
+        this._alternateText = alternateText;
+        this.state = PopupAlternatingMenuItemState.DEFAULT;
+
         this.parent({ label: text,
                       style_class: 'popup-options-menu-item-button',
                       track_hover: true,
@@ -755,14 +768,30 @@ const MenuItemOption = new Lang.Class({
                     });
     },
 
-    // TODO handle Alt key to change some menu items (Poweroff vs Alt Suspend)
-    updateText: function() {
+    stateChanged: function(state) {
+        this.state = state;
+
+        if (this.state == PopupAlternatingMenuItemState.ALTERNATIVE &&
+            this._alternateText) {
+            this.add_style_pseudo_class('alternate');
+            this.set_label(this._alternateText);
+        } else {
+            this.remove_style_pseudo_class('alternate');
+            this.set_label(this._text);
+        }
+    },
+
+    updateText: function(text, alternateText) {
+        this._text = text;
+        this._alternateText = alternateText;
+
+        this.stateChanged(this.state);
     }
 });
 
 const PopupOptionsMenuItem = new Lang.Class({
     Name: 'PopupOptionsMenuItem',
-    Extends: PopupBaseMenuItem,
+    Extends: PopupAlternatingBaseMenuItem,
 
     _init: function(options, params) {
         params = Params.parse (params, { hover: false });
@@ -826,6 +855,17 @@ const PopupOptionsMenuItem = new Lang.Class({
         }
 
         return false;
+    },
+
+    stateChanged: function() {
+        let option = this._options[this._selectedOptionIndex];
+        if (option) {
+            option.stateChanged(this.state);
+        }
+    },
+
+    canAlternate: function() {
+        return true;
     },
 
     activate: function(event) {

@@ -827,13 +827,13 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(item);
         this._lockScreenItem = item;
 
-        this._suspendOrPowerOffOption = new PopupMenu.MenuItemOption(TURN_OFF_TEXT);
+        this._suspendOrPowerOffOption = new PopupMenu.MenuItemOption(TURN_OFF_TEXT, SUSPEND_TEXT);
         this._suspendOrPowerOffOption.connect('clicked', Lang.bind(this, this._onSystemActionActivate));
 
-        let restartOption = new PopupMenu.MenuItemOption(RESTART_TEXT);
+        let restartOption = new PopupMenu.MenuItemOption(RESTART_TEXT, null);
         restartOption.connect('clicked', Lang.bind(this, this._onInstallUpdatesActivate));
 
-        this._logoutOption = new PopupMenu.MenuItemOption(LOGOUT_TEXT);
+        this._logoutOption = new PopupMenu.MenuItemOption(LOGOUT_TEXT, null);
         this._logoutOption.connect('clicked', Lang.bind(this, this._onQuitSessionActivate));
 
         item = new PopupMenu.PopupOptionsMenuItem([ this._suspendOrPowerOffOption,
