@@ -16,6 +16,7 @@ const Atk = imports.gi.Atk;
 
 const AppFavorites = imports.ui.appFavorites;
 const Background = imports.ui.background;
+const BackgroundMenu = imports.ui.backgroundMenu;
 const BoxPointer = imports.ui.boxpointer;
 const ButtonConstants = imports.ui.buttonConstants;
 const DND = imports.ui.dnd;
@@ -391,6 +392,12 @@ const AllView = new Lang.Class({
         this._clickAction.connect('clicked', Lang.bind(this, this._closePopup));
         Main.overview.addAction(this._clickAction, false);
         this._eventBlocker.bind_property('reactive', this._clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
+
+        this._bgAction = new Clutter.ClickAction();
+        Main.overview.addAction(this._bgAction, true);
+        BackgroundMenu.addBackgroundMenu(this._bgAction);
+        this._clickAction.bind_property('enabled', this._bgAction, 'enabled',
+                                        GObject.BindingFlags.SYNC_CREATE | GObject.BindingFlags.INVERT_BOOLEAN);
 
         this.repositionedView = null;
     },

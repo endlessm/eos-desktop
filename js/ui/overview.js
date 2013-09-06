@@ -12,8 +12,6 @@ const Shell = imports.gi.Shell;
 const Gdk = imports.gi.Gdk;
 
 const Background = imports.ui.background;
-const BackgroundMenu = imports.ui.backgroundMenu;
-
 const Dash = imports.ui.dash;
 const DND = imports.ui.dnd;
 const LayoutManager = imports.ui.layout;
@@ -301,8 +299,6 @@ const Overview = new Lang.Class({
 
         global.screen.connect('restacked', Lang.bind(this, this._onRestacked));
         this._group.connect('scroll-event', Lang.bind(this, this._onScrollEvent));
-
-        BackgroundMenu.addBackgroundMenu(this._overview);
 
         this._windowSwitchTimeoutId = 0;
         this._windowSwitchTimestamp = 0;

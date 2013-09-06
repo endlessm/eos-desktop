@@ -41,11 +41,12 @@ const BackgroundMenu = new Lang.Class({
     }
 });
 
-function addBackgroundMenu(actor) {
-    let clickAction = new Clutter.ClickAction();
+function addBackgroundMenu(clickAction) {
     let cursor = new St.Bin({ opacity: 0 });
 
     Main.uiGroup.add_actor(cursor);
+
+    let actor = clickAction.get_actor();
 
     actor.reactive = true;
     actor._backgroundMenu = new BackgroundMenu(cursor);
@@ -71,6 +72,4 @@ function addBackgroundMenu(actor) {
             openMenu();
         }
     });
-
-    actor.add_action(clickAction);
 }

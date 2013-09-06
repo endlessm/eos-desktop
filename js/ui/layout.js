@@ -347,15 +347,17 @@ const LayoutManager = new Lang.Class({
     _addBackgroundClickHandler: function(actor) {
         actor.reactive = true;
         let clickAction = new Clutter.ClickAction();
+        actor.add_action(clickAction);
+
+        BackgroundMenu.addBackgroundMenu(clickAction);
 
         clickAction.connect('clicked', function(action) {
             let button = action.get_button();
             if (button == ButtonConstants.LEFT_MOUSE_BUTTON &&
-                       Main.socialBar.proxy.Visible) {
+                Main.socialBar.proxy.Visible) {
                 Main.socialBar.proxy.toggleRemote(global.get_current_time());
             }
         });
-        actor.add_action(clickAction);
     },
 
     _createBackground: function(monitorIndex) {
@@ -366,8 +368,8 @@ const LayoutManager = new Lang.Class({
         this._addBackgroundClickHandler(bgManager.background.actor);
 
         bgManager.connect('changed', Lang.bind(this, function() {
-                              this._addBackgroundClickHandler(bgManager.background.actor);
-                          }));
+            this._addBackgroundClickHandler(bgManager.background.actor);
+        }));
 
         this._bgManagers.push(bgManager);
 
