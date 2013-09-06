@@ -798,7 +798,7 @@ const PopupOptionsMenuItem = new Lang.Class({
         this.parent(params);
 
         this._options = options;
-        this._selectedOptionIndex = null;
+        this._selectedOptionIndex = -1;
 
         this._container = new St.BoxLayout({ style_class: 'popup-options-menu-item' });
         this._container.connect('key-press-event', Lang.bind(this, this._onKeyPressEvent));
@@ -808,6 +808,7 @@ const PopupOptionsMenuItem = new Lang.Class({
 
             if (option instanceof MenuItemOption) {
                 this._container.add(option, { expand: true });
+                option.connect('key-focus-in', Lang.bind(this, this._onOptionFocused));
                 option.connect('notify::hover', Lang.bind(this, this._onOptionHovered));
             } else {
                 throw TypeError("Invalid argument to PopupOptionsMenuItem constructor");
@@ -821,40 +822,42 @@ const PopupOptionsMenuItem = new Lang.Class({
 
     _onKeyPressEvent: function(actor, event) {
         let symbol = event.get_key_symbol();
+        let selectedOption = this._options[this._selectedOptionIndex];
+        let nextFocus = -1;
+
         if (symbol == Clutter.KEY_Right) {
-            this._container.navigate_focus( this._options[this._selectedOptionIndex],
-                                            Gtk.DirectionType.TAB_FORWARD,
-                                            true
-                                          );
-            return true;
+            nextFocus = Gtk.DirectionType.RIGHT;
         } else if (symbol == Clutter.KEY_Left) {
-            this._container.navigate_focus( this._options[this._selectedOptionIndex],
-                                            Gtk.DirectionType.TAB_BACKWARD,
-                                            true
-                                          );
+            nextFocus = Gtk.DirectionType.LEFT;
+        }
+
+        if (selectedOption && (nextFocus != -1)) {
+            this._container.navigate_focus(selectedOption,
+                                           nextFocus, true);
             return true;
         }
 
         return this.parent(actor, event);
     },
 
-    _onOptionHovered: function(actor, isHovering) {
-        if (isHovering) {
+    _onOptionFocused: function(actor) {
+        let index = this._options.indexOf(actor);
+        this._selectedOptionIndex = index;
+    },
+
+    _onOptionHovered: function(actor) {
+        if (actor.hover) {
             let index = this._options.indexOf(actor);
-            this._updateSelection(index);
+            this._selectedOptionIndex = index;
+            this._updateKeyFocus(index);
         }
     },
 
-    _updateSelection: function(index) {
-        this._selectedOptionIndex = index;
-
-        let option = this._options[index];
-        if (option.visible) {
-            this._options[index].grab_key_focus();
-            return true;
+    _updateKeyFocus: function(index) {
+        let option = this._options[this._selectedOptionIndex];
+        if (option && option.visible) {
+            option.grab_key_focus();
         }
-
-        return false;
     },
 
     stateChanged: function() {
@@ -868,29 +871,18 @@ const PopupOptionsMenuItem = new Lang.Class({
         return true;
     },
 
+    // Do nothing, as the key focus code we have already handles
+    // keyboard activation
     activate: function(event) {
-        if (this._selectedOptionIndex != null) {
-            let selectedOption = this._options[this._selectedOptionIndex];
-            selectedOption.activate();
-        }
 
-        this.parent(event);
     },
 
     // Override default focus handling to disable the selection highlight on
     // the whole MenuItem line
     setActive: function (active, params) {
         let activeChanged = active != this.active;
-        params = Params.parse (params, { grabKeyboard: true });
-
         if (activeChanged) {
             this.active = active;
-            if (active) {
-                if (params.grabKeyboard) {
-                    this.actor.grab_key_focus();
-                    this._updateSelection(0);
-                }
-            }
             this.emit('active-changed', active);
         }
     }

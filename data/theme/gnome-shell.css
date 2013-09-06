@@ -284,7 +284,7 @@ StScrollBar StButton#vhandle:active {
 
 .popup-options-menu-item-button {
     font-size: 11px;
-    font-weight: 600;
+    font-weight: bold;
     color: #ccc;
 }
 
@@ -294,7 +294,6 @@ StScrollBar StButton#vhandle:active {
     background-gradient-start: #323232;
     background-gradient-end: #141414;
     background-size: contain;
-
 }
 
 .popup-options-menu-item-button:active {
