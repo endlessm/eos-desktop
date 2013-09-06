@@ -736,8 +736,8 @@ StScrollBar StButton#vhandle:active {
 }
 
 .splash-close {
-    -splash-close-overlap-x: -20px;
-    -splash-close-overlap-y: 20px;
+    -splash-close-overlap-x: -12px;
+    -splash-close-overlap-y: 6px;
     background-image: url("close-splash.png");
     background-size: 20px;
     height: 20px;
@@ -863,9 +863,20 @@ StScrollBar StButton#vhandle:active {
 }
 
 .overview-icon.dnd,
-.icon-grid .overview-icon,
+.icon-grid .overview-icon {
+    icon-size: 64px;
+}
+
 .app-splash-page {
     icon-size: 64px;
+}
+
+.app-splash-page-title {
+    background-gradient-start: rgb(70,70,70);
+    background-gradient-end: rgb(30,30,30);
+    background-gradient-direction: vertical;
+    background-size: 36px;
+    height: 36px;
 }
 
 .overview-icon.dnd,

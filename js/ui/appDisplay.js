@@ -1581,7 +1581,18 @@ const AppSplashPage = new Lang.Class({
             }));
         }
 
+        let title = new St.Widget({ style_class: 'app-splash-page-title',
+                                    x_expand: true });
+
+        title.set_y_align(Clutter.ActorAlign.START);
+
+        // XXX Clutter 2.0 workaround: ClutterBinLayout needs expand
+        // to respect the alignments.
+        title.set_y_expand(true);
+        title.set_x_expand(true);
+
         this.add_child(background);
+        this.add_child(title);
         this.add_child(this._createCloseButton());
     },
 
