@@ -273,7 +273,6 @@ const OverviewEntry = new Lang.Class({
         this._active = false;
 
         this._capturedEventId = 0;
-        this._iconClickedId = 0;
 
         let primaryIcon = new St.Icon({ style_class: 'search-entry-icon',
                                         icon_name: 'edit-find-symbolic',
@@ -301,6 +300,7 @@ const OverviewEntry = new Lang.Class({
                                          'google-logo-symbolic.svg');
 
         this.connect('primary-icon-clicked', Lang.bind(this, this._popupSearchEntryMenu));
+        this.connect('secondary-icon-clicked', Lang.bind(this, this._activateSearch));
         this._searchMenu.connect('search-state-changed', Lang.bind(this, this._onSearchStateChanged));
         this._onSearchStateChanged();
 
@@ -519,17 +519,7 @@ const OverviewEntry = new Lang.Class({
 
         if (this._active) {
             this.set_secondary_icon(this._goIcon);
-
-            if (this._iconClickedId == 0) {
-                this._iconClickedId = this.connect('secondary-icon-clicked',
-                    Lang.bind(this, this._activateSearch));
-            }
         } else {
-            if (this._iconClickedId > 0) {
-                this.disconnect(this._iconClickedId);
-                this._iconClickedId = 0;
-            }
-
             this.set_secondary_icon(null);
             this._searchCancelled();
         }
