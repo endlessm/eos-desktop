@@ -286,6 +286,7 @@ const OverviewEntry = new Lang.Class({
                       track_hover: true,
                       reactive: true,
                       can_focus: true,
+                      hint_text: '',
                       primary_icon: primaryIcon,
                       x_align: Clutter.ActorAlign.CENTER,
                       y_align: Clutter.ActorAlign.CENTER });
@@ -298,6 +299,10 @@ const OverviewEntry = new Lang.Class({
 
         this._googleHint = new EntryHint('search-entry-hint',
                                          'google-logo-symbolic.svg');
+        this._wikipediaHint = new St.Label({ text: _("Type to search Wikipedia"),
+                                             style_class: 'search-entry-text-hint' });
+        this._localHint = new St.Label({ text: _("Type to search your computer"),
+                                         style_class: 'search-entry-text-hint' });
 
         this.connect('primary-icon-clicked', Lang.bind(this, this._popupSearchEntryMenu));
         this.connect('secondary-icon-clicked', Lang.bind(this, this._activateSearch));
@@ -327,14 +332,11 @@ const OverviewEntry = new Lang.Class({
         let state = this._searchMenu.state;
 
         if (state == EntrySearchMenuState.GOOGLE) {
-            this.hint_text = '';
             this.hint_actor = this._googleHint;
         } else if (state == EntrySearchMenuState.WIKIPEDIA) {
-            this.hint_actor = null;
-            this.hint_text = _("Type to search Wikipedia");
+            this.hint_actor = this._wikipediaHint;
         } else if (state == EntrySearchMenuState.LOCAL) {
-            this.hint_actor = null;
-            this.hint_text = _("Type to search your computer");
+            this.hint_actor = this._localHint;
         }
     },
 
