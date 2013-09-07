@@ -12,7 +12,6 @@ const AltTab = imports.ui.altTab;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
-const Util = imports.misc.util;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 const NO_DEFAULT_MAXIMIZE_KEY = 'no-default-maximize';
@@ -231,32 +230,8 @@ const WindowManager = new Lang.Class({
         return false;
     },
 
-    _minimizeOtherWindowsConditionally : function(metaWindow) {
-        // Don't minimize other windows if default maximize is disabled
-        if (global.settings.get_boolean(NO_DEFAULT_MAXIMIZE_KEY)) {
-            return;
-        }
-
-        if (metaWindow.get_title() == 'WebKitPluginProcess') {
-            return;
-        }
-
-        // If the current window is maximized,
-        // closing or minimizing it should display the app selector,
-        // so we need to minimize all other windows.
-        // If the current window has been resized so it is not maximized,
-        // we want to leave all other windows alone.
-        let isMaximized = (metaWindow.maximized_horizontally &&
-                           metaWindow.maximized_vertically);
-        if (isMaximized && metaWindow.has_focus()) {
-            Util.minimizeOtherWindows(metaWindow);
-        }
-    },
-
     _minimizeWindow : function(shellwm, actor) {
         let window = actor.meta_window;
-
-        this._minimizeOtherWindowsConditionally(window);
 
         if (!this._shouldAnimateActor(actor)) {
             shellwm.completed_minimize(actor);
@@ -480,8 +455,6 @@ const WindowManager = new Lang.Class({
 
     _destroyWindow : function(shellwm, actor) {
         let window = actor.meta_window;
-
-        this._minimizeOtherWindowsConditionally(window);
 
         if (actor._notifyWindowTypeSignalId) {
             window.disconnect(actor._notifyWindowTypeSignalId);

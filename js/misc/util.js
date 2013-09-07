@@ -302,19 +302,6 @@ function ensureActorVisibleInScrollView(scrollView, actor) {
     return true;
 }
 
-function minimizeOtherWindows(metaWindow) {
-    let appSystem = Shell.AppSystem.get_default();
-    let runningApps = appSystem.get_running();
-    runningApps.forEach(function (app) {
-        let appWindows = app.get_windows();
-        appWindows.forEach(function (window) {
-            if (window != metaWindow) {
-                window.minimize();
-            }
-        });
-    });
-}
-
 function getBrowserApp() {
     let appSystem = Shell.AppSystem.get_default();
     let browserApp = appSystem.lookup_app(BROWSER_DESKTOP_ENTRY);
