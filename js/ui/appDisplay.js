@@ -1592,14 +1592,14 @@ const AppSplashPage = new Lang.Class({
         let title = new St.Widget({ style_class: 'app-splash-page-title',
                                     layout_manager: new Clutter.BinLayout(),
                                     x_expand: true,
-                                    y_expand: false});
+                                    y_expand: false });
 
         title.add_child(this._createCloseButton());
 
         this.layout.add(title);
         this.layout.add(this.background, { expand: true,
                                            x_fill: true,
-                                           y_fill: true});
+                                           y_fill: true });
     },
 
     _createCloseButton: function() {
