@@ -403,27 +403,29 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(item);
 
         if (this._haveLauncher(TUTORIAL_LAUNCHER)) {
-            item = new PopupMenu.PopupUserMenuItem(TUTORIAL_TEXT, '/theme/tutorial-symbolic.svg');
+            item = new PopupMenu.PopupUserMenuItem(TUTORIAL_TEXT,
+                                                   { imagePath: '/theme/tutorial-symbolic.svg' });
             item.connect('activate', Lang.bind(this, this._onTutorialActivate));
             this.menu.addMenuItem(item);
         }
 
-        this._systemSettings = new PopupMenu.PopupUserMenuItem(OPTIONS_TEXT, '/theme/settings-symbolic.svg');
+        this._systemSettings = new PopupMenu.PopupUserMenuItem(OPTIONS_TEXT,
+                                                               { imagePath: '/theme/settings-symbolic.svg' });
         this._systemSettings.connect('activate', Lang.bind(this, this._onPreferencesActivate));
         this.menu.addMenuItem(this._systemSettings);
 
         if (this._haveLauncher(FEEDBACK_LAUNCHER)) {
-            item = new PopupMenu.PopupUserMenuItem(FEEDBACK_TEXT, null);
+            item = new PopupMenu.PopupUserMenuItem(FEEDBACK_TEXT);
             item.connect('activate', Lang.bind(this, this._onFeedbackActivate));
             this.menu.addMenuItem(item);
         }
 
-        item = new PopupMenu.PopupUserMenuItem(_("Switch User"), null);
+        item = new PopupMenu.PopupUserMenuItem(_("Switch User"));
         item.connect('activate', Lang.bind(this, this._onLoginScreenActivate));
         this.menu.addMenuItem(item);
         this._loginScreenItem = item;
 
-        item = new PopupMenu.PopupUserMenuItem(_("Lock"), null);
+        item = new PopupMenu.PopupUserMenuItem(_("Lock"), { iconName: 'changes-prevent-symbolic' });
         item.connect('activate', Lang.bind(this, this._onLockScreenActivate));
         this.menu.addMenuItem(item);
         this._lockScreenItem = item;
