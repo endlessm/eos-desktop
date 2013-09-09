@@ -31,8 +31,7 @@ const DISABLE_LOG_OUT_KEY = 'disable-log-out';
 const ALWAYS_SHOW_LOG_OUT_KEY = 'always-show-log-out';
 const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
 
-// TODO These keys have changed names in PO files. We will need to updated them"
-const TURN_OFF_TEXT = _("Turn Off").toUpperCase();
+const POWER_OFF_TEXT = _("Power Off").toUpperCase();
 const SUSPEND_TEXT = _("Suspend").toUpperCase();
 const RESTART_TEXT = _("Restart").toUpperCase();
 const LOGOUT_TEXT = _("Logout").toUpperCase();
@@ -375,9 +374,9 @@ const UserMenuButton = new Lang.Class({
         if (!this._haveShutdown) {
             this._suspendOrPowerOffOption.updateText(SUSPEND_TEXT, null);
         } else if (!this._haveSuspend) {
-            this._suspendOrPowerOffOption.updateText(TURN_OFF_TEXT, null);
+            this._suspendOrPowerOffOption.updateText(POWER_OFF_TEXT, null);
         } else {
-            this._suspendOrPowerOffOption.updateText(TURN_OFF_TEXT, SUSPEND_TEXT);
+            this._suspendOrPowerOffOption.updateText(POWER_OFF_TEXT, SUSPEND_TEXT);
         }
     },
 
@@ -430,7 +429,7 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(item);
         this._lockScreenItem = item;
 
-        this._suspendOrPowerOffOption = new PopupMenu.MenuItemOption(TURN_OFF_TEXT, SUSPEND_TEXT);
+        this._suspendOrPowerOffOption = new PopupMenu.MenuItemOption(POWER_OFF_TEXT, SUSPEND_TEXT);
         this._suspendOrPowerOffOption.connect('clicked', Lang.bind(this, this._onSystemActionActivate));
 
         let restartOption = new PopupMenu.MenuItemOption(RESTART_TEXT, null);
@@ -554,7 +553,7 @@ const UserMenuButton = new Lang.Class({
                              action: function() { dialog.close(); },
                              key: Clutter.Escape };
 
-        let powerOffButton = { label: TURN_OFF_TEXT,  action: Lang.bind(this, function() {
+        let powerOffButton = { label: POWER_OFF_TEXT,  action: Lang.bind(this, function() {
             dialog.close();
             this._session.ShutdownRemote();
         }), default: true };

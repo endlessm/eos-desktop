@@ -80,7 +80,7 @@ const logoutDialogContent = {
 };
 
 const shutdownDialogContent = {
-    subject: C_("title", "Turn Off"),
+    subject: C_("title", "Power Off"),
     inhibitedDescription: _("Click Power Off to quit these applications and power off the system."),
     uninhibitedDescription: function(seconds) {
         return ngettext("The system will power off automatically in %d second.",
@@ -91,7 +91,7 @@ const shutdownDialogContent = {
     confirmButtons: [{ signal: 'ConfirmedReboot',
                        label:  C_("button", "Restart") },
                      { signal: 'ConfirmedShutdown',
-                       label:  C_("button", "Turn Off") }],
+                       label:  C_("button", "Power Off") }],
     iconName: 'system-shutdown-symbolic',
     iconStyleClass: 'end-session-dialog-shutdown-icon'
 };
