@@ -313,6 +313,11 @@ const DashSlider = new Lang.Class({
             return 0;
     },
 
+    slideOut: function() {
+        this.parent();
+        this._dash.hideLabels();
+    },
+
     _onWindowDragBegin: function() {
         this.fadeHalf();
     },
