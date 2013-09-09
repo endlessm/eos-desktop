@@ -422,7 +422,7 @@ msgstr "Перазапусціць сістэму"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:698
 #: ../js/ui/userMenu.js:700 ../js/ui/userMenu.js:815 ../js/ui/userMenu.js:942
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Выключыць камп'ютар"
 
 #: ../js/gdm/util.js:249
@@ -1089,7 +1089,7 @@ msgstr "Скончыць сеанс"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Выключэнне камп'ютара"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1117,7 +1117,7 @@ msgstr "Перазапусціць сістэму"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Выключыць камп'ютар"
 
 #: ../js/ui/endSessionDialog.js:100

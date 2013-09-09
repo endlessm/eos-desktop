@@ -230,7 +230,7 @@ msgstr "Reaniciar"
 
 #: ../js/gdm/powerMenu.js:126 ../js/ui/endSessionDialog.js:80
 #: ../js/ui/endSessionDialog.js:91
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Apagar"
 
 #: ../js/misc/util.js:92

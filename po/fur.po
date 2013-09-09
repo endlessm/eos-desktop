@@ -410,7 +410,7 @@ msgstr "Reinvie"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:679
 #: ../js/ui/userMenu.js:681 ../js/ui/userMenu.js:791
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Stude"
 
 #: ../js/gdm/util.js:152
@@ -1055,7 +1055,7 @@ msgstr "Jes"
 
 #: ../js/ui/endSessionDialog.js:81
 msgctxt "title"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Stude"
 
 #: ../js/ui/endSessionDialog.js:82
@@ -1080,7 +1080,7 @@ msgstr "Reinvie"
 
 #: ../js/ui/endSessionDialog.js:92
 msgctxt "button"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Stude"
 
 #: ../js/ui/endSessionDialog.js:98

@@ -443,7 +443,7 @@ msgstr "പുനരാരംഭിക്കുക"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:698
 #: ../js/ui/userMenu.js:700 ../js/ui/userMenu.js:815 ../js/ui/userMenu.js:942
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "നിര്‍ത്തുക"
 
 #: ../js/gdm/util.js:249
@@ -1114,7 +1114,7 @@ msgstr "പുറത്ത് കടക്കുക"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "നിര്‍ത്തുക"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1142,7 +1142,7 @@ msgstr "പുനരാരംഭിക്കൂ"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "നിര്‍ത്തുക"
 
 #: ../js/ui/endSessionDialog.js:100

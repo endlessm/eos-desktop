@@ -248,7 +248,7 @@ msgid "Restart"
 msgstr "Restartigi"
 
 #: ../js/gdm/powerMenu.js:162
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Elŝalti"
 
 #: ../js/misc/util.js:92
@@ -589,7 +589,7 @@ msgstr "Elsaluti"
 
 #: ../js/ui/endSessionDialog.js:81
 msgctxt "title"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Elŝalti"
 
 #: ../js/ui/endSessionDialog.js:82
@@ -614,7 +614,7 @@ msgstr "Restartigi"
 
 #: ../js/ui/endSessionDialog.js:92
 msgctxt "button"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Elŝalti"
 
 #: ../js/ui/endSessionDialog.js:98

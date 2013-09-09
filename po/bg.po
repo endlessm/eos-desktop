@@ -422,7 +422,7 @@ msgstr "Рестартиране"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:681
 #: ../js/ui/userMenu.js:683 ../js/ui/userMenu.js:798
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Изключване"
 
 #: ../js/gdm/util.js:152
@@ -1067,7 +1067,7 @@ msgstr "Изход"
 
 #: ../js/ui/endSessionDialog.js:81
 msgctxt "title"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Изключване"
 
 #: ../js/ui/endSessionDialog.js:82
@@ -1094,7 +1094,7 @@ msgstr "Рестартиране"
 
 #: ../js/ui/endSessionDialog.js:92
 msgctxt "button"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Изключване"
 
 #: ../js/ui/endSessionDialog.js:98

@@ -398,7 +398,7 @@ msgstr "다시 시작"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:696
 #: ../js/ui/userMenu.js:698 ../js/ui/userMenu.js:813 ../js/ui/userMenu.js:936
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "컴퓨터 끄기"
 
 #: ../js/gdm/util.js:182
@@ -1056,7 +1056,7 @@ msgstr "로그아웃"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "컴퓨터 끄기"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1080,7 +1080,7 @@ msgstr "다시 시작"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "컴퓨터 끄기"
 
 #: ../js/ui/endSessionDialog.js:100

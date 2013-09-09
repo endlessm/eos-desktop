@@ -394,7 +394,7 @@ msgid "Logging out of the system."
 msgstr "U meld nou van die stelsel af."
 
 #: ../js/ui/endSessionDialog.js:72 ../js/ui/endSessionDialog.js:79
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Skakel af"
 
 #: ../js/ui/endSessionDialog.js:73

@@ -426,7 +426,7 @@ msgstr "Paleisti iš naujo"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:698
 #: ../js/ui/userMenu.js:700 ../js/ui/userMenu.js:815 ../js/ui/userMenu.js:942
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Išjungti"
 
 #: ../js/gdm/util.js:249
@@ -1093,7 +1093,7 @@ msgstr "Atsijungti"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Išjungti"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1121,7 +1121,7 @@ msgstr "Paleisti iš naujo"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Išjungti"
 
 #: ../js/ui/endSessionDialog.js:100

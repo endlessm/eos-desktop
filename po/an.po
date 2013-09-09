@@ -433,7 +433,7 @@ msgid "Logging out of the system."
 msgstr "Trancando a sesion."
 
 #: ../js/ui/endSessionDialog.js:75 ../js/ui/endSessionDialog.js:82
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Amortar"
 
 #: ../js/ui/endSessionDialog.js:76

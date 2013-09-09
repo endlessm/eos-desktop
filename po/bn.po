@@ -430,7 +430,7 @@ msgstr "সিস্টেম থেকে লগ আউট।"
 
 #: ../js/ui/endSessionDialog.js:75 ../js/ui/endSessionDialog.js:82
 #, fuzzy
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "পাওয়ার বন্ধ..."
 
 #: ../js/ui/endSessionDialog.js:76

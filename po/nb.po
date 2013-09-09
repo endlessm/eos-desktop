@@ -388,7 +388,7 @@ msgstr "Start på nytt"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:697
 #: ../js/ui/userMenu.js:699 ../js/ui/userMenu.js:814 ../js/ui/userMenu.js:938
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Slå av"
 
 #: ../js/gdm/util.js:182
@@ -1052,7 +1052,7 @@ msgstr "Logg ut"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Slå av"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1078,7 +1078,7 @@ msgstr "Start på nytt"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "Slå av"
 
 #: ../js/ui/endSessionDialog.js:100

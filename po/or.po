@@ -431,7 +431,7 @@ msgstr "ଲଗଇନ ୱିଣ୍ଡୋ"
 
 #. Translators: accessible name of the power menu in the login screen
 #: ../js/gdm/powerMenu.js:36
-#| msgid "Turn Off"
+#| msgid "Power Off"
 msgid "Power"
 msgstr "ବିଦ୍ୟୁତ ଶକ୍ତି"
 
@@ -446,7 +446,7 @@ msgstr "ପୂନଃପ୍ରାରମ୍ଭ କରନ୍ତୁ"
 
 #: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:696
 #: ../js/ui/userMenu.js:698 ../js/ui/userMenu.js:813 ../js/ui/userMenu.js:936
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "ବିଦ୍ୟୁତ ପ୍ରବାହ ବନ୍ଦ କରନ୍ତୁ"
 
 #: ../js/gdm/util.js:182
@@ -1119,7 +1119,7 @@ msgstr "ଲଗଆଉଟ"
 
 #: ../js/ui/endSessionDialog.js:83
 msgctxt "title"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "ବିଦ୍ୟୁତ ପ୍ରବାହ ବନ୍ଦ କରନ୍ତୁ"
 
 #: ../js/ui/endSessionDialog.js:84
@@ -1147,7 +1147,7 @@ msgstr "ପୂନଃପ୍ରାରମ୍ଭ କରନ୍ତୁ"
 
 #: ../js/ui/endSessionDialog.js:94
 msgctxt "button"
-msgid "Turn Off"
+msgid "Power Off"
 msgstr "ବିଦ୍ୟୁତ ପ୍ରବାହ ବନ୍ଦ କରନ୍ତୁ"
 
 #: ../js/ui/endSessionDialog.js:100
