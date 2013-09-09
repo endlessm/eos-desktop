@@ -994,18 +994,25 @@ const PopupUserMenuItem = new Lang.Class({
     Name: 'PopupUserMenuItem',
     Extends: PopupBaseMenuItem,
 
-    _init: function (text, imagePath, params) {
+    _init: function (text, imageParams, params) {
         this.parent(params);
 
         this._container = new St.BoxLayout({ style_class: 'popup-user-menu-item' });
 
+        let imagePath = imageParams ? imageParams.imagePath : null;
+        let iconName = imageParams ? imageParams.iconName : null;
+        let gicon = null;
+
         if (imagePath) {
             let iconFile = Gio.File.new_for_path(global.datadir + imagePath);
-            let gicon = new Gio.FileIcon({ file: iconFile });
+            gicon = new Gio.FileIcon({ file: iconFile });
+        } else if (iconName) {
+            gicon = new Gio.ThemedIcon({ name: iconName });
+        }
 
+        if (gicon) {
             this._icon = new St.Icon({ style_class: 'popup-user-menu-item-icon',
-                                       gicon: gicon
-                                     });
+                                       gicon: gicon });
             this._container.add(this._icon);
         }
 
