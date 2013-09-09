@@ -1557,7 +1557,6 @@ const AppSplashPage = new Lang.Class({
     Extends: St.Widget,
 
     _init: function(app) {
-        //let layout = new Clutter.BoxLayout({ orientation: Clutter.Orientation.VERTICAL })
         this.layout = new St.BoxLayout({ vertical: true,
                                          x_expand: true,
                                          y_expand: true });
