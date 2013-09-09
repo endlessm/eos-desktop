@@ -539,7 +539,7 @@ msgid "%s has been removed from your favorites."
 msgstr "%s foi removida dos seus favoritos."
 
 #: ../js/ui/backgroundMenu.js:20 ../js/ui/userMenu.js:765
-msgid "Options"
+msgid "Settings"
 msgstr "Definições"
 
 #: ../js/ui/backgroundMenu.js:22

@@ -391,7 +391,7 @@ msgstr "%s lisati lemmikutesse."
 msgid "%s has been removed from your favorites."
 msgstr "%s eemaldati lemmikutest."
 
-msgid "Options"
+msgid "Settings"
 msgstr "Sätted"
 
 msgid "Change Background…"

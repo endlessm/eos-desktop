@@ -461,7 +461,7 @@ msgid "%s has been removed from your favorites."
 msgstr "Đã bỏ đánh dấu ưa thích cho %s"
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:787
-msgid "Options"
+msgid "Settings"
 msgstr "Thiết lập"
 
 #: ../js/ui/backgroundMenu.js:21

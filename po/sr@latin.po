@@ -485,7 +485,7 @@ msgid "%s has been removed from your favorites."
 msgstr "„%s“ je uklonjen iz omiljenih."
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:788
-msgid "Options"
+msgid "Settings"
 msgstr "Podešavanja"
 
 #: ../js/ui/backgroundMenu.js:21

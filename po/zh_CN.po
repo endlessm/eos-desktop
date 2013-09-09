@@ -1694,7 +1694,7 @@ msgid "Notifications"
 msgstr "提示"
 
 #: ../js/ui/userMenu.js:763
-msgid "Options"
+msgid "Settings"
 msgstr "设置"
 
 #: ../js/ui/userMenu.js:771

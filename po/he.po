@@ -1684,7 +1684,7 @@ msgid "Notifications"
 msgstr "התרעות"
 
 #: ../js/ui/userMenu.js:767
-msgid "Options"
+msgid "Settings"
 msgstr "הגדרות"
 
 #: ../js/ui/userMenu.js:775

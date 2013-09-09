@@ -499,7 +499,7 @@ msgstr "%s telah dihapus dari favorit Anda."
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:788
 #| msgid "Mouse Settings"
-msgid "Options"
+msgid "Settings"
 msgstr "Pengaturan"
 
 #: ../js/ui/backgroundMenu.js:21

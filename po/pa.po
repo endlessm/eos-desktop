@@ -500,7 +500,7 @@ msgid "%s has been removed from your favorites."
 msgstr "%s ਨੂੰ ਤੁਹਾਡੀ ਪਸੰਦ ਤੋਂ ਹਟਾਇਆ ਜਾ ਚੁੱਕਿਆ ਹੈ।"
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:787
-msgid "Options"
+msgid "Settings"
 msgstr "ਸੈਟਿੰਗ"
 
 #: ../js/ui/backgroundMenu.js:21

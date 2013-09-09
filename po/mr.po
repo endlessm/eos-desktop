@@ -497,7 +497,7 @@ msgstr "%s ला पसंतीतून काढून टाकले."
 
 #: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:789
 #| msgid "Mouse Settings"
-msgid "Options"
+msgid "Settings"
 msgstr "सेटिंग्ज"
 
 #: ../js/ui/backgroundMenu.js:21
