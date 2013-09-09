@@ -848,6 +848,11 @@ StScrollBar StButton#vhandle:active {
     padding-top: 2px;
 }
 
+.search-entry-text-hint {
+    padding-top: 1px;
+    padding-bottom: 2px;
+}
+
 .entry-search-menu {
     -boxpointer-gap: 12px;
 }
