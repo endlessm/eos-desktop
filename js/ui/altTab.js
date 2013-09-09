@@ -354,10 +354,13 @@ const WindowSwitcherPopup = new Lang.Class({
     Name: 'WindowSwitcherPopup',
     Extends: SwitcherPopup.SwitcherPopup,
 
+    _init: function(items) {
+        this.parent(items);
+        this._settings = new Gio.Settings({ schema: 'org.gnome.shell.window-switcher' });
+    },
+
     _getWindowList: function() {
-        let settings = new Gio.Settings({ schema: 'org.gnome.shell.window-switcher' });
-        let workspace = settings.get_boolean('current-workspace-only') ? global.screen.get_active_workspace()
-                                                                       : null;
+        let workspace = this._settings.get_boolean('current-workspace-only') ? global.screen.get_active_workspace() : null;
         return global.display.get_tab_list(Meta.TabList.NORMAL, global.screen, workspace);
     },
 
@@ -367,7 +370,8 @@ const WindowSwitcherPopup = new Lang.Class({
         if (windows.length == 0)
             return false;
 
-        this._switcherList = new WindowList(windows);
+        let mode = this._settings.get_enum('app-icon-mode');
+        this._switcherList = new WindowList(windows, mode);
         this._items = this._switcherList.icons;
 
         return true;
@@ -657,7 +661,7 @@ const ThumbnailList = new Lang.Class({
 const WindowIcon = new Lang.Class({
     Name: 'WindowIcon',
 
-    _init: function(window) {
+    _init: function(window, mode) {
         this.window = window;
 
         this.actor = new St.BoxLayout({ style_class: 'alt-tab-app',
@@ -675,8 +679,7 @@ const WindowIcon = new Lang.Class({
 
         this._icon.destroy_all_children();
 
-        let settings = new Gio.Settings({ schema: 'org.gnome.shell.window-switcher' });
-        switch (settings.get_enum('app-icon-mode')) {
+        switch (mode) {
             case AppIconMode.THUMBNAIL_ONLY:
                 size = WINDOW_PREVIEW_SIZE;
                 this._icon.add_actor(_createWindowClone(mutterWindow, WINDOW_PREVIEW_SIZE));
@@ -714,7 +717,7 @@ const WindowList = new Lang.Class({
     Name: 'WindowList',
     Extends: SwitcherPopup.SwitcherList,
 
-    _init : function(windows) {
+    _init : function(windows, mode) {
         this.parent(true);
 
         this._label = new St.Label({ x_align: Clutter.ActorAlign.CENTER,
@@ -726,7 +729,7 @@ const WindowList = new Lang.Class({
 
         for (let i = 0; i < windows.length; i++) {
             let win = windows[i];
-            let icon = new WindowIcon(win);
+            let icon = new WindowIcon(win, mode);
 
             this.addItem(icon.actor, icon.label);
             this.icons.push(icon);
