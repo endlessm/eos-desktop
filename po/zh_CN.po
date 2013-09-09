@@ -996,7 +996,7 @@ msgstr "注销 %s"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "注销"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -1021,7 +1021,7 @@ msgstr "从系统注销"
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "注销"
 
 #: ../js/ui/endSessionDialog.js:81
@@ -1702,7 +1702,7 @@ msgid "Switch User"
 msgstr "切换用户"
 
 #: ../js/ui/userMenu.js:776
-msgid "Logout"
+msgid "Log Out"
 msgstr "注销"
 
 #: ../js/ui/userMenu.js:796

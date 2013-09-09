@@ -1083,7 +1083,7 @@ msgstr "लॉग आउट %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "लॉग आउट"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1112,7 +1112,7 @@ msgstr "तंत्र से लॉगिंग आउट."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "लॉग आउट"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1850,7 +1850,7 @@ msgid "Switch User"
 msgstr "उपयोक्ता बदलें"
 
 #: ../js/ui/userMenu.js:802
-msgid "Logout"
+msgid "Log Out"
 msgstr "लॉग आउट"
 
 #: ../js/ui/userMenu.js:822

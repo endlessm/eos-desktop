@@ -996,7 +996,7 @@ msgstr "%s دىن چىقىش"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "تىزىمدىن چىقىش"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1021,7 +1021,7 @@ msgstr "سىستېما تىزىمدىن چىقىۋاتىدۇ"
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "تىزىمدىن چىقىش"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1729,7 +1729,7 @@ msgid "Switch User"
 msgstr "ئىشلەتكۈچى ئالماشتۇرۇش"
 
 #: ../js/ui/userMenu.js:801
-msgid "Logout"
+msgid "Log Out"
 msgstr "تىزىمدىن چىقىش"
 
 #: ../js/ui/userMenu.js:821

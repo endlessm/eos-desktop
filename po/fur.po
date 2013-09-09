@@ -1023,7 +1023,7 @@ msgstr "Termine session di %s"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Termine session"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -1050,7 +1050,7 @@ msgstr "Daur a jessî dal sisteme."
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Jes"
 
 #: ../js/ui/endSessionDialog.js:81
@@ -1757,7 +1757,7 @@ msgid "Switch User"
 msgstr "Cambie Utent"
 
 #: ../js/ui/userMenu.js:778
-msgid "Logout"
+msgid "Log Out"
 msgstr "Jes"
 
 #: ../js/ui/userMenu.js:798

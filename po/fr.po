@@ -1110,7 +1110,7 @@ msgstr "Fermer la session de %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Fermer la session"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1139,7 +1139,7 @@ msgstr "Déconnexion du système."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Fermer la session"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1863,7 +1863,7 @@ msgid "Switch User"
 msgstr "Changer d'utilisateur"
 
 #: ../js/ui/userMenu.js:802
-msgid "Logout"
+msgid "Log Out"
 msgstr "Fermer la session"
 
 #: ../js/ui/userMenu.js:822

@@ -463,7 +463,7 @@ msgid "Log Out %s"
 msgstr "Log Keluar %s"
 
 #: ../js/ui/endSessionDialog.js:61 ../js/ui/endSessionDialog.js:67
-msgid "Logout"
+msgid "Log Out"
 msgstr "Log Keluar"
 
 #: ../js/ui/endSessionDialog.js:62

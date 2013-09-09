@@ -1019,7 +1019,7 @@ msgstr "Logg ut %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Logg ut"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1047,7 +1047,7 @@ msgstr "Logger ut av systemet"
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Logg ut"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1766,7 +1766,7 @@ msgid "Switch User"
 msgstr "Bytt bruker"
 
 #: ../js/ui/userMenu.js:801
-msgid "Logout"
+msgid "Log Out"
 msgstr "Logg ut"
 
 #: ../js/ui/userMenu.js:821

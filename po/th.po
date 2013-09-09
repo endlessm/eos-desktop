@@ -899,7 +899,7 @@ msgstr "%s ออกจากระบบ"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "ออกจากระบบ"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -924,7 +924,7 @@ msgstr "กำลังออกจากระบบ"
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "ออกจากระบบ"
 
 #: ../js/ui/endSessionDialog.js:81
@@ -1609,7 +1609,7 @@ msgid "Switch User"
 msgstr "สลับผู้ใช้"
 
 #: ../js/ui/userMenu.js:761
-msgid "Logout"
+msgid "Log Out"
 msgstr "ออกจากระบบ"
 
 #: ../js/ui/userMenu.js:766

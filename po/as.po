@@ -1066,7 +1066,7 @@ msgstr "%s লগ আউট কৰক"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "লগ আউট কৰক"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1094,7 +1094,7 @@ msgstr "চিস্টেমৰ পৰা লগ আউট কৰা হৈছ�
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "লগ আউট কৰক"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1825,7 +1825,7 @@ msgid "Switch User"
 msgstr "ব্যৱহাৰকাৰী পৰিবৰ্তন কৰক"
 
 #: ../js/ui/userMenu.js:801
-msgid "Logout"
+msgid "Log Out"
 msgstr "লগ আউট কৰক"
 
 #: ../js/ui/userMenu.js:821

@@ -522,7 +522,7 @@ msgstr "%s Oturumunu Kapat"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Oturumu Kapat"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -547,7 +547,7 @@ msgstr "Sistemden çıkılıyor."
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Çıkış"
 
 #: ../js/ui/endSessionDialog.js:81

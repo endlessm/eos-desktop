@@ -911,7 +911,7 @@ msgstr "Log Out %s"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Log Out"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -938,7 +938,7 @@ msgstr "Logging out of the system."
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Log Out"
 
 #: ../js/ui/endSessionDialog.js:81
@@ -1631,7 +1631,7 @@ msgid "Switch User"
 msgstr "Switch User"
 
 #: ../js/ui/userMenu.js:761
-msgid "Logout"
+msgid "Log Out"
 msgstr "Log Out"
 
 #: ../js/ui/userMenu.js:766

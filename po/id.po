@@ -1071,7 +1071,7 @@ msgstr "Keluar %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Keluar"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1096,7 +1096,7 @@ msgstr "Keluar dari sistem."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Keluar"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1824,7 +1824,7 @@ msgid "Switch User"
 msgstr "Ganti Pengguna"
 
 #: ../js/ui/userMenu.js:801
-msgid "Logout"
+msgid "Log Out"
 msgstr "Keluar"
 
 #: ../js/ui/userMenu.js:821

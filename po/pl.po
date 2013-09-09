@@ -1063,7 +1063,7 @@ msgstr "Wylogowanie użytkownika %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Wylogowanie"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1092,7 +1092,7 @@ msgstr "Wylogowywanie z systemu."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Wyloguj"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1819,7 +1819,7 @@ msgid "Switch User"
 msgstr "Przełącz użytkownika"
 
 #: ../js/ui/userMenu.js:800
-msgid "Logout"
+msgid "Log Out"
 msgstr "Wyloguj się"
 
 #: ../js/ui/userMenu.js:820

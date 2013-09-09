@@ -881,7 +881,7 @@ msgstr "%s колдонуучусунун сеансын бүтүрүү"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Системадан чыгуу"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -907,7 +907,7 @@ msgstr "Системадан чыгуу."
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Системадан чыгуу"
 
 #: ../js/ui/endSessionDialog.js:81
@@ -1610,7 +1610,7 @@ msgid "System Settings"
 msgstr "Системалык параметрлер"
 
 #: ../js/ui/userMenu.js:759
-msgid "Logout"
+msgid "Log Out"
 msgstr "Системадан чыгуу"
 
 #: ../js/ui/userMenu.js:764

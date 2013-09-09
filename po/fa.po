@@ -1065,7 +1065,7 @@ msgstr "خروج از %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "خروج از سیستم"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1093,7 +1093,7 @@ msgstr "درحال خروج از سیستم."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "خروج از سیستم"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1830,7 +1830,7 @@ msgid "Switch User"
 msgstr "تعویض کاربر"
 
 #: ../js/ui/userMenu.js:800
-msgid "Logout"
+msgid "Log Out"
 msgstr "خروج از سیستم"
 
 #: ../js/ui/userMenu.js:820

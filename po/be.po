@@ -1053,7 +1053,7 @@ msgstr "Заканчэнне сеанса (%s)"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Заканчэнне сеанса"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1084,7 +1084,7 @@ msgstr "Заканчэнне сеанса працы з сістэмай."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Скончыць сеанс"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1810,7 +1810,7 @@ msgid "Switch User"
 msgstr "Перамяніць карыстальніка"
 
 #: ../js/ui/userMenu.js:802
-msgid "Logout"
+msgid "Log Out"
 msgstr "Выйсці з сеанса"
 
 #: ../js/ui/userMenu.js:822

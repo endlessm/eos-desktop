@@ -544,7 +544,7 @@ msgstr "Ieșire din sesiune pentru %s"
 
 #: ../js/ui/endSessionDialog.js:62
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Ieșire din sesiune"
 
 #: ../js/ui/endSessionDialog.js:63
@@ -575,7 +575,7 @@ msgstr "Deconectare din sistem."
 
 #: ../js/ui/endSessionDialog.js:76
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Ieșire din sesiune"
 
 #: ../js/ui/endSessionDialog.js:81

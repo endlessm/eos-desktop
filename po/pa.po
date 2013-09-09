@@ -1066,7 +1066,7 @@ msgstr "%s ਲਾਗਆਉਟ"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "ਲਾਗਆਉਟ"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1094,7 +1094,7 @@ msgstr "ਸਿਸਟਮ ਲਾਗ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ।"
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "ਲਾਗਆਉਟ"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1820,7 +1820,7 @@ msgid "Switch User"
 msgstr "ਯੂਜ਼ਰ ਬਦਲੋ"
 
 #: ../js/ui/userMenu.js:800
-msgid "Logout"
+msgid "Log Out"
 msgstr "ਲਾਗ ਆਉਟ"
 
 #: ../js/ui/userMenu.js:820

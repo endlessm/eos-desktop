@@ -1079,7 +1079,7 @@ msgstr "%s ല്‍ നിന്നു പുറത്ത് കടക്കു
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "പുറത്ത് കടക്കുക"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1109,7 +1109,7 @@ msgstr "സിസ്റ്റത്തില്‍ നിന്നു പുറ�
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "പുറത്ത് കടക്കുക"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1837,7 +1837,7 @@ msgid "Switch User"
 msgstr "ഉപയോക്താവിനെ മാറ്റുക"
 
 #: ../js/ui/userMenu.js:802
-msgid "Logout"
+msgid "Log Out"
 msgstr "പുറത്ത് കടക്കുക"
 
 #: ../js/ui/userMenu.js:822

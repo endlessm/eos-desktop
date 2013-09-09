@@ -1014,7 +1014,7 @@ msgstr "Шығу: %s"
 
 #: ../js/ui/endSessionDialog.js:64
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Шығу"
 
 #: ../js/ui/endSessionDialog.js:65
@@ -1039,7 +1039,7 @@ msgstr "Жүйеден шығу."
 
 #: ../js/ui/endSessionDialog.js:78
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Шығу"
 
 #: ../js/ui/endSessionDialog.js:83
@@ -1763,7 +1763,7 @@ msgid "Switch User"
 msgstr "Пайдаланушыны ауыстыру"
 
 #: ../js/ui/userMenu.js:801
-msgid "Logout"
+msgid "Log Out"
 msgstr "Жүйеден шығу"
 
 #: ../js/ui/userMenu.js:821

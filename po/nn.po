@@ -498,7 +498,7 @@ msgstr "Logg ut %s"
 
 #: ../js/ui/endSessionDialog.js:61
 msgctxt "title"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Logg ut"
 
 #: ../js/ui/endSessionDialog.js:62
@@ -525,7 +525,7 @@ msgstr "Loggar ut av systemet."
 
 #: ../js/ui/endSessionDialog.js:75
 msgctxt "button"
-msgid "Logout"
+msgid "Log Out"
 msgstr "Logg ut"
 
 #: ../js/ui/endSessionDialog.js:80
@@ -1567,7 +1567,7 @@ msgid "System Settings"
 msgstr "Systeminnstillingar"
 
 #: ../js/ui/userMenu.js:711
-msgid "Logout"
+msgid "Log Out"
 msgstr "Logg ut"
 
 #: ../js/ui/userMenu.js:716
