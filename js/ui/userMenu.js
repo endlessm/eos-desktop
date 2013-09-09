@@ -37,7 +37,7 @@ const RESTART_TEXT = _("Restart").toUpperCase();
 const LOG_OUT_TEXT = _("Log Out").toUpperCase();
 
 const TUTORIAL_TEXT = _("Tutorial");
-const OPTIONS_TEXT = _("Options");
+const SETTINGS_TEXT = _("Settings");
 const FEEDBACK_TEXT = _("Give us Feedback");
 
 const FEEDBACK_LAUNCHER = "eos-app-feedback.desktop";
@@ -408,7 +408,7 @@ const UserMenuButton = new Lang.Class({
             this.menu.addMenuItem(item);
         }
 
-        this._systemSettings = new PopupMenu.PopupUserMenuItem(OPTIONS_TEXT,
+        this._systemSettings = new PopupMenu.PopupUserMenuItem(SETTINGS_TEXT,
                                                                { imagePath: '/theme/settings-symbolic.svg' });
         this._systemSettings.connect('activate', Lang.bind(this, this._onPreferencesActivate));
         this.menu.addMenuItem(this._systemSettings);
