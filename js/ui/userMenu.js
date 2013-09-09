@@ -34,7 +34,7 @@ const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
 const POWER_OFF_TEXT = _("Power Off").toUpperCase();
 const SUSPEND_TEXT = _("Suspend").toUpperCase();
 const RESTART_TEXT = _("Restart").toUpperCase();
-const LOGOUT_TEXT = _("Logout").toUpperCase();
+const LOG_OUT_TEXT = _("Log Out").toUpperCase();
 
 const TUTORIAL_TEXT = _("Tutorial");
 const OPTIONS_TEXT = _("Options");
@@ -435,7 +435,7 @@ const UserMenuButton = new Lang.Class({
         let restartOption = new PopupMenu.MenuItemOption(RESTART_TEXT, null);
         restartOption.connect('clicked', Lang.bind(this, this._onRestartActivate));
 
-        this._logoutOption = new PopupMenu.MenuItemOption(LOGOUT_TEXT, null);
+        this._logoutOption = new PopupMenu.MenuItemOption(LOG_OUT_TEXT, null);
         this._logoutOption.connect('clicked', Lang.bind(this, this._onQuitSessionActivate));
 
         item = new PopupMenu.PopupOptionsMenuItem([ this._suspendOrPowerOffOption,
