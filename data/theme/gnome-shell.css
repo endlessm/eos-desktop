@@ -736,12 +736,21 @@ StScrollBar StButton#vhandle:active {
 }
 
 .splash-close {
-    background-image: url("close-splash.png");
+    background-image: url("close-splash-normal.png");
     padding-top: 5px;
     padding-bottom: 5px;
     padding-right: 12px;
     height: 26px;
     width: 26px;
+}
+
+.splash-close:hover {
+    background-image: url("close-splash-hover.png");
+}
+
+.splash-close:checked,
+.splash-close:pressed {
+    background-image: url("close-splash-pressed.png");
 }
 
 .window-close {

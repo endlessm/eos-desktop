@@ -47,7 +47,9 @@ dist_theme_DATA =				\
 	theme/checkbox-off-focused.svg		\
 	theme/checkbox-off.svg			\
 	theme/checkbox.svg			\
-	theme/close-splash.png			\
+	theme/close-splash-hover.png		\
+	theme/close-splash-normal.png		\
+	theme/close-splash-pressed.png		\
 	theme/close-window.svg			\
 	theme/close.svg				\
 	theme/corner-ripple-ltr.png		\
