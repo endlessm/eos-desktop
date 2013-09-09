@@ -990,7 +990,7 @@ msgstr "%Y年%m月%e日%A"
 #: ../js/ui/endSessionDialog.js:63
 #, c-format
 msgctxt "title"
-msgid "Logout %s"
+msgid "Log Out %s"
 msgstr "登出 %s"
 
 #: ../js/ui/endSessionDialog.js:64

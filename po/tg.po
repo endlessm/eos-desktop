@@ -993,7 +993,7 @@ msgstr ""
 #: ../js/ui/endSessionDialog.js:63
 #, c-format
 msgctxt "title"
-msgid "Logout %s"
+msgid "Log Out %s"
 msgstr ""
 
 #: ../js/ui/endSessionDialog.js:64

@@ -1073,7 +1073,7 @@ msgstr "%A %B %e, %Y"
 #: ../js/ui/endSessionDialog.js:63
 #, c-format
 msgctxt "title"
-msgid "Logout %s"
+msgid "Log Out %s"
 msgstr "Αποσύνδεση %s"
 
 #: ../js/ui/endSessionDialog.js:64

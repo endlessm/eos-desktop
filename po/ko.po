@@ -1021,7 +1021,7 @@ msgstr "%Y년 %B %e일 %A"
 #: ../js/ui/endSessionDialog.js:63
 #, c-format
 msgctxt "title"
-msgid "Logout %s"
+msgid "Log Out %s"
 msgstr "%s 로그아웃"
 
 #: ../js/ui/endSessionDialog.js:64

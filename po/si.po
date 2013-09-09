@@ -505,7 +505,7 @@ msgstr "මැතකදි භාවිත කළ අයිතම"
 #: ../js/ui/endSessionDialog.js:61
 #, c-format
 msgctxt "title"
-msgid "Logout %s"
+msgid "Log Out %s"
 msgstr "ඉවත් වන්න %s"
 
 #: ../js/ui/endSessionDialog.js:62

@@ -405,7 +405,7 @@ msgstr "ELEMENTOS RECIENTZ"
 
 #: ../js/ui/endSessionDialog.js:63
 #, c-format
-msgid "Logout %s"
+msgid "Log Out %s"
 msgstr "Trancar a sesion %s"
 
 #: ../js/ui/endSessionDialog.js:64 ../js/ui/endSessionDialog.js:70

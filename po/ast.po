@@ -532,7 +532,7 @@ msgstr "ELEMENTOS RECIENTES"
 
 #: ../js/ui/endSessionDialog.js:60
 #, c-format
-msgid "Logout %s"
+msgid "Log Out %s"
 msgstr "Zarrar la sesión %s"
 
 #: ../js/ui/endSessionDialog.js:61 ../js/ui/endSessionDialog.js:75

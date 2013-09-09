@@ -403,7 +403,7 @@ msgstr "সাম্প্রতিক আইটেম"
 
 #: ../js/ui/endSessionDialog.js:63
 #, c-format
-msgid "Logout %s"
+msgid "Log Out %s"
 msgstr "লগআউট %s"
 
 #: ../js/ui/endSessionDialog.js:64 ../js/ui/endSessionDialog.js:70

@@ -1084,7 +1084,7 @@ msgstr "%A %B %e, %Y"
 #: ../js/ui/endSessionDialog.js:63
 #, c-format
 msgctxt "title"
-msgid "Logout %s"
+msgid "Log Out %s"
 msgstr "%s ಇಂದ ನಿರ್ಗಮಿಸು"
 
 #: ../js/ui/endSessionDialog.js:64

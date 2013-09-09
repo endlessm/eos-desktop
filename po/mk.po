@@ -486,7 +486,7 @@ msgstr "СКОРЕШНИ ПРЕДМЕТИ"
 #: ../js/ui/endSessionDialog.js:61
 #, c-format
 msgctxt "title"
-msgid "Logout %s"
+msgid "Log Out %s"
 msgstr "Одјави го „%s“"
 
 #: ../js/ui/endSessionDialog.js:62
