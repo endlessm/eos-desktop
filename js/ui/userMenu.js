@@ -93,9 +93,7 @@ const UserAvatarWidget = new Lang.Class({
             this.actor.style = 'background-image: url("%s");'.format(iconFile);
         } else {
             this.actor.style = null;
-            this.actor.child = new St.Icon({ icon_name: 'avatar-default-symbolic',
-                                             style_class: 'status-chooser-default-avatar'
-                                           });
+            this.actor.child = new St.Icon({ icon_name: 'avatar-default-symbolic' });
         }
     }
 });
