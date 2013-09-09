@@ -253,6 +253,11 @@ StScrollBar StButton#vhandle:active {
     icon-size: 1.09em;
 }
 
+.popup-user-menu-item-icon {
+    icon-size: 18px;
+    padding-right: 15px;
+}
+
 .settings-menu-icon {
     icon-size: 30px;
 }
@@ -265,6 +270,46 @@ StScrollBar StButton#vhandle:active {
 
 .popup-battery-percentage {
     padding-left: 24px;
+}
+
+.popup-options-menu-item {
+    border: 1px solid #1c1c1c;
+    border-radius: 3px;
+}
+
+.popup-options-menu-item-button {
+    background-gradient-direction: vertical;
+    background-gradient-start: rgba(255, 255, 255, 0.15);
+    background-gradient-end: rgba(255, 255, 255, 0);
+    background-size: contain;
+
+    height: 24px;
+    border-right-width: 1px;
+
+    font-size: 11px;
+    font-weight: bold;
+    color: #ccc;
+}
+
+.popup-options-menu-item-button:last-child {
+    border-right-width: 0px;
+}
+
+.popup-options-menu-item-button:hover,
+.popup-options-menu-item-button:focus {
+    background-gradient-direction: vertical;
+    background-gradient-start: #323232;
+    background-gradient-end: #141414;
+    background-size: contain;
+}
+
+.popup-options-menu-item-button:active {
+    background-gradient-direction: vertical;
+    background-gradient-start: #0D0D0D;
+    background-gradient-end: #000;
+    background-size: contain;
+
+    color: #555;
 }
 
 /* Switches */
@@ -647,20 +692,26 @@ StScrollBar StButton#vhandle:active {
 }
 
 .status-chooser-user-icon {
-    border: 2px solid #8b8b8b;
-    border-radius: 5px;
-    width: 48pt;
-    height: 48pt;
+    border-radius: 40px;
+    width: 40pt;
+    height: 40pt;
     background-size: contain;
+    border: 1px solid #000;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.status-chooser-default-avatar {
+    border-radius: 40px;
+    icon-size: 40px
+    border: 1px solid #000;
 }
 
 .status-chooser-user-icon:hover {
-    border: 2px solid #bbbbbb;
+    border: 1px solid #555;
 }
 
 .status-chooser-user-name {
     font-weight: bold;
-    font-size: 1.3em;
     min-width: 120pt;
 }
 

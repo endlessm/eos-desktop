@@ -416,20 +416,13 @@ const PopupAlternatingMenuItemState = {
     ALTERNATIVE: 1
 }
 
-const PopupAlternatingMenuItem = new Lang.Class({
-    Name: 'PopupAlternatingMenuItem',
+const PopupAlternatingBaseMenuItem = new Lang.Class({
+    Name: 'PopupAlternatingBaseMenuItem',
     Extends: PopupBaseMenuItem,
 
     _init: function(text, alternateText, params) {
         this.parent(params);
         this.actor.add_style_class_name('popup-alternating-menu-item');
-
-        this._text = text;
-        this._alternateText = alternateText;
-        this.label = new St.Label({ text: text });
-        this.state = PopupAlternatingMenuItemState.DEFAULT;
-        this.addActor(this.label);
-        this.actor.label_actor = this.label;
 
         this.actor.connect('notify::mapped', Lang.bind(this, this._onMapped));
     },
@@ -449,11 +442,11 @@ const PopupAlternatingMenuItem = new Lang.Class({
 
     _setState: function(state) {
         if (this.state != state) {
-            if (state == PopupAlternatingMenuItemState.ALTERNATIVE && !this._canAlternate())
+            if (state == PopupAlternatingMenuItemState.ALTERNATIVE && !this.canAlternate())
                 return;
 
             this.state = state;
-            this._updateLabel();
+            this.stateChanged();
         }
     },
 
@@ -481,9 +474,31 @@ const PopupAlternatingMenuItem = new Lang.Class({
             this._updateStateFromModifiers();
 
         return false;
+    }
+});
+
+const PopupAlternatingMenuItem = new Lang.Class({
+    Name: 'PopupAlternatingMenuItem',
+    Extends: PopupAlternatingBaseMenuItem,
+
+    _init: function(text, alternateText, params) {
+        this.parent(params);
+
+        this._text = text;
+        this._alternateText = alternateText;
+        this.label = new St.Label({ text: text });
+        this.state = PopupAlternatingMenuItemState.DEFAULT;
+        this.addActor(this.label);
+        this.actor.label_actor = this.label;
     },
 
-    _updateLabel: function() {
+    canAlternate: function() {
+        if (this.state == PopupAlternatingMenuItemState.DEFAULT && !this._alternateText)
+            return false;
+        return true;
+    },
+
+    stateChanged: function() {
         if (this.state == PopupAlternatingMenuItemState.ALTERNATIVE) {
             this.actor.add_style_pseudo_class('alternate');
             this.label.set_text(this._alternateText);
@@ -493,20 +508,14 @@ const PopupAlternatingMenuItem = new Lang.Class({
         }
     },
 
-    _canAlternate: function() {
-        if (this.state == PopupAlternatingMenuItemState.DEFAULT && !this._alternateText)
-            return false;
-        return true;
-    },
-
     updateText: function(text, alternateText) {
         this._text = text;
         this._alternateText = alternateText;
 
-        if (!this._canAlternate())
+        if (!this.canAlternate())
             this._setState(PopupAlternatingMenuItemState.DEFAULT);
 
-        this._updateLabel();
+        this.updateState();
     }
 });
 
@@ -741,6 +750,143 @@ const Switch = new Lang.Class({
     }
 });
 
+const MenuItemOption = new Lang.Class({
+    Name: 'MenuItemOption',
+    Extends: St.Button,
+
+    _init: function(text, alternateText) {
+        this._text = text;
+        this._alternateText = alternateText;
+        this.state = PopupAlternatingMenuItemState.DEFAULT;
+
+        this.parent({ label: text,
+                      style_class: 'popup-options-menu-item-button',
+                      track_hover: true,
+                      can_focus: true,
+                      reactive: true,
+                    });
+    },
+
+    stateChanged: function(state) {
+        this.state = state;
+
+        if (this.state == PopupAlternatingMenuItemState.ALTERNATIVE &&
+            this._alternateText) {
+            this.add_style_pseudo_class('alternate');
+            this.set_label(this._alternateText);
+        } else {
+            this.remove_style_pseudo_class('alternate');
+            this.set_label(this._text);
+        }
+    },
+
+    updateText: function(text, alternateText) {
+        this._text = text;
+        this._alternateText = alternateText;
+
+        this.stateChanged(this.state);
+    }
+});
+
+const PopupOptionsMenuItem = new Lang.Class({
+    Name: 'PopupOptionsMenuItem',
+    Extends: PopupAlternatingBaseMenuItem,
+
+    _init: function(options, params) {
+        params = Params.parse (params, { hover: false });
+        this.parent(params);
+
+        this._options = options;
+        this._selectedOptionIndex = -1;
+
+        this._container = new St.BoxLayout({ style_class: 'popup-options-menu-item' });
+        this._container.connect('key-press-event', Lang.bind(this, this._onKeyPressEvent));
+
+        for (let optionIndex in options) {
+            let option = options[optionIndex];
+
+            if (option instanceof MenuItemOption) {
+                this._container.add(option, { expand: true });
+                option.connect('key-focus-in', Lang.bind(this, this._onOptionFocused));
+                option.connect('notify::hover', Lang.bind(this, this._onOptionHovered));
+            } else {
+                throw TypeError("Invalid argument to PopupOptionsMenuItem constructor");
+            }
+        }
+
+        this.addActor(this._container, { expand: true,
+                                         span: -1
+                                       });
+    },
+
+    _onKeyPressEvent: function(actor, event) {
+        let symbol = event.get_key_symbol();
+        let selectedOption = this._options[this._selectedOptionIndex];
+        let nextFocus = -1;
+
+        if (symbol == Clutter.KEY_Right) {
+            nextFocus = Gtk.DirectionType.RIGHT;
+        } else if (symbol == Clutter.KEY_Left) {
+            nextFocus = Gtk.DirectionType.LEFT;
+        }
+
+        if (selectedOption && (nextFocus != -1)) {
+            this._container.navigate_focus(selectedOption,
+                                           nextFocus, true);
+            return true;
+        }
+
+        return this.parent(actor, event);
+    },
+
+    _onOptionFocused: function(actor) {
+        let index = this._options.indexOf(actor);
+        this._selectedOptionIndex = index;
+    },
+
+    _onOptionHovered: function(actor) {
+        if (actor.hover) {
+            let index = this._options.indexOf(actor);
+            this._selectedOptionIndex = index;
+            this._updateKeyFocus(index);
+        }
+    },
+
+    _updateKeyFocus: function(index) {
+        let option = this._options[this._selectedOptionIndex];
+        if (option && option.visible) {
+            option.grab_key_focus();
+        }
+    },
+
+    stateChanged: function() {
+        let option = this._options[this._selectedOptionIndex];
+        if (option) {
+            option.stateChanged(this.state);
+        }
+    },
+
+    canAlternate: function() {
+        return true;
+    },
+
+    // Do nothing, as the key focus code we have already handles
+    // keyboard activation
+    activate: function(event) {
+
+    },
+
+    // Override default focus handling to disable the selection highlight on
+    // the whole MenuItem line
+    setActive: function (active, params) {
+        let activeChanged = active != this.active;
+        if (activeChanged) {
+            this.active = active;
+            this.emit('active-changed', active);
+        }
+    }
+});
+
 const PopupSwitchMenuItem = new Lang.Class({
     Name: 'PopupSwitchMenuItem',
     Extends: PopupBaseMenuItem,
@@ -842,6 +988,39 @@ const PopupImageMenuItem = new Lang.Class({
     setIcon: function(name) {
         this._icon.icon_name = name;
     }
+});
+
+const PopupUserMenuItem = new Lang.Class({
+    Name: 'PopupUserMenuItem',
+    Extends: PopupBaseMenuItem,
+
+    _init: function (text, imageParams, params) {
+        this.parent(params);
+
+        this._container = new St.BoxLayout({ style_class: 'popup-user-menu-item' });
+
+        let imagePath = imageParams ? imageParams.imagePath : null;
+        let iconName = imageParams ? imageParams.iconName : null;
+        let gicon = null;
+
+        if (imagePath) {
+            let iconFile = Gio.File.new_for_path(global.datadir + imagePath);
+            gicon = new Gio.FileIcon({ file: iconFile });
+        } else if (iconName) {
+            gicon = new Gio.ThemedIcon({ name: iconName });
+        }
+
+        if (gicon) {
+            this._icon = new St.Icon({ style_class: 'popup-user-menu-item-icon',
+                                       gicon: gicon });
+            this._container.add(this._icon);
+        }
+
+        this.label = new St.Label({ text: text });
+        this._container.add(this.label);
+
+        this.addActor(this._container);
+    },
 });
 
 const PopupMenuBase = new Lang.Class({
