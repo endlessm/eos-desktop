@@ -10,6 +10,7 @@ const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
+const AppStore = imports.ui.appStore;
 const Components = imports.ui.components;
 const CtrlAltTab = imports.ui.ctrlAltTab;
 const EndSessionDialog = imports.ui.endSessionDialog;
@@ -43,6 +44,7 @@ const Util = imports.misc.util;
 const OVERRIDES_SCHEMA = 'org.gnome.shell.overrides';
 const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
 
+let appStore = null;
 let componentManager = null;
 let panel = null;
 let overview = null;
@@ -151,6 +153,7 @@ function _initializeUI() {
     if (LoginManager.canLock())
         screenShield = new ScreenShield.ScreenShield();
 
+    appStore = new AppStore.AppStore();
     socialBar = new SocialBar.SocialBar();
     panel = new Panel.Panel();
     messageTray = new MessageTray.MessageTray();
