@@ -186,9 +186,15 @@ st_button_button_release (ClutterActor       *actor,
 
   if (button->priv->button_mask & mask)
     {
-      gboolean is_click;
+      gboolean is_click = FALSE;
 
-      is_click = button->priv->grabbed && st_widget_get_hover (ST_WIDGET (button));
+      if (button->priv->grabbed)
+        {
+          /* another grab might have been active, so sync hover state */
+          st_widget_sync_hover (ST_WIDGET (button));
+          is_click = st_widget_get_hover (ST_WIDGET (button));
+        }
+
       st_button_release (button, mask, is_click ? event->button : 0);
 
       button->priv->grabbed &= ~mask;
