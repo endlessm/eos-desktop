@@ -987,6 +987,16 @@ const Dash = new Lang.Class({
             }));
 
         return true;
+    },
+
+    hideLabels: function() {
+        let childrenOnDash = this._box.get_children();
+        for (let idx in childrenOnDash) {
+            let item = childrenOnDash[idx];
+            item.hideLabel();
+        }
+
+        this._showAppsIcon.hideLabel();
     }
 });
 
