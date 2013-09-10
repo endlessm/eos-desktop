@@ -1529,6 +1529,10 @@ const AppSplashPage = new Lang.Class({
     Extends: St.Widget,
 
     _init: function(app) {
+        this.layout = new St.BoxLayout({ vertical: true,
+                                         x_expand: true,
+                                         y_expand: true });
+
         let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
         this.parent({ x: workArea.x,
                       y: workArea.y,
@@ -1537,24 +1541,36 @@ const AppSplashPage = new Lang.Class({
                       layout_manager: new Clutter.BinLayout(),
                       style_class: 'app-splash-page' });
 
+        this.add_child(this.layout);
+
         this._app = app;
         this._spinner = null;
 
-        let background = new St.Widget({ style_class: 'app-splash-page-background',
-                                         x_expand: true,
-                                         y_expand: true });
+        this.background = new St.Widget({ style_class: 'app-splash-page-background',
+                                          layout_manager: new Clutter.BinLayout(),
+                                          x_expand: true,
+                                          y_expand: true });
 
         let info = app.get_app_info();
         if (info !== undefined && info.has_key(DESKTOP_LAUNCH_BACKGROUND_FIELD)) {
-            background.connect('allocation-changed', Lang.bind(this, function(actor, box, flags) {
+            this.background.connect('allocation-changed', Lang.bind(this, function(actor, box, flags) {
                 let bg_path = info.get_string(DESKTOP_LAUNCH_BACKGROUND_FIELD);
-                background.style_class = 'app-splash-page-custom-background';
-                background.style = 'background-image: url("%s");background-size: %dpx %dpx'.format(bg_path, box.x2 - box.x1, box.y2 - box.y1);
+                this.background.style_class = 'app-splash-page-custom-background';
+                this.background.style = 'background-image: url("%s");background-size: %dpx %dpx'.format(bg_path, box.x2 - box.x1, box.y2 - box.y1);
             }));
         }
 
-        this.add_child(background);
-        this.add_child(this._createCloseButton());
+        let title = new St.Widget({ style_class: 'app-splash-page-title',
+                                    layout_manager: new Clutter.BinLayout(),
+                                    x_expand: true,
+                                    y_expand: false });
+
+        title.add_child(this._createCloseButton());
+
+        this.layout.add(title);
+        this.layout.add(this.background, { expand: true,
+                                           x_fill: true,
+                                           y_fill: true });
     },
 
     _createCloseButton: function() {
@@ -1568,15 +1584,8 @@ const AppSplashPage = new Lang.Class({
         closeButton.set_y_expand(true);
 
         closeButton.connect('clicked', Lang.bind(this, function() { this.emit('close-clicked'); }));
-        closeButton.connect('style-changed', Lang.bind(this, this._closeButtonStyleChanged));
 
         return closeButton;
-    },
-
-    _closeButtonStyleChanged: function(closeButton) {
-        let themeNode = closeButton.get_theme_node();
-        closeButton.translation_x = themeNode.get_length('-splash-close-overlap-x');
-        closeButton.translation_y = themeNode.get_length('-splash-close-overlap-y');
     },
 
     vfunc_style_changed: function() {
@@ -1591,7 +1600,10 @@ const AppSplashPage = new Lang.Class({
         let appIcon = this._app.create_icon_texture(iconSize);
         appIcon.x_align = Clutter.ActorAlign.CENTER;
         appIcon.y_align = Clutter.ActorAlign.CENTER;
-        this.add_child(appIcon);
+        appIcon.set_x_expand(true);
+        appIcon.set_y_expand(true);
+
+        this.background.add_child(appIcon);
 
         let animationSize = themeNode.get_length('-animation-size');
         this._spinner = new Panel.VariableSpeedAnimation('splash-circle-animation.png',
@@ -1600,7 +1612,7 @@ const AppSplashPage = new Lang.Class({
                                                          SPLASH_CIRCLE_SKIP_END_FRAMES);
         this._spinner.actor.x_align = Clutter.ActorAlign.CENTER;
         this._spinner.actor.y_align = Clutter.ActorAlign.CENTER;
-        this.add_child(this._spinner.actor);
+        this.background.add_child(this._spinner.actor);
     },
 
     spin: function() {
