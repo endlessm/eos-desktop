@@ -692,21 +692,24 @@ StScrollBar StButton#vhandle:active {
 }
 
 .status-chooser-user-icon {
-    border-radius: 40px;
-    width: 40pt;
-    height: 40pt;
+    border: 2px solid #8b8b8b;
+    border-radius: 5px;
+    width: 48pt;
+    height: 48pt;
     background-size: contain;
+}
+
+.status-chooser-user-icon:hover {
+    border: 2px solid #bbbbbb;
+}
+
+.status-chooser .status-chooser-user-icon {
+    border-radius: 40px;
     border: 1px solid #000;
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.status-chooser-default-avatar {
-    border-radius: 40px;
-    icon-size: 40px
-    border: 1px solid #000;
-}
-
-.status-chooser-user-icon:hover {
+.status-chooser .status-chooser-user-icon:hover {
     border: 1px solid #555;
 }
 
