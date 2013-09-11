@@ -21,6 +21,7 @@ const OverviewControls = imports.ui.overviewControls;
 const Panel = imports.ui.panel;
 const Params = imports.misc.params;
 const Tweener = imports.ui.tweener;
+const Util = imports.misc.util;
 const ViewSelector = imports.ui.viewSelector;
 const WorkspaceThumbnail = imports.ui.workspaceThumbnail;
 
@@ -272,6 +273,7 @@ const Overview = new Lang.Class({
         this._shown = false;            // show() and not hide()
         this._toggledFromApp = false;   // was the last call to toggle from an app?
         this._targetPage = null;        // do we have a target page to animate to?
+        this._targetDisableFade = false; // will we fade when showing next?
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
         this.visibleTarget = false;
@@ -615,12 +617,24 @@ const Overview = new Lang.Class({
         this._animateVisible();
     },
 
-    _showOrSwitchPage: function(page) {
+    _showOrSwitchPage: function(page, disableFade) {
         if (this.visible) {
             this._viewSelector.setActivePage(page);
         } else {
             this._targetPage = page;
+            this._targetDisableFade = !!disableFade;
             this.show();
+        }
+    },
+
+    startupState: function() {
+        this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
+
+        // Start the browser, without exiting the overview,
+        // if it's not running already
+        let browser = Util.getBrowserApp();
+        if (browser && browser.get_state() != Shell.AppState.RUNNING) {
+            browser.activate();
         }
     },
 
@@ -683,18 +697,23 @@ const Overview = new Lang.Class({
         this._viewSelector.show(this._targetPage);
         this._targetPage = null;
 
-        this._overview.opacity = 0;
-        Tweener.addTween(this._overview,
-                         { opacity: 255,
-                           transition: 'easeOutQuad',
-                           time: ANIMATION_TIME,
-                           onComplete: this._showDone,
-                           onCompleteScope: this
-                         });
-
         this._coverPane.raise_top();
         this._coverPane.show();
         this.emit('showing');
+
+        if (this._targetDisableFade) {
+            this._targetDisableFade = false;
+            this._showDone();
+        } else {
+            this._overview.opacity = 0;
+            Tweener.addTween(this._overview,
+                             { opacity: 255,
+                               transition: 'easeOutQuad',
+                               time: ANIMATION_TIME,
+                               onComplete: this._showDone,
+                               onCompleteScope: this
+                             });
+        }
     },
 
     // hide:
