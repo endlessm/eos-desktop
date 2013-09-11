@@ -508,11 +508,6 @@ const _Draggable = new Lang.Class({
     },
 
     _cancelDrag: function(eventTime) {
-        if (this._updateHoverId) {
-            GLib.source_remove(this._updateHoverId);
-            this._updateHoverId = 0;
-        }
-
         this.emit('drag-cancelled', eventTime);
         this._dragInProgress = false;
         let [snapBackX, snapBackY, snapBackScale] = this._getRestoreLocation();
@@ -617,6 +612,11 @@ const _Draggable = new Lang.Class({
 
         if (this.actor) {
             this._syncHover(this.actor);
+        }
+
+        if (this._updateHoverId) {
+            GLib.source_remove(this._updateHoverId);
+            this._updateHoverId = 0;
         }
 
         this._dragActor = undefined;
