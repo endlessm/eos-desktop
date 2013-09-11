@@ -11,6 +11,7 @@ const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const AppDisplay = imports.ui.appDisplay;
+const LayoutManager = imports.ui.layout;
 const Main = imports.ui.main;
 const OverviewControls = imports.ui.overviewControls;
 const Params = imports.misc.params;
@@ -397,6 +398,25 @@ const ViewsDisplay = new Lang.Class({
     }
 });
 
+const ViewsCloneLayout = new Lang.Class({
+    Name: 'ViewsCloneLayout',
+    Extends: Clutter.BoxLayout,
+
+    vfunc_allocate: function(container, box, flags) {
+        let panelClone = container.get_child_at_index(0);
+        let viewsClone = container.get_child_at_index(1);
+
+        let panelBox = box.copy();
+        let panelHeight = panelClone.get_preferred_height(-1)[1];
+        panelBox.y2 = panelBox.y1 + panelHeight;
+        panelClone.allocate(panelBox, flags);
+
+        let viewsBox = box.copy();
+        viewsBox.y1 = panelBox.y2;
+        viewsClone.allocate(viewsBox, flags);
+    }
+});
+
 const ViewSelector = new Lang.Class({
     Name: 'ViewSelector',
 
@@ -420,7 +440,34 @@ const ViewSelector = new Lang.Class({
                                        _("Applications"), 'view-grid-symbolic');
         this._entry = this._viewsDisplay.entry;
 
+        this._addViewsPageClone();
+
         this._stageKeyPressId = 0;
+    },
+
+    _addViewsPageClone: function() {
+        let viewsCloneLayout = new ViewsCloneLayout({ vertical: true });
+        let viewsClone = new St.Widget({ layout_manager: viewsCloneLayout,
+                                         opacity: AppDisplay.INACTIVE_GRID_OPACITY });
+        viewsClone.add_child(new Clutter.Clone({ source: Main.panel.actor,
+                                                 opacity: 0 }));
+        viewsClone.add_child(new Clutter.Clone({ source: this._appsPage }));
+
+        let viewsCloneSaturation = new Clutter.DesaturateEffect({ factor: AppDisplay.INACTIVE_GRID_SATURATION,
+                                                                  enabled: false });
+        viewsClone.add_effect(viewsCloneSaturation);
+
+        let workareaConstraint = new LayoutManager.MonitorConstraint({ primary: true,
+                                                                       use_workarea: true });
+        viewsClone.add_constraint(workareaConstraint);
+        Main.layoutManager.setViewsClone(viewsClone);
+
+        Main.overview.connect('showing', Lang.bind(this, function() {
+            viewsCloneSaturation.enabled = false;
+        }));
+        Main.overview.connect('hidden', Lang.bind(this, function() {
+            viewsCloneSaturation.enabled = true;
+        }));
     },
 
     _onEmptySpaceClicked: function() {

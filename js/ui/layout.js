@@ -385,11 +385,18 @@ const LayoutManager = new Lang.Class({
 
         clickAction.connect('clicked', function(action) {
             let button = action.get_button();
-            if (button == ButtonConstants.LEFT_MOUSE_BUTTON &&
-                Main.socialBar.proxy.Visible) {
-                Main.socialBar.proxy.toggleRemote(global.get_current_time());
+            if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+                if (Main.socialBar.proxy.Visible) {
+                    Main.socialBar.proxy.toggleRemote(global.get_current_time());
+                }
+
+                Main.overview.showApps();
             }
         });
+    },
+
+    setViewsClone: function(actor) {
+        this._backgroundGroup.add_child(actor);        
     },
 
     _createBackground: function(monitorIndex) {

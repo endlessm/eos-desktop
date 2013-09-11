@@ -11,6 +11,7 @@ const St = imports.gi.St;
 const Shell = imports.gi.Shell;
 const Gdk = imports.gi.Gdk;
 
+const AppDisplay = imports.ui.appDisplay;
 const Background = imports.ui.background;
 const Dash = imports.ui.dash;
 const DND = imports.ui.dnd;
@@ -250,6 +251,10 @@ const Overview = new Lang.Class({
         this._overview._delegate = this;
         this._overview.add_constraint(new LayoutManager.MonitorConstraint({ primary: true }));
         this._allMonitorsGroup.add_actor(this._overview);
+
+        this._overviewSaturation = new Clutter.DesaturateEffect({ factor: AppDisplay.ACTIVE_GRID_SATURATION,
+                                                                  enabled: false });
+        this._overview.add_effect(this._overviewSaturation);
 
         // this._groupStack is a BinLayout that holds the main actor group, and allows
         // overlaying other elements on top of that
@@ -694,6 +699,13 @@ const Overview = new Lang.Class({
             this._targetPage = ViewSelector.ViewPage.WINDOWS;
         }
 
+        let startOpacity = 0;
+        let shouldAnimateSaturation = false;
+        if (this._targetPage == ViewSelector.ViewPage.APPS) {
+            startOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            shouldAnimateSaturation = true;
+        }
+
         this._viewSelector.show(this._targetPage);
         this._targetPage = null;
 
@@ -705,7 +717,7 @@ const Overview = new Lang.Class({
             this._targetDisableFade = false;
             this._showDone();
         } else {
-            this._overview.opacity = 0;
+            this._overview.opacity = startOpacity;
             Tweener.addTween(this._overview,
                              { opacity: 255,
                                transition: 'easeOutQuad',
@@ -713,6 +725,19 @@ const Overview = new Lang.Class({
                                onComplete: this._showDone,
                                onCompleteScope: this
                              });
+
+            if (shouldAnimateSaturation) {
+                this._overviewSaturation.enabled = true;
+                this._overviewSaturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
+                Tweener.addTween(this._overviewSaturation,
+                                 { factor: AppDisplay.ACTIVE_GRID_SATURATION,
+                                   transition: 'easeOutQuad',
+                                   time: ANIMATION_TIME,
+                                   onComplete: Lang.bind(this, function() {
+                                       this._overviewSaturation.enabled = false;
+                                   })
+                                 });
+            }
         }
     },
 
@@ -821,14 +846,33 @@ const Overview = new Lang.Class({
 
         this._viewSelector.zoomFromOverview();
 
+        let targetOpacity = 0;
+        let shouldAnimateSaturation = false;
+        if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.APPS) {
+            targetOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
+        }
+
         // Make other elements fade out.
         Tweener.addTween(this._overview,
-                         { opacity: 0,
+                         { opacity: targetOpacity,
                            transition: 'easeOutQuad',
                            time: ANIMATION_TIME,
                            onComplete: this._hideDone,
                            onCompleteScope: this
                          });
+
+        if (shouldAnimateSaturation) {
+            this._overviewSaturation.enabled = true;
+            this._overviewSaturation.factor = AppDisplay.ACTIVE_GRID_SATURATION;
+            Tweener.addTween(this._overviewSaturation,
+                             { factor: AppDisplay.INACTIVE_GRID_SATURATION,
+                               transition: 'easeOutQuad',
+                               time: ANIMATION_TIME,
+                               onComplete: Lang.bind(this, function() {
+                                   this._overviewSaturation.enabled = false;
+                               })
+                             });
+        }
 
         this._coverPane.raise_top();
         this._coverPane.show();
