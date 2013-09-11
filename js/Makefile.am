@@ -40,6 +40,7 @@ nobase_dist_js_DATA = 	\
 	ui/appDisplay.js	\
 	ui/appFavorites.js	\
 	ui/appIconBar.js	\
+	ui/appStore.js		\
 	ui/backgroundMenu.js	\
 	ui/background.js	\
 	ui/boxpointer.js	\
