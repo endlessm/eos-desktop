@@ -1778,7 +1778,7 @@ const AppIcon = new Lang.Class({
             return false;
         }
 
-        this.actor.fake_release();
+        this.iconButton.fake_release();
 
         if (this._draggable) {
             this._draggable.fakeRelease();
