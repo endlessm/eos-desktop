@@ -819,6 +819,16 @@ gnome_shell_gdk_event_handler (GdkEvent *event_gdk,
   gtk_main_do_event (event_gdk);
 }
 
+static void
+entry_cursor_func (StEntry  *entry,
+                   gboolean  use_ibeam,
+                   gpointer  user_data)
+{
+  ShellGlobal *global = user_data;
+
+  meta_screen_set_cursor (global->meta_screen, use_ibeam ? META_CURSOR_IBEAM : META_CURSOR_DEFAULT);
+}
+
 void
 _shell_global_set_plugin (ShellGlobal *global,
                           MetaPlugin  *plugin)
@@ -842,6 +852,7 @@ _shell_global_set_plugin (ShellGlobal *global,
   global->ibus_window = gdk_x11_window_foreign_new_for_display (global->gdk_display,
                                                                 global->stage_xwindow);
   st_im_text_set_event_window (global->ibus_window);
+  st_entry_set_cursor_func (entry_cursor_func, global);
 
   g_signal_connect (global->stage, "notify::width",
                     G_CALLBACK (global_stage_notify_width), global);
