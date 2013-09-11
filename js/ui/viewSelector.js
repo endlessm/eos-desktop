@@ -184,6 +184,12 @@ const ViewsDisplay = new Lang.Class({
         RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, this._addSearchProvider));
 
         this._showPage(this._allView.actor);
+
+        Main.overview.connect('hidden', Lang.bind(this, this._onOverviewHidden));
+    },
+
+    _onOverviewHidden: function() {
+        this._showPage(this._allView.actor);
     },
 
     _addPage: function(page) {
