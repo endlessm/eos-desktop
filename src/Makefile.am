@@ -314,7 +314,7 @@ CLEANFILES += ShellJS-0.1.gir
 St-1.0.gir: libst-1.0.la
 St_1_0_gir_INCLUDES = Clutter-1.0 Gtk-3.0
 St_1_0_gir_CFLAGS = $(st_cflags) -DST_COMPILATION
-St_1_0_gir_LIBS = libst-1.0.la
+St_1_0_gir_LIBS = libst-1.0.la libeos-shell.la
 St_1_0_gir_FILES = $(filter-out %-private.h $(st_non_gir_sources), $(addprefix $(srcdir)/,$(st_source_h))) \
 	$(addprefix $(srcdir)/,$(st_source_c))
 INTROSPECTION_GIRS += St-1.0.gir

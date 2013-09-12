@@ -34,7 +34,7 @@ if (!('outputJenkinsResults' in this))
 window.C_=function(type,text){
  return text;
 }
-window._=window.C_;
+window._=function(text) { return text; }
 window.global={};
 
 //Overrides for EOS custom methods
