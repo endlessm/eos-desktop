@@ -423,6 +423,38 @@ const ViewsCloneLayout = new Lang.Class({
     }
 });
 
+const ViewsClone = new Lang.Class({
+    Name: 'ViewsClone',
+    Extends: St.Widget,
+
+    _init: function(appsPage) {
+        this._appsPage = appsPage;
+        let viewsCloneLayout = new ViewsCloneLayout({ vertical: true });
+
+        this.parent({ layout_manager: viewsCloneLayout,
+                      opacity: AppDisplay.INACTIVE_GRID_OPACITY });
+
+        this.add_child(new Clutter.Clone({ source: Main.panel.actor,
+                                           opacity: 0 }));
+        this.add_child(new Clutter.Clone({ source: this._appsPage }));
+
+        let viewsCloneSaturation = new Clutter.DesaturateEffect({ factor: AppDisplay.INACTIVE_GRID_SATURATION,
+                                                                  enabled: false });
+        this.add_effect(viewsCloneSaturation);
+
+        let workareaConstraint = new LayoutManager.MonitorConstraint({ primary: true,
+                                                                       use_workarea: true });
+        this.add_constraint(workareaConstraint);
+
+        Main.overview.connect('showing', Lang.bind(this, function() {
+            viewsCloneSaturation.enabled = false;
+        }));
+        Main.overview.connect('hidden', Lang.bind(this, function() {
+            viewsCloneSaturation.enabled = true;
+        }));
+    }
+});
+
 const ViewSelector = new Lang.Class({
     Name: 'ViewSelector',
 
@@ -448,32 +480,16 @@ const ViewSelector = new Lang.Class({
 
         this._addViewsPageClone();
 
+        Main.overview.connect('hidden', Lang.bind(this, function() {
+            this._showPage(this._appsPage, true);
+        }));
+
         this._stageKeyPressId = 0;
     },
 
     _addViewsPageClone: function() {
-        let viewsCloneLayout = new ViewsCloneLayout({ vertical: true });
-        let viewsClone = new St.Widget({ layout_manager: viewsCloneLayout,
-                                         opacity: AppDisplay.INACTIVE_GRID_OPACITY });
-        viewsClone.add_child(new Clutter.Clone({ source: Main.panel.actor,
-                                                 opacity: 0 }));
-        viewsClone.add_child(new Clutter.Clone({ source: this._appsPage }));
-
-        let viewsCloneSaturation = new Clutter.DesaturateEffect({ factor: AppDisplay.INACTIVE_GRID_SATURATION,
-                                                                  enabled: false });
-        viewsClone.add_effect(viewsCloneSaturation);
-
-        let workareaConstraint = new LayoutManager.MonitorConstraint({ primary: true,
-                                                                       use_workarea: true });
-        viewsClone.add_constraint(workareaConstraint);
-        Main.layoutManager.setViewsClone(viewsClone);
-
-        Main.overview.connect('showing', Lang.bind(this, function() {
-            viewsCloneSaturation.enabled = false;
-        }));
-        Main.overview.connect('hidden', Lang.bind(this, function() {
-            viewsCloneSaturation.enabled = true;
-        }));
+        let layoutViewsClone = new ViewsClone(this._appsPage);
+        Main.layoutManager.setViewsClone(layoutViewsClone);
     },
 
     _onEmptySpaceClicked: function() {
