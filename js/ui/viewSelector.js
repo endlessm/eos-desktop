@@ -3,6 +3,7 @@
 const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
 const Signals = imports.signals;
 const Lang = imports.lang;
@@ -113,6 +114,19 @@ const FocusTrap = new Lang.Class({
             direction == Gtk.DirectionType.TAB_BACKWARD)
             return this.parent(from, direction);
         return false;
+    }
+});
+
+const ViewsDisplayConstraint = new Lang.Class({
+    Name: 'ViewsDisplayConstraint',
+    Extends: LayoutManager.MonitorConstraint,
+
+    vfunc_update_allocation: function(actor, actorBox) {
+        let originalBox = actorBox.copy();
+        this.parent(actor, actorBox);
+
+        actorBox.init_rect(originalBox.get_x(), originalBox.get_y(),
+                           actorBox.get_width(), originalBox.get_height());
     }
 });
 
@@ -427,8 +441,10 @@ const ViewsClone = new Lang.Class({
     Name: 'ViewsClone',
     Extends: St.Widget,
 
-    _init: function(appsPage) {
+    _init: function(appsPage, forOverview) {
         this._appsPage = appsPage;
+        this._forOverview = forOverview;
+
         let viewsCloneLayout = new ViewsCloneLayout({ vertical: true });
 
         this.parent({ layout_manager: viewsCloneLayout,
@@ -447,10 +463,10 @@ const ViewsClone = new Lang.Class({
         this.add_constraint(workareaConstraint);
 
         Main.overview.connect('showing', Lang.bind(this, function() {
-            viewsCloneSaturation.enabled = false;
+            viewsCloneSaturation.enabled = this._forOverview;
         }));
         Main.overview.connect('hidden', Lang.bind(this, function() {
-            viewsCloneSaturation.enabled = true;
+            viewsCloneSaturation.enabled = !this._forOverview;
         }));
     }
 });
@@ -476,6 +492,8 @@ const ViewSelector = new Lang.Class({
         this._viewsDisplay = new ViewsDisplay();
         this._appsPage = this._addPage(this._viewsDisplay.actor,
                                        _("Applications"), 'view-grid-symbolic');
+        this._appsPage.add_constraint(new ViewsDisplayConstraint({ primary: true,
+                                                                   use_workarea: true }));
         this._entry = this._viewsDisplay.entry;
 
         this._addViewsPageClone();
@@ -488,8 +506,15 @@ const ViewSelector = new Lang.Class({
     },
 
     _addViewsPageClone: function() {
-        let layoutViewsClone = new ViewsClone(this._appsPage);
+        let layoutViewsClone = new ViewsClone(this._appsPage, false);
         Main.layoutManager.setViewsClone(layoutViewsClone);
+
+        let overviewViewsClone = new ViewsClone(this._appsPage, true);
+        Main.overview.setViewsClone(overviewViewsClone);
+        this._appsPage.bind_property('visible',
+                                     overviewViewsClone, 'visible',
+                                     GObject.BindingFlags.SYNC_CREATE |
+                                     GObject.BindingFlags.INVERT_BOOLEAN);
     },
 
     _onEmptySpaceClicked: function() {

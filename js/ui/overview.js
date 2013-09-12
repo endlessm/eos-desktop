@@ -317,6 +317,10 @@ const Overview = new Lang.Class({
             this.init();
     },
 
+    setViewsClone: function(actor) {
+        this._backgroundGroup.add_child(actor);        
+    },
+
     _updateDecorators: function() {
         // Remove old decorators
         for (let i = 0; i < this._screenDecorators.length; i++) {
