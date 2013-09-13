@@ -626,6 +626,10 @@ const ViewSelector = new Lang.Class({
         if (noFade) {
             this._activePage.opacity = 255;
         } else {
+            if (this._activePage == this._appsPage) {
+                this._activePage.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            }
+
             Tweener.addTween(this._activePage,
                 { opacity: 255,
                   time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
@@ -642,9 +646,14 @@ const ViewSelector = new Lang.Class({
         this._activePage = page;
         this._pageChanged();
 
-        if (oldPage && !noFade)
+        if (oldPage && !noFade) {
+            let targetOpacity = 0;
+            if (oldPage == this._appsPage) {
+                targetOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            }
+
             Tweener.addTween(oldPage,
-                             { opacity: 0,
+                             { opacity: targetOpacity,
                                time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
                                transition: 'easeOutQuad',
                                onComplete: Lang.bind(this,
@@ -652,8 +661,9 @@ const ViewSelector = new Lang.Class({
                                        this._fadePageIn(oldPage, noFade);
                                    })
                              });
-        else
+        } else {
             this._fadePageIn(oldPage, noFade);
+        }
     },
 
     _a11yFocusPage: function(page) {
