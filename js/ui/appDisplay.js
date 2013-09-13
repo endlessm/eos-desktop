@@ -1514,12 +1514,7 @@ const AppActivationContext = new Lang.Class({
         // (splashId == 0) => the window took more than the stock
         // splash timeout to display
         if (this._splashId == 0) {
-            // Wait for the minimize animation to complete in this case
-            Mainloop.timeout_add(WindowManager.WINDOW_ANIMATION_TIME, Lang.bind(this,
-                function() {
-                    this._clearSplash();
-                    return false;
-                }));
+            this._clearSplash();
         }
     }
 });
