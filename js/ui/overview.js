@@ -11,6 +11,7 @@ const St = imports.gi.St;
 const Shell = imports.gi.Shell;
 const Gdk = imports.gi.Gdk;
 
+const AppDisplay = imports.ui.appDisplay;
 const Background = imports.ui.background;
 const Dash = imports.ui.dash;
 const DND = imports.ui.dnd;
@@ -21,6 +22,7 @@ const OverviewControls = imports.ui.overviewControls;
 const Panel = imports.ui.panel;
 const Params = imports.misc.params;
 const Tweener = imports.ui.tweener;
+const Util = imports.misc.util;
 const ViewSelector = imports.ui.viewSelector;
 const WorkspaceThumbnail = imports.ui.workspaceThumbnail;
 
@@ -250,6 +252,10 @@ const Overview = new Lang.Class({
         this._overview.add_constraint(new LayoutManager.MonitorConstraint({ primary: true }));
         this._allMonitorsGroup.add_actor(this._overview);
 
+        this._overviewSaturation = new Clutter.DesaturateEffect({ factor: AppDisplay.ACTIVE_GRID_SATURATION,
+                                                                  enabled: false });
+        this._overview.add_effect(this._overviewSaturation);
+
         // this._groupStack is a BinLayout that holds the main actor group, and allows
         // overlaying other elements on top of that
         this._groupStack = new St.Widget({ layout_manager: new Clutter.BinLayout(),
@@ -272,6 +278,7 @@ const Overview = new Lang.Class({
         this._shown = false;            // show() and not hide()
         this._toggledFromApp = false;   // was the last call to toggle from an app?
         this._targetPage = null;        // do we have a target page to animate to?
+        this._targetDisableFade = false; // will we fade when showing next?
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
         this.visibleTarget = false;
@@ -308,6 +315,10 @@ const Overview = new Lang.Class({
 
         if (this._initCalled)
             this.init();
+    },
+
+    setViewsClone: function(actor) {
+        this._backgroundGroup.add_child(actor);        
     },
 
     _updateDecorators: function() {
@@ -615,12 +626,24 @@ const Overview = new Lang.Class({
         this._animateVisible();
     },
 
-    _showOrSwitchPage: function(page) {
+    _showOrSwitchPage: function(page, disableFade) {
         if (this.visible) {
             this._viewSelector.setActivePage(page);
         } else {
             this._targetPage = page;
+            this._targetDisableFade = !!disableFade;
             this.show();
+        }
+    },
+
+    startupState: function() {
+        this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
+
+        // Start the browser, without exiting the overview,
+        // if it's not running already
+        let browser = Util.getBrowserApp();
+        if (browser && browser.get_state() != Shell.AppState.RUNNING) {
+            browser.activate();
         }
     },
 
@@ -680,21 +703,46 @@ const Overview = new Lang.Class({
             this._targetPage = ViewSelector.ViewPage.WINDOWS;
         }
 
+        let startOpacity = 0;
+        let shouldAnimateSaturation = false;
+        if (this._targetPage == ViewSelector.ViewPage.APPS) {
+            startOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            shouldAnimateSaturation = true;
+        }
+
         this._viewSelector.show(this._targetPage);
         this._targetPage = null;
-
-        this._overview.opacity = 0;
-        Tweener.addTween(this._overview,
-                         { opacity: 255,
-                           transition: 'easeOutQuad',
-                           time: ANIMATION_TIME,
-                           onComplete: this._showDone,
-                           onCompleteScope: this
-                         });
 
         this._coverPane.raise_top();
         this._coverPane.show();
         this.emit('showing');
+
+        if (this._targetDisableFade) {
+            this._targetDisableFade = false;
+            this._showDone();
+        } else {
+            this._overview.opacity = startOpacity;
+            Tweener.addTween(this._overview,
+                             { opacity: 255,
+                               transition: 'easeOutQuad',
+                               time: ANIMATION_TIME,
+                               onComplete: this._showDone,
+                               onCompleteScope: this
+                             });
+
+            if (shouldAnimateSaturation) {
+                this._overviewSaturation.enabled = true;
+                this._overviewSaturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
+                Tweener.addTween(this._overviewSaturation,
+                                 { factor: AppDisplay.ACTIVE_GRID_SATURATION,
+                                   transition: 'easeOutQuad',
+                                   time: ANIMATION_TIME,
+                                   onComplete: Lang.bind(this, function() {
+                                       this._overviewSaturation.enabled = false;
+                                   })
+                                 });
+            }
+        }
     },
 
     // hide:
@@ -802,14 +850,33 @@ const Overview = new Lang.Class({
 
         this._viewSelector.zoomFromOverview();
 
+        let targetOpacity = 0;
+        let shouldAnimateSaturation = false;
+        if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.APPS) {
+            targetOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
+        }
+
         // Make other elements fade out.
         Tweener.addTween(this._overview,
-                         { opacity: 0,
+                         { opacity: targetOpacity,
                            transition: 'easeOutQuad',
                            time: ANIMATION_TIME,
                            onComplete: this._hideDone,
                            onCompleteScope: this
                          });
+
+        if (shouldAnimateSaturation) {
+            this._overviewSaturation.enabled = true;
+            this._overviewSaturation.factor = AppDisplay.ACTIVE_GRID_SATURATION;
+            Tweener.addTween(this._overviewSaturation,
+                             { factor: AppDisplay.INACTIVE_GRID_SATURATION,
+                               transition: 'easeOutQuad',
+                               time: ANIMATION_TIME,
+                               onComplete: Lang.bind(this, function() {
+                                   this._overviewSaturation.enabled = false;
+                               })
+                             });
+        }
 
         this._coverPane.raise_top();
         this._coverPane.show();

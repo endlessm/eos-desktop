@@ -57,10 +57,15 @@ const MonitorConstraint = new Lang.Class({
                  'index': GObject.ParamSpec.int('index',
                                                 'Monitor index', 'Track specific monitor',
                                                 GObject.ParamFlags.READABLE | GObject.ParamFlags.WRITABLE,
-                                                -1, 64, -1)},
+                                                -1, 64, -1),
+                 'use-workarea': GObject.ParamSpec.boolean('use-workarea',
+                                                           'Use Workarea', 'Track monitor workarea',
+                                                           GObject.ParamFlags.READABLE | GObject.ParamFlags.WRITABLE,
+                                                           false)},
 
     _init: function(props) {
         this._primary = false;
+        this._useWorkarea = false;
         this._index = -1;
 
         this.parent(props);
@@ -91,6 +96,17 @@ const MonitorConstraint = new Lang.Class({
         this.notify('index');
     },
 
+    get use_workarea() {
+        return this._useWorkarea;
+    },
+
+    set use_workarea(v) {
+        this._useWorkarea = v;
+        if (this.actor)
+            this.actor.queue_relayout();
+        this.notify('use-workarea');
+    },
+
     vfunc_set_actor: function(actor) {
         if (actor) {
             if (!this._monitorsChangedId) {
@@ -98,10 +114,20 @@ const MonitorConstraint = new Lang.Class({
                     this.actor.queue_relayout();
                 }));
             }
+
+            if (!this._workareasChangedId) {
+                this._workareasChangedId = global.screen.connect('workareas-changed', Lang.bind(this, function() {
+                    this.actor.queue_relayout();
+                }));
+            }
         } else {
             if (this._monitorsChangedId)
                 Main.layoutManager.disconnect(this._monitorsChangedId);
             this._monitorsChangedId = 0;
+
+            if (this._workareasChangedId)
+                global.screen.disconnect(this._workareasChangedId);
+            this._workareasChangedId = 0;
         }
 
         this.parent(actor);
@@ -112,10 +138,16 @@ const MonitorConstraint = new Lang.Class({
             return;
 
         let monitor;
+        let index;
         if (this._primary) {
-            monitor = Main.layoutManager.primaryMonitor;
+            index = Main.layoutManager.primaryIndex;
         } else {
-            let index = Math.min(this._index, Main.layoutManager.monitors.length - 1);
+            index = Math.min(this._index, Main.layoutManager.monitors.length - 1);
+        }
+
+        if (this._useWorkarea) {
+            monitor = Main.layoutManager.getWorkAreaForMonitor(index);
+        } else {
             monitor = Main.layoutManager.monitors[index];
         }
 
@@ -353,11 +385,18 @@ const LayoutManager = new Lang.Class({
 
         clickAction.connect('clicked', function(action) {
             let button = action.get_button();
-            if (button == ButtonConstants.LEFT_MOUSE_BUTTON &&
-                Main.socialBar.proxy.Visible) {
-                Main.socialBar.proxy.toggleRemote(global.get_current_time());
+            if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+                if (Main.socialBar.proxy.Visible) {
+                    Main.socialBar.proxy.toggleRemote(global.get_current_time());
+                }
+
+                Main.overview.showApps();
             }
         });
+    },
+
+    setViewsClone: function(actor) {
+        this._backgroundGroup.add_child(actor);        
     },
 
     _createBackground: function(monitorIndex) {

@@ -204,26 +204,17 @@ function _initializeUI() {
     ExtensionDownloader.init();
     ExtensionSystem.init();
 
-    if (sessionMode.isGreeter && screenShield) {
-        layoutManager.connect('startup-prepared', function() {
+    layoutManager.connect('startup-prepared', function() {
+        if (sessionMode.isGreeter && screenShield) {
             screenShield.showDialog();
-        });
-    }
+        } else if (sessionMode.isPrimary) {
+            overview.startupState();
+        }
+    });
 
     layoutManager.connect('startup-complete', function() {
                               if (keybindingMode == Shell.KeyBindingMode.NONE) {
                                   keybindingMode = Shell.KeyBindingMode.NORMAL;
-                              }
-
-                              // Now that we've completed startup,
-                              // show the overview
-                              overview.showApps();
-
-                              // Start the browser, without exiting the overview,
-                              // if it's not running already
-                              let browser = Util.getBrowserApp();
-                              if (browser && browser.get_state() != Shell.AppState.RUNNING) {
-                                  browser.activate();
                               }
                           });
 }

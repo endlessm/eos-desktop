@@ -3,6 +3,7 @@
 const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
 const Signals = imports.signals;
 const Lang = imports.lang;
@@ -11,6 +12,7 @@ const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const AppDisplay = imports.ui.appDisplay;
+const LayoutManager = imports.ui.layout;
 const Main = imports.ui.main;
 const OverviewControls = imports.ui.overviewControls;
 const Params = imports.misc.params;
@@ -115,6 +117,19 @@ const FocusTrap = new Lang.Class({
     }
 });
 
+const ViewsDisplayConstraint = new Lang.Class({
+    Name: 'ViewsDisplayConstraint',
+    Extends: LayoutManager.MonitorConstraint,
+
+    vfunc_update_allocation: function(actor, actorBox) {
+        let originalBox = actorBox.copy();
+        this.parent(actor, actorBox);
+
+        actorBox.init_rect(originalBox.get_x(), originalBox.get_y(),
+                           actorBox.get_width(), originalBox.get_height());
+    }
+});
+
 const ViewsDisplay = new Lang.Class({
     Name: 'ViewsDisplay',
 
@@ -182,6 +197,12 @@ const ViewsDisplay = new Lang.Class({
         // Load remote search providers provided by applications
         RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, this._addSearchProvider));
 
+        this._showPage(this._allView.actor);
+
+        Main.overview.connect('hidden', Lang.bind(this, this._onOverviewHidden));
+    },
+
+    _onOverviewHidden: function() {
         this._showPage(this._allView.actor);
     },
 
@@ -397,6 +418,59 @@ const ViewsDisplay = new Lang.Class({
     }
 });
 
+const ViewsCloneLayout = new Lang.Class({
+    Name: 'ViewsCloneLayout',
+    Extends: Clutter.BoxLayout,
+
+    vfunc_allocate: function(container, box, flags) {
+        let panelClone = container.get_child_at_index(0);
+        let viewsClone = container.get_child_at_index(1);
+
+        let panelBox = box.copy();
+        let panelHeight = panelClone.get_preferred_height(-1)[1];
+        panelBox.y2 = panelBox.y1 + panelHeight;
+        panelClone.allocate(panelBox, flags);
+
+        let viewsBox = box.copy();
+        viewsBox.y1 = panelBox.y2;
+        viewsClone.allocate(viewsBox, flags);
+    }
+});
+
+const ViewsClone = new Lang.Class({
+    Name: 'ViewsClone',
+    Extends: St.Widget,
+
+    _init: function(appsPage, forOverview) {
+        this._appsPage = appsPage;
+        this._forOverview = forOverview;
+
+        let viewsCloneLayout = new ViewsCloneLayout({ vertical: true });
+
+        this.parent({ layout_manager: viewsCloneLayout,
+                      opacity: AppDisplay.INACTIVE_GRID_OPACITY });
+
+        this.add_child(new Clutter.Clone({ source: Main.panel.actor,
+                                           opacity: 0 }));
+        this.add_child(new Clutter.Clone({ source: this._appsPage }));
+
+        let viewsCloneSaturation = new Clutter.DesaturateEffect({ factor: AppDisplay.INACTIVE_GRID_SATURATION,
+                                                                  enabled: false });
+        this.add_effect(viewsCloneSaturation);
+
+        let workareaConstraint = new LayoutManager.MonitorConstraint({ primary: true,
+                                                                       use_workarea: true });
+        this.add_constraint(workareaConstraint);
+
+        Main.overview.connect('showing', Lang.bind(this, function() {
+            viewsCloneSaturation.enabled = this._forOverview;
+        }));
+        Main.overview.connect('hidden', Lang.bind(this, function() {
+            viewsCloneSaturation.enabled = !this._forOverview;
+        }));
+    }
+});
+
 const ViewSelector = new Lang.Class({
     Name: 'ViewSelector',
 
@@ -418,9 +492,29 @@ const ViewSelector = new Lang.Class({
         this._viewsDisplay = new ViewsDisplay();
         this._appsPage = this._addPage(this._viewsDisplay.actor,
                                        _("Applications"), 'view-grid-symbolic');
+        this._appsPage.add_constraint(new ViewsDisplayConstraint({ primary: true,
+                                                                   use_workarea: true }));
         this._entry = this._viewsDisplay.entry;
 
+        this._addViewsPageClone();
+
+        Main.overview.connect('hidden', Lang.bind(this, function() {
+            this._showPage(this._appsPage, true);
+        }));
+
         this._stageKeyPressId = 0;
+    },
+
+    _addViewsPageClone: function() {
+        let layoutViewsClone = new ViewsClone(this._appsPage, false);
+        Main.layoutManager.setViewsClone(layoutViewsClone);
+
+        let overviewViewsClone = new ViewsClone(this._appsPage, true);
+        Main.overview.setViewsClone(overviewViewsClone);
+        this._appsPage.bind_property('visible',
+                                     overviewViewsClone, 'visible',
+                                     GObject.BindingFlags.SYNC_CREATE |
+                                     GObject.BindingFlags.INVERT_BOOLEAN);
     },
 
     _onEmptySpaceClicked: function() {
@@ -532,6 +626,10 @@ const ViewSelector = new Lang.Class({
         if (noFade) {
             this._activePage.opacity = 255;
         } else {
+            if (this._activePage == this._appsPage) {
+                this._activePage.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            }
+
             Tweener.addTween(this._activePage,
                 { opacity: 255,
                   time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
@@ -548,9 +646,14 @@ const ViewSelector = new Lang.Class({
         this._activePage = page;
         this._pageChanged();
 
-        if (oldPage && !noFade)
+        if (oldPage && !noFade) {
+            let targetOpacity = 0;
+            if (oldPage == this._appsPage) {
+                targetOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            }
+
             Tweener.addTween(oldPage,
-                             { opacity: 0,
+                             { opacity: targetOpacity,
                                time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
                                transition: 'easeOutQuad',
                                onComplete: Lang.bind(this,
@@ -558,8 +661,9 @@ const ViewSelector = new Lang.Class({
                                        this._fadePageIn(oldPage, noFade);
                                    })
                              });
-        else
+        } else {
             this._fadePageIn(oldPage, noFade);
+        }
     },
 
     _a11yFocusPage: function(page) {

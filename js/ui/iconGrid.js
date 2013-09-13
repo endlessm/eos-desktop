@@ -484,21 +484,13 @@ const IconGrid = new Lang.Class({
         alloc.natural_size = nColumns * this._hItemSize + totalSpacing;
     },
 
-    _getVisibleChildren: function() {
-        let children = this.actor.get_children();
-        children = children.filter(function(actor) {
-            return actor.visible;
-        });
-        return children;
-    },
-
     _getPreferredHeight: function (grid, forWidth, alloc) {
         if (this._fillParent)
             // Ignore all size requests of children and request a size of 0;
             // later we'll allocate as many children as fit the parent
             return;
 
-        let children = this._getVisibleChildren();
+        let children = this.actor.get_children();
         let nColumns;
         if (forWidth < 0) {
             nColumns = children.length;
@@ -530,7 +522,7 @@ const IconGrid = new Lang.Class({
             box = this.actor.get_theme_node().get_content_box(parentBox);
         }
 
-        let children = this._getVisibleChildren();
+        let children = this.actor.get_children();
         let availWidth = box.x2 - box.x1;
         let availHeight = box.y2 - box.y1;
 
@@ -779,7 +771,7 @@ const IconGrid = new Lang.Class({
     },
 
     indexOf: function(item) {
-        let children = this._getVisibleChildren();
+        let children = this.actor.get_children();
         for (let i = 0; i < children.length; i++) {
             if (item == children[i]) {
                 return i;
@@ -823,7 +815,7 @@ const IconGrid = new Lang.Class({
             return [-1, CursorLocation.DEFAULT];
         }
 
-        let children = this._getVisibleChildren();
+        let children = this.actor.get_children();
         let childIdx = Math.min((row * this._allocatedColumns) + column, children.length);
 
         // If we're above the grid vertically,
