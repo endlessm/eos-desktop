@@ -245,6 +245,10 @@ function _windowCreated(metaDisplay, metaWindow) {
         return;
     }
 
+    if (sessionMode.currentMode == 'initial-setup') {
+        return;
+    }
+
     let tracker = Shell.WindowTracker.get_default();
     if (tracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
         metaWindow.maximize(Meta.MaximizeFlags.HORIZONTAL |
