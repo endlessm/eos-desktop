@@ -1375,6 +1375,7 @@ const AppActivationContext = new Lang.Class({
     _init: function(app) {
         this._app = app;
         this._abort = false;
+        this._cancelled = false;
 
         this._cover = null;
         this._splash = null;
@@ -1425,6 +1426,7 @@ const AppActivationContext = new Lang.Class({
     },
 
     _animateSplash: function() {
+        this._cancelled = false;
         this._cover = this._getCoverPage();
         Main.uiGroup.insert_child_below(this._cover, Main.layoutManager.panelBox);
 
@@ -1438,6 +1440,7 @@ const AppActivationContext = new Lang.Class({
             /* If application doesn't quit very likely is because it
              * didn't reach running state yet; so wait for it to
              * finish */
+            this._cancelled = true;
             this._clearSplash();
             if (!this._app.request_quit()) {
                 this._abort = true;
@@ -1476,6 +1479,10 @@ const AppActivationContext = new Lang.Class({
 
                                                              this._splash.destroy();
                                                              this._splash = null;
+
+                                                             if (this._cancelled) {
+                                                                Main.overview.showApps();
+                                                             }
                                                          })
                                                    });
                 }));
