@@ -1904,6 +1904,10 @@ const AppStoreIcon = new Lang.Class({
         return false;
     },
 
+    _onClicked: function(actor, button) {
+        Main.appStore.showPage('apps');
+    },
+
     getDragBeginIcon: function() {
         return this.empty_trash_icon;
     },
