@@ -15,6 +15,7 @@ const AppStoreIface = <interface name={APP_STORE_NAME}>
   </method>
   <method name="ShowPage">
     <arg type="s" direction="in" name="page"/>
+    <arg type="u" direction="in" name="timestamp"/>
   </method>
   <property name="Visible" type="b" access="read"/>
 </interface>;
@@ -47,6 +48,6 @@ const AppStore = new Lang.Class({
     },
 
     showPage: function(page) {
-        this.proxy.ShowPageRemote(page);
+        this.proxy.ShowPageRemote(page, global.get_current_time());
     }
 });

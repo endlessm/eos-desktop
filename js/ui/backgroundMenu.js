@@ -45,18 +45,25 @@ const BackgroundMenu = new Lang.Class({
         // visual niceness, we also take the extra step to wait until the
         // overview has finished hiding itself before triggering the slide-in
         // animation of the AppStore.
-        if (!this._overviewHiddenId) {
-            this._overviewHiddenId = Main.overview.connect('hidden',
-                                                           Lang.bind(this, this._doShowAppStore));
+        if (Main.overview.visible) {
+            if (!this._overviewHiddenId) {
+                this._overviewHiddenId = Main.overview.connect('hidden',
+                    Lang.bind(this, function() {
+                        this._doShowAppStore(page);
+                    }));
+            }
+            Main.overview.hide();
+        } else {
+            this._doShowAppStore(page);
         }
-        Main.overview.hide();
-        Main.appStore.showPage(page);
     },
 
-    _doShowAppStore: function() {
-        Main.overview.disconnect(this._overviewHiddenId);
-        this._overviewHiddenId = 0;
-        Main.appStore.toggle();
+    _doShowAppStore: function(page) {
+        if (this._overviewHiddenId) {
+            Main.overview.disconnect(this._overviewHiddenId);
+            this._overviewHiddenId = 0;
+        }
+        Main.appStore.showPage(page);
     }
 });
 
