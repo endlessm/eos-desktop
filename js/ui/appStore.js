@@ -10,7 +10,7 @@ const APP_STORE_PATH = '/com/endlessm/AppStore';
 const APP_STORE_IFACE = 'com.endlessm.AppStore';
 
 const AppStoreIface = <interface name={APP_STORE_NAME}>
-  <method name="toggle">
+  <method name="Toggle">
     <arg type="u" direction="in" name="timestamp"/>
   </method>
   <method name="ShowPage">
@@ -44,7 +44,7 @@ const AppStore = new Lang.Class({
     },
 
     toggle: function() {
-        this.proxy.toggleRemote(global.get_current_time());
+        this.proxy.ToggleRemote(global.get_current_time());
     },
 
     showPage: function(page) {
