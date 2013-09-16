@@ -1051,6 +1051,7 @@ const PopupMenuBase = new Lang.Class({
 
         this._activeMenuItem = null;
         this._settingsActions = { };
+        this.shouldSwitchToOnHover = true;
 
         this._sessionUpdatedId = Main.sessionMode.connect('updated', Lang.bind(this, this._sessionUpdated));
     },
@@ -1471,6 +1472,8 @@ const PopupDummyMenu = new Lang.Class({
         this.sourceActor = sourceActor;
         this.actor = sourceActor;
         this.actor._delegate = this;
+
+        this.shouldSwitchToOnHover = false;
     },
 
     isChildMenu: function() {
@@ -2260,7 +2263,7 @@ const PopupMenuManager = new Lang.Class({
             if (!menu.blockSourceEvents)
                 this._grabHelper.addActor(source);
             menudata.enterId = source.connect('enter-event', Lang.bind(this, function() { this._onMenuSourceEnter(menu); }));
-            menudata.focusInId = source.connect('key-focus-in', Lang.bind(this, function() { this._onMenuSourceEnter(menu); }));
+            menudata.focusInId = source.connect('key-focus-in', Lang.bind(this, function() { this._onMenuSourceKeyFocus(menu); }));
         }
 
         if (position == undefined)
@@ -2333,6 +2336,14 @@ const PopupMenuManager = new Lang.Class({
     },
 
     _onMenuSourceEnter: function(menu) {
+        if (!menu.shouldSwitchToOnHover) {
+            return false;
+        }
+
+        return this._onMenuSourceKeyFocus(menu);
+    },
+
+    _onMenuSourceKeyFocus: function(menu) {
         if (!this._grabHelper.grabbed)
             return false;
 

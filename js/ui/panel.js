@@ -14,6 +14,7 @@ const Signals = imports.signals;
 const Atk = imports.gi.Atk;
 
 
+const BoxPointer = imports.ui.boxpointer;
 const Config = imports.misc.config;
 const CtrlAltTab = imports.ui.ctrlAltTab;
 const DND = imports.ui.dnd;
@@ -344,6 +345,14 @@ const Panel = new Lang.Class({
 
         this._updatePanel();
         this._updateBackground();
+    },
+
+    closeActiveMenu: function() {
+        let activeMenu = this.menuManager.activeMenu;
+
+        if (activeMenu) {
+            activeMenu.close(BoxPointer.PopupAnimation.FADE);
+        }
     },
 
     _updateBackground: function() {
