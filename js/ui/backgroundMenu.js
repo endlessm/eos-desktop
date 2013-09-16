@@ -17,53 +17,27 @@ const BackgroundMenu = new Lang.Class({
 
     _init: function(source) {
         this.parent(source, 0, St.Side.TOP);
-        this._overviewHiddenId = 0;
 
         this.addSettingsAction(_("Change Background…"), 'gnome-background-panel.desktop');
 
         this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
         this.addAction(_("Add Application"), Lang.bind(this, function() {
-            this._showAppStore("apps");
+            Main.appStore.showPage('apps');
         }));
+
         this.addAction(_("Add Website Link"), Lang.bind(this, function() {
-            this._showAppStore("web");
+            Main.appStore.showPage('web');
         }));
+
         this.addAction(_("Add Folder"), Lang.bind(this, function() {
-            this._showAppStore("folders");
+            Main.appStore.showPage('folders');
         }));
 
         this.actor.add_style_class_name('background-menu');
 
         Main.uiGroup.add_actor(this.actor);
         this.actor.hide();
-    },
-
-    _showAppStore: function(page) {
-        // The background menu is shown on the overview screen. However, to
-        // show the AppStore, we must first hide the overview. For maximum
-        // visual niceness, we also take the extra step to wait until the
-        // overview has finished hiding itself before triggering the slide-in
-        // animation of the AppStore.
-        if (Main.overview.visible) {
-            if (!this._overviewHiddenId) {
-                this._overviewHiddenId = Main.overview.connect('hidden',
-                    Lang.bind(this, function() {
-                        this._doShowAppStore(page);
-                    }));
-            }
-            Main.overview.hide();
-        } else {
-            this._doShowAppStore(page);
-        }
-    },
-
-    _doShowAppStore: function(page) {
-        if (this._overviewHiddenId) {
-            Main.overview.disconnect(this._overviewHiddenId);
-            this._overviewHiddenId = 0;
-        }
-        Main.appStore.showPage(page);
     }
 });
 
