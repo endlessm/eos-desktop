@@ -714,7 +714,7 @@ const Source = new Lang.Class({
         // notifications, so it possible to open them in summary mode; right
         // clicks are always forwarded, as the right click menu is not useful for
         // tray icons
-        if (button == ButtonContants.LEFT_MOUSE_BUTTON &&
+        if (button == ButtonConstants.LEFT_MOUSE_BUTTON &&
             this.notifications.length > 0) {
             return false;
         }
