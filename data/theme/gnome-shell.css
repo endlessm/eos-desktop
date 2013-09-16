@@ -312,6 +312,10 @@ StScrollBar StButton#vhandle:active {
     color: #555;
 }
 
+.panel-menu .popup-options-menu-item {
+    background-color: rgba(0,0,0,0.8);
+}
+
 /* Switches */
 .toggle-switch {
     width: 65px;
@@ -706,7 +710,7 @@ StScrollBar StButton#vhandle:active {
 .status-chooser .status-chooser-user-icon {
     border-radius: 40px;
     border: 1px solid #000;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(50, 50, 50, 0.80);
 }
 
 .status-chooser .status-chooser-user-icon:hover {
