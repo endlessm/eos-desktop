@@ -33,8 +33,8 @@ const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
 
 const POWER_OFF_TEXT = _("Power Off").toUpperCase();
 const SUSPEND_TEXT = _("Suspend").toUpperCase();
-const RESTART_TEXT = _("Restart").toUpperCase();
 const LOG_OUT_TEXT = _("Log Out").toUpperCase();
+const LOCK_TEXT = _("Lock").toUpperCase();
 
 const TUTORIAL_TEXT = _("Tutorial");
 const SETTINGS_TEXT = _("Settings");
@@ -340,7 +340,7 @@ const UserMenuButton = new Lang.Class({
 
     _updateLockScreen: function() {
         let allowLockScreen = !this._lockdownSettings.get_boolean(DISABLE_LOCK_SCREEN_KEY);
-        this._lockScreenItem.actor.visible = allowLockScreen && LoginManager.canLock();
+        this._lockOption.visible = allowLockScreen && LoginManager.canLock();
     },
 
     _updateHaveShutdown: function() {
@@ -422,23 +422,18 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(item);
         this._loginScreenItem = item;
 
-        item = new PopupMenu.PopupUserMenuItem(_("Lock"), { iconName: 'changes-prevent-symbolic' });
-        item.connect('activate', Lang.bind(this, this._onLockScreenActivate));
-        this.menu.addMenuItem(item);
-        this._lockScreenItem = item;
-
         this._suspendOrPowerOffOption = new PopupMenu.MenuItemOption(POWER_OFF_TEXT, SUSPEND_TEXT);
         this._suspendOrPowerOffOption.connect('clicked', Lang.bind(this, this._onSystemActionActivate));
 
-        let restartOption = new PopupMenu.MenuItemOption(RESTART_TEXT, null);
-        restartOption.connect('clicked', Lang.bind(this, this._onRestartActivate));
+        this._lockOption = new PopupMenu.MenuItemOption(LOCK_TEXT, null);
+        this._lockOption.connect('clicked', Lang.bind(this, this._onLockScreenActivate));
 
         this._logoutOption = new PopupMenu.MenuItemOption(LOG_OUT_TEXT, null);
         this._logoutOption.connect('clicked', Lang.bind(this, this._onQuitSessionActivate));
 
-        item = new PopupMenu.PopupOptionsMenuItem([ this._suspendOrPowerOffOption,
-                                                    restartOption,
-                                                    this._logoutOption ]);
+        item = new PopupMenu.PopupOptionsMenuItem([this._suspendOrPowerOffOption,
+                                                   this._lockOption,
+                                                   this._logoutOption]);
         this.menu.addMenuItem(item);
     },
 
@@ -487,11 +482,6 @@ const UserMenuButton = new Lang.Class({
     _onQuitSessionActivate: function() {
         this.menu.close(BoxPointer.PopupAnimation.NONE);
         this._session.LogoutRemote(0);
-    },
-
-    _onRestartActivate: function() {
-        this.menu.close(BoxPointer.PopupAnimation.NONE);
-        this._session.RebootRemote();
     },
 
     _openSessionWarnDialog: function(sessions) {
