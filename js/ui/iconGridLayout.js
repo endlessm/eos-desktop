@@ -80,22 +80,40 @@ const IconGridLayout = new Lang.Class({
 
     repositionIcon: function(id, insertId, newFolder) {
         let icons;
+        let existing = false;
+        let isFolder = id.indexOf('.directory') != -1;
+
         for (let i in this._iconTree) {
             icons = this._iconTree[i];
             let oldPos = icons.indexOf(id);
             if (oldPos != -1) {
                 icons.splice(oldPos, 1);
+                existing = true;
                 break;
             }
         }
 
         if (newFolder != null) {
+            // We're adding or repositioning an icon
             icons = this._iconTree[newFolder];
-            if (! icons) {
-                // invalid destination folder
+            if (!icons) {
+                // Invalid destination folder
                 return;
             }
             this._insertIcon(icons, id, insertId);
+
+            if (isFolder && !existing) {
+                // We're adding a folder, need to initialize an
+                // array for its contents
+                this._iconTree[id] = [];
+            }
+        } else {
+            // We're removing an entry
+            if (isFolder && existing) {
+                // We're removing a folder, need to delete the array
+                // for its contents as well
+                delete this._iconTree[id];
+            }
         }
 
         // Recreate GVariant from iconTree
