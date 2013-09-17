@@ -422,6 +422,9 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(item);
         this._loginScreenItem = item;
 
+        item = new PopupMenu.PopupSeparatorMenuItem();
+        this.menu.addMenuItem(item);
+
         this._suspendOrPowerOffOption = new PopupMenu.MenuItemOption(POWER_OFF_TEXT, SUSPEND_TEXT);
         this._suspendOrPowerOffOption.connect('clicked', Lang.bind(this, this._onSystemActionActivate));
 
