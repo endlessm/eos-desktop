@@ -764,6 +764,7 @@ const MenuItemOption = new Lang.Class({
                       track_hover: true,
                       can_focus: true,
                       reactive: true,
+                      x_expand: true
                     });
     },
 
@@ -799,14 +800,17 @@ const PopupOptionsMenuItem = new Lang.Class({
         this._options = options;
         this._selectedOptionIndex = -1;
 
-        this._container = new St.BoxLayout({ style_class: 'popup-options-menu-item' });
+        let boxLayout = new Clutter.BoxLayout();
+        boxLayout.set_homogeneous(true);
+        this._container = new St.Widget({ layout_manager: boxLayout,
+                                          style_class: 'popup-options-menu-item' });
         this._container.connect('key-press-event', Lang.bind(this, this._onKeyPressEvent));
 
         for (let optionIndex in options) {
             let option = options[optionIndex];
 
             if (option instanceof MenuItemOption) {
-                this._container.add(option, { expand: true });
+                this._container.add_actor(option);
                 option.connect('key-focus-in', Lang.bind(this, this._onOptionFocused));
                 option.connect('notify::hover', Lang.bind(this, this._onOptionHovered));
             } else {
