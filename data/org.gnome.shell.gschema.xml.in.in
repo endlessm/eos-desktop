@@ -22,6 +22,19 @@
         The position is not affected by the RTL vs. LTR text direction.
       </_description>
     </key>
+    <key name="hot-corner-size" type="i">
+      <default>1</default>
+      <_summary>
+        Set the size of the hot corner target
+      </_summary>
+      <_description>
+        Number of pixels in one dimension of the square target
+        for the hot corner.
+        Default is for a single pixel in the very corner.
+        For some virtual machines, this value may need to be set
+        larger than the default.
+      </_description>
+    </key>
     <key name="no-default-maximize" type="b">
       <default>false</default>
       <_summary>

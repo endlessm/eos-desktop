@@ -32,12 +32,13 @@ const MESSAGE_TRAY_PRESSURE_TIMEOUT = 1000; // ms
 // Gsettings key to determine position of hot corner.
 const HOT_CORNER_ON_RIGHT_KEY = 'hot-corner-on-right';
 
+// Gsettings key for the size of the hot corner target.
+// When using a VirtualBox VM, may need to set to at least 3 pixels,
+// since the VM may "steal" two rows from the guest OS display.
+const HOT_CORNER_SIZE_KEY = 'hot-corner-size';
+
 const HOT_CORNER_PRESSURE_THRESHOLD = 100; // pixels
 const HOT_CORNER_PRESSURE_TIMEOUT = 1000; // ms
-
-// Set the hot corner target area to 3x3 so that it works on a VirtualBox VM
-// which "steals" the bottom two rows from the guest OS display
-const HOT_CORNER_SIZE = 3; // pixels
 
 function isPopupMetaWindow(actor) {
     switch(actor.meta_window.get_window_type()) {
@@ -1133,6 +1134,7 @@ const HotCorner = new Lang.Class({
         this._y = y;
 
         this._rtl = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+        this._targetSize = global.settings.get_int(HOT_CORNER_SIZE_KEY);
 
         this._setupFallbackCornerIfNeeded(layoutManager);
 
@@ -1197,8 +1199,8 @@ const HotCorner = new Lang.Class({
                                              reactive: true });
 
             this._corner = new Clutter.Rectangle({ name: 'hot-corner',
-                                                   width: HOT_CORNER_SIZE,
-                                                   height: HOT_CORNER_SIZE,
+                                                   width: this._targetSize,
+                                                   height: this._targetSize,
                                                    opacity: 0,
                                                    reactive: true });
             this._corner._delegate = this;
