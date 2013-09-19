@@ -29,6 +29,9 @@ const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
 const MESSAGE_TRAY_PRESSURE_THRESHOLD = 250; // pixels
 const MESSAGE_TRAY_PRESSURE_TIMEOUT = 1000; // ms
 
+// Gsettings key to determine position of hot corner.
+const HOT_CORNER_ON_RIGHT_KEY = 'hot-corner-on-right';
+
 const HOT_CORNER_PRESSURE_THRESHOLD = 100; // pixels
 const HOT_CORNER_PRESSURE_TIMEOUT = 1000; // ms
 
@@ -165,7 +168,7 @@ const LayoutManager = new Lang.Class({
     Name: 'LayoutManager',
 
     _init: function () {
-        this._rtl = (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL);
+        this._rtl = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
         this.monitors = [];
         this.primaryMonitor = null;
         this.primaryIndex = -1;
@@ -1129,6 +1132,8 @@ const HotCorner = new Lang.Class({
         this._x = x;
         this._y = y;
 
+        this._rtl = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+
         this._setupFallbackCornerIfNeeded(layoutManager);
 
         this._pressureBarrier = new PressureBarrier(HOT_CORNER_PRESSURE_THRESHOLD,
@@ -1141,6 +1146,16 @@ const HotCorner = new Lang.Class({
         this._ripple1 = new St.BoxLayout({ style_class: 'ripple-box', opacity: 0, visible: false });
         this._ripple2 = new St.BoxLayout({ style_class: 'ripple-box', opacity: 0, visible: false });
         this._ripple3 = new St.BoxLayout({ style_class: 'ripple-box', opacity: 0, visible: false });
+
+        if (this._rtl) {
+            this._ripple1.add_style_pseudo_class('rtl');
+            this._ripple2.add_style_pseudo_class('rtl');
+            this._ripple3.add_style_pseudo_class('rtl');
+        } else {
+            this._ripple1.remove_style_pseudo_class('rtl');
+            this._ripple2.remove_style_pseudo_class('rtl');
+            this._ripple3.remove_style_pseudo_class('rtl');
+        }
 
         layoutManager.uiGroup.add_actor(this._ripple1);
         layoutManager.uiGroup.add_actor(this._ripple2);
@@ -1191,7 +1206,7 @@ const HotCorner = new Lang.Class({
             this.actor.add_child(this._corner);
             layoutManager.addChrome(this.actor);
 
-            if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL) {
+            if (this._rtl) {
                 this._corner.set_position(this.actor.width - this._corner.width, 0);
                 this.actor.set_anchor_point_from_gravity(Clutter.Gravity.NORTH_EAST);
             } else {
@@ -1227,7 +1242,7 @@ const HotCorner = new Lang.Class({
 
         ripple._opacity = startOpacity;
 
-        if (ripple.get_text_direction() == Clutter.TextDirection.RTL)
+        if (this._rtl)
             ripple.set_anchor_point_from_gravity(Clutter.Gravity.NORTH_EAST);
 
         ripple.visible = true;

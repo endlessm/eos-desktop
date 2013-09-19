@@ -11,7 +11,18 @@
         using the Alt-F2 dialog.
       </_description>
     </key>
-      <key name="no-default-maximize" type="b">
+    <key name="hot-corner-on-right" type="b">
+      <default>false</default>
+      <_summary>
+        Set the position of the hot corner for the window picker
+      </_summary>
+      <_description>
+        Default position of the hot corner is in the uppper-left corner.
+        Set true to move the hot corner to the upper-right corner.
+        The position is not affected by the RTL vs. LTR text direction.
+      </_description>
+    </key>
+    <key name="no-default-maximize" type="b">
       <default>false</default>
       <_summary>
         Prevent apps from being automatically maximized on launch
