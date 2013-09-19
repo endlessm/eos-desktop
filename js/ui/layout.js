@@ -29,12 +29,16 @@ const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
 const MESSAGE_TRAY_PRESSURE_THRESHOLD = 250; // pixels
 const MESSAGE_TRAY_PRESSURE_TIMEOUT = 1000; // ms
 
+// Gsettings key to determine position of hot corner.
+const HOT_CORNER_ON_RIGHT_KEY = 'hot-corner-on-right';
+
+// Gsettings key for the size of the hot corner target.
+// When using a VirtualBox VM, may need to set to at least 3 pixels,
+// since the VM may "steal" two rows from the guest OS display.
+const HOT_CORNER_SIZE_KEY = 'hot-corner-size';
+
 const HOT_CORNER_PRESSURE_THRESHOLD = 100; // pixels
 const HOT_CORNER_PRESSURE_TIMEOUT = 1000; // ms
-
-// Set the hot corner target area to 3x3 so that it works on a VirtualBox VM
-// which "steals" the bottom two rows from the guest OS display
-const HOT_CORNER_SIZE = 3; // pixels
 
 function isPopupMetaWindow(actor) {
     switch(actor.meta_window.get_window_type()) {
@@ -165,7 +169,7 @@ const LayoutManager = new Lang.Class({
     Name: 'LayoutManager',
 
     _init: function () {
-        this._rtl = (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL);
+        this._rtl = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
         this.monitors = [];
         this.primaryMonitor = null;
         this.primaryIndex = -1;
@@ -332,17 +336,17 @@ const LayoutManager = new Lang.Class({
         for (let i = 0; i < this.monitors.length; i++) {
             let monitor = this.monitors[i];
             let cornerX = this._rtl ? monitor.x + monitor.width : monitor.x;
-            let cornerY = monitor.y + monitor.height;
+            let cornerY = monitor.y;
 
             if (i != this.primaryIndex) {
-                let haveBottomLeftCorner = true;
+                let haveTopLeftCorner = true;
 
-                // Check if we have a bottom left (right for RTL) corner.
-                // I.e. if there is no monitor directly below or to the left(right)
+                // Check if we have a top left (right for RTL) corner.
+                // I.e. if there is no monitor directly above or to the left(right)
                 let besideX = this._rtl ? cornerX + 1 : cornerX - 1;
                 let besideY = cornerY;
-                let belowX = cornerX;
-                let belowY = cornerY + 1;
+                let aboveX = cornerX;
+                let aboveY = cornerY - 1;
 
                 for (let j = 0; j < this.monitors.length; j++) {
                     if (i == j)
@@ -352,19 +356,19 @@ const LayoutManager = new Lang.Class({
                         besideX < otherMonitor.x + otherMonitor.width &&
                         besideY >= otherMonitor.y &&
                         besideY < otherMonitor.y + otherMonitor.height) {
-                        haveBottomLeftCorner = false;
+                        haveTopLeftCorner = false;
                         break;
                     }
-                    if (belowX >= otherMonitor.x &&
-                        belowX < otherMonitor.x + otherMonitor.width &&
-                        belowY >= otherMonitor.y &&
-                        belowY < otherMonitor.y + otherMonitor.height) {
-                        haveBottomLeftCorner = false;
+                    if (aboveX >= otherMonitor.x &&
+                        aboveX < otherMonitor.x + otherMonitor.width &&
+                        aboveY >= otherMonitor.y &&
+                        aboveY < otherMonitor.y + otherMonitor.height) {
+                        haveTopLeftCorner = false;
                         break;
                     }
                 }
 
-                if (!haveBottomLeftCorner)
+                if (!haveTopLeftCorner)
                     continue;
             }
 
@@ -1129,6 +1133,9 @@ const HotCorner = new Lang.Class({
         this._x = x;
         this._y = y;
 
+        this._rtl = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+        this._targetSize = global.settings.get_int(HOT_CORNER_SIZE_KEY);
+
         this._setupFallbackCornerIfNeeded(layoutManager);
 
         this._pressureBarrier = new PressureBarrier(HOT_CORNER_PRESSURE_THRESHOLD,
@@ -1141,6 +1148,16 @@ const HotCorner = new Lang.Class({
         this._ripple1 = new St.BoxLayout({ style_class: 'ripple-box', opacity: 0, visible: false });
         this._ripple2 = new St.BoxLayout({ style_class: 'ripple-box', opacity: 0, visible: false });
         this._ripple3 = new St.BoxLayout({ style_class: 'ripple-box', opacity: 0, visible: false });
+
+        if (this._rtl) {
+            this._ripple1.add_style_pseudo_class('rtl');
+            this._ripple2.add_style_pseudo_class('rtl');
+            this._ripple3.add_style_pseudo_class('rtl');
+        } else {
+            this._ripple1.remove_style_pseudo_class('rtl');
+            this._ripple2.remove_style_pseudo_class('rtl');
+            this._ripple3.remove_style_pseudo_class('rtl');
+        }
 
         layoutManager.uiGroup.add_actor(this._ripple1);
         layoutManager.uiGroup.add_actor(this._ripple2);
@@ -1182,8 +1199,8 @@ const HotCorner = new Lang.Class({
                                              reactive: true });
 
             this._corner = new Clutter.Rectangle({ name: 'hot-corner',
-                                                   width: HOT_CORNER_SIZE,
-                                                   height: HOT_CORNER_SIZE,
+                                                   width: this._targetSize,
+                                                   height: this._targetSize,
                                                    opacity: 0,
                                                    reactive: true });
             this._corner._delegate = this;
@@ -1191,12 +1208,11 @@ const HotCorner = new Lang.Class({
             this.actor.add_child(this._corner);
             layoutManager.addChrome(this.actor);
 
-            if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL) {
-                this._corner.set_position(this.actor.width - this._corner.width, this.actor.height - this._corner.height);
-                this.actor.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_EAST);
+            if (this._rtl) {
+                this._corner.set_position(this.actor.width - this._corner.width, 0);
+                this.actor.set_anchor_point_from_gravity(Clutter.Gravity.NORTH_EAST);
             } else {
-                this._corner.set_position(0, this.actor.height - this._corner.height);
-                this.actor.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_WEST);
+                this._corner.set_position(0, 0);
             }
 
             this.actor.connect('leave-event',
@@ -1228,11 +1244,8 @@ const HotCorner = new Lang.Class({
 
         ripple._opacity = startOpacity;
 
-        if (ripple.get_text_direction() == Clutter.TextDirection.RTL) {
-            ripple.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_EAST);
-        } else {
-            ripple.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_WEST);
-        }
+        if (this._rtl)
+            ripple.set_anchor_point_from_gravity(Clutter.Gravity.NORTH_EAST);
 
         ripple.visible = true;
         ripple.opacity = 255 * Math.sqrt(startOpacity);
