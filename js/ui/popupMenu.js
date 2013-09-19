@@ -853,6 +853,13 @@ const PopupOptionsMenuItem = new Lang.Class({
             let index = this._options.indexOf(actor);
             this._selectedOptionIndex = index;
             this._updateKeyFocus(index);
+        } else {
+            this._selectedOptionIndex = -1;
+            if (actor.has_key_focus()) {
+                // Move the key focus away from the button if it
+                // had it as a consequence of being hovered
+                this._container.grab_key_focus();
+            }
         }
     },
 
