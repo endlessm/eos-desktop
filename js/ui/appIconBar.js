@@ -291,6 +291,7 @@ const AppIconButton = new Lang.Class({
 
         if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
             this._hideHoverState();
+            this.emit('app-icon-pressed');
 
             let windows = this._app.get_windows();
             if (windows.length > 1) {
@@ -337,6 +338,7 @@ const AppIconButton = new Lang.Class({
         this.actor.fake_release();
         if (!this._label.get_parent()) {
             Main.uiGroup.add_actor(this._label);
+            this._label.raise_top();
 
             // Calculate location of the label only if we're not tweening as the
             // values will be inaccurate
@@ -529,11 +531,7 @@ const ScrolledIconList = new Lang.Class({
         for (let i = 0; i < sortedPids.length; i++) {
             let pid = sortedPids[i];
             let app = appsByPid.get(pid);
-            let newChild = new AppIconButton(app, this._iconSize);
-            if (!this._runningApps.has(app)) {
-                this._runningApps.set(app, newChild);
-                this._container.add(newChild.actor);
-            }
+            this._addButton(app);
         }
 
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
@@ -654,15 +652,20 @@ const ScrolledIconList = new Lang.Class({
         this._updatePage();
     },
 
+    _addButton: function(app) {
+        if (!this._runningApps.has(app)) {
+            let newChild = new AppIconButton(app, this._iconSize);
+            newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
+            this._runningApps.set(app, newChild);
+            this._container.add_actor(newChild.actor);
+        }
+    },
+
     _onAppStateChanged: function(appSys, app) {
         let state = app.state;
         switch(state) {
         case Shell.AppState.STARTING:
-            if (!this._runningApps.has(app)) {
-                let newChild = new AppIconButton(app, this._iconSize);
-                this._runningApps.set(app, newChild);
-                this._container.add_actor(newChild.actor);
-            }
+            this._addButton(app);
             this._ensureIsVisible(app);
             break;
 
@@ -672,11 +675,7 @@ const ScrolledIconList = new Lang.Class({
             // but sometimes it can go STARTING -> RUNNING -> STOPPED
             // So we only want to add an app here if we don't already
             // have an icon for @app
-            if (!this._runningApps.has(app)) {
-                let newChild = new AppIconButton(app, this._iconSize);
-                this._runningApps.set(app, newChild);
-                this._container.add_actor(newChild.actor);
-            }
+            this._addButton(app);
             this._ensureIsVisible(app);
             break;
 
@@ -687,7 +686,7 @@ const ScrolledIconList = new Lang.Class({
 
             let oldChild = this._runningApps.get(app);
             if (oldChild) {
-                this._container.remove_actor(oldChild.actor);
+                oldChild.actor.destroy();
                 this._runningApps.delete(app);
             }
             break;
@@ -760,7 +759,7 @@ const AppIconBar = new Lang.Class({
     Name: 'AppIconBar',
     Extends: PanelMenu.Button,
 
-    _init: function() {
+    _init: function(panel) {
         this.parent(0.0, null, true);
         this.actor.add_style_class_name('app-icon-bar');
 
@@ -789,6 +788,7 @@ const AppIconBar = new Lang.Class({
         this._browserApp = Util.getBrowserApp();
         if (this._browserApp) {
             this._browserButton = new BrowserButton(this._browserApp, ICON_SIZE);
+            this._browserButton.connect('app-icon-pressed', Lang.bind(this, function() { panel.closeActiveMenu(); }));
             this._container.add_actor(this._browserButton.actor);
         }
 
@@ -798,6 +798,7 @@ const AppIconBar = new Lang.Class({
         this._container.add_actor(this._forwardButton);
 
         this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, this._updateNavButtonState));
+        this._scrolledIconList.connect('app-icon-pressed', Lang.bind(this, function() { panel.closeActiveMenu(); }));
 
         this._windowTracker = Shell.WindowTracker.get_default();
         this._windowTracker.connect('notify::focus-app', Lang.bind(this, this._updateActiveApp));
