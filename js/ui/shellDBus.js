@@ -417,6 +417,9 @@ const AppStoreIface = <interface name="org.gnome.Shell.AppStore">
 <method name="RemoveApplication">
     <arg type="s" direction="in" name="id" />
 </method>
+<method name="ListApplications">
+    <arg type="as" direction="out" name="applications" />
+</method>
 </interface>;
 
 const AppStoreService = new Lang.Class({
@@ -434,4 +437,9 @@ const AppStoreService = new Lang.Class({
     RemoveApplication: function(id) {
         IconGridLayout.layout.removeIcon(id);
     },
+
+    ListApplicationsAsync: function(params, invocation) {
+        let allApps = IconGridLayout.layout.listApplications();
+        return invocation.return_value(GLib.Variant.new('(as)', [allApps]));
+    }
 });
