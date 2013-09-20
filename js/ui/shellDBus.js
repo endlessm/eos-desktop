@@ -420,6 +420,12 @@ const AppStoreIface = <interface name="org.gnome.Shell.AppStore">
 <method name="ListApplications">
     <arg type="as" direction="out" name="applications" />
 </method>
+<method name="AddFolder">
+    <arg type="s" direction="in" name="id" />
+</method>
+<method name="RemoveFolder">
+    <arg type="s" direction="in" name="id" />
+</method>
 <signal name="ApplicationsChanged">
     <arg type="as" name="applications" />
 </signal>
@@ -435,12 +441,38 @@ const AppStoreService = new Lang.Class({
         IconGridLayout.layout.connect('changed', Lang.bind(this, this._emitApplicationsChanged));
     },
 
-    AddApplication: function(id) {
+    _addItem: function(id, forFolder) {
+        let isFolder = IconGridLayout.layout.iconIsFolder(id);
+        if (isFolder != forFolder) {
+            return;
+        }
+
         IconGridLayout.layout.appendIcon(id, AppDisplay.ALL_VIEW_ID);
     },
 
-    RemoveApplication: function(id) {
+    _removeItem: function(id, forFolder) {
+        let isFolder = IconGridLayout.layout.iconIsFolder(id);
+        if (isFolder != forFolder) {
+            return;
+        }
+
         IconGridLayout.layout.removeIcon(id);
+    },
+
+    AddApplication: function(id) {
+        this._addItem(id, false);
+    },
+
+    RemoveApplication: function(id) {
+        this._removeItem(id, false);
+    },
+
+    AddFolder: function(id) {
+        this._addItem(id, true);
+    },
+
+    RemoveFolder: function(id) {
+        this._removeItem(id, true);
     },
 
     ListApplicationsAsync: function(params, invocation) {
