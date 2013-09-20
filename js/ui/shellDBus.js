@@ -417,6 +417,12 @@ const AppStoreIface = <interface name="org.gnome.Shell.AppStore">
 <method name="RemoveApplication">
     <arg type="s" direction="in" name="id" />
 </method>
+<method name="ListApplications">
+    <arg type="as" direction="out" name="applications" />
+</method>
+<signal name="ApplicationsChanged">
+    <arg type="as" name="applications" />
+</signal>
 </interface>;
 
 const AppStoreService = new Lang.Class({
@@ -425,6 +431,8 @@ const AppStoreService = new Lang.Class({
     _init: function() {
         this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(AppStoreIface, this);
         this._dbusImpl.export(Gio.DBus.session, '/org/gnome/Shell');
+
+        IconGridLayout.layout.connect('changed', Lang.bind(this, this._emitApplicationsChanged));
     },
 
     AddApplication: function(id) {
@@ -434,4 +442,14 @@ const AppStoreService = new Lang.Class({
     RemoveApplication: function(id) {
         IconGridLayout.layout.removeIcon(id);
     },
+
+    ListApplicationsAsync: function(params, invocation) {
+        let allApps = IconGridLayout.layout.listApplications();
+        return invocation.return_value(GLib.Variant.new('(as)', [allApps]));
+    },
+
+    _emitApplicationsChanged: function() {
+        let allApps = IconGridLayout.layout.listApplications();
+        this._dbusImpl.emit_signal('ApplicationsChanged', GLib.Variant.new('(as)', [allApps]));
+    }
 });
