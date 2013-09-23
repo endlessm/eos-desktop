@@ -1279,6 +1279,10 @@ const HotCorner = new Lang.Class({
         if (this._monitor.inFullscreen)
             return;
 
+        if (Main.screenShield.active) {
+            return;
+        }
+
         if (Main.overview.shouldToggleByCornerOrButton()) {
             this._rippleAnimation();
             Main.overview.toggle();
