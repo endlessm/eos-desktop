@@ -456,6 +456,12 @@ const WindowManager = new Lang.Class({
     _destroyWindow : function(shellwm, actor) {
         let window = actor.meta_window;
 
+        // Completely exit Skype when the user closes the window,
+        // rather than remain running iconified in the system tray.
+        if (window.get_wm_class() == 'Skype') {
+            window.kill();
+        }
+
         if (actor._notifyWindowTypeSignalId) {
             window.disconnect(actor._notifyWindowTypeSignalId);
             actor._notifyWindowTypeSignalId = 0;
