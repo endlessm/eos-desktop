@@ -92,8 +92,10 @@ function versionCompare(required, reference) {
     reference = reference.split('.');
 
     for (let i = 0; i < required.length; i++) {
-        if (required[i] != reference[i])
-            return required[i] < reference[i];
+        let requiredInt = parseInt(required[i]);
+        let referenceInt = parseInt(reference[i]);
+        if (requiredInt != referenceInt)
+            return requiredInt < referenceInt;
     }
 
     return true;
