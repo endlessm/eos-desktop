@@ -11,6 +11,17 @@
         using the Alt-F2 dialog.
       </_description>
     </key>
+    <key name="separate-power-off-log-out" type="b">
+      <default>false</default>
+      <_summary>
+        Separate the power off and log out buttons on the user menu
+      </_summary>
+      <_description>
+        By default, use a single exit button to power off or log out
+	(with the log out option on the power off confirmation dialog).
+	Set true for separate buttons on the user menu.
+      </_description>
+    </key>
     <key name="hot-corner-on-right" type="b">
       <default>false</default>
       <_summary>
