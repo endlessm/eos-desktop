@@ -8,9 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"shell&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-23 11:49+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-25 13:54-0700\n"
 "PO-Revision-Date: 2013-03-25 14:57+0530\n"
 "Last-Translator: Ani Peter <peter.ani@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -51,28 +50,30 @@ msgstr "എല്ലാ പ്രയോഗങ്ങളും കാണിയ്�
 msgid "Open the application menu"
 msgstr "പ്രയോഗത്തിന്റെ മെനു തുറക്കുക"
 
-#: ../data/gnome-shell.desktop.in.in.h:1
-msgid "GNOME Shell"
+#: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
+#: ../data/gdm-eos-shell.desktop.in.in.h:1
+#, fuzzy
+msgid "EOS Shell"
 msgstr "ഗ്നോം ഷെല്‍"
 
-#: ../data/gnome-shell.desktop.in.in.h:2
+#: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
+#: ../data/gdm-eos-shell.desktop.in.in.h:2
 msgid "Window management and application launching"
 msgstr "വിന്‍ഡോ കൈകാര്യം ചെയ്യലും പ്രയോഗം ലഭ്യമാക്കലും"
 
-#: ../data/gnome-shell-extension-prefs.desktop.in.in.h:1
+#: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 #: ../js/extensionPrefs/main.js:153
 msgid "GNOME Shell Extension Preferences"
 msgstr "ഗ്നോം ഷെല്‍ എക്സ്റ്റെന്‍ഷന്‍ മുന്‍ഗണനകള്‍"
 
-#: ../data/gnome-shell-extension-prefs.desktop.in.in.h:2
+#: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure GNOME Shell Extensions"
 msgstr "ഗ്നോം ഷെല്‍ എക്സ്റ്റെന്‍ഷനുകള്‍ ക്രമീകരിയ്ക്കുക"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:1
 msgid "Enable internal tools useful for developers and testers from Alt-F2"
 msgstr ""
-"Alt-F2-ല്‍ ഡവലപ്പര്‍മാര്‍ക്കും ടെസ്റ്റേര്‍സിനും പ്രയോജനകരമായ ആന്തരിക "
-"പ്രയോഗങ്ങള്‍ പ്രവര്‍ത്തന "
+"Alt-F2-ല്‍ ഡവലപ്പര്‍മാര്‍ക്കും ടെസ്റ്റേര്‍സിനും പ്രയോജനകരമായ ആന്തരിക പ്രയോഗങ്ങള്‍ പ്രവര്‍ത്തന "
 "സജ്ജമാക്കുന്നു"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:2
@@ -80,209 +81,252 @@ msgid ""
 "Allows access to internal debugging and monitoring tools using the Alt-F2 "
 "dialog."
 msgstr ""
-"Alt-F2 ഡയലോഗ് ഉപയോഗിച്ചു് ആന്തരിക ഡീബഗ്ഗിലേക്കും നീരീക്ഷണ പ്രയോഗങ്ങളിലേക്കും "
-"പ്രവേശനം "
+"Alt-F2 ഡയലോഗ് ഉപയോഗിച്ചു് ആന്തരിക ഡീബഗ്ഗിലേക്കും നീരീക്ഷണ പ്രയോഗങ്ങളിലേക്കും പ്രവേശനം "
 "അനുവദിയ്ക്കുക."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:3
+msgid "Separate the power off and log out buttons on the user menu"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:4
+msgid ""
+"By default, use a single exit button to power off or log out (with the log "
+"out option on the power off confirmation dialog). Set true for separate "
+"buttons on the user menu."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:5
+msgid "Set the position of the hot corner for the window picker"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:6
+msgid ""
+"Default position of the hot corner is in the uppper-left corner. Set true to "
+"move the hot corner to the upper-right corner. The position is not affected "
+"by the RTL vs. LTR text direction."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:7
+msgid "Set the size of the hot corner target"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:8
+msgid ""
+"Number of pixels in one dimension of the square target for the hot corner. "
+"Default is for a single pixel in the very corner. For some virtual machines, "
+"this value may need to be set larger than the default."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:9
+msgid "Prevent apps from being automatically maximized on launch"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:10
+msgid ""
+"Makes window management more like standard Gnome. Hides application splash "
+"screens, prevents applications from being forced to open maximized, and does "
+"not automatically switch to the app selector when a window is minimized."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:11
+msgid "Whether the app store is displayed"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:12
+msgid "Whether the application grid displays the app store icon."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:13
 msgid "Uuids of extensions to enable"
 msgstr "പ്രവര്‍ത്തന സജ്ജമാക്കുന്നതിനുള്ള എക്സ്റ്റെന്‍ഷനുകളുടെ യുയുഐഡികള്‍"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:4
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:14
 msgid ""
 "GNOME Shell extensions have a uuid property; this key lists extensions which "
 "should be loaded. Any extension that wants to be loaded needs to be in this "
 "list. You can also manipulate this list with the EnableExtension and "
 "DisableExtension DBus methods on org.gnome.Shell."
 msgstr ""
-"ഗ്നോം ഷെല്‍ എക്സ്റ്റെന്‍ഷനുകള്‍ക്കു് ഒരു യുയുഐഡി വിശേഷതയുണ്ടു്; ലഭ്യമാക്കേണ്ട "
-"എക്സ്റ്റെന്‍ഷനുകള്‍ ഈ കീ പട്ടിക "
-"ലഭ്യമാക്കുന്നു. ലഭ്യമാക്കേണ്ട ഏതു് എക്സ്റ്റെന്‍ഷനും ഈ പട്ടികയിലുണ്ടാവണം. "
-"org.gnome.Shell-ല്‍ "
-"നിങ്ങള്‍ക്കു് EnableExtension, DisableExtension എന്നീ ഡീബസ് രീതികളിലൂടെ ഈ "
-"പട്ടിക "
+"ഗ്നോം ഷെല്‍ എക്സ്റ്റെന്‍ഷനുകള്‍ക്കു് ഒരു യുയുഐഡി വിശേഷതയുണ്ടു്; ലഭ്യമാക്കേണ്ട എക്സ്റ്റെന്‍ഷനുകള്‍ ഈ കീ പട്ടിക "
+"ലഭ്യമാക്കുന്നു. ലഭ്യമാക്കേണ്ട ഏതു് എക്സ്റ്റെന്‍ഷനും ഈ പട്ടികയിലുണ്ടാവണം. org.gnome.Shell-ല്‍ "
+"നിങ്ങള്‍ക്കു് EnableExtension, DisableExtension എന്നീ ഡീബസ് രീതികളിലൂടെ ഈ പട്ടിക "
 "കൈകാര്യം ചെയ്യുവാനും സാധിയ്ക്കുന്നു."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:5
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:15
 msgid "Whether to collect stats about applications usage"
-msgstr ""
-"പ്രയോഗങ്ങളുടെ ഉപയോഗത്തെപ്പറ്റിയുള്ള സ്ഥിതിവിവരക്കണക്കുകള്‍ ശേഖരിയ്ക്കണമോ "
-"എന്നു്"
+msgstr "പ്രയോഗങ്ങളുടെ ഉപയോഗത്തെപ്പറ്റിയുള്ള സ്ഥിതിവിവരക്കണക്കുകള്‍ ശേഖരിയ്ക്കണമോ എന്നു്"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:6
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
 "The shell normally monitors active applications in order to present the most "
 "used ones (e.g. in launchers). While this data will be kept private, you may "
 "want to disable this for privacy reasons. Please note that doing so won't "
 "remove already saved data."
 msgstr ""
-"ഏറ്റവും കൂടുതല്‍ തവണ ഉപയോഗിയ്ക്കുന്ന പ്രയോഗങ്ങള്‍ ലഭ്യമാക്കുന്നതിനായി ഷെല്‍ "
-"സാധാരണയായി സജീവമായ "
-"പ്രയോഗങ്ങളെ നിരീക്ഷിയ്ക്കുന്നു. (ഉദാഹരണത്തിനു്, ലോഞ്ചേര്‍സ്). ഈ ഡേറ്റാ "
-"സ്വകാര്യമായി "
-"സൂക്ഷിയ്ക്കുന്നെങ്കിലും, ചില കാരണങ്ങളാല്‍ ഇതു് പ്രവര്‍ത്തന "
-"രഹിതമാക്കേണ്ടതുണ്ടു്. ഇങ്ങനെ ചെയ്യുന്നതു് "
+"ഏറ്റവും കൂടുതല്‍ തവണ ഉപയോഗിയ്ക്കുന്ന പ്രയോഗങ്ങള്‍ ലഭ്യമാക്കുന്നതിനായി ഷെല്‍ സാധാരണയായി സജീവമായ "
+"പ്രയോഗങ്ങളെ നിരീക്ഷിയ്ക്കുന്നു. (ഉദാഹരണത്തിനു്, ലോഞ്ചേര്‍സ്). ഈ ഡേറ്റാ സ്വകാര്യമായി "
+"സൂക്ഷിയ്ക്കുന്നെങ്കിലും, ചില കാരണങ്ങളാല്‍ ഇതു് പ്രവര്‍ത്തന രഹിതമാക്കേണ്ടതുണ്ടു്. ഇങ്ങനെ ചെയ്യുന്നതു് "
 "നിങ്ങള്‍ സൂക്ഷിച്ച ഡേറ്റയെ ബാധിയ്ക്കുന്നതല്ല."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:7
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:17
 msgid "List of desktop file IDs for favorite applications"
 msgstr "ഇഷ്ടമുള്ള പ്രയോഗങ്ങള്‍ക്കുള്ള പണിയിട ഫയല്‍ ഐഡികളുടെ പട്ടിക"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:8
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:18
 msgid ""
 "The applications corresponding to these identifiers will be displayed in the "
 "favorites area."
-msgstr ""
-"ഈ ഐഡന്റിഫയറുകള്‍ക്കുള്ള പ്രയോഗങ്ങള്‍ ഉചിതമായ സ്ഥലങ്ങളില്‍ കാണിയ്ക്കുന്നു."
+msgstr "ഈ ഐഡന്റിഫയറുകള്‍ക്കുള്ള പ്രയോഗങ്ങള്‍ ഉചിതമായ സ്ഥലങ്ങളില്‍ കാണിയ്ക്കുന്നു."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:9
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:19
 msgid "List of categories that should be displayed as folders"
 msgstr "ഫോള്‍ഡറുകളായി കാണിയ്ക്കേണ്ട വിഭാഗങ്ങളുടെ പട്ടിക"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:10
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:20
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
 msgstr ""
-"ഈ പട്ടികയിലുള്ള ഓരോ വിഭാഗത്തിന്റെ പേരും, പ്രധാന കാഴ്ചയില്‍ ഓരോ വരിയായി "
-"കാണിയ്ക്കുന്നതിനു് പകരം പ്രയോഗങ്ങളുടെ കാഴ്ചയില്‍ ഫോള്‍ഡറായി കാണിയ്ക്കുന്നു. "
+"ഈ പട്ടികയിലുള്ള ഓരോ വിഭാഗത്തിന്റെ പേരും, പ്രധാന കാഴ്ചയില്‍ ഓരോ വരിയായി കാണിയ്ക്കുന്നതിനു് "
+"പകരം പ്രയോഗങ്ങളുടെ കാഴ്ചയില്‍ ഫോള്‍ഡറായി കാണിയ്ക്കുന്നു. "
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:11
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:21
 msgid "History for command (Alt-F2) dialog"
 msgstr "കമാന്‍ഡ് (Alt-F2) ഡയലോഗിന്റെ നാള്‍വഴി"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:12
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:22
 msgid "History for the looking glass dialog"
 msgstr "തെരച്ചില്‍ ഡയലോഗിനുള്ള നാള്‍വഴി"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:13
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:23
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
 msgstr ""
-"ഉപയോക്താവു് സജ്ജമാക്കിയ അവസാന ഐഎം ആന്തരികമായി സൂക്ഷിയ്ക്കുന്നതിനു് "
-"ഉപയോഗിയ്ക്കുന്നു. മൂല്യം "
+"ഉപയോക്താവു് സജ്ജമാക്കിയ അവസാന ഐഎം ആന്തരികമായി സൂക്ഷിയ്ക്കുന്നതിനു് ഉപയോഗിയ്ക്കുന്നു. മൂല്യം "
 "TpConnectionPresenceType തരത്തിലുള്ളതാകുന്നു."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:14
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:24
 msgid ""
 "Internally used to store the last session presence status for the user. The "
 "value here is from the GsmPresenceStatus enumeration."
 msgstr ""
-"ഉപയോക്താവിനുള്ള അവസാന സെഷന്‍ അവസ്ഥ ആന്തരികമായി സൂക്ഷിയ്ക്കുന്നതിനു് "
-"ഉപയോഗിയ്ക്കുന്നു. മൂല്യം "
+"ഉപയോക്താവിനുള്ള അവസാന സെഷന്‍ അവസ്ഥ ആന്തരികമായി സൂക്ഷിയ്ക്കുന്നതിനു് ഉപയോഗിയ്ക്കുന്നു. മൂല്യം "
 "GsmPresenceStatus തരത്തിലുള്ളതാകുന്നു."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:15
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:25
 msgid "Always show the 'Log out' menuitem in the user menu."
 msgstr "ഉപയോക്തൃ മെനുവില്‍ 'പുറത്തിറങ്ങുക' കാണിക്കുക."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:16
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
 msgid ""
 "This key overrides the automatic hiding of the 'Log out' menuitem in single-"
 "user, single-session situations."
 msgstr ""
-"സിംഗിള്‍ യൂസര്‍, സിംഗിള്‍ സെഷനില്‍ 'ലോഗൌട്ട്' മെനുവസ്തു അദൃശ്യമാക്കുന്നതിനായി "
-"ഈ കീ ഉപയോഗിയ്ക്കുന്നു"
+"സിംഗിള്‍ യൂസര്‍, സിംഗിള്‍ സെഷനില്‍ 'ലോഗൌട്ട്' മെനുവസ്തു അദൃശ്യമാക്കുന്നതിനായി ഈ കീ ഉപയോഗിയ്ക്കുന്നു"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:17
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid ""
 "Whether to remember password for mounting encrypted or remote filesystems"
 msgstr ""
-"എന്‍ക്രിപ്റ്റ് ചെയ്തതോ വിദൂരമോ ആയ ഫയല്‍സിസ്റ്റങ്ങള്‍ മൌണ്ട് ചെയ്യുമ്പോഴുള്ള "
-"രഹസ്യവാക്ക് ഓര്‍മ്മിക്കണോ എന്ന്"
+"എന്‍ക്രിപ്റ്റ് ചെയ്തതോ വിദൂരമോ ആയ ഫയല്‍സിസ്റ്റങ്ങള്‍ മൌണ്ട് ചെയ്യുമ്പോഴുള്ള രഹസ്യവാക്ക് ഓര്‍മ്മിക്കണോ എന്ന്"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:18
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
 msgid ""
 "The shell will request a password when an encrypted device or a remote "
 "filesystem is mounted. If the password can be saved for future use a "
 "'Remember Password' checkbox will be present. This key sets the default "
 "state of the checkbox."
 msgstr ""
-"ഒരു എന്‍ക്രിപ്റ്റ് ചെയ്ത ഡിവൈസ് അല്ലെങ്കില്‍ വിദൂര ഫയല്‍സിസ്റ്റം മൌണ്ട് "
-"ചെയ്യുമ്പോള്‍ ഷെല്‍ ഒരു രഹസ്യവാക്ക് ആവശ്യപ്പെടുന്നു. രഹസ്യവാക്ക് "
-"സൂക്ഷിയ്ക്കുവാന്‍ സാധ്യമെങ്കില്‍,  'രഹസ്യവാക്ക് ഓര്‍ത്തു്വയ്ക്കുക' "
-"ചെക്ക്ബോക്സ് കാണാം. ഈ കീ ചെക്ക്ബോക്സിന്റെ സ്വതവേയുള്ള അവസ്ഥ സജ്ജമാക്കുന്നു."
+"ഒരു എന്‍ക്രിപ്റ്റ് ചെയ്ത ഡിവൈസ് അല്ലെങ്കില്‍ വിദൂര ഫയല്‍സിസ്റ്റം മൌണ്ട് ചെയ്യുമ്പോള്‍ ഷെല്‍ ഒരു രഹസ്യവാക്ക് "
+"ആവശ്യപ്പെടുന്നു. രഹസ്യവാക്ക് സൂക്ഷിയ്ക്കുവാന്‍ സാധ്യമെങ്കില്‍,  'രഹസ്യവാക്ക് ഓര്‍ത്തു്വയ്ക്കുക' ചെക്ക്ബോക്സ് "
+"കാണാം. ഈ കീ ചെക്ക്ബോക്സിന്റെ സ്വതവേയുള്ള അവസ്ഥ സജ്ജമാക്കുന്നു."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:19
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
+msgid "Layout of application launcher icons in the grid"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
+msgid ""
+"This key specifies the exact order of the icons shown in the applications "
+"launcher view."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid "Show the week date in the calendar"
 msgstr "കലണ്ടറിലുള്ള ആഴ്ച തീയിതി കാണിയ്ക്കുക"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:20
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
 msgid "If true, display the ISO week date in the calendar."
 msgstr "true എങ്കില്‍, കലണ്ടറില്‍ ഐഎസ്ഒ ആഴ്ച തീയതി കാണിയ്ക്കുക."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:21
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid "Keybinding to open the application menu"
 msgstr "പ്രയോഗത്തിന്റെ മെനു തുറക്കുന്നതിനുള്ള കീക്കൂട്ടം"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:22
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
 msgid "Keybinding to open the application menu."
 msgstr "പ്രയോഗത്തിന്റെ മെനു തുറക്കുന്നതിനുള്ള കീക്കൂട്ടം."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:23
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid "Keybinding to open the \"Show Applications\" view"
 msgstr "\"പ്രയോഗങ്ങള്‍ കാണിയ്ക്കുക\" എന്ന കാഴ്ച തുറക്കുന്നതിനുള്ള കീബൈന്‍ഡിങ്"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:24
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
 msgid ""
 "Keybinding to open the \"Show Applications\" view of the Activities Overview."
 msgstr ""
-"പ്രവര്‍ത്തികളുടെ അവലോകനത്തിന്റെ \"പ്രയോഗങ്ങള്‍ കാണിയ്ക്കുക\" എന്ന കാഴ്ച "
-"തുറക്കുന്നതിനുള്ള കീബൈന്‍ഡിങ്"
+"പ്രവര്‍ത്തികളുടെ അവലോകനത്തിന്റെ \"പ്രയോഗങ്ങള്‍ കാണിയ്ക്കുക\" എന്ന കാഴ്ച തുറക്കുന്നതിനുള്ള കീബൈന്‍ഡിങ്"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:25
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Keybinding to toggle the visibility of the message tray"
 msgstr "സന്ദേശ ട്രേയുടെ ദൃശ്യത ടൊഗ്ഗിള്‍ ചെയ്യുന്നതിനുള്ള കീക്കൂട്ടം"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
 msgid "Keybinding to toggle the visibility of the message tray."
 msgstr "സന്ദേശ ട്രേയുടെ ദൃശ്യത ടൊഗ്ഗിള്‍ ചെയ്യുന്നതിനുള്ള കീക്കൂട്ടം."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Keybinding to focus the active notification"
 msgstr "സജീവമായ അറിയിപ്പിനുള്ള കീബൈന്‍ഡിങ്"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
 msgid "Keybinding to focus the active notification."
 msgstr "സജീവമായ അറിയിപ്പിനുള്ള കീബൈന്‍ഡിങ്."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
 msgid "Keybinding to toggle the screen recorder"
 msgstr "സ്ക്രീന്‍ റിക്കോര്‍ഡര്‍ ടൊഗ്ഗിള്‍ ചെയ്യുന്നതിനുള്ള കീക്കൂട്ടം"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid "Keybinding to start/stop the builtin screen recorder."
-msgstr ""
-"ബിള്‍ട്ടിന്‍ സ്ക്രീന്‍ റിക്കോര്‍ഡര്‍ തുടങ്ങുവാന്‍/നിര്‍ത്തുന്നതിനുള്ള "
-"കീക്കൂട്ടം."
+msgstr "ബിള്‍ട്ടിന്‍ സ്ക്രീന്‍ റിക്കോര്‍ഡര്‍ തുടങ്ങുവാന്‍/നിര്‍ത്തുന്നതിനുള്ള കീക്കൂട്ടം."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
 msgid "Which keyboard to use"
 msgstr "ഏതു് കീബോര്‍ഡ് ഉപയോഗിയ്ക്കണം"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
 msgid "The type of keyboard to use."
 msgstr "ഏതു് തരം കീബോര്‍ഡ് ഉപയോഗിയ്ക്കണം."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
 msgid "Framerate used for recording screencasts."
 msgstr "സ്ക്രീന്‍കാസ്റ്റുകള്‍ റിക്കോര്‍ഡ് ചെയ്യുന്നതിനുള്ള ഫ്രെയിം റേറ്റ്."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
 msgid ""
 "The framerate of the resulting screencast recordered by GNOME Shell's "
 "screencast recorder in frames-per-second."
 msgstr ""
-"ഗ്നോം ഷെല്ലിന്റെ സ്ക്രീന്‍കാസ്റ്റ് റിക്കോര്‍ഡര്‍ റീക്കോര്‍ഡ് ചെയ്തിട്ടുള്ള "
-"സ്ക്രീന്‍കാസ്റ്റിന്റെ "
+"ഗ്നോം ഷെല്ലിന്റെ സ്ക്രീന്‍കാസ്റ്റ് റിക്കോര്‍ഡര്‍ റീക്കോര്‍ഡ് ചെയ്തിട്ടുള്ള സ്ക്രീന്‍കാസ്റ്റിന്റെ "
 "ഫ്രെയിംറേറ്റ്, ഒരു സെക്കന്‍ഡില്‍ ഒരു ഫ്രെയിം."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "The gstreamer pipeline used to encode the screencast"
 msgstr "സ്ക്രീന്‍കാസ്റ്റ് എന്‍കോഡ് ചെയ്യുന്നതിനുള്ള gstreamer പൈപ്പ്‌ലൈന്‍"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 #, no-c-format
 msgid ""
 "Sets the GStreamer pipeline used to encode recordings. It follows the syntax "
@@ -296,78 +340,68 @@ msgid ""
 "threads=%T ! queue ! webmmux' and records to WEBM using the VP8 codec. %T is "
 "used as a placeholder for a guess at the optimal thread count on the system."
 msgstr ""
-"റിക്കോര്‍ഡിങുകള്‍ എന്‍കോഡ് ചെയ്യുന്നതിനായി GStreamer പൈപ്പ് ലൈന്‍ "
-"ഉപയോഗിയ്ക്കുന്നു. gst-launch-"
-"നുള്ള സിന്റാക്സ് ഉപയോഗിയ്ക്കുന്നു. കാലിയായി സജ്ജമാക്കുമ്പോള്‍ "
-"കാലിയാകുന്നു.ഇതു് നിലവില്‍ 'vp8enc "
+"റിക്കോര്‍ഡിങുകള്‍ എന്‍കോഡ് ചെയ്യുന്നതിനായി GStreamer പൈപ്പ് ലൈന്‍ ഉപയോഗിയ്ക്കുന്നു. gst-launch-"
+"നുള്ള സിന്റാക്സ് ഉപയോഗിയ്ക്കുന്നു. കാലിയായി സജ്ജമാക്കുമ്പോള്‍ കാലിയാകുന്നു.ഇതു് നിലവില്‍ 'vp8enc "
 "min_quantizer=13 max_quantizer=13 cpu-used=5 deadline=1000000 threads=%T ! "
 "queue ! webmmux' ആകുന്നുസ WEBM VP8 കോഡ് ഉപയോഗിച്ചു് റിക്കോര്‍ഡ് ചെയ്യുന്നു."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "File extension used for storing the screencast"
 msgstr "സ്ക്രീന്‍കാസ്റ്റ് സൂക്ഷിയ്ക്കുന്നതിനുള്ള ഫയല്‍ എക്സ്റ്റെന്‍ഷന്‍"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid ""
 "The filename for recorded screencasts will be a unique filename based on the "
 "current date, and use this extension. It should be changed when recording to "
 "a different container format."
 msgstr ""
-"റിക്കോര്‍ഡ് ചെയ്ത സ്ക്രീന്‍കാസ്റ്റുകള്‍ക്കുള്ള ഫയല്‍നാമം നിലവിലുള്ള തീയതി, "
-"എക്സ്റ്റെന്‍ഷന്‍ എന്നിവ "
-"അനുസരിച്ചാകുന്നു. മറ്റൊരു ശൈലിയിലേക്കു് റിക്കോര്‍ഡ് ചെയ്യുമ്പോള്‍ ഇതു് "
-"മാറ്റണം."
+"റിക്കോര്‍ഡ് ചെയ്ത സ്ക്രീന്‍കാസ്റ്റുകള്‍ക്കുള്ള ഫയല്‍നാമം നിലവിലുള്ള തീയതി, എക്സ്റ്റെന്‍ഷന്‍ എന്നിവ "
+"അനുസരിച്ചാകുന്നു. മറ്റൊരു ശൈലിയിലേക്കു് റിക്കോര്‍ഡ് ചെയ്യുമ്പോള്‍ ഇതു് മാറ്റണം."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "The application icon mode."
 msgstr "പ്രയോഗത്തിന്റെ ഐക്കണ്‍ മോഡ്."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
 "only' (shows only the application icon) or 'both'."
 msgstr ""
-"സ്വിച്ചറില്‍ ജാലകങ്ങള്‍ എങ്ങനെ കാണിയ്ക്കുന്നു എന്നു് ക്രമീകരിയ്ക്കുന്നു. "
-"ശരിയായ "
-"സാധ്യതകള്‍: 'thumbnail-only' (ജാലകത്തിന്റെ പ്രതിരൂപം കാണിയ്ക്കുന്നു), "
-"'app-icon-"
+"സ്വിച്ചറില്‍ ജാലകങ്ങള്‍ എങ്ങനെ കാണിയ്ക്കുന്നു എന്നു് ക്രമീകരിയ്ക്കുന്നു. ശരിയായ സാധ്യതകള്‍: "
+"'thumbnail-only' (ജാലകത്തിന്റെ പ്രതിരൂപം കാണിയ്ക്കുന്നു), 'app-icon-"
 "only' (പ്രയോഗത്തിന്റെ പ്രതിരൂപം കാണിയ്ക്കുന്നു) അല്ലെങ്കില്‍ 'both'."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Attach modal dialog to the parent window"
 msgstr "പേരന്റ് ജാലകത്തിലേക്കു് ഡയലോഗ് ചേര്‍ക്കുക"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
-msgstr ""
-"ഗ്നോം ഷെല്‍ പ്രവര്‍ത്തിയ്ക്കുമ്പോള്‍ org.gnome.mutter-ലുള്ള കീ ഈ കീ "
-"തിരുത്തിയെഴുതുന്നു."
+msgstr "ഗ്നോം ഷെല്‍ പ്രവര്‍ത്തിയ്ക്കുമ്പോള്‍ org.gnome.mutter-ലുള്ള കീ ഈ കീ തിരുത്തിയെഴുതുന്നു."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Arrangement of buttons on the titlebar"
 msgstr "തലക്കെട്ടിനുള്ള ബാറില്‍ ബട്ടണുകളുടെ ക്രമീകരണം"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
 msgstr ""
-"ഗ്നോം ഷെല്‍ പ്രവര്‍ത്തിയ്ക്കുമ്പോള്‍ org.gnome.desktop.wm.preferences-ലുള്ള "
-"കീ ഈ കീ തിരുത്തിയെഴുതുന്നു."
+"ഗ്നോം ഷെല്‍ പ്രവര്‍ത്തിയ്ക്കുമ്പോള്‍ org.gnome.desktop.wm.preferences-ലുള്ള കീ ഈ കീ "
+"തിരുത്തിയെഴുതുന്നു."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Enable edge tiling when dropping windows on screen edges"
-msgstr ""
-"സ്ക്രീന്‍ കോണുകളില്‍ ജാലകങ്ങള്‍ എത്തിയ്ക്കുമ്പോള്‍ കോണ്‍ ചരിയ്ക്കുന്നതിനായി "
-"പ്രവര്‍ത്തന സജ്ജമാക്കുക"
+msgstr "സ്ക്രീന്‍ കോണുകളില്‍ ജാലകങ്ങള്‍ എത്തിയ്ക്കുമ്പോള്‍ കോണ്‍ ചരിയ്ക്കുന്നതിനായി പ്രവര്‍ത്തന സജ്ജമാക്കുക"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
 msgid "Workspaces are managed dynamically"
 msgstr "പണിയിടങ്ങള്‍ ഡയനാമിക്കായി കൈകാര്യം ചെയ്തിരിക്കുന്നു"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
 msgid "Workspaces only on primary monitor"
 msgstr "പ്രധാന മോണിറ്ററില്‍ മാത്രം പണിയിടങ്ങള്‍"
 
@@ -382,12 +416,9 @@ msgstr "എക്സ്റ്റെന്‍ഷന്‍"
 
 #: ../js/extensionPrefs/main.js:189
 msgid "Select an extension to configure using the combobox above."
-msgstr ""
-"മുകളിലുള്ള കോമ്പോ ബോക്സ് ഉപയോഗിച്ചു് ക്രമീകരിയ്ക്കുന്നതിനുള്ളൊരു "
-"എക്സ്റ്റെന്‍ഷന്‍ തെര‍ഞ്ഞെടുക്കുക."
+msgstr "മുകളിലുള്ള കോമ്പോ ബോക്സ് ഉപയോഗിച്ചു് ക്രമീകരിയ്ക്കുന്നതിനുള്ളൊരു എക്സ്റ്റെന്‍ഷന്‍ തെര‍ഞ്ഞെടുക്കുക."
 
 #: ../js/gdm/loginDialog.js:405
-#| msgid "Session..."
 msgid "Session…"
 msgstr "പ്രവര്‍ത്തനവേള..."
 
@@ -399,10 +430,10 @@ msgid "Not listed?"
 msgstr "ലഭ്യമല്ലേ?"
 
 #: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:375
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:388
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:415 ../js/ui/unlockDialog.js:99
-#: ../js/ui/userMenu.js:938
+#: ../js/ui/userMenu.js:557
 msgid "Cancel"
 msgstr "വേണ്ട"
 
@@ -432,8 +463,7 @@ msgstr "പ്രവേശന ജാലകം"
 msgid "Power"
 msgstr "ഓഫ്"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:696 ../js/ui/userMenu.js:700
-#: ../js/ui/userMenu.js:816
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "താത്കാലികമായി നിര്‍ത്തുക"
 
@@ -441,8 +471,7 @@ msgstr "താത്കാലികമായി നിര്‍ത്തുക"
 msgid "Restart"
 msgstr "പുനരാരംഭിക്കുക"
 
-#: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:698
-#: ../js/ui/userMenu.js:700 ../js/ui/userMenu.js:815 ../js/ui/userMenu.js:942
+#: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:35
 msgid "Power Off"
 msgstr "നിര്‍ത്തുക"
 
@@ -461,38 +490,67 @@ msgstr "(അല്ലെങ്കില്‍ ഫിംഗര്‍ സ്വൈ
 msgid "(e.g., user or %s)"
 msgstr "(e.g., ഉപയോക്താവു് അല്ലെങ്കില്‍ %s)"
 
-#: ../js/misc/util.js:97
+#: ../js/misc/util.js:124
 msgid "Command not found"
 msgstr "ആജ്ഞ കണ്ടില്ല"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:130
+#: ../js/misc/util.js:157
 msgid "Could not parse command:"
 msgstr "ആജ്ഞ പ്രാവര്‍ത്തികമാക്കാന്‍ സാധ്യമായില്ല:"
 
-#: ../js/misc/util.js:138
+#: ../js/misc/util.js:165
 #, c-format
 msgid "Execution of '%s' failed:"
 msgstr "'%s' നടപ്പിലാക്കുന്നതില്‍ പരാജയപ്പെട്ടു:"
 
-#: ../js/ui/appDisplay.js:349
-msgid "Frequent"
-msgstr "ഇടയ്ക്കിടെ"
+#. For now, let's use the normal icon for the pressed state,
+#. for consistency with the other app selector icons,
+#. which just use the wells to represent the pressed state.
+#. In the future, we may want to use the 'add_down' icon instead.
+#. If so, the return to the normal state after the user
+#. moves off the icon to cancel should be made more responsive;
+#. the current implementation takes about a second for the change
+#. back to the normal icon to occur.
+#: ../js/ui/appDisplay.js:1879
+msgid "Add"
+msgstr ""
 
-#: ../js/ui/appDisplay.js:356
-msgid "All"
-msgstr "എല്ലാം"
+#: ../js/ui/appDisplay.js:1881 ../js/ui/appDisplay.js:1883
+msgid "Delete"
+msgstr ""
 
-#: ../js/ui/appDisplay.js:914
+#: ../js/ui/appDisplay.js:2000
+msgid "Warning"
+msgstr ""
+
+#: ../js/ui/appDisplay.js:2006
+msgid ""
+"To delete a folder you have to remove all of the items inside of it first."
+msgstr ""
+
+#: ../js/ui/appDisplay.js:2012
+msgid "We are just trying to keep you safe."
+msgstr ""
+
+#: ../js/ui/appDisplay.js:2018 ../js/ui/status/bluetooth.js:414
+msgid "OK"
+msgstr "ശരി"
+
+#: ../js/ui/appDisplay.js:2051
+msgid "Delete?"
+msgstr ""
+
+#: ../js/ui/appDisplay.js:2161
 msgid "New Window"
 msgstr "പുതിയ വിന്‍ഡോ"
 
-#: ../js/ui/appDisplay.js:917 ../js/ui/dash.js:284
+#: ../js/ui/appDisplay.js:2164 ../js/ui/dash.js:290
 msgid "Remove from Favorites"
 msgstr "ഇഷ്ടപ്പെട്ടവയില്‍ നിന്നും നീക്കം ചെയ്യുക"
 
-#: ../js/ui/appDisplay.js:918
+#: ../js/ui/appDisplay.js:2165
 msgid "Add to Favorites"
 msgstr "ഇഷ്ടപ്പെട്ടവയിലേക്ക് ചേര്‍ക്കുക"
 
@@ -506,13 +564,23 @@ msgstr "%s നിങ്ങള്‍ക്കിഷ്ടപ്പെട്ടവ
 msgid "%s has been removed from your favorites."
 msgstr "%s നിങ്ങള്‍ക്കിഷ്ടപ്പെട്ടവയില്‍ നിന്നും നീക്കം ചെയ്തിട്ടുണ്ട്."
 
-#: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:789
-msgid "Settings"
-msgstr "സജ്ജീകരണങ്ങള്‍"
-
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
 msgstr "പശ്ചാത്തലം മാറ്റുക..."
+
+#: ../js/ui/backgroundMenu.js:25
+#, fuzzy
+msgid "Add Application"
+msgstr "പ്രയോഗങ്ങള്‍"
+
+#: ../js/ui/backgroundMenu.js:29
+msgid "Add Website Link"
+msgstr ""
+
+#: ../js/ui/backgroundMenu.js:33
+#, fuzzy
+msgid "Add Folder"
+msgstr "ആസ്ഥാന ഫോള്‍ഡര്‍"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -732,8 +800,7 @@ msgid ""
 "Passwords or encryption keys are required to access the wireless network "
 "'%s'."
 msgstr ""
-"വയര്‍ലെസ് നെറ്റ്‌വര്‍ക്ക് '%s'-ലേക്ക് പ്രവേശിക്കുന്നതിനായി രഹസ്യവാക്കുകള്‍ "
-"അല്ലെങ്കില്‍ എന്‍ക്രിപ്ഷന്‍ കീകള്‍ "
+"വയര്‍ലെസ് നെറ്റ്‌വര്‍ക്ക് '%s'-ലേക്ക് പ്രവേശിക്കുന്നതിനായി രഹസ്യവാക്കുകള്‍ അല്ലെങ്കില്‍ എന്‍ക്രിപ്ഷന്‍ കീകള്‍ "
 "ആവശ്യമുണ്ടു്."
 
 #: ../js/ui/components/networkAgent.js:314
@@ -913,8 +980,7 @@ msgstr "%s നിങ്ങള്‍ക്കു് %s അയച്ചിരി�
 #: ../js/ui/components/telepathyClient.js:1206
 #, c-format
 msgid "%s would like permission to see when you are online"
-msgstr ""
-"നിങ്ങള്‍ ഓണ്‍ലൈന്‍ ആകുമ്പോള്‍ കാണുന്നതിനുള്ള അനുമതി %s-നു് ആവശ്യമുണ്ടു്"
+msgstr "നിങ്ങള്‍ ഓണ്‍ലൈന്‍ ആകുമ്പോള്‍ കാണുന്നതിനുള്ള അനുമതി %s-നു് ആവശ്യമുണ്ടു്"
 
 #: ../js/ui/components/telepathyClient.js:1298
 msgid "Network error"
@@ -987,9 +1053,7 @@ msgstr "ഈ അക്കൌണ്ട് നിലവില്‍ സര്‍വ
 #: ../js/ui/components/telepathyClient.js:1332
 msgid ""
 "Connection has been replaced by a new connection using the same resource"
-msgstr ""
-"അതേ ശ്രോതസ്സ് ഉപയോഗിച്ചു് ഒരു പുതിയ കണക്ഷന്‍ ഉപയോഗിച്ചു് ഈ കണക്ഷന്‍ "
-"മാറ്റിസ്ഥാപിയ്ക്കുന്നു"
+msgstr "അതേ ശ്രോതസ്സ് ഉപയോഗിച്ചു് ഒരു പുതിയ കണക്ഷന്‍ ഉപയോഗിച്ചു് ഈ കണക്ഷന്‍ മാറ്റിസ്ഥാപിയ്ക്കുന്നു"
 
 #: ../js/ui/components/telepathyClient.js:1334
 msgid "The account already exists on the server"
@@ -1006,17 +1070,14 @@ msgstr "സമ്മതപത്രം വീണ്ടും ആവശ്യപ�
 #: ../js/ui/components/telepathyClient.js:1340
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
-msgstr ""
-"സമ്മതപത്രം സുരക്ഷിതമല്ലാത്തൊരു സിഫര്‍ ആല്‍ഗോരിഥം ഉപയോഗിയ്ക്കുന്നു "
-"അല്ലെങ്കില്‍ ഉചിതമല്ല"
+msgstr "സമ്മതപത്രം സുരക്ഷിതമല്ലാത്തൊരു സിഫര്‍ ആല്‍ഗോരിഥം ഉപയോഗിയ്ക്കുന്നു അല്ലെങ്കില്‍ ഉചിതമല്ല"
 
 #: ../js/ui/components/telepathyClient.js:1342
 msgid ""
 "The length of the server certificate, or the depth of the server certificate "
 "chain, exceed the limits imposed by the cryptography library"
 msgstr ""
-"സര്‍വറിന്റെ സമ്മതപത്രത്തിന്റെ വ്യാപ്തി, അല്ലെങ്കില്‍ സര്‍വര്‍ സമ്മതപത്ര "
-"ചെയിന്റെ വ്യാപ്തി, എന്നിവ "
+"സര്‍വറിന്റെ സമ്മതപത്രത്തിന്റെ വ്യാപ്തി, അല്ലെങ്കില്‍ സര്‍വര്‍ സമ്മതപത്ര ചെയിന്റെ വ്യാപ്തി, എന്നിവ "
 "പരിധിയില്‍ കൂടുന്നു"
 
 #: ../js/ui/components/telepathyClient.js:1344
@@ -1038,17 +1099,17 @@ msgstr "അക്കൌണ്ട് കാണുക"
 msgid "Unknown reason"
 msgstr "അജ്ഞാതമായ കാരണം"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:96
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:490
 msgid "Windows"
 msgstr "ജാലകങ്ങള്‍"
 
-#: ../js/ui/dash.js:248 ../js/ui/dash.js:286
+#: ../js/ui/dash.js:254 ../js/ui/dash.js:292
 msgid "Show Applications"
 msgstr "പ്രയോഗങ്ങള്‍ കാണിയ്ക്കുക"
 
 #. Translators: this is the name of the dock/favorites area on
 #. the left of the overview
-#: ../js/ui/dash.js:435
+#: ../js/ui/dash.js:446
 msgid "Dash"
 msgstr "ഡാഷ്"
 
@@ -1071,98 +1132,96 @@ msgstr "തീയതി, സമയ ക്രമീകരണങ്ങള്‍"
 msgid "%A %B %e, %Y"
 msgstr "%A %B %e, %Y"
 
-#: ../js/ui/endSessionDialog.js:63
+#: ../js/ui/endSessionDialog.js:65
 #, c-format
 msgctxt "title"
 msgid "Log Out %s"
 msgstr "%s ല്‍ നിന്നു പുറത്ത് കടക്കുക"
 
-#: ../js/ui/endSessionDialog.js:64
+#: ../js/ui/endSessionDialog.js:66
 msgctxt "title"
 msgid "Log Out"
 msgstr "പുറത്ത് കടക്കുക"
 
-#: ../js/ui/endSessionDialog.js:65
+#: ../js/ui/endSessionDialog.js:67
 msgid "Click Log Out to quit these applications and log out of the system."
 msgstr ""
-"ഈ പ്രയോഗങ്ങളില്‍ നിന്നും പുറത്തു് കടക്കുന്നതിനായി പുറത്തു കടക്കുക ക്ലിക്ക് "
-"ചെയ്തു് സിസ്റ്റത്തില്‍ നിന്നും "
+"ഈ പ്രയോഗങ്ങളില്‍ നിന്നും പുറത്തു് കടക്കുന്നതിനായി പുറത്തു കടക്കുക ക്ലിക്ക് ചെയ്തു് സിസ്റ്റത്തില്‍ നിന്നും "
 "പുറത്തു് കടക്കുക."
 
-#: ../js/ui/endSessionDialog.js:67
+#: ../js/ui/endSessionDialog.js:69
 #, c-format
 msgid "%s will be logged out automatically in %d second."
 msgid_plural "%s will be logged out automatically in %d seconds."
 msgstr[0] "%s %d നിമിഷത്തിനുള്ളില്‍ സ്വയമേ പുറത്ത് കടക്കുന്നതാണു്."
 msgstr[1] "%s %d നിമിഷങ്ങള്‍ക്കുള്ളില്‍ സ്വയമേ പുറത്ത് കടക്കുന്നതാണു്."
 
-#: ../js/ui/endSessionDialog.js:72
+#: ../js/ui/endSessionDialog.js:74
 #, c-format
 msgid "You will be logged out automatically in %d second."
 msgid_plural "You will be logged out automatically in %d seconds."
 msgstr[0] "നിങ്ങള്‍ %d നിമിഷത്തിനുള്ളില്‍ സ്വയമേ പുറത്ത് കടക്കുന്നതാണു്."
 msgstr[1] "നിങ്ങള്‍ %d നിമിഷങ്ങള്‍ക്കുള്ളില്‍ സ്വയമേ പുറത്ത് കടക്കുന്നതാണു്."
 
-#: ../js/ui/endSessionDialog.js:76
+#: ../js/ui/endSessionDialog.js:78
 msgid "Logging out of the system."
 msgstr "സിസ്റ്റത്തില്‍ നിന്നു പുറത്തു കടക്കുന്നു."
 
-#: ../js/ui/endSessionDialog.js:78
+#: ../js/ui/endSessionDialog.js:80 ../js/ui/endSessionDialog.js:103
 msgctxt "button"
 msgid "Log Out"
 msgstr "പുറത്ത് കടക്കുക"
 
-#: ../js/ui/endSessionDialog.js:83
+#: ../js/ui/endSessionDialog.js:85
 msgctxt "title"
 msgid "Power Off"
 msgstr "നിര്‍ത്തുക"
 
-#: ../js/ui/endSessionDialog.js:84
+#: ../js/ui/endSessionDialog.js:86
 msgid "Click Power Off to quit these applications and power off the system."
 msgstr ""
-"ഈ പ്രയോഗങ്ങളില്‍ നിന്നും പുറത്തു് കടക്കുന്നതിനായി പവര്‍ ഓഫ് ചെയ്യുക ക്ലിക്ക് "
-"ചെയ്തു സിസ്റ്റിന്റെ പവര്‍ "
+"ഈ പ്രയോഗങ്ങളില്‍ നിന്നും പുറത്തു് കടക്കുന്നതിനായി പവര്‍ ഓഫ് ചെയ്യുക ക്ലിക്ക് ചെയ്തു സിസ്റ്റിന്റെ പവര്‍ "
 "ഓഫ് ചെയ്യുക."
 
-#: ../js/ui/endSessionDialog.js:86
+#: ../js/ui/endSessionDialog.js:88
 #, c-format
 msgid "The system will power off automatically in %d second."
 msgid_plural "The system will power off automatically in %d seconds."
 msgstr[0] "സിസ്റ്റം %d നിമിഷത്തിനുള്ളില്‍ സ്വയമേ ഓഫ് ചെയ്യപ്പെടുന്നതാണു്."
 msgstr[1] "സിസ്റ്റം %d നിമിഷങ്ങള്‍ക്കുള്ളില്‍ സ്വയമേ ഓഫ് ചെയ്യപ്പെടുന്നതാണു്."
 
-#: ../js/ui/endSessionDialog.js:90
+#: ../js/ui/endSessionDialog.js:92
 msgid "Powering off the system."
 msgstr "സിസ്റ്റത്തിന്റെ പവര്‍ ഓഫ് ചെയ്യുന്നു."
 
-#: ../js/ui/endSessionDialog.js:92 ../js/ui/endSessionDialog.js:109
+#: ../js/ui/endSessionDialog.js:99 ../js/ui/endSessionDialog.js:105
+#: ../js/ui/endSessionDialog.js:122
 msgctxt "button"
 msgid "Restart"
 msgstr "പുനരാരംഭിക്കൂ"
 
-#: ../js/ui/endSessionDialog.js:94
+#: ../js/ui/endSessionDialog.js:101 ../js/ui/endSessionDialog.js:107
 msgctxt "button"
 msgid "Power Off"
 msgstr "നിര്‍ത്തുക"
 
-#: ../js/ui/endSessionDialog.js:100
+#: ../js/ui/endSessionDialog.js:113
 msgctxt "title"
 msgid "Restart"
 msgstr "പുനരാരംഭിക്കുക"
 
-#: ../js/ui/endSessionDialog.js:101
+#: ../js/ui/endSessionDialog.js:114
 msgid "Click Restart to quit these applications and restart the system."
-msgstr ""
-"ഈ പ്രയോഗങ്ങള്‍ നിറുത്തി സിസ്റ്റം പുനരാരംഭിക്കുവാന്‍ പുനരാരംഭിക്കൂ അമര്‍ത്തുക"
+msgstr "ഈ പ്രയോഗങ്ങള്‍ നിറുത്തി സിസ്റ്റം പുനരാരംഭിക്കുവാന്‍ പുനരാരംഭിക്കൂ അമര്‍ത്തുക"
 
-#: ../js/ui/endSessionDialog.js:103
+#: ../js/ui/endSessionDialog.js:116
 #, c-format
 msgid "The system will restart automatically in %d second."
 msgid_plural "The system will restart automatically in %d seconds."
 msgstr[0] "സിസ്റ്റം %d നിമിഷത്തിനുള്ളില്‍ സ്വയമേ വീണ്ടും ആരംഭിയ്ക്കുന്നു."
 msgstr[1] "സിസ്റ്റം %d നിമിഷങ്ങള്‍ക്കുള്ളില്‍ സ്വയമേ വീണ്ടും ആരംഭിയ്ക്കുന്നു."
 
-#: ../js/ui/endSessionDialog.js:107
+#: ../js/ui/endSessionDialog.js:120
 msgid "Restarting the system."
 msgstr "സിസ്റ്റം പുനരാരംഭിക്കുന്നു."
 
@@ -1173,9 +1232,7 @@ msgstr "ഇന്‍സ്റ്റോള്‍"
 #: ../js/ui/extensionDownloader.js:204
 #, c-format
 msgid "Download and install '%s' from extensions.gnome.org?"
-msgstr ""
-"extensions.gnome.org ഇല്‍ നിന്നും '%s' ഡൗണ്‍ലോട് ചെയ്ത് ഇന്‍സ്റ്റോള്‍ "
-"ചെയ്യേണമോ?"
+msgstr "extensions.gnome.org ഇല്‍ നിന്നും '%s' ഡൗണ്‍ലോട് ചെയ്ത് ഇന്‍സ്റ്റോള്‍ ചെയ്യേണമോ?"
 
 #: ../js/ui/keyboard.js:619 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:211
@@ -1204,7 +1261,9 @@ msgstr "പിശകുകള്‍ കാണിക്കുക"
 msgid "Enabled"
 msgstr "പ്രവര്‍ത്തനക്ഷമമാക്കി"
 
-#: ../js/ui/lookingGlass.js:769
+#. translators:
+#. * The device has been disabled
+#: ../js/ui/lookingGlass.js:769 ../src/gvc/gvc-mixer-control.c:1830
 msgid "Disabled"
 msgstr "പ്രവര്‍ത്തനരഹിതമാക്കി"
 
@@ -1228,75 +1287,48 @@ msgstr "സ്രോതസ്സ് കാണിക്കുക"
 msgid "Web Page"
 msgstr "വെബ് താള്‍"
 
-#: ../js/ui/messageTray.js:1182
+#: ../js/ui/messageTray.js:1183
 msgid "Open"
 msgstr "തുറക്കുക"
 
-#: ../js/ui/messageTray.js:1189
+#: ../js/ui/messageTray.js:1190
 msgid "Remove"
 msgstr "നീക്കം ചെയ്യുക"
 
-#: ../js/ui/messageTray.js:1501
-#| msgid "No Messages"
+#: ../js/ui/messageTray.js:1502
 msgid "Clear Messages"
 msgstr "സന്ദേശങ്ങള്‍ വെടിപ്പാക്കുക"
 
-#: ../js/ui/messageTray.js:1528
+#: ../js/ui/messageTray.js:1529
 msgid "Notification Settings"
 msgstr "അറിയിപ്പു് ക്രമീകരണങ്ങള്‍"
 
-#: ../js/ui/messageTray.js:1709
+#: ../js/ui/messageTray.js:1719
 msgid "No Messages"
 msgstr "സന്ദേശങ്ങളില്ല"
 
-#: ../js/ui/messageTray.js:1782
+#: ../js/ui/messageTray.js:1794
 msgid "Message Tray"
 msgstr "സന്ദേശത്തിന്റെ ട്രേ"
 
-#: ../js/ui/messageTray.js:2810
+#: ../js/ui/messageTray.js:2822
 msgid "System Information"
 msgstr "സിസ്റ്റത്തെക്കുറിച്ചുള്ള വിവരം"
 
-#: ../js/ui/notificationDaemon.js:629 ../src/shell-app.c:374
+#: ../js/ui/notificationDaemon.js:630 ../src/shell-app.c:383
 msgctxt "program"
 msgid "Unknown"
 msgstr "അജ്ഞാതം"
 
-#: ../js/ui/overviewControls.js:463 ../js/ui/screenShield.js:149
-#, c-format
-msgid "%d new message"
-msgid_plural "%d new messages"
-msgstr[0] "%d പുതിയ സന്ദേശം"
-msgstr[1] "%d പുതിയ സന്ദേശങ്ങള്‍"
-
-#: ../js/ui/overview.js:84
+#: ../js/ui/overview.js:87
 msgid "Undo"
 msgstr "വേണ്ട"
 
-#: ../js/ui/overview.js:129
+#: ../js/ui/overview.js:248
 msgid "Overview"
 msgstr "അവലോകനം"
 
-#. Translators: this is the text displayed
-#. in the search entry when no search is
-#. active; it should not exceed ~30
-#. characters.
-#: ../js/ui/overview.js:271
-#| msgid "Type to search..."
-msgid "Type to search…"
-msgstr "തെരയുന്നതിനായി ടൈപ്പ് ചെയ്യുക..."
-
-#: ../js/ui/panel.js:612
-msgid "Quit"
-msgstr "നിര്‍ത്തുക"
-
-#. Translators: If there is no suitable word for "Activities"
-#. in your language, you can use the word for "Overview".
-#: ../js/ui/panel.js:636
-msgid "Activities"
-msgstr "പ്രവര്‍ത്തനങ്ങള്‍"
-
-#: ../js/ui/panel.js:933
+#: ../js/ui/panel.js:332
 msgid "Top Bar"
 msgstr "മുകളിലുള്ള ബാര്‍"
 
@@ -1305,7 +1337,7 @@ msgstr "മുകളിലുള്ള ബാര്‍"
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:727
+#: ../js/ui/popupMenu.js:736
 msgid "toggle-switch-us"
 msgstr "toggle-switch-us"
 
@@ -1317,24 +1349,7 @@ msgstr "ഒരു കമാന്‍ഡ് നല്‍കുക"
 msgid "Close"
 msgstr "അടക്കുക"
 
-#. Translators: This is a time format for a date in
-#. long format
-#: ../js/ui/screenShield.js:86
-msgid "%A, %B %d"
-msgstr "%A, %B %d"
-
-#: ../js/ui/screenShield.js:151
-#, c-format
-msgid "%d new notification"
-msgid_plural "%d new notifications"
-msgstr[0] "%d പുതിയ അറിയിപ്പു്"
-msgstr[1] "%d പുതിയ അറിയിപ്പുകള്‍"
-
-#: ../js/ui/screenShield.js:438 ../js/ui/userMenu.js:807
-msgid "Lock"
-msgstr "പൂട്ടുക"
-
-#: ../js/ui/screenShield.js:637
+#: ../js/ui/screenShield.js:129
 msgid "GNOME needs to lock the screen"
 msgstr "ഗ്നോമിന് സ്ക്രീന്‍ പൂട്ടണം"
 
@@ -1345,39 +1360,51 @@ msgstr "ഗ്നോമിന് സ്ക്രീന്‍ പൂട്ടണ�
 #.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:758 ../js/ui/screenShield.js:1194
-#| msgid "Unable to connect to %s"
+#: ../js/ui/screenShield.js:167 ../js/ui/screenShield.js:415
 msgid "Unable to lock"
 msgstr "പൂട്ടുവാന്‍ സാധ്യമല്ല"
 
-#: ../js/ui/screenShield.js:759 ../js/ui/screenShield.js:1195
+#: ../js/ui/screenShield.js:168 ../js/ui/screenShield.js:416
 msgid "Lock was blocked by an application"
 msgstr "പൂട്ടുന്ന സംവിധാനം ഒരു പ്രയോഗം തടസ്സപ്പെടുത്തിയിരിയ്ക്കുന്നു"
 
-#: ../js/ui/searchDisplay.js:453
-#| msgid "Searching..."
-msgid "Searching…"
-msgstr "തെരയുന്നു..."
+#: ../js/ui/shellEntry.js:64
+msgid "Google"
+msgstr ""
 
-#: ../js/ui/searchDisplay.js:497
-msgid "No results."
-msgstr "ഫലങ്ങളില്ല."
+#: ../js/ui/shellEntry.js:70
+msgid "Wikipedia"
+msgstr ""
 
-#: ../js/ui/shellEntry.js:29
+#: ../js/ui/shellEntry.js:76
+msgid "Local"
+msgstr ""
+
+#: ../js/ui/shellEntry.js:133
 msgid "Copy"
 msgstr "പകര്‍ത്തുക"
 
-#: ../js/ui/shellEntry.js:34
+#: ../js/ui/shellEntry.js:138
 msgid "Paste"
 msgstr "ഒട്ടിയ്ക്കുക"
 
-#: ../js/ui/shellEntry.js:106
+#: ../js/ui/shellEntry.js:197
 msgid "Show Text"
 msgstr "പദാവലി കാണിക്കുക"
 
-#: ../js/ui/shellEntry.js:108
+#: ../js/ui/shellEntry.js:199
 msgid "Hide Text"
 msgstr "പദാവലി മറക്കുക"
+
+#: ../js/ui/shellEntry.js:302
+#, fuzzy
+msgid "Type to search Wikipedia"
+msgstr "തെരയുന്നതിനായി ടൈപ്പ് ചെയ്യുക..."
+
+#: ../js/ui/shellEntry.js:304
+#, fuzzy
+msgid "Type to search your computer"
+msgstr "നിങ്ങളുടെ കമ്പ്യൂട്ടര്‍ തിരയുക"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1451,12 +1478,10 @@ msgid "Visibility"
 msgstr "കാഴ്ച"
 
 #: ../js/ui/status/bluetooth.js:59
-#| msgid "Send Files to Device..."
 msgid "Send Files to Device…"
 msgstr "ഡിവൈസിലേക്കു് ഫയലുകള്‍ അയയ്ക്കുക..."
 
 #: ../js/ui/status/bluetooth.js:60
-#| msgid "Set Up a New Device..."
 msgid "Set Up a New Device…"
 msgstr "പുതിയൊരു ഡിവൈസ് സജ്ജമാക്കുക..."
 
@@ -1483,7 +1508,6 @@ msgid "connecting..."
 msgstr "ബന്ധിപ്പിയ്ക്കുന്നു...."
 
 #: ../js/ui/status/bluetooth.js:239
-#| msgid "Send Files..."
 msgid "Send Files…"
 msgstr "ഫയലുകള്‍ അയയ്ക്കുക..."
 
@@ -1495,7 +1519,7 @@ msgstr "കീബോര്‍ഡ് ക്രമീകരണങ്ങള്‍"
 msgid "Mouse Settings"
 msgstr "മൗസ് ക്രമീകരണങ്ങള്‍"
 
-#: ../js/ui/status/bluetooth.js:254 ../js/ui/status/volume.js:316
+#: ../js/ui/status/bluetooth.js:254 ../js/ui/status/volume.js:310
 msgid "Sound Settings"
 msgstr "ശബ്ദത്തിന്റെ ക്രമീകരണങ്ങള്‍"
 
@@ -1554,10 +1578,6 @@ msgstr "%s-നുള്ള ജോടി ആവശ്യപ്പെടുന്�
 #: ../js/ui/status/bluetooth.js:397
 msgid "Please enter the PIN mentioned on the device."
 msgstr "ഉപകരണത്തില്‍ പറഞ്ഞിരിക്കുന്ന പിന്‍ ദയവായി നല്‍കുക."
-
-#: ../js/ui/status/bluetooth.js:414
-msgid "OK"
-msgstr "ശരി"
 
 #: ../js/ui/status/keyboard.js:368
 msgid "Show Keyboard Layout"
@@ -1681,7 +1701,7 @@ msgstr "കണക്ഷന്‍ പരാജയപ്പെട്ടു"
 msgid "Activation of network connection failed"
 msgstr "നെറ്റ്‌വര്‍ക്ക് കണക്ഷന്‍ സജീവമാക്കല്‍ പരാജയപ്പെട്ടു"
 
-#: ../js/ui/status/network.js:2276
+#: ../js/ui/status/network.js:2282
 msgid "Networking is disabled"
 msgstr "നെറ്റ്‌വര്‍ക്കിങ് സജ്ജമല്ല"
 
@@ -1696,7 +1716,6 @@ msgstr "ഊര്‍ജ്ജ ക്രമീകരണങ്ങള്‍"
 #. 0 is reported when UPower does not have enough data
 #. to estimate battery life
 #: ../js/ui/status/power.js:99
-#| msgid "Estimating..."
 msgid "Estimating…"
 msgstr "കണക്കുകൂട്ടുന്നു..."
 
@@ -1804,101 +1823,57 @@ msgstr "മറ്റൊരു ഉപയോക്താവായി പ്രവ�
 msgid "Unlock Window"
 msgstr "ജാലകത്തിന്റെ പൂട്ടു തുറക്കുക"
 
-#: ../js/ui/userMenu.js:193
-msgid "Available"
-msgstr "ലഭ്യമാണ്"
-
-#: ../js/ui/userMenu.js:196
-msgid "Busy"
-msgstr "തിരക്കിലാണ്"
-
-#: ../js/ui/userMenu.js:199
-msgid "Invisible"
-msgstr "അദൃശ്യം"
-
-#: ../js/ui/userMenu.js:202
-msgid "Away"
-msgstr "വിദൂരെയാണ്"
-
-#: ../js/ui/userMenu.js:205
-msgid "Idle"
-msgstr "പ്രവര്‍ത്തനത്തിലല്ല"
-
-#: ../js/ui/userMenu.js:208
-msgid "Offline"
-msgstr "ഓഫ്​ലൈന്‍"
-
-#: ../js/ui/userMenu.js:781
-msgid "Notifications"
-msgstr "അറിയിപ്പുകള്‍"
-
-#: ../js/ui/userMenu.js:797
-msgid "Switch User"
-msgstr "ഉപയോക്താവിനെ മാറ്റുക"
-
-#: ../js/ui/userMenu.js:802
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "പുറത്ത് കടക്കുക"
 
-#: ../js/ui/userMenu.js:822
-msgid "Install Updates & Restart"
-msgstr "പരിഷ്കരണങ്ങള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്തു് വീണ്ടും ആരംഭിയ്ക്കുക"
+#: ../js/ui/userMenu.js:38
+msgid "Lock"
+msgstr "പൂട്ടുക"
 
-#: ../js/ui/userMenu.js:840
-msgid "Your chat status will be set to busy"
-msgstr "നിങ്ങളുടെ ചാറ്റ് അവസ്ഥ - തിരക്കില്‍"
-
-#: ../js/ui/userMenu.js:841
-msgid ""
-"Notifications are now disabled, including chat messages. Your online status "
-"has been adjusted to let others know that you might not see their messages."
+#: ../js/ui/userMenu.js:39
+msgid "Exit"
 msgstr ""
-"ചാറ്റ് സന്ദേശങ്ങള്‍ എന്ന പോലെ അറിയിപ്പുകള്‍ പ്രവര്‍ത്തന രഹിതമാക്കുന്നു. "
-"മറ്റുള്ളവരുടെ ചാറ്റ് സന്ദേശങ്ങള്‍ "
-"നിങ്ങള്‍ക്കു് കാണുവാന്‍ സാധ്യമല്ല എന്നു് നിങ്ങളുടെ ഓണ്‍ലൈന്‍ അവസ്ഥയില്‍ "
-"വ്യക്തമാക്കുന്നു."
 
-#: ../js/ui/userMenu.js:888
+#: ../js/ui/userMenu.js:41
+msgid "Tutorial"
+msgstr ""
+
+#: ../js/ui/userMenu.js:42
+msgid "Settings"
+msgstr "സജ്ജീകരണങ്ങള്‍"
+
+#: ../js/ui/userMenu.js:43
+msgid "Give us Feedback"
+msgstr ""
+
+#: ../js/ui/userMenu.js:434
+msgid "Switch User"
+msgstr "ഉപയോക്താവിനെ മാറ്റുക"
+
+#: ../js/ui/userMenu.js:507
 msgid "Other users are logged in."
 msgstr "വേറേ ഉപയോക്താക്കള്‍ ലോഗിന്‍ ചെയ്തിട്ടുണ്ട്."
 
-#: ../js/ui/userMenu.js:893
+#: ../js/ui/userMenu.js:512
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "അടച്ചുപൂട്ടുന്നത് അവരുടെ സൂക്ഷിക്കാത്ത ജോലികള്‍ നഷ്ട്ടപ്പെടുത്താം."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:921
+#: ../js/ui/userMenu.js:540
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (വിദൂരം)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:924
+#: ../js/ui/userMenu.js:543
 #, c-format
 msgid "%s (console)"
 msgstr "%s (കണ്‍സോള്‍)"
 
-#: ../js/ui/viewSelector.js:100
+#: ../js/ui/viewSelector.js:494
 msgid "Applications"
 msgstr "പ്രയോഗങ്ങള്‍"
-
-#: ../js/ui/viewSelector.js:104
-msgid "Search"
-msgstr "തിരയല്‍"
-
-#: ../js/ui/wanda.js:77
-#, c-format
-msgid ""
-"Sorry, no wisdom for you today:\n"
-"%s"
-msgstr ""
-"ക്ഷമിയ്ക്കണം, ഇന്നത്തേക്കു് ഒന്നും ലഭ്യമല്ല:\n"
-"%s"
-
-#: ../js/ui/wanda.js:81
-#, c-format
-msgid "%s the Oracle says"
-msgstr "%s എന്ന ഒറക്കിള്‍ പറയുന്നു"
 
 #: ../js/ui/windowAttentionHandler.js:19
 #, c-format
@@ -1908,6 +1883,28 @@ msgstr "'%s' തയ്യാറാണ്"
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "ഇവല്യൂഷന്‍ കലണ്ടര്‍"
+
+#. translators:
+#. * The number of sound outputs on a particular device
+#: ../src/gvc/gvc-mixer-control.c:1837
+#, c-format
+msgid "%u Output"
+msgid_plural "%u Outputs"
+msgstr[0] "%u ഔട്ട്പുട്ട്"
+msgstr[1] "%u ഔട്ട്പുട്ടുകള്‍"
+
+#. translators:
+#. * The number of sound inputs on a particular device
+#: ../src/gvc/gvc-mixer-control.c:1847
+#, c-format
+msgid "%u Input"
+msgid_plural "%u Inputs"
+msgstr[0] "%u ഇന്‍പുട്ട്"
+msgstr[1] "%u ഇന്‍പുട്ടുകള്‍"
+
+#: ../src/gvc/gvc-mixer-control.c:2371
+msgid "System Sounds"
+msgstr "സിസ്റ്റം ശബ്ദങ്ങള്‍"
 
 #: ../src/main.c:347
 msgid "Print version"
@@ -1925,10 +1922,19 @@ msgstr "ഒരു പ്രത്യേക മോഡ് ഉപയോഗിയ്
 msgid "List possible modes"
 msgstr "സാധ്യമായ മോഡുകള്‍ ലഭ്യമാക്കുക"
 
-#: ../src/shell-app.c:622
+#: ../src/shell-app.c:635
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "'%s' ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
+
+#: ../src/shell-desktop-dir-info.c:485
+msgid "Unnamed"
+msgstr ""
+
+#: ../src/shell-desktop-dir-info.c:747
+#, c-format
+msgid "Custom definition for %s"
+msgstr ""
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."
@@ -1942,6 +1948,86 @@ msgstr "രഹസ്യവാക്ക് കാലിയാകുവാന്�
 msgid "Authentication dialog was dismissed by the user"
 msgstr "ഉപയോക്താവു് ആധികാരികത ഉറപ്പാക്കല്‍ ഡയലോഗ് നിര്‍ത്തുന്നു"
 
+#~ msgid "Frequent"
+#~ msgstr "ഇടയ്ക്കിടെ"
+
+#~ msgid "All"
+#~ msgstr "എല്ലാം"
+
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "%d പുതിയ സന്ദേശം"
+#~ msgstr[1] "%d പുതിയ സന്ദേശങ്ങള്‍"
+
+#~ msgid "Quit"
+#~ msgstr "നിര്‍ത്തുക"
+
+#~ msgid "Activities"
+#~ msgstr "പ്രവര്‍ത്തനങ്ങള്‍"
+
+#~ msgid "%A, %B %d"
+#~ msgstr "%A, %B %d"
+
+#~ msgid "%d new notification"
+#~ msgid_plural "%d new notifications"
+#~ msgstr[0] "%d പുതിയ അറിയിപ്പു്"
+#~ msgstr[1] "%d പുതിയ അറിയിപ്പുകള്‍"
+
+#~| msgid "Searching..."
+#~ msgid "Searching…"
+#~ msgstr "തെരയുന്നു..."
+
+#~ msgid "No results."
+#~ msgstr "ഫലങ്ങളില്ല."
+
+#~ msgid "Available"
+#~ msgstr "ലഭ്യമാണ്"
+
+#~ msgid "Busy"
+#~ msgstr "തിരക്കിലാണ്"
+
+#~ msgid "Invisible"
+#~ msgstr "അദൃശ്യം"
+
+#~ msgid "Away"
+#~ msgstr "വിദൂരെയാണ്"
+
+#~ msgid "Idle"
+#~ msgstr "പ്രവര്‍ത്തനത്തിലല്ല"
+
+#~ msgid "Offline"
+#~ msgstr "ഓഫ്​ലൈന്‍"
+
+#~ msgid "Notifications"
+#~ msgstr "അറിയിപ്പുകള്‍"
+
+#~ msgid "Install Updates & Restart"
+#~ msgstr "പരിഷ്കരണങ്ങള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്തു് വീണ്ടും ആരംഭിയ്ക്കുക"
+
+#~ msgid "Your chat status will be set to busy"
+#~ msgstr "നിങ്ങളുടെ ചാറ്റ് അവസ്ഥ - തിരക്കില്‍"
+
+#~ msgid ""
+#~ "Notifications are now disabled, including chat messages. Your online "
+#~ "status has been adjusted to let others know that you might not see their "
+#~ "messages."
+#~ msgstr ""
+#~ "ചാറ്റ് സന്ദേശങ്ങള്‍ എന്ന പോലെ അറിയിപ്പുകള്‍ പ്രവര്‍ത്തന രഹിതമാക്കുന്നു. മറ്റുള്ളവരുടെ ചാറ്റ് "
+#~ "സന്ദേശങ്ങള്‍ നിങ്ങള്‍ക്കു് കാണുവാന്‍ സാധ്യമല്ല എന്നു് നിങ്ങളുടെ ഓണ്‍ലൈന്‍ അവസ്ഥയില്‍ വ്യക്തമാക്കുന്നു."
+
+#~ msgid "Search"
+#~ msgstr "തിരയല്‍"
+
+#~ msgid ""
+#~ "Sorry, no wisdom for you today:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "ക്ഷമിയ്ക്കണം, ഇന്നത്തേക്കു് ഒന്നും ലഭ്യമല്ല:\n"
+#~ "%s"
+
+#~ msgid "%s the Oracle says"
+#~ msgstr "%s എന്ന ഒറക്കിള്‍ പറയുന്നു"
+
 #~ msgctxt "title"
 #~ msgid "Sign In"
 #~ msgstr "അകത്തുകയറുക"
@@ -1954,19 +2040,6 @@ msgstr "ഉപയോക്താവു് ആധികാരികത ഉറപ�
 
 #~ msgid "More..."
 #~ msgstr "കൂടുതല്‍..."
-
-#~ msgid "%u Output"
-#~ msgid_plural "%u Outputs"
-#~ msgstr[0] "%u ഔട്ട്പുട്ട്"
-#~ msgstr[1] "%u ഔട്ട്പുട്ടുകള്‍"
-
-#~ msgid "%u Input"
-#~ msgid_plural "%u Inputs"
-#~ msgstr[0] "%u ഇന്‍പുട്ട്"
-#~ msgstr[1] "%u ഇന്‍പുട്ടുകള്‍"
-
-#~ msgid "System Sounds"
-#~ msgstr "സിസ്റ്റം ശബ്ദങ്ങള്‍"
 
 #~ msgctxt "event list time"
 #~ msgid "%H:%M"
@@ -2151,9 +2224,6 @@ msgstr "ഉപയോക്താവു് ആധികാരികത ഉറപ�
 #~ msgid "Preferences"
 #~ msgstr "മുന്‍ഗണനകള്‍"
 
-#~ msgid "Search your computer"
-#~ msgstr "നിങ്ങളുടെ കമ്പ്യൂട്ടര്‍ തിരയുക"
-
 #~ msgid "%d minute ago"
 #~ msgid_plural "%d minutes ago"
 #~ msgstr[0] "%d മിനിറ്റ് മുന്‍പ്"
@@ -2173,6 +2243,3 @@ msgstr "ഉപയോക്താവു് ആധികാരികത ഉറപ�
 #~ msgid_plural "%d weeks ago"
 #~ msgstr[0] "%d ആഴ്ച മുന്‍പ്"
 #~ msgstr[1] "%d ആഴ്ചകള്‍ക്ക് മുന്‍പ്"
-
-#~ msgid "Home Folder"
-#~ msgstr "ആസ്ഥാന ഫോള്‍ഡര്‍"
