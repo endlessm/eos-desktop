@@ -4,6 +4,7 @@ const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
+const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
 const St = imports.gi.St;
 const Shell = imports.gi.Shell;
@@ -19,6 +20,7 @@ const WINDOW_ANIMATION_TIME = 0.25;
 const DIM_BRIGHTNESS = -0.3;
 const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
+const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
 
 
 const WindowDimmer = new Lang.Class({
@@ -453,13 +455,31 @@ const WindowManager = new Lang.Class({
         }
     },
 
+    _killAppIfNoWindow : function(app, pid) {
+        let windows = app.get_windows();
+        if (windows.length == 0) {
+            GLib.spawn_command_line_async('kill ' + pid);
+        }
+    },
+
     _destroyWindow : function(shellwm, actor) {
         let window = actor.meta_window;
 
         // Completely exit Skype when the user closes the window,
         // rather than remain running iconified in the system tray.
         if (window.get_wm_class() == 'Skype') {
-            window.kill();
+            let tracker = Shell.WindowTracker.get_default();
+            let app = tracker.get_window_app(window);
+            if (app) {
+                // Wait some amount of time, and if no Skype windows
+                // remain open, exit the application.
+                // We need to get the PID now, as it is not available
+                // from the app once there are no windows remaining.
+                let pid = app.get_pids()[0];
+                Mainloop.timeout_add(
+                    SKYPE_WINDOW_CLOSE_TIMEOUT_MS,
+                    Lang.bind(this, this._killAppIfNoWindow, app, pid));
+            }
         }
 
         if (actor._notifyWindowTypeSignalId) {
