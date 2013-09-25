@@ -1860,7 +1860,7 @@ msgstr "Bloquear"
 
 #: ../js/ui/userMenu.js:39
 msgid "Exit"
-msgstr ""
+msgstr "Salir"
 
 #: ../js/ui/userMenu.js:41
 msgid "Tutorial"
