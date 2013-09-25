@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-shell&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-04 08:38+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-25 13:54-0700\n"
 "PO-Revision-Date: 2013-03-07 21:01+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -49,192 +49,291 @@ msgstr "بارلىق پروگراممىنى كۆرسىتىش"
 msgid "Open the application menu"
 msgstr "پروگرامما تىزىملىكىنى كۆرسىتىش"
 
-#: ../data/gnome-shell.desktop.in.in.h:1
-msgid "GNOME Shell"
+#: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
+#: ../data/gdm-eos-shell.desktop.in.in.h:1
+#, fuzzy
+msgid "EOS Shell"
 msgstr "گىنوم Shell"
 
-#: ../data/gnome-shell.desktop.in.in.h:2
+#: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
+#: ../data/gdm-eos-shell.desktop.in.in.h:2
 msgid "Window management and application launching"
 msgstr "كۆزنەك باشقۇرۇش ۋە پروگرامما ئىجرا قىلىش پروگراممىسى"
 
-#: ../data/gnome-shell-extension-prefs.desktop.in.in.h:1
+#: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 #: ../js/extensionPrefs/main.js:153
 msgid "GNOME Shell Extension Preferences"
 msgstr "گىنوم Shell كېڭەيتمىسىنىڭ مايىللىقى"
 
-#: ../data/gnome-shell-extension-prefs.desktop.in.in.h:2
+#: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure GNOME Shell Extensions"
 msgstr "گىنوم Shell كېڭەيتمىسىنى سەپلەش"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:1
 msgid "Enable internal tools useful for developers and testers from Alt-F2"
-msgstr "ئىچكى قورال قوزغىتىلسا ئىجادكارلار ۋە سىنىغۇچىلارنىڭ Alt-F2 ئارقىلىق كىرىشىگە قۇلايلىق"
+msgstr ""
+"ئىچكى قورال قوزغىتىلسا ئىجادكارلار ۋە سىنىغۇچىلارنىڭ Alt-F2 ئارقىلىق "
+"كىرىشىگە قۇلايلىق"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:2
 msgid ""
 "Allows access to internal debugging and monitoring tools using the Alt-F2 "
 "dialog."
-msgstr "ئىچكى سازلاش ۋە كۆزىتىش قورالىنى زىيارەت قىلىشتا  Alt-F2 ئىشلىتىشكە ئىجازەت."
+msgstr ""
+"ئىچكى سازلاش ۋە كۆزىتىش قورالىنى زىيارەت قىلىشتا  Alt-F2 ئىشلىتىشكە ئىجازەت."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:3
+msgid "Separate the power off and log out buttons on the user menu"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:4
+msgid ""
+"By default, use a single exit button to power off or log out (with the log "
+"out option on the power off confirmation dialog). Set true for separate "
+"buttons on the user menu."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:5
+msgid "Set the position of the hot corner for the window picker"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:6
+msgid ""
+"Default position of the hot corner is in the uppper-left corner. Set true to "
+"move the hot corner to the upper-right corner. The position is not affected "
+"by the RTL vs. LTR text direction."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:7
+msgid "Set the size of the hot corner target"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:8
+msgid ""
+"Number of pixels in one dimension of the square target for the hot corner. "
+"Default is for a single pixel in the very corner. For some virtual machines, "
+"this value may need to be set larger than the default."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:9
+msgid "Prevent apps from being automatically maximized on launch"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:10
+msgid ""
+"Makes window management more like standard Gnome. Hides application splash "
+"screens, prevents applications from being forced to open maximized, and does "
+"not automatically switch to the app selector when a window is minimized."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:11
+msgid "Whether the app store is displayed"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:12
+msgid "Whether the application grid displays the app store icon."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:13
 msgid "Uuids of extensions to enable"
 msgstr "ئىناۋەتلىك قىلىدىغان كېڭەيتىلمىنىڭ Uuids سى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:4
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:14
 msgid ""
 "GNOME Shell extensions have a uuid property; this key lists extensions which "
 "should be loaded. Any extension that wants to be loaded needs to be in this "
 "list. You can also manipulate this list with the EnableExtension and "
 "DisableExtension DBus methods on org.gnome.Shell."
-msgstr "گىنوم Shell كېڭەيتىلمىسىنىڭ uuid خاسلىقى بولىدۇ. بۇ ئاچقۇچتا ئىناۋەتلىك قىلىنىدىغان كېڭەيتىلمىلەرنىڭ تىزىمى بار. ئوقۇلىدىغان كېڭەيتىلمىلەر چوقۇم مۇشۇ تىزىمدا بولۇشى كېرەك. بۇ تىزىمنى org.gnome.Shell دىكى DBus نىڭ EnableExtension ۋە DisableExtension دېگەن فۇنكسىيىلىرى(methods)  ئارقىلىق باشقۇرغىلى بولىدۇ."
+msgstr ""
+"گىنوم Shell كېڭەيتىلمىسىنىڭ uuid خاسلىقى بولىدۇ. بۇ ئاچقۇچتا ئىناۋەتلىك "
+"قىلىنىدىغان كېڭەيتىلمىلەرنىڭ تىزىمى بار. ئوقۇلىدىغان كېڭەيتىلمىلەر چوقۇم "
+"مۇشۇ تىزىمدا بولۇشى كېرەك. بۇ تىزىمنى org.gnome.Shell دىكى DBus نىڭ "
+"EnableExtension ۋە DisableExtension دېگەن فۇنكسىيىلىرى(methods)  ئارقىلىق "
+"باشقۇرغىلى بولىدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:5
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:15
 msgid "Whether to collect stats about applications usage"
 msgstr "پروگراممىنىڭ ئىشلىتىلىشى ھەققىدىكى ستاتىستىكىنى توپلامدۇ يوق"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:6
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
 "The shell normally monitors active applications in order to present the most "
 "used ones (e.g. in launchers). While this data will be kept private, you may "
 "want to disable this for privacy reasons. Please note that doing so won't "
 "remove already saved data."
-msgstr "چاپان (shell) ئادەتتىكى ئەھۋالدا كۆپ ئىشلىتىلىدىغان ئاكتىپ پروگراممىلار(مەسىلەن، ئىجرا قىلىنىۋاتقان)نى كۆزىتىدۇ. گەرچە بۇ سانلىق مەلۇماتلار مەخپىي ساقلانسىمۇ، شەخسىي سىر سەۋەبىدىن بۇنى چەكلىشىڭىز مۇمكىن. دىققەت بۇنداق قىلغاندا ئاللىبۇرۇن ساقلانغان سانلىق مەلۇماتلار چىقىرىۋېتىلمەيدۇ."
+msgstr ""
+"چاپان (shell) ئادەتتىكى ئەھۋالدا كۆپ ئىشلىتىلىدىغان ئاكتىپ پروگراممىلار"
+"(مەسىلەن، ئىجرا قىلىنىۋاتقان)نى كۆزىتىدۇ. گەرچە بۇ سانلىق مەلۇماتلار مەخپىي "
+"ساقلانسىمۇ، شەخسىي سىر سەۋەبىدىن بۇنى چەكلىشىڭىز مۇمكىن. دىققەت بۇنداق "
+"قىلغاندا ئاللىبۇرۇن ساقلانغان سانلىق مەلۇماتلار چىقىرىۋېتىلمەيدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:7
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:17
 msgid "List of desktop file IDs for favorite applications"
 msgstr "ئامراق پروگراممىلارنىڭ ئۈستەلئۈستى ھۆججەت ID تىزىمى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:8
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:18
 msgid ""
 "The applications corresponding to these identifiers will be displayed in the "
 "favorites area."
 msgstr "مۇناسىپ پروگرامما بەلگىسى يىغقۇچ رايونىدا كۆرسىتىلىدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:9
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:19
 msgid "List of categories that should be displayed as folders"
 msgstr "قىسقۇچ سۈپىتىدە كۆرسىتىلىدىغان كاتېگورىيەلەرنىڭ تىزىمى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:10
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:20
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
-msgstr "پروگرامما كۆرۈنۈشىدە ھەر بىر كاتېگورىيە ئاتى قىسقۇچ سۈپىتىدە ئىپادىلىنىدۇ، ئاساسىي كۆرۈنۈشتە كۆرسىتىلمەيدۇ."
+msgstr ""
+"پروگرامما كۆرۈنۈشىدە ھەر بىر كاتېگورىيە ئاتى قىسقۇچ سۈپىتىدە ئىپادىلىنىدۇ، "
+"ئاساسىي كۆرۈنۈشتە كۆرسىتىلمەيدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:11
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:21
 msgid "History for command (Alt-F2) dialog"
 msgstr "بۇيرۇق (Alt-F2) سۆزلەشكۈنىڭ تارىخى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:12
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:22
 msgid "History for the looking glass dialog"
 msgstr "looking glass سۆزلەشكۈنىڭ تارىخى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:13
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:23
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
-msgstr "ئىشلەتكۈچى تەرىپىدىن روشەن بەلگىلەنگەن ئەڭ يېڭى IM ھالىتى ساقلاش ئۈچۈن ئىچكى قىسىمدا ئىشلىتىلىدۇ. بۇ TpConnectionPresenceType نىڭ قىممىتى بولىدۇ."
+msgstr ""
+"ئىشلەتكۈچى تەرىپىدىن روشەن بەلگىلەنگەن ئەڭ يېڭى IM ھالىتى ساقلاش ئۈچۈن ئىچكى "
+"قىسىمدا ئىشلىتىلىدۇ. بۇ TpConnectionPresenceType نىڭ قىممىتى بولىدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:14
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:24
 msgid ""
 "Internally used to store the last session presence status for the user. The "
 "value here is from the GsmPresenceStatus enumeration."
-msgstr "ئىشلەتكۈچىنىڭ ئەڭ يېڭى ھالىتى ساقلاش ئۈچۈن ئىچكى قىسىمدا ئىشلىتىلىدۇ. بۇ GsmPresenceStatus نىڭ قىممىتى بولىدۇ."
+msgstr ""
+"ئىشلەتكۈچىنىڭ ئەڭ يېڭى ھالىتى ساقلاش ئۈچۈن ئىچكى قىسىمدا ئىشلىتىلىدۇ. بۇ "
+"GsmPresenceStatus نىڭ قىممىتى بولىدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:15
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:25
 msgid "Always show the 'Log out' menuitem in the user menu."
 msgstr "ئىشلەتكۈچى تىزىملىكىدە ھەمىشە ‹چىق› تىزىملىكىنى كۆرسىتىدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:16
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
 msgid ""
 "This key overrides the automatic hiding of the 'Log out' menuitem in single-"
 "user, single-session situations."
-msgstr "مەزكۇر ئاچقۇچ يەككە ئىشلەتكۈچى، يەككە ئەڭگىمە ھالىتىدە ‹چىق› دېگەن تىزىملىكنى قاپلىۋېتىدۇ."
+msgstr ""
+"مەزكۇر ئاچقۇچ يەككە ئىشلەتكۈچى، يەككە ئەڭگىمە ھالىتىدە ‹چىق› دېگەن "
+"تىزىملىكنى قاپلىۋېتىدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:17
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid ""
 "Whether to remember password for mounting encrypted or remote filesystems"
-msgstr "شىفىرلانغان ياكى يىراقتىكى ھۆججەت سىستېمىسىنى ئېگەرلەشتە ئىمنى ئەستە تۇتسۇنمۇ"
+msgstr ""
+"شىفىرلانغان ياكى يىراقتىكى ھۆججەت سىستېمىسىنى ئېگەرلەشتە ئىمنى ئەستە تۇتسۇنمۇ"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:18
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
 msgid ""
 "The shell will request a password when an encrypted device or a remote "
 "filesystem is mounted. If the password can be saved for future use a "
 "'Remember Password' checkbox will be present. This key sets the default "
 "state of the checkbox."
-msgstr "شىفىرلانغان ياكى يىراقتىكى ھۆججەت سىستېمىسىنى ئېگەرلەيدىغان ۋاقىتتا مەزكۇر shell ئىم تەلەپ قىلىدۇ. ئەگەر ‹ئىمنى ئەستە تۇت› دېگىنى تاللانسا، كېيىنلىك ئۈچۈن ئىمنى ساقلاپ قويىدۇ. بۇ ئاچقۇچ checkbox نىڭ كۆڭۈلدىكى ھالىتىنى بەلگىلەيدۇ."
+msgstr ""
+"شىفىرلانغان ياكى يىراقتىكى ھۆججەت سىستېمىسىنى ئېگەرلەيدىغان ۋاقىتتا مەزكۇر "
+"shell ئىم تەلەپ قىلىدۇ. ئەگەر ‹ئىمنى ئەستە تۇت› دېگىنى تاللانسا، كېيىنلىك "
+"ئۈچۈن ئىمنى ساقلاپ قويىدۇ. بۇ ئاچقۇچ checkbox نىڭ كۆڭۈلدىكى ھالىتىنى "
+"بەلگىلەيدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:19
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
+msgid "Layout of application launcher icons in the grid"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
+msgid ""
+"This key specifies the exact order of the icons shown in the applications "
+"launcher view."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid "Show the week date in the calendar"
 msgstr "يىلنامىدە ھەپتىنى كۆرسەتسۇن"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:20
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
 msgid "If true, display the ISO week date in the calendar."
 msgstr "ئەگەر راست(true) بولسا يىلنامىدىكى ISO ھەپتە چېسلانى كۆرسىتىدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:21
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid "Keybinding to open the application menu"
 msgstr "پروگرامما تىزىملىكىنى ئاچىدىغان كۇنۇپكا بىرىكمىسى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:22
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
 msgid "Keybinding to open the application menu."
 msgstr "پروگرامما تىزىملىكىنى ئاچىدىغان كۇنۇپكا بىرىكمىسى."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:23
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid "Keybinding to open the \"Show Applications\" view"
 msgstr "«پروگراممىلارنى كۆرسەت» كۆرۈنۈشىنى ئاچىدىغان كۇنۇپكا بىرىكمىسى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:24
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
 msgid ""
 "Keybinding to open the \"Show Applications\" view of the Activities Overview."
-msgstr "پائالىيەتلەر كۆرۈنۈشىدە «پروگراممىلارنى كۆرسەت» كۆرۈنۈشىنى ئاچىدىغان كۇنۇپكا بىرىكمىسى."
+msgstr ""
+"پائالىيەتلەر كۆرۈنۈشىدە «پروگراممىلارنى كۆرسەت» كۆرۈنۈشىنى ئاچىدىغان كۇنۇپكا "
+"بىرىكمىسى."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:25
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Keybinding to toggle the visibility of the message tray"
-msgstr "ئۇچۇر قوندىقىنى كۆرسىتىش-كۆرسەتمەسلىكنى ئالماشتۇرىدىغان كۇنۇپكا بىرىكمىسى"
+msgstr ""
+"ئۇچۇر قوندىقىنى كۆرسىتىش-كۆرسەتمەسلىكنى ئالماشتۇرىدىغان كۇنۇپكا بىرىكمىسى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
 msgid "Keybinding to toggle the visibility of the message tray."
-msgstr "ئۇچۇر قوندىقىنى كۆرسىتىش-كۆرسەتمەسلىكنى ئالماشتۇرىدىغان كۇنۇپكا بىرىكمىسى."
+msgstr ""
+"ئۇچۇر قوندىقىنى كۆرسىتىش-كۆرسەتمەسلىكنى ئالماشتۇرىدىغان كۇنۇپكا بىرىكمىسى."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Keybinding to focus the active notification"
 msgstr "ئاكتىپ ئۇقتۇرۇشنى كۆرسىتىدىغان كۇنۇپكا بىرىكمىسى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
 msgid "Keybinding to focus the active notification."
 msgstr "ئاكتىپ ئۇقتۇرۇشنى كۆرسىتىدىغان كۇنۇپكا بىرىكمىسى."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
 msgid "Keybinding to toggle the screen recorder"
 msgstr "ئېكراننى سۈرەتكە ئالغۇنى باشلايدىغان/توختىتىدىغان كۇنۇپكا بىرىكمىسى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid "Keybinding to start/stop the builtin screen recorder."
-msgstr "سىڭدۈرۈۋېتىلگەن ئېكراننى سۈرەتكە ئالغۇنى باشلايدىغان/توختىتىدىغان كۇنۇپكا بىرىكمىسى."
+msgstr ""
+"سىڭدۈرۈۋېتىلگەن ئېكراننى سۈرەتكە ئالغۇنى باشلايدىغان/توختىتىدىغان كۇنۇپكا "
+"بىرىكمىسى."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
 msgid "Which keyboard to use"
 msgstr "ئىشلەتمەكچى بولغان كۇنۇپكا تاختىسى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
 msgid "The type of keyboard to use."
 msgstr "ئىشلەتمەكچى بولغان كۇنۇپكا تاختىسى."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
 msgid "Framerate used for recording screencasts."
-msgstr "ئېكران كۆرۈنۈشى (screencasts) خاتىرىلەشتە ئىشلىتىلىدىغان كاندۇك تېزلىكى."
+msgstr ""
+"ئېكران كۆرۈنۈشى (screencasts) خاتىرىلەشتە ئىشلىتىلىدىغان كاندۇك تېزلىكى."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
 msgid ""
 "The framerate of the resulting screencast recordered by GNOME Shell's "
 "screencast recorder in frames-per-second."
-msgstr "گىنوم Shell ئېكران خاتىرىلىگۈچ ھەر سېكۇنتتا خاتىرىلەيدىغان ئېكران كۆرۈنۈشى كاندۇك سۈرىتى(ھەر سېكۇنتتىكى كاندۇك سانى)."
+msgstr ""
+"گىنوم Shell ئېكران خاتىرىلىگۈچ ھەر سېكۇنتتا خاتىرىلەيدىغان ئېكران كۆرۈنۈشى "
+"كاندۇك سۈرىتى(ھەر سېكۇنتتىكى كاندۇك سانى)."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "The gstreamer pipeline used to encode the screencast"
 msgstr "ئېكران كۆرۈنۈشىنى كودلاشتا ئىشلىتىلىدىغان gstreamer ئاقما لىنىيىسى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 #, no-c-format
 msgid ""
 "Sets the GStreamer pipeline used to encode recordings. It follows the syntax "
@@ -249,56 +348,68 @@ msgid ""
 "used as a placeholder for a guess at the optimal thread count on the system."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "File extension used for storing the screencast"
-msgstr "ئېكران كۆرۈنۈشى (screencasts) ساقلاشتا ئىشلىتىلىدىغان ھۆججەتنىڭ كېڭەيتىلگەن ئاتى"
+msgstr ""
+"ئېكران كۆرۈنۈشى (screencasts) ساقلاشتا ئىشلىتىلىدىغان ھۆججەتنىڭ كېڭەيتىلگەن "
+"ئاتى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid ""
 "The filename for recorded screencasts will be a unique filename based on the "
 "current date, and use this extension. It should be changed when recording to "
 "a different container format."
-msgstr "خاتىرىلەنگەن ئېكراننىڭ ھۆججەت ئاتى نۆۋەتتىكى چېسلا ئاساسىدا بىردىنبىر بولۇپ بۇ كېڭەيتىلگەن ئاتىنى ئىشلىتىدۇ. ئۇ ئۆزگەرسە ئوخشاش بولمىغان قاچا فورماتىدا خاتىرىلەيدۇ."
+msgstr ""
+"خاتىرىلەنگەن ئېكراننىڭ ھۆججەت ئاتى نۆۋەتتىكى چېسلا ئاساسىدا بىردىنبىر بولۇپ "
+"بۇ كېڭەيتىلگەن ئاتىنى ئىشلىتىدۇ. ئۇ ئۆزگەرسە ئوخشاش بولمىغان قاچا فورماتىدا "
+"خاتىرىلەيدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "The application icon mode."
 msgstr "پروگرامما سىنبەلگە ھالىتى."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
 "only' (shows only the application icon) or 'both'."
-msgstr "ئالماشتۇرغۇچتا پروگراممىلارنىڭ قانداق كۆرسىتىلىدىغانلىقىنى سەپلەيدۇ. قىممەتلەر: ‹thumbnail-only›(پەقەت كۆزنەكنىڭ كىچىك سۈرىتىنىلا كۆرسىتىدۇ)،‹app-icon-only›(پروگراممىنىڭ سىنبەلگىسىنىلا كۆرسىتىدۇ) ۋە ‹ئىككىلىسى›"
+msgstr ""
+"ئالماشتۇرغۇچتا پروگراممىلارنىڭ قانداق كۆرسىتىلىدىغانلىقىنى سەپلەيدۇ. "
+"قىممەتلەر: ‹thumbnail-only›(پەقەت كۆزنەكنىڭ كىچىك سۈرىتىنىلا كۆرسىتىدۇ)،‹app-"
+"icon-only›(پروگراممىنىڭ سىنبەلگىسىنىلا كۆرسىتىدۇ) ۋە ‹ئىككىلىسى›"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Attach modal dialog to the parent window"
 msgstr "ئاتا كۆزنەككە modal سۆزلەشكۈنى قات"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
-msgstr "گىنوم Shell ئىجرا بولۇۋاتقاندا مەزكۇر ئاچقۇچ org.gnome.mutter نىڭ ئىچىدىكى ئاچقۇچنى قاپلىۋېتىدۇ."
+msgstr ""
+"گىنوم Shell ئىجرا بولۇۋاتقاندا مەزكۇر ئاچقۇچ org.gnome.mutter نىڭ ئىچىدىكى "
+"ئاچقۇچنى قاپلىۋېتىدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Arrangement of buttons on the titlebar"
 msgstr "ماۋزۇ بالدىقىدىكى توپچىلارنىڭ ئورۇنلاشتۇرۇلۇشى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
-msgstr "گىنوم Shell ئىجرا بولۇۋاتقاندا مەزكۇر ئاچقۇچ org.gnome.desktop.wm.preferences نىڭ ئىچىدىكى ئاچقۇچنى قاپلىۋېتىدۇ."
+msgstr ""
+"گىنوم Shell ئىجرا بولۇۋاتقاندا مەزكۇر ئاچقۇچ org.gnome.desktop.wm."
+"preferences نىڭ ئىچىدىكى ئاچقۇچنى قاپلىۋېتىدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
 msgid "Workspaces are managed dynamically"
 msgstr "خىزمەت رايونلىرى جانلىق باشقۇرۇلسۇن"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
 msgid "Workspaces only on primary monitor"
 msgstr "ئاساسىي كۆزەتكۈچتىكى خىزمەت رايونلىرىلا"
 
@@ -322,36 +433,36 @@ msgstr "ئەڭگىمە…"
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
 #. manually entering the username.
-#: ../js/gdm/loginDialog.js:629
+#: ../js/gdm/loginDialog.js:630
 msgid "Not listed?"
 msgstr "تىزىمدا يوقمۇ؟"
 
-#: ../js/gdm/loginDialog.js:783 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:375
+#: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:388
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
-#: ../js/ui/status/bluetooth.js:415 ../js/ui/unlockDialog.js:126
-#: ../js/ui/userMenu.js:934
+#: ../js/ui/status/bluetooth.js:415 ../js/ui/unlockDialog.js:99
+#: ../js/ui/userMenu.js:557
 msgid "Cancel"
 msgstr "ئەمەلدىن قالدۇر"
 
-#: ../js/gdm/loginDialog.js:799
+#: ../js/gdm/loginDialog.js:802
 msgctxt "button"
 msgid "Sign In"
 msgstr "كىر"
 
-#: ../js/gdm/loginDialog.js:799
+#: ../js/gdm/loginDialog.js:802
 msgid "Next"
 msgstr "كېيىنكى"
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:904 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:917 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "ئىشلەتكۈچى ئاتى: "
 
-#: ../js/gdm/loginDialog.js:1157
+#: ../js/gdm/loginDialog.js:1173
 msgid "Login Window"
 msgstr "كىرىش كۆزنىكى"
 
@@ -360,8 +471,7 @@ msgstr "كىرىش كۆزنىكى"
 msgid "Power"
 msgstr "توك مەنبە"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:695 ../js/ui/userMenu.js:699
-#: ../js/ui/userMenu.js:815
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "توڭلات"
 
@@ -369,58 +479,86 @@ msgstr "توڭلات"
 msgid "Restart"
 msgstr "قايتا قوزغات"
 
-#: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:697
-#: ../js/ui/userMenu.js:699 ../js/ui/userMenu.js:814 ../js/ui/userMenu.js:938
+#: ../js/gdm/powerMenu.js:103 ../js/ui/userMenu.js:35
 msgid "Power Off"
 msgstr "توكنى ئۈز"
 
-#: ../js/gdm/util.js:182
+#: ../js/gdm/util.js:249
 msgid "Authentication error"
 msgstr "كىملىك دەلىللەش خاتالىقى"
 
 #. Translators: this message is shown below the password entry field
 #. to indicate the user can swipe their finger instead
-#: ../js/gdm/util.js:299
+#: ../js/gdm/util.js:366
 msgid "(or swipe finger)"
 msgstr "(ياكى بارمىقىڭىزنى سىيرىڭ)"
 
-#: ../js/gdm/util.js:324
+#: ../js/gdm/util.js:391
 #, c-format
 msgid "(e.g., user or %s)"
 msgstr "(مەسىلەن،  ئىشلەتكۈچى ياكى %s)"
 
-#: ../js/misc/util.js:94
+#: ../js/misc/util.js:124
 msgid "Command not found"
 msgstr "بۇيرۇق تېپىلمىدى"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:127
+#: ../js/misc/util.js:157
 msgid "Could not parse command:"
 msgstr "بۇيرۇقنى تەھلىل قىلالمىدى:"
 
-#: ../js/misc/util.js:135
+#: ../js/misc/util.js:165
 #, c-format
 msgid "Execution of '%s' failed:"
 msgstr "‹%s› ئىجرا قىلىش مەغلۇپ بولدى:"
 
-#: ../js/ui/appDisplay.js:348
-msgid "Frequent"
-msgstr "دائىم"
+#. For now, let's use the normal icon for the pressed state,
+#. for consistency with the other app selector icons,
+#. which just use the wells to represent the pressed state.
+#. In the future, we may want to use the 'add_down' icon instead.
+#. If so, the return to the normal state after the user
+#. moves off the icon to cancel should be made more responsive;
+#. the current implementation takes about a second for the change
+#. back to the normal icon to occur.
+#: ../js/ui/appDisplay.js:1879
+msgid "Add"
+msgstr ""
 
-#: ../js/ui/appDisplay.js:355
-msgid "All"
-msgstr "ھەممىسى"
+#: ../js/ui/appDisplay.js:1881 ../js/ui/appDisplay.js:1883
+msgid "Delete"
+msgstr ""
 
-#: ../js/ui/appDisplay.js:913
+#: ../js/ui/appDisplay.js:2000
+msgid "Warning"
+msgstr ""
+
+#: ../js/ui/appDisplay.js:2006
+msgid ""
+"To delete a folder you have to remove all of the items inside of it first."
+msgstr ""
+
+#: ../js/ui/appDisplay.js:2012
+msgid "We are just trying to keep you safe."
+msgstr ""
+
+#: ../js/ui/appDisplay.js:2018 ../js/ui/status/bluetooth.js:414
+msgid "OK"
+msgstr "تامام"
+
+#: ../js/ui/appDisplay.js:2051
+msgid "Delete?"
+msgstr ""
+
+#: ../js/ui/appDisplay.js:2161
 msgid "New Window"
 msgstr "يېڭى كۆزنەك"
 
-#: ../js/ui/appDisplay.js:916 ../js/ui/dash.js:284
+#: ../js/ui/appDisplay.js:2164 ../js/ui/dash.js:290
 msgid "Remove from Favorites"
 msgstr "يىغقۇچتىن چىقىرىۋەت"
 
-#: ../js/ui/appDisplay.js:917
+#: ../js/ui/appDisplay.js:2165
 msgid "Add to Favorites"
 msgstr "يىغقۇچقا قوش"
 
@@ -434,13 +572,23 @@ msgstr "‏%s يىغقۇچىڭىزغا قوشۇلدى."
 msgid "%s has been removed from your favorites."
 msgstr "‏%s يىغقۇچىڭىزدىن چىقىرىۋېتىلىدۇ."
 
-#: ../js/ui/backgroundMenu.js:19 ../js/ui/userMenu.js:788
-msgid "Settings"
-msgstr "تەڭشەكلەر"
-
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
 msgstr "تەگلىكنى ئۆزگەرتىش…"
+
+#: ../js/ui/backgroundMenu.js:25
+#, fuzzy
+msgid "Add Application"
+msgstr "پروگراممىلار"
+
+#: ../js/ui/backgroundMenu.js:29
+msgid "Add Website Link"
+msgstr ""
+
+#: ../js/ui/backgroundMenu.js:33
+#, fuzzy
+msgid "Add Folder"
+msgstr "ماكان مۇندەرىجە"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -559,35 +707,35 @@ msgid "S"
 msgstr "ش"
 
 #. Translators: Text to show if there are no events
-#: ../js/ui/calendar.js:692
+#: ../js/ui/calendar.js:720
 msgid "Nothing Scheduled"
 msgstr "ھېچنېمە پىلانلانمىدى"
 
 #. Translators: Shown on calendar heading when selected day occurs on current year
-#: ../js/ui/calendar.js:708
+#: ../js/ui/calendar.js:736
 msgctxt "calendar heading"
 msgid "%A, %B %d"
 msgstr "%A، %B %d"
 
 #. Translators: Shown on calendar heading when selected day occurs on different year
-#: ../js/ui/calendar.js:711
+#: ../js/ui/calendar.js:739
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
 msgstr "%A، %B %d، %Y"
 
-#: ../js/ui/calendar.js:721
+#: ../js/ui/calendar.js:749
 msgid "Today"
 msgstr "بۈگۈن"
 
-#: ../js/ui/calendar.js:725
+#: ../js/ui/calendar.js:753
 msgid "Tomorrow"
 msgstr "ئەتە"
 
-#: ../js/ui/calendar.js:736
+#: ../js/ui/calendar.js:764
 msgid "This week"
 msgstr "بۇ ھەپتە"
 
-#: ../js/ui/calendar.js:744
+#: ../js/ui/calendar.js:772
 msgid "Next week"
 msgstr "كېيىنكى ھەپتە"
 
@@ -603,12 +751,12 @@ msgstr "سىرتقى دىسكا ئۈزۈلدى."
 msgid "Removable Devices"
 msgstr "چىقىرىۋېتىشكە بولىدىغان ئۈسكۈنىلەر"
 
-#: ../js/ui/components/autorunManager.js:593
+#: ../js/ui/components/autorunManager.js:594
 #, c-format
 msgid "Open with %s"
 msgstr "%s دا ئاچ"
 
-#: ../js/ui/components/autorunManager.js:619
+#: ../js/ui/components/autorunManager.js:620
 msgid "Eject"
 msgstr "چىقار"
 
@@ -659,7 +807,9 @@ msgstr "سىمسىز تور كىملىك تەكشۈرۈشكە ئېھتىياجل
 msgid ""
 "Passwords or encryption keys are required to access the wireless network "
 "'%s'."
-msgstr "سىمسىز تور ‹%s› نى زىيارەت قىلماق ئۈچۈن ئىم ياكى شىفىرلاش ئاچقۇچلىرى كېرەكلىك."
+msgstr ""
+"سىمسىز تور ‹%s› نى زىيارەت قىلماق ئۈچۈن ئىم ياكى شىفىرلاش ئاچقۇچلىرى "
+"كېرەكلىك."
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
@@ -928,13 +1078,17 @@ msgstr "گۇۋاھنامە ئىناۋەتسىز قىلىنغان"
 #: ../js/ui/components/telepathyClient.js:1340
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
-msgstr "گۇۋاھنامە خەتەرلىك شىفىرلاش ئالگورىزىمىنى ئىشلەتكەن ياكى شىفىرلىنىشى ئاجىز"
+msgstr ""
+"گۇۋاھنامە خەتەرلىك شىفىرلاش ئالگورىزىمىنى ئىشلەتكەن ياكى شىفىرلىنىشى ئاجىز"
 
 #: ../js/ui/components/telepathyClient.js:1342
 msgid ""
 "The length of the server certificate, or the depth of the server certificate "
 "chain, exceed the limits imposed by the cryptography library"
-msgstr "مۇلازىمېتىر گۇۋاھنامىسىنىڭ ئۇزۇنلۇقى ياكى مۇلازىمېتىر گۇۋاھنامىسىنىڭ زەنجىرىنىڭ چوڭقۇرلۇقى شىفىرلاش فۇنكسىيە ئامبىرىدا بەلگىلەنگەن ئۇزۇنلۇقتىن ئېشىپ كەتتى"
+msgstr ""
+"مۇلازىمېتىر گۇۋاھنامىسىنىڭ ئۇزۇنلۇقى ياكى مۇلازىمېتىر گۇۋاھنامىسىنىڭ "
+"زەنجىرىنىڭ چوڭقۇرلۇقى شىفىرلاش فۇنكسىيە ئامبىرىدا بەلگىلەنگەن ئۇزۇنلۇقتىن "
+"ئېشىپ كەتتى"
 
 #: ../js/ui/components/telepathyClient.js:1344
 msgid "Internal error"
@@ -955,17 +1109,17 @@ msgstr "ھېساباتنى كۆرۈش"
 msgid "Unknown reason"
 msgstr "نامەلۇم سەۋەب"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:96
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:490
 msgid "Windows"
 msgstr "كۆزنەكلەر"
 
-#: ../js/ui/dash.js:248 ../js/ui/dash.js:286
+#: ../js/ui/dash.js:254 ../js/ui/dash.js:292
 msgid "Show Applications"
 msgstr "پروگراممىلارنى كۆرسىتىدۇ"
 
 #. Translators: this is the name of the dock/favorites area on
 #. the left of the overview
-#: ../js/ui/dash.js:435
+#: ../js/ui/dash.js:446
 msgid "Dash"
 msgstr "سىزىقچە"
 
@@ -984,91 +1138,97 @@ msgstr "چېسلا ۋە ۋاقىت تەڭشىكى"
 #. Translators: This is the date format to use when the calendar popup is
 #. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
 #.
-#: ../js/ui/dateMenu.js:205
+#: ../js/ui/dateMenu.js:215
 msgid "%A %B %e, %Y"
 msgstr "%A %B %e، %Y"
 
-#: ../js/ui/endSessionDialog.js:63
+#: ../js/ui/endSessionDialog.js:65
 #, c-format
 msgctxt "title"
 msgid "Log Out %s"
 msgstr "%s دىن چىقىش"
 
-#: ../js/ui/endSessionDialog.js:64
+#: ../js/ui/endSessionDialog.js:66
 msgctxt "title"
 msgid "Log Out"
 msgstr "تىزىمدىن چىقىش"
 
-#: ../js/ui/endSessionDialog.js:65
-msgid "Click Log Out to quit these applications and log out of the system."
-msgstr "تىزىمدىن چىقىش (Log Out) نى بېسىپ پروگراممىدىن چېكىنىش ۋە سىستېما تىزىمىدىن چىقىش."
-
 #: ../js/ui/endSessionDialog.js:67
+msgid "Click Log Out to quit these applications and log out of the system."
+msgstr ""
+"تىزىمدىن چىقىش (Log Out) نى بېسىپ پروگراممىدىن چېكىنىش ۋە سىستېما تىزىمىدىن "
+"چىقىش."
+
+#: ../js/ui/endSessionDialog.js:69
 #, c-format
 msgid "%s will be logged out automatically in %d second."
 msgid_plural "%s will be logged out automatically in %d seconds."
 msgstr[0] "ئىشلەتكۈچى %s يەنە %d سېكۇنتتىن كېيىن ئاپتوماتىك چىقىپ كېتىدۇ."
 
-#: ../js/ui/endSessionDialog.js:72
+#: ../js/ui/endSessionDialog.js:74
 #, c-format
 msgid "You will be logged out automatically in %d second."
 msgid_plural "You will be logged out automatically in %d seconds."
 msgstr[0] "سىز يەنە %d سېكۇنتتىن كېيىن ئاپتوماتىك چىقىپ كېتىسىز."
 
-#: ../js/ui/endSessionDialog.js:76
+#: ../js/ui/endSessionDialog.js:78
 msgid "Logging out of the system."
 msgstr "سىستېما تىزىمدىن چىقىۋاتىدۇ"
 
-#: ../js/ui/endSessionDialog.js:78
+#: ../js/ui/endSessionDialog.js:80 ../js/ui/endSessionDialog.js:103
 msgctxt "button"
 msgid "Log Out"
 msgstr "تىزىمدىن چىقىش"
 
-#: ../js/ui/endSessionDialog.js:83
+#: ../js/ui/endSessionDialog.js:85
 msgctxt "title"
 msgid "Power Off"
 msgstr "توكنى ئۈز"
 
-#: ../js/ui/endSessionDialog.js:84
-msgid "Click Power Off to quit these applications and power off the system."
-msgstr "تۈكنى ئۈز چېكىلسە قوللىنىشچان پروگراممىلاردىن چېكىنىپ سىستېمىنى تاقايدۇ."
-
 #: ../js/ui/endSessionDialog.js:86
+msgid "Click Power Off to quit these applications and power off the system."
+msgstr ""
+"تۈكنى ئۈز چېكىلسە قوللىنىشچان پروگراممىلاردىن چېكىنىپ سىستېمىنى تاقايدۇ."
+
+#: ../js/ui/endSessionDialog.js:88
 #, c-format
 msgid "The system will power off automatically in %d second."
 msgid_plural "The system will power off automatically in %d seconds."
 msgstr[0] "سىستېمىنىڭ توكى يەنە %d سېكۇنتتىن كېيىن ئاپتوماتىك ئۈزۈلىدۇ."
 
-#: ../js/ui/endSessionDialog.js:90
+#: ../js/ui/endSessionDialog.js:92
 msgid "Powering off the system."
 msgstr "سىستېمىنى تاقاۋاتىدۇ."
 
-#: ../js/ui/endSessionDialog.js:92 ../js/ui/endSessionDialog.js:109
+#: ../js/ui/endSessionDialog.js:99 ../js/ui/endSessionDialog.js:105
+#: ../js/ui/endSessionDialog.js:122
 msgctxt "button"
 msgid "Restart"
 msgstr "قايتا قوزغات"
 
-#: ../js/ui/endSessionDialog.js:94
+#: ../js/ui/endSessionDialog.js:101 ../js/ui/endSessionDialog.js:107
 msgctxt "button"
 msgid "Power Off"
 msgstr "توكنى ئۈز"
 
-#: ../js/ui/endSessionDialog.js:100
+#: ../js/ui/endSessionDialog.js:113
 msgctxt "title"
 msgid "Restart"
 msgstr "قايتا قوزغات"
 
-#: ../js/ui/endSessionDialog.js:101
+#: ../js/ui/endSessionDialog.js:114
 msgid "Click Restart to quit these applications and restart the system."
-msgstr "قايتا قوزغات (restart) چېكىلسە پروگراممىدىن چېكىنىپ ۋە سىستېمىنى قايتا قوزغىتىدۇ."
+msgstr ""
+"قايتا قوزغات (restart) چېكىلسە پروگراممىدىن چېكىنىپ ۋە سىستېمىنى قايتا "
+"قوزغىتىدۇ."
 
-#: ../js/ui/endSessionDialog.js:103
+#: ../js/ui/endSessionDialog.js:116
 #, c-format
 msgid "The system will restart automatically in %d second."
 msgid_plural "The system will restart automatically in %d seconds."
 msgstr[0] "سىستېما يەنە %d سېكۇنتتىن كېيىن ئاپتوماتىك قايتا قوزغىلىدۇ."
 
-#: ../js/ui/endSessionDialog.js:107
+#: ../js/ui/endSessionDialog.js:120
 msgid "Restarting the system."
 msgstr "سىستېما قايتا قوزغىلىۋاتىدۇ."
 
@@ -1134,72 +1294,48 @@ msgstr "مەنبەنى كۆرسەت"
 msgid "Web Page"
 msgstr "توربەت"
 
-#: ../js/ui/messageTray.js:1182
+#: ../js/ui/messageTray.js:1183
 msgid "Open"
 msgstr "ئاچ"
 
-#: ../js/ui/messageTray.js:1189
+#: ../js/ui/messageTray.js:1190
 msgid "Remove"
 msgstr "چىقىرىۋەت"
 
-#: ../js/ui/messageTray.js:1501
+#: ../js/ui/messageTray.js:1502
 msgid "Clear Messages"
 msgstr "ئۇچۇرنى تازىلا"
 
-#: ../js/ui/messageTray.js:1528
+#: ../js/ui/messageTray.js:1529
 msgid "Notification Settings"
 msgstr "ئۇقتۇرۇش تەڭشىكى"
 
-#: ../js/ui/messageTray.js:1707
+#: ../js/ui/messageTray.js:1719
 msgid "No Messages"
 msgstr "ئۇچۇر يوق"
 
-#: ../js/ui/messageTray.js:1787
+#: ../js/ui/messageTray.js:1794
 msgid "Message Tray"
 msgstr "ئۇچۇر قوندىقى"
 
-#: ../js/ui/messageTray.js:2864
+#: ../js/ui/messageTray.js:2822
 msgid "System Information"
 msgstr "سىستېما ئۇچۇرى"
 
-#: ../js/ui/notificationDaemon.js:629 ../src/shell-app.c:374
+#: ../js/ui/notificationDaemon.js:630 ../src/shell-app.c:383
 msgctxt "program"
 msgid "Unknown"
 msgstr "نامەلۇم"
 
-#: ../js/ui/overviewControls.js:460 ../js/ui/screenShield.js:153
-#, c-format
-msgid "%d new message"
-msgid_plural "%d new messages"
-msgstr[0] "%d دانە ئۇچۇر"
-
-#: ../js/ui/overview.js:82
+#: ../js/ui/overview.js:87
 msgid "Undo"
 msgstr "يېنىۋال"
 
-#: ../js/ui/overview.js:129
+#: ../js/ui/overview.js:248
 msgid "Overview"
 msgstr "قىسقىچە بايان"
 
-#. Translators: this is the text displayed
-#. in the search entry when no search is
-#. active; it should not exceed ~30
-#. characters.
-#: ../js/ui/overview.js:284
-msgid "Type to search…"
-msgstr "ئىزدەيدىغاننى كىرگۈزۈڭ.…"
-
-#: ../js/ui/panel.js:613
-msgid "Quit"
-msgstr "ئاخىرلاشتۇر"
-
-#. Translators: If there is no suitable word for "Activities"
-#. in your language, you can use the word for "Overview".
-#: ../js/ui/panel.js:642
-msgid "Activities"
-msgstr "پائالىيەتلەر"
-
-#: ../js/ui/panel.js:983
+#: ../js/ui/panel.js:332
 msgid "Top Bar"
 msgstr "ئۈستى بالداق"
 
@@ -1208,35 +1344,19 @@ msgstr "ئۈستى بالداق"
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:727
+#: ../js/ui/popupMenu.js:736
 msgid "toggle-switch-us"
 msgstr "toggle-switch-us"
 
-#: ../js/ui/runDialog.js:205
+#: ../js/ui/runDialog.js:73
 msgid "Enter a Command"
 msgstr "بۇيرۇق كىرگۈزۈڭ"
 
-#: ../js/ui/runDialog.js:241
+#: ../js/ui/runDialog.js:109
 msgid "Close"
 msgstr "ياپ"
 
-#. Translators: This is a time format for a date in
-#. long format
-#: ../js/ui/screenShield.js:90
-msgid "%A, %B %d"
-msgstr "%A، %B %d"
-
-#: ../js/ui/screenShield.js:155
-#, c-format
-msgid "%d new notification"
-msgid_plural "%d new notifications"
-msgstr[0] "%d دانە ئۇقتۇرۇش"
-
-#: ../js/ui/screenShield.js:442 ../js/ui/userMenu.js:806
-msgid "Lock"
-msgstr "قۇلۇپلا"
-
-#: ../js/ui/screenShield.js:639
+#: ../js/ui/screenShield.js:129
 msgid "GNOME needs to lock the screen"
 msgstr "گىنوم ئېكراننى قۇلۇپلىشى زۆرۈر"
 
@@ -1247,37 +1367,51 @@ msgstr "گىنوم ئېكراننى قۇلۇپلىشى زۆرۈر"
 #.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:758 ../js/ui/screenShield.js:1169
+#: ../js/ui/screenShield.js:167 ../js/ui/screenShield.js:415
 msgid "Unable to lock"
 msgstr "قۇلۇپلىغىلى بولمىدى"
 
-#: ../js/ui/screenShield.js:759 ../js/ui/screenShield.js:1170
+#: ../js/ui/screenShield.js:168 ../js/ui/screenShield.js:416
 msgid "Lock was blocked by an application"
 msgstr "بىر پروگرامما قۇلۇپلاشنى توسۇپ قويغان"
 
-#: ../js/ui/searchDisplay.js:431
-msgid "Searching…"
-msgstr "ئىزدەۋاتىدۇ…"
+#: ../js/ui/shellEntry.js:64
+msgid "Google"
+msgstr ""
 
-#: ../js/ui/searchDisplay.js:475
-msgid "No results."
-msgstr "نەتىجە يوق."
+#: ../js/ui/shellEntry.js:70
+msgid "Wikipedia"
+msgstr ""
 
-#: ../js/ui/shellEntry.js:29
+#: ../js/ui/shellEntry.js:76
+msgid "Local"
+msgstr ""
+
+#: ../js/ui/shellEntry.js:133
 msgid "Copy"
 msgstr "كۆچۈر"
 
-#: ../js/ui/shellEntry.js:34
+#: ../js/ui/shellEntry.js:138
 msgid "Paste"
 msgstr "چاپلا"
 
-#: ../js/ui/shellEntry.js:105
+#: ../js/ui/shellEntry.js:197
 msgid "Show Text"
 msgstr "تېكىست كۆرسەت"
 
-#: ../js/ui/shellEntry.js:107
+#: ../js/ui/shellEntry.js:199
 msgid "Hide Text"
 msgstr "تېكىستنى يوشۇر"
+
+#: ../js/ui/shellEntry.js:302
+#, fuzzy
+msgid "Type to search Wikipedia"
+msgstr "ئىزدەيدىغاننى كىرگۈزۈڭ.…"
+
+#: ../js/ui/shellEntry.js:304
+#, fuzzy
+msgid "Type to search your computer"
+msgstr "كومپيۇتېر ئىزدەش"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1287,7 +1421,7 @@ msgstr "ئىم"
 msgid "Remember Password"
 msgstr "ئىمنى ئەستە تۇتۇش"
 
-#: ../js/ui/shellMountOperation.js:403 ../js/ui/unlockDialog.js:140
+#: ../js/ui/shellMountOperation.js:403 ../js/ui/unlockDialog.js:113
 msgid "Unlock"
 msgstr "قۇلۇپسىزلا"
 
@@ -1392,7 +1526,7 @@ msgstr "ھەرپتاختا تەڭشەكلىرى‏"
 msgid "Mouse Settings"
 msgstr "چاشقىنەك تەڭشەكلىرى"
 
-#: ../js/ui/status/bluetooth.js:254 ../js/ui/status/volume.js:316
+#: ../js/ui/status/bluetooth.js:254 ../js/ui/status/volume.js:310
 msgid "Sound Settings"
 msgstr "ئاۋاز تەڭشەكلىرى‏"
 
@@ -1451,10 +1585,6 @@ msgstr "‏%s دىن كەلگەن جۈپلەش ئىلتىماسى"
 #: ../js/ui/status/bluetooth.js:397
 msgid "Please enter the PIN mentioned on the device."
 msgstr "ئۈسكۈنىسىدە يوللىغان PIN نومۇرىنى كىرگۈزۈڭ."
-
-#: ../js/ui/status/bluetooth.js:414
-msgid "OK"
-msgstr "تامام"
 
 #: ../js/ui/status/keyboard.js:368
 msgid "Show Keyboard Layout"
@@ -1578,7 +1708,7 @@ msgstr "باغلىنىش مەغلۇپ بولدى"
 msgid "Activation of network connection failed"
 msgstr "تور باغلىنىشىنى ئاكتىپلاش مەغلۇپ بولدى"
 
-#: ../js/ui/status/network.js:2276
+#: ../js/ui/status/network.js:2282
 msgid "Networking is disabled"
 msgstr "تورغا باغلىنىش چەكلەنگەن"
 
@@ -1688,102 +1818,65 @@ msgstr "ئاۋاز مىقدارى"
 msgid "Microphone"
 msgstr "مىكروفون"
 
-#: ../js/ui/unlockDialog.js:151
+#: ../js/ui/unlockDialog.js:124
 msgid "Log in as another user"
 msgstr "باشقا ئىشلەتكۈچى سۈپىتىدە كىر"
 
-#: ../js/ui/unlockDialog.js:177
+#: ../js/ui/unlockDialog.js:145
 msgid "Unlock Window"
 msgstr "كۆزنەكنى قۇلۇپلا"
 
-#: ../js/ui/userMenu.js:193
-msgid "Available"
-msgstr "ئىشلەتكىلى بولىدۇ"
-
-#: ../js/ui/userMenu.js:196
-msgid "Busy"
-msgstr "ئالدىراش"
-
-#: ../js/ui/userMenu.js:199
-msgid "Invisible"
-msgstr "يوشۇرۇن"
-
-#: ../js/ui/userMenu.js:202
-msgid "Away"
-msgstr "يوق"
-
-#: ../js/ui/userMenu.js:205
-msgid "Idle"
-msgstr "بىكار"
-
-#: ../js/ui/userMenu.js:208
-msgid "Offline"
-msgstr "توردا يوق"
-
-#: ../js/ui/userMenu.js:780
-msgid "Notifications"
-msgstr "ئۇقتۇرۇشلار"
-
-#: ../js/ui/userMenu.js:796
-msgid "Switch User"
-msgstr "ئىشلەتكۈچى ئالماشتۇرۇش"
-
-#: ../js/ui/userMenu.js:801
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "تىزىمدىن چىقىش"
 
-#: ../js/ui/userMenu.js:821
-msgid "Install Updates & Restart"
-msgstr "يېڭىلانمىلارنى ئورنىتىپ قايتا قوزغات"
+#: ../js/ui/userMenu.js:38
+msgid "Lock"
+msgstr "قۇلۇپلا"
 
-#: ../js/ui/userMenu.js:839
-msgid "Your chat status will be set to busy"
-msgstr "سىزنىڭ سۆھبەت ھالىتىڭىز ئالدىراش قىلىنىدۇ"
-
-#: ../js/ui/userMenu.js:840
-msgid ""
-"Notifications are now disabled, including chat messages. Your online status "
-"has been adjusted to let others know that you might not see their messages."
+#: ../js/ui/userMenu.js:39
+msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:886
+#: ../js/ui/userMenu.js:41
+msgid "Tutorial"
+msgstr ""
+
+#: ../js/ui/userMenu.js:42
+msgid "Settings"
+msgstr "تەڭشەكلەر"
+
+#: ../js/ui/userMenu.js:43
+msgid "Give us Feedback"
+msgstr ""
+
+#: ../js/ui/userMenu.js:434
+msgid "Switch User"
+msgstr "ئىشلەتكۈچى ئالماشتۇرۇش"
+
+#: ../js/ui/userMenu.js:507
 msgid "Other users are logged in."
 msgstr "باشقا ئىشلەتكۈچىلەر كىردى:"
 
-#: ../js/ui/userMenu.js:891
+#: ../js/ui/userMenu.js:512
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "تاقالسا ساقلانمىغان خىزمەتلەر يوقىلىشى مۇمكىن."
 
-#: ../js/ui/userMenu.js:918
+#. Translators: Remote here refers to a remote session, like a ssh login
+#: ../js/ui/userMenu.js:540
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (يىراق)"
 
-#: ../js/ui/userMenu.js:920
+#. Translators: Console here refers to a tty like a VT console
+#: ../js/ui/userMenu.js:543
 #, c-format
 msgid "%s (console)"
 msgstr "%s (تىزگىن كۆزنەك)"
 
-#: ../js/ui/viewSelector.js:100
+#: ../js/ui/viewSelector.js:494
 msgid "Applications"
 msgstr "پروگراممىلار"
-
-#: ../js/ui/viewSelector.js:104
-msgid "Search"
-msgstr "ئىزدە"
-
-#: ../js/ui/wanda.js:92
-#, c-format
-msgid ""
-"Sorry, no wisdom for you today:\n"
-"%s"
-msgstr "كەچۈرۈڭ، سىزگە بۈگۈن ھېكمەتلىك سۆز يوق:\n"
-"%s"
-
-#: ../js/ui/wanda.js:96
-#, c-format
-msgid "%s the Oracle says"
-msgstr "خەۋەرچى مۇنداق دەيدۇ %s"
 
 #: ../js/ui/windowAttentionHandler.js:19
 #, c-format
@@ -1824,16 +1917,26 @@ msgstr "كىرىش ئېكرانىدا GDM ئىشلىتىدىغان ئۇسۇل"
 
 #: ../src/main.c:359
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
-msgstr "كۆرسىتىلگەن ئۇسۇلنى ئىشلەتسۇن، مەسىلەن: كىرىش ئېكرانى ئۈچۈن «gdm» دېگەندەك"
+msgstr ""
+"كۆرسىتىلگەن ئۇسۇلنى ئىشلەتسۇن، مەسىلەن: كىرىش ئېكرانى ئۈچۈن «gdm» دېگەندەك"
 
 #: ../src/main.c:365
 msgid "List possible modes"
 msgstr "بارلىق ئۇسۇللارنى تىزىپ كۆرسەت"
 
-#: ../src/shell-app.c:622
+#: ../src/shell-app.c:635
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "‹%s› نى قوزغىتالمىدى"
+
+#: ../src/shell-desktop-dir-info.c:485
+msgid "Unnamed"
+msgstr ""
+
+#: ../src/shell-desktop-dir-info.c:747
+#, c-format
+msgid "Custom definition for %s"
+msgstr ""
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."
@@ -1846,6 +1949,75 @@ msgstr "ئىم قۇرۇق بولسا بولمايدۇ"
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
 msgstr "كىملىك دەلىللەش سۆزلەشكۈنى ئىشلەتكۈچى تاقىدى"
+
+#~ msgid "Frequent"
+#~ msgstr "دائىم"
+
+#~ msgid "All"
+#~ msgstr "ھەممىسى"
+
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "%d دانە ئۇچۇر"
+
+#~ msgid "Quit"
+#~ msgstr "ئاخىرلاشتۇر"
+
+#~ msgid "Activities"
+#~ msgstr "پائالىيەتلەر"
+
+#~ msgid "%A, %B %d"
+#~ msgstr "%A، %B %d"
+
+#~ msgid "%d new notification"
+#~ msgid_plural "%d new notifications"
+#~ msgstr[0] "%d دانە ئۇقتۇرۇش"
+
+#~ msgid "Searching…"
+#~ msgstr "ئىزدەۋاتىدۇ…"
+
+#~ msgid "No results."
+#~ msgstr "نەتىجە يوق."
+
+#~ msgid "Available"
+#~ msgstr "ئىشلەتكىلى بولىدۇ"
+
+#~ msgid "Busy"
+#~ msgstr "ئالدىراش"
+
+#~ msgid "Invisible"
+#~ msgstr "يوشۇرۇن"
+
+#~ msgid "Away"
+#~ msgstr "يوق"
+
+#~ msgid "Idle"
+#~ msgstr "بىكار"
+
+#~ msgid "Offline"
+#~ msgstr "توردا يوق"
+
+#~ msgid "Notifications"
+#~ msgstr "ئۇقتۇرۇشلار"
+
+#~ msgid "Install Updates & Restart"
+#~ msgstr "يېڭىلانمىلارنى ئورنىتىپ قايتا قوزغات"
+
+#~ msgid "Your chat status will be set to busy"
+#~ msgstr "سىزنىڭ سۆھبەت ھالىتىڭىز ئالدىراش قىلىنىدۇ"
+
+#~ msgid "Search"
+#~ msgstr "ئىزدە"
+
+#~ msgid ""
+#~ "Sorry, no wisdom for you today:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "كەچۈرۈڭ، سىزگە بۈگۈن ھېكمەتلىك سۆز يوق:\n"
+#~ "%s"
+
+#~ msgid "%s the Oracle says"
+#~ msgstr "خەۋەرچى مۇنداق دەيدۇ %s"
 
 #~ msgctxt "title"
 #~ msgid "Sign In"
@@ -2023,9 +2195,6 @@ msgstr "كىملىك دەلىللەش سۆزلەشكۈنى ئىشلەتكۈچى 
 #~ msgid_plural "%d weeks ago"
 #~ msgstr[0] "%d ھەپتە ئىلگىرى"
 
-#~ msgid "Home Folder"
-#~ msgstr "ماكان مۇندەرىجە"
-
 #~ msgid "%1$s: %2$s"
 #~ msgstr "%1$s: %2$s"
 
@@ -2049,9 +2218,6 @@ msgstr "كىملىك دەلىللەش سۆزلەشكۈنى ئىشلەتكۈچى 
 
 #~ msgid "Shut Down..."
 #~ msgstr "تاقا…"
-
-#~ msgid "Search your computer"
-#~ msgstr "كومپيۇتېر ئىزدەش"
 
 #~ msgid "Customize the panel clock"
 #~ msgstr "تاختا سائەتنى ئۆزلەشتۈرىدۇ"
