@@ -44,6 +44,8 @@ const _DIALOG_ICON_SIZE = 32;
 
 const GSM_SESSION_MANAGER_LOGOUT_FORCE = 2;
 
+const SEPARATE_POWER_OFF_LOG_OUT_KEY = 'separate-power-off-log-out';
+
 const EndSessionDialogIface = <interface name="org.gnome.SessionManager.EndSessionDialog">
 <method name="Open">
     <arg type="u" direction="in" />
@@ -88,7 +90,18 @@ const shutdownDialogContent = {
                         seconds).format(seconds);
     },
     endDescription: _("Powering off the system."),
-    confirmButtons: [{ signal: 'ConfirmedReboot',
+    
+    // Note: since these buttons are defined as part of a constant,
+    // a change to this gsettings value will not take effect
+    // until the shell is restarted
+    confirmButtons: global.settings.get_boolean(SEPARATE_POWER_OFF_LOG_OUT_KEY) ?
+                    [{ signal: 'ConfirmedReboot',
+                       label:  C_("button", "Restart") },
+                     { signal: 'ConfirmedShutdown',
+                       label:  C_("button", "Power Off") }] :
+                    [{ signal: 'ConfirmedLogout',
+                       label:  C_("button", "Log Out") },
+                     { signal: 'ConfirmedReboot',
                        label:  C_("button", "Restart") },
                      { signal: 'ConfirmedShutdown',
                        label:  C_("button", "Power Off") }],

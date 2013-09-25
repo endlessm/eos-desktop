@@ -30,11 +30,13 @@ const DISABLE_LOCK_SCREEN_KEY = 'disable-lock-screen';
 const DISABLE_LOG_OUT_KEY = 'disable-log-out';
 const ALWAYS_SHOW_LOG_OUT_KEY = 'always-show-log-out';
 const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
+const SEPARATE_POWER_OFF_LOG_OUT_KEY = 'separate-power-off-log-out';
 
 const POWER_OFF_TEXT = _("Power Off").toUpperCase();
 const SUSPEND_TEXT = _("Suspend").toUpperCase();
 const LOG_OUT_TEXT = _("Log Out").toUpperCase();
 const LOCK_TEXT = _("Lock").toUpperCase();
+const EXIT_TEXT = _("Exit").toUpperCase();
 
 const TUTORIAL_TEXT = _("Tutorial");
 const SETTINGS_TEXT = _("Settings");
@@ -274,6 +276,10 @@ const UserMenuButton = new Lang.Class({
                                        Lang.bind(this, this._updateLockScreen));
         global.settings.connect('changed::' + ALWAYS_SHOW_LOG_OUT_KEY,
                                 Lang.bind(this, this._updateLogout));
+        global.settings.connect('changed::' + SEPARATE_POWER_OFF_LOG_OUT_KEY,
+                                Lang.bind(this, this._updateLogout));
+        global.settings.connect('changed::' + SEPARATE_POWER_OFF_LOG_OUT_KEY,
+                                Lang.bind(this, this._updateSuspendOrPowerOff));
         this._updateSwitchUser();
         this._updateLogout();
         this._updateLockScreen();
@@ -328,6 +334,8 @@ const UserMenuButton = new Lang.Class({
     },
 
     _updateLogout: function() {
+        let separateFromPowerOff =
+            global.settings.get_boolean(SEPARATE_POWER_OFF_LOG_OUT_KEY);
         let allowLogout = !this._lockdownSettings.get_boolean(DISABLE_LOG_OUT_KEY);
         let alwaysShow = global.settings.get_boolean(ALWAYS_SHOW_LOG_OUT_KEY);
         let systemAccount = this._user.system_account;
@@ -335,7 +343,8 @@ const UserMenuButton = new Lang.Class({
         let multiUser = this._userManager.has_multiple_users;
         let multiSession = Gdm.get_session_ids().length > 1;
 
-        this._logoutOption.visible = allowLogout && (alwaysShow || multiUser || multiSession || systemAccount || !localAccount);
+        this._logoutOption.visible = separateFromPowerOff && allowLogout &&
+            (alwaysShow || multiUser || multiSession || systemAccount || !localAccount);
     },
 
     _updateLockScreen: function() {
@@ -367,9 +376,14 @@ const UserMenuButton = new Lang.Class({
 
         this._suspendOrPowerOffOption.visible = this._haveShutdown || this._haveSuspend;
 
+        // If the power off and log out functionalities are combined,
+        // show a single exit button
+        if (!global.settings.get_boolean(SEPARATE_POWER_OFF_LOG_OUT_KEY)) {
+            this._suspendOrPowerOffOption.updateText(EXIT_TEXT, null);
+
         // If we can't power off show Suspend instead
         // and disable the alt key
-        if (!this._haveShutdown) {
+        } else if (!this._haveShutdown) {
             this._suspendOrPowerOffOption.updateText(SUSPEND_TEXT, null);
         } else if (!this._haveSuspend) {
             this._suspendOrPowerOffOption.updateText(POWER_OFF_TEXT, null);
