@@ -32,11 +32,11 @@ const ALWAYS_SHOW_LOG_OUT_KEY = 'always-show-log-out';
 const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
 const SEPARATE_POWER_OFF_LOG_OUT_KEY = 'separate-power-off-log-out';
 
-const POWER_OFF_TEXT = _("Power Off").toUpperCase();
-const SUSPEND_TEXT = _("Suspend").toUpperCase();
-const LOG_OUT_TEXT = _("Log Out").toUpperCase();
-const LOCK_TEXT = _("Lock").toUpperCase();
-const EXIT_TEXT = _("Exit").toUpperCase();
+const POWER_OFF_TEXT = _("Power Off");
+const SUSPEND_TEXT = _("Suspend");
+const LOG_OUT_TEXT = _("Log Out");
+const LOCK_TEXT = _("Lock");
+const EXIT_TEXT = _("Exit");
 
 const TUTORIAL_TEXT = _("Tutorial");
 const SETTINGS_TEXT = _("Settings");
