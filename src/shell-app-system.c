@@ -77,9 +77,19 @@ static void shell_app_system_class_init(ShellAppSystemClass *klass)
 }
 
 static void
+installed_changed (GAppInfoMonitor *monitor,
+                   gpointer         user_data)
+{
+  ShellAppSystem *self = user_data;
+
+  g_signal_emit (self, signals[INSTALLED_CHANGED], 0, NULL);
+}
+
+static void
 shell_app_system_init (ShellAppSystem *self)
 {
   ShellAppSystemPrivate *priv;
+  GAppInfoMonitor *monitor;
 
   self->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                                    SHELL_TYPE_APP_SYSTEM,
@@ -93,6 +103,10 @@ shell_app_system_init (ShellAppSystem *self)
   priv->startup_wm_class_to_id = g_hash_table_new (g_str_hash, g_str_equal);
 
   priv->event_recorder = emtr_event_recorder_new ();
+
+  monitor = g_app_info_monitor_get ();
+  g_signal_connect (monitor, "changed", G_CALLBACK (installed_changed), self);
+  installed_changed (monitor, self);
 }
 
 static void
