@@ -1,3 +1,9 @@
+eos-shell (1.1.5) unstable; urgency=low
+
+  * Updating version to 1.1.5
+
+ -- Roddy Shuler <roddy@endlessm.com>  Fri, 27 Sep 2013 21:55:46 -0700
+
 eos-shell (1.1.5~rc2) unstable; urgency=low
 
   * Updating version to 1.1.5~rc2
