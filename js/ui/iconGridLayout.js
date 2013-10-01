@@ -5,7 +5,9 @@ const Signals = imports.signals;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 
-const SCHEMA_KEY = "icon-grid-layout";
+const SCHEMA_KEY = 'icon-grid-layout';
+const DESKTOP_EXT = '.desktop';
+const DIRECTORY_EXT = '.directory';
 
 const IconGridLayout = new Lang.Class({
     Name: 'IconGridLayout',
@@ -57,7 +59,7 @@ const IconGridLayout = new Lang.Class({
     },
 
     getIcons: function(folder) {
-        folder = folder || "";
+        folder = folder || '';
 
         if (this._iconTree[folder]) {
             return this._iconTree[folder];
@@ -67,7 +69,7 @@ const IconGridLayout = new Lang.Class({
     },
 
     iconIsFolder: function(id) {
-        return id && (id.endsWith('.directory'));
+        return id && (id.endsWith(DIRECTORY_EXT));
     },
 
     appendIcon: function(id, folderId) {
@@ -133,10 +135,81 @@ const IconGridLayout = new Lang.Class({
         }
 
         // Recreate GVariant from iconTree
-        let newLayout = GLib.Variant.new("a{sas}", this._iconTree);
+        let newLayout = GLib.Variant.new('a{sas}', this._iconTree);
 
         // Store gsetting
         global.settings.set_value(SCHEMA_KEY, newLayout);
+    },
+
+    resetDesktop: function() {
+        // Reset the gsetting to restore the default layout
+        global.settings.reset(SCHEMA_KEY);
+
+        // Remove any user-specified desktop files,
+        // to restore all default names
+        // and clean up any unused resources
+        let userPath = GLib.get_user_data_dir();
+        let userDir = Gio.File.new_for_path(userPath);
+
+        if (!userDir) {
+            return;
+        }
+
+        let appDir = userDir.get_child('applications');
+        if (appDir) {
+            let children = appDir.enumerate_children_async(
+                Gio.FILE_ATTRIBUTE_STANDARD_NAME,
+                Gio.FileQueryInfoFlags.NONE,
+                GLib.PRIORITY_DEFAULT,
+                null,
+                Lang.bind(this, this._enumerateDesktopFiles));
+        }
+
+        let folderDir = userDir.get_child('desktop-directories');
+        if (folderDir) {
+            let children = folderDir.enumerate_children_async(
+                Gio.FILE_ATTRIBUTE_STANDARD_NAME,
+                Gio.FileQueryInfoFlags.NONE,
+                GLib.PRIORITY_DEFAULT,
+                null,
+                Lang.bind(this, this._enumerateDirectoryFiles));
+        }
+    },
+
+    _enumerateFiles: function(file, result, removeCallback) {
+        let enumerator = file.enumerate_children_finish(result);
+        enumerator.next_files_async(
+            GLib.MAXINT32, GLib.PRIORITY_DEFAULT, null, removeCallback);
+    },
+
+    _enumerateDesktopFiles: function(file, result) {
+        this._enumerateFiles(file, result,
+                             Lang.bind(this, this._removeDesktopFiles));
+    },
+
+    _enumerateDirectoryFiles: function(file, result) {
+        this._enumerateFiles(file, result,
+                             Lang.bind(this, this._removeDirectoryFiles));
+    },
+
+    _removeFiles: function(enumerator, result, extension) {
+        let fileInfos = enumerator.next_files_finish(result);
+        for (let i = 0; i < fileInfos.length; i++) {
+            let fileInfo = fileInfos[i];
+            let fileName = fileInfo.get_name();
+            if (fileName.endsWith(extension)) {
+                let file = enumerator.get_child(fileInfo);
+                file.delete_async(GLib.PRIORITY_DEFAULT, null, null);
+            }
+        }
+    },
+
+    _removeDesktopFiles: function(enumerator, result) {
+        this._removeFiles(enumerator, result, DESKTOP_EXT);
+    },
+
+    _removeDirectoryFiles: function(enumerator, result) {
+        this._removeFiles(enumerator, result, DIRECTORY_EXT);
     },
 
     // We use the insert Id instead of the index here since gsettings
