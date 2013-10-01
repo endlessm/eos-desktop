@@ -1173,7 +1173,7 @@ msgstr "Cerrar la sesión"
 #: ../js/ui/endSessionDialog.js:67
 msgid "Click Log Out to quit these applications and log out of the system."
 msgstr ""
-"Pulse «Cerrar la sesión» para salir de esas aplicaciones y cerrar la sesión "
+"Pulse «Cerrar sesión» para salir de esas aplicaciones y cerrar la sesión "
 "del sistema."
 
 #: ../js/ui/endSessionDialog.js:69
@@ -1197,7 +1197,7 @@ msgstr "Cerrando la sesión."
 #: ../js/ui/endSessionDialog.js:80 ../js/ui/endSessionDialog.js:103
 msgctxt "button"
 msgid "Log Out"
-msgstr "Cerrar la sesión"
+msgstr "Cerrar sesión"
 
 #: ../js/ui/endSessionDialog.js:85
 msgctxt "title"
@@ -1852,7 +1852,7 @@ msgstr "Desbloquear ventana"
 
 #: ../js/ui/userMenu.js:37
 msgid "Log Out"
-msgstr "Cerrar la sesión"
+msgstr "Cerrar sesión"
 
 #: ../js/ui/userMenu.js:38
 msgid "Lock"
