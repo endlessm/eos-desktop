@@ -1228,7 +1228,8 @@ const NMDeviceWireless = new Lang.Class({
     },
 
     getIndicatorIcon: function() {
-        if (this._device.active_connection.state == NetworkManager.ActiveConnectionState.ACTIVATING)
+        if (this._device.state >= NetworkManager.DeviceState.PREPARE &&
+            this._device.state < NetworkManager.DeviceState.ACTIVATED)
             return 'network-wireless-acquiring-symbolic';
 
         let ap = this._device.active_access_point;
