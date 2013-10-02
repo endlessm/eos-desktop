@@ -46,7 +46,7 @@ struct _ShellAppSystemPrivate {
   GHashTable *running_apps;
   GHashTable *visible_id_to_app;
   GHashTable *id_to_app;
-  GHashTable *startup_wm_class_to_app;
+  GHashTable *startup_wm_class_to_id;
 
   EmtrEventRecorder *event_recorder;
 
@@ -99,9 +99,7 @@ shell_app_system_init (ShellAppSystem *self)
   /* All the objects in this hash table are owned by id_to_app */
   priv->visible_id_to_app = g_hash_table_new (g_str_hash, g_str_equal);
 
-  priv->startup_wm_class_to_app = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                         NULL,
-                                                         (GDestroyNotify)g_object_unref);
+  priv->startup_wm_class_to_id = g_hash_table_new (g_str_hash, g_str_equal);
 
   priv->event_recorder = emtr_event_recorder_new ();
 
@@ -124,7 +122,7 @@ shell_app_system_finalize (GObject *object)
   g_hash_table_destroy (priv->running_apps);
   g_hash_table_destroy (priv->id_to_app);
   g_hash_table_destroy (priv->visible_id_to_app);
-  g_hash_table_destroy (priv->startup_wm_class_to_app);
+  g_hash_table_destroy (priv->startup_wm_class_to_id);
 
   g_object_unref (priv->event_recorder);
 
@@ -364,7 +362,7 @@ on_apps_tree_changed_cb (GMenuTree *tree,
           old_startup_wm_class = g_desktop_app_info_get_startup_wm_class (old_info);
 
           if (old_startup_wm_class)
-            g_hash_table_remove (self->priv->startup_wm_class_to_app, old_startup_wm_class);
+            g_hash_table_remove (self->priv->startup_wm_class_to_id, old_startup_wm_class);
 
           _shell_app_set_app_info (app, info);
           g_object_ref (app);  /* Extra ref, removed in _replace below */
@@ -382,8 +380,8 @@ on_apps_tree_changed_cb (GMenuTree *tree,
 
       startup_wm_class = g_desktop_app_info_get_startup_wm_class (info);
       if (startup_wm_class)
-        g_hash_table_replace (self->priv->startup_wm_class_to_app,
-                              (char*)startup_wm_class, g_object_ref (app));
+        g_hash_table_replace (self->priv->startup_wm_class_to_id,
+                              (char*)startup_wm_class, (char*)id);
     }
   /* Now iterate over the apps again; we need to unreference any apps
    * which have been removed.  The JS code may still be holding a
@@ -573,10 +571,16 @@ ShellApp *
 shell_app_system_lookup_startup_wmclass (ShellAppSystem *system,
                                          const char     *wmclass)
 {
+  const char *id;
+
   if (wmclass == NULL)
     return NULL;
 
-  return g_hash_table_lookup (system->priv->startup_wm_class_to_app, wmclass);
+  id = g_hash_table_lookup (system->priv->startup_wm_class_to_id, wmclass);
+  if (id == NULL)
+    return NULL;
+
+  return shell_app_system_lookup_app (system, id);
 }
 
 void
