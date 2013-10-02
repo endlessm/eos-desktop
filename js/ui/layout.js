@@ -426,7 +426,7 @@ const LayoutManager = new Lang.Class({
             this._addBackgroundClickHandler(bgManager.background.actor);
         }));
 
-        this._bgManagers.push(bgManager);
+        this._bgManagers[monitorIndex] = bgManager;
 
         return bgManager.background;
     },
