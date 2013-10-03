@@ -145,31 +145,34 @@ uninstall-hook:
 	rm -f $(DESTDIR)$(sysconfdir)/dconf/db/gdm.d/99-gdm-eos-shell-settings
 
 
-EXTRA_DIST =						\
+EXTRA_DIST =					\
 	99-gdm-eos-shell-settings		\
 	gdm-eos-shell.desktop.in.in		\
+	gdm-eos-shell.session			\
 	eos-shell.desktop.in.in			\
 	eos-session.desktop.in.in		\
 	eos-shell.session.in.in			\
 	eos-shell-extension-prefs.desktop.in.in	\
+	resfix					\
 	$(introspection_DATA)			\
-	$(menu_DATA)					\
-	$(convert_DATA)					\
-	$(keys_in_files)				\
+	$(menu_DATA)				\
+	$(convert_DATA)				\
+	$(keys_in_files)			\
 	org.gnome.shell.gschema.xml.in.in
 
-CLEANFILES =						\
+CLEANFILES =					\
 	gdm-eos-shell.desktop.in		\
 	eos-shell.desktop.in			\
 	eos-session.desktop.in			\
-	eos-shell-extension-prefs.in	\
-	eos-shell.session				\
+	eos-shell-extension-prefs.in		\
+	eos-shell.session			\
 	eos-shell.session.in			\
-	$(desktop_DATA)					\
-	$(sessions_DATA)				\
-	$(keys_DATA)					\
+	$(desktop_DATA)				\
+	$(greeterdesktop_DATA)			\
+	$(sessions_DATA)			\
+	$(keys_DATA)				\
 	$(gsettings_SCHEMAS)			\
-	gschemas.compiled				\
-	org.gnome.shell.gschema.valid	\
+	gschemas.compiled			\
+	org.gnome.shell.gschema.valid		\
 	org.gnome.shell.gschema.xml.in
 

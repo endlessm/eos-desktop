@@ -20,6 +20,7 @@ DIST_EXCLUDE =					\
 	gnome-shell.doap			\
 	HACKING					\
 	MAINTAINERS				\
+	po/change_msgid.sh			\
 	tools/build/*
 
 distcheck-hook:

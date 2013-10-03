@@ -97,6 +97,8 @@ doc-gen-org.gnome.Shell.Screenshot.xml: $(top_srcdir)/data/org.gnome.Shell.Scree
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE).
 # e.g. content_files=running.sgml building.sgml changes-2.0.sgml
 content_files= \
+	doc-gen-org.gnome.Shell.SearchProvider.xml \
+	doc-gen-org.gnome.Shell.SearchProvider2.xml \
 	doc-gen-org.gnome.Shell.Screenshot.xml
 
 # SGML files where gtk-doc abbrevations (#GtkWidget) are expanded
