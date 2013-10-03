@@ -21,7 +21,7 @@
 
 /* default text style */
 stage {
-    font-family: sourcesanspro, sans-serif;
+    font-family: lato, sans-serif;
     font-size: 13pt;
     color: white;
 }
@@ -880,7 +880,7 @@ StScrollBar StButton#vhandle:active {
 #searchEntry {
     width: 320px;
 
-    font-family: sourcesanspro, sans-serif;
+    font-family: lato, sans-serif;
     font-size: 15px;
 
     color: #c5bcb6;
@@ -1553,7 +1553,7 @@ StScrollBar StButton#vhandle:active {
 .trash-popup-label {
     padding-top: 20px;
     font-size: 16px;
-    font-family: sourcesanspro, sans-serif;
+    font-family: lato, sans-serif;
     font-weight: bold;
     color: #FFFFFFF;
     text-align: center;
@@ -1607,7 +1607,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .no-messages-label {
-    font-family: sourcesanspro, sans-serif;
+    font-family: lato, sans-serif;
     font-size: 13pt;
     color: #999999;
 }
