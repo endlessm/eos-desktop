@@ -8,6 +8,8 @@ const GLib = imports.gi.GLib;
 const SCHEMA_KEY = 'icon-grid-layout';
 const DESKTOP_EXT = '.desktop';
 const DIRECTORY_EXT = '.directory';
+const APP_DIR_NAME = 'applications';
+const FOLDER_DIR_NAME = 'desktop-directories';
 
 const IconGridLayout = new Lang.Class({
     Name: 'IconGridLayout',
@@ -155,7 +157,7 @@ const IconGridLayout = new Lang.Class({
             return;
         }
 
-        let appDir = userDir.get_child('applications');
+        let appDir = userDir.get_child(APP_DIR_NAME);
         if (appDir) {
             let children = appDir.enumerate_children_async(
                 Gio.FILE_ATTRIBUTE_STANDARD_NAME,
@@ -165,7 +167,7 @@ const IconGridLayout = new Lang.Class({
                 Lang.bind(this, this._enumerateDesktopFiles));
         }
 
-        let folderDir = userDir.get_child('desktop-directories');
+        let folderDir = userDir.get_child(FOLDER_DIR_NAME);
         if (folderDir) {
             let children = folderDir.enumerate_children_async(
                 Gio.FILE_ATTRIBUTE_STANDARD_NAME,
