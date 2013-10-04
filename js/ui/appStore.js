@@ -46,10 +46,14 @@ const AppStore = new Lang.Class({
     },
 
     toggle: function() {
-        this.proxy.ToggleRemote(global.get_current_time());
+        this._activate(Lang.bind(this, this._doToggle));
     },
 
     showPage: function(page) {
+        this._activate(Lang.bind(this, function() { this._doShowPage(page); }));
+    },
+
+    _activate: function(activateMethod) {
         // The background menu is shown on the overview screen. However, to
         // show the AppStore, we must first hide the overview. For maximum
         // visual niceness, we also take the extra step to wait until the
@@ -57,15 +61,17 @@ const AppStore = new Lang.Class({
         // animation of the AppStore.
         if (Main.overview.visible) {
             if (!this._overviewHiddenId) {
-                this._overviewHiddenId = Main.overview.connect('hidden',
-                    Lang.bind(this, function() {
-                        this._doShowPage(page);
-                    }));
+                this._overviewHiddenId =
+                    Main.overview.connect('hidden', activateMethod);
             }
             Main.overview.hide();
         } else {
-            this._doShowPage(page);
+            activateMethod();
         }
+    },
+
+    _doToggle: function() {
+        this.proxy.ToggleRemote(global.get_current_time());
     },
 
     _doShowPage: function(page) {
