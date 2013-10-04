@@ -6,11 +6,9 @@ Source: eos-shell
 Section: gnome
 Priority: optional
 Maintainer: Endless Mobile <maintainers@endlessm.com>
-Uploaders: Roddy Shuler <roddy@endlessm.com>
 Build-Depends: autotools-dev,
                cdbs,
                debhelper (>= 8.1.3~),
-               dh-autoreconf,
                gdm | gdm3,
                gnome-bluetooth (>= 2.90.0) [linux-any],
                gnome-control-center-dev (>= 3.4),
