@@ -1905,7 +1905,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
-        Main.appStore.showPage('apps');
+        Main.appStore.toggle();
     },
 
     getDragBeginIcon: function() {
