@@ -6,7 +6,6 @@ Source: eos-shell
 Section: gnome
 Priority: optional
 Maintainer: Endless Mobile <maintainers@endlessm.com>
-Uploaders: Roddy Shuler <roddy@endlessm.com>
 Build-Depends: autotools-dev,
                cdbs,
                debhelper (>= 8.1.3~),
