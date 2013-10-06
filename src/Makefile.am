@@ -196,7 +196,7 @@ eos_shell_real_DEPENDENCIES = libeos-shell.la
 
 libeos_shell_js_la_SOURCES =		\
 	shell-js.h			\
-	shell-js.c			\
+	shell-js.cpp		\
 	$(NULL)
 
 libeos_shell_js_la_LIBADD =		\
