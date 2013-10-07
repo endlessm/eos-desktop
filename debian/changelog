@@ -4,6 +4,16 @@ eos-shell (1.1.5~dev1) unstable; urgency=low
 
  -- Roddy Shuler <roddy@endlessm.com>  Thu, 12 Sep 2013 13:40:21 -0500
 
+eos-shell (1.1.4~dev2) unstable; urgency=low
+
+  * debian/eos-shell.links:
+    - Add a compability link for gnome-shell
+  * debian/rules:
+    - Don't add gnome-icon-theme-full as a dependency, singularity uses the
+      Debian gnome 3.8 packages.
+
+ -- Sjoerd Simons <sjoerd.simons@collabora.co.uk>  Thu, 22 Aug 2013 20:54:29 +0200
+
 eos-shell (1.1.4~dev1) unstable; urgency=low
 
   * Updating version to 1.1.4~dev1
