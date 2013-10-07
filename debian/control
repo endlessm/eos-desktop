@@ -58,7 +58,6 @@ Vcs-Browser: http://anonscm.debian.org/viewvc/pkg-gnome/desktop/unstable/gnome-s
 Package: eos-shell
 Architecture: any
 Depends: ${gir:Depends},
-         ${icon-theme:Depends},
          ${misc:Depends},
          ${shlibs:Depends},
          eos-theme,
@@ -87,6 +86,7 @@ Depends: ${gir:Depends},
          gir1.2-telepathylogger-0.2 (>= 0.8.0),
          gir1.2-upowerglib-1.0,
          gjs (>= 1.35.4),
+         gnome-icon-theme-full | gnome-icon-theme,
          gnome-icon-theme-symbolic (>= 2.91),
          gnome-menus (>= 3.8.0),
          gnome-settings-daemon (>= 3.4.0),
