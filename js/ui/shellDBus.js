@@ -426,6 +426,8 @@ const AppStoreIface = <interface name="org.gnome.Shell.AppStore">
 <method name="RemoveFolder">
     <arg type="s" direction="in" name="id" />
 </method>
+<method name="ResetDesktop">
+</method>
 <signal name="ApplicationsChanged">
     <arg type="as" name="applications" />
 </signal>
@@ -473,6 +475,10 @@ const AppStoreService = new Lang.Class({
 
     RemoveFolder: function(id) {
         this._removeItem(id, true);
+    },
+
+    ResetDesktop: function() {
+        IconGridLayout.layout.resetDesktop();
     },
 
     ListApplicationsAsync: function(params, invocation) {
