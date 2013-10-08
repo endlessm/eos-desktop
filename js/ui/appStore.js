@@ -11,6 +11,7 @@ const APP_STORE_IFACE = 'com.endlessm.AppStore';
 
 const AppStoreIface = <interface name={APP_STORE_NAME}>
   <method name="Toggle">
+    <arg type="b" direction="in" name="reset"/>
     <arg type="u" direction="in" name="timestamp"/>
   </method>
   <method name="ShowPage">
@@ -41,12 +42,12 @@ const AppStore = new Lang.Class({
     _onOverviewShowing: function() {
         // Make the AppStore close (slide in) when the overview is shown
         if (this.proxy.Visible) {
-            this.toggle();
+            this.toggle(false);
         }
     },
 
-    toggle: function() {
-        this._activate(Lang.bind(this, this._doToggle));
+    toggle: function(reset) {
+        this._activate(Lang.bind(this, function() { this._doToggle(reset); }));
     },
 
     showPage: function(page) {
@@ -70,8 +71,8 @@ const AppStore = new Lang.Class({
         }
     },
 
-    _doToggle: function() {
-        this.proxy.ToggleRemote(global.get_current_time());
+    _doToggle: function(reset) {
+        this.proxy.ToggleRemote(reset, global.get_current_time());
     },
 
     _doShowPage: function(page) {
