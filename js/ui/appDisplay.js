@@ -1601,12 +1601,13 @@ const AppSplashPage = new Lang.Class({
         let iconSize = themeNode.get_length('icon-size');
 
         let appIcon = this._app.create_icon_texture(iconSize);
-        appIcon.x_align = Clutter.ActorAlign.CENTER;
-        appIcon.y_align = Clutter.ActorAlign.CENTER;
-        appIcon.set_x_expand(true);
-        appIcon.set_y_expand(true);
-
-        this.background.add_child(appIcon);
+        if (appIcon) {
+            appIcon.x_align = Clutter.ActorAlign.CENTER;
+            appIcon.y_align = Clutter.ActorAlign.CENTER;
+            appIcon.set_x_expand(true);
+            appIcon.set_y_expand(true);
+            this.background.add_child(appIcon);
+        }
 
         let animationSize = themeNode.get_length('-animation-size');
         this._spinner = new Panel.VariableSpeedAnimation('splash-circle-animation.png',
