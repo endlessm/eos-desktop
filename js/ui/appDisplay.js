@@ -1918,7 +1918,8 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
-        Main.appStore.showPage('apps');
+        let reset = true;
+        Main.appStore.toggle(reset);
     },
 
     getDragBeginIcon: function() {

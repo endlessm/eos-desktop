@@ -11,6 +11,7 @@ const APP_STORE_IFACE = 'com.endlessm.AppStore';
 
 const AppStoreIface = <interface name={APP_STORE_NAME}>
   <method name="Toggle">
+    <arg type="b" direction="in" name="reset"/>
     <arg type="u" direction="in" name="timestamp"/>
   </method>
   <method name="ShowPage">
@@ -41,15 +42,19 @@ const AppStore = new Lang.Class({
     _onOverviewShowing: function() {
         // Make the AppStore close (slide in) when the overview is shown
         if (this.proxy.Visible) {
-            this.toggle();
+            this.toggle(false);
         }
     },
 
-    toggle: function() {
-        this.proxy.ToggleRemote(global.get_current_time());
+    toggle: function(reset) {
+        this._activate(Lang.bind(this, function() { this._doToggle(reset); }));
     },
 
     showPage: function(page) {
+        this._activate(Lang.bind(this, function() { this._doShowPage(page); }));
+    },
+
+    _activate: function(activateMethod) {
         // The background menu is shown on the overview screen. However, to
         // show the AppStore, we must first hide the overview. For maximum
         // visual niceness, we also take the extra step to wait until the
@@ -57,15 +62,17 @@ const AppStore = new Lang.Class({
         // animation of the AppStore.
         if (Main.overview.visible) {
             if (!this._overviewHiddenId) {
-                this._overviewHiddenId = Main.overview.connect('hidden',
-                    Lang.bind(this, function() {
-                        this._doShowPage(page);
-                    }));
+                this._overviewHiddenId =
+                    Main.overview.connect('hidden', activateMethod);
             }
             Main.overview.hide();
         } else {
-            this._doShowPage(page);
+            activateMethod();
         }
+    },
+
+    _doToggle: function(reset) {
+        this.proxy.ToggleRemote(reset, global.get_current_time());
     },
 
     _doShowPage: function(page) {
