@@ -648,12 +648,18 @@ const Dash = new Lang.Class({
         let minHeight, natHeight;
 
         // Enforce the current icon size during the size request
-        let [currentWidth, currentHeight] = firstIcon.icon.get_size();
+        let [currentWidth, currentHeight] = [0, 0];
 
-        firstIcon.icon.set_size(this.iconSize, this.iconSize);
+        if (firstIcon.icon) {
+            [currentWidth, currentHeight] = firstIcon.icon.get_size();
+            firstIcon.icon.set_size(this.iconSize, this.iconSize);
+        }
+
         [minHeight, natHeight] = firstButton.get_preferred_height(-1);
 
-        firstIcon.icon.set_size(currentWidth, currentHeight);
+        if (firstIcon.icon) {
+            firstIcon.icon.set_size(currentWidth, currentHeight);
+        }
 
         // Subtract icon padding and box spacing from the available height
         availHeight -= iconChildren.length * (natHeight - this.iconSize) +

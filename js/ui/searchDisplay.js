@@ -559,7 +559,9 @@ const ProviderIcon = new Lang.Class({
                                         y_expand: true });
 
         let icon = provider.app.create_icon_texture(this.PROVIDER_ICON_SIZE);
-        this._content.add_actor(icon);
+        if (icon) {
+            this._content.add_actor(icon);
+        }
         this._content.add_actor(this.moreIcon);
     }
 });
