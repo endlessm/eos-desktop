@@ -52,6 +52,13 @@ const AppStore = new Lang.Class({
     _onVisibilityChanged: function() {
         // resync visibility
         this._visible = this.proxy.Visible;
+
+        if (!this._visible) {
+            let visibleWindows = Main.workspaceMonitor.visibleWindows;
+            if (visibleWindows == 0) {
+                Main.overview.showApps();
+            }
+        }
     },
 
     _onOverviewShowing: function() {
