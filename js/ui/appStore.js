@@ -42,7 +42,7 @@ const AppStore = new Lang.Class({
     _onOverviewShowing: function() {
         // Make the AppStore close (slide in) when the overview is shown
         if (this.proxy.Visible) {
-            this.toggle(false);
+            this._doToggle(false);
         }
     },
 
@@ -71,15 +71,20 @@ const AppStore = new Lang.Class({
         }
     },
 
-    _doToggle: function(reset) {
-        this.proxy.ToggleRemote(reset, global.get_current_time());
-    },
-
-    _doShowPage: function(page) {
+    _removeHiddenId: function() {
         if (this._overviewHiddenId) {
             Main.overview.disconnect(this._overviewHiddenId);
             this._overviewHiddenId = 0;
         }
+    },
+
+    _doToggle: function(reset) {
+        this._removeHiddenId();
+        this.proxy.ToggleRemote(reset, global.get_current_time());
+    },
+
+    _doShowPage: function(page) {
+        this._removeHiddenId();
         this.proxy.ShowPageRemote(page, global.get_current_time());
     }
 });
