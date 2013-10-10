@@ -1,60 +1,182 @@
-eos-shell (1.1.5~dev1) unstable; urgency=low
+eos-shell (1.2.0~rc3) unstable; urgency=low
 
-  * Updating version to 1.1.5~dev1
+  * Updating version to 1.2.0~rc3
 
- -- Roddy Shuler <roddy@endlessm.com>  Thu, 12 Sep 2013 13:40:21 -0500
+ -- Roddy Shuler <roddy@endlessm.com>  Wed, 09 Oct 2013 21:48:04 -0700
 
-eos-shell (1.1.4~dev2) unstable; urgency=low
+eos-shell (1.2.0~rc1) unstable; urgency=low
 
-  * debian/eos-shell.links:
-    - Add a compability link for gnome-shell
-  * debian/rules:
-    - Don't add gnome-icon-theme-full as a dependency, singularity uses the
-      Debian gnome 3.8 packages.
+  * Updating version to 1.2.0~rc1
 
- -- Sjoerd Simons <sjoerd.simons@collabora.co.uk>  Thu, 22 Aug 2013 20:54:29 +0200
+ -- Roddy Shuler <roddy@endlessm.com>  Wed, 09 Oct 2013 02:22:34 -0700
 
-eos-shell (1.1.4~dev1) unstable; urgency=low
+eos-shell (1.1.5) unstable; urgency=low
 
-  * Updating version to 1.1.4~dev1
+  * Updating version to 1.1.5
 
- -- Roddy Shuler <roddy@endlessm.com>  Mon, 12 Aug 2013 15:40:09 -0500
+ -- Roddy Shuler <roddy@endlessm.com>  Fri, 27 Sep 2013 21:55:46 -0700
 
-eos-shell (1.1.2~dev2) unstable; urgency=low
+eos-shell (1.1.5~rc2) unstable; urgency=low
 
-  * Updating version to 1.1.2~dev2
+  * Updating version to 1.1.5~rc2
 
- -- Roddy Shuler <roddy@endlessm.com>  Mon, 01 Jul 2013 11:42:28 -0500
+ -- Roddy Shuler <roddy@endlessm.com>  Thu, 26 Sep 2013 17:10:51 -0700
 
-eos-shell (1.1.2~dev1) unstable; urgency=low
+eos-shell (1.1.4) unstable; urgency=low
 
-  * Updating version to 1.1.2~dev1
+  * Updating version to 1.1.4
 
- -- Roddy Shuler <roddy@endlessm.com>  Thu, 20 Jun 2013 14:38:28 -0500
+ -- Roddy Shuler <roddy@endlessm.com>  Mon, 09 Sep 2013 13:04:29 -0500
 
-eos-shell (1.1.1~dev5) unstable; urgency=low
+eos-shell (1.1.4~rc2) unstable; urgency=low
 
-  * Updating version to 1.1.1~dev5
+  * Updating version to 1.1.4~rc2
 
- -- Roddy Shuler <roddy@endlessm.com>  Wed, 12 Jun 2013 14:00:11 -0500
+ -- Roddy Shuler <roddy@endlessm.com>  Fri, 30 Aug 2013 16:45:36 -0500
 
-eos-shell (1.1.1~dev4) unstable; urgency=low
+eos-shell (1.1.4~rc1) unstable; urgency=low
 
-  * Updating version to 1.1.1~dev4
+  * Updating version to 1.1.4~rc1
 
- -- Roddy Shuler <roddy@endlessm.com>  Thu, 06 Jun 2013 00:45:20 -0500
+ -- Roddy Shuler <roddy@endlessm.com>  Fri, 30 Aug 2013 00:35:07 -0500
 
-eos-shell (1.1.1~dev3) unstable; urgency=low
+eos-shell (1.1.3) unstable; urgency=low
 
-  * Updating version to 1.1.1~dev3
+  * Updating version to 1.1.3
 
- -- Roddy Shuler <roddy@endlessm.com>  Tue, 28 May 2013 13:44:38 -0500
+ -- Roddy Shuler <roddy@endlessm.com>  Fri, 09 Aug 2013 19:00:29 -0500
 
-eos-shell (1.1.1~dev2) unstable; urgency=low
+eos-shell (1.1.3~rc1) unstable; urgency=low
 
-  * Updating version to 1.1.1~dev2
+  * Updating version to 1.1.3~rc1
 
- -- Roddy Shuler <roddy@endlessm.com>  Thu, 23 May 2013 22:16:54 -0700
+ -- Roddy Shuler <roddy@endlessm.com>  Fri, 09 Aug 2013 14:06:47 -0500
+
+eos-shell (1.1.2) unstable; urgency=low
+
+  * Updating version to 1.1.2
+
+ -- Roddy Shuler <roddy@endlessm.com>  Tue, 30 Jul 2013 10:47:19 -0500
+
+eos-shell (1.1.2~rc3) unstable; urgency=low
+
+  * Updating version to 1.1.2~rc3
+
+ -- Roddy Shuler <roddy@endlessm.com>  Thu, 25 Jul 2013 16:35:56 -0700
+
+eos-shell (1.1.2~rc2) unstable; urgency=low
+
+  * Updating version to 1.1.2~rc2
+
+ -- Roddy Shuler <roddy@endlessm.com>  Wed, 24 Jul 2013 00:00:56 -0500
+
+eos-shell (1.1.2~rc1) unstable; urgency=low
+
+  * Updating version to 1.1.2~rc1
+
+ -- Roddy Shuler <roddy@endlessm.com>  Fri, 12 Jul 2013 16:22:54 -0500
+
+eos-shell (1.1.1.1) unstable; urgency=low
+
+  * Updating version to 1.1.1.1
+
+ -- Roddy Shuler <roddy@endlessm.com>  Tue, 25 Jun 2013 09:54:43 -0500
+
+eos-shell (1.1.1) unstable; urgency=low
+
+  * Updating version to 1.1.1
+
+ -- Roddy Shuler <roddy@endlessm.com>  Thu, 20 Jun 2013 13:50:52 -0500
+
+eos-shell (1.1.1~rc15) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc15
+
+ -- Roddy Shuler <roddy@endlessm.com>  Wed, 19 Jun 2013 17:56:34 -0500
+
+eos-shell (1.1.1~rc14) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc14
+
+ -- Roddy Shuler <roddy@endlessm.com>  Tue, 18 Jun 2013 01:44:07 -0500
+
+eos-shell (1.1.1~rc13) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc13
+
+ -- Roddy Shuler <roddy@endlessm.com>  Mon, 17 Jun 2013 17:16:25 -0500
+
+eos-shell (1.1.1~rc12) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc12
+
+ -- Roddy Shuler <roddy@endlessm.com>  Fri, 14 Jun 2013 12:34:28 -0500
+
+eos-shell (1.1.1~rc11) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc11
+
+ -- Roddy Shuler <roddy@endlessm.com>  Thu, 13 Jun 2013 15:17:15 -0500
+
+eos-shell (1.1.1~rc10) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc10
+
+ -- Roddy Shuler <roddy@endlessm.com>  Thu, 13 Jun 2013 13:31:51 -0500
+
+eos-shell (1.1.1~rc9) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc9
+
+ -- Roddy Shuler <roddy@endlessm.com>  Thu, 13 Jun 2013 11:26:00 -0500
+
+eos-shell (1.1.1~rc7) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc7
+
+ -- Roddy Shuler <roddy@endlessm.com>  Thu, 06 Jun 2013 17:58:54 -0500
+
+eos-shell (1.1.1~rc6) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc6
+
+ -- Roddy Shuler <roddy@endlessm.com>  Thu, 06 Jun 2013 00:53:52 -0500
+
+eos-shell (1.1.1~rc5) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc5
+
+ -- Srdjan Grubor <sgnn7@sgnn7.org>  Wed, 05 Jun 2013 14:22:57 -0500
+
+eos-shell (1.1.1~rc4) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc4
+
+ -- Srdjan Grubor <sgnn7@sgnn7.org>  Wed, 05 Jun 2013 13:11:58 -0500
+
+eos-shell (555~rc444) unstable; urgency=low
+
+  * Updating version to 555~rc444
+
+ -- Srdjan Grubor <sgnn7@sgnn7.org>  Wed, 29 May 2013 10:06:33 -0700
+
+eos-shell (1.1.1~rc3) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc3
+
+ -- Roddy Shuler <roddy@endlessm.com>  Tue, 28 May 2013 13:52:17 -0500
+
+eos-shell (1.1.1~rc2) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc2
+
+ -- Roddy Shuler <roddy@endlessm.com>  Fri, 24 May 2013 10:44:40 -0700
+
+eos-shell (1.1.1~rc1) unstable; urgency=low
+
+  * Updating version to 1.1.1~rc1
+
+ -- Roddy Shuler <roddy@endlessm.com>  Thu, 23 May 2013 21:33:35 -0700
 
 eos-shell (1.1.1~dev1) unstable; urgency=low
 
