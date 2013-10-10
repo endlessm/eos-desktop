@@ -4,6 +4,7 @@ const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 
 const Main = imports.ui.main;
+const SideComponent = imports.ui.sideComponent;
 
 const APP_STORE_NAME = 'com.endlessm.AppStore';
 const APP_STORE_PATH = '/com/endlessm/AppStore';
@@ -25,66 +26,23 @@ const AppStoreProxy = Gio.DBusProxy.makeProxyWrapper(AppStoreIface);
 
 const AppStore = new Lang.Class({
     Name: 'AppStore',
+    Extends: SideComponent.SideComponent,
 
     _init: function() {
-        this._overviewHiddenId = 0;
-
-        this.proxy = new AppStoreProxy(Gio.DBus.session,
-            APP_STORE_NAME, APP_STORE_PATH, Lang.bind(this, this._onProxyConstructed));
-
-        Main.overview.connect('showing', Lang.bind(this, this._onOverviewShowing));
-    },
-
-    _onProxyConstructed: function() {
-        // nothing to do
-    },
-
-    _onOverviewShowing: function() {
-        // Make the AppStore close (slide in) when the overview is shown
-        if (this.proxy.Visible) {
-            this._doToggle(false);
-        }
-    },
-
-    toggle: function(reset) {
-        this._activate(Lang.bind(this, function() { this._doToggle(reset); }));
+        this.parent(AppStoreProxy, APP_STORE_NAME, APP_STORE_PATH);
     },
 
     showPage: function(page) {
-        this._activate(Lang.bind(this, function() { this._doShowPage(page); }));
+        this.activateAfterHide(Lang.bind(this, function() { this._doShowPage(page); }));
     },
 
-    _activate: function(activateMethod) {
-        // The background menu is shown on the overview screen. However, to
-        // show the AppStore, we must first hide the overview. For maximum
-        // visual niceness, we also take the extra step to wait until the
-        // overview has finished hiding itself before triggering the slide-in
-        // animation of the AppStore.
-        if (Main.overview.visible) {
-            if (!this._overviewHiddenId) {
-                this._overviewHiddenId =
-                    Main.overview.connect('hidden', activateMethod);
-            }
-            Main.overview.hide();
-        } else {
-            activateMethod();
-        }
-    },
-
-    _removeHiddenId: function() {
-        if (this._overviewHiddenId) {
-            Main.overview.disconnect(this._overviewHiddenId);
-            this._overviewHiddenId = 0;
-        }
-    },
-
-    _doToggle: function(reset) {
-        this._removeHiddenId();
+    callToggle: function(reset) {
         this.proxy.ToggleRemote(reset, global.get_current_time());
     },
 
     _doShowPage: function(page) {
-        this._removeHiddenId();
+        this.removeHiddenId();
+        this.visible = true;
         this.proxy.ShowPageRemote(page, global.get_current_time());
     }
 });

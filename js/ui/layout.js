@@ -393,6 +393,9 @@ const LayoutManager = new Lang.Class({
                 if (Main.socialBar.proxy.Visible) {
                     Main.socialBar.proxy.toggleRemote(global.get_current_time());
                 }
+                if (Main.appStore.visible) {
+                    Main.appStore.toggle(false);
+                }
 
                 Main.overview.showApps();
             }
