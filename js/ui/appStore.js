@@ -42,7 +42,7 @@ const AppStore = new Lang.Class({
     _onOverviewShowing: function() {
         // Make the AppStore close (slide in) when the overview is shown
         if (this.proxy.Visible) {
-            this.toggle(false);
+            this._doToggle(false);
         }
     },
 
