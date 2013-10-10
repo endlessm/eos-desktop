@@ -81,40 +81,33 @@ const Indicator = new Lang.Class({
         return _("Estimating…");
     },
 
-    _syncStatusLabel: function() {
-        this._proxy.GetPrimaryDeviceRemote(Lang.bind(this, function(result, error) {
-            if (error) {
-                this._item.actor.hide();
-                return;
-            }
+    _sync: function() {
+        function isBattery(result) {
+            if (!result)
+                return false;
 
             let [device] = result;
-            let [device_id, device_type] = device;
-            if (device_type == UPower.DeviceKind.BATTERY) {
+            let [, deviceType] = device;
+            return (deviceType == UPower.DeviceKind.BATTERY);
+        }
+
+        this._proxy.GetPrimaryDeviceRemote(Lang.bind(this, function(result, error) {
+            let hasIcon = false;
+
+            if (isBattery(result)) {
+                let [device] = result;
+                let [,, icon] = device;
+                let gicon = Gio.icon_new_for_string(icon);
+                this.setGIcon(gicon);
                 this._item.label.text = this._statusForDevice(device);
                 this._item.actor.show();
+                hasIcon = true;
             } else {
                 this._item.actor.hide();
             }
+
+            this.mainIcon.visible = hasIcon;
+            this.actor.visible = hasIcon;
         }));
-    },
-
-    _syncIcon: function() {
-        let icon = this._proxy.Icon;
-        let hasIcon = false;
-
-        if (icon) {
-            let gicon = Gio.icon_new_for_string(icon);
-            this.setGIcon(gicon);
-            this._item.icon.gicon = gicon;
-            hasIcon = true;
-        }
-        this.mainIcon.visible = hasIcon;
-        this.actor.visible = hasIcon;
-    },
-
-    _sync: function() {
-        this._syncIcon();
-        this._syncStatusLabel();
     }
 });
