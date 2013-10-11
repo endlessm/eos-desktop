@@ -295,7 +295,7 @@ const LayoutManager = new Lang.Class({
 
         this._inOverview = true;
         this._updateVisibility();
-        this._queueUpdateRegions();
+        this._updateRegions();
     },
 
     hideOverview: function() {
