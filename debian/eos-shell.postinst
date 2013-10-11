@@ -1,6 +1,13 @@
 #!/bin/bash
 
-ln -fs /usr/lib/gdm/Gdm-1.0.typelib /usr/lib/eos-shell/
-ln -fs /usr/lib/gdm/libgdm* /usr/lib/eos-shell/
+# Some Debian/Ubuntu versions do strange things with Gdm library install
+# paths, and symlinks are needed as a result. Singularity does install into
+# the normal place.
+# We must avoid creating these links if they are not valid, as broken symlinks
+# will cause libgirepository to blacklist Gdm-1.0 and not load it at all.
+if [ -e /usr/lib/gdm/Gdm-1.0.typelib ]; then
+  ln -fs /usr/lib/gdm/Gdm-1.0.typelib /usr/lib/eos-shell/
+  ln -fs /usr/lib/gdm/libgdm* /usr/lib/eos-shell/
+fi
 
 exit 0
