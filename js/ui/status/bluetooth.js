@@ -9,7 +9,6 @@ const St = imports.gi.St;
 
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
-const NotificationDaemon = imports.ui.notificationDaemon;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
