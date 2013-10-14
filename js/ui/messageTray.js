@@ -1374,7 +1374,6 @@ const Source = new Lang.Class({
             this.emit('notification-added', notification);
         }
 
-        notification.connect('clicked', Lang.bind(this, this.open));
         notification.connect('destroy', Lang.bind(this,
             function () {
                 let index = this.notifications.indexOf(notification);
