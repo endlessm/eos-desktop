@@ -115,7 +115,7 @@ const ShellInfo = new Lang.Class({
         if (undoCallback) {
             // if there is an Undo button, we expand the notification to make it visible
             this._source.policy.forceExpanded = true;
-            notification.addButton('system-undo', _("Undo"));
+            notification.addAction('system-undo', _("Undo"));
             notification.connect('action-invoked', Lang.bind(this, this._onUndoClicked));
         }
 
