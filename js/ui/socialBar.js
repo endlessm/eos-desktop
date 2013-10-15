@@ -25,7 +25,7 @@ const SocialBar = new Lang.Class({
         this.parent(SocialBarProxy, SOCIAL_BAR_NAME, SOCIAL_BAR_PATH);
     },
 
-    callToggle: function() {
-        this.proxy.toggleRemote(global.get_current_time());
+    callToggle: function(timestamp) {
+        this.proxy.toggleRemote(timestamp);
     }
 });
