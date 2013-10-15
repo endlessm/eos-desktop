@@ -33,16 +33,16 @@ const AppStore = new Lang.Class({
     },
 
     showPage: function(page) {
-        this.activateAfterHide(Lang.bind(this, function() { this._doShowPage(page); }));
+        this.activateAfterHide(Lang.bind(this, function(timestamp) { this._doShowPage(page, timestamp); }));
     },
 
-    callToggle: function(reset) {
-        this.proxy.ToggleRemote(reset, global.get_current_time());
+    callToggle: function(timestamp, reset) {
+        this.proxy.ToggleRemote(reset, timestamp);
     },
 
-    _doShowPage: function(page) {
+    _doShowPage: function(page, timestamp) {
         this.removeHiddenId();
         this.visible = true;
-        this.proxy.ShowPageRemote(page, global.get_current_time());
+        this.proxy.ShowPageRemote(page, timestamp);
     }
 });

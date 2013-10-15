@@ -47,22 +47,24 @@ const SideComponent = new Lang.Class({
     _onOverviewShowing: function() {
         // Make the component close (slide in) when the overview is shown
         if (this._visible) {
-            this._doToggle();
+            this._doToggle(global.get_current_time());
         }
     },
 
-    _doToggle: function(params) {
+    _doToggle: function(timestamp, params) {
         this.removeHiddenId();
         this._visible = !this._visible;
 
-        this.callToggle(params);
+        this.callToggle(timestamp, params);
     },
 
     toggle: function(params) {
-        this.activateAfterHide(Lang.bind(this, function() { this._doToggle(params); }));
+        this.activateAfterHide(Lang.bind(this, function(timestamp) { this._doToggle(timestamp, params); }));
     },
 
     activateAfterHide: function(activateMethod) {
+        let timestamp = global.get_current_time();
+
         // The background menu is shown on the overview screen. However, to
         // show the AppStore, we must first hide the overview. For maximum
         // visual niceness, we also take the extra step to wait until the
@@ -70,12 +72,13 @@ const SideComponent = new Lang.Class({
         // animation of the AppStore.
         if (Main.overview.visible) {
             if (!this._overviewHiddenId) {
-                this._overviewHiddenId =
-                    Main.overview.connect('hidden', activateMethod);
+                this._overviewHiddenId = Main.overview.connect('hidden', function() {
+                    activateMethod(timestamp);
+                });
             }
             Main.overview.hide();
         } else {
-            activateMethod();
+            activateMethod(timestamp);
         }
     },
 
