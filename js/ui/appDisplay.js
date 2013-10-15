@@ -1080,7 +1080,7 @@ const ViewIcon = new Lang.Class({
         let icon = new IconGrid.BaseIcon('', { createIcon: function(iconSize) {
             return new St.Icon({ icon_size: iconSize });
         }});
-        icon.actor.add_style_class_name('dnd-begin');
+        icon.iconButton.add_style_class_name('dnd-begin');
         return icon;
     },
 

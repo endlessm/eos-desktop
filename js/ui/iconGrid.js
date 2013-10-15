@@ -275,22 +275,24 @@ const BaseIcon = new Lang.Class({
         this.actor.set_child(box);
 
         this.iconSize = ICON_SIZE;
-        this._layeredIcon = new St.Widget({ layout_manager: new Clutter.BinLayout(),
-                                            visible: true,
-                                            x_align: Clutter.ActorAlign.CENTER,
-                                            y_align: Clutter.ActorAlign.CENTER,
-                                            x_expand: true,
-                                            y_expand: true });
-        box.add_actor(this._layeredIcon);
 
         buttonParams = Params.parse(buttonParams, { x_align: St.Align.MIDDLE,
                                                     y_align: St.Align.MIDDLE },
                                     true);
-
         this.iconButton = new St.Button(buttonParams);
-        this.iconButton.add_style_class_name('shadow-icon');
+        this.iconButton.add_style_class_name('icon-button');
+        box.add_actor(this.iconButton);
 
-        this._layeredIcon.add_actor(this.iconButton);
+        this._layeredIcon = new St.Widget({ layout_manager: new Clutter.BinLayout(),
+                                            x_expand: true,
+                                            y_expand: true });
+        this.iconButton.add_actor(this._layeredIcon);
+
+        let shadow = new St.Widget({ style_class: 'shadow-icon',
+                                     visible: true,
+                                     x_expand: true,
+                                     y_expand: true });
+        this._layeredIcon.add_actor(shadow);
 
         if (params.showLabel) {
             if (params.editableLabel) {
@@ -353,7 +355,7 @@ const BaseIcon = new Lang.Class({
         childBox.y1 = Math.floor((iconSize - iconNatHeight) / 2);
         childBox.x2 = childBox.x1 + iconNatWidth;
         childBox.y2 = childBox.y1 + iconNatHeight;
-        this._layeredIcon.allocate(childBox, flags);
+        this.iconButton.allocate(childBox, flags);
     },
 
     _getPreferredWidth: function(actor, forHeight, alloc) {
@@ -394,12 +396,13 @@ const BaseIcon = new Lang.Class({
         this.iconSize = size;
         this.icon = this.createIcon(this.iconSize);
 
-        this.iconButton.child = this.icon;
+        this._layeredIcon.add_actor(this.icon);
+        this._layeredIcon.set_child_below_sibling(this.icon, null);
 
         // The icon returned by createIcon() might actually be smaller than
         // the requested icon size (for instance StTextureCache does this
         // for fallback icons), so set the size explicitly.
-        this.iconButton.set_size(this.iconSize, this.iconSize);
+        this._layeredIcon.set_size(this.iconSize, this.iconSize);
     },
 
     _onStyleChanged: function() {
