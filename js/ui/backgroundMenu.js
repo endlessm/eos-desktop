@@ -53,6 +53,14 @@ function addBackgroundMenu(clickAction) {
     actor._backgroundManager = new PopupMenu.PopupMenuManager({ actor: actor });
     actor._backgroundManager.addMenu(actor._backgroundMenu);
 
+    actor.connect('destroy', function() {
+                      actor._backgroundMenu.destroy();
+                      actor._backgroundMenu = null;
+                      actor._backgroundManager = null;
+
+                      cursor.destroy();
+                  });
+
     function openMenu() {
         let [x, y] = global.get_pointer();
         cursor.set_position(x, y);

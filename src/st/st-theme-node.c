@@ -49,7 +49,13 @@ static void
 st_theme_node_init (StThemeNode *node)
 {
   node->transition_duration = -1;
-  _st_theme_node_init_drawing_state (node);
+  node->background_texture = COGL_INVALID_HANDLE;
+  node->background_material = COGL_INVALID_HANDLE;
+  node->background_shadow_material = COGL_INVALID_HANDLE;
+  node->border_slices_texture = COGL_INVALID_HANDLE;
+  node->border_slices_material = COGL_INVALID_HANDLE;
+
+  st_theme_node_paint_state_init (&node->cached_state);
 }
 
 static void
@@ -96,6 +102,8 @@ st_theme_node_dispose (GObject *gobject)
   if (node->theme)
     g_signal_handlers_disconnect_by_func (node->theme,
                                           on_custom_stylesheets_changed, node);
+
+  st_theme_node_paint_state_free (&node->cached_state);
 
   g_clear_object (&node->theme);
 
@@ -152,7 +160,16 @@ st_theme_node_finalize (GObject *object)
   if (node->background_image)
     g_free (node->background_image);
 
-  _st_theme_node_free_drawing_state (node);
+  if (node->background_texture != COGL_INVALID_HANDLE)
+    cogl_handle_unref (node->background_texture);
+  if (node->background_material != COGL_INVALID_HANDLE)
+    cogl_handle_unref (node->background_material);
+  if (node->background_shadow_material != COGL_INVALID_HANDLE)
+    cogl_handle_unref (node->background_shadow_material);
+  if (node->border_slices_texture != COGL_INVALID_HANDLE)
+    cogl_handle_unref (node->border_slices_texture);
+  if (node->border_slices_material != COGL_INVALID_HANDLE)
+    cogl_handle_unref (node->border_slices_material);
 
   G_OBJECT_CLASS (st_theme_node_parent_class)->finalize (object);
 }
@@ -3676,8 +3693,8 @@ st_theme_node_geometry_equal (StThemeNode *node,
 
 /**
  * st_theme_node_paint_equal:
- * @node: a #StThemeNode
- * @other: a different #StThemeNode
+ * @node: (allow-none): a #StThemeNode
+ * @other: (allow-none): a different #StThemeNode
  *
  * Check if st_theme_node_paint() will paint identically for @node as it does
  * for @other. Note that in some cases this function may return %TRUE even
@@ -3694,12 +3711,12 @@ st_theme_node_paint_equal (StThemeNode *node,
   StShadow *shadow, *other_shadow;
   int i;
 
-  g_return_val_if_fail (ST_IS_THEME_NODE (node), FALSE);
+  /* Make sure NULL != NULL */
+  if (node == NULL || other == NULL)
+    return FALSE;
 
   if (node == other)
     return TRUE;
-
-  g_return_val_if_fail (ST_IS_THEME_NODE (other), FALSE);
 
   _st_theme_node_ensure_background (node);
   _st_theme_node_ensure_background (other);
@@ -3768,4 +3785,31 @@ st_theme_node_paint_equal (StThemeNode *node,
     return FALSE;
 
   return TRUE;
+}
+
+gchar *
+st_theme_node_to_string (StThemeNode *node)
+{
+  GString *desc;
+  gchar **it;
+
+  if (!node)
+    return g_strdup ("[null]");
+
+  desc = g_string_new (NULL);
+  g_string_append_printf (desc,
+                          "[%p %s#%s",
+                          node,
+                          g_type_name (node->element_type),
+                          node->element_id);
+
+  for (it = node->element_classes; it && *it; it++)
+    g_string_append_printf (desc, ".%s", *it);
+
+  for (it = node->pseudo_classes; it && *it; it++)
+    g_string_append_printf (desc, ":%s", *it);
+
+  g_string_append_c (desc, ']');
+
+  return g_string_free (desc, FALSE);
 }

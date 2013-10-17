@@ -99,20 +99,19 @@ struct _StThemeNode {
   guint background_image_shadow_computed : 1;
   guint text_shadow_computed : 1;
   guint link_type : 2;
+  guint rendered_once : 1;
+  guint cached_textures : 1;
 
-  /* Graphics state */
-  float alloc_width;
-  float alloc_height;
+  int box_shadow_min_width;
+  int box_shadow_min_height;
 
-  CoglHandle background_shadow_material;
-  CoglHandle box_shadow_material;
-  CoglHandle background_texture;
-  CoglHandle background_material;
   CoglHandle border_slices_texture;
   CoglHandle border_slices_material;
-  CoglHandle prerendered_texture;
-  CoglHandle prerendered_material;
-  CoglHandle corner_material[4];
+  CoglHandle background_texture;
+  CoglHandle background_material;
+  CoglHandle background_shadow_material;
+
+  StThemeNodePaintState cached_state;
 };
 
 struct _StThemeNodeClass {
@@ -122,9 +121,6 @@ struct _StThemeNodeClass {
 
 void _st_theme_node_ensure_background (StThemeNode *node);
 void _st_theme_node_ensure_geometry (StThemeNode *node);
-
-void _st_theme_node_init_drawing_state (StThemeNode *node);
-void _st_theme_node_free_drawing_state (StThemeNode *node);
 
 G_END_DECLS
 

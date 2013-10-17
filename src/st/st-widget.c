@@ -67,6 +67,8 @@ struct _StWidgetPrivate
   gboolean      hover : 1;
   gboolean      can_focus : 1;
 
+  gulong texture_file_changed_id;
+
   AtkObject *accessible;
   AtkRole accessible_role;
   AtkStateSet *local_state_set;
@@ -79,6 +81,9 @@ struct _StWidgetPrivate
    * that we can remove the pseudo classes on them. */
   StWidget *prev_last_child;
   StWidget *prev_first_child;
+
+  StThemeNodePaintState paint_states[2];
+  int current_paint_state : 2;
 };
 
 /**
@@ -270,36 +275,61 @@ st_widget_remove_transition (StWidget *widget)
 }
 
 static void
+next_paint_state (StWidget *widget)
+{
+  widget->priv->current_paint_state = (widget->priv->current_paint_state + 1) % G_N_ELEMENTS (widget->priv->paint_states);
+}
+
+static StThemeNodePaintState *
+current_paint_state (StWidget *widget)
+{
+  return &widget->priv->paint_states[widget->priv->current_paint_state];
+}
+
+static void
 st_widget_texture_cache_changed (StTextureCache *cache,
                                  const char     *uri,
                                  gpointer        user_data)
 {
   StWidget *actor = ST_WIDGET (user_data);
   StThemeNode *node = actor->priv->theme_node;
-  StBorderImage *border_image;
   char *path;
-  gboolean changed;
+  gboolean changed = FALSE;
 
   if (node == NULL)
     return;
 
   path = g_filename_from_uri (uri, NULL, NULL);
 
-  changed = g_strcmp0 (st_theme_node_get_background_image (node), path) == 0;
+  if (g_strcmp0 (st_theme_node_get_background_image (node), path) == 0)
+    {
+      st_theme_node_invalidate_background_image (node);
+      changed = TRUE;
+    }
 
-  border_image = st_theme_node_get_border_image (node);
-  if (!changed && border_image)
-    changed = strcmp (st_border_image_get_filename (border_image), path) == 0;
+  if (g_strcmp0 (st_border_image_get_filename (st_theme_node_get_border_image (node)), path) == 0)
+    {
+      st_theme_node_invalidate_border_image (node);
+      changed = TRUE;
+    }
+
+  if (changed)
+    {
+      /* If we prerender the background / border, we need to update
+       * the paint state. We should probably implement a method to
+       * the theme node to determine this, but for now, just wipe
+       * the entire paint state.
+       *
+       * Use the existing state instead of a new one because it's
+       * assumed the rest of the state will stay the same.
+       */
+      st_theme_node_paint_state_invalidate (current_paint_state (actor));
+
+      if (CLUTTER_ACTOR_IS_MAPPED (CLUTTER_ACTOR (actor)))
+        clutter_actor_queue_redraw (CLUTTER_ACTOR (actor));
+    }
 
   g_free (path);
-
-  if (!changed)
-    return;
-
-  st_theme_node_invalidate_paint_state (node);
-
-  if (CLUTTER_ACTOR_IS_MAPPED (CLUTTER_ACTOR (actor)))
-    clutter_actor_queue_redraw (CLUTTER_ACTOR (actor));
 }
 
 static void
@@ -334,9 +364,11 @@ st_widget_dispose (GObject *gobject)
       priv->label_actor = NULL;
     }
 
-  g_signal_handlers_disconnect_by_func (st_texture_cache_get_default (),
-                                        st_widget_texture_cache_changed,
-                                        actor);
+  if (priv->texture_file_changed_id != 0)
+    {
+      g_signal_handler_disconnect (st_texture_cache_get_default (), priv->texture_file_changed_id);
+      priv->texture_file_changed_id = 0;
+    }
 
   g_clear_object (&priv->prev_first_child);
   g_clear_object (&priv->prev_last_child);
@@ -348,12 +380,16 @@ static void
 st_widget_finalize (GObject *gobject)
 {
   StWidgetPrivate *priv = ST_WIDGET (gobject)->priv;
+  int i;
 
   g_free (priv->style_class);
   g_free (priv->pseudo_class);
   g_object_unref (priv->local_state_set);
   g_free (priv->accessible_name);
   g_free (priv->inline_style);
+
+  for (i = 0; i < G_N_ELEMENTS (priv->paint_states); i++)
+    st_theme_node_paint_state_free (&priv->paint_states[i]);
 
   G_OBJECT_CLASS (st_widget_parent_class)->finalize (gobject);
 }
@@ -441,7 +477,10 @@ st_widget_paint_background (StWidget *widget)
                                     &allocation,
                                     opacity);
   else
-    st_theme_node_paint (theme_node, &allocation, opacity);
+    st_theme_node_paint (theme_node,
+                         current_paint_state (widget),
+                         &allocation,
+                         opacity);
 }
 
 static void
@@ -1503,6 +1542,7 @@ static void
 st_widget_init (StWidget *actor)
 {
   StWidgetPrivate *priv;
+  int i;
 
   actor->priv = priv = ST_WIDGET_GET_PRIVATE (actor);
   priv->is_stylable = TRUE;
@@ -1515,14 +1555,22 @@ st_widget_init (StWidget *actor)
 
   g_signal_connect (actor, "notify::first-child", G_CALLBACK (st_widget_first_child_notify), NULL);
   g_signal_connect (actor, "notify::last-child", G_CALLBACK (st_widget_last_child_notify), NULL);
-  g_signal_connect (st_texture_cache_get_default (), "texture-file-changed",
-                    G_CALLBACK (st_widget_texture_cache_changed), actor);
+  priv->texture_file_changed_id = g_signal_connect (st_texture_cache_get_default (), "texture-file-changed",
+                                                    G_CALLBACK (st_widget_texture_cache_changed), actor);
+
+  for (i = 0; i < G_N_ELEMENTS (priv->paint_states); i++)
+    st_theme_node_paint_state_init (&priv->paint_states[i]);
 }
 
 static void
 on_transition_completed (StThemeNodeTransition *transition,
                          StWidget              *widget)
 {
+  next_paint_state (widget);
+
+  st_theme_node_paint_state_copy (current_paint_state (widget),
+                                  st_theme_node_transition_get_new_paint_state (transition));
+
   st_widget_remove_transition (widget);
 }
 
@@ -1533,6 +1581,7 @@ st_widget_recompute_style (StWidget    *widget,
   StThemeNode *new_theme_node = st_widget_get_theme_node (widget);
   int transition_duration;
   gboolean paint_equal;
+  gboolean animations_enabled;
 
   if (new_theme_node == old_theme_node)
     {
@@ -1546,12 +1595,13 @@ st_widget_recompute_style (StWidget    *widget,
 
   transition_duration = st_theme_node_get_transition_duration (new_theme_node);
 
-  paint_equal = old_theme_node && st_theme_node_paint_equal (old_theme_node, new_theme_node);
+  paint_equal = st_theme_node_paint_equal (old_theme_node, new_theme_node);
 
-  if (paint_equal)
-    st_theme_node_copy_cached_paint_state (new_theme_node, old_theme_node);
+  g_object_get (gtk_settings_get_default (),
+                "gtk-enable-animations", &animations_enabled,
+                NULL);
 
-  if (transition_duration > 0)
+  if (animations_enabled && transition_duration > 0)
     {
       if (widget->priv->transition_animation != NULL)
         {
@@ -1569,6 +1619,7 @@ st_widget_recompute_style (StWidget    *widget,
           widget->priv->transition_animation =
             st_theme_node_transition_new (old_theme_node,
                                           new_theme_node,
+                                          current_paint_state (widget),
                                           transition_duration);
 
           g_signal_connect (widget->priv->transition_animation, "completed",
@@ -1582,6 +1633,14 @@ st_widget_recompute_style (StWidget    *widget,
   else if (widget->priv->transition_animation)
     {
       st_widget_remove_transition (widget);
+    }
+
+  if (!paint_equal)
+    {
+      next_paint_state (widget);
+
+      if (!st_theme_node_paint_equal (new_theme_node, current_paint_state (widget)->node))
+        st_theme_node_paint_state_invalidate (current_paint_state (widget));
     }
 
   g_signal_emit (widget, signals[STYLE_CHANGED], 0);

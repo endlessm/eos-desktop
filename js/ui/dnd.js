@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const St = imports.gi.St;
 const Lang = imports.lang;
@@ -43,9 +44,7 @@ let dragMonitors = [];
 
 function _getEventHandlerActor() {
     if (!eventHandlerActor) {
-        eventHandlerActor = new Clutter.Rectangle();
-        eventHandlerActor.width = 0;
-        eventHandlerActor.height = 0;
+        eventHandlerActor = new Clutter.Rectangle({ width: 0, height: 0 });
         Main.uiGroup.add_actor(eventHandlerActor);
         // We connect to 'event' rather than 'captured-event' because the capturing phase doesn't happen
         // when you've grabbed the pointer.
@@ -86,11 +85,6 @@ const _Draggable = new Lang.Class({
         this.actor.connect('destroy', Lang.bind(this, function() {
             this._actorDestroyed = true;
 
-            // If the drag actor is destroyed and we were going to fix
-            // up its hover state, fix up the parent hover state instead
-            if (this.actor == this._firstLeaveActor)
-                this._firstLeaveActor = this._dragOrigParent;
-
             if (this._dragInProgress && this._dragCancellable)
                 this._cancelDrag(global.get_current_time());
             this.disconnectAll();
@@ -105,12 +99,6 @@ const _Draggable = new Lang.Class({
         this._dragInProgress = false; // The drag has been started, and has not been dropped or cancelled yet.
         this._animationInProgress = false; // The drag is over and the item is in the process of animating to its original position (snapping back or reverting).
         this._dragCancellable = true;
-
-        // During the drag, we eat enter/leave events so that actors don't prelight.
-        // But we remember the actors that we first left/last entered so we can
-        // fix up the hover state after the drag ends.
-        this._firstLeaveActor = null;
-        this._lastEnterActor = null;
 
         this._eventsGrabbed = false;
     },
@@ -149,16 +137,16 @@ const _Draggable = new Lang.Class({
 
     _grabEvents: function() {
         if (!this._eventsGrabbed) {
-            Clutter.grab_pointer(_getEventHandlerActor());
-            Clutter.grab_keyboard(_getEventHandlerActor());
-            this._eventsGrabbed = true;
+            this._eventsGrabbed = Main.pushModal(_getEventHandlerActor());
+            if (this._eventsGrabbed)
+                Clutter.grab_pointer(_getEventHandlerActor());
         }
     },
 
     _ungrabEvents: function() {
         if (this._eventsGrabbed) {
             Clutter.ungrab_pointer();
-            Clutter.ungrab_keyboard();
+            Main.popModal(_getEventHandlerActor());
             this._eventsGrabbed = false;
         }
     },
@@ -197,11 +185,6 @@ const _Draggable = new Lang.Class({
                 this._cancelDrag(event.get_time());
                 return true;
             }
-        } else if (event.type() == Clutter.EventType.LEAVE) {
-            if (this._firstLeaveActor == null)
-                this._firstLeaveActor = event.get_source();
-        } else if (event.type() == Clutter.EventType.ENTER) {
-            this._lastEnterActor = event.get_source();
         }
 
         return false;
@@ -283,19 +266,19 @@ const _Draggable = new Lang.Class({
             this._dragOrigY = this._dragActor.y;
             this._dragOrigScale = this._dragActor.scale_x;
 
-            this._dragActor.reparent(Main.uiGroup);
-            this._dragActor.raise_top();
-            Shell.util_set_hidden_from_pick(this._dragActor, true);
+            // Set the actor's scale such that it will keep the same
+            // transformed size when it's reparented to the uiGroup
+            let [scaledWidth, scaledHeight] = this.actor.get_transformed_size();
+            this._dragActor.set_scale(scaledWidth / this.actor.width,
+                                      scaledHeight / this.actor.height);
 
             let [actorStageX, actorStageY] = this.actor.get_transformed_position();
             this._dragOffsetX = actorStageX - this._dragStartX;
             this._dragOffsetY = actorStageY - this._dragStartY;
 
-            // Set the actor's scale such that it will keep the same
-            // transformed size when it's reparented to the uiGroup
-            let [scaledWidth, scaledHeight] = this.actor.get_transformed_size();
-            this.actor.set_scale(scaledWidth / this.actor.width,
-                                 scaledHeight / this.actor.height);
+            this._dragActor.reparent(Main.uiGroup);
+            this._dragActor.raise_top();
+            Shell.util_set_hidden_from_pick(this._dragActor, true);
         }
 
         this._dragOrigOpacity = this._dragActor.opacity;
@@ -352,60 +335,65 @@ const _Draggable = new Lang.Class({
         return true;
     },
 
+    _updateDragHover : function () {
+        let target = this._dragActor.get_stage().get_actor_at_pos(Clutter.PickMode.ALL,
+                                                                  this._dragX, this._dragY);
+        let dragEvent = {
+            x: this._dragX,
+            y: this._dragY,
+            dragActor: this._dragActor,
+            source: this.actor._delegate,
+            targetActor: target
+        };
+        for (let i = 0; i < dragMonitors.length; i++) {
+            let motionFunc = dragMonitors[i].dragMotion;
+            if (motionFunc) {
+                let result = motionFunc(dragEvent);
+                if (result != DragMotionResult.CONTINUE) {
+                    global.set_cursor(DRAG_CURSOR_MAP[result]);
+                    return false;
+                }
+            }
+        }
+
+        while (target) {
+            if (target._delegate && target._delegate.handleDragOver) {
+                let [r, targX, targY] = target.transform_stage_point(this._dragX, this._dragY);
+                // We currently loop through all parents on drag-over even if one of the children has handled it.
+                // We can check the return value of the function and break the loop if it's true if we don't want
+                // to continue checking the parents.
+                let result = target._delegate.handleDragOver(this.actor._delegate,
+                                                             this._dragActor,
+                                                             targX,
+                                                             targY,
+                                                             0);
+                if (result != DragMotionResult.CONTINUE) {
+                    global.set_cursor(DRAG_CURSOR_MAP[result]);
+                    return false;
+                }
+            }
+            target = target.get_parent();
+        }
+        global.set_cursor(Shell.Cursor.DND_IN_DRAG);
+        return false;
+    },
+
+    _queueUpdateDragHover: function() {
+        if (this._updateHoverId)
+            GLib.source_remove(this._updateHoverId);
+
+        this._updateHoverId = GLib.idle_add(GLib.PRIORITY_DEFAULT,
+                                            Lang.bind(this, this._updateDragHover));
+    },
+
     _updateDragPosition : function (event) {
         let [stageX, stageY] = event.get_coords();
         this._dragX = stageX;
         this._dragY = stageY;
+        this._dragActor.set_position(stageX + this._dragOffsetX,
+                                     stageY + this._dragOffsetY);
 
-        // If we are dragging, update the position
-        if (this._dragActor) {
-            this._dragActor.set_position(stageX + this._dragOffsetX,
-                                         stageY + this._dragOffsetY);
-
-            let target = this._dragActor.get_stage().get_actor_at_pos(Clutter.PickMode.ALL,
-                                                                      stageX, stageY);
-
-            // We call observers only once per motion with the innermost
-            // target actor. If necessary, the observer can walk the
-            // parent itself.
-            let dragEvent = {
-                x: stageX,
-                y: stageY,
-                dragActor: this._dragActor,
-                source: this.actor._delegate,
-                targetActor: target
-            };
-            for (let i = 0; i < dragMonitors.length; i++) {
-                let motionFunc = dragMonitors[i].dragMotion;
-                if (motionFunc) {
-                    let result = motionFunc(dragEvent);
-                    if (result != DragMotionResult.CONTINUE) {
-                        global.set_cursor(DRAG_CURSOR_MAP[result]);
-                        return true;
-                    }
-                }
-            }
-            while (target) {
-                if (target._delegate && target._delegate.handleDragOver) {
-                    let [r, targX, targY] = target.transform_stage_point(stageX, stageY);
-                    // We currently loop through all parents on drag-over even if one of the children has handled it.
-                    // We can check the return value of the function and break the loop if it's true if we don't want
-                    // to continue checking the parents.
-                    let result = target._delegate.handleDragOver(this.actor._delegate,
-                                                                 this._dragActor,
-                                                                 targX,
-                                                                 targY,
-                                                                 event.get_time());
-                    if (result != DragMotionResult.CONTINUE) {
-                        global.set_cursor(DRAG_CURSOR_MAP[result]);
-                        return true;
-                    }
-                }
-                target = target.get_parent();
-            }
-            global.set_cursor(Shell.Cursor.DND_IN_DRAG);
-        }
-
+        this._queueUpdateDragHover();
         return true;
     },
 
@@ -578,36 +566,16 @@ const _Draggable = new Lang.Class({
             this._dragComplete();
     },
 
-    // Actor is an actor we have entered or left during the drag; call
-    // st_widget_sync_hover on all StWidget ancestors
-    _syncHover: function(actor) {
-        while (actor) {
-            let parent = actor.get_parent();
-            if (actor instanceof St.Widget)
-                actor.sync_hover();
-
-            actor = parent;
-        }
-    },
-
     _dragComplete: function() {
         if (!this._actorDestroyed)
             Shell.util_set_hidden_from_pick(this._dragActor, false);
 
         this._ungrabEvents();
+        global.sync_pointer();
 
-        if (this._firstLeaveActor) {
-            this._syncHover(this._firstLeaveActor);
-            this._firstLeaveActor = null;
-        }
-
-        if (this._lastEnterActor) {
-            this._syncHover(this._lastEnterActor);
-            this._lastEnterActor = null;
-        }
-
-        if (this.actor) {
-            this._syncHover(this.actor);
+        if (this._updateHoverId) {
+            GLib.source_remove(this._updateHoverId);
+            this._updateHoverId = 0;
         }
 
         this._dragActor = undefined;
