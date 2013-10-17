@@ -515,7 +515,7 @@ const IconGrid = new Lang.Class({
 
     getHeightForRows: function(nRows) {
         let totalSpacing = Math.max(0, nRows - 1) * this._spacing;
-        return nRows * this._vItemSize + totalSpacing;
+        return Math.max(1, nRows) * this._vItemSize + totalSpacing;
     },
 
     _allocate: function (grid, box, flags) {
