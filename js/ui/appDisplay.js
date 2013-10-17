@@ -53,7 +53,9 @@ const FOLDER_POPUP_ANIMATION_TYPE = 'easeOutQuad';
 const SHOW_IN_APP_STORE_DESKTOP_KEY = 'X-Endless-ShowInAppStore';
 
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
-const EOS_APP_STORE_ID = 'eos-app-store.desktop';
+const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
+const EOS_APP_STORE_ICON = 'eos-app-store';
+
 const ALL_VIEW_ID = '';
 
 const AppSearchProvider = new Lang.Class({
@@ -338,10 +340,22 @@ const EndlessApplicationView = new Lang.Class({
 
         for (let i = 0; i < ids.length; i++) {
             let itemId = ids[i];
-            let [item, ] = this._createItemForId(itemId);
 
-            if (item) {
-                let icon = this._createItemIcon(item);
+            let icon = null;
+
+            if (itemId == EOS_APP_STORE_ID) {
+                this._appStoreIcon = new AppStoreIcon(this);
+                icon = this._appStoreIcon;
+            }
+            else {
+                let [item, ] = this._createItemForId(itemId);
+
+                if (item) {
+                    icon = this._createItemIcon(item);
+                }
+            }
+
+            if (icon) {
                 this.addIcon(icon);
                 icon.actor.connect('key-focus-in',
                                    Lang.bind(this, this._ensureIconVisible));
@@ -836,13 +850,8 @@ const AllView = new Lang.Class({
 
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
-            if (item.get_id() == EOS_APP_STORE_ID) {
-                this._appStoreIcon = new AppStoreIcon(item, this);
-                return this._appStoreIcon;
-            } else {
-                return new AppIcon(item, null, { showMenu: false,
-                                                 parentView: this });
-            }
+            return new AppIcon(item, null, { showMenu: false,
+                                             parentView: this });
         } else {
             return new FolderIcon(item, this);
         }
@@ -1367,15 +1376,27 @@ const AppIcon = new Lang.Class({
     _init : function(app, iconParams, params) {
         params = Params.parse(params, { showMenu: true,
                                         isDraggable: true,
-                                        parentView: null });
+                                        parentView: null,
+                                        labelName: null,
+                                        iconName: null, });
 
         this.app = app;
-        this._name = this.app.get_name();
 
         this._isDeletable = true;
-        let appInfo = app.get_app_info();
-        if (appInfo && appInfo.has_key(SHOW_IN_APP_STORE_DESKTOP_KEY) && !appInfo.get_boolean(SHOW_IN_APP_STORE_DESKTOP_KEY)) {
-            this._isDeletable = false;
+
+        if (this.app) {
+            this._name = this.app.get_name();
+
+            let appInfo = app.get_app_info();
+            if (appInfo &&
+                appInfo.has_key(SHOW_IN_APP_STORE_DESKTOP_KEY) &&
+                !appInfo.get_boolean(SHOW_IN_APP_STORE_DESKTOP_KEY)) {
+                this._isDeletable = false;
+            }
+        }
+        else {
+            this._name = params.labelName;
+            this._iconName = params.iconName;
         }
 
         this._showMenu = params.showMenu;
@@ -1416,16 +1437,22 @@ const AppIcon = new Lang.Class({
         }
 
         this._menuTimeoutId = 0;
-        this._stateChangedId = this.app.connect('notify::state',
-                                                Lang.bind(this,
-                                                          this._onStateChanged));
-        this._onStateChanged();
+
+        if (this.app) {
+            this._stateChangedId = this.app.connect('notify::state',
+                                                    Lang.bind(this,
+                                                              this._onStateChanged));
+            this._onStateChanged();
+        }
+        else {
+            this._stateChangedId = 0;
+        }
     },
 
     _onDestroy: function() {
         this.parent();
 
-        if (this._stateChangedId > 0) {
+        if (this.app && this._stateChangedId > 0) {
             this.app.disconnect(this._stateChangedId);
         }
         this._stateChangedId = 0;
@@ -1433,7 +1460,16 @@ const AppIcon = new Lang.Class({
     },
 
     _createIcon: function(iconSize) {
-        return this.app.create_icon_texture(iconSize);
+        if (this.app) {
+            return this.app.create_icon_texture(iconSize);
+        }
+
+        if (this._iconName) {
+            return new St.Icon({ icon_size: iconSize,
+                                 icon_name: this._iconName });
+        }
+
+        return null;
     },
 
     _removeMenuTimeout: function() {
@@ -1444,6 +1480,7 @@ const AppIcon = new Lang.Class({
     },
 
     _onStateChanged: function() {
+        // onStateChange is connected only when this.app is set
         if (this.app.state != Shell.AppState.STOPPED) {
             this.actor.add_style_class_name('running');
         } else {
@@ -1453,7 +1490,9 @@ const AppIcon = new Lang.Class({
 
     _onLabelUpdate: function(label, newText) {
         try {
-            this.app.create_custom_launcher_with_name(newText);
+            if (this.app) {
+                this.app.create_custom_launcher_with_name(newText);
+            }
             this._name = newText;
             this.customName = true;
         } catch(e) {
@@ -1484,7 +1523,7 @@ const AppIcon = new Lang.Class({
 
         if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
             this._onActivate(Clutter.get_current_event());
-        } else if (button == ButtonConstants.MIDDLE_MOUSE_BUTTON) {
+        } else if (button == ButtonConstants.MIDDLE_MOUSE_BUTTON && this.app) {
             // Last workspace is always empty
             let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
             launchWorkspace.activate(global.get_current_time());
@@ -1504,7 +1543,11 @@ const AppIcon = new Lang.Class({
     },
 
     getId: function() {
-        return this.app.get_id();
+        if (this.app) {
+            return this.app.get_id();
+        }
+
+        return null;
     },
 
     getName: function() {
@@ -1562,6 +1605,10 @@ const AppIcon = new Lang.Class({
     },
 
     _onActivate: function (event) {
+        if (!this.app) {
+            return;
+        }
+
         this.emit('launching');
 
         if (this.app.state == Shell.AppState.RUNNING) {
@@ -1580,6 +1627,10 @@ const AppIcon = new Lang.Class({
     },
 
     shellWorkspaceLaunch : function(params) {
+        if (!this.app) {
+            return;
+        }
+
         params = Params.parse(params, { workspace: -1,
                                         timestamp: 0 });
 
@@ -1601,10 +1652,12 @@ const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
     Extends: AppIcon,
 
-    _init : function(app, parentView) {
-        this.parent(app,
-                    { shadowAbove: false },
-                    { showMenu: false,
+    _init : function(parentView) {
+        this.parent(null, // app
+                    { shadowAbove: false, }, // iconParams
+                    { labelName: _("Add"), // params
+                      iconName: EOS_APP_STORE_ICON,
+                      showMenu: false,
                       isDraggable: false,
                       parentView: parentView });
 
@@ -1652,6 +1705,10 @@ const AppStoreIcon = new Lang.Class({
         let reset = true;
         Main.appStore.toggle(reset);
     },
+
+    getId: function() {
+        return EOS_APP_STORE_ID;
+    }
 
     getDragBeginIcon: function() {
         return this.empty_trash_icon;
