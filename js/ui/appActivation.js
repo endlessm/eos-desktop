@@ -1,6 +1,8 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
@@ -284,3 +286,57 @@ const AppSplashPage = new Lang.Class({
     }
 });
 Signals.addSignalMethods(AppSplashPage.prototype);
+
+const DesktopAppClient = new Lang.Class({
+    Name: 'DesktopAppClient',
+    _init: function() {
+        this._lastDesktopApp = null;
+        this._subscription =
+            Gio.DBus.session.signal_subscribe(null,
+                                             'org.gtk.gio.DesktopAppInfo',
+                                             'Launched',
+                                             '/org/gtk/gio/DesktopAppInfo',
+                                             null, 0,
+                                             Lang.bind(this, this._onLaunched));
+
+        global.display.connect('window-created', Lang.bind(this, this._windowCreated));
+    },
+
+    _onLaunched: function(connection, sender_name, object_path,
+                          interface_name, signal_name,
+                         parameters) {
+        let [desktopIdPath, display, pid, uris, extras] = parameters.deep_unpack();
+
+        let desktopId = GLib.path_get_basename(desktopIdPath.toString());
+        this._lastDesktopApp = Shell.AppSystem.get_default().lookup_app(desktopId);
+    },
+
+    _popLaunchedApp: function() {
+        let retval = this._lastDesktopApp;
+        this._lastDesktopApp = null;
+        return retval;
+    },
+
+    _windowCreated: function(metaDisplay, metaWindow) {
+        // Don't maximize if key to disable default maximize is set
+        if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
+            return;
+        }
+
+        if (!Main.sessionMode.hasOverview) {
+            return;
+        }
+
+        let tracker = Shell.WindowTracker.get_default();
+        let app = tracker.get_window_app(metaWindow);
+        let lastApp = this._popLaunchedApp();
+        if (app != lastApp) {
+            return;
+        }
+
+        if (tracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
+            metaWindow.maximize(Meta.MaximizeFlags.HORIZONTAL |
+                                Meta.MaximizeFlags.VERTICAL);
+        }
+    }
+});

@@ -10,6 +10,7 @@ const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
+const AppActivation = imports.ui.appActivation;
 const AppStore = imports.ui.appStore;
 const Components = imports.ui.components;
 const CtrlAltTab = imports.ui.ctrlAltTab;
@@ -71,6 +72,7 @@ let xdndHandler = null;
 let keyboard = null;
 let layoutManager = null;
 let workspaceMonitor = null;
+let desktopAppClient = null;
 let _startDate;
 let _defaultCssStylesheet = null;
 let _cssStylesheet = null;
@@ -163,6 +165,7 @@ function _initializeUI() {
     componentManager = new Components.ComponentManager();
 
     workspaceMonitor = new WorkspaceMonitor.WorkspaceMonitor();
+    desktopAppClient = new AppActivation.DesktopAppClient();
 
     layoutManager.init();
     overview.init();
@@ -170,7 +173,6 @@ function _initializeUI() {
     global.screen.override_workspace_layout(Meta.ScreenCorner.TOPLEFT,
                                             false, -1, 1);
     global.display.connect('overlay-key', Lang.bind(overview, overview.toggleByKey));
-    global.display.connect('window-created', _windowCreated);
 
     // Provide the bus object for gnome-session to
     // initiate logouts.
@@ -229,23 +231,6 @@ let _checkWorkspacesId = 0;
  * where it can map another window before we remove the workspace.
  */
 const LAST_WINDOW_GRACE_TIME = 1000;
-
-function _windowCreated(metaDisplay, metaWindow) {
-    // Don't maximize if key to disable default maximize is set
-    if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
-        return;
-    }
-
-    if (sessionMode.currentMode == 'initial-setup') {
-        return;
-    }
-
-    let tracker = Shell.WindowTracker.get_default();
-    if (tracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
-        metaWindow.maximize(Meta.MaximizeFlags.HORIZONTAL |
-                            Meta.MaximizeFlags.VERTICAL);
-    }
-}
 
 function _checkWorkspaces() {
     let i;
