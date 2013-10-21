@@ -636,6 +636,14 @@ const Overview = new Lang.Class({
         }
     },
 
+    _checkFirstLaunchId: function() {
+        if (this._firstLaunchId > 0) {
+            let browser = Util.getBrowserApp();
+            browser.disconnect(this._firstLaunchId);
+            this._firstLaunchId = 0;
+        }
+    },
+
     startupState: function() {
         this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
 
@@ -644,6 +652,15 @@ const Overview = new Lang.Class({
         let browser = Util.getBrowserApp();
         if (browser && browser.get_state() != Shell.AppState.RUNNING) {
             browser.activate();
+
+            this._firstLaunchId = browser.connect('windows-changed', function() {
+                let windows = browser.get_windows();
+                let win = windows[0];
+                let maximizeId = win.connect('notify::maximized-horizontally', function(win) { 
+                    win.minimize();
+                    win.disconnect(maximizeId);
+                });
+            });
         }
     },
 
@@ -755,6 +772,7 @@ const Overview = new Lang.Class({
         if (!this._shown)
             return;
 
+        this._checkFirstLaunchId();
         this._animateNotVisible();
 
         this._shown = false;
