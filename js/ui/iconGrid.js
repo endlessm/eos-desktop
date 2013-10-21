@@ -252,7 +252,8 @@ const BaseIcon = new Lang.Class({
         params = Params.parse(params, { createIcon: null,
                                         setSizeManually: false,
                                         showLabel: true,
-                                        editableLabel: false });
+                                        editableLabel: false,
+                                        shadowAbove: false });
         this.actor = new St.Bin({ style_class: 'overview-icon',
                                   x_fill: true,
                                   y_fill: true });
@@ -263,8 +264,7 @@ const BaseIcon = new Lang.Class({
                            Lang.bind(this, this._onDestroy));
 
         this._spacing = 0;
-
-        this._editStartId = 0;
+        this._shadowAbove = params.shadowAbove;
 
         let box = new Shell.GenericContainer();
         box.connect('allocate', Lang.bind(this, this._allocate));
@@ -397,7 +397,9 @@ const BaseIcon = new Lang.Class({
         this.icon = this.createIcon(this.iconSize);
 
         this._layeredIcon.add_actor(this.icon);
-        this._layeredIcon.set_child_below_sibling(this.icon, null);
+        if (this._shadowAbove) {
+            this._layeredIcon.set_child_below_sibling(this.icon, null);
+        }
 
         // The icon returned by createIcon() might actually be smaller than
         // the requested icon size (for instance StTextureCache does this
