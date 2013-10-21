@@ -742,7 +742,7 @@ const GtkNotificationDaemonNotification = new Lang.Class({
         }
 
         this._defaultAction = defaultAction ? defaultAction.unpack() : null;
-        this._defaultActionTarget = defaultActionTarget ? defaultActionTarget.unpack() : null;
+        this._defaultActionTarget = defaultActionTarget;
 
         this.update(title.unpack(), body ? body.unpack() : null, { gicon: gicon });
     },
@@ -760,7 +760,7 @@ const GtkNotificationDaemonNotification = new Lang.Class({
 
     _onButtonClicked: function(button) {
         let { "action": action, "action-target": actionTarget } = button;
-        this._activateAction(action, actionTarget);
+        this._activateAction(action.unpack(), actionTarget);
     },
 
     _onClicked: function() {
