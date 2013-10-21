@@ -1114,11 +1114,14 @@ StScrollBar StButton#vhandle:active {
     background-size: 64px;
 }
 
-.app-well-app .icon-button.dnd-begin .shadow-icon {
-    background: none;
+.dnd.app-folder .icon-button .shadow-icon,
+.app-well-app.app-folder .icon-button .shadow-icon {
+    background-image: url("folder-shadow-normal.png");
+    background-size: 64px;
 }
 
-.app-well-app.app-folder .icon-button .shadow-icon {
+.app-well-app .icon-button.dnd-begin .shadow-icon,
+.app-well-app.app-folder .icon-button.dnd-begin .shadow-icon {
     background: none;
 }
 

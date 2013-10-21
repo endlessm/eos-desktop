@@ -60,6 +60,7 @@ dist_theme_DATA =				\
 	theme/filter-selected-ltr.svg		\
 	theme/filter-selected-rtl.svg		\
 	theme/folder-shadow-hover.png		\
+	theme/folder-shadow-normal.png		\
 	theme/folder-shadow-pressed.png		\
 	theme/gnome-shell.css			\
 	theme/google-logo-symbolic.svg		\
