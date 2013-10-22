@@ -1081,8 +1081,8 @@ const ViewIcon = new Lang.Class({
     },
 
     getDragActor: function() {
-        let iconParams = { 'createIcon': Lang.bind(this, this._createIcon),
-                           'showLabel': (this.icon.label != null) };
+        let iconParams = { createIcon: Lang.bind(this, this._createIcon),
+                           showLabel: (this.icon.label != null) };
         let icon = new IconGrid.BaseIcon(this.getName(), iconParams);
         icon.actor.add_style_class_name('dnd');
         return icon.actor;
@@ -1273,6 +1273,12 @@ const FolderIcon = new Lang.Class({
         }
 
         return true;
+    },
+
+    getDragActor: function() {
+        let actor = this.parent();
+        actor.add_style_class_name('app-folder');
+        return actor;
     }
 });
 
@@ -1374,12 +1380,10 @@ const AppIcon = new Lang.Class({
 
         this._showMenu = params.showMenu;
 
-        if (!iconParams) {
-            iconParams = {};
-        }
-
-        iconParams['createIcon'] = Lang.bind(this, this._createIcon);
-        iconParams['editableLabel'] = true;
+        iconParams = Params.parse(iconParams, { createIcon: Lang.bind(this, this._createIcon),
+                                                editableLabel: true,
+                                                shadowAbove: true },
+                                  true);
 
         let buttonParams = { button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
 
@@ -1598,7 +1602,8 @@ const AppStoreIcon = new Lang.Class({
     Extends: AppIcon,
 
     _init : function(app, parentView) {
-        this.parent(app, null,
+        this.parent(app,
+                    { shadowAbove: false },
                     { showMenu: false,
                       isDraggable: false,
                       parentView: parentView });
