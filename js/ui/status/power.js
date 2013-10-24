@@ -35,15 +35,17 @@ const UPDeviceState = {
     PENDING_DISCHARGE: 6
 };
 
-const PowerManagerInterface = <interface name="org.gnome.SettingsDaemon.Power">
-<method name="GetDevices">
-    <arg type="a(susdut)" direction="out" />
-</method>
-<method name="GetPrimaryDevice">
-    <arg type="(susdut)" direction="out" />
-</method>
-<property name="Icon" type="s" access="read" />
-</interface>;
+const PowerManagerInterface = '<node> \
+<interface name="org.gnome.SettingsDaemon.Power"> \
+<method name="GetDevices"> \
+    <arg type="a(susdut)" direction="out" /> \
+</method> \
+<method name="GetPrimaryDevice"> \
+    <arg type="(susdut)" direction="out" /> \
+</method> \
+<property name="Icon" type="s" access="read" /> \
+</interface> \
+</node>';
 
 const PowerManagerProxy = Gio.DBusProxy.makeProxyWrapper(PowerManagerInterface);
 

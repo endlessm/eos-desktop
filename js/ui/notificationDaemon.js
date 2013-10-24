@@ -19,51 +19,55 @@ const Util = imports.misc.util;
 let nextNotificationId = 1;
 
 // Should really be defined in Gio.js
-const BusIface = <interface name="org.freedesktop.DBus">
-<method name="GetConnectionUnixProcessID">
-    <arg type="s" direction="in" />
-    <arg type="u" direction="out" />
-</method>
-</interface>;
+const BusIface = '<node> \
+<interface name="org.freedesktop.DBus"> \
+<method name="GetConnectionUnixProcessID"> \
+    <arg type="s" direction="in" /> \
+    <arg type="u" direction="out" /> \
+</method> \
+</interface> \
+</node>';
 
 var BusProxy = Gio.DBusProxy.makeProxyWrapper(BusIface);
 function Bus() {
     return new BusProxy(Gio.DBus.session, 'org.freedesktop.DBus', '/org/freedesktop/DBus');
 }
 
-const NotificationDaemonIface = <interface name="org.freedesktop.Notifications">
-<method name="Notify">
-    <arg type="s" direction="in"/>
-    <arg type="u" direction="in"/>
-    <arg type="s" direction="in"/>
-    <arg type="s" direction="in"/>
-    <arg type="s" direction="in"/>
-    <arg type="as" direction="in"/>
-    <arg type="a{sv}" direction="in"/>
-    <arg type="i" direction="in"/>
-    <arg type="u" direction="out"/>
-</method>
-<method name="CloseNotification">
-    <arg type="u" direction="in"/>
-</method>
-<method name="GetCapabilities">
-    <arg type="as" direction="out"/>
-</method>
-<method name="GetServerInformation">
-    <arg type="s" direction="out"/>
-    <arg type="s" direction="out"/>
-    <arg type="s" direction="out"/>
-    <arg type="s" direction="out"/>
-</method>
-<signal name="NotificationClosed">
-    <arg type="u"/>
-    <arg type="u"/>
-</signal>
-<signal name="ActionInvoked">
-    <arg type="u"/>
-    <arg type="s"/>
-</signal>
-</interface>;
+const NotificationDaemonIface = '<node> \
+<interface name="org.freedesktop.Notifications"> \
+<method name="Notify"> \
+    <arg type="s" direction="in"/> \
+    <arg type="u" direction="in"/> \
+    <arg type="s" direction="in"/> \
+    <arg type="s" direction="in"/> \
+    <arg type="s" direction="in"/> \
+    <arg type="as" direction="in"/> \
+    <arg type="a{sv}" direction="in"/> \
+    <arg type="i" direction="in"/> \
+    <arg type="u" direction="out"/> \
+</method> \
+<method name="CloseNotification"> \
+    <arg type="u" direction="in"/> \
+</method> \
+<method name="GetCapabilities"> \
+    <arg type="as" direction="out"/> \
+</method> \
+<method name="GetServerInformation"> \
+    <arg type="s" direction="out"/> \
+    <arg type="s" direction="out"/> \
+    <arg type="s" direction="out"/> \
+    <arg type="s" direction="out"/> \
+</method> \
+<signal name="NotificationClosed"> \
+    <arg type="u"/> \
+    <arg type="u"/> \
+</signal> \
+<signal name="ActionInvoked"> \
+    <arg type="u"/> \
+    <arg type="s"/> \
+</signal> \
+</interface> \
+</node>';
 
 const NotificationClosedReason = {
     EXPIRED: 1,

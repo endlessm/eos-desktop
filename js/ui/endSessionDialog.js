@@ -48,20 +48,22 @@ const SEPARATE_POWER_OFF_LOG_OUT_KEY = 'separate-power-off-log-out';
 
 const SHARED_ACCOUNT_MESSAGE = _("Remember that shared accounts are not protected by a password, so make sure to delete any files that you want to keep private.");
 
-const EndSessionDialogIface = <interface name="org.gnome.SessionManager.EndSessionDialog">
-<method name="Open">
-    <arg type="u" direction="in" />
-    <arg type="u" direction="in" />
-    <arg type="u" direction="in" />
-    <arg type="ao" direction="in" />
-</method>
-<method name="Close" />
-<signal name="ConfirmedLogout" />
-<signal name="ConfirmedReboot" />
-<signal name="ConfirmedShutdown" />
-<signal name="Canceled" />
-<signal name="Closed" />
-</interface>;
+const EndSessionDialogIface = '<node> \
+<interface name="org.gnome.SessionManager.EndSessionDialog"> \
+<method name="Open"> \
+    <arg type="u" direction="in" /> \
+    <arg type="u" direction="in" /> \
+    <arg type="u" direction="in" /> \
+    <arg type="ao" direction="in" /> \
+</method> \
+<method name="Close" /> \
+<signal name="ConfirmedLogout" /> \
+<signal name="ConfirmedReboot" /> \
+<signal name="ConfirmedShutdown" /> \
+<signal name="Canceled" /> \
+<signal name="Closed" /> \
+</interface> \
+</node>';
 
 function personalizeMessage (user, message) {
     if (user == "shared") {
