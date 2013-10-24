@@ -88,7 +88,8 @@ const _modes = {
         isPrimary: true,
         unlockDialog: imports.ui.unlockDialog.UnlockDialog,
         components: ['networkAgent', 'polkitAgent', 'telepathyClient',
-                     'keyring', 'recorder', 'autorunManager', 'automountManager'],
+                     'keyring', 'recorder', 'autorunManager', 'automountManager',
+                     'updaterManager'],
         panel: {
             left: ['userMenu', 'panelSeparator', 'appIcons'],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
