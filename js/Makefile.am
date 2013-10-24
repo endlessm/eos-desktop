@@ -122,4 +122,5 @@ nobase_dist_js_DATA = 	\
 	ui/components/recorder.js		\
 	ui/components/telepathyClient.js	\
 	ui/components/keyring.js		\
+	ui/components/updaterManager.js		\
 	$(NULL)
