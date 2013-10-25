@@ -1376,27 +1376,17 @@ const AppIcon = new Lang.Class({
     _init : function(app, iconParams, params) {
         params = Params.parse(params, { showMenu: true,
                                         isDraggable: true,
-                                        parentView: null,
-                                        labelName: null,
-                                        iconName: null, });
+                                        parentView: null });
 
         this.app = app;
+        this._name = this.app.get_name();
 
         this._isDeletable = true;
-
-        if (this.app) {
-            this._name = this.app.get_name();
-
-            let appInfo = app.get_app_info();
-            if (appInfo &&
-                appInfo.has_key(SHOW_IN_APP_STORE_DESKTOP_KEY) &&
-                !appInfo.get_boolean(SHOW_IN_APP_STORE_DESKTOP_KEY)) {
-                this._isDeletable = false;
-            }
-        }
-        else {
-            this._name = params.labelName;
-            this._iconName = params.iconName;
+        let appInfo = app.get_app_info();
+        if (appInfo &&
+            appInfo.has_key(SHOW_IN_APP_STORE_DESKTOP_KEY) &&
+            !appInfo.get_boolean(SHOW_IN_APP_STORE_DESKTOP_KEY)) {
+            this._isDeletable = false;
         }
 
         this._showMenu = params.showMenu;
@@ -1437,22 +1427,16 @@ const AppIcon = new Lang.Class({
         }
 
         this._menuTimeoutId = 0;
-
-        if (this.app) {
-            this._stateChangedId = this.app.connect('notify::state',
-                                                    Lang.bind(this,
-                                                              this._onStateChanged));
-            this._onStateChanged();
-        }
-        else {
-            this._stateChangedId = 0;
-        }
+        this._stateChangedId = this.app.connect('notify::state',
+                                                Lang.bind(this,
+                                                          this._onStateChanged));
+        this._onStateChanged();
     },
 
     _onDestroy: function() {
         this.parent();
 
-        if (this.app && this._stateChangedId > 0) {
+        if (this._stateChangedId > 0) {
             this.app.disconnect(this._stateChangedId);
         }
         this._stateChangedId = 0;
@@ -1460,16 +1444,7 @@ const AppIcon = new Lang.Class({
     },
 
     _createIcon: function(iconSize) {
-        if (this.app) {
-            return this.app.create_icon_texture(iconSize);
-        }
-
-        if (this._iconName) {
-            return new St.Icon({ icon_size: iconSize,
-                                 icon_name: this._iconName });
-        }
-
-        return null;
+        return this.app.create_icon_texture(iconSize);
     },
 
     _removeMenuTimeout: function() {
@@ -1480,7 +1455,6 @@ const AppIcon = new Lang.Class({
     },
 
     _onStateChanged: function() {
-        // onStateChange is connected only when this.app is set
         if (this.app.state != Shell.AppState.STOPPED) {
             this.actor.add_style_class_name('running');
         } else {
@@ -1490,9 +1464,7 @@ const AppIcon = new Lang.Class({
 
     _onLabelUpdate: function(label, newText) {
         try {
-            if (this.app) {
-                this.app.create_custom_launcher_with_name(newText);
-            }
+            this.app.create_custom_launcher_with_name(newText);
             this._name = newText;
             this.customName = true;
         } catch(e) {
@@ -1523,7 +1495,7 @@ const AppIcon = new Lang.Class({
 
         if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
             this._onActivate(Clutter.get_current_event());
-        } else if (button == ButtonConstants.MIDDLE_MOUSE_BUTTON && this.app) {
+        } else if (button == ButtonConstants.MIDDLE_MOUSE_BUTTON) {
             // Last workspace is always empty
             let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
             launchWorkspace.activate(global.get_current_time());
@@ -1543,11 +1515,7 @@ const AppIcon = new Lang.Class({
     },
 
     getId: function() {
-        if (this.app) {
-            return this.app.get_id();
-        }
-
-        return null;
+        return this.app.get_id();
     },
 
     getName: function() {
@@ -1605,10 +1573,6 @@ const AppIcon = new Lang.Class({
     },
 
     _onActivate: function (event) {
-        if (!this.app) {
-            return;
-        }
-
         this.emit('launching');
 
         if (this.app.state == Shell.AppState.RUNNING) {
@@ -1627,10 +1591,6 @@ const AppIcon = new Lang.Class({
     },
 
     shellWorkspaceLaunch : function(params) {
-        if (!this.app) {
-            return;
-        }
-
         params = Params.parse(params, { workspace: -1,
                                         timestamp: 0 });
 
@@ -1650,16 +1610,19 @@ Signals.addSignalMethods(AppIcon.prototype);
 
 const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
-    Extends: AppIcon,
+    Extends: ViewIcon,
 
     _init : function(parentView) {
-        this.parent(null, // app
-                    { shadowAbove: false, }, // iconParams
-                    { labelName: _("Add"), // params
-                      iconName: EOS_APP_STORE_ICON,
-                      showMenu: false,
-                      isDraggable: false,
-                      parentView: parentView });
+        let buttonParams = { button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
+        let iconParams = { createIcon: Lang.bind(this, this._createIcon),
+                           showMenu: false,
+                           editableLabel: false,
+                           shadowAbove: false,
+                           isDraggable: false, };
+
+        this._name = _("Add");
+
+        this.parent(parentView, buttonParams, iconParams);
 
         this.actor.add_style_class_name('app-folder');
 
@@ -1681,6 +1644,7 @@ const AppStoreIcon = new Lang.Class({
                                                      { createIcon: this._createFullTrashIcon });
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
+        this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
     },
 
     _createTrashIcon: function(iconSize) {
@@ -1708,7 +1672,12 @@ const AppStoreIcon = new Lang.Class({
 
     getId: function() {
         return EOS_APP_STORE_ID;
-    }
+    },
+
+    _createIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize,
+                             icon_name: EOS_APP_STORE_ICON });
+    },
 
     getDragBeginIcon: function() {
         return this.empty_trash_icon;
