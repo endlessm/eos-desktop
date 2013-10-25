@@ -1028,7 +1028,8 @@ const ViewIcon = new Lang.Class({
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
         this.icon = new IconGrid.BaseIcon(this.getName(), iconParams, buttonParams);
-        if (iconParams['showLabel'] !== false) {
+        if (iconParams['showLabel'] !== false &&
+            iconParams['editableLabel']) {
             this.icon.label.connect('label-edit-update', Lang.bind(this, this._onLabelUpdate));
             this.icon.label.connect('label-edit-cancel', Lang.bind(this, this._onLabelCancel));
         }
@@ -1615,12 +1616,8 @@ const AppStoreIcon = new Lang.Class({
     _init : function(parentView) {
         let buttonParams = { button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
         let iconParams = { createIcon: Lang.bind(this, this._createIcon),
-                           showMenu: false,
                            editableLabel: false,
-                           shadowAbove: false,
-                           isDraggable: false, };
-
-        this._name = _("Add");
+                           shadowAbove: false };
 
         this.parent(parentView, buttonParams, iconParams);
 
@@ -1668,6 +1665,10 @@ const AppStoreIcon = new Lang.Class({
     _onClicked: function(actor, button) {
         let reset = true;
         Main.appStore.toggle(reset);
+    },
+
+    getName: function() {
+        return _("Add");
     },
 
     getId: function() {
