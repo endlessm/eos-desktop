@@ -53,7 +53,9 @@ const FOLDER_POPUP_ANIMATION_TYPE = 'easeOutQuad';
 const SHOW_IN_APP_STORE_DESKTOP_KEY = 'X-Endless-ShowInAppStore';
 
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
-const EOS_APP_STORE_ID = 'eos-app-store.desktop';
+const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
+const EOS_APP_STORE_ICON = 'eos-app-store';
+
 const ALL_VIEW_ID = '';
 
 const AppSearchProvider = new Lang.Class({
@@ -338,10 +340,22 @@ const EndlessApplicationView = new Lang.Class({
 
         for (let i = 0; i < ids.length; i++) {
             let itemId = ids[i];
-            let [item, ] = this._createItemForId(itemId);
 
-            if (item) {
-                let icon = this._createItemIcon(item);
+            let icon = null;
+
+            if (itemId == EOS_APP_STORE_ID) {
+                this._appStoreIcon = new AppStoreIcon(this);
+                icon = this._appStoreIcon;
+            }
+            else {
+                let [item, ] = this._createItemForId(itemId);
+
+                if (item) {
+                    icon = this._createItemIcon(item);
+                }
+            }
+
+            if (icon) {
                 this.addIcon(icon);
                 icon.actor.connect('key-focus-in',
                                    Lang.bind(this, this._ensureIconVisible));
@@ -836,13 +850,8 @@ const AllView = new Lang.Class({
 
     _createItemIcon: function(item) {
         if (item instanceof Shell.App) {
-            if (item.get_id() == EOS_APP_STORE_ID) {
-                this._appStoreIcon = new AppStoreIcon(item, this);
-                return this._appStoreIcon;
-            } else {
-                return new AppIcon(item, null, { showMenu: false,
-                                                 parentView: this });
-            }
+            return new AppIcon(item, null, { showMenu: false,
+                                             parentView: this });
         } else {
             return new FolderIcon(item, this);
         }
@@ -1374,7 +1383,9 @@ const AppIcon = new Lang.Class({
 
         this._isDeletable = true;
         let appInfo = app.get_app_info();
-        if (appInfo && appInfo.has_key(SHOW_IN_APP_STORE_DESKTOP_KEY) && !appInfo.get_boolean(SHOW_IN_APP_STORE_DESKTOP_KEY)) {
+        if (appInfo &&
+            appInfo.has_key(SHOW_IN_APP_STORE_DESKTOP_KEY) &&
+            !appInfo.get_boolean(SHOW_IN_APP_STORE_DESKTOP_KEY)) {
             this._isDeletable = false;
         }
 
@@ -1599,14 +1610,19 @@ Signals.addSignalMethods(AppIcon.prototype);
 
 const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
-    Extends: AppIcon,
+    Extends: ViewIcon,
 
-    _init : function(app, parentView) {
-        this.parent(app,
-                    { shadowAbove: false },
-                    { showMenu: false,
-                      isDraggable: false,
-                      parentView: parentView });
+    _init : function(parentView) {
+        let buttonParams = { button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
+        let iconParams = { createIcon: Lang.bind(this, this._createIcon),
+                           showMenu: false,
+                           editableLabel: false,
+                           shadowAbove: false,
+                           isDraggable: false, };
+
+        this._name = _("Add");
+
+        this.parent(parentView, buttonParams, iconParams);
 
         this.actor.add_style_class_name('app-folder');
 
@@ -1628,6 +1644,7 @@ const AppStoreIcon = new Lang.Class({
                                                      { createIcon: this._createFullTrashIcon });
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
+        this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
     },
 
     _createTrashIcon: function(iconSize) {
@@ -1651,6 +1668,15 @@ const AppStoreIcon = new Lang.Class({
     _onClicked: function(actor, button) {
         let reset = true;
         Main.appStore.toggle(reset);
+    },
+
+    getId: function() {
+        return EOS_APP_STORE_ID;
+    },
+
+    _createIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize,
+                             icon_name: EOS_APP_STORE_ICON });
     },
 
     getDragBeginIcon: function() {
