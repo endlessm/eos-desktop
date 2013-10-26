@@ -4,12 +4,19 @@ const Lang = imports.lang;
 const Signals = imports.signals;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+const Json = imports.gi.Json;
+
+const Config = imports.misc.config;
 
 const SCHEMA_KEY = 'icon-grid-layout';
 const DESKTOP_EXT = '.desktop';
 const DIRECTORY_EXT = '.directory';
 const APP_DIR_NAME = 'applications';
 const FOLDER_DIR_NAME = 'desktop-directories';
+
+const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/EndlessOS/personality-defaults';
+const DEFAULT_CONFIG_NAME_BASE = 'icon-grid';
+const PERSONALITY_FILE = Config.SYSCONFDIR + '/EndlessOS/personality.conf';
 
 const IconGridLayout = new Lang.Class({
     Name: 'IconGridLayout',
@@ -29,6 +36,11 @@ const IconGridLayout = new Lang.Class({
 
         let allIcons = global.settings.get_value(SCHEMA_KEY);
 
+        // Entirely empty indicates that we need to read in the defaults
+        if (allIcons.n_children() == 0) {
+            allIcons = this._getDefaultIconTree();
+        }
+
         for (let i = 0; i < allIcons.n_children(); i++) {
             let context = allIcons.get_child_value(i);
 
@@ -40,6 +52,71 @@ const IconGridLayout = new Lang.Class({
 
             this._iconTree[folder] = context.get_child_value(1).get_strv();
         }
+    },
+
+    _getPersonality: function() {
+        // Check if we have a personality configured
+        let personalityFile = new GLib.KeyFile();
+        let personality = null;
+
+        // Read the file
+        try {
+            personalityFile.load_from_file(PERSONALITY_FILE,
+                                           GLib.KeyFileFlags.NONE);
+            personality = personalityFile.get_string ("Personality",
+                                                      "PersonalityName");
+        } catch (e) {
+            logError(e, 'Personality file \'' + PERSONALITY_FILE +
+                        '\' cannot be read');
+        }
+
+        if (personality === null) {
+            personality = 'default';
+        }
+
+        return personality;
+    },
+
+    _getDefaultIconTree: function() {
+        let personality = this._getPersonality();
+        let defaultsFiles = [];
+
+        // Look for the personality-specific config file
+        let specificPath = DEFAULT_CONFIGS_DIR + '/' +
+            DEFAULT_CONFIG_NAME_BASE + '-' + personality + '.json';
+        defaultsFiles.push(Gio.File.new_for_path(specificPath));
+
+        // Also add a default file for fallback
+        if (personality != 'default') {
+            let fallbackPath = DEFAULT_CONFIGS_DIR + '/' +
+                    DEFAULT_CONFIG_NAME_BASE + '-default.json';
+            defaultsFiles.push(Gio.File.new_for_path(fallbackPath));
+        }
+
+        let iconTree = null;
+        for (let i = 0; i < defaultsFiles.length; i++) {
+            let defaultsFile = defaultsFiles[i];
+            try {
+                let [success, data] = defaultsFile.load_contents(null, null,
+                                                                 null);
+                iconTree = Json.gvariant_deserialize_data(data.toString(), -1,
+                                                          'a{sas}');
+                break;
+            } catch (e) {
+                // Print an error even if we later find the fallback, since
+                // there should always be a personality-specific file
+                logError(e, 'Failed to read icon grid defaults file ' +
+                            defaultsFile.get_path());
+            }
+        }
+
+        if (iconTree === null || iconTree.n_children() == 0) {
+            log('No icon grid defaults found!');
+            // At the minimum, put in something that avoids exceptions later
+            iconTree = GLib.Variant.new('a{sas}', {'': []});
+        }
+
+        return iconTree;
     },
 
     hasIcon: function(id) {
