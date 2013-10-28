@@ -282,6 +282,7 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'keyboard': imports.ui.status.keyboard.InputSourceIndicator,
     'powerMenu': imports.gdm.powerMenu.PowerMenuButton,
     'userMenu': imports.ui.userMenu.UserMenuButton,
+    'chatButton': imports.ui.status.chat.ChatButton,
     'socialBar': imports.ui.status.social.SocialBarButton,
     'panelSeparator': imports.ui.panelSeparator.PanelSeparator
 };
