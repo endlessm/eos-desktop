@@ -562,7 +562,6 @@ StScrollBar StButton#vhandle:active {
 
 .app-icon-button:highlighted {
     background-image: url("mini-icon-active-indicator.png");
-    background-size: 20px 6px;
     background-position: 2px 24px;
 }
 
