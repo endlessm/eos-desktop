@@ -20,7 +20,6 @@ const OverviewControls = imports.ui.overviewControls;
 const Params = imports.misc.params;
 const RemoteSearch = imports.ui.remoteSearch;
 const Search = imports.ui.search;
-const SearchDisplay = imports.ui.searchDisplay;
 const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
@@ -189,7 +188,7 @@ const ViewsDisplay = new Lang.Class({
         this._allView = new AppDisplay.AllView();
 
         this._searchSystem = new Search.SearchSystem();
-        this._searchResults = new SearchDisplay.SearchResults(this._searchSystem);
+        this._searchResults = new Search.SearchResults(this._searchSystem);
 
         // Since the entry isn't inside the results container we install this
         // dummy widget as the last results container child so that we can
