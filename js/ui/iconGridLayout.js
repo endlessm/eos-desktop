@@ -8,6 +8,8 @@ const Json = imports.gi.Json;
 
 const Config = imports.misc.config;
 
+const DESKTOP_GRID_ID = 'desktop';
+
 const SCHEMA_KEY = 'icon-grid-layout';
 const DESKTOP_EXT = '.desktop';
 const DIRECTORY_EXT = '.directory';
@@ -66,8 +68,8 @@ const IconGridLayout = new Lang.Class({
             personality = personalityFile.get_string ("Personality",
                                                       "PersonalityName");
         } catch (e) {
-            logError(e, 'Personality file \'' + PERSONALITY_FILE +
-                        '\' cannot be read');
+            log('Personality file \'' + PERSONALITY_FILE + '\' cannot be read: ' +
+                e.message + '. Will use default personality');
         }
 
         if (personality === null) {
@@ -113,14 +115,14 @@ const IconGridLayout = new Lang.Class({
         if (iconTree === null || iconTree.n_children() == 0) {
             log('No icon grid defaults found!');
             // At the minimum, put in something that avoids exceptions later
-            iconTree = GLib.Variant.new('a{sas}', {'': []});
+            iconTree = GLib.Variant.new('a{sas}', { DESKTOP_GRID_ID: [] });
         }
 
         return iconTree;
     },
 
     hasIcon: function(id) {
-        let toplevelIds = this._iconTree[''];
+        let toplevelIds = this._iconTree[DESKTOP_GRID_ID];
         if (toplevelIds.indexOf(id) != -1) {
             return true;
         }
@@ -138,8 +140,6 @@ const IconGridLayout = new Lang.Class({
     },
 
     getIcons: function(folder) {
-        folder = folder || '';
-
         if (this._iconTree[folder]) {
             return this._iconTree[folder];
         } else {

@@ -56,8 +56,6 @@ const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
 const EOS_APP_STORE_ICON = 'eos-app-store';
 
-const ALL_VIEW_ID = '';
-
 const AppSearchProvider = new Lang.Class({
     Name: 'AppSearchProvider',
 
@@ -866,7 +864,7 @@ const AllView = new Lang.Class({
     },
 
     getViewId: function() {
-        return ALL_VIEW_ID;
+        return IconGridLayout.DESKTOP_GRID_ID;
     },
 
     addFolderPopup: function(popup, source) {
