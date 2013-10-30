@@ -68,8 +68,8 @@ const IconGridLayout = new Lang.Class({
             personality = personalityFile.get_string ("Personality",
                                                       "PersonalityName");
         } catch (e) {
-            logError(e, 'Personality file \'' + PERSONALITY_FILE +
-                        '\' cannot be read');
+            log('Personality file \'' + PERSONALITY_FILE + '\' cannot be read: ' +
+                e.message + '. Will use default personality');
         }
 
         if (personality === null) {
