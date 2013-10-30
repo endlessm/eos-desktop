@@ -180,8 +180,8 @@ libeos_shell_la_SOURCES =		\
 	shell-util.c			\
 	shell-window-tracker.c		\
 	shell-wm.c			\
-	../js/js-resources.c		\
-	../js/js-resources.h		\
+	$(top_builddir)/js/js-resources.c		\
+	$(top_builddir)/js/js-resources.h		\
 	$(NULL)
 
 libeos_shell_la_gir_sources = \
