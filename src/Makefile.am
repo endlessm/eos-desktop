@@ -139,8 +139,7 @@ shell_private_sources = \
 	gactionobserver.h		\
 	gactionobserver.c
 
-libeos_shell_la_SOURCES =		\
-	$(shell_built_sources)		\
+libeos_shell_sources =			\
 	$(shell_public_headers_h)	\
 	$(shell_private_sources)	\
 	shell-app-private.h		\
@@ -180,12 +179,19 @@ libeos_shell_la_SOURCES =		\
 	shell-util.c			\
 	shell-window-tracker.c		\
 	shell-wm.c			\
+	$(NULL)
+
+libeos_shell_built_sources =		\
+	$(shell_built_sources)		\
 	$(top_builddir)/js/js-resources.c		\
 	$(top_builddir)/js/js-resources.h		\
 	$(NULL)
 
+libeos_shell_la_SOURCES = $(libeos_shell_sources)
+nodist_libeos_shell_la_SOURCES = $(libeos_shell_built_sources)
+
 libeos_shell_la_gir_sources = \
-	$(filter-out %-private.h $(shell_private_sources), $(shell_public_headers_h) $(libeos_shell_la_SOURCES))
+	$(filter-out %-private.h $(shell_private_sources), $(shell_public_headers_h) $(libeos_shell_sources) $(libeos_shell_built_sources))
 
 eos_shell_real_SOURCES =		\
 	main.c
