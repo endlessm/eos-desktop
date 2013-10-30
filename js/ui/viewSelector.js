@@ -18,7 +18,6 @@ const LayoutManager = imports.ui.layout;
 const Main = imports.ui.main;
 const OverviewControls = imports.ui.overviewControls;
 const Params = imports.misc.params;
-const RemoteSearch = imports.ui.remoteSearch;
 const Search = imports.ui.search;
 const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
@@ -187,8 +186,7 @@ const ViewsDisplay = new Lang.Class({
         this._appSystem = Shell.AppSystem.get_default();
         this._allView = new AppDisplay.AllView();
 
-        this._searchSystem = new Search.SearchSystem();
-        this._searchResults = new Search.SearchResults(this._searchSystem);
+        this._searchResults = new Search.SearchResults();
 
         // Since the entry isn't inside the results container we install this
         // dummy widget as the last results container child so that we can
@@ -219,20 +217,6 @@ const ViewsDisplay = new Lang.Class({
         // This makes sure that any DnD ops get channeled to the icon grid logic
         // otherwise dropping an item outside of the grid bounds fails
         this.actor._delegate = this;
-
-        // Setup search
-        this._searchSettings = new Gio.Settings({ schema: Search.SEARCH_PROVIDERS_SCHEMA });
-        this._searchSettings.connect('changed::disabled', Lang.bind(this, this._reloadRemoteProviders));
-        this._searchSettings.connect('changed::disable-external', Lang.bind(this, this._reloadRemoteProviders));
-        this._searchSettings.connect('changed::sort-order', Lang.bind(this, this._reloadRemoteProviders));
-
-        // Default search providers
-        this._addSearchProvider(new AppDisplay.AppSearchProvider());
-
-        // Load remote search providers provided by applications
-        RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, this._addSearchProvider));
-
-        IconGridLayout.layout.connect('changed', Lang.bind(this, this._reloadRemoteProviders));
 
         // Add and show all the pages
         this.actor.addPage(this._allView.actor);
@@ -288,7 +272,7 @@ const ViewsDisplay = new Lang.Class({
         this._searchTimeoutId = 0;
 
         let terms = this.entry.getSearchTerms();
-        this._searchSystem.updateSearchResults(terms);
+        this._searchResults.setTerms(terms);
 
         return false;
     },
@@ -386,52 +370,6 @@ const ViewsDisplay = new Lang.Class({
         }
 
         this._queueLocalSearch();
-    },
-
-    _shouldUseSearchProvider: function(provider) {
-        // the disable-external GSetting only affects remote providers
-        if (!provider.isRemoteProvider) {
-            return true;
-        }
-
-        if (this._searchSettings.get_boolean('disable-external')) {
-            return false;
-        }
-
-        let appId = provider.app.get_id();
-        let disable = this._searchSettings.get_strv('disabled');
-        disable = disable.map(function(appId) {
-            let shellApp = this._appSystem.lookup_heuristic_basename(appId);
-            if (shellApp) {
-                return shellApp.get_id();
-            } else {
-                return null;
-            }
-        });
-        return disable.indexOf(appId) == -1;
-    },
-
-    _reloadRemoteProviders: function() {
-        // removeSearchProvider() modifies the provider list we iterate on,
-        // so make a copy first
-        let remoteProviders = this._searchSystem.getRemoteProviders().slice(0);
-
-        remoteProviders.forEach(Lang.bind(this, this._removeSearchProvider));
-        RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, this._addSearchProvider));
-    },
-
-    _addSearchProvider: function(provider) {
-        if (!this._shouldUseSearchProvider(provider)) {
-            return;
-        }
-
-        this._searchSystem.registerProvider(provider);
-        this._searchResults.createProviderDisplay(provider);
-    },
-
-    _removeSearchProvider: function(provider) {
-        this._searchSystem.unregisterProvider(provider);
-        this._searchResults.destroyProviderDisplay(provider);
     },
 
     acceptDrop: function(source, actor, x, y, time) {
