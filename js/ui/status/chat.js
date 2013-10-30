@@ -28,13 +28,40 @@ const ChatButton = new Lang.Class({
 
         let blueDotFile = Gio.File.new_for_path(global.datadir + '/theme/notification-blue_dot.png');
         this._blueDotIcon = new Gio.FileIcon({ file: blueDotFile });
+        this._giconNotify = new Gio.EmblemedIcon({ gicon: this._giconNormal });
+        this._giconNotify.add_emblem(new Gio.Emblem({ icon: this._blueDotIcon }));
 
         this.setGIcon(this._giconNormal);
 
         this.mainIcon.add_style_class_name('system-status-chat-icon');
 
-        // Remove menu entirely to prevent social bar button from closing other menus
-        this.setMenu(null);
+        this.sourceIds = {};
+        Main.messageTray.connect('source-added', Lang.bind(this, this._onSourceAdded));
+        Main.messageTray.connect('source-removed', Lang.bind(this, this._onSourceRemoved));
+    },
+
+    _onSourceAdded: function(messageTray, source) {
+        if (source.isChat) {
+            this.sourceIds[source] = source.connect('count-updated',
+                                                    Lang.bind(this,
+                                                              this._onSourceCountUpdated));
+        }
+    },
+
+    _onSourceRemoved: function(messageTray, source) {
+        if (source.isChat && this.sourceIds[source] != 0) {
+            source.disconnect(this.sourceIds[source]);
+            this.sourceIds[source] = 0;
+        }
+    },
+
+    _onSourceCountUpdated: function(source) {
+        if (source.indicatorCount > 0) {
+            this.setGIcon(this._giconNotify);
+        }
+        else {
+            this.setGIcon(this._giconNormal);
+        }
     },
 
     // overrides default implementation from PanelMenu.Button
