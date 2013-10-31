@@ -32,21 +32,39 @@ const IconGridLayout = new Lang.Class({
         }));
     },
 
-    _updateIconTree: function() {
-        this._iconTree = {};
-
-        let allIcons = global.settings.get_value(SCHEMA_KEY);
-
-        // Entirely empty indicates that we need to read in the defaults
-        if (allIcons.n_children() == 0) {
-            allIcons = this._getDefaultIconTree();
-        }
+    _getIconTreeFromVariant: function(allIcons) {
+        let iconTree = {};
 
         for (let i = 0; i < allIcons.n_children(); i++) {
             let context = allIcons.get_child_value(i);
-            let folder = context.get_child_value(0).get_string();
-            this._iconTree[folder] = context.get_child_value(1).get_strv();
+            let [folder, ] = context.get_child_value(0).get_string();
+            iconTree[folder] = context.get_child_value(1).get_strv();
         }
+
+        return iconTree;
+    },
+
+    _updateIconTree: function() {
+        let allIcons = global.settings.get_value(SCHEMA_KEY);
+        let nIcons = allIcons.n_children();
+        let iconTree = this._getIconTreeFromVariant(allIcons);
+
+        if (nIcons > 0 && !iconTree[DESKTOP_GRID_ID]) {
+            // Missing toplevel desktop ID indicates we are reading a
+            // corrupted setting. Reset grid to defaults, and let the logic
+            // below run after the GSettings notification
+            log('Corrupted icon-grid-layout detected, resetting to defaults');
+            global.settings.reset(SCHEMA_KEY);
+            return;
+        }
+
+        if (nIcons == 0) {
+            // Entirely empty indicates that we need to read in the defaults
+            allIcons = this._getDefaultIcons();
+            iconTree = this._getIconTreeFromVariant(allIcons);
+        }
+
+        this._iconTree = iconTree;
     },
 
     _getPersonality: function() {
@@ -72,7 +90,7 @@ const IconGridLayout = new Lang.Class({
         return personality;
     },
 
-    _getDefaultIconTree: function() {
+    _getDefaultIcons: function() {
         let personality = this._getPersonality();
         let defaultsFiles = [];
 
