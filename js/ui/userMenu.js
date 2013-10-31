@@ -413,17 +413,17 @@ const UserMenuButton = new Lang.Class({
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
 
+        this._systemSettings = new PopupMenu.PopupUserMenuItem(SETTINGS_TEXT,
+                { imagePath: '/theme/settings-symbolic.svg' });
+        this._systemSettings.connect('activate', Lang.bind(this, this._onPreferencesActivate));
+        this.menu.addMenuItem(this._systemSettings);
+
         if (this._haveLauncher(TUTORIAL_LAUNCHER)) {
             item = new PopupMenu.PopupUserMenuItem(TUTORIAL_TEXT,
                                                    { imagePath: '/theme/tutorial-symbolic.svg' });
             item.connect('activate', Lang.bind(this, this._onTutorialActivate));
             this.menu.addMenuItem(item);
         }
-
-        this._systemSettings = new PopupMenu.PopupUserMenuItem(SETTINGS_TEXT,
-                                                               { imagePath: '/theme/settings-symbolic.svg' });
-        this._systemSettings.connect('activate', Lang.bind(this, this._onPreferencesActivate));
-        this.menu.addMenuItem(this._systemSettings);
 
         if (this._haveLauncher(FEEDBACK_LAUNCHER)) {
             item = new PopupMenu.PopupUserMenuItem(FEEDBACK_TEXT,
