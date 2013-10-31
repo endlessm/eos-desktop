@@ -426,7 +426,8 @@ const UserMenuButton = new Lang.Class({
         this.menu.addMenuItem(this._systemSettings);
 
         if (this._haveLauncher(FEEDBACK_LAUNCHER)) {
-            item = new PopupMenu.PopupUserMenuItem(FEEDBACK_TEXT);
+            item = new PopupMenu.PopupUserMenuItem(FEEDBACK_TEXT,
+                                                   { imagePath: '/theme/feedback-symbolic.svg' });
             item.connect('activate', Lang.bind(this, this._onFeedbackActivate));
             this.menu.addMenuItem(item);
         }
