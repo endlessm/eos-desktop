@@ -34,7 +34,6 @@ const IconGridLayout = new Lang.Class({
 
     _updateIconTree: function() {
         this._iconTree = {};
-        this._folderCategories = [];
 
         let allIcons = global.settings.get_value(SCHEMA_KEY);
 
@@ -45,13 +44,7 @@ const IconGridLayout = new Lang.Class({
 
         for (let i = 0; i < allIcons.n_children(); i++) {
             let context = allIcons.get_child_value(i);
-
-            let [folder] = context.get_child_value(0).get_string();
-
-            if (folder) {
-                this._folderCategories.push(folder);
-            }
-
+            let folder = context.get_child_value(0).get_string();
             this._iconTree[folder] = context.get_child_value(1).get_strv();
         }
     },
@@ -122,16 +115,9 @@ const IconGridLayout = new Lang.Class({
     },
 
     hasIcon: function(id) {
-        let toplevelIds = this._iconTree[DESKTOP_GRID_ID];
-        if (toplevelIds.indexOf(id) != -1) {
-            return true;
-        }
-
-        for (let idx in this._folderCategories) {
-            let folder = this._folderCategories[idx];
-            let folderIds = this._iconTree[folder];
-
-            if (folderIds.indexOf(id) != -1) {
+        for (let folderIdx in this._iconTree) {
+            let folder = this._iconTree[folderIdx];
+            if (folder.indexOf(id) != -1) {
                 return true;
             }
         }
