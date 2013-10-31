@@ -1,5 +1,5 @@
 desktopdir=$(datadir)/applications
-desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop
+desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop eos-app-feedback.desktop
 
 sessionsdir=$(datadir)/xsessions
 sessions_DATA = eos-session.desktop

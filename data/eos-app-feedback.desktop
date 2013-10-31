@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=Feedback
+Comment=
+Type=Application
+Exec=chromium-browser chrome-extension://kilnnmemaannmgjifgmiifljomfeaaig/index.html#feedback
+Icon=
+Categories=Utility;
+X-Endless-Splash-Screen=false
+X-Endless-ShowInAppStore=false
+
