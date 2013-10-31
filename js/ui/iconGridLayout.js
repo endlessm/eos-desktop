@@ -129,7 +129,7 @@ const IconGridLayout = new Lang.Class({
         if (this._iconTree[folder]) {
             return this._iconTree[folder];
         } else {
-            return null;
+            return [];
         }
     },
 
