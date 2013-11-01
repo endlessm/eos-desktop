@@ -35,28 +35,52 @@ const ChatButton = new Lang.Class({
 
         this.mainIcon.add_style_class_name('system-status-chat-icon');
 
-        this.sourceIds = {};
+        this._count = 0;
+        this._sources = [];
         Main.messageTray.connect('source-added', Lang.bind(this, this._onSourceAdded));
         Main.messageTray.connect('source-removed', Lang.bind(this, this._onSourceRemoved));
+
+        let sources = Main.messageTray.getSources();
+        sources.forEach(Lang.bind(this, function(source) { this._onSourceAdded(null, source); }));
     },
 
     _onSourceAdded: function(messageTray, source) {
-        if (source.isChat) {
-            this.sourceIds[source] = source.connect('count-updated',
-                                                    Lang.bind(this,
-                                                              this._onSourceCountUpdated));
+        if (source.trayIcon) {
+            return;
         }
+
+        if (source.isTransient) {
+            return;
+        }
+
+        source.connect('count-updated', Lang.bind(this, this._onSourceCountUpdated));
+        this._sources.push(source);
+        this._updateIcon();
     },
 
     _onSourceRemoved: function(messageTray, source) {
-        if (source.isChat && this.sourceIds[source] != 0) {
-            source.disconnect(this.sourceIds[source]);
-            this.sourceIds[source] = 0;
-        }
+        this._sources.splice(this._sources.indexOf(source), 1);
+        this._updateIcon();
     },
 
     _onSourceCountUpdated: function(source) {
-        if (source.indicatorCount > 0) {
+        let count = 0;
+        let hasChat = false;
+
+        this._sources.forEach(Lang.bind(this, function(source) {
+            count += source.indicatorCount;
+            hasChat |= source.isChat;
+        }));
+
+        if (hasChat) {
+            this._count = count;
+        }
+
+        this._updateIcon();
+    },
+
+    _updateIcon: function() {
+        if (this._count > 0) {
             this.setGIcon(this._giconNotify);
         }
         else {
