@@ -54,7 +54,6 @@ const SHOW_IN_APP_STORE_DESKTOP_KEY = 'X-Endless-ShowInAppStore';
 
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
-const EOS_APP_STORE_ICON = 'eos-app-store';
 
 const AppSearchProvider = new Lang.Class({
     Name: 'AppSearchProvider',
@@ -1634,22 +1633,31 @@ const AppStoreIcon = new Lang.Class({
         this.pressed_icon = new IconGrid.BaseIcon(_("Add"),
                                                   { createIcon: Lang.bind(this, this._createIcon) });
         this.empty_trash_icon = new IconGrid.BaseIcon(_("Delete"),
-                                                      { createIcon: this._createTrashIcon });
+                                                      { createIcon: Lang.bind(this, this._createTrashIcon) });
         this.full_trash_icon = new IconGrid.BaseIcon(_("Delete"),
-                                                     { createIcon: this._createFullTrashIcon });
+                                                     { createIcon: Lang.bind(this, this._createFullTrashIcon) });
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
         this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
     },
 
-    _createTrashIcon: function(iconSize) {
+    _createIconFromTheme: function(iconSize, filename) {
+        let gfile = Gio.File.new_for_path(global.datadir + '/theme/' + filename);
+        let gicon = new Gio.FileIcon({ file: gfile });
         return new St.Icon({ icon_size: iconSize,
-                             icon_name: 'eos-app-store-remove'});
+                             gicon: gicon });
+    },
+
+    _createTrashIcon: function(iconSize) {
+        return this._createIconFromTheme(iconSize, 'trash-icon-empty.png');
     },
 
     _createFullTrashIcon: function(iconSize) {
-        return new St.Icon({ icon_size: iconSize,
-                             icon_name: 'eos-app-store-remove-hover'});
+        return this._createIconFromTheme(iconSize, 'trash-icon-full.png');
+    },
+
+    _createIcon: function(iconSize) {
+        return this._createIconFromTheme(iconSize, 'app-store-symbolic.svg');
     },
 
     _onButtonPress: function(actor, event) {
@@ -1671,11 +1679,6 @@ const AppStoreIcon = new Lang.Class({
 
     getId: function() {
         return EOS_APP_STORE_ID;
-    },
-
-    _createIcon: function(iconSize) {
-        return new St.Icon({ icon_size: iconSize,
-                             icon_name: EOS_APP_STORE_ICON });
     },
 
     getDragBeginIcon: function() {
