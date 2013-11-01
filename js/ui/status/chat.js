@@ -23,7 +23,7 @@ const ChatButton = new Lang.Class({
 
         this.actor.add_style_class_name('chat-button');
 
-        let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/chat-button-normal.png');
+        let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/chat-button-symbolic.svg');
         this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
 
         let blueDotFile = Gio.File.new_for_path(global.datadir + '/theme/notification-blue_dot.png');
