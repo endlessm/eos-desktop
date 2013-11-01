@@ -1,5 +1,5 @@
 desktopdir=$(datadir)/applications
-desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop
+desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop eos-app-feedback.desktop
 
 sessionsdir=$(datadir)/xsessions
 sessions_DATA = eos-session.desktop
@@ -100,6 +100,7 @@ dist_theme_DATA =				\
 	theme/trash-pop-up_ok-btn_normal.png	\
 	theme/trash-pop-up_ok-btn_pressed.png	\
 	theme/tutorial-symbolic.svg		\
+	theme/feedback-symbolic.svg		\
 	theme/ws-switch-arrow-up.png		\
 	theme/ws-switch-arrow-down.png
 
