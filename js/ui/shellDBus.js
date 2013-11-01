@@ -449,7 +449,7 @@ const AppStoreService = new Lang.Class({
             return;
         }
 
-        IconGridLayout.layout.appendIcon(id, AppDisplay.ALL_VIEW_ID);
+        IconGridLayout.layout.appendIcon(id, IconGridLayout.DESKTOP_GRID_ID);
     },
 
     _removeItem: function(id, forFolder) {
