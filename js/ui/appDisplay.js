@@ -87,7 +87,7 @@ const AppSearchProvider = new Lang.Class({
         return results.slice(0, maxNumber);
     },
 
-    getInitialResultSet: function(terms) {
+    getInitialResultSet: function(terms, callback, cancellable) {
         let query = terms.join(' ');
         let groups = Gio.DesktopAppInfo.search(query);
         let usage = Shell.AppUsage.get_default();
@@ -101,11 +101,11 @@ const AppSearchProvider = new Lang.Class({
                 return usage.compare('', a, b);
             }));
         });
-        this.searchSystem.setResults(this, results);
+        callback(results);
     },
 
-    getSubsearchResultSet: function(previousResults, terms) {
-        this.getInitialResultSet(terms);
+    getSubsearchResultSet: function(terms, callback, cancellable) {
+        this.getInitialResultSet(terms, callback, cancellable);
     },
 
     activateResult: function(app) {
