@@ -241,7 +241,7 @@ const PinNotification = new Lang.Class({
         this.connect('action-invoked', Lang.bind(this, function(self, action) {
             if (action == 'ok') {
                 if (this._numeric) {
-                    let num = parseInt(this._entry.text);
+                    let num = parseInt(this._entry.text, 10);
                     if (isNaN(num)) {
                         // user reply was empty, or was invalid
                         // cancel the operation
