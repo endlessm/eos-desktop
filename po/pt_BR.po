@@ -1,33 +1,33 @@
-# Portuguese translations for gnome-shell package.
-# Copyright (C) 2013 THE gnome-shell'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the gnome-shell package.
-# Og Maciel <ogmaciel@gnome.org>, 2009.
-# Rodrigo Flores <mail@rodrigoflores.org>, 2009.
-# Felipe Borges <felipe10borges@gmail.com>, 2010.
-# Henrique P. Machado <hpmachado@gnome.org>, 2010, 2011.
-# Jonh Wendell <wendell@bani.com.br>, 2010.
-# Rodrigo Padula <contato@rodrigopadula.com>, 2011.
-# Gabriel F. Vilar <cogumm@gmail.com>, 2011.
-# Adorilson Bezerra <adorilson@gmail.com>, 2011.
-# Djavan Fagundes <djavan@comum.org>, 2012.
-# Enrico Nicoletto <liverig@gmail.com>, 2013.
-# Rafael Ferreira <rafael.f.f1@gmail.com>, 2013.
-#
+# Translations for the Endless OS Shell
+# Copyright (C) 2013 Endless Mobile
+# This file is distributed under the same license as the eos-shell package.
+# 
+# Translators:
+# Adorilson Bezerra <adorilson@gmail.com>, 2011
+# Djavan Fagundes <djavan@comum.org>, 2012
+# Enrico Nicoletto <liverig@gmail.com>, 2013
+# Felipe Borges <felipe10borges@gmail.com>, 2010
+# Gabriel F. Vilar <cogumm@gmail.com>, 2011
+# Henrique P. Machado <hpmachado@gnome.org>, 2010-2011
+# Jonh Wendell <wendell@bani.com.br>, 2010
+# Og Maciel <ogmaciel@gnome.org>, 2009
+# Rafael Ferreira <rafael.f.f1@gmail.com>, 2013
+# rshuler <roddy@endlessm.com>, 2013
+# Rodrigo Flores <mail@rodrigoflores.org>, 2009
+# Rodrigo Padula <contato@rodrigopadula.com>, 2011
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-shell\n"
+"Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-02 22:56-0700\n"
-"PO-Revision-Date: 2013-03-02 21:34-0300\n"
-"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
-"Language: pt_BR\n"
+"PO-Revision-Date: 2013-11-03 05:37+0000\n"
+"Last-Translator: rshuler <roddy@endlessm.com>\n"
+"Language-Team: Portuguese (http://www.transifex.com/projects/p/teams/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.5.4\n"
-"X-Project-Style: gnome\n"
+"Language: pt\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/50-gnome-shell-screenshot.xml.in.h:1
 msgid "Screenshots"
@@ -78,17 +78,13 @@ msgstr "Configurar extensões do GNOME Shell"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:1
 msgid "Enable internal tools useful for developers and testers from Alt-F2"
-msgstr ""
-"Habilitar ferramentas internas úteis para desenvolvedores e testadores a "
-"partir do Alt-F2"
+msgstr "Habilitar ferramentas internas úteis para desenvolvedores e testadores a partir do Alt-F2"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:2
 msgid ""
 "Allows access to internal debugging and monitoring tools using the Alt-F2 "
 "dialog."
-msgstr ""
-"Permite acesso a ferramentas internas de depuração e monitoramento usando o "
-"diálogo Alt-F2."
+msgstr "Permite acesso a ferramentas internas de depuração e monitoramento usando o diálogo Alt-F2."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:3
 msgid "Separate the power off and log out buttons on the user menu"
@@ -119,8 +115,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:8
 msgid ""
 "Number of pixels in one dimension of the square target for the hot corner. "
-"Default is for a single pixel in the very corner. For some virtual machines, "
-"this value may need to be set larger than the default."
+"Default is for a single pixel in the very corner. For some virtual machines,"
+" this value may need to be set larger than the default."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:9
@@ -130,8 +126,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:10
 msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
-"screens, prevents applications from being forced to open maximized, and does "
-"not automatically switch to the app selector when a window is minimized."
+"screens, prevents applications from being forced to open maximized, and does"
+" not automatically switch to the app selector when a window is minimized."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:11
@@ -148,16 +144,11 @@ msgstr "Uuids das extensões para habilitar"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:14
 msgid ""
-"GNOME Shell extensions have a uuid property; this key lists extensions which "
-"should be loaded. Any extension that wants to be loaded needs to be in this "
-"list. You can also manipulate this list with the EnableExtension and "
+"GNOME Shell extensions have a uuid property; this key lists extensions which"
+" should be loaded. Any extension that wants to be loaded needs to be in this"
+" list. You can also manipulate this list with the EnableExtension and "
 "DisableExtension DBus methods on org.gnome.Shell."
-msgstr ""
-"As extensões do GNOME Shell tem uma propriedade uuid; esta chave lista as "
-"extensões que devem ser carregadas. Qualquer extensão que quiser ser "
-"carregada precisa estar nessa lista. Você pode também manipular essa lista "
-"com os métodos EnableExtension e DisableExtensions do DBus em org.gnome."
-"Shell."
+msgstr "As extensões do GNOME Shell tem uma propriedade uuid; esta chave lista as extensões que devem ser carregadas. Qualquer extensão que quiser ser carregada precisa estar nessa lista. Você pode também manipular essa lista com os métodos EnableExtension e DisableExtensions do DBus em org.gnome.Shell."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:15
 msgid "Whether to collect stats about applications usage"
@@ -165,28 +156,21 @@ msgstr "Quando coletar dados sobre uso de aplicativos"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
-"The shell normally monitors active applications in order to present the most "
-"used ones (e.g. in launchers). While this data will be kept private, you may "
-"want to disable this for privacy reasons. Please note that doing so won't "
-"remove already saved data."
-msgstr ""
-"O shell normalmente monitora os aplicativos em execução para apresentar os "
-"mais usados (ex: em lançadores). Embora esses dados sejam mantidos em "
-"segurança, você pode querer desabilitá-los por razões de privacidade. Por "
-"favor, note que ao fazer isso não removerá os dados já salvos."
+"The shell normally monitors active applications in order to present the most"
+" used ones (e.g. in launchers). While this data will be kept private, you "
+"may want to disable this for privacy reasons. Please note that doing so "
+"won't remove already saved data."
+msgstr "O shell normalmente monitora os aplicativos em execução para apresentar os mais usados (ex: em lançadores). Embora esses dados sejam mantidos em segurança, você pode querer desabilitá-los por razões de privacidade. Por favor, note que ao fazer isso não removerá os dados já salvos."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:17
 msgid "List of desktop file IDs for favorite applications"
-msgstr ""
-"Lista dos IDs de arquivo de área de trabalho para os aplicativos favoritos"
+msgstr "Lista dos IDs de arquivo de área de trabalho para os aplicativos favoritos"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:18
 msgid ""
-"The applications corresponding to these identifiers will be displayed in the "
-"favorites area."
-msgstr ""
-"Os aplicativos correspondentes a estes identificadores serão exibidos na "
-"área de favoritos."
+"The applications corresponding to these identifiers will be displayed in the"
+" favorites area."
+msgstr "Os aplicativos correspondentes a estes identificadores serão exibidos na área de favoritos."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:19
 msgid "List of categories that should be displayed as folders"
@@ -196,9 +180,7 @@ msgstr "Lista de categorias que devem ser exibidas como pastas"
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
-msgstr ""
-"Cada nome de categoria nesta lista será representado como uma pasta na visão "
-"do aplicativo, ao invés de ser exibido incorporado à visão principal."
+msgstr "Cada nome de categoria nesta lista será representado como uma pasta na visão do aplicativo, ao invés de ser exibido incorporado à visão principal."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:21
 msgid "History for command (Alt-F2) dialog"
@@ -212,18 +194,13 @@ msgstr "Histórico do diálogo do shell looking glass"
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
-msgstr ""
-"Usado internamente para armazenar a última presença de MI explicitamente "
-"definida pelo usuário. O valor aqui é de uma enumeração "
-"TpConnectionPresenceType."
+msgstr "Usado internamente para armazenar a última presença de MI explicitamente definida pelo usuário. O valor aqui é de uma enumeração TpConnectionPresenceType."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:24
 msgid ""
 "Internally used to store the last session presence status for the user. The "
 "value here is from the GsmPresenceStatus enumeration."
-msgstr ""
-"Usado internamente para armazenar o último status de presença de sessão "
-"definida pelo usuário. O valor aqui é de uma enumeração GsmPresenceStatus."
+msgstr "Usado internamente para armazenar o último status de presença de sessão definida pelo usuário. O valor aqui é de uma enumeração GsmPresenceStatus."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
 msgid "Always show the 'Log out' menuitem in the user menu."
@@ -233,17 +210,12 @@ msgstr "Sempre mostrar o item de menu \"Encerrar sessão\" no menu do usuário."
 msgid ""
 "This key overrides the automatic hiding of the 'Log out' menuitem in single-"
 "user, single-session situations."
-msgstr ""
-"Essa chave sobrescreve a ocultação automática do item de menu \"Encerrar "
-"sessão\" quando houver somente um usuário, em situações de somente uma "
-"sessão."
+msgstr "Essa chave sobrescreve a ocultação automática do item de menu \"Encerrar sessão\" quando houver somente um usuário, em situações de somente uma sessão."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid ""
 "Whether to remember password for mounting encrypted or remote filesystems"
-msgstr ""
-"Se lembra ou não as senhas para montar sistemas de arquivos criptografados "
-"ou remotos"
+msgstr "Se lembra ou não as senhas para montar sistemas de arquivos criptografados ou remotos"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:28
 msgid ""
@@ -251,11 +223,7 @@ msgid ""
 "filesystem is mounted. If the password can be saved for future use a "
 "'Remember Password' checkbox will be present. This key sets the default "
 "state of the checkbox."
-msgstr ""
-"O shell irá pedir uma senha quando um dispositivo criptografado ou um "
-"sistema de arquivo remoto for montado. Caso a senha possa ser salva para uso "
-"posterior, a caixa de seleção 'Lembrar senha' estará presente. Esta chave "
-"ajusta o estado padrão da caixa de seleção."
+msgstr "O shell irá pedir uma senha quando um dispositivo criptografado ou um sistema de arquivo remoto for montado. Caso a senha possa ser salva para uso posterior, a caixa de seleção 'Lembrar senha' estará presente. Esta chave ajusta o estado padrão da caixa de seleção."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:29
 msgid "Layout of application launcher icons in the grid"
@@ -289,10 +257,9 @@ msgstr "Atalho de teclado para abrir a visualização \"Mostrar aplicativos\""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:36
 msgid ""
-"Keybinding to open the \"Show Applications\" view of the Activities Overview."
-msgstr ""
-"Atalho de teclado para abrir a visualização \"Mostrar aplicativos\" da visão "
-"geral de atividades."
+"Keybinding to open the \"Show Applications\" view of the Activities "
+"Overview."
+msgstr "Atalho de teclado para abrir a visualização \"Mostrar aplicativos\" da visão geral de atividades."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Keybinding to toggle the visibility of the message tray"
@@ -334,9 +301,7 @@ msgstr "Taxa de quadros usada para gravar screencasts."
 msgid ""
 "The framerate of the resulting screencast recordered by GNOME Shell's "
 "screencast recorder in frames-per-second."
-msgstr ""
-"A taxa de quadros do screencast resultante do gravador de screencasts do "
-"GNOME Shell em quadros por segundo."
+msgstr "A taxa de quadros do screencast resultante do gravador de screencasts do GNOME Shell em quadros por segundo."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "The gstreamer pipeline used to encode the screencast"
@@ -345,29 +310,18 @@ msgstr "A fila de processamento gstreamer usada para codificar o screencast"
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 #, no-c-format
 msgid ""
-"Sets the GStreamer pipeline used to encode recordings. It follows the syntax "
-"used for gst-launch. The pipeline should have an unconnected sink pad where "
-"the recorded video is recorded. It will normally have a unconnected source "
+"Sets the GStreamer pipeline used to encode recordings. It follows the syntax"
+" used for gst-launch. The pipeline should have an unconnected sink pad where"
+" the recorded video is recorded. It will normally have a unconnected source "
 "pad; output from that pad will be written into the output file. However the "
 "pipeline can also take care of its own output - this might be used to send "
-"the output to an icecast server via shout2send or similar. When unset or set "
-"to an empty value, the default pipeline will be used. This is currently "
+"the output to an icecast server via shout2send or similar. When unset or set"
+" to an empty value, the default pipeline will be used. This is currently "
 "'vp8enc min_quantizer=13 max_quantizer=13 cpu-used=5 deadline=1000000 "
-"threads=%T ! queue ! webmmux' and records to WEBM using the VP8 codec. %T is "
-"used as a placeholder for a guess at the optimal thread count on the system."
-msgstr ""
-"Configura a fila de processamento GStreamer usada para codificar gravações. "
-"Ela segue a sintaxe usada para gst-launch. A fila de processamento deve ter "
-"um sink pad não conectado onde o vídeo gravado é escrito. Ele normalmente "
-"terá um source pad desconectado; saídas deste pad serão gravadas no arquivo "
-"de saída. Porém, a fila de processamento pode também tomar conta de sua "
-"própria saída - isto poderia ser usado para enviar a saída para um servidor "
-"icecast via shout2send ou similar. Quando não definido ou definido para um "
-"valor vazio, o fluxo de processamento padrão será usado. Atualmente é "
-"\"vp8enc min_quantizer=13 max_quantizer=13 cpu-used=5 deadline=1000000 "
-"threads=%T ! queue ! webmmux\" e grava para WEBM usando o codec VP8. %T é "
-"usado como espaço reservado para um convidado na lista para uma ótima "
-"contagem de threads no sistema."
+"threads=%T ! queue ! webmmux' and records to WEBM using the VP8 codec. %T is"
+" used as a placeholder for a guess at the optimal thread count on the "
+"system."
+msgstr "Configura a fila de processamento GStreamer usada para codificar gravações. Ela segue a sintaxe usada para gst-launch. A fila de processamento deve ter um sink pad não conectado onde o vídeo gravado é escrito. Ele normalmente terá um source pad desconectado; saídas deste pad serão gravadas no arquivo de saída. Porém, a fila de processamento pode também tomar conta de sua própria saída - isto poderia ser usado para enviar a saída para um servidor icecast via shout2send ou similar. Quando não definido ou definido para um valor vazio, o fluxo de processamento padrão será usado. Atualmente é \"vp8enc min_quantizer=13 max_quantizer=13 cpu-used=5 deadline=1000000 threads=%T ! queue ! webmmux\" e grava para WEBM usando o codec VP8. %T é usado como espaço reservado para um convidado na lista para uma ótima contagem de threads no sistema."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "File extension used for storing the screencast"
@@ -375,13 +329,10 @@ msgstr "Extensão de arquivo usada para armazenagem do screencast"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid ""
-"The filename for recorded screencasts will be a unique filename based on the "
-"current date, and use this extension. It should be changed when recording to "
-"a different container format."
-msgstr ""
-"O nome de arquivo para screencasts gravados será um nome de arquivo único "
-"baseado na data atual e usará esta extensão. Ele deve ser alterado ao gravar "
-"para um contêiner de formato diferente."
+"The filename for recorded screencasts will be a unique filename based on the"
+" current date, and use this extension. It should be changed when recording "
+"to a different container format."
+msgstr "O nome de arquivo para screencasts gravados será um nome de arquivo único baseado na data atual e usará esta extensão. Ele deve ser alterado ao gravar para um contêiner de formato diferente."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "The application icon mode."
@@ -390,12 +341,9 @@ msgstr "O modo ícone do aplicativo."
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
-"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
-"only' (shows only the application icon) or 'both'."
-msgstr ""
-"Configura como as janelas são mostradas no alternador. As possibilidades "
-"válidas são 'thumbnail-only' (mostra uma miniatura da janela), 'app-icon-"
-"only' (mostra apenas o ícone do aplicativo) ou 'both'."
+"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
+"(shows only the application icon) or 'both'."
+msgstr "Configura como as janelas são mostradas no alternador. As possibilidades válidas são 'thumbnail-only' (mostra uma miniatura da janela), 'app-icon-only' (mostra apenas o ícone do aplicativo) ou 'both'."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Attach modal dialog to the parent window"
@@ -404,8 +352,7 @@ msgstr "Anexar diálogo modal à janela pai"
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
-msgstr ""
-"Esta chave sobrescreve a chave em org.gnome.mutter ao executar GNOME Shell."
+msgstr "Esta chave sobrescreve a chave em org.gnome.mutter ao executar GNOME Shell."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Arrangement of buttons on the titlebar"
@@ -415,14 +362,11 @@ msgstr "Organização dos botões na barra de título"
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
-msgstr ""
-"Esta chave sobrescreve a chave em org.gnome.desktop.wm.preferences ao "
-"executar GNOME Shell."
+msgstr "Esta chave sobrescreve a chave em org.gnome.desktop.wm.preferences ao executar GNOME Shell."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Enable edge tiling when dropping windows on screen edges"
-msgstr ""
-"Habilitar contorno ladrilhado ao arrastar janelas sobre as bordas da tela"
+msgstr "Habilitar contorno ladrilhado ao arrastar janelas sobre as bordas da tela"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:59
 msgid "Workspaces are managed dynamically"
@@ -443,8 +387,7 @@ msgstr "Extensão"
 
 #: ../js/extensionPrefs/main.js:189
 msgid "Select an extension to configure using the combobox above."
-msgstr ""
-"Selecione uma extensão para configurar usando a caixa de seleção abaixo."
+msgstr "Selecione uma extensão para configurar usando a caixa de seleção abaixo."
 
 #: ../js/gdm/loginDialog.js:405
 msgid "Session…"
@@ -551,16 +494,16 @@ msgstr "Excluir"
 
 #: ../js/ui/appDisplay.js:1773
 msgid "Warning"
-msgstr ""
+msgstr "Aviso"
 
 #: ../js/ui/appDisplay.js:1779
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr ""
+msgstr "Para apagar uma pasta que você tem que remover todos os itens dentro do primeiro."
 
 #: ../js/ui/appDisplay.js:1785
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "Estamos tratando de mantener la seguridad de sus datos."
 
 #: ../js/ui/appDisplay.js:1791 ../js/ui/status/bluetooth.js:414
 msgid "OK"
@@ -568,7 +511,7 @@ msgstr "OK"
 
 #: ../js/ui/appDisplay.js:1824
 msgid "Delete?"
-msgstr ""
+msgstr "Excluir?"
 
 #: ../js/ui/appDisplay.js:1934
 msgid "New Window"
@@ -597,22 +540,20 @@ msgid "Change Background…"
 msgstr "Alterar plano de fundo…"
 
 #: ../js/ui/backgroundMenu.js:25
-#, fuzzy
 msgid "Add Application"
-msgstr "Aplicativos"
+msgstr "Adicionar Programas"
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website Link"
-msgstr ""
+msgstr "Adicionar Atalho Para Sites"
 
 #: ../js/ui/backgroundMenu.js:33
-#, fuzzy
 msgid "Add Folder"
-msgstr "Pasta pessoal"
+msgstr "Adicionar Nova Pasta"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
-#.
+#. 
 #: ../js/ui/calendar.js:62
 msgctxt "event list time"
 msgid "All Day"
@@ -637,7 +578,7 @@ msgstr "%l\\u2236%M\\u2009%p"
 #. *
 #. * NOTE: These grid abbreviations are always shown together
 #. * and in order, e.g. "S M T W T F S".
-#.
+#. 
 #: ../js/ui/calendar.js:108
 msgctxt "grid sunday"
 msgid "S"
@@ -684,7 +625,7 @@ msgstr "S"
 #. * NOTE: These list abbreviations are normally not shown together
 #. * so they need to be unique (e.g. Tuesday and Thursday cannot
 #. * both be 'T').
-#.
+#. 
 #: ../js/ui/calendar.js:133
 msgctxt "list sunday"
 msgid "Su"
@@ -731,13 +672,15 @@ msgstr "Sab"
 msgid "Nothing Scheduled"
 msgstr "Nada agendado"
 
-#. Translators: Shown on calendar heading when selected day occurs on current year
+#. Translators: Shown on calendar heading when selected day occurs on current
+#. year
 #: ../js/ui/calendar.js:736
 msgctxt "calendar heading"
 msgid "%A, %B %d"
 msgstr "%A, %d de %B"
 
-#. Translators: Shown on calendar heading when selected day occurs on different year
+#. Translators: Shown on calendar heading when selected day occurs on
+#. different year
 #: ../js/ui/calendar.js:739
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
@@ -827,9 +770,7 @@ msgstr "Autenticação requisitada pela rede sem fio"
 msgid ""
 "Passwords or encryption keys are required to access the wireless network "
 "'%s'."
-msgstr ""
-"Senhas ou chaves criptografadas são necessárias para acessar a rede sem fio "
-"\"%s\"."
+msgstr "Senhas ou chaves criptografadas são necessárias para acessar a rede sem fio \"%s\"."
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
@@ -918,31 +859,36 @@ msgstr "Ativar áudio"
 msgid "Mute"
 msgstr "Sem áudio"
 
-#. Translators: this is the word "Yesterday" followed by a time string. i.e. "Yesterday, 14:30"
+#. Translators: this is the word "Yesterday" followed by a time string. i.e.
+#. "Yesterday, 14:30"
 #: ../js/ui/components/telepathyClient.js:942
 #, no-c-format
 msgid "<b>Yesterday</b>, <b>%H:%M</b>"
 msgstr "<b>Ontem</b>, <b>%H:%M</b>"
 
-#. Translators: this is the week day name followed by a time string. i.e. "Monday, 14:30
+#. Translators: this is the week day name followed by a time string. i.e.
+#. "Monday, 14:30
 #: ../js/ui/components/telepathyClient.js:948
 #, no-c-format
 msgid "<b>%A</b>, <b>%H:%M</b>"
 msgstr "<b>%A</b>, <b>%H:%M</b>"
 
-#. Translators: this is the month name and day number followed by a time string. i.e. "May 25, 14:30"
+#. Translators: this is the month name and day number followed by a time
+#. string. i.e. "May 25, 14:30"
 #: ../js/ui/components/telepathyClient.js:953
 #, no-c-format
 msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
 msgstr "<b>%d</b> de <b>%B</b>, às <b>%H:%M</b>"
 
-#. Translators: this is the month name, day number, year number followed by a time string. i.e. "May 25 2012, 14:30"
+#. Translators: this is the month name, day number, year number followed by a
+#. time string. i.e. "May 25 2012, 14:30"
 #: ../js/ui/components/telepathyClient.js:957
 #, no-c-format
 msgid "<b>%B</b> <b>%d</b> <b>%Y</b>, <b>%H:%M</b> "
 msgstr "<b>%d</b> de <b>%B</b> de <b>%Y</b>, às <b>%H:%M</b> "
 
-#. Translators: this is the other person changing their old IM name to their new
+#. Translators: this is the other person changing their old IM name to their
+#. new
 #. IM name.
 #: ../js/ui/components/telepathyClient.js:985
 #, c-format
@@ -998,7 +944,7 @@ msgstr "Atender"
 #. * the contact's alias and the second one is the
 #. * file name. The string will be something
 #. * like: "Alice is sending you test.ogg"
-#.
+#. 
 #: ../js/ui/components/telepathyClient.js:1171
 #, c-format
 msgid "%s is sending you %s"
@@ -1098,17 +1044,13 @@ msgstr "O certificado foi revogado"
 #: ../js/ui/components/telepathyClient.js:1340
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
-msgstr ""
-"O certificado usa um algoritmo de cifragem inseguro ou é criptograficamente "
-"fraco"
+msgstr "O certificado usa um algoritmo de cifragem inseguro ou é criptograficamente fraco"
 
 #: ../js/ui/components/telepathyClient.js:1342
 msgid ""
-"The length of the server certificate, or the depth of the server certificate "
-"chain, exceed the limits imposed by the cryptography library"
-msgstr ""
-"O comprimento do certificado do servidor, ou a profundidade da cadeia do "
-"certificado excedeu os limites impostos pela biblioteca de criptografia"
+"The length of the server certificate, or the depth of the server certificate"
+" chain, exceed the limits imposed by the cryptography library"
+msgstr "O comprimento do certificado do servidor, ou a profundidade da cadeia do certificado excedeu os limites impostos pela biblioteca de criptografia"
 
 #: ../js/ui/components/telepathyClient.js:1344
 msgid "Internal error"
@@ -1151,14 +1093,14 @@ msgstr "Abrir agenda"
 msgid "Open Clocks"
 msgstr "Abrir relógios"
 
-# O "&" foi inserido como "e" para versão 3.8.0 no gnome-control-center
 #: ../js/ui/dateMenu.js:105
 msgid "Date & Time Settings"
 msgstr "Configurações de data & hora"
 
 #. Translators: This is the date format to use when the calendar popup is
-#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
-#.
+#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29
+#. AM").
+#. 
 #: ../js/ui/dateMenu.js:215
 msgid "%A %B %e, %Y"
 msgstr "%A, %e de %B de %Y"
@@ -1176,8 +1118,7 @@ msgstr "Encerrar sessão"
 
 #: ../js/ui/endSessionDialog.js:67
 msgid "Click Log Out to quit these applications and log out of the system."
-msgstr ""
-"Clique em Encerrar sessão para finalizar estes aplicativos e sair do sistema."
+msgstr "Clique em Encerrar sessão para finalizar estes aplicativos e sair do sistema."
 
 #: ../js/ui/endSessionDialog.js:69
 #, c-format
@@ -1385,7 +1326,7 @@ msgstr "GNOME precisa bloquear a tela"
 #. screenshield. The user is probably very upset at this
 #. point, but any application using global grabs is broken
 #. Just tell him to stop using this app
-#.
+#. 
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
 #: ../js/ui/screenShield.js:167 ../js/ui/screenShield.js:415
@@ -1425,14 +1366,12 @@ msgid "Hide Text"
 msgstr "Ocultar texto"
 
 #: ../js/ui/shellEntry.js:302
-#, fuzzy
 msgid "Type to search Wikipedia"
-msgstr "Digite para pesquisar…"
+msgstr ""
 
 #: ../js/ui/shellEntry.js:304
-#, fuzzy
 msgid "Type to search your computer"
-msgstr "Digite para pesquisar…"
+msgstr ""
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1482,7 +1421,6 @@ msgstr "Teclas de repercussão"
 msgid "Mouse Keys"
 msgstr "Teclas do mouse"
 
-# O nome do item no Painel de Controle do a11y é "acessibilidade"
 #: ../js/ui/status/accessibility.js:72
 msgid "Universal Access Settings"
 msgstr "Configurações de acessibilidade"
@@ -1624,34 +1562,40 @@ msgstr "Volume, rede, bateria"
 msgid "<unknown>"
 msgstr "<desconhecido>"
 
-#. Translators: this indicates that wireless or wwan is disabled by hardware killswitch
+#. Translators: this indicates that wireless or wwan is disabled by hardware
+#. killswitch
 #: ../js/ui/status/network.js:200
 msgid "disabled"
 msgstr "desabilitado"
 
-#. Translators: this is for network devices that are physically present but are not
+#. Translators: this is for network devices that are physically present but
+#. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
 #: ../js/ui/status/network.js:458
 msgid "unmanaged"
 msgstr "não gerenciado"
 
-#. Translators: this is for network connections that require some kind of key or password
+#. Translators: this is for network connections that require some kind of key
+#. or password
 #: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1549
 msgid "authentication required"
 msgstr "autenticação necessária"
 
-#. Translators: this is for devices that require some kind of firmware or kernel
+#. Translators: this is for devices that require some kind of firmware or
+#. kernel
 #. module, which is missing
 #: ../js/ui/status/network.js:479
 msgid "firmware missing"
 msgstr "firmware faltando"
 
-#. Translators: this is for wired network devices that are physically disconnected
+#. Translators: this is for wired network devices that are physically
+#. disconnected
 #: ../js/ui/status/network.js:486
 msgid "cable unplugged"
 msgstr "cabo desconectado"
 
-#. Translators: this is for a network device that cannot be activated (for example it
+#. Translators: this is for a network device that cannot be activated (for
+#. example it
 #. is disabled by rfkill, or it has no coverage
 #: ../js/ui/status/network.js:491
 msgid "unavailable"
@@ -1666,7 +1610,8 @@ msgstr "conexão falhou"
 msgid "More…"
 msgstr "Mais…"
 
-#. TRANSLATORS: this is the indication that a connection for another logged in user is active,
+#. TRANSLATORS: this is the indication that a connection for another logged in
+#. user is active,
 #. and we cannot access its settings (including the name)
 #: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1365
 msgid "Connected (private)"
@@ -1692,7 +1637,8 @@ msgstr "Banda larga - automática"
 msgid "Auto dial-up"
 msgstr "Conexão discada - automática"
 
-#. TRANSLATORS: this the automatic wireless connection name (including the network name)
+#. TRANSLATORS: this the automatic wireless connection name (including the
+#. network name)
 #: ../js/ui/status/network.js:861 ../js/ui/status/network.js:1382
 #, c-format
 msgid "Auto %s"
@@ -1886,8 +1832,7 @@ msgstr "Outros usuários estão com sessão aberta."
 
 #: ../js/ui/userMenu.js:513
 msgid "Shutting down might cause them to lose unsaved work."
-msgstr ""
-"O desligamento pode fazer com que eles percam seus trabalhos não salvos."
+msgstr "O desligamento pode fazer com que eles percam seus trabalhos não salvos."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
 #: ../js/ui/userMenu.js:541
@@ -1959,12 +1904,12 @@ msgstr "Erro ao lançar \"%s\""
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
-msgstr ""
+msgstr "Sem nome"
 
 #: ../src/shell-desktop-dir-info.c:747
 #, c-format
 msgid "Custom definition for %s"
-msgstr ""
+msgstr "Definição personalizada para %s"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."
@@ -1977,261 +1922,3 @@ msgstr "A senha não pode estar em branco"
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
 msgstr "O diálogo de autenticação foi descartado pelo usuário"
-
-#~ msgid "%d new message"
-#~ msgid_plural "%d new messages"
-#~ msgstr[0] "%d nova mensagem"
-#~ msgstr[1] "%d novas mensagens"
-
-#~ msgid "Available"
-#~ msgstr "Disponível"
-
-#~ msgid "Busy"
-#~ msgstr "Ocupado"
-
-#~ msgid "Invisible"
-#~ msgstr "Invisível"
-
-#~ msgid "Away"
-#~ msgstr "Ausente"
-
-#~ msgid "Idle"
-#~ msgstr "Inativo"
-
-#~ msgid "Offline"
-#~ msgstr "Desconectado"
-
-#~ msgid "Notifications"
-#~ msgstr "Notificações"
-
-#~ msgid "Install Updates & Restart"
-#~ msgstr "Instalar atualizações e reiniciar"
-
-#~ msgid "Your chat status will be set to busy"
-#~ msgstr "Seu status no bate-papo ficará como ocupado"
-
-#~ msgid ""
-#~ "Notifications are now disabled, including chat messages. Your online "
-#~ "status has been adjusted to let others know that you might not see their "
-#~ "messages."
-#~ msgstr ""
-#~ "As notificações estão desabilitadas agora, incluindo as do bate-papo. O "
-#~ "seu status foi ajustado para que os outros saibam que você pode não ver "
-#~ "suas mensagens."
-
-#~ msgid "Frequent"
-#~ msgstr "Frequente"
-
-#~ msgid "All"
-#~ msgstr "Todos"
-
-#~ msgid "Quit"
-#~ msgstr "Sair"
-
-#~ msgid "Activities"
-#~ msgstr "Atividades"
-
-#~ msgid "%A, %B %d"
-#~ msgstr "%A, %d de %B"
-
-#~ msgid "%d new notification"
-#~ msgid_plural "%d new notifications"
-#~ msgstr[0] "%d nova notificação"
-#~ msgstr[1] "%d novas notificações"
-
-#~ msgid "Searching…"
-#~ msgstr "Pesquisando…"
-
-#~ msgid "No results."
-#~ msgstr "Nenhum resultado."
-
-#~ msgid "Search"
-#~ msgstr "Pesquisar"
-
-#~ msgid ""
-#~ "Sorry, no wisdom for you today:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Desculpe, sem frases para hoje:\n"
-#~ "%s"
-
-#~ msgid "%s the Oracle says"
-#~ msgstr "%s o oráculo diz"
-
-#~ msgctxt "title"
-#~ msgid "Sign In"
-#~ msgstr "Iniciar sessão"
-
-#~ msgid "tray"
-#~ msgstr "bandeja"
-
-#~ msgid "Clear"
-#~ msgstr "Limpar"
-
-#~ msgid "More..."
-#~ msgstr "Mais..."
-
-#~ msgid "Show full name in the user menu"
-#~ msgstr "Mostrar nome completo no menu do usuário"
-
-#~ msgid "Whether the users full name is shown in the user menu or not."
-#~ msgstr ""
-#~ "Se é mostrado ou não o nome completo de usuários no menu do usuário."
-
-#~ msgctxt "event list time"
-#~ msgid "%H:%M"
-#~ msgstr "%H:%M"
-
-#~ msgctxt "event list time"
-#~ msgid "%l:%M %p"
-#~ msgstr "%l:%M %p"
-
-#~ msgid "United Kingdom"
-#~ msgstr "Reino Unido"
-
-#~ msgid "Default"
-#~ msgstr "Padrão"
-
-#~ msgid "APPLICATIONS"
-#~ msgstr "APLICATIVOS"
-
-#~ msgid "SETTINGS"
-#~ msgstr "CONFIGURAÇÕES"
-
-#~ msgid "Subscription request"
-#~ msgstr "Assinatura necessária"
-
-#~ msgid "Connection error"
-#~ msgstr "Erro de conexão"
-
-#~ msgid "Sent at <b>%X</b> on <b>%A</b>"
-#~ msgstr "Enviado <b>%A</b>, <b>%X</b>"
-
-#~ msgid "Sent on <b>%A</b>, <b>%B %d</b>, %Y"
-#~ msgstr "Enviado <b>%A</b>, <b>%d de %B</b> de %Y"
-
-#~ msgid "Connection to %s failed"
-#~ msgstr "A conexão a %s falhou"
-
-#~ msgid "Reconnect"
-#~ msgstr "Reconectar"
-
-#~ msgid "Browse Files..."
-#~ msgstr "Explorar arquivos..."
-
-#~ msgid "Error browsing device"
-#~ msgstr "Erro ao navegar no dispositivo"
-
-#~ msgid "The requested device cannot be browsed, error is '%s'"
-#~ msgstr "O dispositivo requisitado não pode ser explorado, o erro é \"%s\""
-
-#~ msgid "Wireless"
-#~ msgstr "Sem fio"
-
-#~ msgid "VPN Connections"
-#~ msgstr "Conexões VPN"
-
-#~ msgid "Unavailable"
-#~ msgstr "Indisponível"
-
-#~ msgid "Switch Session"
-#~ msgstr "Alternar sessão"
-
-#~ msgid "System Settings"
-#~ msgstr "Configurações do sistema"
-
-#~ msgid "Your favorite Easter Egg"
-#~ msgstr "Seu Easter Egg favorito"
-
-#~ msgid "disabled OpenSearch providers"
-#~ msgstr "Provedores OpenSearch desabilitados"
-
-#~ msgid "Failed to unmount '%s'"
-#~ msgstr "Erro ao desmontar \"%s\""
-
-#~ msgid "Retry"
-#~ msgstr "Tentar novamente"
-
-#~ msgid "PLACES & DEVICES"
-#~ msgstr "LOCAIS & DISPOSITIVOS"
-
-#~ msgid "Home"
-#~ msgstr "Home"
-
-#~ msgid "%1$s: %2$s"
-#~ msgstr "%1$s: %2$s"
-
-#~ msgid "If true, display date in the clock, in addition to time."
-#~ msgstr "Se verdadeiro, exibe a data no relógio, junto com a hora."
-
-#~ msgid "If true, display seconds in time."
-#~ msgstr "Se verdadeiro, exibe os segundos na hora."
-
-#~ msgid "Show date in clock"
-#~ msgstr "Mostrar data no relógio"
-
-#~ msgid "Show time with seconds"
-#~ msgstr "Mostrar horário com segundos"
-
-#~ msgid "CONTACTS"
-#~ msgstr "CONTATOS"
-
-#~ msgid "%a %b %e, %R:%S"
-#~ msgstr "%a, %e de %b, %R:%S"
-
-#~ msgid "%a %b %e, %R"
-#~ msgstr "%a, %e de %b, %R"
-
-#~ msgid "%a %R:%S"
-#~ msgstr "%a %R:%S"
-
-#~ msgid "%a %R"
-#~ msgstr "%a %R"
-
-#~ msgid "%a %b %e, %l:%M:%S %p"
-#~ msgstr "%a, %e de %b, %H:%M:%S"
-
-#~ msgid "%a %b %e, %l:%M %p"
-#~ msgstr "%a, %e de %b, %l:%M %p"
-
-#~ msgid "%a %l:%M:%S %p"
-#~ msgstr "%a %l:%M:%S %p"
-
-#~ msgid "%a %l:%M %p"
-#~ msgstr "%a %l:%M %p"
-
-#~ msgid "RECENT ITEMS"
-#~ msgstr "DOCUMENTOS RECENTES"
-
-#~ msgid "Connect to..."
-#~ msgstr "Conectar a..."
-
-#~ msgid "Wrong password, please try again"
-#~ msgstr "Senha errada. Por favor, tente novamente"
-
-#~ msgid "%s is online."
-#~ msgstr "%s está conectado."
-
-#~ msgid "%s is offline."
-#~ msgstr "%s está desconectado."
-
-#~ msgid "%s is away."
-#~ msgstr "%s está ausente."
-
-#~ msgid "%s is busy."
-#~ msgstr "%s está ocupado."
-
-#~ msgid "Hidden"
-#~ msgstr "Oculto"
-
-#~ msgid "Power Off..."
-#~ msgstr "Desligar..."
-
-#~ msgid "Online Accounts"
-#~ msgstr "Contas online"
-
-#~ msgid "Lock Screen"
-#~ msgstr "Bloquear a tela"
-
-#~ msgid "Log Out..."
-#~ msgstr "Encerrar sessão..."
