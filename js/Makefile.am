@@ -93,6 +93,7 @@ nobase_dist_js_DATA = 	\
 	ui/shellDBus.js		\
 	ui/sideComponent.js	\
 	ui/status/accessibility.js	\
+	ui/status/chat.js	\
 	ui/status/keyboard.js	\
 	ui/status/lockScreenMenu.js	\
 	ui/status/network.js	\
