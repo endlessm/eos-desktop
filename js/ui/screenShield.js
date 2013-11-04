@@ -295,6 +295,8 @@ const ScreenShield = new Lang.Class({
         this._lockDialogGroup.scale_x = 1;
         this._lockDialogGroup.scale_y = 1;
 
+	     this.actor.raise_top();
+
         if (animateLockDialog) {
             this._lockDialogGroup.opacity = 0;
             Tweener.removeTweens(this._lockDialogGroup);
