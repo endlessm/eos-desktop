@@ -34,8 +34,6 @@ const ChatButton = new Lang.Class({
 
         this.setGIcon(this._giconNormal);
 
-        this.mainIcon.add_style_class_name('system-status-chat-icon');
-
         this._count = 0;
         this._sources = [];
         Main.messageTray.connect('source-added', Lang.bind(this, this._onSourceAdded));
