@@ -583,7 +583,7 @@ const FdoNotificationDaemonSource = new Lang.Class({
     },
 
     _createPolicy: function() {
-        if (this.app) {
+        if (this.app && this.app.get_app_info()) {
             let id = this.app.get_id().replace(/\.desktop$/,'');
             return new MessageTray.NotificationApplicationPolicy(id);
         } else {
