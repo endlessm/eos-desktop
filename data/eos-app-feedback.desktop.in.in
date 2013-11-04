@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
-Name=Feedback
-Comment=
+_Name=Feedback
+_Comment=
 Type=Application
 Exec=chromium-browser chrome-extension://kilnnmemaannmgjifgmiifljomfeaaig/index.html#feedback
 Icon=
