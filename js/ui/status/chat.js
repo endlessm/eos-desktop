@@ -13,7 +13,7 @@ const ChatButton = new Lang.Class({
 
     _init: function() {
         let appSystem = Shell.AppSystem.get_default();
-        this.app = appSystem.lookup_app('empathy.desktop');
+        this.app = appSystem.lookup_app('eos-app-empathy.desktop');
         if (!this.app) {
             log('Unable to find empathy');
             return;
