@@ -157,8 +157,8 @@ function _initializeUI() {
 
     appStore = new AppStore.AppStore();
     socialBar = new SocialBar.SocialBar();
-    panel = new Panel.Panel();
     messageTray = new MessageTray.MessageTray();
+    panel = new Panel.Panel();
     keyboard = new Keyboard.Keyboard();
     notificationDaemon = new NotificationDaemon.NotificationDaemon();
     windowAttentionHandler = new WindowAttentionHandler.WindowAttentionHandler();
