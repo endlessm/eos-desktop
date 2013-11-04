@@ -14,7 +14,7 @@ const Main = imports.ui.main;
 const Params = imports.misc.params;
 const Tweener = imports.ui.tweener;
 
-const PASSWORD_SERVICE_NAME = 'gdm-password';
+const PASSWORD_SERVICE_NAME = 'gdm3';
 const FINGERPRINT_SERVICE_NAME = 'gdm-fingerprint';
 const FADE_ANIMATION_TIME = 0.16;
 const CLONE_FADE_ANIMATION_TIME = 0.25;
