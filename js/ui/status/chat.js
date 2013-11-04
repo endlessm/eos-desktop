@@ -45,11 +45,7 @@ const ChatButton = new Lang.Class({
     },
 
     _onSourceAdded: function(messageTray, source) {
-        if (source.trayIcon) {
-            return;
-        }
-
-        if (source.isTransient) {
+        if (!source.isChat) {
             return;
         }
 
@@ -59,23 +55,21 @@ const ChatButton = new Lang.Class({
     },
 
     _onSourceRemoved: function(messageTray, source) {
-        this._sources.splice(this._sources.indexOf(source), 1);
-        this._updateIcon();
+        let sourceIndex = this._sources.indexOf(source);
+        if (sourceIndex != -1) {
+            this._sources.splice(sourceIndex, 1);
+            this._updateIcon();
+        }
     },
 
     _onSourceCountUpdated: function(source) {
         let count = 0;
-        let hasChat = false;
 
         this._sources.forEach(Lang.bind(this, function(source) {
             count += source.indicatorCount;
-            hasChat |= source.isChat;
         }));
 
-        if (hasChat) {
-            this._count = count;
-        }
-
+        this._count = count;
         this._updateIcon();
     },
 
