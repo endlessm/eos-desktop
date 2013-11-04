@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+_Name=Tutorial
+_Comment=Tutorial video and help
+Type=Application
+Exec=gnome-welcome-tour
+Icon=
+Categories=Utility;
+X-Endless-Splash-Screen=false
+X-Endless-ShowInAppStore=false
+
