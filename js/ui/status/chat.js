@@ -4,6 +4,7 @@ const Gio = imports.gi.Gio;
 const Shell = imports.gi.Shell;
 const Lang = imports.lang;
 
+const AppActivation = imports.ui.appActivation;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 
