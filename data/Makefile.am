@@ -159,6 +159,7 @@ EXTRA_DIST =					\
 	eos-shell.session.in.in			\
 	eos-shell-extension-prefs.desktop.in.in	\
 	eos-app-tutorial.desktop.in.in	\
+	eos-app-feedback.desktop.in.in	\
 	resfix					\
 	$(introspection_DATA)			\
 	$(menu_DATA)				\
@@ -174,6 +175,7 @@ CLEANFILES =					\
 	eos-shell.session			\
 	eos-shell.session.in			\
 	eos-app-tutorial.desktop.in	\
+	eos-app-feedback.desktop.in	\
 	$(desktop_DATA)				\
 	$(greeterdesktop_DATA)			\
 	$(sessions_DATA)			\
