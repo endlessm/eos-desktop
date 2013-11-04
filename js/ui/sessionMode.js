@@ -93,7 +93,7 @@ const _modes = {
         panel: {
             left: ['userMenu', 'panelSeparator', 'appIcons'],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
-                    'network', 'battery', 'socialBar']
+                    'network', 'battery', 'chatButton', 'socialBar']
         }
     }
 };

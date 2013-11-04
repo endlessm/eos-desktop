@@ -46,6 +46,7 @@ dist_theme_DATA =				\
 	theme/calendar-arrow-left.svg		\
 	theme/calendar-arrow-right.svg		\
 	theme/calendar-today.svg		\
+	theme/chat-button-symbolic.svg		\
 	theme/checkbox-focused.svg		\
 	theme/checkbox-off-focused.svg		\
 	theme/checkbox-off.svg			\
@@ -73,6 +74,7 @@ dist_theme_DATA =				\
 	theme/mini-icon-active-indicator.png    \
 	theme/more-results.svg			\
 	theme/noise-texture.png			\
+	theme/notification-blue_dot.png		\
 	theme/panel-button-border.svg		\
 	theme/panel-button-highlight-narrow.svg	\
 	theme/panel-button-highlight-wide.svg	\

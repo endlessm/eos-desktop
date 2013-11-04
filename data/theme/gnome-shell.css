@@ -565,6 +565,10 @@ StScrollBar StButton#vhandle:active {
     background-position: 2px 24px;
 }
 
+.chat-button {
+    background: none;
+}
+
 .browser-icon {
     padding-bottom: 1px;
     icon-size: 28px;
@@ -741,6 +745,10 @@ StScrollBar StButton#vhandle:active {
     padding-right: 6px;
 }
 
+.system-status-chat-icon {
+    icon-size: 30px;
+    padding-right: 6px;
+}
 
 /* Overview */
 .workspace-thumbnails-background {
