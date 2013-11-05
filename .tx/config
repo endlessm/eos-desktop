@@ -2,7 +2,8 @@
 host = https://www.transifex.com
 
 [eos-shell.all]
-file_filter = po/<lang>.po
 source_file = po/eos-shell.pot
 source_lang = en
+trans.es = po/es.po
+trans.pt = po/pt_BR.po
 type = PO
