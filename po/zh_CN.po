@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-25 13:54-0700\n"
+"POT-Creation-Date: 2013-11-02 22:56-0700\n"
 "PO-Revision-Date: 2013-01-09 06:40+0800\n"
 "Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -102,9 +102,9 @@ msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:6
 msgid ""
-"Default position of the hot corner is in the uppper-left corner. Set true to "
-"move the hot corner to the upper-right corner. The position is not affected "
-"by the RTL vs. LTR text direction."
+"Default position of the hot corner is in the uppper-right corner. Set false "
+"to move the hot corner to the upper-left corner. The position is not "
+"affected by the RTL vs. LTR text direction."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:7
@@ -424,7 +424,7 @@ msgstr "未列出？"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:388
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:415 ../js/ui/unlockDialog.js:99
-#: ../js/ui/userMenu.js:557
+#: ../js/ui/userMenu.js:558
 msgid "Cancel"
 msgstr "取消"
 
@@ -505,44 +505,44 @@ msgstr "运行“%s”失败："
 #. moves off the icon to cancel should be made more responsive;
 #. the current implementation takes about a second for the change
 #. back to the normal icon to occur.
-#: ../js/ui/appDisplay.js:1879
+#: ../js/ui/appDisplay.js:1633 ../js/ui/appDisplay.js:1677
 msgid "Add"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1881 ../js/ui/appDisplay.js:1883
+#: ../js/ui/appDisplay.js:1635 ../js/ui/appDisplay.js:1637
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2000
+#: ../js/ui/appDisplay.js:1773
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2006
+#: ../js/ui/appDisplay.js:1779
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2012
+#: ../js/ui/appDisplay.js:1785
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2018 ../js/ui/status/bluetooth.js:414
+#: ../js/ui/appDisplay.js:1791 ../js/ui/status/bluetooth.js:414
 msgid "OK"
 msgstr "确定"
 
-#: ../js/ui/appDisplay.js:2051
+#: ../js/ui/appDisplay.js:1824
 msgid "Delete?"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2161
+#: ../js/ui/appDisplay.js:1934
 msgid "New Window"
 msgstr "新窗口"
 
-#: ../js/ui/appDisplay.js:2164 ../js/ui/dash.js:290
+#: ../js/ui/appDisplay.js:1937 ../js/ui/dash.js:290
 msgid "Remove from Favorites"
 msgstr "从收藏夹中移除"
 
-#: ../js/ui/appDisplay.js:2165
+#: ../js/ui/appDisplay.js:1938
 msgid "Add to Favorites"
 msgstr "添加到收藏夹"
 
@@ -731,16 +731,16 @@ msgstr ""
 msgid "External drive disconnected"
 msgstr ""
 
-#: ../js/ui/components/autorunManager.js:294
+#: ../js/ui/components/autorunManager.js:302
 msgid "Removable Devices"
 msgstr "可移动设备"
 
-#: ../js/ui/components/autorunManager.js:594
+#: ../js/ui/components/autorunManager.js:606
 #, c-format
 msgid "Open with %s"
 msgstr "使用 %s 打开"
 
-#: ../js/ui/components/autorunManager.js:620
+#: ../js/ui/components/autorunManager.js:632
 msgid "Eject"
 msgstr "弹出"
 
@@ -1838,26 +1838,26 @@ msgstr "设置"
 msgid "Give us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:434
+#: ../js/ui/userMenu.js:435
 msgid "Switch User"
 msgstr "切换用户"
 
-#: ../js/ui/userMenu.js:507
+#: ../js/ui/userMenu.js:508
 msgid "Other users are logged in."
 msgstr ""
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:513
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr ""
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:540
+#: ../js/ui/userMenu.js:541
 #, c-format
 msgid "%s (remote)"
 msgstr ""
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:543
+#: ../js/ui/userMenu.js:544
 #, c-format
 msgid "%s (console)"
 msgstr ""
