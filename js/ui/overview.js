@@ -2,14 +2,15 @@
 
 const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
-const Gtk = imports.gi.Gtk;
-const Meta = imports.gi.Meta;
-const Mainloop = imports.mainloop;
-const Signals = imports.signals;
-const Lang = imports.lang;
-const St = imports.gi.St;
-const Shell = imports.gi.Shell;
 const Gdk = imports.gi.Gdk;
+const GLib = imports.gi.GLib;
+const Gtk = imports.gi.Gtk;
+const Lang = imports.lang;
+const Mainloop = imports.mainloop;
+const Meta = imports.gi.Meta;
+const Shell = imports.gi.Shell;
+const Signals = imports.signals;
+const St = imports.gi.St;
 
 const AppDisplay = imports.ui.appDisplay;
 const Background = imports.ui.background;
@@ -644,7 +645,17 @@ const Overview = new Lang.Class({
         }
     },
 
+    _isTourShowing: function() {
+        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
+                                         'run-welcome-tour']);
+        return GLib.file_test(path, GLib.FileTest.EXISTS);
+    },
+
     startupState: function() {
+        if (this._isTourShowing()) {
+            return;
+        }
+
         this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
 
         // Start the browser, without exiting the overview,

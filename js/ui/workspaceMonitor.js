@@ -21,10 +21,11 @@ const WorkspaceMonitor = new Lang.Class({
         this._shellwm.connect('destroy', Lang.bind(this, this._destroyWindow));
 
         this._metaScreen.connect('workspace-switched', Lang.bind(this, this._workspaceSwitched));
+        Main.layoutManager.connect('fullscreen-changed', Lang.bind(this, this._updateOverview));
 
         this._visibleWindows = 0;
 
-        this._trackWorkspace(this._metaScreen.get_active_workspace());
+        this._trackWorkspace(this._metaScreen.get_active_workspace(), false);
     },
 
     _windowIsKnown: function(metaWindow) {
@@ -51,7 +52,7 @@ const WorkspaceMonitor = new Lang.Class({
         this._minimizedWindows.delete(metaWindow);
     },
 
-    _trackWorkspace: function(workspace) {
+    _trackWorkspace: function(workspace, shouldUpdate) {
         this._activeWorkspace = workspace;
 
         // Setup to listen to the number of windows being changed
@@ -77,7 +78,9 @@ const WorkspaceMonitor = new Lang.Class({
             }
         }
 
-        this._updateOverview();
+        if (shouldUpdate) {
+            this._updateOverview();
+        }
     },
 
     _untrackWorkspace: function() {
@@ -101,7 +104,7 @@ const WorkspaceMonitor = new Lang.Class({
 
     _workspaceSwitched: function(from, to, direction) {
         this._untrackWorkspace();
-        this._trackWorkspace(this._metaScreen.get_active_workspace());
+        this._trackWorkspace(this._metaScreen.get_active_workspace(), true);
     },
 
     // The sequence of events is
@@ -212,12 +215,22 @@ const WorkspaceMonitor = new Lang.Class({
             this._visibleWindows = 0;
         }
 
-        if (this._visibleWindows == 0) {
+        // Check the count from the getter to include fullscreen
+        if (this.visibleWindows == 0) {
             Main.overview.showApps();
+        } else if (Main.layoutManager.primaryMonitor.inFullscreen) {
+            // Hide in fullscreen mode
+            Main.overview.hide();
         }
     },
 
     get visibleWindows() {
-        return this._visibleWindows;
+        let visible = this._visibleWindows;
+
+        // Count anything fullscreen as an extra window
+        if (Main.layoutManager.primaryMonitor.inFullscreen) {
+            visible += 1;
+        }
+        return visible;
     }
 });

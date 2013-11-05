@@ -33,6 +33,10 @@ const SideComponent = new Lang.Class({
     },
 
     _onVisibilityChanged: function() {
+        if (this._visible == this.proxy.Visible) {
+            return;
+        }
+
         // resync visibility
         this._visible = this.proxy.Visible;
 
