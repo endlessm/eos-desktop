@@ -144,7 +144,7 @@ const IconGridLayout = new Lang.Class({
     },
 
     getIcons: function(folder) {
-        if (this._iconTree[folder]) {
+        if (this._iconTree && this._iconTree[folder]) {
             return this._iconTree[folder];
         } else {
             return [];
