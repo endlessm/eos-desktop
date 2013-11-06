@@ -139,6 +139,12 @@ AC_SUBST(MUTTER_TYPELIB_DIR)
 GJS_CONSOLE=`$PKG_CONFIG --variable=gjs_console gjs-1.0`
 AC_SUBST(GJS_CONSOLE)
 
+PKG_CHECK_EXISTS([gjs-1.0 >= 1.38.0], [have_gjs138=yes], [have_gjs138=no])
+if test "$have_gjs138" = "yes"; then
+  AC_DEFINE([HAVE_GJS_138], [1],
+            [Define if we have gjs 1.38.0 or newer])
+fi
+
 AC_CHECK_FUNCS(fdwalk)
 AC_CHECK_FUNCS(mallinfo)
 AC_CHECK_HEADERS([sys/resource.h])

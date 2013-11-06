@@ -54,12 +54,23 @@ shell_js_add_extension_importer (const char  *target_object_script,
                          0,
                          &target_object))
     {
+#ifdef HAVE_GJS_138
       gjs_log_exception(context);
       g_set_error(error,
                   G_IO_ERROR,
                   G_IO_ERROR_FAILED,
                   "Unable to import %s", target_object_script);
+#else
+      char *message;
+      gjs_log_exception(context,
+                        &message);
+      g_set_error(error,
+                  G_IO_ERROR,
+                  G_IO_ERROR_FAILED,
+                  "%s", message ? message : "(unknown)");
+      g_free(message);
       goto out;
+#endif
     }
 
   if (!JSVAL_IS_OBJECT (target_object))
