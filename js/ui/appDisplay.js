@@ -212,7 +212,7 @@ const EndlessApplicationView = new Lang.Class({
         let appSystem = Shell.AppSystem.get_default();
         return items.filter(Lang.bind(this,
             function(itemId) {
-                return IconGridLayout.layout.iconIsFolder(itemId) || appSystem.lookup_app(itemId);
+                return IconGridLayout.layout.iconIsFolder(itemId) || appSystem.lookup_app(itemId) || (itemId == EOS_APP_STORE_ID);
             }));
     },
 

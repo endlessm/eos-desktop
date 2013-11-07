@@ -235,7 +235,7 @@ shell_global_init (ShellGlobal *global)
 {
   const char *datadir = g_getenv ("GNOME_SHELL_DATADIR");
   const char *shell_js = g_getenv("GNOME_SHELL_JS");
-  char *imagedir, **search_path;
+  char *imagedir, **search_path, *path;
 
   if (!datadir)
     datadir = GNOME_SHELL_DATADIR;
@@ -257,6 +257,17 @@ shell_global_init (ShellGlobal *global)
   /* Ensure config dir exists for later use */
   global->userdatadir = g_build_filename (g_get_user_data_dir (), "gnome-shell", NULL);
   g_mkdir_with_parents (global->userdatadir, 0700);
+
+  /* Ensure application and folder dirs exist on disk.
+   * This is so that GMenu will always install file monitors there.
+   */
+  path = g_build_filename (g_get_user_data_dir (), "applications", NULL);
+  g_mkdir_with_parents (path, 0700);
+  g_free (path);
+
+  path = g_build_filename (g_get_user_data_dir (), "desktop-directories", NULL);
+  g_mkdir_with_parents (path, 0700);
+  g_free (path);
 
   global->settings = g_settings_new ("org.gnome.shell");
   
