@@ -387,19 +387,12 @@ const LayoutManager = new Lang.Class({
 
         BackgroundMenu.addBackgroundMenu(clickAction);
 
-        clickAction.connect('clicked', function(action) {
+        clickAction.connect('clicked', Lang.bind(this, function(action) {
             let button = action.get_button();
             if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
-                if (Main.socialBar.proxy.Visible) {
-                    Main.socialBar.proxy.toggleRemote(global.get_current_time());
-                }
-                if (Main.appStore.visible) {
-                    Main.appStore.toggle(false);
-                }
-
-                Main.overview.showApps();
+                this.emit('background-clicked');
             }
-        });
+        }));
     },
 
     setViewsClone: function(actor) {

@@ -42,6 +42,11 @@ const AppStore = new Lang.Class({
         Main.appStore = null;
     },
 
+    toggle: function(reset) {
+        reset = !!reset;
+        this.parent(reset);
+    },
+
     showPage: function(page) {
         this.activateAfterHide(Lang.bind(this, function(timestamp) { this._doShowPage(page, timestamp); }));
     },
