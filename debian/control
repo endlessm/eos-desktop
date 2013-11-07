@@ -60,6 +60,7 @@ Architecture: any
 Depends: ${gir:Depends},
          ${misc:Depends},
          ${shlibs:Depends},
+         eos-shell-content,
          eos-theme,
          eos-app-store,
          gdm (>= 3.5.90) | gdm3,
