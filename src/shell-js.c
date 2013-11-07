@@ -69,8 +69,9 @@ shell_js_add_extension_importer (const char  *target_object_script,
                   G_IO_ERROR_FAILED,
                   "%s", message ? message : "(unknown)");
       g_free(message);
-      goto out;
 #endif
+
+      goto out;
     }
 
   if (!JSVAL_IS_OBJECT (target_object))
