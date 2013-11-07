@@ -11,7 +11,6 @@ const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const AppActivation = imports.ui.appActivation;
-const AppStore = imports.ui.appStore;
 const Components = imports.ui.components;
 const CtrlAltTab = imports.ui.ctrlAltTab;
 const EndSessionDialog = imports.ui.endSessionDialog;
@@ -35,7 +34,6 @@ const Scripting = imports.ui.scripting;
 const SessionMode = imports.ui.sessionMode;
 const ShellDBus = imports.ui.shellDBus;
 const ShellMountOperation = imports.ui.shellMountOperation;
-const SocialBar = imports.ui.socialBar;
 const WindowManager = imports.ui.windowManager;
 const WorkspaceMonitor = imports.ui.workspaceMonitor;
 const Magnifier = imports.ui.magnifier;
@@ -155,8 +153,6 @@ function _initializeUI() {
     if (LoginManager.canLock())
         screenShield = new ScreenShield.ScreenShield();
 
-    appStore = new AppStore.AppStore();
-    socialBar = new SocialBar.SocialBar();
     messageTray = new MessageTray.MessageTray();
     panel = new Panel.Panel();
     keyboard = new Keyboard.Keyboard();

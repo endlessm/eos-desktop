@@ -89,7 +89,7 @@ const _modes = {
         unlockDialog: imports.ui.unlockDialog.UnlockDialog,
         components: ['networkAgent', 'polkitAgent', 'telepathyClient',
                      'keyring', 'recorder', 'autorunManager', 'automountManager',
-                     'updaterManager'],
+                     'updaterManager', 'socialBar', 'appStore'],
         panel: {
             left: ['userMenu', 'panelSeparator', 'appIcons'],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
