@@ -1578,7 +1578,9 @@ const AppIcon = new Lang.Class({
             this._removeMenuTimeout();
             this._menuTimeoutId = Mainloop.timeout_add(MENU_POPUP_TIMEOUT,
                 Lang.bind(this, function() {
+                    this._menuTimeoutId = 0;
                     this.popupMenu();
+                    return false;
                 }));
         } else if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
             this.popupMenu();
