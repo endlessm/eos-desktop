@@ -25,7 +25,18 @@ const SocialBar = new Lang.Class({
         this.parent(SocialBarProxy, SOCIAL_BAR_NAME, SOCIAL_BAR_PATH);
     },
 
+    enable: function() {
+        this.parent();
+        Main.socialBar = this;
+    },
+
+    disable: function() {
+        this.parent();
+        Main.socialBar = null;
+    },
+
     callToggle: function(timestamp) {
         this.proxy.toggleRemote(timestamp);
     }
 });
+const Component = SocialBar;

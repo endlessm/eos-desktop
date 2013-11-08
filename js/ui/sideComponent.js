@@ -9,16 +9,50 @@ const SideComponent = new Lang.Class({
     Name: 'SideComponent',
 
     _init: function(proxyProto, proxyName, proxyPath) {
+        this._bgClickedId = 0;
         this._overviewHiddenId = 0;
+        this._overviewShowingId = 0;
+        this._propertiesChangedId = 0;
 
-        this.proxy = new proxyProto(Gio.DBus.session, 
-                                    proxyName, proxyPath,
-                                    Lang.bind(this, this._onProxyConstructed));
-        this.proxy.connect('g-properties-changed', Lang.bind(this, this._onPropertiesChanged));
-
-        Main.overview.connect('showing', Lang.bind(this, this._onOverviewShowing));
+        this._proxyProto = proxyProto;
+        this._proxyName = proxyName;
+        this._proxyPath = proxyPath;
 
         this._visible = false;
+    },
+
+    enable: function() {
+        if (!this.proxy) {
+            this.proxy = new this._proxyProto(Gio.DBus.session, 
+                                              this._proxyName, this._proxyPath,
+                                              Lang.bind(this, this._onProxyConstructed));
+        }
+
+        this._propertiesChangedId =
+            this.proxy.connect('g-properties-changed', Lang.bind(this, this._onPropertiesChanged));
+
+        this._bgClickedId =
+            Main.layoutManager.connect('background-clicked', Lang.bind(this, this._onBackgroundClicked));
+
+        this._overviewShowingId =
+            Main.overview.connect('showing', Lang.bind(this, this._onOverviewShowing));
+    },
+
+    disable: function() {
+        if (this._bgClickedId > 0) {
+            Main.layoutManager.disconnect(this._bgClickedId);
+            this._bgClickedId = 0;
+        }
+
+        if (this._overviewShowingId > 0) {
+            Main.overview.disconnect(this._overviewShowingId);
+            this._overviewShowingId = 0;
+        }
+
+        if (this._propertiesChangedId > 0) {
+            this.proxy.disconnect(this._propertiesChangedId);
+            this._propertiesChangedId = 0;
+        }
     },
 
     _onProxyConstructed: function() {
@@ -53,6 +87,14 @@ const SideComponent = new Lang.Class({
         if (this._visible) {
             this._doToggle(global.get_current_time());
         }
+    },
+
+    _onBackgroundClicked: function() {
+        if (this._visible) {
+            this.toggle();
+        }
+
+        Main.overview.showApps();
     },
 
     _doToggle: function(timestamp, params) {

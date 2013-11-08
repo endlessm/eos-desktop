@@ -32,6 +32,21 @@ const AppStore = new Lang.Class({
         this.parent(AppStoreProxy, APP_STORE_NAME, APP_STORE_PATH);
     },
 
+    enable: function() {
+        this.parent();
+        Main.appStore = this;
+    },
+
+    disable: function() {
+        this.parent();
+        Main.appStore = null;
+    },
+
+    toggle: function(reset) {
+        reset = !!reset;
+        this.parent(reset);
+    },
+
     showPage: function(page) {
         this.activateAfterHide(Lang.bind(this, function(timestamp) { this._doShowPage(page, timestamp); }));
     },
@@ -46,3 +61,4 @@ const AppStore = new Lang.Class({
         this.proxy.ShowPageRemote(page, timestamp);
     }
 });
+const Component = AppStore;

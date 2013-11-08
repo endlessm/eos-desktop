@@ -41,7 +41,6 @@ nobase_dist_js_DATA = 	\
 	ui/appDisplay.js	\
 	ui/appFavorites.js	\
 	ui/appIconBar.js	\
-	ui/appStore.js		\
 	ui/backgroundMenu.js	\
 	ui/background.js	\
 	ui/boxpointer.js	\
@@ -77,7 +76,6 @@ nobase_dist_js_DATA = 	\
 	ui/sessionMode.js	\
 	ui/shellEntry.js	\
 	ui/shellMountOperation.js \
-	ui/socialBar.js		\
 	ui/notificationDaemon.js \
 	ui/osdWindow.js		\
 	ui/overview.js		\
@@ -116,12 +114,14 @@ nobase_dist_js_DATA = 	\
 	ui/workspaceSwitcherPopup.js    \
 	ui/xdndHandler.js	\
 	ui/components/__init__.js		\
+	ui/components/appStore.js		\
 	ui/components/autorunManager.js		\
 	ui/components/automountManager.js	\
+	ui/components/keyring.js		\
 	ui/components/networkAgent.js		\
 	ui/components/polkitAgent.js		\
 	ui/components/recorder.js		\
+	ui/components/socialBar.js		\
 	ui/components/telepathyClient.js	\
-	ui/components/keyring.js		\
 	ui/components/updaterManager.js		\
 	$(NULL)
