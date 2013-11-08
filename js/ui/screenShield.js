@@ -183,6 +183,7 @@ const ScreenShield = new Lang.Class({
         }
 
         this._lightbox.show();
+        this._lightbox.raise_top();
 
         if (this._activationTime == 0)
             this._activationTime = GLib.get_monotonic_time();
@@ -226,6 +227,7 @@ const ScreenShield = new Lang.Class({
 
         let lightboxWasShown = this._lightbox.shown;
         this._lightbox.hide();
+        this.actor.raise_top();
 
         // Shortcircuit in case the mouse was moved before the fade completed
         if (!lightboxWasShown) {
@@ -294,8 +296,6 @@ const ScreenShield = new Lang.Class({
     _resetLockScreen: function(animateLockDialog) {
         this._lockDialogGroup.scale_x = 1;
         this._lockDialogGroup.scale_y = 1;
-
-	     this.actor.raise_top();
 
         if (animateLockDialog) {
             this._lockDialogGroup.opacity = 0;
