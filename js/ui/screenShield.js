@@ -183,7 +183,7 @@ const ScreenShield = new Lang.Class({
         }
 
         this._lightbox.show();
-        this._lightbox.raise_top();
+        this._lightbox.actor.raise_top();
 
         if (this._activationTime == 0)
             this._activationTime = GLib.get_monotonic_time();
