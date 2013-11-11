@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-02 22:56-0700\n"
-"PO-Revision-Date: 2013-11-04 23:07+0000\n"
+"PO-Revision-Date: 2013-11-05 16:44+0000\n"
 "Last-Translator: joelmx <joel@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/teams/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -81,55 +81,55 @@ msgstr "Permitir acceder a las herramientas internas de depuración  monitorizac
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:3
 msgid "Separate the power off and log out buttons on the user menu"
-msgstr ""
+msgstr "Separar los botones de apagado y cierre de sesión en el menú de usuario"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:4
 msgid ""
 "By default, use a single exit button to power off or log out (with the log "
 "out option on the power off confirmation dialog). Set true for separate "
 "buttons on the user menu."
-msgstr ""
+msgstr "Por defecto, utilice un solo botón de salida para apagar o cerrar la sesión (con la opción de cierre de sesión en el diálogo de confirmación de apagado). Establezca botones separados en el menú de usuario."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:5
 msgid "Set the position of the hot corner for the window picker"
-msgstr ""
+msgstr "Establecer la posición de la esquina activa para el selector de ventana"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:6
 msgid ""
 "Default position of the hot corner is in the uppper-right corner. Set false "
 "to move the hot corner to the upper-left corner. The position is not "
 "affected by the RTL vs. LTR text direction."
-msgstr ""
+msgstr "La posición predeterminada de la esquina activa es la esquina superior derecha. Cambie a \"false\" para mover la esquina activa a la esquina superior izquierda. La posición no se verá afectada por el cambio de la dirección de texto de RTL a LTR."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:7
 msgid "Set the size of the hot corner target"
-msgstr ""
+msgstr "Establecer el tamaño del objetivo de la esquina activa"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:8
 msgid ""
 "Number of pixels in one dimension of the square target for the hot corner. "
 "Default is for a single pixel in the very corner. For some virtual machines,"
 " this value may need to be set larger than the default."
-msgstr ""
+msgstr "Número de píxeles en una dimensión del objetivo cuadrado de la esquina activa. Por defecto, aparece un único píxel en la misma esquina. En algunas máquinas virtuales, puede ser necesario establecer este valor de modo que sea superior al predeterminado. "
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:9
 msgid "Prevent apps from being automatically maximized on launch"
-msgstr ""
+msgstr "Impedir que las aplicaciones se maximicen automáticamente al iniciarse"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:10
 msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
 "screens, prevents applications from being forced to open maximized, and does"
 " not automatically switch to the app selector when a window is minimized."
-msgstr ""
+msgstr "Gestiona las ventanas al estilo del Gnome estándar. Oculta pantallas de inicio de aplicaciones, impide que las aplicaciones se abran maximizadas forzosamente y no cambia automáticamene al selector de aplicaciones cuando se minimiza una ventana."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:11
 msgid "Whether the app store is displayed"
-msgstr ""
+msgstr "Si la tienda de aplicaciones se muestra o no"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:12
 msgid "Whether the application grid displays the app store icon."
-msgstr ""
+msgstr "Si el icono de la tienda de aplicaciones aparece o no en la cuadrícula de aplicaciones."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:13
 msgid "Uuids of extensions to enable"
@@ -220,13 +220,13 @@ msgstr "La shell solicitará una contraseña cuando se monte un dispositivo cifr
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:29
 msgid "Layout of application launcher icons in the grid"
-msgstr ""
+msgstr "Distribución de los iconos de inicio de aplicación en la cuadrícula"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:30
 msgid ""
 "This key specifies the exact order of the icons shown in the applications "
 "launcher view."
-msgstr ""
+msgstr "Esta clave especifica el orden exacto de los iconos mostrados en la vista de inicio de aplicación."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid "Show the week date in the calendar"
