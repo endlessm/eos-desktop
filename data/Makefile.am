@@ -80,6 +80,15 @@ dist_theme_DATA =				\
 	theme/panel-button-highlight-wide.svg	\
 	theme/process-working.svg		\
 	theme/running-indicator.svg		\
+	theme/list-icon_google.png		\
+	theme/list-icon_my-computer.png	\
+	theme/list-icon_wikipedia.png	\
+	theme/search-button_active-normal.png	\
+	theme/search-button_hover.png	\
+	theme/search-button_pressed.png	\
+	theme/search-icon_active.png	\
+	theme/search-icon_hover.png		\
+	theme/search-icon_normal.png	\
 	theme/settings-hover.png		\
 	theme/settings-normal.png		\
 	theme/settings-symbolic.svg		\

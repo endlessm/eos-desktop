@@ -294,6 +294,7 @@ const ViewsDisplay = new Lang.Class({
     },
 
     _queueLocalSearch: function() {
+        this.entry.pulseAnimation();
         if (this._searchTimeoutId == 0) {
             this._searchTimeoutId = Mainloop.timeout_add(SEARCH_TIMEOUT,
                 Lang.bind(this, this._doLocalSearch));
@@ -312,6 +313,7 @@ const ViewsDisplay = new Lang.Class({
     },
 
     _onSearchActivated: function() {
+        this.entry.pulseAnimation();
         let searchState = this.entry.getSearchState();
         if (searchState == ShellEntry.EntrySearchMenuState.GOOGLE) {
             this._activateGoogleSearch();
