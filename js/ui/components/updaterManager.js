@@ -60,6 +60,18 @@ const AUTO_UPDATES_DEFAULT_STEP = UpdaterStep.POLL;
 const AUTO_UPDATES_GROUP_NAME = 'Automatic Updates';
 const AUTO_UPDATES_LAST_STEP_KEY = 'LastAutomaticStep';
 
+const UpdaterNotification = new Lang.Class({
+    Name: 'UpdaterNotification',
+    Extends: MessageTray.Notification,
+
+    _init: function(source, title, banner) {
+        this.parent(source, title, banner);
+
+        this.setResident(true);
+        this.setUrgency(MessageTray.Urgency.CRITICAL);
+    }
+});
+
 const UpdaterProxy = Gio.DBusProxy.makeProxyWrapper(UpdaterIface);
 
 const UpdaterManager = new Lang.Class({
@@ -176,7 +188,7 @@ const UpdaterManager = new Lang.Class({
 
         this._ensureSource();
 
-        this._notification = new MessageTray.Notification(this._source,
+        this._notification = new UpdaterNotification(this._source,
             _("Updates available"),
             _("Software updates are available for your system"));
         this._notification.addButton('download-updates', _("Download now"));
@@ -191,7 +203,7 @@ const UpdaterManager = new Lang.Class({
 
         this._ensureSource();
 
-        this._notification = new MessageTray.Notification(this._source,
+        this._notification = new UpdaterNotification(this._source,
             _("Updates ready"),
             _("Software updates are ready to be installed on your system"));
         this._notification.addButton('apply-updates', _("Install now"));
@@ -202,7 +214,7 @@ const UpdaterManager = new Lang.Class({
     _notifyUpdateApplied: function() {
         this._ensureSource();
 
-        this._notification = new MessageTray.Notification(this._source,
+        this._notification = new UpdaterNotification(this._source,
             _("Updates installed"),
             _("Software updates were installed on your system"));
         this._notification.addButton('restart-updates', _("Restart now"));
