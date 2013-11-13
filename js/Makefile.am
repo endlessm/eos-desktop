@@ -35,3 +35,7 @@ EXTRA_DIST = \
 	misc/config.js.in \
 	misc/eos-launch.js \
 	$(NULL)
+
+CLEANFILES = \
+	$(js_built_sources) \
+	$(NULL)
