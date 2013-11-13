@@ -23,7 +23,7 @@ const EntryMenu = new Lang.Class({
     Extends: PopupMenu.PopupMenu,
 
     _init: function(actor, entry) {
-        this.parent(actor, 0, St.Side.TOP);
+        this.parent(actor, 0.025, St.Side.TOP);
 
         this._entry = entry;
         this.actor.add_style_class_name('entry-context-menu');
