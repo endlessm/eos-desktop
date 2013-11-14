@@ -2216,6 +2216,7 @@ const MessageTray = new Lang.Class({
         let notificationQueue = this._notificationQueue;
         let notificationUrgent = notificationQueue.length > 0 && notificationQueue[0].urgency == Urgency.CRITICAL;
         let notificationForFeedback = notificationQueue.length > 0 && notificationQueue[0].forFeedback;
+        let notificationForFeedbackHidden = notificationForFeedback && Main.layoutManager.bottomMonitor.inFullscreen;
         let notificationsLimited = this._busy || Main.layoutManager.bottomMonitor.inFullscreen;
         let notificationsPending = notificationQueue.length > 0 && (!notificationsLimited || notificationUrgent || notificationForFeedback) && Main.sessionMode.hasNotifications;
         let nextNotification = notificationQueue.length > 0 ? notificationQueue[0] : null;
@@ -2226,7 +2227,7 @@ const MessageTray = new Lang.Class({
                                   !(this._notification && this._notification.focused) &&
                                   !this._pointerInTray;
         let notificationLockedOut = !Main.sessionMode.hasNotifications && this._notification;
-        let notificationMustClose = this._notificationRemoved || notificationLockedOut || (notificationExpired && this._userActiveWhileNotificationShown) || this._notificationClosed;
+        let notificationMustClose = this._notificationRemoved || notificationLockedOut || (notificationExpired && this._userActiveWhileNotificationShown) || this._notificationClosed || notificationForFeedbackHidden;
         let canShowNotification = notificationsPending && this._trayState == State.HIDDEN;
 
         if (this._notificationState == State.HIDDEN) {
