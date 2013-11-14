@@ -963,6 +963,7 @@ StScrollBar StButton#vhandle:active {
 	border-top: 4px;
     border-bottom: 4px;
 	padding: 0px;
+	min-width: 145px;
 
     font-family: lato, sans-serif;
     font-size: 13px;
@@ -972,6 +973,7 @@ StScrollBar StButton#vhandle:active {
 .entry-search-menu .popup-menu-item {
     -opacity: 0.6;
     padding-left: 12px;
+    padding-right: 25px;
     padding-top: 0px;
     padding-bottom: 0px;
     height: 30px;
