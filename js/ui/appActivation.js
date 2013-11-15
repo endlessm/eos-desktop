@@ -25,8 +25,8 @@ const SPLASH_SCREEN_COMPLETE_TIME = 250;
 // Don't show the flash frame until the final spinner cycle
 const SPLASH_CIRCLE_SKIP_END_FRAMES = 1;
 
-const SPLASH_SCREEN_DESKTOP_KEY = 'X-Endless-Splash-Screen';
-const SPLASH_SCREEN_LAUNCH_BACKGROUND_KEY = 'X-Endless-launch-background';
+const SPLASH_SCREEN_DESKTOP_KEY = 'X-Endless-SplashScreen';
+const SPLASH_BACKGROUND_DESKTOP_KEY = 'X-Endless-SplashBackground';
 const DEFAULT_SPLASH_SCREEN_BACKGROUND = global.datadir + '/theme/splash-background-default.jpg';
 
 const AppActivationContext = new Lang.Class({
@@ -217,8 +217,8 @@ const AppSplashPage = new Lang.Class({
 
         if (info !== undefined) {
             let bg_path;
-            if (info.has_key(SPLASH_SCREEN_LAUNCH_BACKGROUND_KEY)) {
-                bg_path = info.get_string(SPLASH_SCREEN_LAUNCH_BACKGROUND_KEY);
+            if (info.has_key(SPLASH_BACKGROUND_DESKTOP_KEY)) {
+                bg_path = info.get_string(SPLASH_BACKGROUND_DESKTOP_KEY);
             } else {
                 bg_path = DEFAULT_SPLASH_SCREEN_BACKGROUND;
             }
