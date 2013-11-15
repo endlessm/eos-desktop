@@ -27,6 +27,7 @@ const SPLASH_CIRCLE_SKIP_END_FRAMES = 1;
 
 const SPLASH_SCREEN_DESKTOP_KEY = 'X-Endless-Splash-Screen';
 const SPLASH_SCREEN_LAUNCH_BACKGROUND_KEY = 'X-Endless-launch-background';
+const DEFAULT_SPLASH_SCREEN_BACKGROUND = global.datadir + '/theme/splash-background-default.jpg';
 
 const AppActivationContext = new Lang.Class({
     Name: 'AppActivationContext',
@@ -213,9 +214,16 @@ const AppSplashPage = new Lang.Class({
                                           y_expand: true });
 
         let info = app.get_app_info();
-        if (info !== undefined && info.has_key(SPLASH_SCREEN_LAUNCH_BACKGROUND_KEY)) {
+
+        if (info !== undefined) {
+            let bg_path;
+            if (info.has_key(SPLASH_SCREEN_LAUNCH_BACKGROUND_KEY)) {
+                bg_path = info.get_string(SPLASH_SCREEN_LAUNCH_BACKGROUND_KEY);
+            } else {
+                bg_path = DEFAULT_SPLASH_SCREEN_BACKGROUND;
+            }
+
             this.background.connect('allocation-changed', Lang.bind(this, function(actor, box, flags) {
-                let bg_path = info.get_string(SPLASH_SCREEN_LAUNCH_BACKGROUND_KEY);
                 this.background.style_class = 'app-splash-page-custom-background';
                 this.background.style = 'background-image: url("%s");background-size: %dpx %dpx'.format(bg_path, box.x2 - box.x1, box.y2 - box.y1);
             }));
