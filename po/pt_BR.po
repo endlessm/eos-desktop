@@ -12,6 +12,8 @@
 # Jonh Wendell <wendell@bani.com.br>, 2010
 # Og Maciel <ogmaciel@gnome.org>, 2009
 # Rafael Ferreira <rafael.f.f1@gmail.com>, 2013
+# RenatoP <renato@endlessm.com>, 2013
+# rpitanga <pitanga@endlessm.com>, 2013
 # rshuler <roddy@endlessm.com>, 2013
 # Rodrigo Flores <mail@rodrigoflores.org>, 2009
 # Rodrigo Padula <contato@rodrigopadula.com>, 2011
@@ -20,8 +22,8 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-12 10:46-0800\n"
-"PO-Revision-Date: 2013-11-12 18:46+0000\n"
-"Last-Translator: rshuler <roddy@endlessm.com>\n"
+"PO-Revision-Date: 2013-11-14 18:23+0000\n"
+"Last-Translator: RenatoP <renato@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/teams/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,7 +33,7 @@ msgstr ""
 
 #: ../data/50-gnome-shell-screenshot.xml.in.h:1
 msgid "Screenshots"
-msgstr "Capturas de tela"
+msgstr "Captura de tela"
 
 #: ../data/50-gnome-shell-screenshot.xml.in.h:2
 msgid "Record a screencast"
@@ -47,7 +49,7 @@ msgstr "Mostra a área de notificação"
 
 #: ../data/50-gnome-shell-system.xml.in.h:3
 msgid "Focus the active notification"
-msgstr "Ativar as notificação ativas"
+msgstr "Ativar as notificações ativas"
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
 msgid "Show all applications"
@@ -59,7 +61,7 @@ msgstr "Abre o menu do aplicativo"
 
 #: ../data/eos-app-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
+msgstr "Comentários"
 
 #: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
@@ -67,7 +69,7 @@ msgstr "Tutorial"
 
 #: ../data/eos-app-tutorial.desktop.in.in.h:2
 msgid "Tutorial video and help"
-msgstr ""
+msgstr "Ajuda e Vídeo Tutorial"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
@@ -90,7 +92,7 @@ msgstr "Configurar extensões do GNOME Shell"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:1
 msgid "Enable internal tools useful for developers and testers from Alt-F2"
-msgstr "Habilitar ferramentas internas úteis para desenvolvedores e testadores a partir do Alt-F2"
+msgstr "Habilitar ferramentas internas úteis para desenvolvedores e técnicos a partir do Alt-F2"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:2
 msgid ""
@@ -100,36 +102,36 @@ msgstr "Permite acesso a ferramentas internas de depuração e monitoramento usa
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:3
 msgid "Separate the power off and log out buttons on the user menu"
-msgstr "Separa os botões de saída e de registo de saída no menu do utilizador"
+msgstr "Separa os botões de desligar e saída e no menu do usuário"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:4
 msgid ""
 "By default, use a single exit button to power off or log out (with the log "
 "out option on the power off confirmation dialog). Set true for separate "
 "buttons on the user menu."
-msgstr "Por defeito, utiliza um único botão de saída para desligar ou fazer o registo de saída (com a opção de registo de saída na mensagem de desligar). Define como verdadeiro para obter botões separados no menu do utilizador."
+msgstr "Utilize um único botão de sair para desligar ou encerrar sessão (com a opção de encerrar sessão na mensagem de desligar) como padrão. Defina como verdadeiro para obter botões separados no menu do usuário."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:5
 msgid "Set the position of the hot corner for the window picker"
-msgstr "Define a posição do hot corner a partir do seletor de janela"
+msgstr "Define a posição do painel de aplicativos a partir do seletor de janela"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:6
 msgid ""
 "Default position of the hot corner is in the uppper-right corner. Set false "
 "to move the hot corner to the upper-left corner. The position is not "
 "affected by the RTL vs. LTR text direction."
-msgstr "A posição por defeito da hot corner é no canto superior direito. Definir como falso para mover o hot corner para o canto superior esquerdo. A posição não é afetada pela direção de texto RTL vs. LTR."
+msgstr "A posição padrão painel de aplicativos é no canto superior direito. Definir como falso para mover o painel de aplicativos para o canto superior esquerdo. A posição não é afetada pela direção de texto RTL vs. LTR."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:7
 msgid "Set the size of the hot corner target"
-msgstr "Define o tamanho do hot corner escolhido"
+msgstr "Defina o tamanho do painel de aplicativos escolhido"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:8
 msgid ""
 "Number of pixels in one dimension of the square target for the hot corner. "
 "Default is for a single pixel in the very corner. For some virtual machines,"
 " this value may need to be set larger than the default."
-msgstr "Número de pixéis numa dimensão do quadrado alvo da hot corner. Por defeito é um único pixel no mesmo canto. Para algumas máquinas virtuais, este valor pode necessitar de ser definido como maior que o existente por defeito."
+msgstr "Número de pixeis numa dimensão do quadrado alvo do painel de aplicativos. Por padrão é um único pixel no mesmo canto. Para algumas máquinas virtuais, este valor pode necessitar ser definido como maior que o existente por padrão"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:9
 msgid "Prevent apps from being automatically maximized on launch"
@@ -140,15 +142,15 @@ msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
 "screens, prevents applications from being forced to open maximized, and does"
 " not automatically switch to the app selector when a window is minimized."
-msgstr "Torna a gestão de janelas mais como o Gnome standard. Esconde os ecrãs totais das aplicaçãoes, previne as aplicações de serem forçadas a iniciar maximizadas e, não muda automaticamente o seletor de aplicações quando uma janela é minimizada."
+msgstr "Torna a gestão de janelas como o padrão do Gnome. Esconde os ecrãs totais das aplicações, previne as aplicações de serem forçadas a iniciar maximizadas e, não muda automaticamente o seletor de aplicações quando uma janela é minimizada."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:11
 msgid "Whether the app store is displayed"
-msgstr "Se a loja de aplicações é exibida"
+msgstr "Se a Central de Aplicações é exibida"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:12
 msgid "Whether the application grid displays the app store icon."
-msgstr "Se a grelha de aplicações mostra o ícone da loja de aplicações."
+msgstr "Se o grid de aplicações mostra o ícone da Central de Aplicativos."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:13
 msgid "Uuids of extensions to enable"
@@ -192,7 +194,7 @@ msgstr "Lista de categorias que devem ser exibidas como pastas"
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
-msgstr "Cada nome de categoria nesta lista será representado como uma pasta na visão do aplicativo, ao invés de ser exibido incorporado à visão principal."
+msgstr "Cada nome de categoria nesta lista será representado como uma pasta na visualização do aplicativo, ao invés de ser exibido incorporado à visualização principal."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:21
 msgid "History for command (Alt-F2) dialog"
@@ -239,21 +241,21 @@ msgstr "O shell irá pedir uma senha quando um dispositivo criptografado ou um s
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:29
 msgid "Layout of application launcher icons in the grid"
-msgstr "Layout dos ícones de iniciação das aplicações na grelha"
+msgstr "Visual dos ícones de iniciação das aplicações no grid"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:30
 msgid ""
 "This key specifies the exact order of the icons shown in the applications "
 "launcher view."
-msgstr "Esta chave especifica a ordem exacta dos ícones apresentados na vista de iniciação de aplicações."
+msgstr "Esta chave especifica a ordem exata dos ícones apresentados na visualização de iniciação de aplicações."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid "Show the week date in the calendar"
-msgstr "Mostrar o número da semana na agenda"
+msgstr "Mostrar o data da semana na agenda"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:32
 msgid "If true, display the ISO week date in the calendar."
-msgstr "Se verdadeiro, exibe o número da semana na agenda."
+msgstr "Se verdadeiro, exibe o data da semana na agenda."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid "Keybinding to open the application menu"
@@ -271,7 +273,7 @@ msgstr "Atalho de teclado para abrir a visualização \"Mostrar aplicativos\""
 msgid ""
 "Keybinding to open the \"Show Applications\" view of the Activities "
 "Overview."
-msgstr "Atalho de teclado para abrir a visualização \"Mostrar aplicativos\" da visão geral de atividades."
+msgstr "Atalho de teclado para abrir a visualização \"Mostrar aplicativos\" da visualização geral de atividades."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Keybinding to toggle the visibility of the message tray"
@@ -439,12 +441,12 @@ msgstr "Nome de usuário: "
 
 #: ../js/gdm/loginDialog.js:1173
 msgid "Login Window"
-msgstr "Janela de sessão"
+msgstr "Janela de início de sessão"
 
 #. Translators: accessible name of the power menu in the login screen
 #: ../js/gdm/powerMenu.js:36
 msgid "Power"
-msgstr "Desligar"
+msgstr "Ligar"
 
 #: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
@@ -511,11 +513,11 @@ msgstr "Aviso"
 #: ../js/ui/appDisplay.js:1779
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr "Para apagar uma pasta que você tem que remover todos os itens dentro do primeiro."
+msgstr "Para excluir uma pasta que você tem que remover todos os arquivos de dentro primeiro."
 
 #: ../js/ui/appDisplay.js:1785
 msgid "We are just trying to keep you safe."
-msgstr "Estamos tratando de mantener la seguridad de sus datos."
+msgstr "Estamos apenas tentando manter a segurança dos seus dados."
 
 #: ../js/ui/appDisplay.js:1791 ../js/ui/status/bluetooth.js:414
 msgid "OK"
@@ -553,7 +555,7 @@ msgstr "Alterar plano de fundo…"
 
 #: ../js/ui/backgroundMenu.js:25
 msgid "Add Application"
-msgstr "Adicionar Programas"
+msgstr "Adicionar Aplicativos"
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website Link"
@@ -939,7 +941,7 @@ msgstr "Aceitar"
 #: ../js/ui/components/telepathyClient.js:1129
 #, c-format
 msgid "Video call from %s"
-msgstr "Chamada de vídeo para %s"
+msgstr "Chamada de vídeo de %s"
 
 #. translators: argument is a contact name like Alice for example.
 #: ../js/ui/components/telepathyClient.js:1132
@@ -950,7 +952,7 @@ msgstr "Chamada de %s"
 #. translators: this is a button label (verb), not a noun
 #: ../js/ui/components/telepathyClient.js:1139
 msgid "Answer"
-msgstr "Atender"
+msgstr "Responder"
 
 #. To translators: The first parameter is
 #. * the contact's alias and the second one is the
@@ -998,7 +1000,7 @@ msgstr "Certificado não ativado"
 
 #: ../js/ui/components/telepathyClient.js:1312
 msgid "Certificate hostname mismatch"
-msgstr "Máquina do certificado não confere"
+msgstr "Nome do certificado não confere"
 
 #: ../js/ui/components/telepathyClient.js:1314
 msgid "Certificate fingerprint mismatch"
@@ -1085,43 +1087,43 @@ msgstr "Razão desconhecida"
 
 #: ../js/ui/components/updaterManager.js:164
 msgid "Software Update"
-msgstr ""
+msgstr "Atualização do Sistema"
 
 #: ../js/ui/components/updaterManager.js:180
 msgid "Updates available"
-msgstr ""
+msgstr "Atualizações disponíveis"
 
 #: ../js/ui/components/updaterManager.js:181
 msgid "Software updates are available for your system"
-msgstr ""
+msgstr "Novas atualizações do software estão disponíveis para o seu sistema"
 
 #: ../js/ui/components/updaterManager.js:182
 msgid "Download now"
-msgstr ""
+msgstr "Baixar agora"
 
 #: ../js/ui/components/updaterManager.js:195
 msgid "Updates ready"
-msgstr ""
+msgstr "Atualizações prontas"
 
 #: ../js/ui/components/updaterManager.js:196
 msgid "Software updates are ready to be installed on your system"
-msgstr ""
+msgstr "Novas atualizações do software disponíveis para serem instaladas no seu sistema"
 
 #: ../js/ui/components/updaterManager.js:197
 msgid "Install now"
-msgstr ""
+msgstr "Instalar agora"
 
 #: ../js/ui/components/updaterManager.js:206
 msgid "Updates installed"
-msgstr ""
+msgstr "Atualizações instaladas"
 
 #: ../js/ui/components/updaterManager.js:207
 msgid "Software updates were installed on your system"
-msgstr ""
+msgstr "Novas atualizações do software foram instaladas no seu sistema"
 
 #: ../js/ui/components/updaterManager.js:208
 msgid "Restart now"
-msgstr ""
+msgstr "Reiniciar agora"
 
 #: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:490
 msgid "Windows"
@@ -1139,7 +1141,7 @@ msgstr "Dash"
 
 #: ../js/ui/dateMenu.js:91
 msgid "Open Calendar"
-msgstr "Abrir agenda"
+msgstr "Abrir Calendário"
 
 #: ../js/ui/dateMenu.js:96
 msgid "Open Clocks"
@@ -1170,7 +1172,7 @@ msgstr "Encerrar sessão"
 
 #: ../js/ui/endSessionDialog.js:67
 msgid "Click Log Out to quit these applications and log out of the system."
-msgstr "Clique em Encerrar sessão para finalizar estes aplicativos e sair do sistema."
+msgstr "Clique em Encerrar Sessão para finalizar estes aplicativos e sair do sistema."
 
 #: ../js/ui/endSessionDialog.js:69
 #, c-format
@@ -1318,7 +1320,7 @@ msgstr "Remover"
 
 #: ../js/ui/messageTray.js:1502
 msgid "Clear Messages"
-msgstr "Sem mensagens"
+msgstr "Limpar mensagens"
 
 #: ../js/ui/messageTray.js:1529
 msgid "Notification Settings"
@@ -1419,11 +1421,11 @@ msgstr "Ocultar texto"
 
 #: ../js/ui/shellEntry.js:302
 msgid "Type to search Wikipedia"
-msgstr "Digita para procurar na Wikipédia"
+msgstr "Digite para procurar na Wikipédia"
 
 #: ../js/ui/shellEntry.js:304
 msgid "Type to search your computer"
-msgstr "Digita para procurar no teu computador"
+msgstr "Digite para procurar no seu computador"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1475,7 +1477,7 @@ msgstr "Teclas do mouse"
 
 #: ../js/ui/status/accessibility.js:72
 msgid "Universal Access Settings"
-msgstr "Configurações de acessibilidade"
+msgstr "Configurações de acessibilidade universal"
 
 #: ../js/ui/status/accessibility.js:129
 msgid "High Contrast"
@@ -1600,7 +1602,7 @@ msgstr "Por favor, informe o PIN mencionado no dispositivo."
 
 #: ../js/ui/status/keyboard.js:368
 msgid "Show Keyboard Layout"
-msgstr "Exibir disposição de teclado"
+msgstr "Exibir layout de teclado"
 
 #: ../js/ui/status/keyboard.js:373
 msgid "Region & Language Settings"
@@ -1638,7 +1640,7 @@ msgstr "autenticação necessária"
 #. module, which is missing
 #: ../js/ui/status/network.js:479
 msgid "firmware missing"
-msgstr "firmware faltando"
+msgstr "firmware não está definido"
 
 #. Translators: this is for wired network devices that are physically
 #. disconnected
@@ -1655,7 +1657,7 @@ msgstr "indisponível"
 
 #: ../js/ui/status/network.js:493 ../js/ui/status/network.js:1551
 msgid "connection failed"
-msgstr "conexão falhou"
+msgstr "falha na conexão "
 
 #: ../js/ui/status/network.js:552 ../js/ui/status/network.js:1435
 #: ../js/ui/status/network.js:1627
@@ -1671,11 +1673,11 @@ msgstr "Conectado (privado)"
 
 #: ../js/ui/status/network.js:667
 msgid "Wired"
-msgstr "Cabeada"
+msgstr "Cabeado"
 
 #: ../js/ui/status/network.js:668
 msgid "Auto Ethernet"
-msgstr "Rede cabeada - automática"
+msgstr "Rede cabeada automática"
 
 #: ../js/ui/status/network.js:695
 msgid "Mobile broadband"
@@ -1683,18 +1685,18 @@ msgstr "Banda larga móvel"
 
 #: ../js/ui/status/network.js:728
 msgid "Auto broadband"
-msgstr "Banda larga - automática"
+msgstr "Banda larga  automática"
 
 #: ../js/ui/status/network.js:731
 msgid "Auto dial-up"
-msgstr "Conexão discada - automática"
+msgstr "Conexão discada automática"
 
 #. TRANSLATORS: this the automatic wireless connection name (including the
 #. network name)
 #: ../js/ui/status/network.js:861 ../js/ui/status/network.js:1382
 #, c-format
 msgid "Auto %s"
-msgstr "%s - automática"
+msgstr "%s automático"
 
 #: ../js/ui/status/network.js:863
 msgid "Auto bluetooth"
@@ -1730,7 +1732,7 @@ msgstr "Falha ao ativar a conexão da rede"
 
 #: ../js/ui/status/network.js:2282
 msgid "Networking is disabled"
-msgstr "Rede está desabilitada"
+msgstr "A rede está desabilitada"
 
 #: ../js/ui/status/power.js:55
 msgid "Battery"
@@ -1738,7 +1740,7 @@ msgstr "Bateria"
 
 #: ../js/ui/status/power.js:81
 msgid "Power Settings"
-msgstr "Gerenciamento de energia"
+msgstr "Configurações de economia de energia"
 
 #. 0 is reported when UPower does not have enough data
 #. to estimate battery life
@@ -1868,11 +1870,11 @@ msgstr "Configurações"
 
 #: ../js/ui/userMenu.js:43
 msgid "Give us Feedback"
-msgstr "Dá-nos a tua opinião"
+msgstr "Nos dê a sua opinião"
 
 #: ../js/ui/userMenu.js:435
 msgid "Switch User"
-msgstr "Alternar usuário"
+msgstr "Trocar usuário"
 
 #: ../js/ui/userMenu.js:508
 msgid "Other users are logged in."
@@ -1939,7 +1941,7 @@ msgstr "Modo usado pelo GDM para a tela de início de sessão"
 
 #: ../src/main.c:359
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
-msgstr "Utilizar um modo específico, ex.: \"gdm\" para a tela de login"
+msgstr "Utilizar um modo específico, ex.: \"gdm\" para iniciar sessão"
 
 #: ../src/main.c:365
 msgid "List possible modes"
