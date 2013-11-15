@@ -645,19 +645,7 @@ const Overview = new Lang.Class({
         }
     },
 
-    _isTourShowing: function() {
-        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
-                                         'run-welcome-tour']);
-        return GLib.file_test(path, GLib.FileTest.EXISTS);
-    },
-
-    startupState: function() {
-        if (this._isTourShowing()) {
-            return;
-        }
-
-        this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
-
+    _startBrowser: function() {
         // Start the browser, without exiting the overview,
         // if it's not running already
         let browser = Util.getBrowserApp();
@@ -673,6 +661,22 @@ const Overview = new Lang.Class({
                 });
             });
         }
+    },
+
+    _isTourShowing: function() {
+        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
+                                         'run-welcome-tour']);
+        return GLib.file_test(path, GLib.FileTest.EXISTS);
+    },
+
+    startupState: function() {
+        this._startBrowser();
+
+        if (this._isTourShowing()) {
+            return;
+        }
+
+        this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
     },
 
     showApps: function() {
