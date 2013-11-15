@@ -3,6 +3,7 @@
 const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
 const Gdk = imports.gi.Gdk;
+const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
@@ -669,7 +670,40 @@ const Overview = new Lang.Class({
         return GLib.file_test(path, GLib.FileTest.EXISTS);
     },
 
+    _isInitialSetupRunning: function() {
+        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
+                                         'gnome-initial-setup-done']);
+        let file = Gio.File.new_for_path(path);
+
+        if (file.query_exists(null)) {
+            return false;
+        }
+
+        // Check when gnome-initial-setup finishes
+        let monitor = file.monitor_file(Gio.FileMonitorFlags.NONE, null);
+        this._initialSetupMonitor = monitor;
+
+        let changeId = monitor.connect('changed', Lang.bind(this,
+            function(mon, file, otherFile, eventType) {
+                if (eventType !== Gio.FileMonitorEvent.CREATED) {
+                    return;
+                }
+
+                monitor.disconnect(changeId);
+                this._initialSetupMonitor = null;
+
+                // Start the browser now, as the tour video plays
+                this._startBrowser();
+            }));
+
+        return true;
+    },
+
     startupState: function() {
+        if (this._isInitialSetupRunning()) {
+            return;
+        }
+
         this._startBrowser();
 
         if (this._isTourShowing()) {
