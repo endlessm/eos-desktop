@@ -2,6 +2,7 @@
 
 const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
@@ -9,16 +10,20 @@ const St = imports.gi.St;
 
 const BoxPointer = imports.ui.boxpointer;
 const Main = imports.ui.main;
+const Panel = imports.ui.panel;
 const Params = imports.misc.params;
 const PopupMenu = imports.ui.popupMenu;
 const Util = imports.misc.util;
+
+const SPINNER_ICON_SIZE = 24;
+const SPINNER_MIN_DURATION = 1000;
 
 const EntryMenu = new Lang.Class({
     Name: 'ShellEntryMenu',
     Extends: PopupMenu.PopupMenu,
 
     _init: function(actor, entry) {
-        this.parent(actor, 0, St.Side.TOP);
+        this.parent(actor, 0.025, St.Side.TOP);
 
         this._entry = entry;
         this.actor.add_style_class_name('entry-context-menu');
@@ -48,6 +53,47 @@ const EntrySearchMenuState = {
     LOCAL: 3
 };
 
+const EntrySearchMenuItem = new Lang.Class({
+    Name: 'EntrySearchMenuItem',
+    Extends: PopupMenu.PopupBaseMenuItem,
+
+    _init: function (iconFilename, text) {
+        this.parent();
+        this._checked = false;
+
+        let gfile = Gio.File.new_for_path(global.datadir + '/theme/' + iconFilename);
+        let gicon = new Gio.FileIcon({ file: gfile });
+        this.icon = new St.Icon({ gicon: gicon, style_class: 'source-icon' });
+
+        this.label = new St.Label({ text: text });
+
+        this.addActor(this.icon);
+        this.addActor(this.label);
+        this.actor.label_actor = this.label;
+        this.actor.connect('style-changed', function(widget) {
+            let themeNode = widget.get_theme_node();
+            let opacity = themeNode.get_double('-opacity');
+            widget.set_opacity(255*opacity);
+        });
+    },
+
+    setChecked: function(value) {
+        if (this._checked == value) {
+            return;
+        }
+        this._checked = value;
+        if (this._checked) {
+            this.actor.add_style_pseudo_class('checked');
+        } else {
+            this.actor.remove_style_pseudo_class('checked');
+        }
+    },
+
+    getChecked: function() {
+        return this._checked;
+    },
+});
+
 const EntrySearchMenu = new Lang.Class({
     Name: 'ShellEntrySearchMenu',
     Extends: EntryMenu,
@@ -57,46 +103,41 @@ const EntrySearchMenu = new Lang.Class({
 
         this.actor.add_style_class_name('entry-search-menu');
 
-        this._state = EntrySearchMenuState.GOOGLE;
-
         // Populate menu
         let item;
-        item = new PopupMenu.PopupMenuItem(_("Google"));
+        item = new EntrySearchMenuItem('list-icon_google.png', _("Google"));
         item.connect('activate', Lang.bind(this, this._onGoogleActivated));
         this.addMenuItem(item);
         this._googleItem = item;
 
         if (Util.getWikipediaApp()) {
-            item = new PopupMenu.PopupMenuItem(_("Wikipedia"));
+            item = new EntrySearchMenuItem('list-icon_wikipedia.png', _("Wikipedia"));
             item.connect('activate', Lang.bind(this, this._onWikipediaActivated));
             this.addMenuItem(item);
             this._wikipediaItem = item;
         }
 
-        item = new PopupMenu.PopupMenuItem(_("Local"));
+        item = new EntrySearchMenuItem('list-icon_my-computer.png', _("My Computer"));
         item.connect('activate', Lang.bind(this, this._onLocalActivated));
         this.addMenuItem(item);
         this._localItem = item;
 
-        this._syncState();
-    },
-
-    _syncState: function() {
-        this._googleItem.setShowDot(this._state == EntrySearchMenuState.GOOGLE);
-        this._localItem.setShowDot(this._state == EntrySearchMenuState.LOCAL);
-
-        if (this._wikipediaItem) {
-            this._wikipediaItem.setShowDot(this._state == EntrySearchMenuState.WIKIPEDIA);
-        }
+        this._setState(EntrySearchMenuState.GOOGLE);
     },
 
     _setState: function(state) {
         if (state == this._state) {
             return;
         }
-
         this._state = state;
-        this._syncState();
+
+        this._googleItem.setChecked(this._state == EntrySearchMenuState.GOOGLE);
+        this._localItem.setChecked(this._state == EntrySearchMenuState.LOCAL);
+
+        if (this._wikipediaItem) {
+            this._wikipediaItem.setChecked(this._state == EntrySearchMenuState.WIKIPEDIA);
+        }
+
         this.emit('search-state-changed');
     },
 
@@ -271,16 +312,18 @@ const OverviewEntry = new Lang.Class({
 
     _init: function() {
         this._active = false;
+        this._ongoing = false;
 
         this._capturedEventId = 0;
 
-        let primaryIcon = new St.Icon({ style_class: 'search-entry-icon',
-                                        icon_name: 'edit-find-symbolic',
-                                        track_hover: true });
+        let primaryIcon = new St.Button({ style_class: 'search-entry-source',
+                                        track_hover: true,
+                                        toggle_mode: true });
 
-        this._goIcon = new St.Icon({ style_class: 'search-entry-icon',
-                                     icon_name: 'go-next-symbolic',
-                                     track_hover: true });
+        this._goIcon = new St.Button({ style_class: 'search-entry-button',
+                                       track_hover: true });
+        this._spinnerAnimation = new Panel.AnimatedIcon('process-working.svg', SPINNER_ICON_SIZE);
+        this._spinnerAnimationTimeoutId = 0;
 
         this.parent({ name: 'searchEntry',
                       track_hover: true,
@@ -297,16 +340,19 @@ const OverviewEntry = new Lang.Class({
         this._searchMenuManager = new PopupMenu.PopupMenuManager({ actor: this.primary_icon });
         this._searchMenuManager.addMenu(this._searchMenu);
 
-        this._googleHint = new EntryHint('search-entry-hint',
-                                         'google-logo-symbolic.svg');
-        this._wikipediaHint = new St.Label({ text: _("Type to search Wikipedia"),
+        this._googleHint = new St.Label({ text: _("Google"),
+                                          style_class: 'search-entry-text-hint' });
+        this._wikipediaHint = new St.Label({ text: _("Wikipedia"),
                                              style_class: 'search-entry-text-hint' });
-        this._localHint = new St.Label({ text: _("Type to search your computer"),
+        this._localHint = new St.Label({ text: _("My computer"),
                                          style_class: 'search-entry-text-hint' });
 
         this.connect('primary-icon-clicked', Lang.bind(this, this._popupSearchEntryMenu));
         this.connect('secondary-icon-clicked', Lang.bind(this, this._activateSearch));
         this._searchMenu.connect('search-state-changed', Lang.bind(this, this._onSearchStateChanged));
+        this._searchMenu.connect('open-state-changed', Lang.bind(this, function(menu, state) {
+                                     this.get_primary_icon().set_checked(state);
+                                 }));
         this._onSearchStateChanged();
 
         this.connect('notify::mapped', Lang.bind(this, this._onMapped));
@@ -325,6 +371,7 @@ const OverviewEntry = new Lang.Class({
 
     _onSearchStateChanged: function() {
         this._syncSearchHint();
+        this._updateSecondaryIcon();
         this.emit('search-state-changed');
     },
 
@@ -512,17 +559,48 @@ const OverviewEntry = new Lang.Class({
         return false;
     },
 
+    _updateSecondaryIcon: function() {
+        if (this._spinnerAnimationTimeoutId) {
+            // cancel the ongoing timeout to extend the life of the animation
+            GLib.source_remove (this._spinnerAnimationTimeoutId);
+            this._spinnerAnimationTimeoutId = 0;
+        }
+
+        if (this._ongoing) {
+            this._ongoing = false;
+            if (this.get_secondary_icon() != this._spinnerAnimation.actor) {
+                // start showing the spinner, if we were not doing it yet
+                this.set_secondary_icon(this._spinnerAnimation.actor);
+                this._spinnerAnimation.play();
+            }
+            // the spinner will appear for a minimum of SPINNER_MIN_DURATION msecs.
+            this._spinnerAnimationTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT,
+                                                               SPINNER_MIN_DURATION,
+                                                               Lang.bind(this, function() {
+                                                                   this._spinnerAnimationTimeoutId = 0;
+                                                                   this._updateSecondaryIcon();
+                                                                   return false;
+                                                               }));
+        } else {
+            this._spinnerAnimation.stop();
+            if (this._active && this.getSearchState() != EntrySearchMenuState.LOCAL) {
+                this.set_secondary_icon(this._goIcon);
+            } else {
+                this.set_secondary_icon(null);
+            }
+        }
+    },
+
     set active(value) {
         if (value == this._active) {
             return;
         }
 
         this._active = value;
+        this._ongoing = false;
+        this._updateSecondaryIcon();
 
-        if (this._active) {
-            this.set_secondary_icon(this._goIcon);
-        } else {
-            this.set_secondary_icon(null);
+        if (!this._active) {
             this._searchCancelled();
         }
 
@@ -531,6 +609,11 @@ const OverviewEntry = new Lang.Class({
 
     get active() {
         return this._active;
+    },
+
+    pulseAnimation: function() {
+        this._ongoing = true;
+        this._updateSecondaryIcon();
     },
 
     getSearchState: function() {
