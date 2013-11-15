@@ -57,11 +57,11 @@ const EntrySearchMenuItem = new Lang.Class({
     Name: 'EntrySearchMenuItem',
     Extends: PopupMenu.PopupBaseMenuItem,
 
-    _init: function (icon_filename, text, params) {
-        this.parent(params);
+    _init: function (iconFilename, text) {
+        this.parent();
         this._checked = false;
 
-        let gfile = Gio.File.new_for_path(global.datadir + '/theme/' + icon_filename);
+        let gfile = Gio.File.new_for_path(global.datadir + '/theme/' + iconFilename);
         let gicon = new Gio.FileIcon({ file: gfile });
         this.icon = new St.Icon({ gicon: gicon, style_class: 'source-icon' });
 
@@ -70,21 +70,26 @@ const EntrySearchMenuItem = new Lang.Class({
         this.addActor(this.icon);
         this.addActor(this.label);
         this.actor.label_actor = this.label;
+        this.actor.connect('style-changed', function(widget) {
+            let themeNode = widget.get_theme_node();
+            let opacity = themeNode.get_double('-opacity');
+            widget.set_opacity(255*opacity);
+        });
     },
 
-    set_checked: function(value) {
+    setChecked: function(value) {
+        if (this._checked == value) {
+            return;
+        }
         this._checked = value;
         if (this._checked) {
             this.actor.add_style_pseudo_class('checked');
         } else {
             this.actor.remove_style_pseudo_class('checked');
         }
-        let themeNode = this.actor.get_theme_node();
-        let opacity = themeNode.get_double('-opacity');
-        this.actor.set_opacity(255*opacity);
     },
 
-    get_checked: function() {
+    getChecked: function() {
         return this._checked;
     },
 });
@@ -100,19 +105,19 @@ const EntrySearchMenu = new Lang.Class({
 
         // Populate menu
         let item;
-        item = new EntrySearchMenuItem('list-icon_google.png', _("Google"), {});
+        item = new EntrySearchMenuItem('list-icon_google.png', _("Google"));
         item.connect('activate', Lang.bind(this, this._onGoogleActivated));
         this.addMenuItem(item);
         this._googleItem = item;
 
         if (Util.getWikipediaApp()) {
-            item = new EntrySearchMenuItem('list-icon_wikipedia.png', _("Wikipedia"), {});
+            item = new EntrySearchMenuItem('list-icon_wikipedia.png', _("Wikipedia"));
             item.connect('activate', Lang.bind(this, this._onWikipediaActivated));
             this.addMenuItem(item);
             this._wikipediaItem = item;
         }
 
-        item = new EntrySearchMenuItem('list-icon_my-computer.png', _("My Computer"), {});
+        item = new EntrySearchMenuItem('list-icon_my-computer.png', _("My Computer"));
         item.connect('activate', Lang.bind(this, this._onLocalActivated));
         this.addMenuItem(item);
         this._localItem = item;
@@ -126,11 +131,11 @@ const EntrySearchMenu = new Lang.Class({
         }
         this._state = state;
 
-        this._googleItem.set_checked(this._state == EntrySearchMenuState.GOOGLE);
-        this._localItem.set_checked(this._state == EntrySearchMenuState.LOCAL);
+        this._googleItem.setChecked(this._state == EntrySearchMenuState.GOOGLE);
+        this._localItem.setChecked(this._state == EntrySearchMenuState.LOCAL);
 
         if (this._wikipediaItem) {
-            this._wikipediaItem.set_checked(this._state == EntrySearchMenuState.WIKIPEDIA);
+            this._wikipediaItem.setChecked(this._state == EntrySearchMenuState.WIKIPEDIA);
         }
 
         this.emit('search-state-changed');
@@ -315,8 +320,6 @@ const OverviewEntry = new Lang.Class({
                                         track_hover: true,
                                         toggle_mode: true });
 
-        this._inactiveIcon = new St.Button({ style_class: 'search-entry-button-inactive',
-                                             track_hover: true });
         this._goIcon = new St.Button({ style_class: 'search-entry-button',
                                        track_hover: true });
         this._spinnerAnimation = new Panel.AnimatedIcon('process-working.svg', SPINNER_ICON_SIZE);
@@ -328,7 +331,6 @@ const OverviewEntry = new Lang.Class({
                       can_focus: true,
                       hint_text: '',
                       primary_icon: primaryIcon,
-                      secondary_icon: this._inactiveIcon,
                       x_align: Clutter.ActorAlign.CENTER,
                       y_align: Clutter.ActorAlign.CENTER });
 
@@ -349,7 +351,7 @@ const OverviewEntry = new Lang.Class({
         this.connect('secondary-icon-clicked', Lang.bind(this, this._activateSearch));
         this._searchMenu.connect('search-state-changed', Lang.bind(this, this._onSearchStateChanged));
         this._searchMenu.connect('open-state-changed', Lang.bind(this, function(menu, state) {
-                                     this.primary_icon.set_checked(state);
+                                     this.get_primary_icon().set_checked(state);
                                  }));
         this._onSearchStateChanged();
 
@@ -362,10 +364,8 @@ const OverviewEntry = new Lang.Class({
     _popupSearchEntryMenu: function() {
         if (this._searchMenu.isOpen) {
             this._searchMenu.close(BoxPointer.PopupAnimation.FULL);
-            this.primary_icon.set_checked(false);
         } else {
             this._searchMenu.open(BoxPointer.PopupAnimation.FULL);
-            this.primary_icon.set_checked(true);
         }
     },
 
@@ -523,9 +523,7 @@ const OverviewEntry = new Lang.Class({
     },
 
     _activateSearch: function() {
-        if (this._active) {
-            this.emit('search-activated');
-        }
+        this.emit('search-activated');
     },
 
     _stopSearch: function() {
@@ -588,7 +586,7 @@ const OverviewEntry = new Lang.Class({
             if (this._active && this.getSearchState() != EntrySearchMenuState.LOCAL) {
                 this.set_secondary_icon(this._goIcon);
             } else {
-                this.set_secondary_icon(this._inactiveIcon);
+                this.set_secondary_icon(null);
             }
         }
     },

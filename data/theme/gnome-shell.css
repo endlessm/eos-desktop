@@ -936,13 +936,6 @@ StScrollBar StButton#vhandle:active {
     background-image: url("search-button_pressed.png");
 }
 
-.search-entry-button-inactive {
-    height: 24px;
-    width: 24px;
-    background-image: none;
-    background-color: transparent;
-}
-
 .search-entry-hint {
     /* line the entry hint image with the search loupe */
     padding-top: 2px;
