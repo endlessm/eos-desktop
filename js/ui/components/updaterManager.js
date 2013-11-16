@@ -150,6 +150,8 @@ const UpdaterManager = new Lang.Class({
     },
 
     _onActionInvoked: function(notification, actionId) {
+        this._notification.destroy();
+        
         if (actionId == 'download-updates') {
             this._proxy.FetchRemote();
         } else if (actionId == 'apply-updates') {
