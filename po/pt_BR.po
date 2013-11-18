@@ -21,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-12 10:46-0800\n"
-"PO-Revision-Date: 2013-11-14 18:23+0000\n"
-"Last-Translator: RenatoP <renato@endlessm.com>\n"
+"POT-Creation-Date: 2013-11-18 07:44-0800\n"
+"PO-Revision-Date: 2013-11-18 15:59+0000\n"
+"Last-Translator: rshuler <roddy@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/teams/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1085,47 +1085,47 @@ msgstr "Visualizar conta"
 msgid "Unknown reason"
 msgstr "Razão desconhecida"
 
-#: ../js/ui/components/updaterManager.js:164
+#: ../js/ui/components/updaterManager.js:178
 msgid "Software Update"
 msgstr "Atualização do Sistema"
 
-#: ../js/ui/components/updaterManager.js:180
+#: ../js/ui/components/updaterManager.js:194
 msgid "Updates available"
 msgstr "Atualizações disponíveis"
 
-#: ../js/ui/components/updaterManager.js:181
+#: ../js/ui/components/updaterManager.js:195
 msgid "Software updates are available for your system"
 msgstr "Novas atualizações do software estão disponíveis para o seu sistema"
 
-#: ../js/ui/components/updaterManager.js:182
+#: ../js/ui/components/updaterManager.js:196
 msgid "Download now"
 msgstr "Baixar agora"
 
-#: ../js/ui/components/updaterManager.js:195
+#: ../js/ui/components/updaterManager.js:209
 msgid "Updates ready"
 msgstr "Atualizações prontas"
 
-#: ../js/ui/components/updaterManager.js:196
+#: ../js/ui/components/updaterManager.js:210
 msgid "Software updates are ready to be installed on your system"
 msgstr "Novas atualizações do software disponíveis para serem instaladas no seu sistema"
 
-#: ../js/ui/components/updaterManager.js:197
+#: ../js/ui/components/updaterManager.js:211
 msgid "Install now"
 msgstr "Instalar agora"
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:220
 msgid "Updates installed"
 msgstr "Atualizações instaladas"
 
-#: ../js/ui/components/updaterManager.js:207
+#: ../js/ui/components/updaterManager.js:221
 msgid "Software updates were installed on your system"
 msgstr "Novas atualizações do software foram instaladas no seu sistema"
 
-#: ../js/ui/components/updaterManager.js:208
+#: ../js/ui/components/updaterManager.js:222
 msgid "Restart now"
 msgstr "Reiniciar agora"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:490
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:492
 msgid "Windows"
 msgstr "Janelas"
 
@@ -1334,7 +1334,7 @@ msgstr "Sem mensagens"
 msgid "Message Tray"
 msgstr "Área de notificação"
 
-#: ../js/ui/messageTray.js:2822
+#: ../js/ui/messageTray.js:2823
 msgid "System Information"
 msgstr "Informações do sistema"
 
@@ -1391,41 +1391,37 @@ msgstr "Não foi possível bloquear"
 msgid "Lock was blocked by an application"
 msgstr "O bloqueio foi impedido por um aplicativo"
 
-#: ../js/ui/shellEntry.js:64
+#: ../js/ui/shellEntry.js:108 ../js/ui/shellEntry.js:343
 msgid "Google"
 msgstr "Google"
 
-#: ../js/ui/shellEntry.js:70
+#: ../js/ui/shellEntry.js:114 ../js/ui/shellEntry.js:345
 msgid "Wikipedia"
 msgstr "Wikipédia"
 
-#: ../js/ui/shellEntry.js:76
-msgid "Local"
-msgstr "Local"
+#: ../js/ui/shellEntry.js:120
+msgid "My Computer"
+msgstr "Meu Computador"
 
-#: ../js/ui/shellEntry.js:133
+#: ../js/ui/shellEntry.js:174
 msgid "Copy"
 msgstr "Copiar"
 
-#: ../js/ui/shellEntry.js:138
+#: ../js/ui/shellEntry.js:179
 msgid "Paste"
 msgstr "Colar"
 
-#: ../js/ui/shellEntry.js:197
+#: ../js/ui/shellEntry.js:238
 msgid "Show Text"
 msgstr "Mostrar texto"
 
-#: ../js/ui/shellEntry.js:199
+#: ../js/ui/shellEntry.js:240
 msgid "Hide Text"
 msgstr "Ocultar texto"
 
-#: ../js/ui/shellEntry.js:302
-msgid "Type to search Wikipedia"
-msgstr "Digite para procurar na Wikipédia"
-
-#: ../js/ui/shellEntry.js:304
-msgid "Type to search your computer"
-msgstr "Digite para procurar no seu computador"
+#: ../js/ui/shellEntry.js:347
+msgid "My computer"
+msgstr "Meu computador"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1896,7 +1892,7 @@ msgstr "%s (remoto)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:494
+#: ../js/ui/viewSelector.js:496
 msgid "Applications"
 msgstr "Aplicativos"
 
