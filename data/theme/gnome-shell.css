@@ -906,7 +906,7 @@ StScrollBar StButton#vhandle:active {
     height: 24px;
     width: 24px;
     background-image: url("search-icon_normal.png");
-    background-position: center;
+    background-position: 0px 4px;
 }
 
 .search-entry-source:focus,
@@ -923,7 +923,6 @@ StScrollBar StButton#vhandle:active {
     height: 24px;
     width: 24px;
     background-image: url("search-button_active-normal.png");
-    background-position: center;
 }
 
 .search-entry-button:focus,
@@ -936,11 +935,6 @@ StScrollBar StButton#vhandle:active {
     background-image: url("search-button_pressed.png");
 }
 
-.search-entry-hint {
-    /* line the entry hint image with the search loupe */
-    padding-top: 2px;
-}
-
 .search-entry-text-hint {
     padding-top: 1px;
     padding-bottom: 2px;
@@ -948,15 +942,16 @@ StScrollBar StButton#vhandle:active {
 
 .entry-search-menu {
     -boxpointer-gap: 6px;
+    -arrow-border-radius: 4px;
     -arrow-border-width: 0px;
     -arrow-border-color: transparent;
     -arrow-base: 17px;
     -arrow-rise: 9px;
-    -arrow-border-radius: 4px;
-	border-top: 4px;
+
+    border-top: 4px;
     border-bottom: 4px;
-	padding: 0px;
-	min-width: 145px;
+    padding: 0px;
+    min-width: 145px;
 
     font-family: lato, sans-serif;
     font-size: 13px;
@@ -976,7 +971,7 @@ StScrollBar StButton#vhandle:active {
     background-color: #333333;
 }
 .entry-search-menu .popup-menu-item:checked {
-    -opacity: 1.0;	
+    -opacity: 1.0;
 }
 
 .entry-search-menu .source-icon {
