@@ -9,9 +9,11 @@ const Lang = imports.lang;
 const Meta = imports.gi.Meta;
 const Signals = imports.signals;
 
+const Config = imports.misc.config;
 const Main = imports.ui.main;
 const Params = imports.misc.params;
 const Tweener = imports.ui.tweener;
+const Util = imports.misc.util;
 
 const BACKGROUND_SCHEMA = 'org.gnome.desktop.background';
 const PRIMARY_COLOR_KEY = 'primary-color';
@@ -20,6 +22,8 @@ const COLOR_SHADING_TYPE_KEY = 'color-shading-type';
 const BACKGROUND_STYLE_KEY = 'picture-options';
 const PICTURE_OPACITY_KEY = 'picture-opacity';
 const PICTURE_URI_KEY = 'picture-uri';
+const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/EndlessOS/personality-defaults';
+const BACKGROUND_NAME_BASE = 'desktop-background';
 
 const FADE_ANIMATION_TIME = 1.0;
 
@@ -563,6 +567,26 @@ const Background = new Lang.Class({
 
     },
 
+    _getDefaultBackgroundFile: function() {
+        let personality = Util.getPersonality();
+
+        let files = [];
+        files.push(GLib.build_filenamev([DEFAULT_CONFIGS_DIR,
+            BACKGROUND_NAME_BASE + '-' + personality + '.jpg']));
+
+        files.push(GLib.build_filenamev([DEFAULT_CONFIGS_DIR,
+            BACKGROUND_NAME_BASE + '-default.jpg']));
+
+        for (let i = 0; i < files.length; i++) {
+            if (GLib.file_test(files[i], GLib.FileTest.EXISTS)) {
+                return files[i];
+            }
+        }
+
+        log('No default background images found!');
+        return '';
+    },
+
     _load: function () {
         this._cache = getBackgroundCache();
 
@@ -575,7 +599,14 @@ const Background = new Lang.Class({
         }
 
         let uri = this._settings.get_string(PICTURE_URI_KEY);
-        let filename = Gio.File.new_for_uri(uri).get_path();
+
+        let filename;
+        // This URI indicates that the per-personality default should be used
+        if (uri === 'eos:///default') {
+            filename = this._getDefaultBackgroundFile();
+        } else {
+            filename = Gio.File.new_for_uri(uri).get_path();
+        }
 
         this._loadFile(filename);
     },

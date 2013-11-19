@@ -7,6 +7,7 @@ const GLib = imports.gi.GLib;
 const Json = imports.gi.Json;
 
 const Config = imports.misc.config;
+const Util = imports.misc.util;
 
 const DESKTOP_GRID_ID = 'desktop';
 
@@ -18,7 +19,6 @@ const FOLDER_DIR_NAME = 'desktop-directories';
 
 const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/EndlessOS/personality-defaults';
 const DEFAULT_CONFIG_NAME_BASE = 'icon-grid';
-const PERSONALITY_FILE = Config.SYSCONFDIR + '/EndlessOS/personality.conf';
 
 const IconGridLayout = new Lang.Class({
     Name: 'IconGridLayout',
@@ -67,31 +67,8 @@ const IconGridLayout = new Lang.Class({
         this._iconTree = iconTree;
     },
 
-    _getPersonality: function() {
-        // Check if we have a personality configured
-        let personalityFile = new GLib.KeyFile();
-        let personality = null;
-
-        // Read the file
-        try {
-            personalityFile.load_from_file(PERSONALITY_FILE,
-                                           GLib.KeyFileFlags.NONE);
-            personality = personalityFile.get_string ("Personality",
-                                                      "PersonalityName");
-        } catch (e) {
-            log('Personality file \'' + PERSONALITY_FILE + '\' cannot be read: ' +
-                e.message + '. Will use default personality');
-        }
-
-        if (personality === null) {
-            personality = 'default';
-        }
-
-        return personality;
-    },
-
     _getDefaultIcons: function() {
-        let personality = this._getPersonality();
+        let personality = Util.getPersonality();
         let defaultsFiles = [];
 
         // Look for the personality-specific config file
