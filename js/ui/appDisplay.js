@@ -1695,26 +1695,7 @@ const AppStoreIcon = new Lang.Class({
         }
     },
 
-    _showDeleteConfirmation: function(draggedSource, deleteCallback) {
-        draggedSource.blockHandler = true;
-        this.blockHandler = true;
-        let trashPopup = new TrashPopup({
-            onCancel: Lang.bind(this, function() {
-                this._restoreTrash(trashPopup, draggedSource);
-            }),
-            onAccept: Lang.bind(this, function() {
-                this._restoreTrash(trashPopup, draggedSource);
-                IconGridLayout.layout.removeIcon(draggedSource.getId());
-                if (deleteCallback) {
-                    deleteCallback();
-                }
-            }),
-        });
-        this.actor.set_child(trashPopup.actor);
-    },
-
-    _restoreTrash: function(trashPopup, source) {
-        trashPopup.actor.visible = false;
+    _restoreTrash: function(source) {
         source.blockHandler = false;
         this.blockHandler = false;
         if (source.handleViewDragEnd) {
@@ -1733,14 +1714,42 @@ const AppStoreIcon = new Lang.Class({
         return canDelete;
     },
 
+    _trashItem: function(source) {
+        this._restoreTrash(source);
+        IconGridLayout.layout.removeIcon(source.getId());
+
+        if (source.app) {
+            let appInfo = source.app.get_app_info();
+            if (this._canDelete(appInfo)) {
+                appInfo.delete();
+            }
+        }
+
+        if (source.folder) {
+            if (this._canDelete(source.folder)) {
+                source.folder.delete();
+            }
+        }
+    },
+
+    _undoTrashItem: function(source) {
+        this._restoreTrash(source);
+    },
+
     _acceptAppDrop: function(source) {
         let appInfo = source.app.get_app_info();
-        this._showDeleteConfirmation(source,
-                                     Lang.bind(this, function() {
-                                         if (this._canDelete(appInfo)) {
-                                             appInfo.delete();
-                                         }
-                                     }));
+        if (!this._canDelete(appInfo)) {
+            return;
+        }
+
+        source.blockHandler = true;
+        this.blockHandler = true;
+
+        Main.overview.setMessage(_("%s has been deleted").format(source.app.get_name()),
+                                 { forFeedback: true,
+                                   destroyCallback: Lang.bind(this, this._trashItem(source)),
+                                   undoCallback: Lang.bind(this, this._undoTrashItem(source))
+                                 });
     },
 
     _acceptFolderDrop: function(source) {
@@ -1759,12 +1768,14 @@ const AppStoreIcon = new Lang.Class({
         }
 
         if (isEmpty) {
-            this._showDeleteConfirmation(source,
-                                         Lang.bind(this, function() {
-                                             if (this._canDelete(folder)) {
-                                                 folder.delete();
-                                             }
-                                         }));
+            source.blockHandler = true;
+            this.blockHandler = true;
+
+            Main.overview.setMessage(_("%s has been deleted").format(folder.get_name()),
+                                     { forFeedback: true,
+                                       destroyCallback: Lang.bind(this, this._trashItem(source)),
+                                       undoCallback: Lang.bind(this, this._undoTrashItem(source))
+                                     });
             return;
         }
 
