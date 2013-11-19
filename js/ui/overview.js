@@ -46,6 +46,14 @@ const ShellInfo = new Lang.Class({
     _init: function() {
         this._source = null;
         this._undoCallback = null;
+        this._destroyCallback = null;
+    },
+
+    _onDestroy: function() {
+        if (this._destroyCallback)
+            this._destroyCallback();
+
+        this._destroyCallback = null;
     },
 
     _onUndoClicked: function() {
@@ -59,6 +67,7 @@ const ShellInfo = new Lang.Class({
 
     setMessage: function(text, options) {
         options = Params.parse(options, { undoCallback: null,
+                                          destroyCallback: null,
                                           forFeedback: false
                                         });
 
@@ -82,6 +91,11 @@ const ShellInfo = new Lang.Class({
         } else {
             notification = this._source.notifications[0];
             notification.update(text, null, { clear: true });
+        }
+
+        this._destroyCallback = destroyCallback;
+        if (destroyCallback) {
+            notification.connect('destroy', Lang.bind(this, this._onDestroy));
         }
 
         this._undoCallback = undoCallback;
