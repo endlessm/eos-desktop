@@ -336,6 +336,7 @@ const _Draggable = new Lang.Class({
     },
 
     _updateDragHover : function () {
+        this._updateHoverId = 0;
         let target = this._dragActor.get_stage().get_actor_at_pos(Clutter.PickMode.ALL,
                                                                   this._dragX, this._dragY);
         let dragEvent = {
@@ -380,7 +381,7 @@ const _Draggable = new Lang.Class({
 
     _queueUpdateDragHover: function() {
         if (this._updateHoverId)
-            GLib.source_remove(this._updateHoverId);
+            return;
 
         this._updateHoverId = GLib.idle_add(GLib.PRIORITY_DEFAULT,
                                             Lang.bind(this, this._updateDragHover));
