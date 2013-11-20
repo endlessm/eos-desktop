@@ -98,8 +98,11 @@ dist_theme_DATA =				\
 	theme/separator.png			\
 	theme/source-button-border.svg		\
 	theme/splash-background-default.jpg	\
-	theme/splash-circle-animation.png	\
 	theme/splash-noise-texture.png		\
+	theme/splash-spinner-channel-glow.png \
+	theme/splash-spinner-channel.png	\
+	theme/splash-spinner-glow.png	\
+	theme/splash-spinner.png		\
 	theme/summary-counter.svg		\
 	theme/toggle-off-us.svg			\
 	theme/toggle-off-intl.svg		\
