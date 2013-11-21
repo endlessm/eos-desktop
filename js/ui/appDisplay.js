@@ -1695,12 +1695,19 @@ const AppStoreIcon = new Lang.Class({
         }
     },
 
-    _restoreTrash: function(source) {
+    _removeItem: function(source) {
+        source.blockHandler = true;
+        this.blockHandler = true;
+
+        IconGridLayout.layout.removeIcon(source.getId());
+
         source.blockHandler = false;
         this.blockHandler = false;
+
         if (source.handleViewDragEnd) {
             source.handleViewDragEnd();
         }
+
         this.handleViewDragEnd();
     },
 
@@ -1714,10 +1721,7 @@ const AppStoreIcon = new Lang.Class({
         return canDelete;
     },
 
-    _trashItem: function(source) {
-        this._restoreTrash(source);
-        IconGridLayout.layout.removeIcon(source.getId());
-
+    _deleteItem: function(source) {
         if (source.app) {
             let appInfo = source.app.get_app_info();
             if (this._canDelete(appInfo)) {
@@ -1732,8 +1736,8 @@ const AppStoreIcon = new Lang.Class({
         }
     },
 
-    _undoTrashItem: function(source) {
-        this._restoreTrash(source);
+    _undoRemoveItem: function(source) {
+        IconGridLayout.layout.addIcon(source.getId());
     },
 
     _acceptAppDrop: function(source) {
@@ -1742,13 +1746,12 @@ const AppStoreIcon = new Lang.Class({
             return;
         }
 
-        source.blockHandler = true;
-        this.blockHandler = true;
+        this._removeItem(source);
 
         Main.overview.setMessage(_("%s has been deleted").format(source.app.get_name()),
                                  { forFeedback: true,
-                                   destroyCallback: Lang.bind(this, this._trashItem(source)),
-                                   undoCallback: Lang.bind(this, this._undoTrashItem(source))
+                                   destroyCallback: Lang.bind(this, this._deleteItem(source)),
+                                   undoCallback: Lang.bind(this, this._undoRemoveItem(source))
                                  });
     },
 
@@ -1768,13 +1771,12 @@ const AppStoreIcon = new Lang.Class({
         }
 
         if (isEmpty) {
-            source.blockHandler = true;
-            this.blockHandler = true;
+            this._removeItem(source);
 
             Main.overview.setMessage(_("%s has been deleted").format(folder.get_name()),
                                      { forFeedback: true,
-                                       destroyCallback: Lang.bind(this, this._trashItem(source)),
-                                       undoCallback: Lang.bind(this, this._undoTrashItem(source))
+                                       destroyCallback: Lang.bind(this, this._deleteItem(source)),
+                                       undoCallback: Lang.bind(this, this._undoRemoveItem(source))
                                      });
             return;
         }
