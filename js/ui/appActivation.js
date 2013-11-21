@@ -76,12 +76,16 @@ const AppActivationContext = new Lang.Class({
     },
 
     _getCoverPage: function() {
-        let bgGroup = new Meta.BackgroundGroup();
+        let bgGroup = new Meta.BackgroundGroup({ reactive: true });
         let bgManager = new Background.BackgroundManager({
                 container: bgGroup,
                 monitorIndex: Main.layoutManager.primaryIndex });
 
         bgGroup._bgManager = bgManager;
+        bgGroup.connect('event', Lang.bind(this, function() {
+            // block all the events
+            return true;
+        }));
         return bgGroup;
     },
 
@@ -91,11 +95,11 @@ const AppActivationContext = new Lang.Class({
         Main.uiGroup.insert_child_below(this._cover, Main.layoutManager.panelBox);
 
         this._splash = new AppSplashPage(this._app);
+        Main.uiGroup.add_actor(this._splash);
 
         // Make sure that our events are captured
         Main.pushModal(this._splash);
 
-        Main.uiGroup.add_actor(this._splash);
         this._splash.connect('close-clicked', Lang.bind(this, function() {
             /* If application doesn't quit very likely is because it
              * didn't reach running state yet; so wait for it to
