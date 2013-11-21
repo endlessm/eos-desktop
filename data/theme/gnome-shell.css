@@ -1178,8 +1178,8 @@ StScrollBar StButton#vhandle:active {
     background-size: 64px;
 }
 
-.app-well-app .icon-button.dnd-begin .shadow-icon,
-.app-well-app.app-folder .icon-button.dnd-begin .shadow-icon {
+.app-well-app.dnd-begin .icon-button .shadow-icon,
+.app-well-app.app-folder.dnd-begin .icon-button .shadow-icon {
     background: none;
 }
 
@@ -1189,7 +1189,7 @@ StScrollBar StButton#vhandle:active {
     background-size: contain;
 }
 
-.app-well-app.running > .overview-icon.dnd-begin {
+.app-well-app.running.dnd-begin > .overview-icon {
     background: none;
 }
 

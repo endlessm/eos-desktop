@@ -1057,22 +1057,22 @@ const ViewIcon = new Lang.Class({
         let dragBeginIcon = this.getDragBeginIcon();
         this.icon = dragBeginIcon;
         this.actor.set_child(dragBeginIcon.actor);
+        this.actor.add_style_class_name('dnd-begin');
     },
 
     handleViewDragEnd: function() {
         if (!this.blockHandler && this._origIcon) {
             this.icon = this._origIcon;
+            this.actor.remove_style_class_name('dnd-begin');
             this.actor.set_child(this.icon.actor);
             this._origIcon = null;
         }
     },
 
     getDragBeginIcon: function() {
-        let icon = new IconGrid.BaseIcon('', { createIcon: function(iconSize) {
+        return new IconGrid.BaseIcon('', { createIcon: function(iconSize) {
             return new St.Icon({ icon_size: iconSize });
         }});
-        icon.iconButton.add_style_class_name('dnd-begin');
-        return icon;
     },
 
     setDragHoverState: function(state) {
