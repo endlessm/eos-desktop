@@ -1,5 +1,3 @@
-#!/usr/bin/env gjs
-
 const Gio = imports.gi.Gio;
 const Mainloop = imports.mainloop;
 
@@ -52,7 +50,6 @@ if (! uri) {
     print("Usage: eos-launch endlessm-app://<application-name>\n");
 }
 else {
-    var appName;
     var tokens = uri.match(/(endlessm-app:\/\/|)([0-9,a-z,A-Z,-_.]+)/);
     if (tokens) {
         var appName = tokens[2];
