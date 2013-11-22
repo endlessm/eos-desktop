@@ -3,6 +3,7 @@
 const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+const GObject = imports.gi.GObject;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
@@ -17,17 +18,15 @@ const Panel = imports.ui.panel;
 const Tweener = imports.ui.tweener;
 const WindowManager = imports.ui.windowManager;
 
-const SPLASH_CIRCLE_INITIAL_TIMEOUT = 100;
-const SPLASH_SCREEN_TIMEOUT = 700;
+const SPLASH_CIRCLE_PERIOD = 2;
+const SPLASH_SCREEN_TIMEOUT = 700; // ms
 const SPLASH_SCREEN_FADE_OUT = 0.2;
-const SPLASH_SCREEN_COMPLETE_TIME = 250;
-
-// Don't show the flash frame until the final spinner cycle
-const SPLASH_CIRCLE_SKIP_END_FRAMES = 1;
+const SPLASH_SCREEN_COMPLETE_TIME = 0.2;
 
 const SPLASH_SCREEN_DESKTOP_KEY = 'X-Endless-SplashScreen';
 const SPLASH_BACKGROUND_DESKTOP_KEY = 'X-Endless-SplashBackground';
 const DEFAULT_SPLASH_SCREEN_BACKGROUND = global.datadir + '/theme/splash-background-default.jpg';
+const SPINNER_IMAGES_DIR = global.datadir + '/theme/';
 
 const AppActivationContext = new Lang.Class({
     Name: 'AppActivationContext',
@@ -280,10 +279,7 @@ const AppSplashPage = new Lang.Class({
         }
 
         let animationSize = themeNode.get_length('-animation-size');
-        this._spinner = new Panel.VariableSpeedAnimation('splash-circle-animation.png',
-                                                         animationSize,
-                                                         SPLASH_CIRCLE_INITIAL_TIMEOUT,
-                                                         SPLASH_CIRCLE_SKIP_END_FRAMES);
+        this._spinner = new SplashSpinner(animationSize, SPLASH_CIRCLE_PERIOD);
         this._spinner.actor.x_align = Clutter.ActorAlign.CENTER;
         this._spinner.actor.y_align = Clutter.ActorAlign.CENTER;
         this.background.add_child(this._spinner.actor);
@@ -298,6 +294,70 @@ const AppSplashPage = new Lang.Class({
     }
 });
 Signals.addSignalMethods(AppSplashPage.prototype);
+
+const SplashSpinner = new Lang.Class({
+    Name: 'SplashSpinner',
+    _init: function(size, rotationTime) {
+        this.actor = new St.Widget({ layout_manager: new Clutter.BinLayout(),
+                                     x_expand: true,
+                                     y_expand: true });
+
+        this.actor.add_child(this._loadImage('splash-spinner-channel.png',
+                                             size));
+
+        this._spinner = new St.Widget({ layout_manager: new Clutter.BinLayout(),
+                                        x_expand: true,
+                                        y_expand: true });
+        this.actor.add_child(this._spinner);
+
+        this._spinner.add_child(this._loadImage('splash-spinner.png', size));
+
+        // Start loading glow images now, but they won't be added until
+        // completeInTime is called
+        this._channelGlow = this._loadImage('splash-spinner-channel-glow.png',
+                                            size);
+        this._spinnerGlow = this._loadImage('splash-spinner-glow.png', size);
+        this._channelGlow.bind_property('opacity', this._spinnerGlow,
+                                        'opacity',
+                                        GObject.BindingFlags.SYNC_CREATE);
+
+        this.rotationTime = rotationTime;
+        this._completeCallback = null;
+    },
+
+    _loadImage: function(name, size) {
+        let textureCache = St.TextureCache.get_default();
+        let path = GLib.build_filenamev([SPINNER_IMAGES_DIR, name]);
+        let uri = GLib.filename_to_uri(path, null, null);
+
+        return textureCache.load_uri_async(uri, size, size);
+    },
+
+    play: function() {
+        this._spinner.set_z_rotation_from_gravity(0, Clutter.Gravity.CENTER);
+        Tweener.addTween(this._spinner, { rotation_angle_z: 360,
+                                          time: this.rotationTime,
+                                          transition: 'linear',
+                                          onComplete: Lang.bind(this, this.play)
+                                        });        
+    },
+
+    completeInTime: function(time, callback) {
+        if (this._completeCallback === null) {
+            this._channelGlow.set_opacity(0);
+            this.actor.add_child(this._channelGlow);
+            this._spinner.add_child(this._spinnerGlow);
+        }
+
+        this._completeCallback = callback;
+
+        Tweener.addTween(this._channelGlow, { opacity: 255,
+                                              time: time,
+                                              transition: 'linear',
+                                              onComplete: this._completeCallback
+                                            });
+    }
+});
 
 const DesktopAppClient = new Lang.Class({
     Name: 'DesktopAppClient',
