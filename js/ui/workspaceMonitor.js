@@ -16,7 +16,7 @@ const WorkspaceMonitor = new Lang.Class({
         this._knownWindows = new Hash.Map();
 
         this._shellwm = global.window_manager;
-        this._shellwm.connect('minimize', Lang.bind(this, this._minimizeWindow));
+        this._shellwm.connect('minimize-completed', Lang.bind(this, this._minimizeWindow));
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
         this._shellwm.connect('destroy', Lang.bind(this, this._destroyWindow));
 
