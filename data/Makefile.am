@@ -1,13 +1,16 @@
 desktopdir=$(datadir)/applications
-desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop eos-app-feedback.desktop eos-app-tutorial.desktop
+desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop eos-app-feedback.desktop eos-app-tutorial.desktop eos-launch.desktop
 
 sessionsdir=$(datadir)/xsessions
 sessions_DATA = eos-session.desktop
+
+jsdir = $(pkgdatadir)/js
 
 # We substitute in bindir so it works as an autostart
 # file when built in a non-system prefix
 %.desktop.in:%.desktop.in.in
 	$(AM_V_GEN) sed -e "s|@bindir[@]|$(bindir)|" \
+	    -e "s|@jsdir[@]|$(jsdir)|" \
 	    -e "s|@VERSION[@]|$(VERSION)|" \
 	    $< > $@ || rm $@
 
@@ -177,7 +180,8 @@ EXTRA_DIST =					\
 	$(menu_DATA)				\
 	$(convert_DATA)				\
 	$(keys_in_files)			\
-	org.gnome.shell.gschema.xml.in.in
+	org.gnome.shell.gschema.xml.in.in	\
+	eos-launch.desktop.in.in
 
 CLEANFILES =					\
 	gdm-eos-shell.desktop.in		\
@@ -195,5 +199,6 @@ CLEANFILES =					\
 	$(gsettings_SCHEMAS)			\
 	gschemas.compiled			\
 	org.gnome.shell.gschema.valid		\
-	org.gnome.shell.gschema.xml.in
+	org.gnome.shell.gschema.xml.in		\
+	eos-launch.desktop.in
 
