@@ -401,6 +401,10 @@ const DesktopAppClient = new Lang.Class({
 
         let tracker = Shell.WindowTracker.get_default();
         let app = tracker.get_window_app(metaWindow);
+        if (!app) {
+            return;
+        }
+
         let lastApp = this._popLaunchedApp();
         if (app != lastApp) {
             return;
