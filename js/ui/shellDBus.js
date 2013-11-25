@@ -512,12 +512,20 @@ const AppLauncher = new Lang.Class({
     },
 
     Launch: function(name) {
-        var app = this._appSys.lookup_app(name + ".desktop");
+        if (name == "eos-app-store") {
+            Main.appStore.toggle(true);
 
-        if (app) {
-            let activationContext = new AppActivation.AppActivationContext(app);
-            activationContext.activate();
             return true;
+        }
+        else {
+            var app = this._appSys.lookup_app(name + ".desktop");
+
+            if (app) {
+                let activationContext = new AppActivation.AppActivationContext(app);
+                activationContext.activate();
+
+                return true;
+            }
         }
 
         return false;
