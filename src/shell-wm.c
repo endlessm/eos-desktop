@@ -19,6 +19,7 @@ struct _ShellWM {
 enum
 {
   MINIMIZE,
+  MINIMIZE_COMPLETED,
   MAXIMIZE,
   UNMAXIMIZE,
   MAP,
@@ -55,6 +56,14 @@ shell_wm_class_init (ShellWMClass *klass)
 
   shell_wm_signals[MINIMIZE] =
     g_signal_new ("minimize",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  META_TYPE_WINDOW_ACTOR);
+  shell_wm_signals[MINIMIZE_COMPLETED] =
+    g_signal_new ("minimize-completed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
@@ -161,6 +170,7 @@ shell_wm_completed_minimize (ShellWM         *wm,
                              MetaWindowActor *actor)
 {
   meta_plugin_minimize_completed (wm->plugin, actor);
+  g_signal_emit (wm, shell_wm_signals[MINIMIZE_COMPLETED], 0, actor);
 }
 
 /**
