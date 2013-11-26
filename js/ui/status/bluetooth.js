@@ -2,6 +2,7 @@
 
 const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
+const Gio = imports.gi.Gio;
 const GnomeBluetoothApplet = imports.gi.GnomeBluetoothApplet;
 const GnomeBluetooth = imports.gi.GnomeBluetooth;
 const Lang = imports.lang;
@@ -13,6 +14,17 @@ const NotificationDaemon = imports.ui.notificationDaemon;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
+const BUS_NAME = 'org.gnome.SettingsDaemon.Rfkill';
+const OBJECT_PATH = '/org/gnome/SettingsDaemon/Rfkill';
+
+const RfkillManagerInterface = '<node> \
+<interface name="org.gnome.SettingsDaemon.Rfkill"> \
+<property name="BluetoothAirplaneMode" type="b" access="readwrite" /> \
+</interface> \
+</node>';
+
+const RfkillManagerProxy = Gio.DBusProxy.makeProxyWrapper(RfkillManagerInterface);
+
 const Indicator = new Lang.Class({
     Name: 'BTIndicator',
     Extends: PanelMenu.SystemStatusButton,
@@ -21,18 +33,18 @@ const Indicator = new Lang.Class({
         this.parent('bluetooth-disabled-symbolic', _("Bluetooth"));
 
         this._applet = new GnomeBluetoothApplet.Applet();
+        this._proxy = new RfkillManagerProxy(Gio.DBus.session, BUS_NAME, OBJECT_PATH,
+                                             Lang.bind(this, function(proxy, error) {
+                                                 if (error) {
+                                                     log(error.message);
+                                                     return;
+                                                 }
+                                             }));
 
         this._killswitch = new PopupMenu.PopupSwitchMenuItem(_("Bluetooth"), false);
         this._applet.connect('notify::killswitch-state', Lang.bind(this, this._updateKillswitch));
         this._killswitch.connect('toggled', Lang.bind(this, function() {
-            let current_state = this._applet.killswitch_state;
-            if (current_state != GnomeBluetooth.KillswitchState.HARD_BLOCKED &&
-                current_state != GnomeBluetooth.KillswitchState.NO_ADAPTER) {
-                this._applet.killswitch_state = this._killswitch.state ?
-                    GnomeBluetooth.KillswitchState.UNBLOCKED:
-                    GnomeBluetooth.KillswitchState.SOFT_BLOCKED;
-            } else
-                this._killswitch.setToggleState(false);
+            this._proxy.BluetoothAirplaneMode = !this._killswitch.state;
         }));
 
         this._updateKillswitch();
