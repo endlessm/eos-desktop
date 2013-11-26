@@ -122,19 +122,11 @@ PKG_CHECK_MODULES(GVC, libpulse >= $PULSE_MIN_VERS libpulse-mainloop-glib gobjec
 PKG_CHECK_MODULES(DESKTOP_SCHEMAS, gsettings-desktop-schemas >= 3.7.4)
 PKG_CHECK_MODULES(CARIBOU, caribou-1.0 >= 0.4.8)
 
-AC_MSG_CHECKING([for bluetooth support])
-PKG_CHECK_EXISTS([gnome-bluetooth-1.0 >= 3.1.0],
-        [BLUETOOTH_DIR=`$PKG_CONFIG --variable=applet_libdir gnome-bluetooth-1.0`
-	 BLUETOOTH_LIBS=`$PKG_CONFIG --variable=applet_libs gnome-bluetooth-1.0`
-	 AC_SUBST([BLUETOOTH_LIBS],["$BLUETOOTH_LIBS"])
-	 AC_SUBST([BLUETOOTH_DIR],["$BLUETOOTH_DIR"])
-	 AC_DEFINE_UNQUOTED([BLUETOOTH_DIR],["$BLUETOOTH_DIR"],[Path to installed GnomeBluetooth typelib and library])
-	 AC_DEFINE([HAVE_BLUETOOTH],[1],[Define if you have libgnome-bluetooth-applet])
-	 AC_SUBST([HAVE_BLUETOOTH],[1])
-	 AC_MSG_RESULT([yes])],
+PKG_CHECK_MODULES(BLUETOOTH, gnome-bluetooth-1.0 >= 3.9.0,
+        [AC_DEFINE([HAVE_BLUETOOTH],[1],[Define if you have libgnome-bluetooth-applet])
+	 AC_SUBST([HAVE_BLUETOOTH],[1])],
 	[AC_DEFINE([HAVE_BLUETOOTH],[0])
-	 AC_SUBST([HAVE_BLUETOOTH],[0])
-	 AC_MSG_RESULT([no])])
+	 AC_SUBST([HAVE_BLUETOOTH],[0])])
 
 PKG_CHECK_MODULES(CALENDAR_SERVER, libecal-1.2 >= $LIBECAL_MIN_VERSION libedataserver-1.2 >= $LIBEDATASERVER_MIN_VERSION gio-2.0)
 AC_SUBST(CALENDAR_SERVER_CFLAGS)

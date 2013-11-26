@@ -335,7 +335,7 @@ Shell_0_1_gir_CFLAGS = $(libeos_shell_la_CPPFLAGS) -I $(srcdir)
 Shell_0_1_gir_LIBS = libeos-shell.la
 Shell_0_1_gir_FILES = $(libeos_shell_la_gir_sources)
 Shell_0_1_gir_SCANNERFLAGS = --include-uninstalled=$(builddir)/St-1.0.gir \
-	--add-include-path=$(MUTTER_GIR_DIR) $(if $(BLUETOOTH_DIR),-L $(BLUETOOTH_DIR),)
+	--add-include-path=$(MUTTER_GIR_DIR)
 INTROSPECTION_GIRS += Shell-0.1.gir
 CLEANFILES += Shell-0.1.gir
 

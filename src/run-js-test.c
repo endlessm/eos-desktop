@@ -132,14 +132,6 @@ main(int argc, char **argv)
   g_set_prgname (title);
   g_free (title);
 
-#if HAVE_BLUETOOTH
-  /* The module imports are all so intertwined that if the test
-   * imports anything in js/ui, it will probably eventually end up
-   * pulling in ui/status/bluetooth.js. So we need this.
-   */
-  g_irepository_prepend_search_path (BLUETOOTH_DIR);
-#endif
-
   if (coverage_prefixes) {
     if (!coverage_output_path)
       g_error ("--coverage-output is required when taking coverage statistics");
