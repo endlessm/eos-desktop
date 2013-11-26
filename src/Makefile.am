@@ -309,7 +309,6 @@ libeos_shell_la_LIBADD =		\
 	-lm				\
 	@EOS_C_COVERAGE_LDFLAGS@	\
 	$(EOS_SHELL_LIBS)		\
-	$(BLUETOOTH_LIBS)		\
 	libst-1.0.la       		\
 	libtray.la			\
 	gvc/libgvc.la			\

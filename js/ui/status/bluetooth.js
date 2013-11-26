@@ -2,7 +2,7 @@
 
 const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
-const GnomeBluetoothApplet = imports.gi.GnomeBluetoothApplet;
+const Gio = imports.gi.Gio;
 const GnomeBluetooth = imports.gi.GnomeBluetooth;
 const Lang = imports.lang;
 const St = imports.gi.St;
@@ -27,7 +27,7 @@ const Indicator = new Lang.Class({
     _init: function() {
         this.parent('bluetooth-disabled-symbolic', _("Bluetooth"));
 
-        this._applet = new GnomeBluetoothApplet.Applet();
+        // this._applet = new GnomeBluetoothApplet.Applet();
 
         this._killswitch = new PopupMenu.PopupSwitchMenuItem(_("Bluetooth"), false);
         this._applet.connect('notify::killswitch-state', Lang.bind(this, this._updateKillswitch));
