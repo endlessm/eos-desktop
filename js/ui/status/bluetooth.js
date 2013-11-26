@@ -20,6 +20,7 @@ const OBJECT_PATH = '/org/gnome/SettingsDaemon/Rfkill';
 const RfkillManagerInterface = '<node> \
 <interface name="org.gnome.SettingsDaemon.Rfkill"> \
 <property name="BluetoothAirplaneMode" type="b" access="readwrite" /> \
+<property name="BluetoothHardwareAirplaneMode" type="b" access="read" /> \
 </interface> \
 </node>';
 
@@ -32,7 +33,6 @@ const Indicator = new Lang.Class({
     _init: function() {
         this.parent('bluetooth-disabled-symbolic', _("Bluetooth"));
 
-        this._applet = new GnomeBluetoothApplet.Applet();
         this._proxy = new RfkillManagerProxy(Gio.DBus.session, BUS_NAME, OBJECT_PATH,
                                              Lang.bind(this, function(proxy, error) {
                                                  if (error) {
@@ -40,39 +40,53 @@ const Indicator = new Lang.Class({
                                                      return;
                                                  }
                                              }));
+        this._proxy.connect('g-properties-changed', Lang.bind(this, this._sync));
 
         this._killswitch = new PopupMenu.PopupSwitchMenuItem(_("Bluetooth"), false);
-        this._applet.connect('notify::killswitch-state', Lang.bind(this, this._updateKillswitch));
         this._killswitch.connect('toggled', Lang.bind(this, function() {
             this._proxy.BluetoothAirplaneMode = !this._killswitch.state;
         }));
 
-        this._updateKillswitch();
         this.menu.addMenuItem(this._killswitch);
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         this.menu.addSettingsAction(_("Bluetooth Settings"), 'gnome-bluetooth-panel.desktop');
+
+        this._client = new GnomeBluetooth.Client();
+        this._model = this._client.get_model();
+        this._model.connect('row-changed', Lang.bind(this, this._sync));
+        this._model.connect('row-deleted', Lang.bind(this, this._sync));
+        this._model.connect('row-inserted', Lang.bind(this, this._sync));
+        this._sync();
     },
 
-    _updateKillswitch: function() {
-        let current_state = this._applet.killswitch_state;
-        let on = current_state == GnomeBluetooth.KillswitchState.UNBLOCKED;
-        let has_adapter = current_state != GnomeBluetooth.KillswitchState.NO_ADAPTER;
-        let can_toggle = current_state != GnomeBluetooth.KillswitchState.NO_ADAPTER &&
-                         current_state != GnomeBluetooth.KillswitchState.HARD_BLOCKED;
+    _getDefaultAdapter: function() {
+        let [ret, iter] = this._model.get_iter_first();
+        while (ret) {
+            let isDefault = this._model.get_value(iter,
+                                                  GnomeBluetooth.Column.DEFAULT);
+            if (isDefault)
+                return iter;
+            ret = this._model.iter_next(iter);
+        }
+        return null;
+    },
 
+    _sync: function() {
+        let defaultAdapter = this._getDefaultAdapter();
+        let on = !this._proxy.BluetoothAirplaneMode;
+
+        this.actor.visible = (defaultAdapter != null);
         this._killswitch.setToggleState(on);
-        if (can_toggle)
-            this._killswitch.setStatus(null);
-        else
+
+        if (this._proxy.BluetoothHardwareAirplaneMode)
             /* TRANSLATORS: this means that bluetooth was disabled by hardware rfkill */
             this._killswitch.setStatus(_("hardware disabled"));
+        else
+            this._killswitch.setStatus(null);
 
-        this.actor.visible = has_adapter;
-
-        if (on) {
+        if (on)
             this.setIcon('bluetooth-active-symbolic');
-        } else {
+        else
             this.setIcon('bluetooth-disabled-symbolic');
-        }
     },
 });
