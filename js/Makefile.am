@@ -25,6 +25,7 @@ nobase_dist_js_DATA = 	\
 	gdm/util.js		\
 	extensionPrefs/main.js	\
 	misc/config.js		\
+	misc/eos-launch.js	\
 	misc/extensionUtils.js	\
 	misc/fileUtils.js	\
 	misc/gnomeSession.js	\

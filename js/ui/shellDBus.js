@@ -6,6 +6,7 @@ const Lang = imports.lang;
 const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 
+const AppActivation = imports.ui.appActivation;
 const AppDisplay = imports.ui.appDisplay;
 const Config = imports.misc.config;
 const ExtensionSystem = imports.ui.extensionSystem;
@@ -74,6 +75,7 @@ const GnomeShell = new Lang.Class({
         this._extensionsService = new GnomeShellExtensions();
         this._screenshotService = new Screenshot.ScreenshotService();
         this._appstoreService = new AppStoreService();
+        this._appLauncherService = new AppLauncher();
 
         this._grabbedAccelerators = new Hash.Map();
         this._grabbers = new Hash.Map();
@@ -489,5 +491,43 @@ const AppStoreService = new Lang.Class({
     _emitApplicationsChanged: function() {
         let allApps = IconGridLayout.layout.listApplications();
         this._dbusImpl.emit_signal('ApplicationsChanged', GLib.Variant.new('(as)', [allApps]));
+    }
+});
+
+const AppLauncherIface = <interface name="org.gnome.Shell.AppLauncher">
+<method name="Launch">
+    <arg type="s" direction="in" name="name" />
+    <arg type="b" direction="out" name="success" />
+</method>
+</interface>;
+
+const AppLauncher = new Lang.Class({
+    Name: 'AppLauncherDBus',
+
+    _init: function() {
+        this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(AppLauncherIface, this);
+        this._dbusImpl.export(Gio.DBus.session, '/org/gnome/Shell');
+
+        this._appSys = Shell.AppSystem.get_default();
+    },
+
+    Launch: function(name) {
+        if (name == "eos-app-store") {
+            Main.appStore.toggle(true);
+
+            return true;
+        }
+        else {
+            var app = this._appSys.lookup_app(name + ".desktop");
+
+            if (app) {
+                let activationContext = new AppActivation.AppActivationContext(app);
+                activationContext.activate();
+
+                return true;
+            }
+        }
+
+        return false;
     }
 });

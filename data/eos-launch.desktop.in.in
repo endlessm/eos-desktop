@@ -1,0 +1,7 @@
+[Desktop Entry]
+_Name=EOS Launch
+_Comment=Utility to launch EndlessOS applications
+Exec=gjs @jsdir@/misc/eos-launch.js %U
+X-MultipleArgs=false
+Categories=EndlessOS;Utility;Core;
+MimeType=x-scheme-handler/endlessm-app;
