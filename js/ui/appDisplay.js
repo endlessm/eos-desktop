@@ -1699,6 +1699,11 @@ const AppStoreIcon = new Lang.Class({
         source.blockHandler = true;
         this.blockHandler = true;
 
+        // store the location of the removed item in order to undo it
+        let [ folderId, idx ] = IconGridLayout.layoyt.getPositionForIcon(souce.getId());
+        this._removedItemFolder = folderId;
+        this._removedItemPos = idx;
+
         IconGridLayout.layout.removeIcon(source.getId());
 
         source.blockHandler = false;
@@ -1722,6 +1727,9 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _deleteItem: function(source) {
+        this._removedItemPos = -1;
+        this._removedItemFolder = null;
+
         if (source.app) {
             let appInfo = source.app.get_app_info();
             if (this._canDelete(appInfo)) {
@@ -1737,21 +1745,22 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _undoRemoveItem: function(source) {
-        IconGridLayout.layout.addIcon(source.getId());
+        let pos = this._removedItemPos;
+        let folderId = this._removedItemFolder;
+
+        IconGridLayout.layout.repositionIcon(source.getId(), pos, folderId);
+
+        this._removedItemPos = -1;
+        this._removedItemFolder = null;
     },
 
     _acceptAppDrop: function(source) {
-        let appInfo = source.app.get_app_info();
-        if (!this._canDelete(appInfo)) {
-            return;
-        }
-
         this._removeItem(source);
 
         Main.overview.setMessage(_("%s has been deleted").format(source.app.get_name()),
                                  { forFeedback: true,
-                                   destroyCallback: Lang.bind(this, this._deleteItem(source)),
-                                   undoCallback: Lang.bind(this, this._undoRemoveItem(source))
+                                   destroyCallback: Lang.bind(this, this._deleteItem, source),
+                                   undoCallback: Lang.bind(this, this._undoRemoveItem, source)
                                  });
     },
 
@@ -1775,8 +1784,8 @@ const AppStoreIcon = new Lang.Class({
 
             Main.overview.setMessage(_("%s has been deleted").format(folder.get_name()),
                                      { forFeedback: true,
-                                       destroyCallback: Lang.bind(this, this._deleteItem(source)),
-                                       undoCallback: Lang.bind(this, this._undoRemoveItem(source))
+                                       destroyCallback: Lang.bind(this, this._deleteItem, source),
+                                       undoCallback: Lang.bind(this, this._undoRemoveItem, source)
                                      });
             return;
         }
