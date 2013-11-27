@@ -313,6 +313,7 @@ st_entry_style_changed (StWidget *self)
 {
   StEntryPrivate *priv = ST_ENTRY_PRIV (self);
   StThemeNode *theme_node;
+  StShadow *shadow_spec;
   ClutterColor color;
   const PangoFontDescription *font;
   gchar *font_string, *font_name;
@@ -349,6 +350,16 @@ st_entry_style_changed (StWidget *self)
     clutter_actor_queue_relayout (priv->entry);
   g_free (font_string);
   g_free (font_name);
+
+  /* Entries with shadow need to be painted on a FBO to handle opacity
+     correctly */
+  shadow_spec = st_theme_node_get_text_shadow (theme_node);
+  if (shadow_spec)
+    clutter_actor_set_offscreen_redirect (CLUTTER_ACTOR (self),
+                                          CLUTTER_OFFSCREEN_REDIRECT_ALWAYS);
+  else
+    clutter_actor_set_offscreen_redirect (CLUTTER_ACTOR (self),
+                                          CLUTTER_OFFSCREEN_REDIRECT_AUTOMATIC_FOR_OPACITY);
 
   ST_WIDGET_CLASS (st_entry_parent_class)->style_changed (self);
 }
