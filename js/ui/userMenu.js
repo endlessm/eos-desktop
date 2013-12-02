@@ -40,7 +40,7 @@ const EXIT_TEXT = _("Exit");
 
 const TUTORIAL_TEXT = _("Tutorial");
 const SETTINGS_TEXT = _("Settings");
-const FEEDBACK_TEXT = _("Give us Feedback");
+const FEEDBACK_TEXT = _("Give Us Feedback");
 
 const FEEDBACK_LAUNCHER = "eos-app-feedback.desktop";
 const TUTORIAL_LAUNCHER = "eos-app-tutorial.desktop";

@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-18 07:44-0800\n"
-"PO-Revision-Date: 2013-11-18 15:59+0000\n"
+"POT-Creation-Date: 2013-12-02 13:28-0800\n"
+"PO-Revision-Date: 2013-12-02 21:32+0000\n"
 "Last-Translator: rshuler <roddy@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/teams/language/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -475,17 +475,17 @@ msgstr "(ou deslize o dedo)"
 msgid "(e.g., user or %s)"
 msgstr "(ex.: usuário ou %s)"
 
-#: ../js/misc/util.js:124
+#: ../js/misc/util.js:126
 msgid "Command not found"
 msgstr "Comando não encontrado"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:157
+#: ../js/misc/util.js:159
 msgid "Could not parse command:"
 msgstr "Não foi possível analisar comando:"
 
-#: ../js/misc/util.js:165
+#: ../js/misc/util.js:167
 #, c-format
 msgid "Execution of '%s' failed:"
 msgstr "A execução de \"%s\" falhou:"
@@ -506,36 +506,41 @@ msgstr "Adicionar"
 msgid "Delete"
 msgstr "Excluir"
 
-#: ../js/ui/appDisplay.js:1773
+#: ../js/ui/appDisplay.js:1760 ../js/ui/appDisplay.js:1785
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/appDisplay.js:1795
 msgid "Warning"
 msgstr "Aviso"
 
-#: ../js/ui/appDisplay.js:1779
+#: ../js/ui/appDisplay.js:1801
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para excluir uma pasta que você tem que remover todos os arquivos de dentro primeiro."
 
-#: ../js/ui/appDisplay.js:1785
+#: ../js/ui/appDisplay.js:1807
 msgid "We are just trying to keep you safe."
 msgstr "Estamos apenas tentando manter a segurança dos seus dados."
 
-#: ../js/ui/appDisplay.js:1791 ../js/ui/status/bluetooth.js:414
+#: ../js/ui/appDisplay.js:1813 ../js/ui/status/bluetooth.js:414
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1824
+#: ../js/ui/appDisplay.js:1846
 msgid "Delete?"
 msgstr "Excluir?"
 
-#: ../js/ui/appDisplay.js:1934
+#: ../js/ui/appDisplay.js:1956
 msgid "New Window"
 msgstr "Nova janela"
 
-#: ../js/ui/appDisplay.js:1937 ../js/ui/dash.js:290
+#: ../js/ui/appDisplay.js:1959 ../js/ui/dash.js:290
 msgid "Remove from Favorites"
 msgstr "Remover dos favoritos"
 
-#: ../js/ui/appDisplay.js:1938
+#: ../js/ui/appDisplay.js:1960
 msgid "Add to Favorites"
 msgstr "Adicionar aos favoritos"
 
@@ -1343,11 +1348,11 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../js/ui/overview.js:88
+#: ../js/ui/overview.js:103
 msgid "Undo"
 msgstr "Desfazer"
 
-#: ../js/ui/overview.js:249
+#: ../js/ui/overview.js:264
 msgid "Overview"
 msgstr "Visão geral"
 
@@ -1865,7 +1870,7 @@ msgid "Settings"
 msgstr "Configurações"
 
 #: ../js/ui/userMenu.js:43
-msgid "Give us Feedback"
+msgid "Give Us Feedback"
 msgstr "Nos dê a sua opinião"
 
 #: ../js/ui/userMenu.js:435
