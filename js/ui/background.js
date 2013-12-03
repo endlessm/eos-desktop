@@ -54,11 +54,9 @@ const BackgroundCache = new Lang.Class({
                                         effects: Meta.BackgroundEffects.NONE });
 
         let content = null;
+
         let candidateContent = null;
         for (let i = 0; i < this._patterns.length; i++) {
-            if (!this._patterns[i])
-                continue;
-
             if (this._patterns[i].get_shading() != params.shadingType)
                 continue;
 
@@ -92,7 +90,6 @@ const BackgroundCache = new Lang.Class({
         }
 
         this._patterns.push(content);
-
         return content;
     },
 
@@ -214,11 +211,9 @@ const BackgroundCache = new Lang.Class({
                                         onFinished: null });
 
         let content = null;
+
         let candidateContent = null;
         for (let i = 0; i < this._images.length; i++) {
-            if (!this._images[i])
-                continue;
-
             if (this._images[i].get_style() != params.style)
                 continue;
 
