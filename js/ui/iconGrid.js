@@ -426,6 +426,8 @@ const BaseIcon = new Lang.Class({
     },
 
     _onDestroy: function() {
+        this.actor._delegate = null;
+
         if (this._iconThemeChangedId > 0) {
             let cache = St.TextureCache.get_default();
             cache.disconnect(this._iconThemeChangedId);
