@@ -15,12 +15,14 @@ const ChatButton = new Lang.Class({
     _init: function() {
         let appSystem = Shell.AppSystem.get_default();
         this.app = appSystem.lookup_app('eos-app-empathy.desktop');
-        if (!this.app) {
-            log('Unable to find empathy');
-            return;
-        }
 
         this.parent(null, _("Chat"));
+
+        if (!this.app) {
+            log('Unable to find empathy');
+            this.actor.hide();
+            return;
+        }
 
         this.actor.add_style_class_name('chat-button');
 
