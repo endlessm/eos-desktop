@@ -1044,6 +1044,9 @@ const ViewIcon = new Lang.Class({
             this._origIcon = null;
             origIcon.actor.destroy();
         }
+
+        this.iconButton._delegate = null;
+        this.actor._delegate = null;
     },
 
     _onLabelCancel: function() {
