@@ -29,11 +29,9 @@ CLEANFILES += $(service_DATA)
 
 CLEANFILES += $(gir_DATA) $(typelib_DATA)
 
-bin_SCRIPTS += eos-shell-extension-tool eos-shell-extension-prefs \
-	       eos-shell-perf-tool
-EXTRA_DIST += eos-shell-extension-tool.in eos-shell-extension-prefs.in \
-	      eos-shell-perf-tool.in
-bin_PROGRAMS = eos-shell-real
+bin_SCRIPTS += eos-shell-extension-tool eos-shell-perf-tool
+EXTRA_DIST += eos-shell-extension-tool.in eos-shell-perf-tool.in
+bin_PROGRAMS = eos-shell-real eos-shell-extension-prefs
 
 if USE_JHBUILD_WRAPPER_SCRIPT
 eos_shell = eos-shell-jhbuild
@@ -69,9 +67,6 @@ eos-shell-jhbuild: eos-shell-jhbuild.in eos-shell-real Makefile
 	@$(LIBTOOL) --mode=execute test -f eos-shell-real
 
 eos-shell-extension-tool: eos-shell-extension-tool.in Makefile
-	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
-
-eos-shell-extension-prefs: eos-shell-extension-prefs.in Makefile
 	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
 
 eos-shell-perf-tool: eos-shell-perf-tool.in Makefile
@@ -198,6 +193,13 @@ eos_shell_real_SOURCES =		\
 eos_shell_real_CPPFLAGS = $(eos_shell_cflags)
 eos_shell_real_LDADD = libeos-shell.la libeos-shell-js.la $(libeos_shell_la_LIBADD)
 eos_shell_real_DEPENDENCIES = libeos-shell.la
+
+eos_shell_extension_prefs_SOURCES = gnome-shell-extension-prefs.c \
+	$(top_builddir)/js/js-resources.c		\
+	$(top_builddir)/js/js-resources.h		\
+	$(NULL)
+eos_shell_extension_prefs_CPPFLAGS = $(eos_shell_cflags)
+eos_shell_extension_prefs_LDADD = libeos-shell-js.la
 
 ########################################
 
