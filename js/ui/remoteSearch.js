@@ -215,7 +215,9 @@ const RemoteSearchProvider = new Lang.Class({
     },
 
     createIcon: function(size, meta) {
-        let gicon;
+        let gicon = null;
+        let icon = null;
+
         if (meta['icon']) {
             gicon = Gio.icon_deserialize(meta['icon']);
         } else if (meta['gicon']) {
@@ -227,8 +229,10 @@ const RemoteSearchProvider = new Lang.Class({
                                                        bitsPerSample, width, height, rowStride);
         }
 
-        return new St.Icon({ gicon: gicon,
-                             icon_size: size });
+        if (gicon)
+            icon = new St.Icon({ gicon: gicon,
+                                 icon_size: size });
+        return icon;
     },
 
     _getResultsFinished: function(results, error) {
