@@ -220,6 +220,7 @@ const LayoutManager = new Lang.Class({
 
         this.screenShieldGroup = new St.Widget({ name: 'screenShieldGroup',
                                                  visible: false,
+                                                 reactive: true,
                                                  clip_to_allocation: true,
                                                  layout_manager: new Clutter.BinLayout(),
                                                });
