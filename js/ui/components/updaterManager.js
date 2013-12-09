@@ -146,6 +146,8 @@ const UpdaterManager = new Lang.Class({
             this._notifyUpdateReady();
         } else if (state == UpdaterState.UPDATE_APPLIED) {
             this._notifyUpdateApplied();
+        } else if (state == UpdaterState.ERROR) {
+            this._notifyError();
         }
     },
 
@@ -220,6 +222,21 @@ const UpdaterManager = new Lang.Class({
             _("Updates installed"),
             _("Software updates were installed on your system"));
         this._notification.addButton('restart-updates', _("Restart now"));
+
+        this._sendNotification();
+    },
+
+    _notifyError: function() {
+        // we want to show errors only when manually updating the system
+        if (this._lastAutoStep > UpdaterStep.POLL) {
+          return;
+        }
+
+        this._ensureSource();
+
+        this._notification = new UpdaterNotification(this._source,
+            _("Update failed"),
+            _("We could not update your system"));
 
         this._sendNotification();
     }
