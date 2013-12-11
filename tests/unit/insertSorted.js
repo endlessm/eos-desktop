@@ -10,67 +10,85 @@ const Environment = imports.ui.environment;
 Environment.init();
 const Util = imports.misc.util;
 
-function assertArrayEquals(errorMessage, array1, array2) {
-    JsUnit.assertEquals(errorMessage + ' length',
+function assertArrayEquals(array1, array2) {
+    JsUnit.assertEquals('Array lengths are not equal',
                         array1.length, array2.length);
     for (let j = 0; j < array1.length; j++) {
-        JsUnit.assertEquals(errorMessage + ' item ' + j,
+        JsUnit.assertEquals('Array item ' + j + ' is not equal',
                             array1[j], array2[j]);
     }
 }
 
 function cmp(one, two) {
-    return one-two;
+    return one - two;
 }
 
-let arrayInt = [1, 2, 3, 5, 6];
-Util.insertSorted(arrayInt, 4, cmp);
-
-assertArrayEquals('first test', [1,2,3,4,5,6], arrayInt);
+function testInsertIntegerWithComparator() {
+    let arrayInt = [1, 2, 3, 5, 6];
+    Util.insertSorted(arrayInt, 4, function(one, two) {
+                                       return one - two
+                                   });
+    assertArrayEquals([1, 2, 3, 4, 5, 6], arrayInt);
+}
 
 // no comparator, integer sorting is implied
-Util.insertSorted(arrayInt, 3);
-
-assertArrayEquals('second test', [1,2,3,3,4,5,6], arrayInt);
-
-let obj1 = { a: 1 };
-let obj2 = { a: 2, b: 0 };
-let obj3 = { a: 2, b: 1 };
-let obj4 = { a: 3 };
-
-function objCmp(one, two) {
-    return one.a - two.a;
+function testInsertIntegerWithoutComparator() {
+    let arrayInt = [1, 2, 3, 4, 5, 6];
+    Util.insertSorted(arrayInt, 3);
+    assertArrayEquals([1, 2, 3, 3, 4, 5, 6], arrayInt);
 }
 
-let arrayObj = [obj1, obj3, obj4];
+function testInsertObjectWithPropertyComparator() {
+    let obj1 = { a: 1 };
+    let obj2 = { a: 2, b: 0 };
+    let obj3 = { a: 2, b: 1 };
+    let obj4 = { a: 3 };
 
-// obj2 compares equivalent to obj3, should be
-// inserted before
-Util.insertSorted(arrayObj, obj2, objCmp);
+    let arrayObj = [obj1, obj3, obj4];
 
-assertArrayEquals('object test', [obj1, obj2, obj3, obj4], arrayObj);
-
-function checkedCmp(one, two) {
-    if (typeof one != 'number' ||
-        typeof two != 'number')
-        throw new TypeError('Invalid type passed to checkedCmp');
-
-    return one-two;
+    // obj2 compares equivalent to obj3, should be
+    // inserted before
+    Util.insertSorted(arrayObj, obj2, function(one, two) {
+                                          return one.a - two.a
+                                      });
+    assertArrayEquals([obj1, obj2, obj3, obj4], arrayObj);
 }
-
-let arrayEmpty = [];
 
 // check that no comparisons are made when
 // inserting in a empty array
-Util.insertSorted(arrayEmpty, 3, checkedCmp);
+function testInsertingIntoEmptyArrayDoesNotCallComparator() {
+    let emptyArray = [];
+    Util.insertSorted(emptyArray, 3, function() {
+                                         throw "Comparator should not be called"
+                                     });
+}
+
+
+/* If we access past the end of an array, then the types of
+ * either one or two will not be a number and this comparator
+ * will throw */
+function checkedIntegerCmp(one, two) {
+    if (typeof one != 'number' ||
+        typeof two != 'number')
+        throw new TypeError('Invalid type passed to checkedIntegerCmp ' +
+                            'this is most likely caused by the fact that ' +
+                            'the function calling this one accessed an array ' +
+                            'out of bounds');
+
+    return one - two;
+}
 
 // Insert at the end and check that we don't
 // access past it
-Util.insertSorted(arrayEmpty, 4, checkedCmp);
-Util.insertSorted(arrayEmpty, 5, checkedCmp);
+function testInsertingAndEndOfArrayDoesNotCauseInvalidAccess() {
+    let array = [1];
+    Util.insertSorted(array, 4, checkedIntegerCmp);
+    Util.insertSorted(array, 5, checkedIntegerCmp);
+}
 
-// Some more insertions
-Util.insertSorted(arrayEmpty, 2, checkedCmp);
-Util.insertSorted(arrayEmpty, 1, checkedCmp);
 
-assertArrayEquals('checkedCmp test', [1, 2, 3, 4, 5], arrayEmpty);
+function testInsertingAtBeginningOfArrayDoesNotCauseInvalidAccess() {
+    let array = [1, 4, 5];
+    Util.insertSorted(array, 2, checkedIntegerCmp);
+    Util.insertSorted(array, 1, checkedIntegerCmp);
+}
