@@ -5,10 +5,10 @@
 const JsUnit = imports.jsUnit;
 const Pango = imports.gi.Pango;
 
-const Environment = imports.ui.environment;
-Environment.init();
-
 const MessageTrayMarkup = imports.ui.messageTrayMarkup;
+
+const Environment = imports.misc.coreEnvironment;
+Environment.coreInit();
 
 // Assert that @input, assumed to be markup, gets "fixed" to @output,
 // which is valid markup. If @output is null, @input is expected to

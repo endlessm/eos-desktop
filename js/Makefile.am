@@ -24,7 +24,9 @@ nobase_dist_js_DATA = 	\
 	gdm/realmd.js		\
 	gdm/util.js		\
 	extensionPrefs/main.js	\
+	misc/actorVisibility.js \
 	misc/config.js		\
+	misc/coreEnvironment.js \
 	misc/eos-launch.js	\
 	misc/extensionUtils.js	\
 	misc/fileUtils.js	\
@@ -48,6 +50,7 @@ nobase_dist_js_DATA = 	\
 	ui/buttonConstants.js	\
 	ui/calendar.js		\
 	ui/checkBox.js		\
+	ui/closeButton.js \
 	ui/ctrlAltTab.js	\
 	ui/dash.js		\
 	ui/dateMenu.js		\

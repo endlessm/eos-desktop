@@ -4,10 +4,10 @@
 
 const JsUnit = imports.jsUnit;
 
-const Environment = imports.ui.environment;
-Environment.init();
-
 const Util = imports.misc.util;
+
+const Environment = imports.misc.coreEnvironment;
+Environment.coreInit();
 
 // TODO: A real table driven framework is required here, these are not
 //       all testing the same thing.

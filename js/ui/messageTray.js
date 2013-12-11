@@ -17,6 +17,7 @@ const St = imports.gi.St;
 const BoxPointer = imports.ui.boxpointer;
 const ButtonConstants = imports.ui.buttonConstants;
 const CtrlAltTab = imports.ui.ctrlAltTab;
+const CloseButton = imports.ui.closeButton;
 const GnomeSession = imports.misc.gnomeSession;
 const GrabHelper = imports.ui.grabHelper;
 const Hash = imports.misc.hash;
@@ -1409,7 +1410,7 @@ const SummaryItem = new Lang.Class({
         this.notificationStackView.add_actor(this.notificationStack);
         this.notificationStackWidget.add_actor(this.notificationStackView);
 
-        this.closeButton = Util.makeCloseButton();
+        this.closeButton = CloseButton.makeCloseButton();
         this.notificationStackWidget.add_actor(this.closeButton);
         this._stackedNotifications = [];
 
@@ -1667,7 +1668,7 @@ const MessageTray = new Lang.Class({
         this._clickedSummaryItemMouseButton = -1;
         this._clickedSummaryItemAllocationChangedId = 0;
 
-        this._closeButton = Util.makeCloseButton();
+        this._closeButton = CloseButton.makeCloseButton();
         this._closeButton.hide();
         this._closeButton.connect('clicked', Lang.bind(this, this._closeNotification));
         this._notificationWidget.add_actor(this._closeButton);

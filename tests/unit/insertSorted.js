@@ -3,12 +3,10 @@
 // Test cases for Util.insertSorted
 
 const JsUnit = imports.jsUnit;
-
-// Needed so that Util can bring some UI stuff
-// we don't actually use
-const Environment = imports.ui.environment;
-Environment.init();
 const Util = imports.misc.util;
+
+const Environment = imports.misc.coreEnvironment;
+Environment.coreInit();
 
 function assertArrayEquals(array1, array2) {
     JsUnit.assertEquals('Array lengths are not equal',

@@ -13,10 +13,12 @@ const St = imports.gi.St;
 const Mainloop = imports.mainloop;
 const Atk = imports.gi.Atk;
 
+const ActorVisibility = imports.misc.actorVisibility;
 const AppActivation = imports.ui.appActivation;
 const AppFavorites = imports.ui.appFavorites;
 const BackgroundMenu = imports.ui.backgroundMenu;
 const BoxPointer = imports.ui.boxpointer;
+const CloseButton = imports.ui.closeButton;
 const ButtonConstants = imports.ui.buttonConstants;
 const DND = imports.ui.dnd;
 const IconGrid = imports.ui.iconGrid;
@@ -249,7 +251,7 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     _ensureIconVisible: function(icon) {
-        return Util.ensureActorVisibleInScrollView(this.actor, icon);
+        return ActorVisibility.ensureActorVisibleInScrollView(this.actor, icon);
     },
 
     iconsNeedRedraw: function() {
@@ -1325,7 +1327,7 @@ const AppFolderPopup = new Lang.Class({
         this.actor.add_actor(this._boxPointer.actor);
         this._boxPointer.bin.set_child(this._view.actor);
 
-        this.closeButton = Util.makeCloseButton();
+        this.closeButton = CloseButton.makeCloseButton();
         this.closeButton.connect('clicked', Lang.bind(this, this.popdown));
         this.actor.add_actor(this.closeButton);
 

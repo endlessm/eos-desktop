@@ -6,12 +6,13 @@ imports.gi.versions.Gdk = '3.0';
 imports.gi.versions.GdkPixbuf = '2.0';
 imports.gi.versions.Gtk = '3.0';
 
-const Clutter = imports.gi.Clutter;;
-const Gettext = imports.gettext;
+const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
+
+const CoreEnvironment = imports.misc.coreEnvironment;
 
 // We can't import shell JS modules yet, because they may have
 // variable initializations, etc, that depend on init() already having
@@ -39,22 +40,12 @@ function _patchContainerClass(containerClass) {
     };
 }
 
-function _makeLoggingFunc(func) {
-    return function() {
-        return func([].join.call(arguments, ', '));
-    };
-}
-
 function init() {
+    CoreEnvironment.coreInit();
+
     // Add some bindings to the global JS namespace; (gjs keeps the web
     // browser convention of having that namespace be called 'window'.)
     window.global = Shell.Global.get();
-
-    window.log = _makeLoggingFunc(window.log);
-
-    window._ = Gettext.gettext;
-    window.C_ = Gettext.pgettext;
-    window.ngettext = Gettext.ngettext;
 
     // Miscellaneous monkeypatching
     _patchContainerClass(St.BoxLayout);

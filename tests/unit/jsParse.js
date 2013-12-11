@@ -5,10 +5,10 @@
 const Lang = imports.lang;
 const JsUnit = imports.jsUnit;
 
-const Environment = imports.ui.environment;
-Environment.init();
-
 const JsParse = imports.misc.jsParse;
+
+const Environment = imports.misc.coreEnvironment;
+Environment.coreInit();
 
 // Utility function for comparing arrays
 function assertArrayEquals(errorMessage, array1, array2) {
