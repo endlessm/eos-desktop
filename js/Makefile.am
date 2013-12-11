@@ -68,6 +68,7 @@ nobase_dist_js_DATA = 	\
 	ui/magnifierDBus.js	\
 	ui/main.js		\
 	ui/messageTray.js	\
+	ui/messageTrayMarkup.js \	
 	ui/modalDialog.js	\
 	ui/panelSeparator.js	\
 	ui/remoteSearch.js	\

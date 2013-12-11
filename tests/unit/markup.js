@@ -16,7 +16,7 @@ const MessageTray = imports.ui.messageTray;
 function assertConverts(input, output) {
     if (!output)
         output = input;
-    let fixed = MessageTray._fixMarkup(input, true);
+    let fixed = MessageTrayMarkup.fixMarkupForMessageTray(input, true);
     JsUnit.assertEquals(output, fixed);
 
     let parsed = false;
@@ -30,7 +30,7 @@ function assertConverts(input, output) {
 // Assert that @input, assumed to be plain text, gets escaped to @output,
 // which is valid markup.
 function assertEscapes(input, output) {
-    let fixed = MessageTray._fixMarkup(input, false);
+    let fixed = MessageTrayMarkup.fixMarkupForMessageTray(input, false);
     JsUnit.assertEquals(output, fixed);
 
     let parsed = false;

@@ -22,6 +22,7 @@ const GrabHelper = imports.ui.grabHelper;
 const Hash = imports.misc.hash;
 const Lightbox = imports.ui.lightbox;
 const Main = imports.ui.main;
+const MessageTrayMarkup = imports.ui.messageTrayMarkup;
 const PointerWatcher = imports.ui.pointerWatcher;
 const PopupMenu = imports.ui.popupMenu;
 const Params = imports.misc.params;
@@ -79,23 +80,7 @@ const Urgency = {
 }
 
 function _fixMarkup(text, allowMarkup) {
-    if (allowMarkup) {
-        // Support &amp;, &quot;, &apos;, &lt; and &gt;, escape all other
-        // occurrences of '&'.
-        let _text = text.replace(/&(?!amp;|quot;|apos;|lt;|gt;)/g, '&amp;');
-
-        // Support <b>, <i>, and <u>, escape anything else
-        // so it displays as raw markup.
-        _text = _text.replace(/<(?!\/?[biu]>)/g, '&lt;');
-
-        try {
-            Pango.parse_markup(_text, -1, '');
-            return _text;
-        } catch (e) {}
-    }
-
-    // !allowMarkup, or invalid markup
-    return GLib.markup_escape_text(text, -1);
+    MessageTrayMarkup.fixMarkup(text, allowMarkup);
 }
 
 const FocusGrabber = new Lang.Class({
@@ -235,7 +220,7 @@ const URLHighlighter = new Lang.Class({
     },
 
     setMarkup: function(text, allowMarkup) {
-        text = text ? _fixMarkup(text, allowMarkup) : '';
+        text = text ? MessageTrayMarkup.fixMarkupForMessageTray(text, allowMarkup) : '';
         this._text = text;
 
         this.actor.clutter_text.set_markup(text);
@@ -536,7 +521,7 @@ const Notification = new Lang.Class({
         }
 
         this.title = title;
-        title = title ? _fixMarkup(title.replace(/\n/g, ' '), params.titleMarkup) : '';
+        title = title ? MessageTrayMarkup.fixMarkup(title.replace(/\n/g, ' '), params.titleMarkup) : '';
         this._titleLabel.clutter_text.set_markup('<b>' + title + '</b>');
 
         if (Pango.find_base_dir(title, -1) == Pango.Direction.RTL)
