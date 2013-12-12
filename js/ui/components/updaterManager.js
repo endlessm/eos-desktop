@@ -239,10 +239,11 @@ const UpdaterManager = new Lang.Class({
         }
 
         // we don't want to show errors if the network went away while
-        // fetching an update
+        // polling for, or fetching, an update
+        let wasPolling = this._currentState == UpdaterState.POLLING;
         let wasFetching = this._currentState == UpdaterState.FETCHING;
         let networkMonitor = Gio.NetworkMonitor.get_default();
-        if (wasFetching && !networkMonitor.get_network_available()) {
+        if ((wasPolling || wasFetching) && !networkMonitor.get_network_available()) {
             return;
         }
 
