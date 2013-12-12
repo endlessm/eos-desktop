@@ -91,6 +91,7 @@ const UpdaterManager = new Lang.Class({
         this._notification = null;
         this._source = null;
         this._proxyChangedId = 0;
+        this._currentState = UpdaterState.NONE;
 
         try {
             this._config.load_from_file('/etc/eos-updater.conf',
@@ -140,6 +141,7 @@ const UpdaterManager = new Lang.Class({
 
     _onStateChanged: function() {
         let state = this._proxy.State;
+
         if (state == UpdaterState.UPDATE_AVAILABLE) {
             this._notifyUpdateAvailable();
         } else if (state == UpdaterState.UPDATE_READY) {
@@ -149,6 +151,10 @@ const UpdaterManager = new Lang.Class({
         } else if (state == UpdaterState.ERROR) {
             this._notifyError();
         }
+
+        // we update the _currentState here, so that the notify*
+        // methods can access the previous state
+        this._currentState = state;
     },
 
     _onActionInvoked: function(notification, actionId) {
@@ -229,7 +235,15 @@ const UpdaterManager = new Lang.Class({
     _notifyError: function() {
         // we want to show errors only when manually updating the system
         if (this._lastAutoStep > UpdaterStep.POLL) {
-          return;
+            return;
+        }
+
+        // we don't want to show errors if the network went away while
+        // fetching an update
+        let wasFetching = this._currentState == UpdaterState.FETCHING;
+        let networkMonitor = Gio.NetworkMonitor.get_default();
+        if (wasFetching && !networkMonitor.get_network_available()) {
+            return;
         }
 
         this._ensureSource();
