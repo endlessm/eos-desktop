@@ -64,6 +64,8 @@ ClutterActor *st_im_text_new             (const gchar *text);
 void          st_im_text_set_autoshow_im (StIMText    *self,
                                           gboolean     autoshow);
 
+void            st_im_text_set_event_window  (GdkWindow      *window);
+
 G_END_DECLS
 
 #endif /* __ST_IM_TEXT_H__ */

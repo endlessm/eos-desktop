@@ -14,11 +14,14 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
+#include <cogl/cogl.h>
+#include <meta/screen.h>
+#include <meta/meta-cursor-tracker.h>
+
 #include "shell-recorder-src.h"
 #include "shell-recorder.h"
 
 #include <clutter/x11/clutter-x11.h>
-#include <X11/extensions/Xfixes.h>
 #include <X11/extensions/XInput.h>
 #include <X11/extensions/XInput2.h>
 
@@ -50,6 +53,8 @@ struct _ShellRecorder {
   RecorderState state;
 
   ClutterStage *stage;
+  gboolean custom_area;
+  cairo_rectangle_int_t area;
   int stage_width;
   int stage_height;
 
@@ -59,14 +64,14 @@ struct _ShellRecorder {
   int pointer_x;
   int pointer_y;
 
-  gboolean have_xfixes;
-  int xfixes_event_base;
-
   int xinput_opcode;
 
   CoglHandle recording_icon; /* icon shown while playing */
 
+  gboolean draw_cursor;
+  MetaCursorTracker *cursor_tracker;
   cairo_surface_t *cursor_image;
+  guint8 *cursor_memory;
   int cursor_hot_x;
   int cursor_hot_y;
 
@@ -110,16 +115,20 @@ static void recorder_set_pipeline (ShellRecorder *recorder,
                                    const char    *pipeline);
 static void recorder_set_file_template (ShellRecorder *recorder,
                                         const char    *file_template);
+static void recorder_set_draw_cursor (ShellRecorder *recorder,
+                                      gboolean       draw_cursor);
 
 static void recorder_pipeline_set_caps (RecorderPipeline *pipeline);
 static void recorder_pipeline_closed   (RecorderPipeline *pipeline);
 
 enum {
   PROP_0,
+  PROP_SCREEN,
   PROP_STAGE,
   PROP_FRAMERATE,
   PROP_PIPELINE,
-  PROP_FILE_TEMPLATE
+  PROP_FILE_TEMPLATE,
+  PROP_DRAW_CURSOR
 };
 
 G_DEFINE_TYPE(ShellRecorder, shell_recorder, G_TYPE_OBJECT);
@@ -273,6 +282,7 @@ shell_recorder_init (ShellRecorder *recorder)
 
   recorder->state = RECORDER_STATE_CLOSED;
   recorder->framerate = DEFAULT_FRAMES_PER_SECOND;
+  recorder->draw_cursor = TRUE;
 }
 
 static void
@@ -285,6 +295,8 @@ shell_recorder_finalize (GObject  *object)
 
   if (recorder->cursor_image)
     cairo_surface_destroy (recorder->cursor_image);
+  if (recorder->cursor_memory)
+    g_free (recorder->cursor_memory);
 
   recorder_set_stage (recorder, NULL);
   recorder_set_pipeline (recorder, NULL);
@@ -378,38 +390,24 @@ recorder_remove_redraw_timeout (ShellRecorder *recorder)
 static void
 recorder_fetch_cursor_image (ShellRecorder *recorder)
 {
-  XFixesCursorImage *cursor_image;
-  guchar *data;
+  CoglTexture *texture;
+  int width, height;
   int stride;
-  int i, j;
+  guint8 *data;
 
-  if (!recorder->have_xfixes)
-    return;
+  texture = meta_cursor_tracker_get_sprite (recorder->cursor_tracker);
+  width = cogl_texture_get_width (texture);
+  height = cogl_texture_get_height (texture);
+  stride = 4 * width;
+  data = g_new (guint8, stride * height);
+  cogl_texture_get_data (texture, CLUTTER_CAIRO_FORMAT_ARGB32, stride, data);
 
-  cursor_image = XFixesGetCursorImage (clutter_x11_get_default_display ());
-  if (!cursor_image)
-    return;
-
-  recorder->cursor_hot_x = cursor_image->xhot;
-  recorder->cursor_hot_y = cursor_image->yhot;
-
-  recorder->cursor_image = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                       cursor_image->width,
-                                                       cursor_image->height);
-
-  /* The pixel data (in typical Xlib breakage) is longs even on
-   * 64-bit platforms, so we have to data-convert there. For simplicity,
-   * just do it always
-   */
-  data = cairo_image_surface_get_data (recorder->cursor_image);
-  stride = cairo_image_surface_get_stride (recorder->cursor_image);
-  for (i = 0; i < cursor_image->height; i++)
-    for (j = 0; j < cursor_image->width; j++)
-      *(guint32 *)(data + i * stride + 4 * j) = cursor_image->pixels[i * cursor_image->width + j];
-
-  cairo_surface_mark_dirty (recorder->cursor_image);
-
-  XFree (cursor_image);
+  /* FIXME: cairo-gl? */
+  recorder->cursor_image = cairo_image_surface_create_for_data (data,
+                                                                CAIRO_FORMAT_ARGB32,
+                                                                width, height,
+                                                                stride);
+  recorder->cursor_memory = data;
 }
 
 /* Overlay the cursor image on the frame. We draw the cursor image
@@ -429,10 +427,10 @@ recorder_draw_cursor (ShellRecorder *recorder,
   /* We don't show a cursor unless the hot spot is in the frame; this
    * means that sometimes we aren't going to draw a cursor even when
    * there is a little bit overlapping within the stage */
-  if (recorder->pointer_x < 0 ||
-      recorder->pointer_y < 0 ||
-      recorder->pointer_x >= recorder->stage_width ||
-      recorder->pointer_y >= recorder->stage_height)
+  if (recorder->pointer_x < recorder->area.x ||
+      recorder->pointer_y < recorder->area.y ||
+      recorder->pointer_x >= recorder->area.x + recorder->area.width ||
+      recorder->pointer_y >= recorder->area.y + recorder->area.height)
     return;
 
   if (!recorder->cursor_image)
@@ -444,15 +442,15 @@ recorder_draw_cursor (ShellRecorder *recorder,
   gst_buffer_map (buffer, &info, GST_MAP_WRITE);
   surface = cairo_image_surface_create_for_data (info.data,
                                                  CAIRO_FORMAT_ARGB32,
-                                                 recorder->stage_width,
-                                                 recorder->stage_height,
-                                                 recorder->stage_width * 4);
+                                                 recorder->area.width,
+                                                 recorder->area.height,
+                                                 recorder->area.width * 4);
 
   cr = cairo_create (surface);
   cairo_set_source_surface (cr,
                             recorder->cursor_image,
-                            recorder->pointer_x - recorder->cursor_hot_x,
-                            recorder->pointer_y - recorder->cursor_hot_y);
+                            recorder->pointer_x - recorder->cursor_hot_x - recorder->area.x,
+                            recorder->pointer_y - recorder->cursor_hot_y - recorder->area.y);
   cairo_paint (cr);
 
   cairo_destroy (cr);
@@ -555,12 +553,13 @@ recorder_record_frame (ShellRecorder *recorder)
 
   recorder->last_frame_time = now;
 
-  size = recorder->stage_width * recorder->stage_height * 4;
+  size = recorder->area.width * recorder->area.height * 4;
 
-  data = g_malloc (recorder->stage_width * 4 * recorder->stage_height);
-  cogl_read_pixels (0, 0, /* x/y */
-                    recorder->stage_width,
-                    recorder->stage_height,
+  data = g_malloc (recorder->area.width * 4 * recorder->area.height);
+  cogl_read_pixels (recorder->area.x,
+                    recorder->area.y,
+                    recorder->area.width,
+                    recorder->area.height,
                     COGL_READ_PIXELS_COLOR_BUFFER,
                     CLUTTER_CAIRO_FORMAT_ARGB32,
                     data);
@@ -572,7 +571,8 @@ recorder_record_frame (ShellRecorder *recorder)
 
   GST_BUFFER_PTS(buffer) = now - recorder->start_time;
 
-  recorder_draw_cursor (recorder, buffer);
+  if (recorder->draw_cursor)
+    recorder_draw_cursor (recorder, buffer);
 
   shell_recorder_src_add_buffer (SHELL_RECORDER_SRC (recorder->current_pipeline->src), buffer);
   gst_buffer_unref (buffer);
@@ -616,6 +616,14 @@ recorder_update_size (ShellRecorder *recorder)
   clutter_actor_get_allocation_box (CLUTTER_ACTOR (recorder->stage), &allocation);
   recorder->stage_width = (int)(0.5 + allocation.x2 - allocation.x1);
   recorder->stage_height = (int)(0.5 + allocation.y2 - allocation.y1);
+
+  if (!recorder->custom_area)
+    {
+      recorder->area.x = 0;
+      recorder->area.y = 0;
+      recorder->area.width = recorder->stage_width;
+      recorder->area.height = recorder->stage_height;
+    }
 }
 
 static void
@@ -656,6 +664,24 @@ recorder_queue_redraw (ShellRecorder *recorder)
                                              recorder_idle_redraw, recorder, NULL);
 }
 
+static void
+on_cursor_changed (MetaCursorTracker *tracker,
+                   ShellRecorder     *recorder)
+{
+  if (recorder->cursor_image)
+    {
+      cairo_surface_destroy (recorder->cursor_image);
+      recorder->cursor_image = NULL;
+    }
+  if (recorder->cursor_memory)
+    {
+      g_free (recorder->cursor_memory);
+      recorder->cursor_memory = NULL;
+    }
+
+  recorder_queue_redraw (recorder);
+}
+
 /* We use an event filter on the stage to get the XFixesCursorNotifyEvent
  * and also to track cursor position (when the cursor is over the stage's
  * input area); tracking cursor position here rather than with ClutterEvent
@@ -677,23 +703,8 @@ recorder_event_filter (XEvent        *xev,
       xev->xcookie.extension == recorder->xinput_opcode)
     input_event = (XIEvent *) xev->xcookie.data;
 
-  if (xev->xany.type == recorder->xfixes_event_base + XFixesCursorNotify)
-    {
-      XFixesCursorNotifyEvent *notify_event = (XFixesCursorNotifyEvent *)xev;
-
-      if (notify_event->subtype == XFixesDisplayCursorNotify)
-        {
-          if (recorder->cursor_image)
-            {
-              cairo_surface_destroy (recorder->cursor_image);
-              recorder->cursor_image = NULL;
-            }
-
-          recorder_queue_redraw (recorder);
-        }
-    }
-  else if (input_event != NULL &&
-           input_event->evtype == XI_Motion)
+  if (input_event != NULL &&
+      input_event->evtype == XI_Motion)
     {
       XIDeviceEvent *device_event = (XIDeviceEvent *) input_event;
       if (device_event->deviceid == VIRTUAL_CORE_POINTER_ID)
@@ -917,14 +928,6 @@ recorder_set_stage (ShellRecorder *recorder,
 
       recorder_update_size (recorder);
 
-      recorder->have_xfixes = XFixesQueryExtension (clutter_x11_get_default_display (),
-                                                    &recorder->xfixes_event_base,
-                                                    &error_base);
-      if (recorder->have_xfixes)
-        XFixesSelectCursorInput (clutter_x11_get_default_display (),
-                                   clutter_x11_get_stage_window (stage),
-                                 XFixesDisplayCursorNotifyMask);
-
       if (XQueryExtension (clutter_x11_get_default_display (),
                            "XInputExtension",
                            &recorder->xinput_opcode,
@@ -951,6 +954,22 @@ recorder_set_stage (ShellRecorder *recorder,
 
       recorder_get_initial_cursor_position (recorder);
     }
+}
+
+static void
+recorder_set_screen (ShellRecorder *recorder,
+                     MetaScreen    *screen)
+{
+  MetaCursorTracker *tracker;
+
+  tracker = meta_cursor_tracker_get_for_screen (screen);
+
+  if (tracker == recorder->cursor_tracker)
+    return;
+
+  recorder->cursor_tracker = tracker;
+  g_signal_connect_object (tracker, "cursor-changed",
+                           G_CALLBACK (on_cursor_changed), recorder, 0);
 }
 
 static void
@@ -1007,6 +1026,18 @@ recorder_set_file_template (ShellRecorder *recorder,
 }
 
 static void
+recorder_set_draw_cursor (ShellRecorder *recorder,
+                          gboolean       draw_cursor)
+{
+  if (draw_cursor == recorder->draw_cursor)
+    return;
+
+  recorder->draw_cursor = draw_cursor;
+
+  g_object_notify (G_OBJECT (recorder), "draw-cursor");
+}
+
+static void
 shell_recorder_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
@@ -1016,6 +1047,9 @@ shell_recorder_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_SCREEN:
+      recorder_set_screen (recorder, g_value_get_object (value));
+      break;
     case PROP_STAGE:
       recorder_set_stage (recorder, g_value_get_object (value));
       break;
@@ -1027,6 +1061,9 @@ shell_recorder_set_property (GObject      *object,
       break;
     case PROP_FILE_TEMPLATE:
       recorder_set_file_template (recorder, g_value_get_string (value));
+      break;
+    case PROP_DRAW_CURSOR:
+      recorder_set_draw_cursor (recorder, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1056,6 +1093,9 @@ shell_recorder_get_property (GObject         *object,
     case PROP_FILE_TEMPLATE:
       g_value_set_string (value, recorder->file_template);
       break;
+    case PROP_DRAW_CURSOR:
+      g_value_set_boolean (value, recorder->draw_cursor);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1070,6 +1110,14 @@ shell_recorder_class_init (ShellRecorderClass *klass)
   gobject_class->finalize = shell_recorder_finalize;
   gobject_class->get_property = shell_recorder_get_property;
   gobject_class->set_property = shell_recorder_set_property;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_SCREEN,
+                                   g_param_spec_object ("screen",
+                                                        "Screen",
+                                                        "Screen to record",
+                                                        META_TYPE_SCREEN,
+                                                        G_PARAM_WRITABLE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_STAGE,
@@ -1104,6 +1152,14 @@ shell_recorder_class_init (ShellRecorderClass *klass)
                                                         "The filename template to use for output files",
                                                         NULL,
                                                         G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_DRAW_CURSOR,
+                                   g_param_spec_boolean ("draw-cursor",
+                                                         "Draw Cursor",
+                                                         "Whether to record the cursor",
+                                                         TRUE,
+                                                         G_PARAM_READWRITE));
 }
 
 /* Sets the GstCaps (video format, in this case) on the stream
@@ -1126,8 +1182,8 @@ recorder_pipeline_set_caps (RecorderPipeline *pipeline)
                               "bpp", G_TYPE_INT, 32,
                               "depth", G_TYPE_INT, 24,
                               "framerate", GST_TYPE_FRACTION, pipeline->recorder->framerate, 1,
-                              "width", G_TYPE_INT, pipeline->recorder->stage_width,
-                              "height", G_TYPE_INT, pipeline->recorder->stage_height,
+                              "width", G_TYPE_INT, pipeline->recorder->area.width,
+                              "height", G_TYPE_INT, pipeline->recorder->area.height,
                               NULL);
   g_object_set (pipeline->src, "caps", caps, NULL);
   gst_caps_unref (caps);
@@ -1678,6 +1734,15 @@ shell_recorder_set_file_template (ShellRecorder *recorder,
 
 }
 
+void
+shell_recorder_set_draw_cursor (ShellRecorder *recorder,
+                                gboolean       draw_cursor)
+{
+  g_return_if_fail (SHELL_IS_RECORDER (recorder));
+
+  recorder_set_draw_cursor (recorder, draw_cursor);
+}
+
 /**
  * shell_recorder_set_pipeline:
  * @recorder: the #ShellRecorder
@@ -1705,9 +1770,35 @@ shell_recorder_set_pipeline (ShellRecorder *recorder,
   recorder_set_pipeline (recorder, pipeline);
 }
 
+void
+shell_recorder_set_area (ShellRecorder *recorder,
+                         int            x,
+                         int            y,
+                         int            width,
+                         int            height)
+{
+  g_return_if_fail (SHELL_IS_RECORDER (recorder));
+
+  recorder->custom_area = TRUE;
+  recorder->area.x = CLAMP (x, 0, recorder->stage_width);
+  recorder->area.y = CLAMP (y, 0, recorder->stage_height);
+  recorder->area.width = CLAMP (width,
+                                0, recorder->stage_width - recorder->area.x);
+  recorder->area.height = CLAMP (height,
+                                 0, recorder->stage_height - recorder->area.y);
+
+  /* This breaks the recording but tweaking the GStreamer pipeline a bit
+   * might make it work, at least if the codec can handle a stream where
+   * the frame size changes in the middle.
+   */
+  if (recorder->current_pipeline)
+    recorder_pipeline_set_caps (recorder->current_pipeline);
+}
+
 /**
  * shell_recorder_record:
  * @recorder: the #ShellRecorder
+ * @filename_used: (out) (allow-none): actual filename used for recording
  *
  * Starts recording, Starting the recording may fail if the output file
  * cannot be opened, or if the output stream cannot be created
@@ -1724,7 +1815,8 @@ shell_recorder_set_pipeline (ShellRecorder *recorder,
  * Return value: %TRUE if recording was succesfully started
  */
 gboolean
-shell_recorder_record (ShellRecorder *recorder)
+shell_recorder_record (ShellRecorder  *recorder,
+                       char          **filename_used)
 {
   g_return_val_if_fail (SHELL_IS_RECORDER (recorder), FALSE);
   g_return_val_if_fail (recorder->stage != NULL, FALSE);
@@ -1732,6 +1824,9 @@ shell_recorder_record (ShellRecorder *recorder)
 
   if (!recorder_open_pipeline (recorder))
     return FALSE;
+
+  if (filename_used)
+    *filename_used = g_strdup (recorder->current_pipeline->filename);
 
   recorder_connect_stage_callbacks (recorder);
 

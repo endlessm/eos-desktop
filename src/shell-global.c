@@ -27,6 +27,7 @@
 #include <meta/display.h>
 #include <meta/util.h>
 #include <meta/meta-shaped-texture.h>
+#include <meta/meta-cursor-tracker.h>
 
 /* Memory report bits */
 #ifdef HAVE_MALLINFO
@@ -51,7 +52,7 @@ struct _ShellGlobal {
 
   ClutterStage *stage;
   Window stage_xwindow;
-  GdkWindow *stage_gdk_window;
+  GdkWindow *ibus_window;
 
   MetaDisplay *meta_display;
   GdkDisplay *gdk_display;
@@ -70,7 +71,6 @@ struct _ShellGlobal {
   GtkWindow *grab_notifier;
   gboolean gtk_grab_active;
 
-  ShellStageInputMode input_mode;
   XserverRegion input_region;
 
   GjsContext *js_context;
@@ -92,20 +92,20 @@ struct _ShellGlobal {
   guint32 xdnd_timestamp;
 
   gint64 last_gc_end_time;
+
+  gboolean has_modal;
 };
 
 enum {
   PROP_0,
 
   PROP_SESSION_MODE,
-  PROP_OVERLAY_GROUP,
   PROP_SCREEN,
   PROP_GDK_SCREEN,
   PROP_DISPLAY,
   PROP_SCREEN_WIDTH,
   PROP_SCREEN_HEIGHT,
   PROP_STAGE,
-  PROP_STAGE_INPUT_MODE,
   PROP_WINDOW_GROUP,
   PROP_TOP_WINDOW_GROUP,
   PROP_WINDOW_MANAGER,
@@ -140,9 +140,6 @@ shell_global_set_property(GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_STAGE_INPUT_MODE:
-      shell_global_set_stage_input_mode (global, g_value_get_enum (value));
-      break;
     case PROP_SESSION_MODE:
       g_clear_pointer (&global->session_mode, g_free);
       global->session_mode = g_ascii_strdown (g_value_get_string (value), -1);
@@ -165,9 +162,6 @@ shell_global_get_property(GObject         *object,
     {
     case PROP_SESSION_MODE:
       g_value_set_string (value, shell_global_get_session_mode (global));
-      break;
-    case PROP_OVERLAY_GROUP:
-      g_value_set_object (value, meta_get_overlay_group_for_screen (global->meta_screen));
       break;
     case PROP_SCREEN:
       g_value_set_object (value, global->meta_screen);
@@ -196,9 +190,6 @@ shell_global_get_property(GObject         *object,
       break;
     case PROP_STAGE:
       g_value_set_object (value, global->stage);
-      break;
-    case PROP_STAGE_INPUT_MODE:
-      g_value_set_enum (value, global->input_mode);
       break;
     case PROP_WINDOW_GROUP:
       g_value_set_object (value, meta_get_window_group_for_screen (global->meta_screen));
@@ -274,8 +265,6 @@ shell_global_init (ShellGlobal *global)
   global->grab_notifier = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
   g_signal_connect (global->grab_notifier, "grab-notify", G_CALLBACK (grab_notify), global);
   global->gtk_grab_active = FALSE;
-
-  global->input_mode = SHELL_STAGE_INPUT_MODE_NORMAL;
 
   global->sound_context = ca_gtk_context_get ();
   ca_context_change_props (global->sound_context,
@@ -367,13 +356,6 @@ shell_global_class_init (ShellGlobalClass *klass)
                                                         "user",
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (gobject_class,
-                                   PROP_OVERLAY_GROUP,
-                                   g_param_spec_object ("overlay-group",
-                                                        "Overlay Group",
-                                                        "Actor holding objects that appear above the desktop contents",
-                                                        CLUTTER_TYPE_ACTOR,
-                                                        G_PARAM_READABLE));
-  g_object_class_install_property (gobject_class,
                                    PROP_SCREEN,
                                    g_param_spec_object ("screen",
                                                         "Screen",
@@ -419,14 +401,6 @@ shell_global_class_init (ShellGlobalClass *klass)
                                                         "Stage holding the desktop scene graph",
                                                         CLUTTER_TYPE_ACTOR,
                                                         G_PARAM_READABLE));
-  g_object_class_install_property (gobject_class,
-                                   PROP_STAGE_INPUT_MODE,
-                                   g_param_spec_enum ("stage-input-mode",
-                                                      "Stage input mode",
-                                                      "The stage input mode",
-                                                      SHELL_TYPE_STAGE_INPUT_MODE,
-                                                      SHELL_STAGE_INPUT_MODE_NORMAL,
-                                                      G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_WINDOW_GROUP,
                                    g_param_spec_object ("window-group",
@@ -531,6 +505,18 @@ shell_global_get (void)
   return the_object;
 }
 
+static guint32
+get_current_time_maybe_roundtrip (ShellGlobal *global)
+{
+  guint32 time;
+
+  time = shell_global_get_current_time (global);
+  if (time != CurrentTime)
+    return time;
+
+  return meta_display_get_current_time_roundtrip (global->meta_display);
+}
+
 static void
 focus_window_changed (MetaDisplay *display,
                       GParamSpec  *param,
@@ -538,154 +524,71 @@ focus_window_changed (MetaDisplay *display,
 {
   ShellGlobal *global = user_data;
 
-  if (global->input_mode == SHELL_STAGE_INPUT_MODE_FOCUSED &&
-      meta_display_get_focus_window (display) != NULL)
-    shell_global_set_stage_input_mode (global, SHELL_STAGE_INPUT_MODE_NORMAL);
+  if (global->has_modal)
+    return;
+
+  /* If the stage window became unfocused, drop the key focus
+   * on Clutter's side. */
+  if (!meta_stage_is_focused (global->meta_screen))
+    clutter_stage_set_key_focus (global->stage, NULL);
+}
+
+static ClutterActor *
+get_key_focused_actor (ShellGlobal *global)
+{
+  ClutterActor *actor;
+
+  actor = clutter_stage_get_key_focus (global->stage);
+
+  /* If there's no explicit key focus, clutter_stage_get_key_focus()
+   * returns the stage. This is a terrible API. */
+  if (actor == CLUTTER_ACTOR (global->stage))
+    actor = NULL;
+
+  return actor;
 }
 
 static void
-shell_global_focus_stage (ShellGlobal *global)
+sync_stage_window_focus (ShellGlobal *global)
 {
-  XSetInputFocus (global->xdisplay, global->stage_xwindow,
-                  RevertToPointerRoot,
-                  shell_global_get_current_time (global));
+  ClutterActor *actor;
+
+  if (global->has_modal)
+    return;
+
+  actor = get_key_focused_actor (global);
+
+  /* An actor got key focus and the stage needs to be focused. */
+  if (actor != NULL && !meta_stage_is_focused (global->meta_screen))
+    meta_focus_stage_window (global->meta_screen,
+                             get_current_time_maybe_roundtrip (global));
+
+  /* An actor dropped key focus. Focus the default window. */
+  else if (actor == NULL && meta_stage_is_focused (global->meta_screen))
+    meta_screen_focus_default_window (global->meta_screen,
+                                      get_current_time_maybe_roundtrip (global));
 }
 
-/**
- * shell_global_set_stage_input_mode:
- * @global: the #ShellGlobal
- * @mode: the stage input mode
- *
- * Sets the input mode of the stage; when @mode is
- * %SHELL_STAGE_INPUT_MODE_NONREACTIVE, then the stage does not absorb
- * any clicks, but just passes them through to underlying windows.
- * When it is %SHELL_STAGE_INPUT_MODE_NORMAL, then the stage accepts
- * clicks in the region defined by
- * shell_global_set_stage_input_region() but passes through clicks
- * outside that region. When it is %SHELL_STAGE_INPUT_MODE_FULLSCREEN,
- * the stage absorbs all input.
- *
- * When the input mode is %SHELL_STAGE_INPUT_MODE_FOCUSED, the pointer
- * is handled as with %SHELL_STAGE_INPUT_MODE_NORMAL, but additionally
- * the stage window has the keyboard focus. If the stage loses the
- * focus (eg, because the user clicked into a window) the input mode
- * will revert to %SHELL_STAGE_INPUT_MODE_NORMAL.
- *
- * Note that whenever a mutter-internal Gtk widget has a pointer grab,
- * the shell behaves as though it was in
- * %SHELL_STAGE_INPUT_MODE_NONREACTIVE, to ensure that the widget gets
- * any clicks it is expecting.
- */
-void
-shell_global_set_stage_input_mode (ShellGlobal         *global,
-                                   ShellStageInputMode  mode)
+static void
+focus_actor_changed (ClutterStage *stage,
+                     GParamSpec   *param,
+                     gpointer      user_data)
 {
-  MetaScreen *screen;
+  ShellGlobal *global = user_data;
+  sync_stage_window_focus (global);
+}
 
-  g_return_if_fail (SHELL_IS_GLOBAL (global));
+static void
+sync_input_region (ShellGlobal *global)
+{
+  MetaScreen *screen = global->meta_screen;
 
-  screen = meta_plugin_get_screen (global->plugin);
-
-  if (mode == SHELL_STAGE_INPUT_MODE_NONREACTIVE || global->gtk_grab_active)
+  if (global->gtk_grab_active)
     meta_empty_stage_input_region (screen);
-  else if (mode == SHELL_STAGE_INPUT_MODE_FULLSCREEN || !global->input_region)
+  else if (global->has_modal)
     meta_set_stage_input_region (screen, None);
   else
     meta_set_stage_input_region (screen, global->input_region);
-
-  if (mode == SHELL_STAGE_INPUT_MODE_FOCUSED)
-    shell_global_focus_stage (global);
-
-  if (mode != global->input_mode)
-    {
-      global->input_mode = mode;
-      g_object_notify (G_OBJECT (global), "stage-input-mode");
-    }
-}
-
-/**
- * shell_global_set_cursor:
- * @global: A #ShellGlobal
- * @type: the type of the cursor
- *
- * Set the cursor on the stage window.
- */
-void
-shell_global_set_cursor (ShellGlobal *global,
-                         ShellCursor type)
-{
-  const char *name;
-  GdkCursor *cursor;
-
-  switch (type)
-    {
-    case SHELL_CURSOR_DND_IN_DRAG:
-      name = "dnd-none";
-      break;
-    case SHELL_CURSOR_DND_MOVE:
-      name = "dnd-move";
-      break;
-    case SHELL_CURSOR_DND_COPY:
-      name = "dnd-copy";
-      break;
-    case SHELL_CURSOR_DND_UNSUPPORTED_TARGET:
-      name = "dnd-none";
-      break;
-    case SHELL_CURSOR_POINTING_HAND:
-      name = "hand";
-      break;
-    case SHELL_CURSOR_CROSSHAIR:
-      name = "crosshair";
-      break;
-    default:
-      g_return_if_reached ();
-    }
-
-  cursor = gdk_cursor_new_from_name (global->gdk_display, name);
-  if (!cursor)
-    {
-      GdkCursorType cursor_type;
-      switch (type)
-        {
-        case SHELL_CURSOR_DND_IN_DRAG:
-          cursor_type = GDK_FLEUR;
-          break;
-        case SHELL_CURSOR_DND_MOVE:
-          cursor_type = GDK_TARGET;
-          break;
-        case SHELL_CURSOR_DND_COPY:
-          cursor_type = GDK_PLUS;
-          break;
-        case SHELL_CURSOR_POINTING_HAND:
-          cursor_type = GDK_HAND2;
-          break;
-        case SHELL_CURSOR_CROSSHAIR:
-          cursor_type = GDK_CROSSHAIR;
-          break;
-        case SHELL_CURSOR_DND_UNSUPPORTED_TARGET:
-          cursor_type = GDK_X_CURSOR;
-          break;
-        default:
-          g_return_if_reached ();
-        }
-      cursor = gdk_cursor_new (cursor_type);
-    }
-
-  gdk_window_set_cursor (global->stage_gdk_window, cursor);
-
-  g_object_unref (cursor);
-}
-
-/**
- * shell_global_unset_cursor:
- * @global: A #ShellGlobal
- *
- * Unset the cursor on the stage window.
- */
-void
-shell_global_unset_cursor (ShellGlobal  *global)
-{
-  gdk_window_set_cursor (global->stage_gdk_window, NULL);
 }
 
 /**
@@ -695,8 +598,7 @@ shell_global_unset_cursor (ShellGlobal  *global)
  * describing the input region.
  *
  * Sets the area of the stage that is responsive to mouse clicks when
- * the stage mode is %SHELL_STAGE_INPUT_MODE_NORMAL (but does not change the
- * current stage mode).
+ * we don't have a modal or grab.
  */
 void
 shell_global_set_stage_input_region (ShellGlobal *global,
@@ -726,10 +628,7 @@ shell_global_set_stage_input_region (ShellGlobal *global,
   global->input_region = XFixesCreateRegion (global->xdisplay, rects, nrects);
   g_free (rects);
 
-  /* set_stage_input_mode() will figure out whether or not we
-   * should actually change the input region right now.
-   */
-  shell_global_set_stage_input_mode (global, global->input_mode);
+  sync_input_region (global);
 }
 
 /**
@@ -885,13 +784,9 @@ gnome_shell_gdk_event_handler (GdkEvent *event_gdk,
 {
   if (event_gdk->type == GDK_KEY_PRESS || event_gdk->type == GDK_KEY_RELEASE)
     {
-      ClutterActor *stage;
-      Window stage_xwindow;
+      ShellGlobal *global = data;
 
-      stage = CLUTTER_ACTOR (data);
-      stage_xwindow = clutter_x11_get_stage_window (CLUTTER_STAGE (stage));
-
-      if (GDK_WINDOW_XID (event_gdk->key.window) == stage_xwindow)
+      if (event_gdk->key.window == global->ibus_window)
         {
           ClutterDeviceManager *device_manager = clutter_device_manager_get_default ();
           ClutterInputDevice *keyboard = clutter_device_manager_get_core_device (device_manager,
@@ -901,7 +796,7 @@ gnome_shell_gdk_event_handler (GdkEvent *event_gdk,
                                                            CLUTTER_KEY_PRESS : CLUTTER_KEY_RELEASE);
           event_clutter->key.time = event_gdk->key.time;
           event_clutter->key.flags = CLUTTER_EVENT_NONE;
-          event_clutter->key.stage = CLUTTER_STAGE (stage);
+          event_clutter->key.stage = CLUTTER_STAGE (global->stage);
           event_clutter->key.source = NULL;
 
           /* This depends on ClutterModifierType and GdkModifierType being
@@ -924,6 +819,16 @@ gnome_shell_gdk_event_handler (GdkEvent *event_gdk,
   gtk_main_do_event (event_gdk);
 }
 
+static void
+entry_cursor_func (StEntry  *entry,
+                   gboolean  use_ibeam,
+                   gpointer  user_data)
+{
+  ShellGlobal *global = user_data;
+
+  meta_screen_set_cursor (global->meta_screen, use_ibeam ? META_CURSOR_IBEAM : META_CURSOR_DEFAULT);
+}
+
 void
 _shell_global_set_plugin (ShellGlobal *global,
                           MetaPlugin  *plugin)
@@ -944,8 +849,10 @@ _shell_global_set_plugin (ShellGlobal *global,
 
   global->stage = CLUTTER_STAGE (meta_get_stage_for_screen (global->meta_screen));
   global->stage_xwindow = clutter_x11_get_stage_window (global->stage);
-  global->stage_gdk_window = gdk_x11_window_foreign_new_for_display (global->gdk_display,
-                                                                     global->stage_xwindow);
+  global->ibus_window = gdk_x11_window_foreign_new_for_display (global->gdk_display,
+                                                                global->stage_xwindow);
+  st_im_text_set_event_window (global->ibus_window);
+  st_entry_set_cursor_func (entry_cursor_func, global);
 
   g_signal_connect (global->stage, "notify::width",
                     G_CALLBACK (global_stage_notify_width), global);
@@ -969,10 +876,12 @@ _shell_global_set_plugin (ShellGlobal *global,
                                "End of stage page repaint",
                                "");
 
+  g_signal_connect (global->stage, "notify::key-focus",
+                    G_CALLBACK (focus_actor_changed), global);
   g_signal_connect (global->meta_display, "notify::focus-window",
                     G_CALLBACK (focus_window_changed), global);
 
-  gdk_event_handler_set (gnome_shell_gdk_event_handler, global->stage, NULL);
+  gdk_event_handler_set (gnome_shell_gdk_event_handler, global, NULL);
 
   global->focus_manager = st_focus_manager_get_for_stage (global->stage);
 }
@@ -1004,7 +913,14 @@ shell_global_begin_modal (ShellGlobal       *global,
                           guint32           timestamp,
                           MetaModalOptions  options)
 {
-  return meta_plugin_begin_modal (global->plugin, global->stage_xwindow, None, options, timestamp);
+  /* Make it an error to call begin_modal while we already
+   * have a modal active. */
+  if (global->has_modal)
+    return FALSE;
+
+  global->has_modal = meta_plugin_begin_modal (global->plugin, options, timestamp);
+  sync_input_region (global);
+  return global->has_modal;
 }
 
 /**
@@ -1017,7 +933,25 @@ void
 shell_global_end_modal (ShellGlobal *global,
                         guint32      timestamp)
 {
+  ClutterActor *actor;
+
+  if (!global->has_modal)
+    return;
+
   meta_plugin_end_modal (global->plugin, timestamp);
+  global->has_modal = FALSE;
+
+  /* If the stage window is unfocused, ensure that there's no
+   * actor focused on Clutter's side. */
+  if (!meta_stage_is_focused (global->meta_screen))
+    clutter_stage_set_key_focus (global->stage, NULL);
+
+  /* An actor dropped key focus. Focus the default window. */
+  else if (get_key_focused_actor (global) && meta_stage_is_focused (global->meta_screen))
+    meta_screen_focus_default_window (global->meta_screen,
+                                      get_current_time_maybe_roundtrip (global));
+
+  sync_input_region (global);
 }
 
 /* Code to close all file descriptors before we exec; copied from gspawn.c in GLib.
@@ -1228,7 +1162,7 @@ grab_notify (GtkWidget *widget, gboolean was_grabbed, gpointer user_data)
   global->gtk_grab_active = !was_grabbed;
 
   /* Update for the new setting of gtk_grab_active */
-  shell_global_set_stage_input_mode (global, global->input_mode);
+  sync_input_region (global);
 }
 
 /**
@@ -1267,9 +1201,6 @@ void shell_global_init_xdnd (ShellGlobal *global)
  * @mods: (out): the current set of modifier keys that are pressed down
  *
  * Gets the pointer coordinates and current modifier key state.
- * This is a wrapper around gdk_display_get_pointer() that strips
- * out any un-declared modifier flags, to make gjs happy; see
- * https://bugzilla.gnome.org/show_bug.cgi?id=597292.
  */
 void
 shell_global_get_pointer (ShellGlobal         *global,
@@ -1277,18 +1208,13 @@ shell_global_get_pointer (ShellGlobal         *global,
                           int                 *y,
                           ClutterModifierType *mods)
 {
-  GdkDeviceManager *gmanager;
-  GdkDevice *gdevice;
-  GdkScreen *gscreen;
-  GdkModifierType raw_mods;
+  ClutterModifierType raw_mods;
+  MetaCursorTracker *tracker;
 
-  gmanager = gdk_display_get_device_manager (global->gdk_display);
-  gdevice = gdk_device_manager_get_client_pointer (gmanager);
-  gdk_device_get_position (gdevice, &gscreen, x, y);
-  gdk_device_get_state (gdevice,
-                        gdk_screen_get_root_window (gscreen),
-                        NULL, &raw_mods);
-  *mods = raw_mods & GDK_MODIFIER_MASK;
+  tracker = meta_cursor_tracker_get_for_screen (global->meta_screen);
+  meta_cursor_tracker_get_pointer (tracker, x, y, &raw_mods);
+
+  *mods = raw_mods & CLUTTER_MODIFIER_MASK;
 }
 
 /**
@@ -1303,27 +1229,14 @@ void
 shell_global_sync_pointer (ShellGlobal *global)
 {
   int x, y;
-  GdkModifierType mods;
-  GdkDeviceManager *gmanager;
-  GdkDevice *gdevice;
-  GdkScreen *gscreen;
+  ClutterModifierType mods;
   ClutterMotionEvent event;
 
-  gmanager = gdk_display_get_device_manager (global->gdk_display);
-  gdevice = gdk_device_manager_get_client_pointer (gmanager);
-
-  gdk_device_get_position (gdevice, &gscreen, &x, &y);
-  gdk_device_get_state (gdevice,
-                        gdk_screen_get_root_window (gscreen),
-                        NULL, &mods);
+  shell_global_get_pointer (global, &x, &y, &mods);
 
   event.type = CLUTTER_MOTION;
   event.time = shell_global_get_current_time (global);
   event.flags = 0;
-  /* This is wrong: we should be setting event.stage to NULL if the
-   * pointer is not inside the bounds of the stage given the current
-   * stage_input_mode. For our current purposes however, this works.
-   */
   event.stage = global->stage;
   event.x = x;
   event.y = y;

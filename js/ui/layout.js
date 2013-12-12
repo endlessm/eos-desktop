@@ -159,10 +159,25 @@ const MonitorConstraint = new Lang.Class({
     }
 });
 
+const Monitor = new Lang.Class({
+    Name: 'Monitor',
+
+    _init: function(index, geometry) {
+        this.index = index;
+        this.x = geometry.x;
+        this.y = geometry.y;
+        this.width = geometry.width;
+        this.height = geometry.height;
+    },
+
+    get inFullscreen() {
+        return global.screen.get_monitor_in_fullscreen(this.index);
+    }
+})
+
 const defaultParams = {
     trackFullscreen: false,
     affectsStruts: false,
-    affectsInputRegion: true
 };
 
 const LayoutManager = new Lang.Class({
@@ -214,9 +229,11 @@ const LayoutManager = new Lang.Class({
         global.stage.remove_actor(global.window_group);
         this.uiGroup.add_actor(global.window_group);
 
-        global.stage.remove_actor(global.overlay_group);
-        this.uiGroup.add_actor(global.overlay_group);
         global.stage.add_child(this.uiGroup);
+
+        this.overviewGroup = new St.Widget({ name: 'overviewGroup',
+                                             visible: false });
+        this.addChrome(this.overviewGroup);
 
         this.screenShieldGroup = new St.Widget({ name: 'screenShieldGroup',
                                                  visible: false,
@@ -254,11 +271,6 @@ const LayoutManager = new Lang.Class({
         this._backgroundGroup.lower_bottom();
         this._bgManagers = [];
 
-        // This blocks the XDND picks from finding the activities button
-        // and we never attempt to pick anything from it anyway so make
-        // it invisible from picks
-        Shell.util_set_hidden_from_pick(global.top_window_group, true);
-
         // Need to update struts on new workspaces when they are added
         global.screen.connect('notify::n-workspaces',
                               Lang.bind(this, this._queueUpdateRegions));
@@ -271,24 +283,24 @@ const LayoutManager = new Lang.Class({
         this._monitorsChanged();
     },
 
-    // This is called by Main after everything else is constructed;
-    // it needs access to Main.overview, which didn't exist
-    // yet when the LayoutManager was constructed.
+    // This is called by Main after everything else is constructed
     init: function() {
-        Main.overview.connect('showing', Lang.bind(this, this._overviewShowing));
-        Main.overview.connect('hidden', Lang.bind(this, this._overviewHidden));
         Main.sessionMode.connect('updated', Lang.bind(this, this._sessionUpdated));
 
-        this._prepareStartupAnimation();
+        this._loadBackground();
     },
 
-    _overviewShowing: function() {
+    showOverview: function() {
+        this.overviewGroup.show();
+
         this._inOverview = true;
         this._updateVisibility();
-        this._queueUpdateRegions();
+        this._updateRegions();
     },
 
-    _overviewHidden: function() {
+    hideOverview: function() {
+        this.overviewGroup.hide();
+
         this._inOverview = false;
         this._updateVisibility();
         this._queueUpdateRegions();
@@ -305,7 +317,7 @@ const LayoutManager = new Lang.Class({
         this.monitors = [];
         let nMonitors = screen.get_n_monitors();
         for (let i = 0; i < nMonitors; i++)
-            this.monitors.push(screen.get_monitor_geometry(i));
+            this.monitors.push(new Monitor(i, screen.get_monitor_geometry(i)));
 
         if (nMonitors == 1) {
             this.primaryIndex = this.bottomIndex = 0;
@@ -327,8 +339,10 @@ const LayoutManager = new Lang.Class({
 
     _updateHotCorners: function() {
         // destroy old hot corners
-        for (let i = 0; i < this.hotCorners.length; i++)
-            this.hotCorners[i].destroy();
+        this.hotCorners.forEach(function(corner) {
+            if (corner)
+                corner.destroy();
+        });
         this.hotCorners = [];
 
         let size = this.panelBox.height;
@@ -339,9 +353,9 @@ const LayoutManager = new Lang.Class({
             let cornerX = this._rtl ? monitor.x + monitor.width : monitor.x;
             let cornerY = monitor.y;
 
-            if (i != this.primaryIndex) {
-                let haveTopLeftCorner = true;
+            let haveTopLeftCorner = true;
 
+            if (i != this.primaryIndex) {
                 // Check if we have a top left (right for RTL) corner.
                 // I.e. if there is no monitor directly above or to the left(right)
                 let besideX = this._rtl ? cornerX + 1 : cornerX - 1;
@@ -368,14 +382,15 @@ const LayoutManager = new Lang.Class({
                         break;
                     }
                 }
-
-                if (!haveTopLeftCorner)
-                    continue;
             }
 
-            let corner = new HotCorner(this, monitor, cornerX, cornerY);
-            corner.setBarrierSize(size);
-            this.hotCorners.push(corner);
+            if (haveTopLeftCorner) {
+                let corner = new HotCorner(this, monitor, cornerX, cornerY);
+                corner.setBarrierSize(size);
+                this.hotCorners.push(corner);
+            } else {
+                this.hotCorners.push(null);
+            }
         }
 
         this.emit('hot-corners-changed');
@@ -411,7 +426,7 @@ const LayoutManager = new Lang.Class({
             this._addBackgroundClickHandler(bgManager.background.actor);
         }));
 
-        this._bgManagers.push(bgManager);
+        this._bgManagers[monitorIndex] = bgManager;
 
         return bgManager.background;
     },
@@ -476,7 +491,8 @@ const LayoutManager = new Lang.Class({
 
         let size = this.panelBox.height;
         this.hotCorners.forEach(function(corner) {
-            corner.setBarrierSize(size);
+            if (corner)
+                corner.setBarrierSize(size);
         });
 
         this._updateTrayBox();
@@ -579,17 +595,10 @@ const LayoutManager = new Lang.Class({
     get focusIndex() {
         let i = Main.layoutManager.primaryIndex;
 
-        if (global.stage_input_mode == Shell.StageInputMode.FOCUSED ||
-            global.stage_input_mode == Shell.StageInputMode.FULLSCREEN) {
-            let focusActor = global.stage.key_focus;
-            if (focusActor)
-                i = this.findIndexForActor(focusActor);
-        } else {
-            let focusWindow = global.display.focus_window;
-            if (focusWindow)
-                i = focusWindow.get_monitor();
-        }
-
+        if (global.stage.key_focus != null)
+            i = this.findIndexForActor(global.stage.key_focus);
+        else if (global.display.focus_window != null)
+            i = global.display.focus_window.get_monitor();
         return i;
     },
 
@@ -606,6 +615,25 @@ const LayoutManager = new Lang.Class({
 
     get keyboardIndex() {
         return this._keyboardIndex;
+    },
+
+    _loadBackground: function() {
+        this._systemBackground = new Background.SystemBackground();
+        this._systemBackground.actor.hide();
+
+        global.stage.insert_child_below(this._systemBackground.actor, null);
+
+        let constraint = new Clutter.BindConstraint({ source: global.stage,
+                                                      coordinate: Clutter.BindCoordinate.ALL });
+        this._systemBackground.actor.add_constraint(constraint);
+
+        let signalId = this._systemBackground.connect('loaded', Lang.bind(this, function() {
+            this._systemBackground.disconnect(signalId);
+            this._systemBackground.actor.show();
+            global.stage.show();
+
+            this._prepareStartupAnimation();
+        }));
     },
 
     // Startup Animations
@@ -628,14 +656,20 @@ const LayoutManager = new Lang.Class({
     // screen. So, we set no_clear_hint at the end of the animation.
 
     _prepareStartupAnimation: function() {
-        // Set ourselves to FULLSCREEN input mode while the animation is running
-        // so events don't get delivered to X11 windows (which are distorted by the animation)
-        global.stage_input_mode = Shell.StageInputMode.FULLSCREEN;
+        // During the initial transition, add a simple actor to block all events,
+        // so they don't get delivered to X11 windows that have been transformed.
+        this._coverPane = new Clutter.Actor({ opacity: 0,
+                                              width: global.screen_width,
+                                              height: global.screen_height,
+                                              reactive: true });
+        this.addChrome(this._coverPane);
 
         if (Main.sessionMode.isGreeter) {
             this.trayBox.hide();
             this.panelBox.translation_y = this.panelBox.height;
         } else {
+            this._createPrimaryBackground();
+
             // We need to force an update of the regions now before we scale
             // the UI group to get the coorect allocation for the struts.
             this._updateRegions();
@@ -651,37 +685,21 @@ const LayoutManager = new Lang.Class({
                                          y / global.screen_height);
             this.uiGroup.scale_x = this.uiGroup.scale_y = 0.5;
             this.uiGroup.opacity = 0;
+            global.window_group.set_clip(monitor.x, monitor.y, monitor.width, monitor.height);
         }
 
-        this._systemBackground = new Background.SystemBackground();
-        this._systemBackground.actor.hide();
+        this.emit('startup-prepared');
 
-        global.stage.insert_child_below(this._systemBackground.actor, null);
-
-        let constraint = new Clutter.BindConstraint({ source: global.stage,
-                                                      coordinate: Clutter.BindCoordinate.ALL });
-        this._systemBackground.actor.add_constraint(constraint);
-
-        let signalId = this._systemBackground.connect('loaded',
-                                                      Lang.bind(this, function() {
-                                                          this._systemBackground.disconnect(signalId);
-                                                          this._systemBackground.actor.show();
-                                                          global.stage.show();
-
-                                                          this.emit('startup-prepared');
-
-                                                          // We're mostly prepared for the startup animation
-                                                          // now, but since a lot is going on asynchronously
-                                                          // during startup, let's defer the startup animation
-                                                          // until the event loop is uncontended and idle.
-                                                          // This helps to prevent us from running the animation
-                                                          // when the system is bogged down
-                                                          GLib.idle_add(GLib.PRIORITY_LOW,
-                                                                        Lang.bind(this, function() {
-                                                                            this._startupAnimation();
-                                                                            return false;
-                                                                        }));
-                                                      }));
+        // We're mostly prepared for the startup animation
+        // now, but since a lot is going on asynchronously
+        // during startup, let's defer the startup animation
+        // until the event loop is uncontended and idle.
+        // This helps to prevent us from running the animation
+        // when the system is bogged down
+        GLib.idle_add(GLib.PRIORITY_LOW, Lang.bind(this, function() {
+            this._startupAnimation();
+            return false;
+        }));
     },
 
     _startupAnimation: function() {
@@ -701,7 +719,6 @@ const LayoutManager = new Lang.Class({
     },
 
     _startupAnimationSession: function() {
-        this._createPrimaryBackground();
         Tweener.addTween(this.uiGroup,
                          { scale_x: 1,
                            scale_y: 1,
@@ -717,7 +734,8 @@ const LayoutManager = new Lang.Class({
         // we no longer need to clear the stage
         global.stage.no_clear_hint = true;
 
-        global.stage_input_mode = Shell.StageInputMode.NORMAL;
+        this._coverPane.destroy();
+        this._coverPane = null;
 
         this._systemBackground.actor.destroy();
         this._systemBackground = null;
@@ -727,8 +745,10 @@ const LayoutManager = new Lang.Class({
         this.trayBox.show();
         this.keyboardBox.show();
 
-        if (!Main.sessionMode.isGreeter)
+        if (!Main.sessionMode.isGreeter) {
             this._createSecondaryBackgrounds();
+            global.window_group.remove_clip();
+        }
 
         this._queueUpdateRegions();
 
@@ -736,7 +756,6 @@ const LayoutManager = new Lang.Class({
     },
 
     showKeyboard: function () {
-        this.keyboardBox.raise_top();
         Tweener.addTween(this.keyboardBox,
                          { anchor_y: this.keyboardBox.height,
                            time: KEYBOARD_ANIMATION_TIME,
@@ -781,11 +800,10 @@ const LayoutManager = new Lang.Class({
     // @actor: an actor to add to the chrome
     // @params: (optional) additional params
     //
-    // Adds @actor to the chrome, and (unless %affectsInputRegion in
-    // @params is %false) extends the input region to include it.
-    // Changes in @actor's size, position, and visibility will
-    // automatically result in appropriate changes to the input
-    // region.
+    // Adds @actor to the chrome, and extends the input region
+    // to include it. Changes in @actor's size, position, and
+    // visibility will automatically result in appropriate changes
+    // to the input region.
     //
     // If %affectsStruts in @params is %true (and @actor is along a
     // screen edge), then @actor's size and position will also affect
@@ -798,6 +816,8 @@ const LayoutManager = new Lang.Class({
     // and shown otherwise)
     addChrome: function(actor, params) {
         this.uiGroup.add_actor(actor);
+        if (this.uiGroup.contains(global.top_window_group))
+            this.uiGroup.set_child_below_sibling(actor, global.top_window_group);
         this._trackActor(actor, params);
     },
 
@@ -970,13 +990,8 @@ const LayoutManager = new Lang.Class({
     },
 
     _updateFullscreen: function() {
-        for (let i = 0; i < this.monitors.length; i++)
-            this.monitors[i].inFullscreen = global.screen.get_monitor_in_fullscreen (i);
-
         this._updateVisibility();
         this._queueUpdateRegions();
-
-        this.emit('fullscreen-changed');
     },
 
     _windowsRestacked: function() {
@@ -1004,7 +1019,7 @@ const LayoutManager = new Lang.Class({
 
         for (i = 0; i < this._trackedActors.length; i++) {
             let actorData = this._trackedActors[i];
-            if (!(actorData.affectsInputRegion && wantsInputRegion) && !actorData.affectsStruts)
+            if (!wantsInputRegion && !actorData.affectsStruts)
                 continue;
 
             let [x, y] = actorData.actor.get_transformed_position();
@@ -1014,13 +1029,8 @@ const LayoutManager = new Lang.Class({
             w = Math.round(w);
             h = Math.round(h);
 
-            if (actorData.affectsInputRegion && wantsInputRegion) {
-                let rect = new Meta.Rectangle({ x: x, y: y, width: w, height: h});
-
-                if (actorData.actor.get_paint_visibility() &&
-                    !this.uiGroup.get_skip_paint(actorData.actor))
-                    rects.push(rect);
-            }
+            if (wantsInputRegion && actorData.actor.get_paint_visibility())
+                rects.push(new Meta.Rectangle({ x: x, y: y, width: w, height: h }));
 
             if (actorData.affectsStruts) {
                 // Limit struts to the size of the screen
@@ -1175,12 +1185,21 @@ const HotCorner = new Lang.Class({
         }
 
         if (size > 0) {
-            this._verticalBarrier = new Meta.Barrier({ display: global.display,
-                                                       x1: this._x, x2: this._x, y1: this._y, y2: this._y + size,
-                                                       directions: Meta.BarrierDirection.POSITIVE_X });
-            this._horizontalBarrier = new Meta.Barrier({ display: global.display,
-                                                         x1: this._x, x2: this._x + size, y1: this._y, y2: this._y,
-                                                         directions: Meta.BarrierDirection.POSITIVE_Y });
+            if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL) {
+                this._verticalBarrier = new Meta.Barrier({ display: global.display,
+                                                           x1: this._x, x2: this._x, y1: this._y, y2: this._y + size,
+                                                           directions: Meta.BarrierDirection.NEGATIVE_X });
+                this._horizontalBarrier = new Meta.Barrier({ display: global.display,
+                                                             x1: this._x - size, x2: this._x, y1: this._y, y2: this._y,
+                                                             directions: Meta.BarrierDirection.POSITIVE_Y });
+            } else {
+                this._verticalBarrier = new Meta.Barrier({ display: global.display,
+                                                           x1: this._x, x2: this._x, y1: this._y, y2: this._y + size,
+                                                           directions: Meta.BarrierDirection.POSITIVE_X });
+                this._horizontalBarrier = new Meta.Barrier({ display: global.display,
+                                                             x1: this._x, x2: this._x + size, y1: this._y, y2: this._y,
+                                                             directions: Meta.BarrierDirection.POSITIVE_Y });
+            }
 
             this._pressureBarrier.addBarrier(this._verticalBarrier);
             this._pressureBarrier.addBarrier(this._horizontalBarrier);
@@ -1195,11 +1214,11 @@ const HotCorner = new Lang.Class({
                                              height: 3,
                                              reactive: true });
 
-            this._corner = new Clutter.Rectangle({ name: 'hot-corner',
-                                                   width: this._targetSize,
-                                                   height: this._targetSize,
-                                                   opacity: 0,
-                                                   reactive: true });
+            this._corner = new Clutter.Actor({ name: 'hot-corner',
+                                               width: this._targetSize,
+                                               height: this._targetSize,
+                                               opacity: 0,
+                                               reactive: true });
             this._corner._delegate = this;
 
             this.actor.add_child(this._corner);

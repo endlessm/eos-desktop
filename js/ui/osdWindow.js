@@ -96,7 +96,7 @@ const OsdWindow = new Lang.Class({
                                    Lang.bind(this, this._monitorsChanged));
         this._monitorsChanged();
 
-        Main.layoutManager.addChrome(this.actor, { affectsInputRegion: false });
+        Main.uiGroup.add_child(this.actor);
     },
 
     setIcon: function(icon) {
@@ -125,6 +125,7 @@ const OsdWindow = new Lang.Class({
             return;
 
         if (!this.actor.visible) {
+            Meta.disable_unredirect_for_screen(global.screen);
             this.actor.show();
             this.actor.opacity = 0;
 
@@ -145,16 +146,20 @@ const OsdWindow = new Lang.Class({
             return;
 
         Mainloop.source_remove(this._hideTimeoutId);
-        this._hideTimeoutId = 0;
         this._hide();
     },
 
     _hide: function() {
+        this._hideTimeoutId = 0;
         Tweener.addTween(this.actor,
                          { opacity: 0,
                            time: FADE_TIME,
                            transition: 'easeOutQuad',
-                           onComplete: Lang.bind(this, this._reset) });
+                           onComplete: Lang.bind(this, function() {
+                              this._reset();
+                              Meta.enable_unredirect_for_screen(global.screen);
+                           })
+                         });
     },
 
     _reset: function() {

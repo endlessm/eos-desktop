@@ -98,6 +98,65 @@ function _fixMarkup(text, allowMarkup) {
     return GLib.markup_escape_text(text, -1);
 }
 
+const FocusGrabber = new Lang.Class({
+    Name: 'FocusGrabber',
+
+    _init: function(actor) {
+        this._actor = actor;
+        this._prevKeyFocusActor = null;
+        this._focusActorChangedId = 0;
+        this._focused = false;
+    },
+
+    grabFocus: function() {
+        if (this._focused)
+            return;
+
+        this._prevFocusedWindow = global.display.focus_window;
+        this._prevKeyFocusActor = global.stage.get_key_focus();
+
+        this._focusActorChangedId = global.stage.connect('notify::key-focus', Lang.bind(this, this._focusActorChanged));
+
+        if (!this._actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false))
+            this._actor.grab_key_focus();
+
+        this._focused = true;
+    },
+
+    _focusUngrabbed: function() {
+        if (!this._focused)
+            return false;
+
+        if (this._focusActorChangedId > 0) {
+            global.stage.disconnect(this._focusActorChangedId);
+            this._focusActorChangedId = 0;
+        }
+
+        this._focused = false;
+        return true;
+    },
+
+    _focusActorChanged: function() {
+        let focusedActor = global.stage.get_key_focus();
+        if (!focusedActor || !this._actor.contains(focusedActor))
+            this._focusUngrabbed();
+    },
+
+    ungrabFocus: function() {
+        if (!this._focusUngrabbed())
+            return;
+
+        if (this._prevKeyFocusActor) {
+            global.stage.set_key_focus(this._prevKeyFocusActor);
+            this._prevKeyFocusActor = null;
+        } else {
+            let focusedActor = global.stage.get_key_focus();
+            if (focusedActor && this._actor.contains(focusedActor))
+                global.stage.set_key_focus(null);
+        }
+    }
+});
+
 const URLHighlighter = new Lang.Class({
     Name: 'URLHighlighter',
 
@@ -156,10 +215,10 @@ const URLHighlighter = new Lang.Class({
 
             let urlId = this._findUrlAtPos(event);
             if (urlId != -1 && !this._cursorChanged) {
-                global.set_cursor(Shell.Cursor.POINTING_HAND);
+                global.screen.set_cursor(Meta.Cursor.POINTING_HAND);
                 this._cursorChanged = true;
             } else if (urlId == -1) {
-                global.unset_cursor();
+                global.screen.set_cursor(Meta.Cursor.DEFAULT);
                 this._cursorChanged = false;
             }
             return false;
@@ -170,7 +229,7 @@ const URLHighlighter = new Lang.Class({
 
             if (this._cursorChanged) {
                 this._cursorChanged = false;
-                global.unset_cursor();
+                global.screen.set_cursor(Meta.Cursor.DEFAULT);
             }
         }));
     },
@@ -1586,6 +1645,7 @@ const MessageTray = new Lang.Class({
         this._notificationBin.set_y_align(Clutter.ActorAlign.START);
         this._notificationWidget.add_actor(this._notificationBin);
         this._notificationWidget.hide();
+        this._notificationFocusGrabber = new FocusGrabber(this._notificationWidget);
         this._notificationQueue = [];
         this._notification = null;
         this._notificationClickedId = 0;
@@ -1629,7 +1689,7 @@ const MessageTray = new Lang.Class({
 
         this._userActiveWhileNotificationShown = false;
 
-        this.idleMonitor = new GnomeDesktop.IdleMonitor();
+        this.idleMonitor = Meta.IdleMonitor.get_core();
 
         this._grabHelper = new GrabHelper.GrabHelper(this.actor,
                                                      { keybindingMode: Shell.KeyBindingMode.MESSAGE_TRAY });
@@ -1664,11 +1724,10 @@ const MessageTray = new Lang.Class({
         this._desktopCloneState = State.HIDDEN;
         this._notificationRemoved = false;
         this._reNotifyAfterHideNotification = null;
-        this._inFullscreen = false;
         this._desktopClone = null;
         this._inCtrlAltTab = false;
 
-        this._lightbox = new Lightbox.Lightbox(global.overlay_group,
+        this._lightbox = new Lightbox.Lightbox(Main.layoutManager.overviewGroup,
                                                { inhibitEvents: true,
                                                  fadeInTime: ANIMATION_TIME,
                                                  fadeOutTime: ANIMATION_TIME,
@@ -1680,7 +1739,7 @@ const MessageTray = new Lang.Class({
         Main.layoutManager.trackChrome(this._notificationWidget);
         Main.layoutManager.trackChrome(this._closeButton);
 
-        Main.layoutManager.connect('fullscreen-changed', Lang.bind(this, this._updateState));
+        global.screen.connect('in-fullscreen-changed', Lang.bind(this, this._updateState));
         Main.layoutManager.connect('hot-corners-changed', Lang.bind(this, this._hotCornersChanged));
 
         // If the overview shows or hides while we're in
@@ -1759,7 +1818,6 @@ const MessageTray = new Lang.Class({
         let [x, y, mask] = global.get_pointer();
         this._contextMenu.setPosition(Math.round(x), Math.round(y));
         this._grabHelper.grab({ actor: this._contextMenu.actor,
-                                grabFocus: true,
                                 onUngrab: Lang.bind(this, function () {
                                     this._contextMenu.close(BoxPointer.PopupAnimation.FULL);
                                 })
@@ -2321,7 +2379,6 @@ const MessageTray = new Lang.Class({
 
     _showTray: function() {
         if (!this._grabHelper.grab({ actor: this.actor,
-                                     modal: true,
                                      onUngrab: Lang.bind(this, this._escapeTray) })) {
             this._traySummoned = false;
             return false;
@@ -2357,7 +2414,7 @@ const MessageTray = new Lang.Class({
 
         if (this._desktopClone)
             this._desktopClone.destroy();
-        let cloneSource = Main.overview.visible ? global.overlay_group : global.window_group;
+        let cloneSource = Main.overview.visible ? Main.layoutManager.overviewGroup : global.window_group;
         this._desktopClone = new Clutter.Clone({ source: cloneSource,
                                                  clip: new Clutter.Geometry(this._bottomMonitorGeometry) });
         Main.uiGroup.insert_child_above(this._desktopClone, cloneSource);
@@ -2523,19 +2580,7 @@ const MessageTray = new Lang.Class({
     },
 
     _hideNotification: function() {
-        // HACK!
-        // There seems to be a reentrancy issue in calling .ungrab() here,
-        // which causes _updateState to be called before _notificationState
-        // becomes HIDING. That hides the notification again, nullifying the
-        // object but not setting _notificationState (and that's the weird part)
-        // As then _notificationState is stuck into SHOWN but _notification
-        // is null, every new _updateState fails and the message tray is
-        // lost forever.
-        //
-        // See more at https://bugzilla.gnome.org/show_bug.cgi?id=683986
-        this._notificationState = State.HIDING;
-
-        this._grabHelper.ungrab({ actor: this._notification.actor });
+        this._notificationFocusGrabber.ungrabFocus();
 
         if (this._notificationExpandedId) {
             this._notification.disconnect(this._notificationExpandedId);
@@ -2638,8 +2683,7 @@ const MessageTray = new Lang.Class({
     },
 
     _ensureNotificationFocused: function() {
-        this._grabHelper.grab({ actor: this._notification.actor,
-                                grabFocus: true });
+        this._notificationFocusGrabber.grabFocus();
     },
 
     _onSourceDoneDisplayingContent: function(source, closeTray) {
@@ -2683,7 +2727,6 @@ const MessageTray = new Lang.Class({
         }
 
         this._grabHelper.grab({ actor: this._summaryBoxPointer.bin.child,
-                                grabFocus: true,
                                 onUngrab: Lang.bind(this, this._onSummaryBoxPointerUngrabbed) });
 
         this._summaryBoxPointer.actor.opacity = 0;

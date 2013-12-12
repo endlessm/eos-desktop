@@ -107,7 +107,8 @@ const ScreenShield = new Lang.Class({
                                                  fadeFactor: 1 });
         this._lightbox.connect('shown', Lang.bind(this, this._onLightboxShown));
 
-        this.idleMonitor = new GnomeDesktop.IdleMonitor();
+        this.idleMonitor = Meta.IdleMonitor.get_core();
+        this._cursorTracker = Meta.CursorTracker.get_for_screen(global.screen);
     },
 
     _becomeModal: function() {

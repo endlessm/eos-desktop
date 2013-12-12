@@ -245,15 +245,14 @@ const Overview = new Lang.Class({
         let monitor = Main.layoutManager.primaryMonitor;
 
         this._desktopFade = new St.Bin();
-        global.overlay_group.add_actor(this._desktopFade);
+        Main.layoutManager.overviewGroup.add_child(this._desktopFade);
 
         // this._allMonitorsGroup is a simple actor that covers all monitors,
         // used to install actions that apply to all monitors
         this._allMonitorsGroup = new Clutter.Actor({ reactive: true });
         this._allMonitorsGroup.add_constraint(
-            new Clutter.BindConstraint({ source: global.overlay_group,
+            new Clutter.BindConstraint({ source: Main.layoutManager.overviewGroup,
                                          coordinate: Clutter.BindCoordinate.ALL }));
-        this._allMonitorsGroup.hide();
 
         // this._overview is a vertical box that holds the main actors, together
         // with a ghost of the bottom panel. It covers the primary monitor only
@@ -284,8 +283,7 @@ const Overview = new Lang.Class({
         this._groupStack.add_actor(this._group);
 
         this._backgroundGroup = new Meta.BackgroundGroup();
-        global.overlay_group.add_child(this._backgroundGroup);
-        this._backgroundGroup.hide();
+        Main.layoutManager.overviewGroup.add_child(this._backgroundGroup);
         this._bgManagers = [];
 
         this._activationTime = 0;
@@ -303,12 +301,12 @@ const Overview = new Lang.Class({
         // During transitions, we raise this to the top to avoid having the overview
         // area be reactive; it causes too many issues such as double clicks on
         // Dash elements, or mouseover handlers in the workspaces.
-        this._coverPane = new Clutter.Rectangle({ opacity: 0,
-                                                  reactive: true });
+        this._coverPane = new Clutter.Actor({ opacity: 0,
+                                              reactive: true });
         this._overview.add_actor(this._coverPane);
         this._coverPane.connect('event', Lang.bind(this, function (actor, event) { return true; }));
 
-        global.overlay_group.add_actor(this._allMonitorsGroup);
+        Main.layoutManager.overviewGroup.add_child(this._allMonitorsGroup);
 
         this._coverPane.hide();
 
@@ -360,7 +358,7 @@ const Overview = new Lang.Class({
             screenDecorator.add_child(new Clutter.Actor({ x_expand: true }));
             screenDecorator.add_child(topRightCorner.actor);
 
-            global.overlay_group.add_actor(screenDecorator);
+            Main.layoutManager.overviewGroup.add_actor(screenDecorator);
 
             // Set the size and position
             let monitorWorkArea = Main.layoutManager.getWorkAreaForMonitor(i);
@@ -629,16 +627,17 @@ const Overview = new Lang.Class({
     // show:
     //
     // Animates the overview visible and grabs mouse and keyboard input
-    show : function() {
+    show: function() {
         if (this.isDummy)
             return;
         if (this._shown)
             return;
         this._shown = true;
 
-        if (!this._syncInputMode())
+        if (!this._syncGrab())
             return;
 
+        Main.layoutManager.showOverview();
         this._animateVisible();
     },
 
@@ -735,6 +734,11 @@ const Overview = new Lang.Class({
         this._showOrSwitchPage(ViewSelector.ViewPage.WINDOWS);
     },
 
+    focusSearch: function() {
+        this.showApps();
+        this._viewSelector.focusSearch();
+    },
+
     fadeInDesktop: function() {
             this._desktopFade.opacity = 0;
             this._desktopFade.show();
@@ -776,8 +780,6 @@ const Overview = new Lang.Class({
         //
         // Disable unredirection while in the overview
         Meta.disable_unredirect_for_screen(global.screen);
-        this._allMonitorsGroup.show();
-        this._backgroundGroup.show();
 
         if (!this._targetPage) {
             this._targetPage = ViewSelector.ViewPage.WINDOWS;
@@ -839,7 +841,7 @@ const Overview = new Lang.Class({
         this._animateNotVisible();
 
         this._shown = false;
-        this._syncInputMode();
+        this._syncGrab();
     },
 
     toggleByKey: function() {
@@ -889,8 +891,8 @@ const Overview = new Lang.Class({
 
     //// Private methods ////
 
-    _syncInputMode: function() {
-        // We delay input mode changes during animation so that when removing the
+    _syncGrab: function() {
+        // We delay grab changes during animation so that when removing the
         // overview we don't have a problem with the release of a press/release
         // going to an application.
         if (this.animationInProgress)
@@ -908,16 +910,12 @@ const Overview = new Lang.Class({
                         return false;
                     }
                 }
-            } else {
-                global.stage_input_mode = Shell.StageInputMode.FULLSCREEN;
             }
         } else {
             if (this._modal) {
                 Main.popModal(this._overview);
                 this._modal = false;
             }
-            else if (global.stage_input_mode == Shell.StageInputMode.FULLSCREEN)
-                global.stage_input_mode = Shell.StageInputMode.NORMAL;
         }
         return true;
     },
@@ -976,7 +974,7 @@ const Overview = new Lang.Class({
             this._animateNotVisible();
         }
 
-        this._syncInputMode();
+        this._syncGrab();
         global.sync_pointer();
     },
 
@@ -986,13 +984,10 @@ const Overview = new Lang.Class({
 
         this._viewSelector.hide();
         this._desktopFade.hide();
-        this._backgroundGroup.hide();
-        this._allMonitorsGroup.hide();
+        this._coverPane.hide();
 
         this.visible = false;
         this.animationInProgress = false;
-
-        this._coverPane.hide();
 
         this.emit('hidden');
 
@@ -1000,8 +995,10 @@ const Overview = new Lang.Class({
         if (this._shown) {
             this._animateVisible();
         }
+        else
+            Main.layoutManager.hideOverview();
 
-        this._syncInputMode();
+        this._syncGrab();
 
         // Fake a pointer event if requested
         if (this._needsFakePointerEvent) {

@@ -568,6 +568,12 @@ const ViewSelector = new Lang.Class({
         this._workspacesDisplay.hide();
     },
 
+    focusSearch: function() {
+        if (this._activePage == this._appsPage) {
+            this._entry.grab_key_focus();
+        }
+    },
+
     _addPage: function(actor, name, a11yIcon, params) {
         params = Params.parse(params, { a11yFocus: null });
 

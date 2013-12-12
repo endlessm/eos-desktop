@@ -15,6 +15,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Hash = imports.misc.hash;
 const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
+const Screencast = imports.ui.screencast;
 const Screenshot = imports.ui.screenshot;
 
 const GnomeShellIface = <interface name="org.gnome.Shell">
@@ -23,6 +24,7 @@ const GnomeShellIface = <interface name="org.gnome.Shell">
     <arg type="b" direction="out" name="success" />
     <arg type="s" direction="out" name="result" />
 </method>
+<method name="FocusSearch"/>
 <method name="ShowOSD">
     <arg type="a{sv}" direction="in" name="params"/>
 </method>
@@ -73,6 +75,7 @@ const GnomeShell = new Lang.Class({
         this._dbusImpl.export(Gio.DBus.session, '/org/gnome/Shell');
 
         this._extensionsService = new GnomeShellExtensions();
+        this._screencastService = new Screencast.ScreencastService();
         this._screenshotService = new Screenshot.ScreenshotService();
         this._appstoreService = new AppStoreService();
         this._appLauncherService = new AppLauncher();
@@ -117,6 +120,10 @@ const GnomeShell = new Lang.Class({
             success = false;
         }
         return [success, returnValue];
+    },
+
+    FocusSearch: function() {
+        Main.overview.focusSearch();
     },
 
     ShowOSD: function(params) {

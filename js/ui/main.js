@@ -539,8 +539,6 @@ function pushModal(actor, params) {
         Meta.disable_unredirect_for_screen(global.screen);
     }
 
-    global.set_stage_input_mode(Shell.StageInputMode.FULLSCREEN);
-
     modalCount += 1;
     let actorDestroyId = actor.connect('destroy', function() {
         let index = _findModal(actor);
@@ -589,7 +587,6 @@ function popModal(actor, timestamp) {
     if (focusIndex < 0) {
         global.stage.set_key_focus(null);
         global.end_modal(timestamp);
-        global.set_stage_input_mode(Shell.StageInputMode.NORMAL);
         keybindingMode = Shell.KeyBindingMode.NORMAL;
 
         throw new Error('incorrect pop');
@@ -637,7 +634,6 @@ function popModal(actor, timestamp) {
         return;
 
     global.end_modal(timestamp);
-    global.set_stage_input_mode(Shell.StageInputMode.NORMAL);
     Meta.enable_unredirect_for_screen(global.screen);
     keybindingMode = Shell.KeyBindingMode.NORMAL;
 }
