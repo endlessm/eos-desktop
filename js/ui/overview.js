@@ -680,7 +680,32 @@ const Overview = new Lang.Class({
     _isTourShowing: function() {
         let path = GLib.build_filenamev([GLib.get_user_config_dir(),
                                          'run-welcome-tour']);
-        return GLib.file_test(path, GLib.FileTest.EXISTS);
+        let file = Gio.File.new_for_path(path);
+
+        if (!file.query_exists(null)) {
+            return false;
+        }
+
+        // Check when the welcome tour video finishes
+        let monitor = file.monitor_file(Gio.FileMonitorFlags.NONE, null);
+
+        // Keep the monitor from being garbage collected
+        this._welcomeTourMonitor = monitor;
+
+        let changeId = monitor.connect('changed', Lang.bind(this,
+            function(mon, file, otherFile, eventType) {
+                if (eventType !== Gio.FileMonitorEvent.DELETED) {
+                    return;
+                }
+
+                monitor.disconnect(changeId);
+                this._welcomeTourMonitor = null;
+
+                // Start the browser now that the welcome tour has finished
+                this._startBrowser();
+            }));
+
+        return true;
     },
 
     _isInitialSetupRunning: function() {
@@ -694,6 +719,8 @@ const Overview = new Lang.Class({
 
         // Check when gnome-initial-setup finishes
         let monitor = file.monitor_file(Gio.FileMonitorFlags.NONE, null);
+
+        // Keep the monitor from being garbage collected
         this._initialSetupMonitor = monitor;
 
         let changeId = monitor.connect('changed', Lang.bind(this,
@@ -705,7 +732,12 @@ const Overview = new Lang.Class({
                 monitor.disconnect(changeId);
                 this._initialSetupMonitor = null;
 
-                // Start the browser now, as the tour video plays
+                // Start the browser once the tour video finishes
+
+                if (this._isTourShowing()) {
+                    return;
+                }
+
                 this._startBrowser();
             }));
 
@@ -717,11 +749,11 @@ const Overview = new Lang.Class({
             return;
         }
 
-        this._startBrowser();
-
         if (this._isTourShowing()) {
             return;
         }
+
+        this._startBrowser();
 
         this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
     },
