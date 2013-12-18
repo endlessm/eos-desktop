@@ -25,9 +25,6 @@ const Batch = imports.gdm.batch;
 const GdmUtil = imports.gdm.util;
 const LoginDialog = imports.gdm.loginDialog;
 
-// The timeout before going back automatically to the lock screen (in seconds)
-const IDLE_TIMEOUT = 2 * 60;
-
 const UnlockDialog = new Lang.Class({
     Name: 'UnlockDialog',
     Extends: ModalDialog.ModalDialog,
@@ -144,9 +141,6 @@ const UnlockDialog = new Lang.Class({
         this._userVerifier.begin(this._userName, batch);
 
         Main.ctrlAltTabManager.addGroup(this.dialogLayout, _("Unlock Window"), 'dialog-password-symbolic');
-
-        this._idleMonitor = Meta.IdleMonitor.get_core();
-        this._idleWatchId = this._idleMonitor.add_idle_watch(IDLE_TIMEOUT * 1000, Lang.bind(this, this._escape));
     },
 
     _updateSensitivity: function(sensitive) {
@@ -305,11 +299,6 @@ const UnlockDialog = new Lang.Class({
 
     destroy: function() {
         this._userVerifier.clear();
-
-        if (this._idleWatchId) {
-            this._idleMonitor.remove_watch(this._idleWatchId);
-            this._idleWatchId = 0;
-        }
 
         this.parent();
     },
