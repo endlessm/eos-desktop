@@ -88,7 +88,6 @@ const EditableLabel = new Lang.Class({
             this.add_style_pseudo_class('highlighted');
 
             this._grabHelper.grab({ actor: this,
-                                    modal: true,
                                     onUngrab: Lang.bind(this, this._onHighlightUngrab) });
 
             return true;
@@ -143,7 +142,6 @@ const EditableLabel = new Lang.Class({
             Lang.bind(this, this._startEditing));
         this._grabHelper.grab({ actor: this,
                                 focus: this,
-                                modal: true,
                                 onUngrab: Lang.bind(this, this._onEditUngrab) });
     },
 
