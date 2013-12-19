@@ -20,10 +20,13 @@ const FOLDER_DIR_NAME = 'desktop-directories';
 const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/EndlessOS/personality-defaults';
 const DEFAULT_CONFIG_NAME_BASE = 'icon-grid';
 
+const DESKTOP_SUBSTITUTIONS_GROUP = 'Desktop Substitutions';
+
 const IconGridLayout = new Lang.Class({
     Name: 'IconGridLayout',
 
     _init: function(params) {
+        this._initSubstitutions();
         this._updateIconTree();
 
         global.settings.connect('changed::' + SCHEMA_KEY, Lang.bind(this, function() {
@@ -32,13 +35,41 @@ const IconGridLayout = new Lang.Class({
         }));
     },
 
+    _initSubstitutions: function() {
+        this._substitutions = new GLib.KeyFile();
+
+        try {
+            this._substitutions.load_from_file(Config.DATADIR + '/EndlessOS/eos-desktop-substitutions.ini',
+                                               GLib.KeyFileFlags.NONE);
+        } catch (e) {
+            log('Can\'t load desktop substitutions file: ' + e.message);
+        }
+    },
+
+    _replaceObsolete: function(iconId) {
+        let newIconId = null;
+
+        try {
+            newIconId = this._substitutions.get_string(DESKTOP_SUBSTITUTIONS_GROUP,
+                                                       iconId);
+        } catch (e) {
+            if (!e.matches(GLib.KeyFileError, GLib.KeyFileError.KEY_NOT_FOUND) &&
+                !e.matches(GLib.KeyFileError, GLib.KeyFileError.GROUP_NOT_FOUND)) {
+                logError(e, 'Error fetching substitutions for id ' + iconId);
+            }
+        }
+
+        return (newIconId != null) ? newIconId : iconId;
+    },
+
     _getIconTreeFromVariant: function(allIcons) {
         let iconTree = {};
 
         for (let i = 0; i < allIcons.n_children(); i++) {
             let context = allIcons.get_child_value(i);
             let [folder, ] = context.get_child_value(0).get_string();
-            iconTree[folder] = context.get_child_value(1).get_strv();
+            let children = context.get_child_value(1).get_strv();
+            iconTree[folder] = children.map(Lang.bind(this, this._replaceObsolete));
         }
 
         return iconTree;
