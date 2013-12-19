@@ -19,7 +19,6 @@ const BackgroundMenu = imports.ui.backgroundMenu;
 const BoxPointer = imports.ui.boxpointer;
 const ButtonConstants = imports.ui.buttonConstants;
 const DND = imports.ui.dnd;
-const GrabHelper = imports.ui.grabHelper;
 const IconGrid = imports.ui.iconGrid;
 const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
@@ -1838,68 +1837,6 @@ const AppStoreIcon = new Lang.Class({
     }
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
-
-const TrashPopup = new Lang.Class({
-    Name: 'TrashPopup',
-
-    _init: function(params) {
-        this.actor = new St.BoxLayout({ style_class: 'trash-popup',
-                                        vertical: true });
-
-        this._label = new St.Label({ text: _("Delete?"),
-                                     style_class: 'trash-popup-label'
-                                   });
-
-        this._buttonsLayout = new St.BoxLayout({ style_class: 'trash-popup-buttons',
-                                                 vertical: false
-                                               });
-
-        this.actor.add(this._label);
-        this.actor.add(this._buttonsLayout, { expand: true });
-
-        this._acceptButton = new St.Button({ style_class: 'trash-popup-accept' });
-        this._cancelButton = new St.Button({ style_class: 'trash-popup-cancel' });
-
-        this._buttonsLayout.add(this._cancelButton, { expand: true,
-                                                      x_fill: false,
-                                                      y_fill: false,
-                                                      x_align: St.Align.START,
-                                                      y_align: St.Align.END
-                                                    });
-        this._buttonsLayout.add(this._acceptButton, { expand: true,
-                                                      x_fill: false,
-                                                      y_fill: false,
-                                                      x_align: St.Align.END,
-                                                      y_align: St.Align.END
-                                                    });
-
-        this._grabHelper = new GrabHelper.GrabHelper(this.actor);
-        this._grabHelper.addActor(this.actor);
-        this._grabHelper.grab({ actor: this.actor,
-                                focus: this.actor,
-                                modal: true,
-                                onUngrab: Lang.bind(this, this._onPopupUngrab)
-                              });
-
-        this._acceptButton.connect('clicked', params['onAccept']);
-        this._cancelButton.connect('clicked', params['onCancel']);
-
-        this.actor.connect('hide', Lang.bind(this, function() {
-            this._grabHelper.ungrab({ actor: this.actor });
-        }));
-    },
-
-    _onPopupUngrab: function(isUser) {
-        if (isUser) {
-            /* Re-new grab */
-            this._grabHelper.grab({ actor: this.actor,
-                                    focus: this.actor,
-                                    modal: true,
-                                    onUngrab: Lang.bind(this, this._onPopupUngrab)
-                                  });
-        }
-    }
-});
 
 const AppIconMenu = new Lang.Class({
     Name: 'AppIconMenu',
