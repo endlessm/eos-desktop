@@ -40,6 +40,7 @@ const AppActivationContext = new Lang.Class({
         this._splash = null;
 
         this._appStateId = 0;
+        this._appActivationTime = 0;
         this._splashId = 0;
     },
 
@@ -72,6 +73,7 @@ const AppActivationContext = new Lang.Class({
         let appSystem = Shell.AppSystem.get_default();
         this._appStateId = appSystem.connect('app-state-changed',
             Lang.bind(this, this._onAppStateChanged));
+        this._appActivationTime = GLib.get_monotonic_time();
     },
 
     _getCoverPage: function() {
@@ -167,6 +169,26 @@ const AppActivationContext = new Lang.Class({
         return false;
     },
 
+    _recordLaunchTime: function() {
+        let activationTime = this._appActivationTime;
+        this._appActivationTime = 0;
+
+        if (activationTime == 0) {
+            return;
+        }
+
+        if (!GLib.getenv('SHELL_DEBUG_LAUNCH_TIME')) {
+            return;
+        }
+
+        let currentTime = GLib.get_monotonic_time();
+        let elapsedTime = currentTime - activationTime;
+
+        log('Application ' + this._app.get_name() +
+            ' took ' + elapsedTime / 1000000 +
+            ' seconds to launch');
+    },
+
     _onAppStateChanged: function(appSystem, app) {
         if (app.state != Shell.AppState.RUNNING) {
             return;
@@ -180,6 +202,8 @@ const AppActivationContext = new Lang.Class({
             app.request_quit();
             return;
         }
+
+        this._recordLaunchTime();
 
         // (splashId == 0) => the window took more than the stock
         // splash timeout to display
