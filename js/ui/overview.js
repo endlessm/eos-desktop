@@ -680,11 +680,13 @@ const Overview = new Lang.Class({
     _isTourShowing: function() {
         let path = GLib.build_filenamev([GLib.get_user_config_dir(),
                                          'run-welcome-tour']);
-        let file = Gio.File.new_for_path(path);
+        return GLib.file_test(path, GLib.FileTest.EXISTS);
+    },
 
-        if (!file.query_exists(null)) {
-            return false;
-        }
+    _startBrowserAfterTour: function() {
+        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
+                                         'run-welcome-tour']);
+        let file = Gio.File.new_for_path(path);
 
         // Check when the welcome tour video finishes
         let monitor = file.monitor_file(Gio.FileMonitorFlags.NONE, null);
@@ -704,18 +706,18 @@ const Overview = new Lang.Class({
                 // Start the browser now that the welcome tour has finished
                 this._startBrowser();
             }));
-
-        return true;
     },
 
     _isInitialSetupRunning: function() {
         let path = GLib.build_filenamev([GLib.get_user_config_dir(),
                                          'gnome-initial-setup-done']);
-        let file = Gio.File.new_for_path(path);
+        return !GLib.file_test(path, GLib.FileTest.EXISTS);
+    },
 
-        if (file.query_exists(null)) {
-            return false;
-        }
+    _startBrowserAfterInitialSetup: function() {
+        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
+                                         'gnome-initial-setup-done']);
+        let file = Gio.File.new_for_path(path);
 
         // Check when gnome-initial-setup finishes
         let monitor = file.monitor_file(Gio.FileMonitorFlags.NONE, null);
@@ -735,21 +737,22 @@ const Overview = new Lang.Class({
                 // Start the browser once the tour video finishes
 
                 if (this._isTourShowing()) {
+                    this._startBrowserAfterTour();
                     return;
                 }
 
                 this._startBrowser();
             }));
-
-        return true;
     },
 
     startupState: function() {
         if (this._isInitialSetupRunning()) {
+            this._startBrowserAfterInitialSetup();
             return;
         }
 
         if (this._isTourShowing()) {
+            this._startBrowserAfterTour();
             return;
         }
 
