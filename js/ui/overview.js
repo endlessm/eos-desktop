@@ -683,17 +683,46 @@ const Overview = new Lang.Class({
         return GLib.file_test(path, GLib.FileTest.EXISTS);
     },
 
+    _startBrowserAfterTour: function() {
+        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
+                                         'run-welcome-tour']);
+        let file = Gio.File.new_for_path(path);
+
+        // Check when the welcome tour video finishes
+        let monitor = file.monitor_file(Gio.FileMonitorFlags.NONE, null);
+
+        // Keep the monitor from being garbage collected
+        this._welcomeTourMonitor = monitor;
+
+        let changeId = monitor.connect('changed', Lang.bind(this,
+            function(mon, file, otherFile, eventType) {
+                if (eventType !== Gio.FileMonitorEvent.DELETED) {
+                    return;
+                }
+
+                monitor.disconnect(changeId);
+                this._welcomeTourMonitor = null;
+
+                // Start the browser now that the welcome tour has finished
+                this._startBrowser();
+            }));
+    },
+
     _isInitialSetupRunning: function() {
+        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
+                                         'gnome-initial-setup-done']);
+        return !GLib.file_test(path, GLib.FileTest.EXISTS);
+    },
+
+    _startBrowserAfterInitialSetup: function() {
         let path = GLib.build_filenamev([GLib.get_user_config_dir(),
                                          'gnome-initial-setup-done']);
         let file = Gio.File.new_for_path(path);
 
-        if (file.query_exists(null)) {
-            return false;
-        }
-
         // Check when gnome-initial-setup finishes
         let monitor = file.monitor_file(Gio.FileMonitorFlags.NONE, null);
+
+        // Keep the monitor from being garbage collected
         this._initialSetupMonitor = monitor;
 
         let changeId = monitor.connect('changed', Lang.bind(this,
@@ -705,23 +734,29 @@ const Overview = new Lang.Class({
                 monitor.disconnect(changeId);
                 this._initialSetupMonitor = null;
 
-                // Start the browser now, as the tour video plays
+                // Start the browser once the tour video finishes
+
+                if (this._isTourShowing()) {
+                    this._startBrowserAfterTour();
+                    return;
+                }
+
                 this._startBrowser();
             }));
-
-        return true;
     },
 
     startupState: function() {
         if (this._isInitialSetupRunning()) {
+            this._startBrowserAfterInitialSetup();
+            return;
+        }
+
+        if (this._isTourShowing()) {
+            this._startBrowserAfterTour();
             return;
         }
 
         this._startBrowser();
-
-        if (this._isTourShowing()) {
-            return;
-        }
 
         this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
     },
