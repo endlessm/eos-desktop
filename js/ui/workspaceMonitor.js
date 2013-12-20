@@ -17,8 +17,9 @@ const WorkspaceMonitor = new Lang.Class({
 
         this._shellwm = global.window_manager;
         this._shellwm.connect('minimize-completed', Lang.bind(this, this._minimizeWindow));
+        this._shellwm.connect('unminimize', Lang.bind(this, this._unminimizeWindow));
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
-        this._shellwm.connect('destroy', Lang.bind(this, this._destroyWindow));
+        this._shellwm.connect('destroy-completed', Lang.bind(this, this._destroyWindow));
 
         this._metaScreen.connect('workspace-switched', Lang.bind(this, this._workspaceSwitched));
         this._metaScreen.connect('in-fullscreen-changed', Lang.bind(this, this._updateOverview));
@@ -207,6 +208,14 @@ const WorkspaceMonitor = new Lang.Class({
 
     _mapWindow: function(shellwm, actor) {
         this._realMapWindow(actor.meta_window);
+    },
+
+    _unminimizeWindow: function(shellwm, actor) {
+        this._realMapWindow(actor.meta_window);
+        // if this will be the first visible window, we need to hide the overview/desktop
+        if (Main.overview.visible) {
+            Main.overview.hide();
+        }
     },
 
     _updateOverview: function() {
