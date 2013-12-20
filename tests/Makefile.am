@@ -1,5 +1,9 @@
-noinst_SCRIPTS = run-test.sh
-EXTRA_DIST = run-test.sh.in
+JS_TESTS = \
+	unit/format_test.js				\
+	unit/insertSorted_test.js			\
+	unit/markup_test.js				\
+	unit/jsParse_test.js				\
+	unit/url_test.js
 
 TEST_JS =					\
 	jenkinsTestPlugin.js			\
@@ -35,26 +39,37 @@ TEST_JS =					\
 	testcommon/ui.js                        \
 	test_example/foo_test.js		\
 	test_example/some_class.js		\
-	unit/format.js				\
-	unit/insertSorted.js			\
-	unit/markup.js				\
-	unit/jsParse.js				\
-	unit/url.js
-EXTRA_DIST += $(TEST_JS)
+	$(JS_TESTS)
+
+EXTRA_DIST = $(TEST_JS)
 
 TEST_MISC =					\
 	eos_harness_test/badextension.txt	\
 	testcommon/test.css
 EXTRA_DIST += $(TEST_MISC)
 
-run-test.sh: run-test.sh.in
-	$(AM_V_GEN) sed \
-	    -e "s|@MUTTER_TYPELIB_DIR[@]|$(MUTTER_TYPELIB_DIR)|" \
-	    -e "s|@srcdir[@]|$(srcdir)|" \
-	    $< > $@ && chmod a+x $@
+TESTS = \
+  $(JS_TESTS) \
+  $(NULL)
+TEST_EXTENSIONS = .js
+JASMINE_SUBMODULE_PATH = $(top_srcdir)/tests/jasmine
+
+AM_JS_LOG_FLAGS = \
+	--include-path=$(top_srcdir) \
+	--include-path=$(top_srcdir)/js \
+	--include-path=$(top_srcdir)/tests/unit
+
+include $(JASMINE_SUBMODULE_PATH)/Makefile-jasmine.am.inc
+
+LOG_COMPILER = gtester
+AM_LOG_FLAGS = -k --verbose
+
+# Use locally built versions of Shell-1.0 and libraries; this may need to
+# be changed to AM_TESTS_ENVIRONMENT in a future version of Automake
+TESTS_ENVIRONMENT = \
+	GI_TYPELIB_PATH='$(top_builddir)/src:$(MUTTER_TYPELIB_DIR):${GI_TYPELIB_PATH}' \
+	LD_LIBRARY_PATH='$(top_builddir)/src/:${GI_TYPELIB_PATH}' \
+	$(NULL)
 
 EXTRA_DIST += \
-	README.txt \
-	run-gjs-tests
-
-CLEANFILES = run-test.sh
+	README.txt
