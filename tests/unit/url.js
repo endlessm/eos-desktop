@@ -2,19 +2,19 @@
 
 // Test cases for MessageTray URLification
 
-const JsUnit = imports.jsUnit;
-
 const Util = imports.misc.util;
-
-const Environment = imports.misc.coreEnvironment;
-Environment.coreInit();
+const CoreEnvironment = imports.misc.coreEnvironment;
 
 // TODO: A real table driven framework is required here, these are not
 //       all testing the same thing.
 
-function testFindURLInString() {
+describe('URL-in-string finder', function() {
 
-    const tests = [
+    beforeEach(function() {
+        CoreEnvironment.coreInit();
+    });
+
+    const URLParameters = [
         { input: 'This is a test',
           output: [] },
         { input: 'This is http://www.gnome.org a test',
@@ -62,16 +62,21 @@ function testFindURLInString() {
           output: [ ] }
     ];
 
-    for (let i = 0; i < tests.length; i++) {
-        let match = Util.findUrls(tests[i].input);
-
-        JsUnit.assertEquals('Test ' + i + ' match length',
-			    match.length, tests[i].output.length);
-        for (let j = 0; j < match.length; j++) {
-	        JsUnit.assertEquals('Test ' + i + ', match ' + j + ' url',
-			            match[j].url, tests[i].output[j].url);
-	        JsUnit.assertEquals('Test ' + i + ', match ' + j + ' position',
-			            match[j].pos, tests[i].output[j].pos);
-        }
-    }
-}
+    for (let i = 0; i < URLParameters.length; i++) {
+        const url = URLParameters[i];
+        (function(Input, Output) {
+             let findsOrDoesNotFind;
+             
+             if (Output.length > 0)
+                 findsOrDoesNotFind = 'Finds';
+             else
+                 findsOrDoesNotFind = 'Does not find';
+        
+             it(findsOrDoesNotFind + ' URLs in ' + Input, function() {
+                 let match = Util.findUrls(Input);
+                 
+                 expect(match).toEqual(Output);
+             });
+         })(url.input, url.output);
+    };
+});
