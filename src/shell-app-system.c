@@ -92,8 +92,13 @@ scan_startup_wm_class_to_id (ShellAppSystem *self)
 
       id = g_app_info_get_id (info);
       startup_wm_class = g_desktop_app_info_get_startup_wm_class (G_DESKTOP_APP_INFO (info));
+
       if (startup_wm_class != NULL)
-        g_hash_table_insert (priv->startup_wm_class_to_id, (char *) startup_wm_class, (char *) id);
+        {
+          g_hash_table_insert (priv->startup_wm_class_to_id,
+                               g_strdup (startup_wm_class), g_strdup (id));
+          g_debug ("Application %s has StartupWMClass %s", id, startup_wm_class);
+        }
     }
 
   g_list_free_full (apps, g_object_unref);
@@ -125,7 +130,7 @@ shell_app_system_init (ShellAppSystem *self)
                                            NULL,
                                            (GDestroyNotify)g_object_unref);
 
-  priv->startup_wm_class_to_id = g_hash_table_new (g_str_hash, g_str_equal);
+  priv->startup_wm_class_to_id = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
   priv->event_recorder = emtr_event_recorder_new ();
 
