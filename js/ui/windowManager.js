@@ -316,8 +316,8 @@ const WindowManager = new Lang.Class({
 
         if (Main.overview.visible) {
             // we need to wait for the overview to be hidden before animating
-            this._overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
-                Main.overview.disconnect(this._overviewHiddenId);
+            let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
+                Main.overview.disconnect(overviewHiddenId);
                 this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,
                                     this._unminimizeWindowOverwritten);
             }));
