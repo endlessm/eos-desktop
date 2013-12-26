@@ -215,7 +215,7 @@ const WindowManager = new Lang.Class({
     },
 
     _shouldAnimate: function() {
-        return (this._animationBlockCount == 0);
+        return !(Main.overview.visible || this._animationBlockCount > 0);
     },
 
     _shouldAnimateActor: function(actor) {
@@ -306,6 +306,22 @@ const WindowManager = new Lang.Class({
     },
 
     _unminimizeWindow : function(shellwm, actor) {
+        if (Main.overview.visible) {
+            // we need to wait for the overview to be hidden before animating
+            let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
+                Main.overview.disconnect(overviewHiddenId);
+                this._doUnminimizeWindow(shellwm, actor);
+            }));
+
+            // if this will be the first visible window, we need to hide the overview
+            Main.overview.hide();
+        } else {
+            // the overview has been hidden already
+            this._doUnminimizeWindow(shellwm, actor);
+        }
+    },
+
+    _doUnminimizeWindow: function(shellwm, actor) {
         if (!this._shouldAnimateActor(actor)) {
             shellwm.completed_unminimize(actor);
             return;
@@ -314,21 +330,8 @@ const WindowManager = new Lang.Class({
         this._unminimizing.push(actor);
         actor.show();
 
-        if (Main.overview.visible) {
-            // we need to wait for the overview to be hidden before animating
-            let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
-                Main.overview.disconnect(overviewHiddenId);
-                this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,
-                                    this._unminimizeWindowOverwritten);
-            }));
-
-            // if this will be the first visible window, we need to hide the overview
-            Main.overview.hide();
-        } else {
-            // the overview has been hidden already
-            this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,
-                                this._unminimizeWindowOverwritten);
-        }
+        this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,
+                            this._unminimizeWindowOverwritten);
     },
 
     _unminimizeWindowDone : function(shellwm, actor) {
