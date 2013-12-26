@@ -5,3 +5,4 @@ Exec=gjs @jsdir@/misc/eos-launch.js %U
 X-MultipleArgs=false
 Categories=EndlessOS;Utility;Core;
 MimeType=x-scheme-handler/endlessm-app;
+Type=Application
