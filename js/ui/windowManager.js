@@ -93,6 +93,7 @@ const WindowManager = new Lang.Class({
         this._shellwm.connect('kill-switch-workspace', Lang.bind(this, this._switchWorkspaceDone));
         this._shellwm.connect('kill-window-effects', Lang.bind(this, function (shellwm, actor) {
             this._minimizeWindowDone(shellwm, actor);
+            this._unminimizeWindowDone(shellwm, actor);
             this._maximizeWindowDone(shellwm, actor);
             this._unmaximizeWindowDone(shellwm, actor);
             this._mapWindowDone(shellwm, actor);
