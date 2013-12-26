@@ -564,11 +564,9 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
-        } else {
-            this._slideWindowOut(shellwm, actor,
-                                 this._destroyWindowDone,
-                                 this._destroyWindowDone);
+            return;
         }
+        shellwm.completed_destroy(actor);
     },
 
     _destroyWindowDone : function(shellwm, actor) {
