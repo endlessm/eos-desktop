@@ -21,7 +21,6 @@ enum
   MINIMIZE,
   MINIMIZE_COMPLETED,
   UNMINIMIZE,
-  UNMINIMIZE_COMPLETED,
   MAXIMIZE,
   UNMAXIMIZE,
   MAP,
@@ -74,14 +73,6 @@ shell_wm_class_init (ShellWMClass *klass)
                   META_TYPE_WINDOW_ACTOR);
   shell_wm_signals[UNMINIMIZE] =
       g_signal_new ("unminimize",
-                    G_TYPE_FROM_CLASS (klass),
-                    G_SIGNAL_RUN_LAST,
-                    0,
-                    NULL, NULL, NULL,
-                    G_TYPE_NONE, 1,
-                    META_TYPE_WINDOW_ACTOR);
-  shell_wm_signals[UNMINIMIZE_COMPLETED] =
-      g_signal_new ("unminimize-completed",
                     G_TYPE_FROM_CLASS (klass),
                     G_SIGNAL_RUN_LAST,
                     0,
@@ -203,7 +194,6 @@ shell_wm_completed_unminimize (ShellWM         *wm,
                                MetaWindowActor *actor)
 {
   meta_plugin_unminimize_completed (wm->plugin, actor);
-  g_signal_emit (wm, shell_wm_signals[UNMINIMIZE_COMPLETED], 0, actor);
 }
 
 /**
