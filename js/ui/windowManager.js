@@ -321,6 +321,9 @@ const WindowManager = new Lang.Class({
                 this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,
                                     this._unminimizeWindowOverwritten);
             }));
+
+            // if this will be the first visible window, we need to hide the overview
+            Main.overview.hide();
         } else {
             // the overview has been hidden already
             this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,

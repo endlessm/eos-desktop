@@ -212,10 +212,6 @@ const WorkspaceMonitor = new Lang.Class({
 
     _unminimizeWindow: function(shellwm, actor) {
         this._realMapWindow(actor.meta_window);
-        // if this will be the first visible window, we need to hide the overview/desktop
-        if (Main.overview.visible) {
-            Main.overview.hide();
-        }
     },
 
     _updateOverview: function() {
