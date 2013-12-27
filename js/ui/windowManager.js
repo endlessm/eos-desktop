@@ -76,6 +76,7 @@ const WindowManager = new Lang.Class({
         this._shellwm =  global.window_manager;
 
         this._minimizing = [];
+        this._unminimizing = [];
         this._maximizing = [];
         this._unmaximizing = [];
         this._mapping = [];
@@ -92,6 +93,7 @@ const WindowManager = new Lang.Class({
         this._shellwm.connect('kill-switch-workspace', Lang.bind(this, this._switchWorkspaceDone));
         this._shellwm.connect('kill-window-effects', Lang.bind(this, function (shellwm, actor) {
             this._minimizeWindowDone(shellwm, actor);
+            this._unminimizeWindowDone(shellwm, actor);
             this._maximizeWindowDone(shellwm, actor);
             this._unmaximizeWindowDone(shellwm, actor);
             this._mapWindowDone(shellwm, actor);
@@ -100,6 +102,7 @@ const WindowManager = new Lang.Class({
 
         this._shellwm.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
         this._shellwm.connect('minimize', Lang.bind(this, this._minimizeWindow));
+        this._shellwm.connect('unminimize', Lang.bind(this, this._unminimizeWindow));
         this._shellwm.connect('maximize', Lang.bind(this, this._maximizeWindow));
         this._shellwm.connect('unmaximize', Lang.bind(this, this._unmaximizeWindow));
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
@@ -232,6 +235,43 @@ const WindowManager = new Lang.Class({
         return false;
     },
 
+    _slideWindowIn : function(shellwm, actor, onComplete, onOverwrite) {
+        let origY = actor.y;
+
+        let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+        let startY = monitor.y + monitor.height;
+        actor.set_position(actor.x, startY);
+
+        Tweener.addTween(actor,
+                         { y: origY,
+                           time: WINDOW_ANIMATION_TIME,
+                           transition: 'easeOutQuad',
+                           onComplete: onComplete,
+                           onCompleteScope: this,
+                           onCompleteParams: [shellwm, actor],
+                           onOverwrite: onOverwrite,
+                           onOverwriteScope: this,
+                           onOverwriteParams: [shellwm, actor]
+                         });
+    },
+
+    _slideWindowOut : function(shellwm, actor, onComplete, onOverwrite) {
+        let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+        let yDest = monitor.y + monitor.height;
+
+        Tweener.addTween(actor,
+                         { y: yDest,
+                           time: WINDOW_ANIMATION_TIME,
+                           transition: 'easeOutQuad',
+                           onComplete: onComplete,
+                           onCompleteScope: this,
+                           onCompleteParams: [shellwm, actor],
+                           onOverwrite: onOverwrite,
+                           onOverwriteScope: this,
+                           onOverwriteParams: [shellwm, actor]
+                         });
+    },
+
     _minimizeWindow : function(shellwm, actor) {
         let window = actor.meta_window;
 
@@ -244,51 +284,8 @@ const WindowManager = new Lang.Class({
 
         this._minimizing.push(actor);
 
-        if (window.is_monitor_sized()) {
-            Tweener.addTween(actor,
-                         { opacity: 0,
-                           time: WINDOW_ANIMATION_TIME,
-                           transition: 'easeOutQuad',
-                           onComplete: this._minimizeWindowDone,
-                           onCompleteScope: this,
-                           onCompleteParams: [shellwm, actor],
-                           onOverwrite: this._minimizeWindowOverwritten,
-                           onOverwriteScope: this,
-                           onOverwriteParams: [shellwm, actor]
-                         });
-        } else {
-            let xDest, yDest, xScale, yScale;
-            let [success, geom] = window.get_icon_geometry();
-            if (success) {
-                xDest = geom.x;
-                yDest = geom.y;
-                xScale = geom.width / actor.width;
-                yScale = geom.height / actor.height;
-            } else {
-                let monitor = Main.layoutManager.monitors[window.get_monitor()];
-                xDest = monitor.x;
-                yDest = monitor.y + monitor.height;
-                if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
-                    xDest += monitor.width;
-                xScale = 0;
-                yScale = 0;
-            }
-
-            Tweener.addTween(actor,
-                             { scale_x: xScale,
-                               scale_y: yScale,
-                               x: xDest,
-                               y: yDest,
-                               time: WINDOW_ANIMATION_TIME,
-                               transition: 'easeOutQuad',
-                               onComplete: this._minimizeWindowDone,
-                               onCompleteScope: this,
-                               onCompleteParams: [shellwm, actor],
-                               onOverwrite: this._minimizeWindowOverwritten,
-                               onOverwriteScope: this,
-                               onOverwriteParams: [shellwm, actor]
-                             });
-        }
+        this._slideWindowOut(shellwm, actor, this._minimizeWindowDone,
+                             this._minimizeWindowOverwritten);
     },
 
     _minimizeWindowDone : function(shellwm, actor) {
@@ -305,6 +302,50 @@ const WindowManager = new Lang.Class({
     _minimizeWindowOverwritten : function(shellwm, actor) {
         if (this._removeEffect(this._minimizing, actor)) {
             shellwm.completed_minimize(actor);
+        }
+    },
+
+    _unminimizeWindow : function(shellwm, actor) {
+        if (Main.overview.visible) {
+            // we need to wait for the overview to be hidden before animating
+            let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
+                Main.overview.disconnect(overviewHiddenId);
+                this._doUnminimizeWindow(shellwm, actor);
+            }));
+
+            // if this will be the first visible window, we need to hide the overview
+            Main.overview.hide();
+        } else {
+            // the overview has been hidden already
+            this._doUnminimizeWindow(shellwm, actor);
+        }
+    },
+
+    _doUnminimizeWindow: function(shellwm, actor) {
+        if (!this._shouldAnimateActor(actor)) {
+            shellwm.completed_unminimize(actor);
+            return;
+        }
+
+        this._unminimizing.push(actor);
+        actor.show();
+
+        this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,
+                            this._unminimizeWindowOverwritten);
+    },
+
+    _unminimizeWindowDone : function(shellwm, actor) {
+        if (this._removeEffect(this._unminimizing, actor)) {
+            Tweener.removeTweens(actor);
+            actor.set_scale(1.0, 1.0);
+
+            shellwm.completed_unminimize(actor);
+        }
+    },
+
+    _unminimizeWindowOverwritten : function(shellwm, actor) {
+        if (this._removeEffect(this._unminimizing, actor)) {
+            shellwm.completed_unminimize(actor);
         }
     },
 

@@ -17,6 +17,7 @@ const WorkspaceMonitor = new Lang.Class({
 
         this._shellwm = global.window_manager;
         this._shellwm.connect('minimize-completed', Lang.bind(this, this._minimizeWindow));
+        this._shellwm.connect('unminimize', Lang.bind(this, this._unminimizeWindow));
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
         this._shellwm.connect('destroy', Lang.bind(this, this._destroyWindow));
 
@@ -206,6 +207,10 @@ const WorkspaceMonitor = new Lang.Class({
     },
 
     _mapWindow: function(shellwm, actor) {
+        this._realMapWindow(actor.meta_window);
+    },
+
+    _unminimizeWindow: function(shellwm, actor) {
         this._realMapWindow(actor.meta_window);
     },
 
