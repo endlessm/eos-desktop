@@ -2,6 +2,7 @@
 
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
+const Signals = imports.signals;
 
 const Main = imports.ui.main;
 
@@ -33,9 +34,6 @@ const SideComponent = new Lang.Class({
 
         this._bgClickedId =
             Main.layoutManager.connect('background-clicked', Lang.bind(this, this._onBackgroundClicked));
-
-        this._overviewShowingId =
-            Main.overview.connect('showing', Lang.bind(this, this._onOverviewShowing));
     },
 
     disable: function() {
@@ -72,20 +70,13 @@ const SideComponent = new Lang.Class({
         }
 
         // resync visibility
-        this._visible = this.proxy.Visible;
+        this.visible = this.proxy.Visible;
 
         if (!this._visible) {
             let visibleWindows = Main.workspaceMonitor.visibleWindows;
             if (visibleWindows == 0) {
                 Main.overview.showApps();
             }
-        }
-    },
-
-    _onOverviewShowing: function() {
-        // Make the component close (slide in) when the overview is shown
-        if (this._visible) {
-            this._doToggle(global.get_current_time());
         }
     },
 
@@ -99,8 +90,6 @@ const SideComponent = new Lang.Class({
 
     _doToggle: function(timestamp, params) {
         this.removeHiddenId();
-        this._visible = !this._visible;
-
         this.callToggle(timestamp, params);
     },
 
@@ -140,6 +129,15 @@ const SideComponent = new Lang.Class({
     },
 
     set visible(v) {
+        if (this._visible == v) {
+            return;
+        }
         this._visible = v;
+        if (this._visible) {
+            this.emit('shown');
+        } else {
+            this.emit('hidden');
+        }
     }
 });
+Signals.addSignalMethods(SideComponent.prototype);
