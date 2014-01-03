@@ -652,11 +652,13 @@ const Overview = new Lang.Class({
 
         // if there is, we need to wait for it to be hidden
         if (sideComp != null) {
-            let hidingId = sideComp.connect('hidden',
-                    Lang.bind(this, function(visible) {
-                        sideComp.disconnect(hidingId);
-                        Main.layoutManager.showOverview();
-                        this._animateVisible();
+            let hidingId = sideComp.connect('notify::visible',
+                    Lang.bind(this, function() {
+                        if (!sideComp.visible) {
+                            sideComp.disconnect(hidingId);
+                            Main.layoutManager.showOverview();
+                            this._animateVisible();
+                        }
                     }));
             sideComp.toggle();
         } else {

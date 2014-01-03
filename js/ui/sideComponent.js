@@ -1,18 +1,23 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
+const GObject = imports.gi.GObject;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
-const Signals = imports.signals;
 
 const Main = imports.ui.main;
 
 const SideComponent = new Lang.Class({
     Name: 'SideComponent',
+    Extends: GObject.Object,
+    Properties: {'visible': GObject.ParamSpec.boolean('visible',
+                                                      'Visible', 'Visibility of the component',
+                                                      GObject.ParamFlags.READABLE | GObject.ParamFlags.WRITABLE,
+                                                      false)},
 
     _init: function(proxyProto, proxyName, proxyPath) {
+        this.parent();
         this._bgClickedId = 0;
         this._overviewHiddenId = 0;
-        this._overviewShowingId = 0;
         this._propertiesChangedId = 0;
 
         this._proxyProto = proxyProto;
@@ -40,11 +45,6 @@ const SideComponent = new Lang.Class({
         if (this._bgClickedId > 0) {
             Main.layoutManager.disconnect(this._bgClickedId);
             this._bgClickedId = 0;
-        }
-
-        if (this._overviewShowingId > 0) {
-            Main.overview.disconnect(this._overviewShowingId);
-            this._overviewShowingId = 0;
         }
 
         if (this._propertiesChangedId > 0) {
@@ -129,15 +129,7 @@ const SideComponent = new Lang.Class({
     },
 
     set visible(v) {
-        if (this._visible == v) {
-            return;
-        }
         this._visible = v;
-        if (this._visible) {
-            this.emit('shown');
-        } else {
-            this.emit('hidden');
-        }
+        this.notify('visible');
     }
 });
-Signals.addSignalMethods(SideComponent.prototype);
