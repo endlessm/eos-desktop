@@ -1,5 +1,6 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
+const GObject = imports.gi.GObject;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 
@@ -7,11 +8,16 @@ const Main = imports.ui.main;
 
 const SideComponent = new Lang.Class({
     Name: 'SideComponent',
+    Extends: GObject.Object,
+    Properties: {'visible': GObject.ParamSpec.boolean('visible',
+                                                      'Visible', 'Visibility of the component',
+                                                      GObject.ParamFlags.READABLE | GObject.ParamFlags.WRITABLE,
+                                                      false)},
 
     _init: function(proxyProto, proxyName, proxyPath) {
+        this.parent();
         this._bgClickedId = 0;
         this._overviewHiddenId = 0;
-        this._overviewShowingId = 0;
         this._propertiesChangedId = 0;
 
         this._proxyProto = proxyProto;
@@ -33,20 +39,12 @@ const SideComponent = new Lang.Class({
 
         this._bgClickedId =
             Main.layoutManager.connect('background-clicked', Lang.bind(this, this._onBackgroundClicked));
-
-        this._overviewShowingId =
-            Main.overview.connect('showing', Lang.bind(this, this._onOverviewShowing));
     },
 
     disable: function() {
         if (this._bgClickedId > 0) {
             Main.layoutManager.disconnect(this._bgClickedId);
             this._bgClickedId = 0;
-        }
-
-        if (this._overviewShowingId > 0) {
-            Main.overview.disconnect(this._overviewShowingId);
-            this._overviewShowingId = 0;
         }
 
         if (this._propertiesChangedId > 0) {
@@ -72,20 +70,13 @@ const SideComponent = new Lang.Class({
         }
 
         // resync visibility
-        this._visible = this.proxy.Visible;
+        this.visible = this.proxy.Visible;
 
         if (!this._visible) {
             let visibleWindows = Main.workspaceMonitor.visibleWindows;
             if (visibleWindows == 0) {
                 Main.overview.showApps();
             }
-        }
-    },
-
-    _onOverviewShowing: function() {
-        // Make the component close (slide in) when the overview is shown
-        if (this._visible) {
-            this._doToggle(global.get_current_time());
         }
     },
 
@@ -99,8 +90,6 @@ const SideComponent = new Lang.Class({
 
     _doToggle: function(timestamp, params) {
         this.removeHiddenId();
-        this._visible = !this._visible;
-
         this.callToggle(timestamp, params);
     },
 
@@ -141,5 +130,6 @@ const SideComponent = new Lang.Class({
 
     set visible(v) {
         this._visible = v;
+        this.notify('visible');
     }
 });

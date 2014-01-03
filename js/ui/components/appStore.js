@@ -57,7 +57,6 @@ const AppStore = new Lang.Class({
 
     _doShowPage: function(page, timestamp) {
         this.removeHiddenId();
-        this.visible = true;
         this.proxy.ShowPageRemote(page, timestamp);
     }
 });

@@ -598,6 +598,16 @@ const Overview = new Lang.Class({
         this.emit('windows-restacked', stackIndices);
     },
 
+    _activeSideComponent: function() {
+        let sideComp = null;
+        if (Main.appStore != null && Main.appStore.visible) {
+            sideComp = Main.appStore;
+        } else if (Main.socialBar != null && Main.socialBar.visible) {
+            sideComp = Main.socialBar;
+        }
+        return sideComp;
+    },
+
     //// Public methods ////
 
     beginItemDrag: function(source) {
@@ -637,8 +647,25 @@ const Overview = new Lang.Class({
         if (!this._syncGrab())
             return;
 
-        Main.layoutManager.showOverview();
-        this._animateVisible();
+        // find out if there is a SideComponent being shown
+        let sideComp = this._activeSideComponent();
+
+        // if there is, we need to wait for it to be hidden
+        if (sideComp != null) {
+            let hidingId = sideComp.connect('notify::visible',
+                    Lang.bind(this, function() {
+                        if (!sideComp.visible) {
+                            sideComp.disconnect(hidingId);
+                            Main.layoutManager.showOverview();
+                            this._animateVisible();
+                        }
+                    }));
+            sideComp.toggle();
+        } else {
+            // otherwise, we can show the overview right away
+            Main.layoutManager.showOverview();
+            this._animateVisible();
+        }
     },
 
     _showOrSwitchPage: function(page, disableFade) {
