@@ -68,6 +68,11 @@ function startAppForMount(app, mount) {
     try {
         retval = app.launch(files,
                             global.create_app_launch_context());
+
+        // Make sure to exit the overview and message tray,
+        // to give input to the application window
+        Main.overview.hide();
+        Main.messageTray.hide();
     } catch (e) {
         log('Unable to launch the application ' + app.get_name()
             + ': ' + e.toString());
