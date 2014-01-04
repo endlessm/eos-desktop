@@ -183,7 +183,7 @@ shell_window_tracker_is_window_interesting (MetaWindow *window)
   return TRUE;
 }
 
-/**
+/*
  * get_app_from_window_wmclass:
  *
  * Looks only at the given window, and attempts to determine
@@ -217,7 +217,7 @@ get_app_from_window_wmclass (MetaWindow  *window)
   return NULL;
 }
 
-/**
+/*
  * get_app_from_gapplication_id:
  * @monitor: a #ShellWindowTracker
  * @window: a #MetaWindow
@@ -251,7 +251,7 @@ get_app_from_gapplication_id (MetaWindow  *window)
   return app;
 }
 
-/**
+/*
  * get_app_from_window_group:
  * @monitor: a #ShellWindowTracker
  * @window: a #MetaWindow
@@ -299,7 +299,7 @@ get_app_from_window_group (ShellWindowTracker  *tracker,
   return result;
 }
 
-/**
+/*
  * get_app_from_window_pid:
  * @tracker: a #ShellWindowTracker
  * @window: a #MetaWindow
