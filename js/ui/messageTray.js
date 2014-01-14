@@ -20,7 +20,6 @@ const CtrlAltTab = imports.ui.ctrlAltTab;
 const CloseButton = imports.ui.closeButton;
 const GnomeSession = imports.misc.gnomeSession;
 const GrabHelper = imports.ui.grabHelper;
-const Hash = imports.misc.hash;
 const Lightbox = imports.ui.lightbox;
 const Main = imports.ui.main;
 const MessageTrayMarkup = imports.ui.messageTrayMarkup;
@@ -1834,7 +1833,7 @@ const MessageTray = new Lang.Class({
                               Shell.KeyBindingMode.OVERVIEW,
                               Lang.bind(this, this._expandActiveNotification));
 
-        this._sources = new Hash.Map();
+        this._sources = new Map();
         this._chatSummaryItemsCount = 0;
 
         this._trayDwellTimeoutId = 0;
@@ -1911,7 +1910,7 @@ const MessageTray = new Lang.Class({
     },
 
     _updateNoMessagesLabel: function() {
-        this._noMessages.visible = this._sources.size() == 0;
+        this._noMessages.visible = this._sources.size == 0;
     },
 
     _sessionUpdated: function() {
@@ -2071,7 +2070,8 @@ const MessageTray = new Lang.Class({
     },
 
     _removeSource: function(source) {
-        let [, obj] = this._sources.delete(source);
+        let obj = this._sources.get(source);
+        this._sources.delete(source);
         let summaryItem = obj.summaryItem;
 
         if (source.isChat)
@@ -2104,7 +2104,7 @@ const MessageTray = new Lang.Class({
     },
 
     getSources: function() {
-        return this._sources.keys();
+        return [k for (k of this._sources.keys())];
     },
 
     _onSourceEnableChanged: function(policy, source) {
