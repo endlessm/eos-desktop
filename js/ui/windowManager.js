@@ -21,6 +21,7 @@ const DIM_BRIGHTNESS = -0.3;
 const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
 const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
+const SIDE_COMPONENT_ROLE = 'eos-side-component';
 
 
 const WindowDimmer = new Lang.Class({
@@ -214,6 +215,10 @@ const WindowManager = new Lang.Class({
         this._animationBlockCount = Math.max(0, this._animationBlockCount - 1);
     },
 
+    _isSideComponentWindow : function (win) {
+        return win.get_role() == SIDE_COMPONENT_ROLE;
+    },
+
     _shouldAnimate: function() {
         return !(Main.overview.visible || this._animationBlockCount > 0);
     },
@@ -223,7 +228,8 @@ const WindowManager = new Lang.Class({
             return false;
         let windowType = actor.meta_window.get_window_type();
         return windowType == Meta.WindowType.NORMAL ||
-            windowType == Meta.WindowType.MODAL_DIALOG;
+            windowType == Meta.WindowType.MODAL_DIALOG ||
+            this._isSideComponentWindow(actor.meta_window);
     },
 
     _removeEffect : function(list, actor) {
@@ -461,6 +467,32 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
+        } if (this._isSideComponentWindow(actor.meta_window)) {
+            let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+            let origX = actor.x;
+            if (origX == monitor.x) {
+                // the side bar will appear from the left side
+                actor.set_position( - actor.width, actor.y);
+            } else {
+                // ... from the right side
+                actor.set_position(monitor.width, actor.y);
+            }
+
+            actor.opacity = 255;
+            actor.show();
+            this._mapping.push(actor);
+
+            Tweener.addTween(actor,
+                             { x: origX,
+                               time: WINDOW_ANIMATION_TIME,
+                               transition: "easeOutQuad",
+                               onComplete: this._mapWindowDone,
+                               onCompleteScope: this,
+                               onCompleteParams: [shellwm, actor],
+                               onOverwrite: this._mapWindowOverwrite,
+                               onOverwriteScope: this,
+                               onOverwriteParams: [shellwm, actor]
+                             });
         } else {
             /* Fade window in */
             actor.opacity = 0;
@@ -564,9 +596,33 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
-            return;
+        } else if (this._isSideComponentWindow(actor.meta_window)) {
+            let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+            let endX;
+            if (actor.x == monitor.x) {
+                endX = - actor.width;
+            } else {
+                endX = monitor.width;
+            }
+
+            actor.opacity = 255;
+            actor.show();
+            this._mapping.push(actor);
+
+            Tweener.addTween(actor,
+                             { x: endX,
+                               time: WINDOW_ANIMATION_TIME,
+                               transition: "easeOutQuad",
+                               onComplete: this._destroyWindowDone,
+                               onCompleteScope: this,
+                               onCompleteParams: [shellwm, actor],
+                               onOverwrite: this._destroyWindowDone,
+                               onOverwriteScope: this,
+                               onOverwriteParams: [shellwm, actor]
+                             });
+        } else {
+            shellwm.completed_destroy(actor);
         }
-        shellwm.completed_destroy(actor);
     },
 
     _destroyWindowDone : function(shellwm, actor) {
