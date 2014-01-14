@@ -9,7 +9,6 @@ const NMGtk = imports.gi.NMGtk;
 const Signals = imports.signals;
 const St = imports.gi.St;
 
-const Hash = imports.misc.hash;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -1416,7 +1415,7 @@ const NMVPNSection = new Lang.Class({
 
     _init: function(client) {
         this._client = client;
-        this._connectionItems = new Hash.Map();
+        this._connectionItems = new Map();
 
         this.section = new PopupMenu.PopupMenuSection();
     },
@@ -1455,8 +1454,7 @@ const NMVPNSection = new Lang.Class({
 
     getIndicatorIcon: function() {
         let items = this._connectionItems.values();
-        for (let i = 0; i < items.length; i++) {
-            let item = items[i];
+        for (let item of items) {
             let icon = item.getIndicatorIcon();
             if (icon)
                 return icon;

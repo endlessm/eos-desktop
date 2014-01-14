@@ -5,7 +5,6 @@ const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Shell = imports.gi.Shell;
 
-const Hash = imports.misc.hash;
 const Main = imports.ui.main;
 
 const ScreencastIface = '<node> \
@@ -41,7 +40,7 @@ const ScreencastService = new Lang.Class({
 
         Gio.DBus.session.own_name('org.gnome.Shell.Screencast', Gio.BusNameOwnerFlags.REPLACE, null, null);
 
-        this._recorders = new Hash.Map();
+        this._recorders = new Map();
 
         Main.sessionMode.connect('updated',
                                  Lang.bind(this, this._sessionModeChanged));
@@ -64,8 +63,7 @@ const ScreencastService = new Lang.Class({
         if (Main.sessionMode.allowScreencast)
             return;
 
-        for (let sender in this._recorders.keys())
-            this._recorders.delete(sender);
+        this._recorders.clear();
     },
 
     _onNameVanished: function(connection, name) {
