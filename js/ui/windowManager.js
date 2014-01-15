@@ -443,6 +443,19 @@ const WindowManager = new Lang.Class({
             actor._windowType = type;
         }));
 
+        if (Main.overview.visible) {
+            let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
+                Main.overview.disconnect(overviewHiddenId);
+                this._doMapWindow(shellwm, actor);
+            }));
+
+            Main.overview.hide();
+        } else {
+            this._doMapWindow(shellwm, actor);
+        }
+    },
+
+    _doMapWindow: function(shellwm, actor) {
         if (!this._shouldAnimateActor(actor)) {
             shellwm.completed_map(actor);
             return;
