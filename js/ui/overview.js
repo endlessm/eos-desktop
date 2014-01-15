@@ -447,6 +447,9 @@ const Overview = new Lang.Class({
                                this.dashIconSize = this._dash.iconSize;
                            }));
 
+        // clicking the desktop displays the app grid
+        Main.layoutManager.connect('background-clicked', Lang.bind(this, this.showApps));
+
         Main.layoutManager.connect('monitors-changed', Lang.bind(this, this._relayout));
         global.screen.connect('workareas-changed', Lang.bind(this, this._relayoutNoHide));
         this._relayoutNoHide();

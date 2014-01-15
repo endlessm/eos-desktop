@@ -16,7 +16,6 @@ const SideComponent = new Lang.Class({
 
     _init: function(proxyProto, proxyName, proxyPath) {
         this.parent();
-        this._bgClickedId = 0;
         this._overviewHiddenId = 0;
         this._propertiesChangedId = 0;
 
@@ -36,17 +35,9 @@ const SideComponent = new Lang.Class({
 
         this._propertiesChangedId =
             this.proxy.connect('g-properties-changed', Lang.bind(this, this._onPropertiesChanged));
-
-        this._bgClickedId =
-            Main.layoutManager.connect('background-clicked', Lang.bind(this, this._onBackgroundClicked));
     },
 
     disable: function() {
-        if (this._bgClickedId > 0) {
-            Main.layoutManager.disconnect(this._bgClickedId);
-            this._bgClickedId = 0;
-        }
-
         if (this._propertiesChangedId > 0) {
             this.proxy.disconnect(this._propertiesChangedId);
             this._propertiesChangedId = 0;
@@ -78,14 +69,6 @@ const SideComponent = new Lang.Class({
                 Main.overview.showApps();
             }
         }
-    },
-
-    _onBackgroundClicked: function() {
-        if (this._visible) {
-            this.toggle();
-        }
-
-        Main.overview.showApps();
     },
 
     _doToggle: function(timestamp, params) {
