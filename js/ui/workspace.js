@@ -14,6 +14,7 @@ const Lightbox = imports.ui.lightbox;
 const Main = imports.ui.main;
 const Overview = imports.ui.overview;
 const Panel = imports.ui.panel;
+const SideComponent = imports.ui.sideComponent;
 const Tweener = imports.ui.tweener;
 
 const FOCUS_ANIMATION_TIME = 0.15;
@@ -923,10 +924,14 @@ const Workspace = new Lang.Class({
         // Create clones for windows that should be
         // visible in the Overview
         this._windows = [];
+        this._sideComponents = [];
         this._windowOverlays = [];
         for (let i = 0; i < windows.length; i++) {
             if (this._isOverviewWindow(windows[i])) {
                 this._addWindowClone(windows[i], true);
+            }
+            if (SideComponent.isSideComponentWindow(windows[i])) {
+                this._addSideComponentClone(windows[i]);
             }
         }
 
@@ -1037,6 +1042,11 @@ const Workspace = new Lang.Class({
         // Start the animations
         let slots = this._computeAllWindowSlots(clones);
 
+        // Now push fake empty slots for the side components, at the top
+        for (let i = 0; i < this._sideComponents.length; i++) {
+            slots.push([0, this._sideComponents[i].origY, 1.0, this._sideComponents[i]]);
+        }
+
         let currentWorkspace = global.screen.get_active_workspace();
         let isOnCurrentWorkspace = this.metaWorkspace == null || this.metaWorkspace == currentWorkspace;
 
@@ -1087,6 +1097,13 @@ const Workspace = new Lang.Class({
                                        time: Overview.ANIMATION_TIME,
                                        transition: 'easeInQuad'
                                      });
+                } else if (SideComponent.isSideComponentWindow(clone.realWindow)) {
+                    let origX = clone.origX;
+                    if (origX == this._monitor.x) {
+                        x = - clone.width;
+                    } else {
+                        x = this._monitor.width;
+                    }
                 }
 
                 this._animateClone(clone, overlay, x, y, scale, initialPositioning);
@@ -1256,12 +1273,18 @@ const Workspace = new Lang.Class({
         if (this._lookupIndex (metaWin) != -1)
             return;
 
-        if (!this._isMyWindow(win) || !this._isOverviewWindow(win))
+        if (!this._isMyWindow(win) || !this._isOverviewWindow(win) || !SideComponent.isSideComponentWindow(win))
             return;
 
-        let [clone, overlay] = this._addWindowClone(win, false);
+        let clone;
 
-        if (win._overviewHint) {
+        if (SideComponent.isSideComponentWindow(win)) {
+            clone = this._addSideComponentClone(win);
+        } else {
+            [clone, ] = this._addWindowClone(win, false);
+        }
+
+        if (clone && win._overviewHint) {
             let x = win._overviewHint.x - this.actor.x;
             let y = win._overviewHint.y - this.actor.y;
             let scale = win._overviewHint.scale;
@@ -1332,6 +1355,11 @@ const Workspace = new Lang.Class({
             Tweener.removeTweens(clone.actor);
         }
 
+        for (let i = 0; i < this._sideComponents.length; i++) {
+            let clone = this._sideComponents[i];
+            Tweener.removeTweens(clone.actor);
+        }
+
         if (this._repositionWindowsId > 0) {
             Mainloop.source_remove(this._repositionWindowsId);
             this._repositionWindowsId = 0;
@@ -1371,6 +1399,21 @@ const Workspace = new Lang.Class({
                                  });
             }
         }
+
+        // Now do the same for side components
+        for (let i = 0; i < this._sideComponents.length; i++) {
+            let clone = this._sideComponents[i];
+
+            Tweener.addTween(clone.actor,
+                             { x: clone.origX,
+                               y: clone.origY,
+                               scale_x: 1.0,
+                               scale_y: 1.0,
+                               time: Overview.ANIMATION_TIME,
+                               opacity: 255,
+                               transition: 'easeOutQuad'
+                             });
+        }
     },
 
     destroy : function() {
@@ -1397,6 +1440,7 @@ const Workspace = new Lang.Class({
         if (this._positionWindowsId > 0)
             Meta.later_remove(this._positionWindowsId);
         this._windows = [];
+        this._sideComponents = [];
     },
 
     // Sets this.leavingOverview flag to false.
@@ -1415,6 +1459,17 @@ const Workspace = new Lang.Class({
     _isOverviewWindow : function (win) {
         let tracker = Shell.WindowTracker.get_default();
         return tracker.is_window_interesting(win.get_meta_window());
+    },
+
+    // Create a clone of a side component window and add it to the
+    // side components list
+    _addSideComponentClone: function(win) {
+        let clone = new WindowClone(win, this);
+        clone.positioned = true;
+        this.actor.add_actor(clone.actor);
+        this._sideComponents.push(clone);
+
+        return clone;
     },
 
     // Create a clone of a (non-desktop) window and add it to the window list
