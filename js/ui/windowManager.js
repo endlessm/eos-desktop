@@ -12,6 +12,7 @@ const Shell = imports.gi.Shell;
 const AltTab = imports.ui.altTab;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Main = imports.ui.main;
+const SideComponent = imports.ui.sideComponent;
 const Tweener = imports.ui.tweener;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
@@ -21,8 +22,6 @@ const DIM_BRIGHTNESS = -0.3;
 const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
 const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
-const SIDE_COMPONENT_ROLE = 'eos-side-component';
-
 
 const WindowDimmer = new Lang.Class({
     Name: 'WindowDimmer',
@@ -215,10 +214,6 @@ const WindowManager = new Lang.Class({
         this._animationBlockCount = Math.max(0, this._animationBlockCount - 1);
     },
 
-    _isSideComponentWindow : function (win) {
-        return win.get_role() == SIDE_COMPONENT_ROLE;
-    },
-
     _shouldAnimate: function() {
         return !(Main.overview.visible || this._animationBlockCount > 0);
     },
@@ -229,7 +224,7 @@ const WindowManager = new Lang.Class({
         let windowType = actor.meta_window.get_window_type();
         return windowType == Meta.WindowType.NORMAL ||
             windowType == Meta.WindowType.MODAL_DIALOG ||
-            this._isSideComponentWindow(actor.meta_window);
+            SideComponent.isSideComponentWindow(actor);
     },
 
     _removeEffect : function(list, actor) {
@@ -480,7 +475,7 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
-        } if (this._isSideComponentWindow(actor.meta_window)) {
+        } if (SideComponent.isSideComponentWindow(actor)) {
             let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
             let origX = actor.x;
             if (origX == monitor.x) {
@@ -609,7 +604,7 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
-        } else if (this._isSideComponentWindow(actor.meta_window)) {
+        } else if (SideComponent.isSideComponentWindow(actor)) {
             let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
             let endX;
             if (actor.x == monitor.x) {
