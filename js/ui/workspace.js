@@ -1096,8 +1096,11 @@ const Workspace = new Lang.Class({
                 clone.actor.set_position(x, y);
                 clone.actor.set_scale(scale, scale);
                 clone.actor.opacity = 255;
-                clone.overlay.relayout(false);
-                this._showWindowOverlay(clone, overlay, isOnCurrentWorkspace);
+
+                if (clone.overlay) {
+                    clone.overlay.relayout(false);
+                    this._showWindowOverlay(clone, overlay, isOnCurrentWorkspace);
+                }
             }
         }
     },
@@ -1131,7 +1134,8 @@ const Workspace = new Lang.Class({
                            })
                          });
 
-        clone.overlay.relayout(true);
+        if (overlay)
+            overlay.relayout(true);
     },
 
     _showWindowOverlay: function(clone, overlay, fade) {
