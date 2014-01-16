@@ -48,16 +48,12 @@ const AppStore = new Lang.Class({
     },
 
     showPage: function(page) {
-        this.activateAfterHide(Lang.bind(this, function(timestamp) { this._doShowPage(page, timestamp); }));
+        Main.overview.hide();
+        this.proxy.ShowPageRemote(page, timestamp);
     },
 
     callToggle: function(timestamp, reset) {
         this.proxy.ToggleRemote(reset, timestamp);
-    },
-
-    _doShowPage: function(page, timestamp) {
-        this.removeHiddenId();
-        this.proxy.ShowPageRemote(page, timestamp);
     }
 });
 const Component = AppStore;

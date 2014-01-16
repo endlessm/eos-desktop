@@ -23,7 +23,6 @@ const SideComponent = new Lang.Class({
 
     _init: function(proxyProto, proxyName, proxyPath) {
         this.parent();
-        this._overviewHiddenId = 0;
         this._propertiesChangedId = 0;
 
         this._proxyProto = proxyProto;
@@ -78,40 +77,9 @@ const SideComponent = new Lang.Class({
         }
     },
 
-    _doToggle: function(timestamp, params) {
-        this.removeHiddenId();
-        this.callToggle(timestamp, params);
-    },
-
     toggle: function(params) {
-        this.activateAfterHide(Lang.bind(this, function(timestamp) { this._doToggle(timestamp, params); }));
-    },
-
-    activateAfterHide: function(activateMethod) {
-        let timestamp = global.get_current_time();
-
-        // The background menu is shown on the overview screen. However, to
-        // show the AppStore, we must first hide the overview. For maximum
-        // visual niceness, we also take the extra step to wait until the
-        // overview has finished hiding itself before triggering the slide-in
-        // animation of the AppStore.
-        if (Main.overview.visible) {
-            if (!this._overviewHiddenId) {
-                this._overviewHiddenId = Main.overview.connect('hidden', function() {
-                    activateMethod(timestamp);
-                });
-            }
-            Main.overview.hide();
-        } else {
-            activateMethod(timestamp);
-        }
-    },
-
-    removeHiddenId: function() {
-        if (this._overviewHiddenId) {
-            Main.overview.disconnect(this._overviewHiddenId);
-            this._overviewHiddenId = 0;
-        }
+        Main.overview.hide();
+        this.callToggle(global.get_current_time(), params);
     },
 
     get visible() {
