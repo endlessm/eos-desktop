@@ -199,7 +199,7 @@ eos_shell_extension_prefs_SOURCES = gnome-shell-extension-prefs.c \
 	$(top_builddir)/js/js-resources.h		\
 	$(NULL)
 eos_shell_extension_prefs_CPPFLAGS = $(eos_shell_cflags)
-eos_shell_extension_prefs_LDADD = libeos-shell-js.la
+eos_shell_extension_prefs_LDADD = libeos-shell-js.la $(EOS_SHELL_LIBS)
 
 ########################################
 
