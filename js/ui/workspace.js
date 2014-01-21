@@ -1079,6 +1079,14 @@ const Workspace = new Lang.Class({
                 clone.positioned = true;
             }
 
+            if (SideComponent.isSideComponentWindow(clone.realWindow)) {
+                if (clone.origX == this._monitor.x) {
+                    x = - clone.width;
+                } else {
+                    x = this._monitor.width;
+                }
+            }
+
             if (animate && isOnCurrentWorkspace) {
                 if (!metaWindow.showing_on_its_workspace()) {
                     /* Hidden windows should fade in and grow
@@ -1097,13 +1105,6 @@ const Workspace = new Lang.Class({
                                        time: Overview.ANIMATION_TIME,
                                        transition: 'easeInQuad'
                                      });
-                } else if (SideComponent.isSideComponentWindow(clone.realWindow)) {
-                    let origX = clone.origX;
-                    if (origX == this._monitor.x) {
-                        x = - clone.width;
-                    } else {
-                        x = this._monitor.width;
-                    }
                 }
 
                 this._animateClone(clone, overlay, x, y, scale, initialPositioning);
