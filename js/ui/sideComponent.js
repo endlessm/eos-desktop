@@ -10,7 +10,7 @@ const SIDE_COMPONENT_ROLE = 'eos-side-component';
 
 function isSideComponentWindow (actor) {
     let win = actor.meta_window;
-    return (win.get_role() == SIDE_COMPONENT_ROLE);
+    return win && (win.get_role() == SIDE_COMPONENT_ROLE);
 };
 
 const SideComponent = new Lang.Class({
