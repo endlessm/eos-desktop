@@ -9,8 +9,8 @@ const CoreEnvironment = imports.misc.coreEnvironment;
 describe ('Markup Fixer', function() {
 
     function convertAndEscape(text) {
-        const conversion = MessageTrayMarkup.fixMarkupForMessageTray(text, MessageTrayMarkup.FixType.CONVERT);
-        const escape = MessageTrayMarkup.fixMarkupForMessageTray(text, MessageTrayMarkup.FixType.ESCAPE);
+        const conversion = MessageTrayMarkup.fixMarkup(text, MessageTrayMarkup.FixType.CONVERT);
+        const escape = MessageTrayMarkup.fixMarkup(text, MessageTrayMarkup.FixType.ESCAPE);
         return {
             converted: conversion,
             escaped: escape

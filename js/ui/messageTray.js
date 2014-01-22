@@ -221,7 +221,7 @@ const URLHighlighter = new Lang.Class({
     },
 
     setMarkup: function(text, allowMarkup) {
-        text = text ? MessageTrayMarkup.fixMarkupForMessageTray(text, allowMarkup) : '';
+        text = text ? MessageTrayMarkup.fixMarkup(text, allowMarkup) : '';
         this._text = text;
 
         this.actor.clutter_text.set_markup(text);

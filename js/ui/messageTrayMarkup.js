@@ -9,12 +9,11 @@ const FixType = {
 };
 
 // fixMarkup:
-// fixMarkupForMessageTray:
 // @text: some text with markup
 // @allowMarkup: whether or not to parse markup characters in this text
 //
 // Escapes all invalid markup or all markup if markup is not allowed.
-function fixMarkupForMessageTray(text, allowMarkup) {
+function fixMarkup(text, allowMarkup) {
     if (allowMarkup == FixType.CONVERT) {
         // Support &amp;, &quot;, &apos;, &lt; and &gt;, escape all other
         // occurrences of '&'.
