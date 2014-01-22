@@ -11,13 +11,16 @@ const APP_STORE_PATH = '/com/endlessm/AppStore';
 const APP_STORE_IFACE = 'com.endlessm.AppStore';
 
 const AppStoreIface = <interface name={APP_STORE_NAME}>
-  <method name="Toggle">
+  <method name="show">
+    <arg type="u" direction="in" name="timestamp"/>
     <arg type="b" direction="in" name="reset"/>
+  </method>
+  <method name="hide">
     <arg type="u" direction="in" name="timestamp"/>
   </method>
-  <method name="ShowPage">
-    <arg type="s" direction="in" name="page"/>
+  <method name="showPage">
     <arg type="u" direction="in" name="timestamp"/>
+    <arg type="s" direction="in" name="page"/>
   </method>
   <property name="Visible" type="b" access="read"/>
 </interface>;
@@ -47,13 +50,16 @@ const AppStore = new Lang.Class({
         this.parent(reset);
     },
 
-    showPage: function(page) {
-        Main.overview.hide();
-        this.proxy.ShowPageRemote(page, global.get_current_time());
+    callShow: function(timestamp, reset) {
+        this.proxy.showRemote(timestamp, reset);
     },
 
-    callToggle: function(timestamp, reset) {
-        this.proxy.ToggleRemote(reset, timestamp);
+    callHide: function(timestamp) {
+        this.proxy.hideRemote(timestamp);
+    },
+
+    showPage: function(page) {
+        this.proxy.showPageRemote(global.get_current_time(), page);
     }
 });
 const Component = AppStore;
