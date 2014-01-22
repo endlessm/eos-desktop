@@ -521,11 +521,7 @@ const AppLauncher = new Lang.Class({
 
     Launch: function(name) {
         if (name == "eos-app-store") {
-            if (Main.overview.visible && Main.appStore.visible) {
-                Main.overview.hide();
-            } else {
-                Main.appStore.toggle(true); // reset
-            }
+            Main.appStore.show(true);
 
             return true;
         }
