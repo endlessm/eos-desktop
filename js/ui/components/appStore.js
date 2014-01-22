@@ -49,7 +49,7 @@ const AppStore = new Lang.Class({
 
     showPage: function(page) {
         Main.overview.hide();
-        this.proxy.ShowPageRemote(page, timestamp);
+        this.proxy.ShowPageRemote(page, global.get_current_time());
     },
 
     callToggle: function(timestamp, reset) {
