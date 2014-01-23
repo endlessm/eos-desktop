@@ -3,4 +3,4 @@
 	url = git://git.gnome.org/libgnome-volume-control
 [submodule "tests/jasmine"]
 	path = tests/jasmine
-	url = ../../endlessm/eos-jasmine
+	url = git@github.com:endlessm/eos-jasmine.git
