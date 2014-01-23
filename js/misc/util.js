@@ -6,7 +6,6 @@ const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const Config = imports.misc.config;
-const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
 
 const SCROLL_TIME = 0.1;
@@ -85,11 +84,11 @@ function findSearchUrls(terms) {
 //
 // Runs @argv in the background, handling any errors that occur
 // when trying to start the program.
-function spawn(argv) {
+function spawn(argv, errorNotifier) {
     try {
         trySpawn(argv);
     } catch (err) {
-        _handleSpawnError(argv[0], err);
+        _handleSpawnError(argv[0], err, errorNotifier);
     }
 }
 
@@ -98,12 +97,12 @@ function spawn(argv) {
 //
 // Runs @command_line in the background, handling any errors that
 // occur when trying to parse or start the program.
-function spawnCommandLine(command_line) {
+function spawnCommandLine(command_line, errorNotifier) {
     try {
         let [success, argv] = GLib.shell_parse_argv(command_line);
         trySpawn(argv);
     } catch (err) {
-        _handleSpawnError(command_line, err);
+        _handleSpawnError(command_line, err, errorNotifier);
     }
 }
 
@@ -163,9 +162,9 @@ function trySpawnCommandLine(command_line) {
     trySpawn(argv);
 }
 
-function _handleSpawnError(command, err) {
+function _handleSpawnError(command, err, errorNotifier) {
     let title = _("Execution of '%s' failed:").format(command);
-    Main.notifyError(title, err.message);
+    errorNotifier(title, err.message);
 }
 
 // killall:
@@ -241,67 +240,6 @@ function insertSorted(array, val, cmp) {
     array.splice(pos, 0, val);
 
     return pos;
-}
-
-function makeCloseButton() {
-    let closeButton = new St.Button({ style_class: 'notification-close'});
-
-    // This is a bit tricky. St.Bin has its own x-align/y-align properties
-    // that compete with Clutter's properties. This should be fixed for
-    // Clutter 2.0. Since St.Bin doesn't define its own setters, the
-    // setters are a workaround to get Clutter's version.
-    closeButton.set_x_align(Clutter.ActorAlign.END);
-    closeButton.set_y_align(Clutter.ActorAlign.START);
-
-    // XXX Clutter 2.0 workaround: ClutterBinLayout needs expand
-    // to respect the alignments.
-    closeButton.set_x_expand(true);
-    closeButton.set_y_expand(true);
-
-    closeButton.connect('style-changed', function() {
-        let themeNode = closeButton.get_theme_node();
-        closeButton.translation_x = themeNode.get_length('-shell-close-overlap-x');
-        closeButton.translation_y = themeNode.get_length('-shell-close-overlap-y');
-    });
-
-    return closeButton;
-}
-
-function ensureActorVisibleInScrollView(scrollView, actor) {
-    let adjustment = scrollView.vscroll.adjustment;
-    let [value, lower, upper, stepIncrement, pageIncrement, pageSize] = adjustment.get_values();
-
-    let offset = 0;
-    let vfade = scrollView.get_effect("fade");
-    if (vfade)
-        offset = vfade.vfade_offset;
-
-    let box = actor.get_allocation_box();
-    let y1 = box.y1, y2 = box.y2;
-
-    let parent = actor.get_parent();
-    while (parent != scrollView) {
-        if (!parent)
-            throw new Error("actor not in scroll view");
-
-        let box = parent.get_allocation_box();
-        y1 += box.y1;
-        y2 += box.y1;
-        parent = parent.get_parent();
-    }
-
-    if (y1 < value + offset)
-        value = Math.max(0, y1 - offset);
-    else if (y2 > value + pageSize - offset)
-        value = Math.min(upper, y2 + offset - pageSize);
-    else
-        return false;
-
-    Tweener.addTween(adjustment,
-                     { value: value,
-                       time: SCROLL_TIME,
-                       transition: 'easeOutQuad' });
-    return true;
 }
 
 function getBrowserApp() {

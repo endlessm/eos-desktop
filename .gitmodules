@@ -1,3 +1,6 @@
 [submodule "src/gvc"]
 	path = src/gvc
 	url = git://git.gnome.org/libgnome-volume-control
+[submodule "tests/jasmine"]
+	path = tests/jasmine
+	url = ../../endlessm/eos-jasmine

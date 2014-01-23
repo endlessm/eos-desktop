@@ -8,6 +8,7 @@ const Signals = imports.signals;
 const St = imports.gi.St;
 const Atk = imports.gi.Atk;
 
+const ActorVisibility = imports.misc.actorVisibility;
 const DND = imports.ui.dnd;
 const IconGrid = imports.ui.iconGrid;
 const Main = imports.ui.main;
@@ -405,7 +406,7 @@ const SearchResults = new Lang.Class({
     },
 
     _keyFocusIn: function(provider, icon) {
-        Util.ensureActorVisibleInScrollView(this._scrollView, icon);
+        ActorVisibility.ensureActorVisibleInScrollView(this._scrollView, icon);
     },
 
     createProviderDisplay: function(provider) {

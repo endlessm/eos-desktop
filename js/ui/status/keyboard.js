@@ -559,7 +559,7 @@ const InputSourceIndicator = new Lang.Class({
         if (xkbVariant.length > 0)
             description = description + '\t' + xkbVariant;
 
-        Util.spawn(['gkbd-keyboard-display', '-l', description]);
+        Util.spawn(['gkbd-keyboard-display', '-l', description], Main.notifyError);
     },
 
     _makeEngineShortName: function(engineDesc) {
