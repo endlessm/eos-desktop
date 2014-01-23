@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-02 13:28-0800\n"
+"POT-Creation-Date: 2014-01-23 11:01-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -402,7 +402,7 @@ msgstr ""
 #: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:388
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
-#: ../js/ui/status/bluetooth.js:415 ../js/ui/unlockDialog.js:99
+#: ../js/ui/status/bluetooth.js:415 ../js/ui/unlockDialog.js:97
 #: ../js/ui/userMenu.js:558
 msgid "Cancel"
 msgstr ""
@@ -460,17 +460,17 @@ msgstr ""
 msgid "(e.g., user or %s)"
 msgstr ""
 
-#: ../js/misc/util.js:126
+#: ../js/misc/util.js:125
 msgid "Command not found"
 msgstr ""
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:159
+#: ../js/misc/util.js:158
 msgid "Could not parse command:"
 msgstr ""
 
-#: ../js/misc/util.js:167
+#: ../js/misc/util.js:166
 #, c-format
 msgid "Execution of '%s' failed:"
 msgstr ""
@@ -483,49 +483,45 @@ msgstr ""
 #. moves off the icon to cancel should be made more responsive;
 #. the current implementation takes about a second for the change
 #. back to the normal icon to occur.
-#: ../js/ui/appDisplay.js:1633 ../js/ui/appDisplay.js:1677
+#: ../js/ui/appDisplay.js:1637 ../js/ui/appDisplay.js:1681
 msgid "Add"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1635 ../js/ui/appDisplay.js:1637
+#: ../js/ui/appDisplay.js:1639 ../js/ui/appDisplay.js:1641
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1760 ../js/ui/appDisplay.js:1785
+#: ../js/ui/appDisplay.js:1764 ../js/ui/appDisplay.js:1789
 #, c-format
 msgid "%s has been deleted"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1795
+#: ../js/ui/appDisplay.js:1799
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1801
+#: ../js/ui/appDisplay.js:1805
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1807
+#: ../js/ui/appDisplay.js:1811
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1813 ../js/ui/status/bluetooth.js:414
+#: ../js/ui/appDisplay.js:1817 ../js/ui/status/bluetooth.js:414
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1846
-msgid "Delete?"
-msgstr ""
-
-#: ../js/ui/appDisplay.js:1956
+#: ../js/ui/appDisplay.js:1898
 msgid "New Window"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1959 ../js/ui/dash.js:290
+#: ../js/ui/appDisplay.js:1901 ../js/ui/dash.js:290
 msgid "Remove from Favorites"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1960
+#: ../js/ui/appDisplay.js:1902
 msgid "Add to Favorites"
 msgstr ""
 
@@ -712,16 +708,16 @@ msgstr ""
 msgid "External drive disconnected"
 msgstr ""
 
-#: ../js/ui/components/autorunManager.js:302
+#: ../js/ui/components/autorunManager.js:303
 msgid "Removable Devices"
 msgstr ""
 
-#: ../js/ui/components/autorunManager.js:606
+#: ../js/ui/components/autorunManager.js:610
 #, c-format
 msgid "Open with %s"
 msgstr ""
 
-#: ../js/ui/components/autorunManager.js:632
+#: ../js/ui/components/autorunManager.js:636
 msgid "Eject"
 msgstr ""
 
@@ -1068,44 +1064,52 @@ msgstr ""
 msgid "Unknown reason"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:178
+#: ../js/ui/components/updaterManager.js:186
 msgid "Software Update"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:194
+#: ../js/ui/components/updaterManager.js:202
 msgid "Updates available"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:195
+#: ../js/ui/components/updaterManager.js:203
 msgid "Software updates are available for your system"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:196
+#: ../js/ui/components/updaterManager.js:204
 msgid "Download now"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:209
+#: ../js/ui/components/updaterManager.js:217
 msgid "Updates ready"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:210
+#: ../js/ui/components/updaterManager.js:218
 msgid "Software updates are ready to be installed on your system"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:211
+#: ../js/ui/components/updaterManager.js:219
 msgid "Install now"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:228
 msgid "Updates installed"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:229
 msgid "Software updates were installed on your system"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:222
+#: ../js/ui/components/updaterManager.js:230
 msgid "Restart now"
+msgstr ""
+
+#: ../js/ui/components/updaterManager.js:253
+msgid "Update failed"
+msgstr ""
+
+#: ../js/ui/components/updaterManager.js:254
+msgid "We could not update your system"
 msgstr ""
 
 #: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:492
@@ -1292,31 +1296,31 @@ msgstr ""
 msgid "Web Page"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1183
+#: ../js/ui/messageTray.js:1228
 msgid "Open"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1190
+#: ../js/ui/messageTray.js:1235
 msgid "Remove"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1502
+#: ../js/ui/messageTray.js:1547
 msgid "Clear Messages"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1529
+#: ../js/ui/messageTray.js:1574
 msgid "Notification Settings"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1719
+#: ../js/ui/messageTray.js:1764
 msgid "No Messages"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1794
+#: ../js/ui/messageTray.js:1838
 msgid "Message Tray"
 msgstr ""
 
-#: ../js/ui/messageTray.js:2823
+#: ../js/ui/messageTray.js:2852
 msgid "System Information"
 msgstr ""
 
@@ -1329,7 +1333,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-#: ../js/ui/overview.js:264
+#: ../js/ui/overview.js:263
 msgid "Overview"
 msgstr ""
 
@@ -1354,7 +1358,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: ../js/ui/screenShield.js:129
+#: ../js/ui/screenShield.js:130
 msgid "GNOME needs to lock the screen"
 msgstr ""
 
@@ -1365,11 +1369,11 @@ msgstr ""
 #.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:167 ../js/ui/screenShield.js:417
+#: ../js/ui/screenShield.js:168 ../js/ui/screenShield.js:418
 msgid "Unable to lock"
 msgstr ""
 
-#: ../js/ui/screenShield.js:168 ../js/ui/screenShield.js:418
+#: ../js/ui/screenShield.js:169 ../js/ui/screenShield.js:419
 msgid "Lock was blocked by an application"
 msgstr ""
 
@@ -1413,62 +1417,62 @@ msgstr ""
 msgid "Remember Password"
 msgstr ""
 
-#: ../js/ui/shellMountOperation.js:403 ../js/ui/unlockDialog.js:113
+#: ../js/ui/shellMountOperation.js:403 ../js/ui/unlockDialog.js:111
 msgid "Unlock"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:36
+#: ../js/ui/status/accessibility.js:39
 msgid "Accessibility"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:41
+#: ../js/ui/status/accessibility.js:47
 msgid "Zoom"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:48
+#: ../js/ui/status/accessibility.js:54
 msgid "Screen Reader"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:52
+#: ../js/ui/status/accessibility.js:58
 msgid "Screen Keyboard"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:56
+#: ../js/ui/status/accessibility.js:62
 msgid "Visual Alerts"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:59
+#: ../js/ui/status/accessibility.js:65
 msgid "Sticky Keys"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:62
+#: ../js/ui/status/accessibility.js:68
 msgid "Slow Keys"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:65
+#: ../js/ui/status/accessibility.js:71
 msgid "Bounce Keys"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:68
+#: ../js/ui/status/accessibility.js:74
 msgid "Mouse Keys"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:72
+#: ../js/ui/status/accessibility.js:78
 msgid "Universal Access Settings"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:129
+#: ../js/ui/status/accessibility.js:136
 msgid "High Contrast"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:178
+#: ../js/ui/status/accessibility.js:185
 msgid "Large Text"
 msgstr ""
 
 #: ../js/ui/status/bluetooth.js:28 ../js/ui/status/bluetooth.js:32
 #: ../js/ui/status/bluetooth.js:289 ../js/ui/status/bluetooth.js:321
 #: ../js/ui/status/bluetooth.js:357 ../js/ui/status/bluetooth.js:388
-#: ../js/ui/status/network.js:826
+#: ../js/ui/status/network.js:827
 msgid "Bluetooth"
 msgstr ""
 
@@ -1502,7 +1506,7 @@ msgid "disconnecting..."
 msgstr ""
 
 #: ../js/ui/status/bluetooth.js:221 ../js/ui/status/network.js:466
-#: ../js/ui/status/network.js:1546
+#: ../js/ui/status/network.js:1548
 msgid "connecting..."
 msgstr ""
 
@@ -1606,7 +1610,7 @@ msgid "unmanaged"
 msgstr ""
 
 #. Translators: this is for network connections that require some kind of key or password
-#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1549
+#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
 msgid "authentication required"
 msgstr ""
 
@@ -1627,18 +1631,18 @@ msgstr ""
 msgid "unavailable"
 msgstr ""
 
-#: ../js/ui/status/network.js:493 ../js/ui/status/network.js:1551
+#: ../js/ui/status/network.js:493 ../js/ui/status/network.js:1553
 msgid "connection failed"
 msgstr ""
 
-#: ../js/ui/status/network.js:552 ../js/ui/status/network.js:1435
-#: ../js/ui/status/network.js:1627
+#: ../js/ui/status/network.js:552 ../js/ui/status/network.js:1437
+#: ../js/ui/status/network.js:1629
 msgid "More…"
 msgstr ""
 
 #. TRANSLATORS: this is the indication that a connection for another logged in user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1365
+#: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1366
 msgid "Connected (private)"
 msgstr ""
 
@@ -1663,44 +1667,44 @@ msgid "Auto dial-up"
 msgstr ""
 
 #. TRANSLATORS: this the automatic wireless connection name (including the network name)
-#: ../js/ui/status/network.js:861 ../js/ui/status/network.js:1382
+#: ../js/ui/status/network.js:862 ../js/ui/status/network.js:1383
 #, c-format
 msgid "Auto %s"
 msgstr ""
 
-#: ../js/ui/status/network.js:863
+#: ../js/ui/status/network.js:864
 msgid "Auto bluetooth"
 msgstr ""
 
-#: ../js/ui/status/network.js:1384
+#: ../js/ui/status/network.js:1385
 msgid "Auto wireless"
 msgstr ""
 
-#: ../js/ui/status/network.js:1729
+#: ../js/ui/status/network.js:1731
 msgid "Enable networking"
 msgstr ""
 
-#: ../js/ui/status/network.js:1771
+#: ../js/ui/status/network.js:1773
 msgid "Wi-Fi"
 msgstr ""
 
-#: ../js/ui/status/network.js:1790
+#: ../js/ui/status/network.js:1792
 msgid "Network Settings"
 msgstr ""
 
-#: ../js/ui/status/network.js:1807
+#: ../js/ui/status/network.js:1809
 msgid "Network Manager"
 msgstr ""
 
-#: ../js/ui/status/network.js:1897
+#: ../js/ui/status/network.js:1899
 msgid "Connection failed"
 msgstr ""
 
-#: ../js/ui/status/network.js:1898
+#: ../js/ui/status/network.js:1900
 msgid "Activation of network connection failed"
 msgstr ""
 
-#: ../js/ui/status/network.js:2282
+#: ../js/ui/status/network.js:2284
 msgid "Networking is disabled"
 msgstr ""
 
@@ -1814,11 +1818,11 @@ msgstr ""
 msgid "Microphone"
 msgstr ""
 
-#: ../js/ui/unlockDialog.js:124
+#: ../js/ui/unlockDialog.js:122
 msgid "Log in as another user"
 msgstr ""
 
-#: ../js/ui/unlockDialog.js:145
+#: ../js/ui/unlockDialog.js:143
 msgid "Unlock Window"
 msgstr ""
 
