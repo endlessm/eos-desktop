@@ -6,7 +6,10 @@ JS_TESTS = \
 	unit/url_test.js
 
 TEST_JS =					\
+	jasmine_runner.js			\
 	jenkinsTestPlugin.js			\
+	run-gjs-tests				\
+	run-test.sh.in				\
 	eos_harness_test/subdir/testbar.js	\
 	eos_harness_test/testNoSetupOrTearDown.js \
 	eos_harness_test/testbar.js		\
