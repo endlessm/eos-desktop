@@ -1081,7 +1081,7 @@ const Workspace = new Lang.Class({
 
             if (SideComponent.isSideComponentWindow(clone.realWindow)) {
                 if (clone.origX == this._monitor.x) {
-                    x = -clone.width;
+                    x = -clone.actor.width;
                 } else {
                     x = this._monitor.width;
                 }
