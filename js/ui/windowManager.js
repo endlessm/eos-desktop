@@ -223,8 +223,8 @@ const WindowManager = new Lang.Class({
             return false;
         let windowType = actor.meta_window.get_window_type();
         return windowType == Meta.WindowType.NORMAL ||
-            windowType == Meta.WindowType.MODAL_DIALOG ||
-            SideComponent.isSideComponentWindow(actor);
+               windowType == Meta.WindowType.MODAL_DIALOG ||
+               SideComponent.isSideComponentWindow(actor);
     },
 
     _removeEffect : function(list, actor) {
@@ -480,7 +480,7 @@ const WindowManager = new Lang.Class({
             let origX = actor.x;
             if (origX == monitor.x) {
                 // the side bar will appear from the left side
-                actor.set_position( - actor.width, actor.y);
+                actor.set_position(-actor.width, actor.y);
             } else {
                 // ... from the right side
                 actor.set_position(monitor.width, actor.y);
@@ -608,7 +608,7 @@ const WindowManager = new Lang.Class({
             let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
             let endX;
             if (actor.x == monitor.x) {
-                endX = - actor.width;
+                endX = -actor.width;
             } else {
                 endX = monitor.width;
             }

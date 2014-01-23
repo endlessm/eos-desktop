@@ -524,7 +524,7 @@ const AppLauncher = new Lang.Class({
             if (Main.overview.visible && Main.appStore.visible) {
                 Main.overview.hide();
             } else {
-                Main.appStore.toggle(reset);
+                Main.appStore.toggle(true); // reset
             }
 
             return true;

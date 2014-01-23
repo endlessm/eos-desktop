@@ -1081,7 +1081,7 @@ const Workspace = new Lang.Class({
 
             if (SideComponent.isSideComponentWindow(clone.realWindow)) {
                 if (clone.origX == this._monitor.x) {
-                    x = - clone.width;
+                    x = -clone.width;
                 } else {
                     x = this._monitor.width;
                 }
@@ -1152,8 +1152,9 @@ const Workspace = new Lang.Class({
                            })
                          });
 
-        if (overlay)
+        if (overlay) {
             overlay.relayout(true);
+        }
     },
 
     _showWindowOverlay: function(clone, overlay, fade) {
