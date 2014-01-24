@@ -1673,8 +1673,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
-        let reset = true;
-        Main.appStore.toggle(reset);
+        Main.appStore.show(true);
     },
 
     getName: function() {

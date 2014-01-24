@@ -12,6 +12,7 @@ const Shell = imports.gi.Shell;
 const AltTab = imports.ui.altTab;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Main = imports.ui.main;
+const SideComponent = imports.ui.sideComponent;
 const Tweener = imports.ui.tweener;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
@@ -21,7 +22,6 @@ const DIM_BRIGHTNESS = -0.3;
 const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
 const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
-
 
 const WindowDimmer = new Lang.Class({
     Name: 'WindowDimmer',
@@ -223,7 +223,8 @@ const WindowManager = new Lang.Class({
             return false;
         let windowType = actor.meta_window.get_window_type();
         return windowType == Meta.WindowType.NORMAL ||
-            windowType == Meta.WindowType.MODAL_DIALOG;
+               windowType == Meta.WindowType.MODAL_DIALOG ||
+               SideComponent.isSideComponentWindow(actor);
     },
 
     _removeEffect : function(list, actor) {
@@ -437,6 +438,19 @@ const WindowManager = new Lang.Class({
             actor._windowType = type;
         }));
 
+        if (Main.overview.visible) {
+            let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
+                Main.overview.disconnect(overviewHiddenId);
+                this._doMapWindow(shellwm, actor);
+            }));
+
+            Main.overview.hide();
+        } else {
+            this._doMapWindow(shellwm, actor);
+        }
+    },
+
+    _doMapWindow: function(shellwm, actor) {
         if (!this._shouldAnimateActor(actor)) {
             shellwm.completed_map(actor);
             return;
@@ -452,6 +466,32 @@ const WindowManager = new Lang.Class({
 
             Tweener.addTween(actor,
                              { scale_y: 1,
+                               time: WINDOW_ANIMATION_TIME,
+                               transition: "easeOutQuad",
+                               onComplete: this._mapWindowDone,
+                               onCompleteScope: this,
+                               onCompleteParams: [shellwm, actor],
+                               onOverwrite: this._mapWindowOverwrite,
+                               onOverwriteScope: this,
+                               onOverwriteParams: [shellwm, actor]
+                             });
+        } if (SideComponent.isSideComponentWindow(actor)) {
+            let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+            let origX = actor.x;
+            if (origX == monitor.x) {
+                // the side bar will appear from the left side
+                actor.set_position(-actor.width, actor.y);
+            } else {
+                // ... from the right side
+                actor.set_position(monitor.width, actor.y);
+            }
+
+            actor.opacity = 255;
+            actor.show();
+            this._mapping.push(actor);
+
+            Tweener.addTween(actor,
+                             { x: origX,
                                time: WINDOW_ANIMATION_TIME,
                                transition: "easeOutQuad",
                                onComplete: this._mapWindowDone,
@@ -564,9 +604,33 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
-            return;
+        } else if (SideComponent.isSideComponentWindow(actor)) {
+            let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+            let endX;
+            if (actor.x == monitor.x) {
+                endX = -actor.width;
+            } else {
+                endX = monitor.width;
+            }
+
+            actor.opacity = 255;
+            actor.show();
+            this._mapping.push(actor);
+
+            Tweener.addTween(actor,
+                             { x: endX,
+                               time: WINDOW_ANIMATION_TIME,
+                               transition: "easeOutQuad",
+                               onComplete: this._destroyWindowDone,
+                               onCompleteScope: this,
+                               onCompleteParams: [shellwm, actor],
+                               onOverwrite: this._destroyWindowDone,
+                               onOverwriteScope: this,
+                               onOverwriteParams: [shellwm, actor]
+                             });
+        } else {
+            shellwm.completed_destroy(actor);
         }
-        shellwm.completed_destroy(actor);
     },
 
     _destroyWindowDone : function(shellwm, actor) {

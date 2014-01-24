@@ -11,13 +11,16 @@ const APP_STORE_PATH = '/com/endlessm/AppStore';
 const APP_STORE_IFACE = 'com.endlessm.AppStore';
 
 const AppStoreIface = <interface name={APP_STORE_NAME}>
-  <method name="Toggle">
+  <method name="show">
+    <arg type="u" direction="in" name="timestamp"/>
     <arg type="b" direction="in" name="reset"/>
+  </method>
+  <method name="hide">
     <arg type="u" direction="in" name="timestamp"/>
   </method>
-  <method name="ShowPage">
-    <arg type="s" direction="in" name="page"/>
+  <method name="showPage">
     <arg type="u" direction="in" name="timestamp"/>
+    <arg type="s" direction="in" name="page"/>
   </method>
   <property name="Visible" type="b" access="read"/>
 </interface>;
@@ -47,17 +50,16 @@ const AppStore = new Lang.Class({
         this.parent(reset);
     },
 
+    callShow: function(timestamp, reset) {
+        this.proxy.showRemote(timestamp, reset);
+    },
+
+    callHide: function(timestamp) {
+        this.proxy.hideRemote(timestamp);
+    },
+
     showPage: function(page) {
-        this.activateAfterHide(Lang.bind(this, function(timestamp) { this._doShowPage(page, timestamp); }));
-    },
-
-    callToggle: function(timestamp, reset) {
-        this.proxy.ToggleRemote(reset, timestamp);
-    },
-
-    _doShowPage: function(page, timestamp) {
-        this.removeHiddenId();
-        this.proxy.ShowPageRemote(page, timestamp);
+        this.proxy.showPageRemote(global.get_current_time(), page);
     }
 });
 const Component = AppStore;

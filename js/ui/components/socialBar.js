@@ -8,8 +8,11 @@ const SideComponent = imports.ui.sideComponent;
 
 const SocialBarIface =
     <interface name="com.endlessm.SocialBar">
-    <method name="toggle">
-    <arg type="u" direction="in" name="timestamp"/>
+    <method name="show">
+      <arg type="u" direction="in" name="timestamp"/>
+    </method>
+    <method name="hide">
+      <arg type="u" direction="in" name="timestamp"/>
     </method>
     <property name="Visible" type="b" access="read"/>
     </interface>;
@@ -35,8 +38,12 @@ const SocialBar = new Lang.Class({
         Main.socialBar = null;
     },
 
-    callToggle: function(timestamp) {
-        this.proxy.toggleRemote(timestamp);
+    callShow: function(timestamp) {
+        this.proxy.showRemote(timestamp);
+    },
+
+    callHide: function(timestamp) {
+        this.proxy.hideRemote(timestamp);
     }
 });
 const Component = SocialBar;

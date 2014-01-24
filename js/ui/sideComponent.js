@@ -6,6 +6,13 @@ const Lang = imports.lang;
 
 const Main = imports.ui.main;
 
+const SIDE_COMPONENT_ROLE = 'eos-side-component';
+
+function isSideComponentWindow (actor) {
+    let win = actor.meta_window;
+    return win && (win.get_role() == SIDE_COMPONENT_ROLE);
+};
+
 const SideComponent = new Lang.Class({
     Name: 'SideComponent',
     Extends: GObject.Object,
@@ -16,8 +23,6 @@ const SideComponent = new Lang.Class({
 
     _init: function(proxyProto, proxyName, proxyPath) {
         this.parent();
-        this._bgClickedId = 0;
-        this._overviewHiddenId = 0;
         this._propertiesChangedId = 0;
 
         this._proxyProto = proxyProto;
@@ -36,17 +41,9 @@ const SideComponent = new Lang.Class({
 
         this._propertiesChangedId =
             this.proxy.connect('g-properties-changed', Lang.bind(this, this._onPropertiesChanged));
-
-        this._bgClickedId =
-            Main.layoutManager.connect('background-clicked', Lang.bind(this, this._onBackgroundClicked));
     },
 
     disable: function() {
-        if (this._bgClickedId > 0) {
-            Main.layoutManager.disconnect(this._bgClickedId);
-            this._bgClickedId = 0;
-        }
-
         if (this._propertiesChangedId > 0) {
             this.proxy.disconnect(this._propertiesChangedId);
             this._propertiesChangedId = 0;
@@ -80,48 +77,23 @@ const SideComponent = new Lang.Class({
         }
     },
 
-    _onBackgroundClicked: function() {
-        if (this._visible) {
-            this.toggle();
-        }
-
-        Main.overview.showApps();
-    },
-
-    _doToggle: function(timestamp, params) {
-        this.removeHiddenId();
-        this.callToggle(timestamp, params);
-    },
-
     toggle: function(params) {
-        this.activateAfterHide(Lang.bind(this, function(timestamp) { this._doToggle(timestamp, params); }));
-    },
-
-    activateAfterHide: function(activateMethod) {
-        let timestamp = global.get_current_time();
-
-        // The background menu is shown on the overview screen. However, to
-        // show the AppStore, we must first hide the overview. For maximum
-        // visual niceness, we also take the extra step to wait until the
-        // overview has finished hiding itself before triggering the slide-in
-        // animation of the AppStore.
-        if (Main.overview.visible) {
-            if (!this._overviewHiddenId) {
-                this._overviewHiddenId = Main.overview.connect('hidden', function() {
-                    activateMethod(timestamp);
-                });
-            }
-            Main.overview.hide();
+        if (this.visible) {
+            this.callHide(global.get_current_time(), params);
         } else {
-            activateMethod(timestamp);
+            this.callShow(global.get_current_time(), params);
         }
     },
 
-    removeHiddenId: function() {
-        if (this._overviewHiddenId) {
-            Main.overview.disconnect(this._overviewHiddenId);
-            this._overviewHiddenId = 0;
+    show: function(params) {
+        if (Main.overview.visible) {
+            Main.overview.hide();
         }
+        this.callShow(global.get_current_time(), params);
+    },
+
+    hide: function(params) {
+        this.callHide(global.get_current_time(), params);
     },
 
     get visible() {

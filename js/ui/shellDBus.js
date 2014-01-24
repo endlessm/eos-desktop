@@ -521,7 +521,7 @@ const AppLauncher = new Lang.Class({
 
     Launch: function(name) {
         if (name == "eos-app-store") {
-            Main.appStore.toggle(true);
+            Main.appStore.show(true);
 
             return true;
         }
