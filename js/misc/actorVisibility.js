@@ -2,6 +2,8 @@
 
 const Tweener = imports.ui.tweener;
 
+const SCROLL_TIME = 0.1;
+
 function ensureActorVisibleInScrollView(scrollView, actor) {
     let adjustment = scrollView.vscroll.adjustment;
     let [value, lower, upper, stepIncrement, pageIncrement, pageSize] = adjustment.get_values();

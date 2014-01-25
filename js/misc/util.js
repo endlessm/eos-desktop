@@ -8,8 +8,6 @@ const St = imports.gi.St;
 const Config = imports.misc.config;
 const Tweener = imports.ui.tweener;
 
-const SCROLL_TIME = 0.1;
-
 const BROWSER_DESKTOP_ENTRY = 'eos-app-chromium-browser.desktop';
 const WIKIPEDIA_DESKTOP_ENTRY = 'eos-app-com.endlessm.wikipedia.desktop';
 const PERSONALITY_FILE = Config.SYSCONFDIR + '/EndlessOS/personality.conf';
