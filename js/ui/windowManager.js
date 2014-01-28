@@ -480,10 +480,10 @@ const WindowManager = new Lang.Class({
             let origX = actor.x;
             if (origX == monitor.x) {
                 // the side bar will appear from the left side
-                actor.set_position(-actor.width, actor.y);
+                actor.set_position(monitor.x - actor.width, actor.y);
             } else {
                 // ... from the right side
-                actor.set_position(monitor.width, actor.y);
+                actor.set_position(monitor.x + monitor.width, actor.y);
             }
 
             actor.opacity = 255;
@@ -608,9 +608,9 @@ const WindowManager = new Lang.Class({
             let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
             let endX;
             if (actor.x == monitor.x) {
-                endX = -actor.width;
+                endX = monitor.x - actor.width;
             } else {
-                endX = monitor.width;
+                endX = monitor.x + monitor.width;
             }
 
             actor.opacity = 255;
