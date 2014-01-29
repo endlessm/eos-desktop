@@ -126,6 +126,8 @@ const WorkspacesView = new Lang.Class({
                            monitors[i].height);
             this.actor.bind_property('opacity', ws.actor, 'opacity',
                                      GObject.BindingFlags.SYNC_CREATE);
+            this.actor.bind_property('visible', ws.actor, 'visible',
+                                     GObject.BindingFlags.SYNC_CREATE);
             Main.layoutManager.overviewGroup.add_actor(ws.actor);
             this._extraWorkspaces.push(ws);
         }
