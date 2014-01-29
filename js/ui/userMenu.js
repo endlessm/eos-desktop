@@ -32,7 +32,6 @@ const ALWAYS_SHOW_LOG_OUT_KEY = 'always-show-log-out';
 const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
 const SEPARATE_POWER_OFF_LOG_OUT_KEY = 'separate-power-off-log-out';
 
-const POWER_OFF_TEXT = _("Power Off");
 const SUSPEND_TEXT = _("Suspend");
 const LOG_OUT_TEXT = _("Log Out");
 const LOCK_TEXT = _("Lock");
@@ -386,9 +385,9 @@ const UserMenuButton = new Lang.Class({
         } else if (!this._haveShutdown) {
             this._suspendOrPowerOffOption.updateText(SUSPEND_TEXT, null);
         } else if (!this._haveSuspend) {
-            this._suspendOrPowerOffOption.updateText(POWER_OFF_TEXT, null);
+            this._suspendOrPowerOffOption.updateText(EXIT_TEXT, null);
         } else {
-            this._suspendOrPowerOffOption.updateText(POWER_OFF_TEXT, SUSPEND_TEXT);
+            this._suspendOrPowerOffOption.updateText(EXIT_TEXT, SUSPEND_TEXT);
         }
     },
 
@@ -440,7 +439,7 @@ const UserMenuButton = new Lang.Class({
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
 
-        this._suspendOrPowerOffOption = new PopupMenu.MenuItemOption(POWER_OFF_TEXT, SUSPEND_TEXT);
+        this._suspendOrPowerOffOption = new PopupMenu.MenuItemOption(EXIT_TEXT, SUSPEND_TEXT);
         this._suspendOrPowerOffOption.connect('clicked', Lang.bind(this, this._onSystemActionActivate));
 
         this._lockOption = new PopupMenu.MenuItemOption(LOCK_TEXT, null);
@@ -559,7 +558,7 @@ const UserMenuButton = new Lang.Class({
                              action: function() { dialog.close(); },
                              key: Clutter.Escape };
 
-        let powerOffButton = { label: POWER_OFF_TEXT,  action: Lang.bind(this, function() {
+        let powerOffButton = { label: EXIT_TEXT,  action: Lang.bind(this, function() {
             dialog.close();
             this._session.ShutdownRemote();
         }), default: true };
