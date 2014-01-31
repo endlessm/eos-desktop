@@ -60,8 +60,10 @@ dist_theme_DATA =				\
 	theme/close-splash-pressed.png		\
 	theme/close-window.svg			\
 	theme/close.svg				\
-	theme/corner-ripple-ltr.png		\
-	theme/corner-ripple-rtl.png		\
+	theme/corner-ripple-bl.png		\
+	theme/corner-ripple-br.png		\
+	theme/corner-ripple-tl.png		\
+	theme/corner-ripple-tr.png		\
 	theme/dash-placeholder.svg		\
 	theme/filter-selected-ltr.svg		\
 	theme/filter-selected-rtl.svg		\

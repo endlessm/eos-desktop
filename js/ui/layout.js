@@ -29,8 +29,10 @@ const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
 const MESSAGE_TRAY_PRESSURE_THRESHOLD = 250; // pixels
 const MESSAGE_TRAY_PRESSURE_TIMEOUT = 1000; // ms
 
-// Gsettings key to determine position of hot corner.
+// Gsettings keys to determine enable/position of hot corner.
+const HOT_CORNER_ENABLED_KEY = 'hot-corner-enabled';
 const HOT_CORNER_ON_RIGHT_KEY = 'hot-corner-on-right';
+const HOT_CORNER_ON_BOTTOM_KEY = 'hot-corner-on-bottom';
 
 // Gsettings key for the size of the hot corner target.
 // When using a VirtualBox VM, may need to set to at least 3 pixels,
@@ -184,7 +186,9 @@ const LayoutManager = new Lang.Class({
     Name: 'LayoutManager',
 
     _init: function () {
-        this._rtl = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+        this._cornerEnabled = global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
+        this._cornerOnRight = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+        this._cornerOnBottom  = global.settings.get_boolean(HOT_CORNER_ON_BOTTOM_KEY);
         this.monitors = [];
         this.primaryMonitor = null;
         this.primaryIndex = -1;
@@ -350,18 +354,27 @@ const LayoutManager = new Lang.Class({
         // build new hot corners
         for (let i = 0; i < this.monitors.length; i++) {
             let monitor = this.monitors[i];
-            let cornerX = this._rtl ? monitor.x + monitor.width : monitor.x;
+            let cornerX = monitor.x;
             let cornerY = monitor.y;
+            if (this._cornerOnRight) {
+                cornerX += monitor.width;
+            }
+            if (this._cornerOnBottom) {
+                cornerY += monitor.height;
+            }
 
-            let haveTopLeftCorner = true;
+            let haveHotCorner = true;
 
-            if (i != this.primaryIndex) {
-                // Check if we have a top left (right for RTL) corner.
-                // I.e. if there is no monitor directly above or to the left(right)
-                let besideX = this._rtl ? cornerX + 1 : cornerX - 1;
+            if (!this._cornerEnabled) {
+                haveHotCorner = false;
+            } else if (i != this.primaryIndex) {
+                // Check if we have the specified corner.
+                // I.e. if there is no monitor directly above(below)
+                // or to the left(right)
+                let besideX = this._cornerOnRight ? cornerX + 1 : cornerX - 1;
                 let besideY = cornerY;
                 let aboveX = cornerX;
-                let aboveY = cornerY - 1;
+                let aboveY = this._cornerOnBottom ? cornerY + 1 : cornerY - 1;
 
                 for (let j = 0; j < this.monitors.length; j++) {
                     if (i == j)
@@ -371,20 +384,20 @@ const LayoutManager = new Lang.Class({
                         besideX < otherMonitor.x + otherMonitor.width &&
                         besideY >= otherMonitor.y &&
                         besideY < otherMonitor.y + otherMonitor.height) {
-                        haveTopLeftCorner = false;
+                        haveHotCorner = false;
                         break;
                     }
                     if (aboveX >= otherMonitor.x &&
                         aboveX < otherMonitor.x + otherMonitor.width &&
                         aboveY >= otherMonitor.y &&
                         aboveY < otherMonitor.y + otherMonitor.height) {
-                        haveTopLeftCorner = false;
+                        haveHotCorner = false;
                         break;
                     }
                 }
             }
 
-            if (haveTopLeftCorner) {
+            if (haveHotCorner) {
                 let corner = new HotCorner(this, monitor, cornerX, cornerY);
                 corner.setBarrierSize(size);
                 this.hotCorners.push(corner);
@@ -1140,7 +1153,9 @@ const HotCorner = new Lang.Class({
         this._x = x;
         this._y = y;
 
-        this._rtl = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+        this._cornerEnabled = global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
+        this._cornerOnRight = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+        this._cornerOnBottom = global.settings.get_boolean(HOT_CORNER_ON_BOTTOM_KEY);
         this._targetSize = global.settings.get_int(HOT_CORNER_SIZE_KEY);
 
         this._setupFallbackCornerIfNeeded(layoutManager);
@@ -1156,14 +1171,54 @@ const HotCorner = new Lang.Class({
         this._ripple2 = new St.BoxLayout({ style_class: 'ripple-box', opacity: 0, visible: false });
         this._ripple3 = new St.BoxLayout({ style_class: 'ripple-box', opacity: 0, visible: false });
 
-        if (this._rtl) {
-            this._ripple1.add_style_pseudo_class('rtl');
-            this._ripple2.add_style_pseudo_class('rtl');
-            this._ripple3.add_style_pseudo_class('rtl');
+        if (this._cornerOnRight) {
+            if (this._cornerOnBottom) {
+                // Bottom-right corner
+                this._ripple1.remove_style_pseudo_class('tr');
+                this._ripple2.remove_style_pseudo_class('tr');
+                this._ripple3.remove_style_pseudo_class('tr');
+                this._ripple1.remove_style_pseudo_class('bl');
+                this._ripple2.remove_style_pseudo_class('bl');
+                this._ripple3.remove_style_pseudo_class('bl');
+                this._ripple1.add_style_pseudo_class('br');
+                this._ripple2.add_style_pseudo_class('br');
+                this._ripple3.add_style_pseudo_class('br');
+            } else {
+                // Top-right corner
+                this._ripple1.remove_style_pseudo_class('bl');
+                this._ripple2.remove_style_pseudo_class('bl');
+                this._ripple3.remove_style_pseudo_class('bl');
+                this._ripple1.remove_style_pseudo_class('br');
+                this._ripple2.remove_style_pseudo_class('br');
+                this._ripple3.remove_style_pseudo_class('br');
+                this._ripple1.add_style_pseudo_class('tr');
+                this._ripple2.add_style_pseudo_class('tr');
+                this._ripple3.add_style_pseudo_class('tr');
+            }
         } else {
-            this._ripple1.remove_style_pseudo_class('rtl');
-            this._ripple2.remove_style_pseudo_class('rtl');
-            this._ripple3.remove_style_pseudo_class('rtl');
+            if (this._cornerOnBottom) {
+                // Bottom-left corner
+                this._ripple1.remove_style_pseudo_class('tr');
+                this._ripple2.remove_style_pseudo_class('tr');
+                this._ripple3.remove_style_pseudo_class('tr');
+                this._ripple1.remove_style_pseudo_class('br');
+                this._ripple2.remove_style_pseudo_class('br');
+                this._ripple3.remove_style_pseudo_class('br');
+                this._ripple1.add_style_pseudo_class('bl');
+                this._ripple2.add_style_pseudo_class('bl');
+                this._ripple3.add_style_pseudo_class('bl');
+            } else {
+                // Top-left corner
+                this._ripple1.remove_style_pseudo_class('tr');
+                this._ripple2.remove_style_pseudo_class('tr');
+                this._ripple3.remove_style_pseudo_class('tr');
+                this._ripple1.remove_style_pseudo_class('bl');
+                this._ripple2.remove_style_pseudo_class('bl');
+                this._ripple3.remove_style_pseudo_class('bl');
+                this._ripple1.remove_style_pseudo_class('br');
+                this._ripple2.remove_style_pseudo_class('br');
+                this._ripple3.remove_style_pseudo_class('br');
+            }
         }
 
         layoutManager.uiGroup.add_actor(this._ripple1);
@@ -1224,11 +1279,26 @@ const HotCorner = new Lang.Class({
             this.actor.add_child(this._corner);
             layoutManager.addChrome(this.actor);
 
-            if (this._rtl) {
-                this._corner.set_position(this.actor.width - this._corner.width, 0);
-                this.actor.set_anchor_point_from_gravity(Clutter.Gravity.NORTH_EAST);
+            if (this._cornerOnRight) {
+                if (this._cornerOnBottom) {
+                    // Bottom-right corner
+                    this._corner.set_position(this.actor.width - this._corner.width, this.actor.height - this._corner.height);
+                    this.actor.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_EAST);
+                } else {
+                    // Top-right corner
+                    this._corner.set_position(this.actor.width - this._corner.width, 0);
+                    this.actor.set_anchor_point_from_gravity(Clutter.Gravity.NORTH_EAST);
+                }
             } else {
-                this._corner.set_position(0, 0);
+                if (this._cornerOnBottom) {
+                    // Bottom-left corner
+                    this._corner.set_position(0, this.actor.height - this._corner.height);
+                    this.actor.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_WEST);
+                } else {
+                    // Top-left corner
+                    this._corner.set_position(0, 0);
+                    // Default gravity is north-west
+                }
             }
 
             this.actor.connect('leave-event',
@@ -1260,8 +1330,24 @@ const HotCorner = new Lang.Class({
 
         ripple._opacity = startOpacity;
 
-        if (this._rtl)
-            ripple.set_anchor_point_from_gravity(Clutter.Gravity.NORTH_EAST);
+        if (this._cornerOnRight) {
+            if (this._cornerOnBottom) {
+                // Bottom-right corner
+                ripple.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_EAST);
+            } else {
+                // Top-right corner
+                ripple.set_anchor_point_from_gravity(Clutter.Gravity.NORTH_EAST);
+            }
+        } else {
+            if (this._cornerOnBottom) {
+                // Bottom-left corner
+                ripple.set_anchor_point_from_gravity(Clutter.Gravity.SOUTH_WEST);
+            } else {
+                // Top-left corner
+                // Default gravity is north-west
+            }
+        }
+
 
         ripple.visible = true;
         ripple.opacity = 255 * Math.sqrt(startOpacity);

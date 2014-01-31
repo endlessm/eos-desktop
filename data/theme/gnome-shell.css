@@ -2011,12 +2011,20 @@ StScrollBar StButton#vhandle:active {
 .ripple-box {
     width: 52px;
     height: 52px;
-    background-image: url("corner-ripple-ltr.png");
+    background-image: url("corner-ripple-tl.png");
     background-size: contain;
 }
 
-.ripple-box:rtl {
-    background-image: url("corner-ripple-rtl.png");
+.ripple-box:tr {
+    background-image: url("corner-ripple-tr.png");
+}
+
+.ripple-box:bl {
+    background-image: url("corner-ripple-bl.png");
+}
+
+.ripple-box:br {
+    background-image: url("corner-ripple-br.png");
 }
 
 .switcher-arrow {
