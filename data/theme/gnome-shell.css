@@ -569,6 +569,12 @@ StScrollBar StButton#vhandle:active {
     background: none;
 }
 
+.social-button {
+    background: none;
+    -natural-hpadding: 4px;
+    -minimum-hpadding: 4px;
+}
+
 .browser-icon {
     padding-bottom: 1px;
     icon-size: 28px;
@@ -741,8 +747,8 @@ StScrollBar StButton#vhandle:active {
 }
 
 .system-status-social-icon {
-    icon-size: 30px;
-    padding-right: 6px;
+    icon-size: 28px;
+    padding-right: 5px;
 }
 
 /* Overview */
