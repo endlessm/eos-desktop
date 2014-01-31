@@ -523,13 +523,9 @@ const EndSessionDialog = new Lang.Class({
             return;
         }
 
-        this._updateContent();
+        invocation.return_value(null);
 
-        let signalId = this.connect('opened',
-                                    Lang.bind(this, function() {
-                                        invocation.return_value(null);
-                                        this.disconnect(signalId);
-                                    }));
+        this._updateContent();
     },
 
     Close: function(parameters, invocation) {
