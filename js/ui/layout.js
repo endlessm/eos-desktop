@@ -29,7 +29,8 @@ const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
 const MESSAGE_TRAY_PRESSURE_THRESHOLD = 250; // pixels
 const MESSAGE_TRAY_PRESSURE_TIMEOUT = 1000; // ms
 
-// Gsettings keys to determine enable/position of hot corner.
+// Gsettings keys to determine position of hot corner
+// and whether or not it is enabled.
 const HOT_CORNER_ENABLED_KEY = 'hot-corner-enabled';
 const HOT_CORNER_ON_RIGHT_KEY = 'hot-corner-on-right';
 const HOT_CORNER_ON_BOTTOM_KEY = 'hot-corner-on-bottom';
@@ -369,13 +370,16 @@ const LayoutManager = new Lang.Class({
                 haveHotCorner = false;
             } else if (i != this.primaryIndex) {
                 // Check if we have the specified corner.
-                // I.e. if there is no monitor directly above(below)
-                // or to the left(right)
+                // I.e. if there is no monitor directly above/below
+                // or beside (to the left/right)
                 let besideX = this._cornerOnRight ? cornerX + 1 : cornerX - 1;
                 let besideY = cornerY;
-                let aboveX = cornerX;
-                let aboveY = this._cornerOnBottom ? cornerY + 1 : cornerY - 1;
+                let aboveOrBelowX = cornerX;
+                let aboveOrBelowY = this._cornerOnBottom ? cornerY + 1 : cornerY - 1;
 
+                // Iterate through all other monitors, and see if any of them
+                // contain the point that is one pixel diagonally further
+                // outside the corner point of interest.
                 for (let j = 0; j < this.monitors.length; j++) {
                     if (i == j)
                         continue;
@@ -387,10 +391,10 @@ const LayoutManager = new Lang.Class({
                         haveHotCorner = false;
                         break;
                     }
-                    if (aboveX >= otherMonitor.x &&
-                        aboveX < otherMonitor.x + otherMonitor.width &&
-                        aboveY >= otherMonitor.y &&
-                        aboveY < otherMonitor.y + otherMonitor.height) {
+                    if (aboveOrBelowX >= otherMonitor.x &&
+                        aboveOrBelowX < otherMonitor.x + otherMonitor.width &&
+                        aboveOrBelowY >= otherMonitor.y &&
+                        aboveOrBelowY < otherMonitor.y + otherMonitor.height) {
                         haveHotCorner = false;
                         break;
                     }
@@ -1171,53 +1175,39 @@ const HotCorner = new Lang.Class({
         this._ripple2 = new St.BoxLayout({ style_class: 'ripple-box', opacity: 0, visible: false });
         this._ripple3 = new St.BoxLayout({ style_class: 'ripple-box', opacity: 0, visible: false });
 
+        // Remove all existing style pseudo-classes
+        // (note: top-left is default and does not use a pseudo-class)
+        let corners = ['tr', 'bl', 'br'];
+        let ripples = [this._ripple1, this._ripple2, this._ripple3];
+        for (let corner = 0; corner < corners.length; corner++) {
+            for (let ripple = 0; ripples < ripples.length; ripple++) {
+                ripples[ripple].remove_style_pseudo_class(corners[corner]);
+            }
+        }
+
+        // Add the style pseudo-class for the selected ripple corner
+        let addCorner = null;
         if (this._cornerOnRight) {
             if (this._cornerOnBottom) {
                 // Bottom-right corner
-                this._ripple1.remove_style_pseudo_class('tr');
-                this._ripple2.remove_style_pseudo_class('tr');
-                this._ripple3.remove_style_pseudo_class('tr');
-                this._ripple1.remove_style_pseudo_class('bl');
-                this._ripple2.remove_style_pseudo_class('bl');
-                this._ripple3.remove_style_pseudo_class('bl');
-                this._ripple1.add_style_pseudo_class('br');
-                this._ripple2.add_style_pseudo_class('br');
-                this._ripple3.add_style_pseudo_class('br');
+                addCorner = 'br';
             } else {
                 // Top-right corner
-                this._ripple1.remove_style_pseudo_class('bl');
-                this._ripple2.remove_style_pseudo_class('bl');
-                this._ripple3.remove_style_pseudo_class('bl');
-                this._ripple1.remove_style_pseudo_class('br');
-                this._ripple2.remove_style_pseudo_class('br');
-                this._ripple3.remove_style_pseudo_class('br');
-                this._ripple1.add_style_pseudo_class('tr');
-                this._ripple2.add_style_pseudo_class('tr');
-                this._ripple3.add_style_pseudo_class('tr');
+                addCorner = 'tr';
             }
         } else {
             if (this._cornerOnBottom) {
                 // Bottom-left corner
-                this._ripple1.remove_style_pseudo_class('tr');
-                this._ripple2.remove_style_pseudo_class('tr');
-                this._ripple3.remove_style_pseudo_class('tr');
-                this._ripple1.remove_style_pseudo_class('br');
-                this._ripple2.remove_style_pseudo_class('br');
-                this._ripple3.remove_style_pseudo_class('br');
-                this._ripple1.add_style_pseudo_class('bl');
-                this._ripple2.add_style_pseudo_class('bl');
-                this._ripple3.add_style_pseudo_class('bl');
+                addCorner = 'bl';
             } else {
                 // Top-left corner
-                this._ripple1.remove_style_pseudo_class('tr');
-                this._ripple2.remove_style_pseudo_class('tr');
-                this._ripple3.remove_style_pseudo_class('tr');
-                this._ripple1.remove_style_pseudo_class('bl');
-                this._ripple2.remove_style_pseudo_class('bl');
-                this._ripple3.remove_style_pseudo_class('bl');
-                this._ripple1.remove_style_pseudo_class('br');
-                this._ripple2.remove_style_pseudo_class('br');
-                this._ripple3.remove_style_pseudo_class('br');
+                // No style pseudo-class to add
+            }
+        }
+
+        if (addCorner) {
+            for (let ripple = 0; ripple < ripples.length; ripple++) {
+                ripples[ripple].add_style_pseudo_class(addCorner);
             }
         }
 

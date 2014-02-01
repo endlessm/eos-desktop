@@ -50,7 +50,7 @@
       </_summary>
       <_description>
         Default position of the hot corner is in a bottom corner.
-        Set false to move the hot corner to to a top corner.
+        Set false to move the hot corner to a top corner.
       </_description>
     </key>
     <key name="hot-corner-size" type="i">
