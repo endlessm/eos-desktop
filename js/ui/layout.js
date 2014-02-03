@@ -285,6 +285,14 @@ const LayoutManager = new Lang.Class({
                               Lang.bind(this, this._monitorsChanged));
         global.screen.connect('in-fullscreen-changed',
                               Lang.bind(this, this._updateFullscreen));
+
+        global.settings.connect('changed::' + HOT_CORNER_ENABLED_KEY,
+                                Lang.bind(this, this._updateHotCorners));
+        global.settings.connect('changed::' + HOT_CORNER_ON_RIGHT_KEY,
+                                Lang.bind(this, this._updateHotCorners));
+        global.settings.connect('changed::' + HOT_CORNER_ON_BOTTOM_KEY,
+                                Lang.bind(this, this._updateHotCorners));
+
         this._monitorsChanged();
     },
 
@@ -343,6 +351,10 @@ const LayoutManager = new Lang.Class({
     },
 
     _updateHotCorners: function() {
+        this._cornerEnabled = global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
+        this._cornerOnRight = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+        this._cornerOnBottom  = global.settings.get_boolean(HOT_CORNER_ON_BOTTOM_KEY);
+
         // destroy old hot corners
         this.hotCorners.forEach(function(corner) {
             if (corner)
