@@ -86,9 +86,7 @@ const SideComponent = new Lang.Class({
     },
 
     show: function(params) {
-        if (Main.overview.visible) {
-            Main.overview.hide();
-        }
+        Main.overview.hide();
         this.callShow(global.get_current_time(), params);
     },
 
