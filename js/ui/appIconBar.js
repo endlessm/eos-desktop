@@ -317,10 +317,11 @@ const AppIconButton = new Lang.Class({
             this._app.activate();
             Main.overview.hide();
         } else if (windows.length == 1) {
-            if (windows[0].has_focus() && !Main.overview.visible) {
-                windows[0].minimize();
+            let win = windows[0];
+            if (win.has_focus() && !Main.overview.visible) {
+                win.minimize();
             } else {
-                Main.activateWindow(windows[0]);
+                Main.activateWindow(win);
             }
         }
         this._animateRotation();
