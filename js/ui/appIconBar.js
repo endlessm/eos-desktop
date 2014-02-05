@@ -17,6 +17,7 @@ const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Util = imports.misc.util;
+const ViewSelector = imports.ui.viewSelector;
 
 const MAX_OPACITY = 255;
 const MAX_ANGLE = 360;
@@ -317,10 +318,25 @@ const AppIconButton = new Lang.Class({
             this._app.activate();
             Main.overview.hide();
         } else if (windows.length == 1) {
-            if (windows[0].has_focus() && !Main.overview.visible) {
-                windows[0].minimize();
+            let win = windows[0];
+            if (win.has_focus() && !Main.overview.visible) {
+                // The overview is not visible, and this is the
+                // currently focused application; minimize it
+                win.minimize();
+            } else if (win.minimized && Main.overview.visible &&
+                       (Main.overview.getActivePage() == ViewSelector.ViewPage.APPS)) {
+                // The overview apps page is visible, and this is a minimized
+                // window. Wait for the overview to be hidden before
+                // unminimizing it
+                let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
+                    Main.overview.disconnect(overviewHiddenId);
+                    Main.activateWindow(win);
+                }));
+
+                Main.overview.hide();
             } else {
-                Main.activateWindow(windows[0]);
+                // Activate window normally
+                Main.activateWindow(win);
             }
         }
         this._animateRotation();

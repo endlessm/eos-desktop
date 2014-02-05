@@ -772,6 +772,10 @@ const Overview = new Lang.Class({
         this._showOrSwitchPage(ViewSelector.ViewPage.WINDOWS);
     },
 
+    getActivePage: function() {
+        return this._viewSelector.getActivePage();
+    },
+
     focusSearch: function() {
         this.showApps();
         this._viewSelector.focusSearch();

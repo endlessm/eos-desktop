@@ -307,22 +307,6 @@ const WindowManager = new Lang.Class({
     },
 
     _unminimizeWindow : function(shellwm, actor) {
-        if (Main.overview.visible) {
-            // we need to wait for the overview to be hidden before animating
-            let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
-                Main.overview.disconnect(overviewHiddenId);
-                this._doUnminimizeWindow(shellwm, actor);
-            }));
-
-            // if this will be the first visible window, we need to hide the overview
-            Main.overview.hide();
-        } else {
-            // the overview has been hidden already
-            this._doUnminimizeWindow(shellwm, actor);
-        }
-    },
-
-    _doUnminimizeWindow: function(shellwm, actor) {
         if (!this._shouldAnimateActor(actor)) {
             shellwm.completed_unminimize(actor);
             return;
