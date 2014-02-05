@@ -16,10 +16,6 @@ function isSideComponentWindow (actor) {
 const SideComponent = new Lang.Class({
     Name: 'SideComponent',
     Extends: GObject.Object,
-    Properties: {'visible': GObject.ParamSpec.boolean('visible',
-                                                      'Visible', 'Visibility of the component',
-                                                      GObject.ParamFlags.READABLE | GObject.ParamFlags.WRITABLE,
-                                                      false)},
 
     _init: function(proxyProto, proxyName, proxyPath) {
         this.parent();
@@ -67,7 +63,7 @@ const SideComponent = new Lang.Class({
         }
 
         // resync visibility
-        this.visible = this.proxy.Visible;
+        this._visible = this.proxy.Visible;
 
         if (!this._visible) {
             let visibleWindows = Main.workspaceMonitor.visibleWindows;
@@ -78,30 +74,19 @@ const SideComponent = new Lang.Class({
     },
 
     toggle: function(params) {
-        if (this.visible) {
-            this.callHide(global.get_current_time(), params);
+        if (this._visible) {
+            this.hide(params);
         } else {
-            this.callShow(global.get_current_time(), params);
+            this.show(params);
         }
     },
 
     show: function(params) {
-        if (Main.overview.visible) {
-            Main.overview.hide();
-        }
+        Main.overview.hide();
         this.callShow(global.get_current_time(), params);
     },
 
     hide: function(params) {
         this.callHide(global.get_current_time(), params);
-    },
-
-    get visible() {
-        return this._visible;
-    },
-
-    set visible(v) {
-        this._visible = v;
-        this.notify('visible');
     }
 });
