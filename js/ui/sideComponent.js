@@ -75,9 +75,9 @@ const SideComponent = new Lang.Class({
 
     toggle: function(params) {
         if (this._visible) {
-            this.callHide(global.get_current_time(), params);
+            this.hide(params);
         } else {
-            this.callShow(global.get_current_time(), params);
+            this.show(params);
         }
     },
 
