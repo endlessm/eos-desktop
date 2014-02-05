@@ -59,8 +59,9 @@ const AppStore = new Lang.Class({
     },
 
     showPage: function(page) {
-        Main.overview.hide();
-        this.proxy.showPageRemote(global.get_current_time(), page);
+        this.callOnOverviewHidden(Lang.bind(this, function() {
+            this.proxy.showPageRemote(global.get_current_time(), page);
+        }));
     }
 });
 const Component = AppStore;
