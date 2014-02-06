@@ -73,6 +73,20 @@ const SideComponent = new Lang.Class({
         }
     },
 
+    callOnOverviewHidden: function(callback) {
+        if (!Main.overview.visible) {
+            callback();
+            return;
+        }
+
+        let overviewHiddenId = Main.overview.connect('hidden', function() {
+            Main.overview.disconnect(overviewHiddenId);
+            callback();
+        });
+
+        Main.overview.hide();
+    },
+
     toggle: function(params) {
         if (this._visible) {
             this.hide(params);
@@ -82,8 +96,9 @@ const SideComponent = new Lang.Class({
     },
 
     show: function(params) {
-        Main.overview.hide();
-        this.callShow(global.get_current_time(), params);
+        this.callOnOverviewHidden(Lang.bind(this, function() {
+            this.callShow(global.get_current_time(), params);
+        }));
     },
 
     hide: function(params) {
