@@ -150,17 +150,15 @@ const EndlessApplicationView = new Lang.Class({
 
     _createItemForId: function(itemId) {
         let appSystem = Shell.AppSystem.get_default();
-        let isFolder = false;
         let item = null;
 
         if (IconGridLayout.layout.iconIsFolder(itemId)) {
             item = Shell.DesktopDirInfo.new(itemId);
-            isFolder = true;
         } else {
             item = appSystem.lookup_app(itemId);
         }
 
-        return [item, isFolder];
+        return item;
     },
 
     addIcon: function(icon) {
@@ -273,7 +271,7 @@ const EndlessApplicationView = new Lang.Class({
         // Iterate through all visible icons
         for (let idx in layoutIds) {
             let itemId = layoutIds[idx];
-            let [item, isFolder] = this._createItemForId(itemId);
+            let item = this._createItemForId(itemId);
 
             if (!item) {
                 continue;
@@ -299,6 +297,8 @@ const EndlessApplicationView = new Lang.Class({
                 return true;
             }
 
+            let isFolder = IconGridLayout.layout.iconIsFolder(itemId);
+
             if (isFolder && currentIcon.view.iconsNeedRedraw()) {
                 // Items inside the folder changed
                 return true;
@@ -310,13 +310,13 @@ const EndlessApplicationView = new Lang.Class({
             if (isFolder) {
                 oldIconInfo = currentIcon.folder.get_icon();
                 newIconInfo = item.get_icon();
-            } else {
+            } else if (currentIcon.app) {
                 let appInfo = currentIcon.app.get_app_info();
                 oldIconInfo = appInfo.get_icon();
                 newIconInfo = item.get_app_info().get_icon();
             }
 
-            if (!newIconInfo.equal(oldIconInfo)) {
+            if (newIconInfo && !newIconInfo.equal(oldIconInfo)) {
                 // The icon image changed
                 return true;
             }
@@ -340,17 +340,10 @@ const EndlessApplicationView = new Lang.Class({
             let itemId = ids[i];
 
             let icon = null;
+            let item = this._createItemForId(itemId);
 
-            if (itemId == EOS_APP_STORE_ID) {
-                this._appStoreIcon = new AppStoreIcon(this);
-                icon = this._appStoreIcon;
-            }
-            else {
-                let [item, ] = this._createItemForId(itemId);
-
-                if (item) {
-                    icon = this._createItemIcon(item);
-                }
+            if (item) {
+                icon = this._createItemIcon(item);
             }
 
             if (icon) {
@@ -422,6 +415,8 @@ const AllView = new Lang.Class({
     _init: function() {
         this.parent();
 
+        this._appStoreIcon = null;
+
         this._grid.actor.y_expand = true;
         this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
 
@@ -484,6 +479,11 @@ const AllView = new Lang.Class({
         }));
 
         this._allAppsWorkId = Main.initializeDeferredWork(this.actor, Lang.bind(this, this._redisplay));
+    },
+
+    removeAll: function() {
+        this.parent();
+        this._appStoreIcon = null;
     },
 
     _redisplay: function() {
@@ -846,8 +846,32 @@ const AllView = new Lang.Class({
         return true;
     },
 
+    _ensureAppStoreIcon: function() {
+        if (this._appStoreIcon) {
+            return;
+        }
+
+        this._appStoreIcon = new AppStoreIcon(this);
+        this._appStoreItem = {
+            get_name: Lang.bind(this, function() {
+                return this._appStoreIcon.getName();
+            })
+        };
+    },
+
+    _createItemForId: function(itemId) {
+        if (itemId == EOS_APP_STORE_ID) {
+            this._ensureAppStoreIcon();
+            return this._appStoreItem;
+        }
+
+        return this.parent(itemId);
+    },
+
     _createItemIcon: function(item) {
-        if (item instanceof Shell.App) {
+        if (item == this._appStoreItem) {
+            return this._appStoreIcon;
+        } else if (item instanceof Shell.App) {
             return new AppIcon(item, null, { showMenu: false,
                                              parentView: this });
         } else {
