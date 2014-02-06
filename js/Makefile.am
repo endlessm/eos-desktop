@@ -126,7 +126,6 @@ nobase_dist_js_DATA = 	\
 	ui/components/keyring.js		\
 	ui/components/networkAgent.js		\
 	ui/components/polkitAgent.js		\
-	ui/components/recorder.js		\
 	ui/components/socialBar.js		\
 	ui/components/telepathyClient.js	\
 	ui/components/updaterManager.js		\
