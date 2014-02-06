@@ -1,88 +1,26 @@
-#!/usr/bin/gjs
+#!/bin/bash
+declare -A display_settings
 
-const GnomeDesktop = imports.gi.GnomeDesktop;
-const Gdk = imports.gi.Gdk;
-const GLib = imports.gi.GLib;
-const Gtk = imports.gi.Gtk;
+# Capure current display configuration
+displays=$( xrandr | sed '/^\s\+/d' | tail -n +2 | grep " connected" | awk '{print $1}')
+for display in $displays; do
+    configuration=$(xrandr | grep "^$display" | sed -ne 's/.*\s\([0-9]\+x[0-9]\+.*\s\).*(.*/\1/p')
+    display_settings[$display]=$configuration
+done
 
-const System = imports.system;
+# Run the command
+$@
 
-const TIMEOUT_PRIORITY = 1;
-const WINDOW_HOLD_TIME = 100;
+# Apply old display configuration
+full_config=""
+for key in ${!display_settings[@]}; do
+    value=${display_settings["${key}"]}
+    resolution=$(echo $value | sed 's/+.*//g')
+    offset=$(echo $value | sed 's/[0-9]\+x[0-9]\++//' | sed 's/+/x/')
 
-const exitGtkMainLoop = function() {
-    Gtk.main_quit();
-}
+    full_config="$full_config --output $key --mode $resolution --pos $offset"
 
-// Fix for some apps that use OpenGL and don't register a window. This allows them
-// to be identified by the shell and eventing to work properly
-const createNamedWindow = function(name) {
-    let trackingWindow = new Gtk.Window({ type: Gtk.WindowType.TOPLEVEL });
+    echo "Restoring resolution: $resolution $offset"
+done
 
-    trackingWindow.connect("destroy", exitGtkMainLoop);
-    trackingWindow.connect("realize", function() { GLib.timeout_add(TIMEOUT_PRIORITY,
-                                                                    WINDOW_HOLD_TIME,
-                                                                    exitGtkMainLoop); });
-
-    trackingWindow.resize(1, 1);
-    trackingWindow.set_wmclass(name, name);
-    trackingWindow.set_decorated(false);
-    trackingWindow.set_resizable(false);
-    trackingWindow.show_all();
-
-    Gtk.main();
-}
-
-const fixResolution = function(args) {
-    Gtk.init(null, null);
-    let screen = Gdk.Screen.get_default();
-    let rrScreen = null;
-
-    try {
-        rrScreen = GnomeDesktop.RRScreen.new(screen);
-    } catch(e) {
-        logError(e, 'Can\'t create RRScreen for default GdkScreen');
-        System.exit(-1);
-    }
-
-    let config = null;
-
-    try {
-        config = GnomeDesktop.RRConfig.new_current(rrScreen);
-    } catch(e) {
-        logError(e, 'Can\'t create RRConfig for current configuration');
-        System.exit(-1);
-    }
-
-    let cmdline = args.join(' ');
-    let status = 0;
-    let stdOut = null;
-    let stdErr = null;
-
-    createNamedWindow(args[0]);
-
-    try {
-        [, stdOut, stdErr, status] = GLib.spawn_command_line_sync(cmdline);
-    } catch(e) {
-        logError(e, 'Can\'t spawn command line');
-        System.exit(-1);
-    }
-
-    if (status == 0) {
-        log('\nProcess exited cleanly\nstdout:\n' + stdOut + 'stderr:\n' + stdErr);
-    } else {
-        log('\nProcess exited with error\nstdout:\n' + stdOut + 'stderr:\n' + stdErr);
-    }
-
-    try {
-        config.apply_with_time(rrScreen, 0);
-    } catch(e) {
-        logError(e, 'Failed to apply the last configuration');
-        System.exit(-1);
-    }
-
-    System.exit(status);
-}
-
-// Run the script
-fixResolution(ARGV);
+xrandr $full_config
