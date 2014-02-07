@@ -278,7 +278,7 @@ const AppIconButton = new Lang.Class({
         this.actor.connect('notify::allocation', Lang.bind(this,
             this._updateIconGeometry));
         this.actor.connect('destroy', Lang.bind(this,
-            this._resetIconGeometry));
+            this._onDestroy));
         this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
         this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
     },
@@ -387,6 +387,11 @@ const AppIconButton = new Lang.Class({
         this._iconSize = iconSize;
 
         this.actor.set_child(icon);
+    },
+
+    _onDestroy: function() {
+        this._label.destroy();
+        this._resetIconGeometry();
     },
 
     _resetIconGeometry: function() {
