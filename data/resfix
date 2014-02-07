@@ -75,7 +75,7 @@ const fixResolution = function(args) {
     }
 
     try {
-        config.apply_with_time(rrScreen, 0);
+        config.apply(rrScreen);
     } catch(e) {
         logError(e, 'Failed to apply the last configuration');
         System.exit(-1);
