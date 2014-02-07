@@ -95,7 +95,8 @@ Depends: ${gir:Depends},
          python (>= 2.6),
          telepathy-mission-control-5,
          evolution-data-server
-Recommends: gnome-control-center,
+Recommends: gnome-clocks,
+            gnome-control-center,
             gnome-session-fallback,
             gnome-user-guide,
             unzip
