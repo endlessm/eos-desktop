@@ -1,7 +1,6 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 [encoding: UTF-8]
-data/50-gnome-shell-screenshot.xml.in
 data/50-gnome-shell-system.xml.in
 data/eos-app-feedback.desktop.in.in
 data/eos-app-tutorial.desktop.in.in
