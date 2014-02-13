@@ -36,7 +36,6 @@ const AppActivationContext = new Lang.Class({
         this._abort = false;
         this._cancelled = false;
 
-        this._cover = null;
         this._splash = null;
 
         this._appStateId = 0;
@@ -76,24 +75,8 @@ const AppActivationContext = new Lang.Class({
         this._appActivationTime = GLib.get_monotonic_time();
     },
 
-    _getCoverPage: function() {
-        let bgGroup = new Meta.BackgroundGroup({ reactive: true });
-        let bgManager = new Background.BackgroundManager({
-                container: bgGroup,
-                monitorIndex: Main.layoutManager.primaryIndex });
-
-        bgGroup._bgManager = bgManager;
-        bgGroup.connect('event', Lang.bind(this, function() {
-            // block all the events
-            return true;
-        }));
-        return bgGroup;
-    },
-
     _animateSplash: function() {
         this._cancelled = false;
-        this._cover = this._getCoverPage();
-        Main.uiGroup.insert_child_below(this._cover, Main.layoutManager.panelBox);
 
         this._splash = new AppSplashPage(this._app);
         Main.uiGroup.add_actor(this._splash);
@@ -125,12 +108,6 @@ const AppActivationContext = new Lang.Class({
     },
 
     _clearSplash: function() {
-        if (this._cover) {
-            this._cover._bgManager.destroy();
-            this._cover.destroy();
-            this._cover = null;
-        }
-
         if (this._splash) {
             this._splash.completeInTime(SPLASH_SCREEN_COMPLETE_TIME, Lang.bind(this,
                 function() {
