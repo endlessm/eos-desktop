@@ -586,7 +586,6 @@ const WindowManager = new Lang.Class({
 
             actor.opacity = 255;
             actor.show();
-            this._mapping.push(actor);
 
             Tweener.addTween(actor,
                              { x: endX,
