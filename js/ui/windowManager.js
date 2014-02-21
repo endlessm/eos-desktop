@@ -446,7 +446,7 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
-        } if (SideComponent.isSideComponentWindow(actor)) {
+        } else if (SideComponent.isSideComponentWindow(actor)) {
             let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
             let origX = actor.x;
             if (origX == monitor.x) {
@@ -586,7 +586,6 @@ const WindowManager = new Lang.Class({
 
             actor.opacity = 255;
             actor.show();
-            this._mapping.push(actor);
 
             Tweener.addTween(actor,
                              { x: endX,
