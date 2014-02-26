@@ -384,12 +384,6 @@ const DesktopAppClient = new Lang.Class({
         this._lastDesktopApp = Shell.AppSystem.get_default().lookup_app(desktopId);
     },
 
-    _popLaunchedApp: function() {
-        let retval = this._lastDesktopApp;
-        this._lastDesktopApp = null;
-        return retval;
-    },
-
     _windowCreated: function(metaDisplay, metaWindow) {
         // Don't maximize if key to disable default maximize is set
         if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
@@ -406,9 +400,11 @@ const DesktopAppClient = new Lang.Class({
             return;
         }
 
-        let lastApp = this._popLaunchedApp();
-        if (app != lastApp) {
+        // Skip if the window does not belong to the launched app
+        if (app != this._lastDesktopApp) {
             return;
+        } else {
+            this._lastDesktopApp = null;
         }
 
         if (tracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
