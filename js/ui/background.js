@@ -147,8 +147,7 @@ const BackgroundCache = new Lang.Class({
         for (let i = 0; i < this._pendingFileLoads.length; i++) {
             if (this._pendingFileLoads[i].filename == params.filename &&
                 this._pendingFileLoads[i].style == params.style) {
-                this._pendingFileLoads[i].callers.push({ shouldCopy: true,
-                                                         monitorIndex: params.monitorIndex,
+                this._pendingFileLoads[i].callers.push({ monitorIndex: params.monitorIndex,
                                                          effects: params.effects,
                                                          onFinished: params.onFinished });
                 return;
@@ -157,14 +156,11 @@ const BackgroundCache = new Lang.Class({
 
         this._pendingFileLoads.push({ filename: params.filename,
                                       style: params.style,
-                                      callers: [{ shouldCopy: false,
-                                                  monitorIndex: params.monitorIndex,
+                                      callers: [{ monitorIndex: params.monitorIndex,
                                                   effects: params.effects,
                                                   onFinished: params.onFinished }] });
 
-        let content = new Meta.Background({ meta_screen: global.screen,
-                                            monitor: params.monitorIndex,
-                                            effects: params.effects });
+        let content = new Meta.Background({ meta_screen: global.screen });
 
         content.load_file_async(params.filename,
                                 params.style,
@@ -175,7 +171,6 @@ const BackgroundCache = new Lang.Class({
                                                   content.load_file_finish(result);
 
                                                   this._monitorFile(params.filename);
-                                                  this._images.push(content);
                                               } catch(e) {
                                                   content = null;
                                               }
@@ -190,12 +185,10 @@ const BackgroundCache = new Lang.Class({
                                                       if (pendingLoad.callers[j].onFinished) {
                                                           let newContent;
 
-                                                          if (content && pendingLoad.callers[j].shouldCopy) {
+                                                          if (content) {
                                                               newContent = content.copy(pendingLoad.callers[j].monitorIndex,
                                                                                         pendingLoad.callers[j].effects);
                                                               this._images.push(newContent);
-                                                          } else {
-                                                              newContent = content;
                                                           }
 
                                                           pendingLoad.callers[j].onFinished(newContent);
