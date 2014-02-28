@@ -537,7 +537,7 @@ const AllView = new Lang.Class({
     },
 
     _setupDragState: function(source) {
-        if (!source.parentView) {
+        if (!source || !source.parentView) {
             return;
         }
 
@@ -562,7 +562,7 @@ const AllView = new Lang.Class({
     },
 
     _clearDragState: function(source) {
-        if (!source.parentView) {
+        if (!source || !source.parentView) {
             return;
         }
 
