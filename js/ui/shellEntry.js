@@ -36,9 +36,19 @@ const EntryMenu = new Lang.Class({
         this.parent(animate);
         this._entry.add_style_pseudo_class('focus');
 
-        let direction = Gtk.DirectionType.TAB_FORWARD;
-        if (!this.actor.navigate_focus(null, direction, false))
-            this.actor.grab_key_focus();
+        let items = this._getMenuItems();
+        let checkedItem = null;
+        for (let idx in items) {
+            let item = items[idx];
+            if (item.getChecked()) {
+                checkedItem = item;
+                break;
+            }
+        }
+
+        if (checkedItem != null) {
+            checkedItem.actor.grab_key_focus();
+        }
     },
 
     close: function(animate) {
