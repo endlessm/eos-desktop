@@ -1727,7 +1727,8 @@ const AppStoreIcon = new Lang.Class({
         this.blockHandler = true;
 
         // store the location of the removed item in order to undo it
-        let [ folderId, idx ] = IconGridLayout.layout.getPositionForIcon(source.getId());
+        let folderId = source.parentView.getViewId();
+        let idx = source.parentView.indexOf(source);
         this._removedItemFolder = folderId;
         this._removedItemPos = idx;
 
@@ -1772,10 +1773,10 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _undoRemoveItem: function(source) {
-        let pos = this._removedItemPos;
         let folderId = this._removedItemFolder;
+        let icon = source.parentView.getIconForIndex(this._removedItemPos);
 
-        IconGridLayout.layout.repositionIcon(source.getId(), pos, folderId);
+        IconGridLayout.layout.repositionIcon(source.getId(), icon.getId(), folderId);
 
         this._removedItemPos = -1;
         this._removedItemFolder = null;
