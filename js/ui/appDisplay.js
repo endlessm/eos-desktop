@@ -1654,22 +1654,11 @@ const AppStoreIcon = new Lang.Class({
         this._removedItemPos = -1;
         this._removedItemFolder = null;
 
-        // For now, let's use the normal icon for the pressed state,
-        // for consistency with the other app selector icons,
-        // which just use the wells to represent the pressed state.
-        // In the future, we may want to use the 'add_down' icon instead.
-        // If so, the return to the normal state after the user
-        // moves off the icon to cancel should be made more responsive;
-        // the current implementation takes about a second for the change
-        // back to the normal icon to occur.
-        this.pressed_icon = new IconGrid.BaseIcon(_("Add"),
-                                                  { createIcon: Lang.bind(this, this._createIcon) });
         this.empty_trash_icon = new IconGrid.BaseIcon(_("Delete"),
                                                       { createIcon: Lang.bind(this, this._createTrashIcon) });
         this.full_trash_icon = new IconGrid.BaseIcon(_("Delete"),
                                                      { createIcon: Lang.bind(this, this._createFullTrashIcon) });
 
-        this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
         this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
     },
 
@@ -1690,14 +1679,6 @@ const AppStoreIcon = new Lang.Class({
 
     _createIcon: function(iconSize) {
         return this._createIconFromTheme(iconSize, 'app-store-symbolic.svg');
-    },
-
-    _onButtonPress: function(actor, event) {
-        let button = event.get_button();
-        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
-            this.actor.set_child(this.pressed_icon.actor);
-        }
-        return false;
     },
 
     _onClicked: function(actor, button) {
