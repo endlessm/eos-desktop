@@ -300,8 +300,6 @@ const AppIconButton = new Lang.Class({
                 this._menu.popup();
                 this._menuManager.ignoreRelease();
 
-                this._animateRotation();
-
                 // This will block the clicked signal from being emitted
                 return true;
             }
@@ -441,6 +439,8 @@ const AppIconButton = new Lang.Class({
                 // scrollable so the minimum height is smaller than the natural height
                 let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
                 this._menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
+
+                this._animateRotation();
             }));
     }
 });
