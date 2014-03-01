@@ -1650,6 +1650,10 @@ const AppStoreIcon = new Lang.Class({
 
         this.canDrop = true;
 
+        this._removeUndone = false;
+        this._removedItemPos = -1;
+        this._removedItemFolder = null;
+
         // For now, let's use the normal icon for the pressed state,
         // for consistency with the other app selector icons,
         // which just use the wells to represent the pressed state.
@@ -1731,6 +1735,7 @@ const AppStoreIcon = new Lang.Class({
         let idx = source.parentView.indexOf(source);
         this._removedItemFolder = folderId;
         this._removedItemPos = idx;
+        this._removeUndone = false;
 
         IconGridLayout.layout.removeIcon(source.getId());
 
@@ -1742,6 +1747,12 @@ const AppStoreIcon = new Lang.Class({
         }
 
         this.handleViewDragEnd();
+
+        Main.overview.setMessage(_("%s has been deleted").format(source.getName()),
+                                 { forFeedback: true,
+                                   destroyCallback: Lang.bind(this, this._onMessageDestroy, source),
+                                   undoCallback: Lang.bind(this, this._undoRemoveItem, source)
+                                 });
     },
 
     _canDelete: function(item) {
@@ -1755,9 +1766,6 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _deleteItem: function(source) {
-        this._removedItemPos = -1;
-        this._removedItemFolder = null;
-
         if (source.app) {
             let appInfo = source.app.get_app_info();
             if (this._canDelete(appInfo)) {
@@ -1772,24 +1780,22 @@ const AppStoreIcon = new Lang.Class({
         }
     },
 
+    _onMessageDestroy: function(source) {
+        if (!this._removeUndone) {
+            this._deleteItem(source);
+        }
+
+        this._removeUndone = false;
+        this._removedItemFolder = null;
+        this._removedItemPos = -1;
+    },
+
     _undoRemoveItem: function(source) {
         let folderId = this._removedItemFolder;
         let icon = source.parentView.getIconForIndex(this._removedItemPos);
 
+        this._removeUndone = true;
         IconGridLayout.layout.repositionIcon(source.getId(), icon.getId(), folderId);
-
-        this._removedItemPos = -1;
-        this._removedItemFolder = null;
-    },
-
-    _acceptAppDrop: function(source) {
-        this._removeItem(source);
-
-        Main.overview.setMessage(_("%s has been deleted").format(source.app.get_name()),
-                                 { forFeedback: true,
-                                   destroyCallback: Lang.bind(this, this._deleteItem, source),
-                                   undoCallback: Lang.bind(this, this._undoRemoveItem, source)
-                                 });
     },
 
     _acceptFolderDrop: function(source) {
@@ -1809,12 +1815,6 @@ const AppStoreIcon = new Lang.Class({
 
         if (isEmpty) {
             this._removeItem(source);
-
-            Main.overview.setMessage(_("%s has been deleted").format(folder.get_name()),
-                                     { forFeedback: true,
-                                       destroyCallback: Lang.bind(this, this._deleteItem, source),
-                                       undoCallback: Lang.bind(this, this._undoRemoveItem, source)
-                                     });
             return;
         }
 
@@ -1850,7 +1850,7 @@ const AppStoreIcon = new Lang.Class({
 
     handleIconDrop: function(source) {
         if (source.app) {
-            this._acceptAppDrop(source);
+            this._removeItem(source);
             return true;
         }
 
