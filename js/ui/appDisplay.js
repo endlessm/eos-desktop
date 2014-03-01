@@ -134,9 +134,14 @@ const EndlessApplicationView = new Lang.Class({
 
         // Standard hack for ClutterBinLayout
         this._grid.actor.x_expand = true;
+        this._grid.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
         this._allIcons = [];
         this.repositionedIconData = [ null, null ];
+    },
+
+    _onDestroy: function() {
+        this._allIcons = [];
     },
 
     removeAll: function() {
