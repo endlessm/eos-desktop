@@ -440,6 +440,10 @@ const BaseIcon = new Lang.Class({
 
     _onIconThemeChanged: function() {
         this._createIconTexture(this.iconSize);
+    },
+
+    reloadIcon: function() {
+        this._createIconTexture(this.iconSize);
     }
 });
 

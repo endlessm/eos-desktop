@@ -187,20 +187,6 @@ const IconGridLayout = new Lang.Class({
         return allApplications;
     },
 
-    getPositionForIcon: function(id) {
-        let icons;
-
-        for (let i in this._iconTree) {
-            icons = this._iconTree[i];
-            let pos = icons.indexOf(id);
-            if (pos != -1) {
-                return [ i, pos ];
-            }
-        }
-
-        return [ null, -1 ];
-    },
-
     repositionIcon: function(id, insertId, newFolder) {
         let icons;
         let existing = false;
