@@ -12,6 +12,7 @@ const Signals = imports.signals;
 const St = imports.gi.St;
 
 const Background = imports.ui.background;
+const GrabHelper = imports.ui.grabHelper;
 const Main = imports.ui.main;
 const Overview = imports.ui.overview;
 const Panel = imports.ui.panel;
@@ -82,7 +83,10 @@ const AppActivationContext = new Lang.Class({
         Main.uiGroup.add_actor(this._splash);
 
         // Make sure that our events are captured
-        Main.pushModal(this._splash);
+        this._grabHelper = new GrabHelper.GrabHelper(this._splash);
+        this._grabHelper.addActor(this._splash);
+        this._grabHelper.grab({ actor: this._splash,
+                                focus: this._splash });
 
         this._splash.connect('close-clicked', Lang.bind(this, function() {
             /* If application doesn't quit very likely is because it
@@ -117,7 +121,7 @@ const AppActivationContext = new Lang.Class({
                                                      onComplete: Lang.bind(this,
                                                          function() {
                                                              // Release keybinding to overview again
-                                                             Main.popModal(this._splash);
+                                                             this._grabHelper.ungrab({ actor: this._splash });
 
                                                              this._splash.destroy();
                                                              this._splash = null;
