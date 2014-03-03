@@ -1797,10 +1797,17 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _undoRemoveItem: function(source) {
+        let allView = this.parentView;
         let folderId = this._removedItemFolder;
-        let icon = source.parentView.getIconForIndex(this._removedItemPos);
+        let view = allView.getViewForId(folderId);
+
+        if (!view) {
+            return;
+        }
 
         this._removeUndone = true;
+
+        let icon = view.getIconForIndex(this._removedItemPos);
         IconGridLayout.layout.repositionIcon(source.getId(), icon.getId(), folderId);
     },
 
