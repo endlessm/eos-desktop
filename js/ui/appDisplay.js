@@ -1053,6 +1053,12 @@ const AllView = new Lang.Class({
     }
 });
 
+const ViewIconState = {
+    NORMAL: 0,
+    DND_PLACEHOLDER: 1,
+    NUM_STATES: 2
+};
+
 const ViewIcon = new Lang.Class({
     Name: 'ViewIcon',
 
@@ -1063,7 +1069,7 @@ const ViewIcon = new Lang.Class({
         this.customName = false;
         this.blockHandler = false;
 
-        this._origIcon = null;
+        this._iconState = ViewIconState.NORMAL;
 
         this.actor = new St.Bin({ style_class: 'app-well-app' });
         this.actor.x_fill = true;
@@ -1073,6 +1079,10 @@ const ViewIcon = new Lang.Class({
         this.actor._delegate = this;
 
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+
+        this._origText = null;
+        this._createIconFunc = iconParams['createIcon'];
+        iconParams['createIcon'] = Lang.bind(this, this._createIconBase);
 
         this.icon = new IconGrid.BaseIcon(this.getName(), iconParams, buttonParams);
         if (iconParams['showLabel'] !== false &&
@@ -1089,43 +1099,49 @@ const ViewIcon = new Lang.Class({
     },
 
     _onDestroy: function() {
-        if (this._origIcon) {
-            let origIcon = this._origIcon;
-            this._origIcon = null;
-            origIcon.actor.destroy();
-        }
-
         this.iconButton._delegate = null;
         this.actor._delegate = null;
+    },
+
+    _createIconBase: function(iconSize) {
+        if (this._iconState == ViewIconState.DND_PLACEHOLDER) {
+            // Replace the original icon with an empty placeholder
+            return new St.Icon({ icon_size: iconSize });
+        }
+
+        return this._createIconFunc(iconSize);
     },
 
     _onLabelCancel: function() {
         this.actor.sync_hover();
     },
 
-    handleViewDragBegin: function() {
-        // Replace the dragged icon with an empty placeholder
-        this._origIcon = this.icon;
-
-        let dragBeginIcon = this.getDragBeginIcon();
-        this.icon = dragBeginIcon;
-        this.actor.set_child(dragBeginIcon.actor);
-        this.actor.add_style_class_name('dnd-begin');
-    },
-
-    handleViewDragEnd: function() {
-        if (!this.blockHandler && this._origIcon) {
-            this.icon = this._origIcon;
-            this.actor.remove_style_class_name('dnd-begin');
-            this.actor.set_child(this.icon.actor);
-            this._origIcon = null;
+    replaceText: function(newText) {
+        if (this.icon.label) {
+            this._origText = this.icon.label.text;
+            this.icon.label.text = newText;
         }
     },
 
-    getDragBeginIcon: function() {
-        return new IconGrid.BaseIcon('', { createIcon: function(iconSize) {
-            return new St.Icon({ icon_size: iconSize });
-        }});
+    restoreText: function() {
+        if (this._origText) {
+            this.icon.label.text = this._origText;
+            this._origText = null;
+        }
+    },
+
+    handleViewDragBegin: function() {
+        this.iconState = ViewIconState.DND_PLACEHOLDER;
+        this.actor.add_style_class_name('dnd-begin');
+        this.replaceText(null);
+    },
+
+    handleViewDragEnd: function() {
+        if (!this.blockHandler) {
+            this.iconState = ViewIconState.NORMAL;
+            this.actor.remove_style_class_name('dnd-begin');
+            this.restoreText();
+        }
     },
 
     setDragHoverState: function(state) {
@@ -1152,6 +1168,19 @@ const ViewIcon = new Lang.Class({
     // we show as the item is being dragged.
     getDragActorSource: function() {
         return this.icon.actor;
+    },
+
+    set iconState(iconState) {
+        if (this._iconState == iconState) {
+            return;
+        }
+
+        this._iconState = iconState;
+        this.icon.reloadIcon();
+    },
+
+    get iconState() {
+        return this._iconState;
     }
 });
 
@@ -1659,6 +1688,11 @@ const AppIcon = new Lang.Class({
 });
 Signals.addSignalMethods(AppIcon.prototype);
 
+const AppStoreIconState = {
+    EMPTY_TRASH: ViewIconState.NUM_STATES,
+    FULL_TRASH: ViewIconState.NUM_STATES + 1
+};
+
 const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
     Extends: ViewIcon,
@@ -1679,31 +1713,26 @@ const AppStoreIcon = new Lang.Class({
         this._removedItemPos = -1;
         this._removedItemFolder = null;
 
-        this.empty_trash_icon = new IconGrid.BaseIcon(_("Delete"),
-                                                      { createIcon: Lang.bind(this, this._createTrashIcon) });
-        this.full_trash_icon = new IconGrid.BaseIcon(_("Delete"),
-                                                     { createIcon: Lang.bind(this, this._createFullTrashIcon) });
-
         this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
     },
 
-    _createIconFromTheme: function(iconSize, filename) {
-        let gfile = Gio.File.new_for_path(global.datadir + '/theme/' + filename);
-        let gicon = new Gio.FileIcon({ file: gfile });
+    _stIconFromState: function(state, iconSize) {
+        let iconName = null;
+        if (state == AppStoreIconState.EMPTY_TRASH) {
+            iconName = 'trash-icon-empty.png';
+        } else if (state == AppStoreIconState.FULL_TRASH) {
+            iconName = 'trash-icon-full.png';
+        } else {
+            iconName = 'app-store-symbolic.svg';
+        }
+
+        let gfile = Gio.File.new_for_path(global.datadir + '/theme/' + iconName);
         return new St.Icon({ icon_size: iconSize,
-                             gicon: gicon });
-    },
-
-    _createTrashIcon: function(iconSize) {
-        return this._createIconFromTheme(iconSize, 'trash-icon-empty.png');
-    },
-
-    _createFullTrashIcon: function(iconSize) {
-        return this._createIconFromTheme(iconSize, 'trash-icon-full.png');
+                             gicon: new Gio.FileIcon({ file: gfile }) });
     },
 
     _createIcon: function(iconSize) {
-        return this._createIconFromTheme(iconSize, 'app-store-symbolic.svg');
+        return this._stIconFromState(this.iconState, iconSize);
     },
 
     _onClicked: function(actor, button) {
@@ -1718,23 +1747,26 @@ const AppStoreIcon = new Lang.Class({
         return EOS_APP_STORE_ID;
     },
 
-    getDragBeginIcon: function() {
-        return this.empty_trash_icon;
+    handleViewDragBegin: function() {
+        this.iconState = AppStoreIconState.EMPTY_TRASH;
+        this.replaceText(_("Delete"));
+    },
+
+    handleViewDragEnd: function() {
+        this.iconState = ViewIconState.NORMAL;
+        this.restoreText();
     },
 
     setDragHoverState: function(state) {
         this.parent(state);
 
-        if (state) {
-            this.actor.set_child(this.full_trash_icon.actor);
-        } else {
-            this.actor.set_child(this.empty_trash_icon.actor);
-        }
+        let appStoreIconState = state ?
+            AppStoreIconState.FULL_TRASH : AppStoreIconState.EMPTY_TRASH;
+        this.iconState = appStoreIconState;
     },
 
     _removeItem: function(source) {
         source.blockHandler = true;
-        this.blockHandler = true;
 
         // store the location of the removed item in order to undo it
         let folderId = source.parentView.getViewId();
@@ -1746,7 +1778,6 @@ const AppStoreIcon = new Lang.Class({
         IconGridLayout.layout.removeIcon(source.getId());
 
         source.blockHandler = false;
-        this.blockHandler = false;
 
         if (source.handleViewDragEnd) {
             source.handleViewDragEnd();
