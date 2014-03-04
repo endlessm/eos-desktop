@@ -54,11 +54,9 @@ const BackgroundCache = new Lang.Class({
                                         effects: Meta.BackgroundEffects.NONE });
 
         let content = null;
+
         let candidateContent = null;
         for (let i = 0; i < this._patterns.length; i++) {
-            if (!this._patterns[i])
-                continue;
-
             if (this._patterns[i].get_shading() != params.shadingType)
                 continue;
 
@@ -92,7 +90,6 @@ const BackgroundCache = new Lang.Class({
         }
 
         this._patterns.push(content);
-
         return content;
     },
 
@@ -120,9 +117,9 @@ const BackgroundCache = new Lang.Class({
 
     _removeContent: function(contentList, content) {
         let index = contentList.indexOf(content);
-
-        if (index >= 0)
-            contentList.splice(index, 1);
+        if (index < 0)
+            throw new Error("Trying to remove invalid content: " + content);
+        contentList.splice(index, 1);
     },
 
     removePatternContent: function(content) {
@@ -132,7 +129,8 @@ const BackgroundCache = new Lang.Class({
     removeImageContent: function(content) {
         let filename = content.get_filename();
 
-        if (filename && this._fileMonitors[filename])
+        let hasOtherUsers = this._images.some(function(content) { return filename == content.get_filename(); });
+        if (!hasOtherUsers)
             delete this._fileMonitors[filename];
 
         this._removeContent(this._images, content);
@@ -190,13 +188,17 @@ const BackgroundCache = new Lang.Class({
 
                                                   for (let j = 0; j < pendingLoad.callers.length; j++) {
                                                       if (pendingLoad.callers[j].onFinished) {
-                                                          if (content && pendingLoad.callers[j].shouldCopy) {
-                                                              content = object.copy(pendingLoad.callers[j].monitorIndex,
-                                                                                    pendingLoad.callers[j].effects);
+                                                          let newContent;
 
+                                                          if (content && pendingLoad.callers[j].shouldCopy) {
+                                                              newContent = content.copy(pendingLoad.callers[j].monitorIndex,
+                                                                                        pendingLoad.callers[j].effects);
+                                                              this._images.push(newContent);
+                                                          } else {
+                                                              newContent = content;
                                                           }
 
-                                                          pendingLoad.callers[j].onFinished(content);
+                                                          pendingLoad.callers[j].onFinished(newContent);
                                                       }
                                                   }
 
@@ -214,11 +216,9 @@ const BackgroundCache = new Lang.Class({
                                         onFinished: null });
 
         let content = null;
+
         let candidateContent = null;
         for (let i = 0; i < this._images.length; i++) {
-            if (!this._images[i])
-                continue;
-
             if (this._images[i].get_style() != params.style)
                 continue;
 
@@ -226,7 +226,7 @@ const BackgroundCache = new Lang.Class({
                 continue;
 
             if (params.style == GDesktopEnums.BackgroundStyle.SPANNED &&
-                this._images[i].monitor_index != this._monitorIndex)
+                this._images[i].monitor != params.monitorIndex)
                 continue;
 
             candidateContent = this._images[i];
@@ -318,7 +318,6 @@ const Background = new Lang.Class({
 
         this._brightness = 1.0;
         this._vignetteSharpness = 0.2;
-        this._saturation = 1.0;
         this._cancellable = new Gio.Cancellable();
         this.isLoaded = false;
 
@@ -418,29 +417,26 @@ const Background = new Lang.Class({
         this._fileWatches[filename] = signalId;
     },
 
-    _addImage: function(content, index, filename) {
-        content.saturation = this._saturation;
-        content.brightness = this._brightness;
-        content.vignette_sharpness = this._vignetteSharpness;
+    _ensureImage: function(index) {
+        if (this._images[index])
+            return;
 
         let actor = new Meta.BackgroundActor();
-        actor.content = content;
 
         // The background pattern is the first actor in
         // the group, and all images should be above that.
         this.actor.insert_child_at_index(actor, index + 1);
-
         this._images[index] = actor;
-        this._watchCacheFile(filename);
     },
 
-    _updateImage: function(content, index, filename) {
-        content.saturation = this._saturation;
+    _updateImage: function(index, content, filename) {
         content.brightness = this._brightness;
         content.vignette_sharpness = this._vignetteSharpness;
 
-        this._cache.removeImageContent(this._images[index].content);
-        this._images[index].content = content;
+        let image = this._images[index];
+        if (image.content)
+            this._cache.removeImageContent(content);
+        image.content = content;
         this._watchCacheFile(filename);
     },
 
@@ -488,11 +484,8 @@ const Background = new Lang.Class({
                                                   return;
                                               }
 
-                                              if (!this._images[i]) {
-                                                  this._addImage(content, i, files[i]);
-                                              } else {
-                                                  this._updateImage(content, i, files[i]);
-                                              }
+                                              this._ensureImage(i);
+                                              this._updateImage(i, content, files[i]);
 
                                               if (numPendingImages == 0) {
                                                   this._setLoaded();
@@ -547,24 +540,27 @@ const Background = new Lang.Class({
                                            });
     },
 
-    _loadFile: function(filename) {
+    _loadImage: function(filename) {
         this._cache.getImageContent({ monitorIndex: this._monitorIndex,
                                       effects: this._effects,
                                       style: this._style,
                                       filename: filename,
                                       cancellable: this._cancellable,
                                       onFinished: Lang.bind(this, function(content) {
-                                          if (!content) {
-                                              if (!this._cancellable.is_cancelled())
-                                                  this._loadAnimation(filename);
-                                              return;
+                                          if (content) {
+                                              this._ensureImage(0);
+                                              this._updateImage(0, content, filename);
                                           }
-
-                                          this._addImage(content, 0, filename);
                                           this._setLoaded();
                                       })
                                     });
+    },
 
+    _loadFile: function(filename) {
+        if (filename.endsWith('.xml'))
+            this._loadAnimation(filename);
+        else
+            this._loadImage(filename);
     },
 
     _getDefaultBackgroundFile: function() {
@@ -590,7 +586,7 @@ const Background = new Lang.Class({
     _load: function () {
         this._cache = getBackgroundCache();
 
-        this._loadPattern(this._cache);
+        this._loadPattern();
 
         this._style = this._settings.get_enum(BACKGROUND_STYLE_KEY);
         if (this._style == GDesktopEnums.BackgroundStyle.NONE) {
@@ -609,24 +605,6 @@ const Background = new Lang.Class({
         }
 
         this._loadFile(filename);
-    },
-
-    get saturation() {
-        return this._saturation;
-    },
-
-    set saturation(saturation) {
-        this._saturation = saturation;
-
-        if (this._pattern && this._pattern.content)
-            this._pattern.content.saturation = saturation;
-
-        let keys = Object.keys(this._images);
-        for (let i = 0; i < keys.length; i++) {
-            let image = this._images[keys[i]];
-            if (image && image.content)
-                image.content.saturation = saturation;
-        }
     },
 
     get brightness() {
@@ -680,7 +658,13 @@ const SystemBackground = new Lang.Class({
                                           this.emit('loaded');
                                       })
                                     });
-    }
+
+        this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+    },
+
+    _onDestroy: function() {
+        this._cache.removeImageContent(this.actor.content);
+    },
 });
 Signals.addSignalMethods(SystemBackground.prototype);
 
@@ -766,30 +750,30 @@ const BackgroundManager = new Lang.Class({
         }
     },
 
-    _updateBackground: function(background, monitorIndex) {
-        let newBackground = this._createBackground(monitorIndex);
-        newBackground.vignetteSharpness = background.vignetteSharpness;
-        newBackground.brightness = background.brightness;
-        newBackground.saturation = background.saturation;
-        newBackground.visible = background.visible;
+    _updateBackground: function() {
+        let newBackground = this._createBackground();
+        newBackground.vignetteSharpness = this.background.vignetteSharpness;
+        newBackground.brightness = this.background.brightness;
+        newBackground.visible = this.background.visible;
 
         newBackground.loadedSignalId = newBackground.connect('loaded',
             Lang.bind(this, function() {
                 newBackground.disconnect(newBackground.loadedSignalId);
                 newBackground.loadedSignalId = 0;
-                Tweener.addTween(background.actor,
+                Tweener.addTween(this.background.actor,
                                  { opacity: 0,
                                    time: FADE_ANIMATION_TIME,
                                    transition: 'easeOutQuad',
                                    onComplete: Lang.bind(this, function() {
-                                       if (this._newBackground == newBackground) {
-                                           this.background = newBackground;
-                                           this._newBackground = null;
-                                       } else {
+                                       if (this._newBackground != newBackground) {
+                                           /* Not interesting, we queued another load */
                                            newBackground.actor.destroy();
+                                           return;
                                        }
 
-                                       background.actor.destroy();
+                                       this.background.actor.destroy();
+                                       this.background = newBackground;
+                                       this._newBackground = null;
 
                                        this.emit('changed');
                                    })
@@ -816,7 +800,7 @@ const BackgroundManager = new Lang.Class({
         background.changeSignalId = background.connect('changed', Lang.bind(this, function() {
             background.disconnect(background.changeSignalId);
             background.changeSignalId = 0;
-            this._updateBackground(background, this._monitorIndex);
+            this._updateBackground();
         }));
 
         background.actor.connect('destroy', Lang.bind(this, function() {
