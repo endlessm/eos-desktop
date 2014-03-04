@@ -12,6 +12,7 @@ const Signals = imports.signals;
 const St = imports.gi.St;
 
 const Background = imports.ui.background;
+const GrabHelper = imports.ui.grabHelper;
 const Main = imports.ui.main;
 const Overview = imports.ui.overview;
 const Panel = imports.ui.panel;
@@ -82,7 +83,10 @@ const AppActivationContext = new Lang.Class({
         Main.uiGroup.add_actor(this._splash);
 
         // Make sure that our events are captured
-        Main.pushModal(this._splash);
+        this._grabHelper = new GrabHelper.GrabHelper(this._splash);
+        this._grabHelper.addActor(this._splash);
+        this._grabHelper.grab({ actor: this._splash,
+                                focus: this._splash });
 
         this._splash.connect('close-clicked', Lang.bind(this, function() {
             /* If application doesn't quit very likely is because it
@@ -117,7 +121,7 @@ const AppActivationContext = new Lang.Class({
                                                      onComplete: Lang.bind(this,
                                                          function() {
                                                              // Release keybinding to overview again
-                                                             Main.popModal(this._splash);
+                                                             this._grabHelper.ungrab({ actor: this._splash });
 
                                                              this._splash.destroy();
                                                              this._splash = null;
@@ -210,7 +214,10 @@ const AppSplashPage = new Lang.Class({
         this.add_child(this.layout);
 
         this._app = app;
+        this._appIcon = null;
         this._spinner = null;
+        this._iconSize = -1;
+        this._animationSize = -1;
 
         this.background = new St.Widget({ style_class: 'app-splash-page-background',
                                           layout_manager: new Clutter.BinLayout(),
@@ -262,13 +269,27 @@ const AppSplashPage = new Lang.Class({
     },
 
     vfunc_style_changed: function() {
+        let themeNode = this.get_theme_node();
+        let iconSize = themeNode.get_length('icon-size');
+        let animationSize = themeNode.get_length('-animation-size');
+
+        if (this._iconSize == iconSize &&
+            this._animationSize == animationSize) {
+            return;
+        }
+
+        this._iconSize = iconSize;
+        this._animationSize = animationSize;
+
         if (this._spinner) {
             this._spinner.actor.destroy();
             this._spinner = null;
         }
 
-        let themeNode = this.get_theme_node();
-        let iconSize = themeNode.get_length('icon-size');
+        if (this._appIcon) {
+            this._appIcon.destroy();
+            this._appIcon = null;
+        }
 
         let appIcon = this._app.create_icon_texture(iconSize);
         if (appIcon) {
@@ -277,9 +298,9 @@ const AppSplashPage = new Lang.Class({
             appIcon.set_x_expand(true);
             appIcon.set_y_expand(true);
             this.background.add_child(appIcon);
+            this._appIcon = appIcon;
         }
 
-        let animationSize = themeNode.get_length('-animation-size');
         this._spinner = new SplashSpinner(animationSize, SPLASH_CIRCLE_PERIOD);
         this._spinner.actor.x_align = Clutter.ActorAlign.CENTER;
         this._spinner.actor.y_align = Clutter.ActorAlign.CENTER;
