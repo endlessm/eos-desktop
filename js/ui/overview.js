@@ -660,11 +660,21 @@ const Overview = new Lang.Class({
             browser.disconnect(this._firstLaunchId);
             this._firstLaunchId = 0;
         }
+
+        if (this._minimizeStartWindowsId > 0) {
+            global.display.disconnect(this._minimizeStartWindowsId);
+            this._minimizeStartWindowsId = 0;
+        }
     },
 
     _startBrowser: function() {
         // Start the browser, without exiting the overview,
-        // if it's not running already
+        // if it's not running already.
+        // At the same time, minimize all the windows beloging to auto-started applications.
+        this._minimizeStartWindowsId = global.display.connect('window-created', function(metaDisplay, metaWindow) {
+            metaWindow.minimize();
+        });
+
         let browser = Util.getBrowserApp();
         if (browser && browser.get_state() != Shell.AppState.RUNNING) {
             browser.activate();
