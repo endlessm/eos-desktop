@@ -94,6 +94,7 @@ const ShellInfo = new Lang.Class({
             notification = new MessageTray.Notification(this._source, text, null);
             notification.setTransient(true);
             notification.setForFeedback(forFeedback);
+            notification.ignoreHover = true;
         } else {
             notification = this._source.notifications[0];
             notification.update(text, null, { clear: true });

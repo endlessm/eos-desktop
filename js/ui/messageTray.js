@@ -391,6 +391,7 @@ const Notification = new Lang.Class({
         this._soundName = null;
         this._soundFile = null;
         this._soundPlayed = false;
+        this.ignoreHover = false;
 
         source.connect('destroy', Lang.bind(this,
             function (source, reason) {
@@ -2193,11 +2194,18 @@ const MessageTray = new Lang.Class({
             this._trayLeftMouseX = x;
             this._trayLeftMouseY = y;
 
-            // We wait just a little before hiding the message tray in case the user quickly moves the mouse back into it.
-            // We wait for a longer period if the notification popped up where the mouse pointer was already positioned.
-            // That gives the user more time to mouse away from the notification and mouse back in in order to expand it.
-            let timeout = this._useLongerTrayLeftTimeout ? LONGER_HIDE_TIMEOUT * 1000 : HIDE_TIMEOUT * 1000;
-            this._trayLeftTimeoutId = Mainloop.timeout_add(timeout, Lang.bind(this, this._onTrayLeftTimeout));
+            if (this._notification && this._notification.ignoreHover) {
+                // the notification will not be hidden if the pointer leaves it
+                // but we need to handle the focus properly in that case
+                this._notificationFocusGrabber.ungrabFocus();
+                this._pointerInTray = false;
+            } else {
+                // We wait just a little before hiding the message tray in case the user quickly moves the mouse back into it.
+                // We wait for a longer period if the notification popped up where the mouse pointer was already positioned.
+                // That gives the user more time to mouse away from the notification and mouse back in in order to expand it.
+                let timeout = this._useLongerTrayLeftTimeout ? LONGER_HIDE_TIMEOUT * 1000 : HIDE_TIMEOUT * 1000;
+                this._trayLeftTimeoutId = Mainloop.timeout_add(timeout, Lang.bind(this, this._onTrayLeftTimeout));
+            }
         }
     },
 
