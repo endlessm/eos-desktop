@@ -284,7 +284,8 @@ const NotificationPolicy = new Lang.Class({
                                         showBanners: true,
                                         forceExpanded: false,
                                         showInLockScreen: true,
-                                        detailsInLockScreen: false
+                                        detailsInLockScreen: false,
+                                        notificationTimeout: NOTIFICATION_TIMEOUT
                                       });
         Lang.copyProperties(params, this);
     },
@@ -2527,7 +2528,7 @@ const MessageTray = new Lang.Class({
 
     _showNotificationCompleted: function() {
         if (this._notification.urgency != Urgency.CRITICAL)
-            this._updateNotificationTimeout(NOTIFICATION_TIMEOUT * 1000);
+            this._updateNotificationTimeout(this._notification.source.policy.notificationTimeout * 1000);
     },
 
     _updateNotificationTimeout: function(timeout) {

@@ -31,6 +31,8 @@ const WorkspaceThumbnail = imports.ui.workspaceThumbnail;
 // Time for initial animation going into Overview mode
 const ANIMATION_TIME = 0.25;
 
+const OVERVIEW_NOTIFICATION_TIMEOUT = 8;
+
 // Must be less than ANIMATION_TIME, since we switch to
 // or from the overview completely after ANIMATION_TIME,
 // and don't want the shading animation to get cut off
@@ -84,6 +86,8 @@ const ShellInfo = new Lang.Class({
                 }));
             Main.messageTray.add(this._source);
         }
+
+        this._source.policy.notificationTimeout = OVERVIEW_NOTIFICATION_TIMEOUT;
 
         let notification = null;
         if (this._source.notifications.length == 0) {
