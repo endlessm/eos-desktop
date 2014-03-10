@@ -31,6 +31,8 @@ const WorkspaceThumbnail = imports.ui.workspaceThumbnail;
 // Time for initial animation going into Overview mode
 const ANIMATION_TIME = 0.25;
 
+const OVERVIEW_NOTIFICATION_TIMEOUT = 8;
+
 // Must be less than ANIMATION_TIME, since we switch to
 // or from the overview completely after ANIMATION_TIME,
 // and don't want the shading animation to get cut off
@@ -85,11 +87,15 @@ const ShellInfo = new Lang.Class({
             Main.messageTray.add(this._source);
         }
 
+        this._source.policy.showInLockScreen = false;
+        this._source.policy.notificationTimeout = OVERVIEW_NOTIFICATION_TIMEOUT;
+
         let notification = null;
         if (this._source.notifications.length == 0) {
             notification = new MessageTray.Notification(this._source, text, null);
             notification.setTransient(true);
             notification.setForFeedback(forFeedback);
+            notification.ignoreHover = true;
         } else {
             notification = this._source.notifications[0];
             notification.update(text, null, { clear: true });
@@ -100,6 +106,8 @@ const ShellInfo = new Lang.Class({
 
         this._undoCallback = undoCallback;
         if (undoCallback) {
+            // if there is an Undo button, we expand the notification to make it visible
+            this._source.policy.forceExpanded = true;
             notification.addButton('system-undo', _("Undo"));
             notification.connect('action-invoked', Lang.bind(this, this._onUndoClicked));
         }
