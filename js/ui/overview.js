@@ -87,6 +87,7 @@ const ShellInfo = new Lang.Class({
             Main.messageTray.add(this._source);
         }
 
+        this._source.policy.showInLockScreen = false;
         this._source.policy.notificationTimeout = OVERVIEW_NOTIFICATION_TIMEOUT;
 
         let notification = null;
