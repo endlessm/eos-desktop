@@ -1839,7 +1839,8 @@ const AppStoreIcon = new Lang.Class({
         this._removeUndone = true;
 
         let icon = view.getIconForIndex(this._removedItemPos);
-        IconGridLayout.layout.repositionIcon(source.getId(), icon.getId(), folderId);
+        let iconId = (icon != null) ? icon.getId() : null;
+        IconGridLayout.layout.repositionIcon(source.getId(), iconId, folderId);
     },
 
     _acceptFolderDrop: function(source) {
