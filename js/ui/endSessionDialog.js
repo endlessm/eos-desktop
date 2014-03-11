@@ -46,6 +46,8 @@ const GSM_SESSION_MANAGER_LOGOUT_FORCE = 2;
 
 const SEPARATE_POWER_OFF_LOG_OUT_KEY = 'separate-power-off-log-out';
 
+const SHARED_ACCOUNT_MESSAGE = _("Remember that shared accounts are not protected by a password, so make sure to delete any files that you want to keep private.");
+
 const EndSessionDialogIface = <interface name="org.gnome.SessionManager.EndSessionDialog">
 <method name="Open">
     <arg type="u" direction="in" />
@@ -61,21 +63,33 @@ const EndSessionDialogIface = <interface name="org.gnome.SessionManager.EndSessi
 <signal name="Closed" />
 </interface>;
 
+function personalizeMessage (user, message) {
+    if (user == "shared") {
+        return message + "\n\n" + SHARED_ACCOUNT_MESSAGE;
+    } else {
+        return message;
+    }
+}
+
 const logoutDialogContent = {
     subjectWithUser: C_("title", "Log Out %s"),
     subject: C_("title", "Log Out"),
-    inhibitedDescription: _("Click Log Out to quit these applications and log out of the system."),
-    uninhibitedDescriptionWithUser: function(user, seconds) {
-        return ngettext("%s will be logged out automatically in %d second.",
-                        "%s will be logged out automatically in %d seconds.",
-                        seconds).format(user, seconds);
+    inhibitedDescription: function(user) {
+        return personalizeMessage(user, _("Click Log Out to quit these applications and log out of the system."));
     },
-    uninhibitedDescription: function(seconds) {
-        return ngettext("You will be logged out automatically in %d second.",
-                        "You will be logged out automatically in %d seconds.",
-                        seconds).format(seconds);
+    uninhibitedDescriptionWithUser: function(user, username, seconds) {
+        return personalizeMessage(user, ngettext("%s will be logged out automatically in %d second.",
+                                                 "%s will be logged out automatically in %d seconds.",
+                                                 seconds).format(username, seconds));
     },
-    endDescription: _("Logging out of the system."),
+    uninhibitedDescription: function(user, seconds) {
+        return personalizeMessage(user, ngettext("You will be logged out automatically in %d second.",
+                                                 "You will be logged out automatically in %d seconds.",
+                                                 seconds).format(seconds));
+    },
+    endDescription: function(user) {
+        return personalizeMessage(user, _("Logging out of the system."));
+    },
     confirmButtons: [{ signal: 'ConfirmedLogout',
                        label:  C_("button", "Log Out") }],
     iconStyleClass: 'end-session-dialog-logout-icon'
@@ -83,13 +97,17 @@ const logoutDialogContent = {
 
 const shutdownDialogContent = {
     subject: C_("title", "Power Off"),
-    inhibitedDescription: _("Click Power Off to quit these applications and power off the system."),
-    uninhibitedDescription: function(seconds) {
-        return ngettext("The system will power off automatically in %d second.",
-                        "The system will power off automatically in %d seconds.",
-                        seconds).format(seconds);
+    inhibitedDescription: function(user) {
+        return personalizeMessage(user, _("Click Power Off to quit these applications and power off the system."));
     },
-    endDescription: _("Powering off the system."),
+    uninhibitedDescription: function(user, seconds) {
+        return personalizeMessage(user, ngettext("The system will power off automatically in %d second.",
+                                                 "The system will power off automatically in %d seconds.",
+                                                 seconds).format(seconds));
+    },
+    endDescription: function(user) {
+        return personalizeMessage(user, _("Powering off the system."));
+    },
     
     // Note: since these buttons are defined as part of a constant,
     // a change to this gsettings value will not take effect
@@ -111,13 +129,17 @@ const shutdownDialogContent = {
 
 const restartDialogContent = {
     subject: C_("title", "Restart"),
-    inhibitedDescription: _("Click Restart to quit these applications and restart the system."),
-    uninhibitedDescription: function(seconds) {
-        return ngettext("The system will restart automatically in %d second.",
-                        "The system will restart automatically in %d seconds.",
-                        seconds).format(seconds);
+    inhibitedDescription: function(user) {
+        return personalizeMessage(user, _("Click Restart to quit these applications and restart the system."));
     },
-    endDescription: _("Restarting the system."),
+    uninhibitedDescription: function(user, seconds) {
+        return personalizeMessage(user, ngettext("The system will restart automatically in %d second.",
+                                                 "The system will restart automatically in %d seconds.",
+                                                 seconds).format(seconds));
+    },
+    endDescription: function(user) {
+        return personalizeMessage (user, _("Restarting the system."));
+    },
     confirmButtons: [{ signal: 'ConfirmedReboot',
                        label:  C_("button", "Restart") }],
     iconName: 'view-refresh-symbolic',
@@ -335,11 +357,12 @@ const EndSessionDialog = new Lang.Class({
         let dialogContent = DialogContent[this._type];
 
         let subject = dialogContent.subject;
+        let userName = this._user.get_user_name();
         let description;
 
         if (this._inhibitors.length > 0) {
             this._stopTimer();
-            description = dialogContent.inhibitedDescription;
+            description = dialogContent.inhibitedDescription(userName);
         } else if (this._secondsLeft > 0 && this._inhibitors.length == 0) {
             let displayTime = _roundSecondsToInterval(this._totalSecondsToStayOpen,
                                                       this._secondsLeft,
@@ -353,16 +376,16 @@ const EndSessionDialog = new Lang.Class({
                         subject = dialogContent.subjectWithUser.format(realName);
 
                     if (dialogContent.uninhibitedDescriptionWithUser)
-                        description = dialogContent.uninhibitedDescriptionWithUser(realName, displayTime);
+                        description = dialogContent.uninhibitedDescriptionWithUser(userName, realName, displayTime);
                     else
-                        description = dialogContent.uninhibitedDescription(displayTime);
+                        description = dialogContent.uninhibitedDescription(userName, displayTime);
                 }
             }
 
             if (!description)
-                description = dialogContent.uninhibitedDescription(displayTime);
+                description = dialogContent.uninhibitedDescription(userName, displayTime);
         } else {
-            description = dialogContent.endDescription;
+            description = dialogContent.endDescription(userName);
         }
 
         _setLabelText(this._subjectLabel, subject);
