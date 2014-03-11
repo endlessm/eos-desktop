@@ -1194,7 +1194,7 @@ const Source = new Lang.Class({
 
         this.notifications = [];
 
-        this.policy = this._createPolicy();
+        this.policy = new NotificationPolicy();
     },
 
     get count() {
@@ -1216,10 +1216,6 @@ const Source = new Lang.Class({
 
     countUpdated: function() {
         this.emit('count-updated');
-    },
-
-    _createPolicy: function() {
-        return new NotificationPolicy();
     },
 
     buildRightClickMenu: function() {
