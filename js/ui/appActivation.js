@@ -221,6 +221,7 @@ const AppSplashPage = new Lang.Class({
 
         this.background = new St.Widget({ style_class: 'app-splash-page-background',
                                           layout_manager: new Clutter.BinLayout(),
+                                          clip_to_allocation: true,
                                           x_expand: true,
                                           y_expand: true });
 
@@ -236,7 +237,8 @@ const AppSplashPage = new Lang.Class({
 
             this.background.connect('allocation-changed', Lang.bind(this, function(actor, box, flags) {
                 this.background.style_class = 'app-splash-page-custom-background';
-                this.background.style = 'background-image: url("%s");background-size: %dpx %dpx'.format(bg_path, box.x2 - box.x1, box.y2 - box.y1);
+                this.background.style =
+                    'background-image: url("%s");background-size: cover;background-position: center center;'.format(bg_path);
             }));
         }
 
