@@ -382,6 +382,10 @@ const LayoutManager = new Lang.Class({
         this.panelBox.connect('notify::visible',
                               Lang.bind(this, this._updateTrayBox));
 
+        this.modalDialogGroup = new St.Widget({ name: 'modalDialogGroup',
+                                                layout_manager: new Clutter.BinLayout() });
+        this.uiGroup.add_actor(this.modalDialogGroup);
+
         this.keyboardBox = new St.BoxLayout({ name: 'keyboardBox',
                                               reactive: true,
                                               track_hover: true });
