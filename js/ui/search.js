@@ -18,7 +18,6 @@ const Main = imports.ui.main;
 const Overview = imports.ui.overview;
 const RemoteSearch = imports.ui.remoteSearch;
 const Separator = imports.ui.separator;
-const Util = imports.misc.util;
 
 const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 
@@ -635,8 +634,11 @@ const SearchResults = new Lang.Class({
         if (newDefaultResult != this._defaultResult) {
             if (this._defaultResult)
                 this._defaultResult.setSelected(false);
-            if (newDefaultResult)
+            if (newDefaultResult) {
                 newDefaultResult.setSelected(this._highlightDefault);
+                if (this._highlightDefault)
+                    ActorVisibility.ensureActorVisibleInScrollView(this._scrollView, newDefaultResult.actor);
+            }
 
             this._defaultResult = newDefaultResult;
         }
@@ -673,8 +675,11 @@ const SearchResults = new Lang.Class({
 
     highlightDefault: function(highlight) {
         this._highlightDefault = highlight;
-        if (this._defaultResult)
+        if (this._defaultResult) {
             this._defaultResult.setSelected(highlight);
+            if (highlight)
+                ActorVisibility.ensureActorVisibleInScrollView(this._scrollView, this._defaultResult.actor);
+        }
     },
 
     navigateFocus: function(direction) {
