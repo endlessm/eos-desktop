@@ -241,20 +241,16 @@ const UserMenuButton = new Lang.Class({
         this._loginManager = LoginManager.getLoginManager();
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
-        this._iconBox = new St.Bin();
-        box.add(this._iconBox, { y_align: St.Align.MIDDLE, y_fill: false });
+        this._icon = new St.Icon({ style_class: 'settings-menu-icon' });
+        box.add(this._icon);
 
         let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/settings-normal.png');
-        let giconNormal = new Gio.FileIcon({ file: iconFileNormal });
-        this._settingsIconNormal = new St.Icon({ gicon: giconNormal,
-                                                 style_class: 'settings-menu-icon' });
+        this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
 
         let iconFileHover = Gio.File.new_for_path(global.datadir + '/theme/settings-hover.png');
-        let giconHover = new Gio.FileIcon({ file: iconFileHover });
-        this._settingsIconHover = new St.Icon({ gicon: giconHover,
-                                                style_class: 'settings-menu-icon' });
+        this._giconHover = new Gio.FileIcon({ file: iconFileHover });
 
-        this._iconBox.child = this._settingsIconNormal;
+        this._icon.gicon = this._giconNormal;
         this.actor.connect('notify::hover', Lang.bind(this, this._onHoverChanged));
 
         this._createSubMenu();
@@ -396,9 +392,9 @@ const UserMenuButton = new Lang.Class({
         // so no need to change the icon here based on the presence
 
         if (Main.sessionMode.isLocked)
-            this._iconBox.visible = Main.screenShield.locked;
+            this._icon.visible = Main.screenShield.locked;
         else
-            this._iconBox.visible = true;
+            this._icon.visible = true;
     },
 
     _createSubMenu: function() {
@@ -617,9 +613,9 @@ const UserMenuButton = new Lang.Class({
 
     _onHoverChanged: function() {
         if (this.actor.get_hover()) {
-            this._iconBox.child = this._settingsIconHover;
+            this._icon.gicon = this._giconHover;
         } else {
-            this._iconBox.child = this._settingsIconNormal;
+            this._icon.gicon = this._giconNormal;
         }
     }
 });
