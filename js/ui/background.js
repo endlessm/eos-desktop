@@ -136,6 +136,25 @@ const BackgroundCache = new Lang.Class({
         this._removeContent(this._images, content);
     },
 
+    _attachCallerToFileLoad: function(caller, fileLoad) {
+        fileLoad.callers.push(caller);
+
+        if (!caller.cancellable)
+            return;
+
+        caller.cancellable.connect(Lang.bind(this, function() {
+            let idx = fileLoad.callers.indexOf(caller);
+            fileLoad.callers.splice(idx, 1);
+
+            if (fileLoad.callers.length == 0) {
+                fileLoad.cancellable.cancel();
+
+                let idx = this._pendingFileLoads.indexOf(fileLoad);
+                this._pendingFileLoads.splice(idx, 1);
+            }
+        }));
+    },
+
     _loadImageContent: function(params) {
         params = Params.parse(params, { monitorIndex: 0,
                                         style: null,
@@ -144,27 +163,28 @@ const BackgroundCache = new Lang.Class({
                                         cancellable: null,
                                         onFinished: null });
 
+        let caller = { monitorIndex: params.monitorIndex,
+                       effects: params.effects,
+                       cancellable: params.cancellable,
+                       onFinished: params.onFinished };
+
         for (let i = 0; i < this._pendingFileLoads.length; i++) {
-            if (this._pendingFileLoads[i].filename == params.filename &&
-                this._pendingFileLoads[i].style == params.style) {
-                this._pendingFileLoads[i].callers.push({ shouldCopy: true,
-                                                         monitorIndex: params.monitorIndex,
-                                                         effects: params.effects,
-                                                         onFinished: params.onFinished });
+            let fileLoad = this._pendingFileLoads[i];
+
+            if (fileLoad.filename == params.filename &&
+                fileLoad.style == params.style) {
+                this._attachCallerToFileLoad(caller, fileLoad);
                 return;
             }
         }
 
-        this._pendingFileLoads.push({ filename: params.filename,
-                                      style: params.style,
-                                      callers: [{ shouldCopy: false,
-                                                  monitorIndex: params.monitorIndex,
-                                                  effects: params.effects,
-                                                  onFinished: params.onFinished }] });
+        let fileLoad = { filename: params.filename,
+                         style: params.style,
+                         cancellable: new Gio.Cancellable(),
+                         callers: [] };
+        this._attachCallerToFileLoad(caller, fileLoad);
 
-        let content = new Meta.Background({ meta_screen: global.screen,
-                                            monitor: params.monitorIndex,
-                                            effects: params.effects });
+        let content = new Meta.Background({ meta_screen: global.screen });
 
         content.load_file_async(params.filename,
                                 params.style,
@@ -175,35 +195,26 @@ const BackgroundCache = new Lang.Class({
                                                   content.load_file_finish(result);
 
                                                   this._monitorFile(params.filename);
-                                                  this._images.push(content);
                                               } catch(e) {
                                                   content = null;
                                               }
 
-                                              for (let i = 0; i < this._pendingFileLoads.length; i++) {
-                                                  let pendingLoad = this._pendingFileLoads[i];
-                                                  if (pendingLoad.filename != params.filename ||
-                                                      pendingLoad.style != params.style)
-                                                      continue;
+                                              for (let i = 0; i < fileLoad.callers.length; i++) {
+                                                  let caller = fileLoad.callers[i];
+                                                  if (caller.onFinished) {
+                                                      let newContent;
 
-                                                  for (let j = 0; j < pendingLoad.callers.length; j++) {
-                                                      if (pendingLoad.callers[j].onFinished) {
-                                                          let newContent;
-
-                                                          if (content && pendingLoad.callers[j].shouldCopy) {
-                                                              newContent = content.copy(pendingLoad.callers[j].monitorIndex,
-                                                                                        pendingLoad.callers[j].effects);
-                                                              this._images.push(newContent);
-                                                          } else {
-                                                              newContent = content;
-                                                          }
-
-                                                          pendingLoad.callers[j].onFinished(newContent);
+                                                      if (content) {
+                                                          newContent = content.copy(caller.monitorIndex, caller.effects);
+                                                          this._images.push(newContent);
                                                       }
-                                                  }
 
-                                                  this._pendingFileLoads.splice(i, 1);
+                                                      caller.onFinished(newContent);
+                                                  }
                                               }
+
+                                              let idx = this._pendingFileLoads.indexOf(fileLoad);
+                                              this._pendingFileLoads.splice(idx, 1);
                                           }));
     },
 
@@ -760,17 +771,18 @@ const BackgroundManager = new Lang.Class({
             Lang.bind(this, function() {
                 newBackground.disconnect(newBackground.loadedSignalId);
                 newBackground.loadedSignalId = 0;
+
+                if (this._newBackground != newBackground) {
+                    /* Not interesting, we queued another load */
+                    newBackground.actor.destroy();
+                    return;
+                }
+
                 Tweener.addTween(this.background.actor,
                                  { opacity: 0,
                                    time: FADE_ANIMATION_TIME,
                                    transition: 'easeOutQuad',
                                    onComplete: Lang.bind(this, function() {
-                                       if (this._newBackground != newBackground) {
-                                           /* Not interesting, we queued another load */
-                                           newBackground.actor.destroy();
-                                           return;
-                                       }
-
                                        this.background.actor.destroy();
                                        this.background = newBackground;
                                        this._newBackground = null;
