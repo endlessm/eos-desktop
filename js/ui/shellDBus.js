@@ -526,13 +526,19 @@ const AppLauncher = new Lang.Class({
             return true;
         }
         else {
-            var app = this._appSys.lookup_app(name + ".desktop");
+            let appName = name;
+            if (!appName.endsWith('.desktop'))
+                appName += '.desktop';
+            
+            let app = this._appSys.lookup_app(appName);
 
             if (app) {
                 let activationContext = new AppActivation.AppActivationContext(app);
                 activationContext.activate();
 
                 return true;
+            } else {
+                log('Unable to launch app ' + appName + ': Not installed');
             }
         }
 
