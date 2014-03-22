@@ -170,8 +170,8 @@ const AppActivationContext = new Lang.Class({
             ' seconds to launch');
     },
 
-    _onAppStateChanged: function(appSystem, app) {
-        if (app.state != Shell.AppState.RUNNING) {
+    _onAppStateChanged: function(appSystem) {
+        if (this._app.state != Shell.AppState.RUNNING) {
             return;
         }
 
@@ -180,7 +180,7 @@ const AppActivationContext = new Lang.Class({
 
         if (this._abort) {
             this._abort = false;
-            app.request_quit();
+            this._app.request_quit();
             return;
         }
 
