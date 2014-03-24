@@ -42,8 +42,11 @@ const BackgroundMenu = new Lang.Class({
 });
 
 function addBackgroundMenu(clickAction) {
-    let cursor = new St.Bin({ opacity: 0 });
+    if (!Main.sessionMode.hasOverview) {
+        return;
+    }
 
+    let cursor = new St.Bin({ opacity: 0 });
     Main.uiGroup.add_actor(cursor);
 
     let actor = clickAction.get_actor();
