@@ -1,5 +1,6 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
+const AcountsService = imports.gi.AccountsService;
 const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
@@ -91,6 +92,8 @@ const ScreenShield = new Lang.Class({
             }));
 
         this._settings = new Gio.Settings({ schema: SCREENSAVER_SCHEMA });
+
+        this._user = AccountsService.UserManager.get_default().get_user(GLib.get_user_name());
 
         this._isModal = false;
         this._isGreeter = false;
@@ -191,7 +194,7 @@ const ScreenShield = new Lang.Class({
 
         this._becameActiveId = this.idleMonitor.add_user_active_watch(Lang.bind(this, this._onUserBecameActive));
 
-        let shouldLock = this._settings.get_boolean(LOCK_ENABLED_KEY) && !this._isLocked;
+        let shouldLock = this._settings.get_boolean(LOCK_ENABLED_KEY) && !this._isLocked && !this._user.get_automatic_login();
 
         if (shouldLock) {
             let lockTimeout = Math.max(STANDARD_FADE_TIME, this._settings.get_uint(LOCK_DELAY_KEY));
@@ -231,8 +234,8 @@ const ScreenShield = new Lang.Class({
         this.actor.raise_top();
 
         // Shortcircuit in case the mouse was moved before the fade completed
-        // or lock is disabled
-        if (!lightboxWasShown || !this._settings.get_boolean(LOCK_ENABLED_KEY)) {
+        // or lock is disabled or user is logged automatically
+        if (!lightboxWasShown || !this._settings.get_boolean(LOCK_ENABLED_KEY) || this._user.get_automatic_login()) {
             this.deactivate(false);
             return;
         }
