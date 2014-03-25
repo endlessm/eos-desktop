@@ -263,6 +263,8 @@ const UserMenuButton = new Lang.Class({
                                   Lang.bind(this, this._updateMultiUser));
         this._userManager.connect('user-removed',
                                   Lang.bind(this, this._updateMultiUser));
+        this._user.connect('notify::automatic-login',
+                            Lang.bind(this, this._updateLockScreen));
         this._lockdownSettings.connect('changed::' + DISABLE_USER_SWITCH_KEY,
                                        Lang.bind(this, this._updateSwitchUser));
         this._lockdownSettings.connect('changed::' + DISABLE_LOG_OUT_KEY,
@@ -344,7 +346,7 @@ const UserMenuButton = new Lang.Class({
 
     _updateLockScreen: function() {
         let allowLockScreen = !this._lockdownSettings.get_boolean(DISABLE_LOCK_SCREEN_KEY);
-        this._lockOption.visible = allowLockScreen && LoginManager.canLock();
+        this._lockOption.visible = allowLockScreen && LoginManager.canLock() && !this._user.get_automatic_login();
     },
 
     _updateHaveShutdown: function() {
