@@ -231,7 +231,8 @@ const ScreenShield = new Lang.Class({
         this.actor.raise_top();
 
         // Shortcircuit in case the mouse was moved before the fade completed
-        if (!lightboxWasShown) {
+        // or lock is disabled
+        if (!lightboxWasShown || !this._settings.get_boolean(LOCK_ENABLED_KEY)) {
             this.deactivate(false);
             return;
         }
