@@ -862,12 +862,15 @@ StScrollBar StButton#vhandle:active {
 
 /* Dash */
 
-#dash {
+#dash, #dash-end {
     color: #5f5f5f;
     font-size: 11pt;
     padding: 4px 0px;
     background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(128, 128, 128, 0.4);
+}
+
+#dash {
     border-left: 0px;
     border-radius: 0px 9px 9px 0px;
 }
@@ -876,6 +879,17 @@ StScrollBar StButton#vhandle:active {
     border-left: 1px;
     border-right: 0px;
     border-radius: 9px 0px 0px 9px;
+}
+
+#dash-end {
+    border-right: 0px;
+    border-radius: 9px 0px 0px 9px;
+}
+
+#dash-end:rtl {
+    border-left: 0px;
+    border-right: 1px;
+    border-radius: 0px 9px 9px 0px;
 }
 
 .placeholder {

@@ -7,6 +7,7 @@ const Meta = imports.gi.Meta;
 const St = imports.gi.St;
 const Shell = imports.gi.Shell;
 
+const Dash = imports.ui.dash;
 const Main = imports.ui.main;
 const Params = imports.misc.params;
 const Tweener = imports.ui.tweener;
@@ -292,7 +293,8 @@ const DashSlider = new Lang.Class({
     Extends: SlidingControl,
 
     _init: function(dash) {
-        this.parent({ slideDirection: SlideDirection.LEFT });
+        this.parent({ slideDirection: dash.dashPosition == Dash.DashPosition.END ?
+                      SlideDirection.RIGHT : SlideDirection.LEFT });
 
         this._dash = dash;
 

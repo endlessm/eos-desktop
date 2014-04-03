@@ -23,6 +23,13 @@ const DASH_ITEM_HOVER_TIMEOUT = 300;
 
 const ICON_SIZE = 64;
 
+const DASH_POSITION_KEY = 'dash-position';
+
+const DashPosition = {
+    START: 0,
+    END: 1
+};
+
 function getAppFromSource(source) {
     if (source instanceof AppDisplay.AppIcon) {
         return source.app;
@@ -341,9 +348,9 @@ const DashActor = new Lang.Class({
     Name: 'DashActor',
     Extends: St.Widget,
 
-    _init: function() {
+    _init: function(dashPosition) {
         let layout = new Clutter.BoxLayout({ orientation: Clutter.Orientation.VERTICAL });
-        this.parent({ name: 'dash',
+        this.parent({ name: dashPosition == DashPosition.END ? 'dash-end' : 'dash',
                       layout_manager: layout,
                       clip_to_allocation: true });
     },
@@ -402,7 +409,8 @@ const Dash = new Lang.Class({
         this._resetHoverTimeoutId = 0;
         this._labelShowing = false;
 
-        this._container = new DashActor();
+        this._dashPosition = global.settings.get_enum(DASH_POSITION_KEY);
+        this._container = new DashActor(this._dashPosition);
         this._box = new St.BoxLayout({ vertical: true,
                                        clip_to_allocation: true });
         this._box._delegate = this;
@@ -1003,6 +1011,10 @@ const Dash = new Lang.Class({
         }
 
         this._showAppsIcon.hideLabel();
+    },
+
+    get dashPosition() {
+        return this._dashPosition;
     }
 });
 

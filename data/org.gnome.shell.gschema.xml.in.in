@@ -1,4 +1,9 @@
 <schemalist>
+  <enum id="org.gnome.shell.DashPosition">
+    <value nick="start" value="0"/>
+    <value nick="end" value="1"/>
+  </enum>
+
   <schema id="org.gnome.shell" path="/org/gnome/shell/"
           gettext-domain="@GETTEXT_PACKAGE@">
     <key name="development-tools" type="b">
@@ -64,6 +69,18 @@
         Default is for a single pixel in the very corner.
         For some virtual machines, this value may need to be set
         larger than the default.
+      </_description>
+    </key>
+    <key name="dash-position" enum="org.gnome.shell.DashPosition">
+      <default>'end'</default>
+      <_summary>
+        Set the left/right position of the dash on the overview
+      </_summary>
+      <_description>
+        Default position of the dash is at the end of the screen
+	(right edge for LTR text direction).
+        Unlike the hot corners, the opposite side is used for
+	RTL text direction.
       </_description>
     </key>
     <key name="no-default-maximize" type="b">
