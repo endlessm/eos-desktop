@@ -1,5 +1,6 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
+const AccountsService = imports.gi.AccountsService;
 const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
 const Gdk = imports.gi.Gdk;
@@ -395,7 +396,37 @@ const Overview = new Lang.Class({
         }
     },
 
+    _onCurrentUserLanguageChanged: function() {
+        Shell.util_set_locale(this._currentUser.get_language());
+    },
+
+    _onCurrentUserLoaded: function() {
+        if (this._onCurrentUserLoadedId > 0) {
+            this._currentUser.disconnect(this._onCurrentUserLoadedId);
+            this._currentUserLoadedId = 0;
+        }
+
+        this._currentUser.connect('notify::language',
+                                  Lang.bind(this, this._onCurrentUserLanguageChanged));
+
+        this._onCurrentUserLanguageChanged();
+    },
+
+    _loadCurrentUser: function() {
+        this._currentUser = AccountsService.UserManager.get_default().get_user(GLib.get_user_name());
+        if (this._currentUser.is_loaded) {
+            this._onCurrentUserLoaded();
+        } else {
+            this._onCurrentUserLoadedId = this._currentUser.connect('notify::is-loaded',
+                                                                    Lang.bind(this, this._onCurrentUserLoaded));
+        }
+    },
+
     _sessionUpdated: function() {
+        if (Main.sessionMode.currentMode == 'initial-setup') {
+            this._loadCurrentUser();
+        }
+
         this.isDummy = !Main.sessionMode.hasOverview;
         this._createOverview();
     },
