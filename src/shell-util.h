@@ -48,6 +48,8 @@ GdkPixbuf *shell_util_create_pixbuf_from_data (const guchar      *data,
 void    shell_util_cursor_tracker_to_clutter (MetaCursorTracker *tracker,
                                               ClutterTexture    *texture);
 
+void    shell_util_set_locale                (const gchar *new_locale);
+
 G_END_DECLS
 
 #endif /* __SHELL_UTIL_H__ */

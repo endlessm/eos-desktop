@@ -9,6 +9,7 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <locale.h>
 
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
 #include <langinfo.h>
@@ -411,4 +412,16 @@ shell_util_cursor_tracker_to_clutter (MetaCursorTracker *tracker,
 
   sprite = meta_cursor_tracker_get_sprite (tracker);
   clutter_texture_set_cogl_texture (texture, sprite);
+}
+
+/**
+ * shell_util_set_locale:
+ * @new_locale: the new locale to setup
+ *
+ * Sets LC_ALL to the @new_locale.
+ */
+void
+shell_util_set_locale (const gchar *new_locale)
+{
+  setlocale (LC_ALL, new_locale);
 }
