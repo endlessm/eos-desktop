@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const GObject = imports.gi.GObject;
+const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 
@@ -87,21 +88,21 @@ const SideComponent = new Lang.Class({
         Main.overview.hide();
     },
 
-    toggle: function(params) {
+    toggle: function(timestamp, params) {
         if (this._visible) {
-            this.hide(params);
+            this.hide(timestamp, params);
         } else {
-            this.show(params);
+            this.show(timestamp, params);
         }
     },
 
-    show: function(params) {
+    show: function(timestamp, params) {
         this.callOnOverviewHidden(Lang.bind(this, function() {
-            this.callShow(global.get_current_time(), params);
+            this.callShow(timestamp, params);
         }));
     },
 
-    hide: function(params) {
-        this.callHide(global.get_current_time(), params);
+    hide: function(timestamp, params) {
+        this.callHide(timestamp, params);
     }
 });

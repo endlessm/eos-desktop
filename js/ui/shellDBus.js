@@ -521,7 +521,7 @@ const AppLauncher = new Lang.Class({
 
     Launch: function(name) {
         if (name == "eos-app-store") {
-            Main.appStore.show(true);
+            Main.appStore.show(global.get_current_time(), true);
 
             return true;
         }

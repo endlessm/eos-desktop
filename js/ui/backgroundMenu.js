@@ -23,15 +23,15 @@ const BackgroundMenu = new Lang.Class({
         this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
         this.addAction(_("Add Application"), Lang.bind(this, function() {
-            Main.appStore.showPage('apps');
+            Main.appStore.showPage(global.get_current_time(), 'apps');
         }));
 
         this.addAction(_("Add Website Link"), Lang.bind(this, function() {
-            Main.appStore.showPage('web');
+            Main.appStore.showPage(global.get_current_time(), 'web');
         }));
 
         this.addAction(_("Add Folder"), Lang.bind(this, function() {
-            Main.appStore.showPage('folders');
+            Main.appStore.showPage(global.get_current_time(), 'folders');
         }));
 
         this.actor.add_style_class_name('background-menu');

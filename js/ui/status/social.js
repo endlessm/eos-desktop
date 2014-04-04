@@ -41,9 +41,9 @@ const SocialBarButton = new Lang.Class({
             this.setGIcon(this._giconPressed);
             // pressing the button when the overview is being shown always displays the side bar
             if (Main.overview.visible) {
-                Main.socialBar.show();
+                Main.socialBar.show(event.get_time());
             } else {
-                Main.socialBar.toggle();
+                Main.socialBar.toggle(event.get_time());
             }
         } catch(e) {
             log('Unable to toggle social bar visibility: ' + e.message);

@@ -1736,7 +1736,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
-        Main.appStore.show(true);
+        Main.appStore.show(global.get_current_time(), true);
     },
 
     getName: function() {
