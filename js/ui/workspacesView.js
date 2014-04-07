@@ -634,8 +634,6 @@ const WorkspacesDisplay = new Lang.Class({
 
         let [x, y] = this.actor.get_transformed_position();
 
-        let rtl = (Clutter.get_default_text_direction () == Clutter.TextDirection.RTL);
-
         let monitors = Main.layoutManager.monitors;
         let m = 0;
         for (let i = 0; i < monitors.length; i++) {

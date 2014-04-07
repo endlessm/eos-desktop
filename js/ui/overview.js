@@ -463,17 +463,24 @@ const Overview = new Lang.Class({
                                                               this._thumbnailsBox,
                                                               this._viewSelector);
 
-        this._controls.dashActor.x_align = Clutter.ActorAlign.START;
+        this._controls.dashActor.x_align =
+            this._dash.dashPosition == Dash.DashPosition.END ?
+            Clutter.ActorAlign.END : Clutter.ActorAlign.START;
         this._controls.dashActor.y_expand = true;
 
         // Put the dash in a separate layer to allow content to be centered
         this._groupStack.add_actor(this._controls.dashActor);
 
         // Pack all the actors into the group
-        this._group.add_actor(this._controls.dashSpacer);
+        if (this._dash.dashPosition == Dash.DashPosition.START) {
+            this._group.add_actor(this._controls.dashSpacer);
+        }
         this._group.add(this._viewSelector.actor, { x_fill: true,
                                                     expand: true });
         this._group.add_actor(this._controls.thumbnailsActor);
+        if (this._dash.dashPosition == Dash.DashPosition.END) {
+            this._group.add_actor(this._controls.dashSpacer);
+        }
 
         // Add the group to the overview box
         this._overview.add(this._groupStack, { y_fill: true, expand: true });
