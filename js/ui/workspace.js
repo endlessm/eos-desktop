@@ -1275,7 +1275,7 @@ const Workspace = new Lang.Class({
         if (this._lookupIndex (metaWin) != -1)
             return;
 
-        if (!this._isMyWindow(win) || !this._isOverviewWindow(win) || !SideComponent.isSideComponentWindow(win))
+        if (!this._isMyWindow(win) || !this._isOverviewWindow(win) || SideComponent.isSideComponentWindow(win))
             return;
 
         let clone;
