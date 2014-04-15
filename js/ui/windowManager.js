@@ -424,6 +424,63 @@ const WindowManager = new Lang.Class({
                            transition: 'linear' });
     },
 
+    _maybeHideOtherWindows: function(actor, animate) {
+        if (!SideComponent.isSideComponentWindow(actor))
+            return;
+
+        let winActors = global.get_window_actors();
+        for (let i = 0; i < winActors.length; i++) {
+            if (!winActors[i].get_meta_window().showing_on_its_workspace())
+                continue;
+
+            if (SideComponent.isSideComponentWindow(winActors[i]))
+                continue;
+
+            if (animate) {
+                Tweener.addTween(winActors[i],
+                                 { opacity: 0,
+                                   time: WINDOW_ANIMATION_TIME,
+                                   transition: 'easeOutQuad',
+                                   onComplete: function(winActor) { winActor.hide(); },
+                                   onCompleteParams: [winActors[i]],
+                                   onOverwrite: function(winActor) { winActor.hide(); },
+                                   onOverwriteParams: [winActors[i]]
+                                 });
+            } else {
+                winActors[i].hide();
+            }
+        }
+    },
+
+    _maybeShowOtherWindows: function(actor, animate) {
+        if (!SideComponent.isSideComponentWindow(actor))
+            return;
+
+        let winActors = global.get_window_actors();
+        for (let i = 0; i < winActors.length; i++) {
+            if (!winActors[i].get_meta_window().showing_on_its_workspace())
+                continue;
+
+            if (SideComponent.isSideComponentWindow(winActors[i]))
+                continue;
+
+            if (animate) {
+                winActors[i].opacity = 0;
+                winActors[i].show();
+                Tweener.addTween(winActors[i],
+                                 { opacity: 255,
+                                   time: WINDOW_ANIMATION_TIME,
+                                   transition: 'easeOutQuad',
+                                   onOverwrite: function(winActor) { winActor.opacity = 255; },
+                                   onOverwriteParams: [winActors[i]]
+                                 });
+            } else {
+                winActors[i].opacity = 255;
+                winActors[i].show();
+            }
+        }
+    },
+
     _mapWindow : function(shellwm, actor) {
         actor._windowType = actor.meta_window.get_window_type();
         actor._notifyWindowTypeSignalId = actor.meta_window.connect('notify::window-type', Lang.bind(this, function () {
@@ -495,6 +552,8 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
+
+            this._maybeHideOtherWindows(actor, true);
         } else {
             /* Fade window in */
             actor.opacity = 0;
@@ -569,6 +628,7 @@ const WindowManager = new Lang.Class({
 
         if (!this._shouldAnimateActor(actor)) {
             shellwm.completed_destroy(actor);
+            this._maybeShowOtherWindows(actor, false);
             return;
         }
 
@@ -626,6 +686,8 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
+
+            this._maybeShowOtherWindows(actor, true);
         } else {
             shellwm.completed_destroy(actor);
         }
