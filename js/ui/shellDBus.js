@@ -426,28 +426,30 @@ const ScreenSaverDBus = new Lang.Class({
     },
 });
 
-const AppStoreIface = <interface name="org.gnome.Shell.AppStore">
-<method name="AddApplication">
-    <arg type="s" direction="in" name="id" />
-</method>
-<method name="RemoveApplication">
-    <arg type="s" direction="in" name="id" />
-</method>
-<method name="ListApplications">
-    <arg type="as" direction="out" name="applications" />
-</method>
-<method name="AddFolder">
-    <arg type="s" direction="in" name="id" />
-</method>
-<method name="RemoveFolder">
-    <arg type="s" direction="in" name="id" />
-</method>
-<method name="ResetDesktop">
-</method>
-<signal name="ApplicationsChanged">
-    <arg type="as" name="applications" />
-</signal>
-</interface>;
+const AppStoreIface = '<node> \
+<interface name="org.gnome.Shell.AppStore"> \
+<method name="AddApplication"> \
+    <arg type="s" direction="in" name="id" /> \
+</method> \
+<method name="RemoveApplication"> \
+    <arg type="s" direction="in" name="id" /> \
+</method> \
+<method name="ListApplications"> \
+    <arg type="as" direction="out" name="applications" /> \
+</method> \
+<method name="AddFolder"> \
+    <arg type="s" direction="in" name="id" /> \
+</method> \
+<method name="RemoveFolder"> \
+    <arg type="s" direction="in" name="id" /> \
+</method> \
+<method name="ResetDesktop"> \
+</method> \
+<signal name="ApplicationsChanged"> \
+    <arg type="as" name="applications" /> \
+</signal> \
+</interface> \
+</node>';
 
 const AppStoreService = new Lang.Class({
     Name: 'AppStoreServiceDBus',
@@ -508,12 +510,14 @@ const AppStoreService = new Lang.Class({
     }
 });
 
-const AppLauncherIface = <interface name="org.gnome.Shell.AppLauncher">
-<method name="Launch">
-    <arg type="s" direction="in" name="name" />
-    <arg type="b" direction="out" name="success" />
-</method>
-</interface>;
+const AppLauncherIface = '<node> \
+<interface name="org.gnome.Shell.AppLauncher"> \
+<method name="Launch"> \
+    <arg type="s" direction="in" name="name" /> \
+    <arg type="b" direction="out" name="success" /> \
+</method> \
+</interface> \
+</node>';
 
 const AppLauncher = new Lang.Class({
     Name: 'AppLauncherDBus',
