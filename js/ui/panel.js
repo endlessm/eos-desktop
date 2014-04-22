@@ -376,7 +376,10 @@ const Panel = new Lang.Class({
 
     _getPreferredWidth: function(actor, forHeight, alloc) {
         alloc.min_size = -1;
-        alloc.natural_size = Main.layoutManager.primaryMonitor.width;
+        alloc.natural_size = 0;
+        if (Main.layoutManager.primaryMonitor) {
+            alloc.natural_size = Main.layoutManager.primaryMonitor.width;
+        }
     },
 
     _getPreferredHeight: function(actor, forWidth, alloc) {

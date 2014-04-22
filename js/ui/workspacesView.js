@@ -584,7 +584,7 @@ const WorkspacesDisplay = new Lang.Class({
     },
 
     _getPrimaryView: function() {
-        if (!this._workspacesViews.length)
+        if (!this._workspacesViews.length || this._primaryIndex == -1)
             return null;
         if (this._workspacesOnlyOnPrimary)
             return this._workspacesViews[0];
@@ -593,7 +593,12 @@ const WorkspacesDisplay = new Lang.Class({
     },
 
     activeWorkspaceHasMaximizedWindows: function() {
-        return this._getPrimaryView().getActiveWorkspace().hasMaximizedWindows();
+        let primaryView = this._getPrimaryView();
+        if (primaryView) {
+            return primaryView.getActiveWorkspace().hasMaximizedWindows();
+        } else {
+            return false;
+        }
     },
 
     _parentSet: function(actor, oldParent) {

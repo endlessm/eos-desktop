@@ -2265,8 +2265,8 @@ const MessageTray = new Lang.Class({
         let notificationQueue = this._notificationQueue;
         let notificationUrgent = notificationQueue.length > 0 && notificationQueue[0].urgency == Urgency.CRITICAL;
         let notificationForFeedback = notificationQueue.length > 0 && notificationQueue[0].forFeedback;
-        let notificationForFeedbackHidden = notificationForFeedback && Main.layoutManager.bottomMonitor.inFullscreen;
-        let notificationsLimited = this._busy || Main.layoutManager.bottomMonitor.inFullscreen;
+        let notificationForFeedbackHidden = notificationForFeedback && (Main.layoutManager.bottomMonitor && Main.layoutManager.bottomMonitor.inFullscreen);
+        let notificationsLimited = this._busy || (Main.layoutManager.bottomMonitor && Main.layoutManager.bottomMonitor.inFullscreen);
         let notificationsPending = notificationQueue.length > 0 && (!notificationsLimited || notificationUrgent || notificationForFeedback) && Main.sessionMode.hasNotifications;
         let nextNotification = notificationQueue.length > 0 ? notificationQueue[0] : null;
         let notificationPinned = this._pointerInTray && !this._notificationRemoved;

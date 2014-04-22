@@ -197,7 +197,9 @@ const WorkspaceThumbnail = new Lang.Class({
         this._createBackground();
 
         let monitor = Main.layoutManager.primaryMonitor;
-        this.setPorthole(monitor.x, monitor.y, monitor.width, monitor.height);
+        if (monitor) {
+            this.setPorthole(monitor.x, monitor.y, monitor.width, monitor.height);
+        }
 
         let windows = global.get_window_actors().filter(Lang.bind(this, function(actor) {
             let win = actor.meta_window;

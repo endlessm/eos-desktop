@@ -157,7 +157,9 @@ const MonitorConstraint = new Lang.Class({
             monitor = Main.layoutManager.monitors[index];
         }
 
-        actorBox.init_rect(monitor.x, monitor.y, monitor.width, monitor.height);
+        if (monitor) {
+            actorBox.init_rect(monitor.x, monitor.y, monitor.width, monitor.height);
+        }
     }
 });
 
@@ -190,6 +192,8 @@ const LayoutManager = new Lang.Class({
         this._cornerOnRight = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
         this._cornerOnBottom  = global.settings.get_boolean(HOT_CORNER_ON_BOTTOM_KEY);
         this.monitors = [];
+        this.bottomMonitor = null;
+        this.bottomIndex = -1;
         this.primaryMonitor = null;
         this.primaryIndex = -1;
         this.hotCorners = [];
@@ -345,8 +349,14 @@ const LayoutManager = new Lang.Class({
                 }
             }
         }
-        this.primaryMonitor = this.monitors[this.primaryIndex];
-        this.bottomMonitor = this.monitors[this.bottomIndex];
+
+        if (this.primaryIndex != -1) {
+            this.primaryMonitor = this.monitors[this.primaryIndex];
+        }
+
+        if (this.bottomIndex != -1) {
+            this.bottomMonitor = this.monitors[this.bottomIndex];
+        }
     },
 
     _updateHotCorners: function() {
@@ -490,20 +500,24 @@ const LayoutManager = new Lang.Class({
     },
 
     _updateTrayBox: function() {
-        this.trayBox.set_position(this.bottomMonitor.x,
-                                  this.bottomMonitor.y + this.bottomMonitor.height);
-        this.trayBox.set_size(this.bottomMonitor.width, -1);
+        if (this.bottomMonitor) {
+            this.trayBox.set_position(this.bottomMonitor.x,
+                                      this.bottomMonitor.y + this.bottomMonitor.height);
+            this.trayBox.set_size(this.bottomMonitor.width, -1);
+        }
     },
 
     _updateBoxes: function() {
         this.screenShieldGroup.set_position(0, 0);
         this.screenShieldGroup.set_size(global.screen_width, global.screen_height);
-        this.panelBox.set_position(this.primaryMonitor.x, this.primaryMonitor.y + this.primaryMonitor.height - this.panelBox.height);
 
-        this.panelBox.set_size(this.primaryMonitor.width, -1);
+        if (this.primaryMonitor) {
+            this.panelBox.set_position(this.primaryMonitor.x, this.primaryMonitor.y + this.primaryMonitor.height - this.panelBox.height);
+            this.panelBox.set_size(this.primaryMonitor.width, -1);
 
-        if (this.keyboardIndex < 0)
-            this.keyboardIndex = this.primaryIndex;
+            if (this.keyboardIndex < 0)
+                this.keyboardIndex = this.primaryIndex;
+        }
 
         this._updateTrayBox();
     },
@@ -526,15 +540,14 @@ const LayoutManager = new Lang.Class({
             this._rightPanelBarrier = null;
         }
 
-        if (this.panelBox.height) {
-            let primary = this.primaryMonitor;
-
+        let primary = this.primaryMonitor;
+        if (this.panelBox.height && primary) {
             this._rightPanelBarrier = new Meta.Barrier({ display: global.display,
                                                          x1: primary.x + primary.width, y1: primary.y,
                                                          x2: primary.x + primary.width, y2: primary.y + this.panelBox.height,
                                                          directions: Meta.BarrierDirection.NEGATIVE_X });
 
-            this.panelBox.set_position(this.primaryMonitor.x, this.primaryMonitor.y + this.primaryMonitor.height - this.panelBox.height);
+            this.panelBox.set_position(primary.x, primary.y + primary.height - this.panelBox.height);
         }
     },
 
@@ -554,6 +567,10 @@ const LayoutManager = new Lang.Class({
 
     _updateTrayBarrier: function() {
         let monitor = this.bottomMonitor;
+
+        if (!monitor) {
+            return;
+        }
 
         if (this._trayBarrier) {
             this._trayPressure.removeBarrier(this._trayBarrier);
@@ -700,14 +717,16 @@ const LayoutManager = new Lang.Class({
             this.keyboardBox.hide();
 
             let monitor = this.primaryMonitor;
-            let x = monitor.x + monitor.width / 2.0;
-            let y = monitor.y + monitor.height / 2.0;
+            if (monitor) {
+                let x = monitor.x + monitor.width / 2.0;
+                let y = monitor.y + monitor.height / 2.0;
 
-            this.uiGroup.set_pivot_point(x / global.screen_width,
-                                         y / global.screen_height);
-            this.uiGroup.scale_x = this.uiGroup.scale_y = 0.5;
-            this.uiGroup.opacity = 0;
-            global.window_group.set_clip(monitor.x, monitor.y, monitor.width, monitor.height);
+                this.uiGroup.set_pivot_point(x / global.screen_width,
+                                             y / global.screen_height);
+                this.uiGroup.scale_x = this.uiGroup.scale_y = 0.5;
+                this.uiGroup.opacity = 0;
+                global.window_group.set_clip(monitor.x, monitor.y, monitor.width, monitor.height);
+            }
         }
 
         this.emit('startup-prepared');
@@ -962,9 +981,10 @@ const LayoutManager = new Lang.Class({
             if (!actorData.isToplevel)
                 continue;
 
+            let monitor = this.findMonitorForActor(actorData.actor);
             if (!windowsVisible)
                 visible = true;
-            else if (this.findMonitorForActor(actorData.actor).inFullscreen)
+            else if (monitor && monitor.inFullscreen)
                 visible = false;
             else
                 visible = true;
@@ -973,6 +993,10 @@ const LayoutManager = new Lang.Class({
     },
 
     getWorkAreaForMonitor: function(monitorIndex) {
+        if (!this.monitors.length) {
+            return new Meta.Rectangle({ x: 0, y: 0, width: 0, height: 0 });
+        }
+
         // Assume that all workspaces will have the same
         // struts and pick the first one.
         let ws = global.screen.get_workspace_by_index(0);
@@ -989,7 +1013,11 @@ const LayoutManager = new Lang.Class({
     },
 
     findMonitorForActor: function(actor) {
-        return this.monitors[this.findIndexForActor(actor)];
+        let idx = this.findIndexForActor(actor);
+        if (idx == -1) {
+            return null;
+        }
+        return this.monitors[idx];
     },
 
     _queueUpdateRegions: function() {
@@ -1036,6 +1064,13 @@ const LayoutManager = new Lang.Class({
             delete this._updateRegionIdle;
         }
 
+        // Don't update this if we don't have a primary monitor;
+        // we'll be called again when the monitor configuration changes
+        let primary = this.primaryMonitor;
+        if (!primary) {
+            return false;
+        }
+
         let isPopupMenuVisible = global.top_window_group.get_children().some(isPopupMetaWindow);
         let wantsInputRegion = !isPopupMenuVisible;
 
@@ -1079,7 +1114,6 @@ const LayoutManager = new Lang.Class({
                 // the width/height across the middle of the screen, then
                 // we don't create a strut for it at all.
                 let side;
-                let primary = this.primaryMonitor;
                 if (x1 <= primary.x && x2 >= primary.x + primary.width) {
                     if (y1 <= primary.y)
                         side = Meta.Side.TOP;
