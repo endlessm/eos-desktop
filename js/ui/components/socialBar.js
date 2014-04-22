@@ -6,16 +6,18 @@ const Lang = imports.lang;
 const Main = imports.ui.main;
 const SideComponent = imports.ui.sideComponent;
 
-const SocialBarIface =
-    <interface name="com.endlessm.SocialBar">
-    <method name="show">
-      <arg type="u" direction="in" name="timestamp"/>
-    </method>
-    <method name="hide">
-      <arg type="u" direction="in" name="timestamp"/>
-    </method>
-    <property name="Visible" type="b" access="read"/>
-    </interface>;
+const SocialBarIface = '<node> \
+<interface name="com.endlessm.SocialBar"> \
+<method name="show"> \
+  <arg type="u" direction="in" name="timestamp"/> \
+</method> \
+<method name="hide"> \
+  <arg type="u" direction="in" name="timestamp"/> \
+</method> \
+<property name="Visible" type="b" access="read"/> \
+</interface> \
+</node>';
+
 const SOCIAL_BAR_NAME = 'com.endlessm.SocialBar';
 const SOCIAL_BAR_PATH = '/com/endlessm/SocialBar';
 const SocialBarProxy = Gio.DBusProxy.makeProxyWrapper(SocialBarIface);

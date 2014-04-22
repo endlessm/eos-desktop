@@ -22,7 +22,6 @@
 #include <clutter/x11/clutter-x11.h>
 #include <gdk/gdkx.h>
 #include <gio/gio.h>
-#include <gjs/gjs-module.h>
 #include <girepository.h>
 #include <meta/display.h>
 #include <meta/util.h>
@@ -90,8 +89,6 @@ struct _ShellGlobal {
   ca_context *sound_context;
 
   guint32 xdnd_timestamp;
-
-  gint64 last_gc_end_time;
 
   gboolean has_modal;
 };
@@ -280,10 +277,7 @@ shell_global_init (ShellGlobal *global)
   search_path = g_strsplit (shell_js, ":", -1);
   global->js_context = g_object_new (GJS_TYPE_CONTEXT,
                                      "search-path", search_path,
-                                     "js-version", "1.8",
-                                     "gc-notifications", TRUE,
                                      NULL);
-  g_signal_connect (global->js_context, "gc", G_CALLBACK (shell_global_on_gc), global);
 
   g_strfreev (search_path);
 }
@@ -461,12 +455,12 @@ shell_global_class_init (ShellGlobalClass *klass)
                                                         G_PARAM_READABLE));
 }
 
-/**•
- * _shell_global_init: (skip)•
+/*
+ * _shell_global_init: (skip)
  * @first_property_name: the name of the first property
  * @...: the value of the first property, followed optionally by more
  *  name/value pairs, followed by %NULL
- *•
+ *
  * Initializes the shell global singleton with the construction-time
  * properties.
  *
@@ -1089,51 +1083,6 @@ shell_global_reexec_self (ShellGlobal *global)
   g_warning ("failed to reexec: %s", g_strerror (errno));
   g_ptr_array_free (arr, TRUE);
 }
-
-static void
-shell_global_on_gc (GjsContext   *context,
-                    ShellGlobal  *global)
-{
-  global->last_gc_end_time = g_get_monotonic_time ();
-}
-
-/**
- * shell_global_get_memory_info:
- * @global:
- * @meminfo: (out caller-allocates): Output location for memory information
- *
- * Load process-global data about memory usage.
- */
-void
-shell_global_get_memory_info (ShellGlobal        *global,
-                              ShellMemoryInfo    *meminfo)
-{
-  JSContext *context;
-  gint64 now;
-
-#ifdef HAVE_MALLINFO
-  {
-    struct mallinfo info = mallinfo ();
-    meminfo->glibc_uordblks = info.uordblks;
-  }
-#else
-  meminfo->glibc_uordblks = 0;
-#endif
-
-  context = gjs_context_get_native_context (global->js_context);
-
-  meminfo->js_bytes = JS_GetGCParameter (JS_GetRuntime (context), JSGC_BYTES);
-
-  meminfo->gjs_boxed = (unsigned int) gjs_counter_boxed.value;
-  meminfo->gjs_gobject = (unsigned int) gjs_counter_object.value;
-  meminfo->gjs_function = (unsigned int) gjs_counter_function.value;
-  meminfo->gjs_closure = (unsigned int) gjs_counter_closure.value;
-
-  now = g_get_monotonic_time ();
-
-  meminfo->last_gc_seconds_ago = (now - global->last_gc_end_time) / G_TIME_SPAN_SECOND;
-}
-
 
 /**
  * shell_global_notify_error:

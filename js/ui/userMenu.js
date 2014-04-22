@@ -48,13 +48,15 @@ const DIALOG_ICON_SIZE = 64;
 
 const MAX_USERS_IN_SESSION_DIALOG = 5;
 
-const SystemdLoginSessionIface = <interface name='org.freedesktop.login1.Session'>
-    <property name="Id" type="s" access="read"/>
-    <property name="Remote" type="b" access="read"/>
-    <property name="Class" type="s" access="read"/>
-    <property name="Type" type="s" access="read"/>
-    <property name="State" type="s" access="read"/>
-</interface>;
+const SystemdLoginSessionIface = '<node> \
+<interface name="org.freedesktop.login1.Session"> \
+    <property name="Id" type="s" access="read"/> \
+    <property name="Remote" type="b" access="read"/> \
+    <property name="Class" type="s" access="read"/> \
+    <property name="Type" type="s" access="read"/> \
+    <property name="State" type="s" access="read"/> \
+</interface> \
+</node>';
 
 const SystemdLoginSession = Gio.DBusProxy.makeProxyWrapper(SystemdLoginSessionIface);
 

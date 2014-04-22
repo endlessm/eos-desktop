@@ -1,12 +1,14 @@
 const Gio = imports.gi.Gio;
 const Mainloop = imports.mainloop;
 
-const AppLauncherIface = <interface name="org.gnome.Shell.AppLauncher">
-<method name="Launch">
-    <arg type="s" direction="in" name="name" />
-    <arg type="b" direction="out" name="success" />
-</method>
-</interface>;
+const AppLauncherIface = '<node> \
+<interface name="org.gnome.Shell.AppLauncher"> \
+<method name="Launch"> \
+    <arg type="s" direction="in" name="name" /> \
+    <arg type="b" direction="out" name="success" /> \
+</method> \
+</interface> \
+</node>';
 
 function onError(error) {
     log(error);

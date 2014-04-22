@@ -254,7 +254,7 @@ shell_dir_info_can_delete (ShellDirInfo *dirinfo)
 
 
 /**
- * shell_dir_info_delete:
+ * shell_dir_info_delete: (virtual do_delete)
  * @dirinfo: a #ShellDirInfo
  *
  * Tries to delete a #ShellDirInfo.
@@ -263,7 +263,6 @@ shell_dir_info_can_delete (ShellDirInfo *dirinfo)
  * #ShellDirInfo<!-- -->s which can be deleted, and system-wide ones which
  * cannot. See shell_dir_info_can_delete().
  *
- * Virtual: do_delete
  * Returns: %TRUE if @dirinfo has been deleted
  */
 gboolean
