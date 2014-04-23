@@ -303,7 +303,7 @@ const LayoutManager = new Lang.Class({
     init: function() {
         Main.sessionMode.connect('updated', Lang.bind(this, this._sessionUpdated));
 
-        this._loadBackground();
+        this._loadInitialBackground();
     },
 
     showOverview: function() {
@@ -656,22 +656,43 @@ const LayoutManager = new Lang.Class({
         return this._keyboardIndex;
     },
 
-    _loadBackground: function() {
-        this._systemBackground = new Background.SystemBackground();
-        this._systemBackground.actor.hide();
+    _initialBackgroundLoaded: function() {
+        global.stage.show();
+        this._prepareStartupAnimation();
+    },
 
+    _createSystemBackground: function() {
+        if (!this.primaryMonitor) {
+            return false;
+        }
+
+        this._systemBackground = new Background.SystemBackground();
         global.stage.insert_child_below(this._systemBackground.actor, null);
 
         let constraint = new Clutter.BindConstraint({ source: global.stage,
                                                       coordinate: Clutter.BindCoordinate.ALL });
         this._systemBackground.actor.add_constraint(constraint);
 
+        return true;
+    },
+
+    _loadInitialBackground: function() {
+        if (!this._createSystemBackground()) {
+            // proceed with the rest of the startup
+            GLib.idle_add(GLib.PRIORITY_DEFAULT, Lang.bind(this, function() {
+                this._initialBackgroundLoaded();
+                return false;
+            }));
+
+            return;
+        }
+
+        this._systemBackground.actor.hide();
         let signalId = this._systemBackground.connect('loaded', Lang.bind(this, function() {
             this._systemBackground.disconnect(signalId);
             this._systemBackground.actor.show();
-            global.stage.show();
 
-            this._prepareStartupAnimation();
+            this._initialBackgroundLoaded();
         }));
     },
 
@@ -778,8 +799,10 @@ const LayoutManager = new Lang.Class({
         this._coverPane.destroy();
         this._coverPane = null;
 
-        this._systemBackground.actor.destroy();
-        this._systemBackground = null;
+        if (this._systemBackground) {
+            this._systemBackground.actor.destroy();
+            this._systemBackground = null;
+        }
 
         this._startingUp = false;
 
