@@ -627,7 +627,7 @@ st_scroll_view_allocate (ClutterActor          *actor,
       else
         {
           child_box.x1 = content_box.x1;
-          child_box.x2 = content_box.x2 - (vscrollbar_visible ? sb_width : 0);
+          child_box.x2 = MAX (content_box.x1, content_box.x2 - (vscrollbar_visible ? sb_width : 0));
         }
       child_box.y1 = content_box.y2 - sb_height;
       child_box.y2 = content_box.y2;

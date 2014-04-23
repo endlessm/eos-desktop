@@ -403,7 +403,7 @@ const Panel = new Lang.Class({
             childBox.x2 = allocWidth;
         } else {
             childBox.x1 = 0;
-            childBox.x2 = allocWidth - rightNaturalWidth;
+            childBox.x2 = Math.max(0, allocWidth - rightNaturalWidth);
         }
         this._leftBox.allocate(childBox, flags);
 

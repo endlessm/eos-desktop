@@ -430,7 +430,7 @@ const ViewsCloneLayout = new Lang.Class({
 
         let panelBox = box.copy();
         let panelHeight = panelClone.get_preferred_height(-1)[1];
-        panelBox.y2 = panelBox.y1 + panelHeight;
+        panelBox.y2 = Math.min(panelBox.y2, panelBox.y1 + panelHeight);
         panelClone.allocate(panelBox, flags);
 
         let viewsBox = box.copy();
