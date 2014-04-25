@@ -448,6 +448,11 @@ const BoxPointer = new Lang.Class({
         let sourceActor = this._sourceActor;
         let alignment = this._arrowAlignment;
 
+        let monitor = Main.layoutManager.findMonitorForActor(sourceActor);
+        if (!monitor) {
+            return;
+        }
+
         // Position correctly relative to the sourceActor
         let sourceNode = sourceActor.get_theme_node();
         let sourceContentBox = sourceNode.get_content_box(sourceActor.get_allocation_box());
@@ -459,7 +464,6 @@ const BoxPointer = new Lang.Class({
         // We also want to keep it onscreen, and separated from the
         // edge by the same distance as the main part of the box is
         // separated from its sourceActor
-        let monitor = Main.layoutManager.findMonitorForActor(sourceActor);
         let themeNode = this.actor.get_theme_node();
         let borderWidth = themeNode.get_length('-arrow-border-width');
         let arrowBase = themeNode.get_length('-arrow-base');
@@ -592,6 +596,10 @@ const BoxPointer = new Lang.Class({
         let sourceAllocation = Shell.util_get_transformed_allocation(this._sourceActor);
         let [minWidth, minHeight, boxWidth, boxHeight] = this._container.get_preferred_size();
         let monitor = Main.layoutManager.findMonitorForActor(this.actor);
+
+        if (!monitor) {
+          return St.Side.BOTTOM;
+        }
 
         switch (arrowSide) {
         case St.Side.TOP:

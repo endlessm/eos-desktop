@@ -803,9 +803,14 @@ const BackgroundManager = new Lang.Class({
 
         let monitor = this._layoutManager.monitors[this._monitorIndex];
 
-        background.actor.set_size(monitor.width, monitor.height);
+        if (monitor) {
+            background.actor.set_size(monitor.width, monitor.height);
+            if (this._controlPosition) {
+                background.actor.set_position(monitor.x, monitor.y);
+            }
+        }
+
         if (this._controlPosition) {
-            background.actor.set_position(monitor.x, monitor.y);
             background.actor.lower_bottom();
         }
 

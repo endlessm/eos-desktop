@@ -220,10 +220,12 @@ const WorkspaceMonitor = new Lang.Class({
             this._visibleWindows = 0;
         }
 
+        let primaryMonitor = Main.layoutManager.primaryMonitor;
+
         // Check the count from the getter to include fullscreen
         if (this.visibleWindows == 0) {
             Main.overview.showApps();
-        } else if (Main.layoutManager.primaryMonitor.inFullscreen) {
+        } else if (primaryMonitor && primaryMonitor.inFullscreen) {
             // Hide in fullscreen mode
             Main.overview.hide();
         }
@@ -231,9 +233,10 @@ const WorkspaceMonitor = new Lang.Class({
 
     get visibleWindows() {
         let visible = this._visibleWindows;
+        let primaryMonitor = Main.layoutManager.primaryMonitor;
 
         // Count anything fullscreen as an extra window
-        if (Main.layoutManager.primaryMonitor.inFullscreen) {
+        if (primaryMonitor && primaryMonitor.inFullscreen) {
             visible += 1;
         }
         return visible;

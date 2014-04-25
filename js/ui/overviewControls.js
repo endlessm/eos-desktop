@@ -62,9 +62,11 @@ const SlideLayout = new Lang.Class({
         let translationX = (realDirection == SlideDirection.LEFT) ?
             (availWidth - natWidth) : (natWidth - availWidth);
 
-        let actorBox = new Clutter.ActorBox({ x1: translationX,
+        let x1 = translationX;
+        let x2 = Math.max(x1, child.x_expand ? availWidth : natWidth);
+        let actorBox = new Clutter.ActorBox({ x1: x1,
                                               y1: 0,
-                                              x2: child.x_expand ? availWidth : natWidth,
+                                              x2: x2,
                                               y2: child.y_expand ? availHeight : natHeight });
 
         child.allocate(actorBox, flags);

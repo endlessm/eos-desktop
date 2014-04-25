@@ -376,7 +376,10 @@ const Panel = new Lang.Class({
 
     _getPreferredWidth: function(actor, forHeight, alloc) {
         alloc.min_size = -1;
-        alloc.natural_size = Main.layoutManager.primaryMonitor.width;
+        alloc.natural_size = 0;
+        if (Main.layoutManager.primaryMonitor) {
+            alloc.natural_size = Main.layoutManager.primaryMonitor.width;
+        }
     },
 
     _getPreferredHeight: function(actor, forWidth, alloc) {
@@ -400,7 +403,7 @@ const Panel = new Lang.Class({
             childBox.x2 = allocWidth;
         } else {
             childBox.x1 = 0;
-            childBox.x2 = allocWidth - rightNaturalWidth;
+            childBox.x2 = Math.max(0, allocWidth - rightNaturalWidth);
         }
         this._leftBox.allocate(childBox, flags);
 

@@ -460,7 +460,7 @@ const AllView = new Lang.Class({
 
         this._bgAction = new Clutter.ClickAction();
         Main.overview.addAction(this._bgAction, true);
-        BackgroundMenu.addBackgroundMenu(this._bgAction);
+        BackgroundMenu.addBackgroundMenu(this._bgAction, Main.layoutManager);
         this._clickAction.bind_property('enabled', this._bgAction, 'enabled',
                                         GObject.BindingFlags.SYNC_CREATE | GObject.BindingFlags.INVERT_BOOLEAN);
         this.actor.bind_property('mapped', this._bgAction, 'enabled',
