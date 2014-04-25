@@ -307,7 +307,8 @@ const WindowManager = new Lang.Class({
     },
 
     _unminimizeWindow : function(shellwm, actor) {
-        if (!this._shouldAnimateActor(actor)) {
+        // if the overview is visible, we will close it and then animate the actor
+        if (!this._shouldAnimateActor(actor) && !Main.overview.visible) {
             shellwm.completed_unminimize(actor);
             return;
         }
@@ -315,8 +316,17 @@ const WindowManager = new Lang.Class({
         this._unminimizing.push(actor);
         actor.show();
 
-        this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,
-                            this._unminimizeWindowOverwritten);
+        if (Main.overview.visible) {
+            Main.overview.hide();
+            let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
+                Main.overview.disconnect(overviewHiddenId);
+                this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,
+                                    this._unminimizeWindowOverwritten);
+            }));
+        } else {
+            this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,
+                                this._unminimizeWindowOverwritten);
+        }
     },
 
     _unminimizeWindowDone : function(shellwm, actor) {
