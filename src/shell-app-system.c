@@ -9,6 +9,8 @@
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 
+#include <eosmetrics/eosmetrics.h>
+
 #include "shell-app-private.h"
 #include "shell-window-tracker-private.h"
 #include "shell-app-system-private.h"
@@ -45,6 +47,8 @@ struct _ShellAppSystemPrivate {
   GHashTable *visible_id_to_app;
   GHashTable *id_to_app;
   GHashTable *startup_wm_class_to_app;
+
+  EmtrEventRecorder *event_recorder;
 
   GSList *known_vendor_prefixes;
 };
@@ -99,6 +103,8 @@ shell_app_system_init (ShellAppSystem *self)
                                                          NULL,
                                                          (GDestroyNotify)g_object_unref);
 
+  priv->event_recorder = emtr_event_recorder_new ();
+
   /* We want to track NoDisplay apps, so we add INCLUDE_NODISPLAY. We'll
    * filter NoDisplay apps out when showing them to the user. */
   priv->apps_tree = gmenu_tree_new ("gnome-applications.menu", GMENU_TREE_FLAGS_INCLUDE_NODISPLAY);
@@ -119,6 +125,8 @@ shell_app_system_finalize (GObject *object)
   g_hash_table_destroy (priv->id_to_app);
   g_hash_table_destroy (priv->visible_id_to_app);
   g_hash_table_destroy (priv->startup_wm_class_to_app);
+
+  g_object_unref (priv->event_recorder);
 
   g_slist_free_full (priv->known_vendor_prefixes, g_free);
   priv->known_vendor_prefixes = NULL;
@@ -612,17 +620,38 @@ _shell_app_system_notify_app_state_changed (ShellAppSystem *self,
 {
   ShellAppState state = shell_app_get_state (app);
 
+  gchar *app_address = g_strdup_printf ("%p", app);
+  GDesktopAppInfo *app_info = shell_app_get_app_info (app);
+  const gchar *app_info_id = NULL;
+  if (app_info != NULL) {
+    app_info_id = g_app_info_get_id (G_APP_INFO (app_info));
+  }
+
   switch (state)
     {
     case SHELL_APP_STATE_RUNNING:
+      if (app_info_id != NULL) 
+      {
+        emtr_event_recorder_record_start (self->priv->event_recorder, EMTR_EVENT_SHELL_APP_IS_OPEN, 
+                                          g_variant_new ("s", app_address), 
+                                          g_variant_new ("s", app_info_id));
+      }
       g_hash_table_insert (self->priv->running_apps, g_object_ref (app), NULL);
       break;
     case SHELL_APP_STATE_STARTING:
       break;
     case SHELL_APP_STATE_STOPPED:
+      if (app_info_id != NULL) 
+      {
+        emtr_event_recorder_record_stop (self->priv->event_recorder, EMTR_EVENT_SHELL_APP_IS_OPEN, 
+                                         g_variant_new ("s", app_address),
+                                         NULL);
+      }
       g_hash_table_remove (self->priv->running_apps, app);
       break;
     }
+  g_free (app_address);
+
   g_signal_emit (self, signals[APP_STATE_CHANGED], 0, app);
 }
 
