@@ -12,6 +12,7 @@ const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const AppDisplay = imports.ui.appDisplay;
+const IconGridLayout = imports.ui.iconGridLayout;
 const LayoutManager = imports.ui.layout;
 const Main = imports.ui.main;
 const OverviewControls = imports.ui.overviewControls;
@@ -196,6 +197,8 @@ const ViewsDisplay = new Lang.Class({
 
         // Load remote search providers provided by applications
         RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, this._addSearchProvider));
+
+        IconGridLayout.layout.connect('changed', Lang.bind(this, this._reloadRemoteProviders));
 
         this._showPage(this._allView.actor);
 

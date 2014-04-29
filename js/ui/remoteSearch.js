@@ -7,6 +7,7 @@ const Lang = imports.lang;
 const St = imports.gi.St;
 const Shell = imports.gi.Shell;
 
+const IconGridLayout = imports.ui.iconGridLayout;
 const Search = imports.ui.search;
 
 const KEY_FILE_GROUP = 'Shell Search Provider';
@@ -98,6 +99,10 @@ function loadRemoteSearchProviders(addProviderCallback) {
                 return;
             }
 
+            // Check if it is available on desktop
+            if (!IconGridLayout.layout.hasIcon(app.get_id()))
+                return
+            
             let version = '1';
             try {
                 version = keyfile.get_string(group, 'Version');
