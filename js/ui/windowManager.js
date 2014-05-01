@@ -237,9 +237,13 @@ const WindowManager = new Lang.Class({
     },
 
     _slideWindowIn : function(shellwm, actor, onComplete, onOverwrite) {
-        let origY = actor.y;
-
         let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+        if (!monitor) {
+            onComplete.apply(this, [shellwm, actor]);
+            return;
+        }
+
+        let origY = actor.y;
         let startY = monitor.y + monitor.height;
         actor.set_position(actor.x, startY);
 
@@ -258,8 +262,12 @@ const WindowManager = new Lang.Class({
 
     _slideWindowOut : function(shellwm, actor, onComplete, onOverwrite) {
         let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
-        let yDest = monitor.y + monitor.height;
+        if (!monitor) {
+            onComplete.apply(this, [shellwm, actor]);
+            return;
+        }
 
+        let yDest = monitor.y + monitor.height;
         Tweener.addTween(actor,
                          { y: yDest,
                            time: WINDOW_ANIMATION_TIME,
@@ -458,6 +466,11 @@ const WindowManager = new Lang.Class({
                              });
         } else if (SideComponent.isSideComponentWindow(actor)) {
             let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+            if (!monitor) {
+                this._mapWindowDone(shellwm, actor);
+                return;
+            }
+
             let origX = actor.x;
             if (origX == monitor.x) {
                 // the side bar will appear from the left side
@@ -587,6 +600,11 @@ const WindowManager = new Lang.Class({
                              });
         } else if (SideComponent.isSideComponentWindow(actor)) {
             let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+            if (!monitor) {
+                this._destroyWindowDone(shellwm, actor);
+                return;
+            }
+
             let endX;
             if (actor.x == monitor.x) {
                 endX = monitor.x - actor.width;
