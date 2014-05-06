@@ -1039,6 +1039,7 @@ const Overview = new Lang.Class({
         let shouldAnimateSaturation = false;
         if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.APPS) {
             targetOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            shouldAnimateSaturation = true;
         }
 
         // Make other elements fade out.

@@ -115,6 +115,7 @@ struct _StEntryPrivate
   CoglHandle    text_shadow_material;
   gfloat        shadow_width;
   gfloat        shadow_height;
+  guint8        shadow_opacity;
 };
 
 static guint entry_signals[LAST_SIGNAL] = { 0, };
@@ -309,7 +310,6 @@ st_entry_style_changed (StWidget *self)
 {
   StEntryPrivate *priv = ST_ENTRY_PRIV (self);
   StThemeNode *theme_node;
-  StShadow *shadow_spec;
   ClutterColor color;
   const PangoFontDescription *font;
   gchar *font_string, *font_name;
@@ -346,16 +346,6 @@ st_entry_style_changed (StWidget *self)
     clutter_actor_queue_relayout (priv->entry);
   g_free (font_string);
   g_free (font_name);
-
-  /* Entries with shadow need to be painted on a FBO to handle opacity
-     correctly */
-  shadow_spec = st_theme_node_get_text_shadow (theme_node);
-  if (shadow_spec)
-    clutter_actor_set_offscreen_redirect (CLUTTER_ACTOR (self),
-                                          CLUTTER_OFFSCREEN_REDIRECT_ALWAYS);
-  else
-    clutter_actor_set_offscreen_redirect (CLUTTER_ACTOR (self),
-                                          CLUTTER_OFFSCREEN_REDIRECT_AUTOMATIC_FOR_OPACITY);
 
   ST_WIDGET_CLASS (st_entry_parent_class)->style_changed (self);
 }
@@ -853,11 +843,14 @@ st_entry_paint (ClutterActor *actor)
     {
       ClutterActorBox allocation;
       float width, height;
+      guint8 paint_opacity;
 
       clutter_actor_get_allocation_box (priv->entry, &allocation);
       clutter_actor_box_get_size (&allocation, &width, &height);
+      paint_opacity = clutter_actor_get_paint_opacity (priv->entry);
 
       if (priv->text_shadow_material == COGL_INVALID_HANDLE ||
+          priv->shadow_opacity != paint_opacity ||
           width != priv->shadow_width ||
           height != priv->shadow_height)
         {
@@ -869,6 +862,7 @@ st_entry_paint (ClutterActor *actor)
           material = _st_create_shadow_material_from_actor (shadow_spec,
                                                             priv->entry);
 
+          priv->shadow_opacity = paint_opacity;
           priv->shadow_width = width;
           priv->shadow_height = height;
           priv->text_shadow_material = material;
@@ -878,7 +872,7 @@ st_entry_paint (ClutterActor *actor)
         _st_paint_shadow_with_opacity (shadow_spec,
                                        priv->text_shadow_material,
                                        &allocation,
-                                       clutter_actor_get_paint_opacity (priv->entry));
+                                       paint_opacity);
     }
 
   /* Since we paint the background ourselves, chain to the parent class
@@ -1029,6 +1023,7 @@ st_entry_init (StEntry *entry)
   priv->text_shadow_material = COGL_INVALID_HANDLE;
   priv->shadow_width = -1.;
   priv->shadow_height = -1.;
+  priv->shadow_opacity = 0;
 
   clutter_actor_add_child (CLUTTER_ACTOR (entry), priv->entry);
   clutter_actor_set_reactive ((ClutterActor *) entry, TRUE);
