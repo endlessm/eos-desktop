@@ -762,25 +762,6 @@ shell_app_get_n_windows (ShellApp *app)
   return g_slist_length (app->running_state->windows);
 }
 
-static gboolean
-shell_app_has_visible_windows (ShellApp   *app)
-{
-  GSList *iter;
-
-  if (app->running_state == NULL)
-    return FALSE;
-
-  for (iter = app->running_state->windows; iter; iter = iter->next)
-    {
-      MetaWindow *window = iter->data;
-
-      if (meta_window_showing_on_its_workspace (window))
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
 gboolean
 shell_app_is_on_workspace (ShellApp *app,
                            MetaWorkspace   *workspace)
@@ -832,9 +813,7 @@ shell_app_get_last_user_time (ShellApp *app)
  *
  * Compare one #ShellApp instance to another, in the following way:
  *   - Running applications sort before not-running applications.
- *   - If one of them has visible windows and the other does not, the one
- *     with visible windows is first.
- *   - Finally, the application which the user interacted with most recently
+ *   - The application which the user interacted with most recently
  *     compares earlier.
  */
 int
@@ -849,14 +828,6 @@ shell_app_compare (ShellApp *app,
         return -1;
       return 1;
     }
-
-  vis_app = shell_app_has_visible_windows (app);
-  vis_other = shell_app_has_visible_windows (other);
-
-  if (vis_app && !vis_other)
-    return -1;
-  else if (!vis_app && vis_other)
-    return 1;
 
   if (app->state == SHELL_APP_STATE_RUNNING)
     {
