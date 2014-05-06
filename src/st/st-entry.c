@@ -843,12 +843,14 @@ st_entry_paint (ClutterActor *actor)
     {
       ClutterActorBox allocation;
       float width, height;
+      guint8 paint_opacity;
 
       clutter_actor_get_allocation_box (priv->entry, &allocation);
       clutter_actor_box_get_size (&allocation, &width, &height);
+      paint_opacity = clutter_actor_get_paint_opacity (priv->entry);
 
       if (priv->text_shadow_material == COGL_INVALID_HANDLE ||
-          priv->shadow_opacity != clutter_actor_get_paint_opacity (priv->entry) ||
+          priv->shadow_opacity != paint_opacity ||
           width != priv->shadow_width ||
           height != priv->shadow_height)
         {
@@ -860,7 +862,7 @@ st_entry_paint (ClutterActor *actor)
           material = _st_create_shadow_material_from_actor (shadow_spec,
                                                             priv->entry);
 
-          priv->shadow_opacity = clutter_actor_get_paint_opacity (priv->entry);
+          priv->shadow_opacity = paint_opacity;
           priv->shadow_width = width;
           priv->shadow_height = height;
           priv->text_shadow_material = material;
@@ -870,7 +872,7 @@ st_entry_paint (ClutterActor *actor)
         _st_paint_shadow_with_opacity (shadow_spec,
                                        priv->text_shadow_material,
                                        &allocation,
-                                       clutter_actor_get_paint_opacity (priv->entry));
+                                       paint_opacity);
     }
 
   /* Since we paint the background ourselves, chain to the parent class
