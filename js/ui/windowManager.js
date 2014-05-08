@@ -13,6 +13,8 @@ const AltTab = imports.ui.altTab;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Main = imports.ui.main;
 const SideComponent = imports.ui.sideComponent;
+const BackgroundMenu = imports.ui.backgroundMenu;
+const ButtonConstants = imports.ui.buttonConstants;
 const Tweener = imports.ui.tweener;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
@@ -91,10 +93,17 @@ const WindowManager = new Lang.Class({
 
         this._desktopOverlay = new St.Widget({ reactive: true });
         Main.layoutManager.addChrome(this._desktopOverlay);
-        this._desktopOverlay.connect('button-press-event', Lang.bind(this, function() {
-            Main.layoutManager.emit('background-clicked');
-        }));
         this._desktopOverlayShowing = false;
+
+        // the desktop overlay needs to replicate the background's functionality
+        this._desktopOverlayBgAction = new Clutter.ClickAction();
+        this._desktopOverlayBgAction.connect('clicked', function(action) {
+            if (action.get_button() == ButtonConstants.LEFT_MOUSE_BUTTON) {
+                Main.layoutManager.emit('background-clicked');
+            }
+        });
+        this._desktopOverlay.add_action(this._desktopOverlayBgAction);
+        BackgroundMenu.addBackgroundMenu(this._desktopOverlayBgAction, Main.layoutManager);
 
         this._switchData = null;
         this._shellwm.connect('kill-switch-workspace', Lang.bind(this, this._switchWorkspaceDone));
