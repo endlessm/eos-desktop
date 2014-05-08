@@ -2367,6 +2367,11 @@ StScrollBar StButton#vhandle:active {
     color: #444444;
 }
 
+/* Restart message */
+.restart-message {
+    font-size: 14pt;
+}
+
 /* ShellMountOperation Dialogs */
 .shell-mount-operation-icon {
     icon-size: 48px;

@@ -897,7 +897,9 @@ const LayoutManager = new Lang.Class({
                                               reactive: true });
         this.addChrome(this._coverPane);
 
-        if (Main.sessionMode.isGreeter) {
+        if (Meta.is_restart()) {
+            // On restart, we don't do an animation
+        } else if (Main.sessionMode.isGreeter) {
             this.trayBox.hide();
         } else {
             this._updateBackgrounds();
@@ -937,7 +939,7 @@ const LayoutManager = new Lang.Class({
     },
 
     _startupAnimation: function() {
-        if (Main.sessionMode.isGreeter)
+        if (Meta.is_restart() || Main.sessionMode.isGreeter)
             this._startupAnimationComplete();
         else
             this._startupAnimationSession();
