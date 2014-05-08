@@ -89,6 +89,13 @@ const WindowManager = new Lang.Class({
 
         this._allowedKeybindings = {};
 
+        this._desktopOverlay = new St.Widget({ reactive: true });
+        Main.layoutManager.addChrome(this._desktopOverlay);
+        this._desktopOverlay.connect('button-press-event', Lang.bind(this, function() {
+            Main.layoutManager.emit('background-clicked');
+        }));
+        this._desktopOverlayShowing = false;
+
         this._switchData = null;
         this._shellwm.connect('kill-switch-workspace', Lang.bind(this, this._switchWorkspaceDone));
         this._shellwm.connect('kill-window-effects', Lang.bind(this, function (shellwm, actor) {
@@ -178,10 +185,18 @@ const WindowManager = new Lang.Class({
         Main.overview.connect('showing', Lang.bind(this, function() {
             for (let i = 0; i < this._dimmedWindows.length; i++)
                 this._undimWindow(this._dimmedWindows[i]);
+
+            // hide the overlay so it doesn't conflict with the desktop
+            if (this._desktopOverlayShowing)
+                this._desktopOverlay.hide();
         }));
         Main.overview.connect('hiding', Lang.bind(this, function() {
             for (let i = 0; i < this._dimmedWindows.length; i++)
                 this._dimWindow(this._dimmedWindows[i]);
+
+            // show the overlay if needed
+            if (this._desktopOverlayShowing)
+                this._desktopOverlay.show();
         }));
     },
 
@@ -454,6 +469,21 @@ const WindowManager = new Lang.Class({
                 winActors[i].hide();
             }
         }
+
+        // cover other windows with an invisible overlay at the side of the SideComponent
+        let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+        this._desktopOverlay.width = monitor.width - actor.width;
+        this._desktopOverlay.height = actor.height;
+        this._desktopOverlay.y = actor.y;
+
+        if (actor.x <= monitor.x) {
+            this._desktopOverlay.x = monitor.x + monitor.width - this._desktopOverlay.width;
+        } else {
+            this._desktopOverlay.x = monitor.x;
+        }
+
+        this._desktopOverlayShowing = true;
+        this._desktopOverlay.show();
     },
 
     _showOtherWindows: function(actor, animate) {
@@ -480,6 +510,9 @@ const WindowManager = new Lang.Class({
                 winActors[i].show();
             }
         }
+
+        this._desktopOverlayShowing = false;
+        this._desktopOverlay.hide();
     },
 
     _mapWindow : function(shellwm, actor) {
