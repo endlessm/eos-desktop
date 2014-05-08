@@ -424,10 +424,14 @@ const WindowManager = new Lang.Class({
                            transition: 'linear' });
     },
 
-    _maybeHideOtherWindows: function(actor, animate) {
-        if (!SideComponent.isSideComponentWindow(actor))
-            return;
+    _shouldHideOtherWindows: function(actor) {
+        // TODO : for now, only the app store should cause other windows to hide
+        // but it would be good to have a more general solution than this one
+        return (SideComponent.isSideComponentWindow(actor) &&
+                actor.get_meta_window().get_wm_class() == 'Eos-app-store');
+    },
 
+    _hideOtherWindows: function(actor, animate) {
         let winActors = global.get_window_actors();
         for (let i = 0; i < winActors.length; i++) {
             if (!winActors[i].get_meta_window().showing_on_its_workspace())
@@ -452,10 +456,7 @@ const WindowManager = new Lang.Class({
         }
     },
 
-    _maybeShowOtherWindows: function(actor, animate) {
-        if (!SideComponent.isSideComponentWindow(actor))
-            return;
-
+    _showOtherWindows: function(actor, animate) {
         let winActors = global.get_window_actors();
         for (let i = 0; i < winActors.length; i++) {
             if (!winActors[i].get_meta_window().showing_on_its_workspace())
@@ -553,7 +554,9 @@ const WindowManager = new Lang.Class({
                                onOverwriteParams: [shellwm, actor]
                              });
 
-            this._maybeHideOtherWindows(actor, true);
+            if (this._shouldHideOtherWindows(actor)) {
+                this._hideOtherWindows(actor, true);
+            }
         } else {
             /* Fade window in */
             actor.opacity = 0;
@@ -628,7 +631,10 @@ const WindowManager = new Lang.Class({
 
         if (!this._shouldAnimateActor(actor)) {
             shellwm.completed_destroy(actor);
-            this._maybeShowOtherWindows(actor, false);
+
+            if (this._shouldHideOtherWindows(actor)) {
+                this._showOtherWindows(actor, false);
+            }
             return;
         }
 
@@ -687,7 +693,10 @@ const WindowManager = new Lang.Class({
                                onOverwriteParams: [shellwm, actor]
                              });
 
-            this._maybeShowOtherWindows(actor, true);
+
+            if (this._shouldHideOtherWindows(actor)) {
+                this._showOtherWindows(actor, true);
+            }
         } else {
             shellwm.completed_destroy(actor);
         }
