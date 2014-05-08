@@ -449,6 +449,26 @@ const Background = new Lang.Class({
             this._cache.removeImageContent(content);
         image.content = content;
         this._watchCacheFile(filename);
+
+        let needs_pattern = true;
+        let [monitorWidth, monitorHeight] = this.actor.get_size();
+        let keys = Object.keys(this._images);
+
+        for (let i = 0; i < keys.length; i++) {
+            let image = this._images[keys[i]];
+            let rect = image.content.get_texture_rect();
+            if (rect.get_width() >= monitorWidth  &&
+                rect.get_height() >= monitorHeight &&
+                !image.content.get_has_alpha()) {
+                needs_pattern = false;
+                break;
+            }
+        }
+
+        if (needs_pattern)
+            this._pattern.show();
+        else
+            this._pattern.hide();
     },
 
     _updateAnimationProgress: function() {
