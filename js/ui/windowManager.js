@@ -504,8 +504,7 @@ const WindowManager = new Lang.Class({
             if (SideComponent.isSideComponentWindow(winActors[i]))
                 continue;
 
-            if (animate) {
-                winActors[i].opacity = 0;
+            if (animate && winActors[i].opacity != 255) {
                 winActors[i].show();
                 Tweener.addTween(winActors[i],
                                  { opacity: 255,
