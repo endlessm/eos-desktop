@@ -192,20 +192,24 @@ const WindowManager = new Lang.Class({
                                         Lang.bind(this, this._startA11ySwitcher));
 
         Main.overview.connect('showing', Lang.bind(this, function() {
-            for (let i = 0; i < this._dimmedWindows.length; i++)
+            for (let i = 0; i < this._dimmedWindows.length; i++) {
                 this._undimWindow(this._dimmedWindows[i]);
+            }
 
             // hide the overlay so it doesn't conflict with the desktop
-            if (this._desktopOverlayShowing)
+            if (this._desktopOverlayShowing) {
                 this._desktopOverlay.hide();
+            }
         }));
         Main.overview.connect('hiding', Lang.bind(this, function() {
-            for (let i = 0; i < this._dimmedWindows.length; i++)
+            for (let i = 0; i < this._dimmedWindows.length; i++) {
                 this._dimWindow(this._dimmedWindows[i]);
+            }
 
             // show the overlay if needed
-            if (this._desktopOverlayShowing)
+            if (this._desktopOverlayShowing) {
                 this._desktopOverlay.show();
+            }
         }));
     },
 
@@ -458,11 +462,13 @@ const WindowManager = new Lang.Class({
     _hideOtherWindows: function(actor, animate) {
         let winActors = global.get_window_actors();
         for (let i = 0; i < winActors.length; i++) {
-            if (!winActors[i].get_meta_window().showing_on_its_workspace())
+            if (!winActors[i].get_meta_window().showing_on_its_workspace()) {
                 continue;
+            }
 
-            if (SideComponent.isSideComponentWindow(winActors[i]))
+            if (SideComponent.isSideComponentWindow(winActors[i])) {
                 continue;
+            }
 
             if (animate) {
                 Tweener.addTween(winActors[i],
@@ -498,11 +504,13 @@ const WindowManager = new Lang.Class({
     _showOtherWindows: function(actor, animate) {
         let winActors = global.get_window_actors();
         for (let i = 0; i < winActors.length; i++) {
-            if (!winActors[i].get_meta_window().showing_on_its_workspace())
+            if (!winActors[i].get_meta_window().showing_on_its_workspace()) {
                 continue;
+            }
 
-            if (SideComponent.isSideComponentWindow(winActors[i]))
+            if (SideComponent.isSideComponentWindow(winActors[i])) {
                 continue;
+            }
 
             if (animate && winActors[i].opacity != 255) {
                 winActors[i].show();
