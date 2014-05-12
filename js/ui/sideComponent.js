@@ -21,6 +21,7 @@ const SideComponent = new Lang.Class({
     _init: function(proxyProto, proxyName, proxyPath) {
         this.parent();
         this._propertiesChangedId = 0;
+        this._desktopShownId = 0;
 
         this._proxyProto = proxyProto;
         this._proxyName = proxyName;
@@ -38,12 +39,27 @@ const SideComponent = new Lang.Class({
 
         this._propertiesChangedId =
             this.proxy.connect('g-properties-changed', Lang.bind(this, this._onPropertiesChanged));
+
+        // Clicking the background (which calls overview.showApps) hides the component,
+        // so trying to open it again will call WindowManager._mapWindow(),
+        // which will hide the overview and animate the window.
+        // Note that this is not the case when opening the window picker.
+        this._desktopShownId = Main.layoutManager.connect('background-clicked', Lang.bind(this, function() {
+            if (this._visible) {
+                this.hide(global.get_current_time());
+            }
+        }));
     },
 
     disable: function() {
         if (this._propertiesChangedId > 0) {
             this.proxy.disconnect(this._propertiesChangedId);
             this._propertiesChangedId = 0;
+        }
+
+        if (this._desktopShownId > 0) {
+            Main.layoutManager.disconnect(this._desktopShownId);
+            this._desktopShownId = 0;
         }
     },
 
@@ -74,20 +90,6 @@ const SideComponent = new Lang.Class({
         }
     },
 
-    callOnOverviewHidden: function(callback) {
-        if (!Main.overview.visible) {
-            callback();
-            return;
-        }
-
-        let overviewHiddenId = Main.overview.connect('hidden', function() {
-            Main.overview.disconnect(overviewHiddenId);
-            callback();
-        });
-
-        Main.overview.hide();
-    },
-
     toggle: function(timestamp, params) {
         if (this._visible) {
             this.hide(timestamp, params);
@@ -97,9 +99,7 @@ const SideComponent = new Lang.Class({
     },
 
     show: function(timestamp, params) {
-        this.callOnOverviewHidden(Lang.bind(this, function() {
-            this.callShow(timestamp, params);
-        }));
+        this.callShow(timestamp, params);
     },
 
     hide: function(timestamp, params) {

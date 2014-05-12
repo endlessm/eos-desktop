@@ -531,6 +531,37 @@ const WindowManager = new Lang.Class({
         this._desktopOverlay.hide();
     },
 
+    _mapSideComponent : function (shellwm, actor, monitor) {
+        let origX = actor.x;
+        if (origX == monitor.x) {
+            // the side bar will appear from the left side
+            actor.set_position(monitor.x - actor.width, actor.y);
+        } else {
+            // ... from the right side
+            actor.set_position(monitor.x + monitor.width, actor.y);
+        }
+
+        actor.opacity = 255;
+        actor.show();
+        this._mapping.push(actor);
+
+        Tweener.addTween(actor,
+                         { x: origX,
+                           time: WINDOW_ANIMATION_TIME,
+                           transition: "easeOutQuad",
+                           onComplete: this._mapWindowDone,
+                           onCompleteScope: this,
+                           onCompleteParams: [shellwm, actor],
+                           onOverwrite: this._mapWindowOverwrite,
+                           onOverwriteScope: this,
+                           onOverwriteParams: [shellwm, actor]
+                         });
+
+        if (this._shouldHideOtherWindows(actor)) {
+            this._hideOtherWindows(actor, false);
+        }
+    },
+
     _mapWindow : function(shellwm, actor) {
         actor._windowType = actor.meta_window.get_window_type();
         actor._notifyWindowTypeSignalId = actor.meta_window.connect('notify::window-type', Lang.bind(this, function () {
@@ -547,7 +578,8 @@ const WindowManager = new Lang.Class({
             actor._windowType = type;
         }));
 
-        if (!this._shouldAnimateActor(actor)) {
+        // for side components, we will hide the overview and then animate
+        if (!this._shouldAnimateActor(actor) && !(SideComponent.isSideComponentWindow(actor) && Main.overview.visible)) {
             shellwm.completed_map(actor);
             return;
         }
@@ -578,33 +610,14 @@ const WindowManager = new Lang.Class({
                 return;
             }
 
-            let origX = actor.x;
-            if (origX == monitor.x) {
-                // the side bar will appear from the left side
-                actor.set_position(monitor.x - actor.width, actor.y);
+            if (Main.overview.visible) {
+                let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
+                    Main.overview.disconnect(overviewHiddenId);
+                    this._mapSideComponent(shellwm, actor, monitor);
+                }));
+                Main.overview.hide();
             } else {
-                // ... from the right side
-                actor.set_position(monitor.x + monitor.width, actor.y);
-            }
-
-            actor.opacity = 255;
-            actor.show();
-            this._mapping.push(actor);
-
-            Tweener.addTween(actor,
-                             { x: origX,
-                               time: WINDOW_ANIMATION_TIME,
-                               transition: "easeOutQuad",
-                               onComplete: this._mapWindowDone,
-                               onCompleteScope: this,
-                               onCompleteParams: [shellwm, actor],
-                               onOverwrite: this._mapWindowOverwrite,
-                               onOverwriteScope: this,
-                               onOverwriteParams: [shellwm, actor]
-                             });
-
-            if (this._shouldHideOtherWindows(actor)) {
-                this._hideOtherWindows(actor, true);
+                this._mapSideComponent(shellwm, actor, monitor);
             }
         } else {
             /* Fade window in */

@@ -60,9 +60,7 @@ const AppStore = new Lang.Class({
     },
 
     showPage: function(timestamp, page) {
-        this.callOnOverviewHidden(Lang.bind(this, function() {
-            this.proxy.showPageRemote(timestamp, page);
-        }));
+        this.proxy.showPageRemote(timestamp, page);
     }
 });
 const Component = AppStore;
