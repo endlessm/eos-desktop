@@ -106,6 +106,54 @@ const ViewsDisplayLayout = new Lang.Class({
     }
 });
 
+const ViewsDisplayContainer = new Lang.Class({
+    Name: 'ViewsDisplayContainer',
+    Extends: St.Widget,
+
+    _init: function(entry, allView) {
+        this._activePage = null;
+
+        this._stack = new Shell.Stack({ x_expand: true,
+                                        y_expand: true });
+        this._entry = entry;
+        this._allView = allView;
+
+        let layoutManager = new ViewsDisplayLayout(this._stack, this._entry, this._allView);
+        this.parent({ layout_manager: layoutManager,
+                      x_expand: true,
+                      y_expand: true });
+
+        this.add_actor(this._stack);
+        this.add_actor(this._entry);
+    },
+
+    addPage: function(page) {
+        page.visible = false;
+        page.y_align = Clutter.ActorAlign.START;
+        this._stack.add_actor(page);
+    },
+
+    showPage: function(page) {
+        if (page == this._activePage) {
+            return;
+        }
+
+        if (this._activePage) {
+            this._activePage.hide();
+        }
+
+        this._activePage = page;
+
+        if (this._activePage) {
+            this._activePage.show();
+        }
+    },
+
+    get activePage() {
+        return this._activePage;
+    }
+});
+
 const FocusTrap = new Lang.Class({
     Name: 'FocusTrap',
     Extends: St.Widget,
@@ -118,36 +166,17 @@ const FocusTrap = new Lang.Class({
     }
 });
 
-const ViewsDisplayConstraint = new Lang.Class({
-    Name: 'ViewsDisplayConstraint',
-    Extends: LayoutManager.MonitorConstraint,
-
-    vfunc_update_allocation: function(actor, actorBox) {
-        let originalBox = actorBox.copy();
-        this.parent(actor, actorBox);
-
-        actorBox.init_rect(originalBox.get_x(), originalBox.get_y(),
-                           actorBox.get_width(), originalBox.get_height());
-    }
-});
-
 const ViewsDisplay = new Lang.Class({
     Name: 'ViewsDisplay',
 
     _init: function() {
-        this._activePage = null;
         this._searchTimeoutId = 0;
-
-        this._stack = new Shell.Stack({ x_expand: true,
-                                        y_expand: true });
 
         this._appSystem = Shell.AppSystem.get_default();
         this._allView = new AppDisplay.AllView();
-        this._addPage(this._allView.actor);
 
         this._searchSystem = new Search.SearchSystem();
         this._searchResults = new SearchDisplay.SearchResults(this._searchSystem);
-        this._addPage(this._searchResults.actor);
 
         // Since the entry isn't inside the results container we install this
         // dummy widget as the last results container child so that we can
@@ -174,14 +203,7 @@ const ViewsDisplay = new Lang.Class({
             this._searchResults.highlightDefault(false);
         }));
 
-        let layoutManager = new ViewsDisplayLayout(this._stack, this.entry, this._allView);
-        this.actor = new St.Widget({ layout_manager: layoutManager,
-                                     x_expand: true,
-                                     y_expand: true });
-
-        this.actor.add_actor(this.entry);
-        this.actor.add_actor(this._stack);
-
+        this.actor = new ViewsDisplayContainer(this.entry, this._allView);
         // This makes sure that any DnD ops get channeled to the icon grid logic
         // otherwise dropping an item outside of the grid bounds fails
         this.actor._delegate = this;
@@ -200,35 +222,16 @@ const ViewsDisplay = new Lang.Class({
 
         IconGridLayout.layout.connect('changed', Lang.bind(this, this._reloadRemoteProviders));
 
-        this._showPage(this._allView.actor);
+        // Add and show all the pages
+        this.actor.addPage(this._allView.actor);
+        this.actor.addPage(this._searchResults.actor);
+        this.actor.showPage(this._allView.actor);
 
         Main.overview.connect('hidden', Lang.bind(this, this._onOverviewHidden));
     },
 
     _onOverviewHidden: function() {
-        this._showPage(this._allView.actor);
-    },
-
-    _addPage: function(page) {
-        page.visible = false;
-        page.y_align = Clutter.ActorAlign.START;
-        this._stack.add_actor(page);
-    },
-
-    _showPage: function(page) {
-        if (page == this._activePage) {
-            return;
-        }
-
-        if (this._activePage) {
-            this._activePage.hide();
-        }
-
-        this._activePage = page;
-
-        if (this._activePage) {
-            this._activePage.show();
-        }
+        this.actor.showPage(this._allView.actor);
     },
 
     _activateGoogleSearch: function() {
@@ -307,12 +310,12 @@ const ViewsDisplay = new Lang.Class({
     _enterLocalSearch: function() {
         this._searchResults.startingSearch();
         this._queueLocalSearch();
-        this._showPage(this._searchResults.actor);        
+        this.actor.showPage(this._searchResults.actor);
     },
 
     _leaveLocalSearch: function() {
         this._clearLocalSearch();
-        this._showPage(this._allView.actor);
+        this.actor.showPage(this._allView.actor);
     },
 
     _onSearchActivated: function() {
@@ -417,7 +420,7 @@ const ViewsDisplay = new Lang.Class({
     acceptDrop: function(source, actor, x, y, time) {
         // Forward all DnD releases to the scrollview if we're 
         // displaying apps
-        if (this._activePage == this._allView.actor) {
+        if (this.actor.activePage == this._allView.actor) {
             this._allView.acceptDrop(source, actor, x, y, time);
         }
     }
@@ -473,6 +476,19 @@ const ViewsClone = new Lang.Class({
         Main.overview.connect('hidden', Lang.bind(this, function() {
             viewsCloneSaturation.enabled = !this._forOverview;
         }));
+    }
+});
+
+const ViewsDisplayConstraint = new Lang.Class({
+    Name: 'ViewsDisplayConstraint',
+    Extends: LayoutManager.MonitorConstraint,
+
+    vfunc_update_allocation: function(actor, actorBox) {
+        let originalBox = actorBox.copy();
+        this.parent(actor, actorBox);
+
+        actorBox.init_rect(originalBox.get_x(), originalBox.get_y(),
+                           actorBox.get_width(), originalBox.get_height());
     }
 });
 
