@@ -413,6 +413,33 @@ const AllViewLayout = new Lang.Class({
     }
 });
 
+const AllViewContainer = new Lang.Class({
+    Name: 'AllViewContainer',
+    Extends: St.ScrollView,
+
+    _init: function(gridActor) {
+        gridActor.y_expand = true;
+        gridActor.y_align = Clutter.ActorAlign.CENTER;
+
+        this.parent({ x_fill: true,
+                      y_fill: false,
+                      y_align: Clutter.ActorAlign.START,
+                      x_expand: true,
+                      y_expand: true,
+                      overlay_scrollbars: true,
+                      hscrollbar_policy: Gtk.PolicyType.NEVER,
+                      vscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
+                      style_class: 'all-apps vfade' });
+
+        let box = new St.BoxLayout({ vertical: true });
+        this.stack = new St.Widget({ layout_manager: new AllViewLayout() });
+        this.stack.add_actor(gridActor);
+        box.add(this.stack, { y_align: St.Align.START, expand: true });
+
+        this.add_actor(box);
+    }
+});
+
 const AllView = new Lang.Class({
     Name: 'AllView',
     Extends: EndlessApplicationView,
@@ -422,27 +449,13 @@ const AllView = new Lang.Class({
 
         this._appStoreIcon = null;
 
-        this._grid.actor.y_expand = true;
-        this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
+        this.actor = new AllViewContainer(this._grid.actor);
+        this.actor._delegate = this;
+        this.stack = this.actor.stack;
 
-        let box = new St.BoxLayout({ vertical: true });
-        this.stack = new St.Widget({ layout_manager: new AllViewLayout() });
-        this.stack.add_actor(this._grid.actor);
         this._eventBlocker = new St.Widget({ x_expand: true, y_expand: true });
         this.stack.add_actor(this._eventBlocker);
-        box.add(this.stack, { y_align: St.Align.START, expand: true });
 
-        this.actor = new St.ScrollView({ x_fill: true,
-                                         y_fill: false,
-                                         y_align: St.Align.START,
-                                         x_expand: true,
-                                         y_expand: true,
-                                         overlay_scrollbars: true,
-                                         style_class: 'all-apps vfade' });
-        this.actor._delegate = this;
-
-        this.actor.add_actor(box);
-        this.actor.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         let action = new Clutter.PanAction({ interpolate: true });
         action.connect('pan', Lang.bind(this, this._onPan));
         this.actor.add_action(action);
