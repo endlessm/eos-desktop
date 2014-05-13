@@ -89,9 +89,9 @@ const AppActivationContext = new Lang.Class({
                                 focus: this._splash });
 
         this._splash.connect('close-clicked', Lang.bind(this, function() {
-            /* If application doesn't quit very likely is because it
-             * didn't reach running state yet; so wait for it to
-             * finish */
+            // If application doesn't quit very likely is because it
+            // didn't reach running state yet; so wait for it to
+            // finish
             this._cancelled = true;
             this._clearSplash();
             if (!this._app.request_quit()) {
@@ -175,10 +175,10 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
-        /* For the case of starting LibreOffice, in case the recovery page is
-         * launched it can't be identified as libreoffice, and it is reported as
-         * a different new application. See
-         * https://github.com/endlessm/eos-shell/issues/2238 */
+        // For the case of starting LibreOffice, in case the recovery page is
+        // launched it can't be identified as libreoffice, and it is reported as
+        // a different new application. See
+        // https://github.com/endlessm/eos-shell/issues/2238
         if (this._app != app) {
             let name = app.get_name();
             if (name != "Soffice") {
