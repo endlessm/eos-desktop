@@ -418,7 +418,7 @@ const DesktopAppClient = new Lang.Class({
         let [desktopIdPath, display, pid, uris, extras] = parameters.deep_unpack();
 
         let desktopId = GLib.path_get_basename(desktopIdPath.toString());
-        this._lastDesktopApp = Shell.AppSystem.get_default().lookup_app(desktopId);
+        this._lastDesktopApp = Shell.AppSystem.get_default().lookup_heuristic_basename(desktopId);
     },
 
     _windowCreated: function(metaDisplay, metaWindow) {
