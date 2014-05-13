@@ -532,7 +532,13 @@ const WindowManager = new Lang.Class({
         this._desktopOverlay.hide();
     },
 
-    _mapSideComponent : function (shellwm, actor, monitor, animateFade) {
+    _mapSideComponent : function (shellwm, actor, animateFade) {
+        let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+        if (!monitor) {
+            this._mapWindowDone(shellwm, actor);
+            return;
+        }
+
         let origX = actor.x;
         if (origX == monitor.x) {
             // the side bar will appear from the left side
@@ -605,20 +611,14 @@ const WindowManager = new Lang.Class({
                                onOverwriteParams: [shellwm, actor]
                              });
         } else if (SideComponent.isSideComponentWindow(actor)) {
-            let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
-            if (!monitor) {
-                this._mapWindowDone(shellwm, actor);
-                return;
-            }
-
             if (Main.overview.visible) {
                 let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
                     Main.overview.disconnect(overviewHiddenId);
-                    this._mapSideComponent(shellwm, actor, monitor, false);
+                    this._mapSideComponent(shellwm, actor, false);
                 }));
                 Main.overview.hide();
             } else {
-                this._mapSideComponent(shellwm, actor, monitor, true);
+                this._mapSideComponent(shellwm, actor, true);
             }
         } else {
             /* Fade window in */
