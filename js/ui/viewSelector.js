@@ -452,8 +452,8 @@ const ViewsClone = new Lang.Class({
     Name: 'ViewsClone',
     Extends: St.Widget,
 
-    _init: function(appsPage, forOverview) {
-        this._appsPage = appsPage;
+    _init: function(viewsDisplay, forOverview) {
+        this._viewsDisplay = viewsDisplay;
         this._forOverview = forOverview;
 
         let viewsCloneLayout = new ViewsCloneLayout({ vertical: true });
@@ -463,21 +463,33 @@ const ViewsClone = new Lang.Class({
 
         this.add_child(new Clutter.Clone({ source: Main.panel.actor,
                                            opacity: 0 }));
-        this.add_child(new Clutter.Clone({ source: this._appsPage }));
 
-        let viewsCloneSaturation = new Clutter.DesaturateEffect({ factor: AppDisplay.INACTIVE_GRID_SATURATION,
-                                                                  enabled: false });
-        this.add_effect(viewsCloneSaturation);
+        let allView = this._viewsDisplay.allView;
+        let entry = this._viewsDisplay.entry;
+        let entryClone = new St.Bin({ child: new Clutter.Clone({ source: entry }) });
+
+        let container = new ViewsDisplayContainer(entryClone, allView);
+        let iconGridClone = new Clutter.Clone({ source: allView.gridActor,
+                                                x_expand: true });
+        let appGridContainer = new AppDisplay.AllViewContainer(iconGridClone);
+        appGridContainer.reactive = false;
+
+        let iconGridSaturation = new Clutter.DesaturateEffect({ factor: AppDisplay.INACTIVE_GRID_SATURATION,
+                                                                enabled: false });
+        iconGridClone.add_effect(iconGridSaturation);
+        container.addPage(appGridContainer);
+        container.showPage(appGridContainer);
+        this.add_child(container);
 
         let workareaConstraint = new LayoutManager.MonitorConstraint({ primary: true,
                                                                        use_workarea: true });
         this.add_constraint(workareaConstraint);
 
         Main.overview.connect('showing', Lang.bind(this, function() {
-            viewsCloneSaturation.enabled = this._forOverview;
+            iconGridSaturation.enabled = this._forOverview;
         }));
         Main.overview.connect('hidden', Lang.bind(this, function() {
-            viewsCloneSaturation.enabled = !this._forOverview;
+            iconGridSaturation.enabled = !this._forOverview;
         }));
     }
 });
@@ -530,10 +542,10 @@ const ViewSelector = new Lang.Class({
     },
 
     _addViewsPageClone: function() {
-        let layoutViewsClone = new ViewsClone(this._appsPage, false);
+        let layoutViewsClone = new ViewsClone(this._viewsDisplay, false);
         Main.layoutManager.setViewsClone(layoutViewsClone);
 
-        let overviewViewsClone = new ViewsClone(this._appsPage, true);
+        let overviewViewsClone = new ViewsClone(this._viewsDisplay, true);
         Main.overview.setViewsClone(overviewViewsClone);
         this._appsPage.bind_property('visible',
                                      overviewViewsClone, 'visible',
