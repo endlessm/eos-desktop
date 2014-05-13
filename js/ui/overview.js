@@ -24,6 +24,7 @@ const MessageTray = imports.ui.messageTray;
 const OverviewControls = imports.ui.overviewControls;
 const Panel = imports.ui.panel;
 const Params = imports.misc.params;
+const SideComponent = imports.ui.sideComponent;
 const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
 const ViewSelector = imports.ui.viewSelector;
@@ -720,7 +721,9 @@ const Overview = new Lang.Class({
         // if it's not running already.
         // At the same time, minimize all the windows beloging to auto-started applications.
         this._minimizeStartWindowsId = global.display.connect('window-created', function(metaDisplay, metaWindow) {
-            metaWindow.minimize();
+            if (!SideComponent.isSideComponentWindow(metaWindow)) {
+                metaWindow.minimize();
+            }
         });
 
         let browser = Util.getBrowserApp();

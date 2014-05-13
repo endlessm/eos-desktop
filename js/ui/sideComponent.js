@@ -4,13 +4,23 @@ const GObject = imports.gi.GObject;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
+const Meta = imports.gi.Meta;
 
 const Main = imports.ui.main;
 
 const SIDE_COMPONENT_ROLE = 'eos-side-component';
 
-function isSideComponentWindow (actor) {
-    let win = actor.meta_window;
+/**
+ * isSideComponentWindow:
+ * @obj: an instance of Meta.WindowActor or Meta.Window
+ */
+function isSideComponentWindow (obj) {
+    let win = null;
+    if (obj instanceof Meta.WindowActor) {
+        win = obj.meta_window;
+    } else if (obj instanceof Meta.Window) {
+        win = obj;
+    }
     return win && (win.get_role() == SIDE_COMPONENT_ROLE);
 };
 
