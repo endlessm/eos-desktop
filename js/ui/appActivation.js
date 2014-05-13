@@ -409,6 +409,11 @@ const DesktopAppClient = new Lang.Class({
 
         let desktopId = GLib.path_get_basename(desktopIdPath.toString());
         this._lastDesktopApp = Shell.AppSystem.get_default().lookup_heuristic_basename(desktopId);
+
+        if (this._lastDesktopApp) {
+            let context = new AppActivationContext(this._lastDesktopApp);
+            context.showSplash();
+        }
     },
 
     _windowCreated: function(metaDisplay, metaWindow) {
