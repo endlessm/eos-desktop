@@ -52,6 +52,10 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
+        this.showSplash();
+    },
+
+    showSplash: function() {
         // Don't show splash screen if the splash screen key is false
         let info = this._app.get_app_info();
 
@@ -89,9 +93,9 @@ const AppActivationContext = new Lang.Class({
                                 focus: this._splash });
 
         this._splash.connect('close-clicked', Lang.bind(this, function() {
-            /* If application doesn't quit very likely is because it
-             * didn't reach running state yet; so wait for it to
-             * finish */
+            // If application doesn't quit very likely is because it
+            // didn't reach running state yet; so wait for it to
+            // finish
             this._cancelled = true;
             this._clearSplash();
             if (!this._app.request_quit()) {
@@ -175,20 +179,6 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
-        /* For the case of starting LibreOffice, in case the recovery page is
-         * launched it can't be identified as libreoffice, and it is reported as
-         * a different new application. See
-         * https://github.com/endlessm/eos-shell/issues/2238 */
-        if (this._app != app) {
-            let name = app.get_name();
-            if (name != "Soffice") {
-                return;
-            }
-            let id = this._app.get_id();
-            if (id.indexOf("eos-app-libreoffice") == -1) {
-                return;
-            }
-        }
         appSystem.disconnect(this._appStateId);
         this._appStateId = 0;
 
@@ -418,7 +408,12 @@ const DesktopAppClient = new Lang.Class({
         let [desktopIdPath, display, pid, uris, extras] = parameters.deep_unpack();
 
         let desktopId = GLib.path_get_basename(desktopIdPath.toString());
-        this._lastDesktopApp = Shell.AppSystem.get_default().lookup_app(desktopId);
+        this._lastDesktopApp = Shell.AppSystem.get_default().lookup_heuristic_basename(desktopId);
+
+        if (this._lastDesktopApp) {
+            let context = new AppActivationContext(this._lastDesktopApp);
+            context.showSplash();
+        }
     },
 
     _windowCreated: function(metaDisplay, metaWindow) {
@@ -440,9 +435,9 @@ const DesktopAppClient = new Lang.Class({
         // Skip if the window does not belong to the launched app
         if (app != this._lastDesktopApp) {
             return;
-        } else {
-            this._lastDesktopApp = null;
         }
+
+        this._lastDesktopApp = null;
 
         if (tracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
             metaWindow.maximize(Meta.MaximizeFlags.HORIZONTAL |
