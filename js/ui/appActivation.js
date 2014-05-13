@@ -440,9 +440,9 @@ const DesktopAppClient = new Lang.Class({
         // Skip if the window does not belong to the launched app
         if (app != this._lastDesktopApp) {
             return;
-        } else {
-            this._lastDesktopApp = null;
         }
+
+        this._lastDesktopApp = null;
 
         if (tracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
             metaWindow.maximize(Meta.MaximizeFlags.HORIZONTAL |
