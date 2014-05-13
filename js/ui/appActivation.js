@@ -52,6 +52,10 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
+        this.showSplash();
+    },
+
+    showSplash: function() {
         // Don't show splash screen if the splash screen key is false
         let info = this._app.get_app_info();
 
