@@ -534,10 +534,6 @@ const ViewSelector = new Lang.Class({
 
         this._addViewsPageClone();
 
-        Main.overview.connect('hidden', Lang.bind(this, function() {
-            this._showPage(this._appsPage, true);
-        }));
-
         this._stageKeyPressId = 0;
     },
 
