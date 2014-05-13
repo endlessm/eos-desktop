@@ -422,6 +422,10 @@ const ViewsDisplay = new Lang.Class({
         if (this.actor.activePage == this._allView.actor) {
             this._allView.acceptDrop(source, actor, x, y, time);
         }
+    },
+
+    get allView() {
+        return this._allView;
     }
 });
 

@@ -357,6 +357,10 @@ const EndlessApplicationView = new Lang.Class({
                                    Lang.bind(this, this._ensureIconVisible));
             }
         }
+    },
+
+    get gridActor() {
+        return this._grid.actor;
     }
 });
 
