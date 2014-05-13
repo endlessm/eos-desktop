@@ -179,20 +179,6 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
-        // For the case of starting LibreOffice, in case the recovery page is
-        // launched it can't be identified as libreoffice, and it is reported as
-        // a different new application. See
-        // https://github.com/endlessm/eos-shell/issues/2238
-        if (this._app != app) {
-            let name = app.get_name();
-            if (name != "Soffice") {
-                return;
-            }
-            let id = this._app.get_id();
-            if (id.indexOf("eos-app-libreoffice") == -1) {
-                return;
-            }
-        }
         appSystem.disconnect(this._appStateId);
         this._appStateId = 0;
 
