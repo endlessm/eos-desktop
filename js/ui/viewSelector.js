@@ -129,7 +129,6 @@ const ViewsDisplayContainer = new Lang.Class({
 
     addPage: function(page) {
         page.visible = false;
-        page.y_align = Clutter.ActorAlign.START;
         this._stack.add_actor(page);
     },
 

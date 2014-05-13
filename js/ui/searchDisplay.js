@@ -355,7 +355,8 @@ const SearchResults = new Lang.Class({
         this._searchSystem.connect('search-updated', Lang.bind(this, this._updateResults));
 
         this.actor = new St.BoxLayout({ name: 'searchResults',
-                                        vertical: true });
+                                        vertical: true,
+                                        y_align: Clutter.ActorAlign.START });
 
         this._content = new St.BoxLayout({ name: 'searchResultsContent',
                                            vertical: true });
