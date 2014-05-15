@@ -930,7 +930,7 @@ const Workspace = new Lang.Class({
             if (this._isOverviewWindow(windows[i])) {
                 this._addWindowClone(windows[i], true);
             }
-            if (SideComponent.isSideComponentWindow(windows[i])) {
+            if (SideComponent.isSideComponentWindow(windows[i].meta_window)) {
                 this._addSideComponentClone(windows[i]);
             }
         }
@@ -1079,7 +1079,7 @@ const Workspace = new Lang.Class({
                 clone.positioned = true;
             }
 
-            if (SideComponent.isSideComponentWindow(clone.realWindow)) {
+            if (SideComponent.isSideComponentWindow(clone.realWindow.meta_window)) {
                 if (clone.origX == this._monitor.x) {
                     x = -clone.actor.width;
                 } else {
@@ -1275,12 +1275,12 @@ const Workspace = new Lang.Class({
         if (this._lookupIndex (metaWin) != -1)
             return;
 
-        if (!this._isMyWindow(win) || !this._isOverviewWindow(win) || SideComponent.isSideComponentWindow(win))
+        if (!this._isMyWindow(win) || !this._isOverviewWindow(win) || SideComponent.isSideComponentWindow(win.meta_window))
             return;
 
         let clone;
 
-        if (SideComponent.isSideComponentWindow(win)) {
+        if (SideComponent.isSideComponentWindow(win.meta_window)) {
             clone = this._addSideComponentClone(win);
         } else {
             [clone, ] = this._addWindowClone(win, false);

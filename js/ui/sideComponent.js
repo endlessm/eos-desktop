@@ -12,16 +12,11 @@ const SIDE_COMPONENT_ROLE = 'eos-side-component';
 
 /**
  * isSideComponentWindow:
- * @obj: an instance of Meta.WindowActor or Meta.Window
+ * @metaWindow: an instance of #Meta.Window
+ * @return: whether the #Meta.Window belongs to a #SideComponent 
  */
-function isSideComponentWindow (obj) {
-    let win = null;
-    if (obj instanceof Meta.WindowActor) {
-        win = obj.meta_window;
-    } else if (obj instanceof Meta.Window) {
-        win = obj;
-    }
-    return win && (win.get_role() == SIDE_COMPONENT_ROLE);
+function isSideComponentWindow (metaWindow) {
+    return metaWindow && (metaWindow.get_role() == SIDE_COMPONENT_ROLE);
 };
 
 const SideComponent = new Lang.Class({

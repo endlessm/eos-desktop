@@ -252,7 +252,7 @@ const WindowManager = new Lang.Class({
         let windowType = actor.meta_window.get_window_type();
         return windowType == Meta.WindowType.NORMAL ||
                windowType == Meta.WindowType.MODAL_DIALOG ||
-               SideComponent.isSideComponentWindow(actor);
+               SideComponent.isSideComponentWindow(actor.meta_window);
     },
 
     _removeEffect : function(list, actor) {
@@ -466,7 +466,7 @@ const WindowManager = new Lang.Class({
                 continue;
             }
 
-            if (SideComponent.isSideComponentWindow(winActors[i])) {
+            if (SideComponent.isSideComponentWindow(winActors[i].meta_window)) {
                 continue;
             }
 
@@ -509,7 +509,7 @@ const WindowManager = new Lang.Class({
                 continue;
             }
 
-            if (SideComponent.isSideComponentWindow(winActors[i])) {
+            if (SideComponent.isSideComponentWindow(winActors[i].meta_window)) {
                 continue;
             }
 
@@ -586,7 +586,7 @@ const WindowManager = new Lang.Class({
         }));
 
         // for side components, we will hide the overview and then animate
-        if (!this._shouldAnimateActor(actor) && !(SideComponent.isSideComponentWindow(actor) && Main.overview.visible)) {
+        if (!this._shouldAnimateActor(actor) && !(SideComponent.isSideComponentWindow(actor.meta_window) && Main.overview.visible)) {
             shellwm.completed_map(actor);
             return;
         }
@@ -610,7 +610,7 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
-        } else if (SideComponent.isSideComponentWindow(actor)) {
+        } else if (SideComponent.isSideComponentWindow(actor.meta_window)) {
             if (Main.overview.visible) {
                 let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
                     Main.overview.disconnect(overviewHiddenId);
@@ -727,7 +727,7 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
-        } else if (SideComponent.isSideComponentWindow(actor)) {
+        } else if (SideComponent.isSideComponentWindow(actor.meta_window)) {
             let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
             if (!monitor) {
                 this._destroyWindowDone(shellwm, actor);
