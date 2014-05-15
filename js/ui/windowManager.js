@@ -453,6 +453,11 @@ const WindowManager = new Lang.Class({
     },
 
     _hideOtherWindows: function(actor, animate) {
+        let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+        if (!monitor) {
+            return;
+        }
+
         let winActors = global.get_window_actors();
         for (let i = 0; i < winActors.length; i++) {
             if (!winActors[i].get_meta_window().showing_on_its_workspace()) {
@@ -480,9 +485,9 @@ const WindowManager = new Lang.Class({
         }
 
         // cover other windows with an invisible overlay at the side of the SideComponent
-        let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+        let workArea = Main.layoutManager.getWorkAreaForMonitor(actor.meta_window.get_monitor());
         this._desktopOverlay.width = monitor.width - actor.width;
-        this._desktopOverlay.height = actor.height;
+        this._desktopOverlay.height = workArea.height;
         this._desktopOverlay.y = actor.y;
 
         if (actor.x <= monitor.x) {
