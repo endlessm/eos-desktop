@@ -548,7 +548,6 @@ const WindowManager = new Lang.Class({
 
         actor.opacity = 255;
         actor.show();
-        this._mapping.push(actor);
 
         Tweener.addTween(actor,
                          { x: origX,
@@ -609,6 +608,8 @@ const WindowManager = new Lang.Class({
                                onOverwriteParams: [shellwm, actor]
                              });
         } else if (SideComponent.isSideComponentWindow(actor.meta_window)) {
+            this._mapping.push(actor);
+
             if (Main.overview.visible) {
                 let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
                     Main.overview.disconnect(overviewHiddenId);
