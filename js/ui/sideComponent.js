@@ -19,6 +19,15 @@ function isSideComponentWindow (metaWindow) {
     return metaWindow && (metaWindow.get_role() == SIDE_COMPONENT_ROLE);
 };
 
+/**
+ * isAppStoreWindow:
+ * @metaWindow: an instance of #Meta.Window
+ * @return: whether the #Meta.Window belongs to the App Store application
+ */
+function isAppStoreWindow (metaWindow) {
+    return isSideComponentWindow(metaWindow) && (metaWindow.get_wm_class() == 'Eos-app-store');
+};
+
 const SideComponent = new Lang.Class({
     Name: 'SideComponent',
     Extends: GObject.Object,

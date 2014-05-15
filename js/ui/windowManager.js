@@ -452,13 +452,6 @@ const WindowManager = new Lang.Class({
                            transition: 'linear' });
     },
 
-    _shouldHideOtherWindows: function(actor) {
-        // TODO : for now, only the app store should cause other windows to hide
-        // but it would be good to have a more general solution than this one
-        return (SideComponent.isSideComponentWindow(actor) &&
-                actor.get_meta_window().get_wm_class() == 'Eos-app-store');
-    },
-
     _hideOtherWindows: function(actor, animate) {
         let winActors = global.get_window_actors();
         for (let i = 0; i < winActors.length; i++) {
@@ -564,7 +557,7 @@ const WindowManager = new Lang.Class({
                            onOverwriteParams: [shellwm, actor]
                          });
 
-        if (this._shouldHideOtherWindows(actor)) {
+        if (SideComponent.isAppStoreWindow(actor.meta_window)) {
             this._hideOtherWindows(actor, animateFade);
         }
     },
@@ -695,7 +688,7 @@ const WindowManager = new Lang.Class({
         if (!this._shouldAnimateActor(actor)) {
             shellwm.completed_destroy(actor);
 
-            if (this._shouldHideOtherWindows(actor)) {
+            if (SideComponent.isAppStoreWindow(actor.meta_window)) {
                 this._showOtherWindows(actor, false);
             }
             return;
@@ -757,7 +750,7 @@ const WindowManager = new Lang.Class({
                              });
 
 
-            if (this._shouldHideOtherWindows(actor)) {
+            if (SideComponent.isAppStoreWindow(actor.meta_window)) {
                 this._showOtherWindows(actor, true);
             }
         } else {
