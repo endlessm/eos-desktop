@@ -14,6 +14,7 @@ const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Main = imports.ui.main;
 const SideComponent = imports.ui.sideComponent;
 const Tweener = imports.ui.tweener;
+const ViewSelector = imports.ui.viewSelector;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 const NO_DEFAULT_MAXIMIZE_KEY = 'no-default-maximize';
@@ -315,8 +316,14 @@ const WindowManager = new Lang.Class({
     },
 
     _unminimizeWindow : function(shellwm, actor) {
-        // if the overview is visible, we will close it and then animate the actor
+        // if the overview is visible, we will handle the animation here
         if (!this._shouldAnimateActor(actor) && !Main.overview.visible) {
+            shellwm.completed_unminimize(actor);
+            return;
+        }
+
+        // the window picker has its own animation when selecting a minimized window
+        if (Main.overview.visible && Main.overview.getActivePage() == ViewSelector.ViewPage.WINDOWS) {
             shellwm.completed_unminimize(actor);
             return;
         }
@@ -325,12 +332,12 @@ const WindowManager = new Lang.Class({
         actor.show();
 
         if (Main.overview.visible) {
-            Main.overview.hide();
             let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
                 Main.overview.disconnect(overviewHiddenId);
                 this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,
                                     this._unminimizeWindowOverwritten);
             }));
+            Main.overview.hide();
         } else {
             this._slideWindowIn(shellwm, actor, this._unminimizeWindowDone,
                                 this._unminimizeWindowOverwritten);
