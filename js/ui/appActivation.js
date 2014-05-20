@@ -413,7 +413,12 @@ const DesktopAppClient = new Lang.Class({
 
         // Show the splash page if we didn't launch this ourselves, since in that case
         // we already explicitly control when the splash screen should be used
-        if (this._lastDesktopApp && !launchedByShell) {
+        let showSplash =
+            (this._lastDesktopApp != null) &&
+            (this._lastDesktopApp.state != Shell.AppState.RUNNING) &&
+            !launchedByShell;
+
+        if (showSplash) {
             let context = new AppActivationContext(this._lastDesktopApp);
             context.showSplash();
         }
