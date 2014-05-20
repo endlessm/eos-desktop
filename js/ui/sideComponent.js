@@ -32,12 +32,13 @@ const SideComponent = new Lang.Class({
     Name: 'SideComponent',
     Extends: GObject.Object,
 
-    _init: function(proxyProto, proxyName, proxyPath) {
+    _init: function(proxyIface, proxyName, proxyPath) {
         this.parent();
         this._propertiesChangedId = 0;
         this._desktopShownId = 0;
 
-        this._proxyProto = proxyProto;
+        this._proxyIface = proxyIface;
+        this._proxyInfo = Gio.DBusInterfaceInfo.new_for_xml(this._proxyIface);
         this._proxyName = proxyName;
         this._proxyPath = proxyPath;
 
@@ -46,9 +47,13 @@ const SideComponent = new Lang.Class({
 
     enable: function() {
         if (!this.proxy) {
-            this.proxy = new this._proxyProto(Gio.DBus.session, 
-                                              this._proxyName, this._proxyPath,
-                                              Lang.bind(this, this._onProxyConstructed));
+            this.proxy = new Gio.DBusProxy({ g_connection: Gio.DBus.session,
+                                             g_interface_name: this._proxyInfo.name,
+                                             g_interface_info: this._proxyInfo,
+                                             g_name: this._proxyName,
+                                             g_object_path: this._proxyPath,
+                                             g_flags: Gio.DBusProxyFlags.DO_NOT_AUTO_START_AT_CONSTRUCTION });
+            this.proxy.init_async(GLib.PRIORITY_DEFAULT, null, Lang.bind(this, this._onProxyConstructed));
         }
 
         this._propertiesChangedId =
@@ -77,8 +82,12 @@ const SideComponent = new Lang.Class({
         }
     },
 
-    _onProxyConstructed: function() {
-        // nothing to do
+    _onProxyConstructed: function(object, res) {
+        try {
+            object.init_finish(res);
+        } catch (e) {
+            logError(e, 'Error while constructing the DBus proxy for ' + this._proxyName);
+        }
     },
 
     _onPropertiesChanged: function(proxy, changedProps, invalidatedProps) {

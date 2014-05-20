@@ -26,14 +26,12 @@ const AppStoreIface = '<node> \
 </interface> \
 </node>';
 
-const AppStoreProxy = Gio.DBusProxy.makeProxyWrapper(AppStoreIface);
-
 const AppStore = new Lang.Class({
     Name: 'AppStore',
     Extends: SideComponent.SideComponent,
 
     _init: function() {
-        this.parent(AppStoreProxy, APP_STORE_NAME, APP_STORE_PATH);
+        this.parent(AppStoreIface, APP_STORE_NAME, APP_STORE_PATH);
     },
 
     enable: function() {

@@ -20,14 +20,13 @@ const SocialBarIface = '<node> \
 
 const SOCIAL_BAR_NAME = 'com.endlessm.SocialBar';
 const SOCIAL_BAR_PATH = '/com/endlessm/SocialBar';
-const SocialBarProxy = Gio.DBusProxy.makeProxyWrapper(SocialBarIface);
 
 const SocialBar = new Lang.Class({
     Name: 'SocialBar',
     Extends: SideComponent.SideComponent,
 
     _init: function() {
-        this.parent(SocialBarProxy, SOCIAL_BAR_NAME, SOCIAL_BAR_PATH);
+        this.parent(SocialBarIface, SOCIAL_BAR_NAME, SOCIAL_BAR_PATH);
     },
 
     enable: function() {
