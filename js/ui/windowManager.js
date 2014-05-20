@@ -13,6 +13,8 @@ const AltTab = imports.ui.altTab;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Main = imports.ui.main;
 const SideComponent = imports.ui.sideComponent;
+const BackgroundMenu = imports.ui.backgroundMenu;
+const ButtonConstants = imports.ui.buttonConstants;
 const Tweener = imports.ui.tweener;
 const ViewSelector = imports.ui.viewSelector;
 
@@ -89,6 +91,20 @@ const WindowManager = new Lang.Class({
         this._animationBlockCount = 0;
 
         this._allowedKeybindings = {};
+
+        this._desktopOverlay = new St.Widget({ reactive: true });
+        Main.layoutManager.addChrome(this._desktopOverlay);
+        this._desktopOverlayShowing = false;
+
+        // the desktop overlay needs to replicate the background's functionality
+        this._desktopOverlayBgAction = new Clutter.ClickAction();
+        this._desktopOverlayBgAction.connect('clicked', function(action) {
+            if (action.get_button() == ButtonConstants.LEFT_MOUSE_BUTTON) {
+                Main.layoutManager.emit('background-clicked');
+            }
+        });
+        this._desktopOverlay.add_action(this._desktopOverlayBgAction);
+        BackgroundMenu.addBackgroundMenu(this._desktopOverlayBgAction, Main.layoutManager);
 
         this._switchData = null;
         this._shellwm.connect('kill-switch-workspace', Lang.bind(this, this._switchWorkspaceDone));
@@ -177,12 +193,24 @@ const WindowManager = new Lang.Class({
                                         Lang.bind(this, this._startA11ySwitcher));
 
         Main.overview.connect('showing', Lang.bind(this, function() {
-            for (let i = 0; i < this._dimmedWindows.length; i++)
+            for (let i = 0; i < this._dimmedWindows.length; i++) {
                 this._undimWindow(this._dimmedWindows[i]);
+            }
+
+            // hide the overlay so it doesn't conflict with the desktop
+            if (this._desktopOverlayShowing) {
+                this._desktopOverlay.hide();
+            }
         }));
         Main.overview.connect('hiding', Lang.bind(this, function() {
-            for (let i = 0; i < this._dimmedWindows.length; i++)
+            for (let i = 0; i < this._dimmedWindows.length; i++) {
                 this._dimWindow(this._dimmedWindows[i]);
+            }
+
+            // show the overlay if needed
+            if (this._desktopOverlayShowing) {
+                this._desktopOverlay.show();
+            }
         }));
     },
 
@@ -225,7 +253,7 @@ const WindowManager = new Lang.Class({
         let windowType = actor.meta_window.get_window_type();
         return windowType == Meta.WindowType.NORMAL ||
                windowType == Meta.WindowType.MODAL_DIALOG ||
-               SideComponent.isSideComponentWindow(actor);
+               SideComponent.isSideComponentWindow(actor.meta_window);
     },
 
     _removeEffect : function(list, actor) {
@@ -431,6 +459,120 @@ const WindowManager = new Lang.Class({
                            transition: 'linear' });
     },
 
+    _hideOtherWindows: function(actor, animate) {
+        let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+        if (!monitor) {
+            return;
+        }
+
+        let winActors = global.get_window_actors();
+        for (let i = 0; i < winActors.length; i++) {
+            if (!winActors[i].get_meta_window().showing_on_its_workspace()) {
+                continue;
+            }
+
+            if (SideComponent.isSideComponentWindow(winActors[i].meta_window)) {
+                continue;
+            }
+
+            if (animate) {
+                Tweener.addTween(winActors[i],
+                                 { opacity: 0,
+                                   time: WINDOW_ANIMATION_TIME,
+                                   transition: 'easeOutQuad',
+                                   onComplete: function(winActor) { winActor.hide(); },
+                                   onCompleteParams: [winActors[i]],
+                                   onOverwrite: function(winActor) { winActor.hide(); },
+                                   onOverwriteParams: [winActors[i]]
+                                 });
+            } else {
+                winActors[i].opacity = 0;
+                winActors[i].hide();
+            }
+        }
+
+        // cover other windows with an invisible overlay at the side of the SideComponent
+        let workArea = Main.layoutManager.getWorkAreaForMonitor(actor.meta_window.get_monitor());
+        this._desktopOverlay.width = monitor.width - actor.width;
+        this._desktopOverlay.height = workArea.height;
+        this._desktopOverlay.y = actor.y;
+
+        if (actor.x <= monitor.x) {
+            this._desktopOverlay.x = monitor.x + monitor.width - this._desktopOverlay.width;
+        } else {
+            this._desktopOverlay.x = monitor.x;
+        }
+
+        this._desktopOverlayShowing = true;
+        this._desktopOverlay.show();
+    },
+
+    _showOtherWindows: function(actor, animate) {
+        let winActors = global.get_window_actors();
+        for (let i = 0; i < winActors.length; i++) {
+            if (!winActors[i].get_meta_window().showing_on_its_workspace()) {
+                continue;
+            }
+
+            if (SideComponent.isSideComponentWindow(winActors[i].meta_window)) {
+                continue;
+            }
+
+            if (animate && winActors[i].opacity != 255) {
+                winActors[i].show();
+                Tweener.addTween(winActors[i],
+                                 { opacity: 255,
+                                   time: WINDOW_ANIMATION_TIME,
+                                   transition: 'easeOutQuad',
+                                   onOverwrite: function(winActor) { winActor.opacity = 255; },
+                                   onOverwriteParams: [winActors[i]]
+                                 });
+            } else {
+                winActors[i].opacity = 255;
+                winActors[i].show();
+            }
+        }
+
+        this._desktopOverlayShowing = false;
+        this._desktopOverlay.hide();
+    },
+
+    _mapSideComponent : function (shellwm, actor, animateFade) {
+        let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+        if (!monitor) {
+            this._mapWindowDone(shellwm, actor);
+            return;
+        }
+
+        let origX = actor.x;
+        if (origX == monitor.x) {
+            // the side bar will appear from the left side
+            actor.set_position(monitor.x - actor.width, actor.y);
+        } else {
+            // ... from the right side
+            actor.set_position(monitor.x + monitor.width, actor.y);
+        }
+
+        actor.opacity = 255;
+        actor.show();
+
+        Tweener.addTween(actor,
+                         { x: origX,
+                           time: WINDOW_ANIMATION_TIME,
+                           transition: "easeOutQuad",
+                           onComplete: this._mapWindowDone,
+                           onCompleteScope: this,
+                           onCompleteParams: [shellwm, actor],
+                           onOverwrite: this._mapWindowOverwrite,
+                           onOverwriteScope: this,
+                           onOverwriteParams: [shellwm, actor]
+                         });
+
+        if (SideComponent.isAppStoreWindow(actor.meta_window)) {
+            this._hideOtherWindows(actor, animateFade);
+        }
+    },
+
     _mapWindow : function(shellwm, actor) {
         actor._windowType = actor.meta_window.get_window_type();
         actor._notifyWindowTypeSignalId = actor.meta_window.connect('notify::window-type', Lang.bind(this, function () {
@@ -447,7 +589,8 @@ const WindowManager = new Lang.Class({
             actor._windowType = type;
         }));
 
-        if (!this._shouldAnimateActor(actor)) {
+        // for side components, we will hide the overview and then animate
+        if (!this._shouldAnimateActor(actor) && !(SideComponent.isSideComponentWindow(actor.meta_window) && Main.overview.visible)) {
             shellwm.completed_map(actor);
             return;
         }
@@ -471,37 +614,18 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
-        } else if (SideComponent.isSideComponentWindow(actor)) {
-            let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
-            if (!monitor) {
-                this._mapWindowDone(shellwm, actor);
-                return;
-            }
-
-            let origX = actor.x;
-            if (origX == monitor.x) {
-                // the side bar will appear from the left side
-                actor.set_position(monitor.x - actor.width, actor.y);
-            } else {
-                // ... from the right side
-                actor.set_position(monitor.x + monitor.width, actor.y);
-            }
-
-            actor.opacity = 255;
-            actor.show();
+        } else if (SideComponent.isSideComponentWindow(actor.meta_window)) {
             this._mapping.push(actor);
 
-            Tweener.addTween(actor,
-                             { x: origX,
-                               time: WINDOW_ANIMATION_TIME,
-                               transition: "easeOutQuad",
-                               onComplete: this._mapWindowDone,
-                               onCompleteScope: this,
-                               onCompleteParams: [shellwm, actor],
-                               onOverwrite: this._mapWindowOverwrite,
-                               onOverwriteScope: this,
-                               onOverwriteParams: [shellwm, actor]
-                             });
+            if (Main.overview.visible) {
+                let overviewHiddenId = Main.overview.connect('hidden', Lang.bind(this, function() {
+                    Main.overview.disconnect(overviewHiddenId);
+                    this._mapSideComponent(shellwm, actor, false);
+                }));
+                Main.overview.hide();
+            } else {
+                this._mapSideComponent(shellwm, actor, true);
+            }
         } else {
             /* Fade window in */
             actor.opacity = 0;
@@ -576,6 +700,10 @@ const WindowManager = new Lang.Class({
 
         if (!this._shouldAnimateActor(actor)) {
             shellwm.completed_destroy(actor);
+
+            if (SideComponent.isAppStoreWindow(actor.meta_window)) {
+                this._showOtherWindows(actor, false);
+            }
             return;
         }
 
@@ -605,7 +733,7 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
-        } else if (SideComponent.isSideComponentWindow(actor)) {
+        } else if (SideComponent.isSideComponentWindow(actor.meta_window)) {
             let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
             if (!monitor) {
                 this._destroyWindowDone(shellwm, actor);
@@ -633,6 +761,11 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
+
+
+            if (SideComponent.isAppStoreWindow(actor.meta_window)) {
+                this._showOtherWindows(actor, true);
+            }
         } else {
             shellwm.completed_destroy(actor);
         }
