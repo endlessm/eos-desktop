@@ -730,14 +730,17 @@ const Overview = new Lang.Class({
         if (browser && browser.get_state() != Shell.AppState.RUNNING) {
             browser.activate();
 
-            this._firstLaunchId = browser.connect('windows-changed', function() {
+            this._firstLaunchId = browser.connect('windows-changed', Lang.bind(this, function() {
                 let windows = browser.get_windows();
                 let win = windows[0];
-                let maximizeId = win.connect('notify::maximized-horizontally', function(win) { 
-                    win.minimize();
-                    win.disconnect(maximizeId);
-                });
-            });
+                let raisedId = win.connect('raised', Lang.bind(this, function(win) {
+                    if (this._firstLaunchId > 0) {
+                        win.minimize();
+                    } else {
+                        win.disconnect(raisedId);
+                    }
+                }));
+            }));
         }
     },
 
