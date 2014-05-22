@@ -510,7 +510,7 @@ shell_app_system_lookup_app_for_path (ShellAppSystem   *system,
   else
     basename = desktop_path;
 
-  app = shell_app_system_lookup_app (system, basename);
+  app = shell_app_system_lookup_heuristic_basename (system, basename);
   if (!app)
     return NULL;
 
