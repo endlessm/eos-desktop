@@ -7,6 +7,7 @@ const Lang = imports.lang;
 const Meta = imports.gi.Meta;
 
 const Main = imports.ui.main;
+const ViewSelector = imports.ui.viewSelector;
 
 const SIDE_COMPONENT_ROLE = 'eos-side-component';
 
@@ -68,6 +69,14 @@ const SideComponent = new Lang.Class({
                 this.hide(global.get_current_time());
             }
         }));
+
+        // Same when clicking the background from the window picker.
+        this._overviewPageChangedId = Main.overview.connect('page-changed', Lang.bind(this, function() {
+            if (this._visible && Main.overview.visible &&
+                    Main.overview.getActivePage() == ViewSelector.ViewPage.APPS) {
+                this.hide(global.get_current_time());
+            }
+        }));
     },
 
     disable: function() {
@@ -79,6 +88,11 @@ const SideComponent = new Lang.Class({
         if (this._desktopShownId > 0) {
             Main.layoutManager.disconnect(this._desktopShownId);
             this._desktopShownId = 0;
+        }
+
+        if (this._overviewPageChangedId > 0) {
+            Main.overview.disconnect(this._overviewPageChangedId);
+            this._overviewPageChangedId = 0;
         }
     },
 
