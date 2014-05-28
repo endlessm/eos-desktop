@@ -136,7 +136,12 @@ const SideComponent = new Lang.Class({
     },
 
     show: function(timestamp, params) {
-        this.callShow(timestamp, params);
+        if (this._visible && Main.overview.visible) {
+            // the component is already open, but obscured by the overview
+            Main.overview.hide();
+        } else {
+            this.callShow(timestamp, params);
+        }
     },
 
     hide: function(timestamp, params) {
