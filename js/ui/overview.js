@@ -496,6 +496,10 @@ const Overview = new Lang.Class({
                                this.dashIconSize = this._dash.iconSize;
                            }));
 
+        this._viewSelector.connect('page-changed', Lang.bind(this,function() {
+            this.emit('page-changed');
+        }));
+
         // clicking the desktop displays the app grid
         Main.layoutManager.connect('background-clicked', Lang.bind(this, this.showApps));
 
