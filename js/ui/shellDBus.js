@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Gio = imports.gi.Gio;
+const EosMetrics = imports.gi.EosMetrics;
 const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Meta = imports.gi.Meta;
@@ -480,10 +481,14 @@ const AppStoreService = new Lang.Class({
     },
 
     AddApplication: function(id) {
+        let eventRecorder = EosMetrics.EventRecorder.prototype.get_default();
+        eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_ADDED, new GLib.Variant('s', id));
         this._addItem(id, false);
     },
 
     RemoveApplication: function(id) {
+        let eventRecorder = EosMetrics.EventRecorder.prototype.get_default();
+        eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_REMOVED, new GLib.Variant('s', id));
         this._removeItem(id, false);
     },
 

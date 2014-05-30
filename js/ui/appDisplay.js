@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const EosMetrics = imports.gi.EosMetrics;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
@@ -1834,6 +1835,9 @@ const AppStoreIcon = new Lang.Class({
 
     _deleteItem: function(source) {
         if (source.app) {
+            let eventRecorder = EosMetrics.EventRecorder.prototype.get_default();
+            eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_REMOVED, new GLib.Variant('s', source.getId()));
+
             let appInfo = source.app.get_app_info();
             if (this._canDelete(appInfo)) {
                 appInfo.delete();
