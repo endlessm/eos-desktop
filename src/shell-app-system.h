@@ -5,8 +5,6 @@
 #include <gio/gio.h>
 #include <clutter/clutter.h>
 #include <meta/window.h>
-#define GMENU_I_KNOW_THIS_IS_UNSTABLE
-#include <gmenu-tree.h>
 
 #include "shell-app.h"
 
@@ -39,14 +37,8 @@ struct _ShellAppSystemClass
 GType           shell_app_system_get_type    (void) G_GNUC_CONST;
 ShellAppSystem *shell_app_system_get_default (void);
 
-GMenuTree      *shell_app_system_get_tree                     (ShellAppSystem *system);
-
 ShellApp       *shell_app_system_lookup_app                   (ShellAppSystem  *system,
                                                                const char      *id);
-ShellApp       *shell_app_system_lookup_app_by_tree_entry     (ShellAppSystem  *system,
-                                                               GMenuTreeEntry  *entry);
-ShellApp       *shell_app_system_lookup_app_for_path          (ShellAppSystem  *system,
-                                                               const char      *desktop_path);
 ShellApp       *shell_app_system_lookup_heuristic_basename    (ShellAppSystem  *system,
                                                                const char      *id);
 
@@ -56,11 +48,5 @@ ShellApp       *shell_app_system_lookup_desktop_wmclass       (ShellAppSystem *s
                                                                const char     *wmclass);
 
 GSList         *shell_app_system_get_running               (ShellAppSystem  *self);
-
-GSList         *shell_app_system_initial_search            (ShellAppSystem  *system,
-                                                            GSList          *terms);
-GSList         *shell_app_system_subsearch                 (ShellAppSystem  *system,
-                                                            GSList          *previous_results,
-                                                            GSList          *terms);
 
 #endif /* __SHELL_APP_SYSTEM_H__ */

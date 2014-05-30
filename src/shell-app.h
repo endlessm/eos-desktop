@@ -4,9 +4,8 @@
 
 #include <clutter/clutter.h>
 #include <gio/gio.h>
+#include <gio/gdesktopappinfo.h>
 #include <meta/window.h>
-#define GMENU_I_KNOW_THIS_IS_UNSTABLE
-#include <gmenu-tree.h>
 
 G_BEGIN_DECLS
 
@@ -38,7 +37,6 @@ GType shell_app_get_type (void) G_GNUC_CONST;
 
 const char *shell_app_get_id (ShellApp *app);
 
-GMenuTreeEntry *shell_app_get_tree_entry (ShellApp *app);
 GDesktopAppInfo *shell_app_get_app_info (ShellApp *app);
 
 ClutterActor *shell_app_create_icon_texture (ShellApp *app, int size);

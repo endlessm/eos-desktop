@@ -183,7 +183,7 @@ shell_window_tracker_is_window_interesting (MetaWindow *window)
   return TRUE;
 }
 
-/**
+/*
  * get_app_from_window_wmclass:
  *
  * Looks only at the given window, and attempts to determine
@@ -217,7 +217,41 @@ get_app_from_window_wmclass (MetaWindow  *window)
   return NULL;
 }
 
-/**
+/*
+ * get_app_from_gapplication_id:
+ * @monitor: a #ShellWindowTracker
+ * @window: a #MetaWindow
+ *
+ * Looks only at the given window, and attempts to determine
+ * an application based on _GTK_APPLICATION_ID.  If one can't be determined,
+ * return %NULL.
+ *
+ * Return value: (transfer full): A newly-referenced #ShellApp, or %NULL
+ */
+static ShellApp *
+get_app_from_gapplication_id (MetaWindow  *window)
+{
+  ShellApp *app;
+  ShellAppSystem *appsys;
+  const char *id;
+  char *desktop_file;
+
+  appsys = shell_app_system_get_default ();
+
+  id = meta_window_get_gtk_application_id (window);
+  if (!id)
+    return NULL;
+
+  desktop_file = g_strconcat (id, ".desktop", NULL);
+  app = shell_app_system_lookup_app (appsys, desktop_file);
+  if (app)
+    g_object_ref (app);
+
+  g_free (desktop_file);
+  return app;
+}
+
+/*
  * get_app_from_window_group:
  * @monitor: a #ShellWindowTracker
  * @window: a #MetaWindow
@@ -265,7 +299,7 @@ get_app_from_window_group (ShellWindowTracker  *tracker,
   return result;
 }
 
-/**
+/*
  * get_app_from_window_pid:
  * @tracker: a #ShellWindowTracker
  * @window: a #MetaWindow
@@ -332,6 +366,13 @@ get_app_for_window (ShellWindowTracker    *tracker,
 
   if (meta_window_is_remote (window))
     return _shell_app_new_for_window (window);
+
+  /* Check if the window has a GApplication ID attached; this is
+   * canonical if it does
+   */
+  result = get_app_from_gapplication_id (window);
+  if (result != NULL)
+    return result;
 
   /* Check if the app's WM_CLASS specifies an app; this is
    * canonical if it does.
@@ -402,6 +443,8 @@ update_focus_app (ShellWindowTracker *self)
     }
 
   set_focus_app (self, new_focus_app);
+
+  g_clear_object (&new_focus_app);
 }
 
 static void
@@ -424,9 +467,6 @@ track_window (ShellWindowTracker *self,
               MetaWindow      *window)
 {
   ShellApp *app;
-
-  if (!shell_window_tracker_is_window_interesting (window))
-    return;
 
   app = get_app_for_window (self, window);
   if (!app)
@@ -466,11 +506,8 @@ disassociate_window (ShellWindowTracker   *self,
 
   g_hash_table_remove (self->window_to_app, window);
 
-  if (shell_window_tracker_is_window_interesting (window))
-    {
-      _shell_app_remove_window (app, window);
-      g_signal_handlers_disconnect_by_func (window, G_CALLBACK(on_wm_class_changed), self);
-    }
+  _shell_app_remove_window (app, window);
+  g_signal_handlers_disconnect_by_func (window, G_CALLBACK(on_wm_class_changed), self);
 
   g_signal_emit (self, signals[TRACKED_WINDOWS_CHANGED], 0);
 
@@ -780,6 +817,7 @@ ShellApp *
 shell_startup_sequence_get_app (ShellStartupSequence *sequence)
 {
   const char *appid;
+  char *basename;
   ShellAppSystem *appsys;
   ShellApp *app;
 
@@ -787,8 +825,10 @@ shell_startup_sequence_get_app (ShellStartupSequence *sequence)
   if (!appid)
     return NULL;
 
+  basename = g_path_get_basename (appid);
   appsys = shell_app_system_get_default ();
-  app = shell_app_system_lookup_app_for_path (appsys, appid);
+  app = shell_app_system_lookup_app (appsys, basename);
+  g_free (basename);
   return app;
 }
 

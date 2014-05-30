@@ -4,13 +4,11 @@ desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop eos-app-feedb
 sessionsdir=$(datadir)/xsessions
 sessions_DATA = eos-session.desktop
 
-jsdir = $(pkgdatadir)/js
-
 # We substitute in bindir so it works as an autostart
 # file when built in a non-system prefix
 %.desktop.in:%.desktop.in.in
 	$(AM_V_GEN) sed -e "s|@bindir[@]|$(bindir)|" \
-	    -e "s|@jsdir[@]|$(jsdir)|" \
+	    -e "s|@pkgdatadir[@]|$(pkgdatadir)|" \
 	    -e "s|@VERSION[@]|$(VERSION)|" \
 	    $< > $@ || rm $@
 

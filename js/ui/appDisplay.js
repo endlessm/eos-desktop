@@ -74,7 +74,7 @@ const AppSearchProvider = new Lang.Class({
     getResultMetas: function(apps, callback) {
         let metas = [];
         for (let i = 0; i < apps.length; i++) {
-            let app = apps[i];
+            let app = this._appSys.lookup_app(apps[i]);
             metas.push({ 'id': app,
                          'name': app.get_name(),
                          'createIcon': function(size) {
@@ -86,13 +86,24 @@ const AppSearchProvider = new Lang.Class({
     },
 
     getInitialResultSet: function(terms) {
-        let results = this._appSys.initial_search(terms);
-        this.searchSystem.setResults(this, this._filterLayoutIds(results));
+        let query = terms.join(' ');
+        let groups = Gio.DesktopAppInfo.search(query);
+        let usage = Shell.AppUsage.get_default();
+        let results = [];
+        groups.forEach(function(group) {
+            group = group.filter(function(appID) {
+                let app = Gio.DesktopAppInfo.new(appID);
+                return app && app.should_show() && IconGridLayout.layout.hasIcon(appID);
+            });
+            results = results.concat(group.sort(function(a, b) {
+                return usage.compare('', a, b);
+            }));
+        });
+        this.searchSystem.setResults(this, results);
     },
 
     getSubsearchResultSet: function(previousResults, terms) {
-        let results = this._appSys.subsearch(previousResults, terms);
-        this.searchSystem.setResults(this, this._filterLayoutIds(results));
+        this.getInitialResultSet(terms);
     },
 
     activateResult: function(app) {
@@ -1578,7 +1589,9 @@ const AppIcon = new Lang.Class({
             this._removeMenuTimeout();
             this._menuTimeoutId = Mainloop.timeout_add(MENU_POPUP_TIMEOUT,
                 Lang.bind(this, function() {
+                    this._menuTimeoutId = 0;
                     this.popupMenu();
+                    return false;
                 }));
         } else if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
             this.popupMenu();
@@ -1959,7 +1972,9 @@ const AppIconMenu = new Lang.Class({
     _redisplay: function() {
         this.removeAll();
 
-        let windows = this._source.app.get_windows();
+        let windows = this._source.app.get_windows().filter(function(w) {
+            return Shell.WindowTracker.is_window_interesting(w);
+        });
 
         // Display the app windows menu items and the separator between windows
         // of the current desktop and other windows.

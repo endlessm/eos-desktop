@@ -1190,6 +1190,7 @@ const Workspace = new Lang.Class({
         }
 
         this.positionWindows(WindowPositionFlags.ANIMATE);
+        this._repositionWindowsId = 0;
         return false;
     },
 

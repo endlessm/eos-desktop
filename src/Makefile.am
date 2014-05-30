@@ -29,11 +29,9 @@ CLEANFILES += $(service_DATA)
 
 CLEANFILES += $(gir_DATA) $(typelib_DATA)
 
-bin_SCRIPTS += eos-shell-extension-tool eos-shell-extension-prefs \
-	       eos-shell-perf-tool
-EXTRA_DIST += eos-shell-extension-tool.in eos-shell-extension-prefs.in \
-	      eos-shell-perf-tool.in
-bin_PROGRAMS = eos-shell-real
+bin_SCRIPTS += eos-shell-extension-tool eos-shell-perf-tool
+EXTRA_DIST += eos-shell-extension-tool.in eos-shell-perf-tool.in
+bin_PROGRAMS = eos-shell-real eos-shell-extension-prefs
 
 if USE_JHBUILD_WRAPPER_SCRIPT
 eos_shell = eos-shell-jhbuild
@@ -71,9 +69,6 @@ eos-shell-jhbuild: eos-shell-jhbuild.in eos-shell-real Makefile
 eos-shell-extension-tool: eos-shell-extension-tool.in Makefile
 	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
 
-eos-shell-extension-prefs: eos-shell-extension-prefs.in Makefile
-	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
-
 eos-shell-perf-tool: eos-shell-perf-tool.in Makefile
 	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
 
@@ -93,7 +88,6 @@ eos_shell_cflags =				\
 	-DGNOME_SHELL_LIBEXECDIR=\"$(libexecdir)\"	\
 	-DGNOME_SHELL_DATADIR=\"$(pkgdatadir)\"	\
 	-DGNOME_SHELL_PKGLIBDIR=\"$(pkglibdir)\" \
-	-DJSDIR=\"$(pkgdatadir)/js\"		\
 	-DMUTTER_TYPELIB_DIR=\"$(MUTTER_TYPELIB_DIR)\"
 
 privlibdir = $(pkglibdir)
@@ -140,8 +134,7 @@ shell_private_sources = \
 	gactionobserver.h		\
 	gactionobserver.c
 
-libeos_shell_la_SOURCES =		\
-	$(shell_built_sources)		\
+libeos_shell_sources =			\
 	$(shell_public_headers_h)	\
 	$(shell_private_sources)	\
 	shell-app-private.h		\
@@ -183,8 +176,17 @@ libeos_shell_la_SOURCES =		\
 	shell-wm.c			\
 	$(NULL)
 
+libeos_shell_built_sources =		\
+	$(shell_built_sources)		\
+	$(top_builddir)/js/js-resources.c		\
+	$(top_builddir)/js/js-resources.h		\
+	$(NULL)
+
+libeos_shell_la_SOURCES = $(libeos_shell_sources)
+nodist_libeos_shell_la_SOURCES = $(libeos_shell_built_sources)
+
 libeos_shell_la_gir_sources = \
-	$(filter-out %-private.h $(shell_private_sources), $(shell_public_headers_h) $(libeos_shell_la_SOURCES))
+	$(filter-out %-private.h $(shell_private_sources), $(shell_public_headers_h) $(libeos_shell_sources) $(libeos_shell_built_sources))
 
 eos_shell_real_SOURCES =		\
 	main.c
@@ -192,11 +194,21 @@ eos_shell_real_CPPFLAGS = $(eos_shell_cflags)
 eos_shell_real_LDADD = libeos-shell.la libeos-shell-js.la $(libeos_shell_la_LIBADD)
 eos_shell_real_DEPENDENCIES = libeos-shell.la
 
+eos_shell_extension_prefs_SOURCES = 	\
+	gnome-shell-extension-prefs.c 	\
+	$(NULL)
+nodist_gnome_shell_extension_prefs_SOURCES = \
+	$(top_builddir)/js/js-resources.c		\
+	$(top_builddir)/js/js-resources.h		\
+	$(NULL)
+eos_shell_extension_prefs_CPPFLAGS = $(eos_shell_cflags)
+eos_shell_extension_prefs_LDADD = libeos-shell-js.la $(EOS_SHELL_LIBS)
+
 ########################################
 
 libeos_shell_js_la_SOURCES =		\
 	shell-js.h			\
-	shell-js.cpp		\
+	shell-js.cpp			\
 	$(NULL)
 
 libeos_shell_js_la_LIBADD =		\

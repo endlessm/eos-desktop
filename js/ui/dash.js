@@ -603,6 +603,7 @@ const Dash = new Lang.Class({
                     Lang.bind(this, function() {
                         this._labelShowing = true;
                         item.showLabel();
+                        this._showLabelTimeoutId = 0;
                         return false;
                     }));
                 if (this._resetHoverTimeoutId > 0) {
@@ -619,6 +620,7 @@ const Dash = new Lang.Class({
                 this._resetHoverTimeoutId = Mainloop.timeout_add(DASH_ITEM_HOVER_TIMEOUT,
                     Lang.bind(this, function() {
                         this._labelShowing = false;
+                        this._resetHoverTimeoutId = 0;
                         return false;
                     }));
             }

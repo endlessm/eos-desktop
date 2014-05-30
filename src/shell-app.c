@@ -50,7 +50,7 @@ typedef struct {
  * SECTION:shell-app
  * @short_description: Object representing an application
  *
- * This object wraps a #GMenuTreeEntry, providing methods and signals
+ * This object wraps a #GDesktopAppInfo, providing methods and signals
  * primarily useful for running applications.
  */
 struct _ShellApp
@@ -61,7 +61,7 @@ struct _ShellApp
 
   ShellAppState state;
 
-  GMenuTreeEntry *entry; /* If NULL, this app is backed by one or more
+  GDesktopAppInfo *info; /* If NULL, this app is backed by one or more
                           * MetaWindow.  For purposes of app title
                           * etc., we use the first window added,
                           * because it's most likely to be what we
@@ -72,12 +72,7 @@ struct _ShellApp
   ShellAppRunningState *running_state;
 
   char *window_id_string;
-
-  char *casefolded_name;
-  char *casefolded_generic_name;
   char *name_collation_key;
-  char *casefolded_exec;
-  char **casefolded_keywords;
 };
 
 enum {
@@ -134,15 +129,15 @@ shell_app_get_property (GObject    *gobject,
 const char *
 shell_app_get_id (ShellApp *app)
 {
-  if (app->entry)
-    return gmenu_tree_entry_get_desktop_file_id (app->entry);
+  if (app->info)
+    return g_app_info_get_id (G_APP_INFO (app->info));
   return app->window_id_string;
 }
 
 static MetaWindow *
 window_backed_app_get_window (ShellApp     *app)
 {
-  g_assert (app->entry == NULL);
+  g_assert (app->info == NULL);
   g_assert (app->running_state);
   g_assert (app->running_state->windows);
   return app->running_state->windows->data;
@@ -193,11 +188,10 @@ shell_app_create_icon_texture (ShellApp   *app,
 
   ret = NULL;
 
-  if (app->entry == NULL)
+  if (app->info == NULL)
     return window_backed_app_get_icon (app, size);
 
-  info = G_APP_INFO (gmenu_tree_entry_get_app_info (app->entry));
-  icon = g_app_info_get_icon (info);
+  icon = g_app_info_get_icon (G_APP_INFO (app->info));
   if (icon != NULL)
     ret = st_texture_cache_load_gicon (st_texture_cache_get_default (), NULL, icon, size);
 
@@ -249,7 +243,7 @@ shell_app_create_faded_icon_cpu (StTextureCache *cache,
 
   info = NULL;
 
-  icon = g_app_info_get_icon (G_APP_INFO (gmenu_tree_entry_get_app_info (app->entry)));
+  icon = g_app_info_get_icon (G_APP_INFO (app->info));
   if (icon != NULL)
     {
       info = gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (),
@@ -338,7 +332,7 @@ shell_app_get_faded_icon (ShellApp *app, int size)
    * property tracking bits, and this helps us visually distinguish
    * app-tracked from not.
    */
-  if (!app->entry)
+  if (!app->info)
     return window_backed_app_get_icon (app, size);
 
   /* Use icon: prefix so that we get evicted from the cache on
@@ -371,8 +365,8 @@ shell_app_get_faded_icon (ShellApp *app, int size)
 const char *
 shell_app_get_name (ShellApp *app)
 {
-  if (app->entry)
-    return g_app_info_get_name (G_APP_INFO (gmenu_tree_entry_get_app_info (app->entry)));
+  if (app->info)
+    return g_app_info_get_name (G_APP_INFO (app->info));
   else
     {
       MetaWindow *window = window_backed_app_get_window (app);
@@ -388,8 +382,8 @@ shell_app_get_name (ShellApp *app)
 const char *
 shell_app_get_description (ShellApp *app)
 {
-  if (app->entry)
-    return g_app_info_get_description (G_APP_INFO (gmenu_tree_entry_get_app_info (app->entry)));
+  if (app->info)
+    return g_app_info_get_description (G_APP_INFO (app->info));
   else
     return NULL;
 }
@@ -404,7 +398,7 @@ shell_app_get_description (ShellApp *app)
 gboolean
 shell_app_is_window_backed (ShellApp *app)
 {
-  return app->entry == NULL;
+  return app->info == NULL;
 }
 
 typedef struct {
@@ -660,7 +654,7 @@ void
 shell_app_open_new_window (ShellApp      *app,
                            int            workspace)
 {
-  g_return_if_fail (app->entry != NULL);
+  g_return_if_fail (app->info != NULL);
 
   /* Here we just always launch the application again, even if we know
    * it was already running.  For most applications this
@@ -729,10 +723,10 @@ shell_app_compare_windows (gconstpointer   a,
  * shell_app_get_windows:
  * @app:
  *
- * Get the toplevel, interesting windows which are associated with this
- * application.  The returned list will be sorted first by whether
- * they're on the active workspace, then by whether they're visible,
- * and finally by the time the user last interacted with them.
+ * Get the windows which are associated with this application. The
+ * returned list will be sorted first by whether they're on the
+ * active workspace, then by whether they're visible, and finally
+ * by the time the user last interacted with them.
  *
  * Returns: (transfer none) (element-type MetaWindow): List of windows
  */
@@ -857,25 +851,24 @@ _shell_app_new_for_window (MetaWindow      *window)
 }
 
 ShellApp *
-_shell_app_new (GMenuTreeEntry *info)
+_shell_app_new (GDesktopAppInfo *info)
 {
   ShellApp *app;
 
   app = g_object_new (SHELL_TYPE_APP, NULL);
 
-  _shell_app_set_entry (app, info);
+  _shell_app_set_app_info (app, info);
 
   return app;
 }
 
 void
-_shell_app_set_entry (ShellApp       *app,
-                      GMenuTreeEntry *entry)
+_shell_app_set_app_info (ShellApp        *app,
+                         GDesktopAppInfo *info)
 {
-  if (app->entry != NULL)
-    gmenu_tree_item_unref (app->entry);
-  app->entry = gmenu_tree_item_ref (entry);
-  
+  g_clear_object (&app->info);
+  app->info = g_object_ref (info);
+
   if (app->name_collation_key != NULL)
     g_free (app->name_collation_key);
   app->name_collation_key = g_utf8_collate_key (shell_app_get_name (app), -1);
@@ -1115,17 +1108,13 @@ shell_app_launch (ShellApp     *app,
                   char        **startup_id,
                   GError      **error)
 {
-  GDesktopAppInfo *gapp;
   GdkAppLaunchContext *context;
   gboolean ret;
   ShellGlobal *global;
   MetaScreen *screen;
   GdkDisplay *gdisplay;
 
-  if (startup_id)
-    *startup_id = NULL;
-
-  if (app->entry == NULL)
+  if (app->info == NULL)
     {
       MetaWindow *window = window_backed_app_get_window (app);
       /* We can't pass URIs into a window; shouldn't hit this
@@ -1151,8 +1140,7 @@ shell_app_launch (ShellApp     *app,
   gdk_app_launch_context_set_timestamp (context, timestamp);
   gdk_app_launch_context_set_desktop (context, workspace);
 
-  gapp = gmenu_tree_entry_get_app_info (app->entry);
-  ret = g_desktop_app_info_launch_uris_as_manager (gapp, uris,
+  ret = g_desktop_app_info_launch_uris_as_manager (app->info, NULL,
                                                    G_APP_LAUNCH_CONTEXT (context),
                                                    G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
                                                    NULL, NULL,
@@ -1172,21 +1160,7 @@ shell_app_launch (ShellApp     *app,
 GDesktopAppInfo *
 shell_app_get_app_info (ShellApp *app)
 {
-  if (app->entry)
-    return gmenu_tree_entry_get_app_info (app->entry);
-  return NULL;
-}
-
-/**
- * shell_app_get_tree_entry:
- * @app: a #ShellApp
- *
- * Returns: (transfer none): The #GMenuTreeEntry for this app, or %NULL if backed by a window
- */
-GMenuTreeEntry *
-shell_app_get_tree_entry (ShellApp *app)
-{
-  return app->entry;
+  return app->info;
 }
 
 gboolean
@@ -1203,10 +1177,10 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   char **keys;
   gsize i;
 
-  if (app->entry == NULL)
+  if (app->info == NULL)
     return FALSE;
 
-  filename = gmenu_tree_entry_get_desktop_file_path (app->entry);
+  filename = g_desktop_app_info_get_filename (app->info);
   if (filename == NULL || *filename == '\0')
     return FALSE;
 
@@ -1379,70 +1353,6 @@ unref_running_state (ShellAppRunningState *state)
   g_slice_free (ShellAppRunningState, state);
 }
 
-static char *
-trim_exec_line (const char *str)
-{
-  const char *start, *end, *pos;
-
-  if (str == NULL)
-    return NULL;
-
-  end = strchr (str, ' ');
-  if (end == NULL)
-    end = str + strlen (str);
-
-  start = str;
-  while ((pos = strchr (start, '/')) && pos < end)
-    start = ++pos;
-
-  return g_strndup (start, end - start);
-}
-
-static void
-shell_app_init_search_data (ShellApp *app)
-{
-  const char *name;
-  const char *generic_name;
-  const char *exec;
-  const char * const *keywords;
-  char *normalized_exec;
-  GDesktopAppInfo *appinfo;
-
-  appinfo = gmenu_tree_entry_get_app_info (app->entry);
-  name = g_app_info_get_name (G_APP_INFO (appinfo));
-  app->casefolded_name = shell_util_normalize_casefold_and_unaccent (name);
-
-  generic_name = g_desktop_app_info_get_generic_name (appinfo);
-  if (generic_name)
-    app->casefolded_generic_name = shell_util_normalize_casefold_and_unaccent (generic_name);
-  else
-    app->casefolded_generic_name = NULL;
-
-  exec = g_app_info_get_executable (G_APP_INFO (appinfo));
-  normalized_exec = shell_util_normalize_casefold_and_unaccent (exec);
-  app->casefolded_exec = trim_exec_line (normalized_exec);
-  g_free (normalized_exec);
-
-  keywords = g_desktop_app_info_get_keywords (appinfo);
-
-  if (keywords)
-    {
-      int i;
-
-      app->casefolded_keywords = g_new0 (char*, g_strv_length ((char **)keywords) + 1);
-
-      i = 0;
-      while (keywords[i])
-        {
-          app->casefolded_keywords[i] = shell_util_normalize_casefold_and_unaccent (keywords[i]);
-          ++i;
-        }
-      app->casefolded_keywords[i] = NULL;
-    }
-  else
-    app->casefolded_keywords = NULL;
-}
-
 /**
  * shell_app_compare_by_name:
  * @app: One app
@@ -1459,118 +1369,6 @@ shell_app_compare_by_name (ShellApp *app, ShellApp *other)
   return strcmp (app->name_collation_key, other->name_collation_key);
 }
 
-static ShellAppSearchMatch
-_shell_app_match_search_terms (ShellApp  *app,
-                               GSList    *terms)
-{
-  GSList *iter;
-  ShellAppSearchMatch match;
-
-  if (G_UNLIKELY (!app->casefolded_name))
-    shell_app_init_search_data (app);
-
-  match = MATCH_NONE;
-  for (iter = terms; iter; iter = iter->next)
-    {
-      ShellAppSearchMatch current_match;
-      const char *term = iter->data;
-      const char *p;
-
-      current_match = MATCH_NONE;
-
-      p = strstr (app->casefolded_name, term);
-      if (p != NULL)
-        {
-          if (p == app->casefolded_name || *(p - 1) == ' ')
-            current_match = MATCH_PREFIX;
-          else
-            current_match = MATCH_SUBSTRING;
-        }
-
-      if (app->casefolded_generic_name)
-        {
-          p = strstr (app->casefolded_generic_name, term);
-          if (p != NULL)
-            {
-              if (p == app->casefolded_generic_name || *(p - 1) == ' ')
-                current_match = MATCH_PREFIX;
-              else if (current_match < MATCH_PREFIX)
-                current_match = MATCH_SUBSTRING;
-            }
-        }
-
-      if (app->casefolded_exec)
-        {
-          p = strstr (app->casefolded_exec, term);
-          if (p != NULL)
-            {
-              if (p == app->casefolded_exec || *(p - 1) == '-')
-                current_match = MATCH_PREFIX;
-              else if (current_match < MATCH_PREFIX)
-                current_match = MATCH_SUBSTRING;
-            }
-        }
-
-      if (app->casefolded_keywords)
-        {
-          int i = 0;
-          while (app->casefolded_keywords[i] && current_match < MATCH_PREFIX)
-            {
-              p = strstr (app->casefolded_keywords[i], term);
-              if (p != NULL)
-                {
-                  if (p == app->casefolded_keywords[i])
-                    current_match = MATCH_PREFIX;
-                  else
-                    current_match = MATCH_SUBSTRING;
-                }
-              ++i;
-            }
-        }
-
-      if (current_match == MATCH_NONE)
-        return current_match;
-
-      if (current_match > match)
-        match = current_match;
-    }
-  return match;
-}
-
-void
-_shell_app_do_match (ShellApp         *app,
-                     GSList           *terms,
-                     GSList          **prefix_results,
-                     GSList          **substring_results)
-{
-  ShellAppSearchMatch match;
-  GAppInfo *appinfo;
-
-  g_assert (app != NULL);
-
-  /* Skip window-backed apps */ 
-  appinfo = (GAppInfo*)shell_app_get_app_info (app);
-  if (appinfo == NULL)
-    return;
-  /* Skip not-visible apps */ 
-  if (!g_app_info_should_show (appinfo))
-    return;
-
-  match = _shell_app_match_search_terms (app, terms);
-  switch (match)
-    {
-      case MATCH_NONE:
-        break;
-      case MATCH_PREFIX:
-        *prefix_results = g_slist_prepend (*prefix_results, app);
-        break;
-      case MATCH_SUBSTRING:
-        *substring_results = g_slist_prepend (*substring_results, app);
-        break;
-    }
-}
-
-
 static void
 shell_app_init (ShellApp *self)
 {
@@ -1582,11 +1380,7 @@ shell_app_dispose (GObject *object)
 {
   ShellApp *app = SHELL_APP (object);
 
-  if (app->entry)
-    {
-      gmenu_tree_item_unref (app->entry);
-      app->entry = NULL;
-    }
+  g_clear_object (&app->info);
 
   if (app->running_state)
     {
@@ -1607,11 +1401,7 @@ shell_app_finalize (GObject *object)
 
   g_free (app->window_id_string);
 
-  g_free (app->casefolded_name);
-  g_free (app->casefolded_generic_name);
   g_free (app->name_collation_key);
-  g_free (app->casefolded_exec);
-  g_strfreev (app->casefolded_keywords);
 
   G_OBJECT_CLASS(shell_app_parent_class)->finalize (object);
 }
