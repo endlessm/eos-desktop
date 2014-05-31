@@ -157,7 +157,7 @@ shell_app_system_init (ShellAppSystem *self)
 
   priv->startup_wm_class_to_id = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-  priv->event_recorder = emtr_event_recorder_new ();
+  priv->event_recorder = emtr_event_recorder_get_default ();
 
   monitor = g_app_info_monitor_get ();
   g_signal_connect (monitor, "changed", G_CALLBACK (installed_changed), self);
