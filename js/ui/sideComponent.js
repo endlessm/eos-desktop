@@ -118,13 +118,6 @@ const SideComponent = new Lang.Class({
 
         // resync visibility
         this._visible = this.proxy.Visible;
-
-        if (!this._visible) {
-            let visibleWindows = Main.workspaceMonitor.visibleWindows;
-            if (visibleWindows == 0) {
-                Main.overview.showApps();
-            }
-        }
     },
 
     toggle: function(timestamp, params) {
