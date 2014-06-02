@@ -44,8 +44,6 @@ struct _ShellAppSystemPrivate {
   GHashTable *running_apps;
   GHashTable *id_to_app;
   GHashTable *startup_wm_class_to_id;
-
-  EmtrEventRecorder *event_recorder;
 };
 
 static void shell_app_system_finalize (GObject *object);
@@ -157,8 +155,6 @@ shell_app_system_init (ShellAppSystem *self)
 
   priv->startup_wm_class_to_id = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-  priv->event_recorder = emtr_event_recorder_get_default ();
-
   monitor = g_app_info_monitor_get ();
   g_signal_connect (monitor, "changed", G_CALLBACK (installed_changed), self);
   installed_changed (monitor, self);
@@ -173,8 +169,6 @@ shell_app_system_finalize (GObject *object)
   g_hash_table_destroy (priv->running_apps);
   g_hash_table_destroy (priv->id_to_app);
   g_hash_table_destroy (priv->startup_wm_class_to_id);
-
-  g_object_unref (priv->event_recorder);
 
   G_OBJECT_CLASS (shell_app_system_parent_class)->finalize (object);
 }
@@ -341,8 +335,9 @@ _shell_app_system_notify_app_state_changed (ShellAppSystem *self,
     case SHELL_APP_STATE_RUNNING:
       if (app_info_id != NULL) 
       {
-        emtr_event_recorder_record_start (self->priv->event_recorder, EMTR_EVENT_SHELL_APP_IS_OPEN, 
-                                          g_variant_new ("s", app_address), 
+        emtr_event_recorder_record_start (emtr_event_recorder_get_default (),
+                                          EMTR_EVENT_SHELL_APP_IS_OPEN,
+                                          g_variant_new ("s", app_address),
                                           g_variant_new ("s", app_info_id));
       }
       g_hash_table_insert (self->priv->running_apps, g_object_ref (app), NULL);
@@ -352,7 +347,8 @@ _shell_app_system_notify_app_state_changed (ShellAppSystem *self,
     case SHELL_APP_STATE_STOPPED:
       if (app_info_id != NULL) 
       {
-        emtr_event_recorder_record_stop (self->priv->event_recorder, EMTR_EVENT_SHELL_APP_IS_OPEN, 
+        emtr_event_recorder_record_stop (emtr_event_recorder_get_default (),
+                                         EMTR_EVENT_SHELL_APP_IS_OPEN,
                                          g_variant_new ("s", app_address),
                                          NULL);
       }
