@@ -20,6 +20,7 @@ const WorkspaceMonitor = new Lang.Class({
         this._shellwm.connect('unminimize', Lang.bind(this, this._unminimizeWindow));
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
         this._shellwm.connect('destroy', Lang.bind(this, this._destroyWindow));
+        this._shellwm.connect('destroy-completed', Lang.bind(this, this._destroyWindowCompleted));
 
         this._metaScreen.connect('workspace-switched', Lang.bind(this, this._workspaceSwitched));
         this._metaScreen.connect('in-fullscreen-changed', Lang.bind(this, this._updateOverview));
@@ -167,6 +168,12 @@ const WorkspaceMonitor = new Lang.Class({
         }
 
         this._visibleWindows -= 1;
+    },
+
+    _destroyWindowCompleted: function(shellwm, actor) {
+        // Show the overview when the animation has ended. The split between the
+        // callbacks for 'destroy' and 'destroy-completed' is because the
+        // MetaWindow might be already NULL after the latter has been emitted.
         this._updateOverview();
     },
 
