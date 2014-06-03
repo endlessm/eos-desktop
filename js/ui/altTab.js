@@ -361,7 +361,7 @@ const WindowSwitcherPopup = new Lang.Class({
 
     _getWindowList: function() {
         let workspace = this._settings.get_boolean('current-workspace-only') ? global.screen.get_active_workspace() : null;
-        return global.display.get_tab_list(Meta.TabList.NORMAL, global.screen, workspace);
+        return global.display.get_tab_list(Meta.TabList.NORMAL, workspace);
     },
 
     _createSwitcher: function() {
@@ -439,8 +439,7 @@ const AppSwitcher = new Lang.Class({
         this._arrows = [];
 
         let windowTracker = Shell.WindowTracker.get_default();
-        let allWindows = global.display.get_tab_list(Meta.TabList.NORMAL,
-                                                     global.screen, null);
+        let allWindows = global.display.get_tab_list(Meta.TabList.NORMAL, null);
 
         // Construct the AppIcons, add to the popup
         for (let i = 0; i < apps.length; i++) {
