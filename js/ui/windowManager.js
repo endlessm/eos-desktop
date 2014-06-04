@@ -785,10 +785,17 @@ const WindowManager = new Lang.Class({
                 this._showOtherWindows(actor, true);
             }
         } else {
-            Mainloop.idle_add(function () {
-                                  shellwm.completed_destroy(actor);
-                                  return false;
-                              });
+            Tweener.addTween(actor,
+                             { opacity: 0,
+                               time: WINDOW_ANIMATION_TIME,
+                               transition: "easeOutQuad",
+                               onComplete: this._destroyWindowDone,
+                               onCompleteScope: this,
+                               onCompleteParams: [shellwm, actor],
+                               onOverwrite: this._destroyWindowDone,
+                               onOverwriteScope: this,
+                               onOverwriteParams: [shellwm, actor]
+                             });
         }
     },
 
