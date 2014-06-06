@@ -39,6 +39,8 @@
  * have it also track through startup-notification.
  */
 
+#define SIDE_COMPONENT_ROLE "eos-side-component"
+
 struct _ShellWindowTracker
 {
   GObject parent;
@@ -138,14 +140,21 @@ shell_window_tracker_class_init (ShellWindowTrackerClass *klass)
  * desktop window.  We skip all override-redirect types, and also
  * exclude other window types like tooltip explicitly, though generally
  * most of these should be override-redirect.
+ * Side component windows are considered interesting so they can be handled
+ * by the window manager.
  *
  * Returns: %TRUE iff a window is "interesting"
  */
 gboolean
 shell_window_tracker_is_window_interesting (MetaWindow *window)
 {
-  if (meta_window_is_override_redirect (window)
-      || meta_window_is_skip_taskbar (window))
+  if (meta_window_is_override_redirect (window))
+    return FALSE;
+
+  if (g_strcmp0 (meta_window_get_role (window), SIDE_COMPONENT_ROLE) == 0)
+    return TRUE;
+
+  if (meta_window_is_skip_taskbar (window))
     return FALSE;
 
   switch (meta_window_get_window_type (window))
@@ -347,6 +356,10 @@ get_app_for_window (ShellWindowTracker    *tracker,
   ShellAppSystem *app_system;
   ShellApp *result = NULL;
   const char *startup_id;
+
+  /* Side components don't have an associated app */
+  if (g_strcmp0 (meta_window_get_role (window), SIDE_COMPONENT_ROLE) == 0)
+    return NULL;
 
   app_system = shell_app_system_get_default ();
 
