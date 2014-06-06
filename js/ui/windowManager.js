@@ -133,7 +133,7 @@ const WindowManager = new Lang.Class({
         this._shellwm.connect('maximize', Lang.bind(this, this._maximizeWindow));
         this._shellwm.connect('unmaximize', Lang.bind(this, this._unmaximizeWindow));
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
-        this._shellwm.connect('destroy', Lang.bind(this, this._destroyWindow));
+        this._shellwm.connect_after('destroy', Lang.bind(this, this._destroyWindow));
         this._shellwm.connect('filter-keybinding', Lang.bind(this, this._filterKeybinding));
 
         this._workspaceSwitcherPopup = null;
@@ -741,10 +741,7 @@ const WindowManager = new Lang.Class({
         }
 
         if (!this._shouldAnimateActor(actor)) {
-            Mainloop.idle_add(function () {
-                                  shellwm.completed_destroy(actor);
-                                  return false;
-            });
+            shellwm.completed_destroy(actor);
 
             if (SideComponent.shouldHideOtherWindows(actor.meta_window)) {
                 this._showOtherWindows(actor, false);
