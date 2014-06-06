@@ -21,12 +21,24 @@ function isSideComponentWindow (metaWindow) {
 };
 
 /**
- * isAppStoreWindow:
+ * shouldHideOtherWindows:
  * @metaWindow: an instance of #Meta.Window
- * @return: whether the #Meta.Window belongs to the App Store application
+ * @return: whether other windows should be hidden while this one is open
  */
-function isAppStoreWindow (metaWindow) {
-    return isSideComponentWindow(metaWindow) && (metaWindow.get_wm_class() == 'Eos-app-store');
+function shouldHideOtherWindows (metaWindow) {
+    return isSideComponentWindow(metaWindow) &&
+               (metaWindow.get_wm_class() == 'Eos-app-store' || Main.socialBar.launchedFromDesktop);
+};
+
+/**
+ * launchedFromDesktop:
+ * @metaWindow: an instance of #Meta.Window
+ * @return: whether the side component was launched from the desktop
+ */
+function launchedFromDesktop (metaWindow) {
+    return isSideComponentWindow(metaWindow) &&
+               ((metaWindow.get_wm_class() == 'Eos-app-store' && Main.appStore.launchedFromDesktop) ||
+                   Main.socialBar.launchedFromDesktop);
 };
 
 const SideComponent = new Lang.Class({
@@ -44,6 +56,7 @@ const SideComponent = new Lang.Class({
         this._proxyPath = proxyPath;
 
         this._visible = false;
+        this._launchedFromDesktop = false;
     },
 
     enable: function() {
@@ -129,6 +142,8 @@ const SideComponent = new Lang.Class({
     },
 
     show: function(timestamp, params) {
+        this._launchedFromDesktop = Main.overview.visible &&
+                                    Main.overview.getActivePage() == ViewSelector.ViewPage.APPS;
         if (this._visible && Main.overview.visible) {
             // the component is already open, but obscured by the overview
             Main.overview.hide();
@@ -139,5 +154,9 @@ const SideComponent = new Lang.Class({
 
     hide: function(timestamp, params) {
         this.callHide(timestamp, params);
+    },
+
+    get launchedFromDesktop() {
+        return this._launchedFromDesktop;
     }
 });

@@ -96,6 +96,7 @@ const WindowManager = new Lang.Class({
         Main.layoutManager.addChrome(this._desktopOverlay);
         this._desktopOverlayShowing = false;
         this._desktopOverlayActor = null;
+        this._showDesktopOnDestroyDone = false;
 
         // The desktop overlay needs to replicate the background's functionality;
         // when clicked, we animate the side component out before emitting "background-clicked".
@@ -609,7 +610,7 @@ const WindowManager = new Lang.Class({
                            onOverwriteParams: [shellwm, actor]
                          });
 
-        if (SideComponent.isAppStoreWindow(actor.meta_window)) {
+        if (SideComponent.shouldHideOtherWindows(actor.meta_window)) {
             this._hideOtherWindows(actor, animateFade);
         }
     },
@@ -745,7 +746,7 @@ const WindowManager = new Lang.Class({
                                   return false;
             });
 
-            if (SideComponent.isAppStoreWindow(actor.meta_window)) {
+            if (SideComponent.shouldHideOtherWindows(actor.meta_window)) {
                 this._showOtherWindows(actor, false);
             }
             return;
@@ -781,7 +782,14 @@ const WindowManager = new Lang.Class({
             this._slideSideComponentOut(shellwm, actor,
                                         this._destroyWindowDone, this._destroyWindowDone);
 
-            if (SideComponent.isAppStoreWindow(actor.meta_window)) {
+            // if the side component does not have the focus at this point,
+            // that means that it is closing because another window has gotten it
+            // and therefore we should not try to show the desktop
+            this._showDesktopOnDestroyDone = actor.meta_window.has_focus() &&
+                                             SideComponent.launchedFromDesktop(actor.meta_window);
+
+            if (!this._showDesktopOnDestroyDone && SideComponent.shouldHideOtherWindows(actor.meta_window)) {
+                // reveal other windows while we slide out the side component
                 this._showOtherWindows(actor, true);
             }
         } else {
@@ -805,6 +813,13 @@ const WindowManager = new Lang.Class({
             if (parent && actor._parentDestroyId) {
                 parent.disconnect(actor._parentDestroyId);
                 actor._parentDestroyId = 0;
+            }
+
+            if (SideComponent.isSideComponentWindow(actor.meta_window) && this._showDesktopOnDestroyDone) {
+                Main.overview.showApps();
+                if (SideComponent.shouldHideOtherWindows(actor.meta_window)) {
+                    this._showOtherWindows(actor, false);
+                }
             }
             shellwm.completed_destroy(actor);
         }

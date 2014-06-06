@@ -5,6 +5,7 @@ const Lang = imports.lang;
 
 const Main = imports.ui.main;
 const SideComponent = imports.ui.sideComponent;
+const ViewSelector = imports.ui.viewSelector;
 
 const APP_STORE_NAME = 'com.endlessm.AppStore';
 const APP_STORE_PATH = '/com/endlessm/AppStore';
@@ -58,6 +59,10 @@ const AppStore = new Lang.Class({
     },
 
     showPage: function(timestamp, page) {
+        if (!this._visible) {
+            this._launchedFromDesktop = Main.overview.visible &&
+                                        Main.overview.getActivePage() == ViewSelector.ViewPage.APPS;
+        }
         this.proxy.showPageRemote(timestamp, page);
     }
 });
