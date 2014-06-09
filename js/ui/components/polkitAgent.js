@@ -16,7 +16,7 @@ const PolkitAgent = imports.gi.PolkitAgent;
 const Components = imports.ui.components;
 const ModalDialog = imports.ui.modalDialog;
 const ShellEntry = imports.ui.shellEntry;
-const UserMenu = imports.ui.userMenu;
+const UserWidget = imports.ui.userWidget;
 
 const DIALOG_ICON_SIZE = 48;
 
@@ -31,7 +31,6 @@ const AuthenticationDialog = new Lang.Class({
         this.message = message;
         this.userNames = userNames;
         this._wasDismissed = false;
-        this._completed = false;
 
         let mainContentBox = new St.BoxLayout({ style_class: 'prompt-dialog-main-layout',
                                                 vertical: false });
@@ -101,9 +100,9 @@ const AuthenticationDialog = new Lang.Class({
             let userBox = new St.BoxLayout({ style_class: 'polkit-dialog-user-layout',
                                              vertical: false });
             messageBox.add(userBox);
-            this._userAvatar = new UserMenu.UserAvatarWidget(this._user,
-                                                             { iconSize: DIALOG_ICON_SIZE,
-                                                               styleClass: 'polkit-dialog-user-icon' });
+            this._userAvatar = new UserWidget.Avatar(this._user,
+                                                     { iconSize: DIALOG_ICON_SIZE,
+                                                       styleClass: 'polkit-dialog-user-icon' });
             this._userAvatar.actor.hide();
             userBox.add(this._userAvatar.actor,
                         { x_fill:  true,
@@ -161,26 +160,32 @@ const AuthenticationDialog = new Lang.Class({
 
         this._cancelButton = this.addButton({ label: _("Cancel"),
                                               action: Lang.bind(this, this.cancel),
-                                              key: Clutter.Escape });
+                                              key: Clutter.Escape },
+                                            { expand: true, x_fill: false, x_align: St.Align.START });
+        this.placeSpinner({ expand: false,
+                            x_fill: false,
+                            y_fill: false,
+                            x_align: St.Align.END,
+                            y_align: St.Align.MIDDLE });
         this._okButton = this.addButton({ label:  _("Authenticate"),
                                           action: Lang.bind(this, this._onAuthenticateButtonPressed),
                                           default: true },
-                                        { expand: true, x_fill: false, x_align: St.Align.END });
+                                        { expand: false, x_fill: false, x_align: St.Align.END });
 
         this._doneEmitted = false;
 
         this._identityToAuth = Polkit.UnixUser.new_for_name(userName);
         this._cookie = cookie;
+    },
 
+    performAuthentication: function() {
+        this.destroySession();
         this._session = new PolkitAgent.Session({ identity: this._identityToAuth,
                                                   cookie: this._cookie });
         this._session.connect('completed', Lang.bind(this, this._onSessionCompleted));
         this._session.connect('request', Lang.bind(this, this._onSessionRequest));
         this._session.connect('show-error', Lang.bind(this, this._onSessionShowError));
         this._session.connect('show-info', Lang.bind(this, this._onSessionShowInfo));
-    },
-
-    startAuthentication: function() {
         this._session.initiate();
     },
 
@@ -202,14 +207,14 @@ const AuthenticationDialog = new Lang.Class({
             log('polkitAuthenticationAgent: Failed to show modal dialog.' +
                 ' Dismissing authentication request for action-id ' + this.actionId +
                 ' cookie ' + this._cookie);
-            this._emitDone(false, true);
+            this._emitDone(true);
         }
     },
 
-    _emitDone: function(keepVisible, dismissed) {
+    _emitDone: function(dismissed) {
         if (!this._doneEmitted) {
             this._doneEmitted = true;
-            this.emit('done', keepVisible, dismissed);
+            this.emit('done', dismissed);
         }
     },
 
@@ -219,6 +224,7 @@ const AuthenticationDialog = new Lang.Class({
 
         this._okButton.can_focus = sensitive;
         this._okButton.reactive = sensitive;
+        this.setWorking(!sensitive);
     },
 
     _onEntryActivate: function() {
@@ -237,12 +243,16 @@ const AuthenticationDialog = new Lang.Class({
     },
 
     _onSessionCompleted: function(session, gainedAuthorization) {
-        if (this._completed)
+        if (this._completed || this._doneEmitted)
             return;
 
         this._completed = true;
 
-        if (!gainedAuthorization) {
+        /* Yay, all done */
+        if (gainedAuthorization) {
+            this._emitDone(false);
+
+        } else {
             /* Unless we are showing an existing error message from the PAM
              * module (the PAM module could be reporting the authentication
              * error providing authentication-method specific information),
@@ -258,8 +268,10 @@ const AuthenticationDialog = new Lang.Class({
                 this._infoMessageLabel.hide();
                 this._nullMessageLabel.hide();
             }
+
+            /* Try and authenticate again */
+            this.performAuthentication();
         }
-        this._emitDone(!gainedAuthorization, false);
     },
 
     _onSessionRequest: function(session, request, echo_on) {
@@ -303,6 +315,7 @@ const AuthenticationDialog = new Lang.Class({
         if (this._session) {
             if (!this._completed)
                 this._session.cancel();
+            this._completed = false;
             this._session = null;
         }
     },
@@ -317,7 +330,7 @@ const AuthenticationDialog = new Lang.Class({
     cancel: function() {
         this._wasDismissed = true;
         this.close(global.get_current_time());
-        this._emitDone(false, true);
+        this._emitDone(true);
     },
 });
 Signals.addSignalMethods(AuthenticationDialog.prototype);
@@ -327,7 +340,6 @@ const AuthenticationAgent = new Lang.Class({
 
     _init: function() {
         this._currentDialog = null;
-        this._isCompleting = false;
         this._handle = null;
         this._native = new Shell.PolkitAuthenticationAgent();
         this._native.connect('initiate', Lang.bind(this, this._onInitiate));
@@ -364,45 +376,24 @@ const AuthenticationAgent = new Lang.Class({
         // discussion.
 
         this._currentDialog.connect('done', Lang.bind(this, this._onDialogDone));
-        this._currentDialog.startAuthentication();
+        this._currentDialog.performAuthentication();
     },
 
     _onCancel: function(nativeAgent) {
-        this._completeRequest(false, false);
+        this._completeRequest(false);
     },
 
-    _onDialogDone: function(dialog, keepVisible, dismissed) {
-        this._completeRequest(keepVisible, dismissed);
+    _onDialogDone: function(dialog, dismissed) {
+        this._completeRequest(dismissed);
     },
 
-    _reallyCompleteRequest: function(dismissed) {
+    _completeRequest: function(dismissed) {
         this._currentDialog.close();
         this._currentDialog.destroySession();
         this._currentDialog = null;
-        this._isCompleting = false;
 
-        this._native.complete(dismissed)
+        this._native.complete(dismissed);
     },
-
-    _completeRequest: function(keepVisible, wasDismissed) {
-        if (this._isCompleting)
-            return;
-
-        this._isCompleting = true;
-
-        if (keepVisible) {
-            // Give the user 2 seconds to read 'Authentication Failure' before
-            // dismissing the dialog
-            Mainloop.timeout_add(2000,
-                                 Lang.bind(this,
-                                           function() {
-                                               this._reallyCompleteRequest(wasDismissed);
-                                               return false;
-                                           }));
-        } else {
-            this._reallyCompleteRequest(wasDismissed);
-        }
-    }
 });
 
 const Component = AuthenticationAgent;

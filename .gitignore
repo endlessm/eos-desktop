@@ -26,6 +26,8 @@ data/eos-session.desktop
 data/eos-session.desktop.in
 data/eos-shell.desktop
 data/eos-shell.desktop.in
+data/eos-shell-wayland.desktop
+data/eos-shell-wayland.desktop.in
 data/eos-shell.session
 data/eos-shell-extension-prefs.desktop
 data/eos-shell-extension-prefs.desktop.in
@@ -89,6 +91,7 @@ src/eos-shell-jhbuild
 src/eos-shell-perf-helper
 src/eos-shell-perf-tool
 src/eos-shell-real
+src/eos-shell-wayland
 src/hotplug-sniffer/org.gnome.Shell.HotplugSniffer.service
 src/run-js-test
 src/test-recorder

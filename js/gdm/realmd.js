@@ -69,7 +69,7 @@ const Manager = new Lang.Class({
                                            Lang.bind(this, this._reloadRealms))
         this._realms = {};
 
-        this._aggregateProvider.connect('g-properties-changed',
+        this._signalId = this._aggregateProvider.connect('g-properties-changed',
                                         Lang.bind(this, function(proxy, properties) {
                                             if ('Realms' in properties.deep_unpack())
                                                 this._reloadRealms();
@@ -112,7 +112,7 @@ const Manager = new Lang.Class({
         realm.connect('g-properties-changed',
                       Lang.bind(this, function(proxy, properties) {
                                 if ('Configured' in properties.deep_unpack())
-                                    this._reloadRealm();
+                                    this._reloadRealm(realm);
                                 }));
     },
 
@@ -140,6 +140,18 @@ const Manager = new Lang.Class({
         this._updateLoginFormat();
 
         return this._loginFormat;
+    },
+
+    release: function() {
+        Service(Gio.DBus.system,
+                'org.freedesktop.realmd',
+                '/org/freedesktop/realmd',
+                function(service) {
+                    service.ReleaseRemote();
+                });
+        this._aggregateProvider.disconnect(this._signalId);
+        this._realms = { };
+        this._updateLoginFormat();
     }
 });
 Signals.addSignalMethods(Manager.prototype)

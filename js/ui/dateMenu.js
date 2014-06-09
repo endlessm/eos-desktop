@@ -49,16 +49,13 @@ const DateMenuButton = new Lang.Class({
             menuAlignment = 1.0 - menuAlignment;
         this.parent(menuAlignment);
 
-        // At this moment calendar menu is not keyboard navigable at
-        // all (so not accessible), so it doesn't make sense to set as
-        // role ATK_ROLE_MENU like other elements of the panel.
-        this.actor.accessible_role = Atk.Role.LABEL;
-
-        this._clockDisplay = new St.Label();
+        this._clockDisplay = new St.Label({ y_align: Clutter.ActorAlign.CENTER });
+        this.actor.label_actor = this._clockDisplay;
         this.actor.add_actor(this._clockDisplay);
+        this.actor.add_style_class_name ('clock-display');
 
-        hbox = new St.BoxLayout({name: 'calendarArea' });
-        this.menu.addActor(hbox);
+        hbox = new St.BoxLayout({ name: 'calendarArea' });
+        this.menu.box.add_child(hbox);
 
         // Fill up the first column
 
@@ -66,9 +63,8 @@ const DateMenuButton = new Lang.Class({
         hbox.add(vbox);
 
         // Date
-        this._date = new St.Label();
-        this.actor.label_actor = this._clockDisplay;
-        this._date.style_class = 'datemenu-date-label';
+        this._date = new St.Label({ style_class: 'datemenu-date-label',
+                                    can_focus: true });
         vbox.add(this._date);
 
         this._eventList = new Calendar.EventsList();
@@ -85,27 +81,22 @@ const DateMenuButton = new Lang.Class({
         vbox.add(this._calendar.actor);
 
         let separator = new PopupMenu.PopupSeparatorMenuItem();
-        separator.setColumnWidths(1);
-        vbox.add(separator.actor, {y_align: St.Align.END, expand: true, y_fill: false});
+        vbox.add(separator.actor, { y_align: St.Align.END, expand: true, y_fill: false });
 
         this._openCalendarItem = new PopupMenu.PopupMenuItem(_("Open Calendar"));
         this._openCalendarItem.connect('activate', Lang.bind(this, this._onOpenCalendarActivate));
-        this._openCalendarItem.actor.can_focus = false;
         vbox.add(this._openCalendarItem.actor, {y_align: St.Align.END, expand: true, y_fill: false});
 
         this._openClocksItem = new PopupMenu.PopupMenuItem(_("Open Clocks"));
         this._openClocksItem.connect('activate', Lang.bind(this, this._onOpenClocksActivate));
-        this._openClocksItem.actor.can_focus = false;
         vbox.add(this._openClocksItem.actor, {y_align: St.Align.END, expand: true, y_fill: false});
 
         Shell.AppSystem.get_default().connect('installed-changed',
                                               Lang.bind(this, this._appInstalledChanged));
-        this._appInstalledChanged();
 
         item = this.menu.addSettingsAction(_("Date & Time Settings"), 'gnome-datetime-panel.desktop');
         if (item) {
             item.actor.show_on_set_parent = false;
-            item.actor.can_focus = false;
             item.actor.reparent(vbox);
             this._dateAndTimeSeparator = separator;
         }
@@ -116,12 +107,7 @@ const DateMenuButton = new Lang.Class({
         hbox.add(this._separator);
 
         // Fill up the second column
-        vbox = new St.BoxLayout({ name: 'calendarEventsArea',
-                                  vertical: true });
-        hbox.add(vbox, { expand: true });
-
-        // Event list
-        vbox.add(this._eventList.actor, { expand: true });
+        hbox.add(this._eventList.actor, { expand: true, y_fill: false, y_align: St.Align.START });
 
         // Whenever the menu is opened, select today
         this.menu.connect('open-state-changed', Lang.bind(this, function(menu, isOpen) {
@@ -157,24 +143,25 @@ const DateMenuButton = new Lang.Class({
     },
 
     _appInstalledChanged: function() {
-        let app = Shell.AppSystem.get_default().lookup_app('gnome-clocks.desktop');
-        this._openClocksItem.actor.visible = app !== null;
+        this._calendarApp = undefined;
+        this._updateEventsVisibility();
     },
 
     _updateEventsVisibility: function() {
         let visible = this._eventSource.hasCalendars;
-        this._openCalendarItem.actor.visible = visible;
-        this._openClocksItem.actor.visible = visible;
+        this._openCalendarItem.actor.visible = visible &&
+            (this._getCalendarApp() != null);
+        this._openClocksItem.actor.visible = visible &&
+            (this._getClockApp() != null);
         this._separator.visible = visible;
+        this._eventList.actor.visible = visible;
         if (visible) {
-          let alignment = 0.25;
-          if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
-            alignment = 1.0 - alignment;
-          this.menu._arrowAlignment = alignment;
-          this._eventList.actor.get_parent().show();
+            let alignment = 0.25;
+            if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
+                alignment = 1.0 - alignment;
+            this.menu._arrowAlignment = alignment;
         } else {
-          this.menu._arrowAlignment = 0.5;
-          this._eventList.actor.get_parent().hide();
+            this.menu._arrowAlignment = 0.5;
         }
     },
 
@@ -217,18 +204,34 @@ const DateMenuButton = new Lang.Class({
         this._date.set_text(displayDate.toLocaleFormat(dateFormat));
     },
 
+    _getCalendarApp: function() {
+        if (this._calendarApp !== undefined)
+            return this._calendarApp;
+
+        let apps = Gio.AppInfo.get_recommended_for_type('text/calendar');
+        if (apps && (apps.length > 0))
+            this._calendarApp = apps[0];
+        else
+            this._calendarApp = null;
+        return this._calendarApp;
+    },
+
+    _getClockApp: function() {
+        return Shell.AppSystem.get_default().lookup_app('gnome-clocks.desktop');
+    },
+
     _onOpenCalendarActivate: function() {
         this.menu.close();
 
-        let app = Gio.AppInfo.get_default_for_type('text/calendar', false);
-        if (app.get_id() == 'evolution')
-            app = Gio.DesktopAppInfo.new('evolution-calendar');
+        let app = this._getCalendarApp();
+        if (app.get_id() == 'evolution.desktop')
+            app = Gio.DesktopAppInfo.new('evolution-calendar.desktop');
         app.launch([], global.create_app_launch_context());
     },
 
     _onOpenClocksActivate: function() {
         this.menu.close();
-        let app = Shell.AppSystem.get_default().lookup_app('gnome-clocks.desktop');
+        let app = this._getClockApp();
         app.activate();
     }
 });

@@ -6,12 +6,14 @@ const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
+const Pango = imports.gi.Pango;
 const St = imports.gi.St;
 const Shell = imports.gi.Shell;
 
 const AltTab = imports.ui.altTab;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Main = imports.ui.main;
+const ModalDialog = imports.ui.modalDialog;
 const SideComponent = imports.ui.sideComponent;
 const BackgroundMenu = imports.ui.backgroundMenu;
 const ButtonConstants = imports.ui.buttonConstants;
@@ -25,6 +27,108 @@ const DIM_BRIGHTNESS = -0.3;
 const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
 const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
+
+const DISPLAY_REVERT_TIMEOUT = 20; // in seconds - keep in sync with mutter
+const ONE_SECOND = 1000; // in ms
+
+const DisplayChangeDialog = new Lang.Class({
+    Name: 'DisplayChangeDialog',
+    Extends: ModalDialog.ModalDialog,
+
+    _init: function(wm) {
+        this.parent({ styleClass: 'prompt-dialog' });
+
+        this._wm = wm;
+
+        let mainContentBox = new St.BoxLayout({ style_class: 'prompt-dialog-main-layout',
+                                                vertical: false });
+        this.contentLayout.add(mainContentBox,
+                               { x_fill: true,
+                                 y_fill: true });
+
+        let icon = new St.Icon({ icon_name: 'preferences-desktop-display-symbolic' });
+        mainContentBox.add(icon,
+                           { x_fill:  true,
+                             y_fill:  false,
+                             x_align: St.Align.END,
+                             y_align: St.Align.START });
+
+        let messageBox = new St.BoxLayout({ style_class: 'prompt-dialog-message-layout',
+                                            vertical: true });
+        mainContentBox.add(messageBox,
+                           { expand: true, y_align: St.Align.START });
+
+        let subjectLabel = new St.Label({ style_class: 'prompt-dialog-headline',
+                                            text: _("Do you want to keep these display settings?") });
+        messageBox.add(subjectLabel,
+                       { y_fill:  false,
+                         y_align: St.Align.START });
+
+        this._countDown = DISPLAY_REVERT_TIMEOUT;
+        let message = this._formatCountDown();
+        this._descriptionLabel = new St.Label({ style_class: 'prompt-dialog-description',
+                                                text: this._formatCountDown() });
+        this._descriptionLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        this._descriptionLabel.clutter_text.line_wrap = true;
+
+        messageBox.add(this._descriptionLabel,
+                       { y_fill:  true,
+                         y_align: St.Align.START });
+
+        /* Translators: this and the following message should be limited in lenght,
+           to avoid ellipsizing the labels.
+        */
+        this._cancelButton = this.addButton({ label: _("Revert Settings"),
+                                              action: Lang.bind(this, this._onFailure),
+                                              key: Clutter.Escape },
+                                            { expand: true, x_fill: false, x_align: St.Align.START });
+        this._okButton = this.addButton({ label:  _("Keep Changes"),
+                                          action: Lang.bind(this, this._onSuccess),
+                                          default: true },
+                                        { expand: false, x_fill: false, x_align: St.Align.END });
+
+        this._timeoutId = Mainloop.timeout_add(ONE_SECOND, Lang.bind(this, this._tick));
+    },
+
+    close: function(timestamp) {
+        if (this._timeoutId > 0) {
+            Mainloop.source_remove(this._timeoutId);
+            this._timeoutId = 0;
+        }
+
+        this.parent(timestamp);
+    },
+
+    _formatCountDown: function() {
+        let fmt = ngettext("Settings changes will revert in %d second",
+                           "Settings changes will revert in %d seconds");
+        return fmt.format(this._countDown);
+    },
+
+    _tick: function() {
+        this._countDown--;
+
+        if (this._countDown == 0) {
+            /* mutter already takes care of failing at timeout */
+            this._timeoutId = 0;
+            this.close();
+            return false;
+        }
+
+        this._descriptionLabel.text = this._formatCountDown();
+        return true;
+    },
+
+    _onFailure: function() {
+        this._wm.complete_display_change(false);
+        this.close();
+    },
+
+    _onSuccess: function() {
+        this._wm.complete_display_change(true);
+        this.close();
+    },
+});
 
 const WindowDimmer = new Lang.Class({
     Name: 'WindowDimmer',
@@ -71,6 +175,203 @@ function getWindowDimmer(actor) {
         return null;
     }
 }
+
+/*
+ * When the last window closed on a workspace is a dialog or splash
+ * screen, we assume that it might be an initial window shown before
+ * the main window of an application, and give the app a grace period
+ * where it can map another window before we remove the workspace.
+ */
+const LAST_WINDOW_GRACE_TIME = 1000;
+
+const WorkspaceTracker = new Lang.Class({
+    Name: 'WorkspaceTracker',
+
+    _init: function(wm) {
+        this._wm = wm;
+
+        this._workspaces = [];
+        this._checkWorkspacesId = 0;
+
+        let tracker = Shell.WindowTracker.get_default();
+        tracker.connect('startup-sequence-changed', Lang.bind(this, this._queueCheckWorkspaces));
+
+        global.screen.connect('notify::n-workspaces', Lang.bind(this, this._nWorkspacesChanged));
+
+        global.screen.connect('window-entered-monitor', Lang.bind(this, this._windowEnteredMonitor));
+        global.screen.connect('window-left-monitor', Lang.bind(this, this._windowLeftMonitor));
+        global.screen.connect('restacked', Lang.bind(this, this._windowsRestacked));
+
+        this._workspaceSettings = new Gio.Settings({ schema: Main.dynamicWorkspacesSchema });
+        this._workspaceSettings.connect('changed::dynamic-workspaces', Lang.bind(this, this._queueCheckWorkspaces));
+
+        this._nWorkspacesChanged();
+    },
+
+    _checkWorkspaces: function() {
+        let i;
+        let emptyWorkspaces = [];
+
+        if (!Meta.prefs_get_dynamic_workspaces()) {
+            this._checkWorkspacesId = 0;
+            return false;
+        }
+
+        for (i = 0; i < this._workspaces.length; i++) {
+            let lastRemoved = this._workspaces[i]._lastRemovedWindow;
+            if ((lastRemoved &&
+                 (lastRemoved.get_window_type() == Meta.WindowType.SPLASHSCREEN ||
+                  lastRemoved.get_window_type() == Meta.WindowType.DIALOG ||
+                  lastRemoved.get_window_type() == Meta.WindowType.MODAL_DIALOG)) ||
+                this._workspaces[i]._keepAliveId)
+                emptyWorkspaces[i] = false;
+            else
+                emptyWorkspaces[i] = true;
+        }
+
+        let sequences = Shell.WindowTracker.get_default().get_startup_sequences();
+        for (i = 0; i < sequences.length; i++) {
+            let index = sequences[i].get_workspace();
+            if (index >= 0 && index <= global.screen.n_workspaces)
+                emptyWorkspaces[index] = false;
+        }
+
+        let windows = global.get_window_actors();
+        for (i = 0; i < windows.length; i++) {
+            let win = windows[i];
+
+            if (win.get_meta_window().is_on_all_workspaces())
+                continue;
+
+            let workspaceIndex = win.get_workspace();
+            emptyWorkspaces[workspaceIndex] = false;
+        }
+
+        // If we don't have an empty workspace at the end, add one
+        if (!emptyWorkspaces[emptyWorkspaces.length -1]) {
+            global.screen.append_new_workspace(false, global.get_current_time());
+            emptyWorkspaces.push(false);
+        }
+
+        let activeWorkspaceIndex = global.screen.get_active_workspace_index();
+        let removingCurrentWorkspace = (emptyWorkspaces[activeWorkspaceIndex] &&
+                                        activeWorkspaceIndex < emptyWorkspaces.length - 1);
+
+        if (removingCurrentWorkspace) {
+            // "Merge" the empty workspace we are removing with the one at the end
+            this._wm.blockAnimations();
+        }
+
+        // Delete other empty workspaces; do it from the end to avoid index changes
+        for (i = emptyWorkspaces.length - 2; i >= 0; i--) {
+            if (emptyWorkspaces[i])
+                global.screen.remove_workspace(this._workspaces[i], global.get_current_time());
+        }
+
+        if (removingCurrentWorkspace) {
+            global.screen.get_workspace_by_index(global.screen.n_workspaces - 1).activate(global.get_current_time());
+            this._wm.unblockAnimations();
+        }
+
+        this._checkWorkspacesId = 0;
+        return false;
+    },
+
+    keepWorkspaceAlive: function(workspace, duration) {
+        if (workspace._keepAliveId)
+            Mainloop.source_remove(workspace._keepAliveId);
+
+        workspace._keepAliveId = Mainloop.timeout_add(duration, Lang.bind(this, function() {
+            workspace._keepAliveId = 0;
+            this._queueCheckWorkspaces();
+            return false;
+        }));
+    },
+
+    _windowRemoved: function(workspace, window) {
+        workspace._lastRemovedWindow = window;
+        this._queueCheckWorkspaces();
+        Mainloop.timeout_add(LAST_WINDOW_GRACE_TIME, Lang.bind(this, function() {
+            if (workspace._lastRemovedWindow == window) {
+                workspace._lastRemovedWindow = null;
+                this._queueCheckWorkspaces();
+            }
+            return false;
+        }));
+    },
+
+    _windowLeftMonitor: function(metaScreen, monitorIndex, metaWin) {
+        // If the window left the primary monitor, that
+        // might make that workspace empty
+        if (monitorIndex == Main.layoutManager.primaryIndex)
+            this._queueCheckWorkspaces();
+    },
+
+    _windowEnteredMonitor: function(metaScreen, monitorIndex, metaWin) {
+        // If the window entered the primary monitor, that
+        // might make that workspace non-empty
+        if (monitorIndex == Main.layoutManager.primaryIndex)
+            this._queueCheckWorkspaces();
+    },
+
+    _windowsRestacked: function() {
+        // Figure out where the pointer is in case we lost track of
+        // it during a grab. (In particular, if a trayicon popup menu
+        // is dismissed, see if we need to close the message tray.)
+        global.sync_pointer();
+    },
+
+    _queueCheckWorkspaces: function() {
+        if (this._checkWorkspacesId == 0)
+            this._checkWorkspacesId = Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this, this._checkWorkspaces));
+    },
+
+    _nWorkspacesChanged: function() {
+        let oldNumWorkspaces = this._workspaces.length;
+        let newNumWorkspaces = global.screen.n_workspaces;
+
+        if (oldNumWorkspaces == newNumWorkspaces)
+            return false;
+
+        let lostWorkspaces = [];
+        if (newNumWorkspaces > oldNumWorkspaces) {
+            let w;
+
+            // Assume workspaces are only added at the end
+            for (w = oldNumWorkspaces; w < newNumWorkspaces; w++)
+                this._workspaces[w] = global.screen.get_workspace_by_index(w);
+
+            for (w = oldNumWorkspaces; w < newNumWorkspaces; w++) {
+                let workspace = this._workspaces[w];
+                workspace._windowAddedId = workspace.connect('window-added', Lang.bind(this, this._queueCheckWorkspaces));
+                workspace._windowRemovedId = workspace.connect('window-removed', Lang.bind(this, this._windowRemoved));
+            }
+
+        } else {
+            // Assume workspaces are only removed sequentially
+            // (e.g. 2,3,4 - not 2,4,7)
+            let removedIndex;
+            let removedNum = oldNumWorkspaces - newNumWorkspaces;
+            for (let w = 0; w < oldNumWorkspaces; w++) {
+                let workspace = global.screen.get_workspace_by_index(w);
+                if (this._workspaces[w] != workspace) {
+                    removedIndex = w;
+                    break;
+                }
+            }
+
+            let lostWorkspaces = this._workspaces.splice(removedIndex, removedNum);
+            lostWorkspaces.forEach(function(workspace) {
+                workspace.disconnect(workspace._windowAddedId);
+                workspace.disconnect(workspace._windowRemovedId);
+            });
+        }
+
+        this._queueCheckWorkspaces();
+
+        return false;
+    }
+});
 
 const WindowManager = new Lang.Class({
     Name: 'WindowManager',
@@ -125,6 +426,7 @@ const WindowManager = new Lang.Class({
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
         this._shellwm.connect('destroy', Lang.bind(this, this._destroyWindow));
         this._shellwm.connect('filter-keybinding', Lang.bind(this, this._filterKeybinding));
+        this._shellwm.connect('confirm-display-change', Lang.bind(this, this._confirmDisplayChange));
 
         this._workspaceSwitcherPopup = null;
         this.setCustomKeybindingHandler('switch-to-workspace-left',
@@ -158,6 +460,90 @@ const WindowManager = new Lang.Class({
         this.setCustomKeybindingHandler('move-to-workspace-down',
                                         Shell.KeyBindingMode.NORMAL |
                                         Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-1',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-2',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-3',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-4',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-5',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-6',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-7',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-8',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-9',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-10',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-11',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('switch-to-workspace-12',
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-1',
+                                        Shell.KeyBindingMode.NORMAL,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-2',
+                                        Shell.KeyBindingMode.NORMAL,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-3',
+                                        Shell.KeyBindingMode.NORMAL,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-4',
+                                        Shell.KeyBindingMode.NORMAL,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-5',
+                                        Shell.KeyBindingMode.NORMAL,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-6',
+                                        Shell.KeyBindingMode.NORMAL,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-7',
+                                        Shell.KeyBindingMode.NORMAL,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-8',
+                                        Shell.KeyBindingMode.NORMAL,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-9',
+                                        Shell.KeyBindingMode.NORMAL,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-10',
+                                        Shell.KeyBindingMode.NORMAL,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-11',
+                                        Shell.KeyBindingMode.NORMAL,
+                                        Lang.bind(this, this._showWorkspaceSwitcher));
+        this.setCustomKeybindingHandler('move-to-workspace-12',
+                                        Shell.KeyBindingMode.NORMAL,
                                         Lang.bind(this, this._showWorkspaceSwitcher));
         this.setCustomKeybindingHandler('switch-applications',
                                         Shell.KeyBindingMode.NORMAL,
@@ -212,6 +598,19 @@ const WindowManager = new Lang.Class({
                 this._desktopOverlay.show();
             }
         }));
+
+        if (Main.sessionMode.hasWorkspaces)
+            this._workspaceTracker = new WorkspaceTracker(this);
+
+        global.screen.override_workspace_layout(Meta.ScreenCorner.TOPLEFT,
+                                                false, -1, 1);
+    },
+
+    keepWorkspaceAlive: function(workspace, duration) {
+        if (!this._workspaceTracker)
+            return;
+
+        this._workspaceTracker.keepWorkspaceAlive(workspace, duration);
     },
 
     setCustomKeybindingHandler: function(name, modes, handler) {
@@ -798,7 +1197,7 @@ const WindowManager = new Lang.Class({
     },
 
     _switchWorkspace : function(shellwm, from, to, direction) {
-        if (!this._shouldAnimate()) {
+        if (!Main.sessionMode.hasWorkspaces || !this._shouldAnimate()) {
             shellwm.completed_switch_workspace();
             return;
         }
@@ -947,22 +1346,37 @@ const WindowManager = new Lang.Class({
     },
 
     _showWorkspaceSwitcher : function(display, screen, window, binding) {
+        if (!Main.sessionMode.hasWorkspaces)
+            return;
+
         if (screen.n_workspaces == 1)
             return;
 
-        let [action,,,direction] = binding.get_name().split('-');
-        let direction = Meta.MotionDirection[direction.toUpperCase()];
+        let [action,,,target] = binding.get_name().split('-');
         let newWs;
+        let direction;
 
+        if (isNaN(target)) {
+            direction = Meta.MotionDirection[target.toUpperCase()];
+            newWs = screen.get_active_workspace().get_neighbor(direction);
+        } else if (target > 0) {
+            target--;
+            newWs = screen.get_workspace_by_index(target);
+
+            if (screen.get_active_workspace().index() > target)
+                direction = Meta.MotionDirection.UP;
+            else
+                direction = Meta.MotionDirection.DOWN;
+        }
 
         if (direction != Meta.MotionDirection.UP &&
             direction != Meta.MotionDirection.DOWN)
             return;
 
         if (action == 'switch')
-            newWs = this.actionMoveWorkspace(direction);
+            this.actionMoveWorkspace(newWs);
         else
-            newWs = this.actionMoveWindow(window, direction);
+            this.actionMoveWindow(window, newWs);
 
         if (!Main.overview.visible) {
             if (this._workspaceSwitcherPopup == null) {
@@ -975,31 +1389,36 @@ const WindowManager = new Lang.Class({
         }
     },
 
-    actionMoveWorkspace: function(direction) {
+    actionMoveWorkspace: function(workspace) {
+        if (!Main.sessionMode.hasWorkspaces)
+            return;
+
         let activeWorkspace = global.screen.get_active_workspace();
-        let toActivate = activeWorkspace.get_neighbor(direction);
 
-        if (activeWorkspace != toActivate)
-            toActivate.activate(global.get_current_time());
-
-        return toActivate;
+        if (activeWorkspace != workspace)
+            workspace.activate(global.get_current_time());
     },
 
-    actionMoveWindow: function(window, direction) {
-        let activeWorkspace = global.screen.get_active_workspace();
-        let toActivate = activeWorkspace.get_neighbor(direction);
+    actionMoveWindow: function(window, workspace) {
+        if (!Main.sessionMode.hasWorkspaces)
+            return;
 
-        if (activeWorkspace != toActivate) {
+        let activeWorkspace = global.screen.get_active_workspace();
+
+        if (activeWorkspace != workspace) {
             // This won't have any effect for "always sticky" windows
             // (like desktop windows or docks)
 
             this._movingWindow = window;
-            window.change_workspace(toActivate);
+            window.change_workspace(workspace);
 
             global.display.clear_mouse_mode();
-            toActivate.activate_with_focus (window, global.get_current_time());
+            workspace.activate_with_focus (window, global.get_current_time());
         }
+    },
 
-        return toActivate;
+    _confirmDisplayChange: function() {
+        let dialog = new DisplayChangeDialog(this._shellwm);
+        dialog.open();
     },
 });

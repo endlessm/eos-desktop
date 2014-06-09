@@ -300,13 +300,7 @@ const ShowAppsIcon = new Lang.Class({
     },
 
     handleDragOver: function(source, actor, x, y, time) {
-        let app = getAppFromSource(source);
-        if (app == null)
-            return DND.DragMotionResult.NO_DROP;
-
-        let id = app.get_id();
-        let isFavorite = AppFavorites.getAppFavorites().isFavorite(id);
-        if (!isFavorite)
+        if (!this._canRemoveApp(getAppFromSource(source)))
             return DND.DragMotionResult.NO_DROP;
 
         return DND.DragMotionResult.MOVE_DROP;
@@ -314,7 +308,7 @@ const ShowAppsIcon = new Lang.Class({
 
     acceptDrop: function(source, actor, x, y, time) {
         let app = getAppFromSource(source);
-        if (app == null)
+        if (!this._canRemoveApp(app))
             return false;
 
         let id = app.get_id();
@@ -341,6 +335,16 @@ const DragPlaceholderItem = new Lang.Class({
     _init: function() {
         this.parent();
         this.setChild(new St.Bin({ style_class: 'placeholder' }));
+    }
+});
+
+const EmptyDropTargetItem = new Lang.Class({
+    Name: 'EmptyDropTargetItem',
+    Extends: DashItemContainer,
+
+    _init: function() {
+        this.parent();
+        this.setChild(new St.Bin({ style_class: 'empty-dash-drop-target' }));
     }
 });
 
@@ -438,7 +442,10 @@ const Dash = new Lang.Class({
 
         this._appSystem = Shell.AppSystem.get_default();
 
-        this._appSystem.connect('installed-changed', Lang.bind(this, this._queueRedisplay));
+        this._appSystem.connect('installed-changed', Lang.bind(this, function() {
+            AppFavorites.getAppFavorites().reload();
+            this._queueRedisplay();
+        }));
         AppFavorites.getAppFavorites().connect('changed', Lang.bind(this, this._queueRedisplay));
         this._appSystem.connect('app-state-changed', Lang.bind(this, this._queueRedisplay));
 
@@ -460,6 +467,12 @@ const Dash = new Lang.Class({
             dragMotion: Lang.bind(this, this._onDragMotion)
         };
         DND.addDragMonitor(this._dragMonitor);
+
+        if (this._box.get_n_children() == 0) {
+            this._emptyDropTarget = new EmptyDropTargetItem();
+            this._box.insert_child_at_index(this._emptyDropTarget, 0);
+            this._emptyDropTarget.show(true);
+        }
     },
 
     _onDragCancelled: function() {
@@ -476,6 +489,7 @@ const Dash = new Lang.Class({
 
     _endDrag: function() {
         this._clearDragPlaceholder();
+        this._clearEmptyDropTarget();
         this._showAppsIcon.setDragApp(null);
         DND.removeDragMonitor(this._dragMonitor);
     },
@@ -537,18 +551,24 @@ const Dash = new Lang.Class({
         Main.queueDeferredWork(this._workId);
     },
 
-    _hookUpLabel: function(item) {
+    _hookUpLabel: function(item, appIcon) {
         item.child.reactive = true;
         item.child.track_hover = true;
 
         item.child.connect('notify::hover', Lang.bind(this, function() {
-            this._onHover(item);
+            this._syncLabel(item, appIcon);
         }));
 
         Main.overview.connect('hiding', Lang.bind(this, function() {
             this._labelShowing = false;
             item.hideLabel();
         }));
+
+        if (appIcon) {
+            appIcon.connect('sync-tooltip', Lang.bind(this, function() {
+                this._syncLabel(item, appIcon);
+            }));
+        }
     },
 
     _createAppItem: function(app) {
@@ -577,7 +597,7 @@ const Dash = new Lang.Class({
         item.setLabelText(app.get_name());
 
         appIcon.icon.setIconSize(this.iconSize);
-        this._hookUpLabel(item);
+        this._hookUpLabel(item, appIcon);
 
         return item;
     },
@@ -595,8 +615,10 @@ const Dash = new Lang.Class({
         }
     },
 
-    _onHover: function (item) {
-        if (item.child.get_hover()) {
+    _syncLabel: function (item, appIcon) {
+        let shouldShow = appIcon ? appIcon.shouldShowTooltip() : item.child.get_hover();
+
+        if (shouldShow) {
             if (this._showLabelTimeoutId == 0) {
                 let timeout = this._labelShowing ? 0 : DASH_ITEM_HOVER_TIMEOUT;
                 this._showLabelTimeoutId = Mainloop.timeout_add(timeout,
@@ -845,9 +867,21 @@ const Dash = new Lang.Class({
 
     _clearDragPlaceholder: function() {
         if (this._dragPlaceholder) {
+            this._animatingPlaceholdersCount++;
             this._dragPlaceholder.animateOutAndDestroy();
+            this._dragPlaceholder.connect('destroy',
+                Lang.bind(this, function() {
+                    this._animatingPlaceholdersCount--;
+                }));
             this._dragPlaceholder = null;
-            this._dragPlaceholderPos = -1;
+        }
+        this._dragPlaceholderPos = -1;
+    },
+
+    _clearEmptyDropTarget: function() {
+        if (this._emptyDropTarget) {
+            this._emptyDropTarget.animateOutAndDestroy();
+            this._emptyDropTarget = null;
         }
     },
 
@@ -883,43 +917,18 @@ const Dash = new Lang.Class({
             numChildren--;
         }
 
-        // Let's compute the size per element
-        let childSize = 0;
-        if (numChildren > 0) {
-            childSize = Math.floor(boxHeight / numChildren);
-        }
-
-        // Let's check if placeholder is before mouse pointer; if so, as we
-        // don't want to consider the placeholder in our computations, so let's
-        // decrease "y"
-        if (this._dragPlaceholder && this._dragPlaceholderPos*childSize < y) {
-            y -= this._dragPlaceholder.height;
-        }
-
-        // Let's compute the new position for the placeholder
         let pos;
-        if (childSize > 0) {
-            pos = Math.floor(y / childSize + 0.5);
-        } else {
-            pos = 0;
-        }
+        if (!this._emptyDropTarget)
+            pos = Math.floor(y * numChildren / boxHeight);
+        else
+            pos = 0; // always insert at the top when dash is empty
 
         if (pos != this._dragPlaceholderPos && pos <= numFavorites && this._animatingPlaceholdersCount == 0) {
             this._dragPlaceholderPos = pos;
 
             // Don't allow positioning before or after self
             if (favPos != -1 && (pos == favPos || pos == favPos + 1)) {
-                if (this._dragPlaceholder) {
-                    this._dragPlaceholder.animateOutAndDestroy();
-                    this._animatingPlaceholdersCount++;
-                    this._dragPlaceholder.connect('destroy',
-                        Lang.bind(this, function() {
-                            this._animatingPlaceholdersCount--;
-                        }));
-                }
-                this._dragPlaceholder = null;
-                this._dragPlaceholderPos = -1;
-
+                this._clearDragPlaceholder();
                 return DND.DragMotionResult.CONTINUE;
             }
 
@@ -944,9 +953,9 @@ const Dash = new Lang.Class({
 
         // Remove the drag placeholder if we are not in the
         // "favorites zone"
-        if (pos > numFavorites && this._dragPlaceholder) {
+        if (pos > numFavorites)
             this._clearDragPlaceholder();
-        }
+
         if (!this._dragPlaceholder)
             return DND.DragMotionResult.NO_DROP;
 

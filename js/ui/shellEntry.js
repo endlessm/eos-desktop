@@ -172,9 +172,7 @@ const EntryEditMenu = new Lang.Class({
     Name: 'ShellEntryEditMenu',
     Extends: EntryMenu,
 
-    _init: function(entry, params) {
-        params = Params.parse (params, { isPassword: false });
-
+    _init: function(entry) {
         this.parent(entry, entry);
 
         this._clipboard = St.Clipboard.get_default();
@@ -192,8 +190,6 @@ const EntryEditMenu = new Lang.Class({
         this._pasteItem = item;
 
         this._passwordItem = null;
-        if (params.isPassword)
-	    this._makePasswordItem();
     },
 
     _makePasswordItem: function() {
@@ -205,19 +201,21 @@ const EntryEditMenu = new Lang.Class({
     },
 
     get isPassword() {
-	return this._passwordItem != null;
+        return this._passwordItem != null;
     },
 
     set isPassword(v) {
-	if (v == this.isPassword)
-	    return;
+        if (v == this.isPassword)
+            return;
 
-	if (v)
-	    this._makePasswordItem();
-	else {
-	    this._passwordItem.destroy();
-	    this._passwordItem = null;
-	}
+        if (v) {
+            this._makePasswordItem();
+            this._entry.input_purpose = Gtk.InputPurpose.PASSWORD;
+        } else {
+            this._passwordItem.destroy();
+            this._passwordItem = null;
+            this._entry.input_purpose = Gtk.InputPurpose.FREE_FORM;
+        }
     },
 
     open: function(animate) {
@@ -665,7 +663,10 @@ function addContextMenu(entry, params) {
     if (entry.menu)
         return;
 
-    entry.menu = new EntryEditMenu(entry, params);
+    params = Params.parse (params, { isPassword: false });
+
+    entry.menu = new EntryEditMenu(entry);
+    entry.menu.isPassword = params.isPassword;
     entry._menuManager = new PopupMenu.PopupMenuManager({ actor: entry });
     entry._menuManager.addMenu(entry.menu);
 
@@ -676,4 +677,10 @@ function addContextMenu(entry, params) {
     entry.connect('button-press-event', Lang.bind(null, _onButtonPressEvent, entry));
 
     entry.connect('popup-menu', Lang.bind(null, _onPopup, entry));
+
+    entry.connect('destroy', function() {
+        entry.menu.destroy();
+        entry.menu = null;
+        entry._menuManager = null;
+    });
 }

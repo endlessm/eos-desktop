@@ -39,7 +39,8 @@
  * minutes to signify idle.
  */
 
-#define ENABLE_MONITORING_KEY "enable-app-monitoring"
+#define PRIVACY_SCHEMA "org.gnome.desktop.privacy"
+#define ENABLE_MONITORING_KEY "remember-app-usage"
 
 #define FOCUS_TIME_MIN_SECONDS 7 /* Need 7 continuous seconds of focus */
 
@@ -82,10 +83,10 @@ struct _ShellAppUsage
   GFile *configfile;
   GDBusProxy *session_proxy;
   GdkDisplay *display;
+  GSettings *privacy_settings;
   gulong last_idle;
   guint idle_focus_change_id;
   guint save_id;
-  guint settings_notify;
   gboolean currently_idle;
   gboolean enable_monitoring;
 
@@ -418,33 +419,30 @@ shell_app_usage_init (ShellAppUsage *self)
   self->currently_idle = FALSE;
   self->enable_monitoring = FALSE;
 
-  g_object_get (shell_global_get(), "userdatadir", &shell_userdata_dir, NULL),
+  g_object_get (global, "userdatadir", &shell_userdata_dir, NULL),
   path = g_build_filename (shell_userdata_dir, DATA_FILENAME, NULL);
   g_free (shell_userdata_dir);
   self->configfile = g_file_new_for_path (path);
   g_free (path);
   restore_from_file (self);
 
-
-  self->settings_notify = g_signal_connect (shell_global_get_settings (global),
-                                            "changed::" ENABLE_MONITORING_KEY,
-                                            G_CALLBACK (on_enable_monitoring_key_changed),
-                                            self);
+  self->privacy_settings = g_settings_new(PRIVACY_SCHEMA);
+  g_signal_connect (self->privacy_settings,
+                    "changed::" ENABLE_MONITORING_KEY,
+                    G_CALLBACK (on_enable_monitoring_key_changed),
+                    self);
   update_enable_monitoring (self);
 }
 
 static void
 shell_app_usage_finalize (GObject *object)
 {
-  ShellGlobal *global;
   ShellAppUsage *self = SHELL_APP_USAGE (object);
 
   if (self->save_id > 0)
     g_source_remove (self->save_id);
 
-  global = shell_global_get ();
-  g_signal_handler_disconnect (shell_global_get_settings (global),
-                               self->settings_notify);
+  g_object_unref (self->privacy_settings);
 
   g_object_unref (self->configfile);
 
@@ -956,11 +954,9 @@ out:
 static void
 update_enable_monitoring (ShellAppUsage *self)
 {
-  ShellGlobal *global;
   gboolean enable;
 
-  global = shell_global_get ();
-  enable = g_settings_get_boolean (shell_global_get_settings (global),
+  enable = g_settings_get_boolean (self->privacy_settings,
                                    ENABLE_MONITORING_KEY);
 
   /* Be sure not to start the timers if they were already set */

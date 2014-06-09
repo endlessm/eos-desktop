@@ -382,7 +382,7 @@ const _Draggable = new Lang.Class({
 
     _queueUpdateDragHover: function() {
         if (this._updateHoverId)
-            return;
+            GLib.source_remove(this._updateHoverId);
 
         this._updateHoverId = GLib.idle_add(GLib.PRIORITY_DEFAULT,
                                             Lang.bind(this, this._updateDragHover));

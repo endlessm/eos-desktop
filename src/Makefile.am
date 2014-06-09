@@ -31,23 +31,11 @@ CLEANFILES += $(gir_DATA) $(typelib_DATA)
 
 bin_SCRIPTS += eos-shell-extension-tool eos-shell-perf-tool
 EXTRA_DIST += eos-shell-extension-tool.in eos-shell-perf-tool.in
-bin_PROGRAMS = eos-shell-real eos-shell-extension-prefs
+bin_PROGRAMS = eos-shell eos-shell-extension-prefs
 
-if USE_JHBUILD_WRAPPER_SCRIPT
-eos_shell = eos-shell-jhbuild
-bin_SCRIPTS += eos-shell-jhbuild
-else
-eos_shell = eos-shell-real
-endif
-EXTRA_DIST += eos-shell-jhbuild.in
-
-noinst_DATA = eos-shell
-eos-shell: $(eos_shell) Makefile
-	$(AM_V_GEN) cp $< $@.tmp && mv $@.tmp $@
-install-exec-hook:
-	mv $(DESTDIR)$(bindir)/$(eos_shell) $(DESTDIR)$(bindir)/eos-shell
-uninstall-hook:
-	rm -f $(DESTDIR)$(bindir)/eos-shell
+if HAVE_MUTTER_WAYLAND
+bin_PROGRAMS += eos-shell-wayland
+endif HAVE_MUTTER_WAYLAND
 
 generated_script_substitutions = \
 	    -e "s|@bindir[@]|$(bindir)|g" \
@@ -60,11 +48,6 @@ generated_script_substitutions = \
 	    -e "s|@VERSION[@]|$(VERSION)|g" \
 	    -e "s|@sysconfdir[@]|$(sysconfdir)|g" \
 	    -e "s|@GJS_CONSOLE[@]|$(GJS_CONSOLE)|g"
-
-eos-shell-jhbuild: eos-shell-jhbuild.in eos-shell-real Makefile
-	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
-	@# Regenerate libtool wrapper so Alt+F2 restart will work
-	@$(LIBTOOL) --mode=execute test -f eos-shell-real
 
 eos-shell-extension-tool: eos-shell-extension-tool.in Makefile
 	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
@@ -87,11 +70,15 @@ eos_shell_cflags =				\
 	-DDATADIR=\"$(datadir)\"		\
 	-DGNOME_SHELL_LIBEXECDIR=\"$(libexecdir)\"	\
 	-DGNOME_SHELL_DATADIR=\"$(pkgdatadir)\"	\
-	-DGNOME_SHELL_PKGLIBDIR=\"$(pkglibdir)\" \
-	-DMUTTER_TYPELIB_DIR=\"$(MUTTER_TYPELIB_DIR)\"
+	-DGNOME_SHELL_PKGLIBDIR=\"$(pkglibdir)\"
 
 privlibdir = $(pkglibdir)
-privlib_LTLIBRARIES = libeos-shell.la libeos-shell-js.la
+privlib_LTLIBRARIES = libeos-shell-js.la libeos-shell-menu.la libeos-shell.la
+noinst_LTLIBRARIES += libeos-shell-base.la
+
+if HAVE_MUTTER_WAYLAND
+privlib_LTLIBRARIES += libeos-shell-wayland.la
+endif HAVE_MUTTER_WAYLAND
 
 shell_built_sources = \
 	shell-enum-types.h \
@@ -126,49 +113,61 @@ shell_public_headers_h =		\
 	shell-window-tracker.h		\
 	shell-wm.h
 
-shell_private_sources = \
-	gactionmuxer.h			\
-	gactionmuxer.c			\
-	gactionobservable.h		\
-	gactionobservable.c		\
-	gactionobserver.h		\
-	gactionobserver.c
+libeos_shell_menu_la_SOURCES = 	\
+	gtkactionmuxer.h		\
+	gtkactionmuxer.c		\
+	gtkactionobservable.h		\
+	gtkactionobservable.c		\
+	gtkactionobserver.h		\
+	gtkactionobserver.c		\
+	gtkmenutrackeritem.c		\
+	gtkmenutrackeritem.h		\
+	gtkmenutracker.c		\
+	gtkmenutracker.h		\
+	$(NULL)
 
-libeos_shell_sources =			\
+libeos_shell_base_la_SOURCES = 	\
 	$(shell_public_headers_h)	\
 	$(shell_private_sources)	\
-	shell-app-private.h		\
-	shell-app-system-private.h	\
 	shell-embedded-window-private.h	\
-	shell-global-private.h		\
-	shell-window-tracker-private.h	\
-	shell-wm-private.h		\
-	gnome-shell-plugin.c		\
-	shell-app.c			\
-	shell-app-system.c		\
-	shell-app-usage.c		\
-	shell-desktop-dir-info.c	\
-	shell-dir-info.c		\
 	shell-embedded-window.c		\
 	shell-generic-container.c	\
-	shell-gtk-embed.c		\
-	shell-global.c			\
-	shell-grid-desaturate-effect.c  \
 	shell-invert-lightness-effect.c	\
 	shell-keyring-prompt.h		\
 	shell-keyring-prompt.c		\
+	shell-menu-tracker.c		\
+	shell-menu-tracker.h		\
 	shell-mount-operation.c		\
 	shell-network-agent.c		\
 	shell-page-flip-effect.c	\
 	shell-perf-log.c		\
 	shell-polkit-authentication-agent.h	\
 	shell-polkit-authentication-agent.c	\
-	shell-screenshot.c		\
 	shell-secure-text-buffer.c	\
 	shell-secure-text-buffer.h	\
 	shell-slicer.c			\
 	shell-stack.c			\
-	shell-tp-client.c			\
+	shell-tp-client.c		\
+	$(NULL)
+
+libeos_shell_sources =		\
+	$(shell_built_sources)		\
+	$(shell_public_headers_h)	\
+	shell-app-private.h		\
+	shell-app-system-private.h	\
+	shell-global-private.h		\
+	shell-window-tracker-private.h	\
+	eos-wm-private.h		\
+	gnome-shell-plugin.c		\
+	shell-app.c			\
+	shell-app-system.c		\
+	shell-app-usage.c		\
+	shell-desktop-dir-info.c	\
+	shell-dir-info.c		\
+	shell-global.c			\
+	shell-grid-desaturate-effect.c  \
+	shell-gtk-embed.c		\
+	shell-screenshot.c		\
 	shell-tray-icon.c		\
 	shell-tray-manager.c		\
 	shell-util.c			\
@@ -176,23 +175,35 @@ libeos_shell_sources =			\
 	shell-wm.c			\
 	$(NULL)
 
-libeos_shell_built_sources =		\
-	$(shell_built_sources)		\
-	$(top_builddir)/js/js-resources.c		\
-	$(top_builddir)/js/js-resources.h		\
-	$(NULL)
-
 libeos_shell_la_SOURCES = $(libeos_shell_sources)
-nodist_libeos_shell_la_SOURCES = $(libeos_shell_built_sources)
 
 libeos_shell_la_gir_sources = \
-	$(filter-out %-private.h $(shell_private_sources), $(shell_public_headers_h) $(libeos_shell_sources) $(libeos_shell_built_sources))
+	$(filter-out %-private.h $(shell_private_sources), $(shell_public_headers_h) $(libeos_shell_base_la_SOURCES) $(libeos_shell_sources))
 
-eos_shell_real_SOURCES =		\
-	main.c
-eos_shell_real_CPPFLAGS = $(eos_shell_cflags)
-eos_shell_real_LDADD = libeos-shell.la libeos-shell-js.la $(libeos_shell_la_LIBADD)
-eos_shell_real_DEPENDENCIES = libeos-shell.la
+eos_shell_SOURCES = main.c
+eos_shell_CPPFLAGS = \
+	-DMUTTER_TYPELIB_DIR=\"$(MUTTER_TYPELIB_DIR)\" \
+	$(MUTTER_CFLAGS) \
+	$(eos_shell_cflags)
+
+# Here, and after, we repeat mutter and bluetooth libraries just for the rpath
+# The dependency is already pulled in by libtool
+eos_shell_LDADD = libeos-shell.la libeos-shell-js.la $(EOS_SHELL_LIBS) $(MUTTER_LIBS) $(BLUETOOTH_LIBS)
+eos_shell_DEPENDENCIES = libeos-shell.la
+
+if HAVE_MUTTER_WAYLAND
+libeos_shell_wayland_la_SOURCES = $(libeos_shell_sources)
+
+eos_shell_wayland_SOURCES = main.c
+eos_shell_wayland_CPPFLAGS = \
+	-DHAVE_WAYLAND \
+	-DMUTTER_TYPELIB_DIR=\"$(MUTTER_WAYLAND_TYPELIB_DIR)\" \
+	$(MUTTER_WAYLAND_CFLAGS) \
+	$(eos_shell_cflags)
+
+eos_shell_wayland_LDADD = libeos-shell-wayland.la libeos-shell-js.la $(EOS_SHELL_LIBS) $(MUTTER_WAYLAND_LIBS) $(BLUETOOTH_LIBS)
+eos_shell_wayland_DEPENDENCIES = libeos-shell-wayland.la
+endif HAVE_MUTTER_WAYLAND
 
 eos_shell_extension_prefs_SOURCES = 	\
 	gnome-shell-extension-prefs.c 	\
@@ -230,14 +241,14 @@ shell_recorder_sources =        \
 # Custom element is an internal detail
 
 if BUILD_RECORDER
-libeos_shell_la_SOURCES += $(shell_recorder_sources)
+libeos_shell_sources += $(shell_recorder_sources)
 
 shell_recorder_private_sources =  \
 	shell-recorder-src.c	\
 	shell-recorder-src.h	\
 	$(NULL)
 
-shell_private_sources += $(shell_recorder_private_sources)
+shell_private_sources = $(shell_recorder_private_sources)
 
 endif BUILD_RECORDER
 
@@ -253,8 +264,8 @@ eos_shell_perf_helper_LDADD = $(SHELL_PERF_HELPER_LIBS)
 
 noinst_PROGRAMS += run-js-test
 
-run_js_test_CPPFLAGS = $(eos_shell_cflags)
-run_js_test_LDADD = libeos-shell.la $(libeos_shell_la_LIBADD)
+run_js_test_CPPFLAGS = $(MUTTER_CFLAGS) $(eos_shell_cflags)
+run_js_test_LDADD = libeos-shell.la $(EOS_SHELL_JS_LIBS) $(MUTTER_LIBS) $(BLUETOOTH_LIBS)
 run_js_test_LDFLAGS = -export-dynamic
 
 run_js_test_SOURCES =			\
@@ -284,24 +295,65 @@ shell-enum-types.c: $(srcdir)/shell-enum-types.c.in stamp-shell-enum-types.h
 	rm -f $(@F).tmp
 EXTRA_DIST += shell-enum-types.c.in
 
-libeos_shell_la_LDFLAGS = -avoid-version
-libeos_shell_la_LIBADD =		\
+libeos_shell_ldflags = -avoid-version
+libeos_shell_libadd =		\
 	-lm			\
 	$(EOS_SHELL_LIBS)	\
-	$(BLUETOOTH_LIBS)	\
+	libeos-shell-menu.la	\
 	libst-1.0.la       	\
 	libtray.la		\
 	gvc/libgvc.la		\
 	$(NULL)
 
-libeos_shell_la_CPPFLAGS = $(eos_shell_cflags)
+libeos_shell_menu_la_LDFLAGS = $(libeos_shell_ldflags)
+libeos_shell_menu_la_LIBADD = $(EOS_SHELL_LIBS)
+libeos_shell_menu_la_CPPFLAGS = $(EOS_SHELL_CFLAGS)
 
-Shell-0.1.gir: libeos-shell.la St-1.0.gir
+libeos_shell_base_la_LIBADD = $(libeos_shell_libadd)
+libeos_shell_base_la_CPPFLAGS = $(eos_shell_cflags)
+
+libeos_shell_la_LDFLAGS = $(libeos_shell_ldflags)
+libeos_shell_la_LIBADD = $(GNOME_SHELL_LIBS) $(MUTTER_LIBS) libeos-shell-base.la
+libeos_shell_la_CPPFLAGS = $(MUTTER_CFLAGS) $(eos_shell_cflags)
+
+if HAVE_MUTTER_WAYLAND
+libeos_shell_wayland_la_LDFLAGS = $(libeos_shell_ldflags)
+libeos_shell_wayland_la_LIBADD = $(MUTTER_WAYLAND_LIBS) libeos-shell-base.la
+libeos_shell_wayland_la_CPPFLAGS = $(MUTTER_WAYLAND_CFLAGS) -DHAVE_WAYLAND $(eos_shell_cflags)
+endif HAVE_MUTTER_WAYLAND
+
+ShellMenu-0.1.gir: libeos-shell-menu.la
+ShellMenu_0_1_gir_INCLUDES = Gio-2.0
+ShellMenu_0_1_gir_CFLAGS = $(libeos_shell_menu_la_CPPFLAGS) -I $(srcdir)
+ShellMenu_0_1_gir_LIBS = libeos-shell-menu.la
+ShellMenu_0_1_gir_FILES = \
+	gtkactionmuxer.h		\
+	gtkactionmuxer.c		\
+	gtkactionobservable.h		\
+	gtkactionobservable.c		\
+	gtkactionobserver.h		\
+	gtkactionobserver.c		\
+	gtkmenutrackeritem.c		\
+	gtkmenutrackeritem.h		\
+	$(NULL)
+ShellMenu_0_1_gir_SCANNERFLAGS = 	\
+	--namespace=ShellMenu --identifier-prefix=Gtk \
+	$(if $(BLUETOOTH_DIR),-L $(BLUETOOTH_DIR),)
+INTROSPECTION_GIRS += ShellMenu-0.1.gir
+CLEANFILES += ShellMenu-0.1.gir
+
+Shell-0.1.gir: eos-shell St-1.0.gir ShellMenu-0.1.gir
 Shell_0_1_gir_INCLUDES = Clutter-1.0 ClutterX11-1.0 Meta-3.0 TelepathyGLib-0.12 Soup-2.4 GMenu-3.0 NetworkManager-1.0 NMClient-1.0
 Shell_0_1_gir_CFLAGS = $(libeos_shell_la_CPPFLAGS) -I $(srcdir)
-Shell_0_1_gir_LIBS = libeos-shell.la
+# Hack! we use PROGRAM instead of LIBS so that the soname is not included
+# in the typelib. This way the symbols will be resolved with the libeos-shell
+# linked against the executable (which will be libeos-shell-wayland for
+# eos-shell-wayland)
+Shell_0_1_gir_PROGRAM = $(builddir)/eos-shell
 Shell_0_1_gir_FILES = $(libeos_shell_la_gir_sources)
-Shell_0_1_gir_SCANNERFLAGS = --include-uninstalled=$(builddir)/St-1.0.gir \
+Shell_0_1_gir_SCANNERFLAGS =	\
+	--include-uninstalled=$(builddir)/St-1.0.gir \
+	--include-uninstalled=$(builddir)/ShellMenu-0.1.gir \
 	--add-include-path=$(MUTTER_GIR_DIR) $(if $(BLUETOOTH_DIR),-L $(BLUETOOTH_DIR),)
 INTROSPECTION_GIRS += Shell-0.1.gir
 CLEANFILES += Shell-0.1.gir

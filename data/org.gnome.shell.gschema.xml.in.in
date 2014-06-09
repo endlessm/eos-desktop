@@ -140,6 +140,13 @@
         application view, rather than being displayed inline in the main view.
       </_description>
     </key>
+    <key name="app-picker-view" type="u">
+      <default>0</default>
+      <summary>App Picker View</summary>
+      <description>
+        Index of the currently selected view in the application picker.
+      </description>
+    </key>
     <key name="command-history" type="as">
       <default>[]</default>
       <_summary>History for command (Alt-F2) dialog</_summary>
@@ -147,16 +154,6 @@
     <key name="looking-glass-history" type="as">
       <default>[]</default>
       <_summary>History for the looking glass dialog</_summary>
-    </key>
-    <key name="saved-im-presence" type="i">
-      <default>1</default>
-      <_summary>Internally used to store the last IM presence explicitly set by the user. The
-value here is from the TpConnectionPresenceType enumeration.</_summary>
-    </key>
-    <key name="saved-session-presence" type="i">
-      <default>0</default>
-      <_summary>Internally used to store the last session presence status for the user. The
-value here is from the GsmPresenceStatus enumeration.</_summary>
     </key>
     <key name="always-show-log-out" type="b">
       <default>false</default>
@@ -216,6 +213,13 @@ value here is from the GsmPresenceStatus enumeration.</_summary>
         Overview.
       </_description>
     </key>
+    <key name="toggle-overview" type="as">
+      <default>["&lt;Super&gt;s"]</default>
+      <_summary>Keybinding to open the overview</_summary>
+      <_description>
+        Keybinding to open the Activities Overview.
+      </_description>
+    </key>
     <key name="toggle-message-tray" type="as">
       <default>["&lt;Super&gt;m"]</default>
       <_summary>Keybinding to toggle the visibility of the message tray</_summary>
@@ -243,6 +247,19 @@ value here is from the GsmPresenceStatus enumeration.</_summary>
     </key>
   </schema>
 
+  <schema id="org.gnome.shell.app-switcher"
+          path="/org/gnome/shell/app-switcher/"
+          gettext-domain="@GETTEXT_PACKAGE@">
+    <key type="b" name="current-workspace-only">
+      <default>false</default>
+      <summary>Limit switcher to current workspace.</summary>
+      <description>
+	If true, only applications that have windows on the current workspace are shown in the switcher.
+	Otherwise, all applications are included.
+      </description>
+    </key>
+  </schema>
+
   <enum id="org.gnome.shell.window-switcher.AppIconMode">
     <value value="1" nick="thumbnail-only"/>
     <value value="2" nick="app-icon-only"/>
@@ -261,7 +278,7 @@ value here is from the GsmPresenceStatus enumeration.</_summary>
       </_description>
     </key>
     <key type="b" name="current-workspace-only">
-      <default>false</default>
+      <default>true</default>
       <summary>Limit switcher to current workspace.</summary>
       <description>
 	If true, only windows from the current workspace are shown in the switcher.
@@ -316,10 +333,10 @@ value here is from the GsmPresenceStatus enumeration.</_summary>
 
     <key name="focus-change-on-pointer-rest" type="b">
       <default>true</default>
-      <summary>Delay focus changes in mouse mode until the pointer stops moving</summary>
-      <description>
+      <_summary>Delay focus changes in mouse mode until the pointer stops moving</_summary>
+      <_description>
         This key overrides the key in org.gnome.mutter when running GNOME Shell.
-      </description>
+      </_description>
     </key>
   </schema>
 </schemalist>

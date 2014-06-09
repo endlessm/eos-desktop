@@ -3,8 +3,9 @@
 const Clutter = imports.gi.Clutter;
 const Lang = imports.lang;
 const Meta = imports.gi.Meta;
-const St = imports.gi.St;
 const Shell = imports.gi.Shell;
+const Signals = imports.signals;
+const St = imports.gi.St;
 
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
@@ -59,6 +60,10 @@ const BoxPointer = new Lang.Class({
         this._sourceAlignment = 0.5;
         this._capturedEventId = 0;
         this._muteInput();
+    },
+
+    get arrowSide() {
+        return this._arrowSide;
     },
 
     _muteInput: function() {
@@ -182,7 +187,9 @@ const BoxPointer = new Lang.Class({
     },
 
     _getPreferredHeight: function(actor, forWidth, alloc) {
-        let [minSize, naturalSize] = this.bin.get_preferred_height(forWidth);
+        let themeNode = this.actor.get_theme_node();
+        let borderWidth = themeNode.get_length('-arrow-border-width');
+        let [minSize, naturalSize] = this.bin.get_preferred_height(forWidth - 2 * borderWidth);
         alloc.min_size = minSize;
         alloc.natural_size = naturalSize;
         this._adjustAllocationForArrow(false, alloc);
@@ -613,12 +620,12 @@ const BoxPointer = new Lang.Class({
                 return St.Side.TOP;
             break;
         case St.Side.LEFT:
-            if (sourceAllocation.y2 + boxWidth > monitor.x + monitor.width &&
+            if (sourceAllocation.x2 + boxWidth > monitor.x + monitor.width &&
                 boxWidth < sourceAllocation.x1 - monitor.x)
                 return St.Side.RIGHT;
             break;
         case St.Side.RIGHT:
-            if (sourceAllocation.y1 - boxWidth < monitor.x &&
+            if (sourceAllocation.x1 - boxWidth < monitor.x &&
                 boxWidth < monitor.x + monitor.width - sourceAllocation.x2)
                 return St.Side.LEFT;
             break;
@@ -636,6 +643,8 @@ const BoxPointer = new Lang.Class({
                 this._container.queue_relayout();
                 return false;
             }));
+
+            this.emit('arrow-side-changed');
         }
     },
 
@@ -663,5 +672,21 @@ const BoxPointer = new Lang.Class({
 
     get opacity() {
         return this.actor.opacity;
+    },
+
+    updateArrowSide: function(side) {
+        this._arrowSide = side;
+        this._border.queue_repaint();
+
+        this.emit('arrow-side-changed');
+    },
+
+    getPadding: function(side) {
+        return this.bin.get_theme_node().get_padding(side);
+    },
+
+    getArrowHeight: function() {
+        return this.actor.get_theme_node().get_length('-arrow-rise');
     }
 });
+Signals.addSignalMethods(BoxPointer.prototype);

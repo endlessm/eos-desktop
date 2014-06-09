@@ -1,5 +1,6 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
+const GObject = imports.gi.GObject;
 const Clutter = imports.gi.Clutter;
 const GObject = imports.gi.GObject;
 const Lang = imports.lang;
@@ -12,6 +13,7 @@ const Main = imports.ui.main;
 const Params = imports.misc.params;
 const Tweener = imports.ui.tweener;
 const ViewSelector = imports.ui.viewSelector;
+const WorkspaceThumbnail = imports.ui.workspaceThumbnail;
 
 const SIDE_CONTROLS_ANIMATION_TIME = 0.16;
 
@@ -54,13 +56,15 @@ const SlideLayout = new Lang.Class({
     vfunc_allocate: function(container, box, flags) {
         let child = container.get_first_child();
 
-        let [, , natWidth, natHeight] = child.get_preferred_size();
         let availWidth = Math.round(box.x2 - box.x1);
         let availHeight = Math.round(box.y2 - box.y1);
+        let [, natWidth] = child.get_preferred_width(availHeight);
 
+        // Align the actor inside the clipped box, as the actor's alignment
+        // flags only determine what to do if the allocated box is bigger
+        // than the actor's box.
         let realDirection = getRtlSlideDirection(this._direction, child);
-        let translationX = (realDirection == SlideDirection.LEFT) ?
-            (availWidth - natWidth) : (natWidth - availWidth);
+        let alignX = (realDirection == SlideDirection.LEFT) ? (availWidth - natWidth) : 0;
 
         let x1 = translationX;
         let x2 = Math.max(x1, child.x_expand ? availWidth : natWidth);
@@ -198,6 +202,7 @@ const SlidingControl = new Lang.Class({
 
     slideIn: function() {
         this.visible = true;
+        this._updateTranslation();
         // we will update slideX and the translation from pageEmpty
     },
 
@@ -226,17 +231,13 @@ const ThumbnailsSlider = new Lang.Class({
 
         this._thumbnailsBox = thumbnailsBox;
 
-        // SlideLayout reads the actor's expand flags to decide
-        // whether to allocate the natural size to its child, or the whole
-        // available allocation
-        this._thumbnailsBox.actor.y_expand = true;
-
         this.actor.request_mode = Clutter.RequestMode.WIDTH_FOR_HEIGHT;
         this.actor.reactive = true;
         this.actor.track_hover = true;
         this.actor.add_actor(this._thumbnailsBox.actor);
 
         Main.layoutManager.connect('monitors-changed', Lang.bind(this, this.updateSlide));
+        Main.overview.connect('hiding', Lang.bind(this, this.slideOut));
         this.actor.connect('notify::hover', Lang.bind(this, this.updateSlide));
         this._thumbnailsBox.actor.bind_property('visible', this.actor, 'visible', GObject.BindingFlags.SYNC_CREATE);
     },
@@ -264,6 +265,18 @@ const ThumbnailsSlider = new Lang.Class({
         return alwaysZoomOut;
     },
 
+    _onOverviewShowing: function() {
+        this.visible = true;
+        this.layout.slideX = this.getSlide();
+        this.actor.translation_x = this._getTranslation();
+        this.slideIn();
+    },
+
+    getNonExpandedWidth: function() {
+        let child = this.actor.get_first_child();
+        return child.get_theme_node().get_length('visible-width');
+    },
+
     getSlide: function() {
         if (!this.visible)
             return 0;
@@ -275,18 +288,16 @@ const ThumbnailsSlider = new Lang.Class({
         let child = this.actor.get_first_child();
         let preferredHeight = child.get_preferred_height(-1)[1];
         let expandedWidth = child.get_preferred_width(preferredHeight)[1];
-        let visibleWidth = child.get_theme_node().get_length('visible-width');
 
-        return visibleWidth / expandedWidth;
+        return this.getNonExpandedWidth() / expandedWidth;
     },
 
     getVisibleWidth: function() {
         let alwaysZoomOut = this._getAlwaysZoomOut();
         if (alwaysZoomOut)
             return this.parent();
-
-        let child = this.actor.get_first_child();
-        return child.get_theme_node().get_length('visible-width');
+        else
+            return this.getNonExpandedWidth();
     }
 });
 
@@ -304,10 +315,14 @@ const DashSlider = new Lang.Class({
         // whether to allocate the natural size to its child, or the whole
         // available allocation
         this._dash.actor.x_expand = true;
-        this._dash.actor.y_expand = true;
+
+        this.actor.x_align = Clutter.ActorAlign.START;
+        this.actor.y_expand = true;
+
         this.actor.add_actor(this._dash.actor);
 
         this._dash.connect('icon-size-changed', Lang.bind(this, this.updateSlide));
+        Main.overview.connect('hiding', Lang.bind(this, this.slideOut));
     },
 
     getSlide: function() {
@@ -320,6 +335,13 @@ const DashSlider = new Lang.Class({
     slideOut: function() {
         this.parent();
         this._dash.hideLabels();
+    },
+
+    _onOverviewShowing: function() {
+        this.visible = true;
+        this.layout.slideX = this.getSlide();
+        this.actor.translation_x = this._getTranslation();
+        this.slideIn();
     },
 
     _onWindowDragBegin: function() {
@@ -372,20 +394,76 @@ const DashSpacer = new Lang.Class({
 const ControlsManager = new Lang.Class({
     Name: 'ControlsManager',
 
-    _init: function(dash, thumbnails, viewSelector) {
-        this._dashSlider = new DashSlider(dash);
-        this.dashActor = this._dashSlider.actor;
-        this.dashSpacer = new DashSpacer();
-        this.dashSpacer.setDashActor(this.dashActor);
+    _init: function(searchEntry) {
+        this.dash = new Dash.Dash();
+        this._dashSlider = new DashSlider(this.dash);
+        this._dashSpacer = new DashSpacer();
+        this._dashSpacer.setDashActor(this._dashSlider.actor);
 
-        this._thumbnailsSlider = new ThumbnailsSlider(thumbnails);
-        this.thumbnailsActor = this._thumbnailsSlider.actor;
+        this._thumbnailsBox = new WorkspaceThumbnail.ThumbnailsBox();
+        this._thumbnailsSlider = new ThumbnailsSlider(this._thumbnailsBox);
 
-        this._viewSelector = viewSelector;
-        this._viewSelector.connect('page-changed', Lang.bind(this, this._setVisibility));
-        this._viewSelector.connect('page-empty', Lang.bind(this, this._onPageEmpty));
+        this.viewSelector = new ViewSelector.ViewSelector(searchEntry,
+                                                          this.dash.showAppsButton);
+        this.viewSelector.connect('page-changed', Lang.bind(this, this._setVisibility));
+        this.viewSelector.connect('page-empty', Lang.bind(this, this._onPageEmpty));
+
+        this._indicator = new MessagesIndicator(this.viewSelector);
+        this.indicatorActor = this._indicator.actor;
+
+        let layout = new ControlsLayout();
+        this.actor = new St.Widget({ layout_manager: layout,
+                                     reactive: true,
+                                     x_expand: true, y_expand: true,
+                                     clip_to_allocation: true });
+        this._group = new St.BoxLayout({ name: 'overview-group',
+                                        x_expand: true, y_expand: true });
+        this.actor.add_actor(this._group);
+
+        this.actor.add_actor(this._dashSlider.actor);
+
+        this._group.add_actor(this._dashSpacer);
+        this._group.add(this.viewSelector.actor, { x_fill: true,
+                                                   expand: true });
+        this._group.add_actor(this._thumbnailsSlider.actor);
+
+        layout.connect('allocation-changed', Lang.bind(this, this._updateWorkspacesGeometry));
 
         Main.overview.connect('showing', Lang.bind(this, this._updateSpacerVisibility));
+        Main.overview.connect('item-drag-begin', Lang.bind(this,
+            function() {
+                let activePage = this.viewSelector.getActivePage();
+                if (activePage != ViewSelector.ViewPage.WINDOWS)
+                    this.viewSelector.fadeHalf();
+            }));
+        Main.overview.connect('item-drag-end', Lang.bind(this,
+            function() {
+                this.viewSelector.fadeIn();
+            }));
+        Main.overview.connect('item-drag-cancelled', Lang.bind(this,
+            function() {
+                this.viewSelector.fadeIn();
+            }));
+    },
+
+    _updateWorkspacesGeometry: function() {
+        let [x, y] = this.actor.get_transformed_position();
+        let [width, height] = this.actor.get_transformed_size();
+        let geometry = { x: x, y: y, width: width, height: height };
+
+        let spacing = this.actor.get_theme_node().get_length('spacing');
+        let dashWidth = this._dashSlider.getVisibleWidth() + spacing;
+        let thumbnailsWidth = this._thumbnailsSlider.getNonExpandedWidth() + spacing;
+
+        geometry.width -= dashWidth;
+        geometry.width -= thumbnailsWidth;
+
+        if (this.actor.get_text_direction() == Clutter.TextDirection.LTR)
+            geometry.x += dashWidth;
+        else
+            geometry.x += thumbnailsWidth;
+
+        this.viewSelector.setWorkspacesFullGeometry(geometry);
     },
 
     _setVisibility: function() {
@@ -396,8 +474,9 @@ const ControlsManager = new Lang.Class({
         if (Main.overview.animationInProgress && !Main.overview.visibleTarget)
             return;
 
-        let activePage = this._viewSelector.getActivePage();
-        let dashVisible = (activePage == ViewSelector.ViewPage.WINDOWS);
+        let activePage = this.viewSelector.getActivePage();
+        let dashVisible = (activePage == ViewSelector.ViewPage.WINDOWS ||
+                           activePage == ViewSelector.ViewPage.APPS);
         let thumbnailsVisible = (activePage == ViewSelector.ViewPage.WINDOWS);
 
         if (dashVisible)
@@ -415,8 +494,8 @@ const ControlsManager = new Lang.Class({
         if (Main.overview.animationInProgress && !Main.overview.visibleTarget)
             return;
 
-        let activePage = this._viewSelector.getActivePage();
-        this.dashSpacer.visible = (activePage == ViewSelector.ViewPage.WINDOWS);
+        let activePage = this.viewSelector.getActivePage();
+        this._dashSpacer.visible = (activePage == ViewSelector.ViewPage.WINDOWS);
     },
 
     _onPageEmpty: function() {

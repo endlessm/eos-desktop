@@ -896,6 +896,101 @@ st_theme_node_get_double (StThemeNode *node,
     }
 }
 
+/**
+ * st_theme_node_lookup_url:
+ * @node: a #StThemeNode
+ * @property_name: The name of the string property
+ * @inherit: if %TRUE, if a value is not found for the property on the
+ *   node, then it will be looked up on the parent node, and then on the
+ *   parent's parent, and so forth. Note that if the property has a
+ *   value of 'inherit' it will be inherited even if %FALSE is passed
+ *   in for @inherit; this only affects the default behavior for inheritance.
+ * @value: (out): location to store the newly allocated value that was
+ *   determined. If the property is not found, the value in this location
+ *   will not be changed.
+ *
+ * Looks up a property containing a single URL value.
+ *
+ * See also st_theme_node_get_url(), which provides a simpler API.
+ *
+ * Return value: %TRUE if the property was found in the properties for this
+ *  theme node (or in the properties of parent nodes when inheriting.)
+ */
+gboolean
+st_theme_node_lookup_url (StThemeNode  *node,
+                          const char   *property_name,
+                          gboolean      inherit,
+                          char        **value)
+{
+  gboolean result = FALSE;
+  int i;
+
+  ensure_properties (node);
+
+  for (i = node->n_properties - 1; i >= 0; i--)
+    {
+      CRDeclaration *decl = node->properties[i];
+
+      if (strcmp (decl->property->stryng->str, property_name) == 0)
+        {
+          CRTerm *term = decl->value;
+          CRStyleSheet *base_stylesheet;
+          GFile *file;
+
+          if (term->type != TERM_URI && term->type != TERM_STRING)
+            continue;
+
+          if (decl->parent_statement != NULL)
+            base_stylesheet = decl->parent_statement->parent_sheet;
+          else
+            base_stylesheet = NULL;
+
+          file = _st_theme_resolve_url (node->theme,
+                                        base_stylesheet,
+                                        decl->value->content.str->stryng->str);
+          *value = g_file_get_path (file);
+          g_object_unref (file);
+          result = TRUE;
+          break;
+        }
+    }
+
+  if (!result && inherit && node->parent_node)
+    result = st_theme_node_lookup_url (node->parent_node, property_name, inherit, value);
+
+  return result;
+}
+
+/*
+ * st_theme_node_get_url:
+ * @node: a #StThemeNode
+ * @property_name: The name of the string property
+ *
+ * Looks up a property containing a single URL value.
+ *
+ * See also st_theme_node_lookup_url(), which provides more options,
+ * and lets you handle the case where the theme does not specify the
+ * indicated value.
+ *
+ * Return value: the newly allocated value if found.
+ *  If @property_name is not found, a warning will be logged and %NULL
+ *  will be returned.
+ */
+char *
+st_theme_node_get_url (StThemeNode *node,
+                       const char  *property_name)
+{
+  char *value;
+
+  if (st_theme_node_lookup_url (node, property_name, FALSE, &value))
+    return value;
+  else
+    {
+      g_warning ("Did not find string property '%s'", property_name);
+      return NULL;
+    }
+}
+
 static const PangoFontDescription *
 get_parent_font (StThemeNode *node)
 {
@@ -920,6 +1015,9 @@ get_length_from_term (StThemeNode *node,
   } type = ABSOLUTE;
 
   double multiplier = 1.0;
+  int scale_factor;
+
+  g_object_get (node->context, "scale-factor", &scale_factor, NULL);
 
   if (term->type != TERM_NUMBER)
     {
@@ -933,7 +1031,7 @@ get_length_from_term (StThemeNode *node,
     {
     case NUM_LENGTH_PX:
       type = ABSOLUTE;
-      multiplier = 1;
+      multiplier = 1 * scale_factor;
       break;
     case NUM_LENGTH_PT:
       type = POINTS;
@@ -1571,6 +1669,7 @@ void
 _st_theme_node_ensure_geometry (StThemeNode *node)
 {
   int i, j;
+  int width, height;
 
   if (node->geometry_computed)
     return;
@@ -1588,6 +1687,8 @@ _st_theme_node_ensure_geometry (StThemeNode *node)
   node->outline_width = 0;
   node->outline_color = TRANSPARENT_COLOR;
 
+  width = -1;
+  height = -1;
   node->width = -1;
   node->height = -1;
   node->min_width = -1;
@@ -1607,8 +1708,12 @@ _st_theme_node_ensure_geometry (StThemeNode *node)
       else if (g_str_has_prefix (property_name, "padding"))
         do_padding_property (node, decl);
       else if (strcmp (property_name, "width") == 0)
-        do_size_property (node, decl, &node->width);
+        do_size_property (node, decl, &width);
       else if (strcmp (property_name, "height") == 0)
+        do_size_property (node, decl, &height);
+      else if (strcmp (property_name, "-st-natural-width") == 0)
+        do_size_property (node, decl, &node->width);
+      else if (strcmp (property_name, "-st-natural-height") == 0)
         do_size_property (node, decl, &node->height);
       else if (strcmp (property_name, "min-width") == 0)
         do_size_property (node, decl, &node->min_width);
@@ -1620,29 +1725,43 @@ _st_theme_node_ensure_geometry (StThemeNode *node)
         do_size_property (node, decl, &node->max_height);
     }
 
-  if (node->width != -1)
+  /*
+   * Setting width sets max-width, min-width and -st-natural-width,
+   * unless one of them is set individually.
+   * Setting min-width sets natural width too, so that the minimum
+   * width reported by get_preferred_width() is always not greater
+   * than the natural width.
+   * The natural width in node->width is actually a lower bound, the
+   * actor is allowed to request something greater than that, but
+   * not greater than max-width.
+   * We don't need to clamp node->width to be less than max_width,
+   * that's done by adjust_preferred_width.
+   */
+  if (width != -1)
     {
+      if (node->width == -1)
+        node->width = width;
       if (node->min_width == -1)
-        node->min_width = node->width;
-      else if (node->width < node->min_width)
-        node->width = node->min_width;
+        node->min_width = width;
       if (node->max_width == -1)
-        node->max_width = node->width;
-      else if (node->width > node->max_width)
-        node->width = node->max_width;
+        node->max_width = width;
     }
 
-  if (node->height != -1)
+  if (node->width < node->min_width)
+    node->width = node->min_width;
+
+  if (height != -1)
     {
+      if (node->height == -1)
+        node->height = height;
       if (node->min_height == -1)
-        node->min_height = node->height;
-      else if (node->height < node->min_height)
-        node->height = node->min_height;
+        node->min_height = height;
       if (node->max_height == -1)
-        node->max_height = node->height;
-      else if (node->height > node->max_height)
-        node->height = node->max_height;
+        node->max_height = height;
     }
+
+  if (node->height < node->min_height)
+    node->height = node->min_height;
 }
 
 int
@@ -3446,7 +3565,7 @@ st_theme_node_adjust_preferred_width (StThemeNode  *node,
   if (natural_width_p)
     {
       if (node->width != -1)
-        *natural_width_p = node->width;
+        *natural_width_p = MAX (*natural_width_p, node->width);
       if (node->max_width != -1)
         *natural_width_p = MIN (*natural_width_p, node->max_width);
       *natural_width_p += width_inc;
@@ -3512,7 +3631,7 @@ st_theme_node_adjust_preferred_height (StThemeNode  *node,
   if (natural_height_p)
     {
       if (node->height != -1)
-        *natural_height_p = node->height;
+        *natural_height_p = MAX (*natural_height_p, node->height);
       if (node->max_height != -1)
         *natural_height_p = MIN (*natural_height_p, node->max_height);
       *natural_height_p += height_inc;

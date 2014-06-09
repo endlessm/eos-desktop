@@ -44,6 +44,8 @@ gboolean shell_global_begin_modal            (ShellGlobal         *global,
                                               MetaModalOptions    options);
 void     shell_global_end_modal              (ShellGlobal         *global,
                                               guint32              timestamp);
+void     shell_global_freeze_keyboard        (ShellGlobal         *global,
+                                              guint32              timestamp);
 
 void     shell_global_set_stage_input_region (ShellGlobal         *global,
                                               GSList              *rectangles);
@@ -122,6 +124,14 @@ void     shell_global_init_xdnd                 (ShellGlobal  *global);
 void     shell_global_reexec_self               (ShellGlobal  *global);
 
 const char *     shell_global_get_session_mode  (ShellGlobal  *global);
+
+void     shell_global_set_runtime_state      (ShellGlobal  *global,
+                                              const char   *property_name,
+                                              GVariant     *variant);
+GVariant * shell_global_get_runtime_state       (ShellGlobal  *global,
+                                                 const char   *property_type,
+                                                 const char   *property_name);
+
 
 G_END_DECLS
 

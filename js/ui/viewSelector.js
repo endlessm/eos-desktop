@@ -594,6 +594,10 @@ const ViewSelector = new Lang.Class({
             Main.overview.fadeInDesktop();
     },
 
+    setWorkspacesFullGeometry: function(geom) {
+        this._workspacesDisplay.setWorkspacesFullGeometry(geom);
+    },
+
     hide: function() {
         this._workspacesDisplay.hide();
     },
@@ -661,19 +665,11 @@ const ViewSelector = new Lang.Class({
         this.emit('page-empty');
 
         this._activePage.show();
-        if (noFade) {
-            this._activePage.opacity = 255;
-        } else {
-            if (this._activePage == this._appsPage) {
-                this._activePage.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
-            }
-
-            Tweener.addTween(this._activePage,
-                { opacity: 255,
-                  time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
-                  transition: 'easeOutQuad'
-                });
-        }
+        Tweener.addTween(this._activePage,
+            { opacity: 255,
+              time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
+              transition: 'easeOutQuad'
+            });
     },
 
     _showPage: function(page, noFade) {

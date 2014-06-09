@@ -34,7 +34,7 @@ function shouldAutorunMount(mount, forTransient) {
     if (!volume || (!volume.allowAutorun && forTransient))
         return false;
 
-    if (!root.is_native() || isMountRootHidden(root))
+    if (root.is_native() && isMountRootHidden(root))
         return false;
 
     return true;

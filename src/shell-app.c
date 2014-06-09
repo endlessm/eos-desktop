@@ -16,7 +16,7 @@
 #include "shell-app-system-private.h"
 #include "shell-window-tracker-private.h"
 #include "st.h"
-#include "gactionmuxer.h"
+#include "gtkactionmuxer.h"
 
 typedef enum {
   MATCH_NONE,
@@ -37,13 +37,19 @@ typedef struct {
 
   GSList *windows;
 
+  guint interesting_windows;
+
   /* Whether or not we need to resort the windows; this is done on demand */
   gboolean window_sort_stale : 1;
 
+  /* DBus property notification subscription */
+  guint properties_changed_id : 1;
+
   /* See GApplication documentation */
   GDBusMenuModel   *remote_menu;
-  GActionMuxer     *muxer;
-  char * unique_bus_name;
+  GtkActionMuxer   *muxer;
+  char             *unique_bus_name;
+  GDBusConnection  *session;
 } ShellAppRunningState;
 
 /**
@@ -213,6 +219,7 @@ shell_app_create_icon_texture (ShellApp   *app,
 typedef struct {
   ShellApp *app;
   int size;
+  ClutterTextDirection direction;
 } CreateFadedIconData;
 
 static CoglHandle
@@ -230,7 +237,7 @@ shell_app_create_faded_icon_cpu (StTextureCache *cache,
   guint8 n_channels;
   gboolean have_alpha;
   gint fade_start;
-  gint fade_range;
+  gint fade_end;
   guint i, j;
   guint pixbuf_byte_size;
   guint8 *orig_pixels;
@@ -264,7 +271,7 @@ shell_app_create_faded_icon_cpu (StTextureCache *cache,
     return COGL_INVALID_HANDLE;
 
   pixbuf = gtk_icon_info_load_icon (info, NULL);
-  gtk_icon_info_free (info);
+  g_object_unref (info);
 
   if (pixbuf == NULL)
     return COGL_INVALID_HANDLE;
@@ -282,14 +289,26 @@ shell_app_create_faded_icon_cpu (StTextureCache *cache,
   pixels = g_malloc0 (rowstride * height);
   memcpy (pixels, orig_pixels, pixbuf_byte_size);
 
-  fade_start = width / 2;
-  fade_range = width - fade_start;
-  for (i = fade_start; i < width; i++)
+  /* fade on the right side for LTR, left side for RTL */
+  if (data->direction == CLUTTER_TEXT_DIRECTION_LTR)
+    {
+      fade_start = width / 2;
+      fade_end = width;
+    }
+  else
+    {
+      fade_start = 0;
+      fade_end = width / 2;
+    }
+
+  for (i = fade_start; i < fade_end; i++)
     {
       for (j = 0; j < height; j++)
         {
           guchar *pixel = &pixels[j * rowstride + i * n_channels];
-          float fade = 1.0 - ((float) i - fade_start) / fade_range;
+          float fade = ((float) i - fade_start) / (fade_end - fade_start);
+          if (data->direction == CLUTTER_TEXT_DIRECTION_LTR)
+            fade = 1.0 - fade;
           pixel[0] = 0.5 + pixel[0] * fade;
           pixel[1] = 0.5 + pixel[1] * fade;
           pixel[2] = 0.5 + pixel[2] * fade;
@@ -315,13 +334,14 @@ shell_app_create_faded_icon_cpu (StTextureCache *cache,
  * shell_app_get_faded_icon:
  * @app: A #ShellApp
  * @size: Size in pixels
+ * @direction: Whether to fade on the left or right
  *
  * Return an actor with a horizontally faded look.
  *
  * Return value: (transfer none): A floating #ClutterActor, or %NULL if no icon
  */
 ClutterActor *
-shell_app_get_faded_icon (ShellApp *app, int size)
+shell_app_get_faded_icon (ShellApp *app, int size, ClutterTextDirection direction)
 {
   CoglHandle texture;
   ClutterActor *result;
@@ -337,9 +357,13 @@ shell_app_get_faded_icon (ShellApp *app, int size)
 
   /* Use icon: prefix so that we get evicted from the cache on
    * icon theme changes. */
-  cache_key = g_strdup_printf ("icon:%s,size=%d,faded", shell_app_get_id (app), size);
+  cache_key = g_strdup_printf ("icon:%s,size=%d,faded-%s",
+                               shell_app_get_id (app),
+                               size,
+                               direction == CLUTTER_TEXT_DIRECTION_RTL ? "rtl" : "ltr");
   data.app = app;
   data.size = size;
+  data.direction = direction;
   texture = st_texture_cache_load (st_texture_cache_get_default (),
                                    cache_key,
                                    ST_TEXTURE_CACHE_POLICY_FOREVER,
@@ -557,16 +581,16 @@ shell_app_update_window_actions (ShellApp *app, MetaWindow *window)
       actions = g_object_get_data (G_OBJECT (window), "actions");
       if (actions == NULL)
         {
-          actions = G_ACTION_GROUP (g_dbus_action_group_get (g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL),
+          actions = G_ACTION_GROUP (g_dbus_action_group_get (app->running_state->session,
                                                              meta_window_get_gtk_unique_bus_name (window),
                                                              object_path));
           g_object_set_data_full (G_OBJECT (window), "actions", actions, g_object_unref);
         }
 
       if (!app->running_state->muxer)
-        app->running_state->muxer = g_action_muxer_new ();
+        app->running_state->muxer = gtk_action_muxer_new ();
 
-      g_action_muxer_insert (app->running_state->muxer, "win", actions);
+      gtk_action_muxer_insert (app->running_state->muxer, "win", actions);
       g_object_notify (G_OBJECT (app), "action-group");
     }
 }
@@ -638,6 +662,7 @@ shell_app_activate_full (ShellApp      *app,
       case SHELL_APP_STATE_STARTING:
         break;
       case SHELL_APP_STATE_RUNNING:
+      case SHELL_APP_STATE_BUSY:
         shell_app_activate_window (app, NULL, timestamp);
         break;
     }
@@ -814,8 +839,6 @@ int
 shell_app_compare (ShellApp *app,
                    ShellApp *other)
 {
-  gboolean vis_app, vis_other;
-
   if (app->state != other->state)
     {
       if (app->state == SHELL_APP_STATE_RUNNING)
@@ -884,12 +907,6 @@ shell_app_state_transition (ShellApp      *app,
                       state == SHELL_APP_STATE_STARTING));
   app->state = state;
 
-  if (app->state == SHELL_APP_STATE_STOPPED && app->running_state)
-    {
-      unref_running_state (app->running_state);
-      app->running_state = NULL;
-    }
-
   _shell_app_system_notify_app_state_changed (shell_app_system_get_default (), app);
 
   g_object_notify (G_OBJECT (app), "state");
@@ -920,6 +937,37 @@ shell_app_on_user_time_changed (MetaWindow *window,
 }
 
 static void
+shell_app_sync_running_state (ShellApp *app)
+{
+  g_return_if_fail (app->running_state != NULL);
+
+  if (app->running_state->interesting_windows == 0)
+    shell_app_state_transition (app, SHELL_APP_STATE_STOPPED);
+  else if (app->state != SHELL_APP_STATE_STARTING)
+    shell_app_state_transition (app, SHELL_APP_STATE_RUNNING);
+}
+
+
+static void
+shell_app_on_skip_taskbar_changed (MetaWindow *window,
+                                   GParamSpec *pspec,
+                                   ShellApp   *app)
+{
+  g_assert (app->running_state != NULL);
+
+  /* we rely on MetaWindow:skip-taskbar only being notified
+   * when it actually changes; when that assumption breaks,
+   * we'll have to track the "interesting" windows themselves
+   */
+  if (meta_window_is_skip_taskbar (window))
+    app->running_state->interesting_windows--;
+  else
+    app->running_state->interesting_windows++;
+
+  shell_app_sync_running_state (app);
+}
+
+static void
 shell_app_on_ws_switch (MetaScreen         *screen,
                         int                 from,
                         int                 to,
@@ -933,6 +981,70 @@ shell_app_on_ws_switch (MetaScreen         *screen,
   app->running_state->window_sort_stale = TRUE;
 
   g_signal_emit (app, shell_app_signals[WINDOWS_CHANGED], 0);
+}
+
+static void
+application_properties_changed (GDBusConnection *connection,
+                                const gchar     *sender_name,
+                                const gchar     *object_path,
+                                const gchar     *interface_name,
+                                const gchar     *signal_name,
+                                GVariant        *parameters,
+                                gpointer         user_data)
+{
+  ShellApp *app = user_data;
+  GVariant *changed_properties;
+  gboolean busy = FALSE;
+  const gchar *interface_name_for_signal;
+
+  g_variant_get (parameters,
+                 "(&s@a{sv}as)",
+                 &interface_name_for_signal,
+                 &changed_properties,
+                 NULL);
+
+  if (g_strcmp0 (interface_name_for_signal, "org.gtk.Application") != 0)
+    return;
+
+  g_variant_lookup (changed_properties, "Busy", "b", &busy);
+
+  if (busy)
+    shell_app_state_transition (app, SHELL_APP_STATE_BUSY);
+  else
+    shell_app_state_transition (app, SHELL_APP_STATE_RUNNING);
+
+  if (changed_properties != NULL)
+    g_variant_unref (changed_properties);
+}
+
+static void
+shell_app_ensure_busy_watch (ShellApp *app)
+{
+  ShellAppRunningState *running_state = app->running_state;
+  MetaWindow *window;
+  const gchar *object_path;
+
+  if (running_state->properties_changed_id != 0)
+    return;
+
+  if (running_state->unique_bus_name == NULL)
+    return;
+
+  window = g_slist_nth_data (running_state->windows, 0);
+  object_path = meta_window_get_gtk_application_object_path (window);
+
+  if (object_path == NULL)
+    return;
+
+  running_state->properties_changed_id =
+    g_dbus_connection_signal_subscribe (running_state->session,
+                                        running_state->unique_bus_name,
+                                        "org.freedesktop.DBus.Properties",
+                                        "PropertiesChanged",
+                                        object_path,
+                                        "org.gtk.Application",
+                                        G_DBUS_SIGNAL_FLAGS_NONE,
+                                        application_properties_changed, app, NULL);
 }
 
 void
@@ -951,11 +1063,14 @@ _shell_app_add_window (ShellApp        *app,
   app->running_state->windows = g_slist_prepend (app->running_state->windows, g_object_ref (window));
   g_signal_connect (window, "unmanaged", G_CALLBACK(shell_app_on_unmanaged), app);
   g_signal_connect (window, "notify::user-time", G_CALLBACK(shell_app_on_user_time_changed), app);
+  g_signal_connect (window, "notify::skip-taskbar", G_CALLBACK(shell_app_on_skip_taskbar_changed), app);
 
   shell_app_update_app_menu (app, window);
+  shell_app_ensure_busy_watch (app);
 
-  if (app->state != SHELL_APP_STATE_STARTING)
-    shell_app_state_transition (app, SHELL_APP_STATE_RUNNING);
+  if (shell_window_tracker_is_window_interesting (window))
+    app->running_state->interesting_windows++;
+  shell_app_sync_running_state (app);
 
   g_object_thaw_notify (G_OBJECT (app));
 
@@ -973,11 +1088,16 @@ _shell_app_remove_window (ShellApp   *app,
 
   g_signal_handlers_disconnect_by_func (window, G_CALLBACK(shell_app_on_unmanaged), app);
   g_signal_handlers_disconnect_by_func (window, G_CALLBACK(shell_app_on_user_time_changed), app);
+  g_signal_handlers_disconnect_by_func (window, G_CALLBACK(shell_app_on_skip_taskbar_changed), app);
   g_object_unref (window);
   app->running_state->windows = g_slist_remove (app->running_state->windows, window);
 
-  if (app->running_state->windows == NULL)
-    shell_app_state_transition (app, SHELL_APP_STATE_STOPPED);
+  if (shell_window_tracker_is_window_interesting (window))
+    app->running_state->interesting_windows--;
+  shell_app_sync_running_state (app);
+
+  if (app->running_state && app->running_state->windows == NULL)
+    g_clear_pointer (&app->running_state, unref_running_state);
 
   g_signal_emit (app, shell_app_signals[WINDOWS_CHANGED], 0);
 }
@@ -1283,7 +1403,9 @@ create_running_state (ShellApp *app)
   app->running_state->workspace_switch_id =
     g_signal_connect (screen, "workspace-switched", G_CALLBACK(shell_app_on_ws_switch), app);
 
-  app->running_state->muxer = g_action_muxer_new ();
+  app->running_state->session = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+  g_assert (app->running_state->session != NULL);
+  app->running_state->muxer = gtk_action_muxer_new ();
 }
 
 void
@@ -1309,7 +1431,6 @@ shell_app_update_app_menu (ShellApp   *app,
     {
       const gchar *application_object_path;
       const gchar *app_menu_object_path;
-      GDBusConnection *session;
       GDBusActionGroup *actions;
 
       application_object_path = meta_window_get_gtk_application_object_path (window);
@@ -1318,16 +1439,13 @@ shell_app_update_app_menu (ShellApp   *app,
       if (application_object_path == NULL || app_menu_object_path == NULL || unique_bus_name == NULL)
         return;
 
-      session = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-      g_assert (session != NULL);
       g_clear_pointer (&app->running_state->unique_bus_name, g_free);
       app->running_state->unique_bus_name = g_strdup (unique_bus_name);
       g_clear_object (&app->running_state->remote_menu);
-      app->running_state->remote_menu = g_dbus_menu_model_get (session, unique_bus_name, app_menu_object_path);
-      actions = g_dbus_action_group_get (session, unique_bus_name, application_object_path);
-      g_action_muxer_insert (app->running_state->muxer, "app", G_ACTION_GROUP (actions));
+      app->running_state->remote_menu = g_dbus_menu_model_get (app->running_state->session, unique_bus_name, app_menu_object_path);
+      actions = g_dbus_action_group_get (app->running_state->session, unique_bus_name, application_object_path);
+      gtk_action_muxer_insert (app->running_state->muxer, "app", G_ACTION_GROUP (actions));
       g_object_unref (actions);
-      g_object_unref (session);
     }
 }
 
@@ -1345,8 +1463,12 @@ unref_running_state (ShellAppRunningState *state)
   screen = shell_global_get_screen (shell_global_get ());
   g_signal_handler_disconnect (screen, state->workspace_switch_id);
 
+  if (state->properties_changed_id != 0)
+    g_dbus_connection_signal_unsubscribe (state->session, state->properties_changed_id);
+
   g_clear_object (&state->remote_menu);
   g_clear_object (&state->muxer);
+  g_clear_object (&state->session);
   g_clear_pointer (&state->unique_bus_name, g_free);
   g_clear_pointer (&state->remote_menu, g_free);
 
@@ -1382,11 +1504,9 @@ shell_app_dispose (GObject *object)
 
   g_clear_object (&app->info);
 
-  if (app->running_state)
-    {
-      while (app->running_state->windows)
-        _shell_app_remove_window (app, app->running_state->windows->data);
-    }
+  while (app->running_state)
+    _shell_app_remove_window (app, app->running_state->windows->data);
+
   /* We should have been transitioned when we removed all of our windows */
   g_assert (app->state == SHELL_APP_STATE_STOPPED);
   g_assert (app->running_state == NULL);

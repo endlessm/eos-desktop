@@ -13,12 +13,11 @@ const Tp = imports.gi.TelepathyGLib;
 const History = imports.misc.history;
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
-const NotificationDaemon = imports.ui.notificationDaemon;
 const Params = imports.misc.params;
 const PopupMenu = imports.ui.popupMenu;
 
 // See Notification.appendMessage
-const SCROLLBACK_IMMEDIATE_TIME = 60; // 1 minute
+const SCROLLBACK_IMMEDIATE_TIME = 3 * 60; // 3 minutes
 const SCROLLBACK_RECENT_TIME = 15 * 60; // 15 minutes
 const SCROLLBACK_RECENT_LENGTH = 20;
 const SCROLLBACK_IDLE_LENGTH = 5;
@@ -416,7 +415,7 @@ const TelepathyClient = new Lang.Class({
     _ensureAppSource: function() {
         if (this._appSource == null) {
             this._appSource = new MessageTray.Source(_("Chat"), 'empathy');
-            this._appSource.policy = new NotificationDaemon.NotificationApplicationPolicy('empathy');
+            this._appSource.policy = new MessageTray.NotificationApplicationPolicy('empathy');
 
             Main.messageTray.add(this._appSource);
             this._appSource.connect('destroy', Lang.bind(this, function () {
@@ -488,7 +487,7 @@ const ChatSource = new Lang.Class({
     },
 
     _createPolicy: function() {
-        return new NotificationDaemon.NotificationApplicationPolicy('empathy');
+        return new MessageTray.NotificationApplicationPolicy('empathy');
     },
 
     _updateAlias: function() {
@@ -969,7 +968,8 @@ const ChatNotification = new Lang.Class({
         let timeLabel = this._append({ body: this._formatTimestamp(lastMessageDate),
                                        group: 'meta',
                                        styles: ['chat-meta-message'],
-                                       childProps: { expand: true, x_fill: false },
+                                       childProps: { expand: true, x_fill: false,
+                                                     x_align: St.Align.END },
                                        noTimestamp: true,
                                        timestamp: lastMessageTime });
 
@@ -1062,7 +1062,7 @@ const ApproverSource = new Lang.Class({
     },
 
     _createPolicy: function() {
-        return new NotificationDaemon.NotificationApplicationPolicy('empathy');
+        return new MessageTray.NotificationApplicationPolicy('empathy');
     },
 
     destroy: function() {
@@ -1135,6 +1135,8 @@ const AudioVideoNotification = new Lang.Class({
 
         this.parent(source, title, null, { customContent: true });
         this.setResident(true);
+
+        this.setUrgency(MessageTray.Urgency.CRITICAL);
 
         this.addButton('reject', _("Decline"));
         /* translators: this is a button label (verb), not a noun */

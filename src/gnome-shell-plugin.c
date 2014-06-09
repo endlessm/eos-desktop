@@ -35,6 +35,7 @@
 #include <gjs/gjs.h>
 #include <meta/display.h>
 #include <meta/meta-plugin.h>
+#include <meta/util.h>
 
 #include "shell-global-private.h"
 #include "shell-perf-log.h"
@@ -77,6 +78,9 @@ static gboolean              gnome_shell_plugin_xevent_filter (MetaPlugin *plugi
 
 static gboolean              gnome_shell_plugin_keybinding_filter (MetaPlugin *plugin,
                                                                    MetaKeyBinding *binding);
+
+static void gnome_shell_plugin_confirm_display_change (MetaPlugin *plugin);
+
 static const MetaPluginInfo *gnome_shell_plugin_plugin_info   (MetaPlugin *plugin);
 
 
@@ -135,6 +139,9 @@ gnome_shell_plugin_class_init (GnomeShellPluginClass *klass)
 
   plugin_class->xevent_filter     = gnome_shell_plugin_xevent_filter;
   plugin_class->keybinding_filter = gnome_shell_plugin_keybinding_filter;
+
+  plugin_class->confirm_display_change = gnome_shell_plugin_confirm_display_change;
+
   plugin_class->plugin_info       = gnome_shell_plugin_plugin_info;
 }
 
@@ -326,45 +333,11 @@ gnome_shell_plugin_kill_switch_workspace (MetaPlugin         *plugin)
 }
 
 static gboolean
-ignore_crossing_event (MetaPlugin   *plugin,
-                       XIEnterEvent *enter_event)
-{
-  MetaScreen *screen = meta_plugin_get_screen (plugin);
-  ClutterStage *stage = CLUTTER_STAGE (meta_get_stage_for_screen (screen));
-
-  if (enter_event->event == clutter_x11_get_stage_window (stage))
-    {
-      /* If the pointer enters a child of the stage window (eg, a
-       * trayicon), we want to consider it to still be in the stage,
-       * so don't let Clutter see the event.
-       */
-      if (enter_event->detail == XINotifyInferior)
-        return TRUE;
-
-      /* If the pointer is grabbed by a window it is not currently in,
-       * filter that out as well. In particular, if a trayicon grabs
-       * the pointer after a click on its label, we don't want to hide
-       * the message tray. Filtering out this event will leave Clutter
-       * out of sync, but that happens fairly often with grabs, and we
-       * can work around it. (Eg, shell_global_sync_pointer().)
-       */
-      if (enter_event->mode == XINotifyGrab &&
-          (enter_event->detail == XINotifyNonlinear ||
-           enter_event->detail == XINotifyNonlinearVirtual))
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
 gnome_shell_plugin_xevent_filter (MetaPlugin *plugin,
                                   XEvent     *xev)
 {
-  MetaScreen *screen = meta_plugin_get_screen (plugin);
-  MetaDisplay *display = meta_screen_get_display (screen);
-
   GnomeShellPlugin *shell_plugin = GNOME_SHELL_PLUGIN (plugin);
+
 #ifdef GLX_INTEL_swap_event
   if (shell_plugin->have_swap_event &&
       xev->type == (shell_plugin->glx_event_base + GLX_BufferSwapComplete))
@@ -382,20 +355,13 @@ gnome_shell_plugin_xevent_filter (MetaPlugin *plugin,
     }
 #endif
 
-  /* Make sure that Clutter doesn't see certain focus change events,
-   * so that when we're moving into something like a tray icon, we
-   * don't unfocus the container. */
-  if (xev->type == GenericEvent &&
-      xev->xcookie.extension == meta_display_get_xinput_opcode (display))
-    {
-      XIEvent *input_event = (XIEvent *) xev->xcookie.data;
-      if ((input_event->evtype == XI_Enter || input_event->evtype == XI_Leave) &&
-          ignore_crossing_event (plugin, (XIEnterEvent *) input_event))
-        return TRUE;
-    }
+#ifdef HAVE_WAYLAND
+  if (meta_is_wayland_compositor ())
+    return FALSE;
+#endif
 
   /*
-   * Pass the event to shell-global
+   * Pass the event to shell-global for XDND
    */
   if (_shell_global_check_xdnd_event (shell_plugin->global, xev))
     return TRUE;
@@ -408,6 +374,12 @@ gnome_shell_plugin_keybinding_filter (MetaPlugin     *plugin,
                                       MetaKeyBinding *binding)
 {
   return _shell_wm_filter_keybinding (get_shell_wm (), binding);
+}
+
+static void
+gnome_shell_plugin_confirm_display_change (MetaPlugin *plugin)
+{
+  _shell_wm_confirm_display_change (get_shell_wm ());
 }
 
 static const

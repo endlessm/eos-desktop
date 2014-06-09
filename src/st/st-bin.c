@@ -108,8 +108,8 @@ st_bin_allocate (ClutterActor          *self,
       gdouble x_align_f, y_align_f;
 
       st_theme_node_get_content_box (theme_node, box, &childbox);
-      _st_get_align_factors (priv->x_align, priv->y_align,
-                             &x_align_f, &y_align_f);
+      st_get_align_factors (priv->x_align, priv->y_align,
+                            &x_align_f, &y_align_f);
       clutter_actor_allocate_align_fill (priv->child, &childbox,
                                          x_align_f, y_align_f,
                                          priv->x_fill, priv->y_fill,
@@ -185,6 +185,15 @@ st_bin_dispose (GObject *gobject)
   g_assert (priv->child == NULL);
 
   G_OBJECT_CLASS (st_bin_parent_class)->dispose (gobject);
+}
+
+static void
+st_bin_popup_menu (StWidget *widget)
+{
+  StBinPrivate *priv = ST_BIN (widget)->priv;
+
+  if (priv->child && ST_IS_WIDGET (priv->child))
+    st_widget_popup_menu (ST_WIDGET (priv->child));
 }
 
 static gboolean
@@ -312,6 +321,7 @@ st_bin_class_init (StBinClass *klass)
   actor_class->get_preferred_height = st_bin_get_preferred_height;
   actor_class->allocate = st_bin_allocate;
 
+  widget_class->popup_menu = st_bin_popup_menu;
   widget_class->navigate_focus = st_bin_navigate_focus;
 
   /**

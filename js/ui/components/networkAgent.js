@@ -62,14 +62,9 @@ const NetworkSecretDialog = new Lang.Class({
 
         if (this._content.message != null) {
             let descriptionLabel = new St.Label({ style_class: 'prompt-dialog-description',
-                                                  text: this._content.message,
-                                                  // HACK: for reasons unknown to me, the label
-                                                  // is not asked the correct height for width,
-                                                  // and thus is underallocated
-                                                  // place a fixed height to avoid overflowing
-                                                  style: 'height: 3em'
-                                                });
+                                                  text: this._content.message });
             descriptionLabel.clutter_text.line_wrap = true;
+            descriptionLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
 
             messageBox.add(descriptionLabel,
                            { y_fill:  true,
@@ -77,13 +72,18 @@ const NetworkSecretDialog = new Lang.Class({
                              expand: true });
         }
 
-        let secretTable = new St.Table({ style_class: 'network-dialog-secret-table' });
+        let layout = new Clutter.TableLayout();
+        let secretTable = new St.Widget({ style_class: 'network-dialog-secret-table',
+                                          layout_manager: layout });
+        layout.hookup_style(secretTable);
+
         let initialFocusSet = false;
         let pos = 0;
         for (let i = 0; i < this._content.secrets.length; i++) {
             let secret = this._content.secrets[i];
             let label = new St.Label({ style_class: 'prompt-dialog-password-label',
                                        text: secret.label });
+            label.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
 
             let reactive = secret.key != null;
 
@@ -116,11 +116,10 @@ const NetworkSecretDialog = new Lang.Class({
             } else
                 secret.valid = true;
 
-            secretTable.add(label, { row: pos, col: 0,
-                                     x_expand: false, x_fill: true,
-                                     x_align: St.Align.START,
-                                     y_fill: false, y_align: St.Align.MIDDLE });
-            secretTable.add(secret.entry, { row: pos, col: 1, x_expand: true, x_fill: true, y_align: St.Align.END });
+            layout.pack(label, 0, pos);
+            layout.child_set(label, { x_expand: false, y_fill: false,
+                                      x_align: Clutter.TableAlignment.START });
+            layout.pack(secret.entry, 1, pos);
             pos++;
 
             if (secret.password)
@@ -385,11 +384,7 @@ const VPNRequestHandler = new Lang.Class({
             this._childPid = pid;
             this._stdin = new Gio.UnixOutputStream({ fd: stdin, close_fd: true });
             this._stdout = new Gio.UnixInputStream({ fd: stdout, close_fd: true });
-            // We need this one too, even if don't actually care of what the process
-            // has to say on stderr, because otherwise the fd opened by g_spawn_async_with_pipes
-            // is kept open indefinitely
-            let stderrStream = new Gio.UnixInputStream({ fd: stderr, close_fd: true });
-            stderrStream.close(null);
+            GLib.close(stderr);
             this._dataStdout = new Gio.DataInputStream({ base_stream: this._stdout });
 
             if (this._newStylePlugin)

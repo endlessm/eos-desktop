@@ -21,8 +21,6 @@ const FOCUS_ANIMATION_TIME = 0.15;
 
 const WINDOW_DND_SIZE = 256;
 
-const SCROLL_SCALE_AMOUNT = 100 / 5;
-
 const WINDOW_CLONE_MAXIMUM_SCALE = 0.7;
 
 const LIGHTBOX_FADE_TIME = 0.1;
@@ -128,7 +126,7 @@ const WindowClone = new Lang.Class({
         if (this._stackAbove == null)
             return null;
 
-        if (this.inDrag || this._zooming) {
+        if (this.inDrag) {
             if (this._stackAbove._delegate)
                 return this._stackAbove._delegate.getActualStackAbove();
             else
@@ -346,19 +344,6 @@ const WindowOverlay = new Lang.Class({
             this._animateVisible();
     },
 
-    fadeIn: function() {
-        if (!this._hidden)
-            return;
-
-        this.show();
-        this.title.opacity = 0;
-        this._parentActor.raise_top();
-        Tweener.addTween(this.title,
-                         { opacity: 255,
-                           time: CLOSE_BUTTON_FADE_TIME,
-                           transition: 'easeOutQuad' });
-    },
-
     chromeHeights: function () {
         return [Math.max(this.borderSize, this.closeButton.height - this.closeButton._overlap),
                 this.title.height + this.title._spacing];
@@ -375,7 +360,6 @@ const WindowOverlay = new Lang.Class({
         let border = this.border;
 
         Tweener.removeTweens(button);
-        Tweener.removeTweens(title);
         Tweener.removeTweens(border);
 
         let [cloneX, cloneY, cloneWidth, cloneHeight] = this._windowClone.slot;
@@ -454,6 +438,10 @@ const WindowOverlay = new Lang.Class({
         metaWindow.delete(global.get_current_time());
     },
 
+    _windowCanClose: function() {
+        return this._windowClone.metaWindow.can_close();
+    },
+
     _onWindowAdded: function(workspace, win) {
         let metaWindow = this._windowClone.metaWindow;
 
@@ -489,12 +477,14 @@ const WindowOverlay = new Lang.Class({
     _animateVisible: function() {
         this._parentActor.raise_top();
 
-        this.closeButton.show();
-        this.closeButton.opacity = 0;
-        Tweener.addTween(this.closeButton,
-                         { opacity: 255,
-                           time: CLOSE_BUTTON_FADE_TIME,
-                           transition: 'easeOutQuad' });
+        if (this._windowCanClose()) {
+            this.closeButton.show();
+            this.closeButton.opacity = 0;
+            Tweener.addTween(this.closeButton,
+                             { opacity: 255,
+                               time: CLOSE_BUTTON_FADE_TIME,
+                               transition: 'easeOutQuad' });
+        }
 
         this.border.show();
         this.border.opacity = 0;
@@ -754,13 +744,6 @@ const LayoutStrategy = new Lang.Class({
         layout.space = space;
     },
 
-    _getDistance: function (row, actor) {
-        let dist_x = actor.x - row.x;
-        let dist_y = actor.y - row.y;
-
-        return Math.sqrt(Math.pow(dist_x, 2) + Math.pow(dist_y, 2));
-    },
-
     computeWindowSlots: function(layout, area) {
         this._computeRowSizes(layout);
 
@@ -768,28 +751,36 @@ const LayoutStrategy = new Lang.Class({
 
         let slots = [];
 
-        let y = 0;
+        // Do this in three parts.
+        let height = 0;
         for (let i = 0; i < rows.length; i++) {
             let row = rows[i];
-            row.x = area.x + (area.width - row.width) / 2;
-            row.y = area.y + y;
-            y += row.height + this._rowSpacing;
-            row.windows.sort(Lang.bind(this, function(a, b) {
-                return this._getDistance(row, a.realWindow) - this._getDistance(row, b.realWindow);
-            }));
+            height += row.height + this._rowSpacing;
         }
 
-        let height = y - this._rowSpacing;
-        let baseY = (area.height - height) / 2;
+        height -= this._rowSpacing;
+
+        let y = 0;
 
         for (let i = 0; i < rows.length; i++) {
             let row = rows[i];
-            row.y += baseY;
+
+            // If this window layout row doesn't fit in the actual
+            // geometry, then apply an additional scale to it.
+            row.additionalScale = Math.min(1, area.width / row.width, area.height / height);
+
+            row.x = area.x + (Math.max(area.width - row.width, 0) / 2) * row.additionalScale;
+            row.y = area.y + (y + Math.max(area.height - height, 0) / 2) * row.additionalScale;
+            y += row.height + this._rowSpacing;
+        }
+
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
             let x = row.x;
             for (let j = 0; j < row.windows.length; j++) {
                 let window = row.windows[j];
 
-                let s = scale * this._computeWindowScale(window);
+                let s = scale * this._computeWindowScale(window) * row.additionalScale;
                 let cellWidth = window.actor.width * s;
                 let cellHeight = window.actor.height * s;
 
@@ -833,6 +824,13 @@ const UnalignedLayoutStrategy = new Lang.Class({
         return false;
     },
 
+    _sortRow: function(row) {
+        // Sort windows horizontally to minimize travel distance
+        row.windows.sort(function(a, b) {
+            return a.realWindow.x - b.realWindow.x;
+        });
+    },
+
     computeLayout: function(windows, layout) {
         let numRows = layout.numRows;
 
@@ -872,6 +870,8 @@ const UnalignedLayoutStrategy = new Lang.Class({
         let maxRow;
         for (let i = 0; i < numRows; i++) {
             let row = rows[i];
+            this._sortRow(row);
+
             if (!maxRow || row.fullWidth > maxRow.fullWidth)
                 maxRow = row;
             gridHeight += row.fullHeight;
@@ -884,6 +884,14 @@ const UnalignedLayoutStrategy = new Lang.Class({
     }
 });
 
+function padArea(area, padding) {
+    return {
+        x: area.x + padding.left,
+        y: area.y + padding.top,
+        width: area.width - padding.left - padding.right,
+        height: area.height - padding.top - padding.bottom,
+    };
+}
 
 /**
  * @metaWorkspace: a #Meta.Workspace, or null
@@ -895,10 +903,19 @@ const Workspace = new Lang.Class({
         // When dragging a window, we use this slot for reserve space.
         this._reservedSlot = null;
         this.metaWorkspace = metaWorkspace;
-        this._x = 0;
-        this._y = 0;
-        this._width = 0;
-        this._height = 0;
+
+        // The full geometry is the geometry we should try and position
+        // windows for. The actual geometry we allocate may be less than
+        // this, like if the workspace switcher is slid out.
+        this._fullGeometry = null;
+
+        // The actual geometry is the geometry we need to arrange windows
+        // in. If this is a smaller area than the full geometry, we'll
+        // do some simple aspect ratio like math to fit the layout calculated
+        // for the full geometry into this area.
+        this._actualGeometry = null;
+
+        this._currentLayout = null;
 
         this.monitorIndex = monitorIndex;
         this._monitor = Main.layoutManager.monitors[this.monitorIndex];
@@ -952,24 +969,29 @@ const Workspace = new Lang.Class({
 
         this._positionWindowsFlags = 0;
         this._positionWindowsId = 0;
-
-        this._currentLayout = null;
     },
 
-    setGeometry: function(x, y, width, height) {
-        this._x = x;
-        this._y = y;
-        this._width = width;
-        this._height = height;
+    setFullGeometry: function(geom) {
+        this._fullGeometry = geom;
+        this._recalculateWindowPositions(WindowPositionFlags.NONE);
+    },
 
-        Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this, function() {
-            this._dropRect.set_position(x, y);
-            this._dropRect.set_size(width, height);
+    setActualGeometry: function(geom) {
+        this._actualGeometry = geom;
+
+        if (this._actualGeometryLater)
+            return;
+
+        this._actualGeometryLater = Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this, function() {
+            let geom = this._actualGeometry;
+
+            this._dropRect.set_position(geom.x, geom.y);
+            this._dropRect.set_size(geom.width, geom.height);
+            this._updateWindowPositions(Main.overview.animationInProgress ? WindowPositionFlags.ANIMATE : WindowPositionFlags.NONE);
+
+            this._actualGeometryLater = 0;
             return false;
         }));
-
-        this.positionWindows(Main.overview.animationInProgress ?
-                             WindowPositionFlags.ANIMATE : WindowPositionFlags.NONE);
     },
 
     _lookupIndex: function (metaWindow) {
@@ -997,37 +1019,32 @@ const Workspace = new Lang.Class({
             clone = null;
 
         this._reservedSlot = clone;
-        this._currentLayout = null;
-        this.positionWindows(WindowPositionFlags.ANIMATE);
+        this._recalculateWindowPositions(WindowPositionFlags.ANIMATE);
     },
 
-    /**
-     * positionWindows:
-     * @flags:
-     *  INITIAL - this is the initial positioning of the windows.
-     *  ANIMATE - Indicates that we need animate changing position.
-     */
-    positionWindows: function(flags) {
+    _recalculateWindowPositions: function(flags) {
         this._positionWindowsFlags |= flags;
 
         if (this._positionWindowsId > 0)
             return;
 
         this._positionWindowsId = Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this, function() {
-            this._realPositionWindows(this._positionWindowsFlags);
+            this._realRecalculateWindowPositions(this._positionWindowsFlags);
             this._positionWindowsFlags = 0;
             this._positionWindowsId = 0;
             return false;
         }));
     },
 
-    _realPositionWindows : function(flags) {
+    _realRecalculateWindowPositions: function(flags) {
         if (this._repositionWindowsId > 0) {
             Mainloop.source_remove(this._repositionWindowsId);
             this._repositionWindowsId = 0;
         }
 
         let clones = this._windows.slice();
+        if (clones.length == 0)
+            return;
 
         clones.sort(function(a, b) {
             return a.metaWindow.get_stable_sequence() - b.metaWindow.get_stable_sequence();
@@ -1036,11 +1053,25 @@ const Workspace = new Lang.Class({
         if (this._reservedSlot)
             clones.push(this._reservedSlot);
 
+        this._currentLayout = this._computeLayout(clones);
+        this._updateWindowPositions(flags);
+    },
+
+    _updateWindowPositions: function(flags) {
+        if (this._currentLayout == null) {
+            this._recalculateWindowPositions(flags);
+            return;
+        }
+
         let initialPositioning = flags & WindowPositionFlags.INITIAL;
         let animate = flags & WindowPositionFlags.ANIMATE;
 
-        // Start the animations
-        let slots = this._computeAllWindowSlots(clones);
+        let layout = this._currentLayout;
+        let strategy = layout.strategy;
+
+        let [, , padding] = this._getSpacingAndPadding();
+        let area = padArea(this._actualGeometry, padding);
+        let slots = strategy.computeWindowSlots(layout, area);
 
         // Now push fake empty slots for the side components, at the top
         for (let i = 0; i < this._sideComponents.length; i++) {
@@ -1113,11 +1144,11 @@ const Workspace = new Lang.Class({
                 Tweener.removeTweens(clone.actor);
                 clone.actor.set_position(x, y);
                 clone.actor.set_scale(scale, scale);
-                clone.actor.opacity = 255;
+                clone.actor.set_opacity(255);
 
                 if (clone.overlay) {
                     clone.overlay.relayout(false);
-                    this._showWindowOverlay(clone, overlay, isOnCurrentWorkspace);
+                    this._showWindowOverlay(clone, overlay);
                 }
             }
         }
@@ -1148,7 +1179,7 @@ const Workspace = new Lang.Class({
                            time: Overview.ANIMATION_TIME,
                            transition: 'easeOutQuad',
                            onComplete: Lang.bind(this, function() {
-                               this._showWindowOverlay(clone, overlay, true);
+                               this._showWindowOverlay(clone, overlay);
                            })
                          });
 
@@ -1157,24 +1188,20 @@ const Workspace = new Lang.Class({
         }
     },
 
-    _showWindowOverlay: function(clone, overlay, fade) {
+    _showWindowOverlay: function(clone, overlay) {
         if (clone.inDrag)
             return;
 
-        if (overlay) {
-            if (fade)
-                overlay.fadeIn();
-            else
+        if (overlay && overlay._hidden)
                 overlay.show();
-        }
     },
 
     _delayedWindowRepositioning: function() {
         let [x, y, mask] = global.get_pointer();
 
         let pointerHasMoved = (this._cursorX != x && this._cursorY != y);
-        let inWorkspace = (this._x < x && x < this._x + this._width &&
-                           this._y < y && y < this._y + this._height);
+        let inWorkspace = (this._fullGeometry.x < x && x < this._fullGeometry.x + this._fullGeometry.width &&
+                           this._fullGeometry.y < y && y < this._fullGeometry.y + this._fullGeometry.height);
 
         if (pointerHasMoved && inWorkspace) {
             // store current cursor position
@@ -1189,7 +1216,7 @@ const Workspace = new Lang.Class({
                 return true;
         }
 
-        this.positionWindows(WindowPositionFlags.ANIMATE);
+        this._recalculateWindowPositions(WindowPositionFlags.ANIMATE);
         this._repositionWindowsId = 0;
         return false;
     },
@@ -1301,7 +1328,7 @@ const Workspace = new Lang.Class({
         }
 
         this._currentLayout = null;
-        this.positionWindows(WindowPositionFlags.ANIMATE);
+        this._recalculateWindowPositions(WindowPositionFlags.ANIMATE);
     },
 
     _windowAdded : function(metaWorkspace, metaWin) {
@@ -1338,13 +1365,8 @@ const Workspace = new Lang.Class({
 
     // Animate the full-screen to Overview transition.
     zoomToOverview : function() {
-        this._currentLayout = null;
-
         // Position and scale the windows.
-        if (Main.overview.animationInProgress)
-            this.positionWindows(WindowPositionFlags.ANIMATE | WindowPositionFlags.INITIAL);
-        else
-            this.positionWindows(WindowPositionFlags.INITIAL);
+        this._recalculateWindowPositions(WindowPositionFlags.ANIMATE | WindowPositionFlags.INITIAL);
     },
 
     // Animates the return from Overview mode
@@ -1442,6 +1464,10 @@ const Workspace = new Lang.Class({
 
         if (this._positionWindowsId > 0)
             Meta.later_remove(this._positionWindowsId);
+
+        if (this._actualGeometryLater > 0)
+            Meta.later_remove(this._actualGeometryLater);
+
         this._windows = [];
         this._sideComponents = [];
     },
@@ -1500,7 +1526,7 @@ const Workspace = new Lang.Class({
                       }));
         clone.connect('size-changed',
                       Lang.bind(this, function() {
-                          this.positionWindows(0);
+                          this._recalculateWindowPositions(WindowPositionFlags.NONE);
                       }));
 
         this.actor.add_actor(clone.actor);
@@ -1549,11 +1575,13 @@ const Workspace = new Lang.Class({
         }
     },
 
-    _computeLayout: function(windows, area, rowSpacing, columnSpacing) {
+    _getBestLayout: function(windows, area, rowSpacing, columnSpacing) {
         // We look for the largest scale that allows us to fit the
         // largest row/tallest column on the workspace.
 
         let lastLayout = {};
+
+        let strategy = new UnalignedLayoutStrategy(this._monitor, rowSpacing, columnSpacing);
 
         for (let numRows = 1; ; numRows++) {
             let numColumns = Math.ceil(windows.length / numRows);
@@ -1563,8 +1591,6 @@ const Workspace = new Lang.Class({
             // 3 columns as well => just use 3 rows then)
             if (numColumns == lastLayout.numColumns)
                 break;
-
-            let strategy = new UnalignedLayoutStrategy(this._monitor, rowSpacing, columnSpacing);
 
             let layout = { area: area, strategy: strategy, numRows: numRows, numColumns: numColumns };
             strategy.computeLayout(windows, layout);
@@ -1579,18 +1605,7 @@ const Workspace = new Lang.Class({
         return lastLayout;
     },
 
-    _rectEqual: function(one, two) {
-        if (one == two)
-            return true;
-
-        return (one.x == two.x &&
-                one.y == two.y &&
-                one.width == two.width &&
-                one.height == two.height);
-    },
-
-    _computeAllWindowSlots: function(windows) {
-        let totalWindows = windows.length;
+    _getSpacingAndPadding: function() {
         let node = this.actor.get_theme_node();
 
         // Window grid spacing
@@ -1603,21 +1618,14 @@ const Workspace = new Lang.Class({
             right: node.get_padding(St.Side.RIGHT),
         };
 
-        if (!totalWindows)
-            return [];
-
         let closeButtonHeight, captionHeight;
         let leftBorder, rightBorder;
-        if (this._windowOverlays.length) {
-            // All of the overlays have the same chrome sizes,
-            // so just pick the first one.
-            let overlay = this._windowOverlays[0];
-            [closeButtonHeight, captionHeight] = overlay.chromeHeights();
-            [leftBorder, rightBorder] = overlay.chromeWidths();
-        } else {
-            [closeButtonHeight, captionHeight] = [0, 0];
-            [leftBorder, rightBorder] = [0, 0];
-        }
+
+        // All of the overlays have the same chrome sizes,
+        // so just pick the first one.
+        let overlay = this._windowOverlays[0];
+        [closeButtonHeight, captionHeight] = overlay.chromeHeights();
+        [leftBorder, rightBorder] = overlay.chromeWidths();
 
         rowSpacing += captionHeight;
         columnSpacing += (rightBorder + leftBorder) / 2;
@@ -1626,25 +1634,13 @@ const Workspace = new Lang.Class({
         padding.left += leftBorder;
         padding.right += rightBorder;
 
-        let area = {
-            x: this._x + padding.left,
-            y: this._y + padding.top,
-            width: this._width - padding.left - padding.right,
-            height: this._height - padding.top - padding.bottom,
-        };
+        return [rowSpacing, columnSpacing, padding];
+    },
 
-        if (!this._currentLayout)
-            this._currentLayout = this._computeLayout(windows, area, rowSpacing, columnSpacing);
-
-        let layout = this._currentLayout;
-        let strategy = layout.strategy;
-
-        if (!this._rectEqual(area, layout.area)) {
-            layout.area = area;
-            strategy.computeScaleAndSpace(layout);
-        }
-
-        return strategy.computeWindowSlots(layout, area);
+    _computeLayout: function(windows) {
+        let [rowSpacing, columnSpacing, padding] = this._getSpacingAndPadding();
+        let area = padArea(this._fullGeometry, padding);
+        return this._getBestLayout(windows, area, rowSpacing, columnSpacing);
     },
 
     _onCloneSelected : function (clone, time) {

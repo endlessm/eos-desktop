@@ -16,7 +16,6 @@ const St = imports.gi.St;
 
 const AppDisplay = imports.ui.appDisplay;
 const Background = imports.ui.background;
-const Dash = imports.ui.dash;
 const DND = imports.ui.dnd;
 const LayoutManager = imports.ui.layout;
 const Main = imports.ui.main;
@@ -27,7 +26,6 @@ const Params = imports.misc.params;
 const SideComponent = imports.ui.sideComponent;
 const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
-const ViewSelector = imports.ui.viewSelector;
 const WorkspaceThumbnail = imports.ui.workspaceThumbnail;
 
 // Time for initial animation going into Overview mode
@@ -40,7 +38,7 @@ const OVERVIEW_NOTIFICATION_TIMEOUT = 8;
 // and don't want the shading animation to get cut off
 const SHADE_ANIMATION_TIME = .20;
 
-const DND_WINDOW_SWITCH_TIMEOUT = 1250;
+const DND_WINDOW_SWITCH_TIMEOUT = 750;
 
 const OVERVIEW_ACTIVATION_TIMEOUT = 0.5;
 
@@ -315,7 +313,7 @@ const Overview = new Lang.Class({
         // Dash elements, or mouseover handlers in the workspaces.
         this._coverPane = new Clutter.Actor({ opacity: 0,
                                               reactive: true });
-        this._overview.add_actor(this._coverPane);
+        Main.layoutManager.overviewGroup.add_child(this._coverPane);
         this._coverPane.connect('event', Lang.bind(this, function (actor, event) { return true; }));
 
         Main.layoutManager.overviewGroup.add_child(this._allMonitorsGroup);
@@ -331,7 +329,6 @@ const Overview = new Lang.Class({
         Main.xdndHandler.connect('drag-end', Lang.bind(this, this._onDragEnd));
 
         global.screen.connect('restacked', Lang.bind(this, this._onRestacked));
-        this._group.connect('scroll-event', Lang.bind(this, this._onScrollEvent));
 
         this._windowSwitchTimeoutId = 0;
         this._windowSwitchTimestamp = 0;
@@ -457,34 +454,13 @@ const Overview = new Lang.Class({
                                          opacity: 0 });
 
         // Create controls
-        this._dash = new Dash.Dash();
-        this._viewSelector = new ViewSelector.ViewSelector(this._dash.showAppsButton);
-        this._thumbnailsBox = new WorkspaceThumbnail.ThumbnailsBox();
-        this._controls = new OverviewControls.ControlsManager(this._dash,
-                                                              this._thumbnailsBox,
-                                                              this._viewSelector);
+        this._controls = new OverviewControls.ControlsManager(this._searchEntry);
+        this._dash = this._controls.dash;
+        this.viewSelector = this._controls.viewSelector;
 
-        this._controls.dashActor.x_align =
-            this._dash.dashPosition == Dash.DashPosition.END ?
-            Clutter.ActorAlign.END : Clutter.ActorAlign.START;
-        this._controls.dashActor.y_expand = true;
-
-        // Put the dash in a separate layer to allow content to be centered
-        this._groupStack.add_actor(this._controls.dashActor);
-
-        // Pack all the actors into the group
-        if (this._dash.dashPosition == Dash.DashPosition.START) {
-            this._group.add_actor(this._controls.dashSpacer);
-        }
-        this._group.add(this._viewSelector.actor, { x_fill: true,
-                                                    expand: true });
-        this._group.add_actor(this._controls.thumbnailsActor);
-        if (this._dash.dashPosition == Dash.DashPosition.END) {
-            this._group.add_actor(this._controls.dashSpacer);
-        }
-
-        // Add the group to the overview box
-        this._overview.add(this._groupStack, { y_fill: true, expand: true });
+        // Add our same-line elements after the search entry
+        this._overview.add(this._controls.actor, { y_fill: true, expand: true });
+        this._controls.actor.connect('scroll-event', Lang.bind(this, this._onScrollEvent));
 
         // Add the panel ghost to give some spacing
         this._overview.add_actor(this._bottomGhost);
@@ -660,6 +636,7 @@ const Overview = new Lang.Class({
 
     beginItemDrag: function(source) {
         this.emit('item-drag-begin', source);
+        this._inDrag = true;
     },
 
     cancelledItemDrag: function(source) {
@@ -668,10 +645,12 @@ const Overview = new Lang.Class({
 
     endItemDrag: function(source) {
         this.emit('item-drag-end', source);
+        this._inDrag = false;
     },
 
     beginWindowDrag: function(source) {
         this.emit('window-drag-begin');
+        this._inDrag = true;
     },
 
     cancelledWindowDrag: function(source) {
@@ -680,6 +659,7 @@ const Overview = new Lang.Class({
 
     endWindowDrag: function(source) {
         this.emit('window-drag-end');
+        this._inDrag = false;
     },
 
     // show:
@@ -888,15 +868,6 @@ const Overview = new Lang.Class({
         this.visibleTarget = true;
         this._activationTime = Date.now() / 1000;
 
-        // All the the actors in the window group are completely obscured,
-        // hiding the group holding them while the Overview is displayed greatly
-        // increases performance of the Overview especially when there are many
-        // windows visible.
-        //
-        // If we switched to displaying the actors in the Overview rather than
-        // clones of them, this would obviously no longer be necessary.
-        //
-        // Disable unredirection while in the overview
         Meta.disable_unredirect_for_screen(global.screen);
 
         if (!this._targetPage) {
@@ -1002,6 +973,8 @@ const Overview = new Lang.Class({
     shouldToggleByCornerOrButton: function() {
         if (this.animationInProgress)
             return false;
+        if (this._inDrag)
+            return false;
         if (this._activationTime == 0 || Date.now() / 1000 - this._activationTime > OVERVIEW_ACTIVATION_TIMEOUT)
             return true;
         return false;
@@ -1045,7 +1018,7 @@ const Overview = new Lang.Class({
         this.animationInProgress = true;
         this.visibleTarget = false;
 
-        this._viewSelector.zoomFromOverview();
+        this.viewSelector.zoomFromOverview();
 
         let targetOpacity = 0;
         let shouldAnimateSaturation = false;
@@ -1101,7 +1074,7 @@ const Overview = new Lang.Class({
         // Re-enable unredirection
         Meta.enable_unredirect_for_screen(global.screen);
 
-        this._viewSelector.hide();
+        this.viewSelector.hide();
         this._desktopFade.hide();
         this._coverPane.hide();
 
@@ -1111,9 +1084,8 @@ const Overview = new Lang.Class({
         this.emit('hidden');
 
         // Handle any calls to show() while we were hiding
-        if (this._shown) {
+        if (this._shown)
             this._animateVisible();
-        }
         else
             Main.layoutManager.hideOverview();
 

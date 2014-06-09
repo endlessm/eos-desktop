@@ -160,19 +160,19 @@ st_scroll_view_get_property (GObject    *object,
 
 /**
  * st_scroll_view_update_fade_effect:
- * @self: a #StScrollView
+ * @scroll: a #StScrollView
  * @vfade_offset: The length of the veritcal fade effect, in pixels.
  * @hfade_offset: The length of the horizontal fade effect, in pixels.
  *
  * Sets the height of the fade area area in pixels. A value of 0
  * disables the effect.
  */
-static void
-st_scroll_view_update_fade_effect (StScrollView *self,
+void
+st_scroll_view_update_fade_effect (StScrollView *scroll,
                                    float vfade_offset,
                                    float hfade_offset)
 {
-  StScrollViewPrivate *priv = ST_SCROLL_VIEW (self)->priv;
+  StScrollViewPrivate *priv = ST_SCROLL_VIEW (scroll)->priv;
 
   /* A fade amount of more than 0 enables the effect. */
   if (vfade_offset > 0. || hfade_offset > 0.)
@@ -180,7 +180,7 @@ st_scroll_view_update_fade_effect (StScrollView *self,
       if (priv->fade_effect == NULL) {
         priv->fade_effect = g_object_new (ST_TYPE_SCROLL_VIEW_FADE, NULL);
 
-        clutter_actor_add_effect_with_name (CLUTTER_ACTOR (self), "fade",
+        clutter_actor_add_effect_with_name (CLUTTER_ACTOR (scroll), "fade",
                                             CLUTTER_EFFECT (priv->fade_effect));
       }
 
@@ -194,12 +194,12 @@ st_scroll_view_update_fade_effect (StScrollView *self,
    else
     {
       if (priv->fade_effect != NULL) {
-        clutter_actor_remove_effect (CLUTTER_ACTOR (self), CLUTTER_EFFECT (priv->fade_effect));
+        clutter_actor_remove_effect (CLUTTER_ACTOR (scroll), CLUTTER_EFFECT (priv->fade_effect));
         priv->fade_effect = NULL;
       }
     }
 
-  clutter_actor_queue_redraw (CLUTTER_ACTOR (self));
+  clutter_actor_queue_redraw (CLUTTER_ACTOR (scroll));
 }
 
 static void
@@ -598,42 +598,36 @@ st_scroll_view_allocate (ClutterActor          *actor,
    */
 
   /* Vertical scrollbar */
-  if (CLUTTER_ACTOR_IS_VISIBLE (priv->vscroll))
-    {
-      if (clutter_actor_get_text_direction (actor) == CLUTTER_TEXT_DIRECTION_RTL)
-        {
-          child_box.x1 = content_box.x1;
-          child_box.x2 = content_box.x1 + sb_width;
-        }
-      else
-        {
-          child_box.x1 = content_box.x2 - sb_width;
-          child_box.x2 = content_box.x2;
-        }
-      child_box.y1 = content_box.y1;
-      child_box.y2 = content_box.y2 - (hscrollbar_visible ? sb_height : 0);
+    if (clutter_actor_get_text_direction (actor) == CLUTTER_TEXT_DIRECTION_RTL)
+      {
+        child_box.x1 = content_box.x1;
+        child_box.x2 = content_box.x1 + sb_width;
+      }
+    else
+      {
+        child_box.x1 = content_box.x2 - sb_width;
+        child_box.x2 = content_box.x2;
+      }
+    child_box.y1 = content_box.y1;
+    child_box.y2 = content_box.y2 - (hscrollbar_visible ? sb_height : 0);
 
-      clutter_actor_allocate (priv->vscroll, &child_box, flags);
-    }
+    clutter_actor_allocate (priv->vscroll, &child_box, flags);
 
   /* Horizontal scrollbar */
-  if (CLUTTER_ACTOR_IS_VISIBLE (priv->hscroll))
-    {
-      if (clutter_actor_get_text_direction (actor) == CLUTTER_TEXT_DIRECTION_RTL)
-        {
-          child_box.x1 = content_box.x1 + (vscrollbar_visible ? sb_width : 0);
-          child_box.x2 = content_box.x2;
-        }
-      else
-        {
-          child_box.x1 = content_box.x1;
-          child_box.x2 = MAX (content_box.x1, content_box.x2 - (vscrollbar_visible ? sb_width : 0));
-        }
-      child_box.y1 = content_box.y2 - sb_height;
-      child_box.y2 = content_box.y2;
+    if (clutter_actor_get_text_direction (actor) == CLUTTER_TEXT_DIRECTION_RTL)
+      {
+        child_box.x1 = content_box.x1 + (vscrollbar_visible ? sb_width : 0);
+        child_box.x2 = content_box.x2;
+      }
+    else
+      {
+        child_box.x1 = content_box.x1;
+        child_box.x2 = MAX (content_box.x1, content_box.x2 - (vscrollbar_visible ? sb_width : 0));
+      }
+    child_box.y1 = content_box.y2 - sb_height;
+    child_box.y2 = content_box.y2;
 
-      clutter_actor_allocate (priv->hscroll, &child_box, flags);
-    }
+    clutter_actor_allocate (priv->hscroll, &child_box, flags);
 
   /* In case the scrollbar policy is NEVER or scrollbars should be
    * overlayed, we don't trim the content box allocation by the

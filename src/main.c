@@ -34,8 +34,6 @@ extern GType gnome_shell_plugin_get_type (void);
 #define SHELL_DBUS_SERVICE "org.gnome.Shell"
 #define MAGNIFIER_DBUS_SERVICE "org.gnome.Magnifier"
 
-#define OVERRIDES_SCHEMA "org.gnome.shell.overrides"
-
 #define WM_NAME "GNOME Shell"
 #define GNOME_WM_KEYBINDINGS "Mutter,GNOME Shell"
 
@@ -44,6 +42,11 @@ static char *session_mode = NULL;
 
 #define DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER 1
 #define DBUS_REQUEST_NAME_REPLY_ALREADY_OWNER 4
+
+enum {
+  SHELL_DEBUG_BACKTRACE_WARNINGS = 1,
+};
+static int _shell_debug;
 
 static void
 shell_dbus_acquire_name (GDBusProxy *bus,
@@ -165,23 +168,6 @@ shell_dbus_init (gboolean replace)
 }
 
 static void
-shell_prefs_init (void)
-{
-  meta_prefs_override_preference_schema ("attach-modal-dialogs",
-                                         OVERRIDES_SCHEMA);
-  meta_prefs_override_preference_schema ("dynamic-workspaces",
-                                         OVERRIDES_SCHEMA);
-  meta_prefs_override_preference_schema ("workspaces-only-on-primary",
-                                         OVERRIDES_SCHEMA);
-  meta_prefs_override_preference_schema ("button-layout",
-                                         OVERRIDES_SCHEMA);
-  meta_prefs_override_preference_schema ("edge-tiling",
-                                         OVERRIDES_SCHEMA);
-  meta_prefs_override_preference_schema ("focus-change-on-pointer-rest",
-                                         OVERRIDES_SCHEMA);
-}
-
-static void
 shell_introspection_init (void)
 {
 
@@ -268,6 +254,17 @@ shell_a11y_init (void)
 }
 
 static void
+shell_init_debug (const char *debug_env)
+{
+  static const GDebugKey keys[] = {
+    { "backtrace-warnings", SHELL_DEBUG_BACKTRACE_WARNINGS }
+  };
+
+  _shell_debug = g_parse_debug_string (debug_env, keys,
+                                       G_N_ELEMENTS (keys));
+}
+
+static void
 default_log_handler (const char     *log_domain,
                      GLogLevelFlags  log_level,
                      const char     *message,
@@ -278,12 +275,23 @@ default_log_handler (const char     *log_domain,
 
   g_get_current_time (&now);
 
-  tp_debug_sender_add_message (sender, &now, log_domain, log_level, message);
+  /* Send telepathy debug through DBus */
+  if (log_domain != NULL && g_str_has_prefix (log_domain, "tp-glib"))
+    tp_debug_sender_add_message (sender, &now, log_domain, log_level, message);
 
   /* Filter out telepathy-glib logs, we don't want to flood Shell's output
    * with those. */
   if (!log_domain || !g_str_has_prefix (log_domain, "tp-glib"))
     g_log_default_handler (log_domain, log_level, message, data);
+
+  /* Filter out Gjs logs, those already have the stack */
+  if (log_domain && strcmp (log_domain, "Gjs") == 0)
+    return;
+
+  if ((_shell_debug & SHELL_DEBUG_BACKTRACE_WARNINGS) &&
+      ((log_level & G_LOG_LEVEL_CRITICAL) ||
+       (log_level & G_LOG_LEVEL_WARNING)))
+    gjs_dumpstack ();
 }
 
 static void
@@ -380,6 +388,7 @@ main (int argc, char **argv)
 
   ctx = meta_get_option_context ();
   g_option_context_add_main_entries (ctx, gnome_shell_options, GETTEXT_PACKAGE);
+  g_option_context_add_group (ctx, g_irepository_get_option_group ());
   if (!g_option_context_parse (ctx, &argc, &argv, &error))
     {
       g_printerr ("%s: %s\n", argv[0], error->message);
@@ -404,10 +413,11 @@ main (int argc, char **argv)
   g_setenv ("GJS_DEBUG_OUTPUT", "stderr", TRUE);
   g_setenv ("GJS_DEBUG_TOPICS", "JS ERROR;JS LOG", TRUE);
 
+  shell_init_debug (g_getenv ("SHELL_DEBUG"));
+
   shell_dbus_init (meta_get_replace_current_wm ());
   shell_a11y_init ();
   shell_perf_log_init ();
-  shell_prefs_init ();
   shell_introspection_init ();
   shell_fonts_init ();
 
@@ -417,6 +427,7 @@ main (int argc, char **argv)
   tp_debug_set_flags ("all");
 
   sender = tp_debug_sender_dup ();
+
   g_log_set_default_handler (default_log_handler, sender);
 
   /* Initialize the global object */

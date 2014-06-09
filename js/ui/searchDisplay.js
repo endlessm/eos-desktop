@@ -215,8 +215,8 @@ const SearchResultsBase = new Lang.Class({
         this.actor.hide();
     },
 
-    _keyFocusIn: function(icon) {
-        this.emit('key-focus-in', icon);
+    _keyFocusIn: function(actor) {
+        this.emit('key-focus-in', actor);
     },
 
     _setMoreIconVisible: function(visible) {
@@ -231,7 +231,7 @@ const SearchResultsBase = new Lang.Class({
             callback();
         } else {
             let maxResults = this._getMaxDisplayedResults();
-            let results = providerResults.slice(0, maxResults);
+            let results = this.provider.filterResults(providerResults, maxResults);
             let hasMoreResults = results.length < providerResults.length;
 
             this.provider.getResultMetas(results, Lang.bind(this, function(metas) {
@@ -260,6 +260,7 @@ const ListSearchResults = new Lang.Class({
 
         this._container = new St.BoxLayout({ style_class: 'search-section-content' });
         this.providerIcon = new ProviderIcon(provider);
+        this.providerIcon.connect('key-focus-in', Lang.bind(this, this._keyFocusIn));
         this.providerIcon.connect('clicked', Lang.bind(this,
             function() {
                 provider.launchSearch(this._terms);
@@ -323,14 +324,14 @@ const GridSearchResults = new Lang.Class({
     },
 
     _getMaxDisplayedResults: function() {
-        return this._grid.childrenInRow(this._bin.width) * this._grid.getRowLimit();
+        return this._grid.columnsForWidth(this._bin.width) * this._grid.getRowLimit();
     },
 
     _renderResults: function(metas) {
         for (let i = 0; i < metas.length; i++) {
             let display = new GridSearchResult(this.provider, metas[i], this._terms);
             display.actor.connect('key-focus-in', Lang.bind(this, this._keyFocusIn));
-            this._grid.addItem(display.actor);
+            this._grid.addItem(display);
         }
     },
 
@@ -406,8 +407,8 @@ const SearchResults = new Lang.Class({
         return false;
     },
 
-    _keyFocusIn: function(provider, icon) {
-        ActorVisibility.ensureActorVisibleInScrollView(this._scrollView, icon);
+    _keyFocusIn: function(provider, actor) {
+        Util.ensureActorVisibleInScrollView(this._scrollView, actor);
     },
 
     createProviderDisplay: function(provider) {

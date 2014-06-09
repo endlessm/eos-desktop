@@ -144,35 +144,8 @@ shell_window_tracker_class_init (ShellWindowTrackerClass *klass)
 gboolean
 shell_window_tracker_is_window_interesting (MetaWindow *window)
 {
-  if (meta_window_is_override_redirect (window)
-      || meta_window_is_skip_taskbar (window))
+  if (meta_window_is_skip_taskbar (window))
     return FALSE;
-
-  switch (meta_window_get_window_type (window))
-    {
-      /* Definitely ignore these. */
-      case META_WINDOW_DESKTOP:
-      case META_WINDOW_DOCK:
-      case META_WINDOW_SPLASHSCREEN:
-      /* Should have already been handled by override_redirect above,
-       * but explicitly list here so we get the "unhandled enum"
-       * warning if in the future anything is added.*/
-      case META_WINDOW_DROPDOWN_MENU:
-      case META_WINDOW_POPUP_MENU:
-      case META_WINDOW_TOOLTIP:
-      case META_WINDOW_NOTIFICATION:
-      case META_WINDOW_COMBO:
-      case META_WINDOW_DND:
-      case META_WINDOW_OVERRIDE_OTHER:
-        return FALSE;
-      case META_WINDOW_NORMAL:
-      case META_WINDOW_DIALOG:
-      case META_WINDOW_MODAL_DIALOG:
-      case META_WINDOW_MENU:
-      case META_WINDOW_TOOLBAR:
-      case META_WINDOW_UTILITY:
-        break;
-    }
 
   /* HACK: see https://github.com/endlessm/eos-shell/issues/548 and
    * https://github.com/linuxmint/Cinnamon/issues/728
@@ -201,10 +174,11 @@ get_app_from_window_wmclass (MetaWindow  *window)
   const char *wm_instance;
 
   appsys = shell_app_system_get_default ();
-  wm_class = meta_window_get_wm_class (window);
-  wm_instance = meta_window_get_wm_class_instance (window);
 
-  /* try a match from WM_CLASS to .desktop */
+  wm_instance = meta_window_get_wm_class_instance (window);
+  wm_class = meta_window_get_wm_class (window);
+
+  /* first try a match from WM_CLASS to .desktop */
   app = shell_app_system_lookup_desktop_wmclass (appsys, wm_class);
   if (app != NULL)
     return g_object_ref (app);
@@ -344,11 +318,13 @@ static ShellApp *
 get_app_for_window (ShellWindowTracker    *tracker,
                     MetaWindow            *window)
 {
-  ShellAppSystem *app_system;
   ShellApp *result = NULL;
+  MetaWindow *transient_for;
   const char *startup_id;
 
-  app_system = shell_app_system_get_default ();
+  transient_for = meta_window_get_transient_for (window);
+  if (transient_for != NULL)
+    return get_app_for_window (tracker, transient_for);
 
   /* First, we check whether we already know about this window,
    * if so, just return that.
@@ -434,6 +410,16 @@ update_focus_app (ShellWindowTracker *self)
   ShellApp *new_focus_app;
 
   new_focus_win = meta_display_get_focus_window (shell_global_get_display (shell_global_get ()));
+
+  /* we only consider an app focused if the focus window can be clearly
+   * associated with a running app; this is the case if the focus window
+   * or one of its parents is visible in the taskbar, e.g.
+   *   - 'nautilus' should appear focused when its about dialog has focus
+   *   - 'nautilus' should not appear focused when the DESKTOP has focus
+   */
+  while (new_focus_win && meta_window_is_skip_taskbar (new_focus_win))
+    new_focus_win = meta_window_get_transient_for (new_focus_win);
+
   new_focus_app = new_focus_win ? shell_window_tracker_get_window_app (self, new_focus_win) : NULL;
 
   if (new_focus_app)
@@ -647,12 +633,7 @@ ShellApp *
 shell_window_tracker_get_window_app (ShellWindowTracker *tracker,
                                      MetaWindow         *metawin)
 {
-  MetaWindow *transient_for;
   ShellApp *app;
-
-  transient_for = meta_window_get_transient_for (metawin);
-  if (transient_for != NULL)
-    metawin = transient_for;
 
   app = g_hash_table_lookup (tracker->window_to_app, metawin);
   if (app)

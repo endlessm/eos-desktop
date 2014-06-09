@@ -310,14 +310,15 @@ const Background = new Lang.Class({
     _init: function(params) {
         params = Params.parse(params, { monitorIndex: 0,
                                         layoutManager: Main.layoutManager,
-                                        effects: Meta.BackgroundEffects.NONE });
+                                        effects: Meta.BackgroundEffects.NONE,
+                                        settings: null });
         this.actor = new Meta.BackgroundGroup();
         this.actor._delegate = this;
 
         this._destroySignalId = this.actor.connect('destroy',
                                                    Lang.bind(this, this._destroy));
 
-        this._settings = new Gio.Settings({ schema: BACKGROUND_SCHEMA });
+        this._settings = params.settings;
         this._monitorIndex = params.monitorIndex;
         this._layoutManager = params.layoutManager;
         this._effects = params.effects;
@@ -626,13 +627,22 @@ const Background = new Lang.Class({
         }
 
         let uri = this._settings.get_string(PICTURE_URI_KEY);
-
         let filename;
-        // This URI indicates that the per-personality default should be used
-        if (uri === 'eos:///default') {
-            filename = this._getDefaultBackgroundFile();
-        } else {
-            filename = Gio.File.new_for_uri(uri).get_path();
+        if (GLib.uri_parse_scheme(uri) != null) {
+            // This URI indicates that the per-personality default should be used
+            if (uri === 'eos:///default') {
+                filename = this._getDefaultBackgroundFile();
+            } else {
+                filename = Gio.File.new_for_uri(uri).get_path();
+            }
+        }
+        else {
+            filename = uri;
+        }
+
+        if (!filename) {
+            this._setLoaded();
+            return;
         }
 
         this._loadFile(filename);
@@ -757,8 +767,10 @@ const BackgroundManager = new Lang.Class({
                                         layoutManager: Main.layoutManager,
                                         monitorIndex: null,
                                         effects: Meta.BackgroundEffects.NONE,
-                                        controlPosition: true });
+                                        controlPosition: true,
+                                        settingsSchema: BACKGROUND_SCHEMA });
 
+        this._settings = new Gio.Settings({ schema: params.settingsSchema });
         this._container = params.container;
         this._layoutManager = params.layoutManager;
         this._effects = params.effects;
@@ -818,7 +830,8 @@ const BackgroundManager = new Lang.Class({
     _createBackground: function() {
         let background = new Background({ monitorIndex: this._monitorIndex,
                                           layoutManager: this._layoutManager,
-                                          effects: this._effects });
+                                          effects: this._effects,
+                                          settings: this._settings });
         this._container.add_child(background.actor);
 
         let monitor = this._layoutManager.monitors[this._monitorIndex];

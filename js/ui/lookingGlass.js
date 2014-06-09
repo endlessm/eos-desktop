@@ -308,10 +308,6 @@ const Result = new Lang.Class({
         box.add(resultTxt);
         let objLink = new ObjLink(this._lookingGlass, o);
         box.add(objLink.actor);
-        let line = new Clutter.Rectangle({ name: 'Separator' });
-        let padBin = new St.Bin({ name: 'Separator', x_fill: true, y_fill: true });
-        padBin.add_actor(line);
-        this.actor.add(padBin);
     }
 });
 
@@ -804,8 +800,9 @@ const LookingGlass = new Lang.Class({
         this._updateFont();
 
         // We want it to appear to slide out from underneath the panel
-        Main.layoutManager.panelBox.add_actor(this.actor);
-        this.actor.lower_bottom();
+        Main.uiGroup.add_actor(this.actor);
+        Main.uiGroup.set_child_below_sibling(this.actor,
+                                             Main.layoutManager.panelBox);
         Main.layoutManager.panelBox.connect('allocation-changed',
                                             Lang.bind(this, this._queueResize));
         Main.layoutManager.keyboardBox.connect('allocation-changed',
@@ -884,7 +881,7 @@ const LookingGlass = new Lang.Class({
             let text = o.get_text();
             // Ensure we don't get newlines in the command; the history file is
             // newline-separated.
-            text.replace('\n', ' ');
+            text = text.replace('\n', ' ');
             // Strip leading and trailing whitespace
             text = text.replace(/^\s+/g, '').replace(/\s+$/g, '');
             if (text == '')
@@ -950,28 +947,18 @@ const LookingGlass = new Lang.Class({
 
     _showCompletions: function(completions) {
         if (!this._completionActor) {
-            let actor = new St.BoxLayout({ vertical: true });
-
-            this._completionText = new St.Label({ name: 'LookingGlassAutoCompletionText', style_class: 'lg-completions-text' });
-            this._completionText.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-            this._completionText.clutter_text.line_wrap = true;
-            actor.add(this._completionText);
-
-            let line = new Clutter.Rectangle();
-            let padBin = new St.Bin({ x_fill: true, y_fill: true });
-            padBin.add_actor(line);
-            actor.add(padBin);
-
-            this._completionActor = actor;
+            this._completionActor = new St.Label({ name: 'LookingGlassAutoCompletionText', style_class: 'lg-completions-text' });
+            this._completionActor.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+            this._completionActor.clutter_text.line_wrap = true;
             this._evalBox.insert_child_below(this._completionActor, this._entryArea);
         }
 
-        this._completionText.set_text(completions.join(', '));
+        this._completionActor.set_text(completions.join(', '));
 
         // Setting the height to -1 allows us to get its actual preferred height rather than
         // whatever was last given in set_height by Tweener.
         this._completionActor.set_height(-1);
-        let [minHeight, naturalHeight] = this._completionText.get_preferred_height(this._resultsArea.get_width());
+        let [minHeight, naturalHeight] = this._completionActor.get_preferred_height(this._resultsArea.get_width());
 
         // Don't reanimate if we are already visible
         if (this._completionActor.visible) {
@@ -1046,15 +1033,15 @@ const LookingGlass = new Lang.Class({
         let myWidth = primary.width * 0.7;
         let availableHeight = primary.height - Main.layoutManager.keyboardBox.height;
         let myHeight = Math.min(primary.height * 0.7, availableHeight * 0.9);
-        this.actor.x = (primary.width - myWidth) / 2;
+        this.actor.x = primary.x + (primary.width - myWidth) / 2;
         this._targetY = 2*this.actor.get_parent().height - primary.height;
         this._hiddenY = 2*this._targetY;
         this.actor.y = this._hiddenY;
         this.actor.width = myWidth;
         this.actor.height = myHeight;
         this._objInspector.actor.set_size(Math.floor(myWidth * 0.8), Math.floor(myHeight * 0.8));
-        this._objInspector.actor.set_position(primary.x + this.actor.x + Math.floor(myWidth * 0.1),
-                                              primary.y + this._targetY + Math.floor(myHeight * 0.1));
+        this._objInspector.actor.set_position(this.actor.x + Math.floor(myWidth * 0.1),
+                                              this._targetY + Math.floor(myHeight * 0.1));
     },
 
     insertObject: function(obj) {
@@ -1124,7 +1111,7 @@ const LookingGlass = new Lang.Class({
 
         Main.popModal(this._entry);
 
-        Tweener.addTween(this.actor, { time: 0.5 / St.get_slow_down_factor(),
+        Tweener.addTween(this.actor, { time: Math.min(0.5 / St.get_slow_down_factor(), 0.5),
                                        transition: 'easeOutQuad',
                                        y: this._hiddenY,
                                        onComplete: Lang.bind(this, function () {

@@ -1,5 +1,8 @@
 desktopdir=$(datadir)/applications
 desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop eos-app-feedback.desktop eos-app-tutorial.desktop eos-launch.desktop
+if HAVE_MUTTER_WAYLAND
+desktop_DATA += eos-shell-wayland.desktop
+endif HAVE_MUTTER_WAYLAND
 
 sessionsdir=$(datadir)/xsessions
 sessions_DATA = eos-session.desktop
@@ -79,6 +82,10 @@ dist_theme_DATA =				\
 	theme/more-results.svg			\
 	theme/noise-texture.png			\
 	theme/notification-blue_dot.png		\
+	theme/page-indicator-active.svg		\
+	theme/page-indicator-inactive.svg	\
+	theme/page-indicator-checked.svg	\
+	theme/page-indicator-hover.svg		\
 	theme/panel-button-border.svg		\
 	theme/panel-button-highlight-narrow.svg	\
 	theme/panel-button-highlight-wide.svg	\
@@ -127,9 +134,7 @@ dist_theme_DATA =				\
 	theme/ws-switch-arrow-down.png
 
 keysdir = @GNOME_KEYBINDINGS_KEYSDIR@
-keys_in_files =					\
-	50-gnome-shell-system.xml.in		\
-	$(NULL)
+keys_in_files = 50-gnome-shell-system.xml.in
 keys_DATA = $(keys_in_files:.xml.in=.xml)
 
 gsettings_SCHEMAS = org.gnome.shell.gschema.xml
@@ -173,6 +178,7 @@ EXTRA_DIST =					\
 	gdm-eos-shell.desktop.in.in		\
 	gdm-eos-shell.session			\
 	eos-shell.desktop.in.in			\
+	eos-shell-wayland.desktop.in.in		\
 	eos-session.desktop.in.in		\
 	eos-shell.session.in.in			\
 	eos-shell-extension-prefs.desktop.in.in	\
@@ -189,6 +195,7 @@ EXTRA_DIST =					\
 CLEANFILES =					\
 	gdm-eos-shell.desktop.in		\
 	eos-shell.desktop.in			\
+	eos-shell-wayland.desktop.in			\
 	eos-session.desktop.in			\
 	eos-shell-extension-prefs.in		\
 	eos-shell.session			\

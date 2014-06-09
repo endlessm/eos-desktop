@@ -1,5 +1,5 @@
 AC_PREREQ(2.63)
-AC_INIT([eos-shell],[3.8.0],[https://github.com/endlessm/eos-shell])
+AC_INIT([eos-shell],[3.10.4],[https://github.com/endlessm/eos-shell])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/shell-global.c])
@@ -9,7 +9,7 @@ AC_CONFIG_AUX_DIR([config])
 AC_SUBST([PACKAGE_NAME], ["$PACKAGE_NAME"])
 AC_SUBST([PACKAGE_VERSION], ["$PACKAGE_VERSION"])
 
-AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz tar-ustar foreign parallel-tests])
+AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz tar-ustar foreign])
 AM_MAINTAINER_MODE([enable])
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
@@ -24,9 +24,6 @@ LT_INIT([disable-static])
 
 # i18n
 IT_PROG_INTLTOOL([0.40])
-
-AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION([0.17])
 
 GETTEXT_PACKAGE=eos-shell
 AC_SUBST(GETTEXT_PACKAGE)
@@ -54,7 +51,7 @@ if $PKG_CONFIG --exists gstreamer-1.0 '>=' $GSTREAMER_MIN_VERSION ; then
    AC_MSG_RESULT(yes)
    build_recorder=true
    recorder_modules="gstreamer-1.0 gstreamer-base-1.0 x11 gtk+-3.0"
-   PKG_CHECK_MODULES(TEST_SHELL_RECORDER, $recorder_modules clutter-1.0 xfixes)
+   PKG_CHECK_MODULES(TEST_SHELL_RECORDER, $recorder_modules clutter-1.0)
 else
    AC_MSG_RESULT(no)
 fi
@@ -63,40 +60,50 @@ AM_CONDITIONAL(BUILD_RECORDER, $build_recorder)
 
 CLUTTER_MIN_VERSION=1.13.4
 GOBJECT_INTROSPECTION_MIN_VERSION=0.10.1
-GJS_MIN_VERSION=1.36.1
-MUTTER_MIN_VERSION=3.8.0
+GJS_MIN_VERSION=1.38.1
+MUTTER_MIN_VERSION=3.10.4
 GTK_MIN_VERSION=3.7.9
-GIO_MIN_VERSION=2.35.0
+GIO_MIN_VERSION=2.37.0
 LIBECAL_MIN_VERSION=3.5.3
 LIBEDATASERVER_MIN_VERSION=3.5.3
 TELEPATHY_GLIB_MIN_VERSION=0.17.5
 POLKIT_MIN_VERSION=0.100
 STARTUP_NOTIFICATION_MIN_VERSION=0.11
-GCR_MIN_VERSION=3.3.90
+GCR_MIN_VERSION=3.7.5
 GNOME_DESKTOP_REQUIRED_VERSION=3.7.90
-NETWORKMANAGER_MIN_VERSION=0.9.6
+NETWORKMANAGER_MIN_VERSION=0.9.8
 PULSE_MIN_VERS=2.0
 
 # Collect more than 20 libraries for a prize!
-PKG_CHECK_MODULES(EOS_SHELL, gio-unix-2.0 >= $GIO_MIN_VERSION
-			       libxml-2.0
-                               gtk+-3.0 >= $GTK_MIN_VERSION
-                               atk-bridge-2.0
-                               libmutter >= $MUTTER_MIN_VERSION
-                               gjs-internals-1.0 >= $GJS_MIN_VERSION
-                               $recorder_modules
-                               gdk-x11-3.0 libsoup-2.4
-			       clutter-x11-1.0 >= $CLUTTER_MIN_VERSION
-			       clutter-glx-1.0 >= $CLUTTER_MIN_VERSION
-                               libstartup-notification-1.0 >= $STARTUP_NOTIFICATION_MIN_VERSION
-                               gobject-introspection-1.0 >= $GOBJECT_INTROSPECTION_MIN_VERSION
-			       libcanberra libcanberra-gtk3
-                               telepathy-glib >= $TELEPATHY_GLIB_MIN_VERSION
-                               polkit-agent-1 >= $POLKIT_MIN_VERSION xfixes
-                               libnm-glib libnm-util >= $NETWORKMANAGER_MIN_VERSION
-                               libnm-gtk >= $NETWORKMANAGER_MIN_VERSION
-                               libsecret-unstable gcr-3 >= $GCR_MIN_VERSION
-                               eosmetrics-0)
+SHARED_PCS="gio-unix-2.0 >= $GIO_MIN_VERSION
+            libxml-2.0
+            gtk+-3.0 >= $GTK_MIN_VERSION
+            atk-bridge-2.0
+            gjs-internals-1.0 >= $GJS_MIN_VERSION
+            $recorder_modules
+            gdk-x11-3.0 libsoup-2.4
+            xtst
+            clutter-x11-1.0 >= $CLUTTER_MIN_VERSION
+            clutter-glx-1.0 >= $CLUTTER_MIN_VERSION
+            libstartup-notification-1.0 >= $STARTUP_NOTIFICATION_MIN_VERSION
+            gobject-introspection-1.0 >= $GOBJECT_INTROSPECTION_MIN_VERSION
+            libcanberra libcanberra-gtk3
+            telepathy-glib >= $TELEPATHY_GLIB_MIN_VERSION
+            polkit-agent-1 >= $POLKIT_MIN_VERSION
+            libnm-glib libnm-util >= $NETWORKMANAGER_MIN_VERSION
+            libnm-gtk >= $NETWORKMANAGER_MIN_VERSION
+            libsecret-unstable gcr-base-3 >= $GCR_MIN_VERSION
+            eosmetrics-0"
+
+PKG_CHECK_MODULES(EOS_SHELL, $SHARED_PCS)
+PKG_CHECK_MODULES(MUTTER, libmutter >= $MUTTER_MIN_VERSION)
+PKG_CHECK_MODULES(MUTTER_WAYLAND, [libmutter-wayland >= $MUTTER_MIN_VERSION],
+                 [MUTTER_WAYLAND_TYPELIB_DIR=`$PKG_CONFIG --variable=typelibdir libmutter-wayland`
+                  AC_SUBST(MUTTER_WAYLAND_TYPELIB_DIR)
+                  have_mutter_wayland=yes],
+                 [have_mutter_wayland=no])
+
+AM_CONDITIONAL(HAVE_MUTTER_WAYLAND, test $have_mutter_wayland != no)
 
 PKG_CHECK_MODULES(EOS_SHELL_JS, gio-2.0 gjs-internals-1.0 >= $GJS_MIN_VERSION)
 PKG_CHECK_MODULES(ST, clutter-1.0 gtk+-3.0 libcroco-0.6 >= 0.6.8 x11)
@@ -109,7 +116,7 @@ PKG_CHECK_MODULES(DESKTOP_SCHEMAS, gsettings-desktop-schemas >= 3.7.4)
 PKG_CHECK_MODULES(CARIBOU, caribou-1.0 >= 0.4.8)
 
 AC_MSG_CHECKING([for bluetooth support])
-PKG_CHECK_EXISTS([gnome-bluetooth-1.0 >= 3.1.0],
+PKG_CHECK_EXISTS([gnome-bluetooth-1.0 >= 3.9.0],
         [BLUETOOTH_DIR=`$PKG_CONFIG --variable=applet_libdir gnome-bluetooth-1.0`
 	 BLUETOOTH_LIBS=`$PKG_CONFIG --variable=applet_libs gnome-bluetooth-1.0`
 	 AC_SUBST([BLUETOOTH_LIBS],["$BLUETOOTH_LIBS"])
@@ -132,8 +139,9 @@ AC_SUBST([GNOME_KEYBINDINGS_KEYSDIR])
 GOBJECT_INTROSPECTION_CHECK([$GOBJECT_INTROSPECTION_MIN_VERSION])
 
 MUTTER_GIR_DIR=`$PKG_CONFIG --variable=girdir libmutter`
-MUTTER_TYPELIB_DIR=`$PKG_CONFIG --variable=typelibdir libmutter`
 AC_SUBST(MUTTER_GIR_DIR)
+
+MUTTER_TYPELIB_DIR=`$PKG_CONFIG --variable=typelibdir libmutter`
 AC_SUBST(MUTTER_TYPELIB_DIR)
 
 GJS_CONSOLE=`$PKG_CONFIG --variable=gjs_console gjs-1.0`
@@ -175,10 +183,6 @@ fi
 AM_CONDITIONAL(ENABLE_MAN, test "$enable_man" != no)
 
 GNOME_COMPILE_WARNINGS([error])
-
-AC_ARG_ENABLE(jhbuild-wrapper-script,
-  AS_HELP_STRING([--enable-jhbuild-wrapper-script],[Make "gnome-shell" script work for jhbuild]),,enable_jhbuild_wrapper_script=no)
-AM_CONDITIONAL(USE_JHBUILD_WRAPPER_SCRIPT, test "x$enable_jhbuild_wrapper_script" = xyes)
 
 BROWSER_PLUGIN_DIR="${BROWSER_PLUGIN_DIR:-"\${libdir}/mozilla/plugins"}"
 AC_ARG_VAR([BROWSER_PLUGIN_DIR],[Where to install the plugin to])

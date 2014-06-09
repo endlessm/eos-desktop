@@ -232,11 +232,13 @@ const AppSwitcherPopup = new Lang.Class({
     },
 
     _finish : function(timestamp) {
-        this.parent();
-
         let appIcon = this._items[this._selectedIndex];
-        let window = this._currentWindow > 0 ? this._currentWindow : 0;
-        appIcon.app.activate_window(appIcon.cachedWindows[window], timestamp);
+        if (this._currentWindow < 0)
+            appIcon.app.activate_window(appIcon.cachedWindows[0], timestamp);
+        else
+            Main.activateWindow(appIcon.cachedWindows[this._currentWindow], timestamp);
+
+        this.parent();
     },
 
     _onDestroy : function() {
@@ -353,10 +355,13 @@ const WindowSwitcherPopup = new Lang.Class({
     Name: 'WindowSwitcherPopup',
     Extends: SwitcherPopup.SwitcherPopup,
 
+    _init: function(items) {
+        this.parent(items);
+        this._settings = new Gio.Settings({ schema: 'org.gnome.shell.window-switcher' });
+    },
+
     _getWindowList: function() {
-        let settings = new Gio.Settings({ schema: 'org.gnome.shell.window-switcher' });
-        let workspace = settings.get_boolean('current-workspace-only') ? global.screen.get_active_workspace()
-                                                                       : null;
+        let workspace = this._settings.get_boolean('current-workspace-only') ? global.screen.get_active_workspace() : null;
         return global.display.get_tab_list(Meta.TabList.NORMAL, global.screen, workspace);
     },
 
@@ -366,7 +371,8 @@ const WindowSwitcherPopup = new Lang.Class({
         if (windows.length == 0)
             return false;
 
-        this._switcherList = new WindowList(windows);
+        let mode = this._settings.get_enum('app-icon-mode');
+        this._switcherList = new WindowList(windows, mode);
         this._items = this._switcherList.icons;
 
         return true;
@@ -395,9 +401,9 @@ const WindowSwitcherPopup = new Lang.Class({
     },
 
     _finish: function() {
-        this.parent();
-
         Main.activateWindow(this._items[this._selectedIndex].window);
+
+        this.parent();
     }
 });
 
@@ -434,8 +440,11 @@ const AppSwitcher = new Lang.Class({
         this._arrows = [];
 
         let windowTracker = Shell.WindowTracker.get_default();
+        let settings = new Gio.Settings({ schema: 'org.gnome.shell.app-switcher' });
+        let workspace = settings.get_boolean('current-workspace-only') ? global.screen.get_active_workspace()
+                                                                       : null;
         let allWindows = global.display.get_tab_list(Meta.TabList.NORMAL,
-                                                     global.screen, null);
+                                                     global.screen, workspace);
 
         // Construct the AppIcons, add to the popup
         for (let i = 0; i < apps.length; i++) {
@@ -445,7 +454,10 @@ const AppSwitcher = new Lang.Class({
             appIcon.cachedWindows = allWindows.filter(function(w) {
                 return windowTracker.get_window_app (w) == appIcon.app;
             });
-            this._addIcon(appIcon);
+            if (appIcon.cachedWindows.length > 0)
+                this._addIcon(appIcon);
+            else if (workspace == null)
+                throw new Error('%s appears to be running, but doesn\'t have any windows'.format(appIcon.app.get_name()));
         }
 
         this._curApp = -1;
@@ -656,7 +668,7 @@ const ThumbnailList = new Lang.Class({
 const WindowIcon = new Lang.Class({
     Name: 'WindowIcon',
 
-    _init: function(window) {
+    _init: function(window, mode) {
         this.window = window;
 
         this.actor = new St.BoxLayout({ style_class: 'alt-tab-app',
@@ -674,8 +686,7 @@ const WindowIcon = new Lang.Class({
 
         this._icon.destroy_all_children();
 
-        let settings = new Gio.Settings({ schema: 'org.gnome.shell.window-switcher' });
-        switch (settings.get_enum('app-icon-mode')) {
+        switch (mode) {
             case AppIconMode.THUMBNAIL_ONLY:
                 size = WINDOW_PREVIEW_SIZE;
                 this._icon.add_actor(_createWindowClone(mutterWindow, WINDOW_PREVIEW_SIZE));
@@ -713,7 +724,7 @@ const WindowList = new Lang.Class({
     Name: 'WindowList',
     Extends: SwitcherPopup.SwitcherList,
 
-    _init : function(windows) {
+    _init : function(windows, mode) {
         this.parent(true);
 
         this._label = new St.Label({ x_align: Clutter.ActorAlign.CENTER,
@@ -725,7 +736,7 @@ const WindowList = new Lang.Class({
 
         for (let i = 0; i < windows.length; i++) {
             let win = windows[i];
-            let icon = new WindowIcon(win);
+            let icon = new WindowIcon(win, mode);
 
             this.addItem(icon.actor, icon.label);
             this.icons.push(icon);

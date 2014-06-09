@@ -6,21 +6,28 @@ const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 const Signals = imports.signals;
+const St = imports.gi.St;
 
 const Batch = imports.gdm.batch;
 const Fprint = imports.gdm.fingerprint;
-const Realmd = imports.gdm.realmd;
+const OVirt = imports.gdm.oVirt;
 const Main = imports.ui.main;
 const Params = imports.misc.params;
+const ShellEntry = imports.ui.shellEntry;
+const SmartcardManager = imports.misc.smartcardManager;
 const Tweener = imports.ui.tweener;
 
 const PASSWORD_SERVICE_NAME = 'gdm-password';
 const FINGERPRINT_SERVICE_NAME = 'gdm-fingerprint';
+const SMARTCARD_SERVICE_NAME = 'gdm-smartcard';
+const OVIRT_SERVICE_NAME = 'gdm-ovirtcred';
 const FADE_ANIMATION_TIME = 0.16;
 const CLONE_FADE_ANIMATION_TIME = 0.25;
 
 const LOGIN_SCREEN_SCHEMA = 'org.gnome.login-screen';
+const PASSWORD_AUTHENTICATION_KEY = 'enable-password-authentication';
 const FINGERPRINT_AUTHENTICATION_KEY = 'enable-fingerprint-authentication';
+const SMARTCARD_AUTHENTICATION_KEY = 'enable-smartcard-authentication';
 const BANNER_MESSAGE_KEY = 'banner-message-enable';
 const BANNER_MESSAGE_TEXT_KEY = 'banner-message-text';
 const ALLOWED_FAILURES_KEY = 'allowed-failures';
@@ -30,6 +37,13 @@ const DISABLE_USER_LIST_KEY = 'disable-user-list';
 
 // Give user 16ms to read each character of a PAM message
 const USER_READ_TIME = 16
+
+const MessageType = {
+    NONE: 0,
+    ERROR: 1,
+    INFO: 2,
+    HINT: 3
+};
 
 function fadeInActor(actor) {
     if (actor.opacity == 255 && actor.visible)
@@ -115,20 +129,45 @@ const ShellUserVerifier = new Lang.Class({
         this._client = client;
 
         this._settings = new Gio.Settings({ schema: LOGIN_SCREEN_SCHEMA });
+        this._settings.connect('changed',
+                               Lang.bind(this, this._updateDefaultService));
+        this._updateDefaultService();
 
         this._fprintManager = new Fprint.FprintManager();
-        this._realmManager = new Realmd.Manager();
+        this._smartcardManager = SmartcardManager.getSmartcardManager();
+
+        // We check for smartcards right away, since an inserted smartcard
+        // at startup should result in immediately initiating authentication.
+        // This is different than fingeprint readers, where we only check them
+        // after a user has been picked.
+        this._checkForSmartcard();
+
+        this._smartcardManager.connect('smartcard-inserted',
+                                       Lang.bind(this, this._checkForSmartcard));
+        this._smartcardManager.connect('smartcard-removed',
+                                       Lang.bind(this, this._checkForSmartcard));
+
         this._messageQueue = [];
         this._messageQueueTimeoutId = 0;
         this.hasPendingMessages = false;
+        this.reauthenticating = false;
 
         this._failCounter = 0;
+
+        this._oVirtCredentialsManager = OVirt.getOVirtCredentialsManager();
+
+        if (this._oVirtCredentialsManager.hasToken())
+            this._oVirtUserAuthenticated(this._oVirtCredentialsManager.getToken());
+
+        this._oVirtCredentialsManager.connect('user-authenticated',
+                                              Lang.bind(this, this._oVirtUserAuthenticated));
     },
 
     begin: function(userName, hold) {
         this._cancellable = new Gio.Cancellable();
         this._hold = hold;
         this._userName = userName;
+        this.reauthenticating = false;
 
         this._checkForFingerprintReader();
 
@@ -146,8 +185,10 @@ const ShellUserVerifier = new Lang.Class({
         if (this._cancellable)
             this._cancellable.cancel();
 
-        if (this._userVerifier)
+        if (this._userVerifier) {
             this._userVerifier.call_cancel_sync(null);
+            this.clear();
+        }
     },
 
     clear: function() {
@@ -165,14 +206,14 @@ const ShellUserVerifier = new Lang.Class({
     },
 
     answerQuery: function(serviceName, answer) {
-        if (!this._userVerifier.hasPendingMessages) {
+        if (!this.hasPendingMessages) {
             this._userVerifier.call_answer_query(serviceName, answer, this._cancellable, null);
         } else {
-            let signalId = this._userVerifier.connect('no-more-messages',
-                                                      Lang.bind(this, function() {
-                                                          this._userVerifier.disconnect(signalId);
-                                                          this._userVerifier.call_answer_query(serviceName, answer, this._cancellable, null);
-                                                      }));
+            let signalId = this.connect('no-more-messages',
+                                        Lang.bind(this, function() {
+                                            this.disconnect(signalId);
+                                            this._userVerifier.call_answer_query(serviceName, answer, this._cancellable, null);
+                                        }));
         }
     },
 
@@ -201,7 +242,8 @@ const ShellUserVerifier = new Lang.Class({
             return;
 
         let message = this._messageQueue.shift();
-        this.emit('show-message', message.text, message.iconName);
+
+        this.emit('show-message', message.text, message.type);
 
         this._messageQueueTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT,
                                                        message.interval,
@@ -211,11 +253,11 @@ const ShellUserVerifier = new Lang.Class({
                                                        }));
     },
 
-    _queueMessage: function(message, iconName) {
+    _queueMessage: function(message, messageType) {
         let interval = this._getIntervalForMessage(message);
 
         this.hasPendingMessages = true;
-        this._messageQueue.push({ text: message, interval: interval, iconName: iconName });
+        this._messageQueue.push({ text: message, type: messageType, interval: interval });
         this._queueMessageTimeout();
     },
 
@@ -226,27 +268,57 @@ const ShellUserVerifier = new Lang.Class({
             GLib.source_remove(this._messageQueueTimeoutId);
             this._messageQueueTimeoutId = 0;
         }
-        this.emit('show-message', null, null);
+        this.emit('show-message', null, MessageType.NONE);
     },
 
     _checkForFingerprintReader: function() {
         this._haveFingerprintReader = false;
 
-        if (!this._settings.get_boolean(FINGERPRINT_AUTHENTICATION_KEY))
+        if (!this._settings.get_boolean(FINGERPRINT_AUTHENTICATION_KEY)) {
+            this._updateDefaultService();
             return;
+        }
 
         this._fprintManager.GetDefaultDeviceRemote(Gio.DBusCallFlags.NONE, this._cancellable, Lang.bind(this,
             function(device, error) {
                 if (!error && device)
                     this._haveFingerprintReader = true;
+                    this._updateDefaultService();
             }));
+    },
+
+    _oVirtUserAuthenticated: function(token) {
+        this._preemptingService = OVIRT_SERVICE_NAME;
+        this.emit('ovirt-user-authenticated');
+    },
+
+    _checkForSmartcard: function() {
+        let smartcardDetected;
+
+        if (!this._settings.get_boolean(SMARTCARD_AUTHENTICATION_KEY))
+            smartcardDetected = false;
+        else if (this.reauthenticating)
+            smartcardDetected = this._smartcardManager.hasInsertedLoginToken();
+        else
+            smartcardDetected = this._smartcardManager.hasInsertedTokens();
+
+        if (smartcardDetected != this.smartcardDetected) {
+            this.smartcardDetected = smartcardDetected;
+
+            if (this.smartcardDetected)
+                this._preemptingService = SMARTCARD_SERVICE_NAME;
+            else if (this._preemptingService == SMARTCARD_SERVICE_NAME)
+                this._preemptingService = null;
+
+            this.emit('smartcard-status-changed');
+        }
     },
 
     _reportInitError: function(where, error) {
         logError(error, where);
         this._hold.release();
 
-        this._queueMessage(_("Authentication error"), 'login-dialog-message-warning');
+        this._queueMessage(_("Authentication error"), MessageType.ERROR);
         this._verificationFailed(false);
     },
 
@@ -267,6 +339,7 @@ const ShellUserVerifier = new Lang.Class({
             return;
         }
 
+        this.reauthenticating = true;
         this._connectSignals();
         this._beginVerification();
         this._hold.release();
@@ -297,117 +370,111 @@ const ShellUserVerifier = new Lang.Class({
         this._userVerifier.connect('verification-complete', Lang.bind(this, this._onVerificationComplete));
     },
 
-    _beginVerification: function() {
+    _getForegroundService: function() {
+        if (this._preemptingService)
+            return this._preemptingService;
+
+        return this._defaultService;
+    },
+
+    serviceIsForeground: function(serviceName) {
+        return serviceName == this._getForegroundService();
+    },
+
+    serviceIsDefault: function(serviceName) {
+        return serviceName == this._defaultService;
+    },
+
+    _updateDefaultService: function() {
+        if (this._settings.get_boolean(PASSWORD_AUTHENTICATION_KEY))
+            this._defaultService = PASSWORD_SERVICE_NAME;
+        else if (this.smartcardDetected)
+            this._defaultService = SMARTCARD_SERVICE_NAME;
+        else if (this._haveFingerprintReader)
+            this._defaultService = FINGERPRINT_SERVICE_NAME;
+    },
+
+    _startService: function(serviceName) {
         this._hold.acquire();
-
         if (this._userName) {
-            this._userVerifier.call_begin_verification_for_user(PASSWORD_SERVICE_NAME,
-                                                                this._userName,
-                                                                this._cancellable,
-                                                                Lang.bind(this, function(obj, result) {
-                try {
-                    obj.call_begin_verification_for_user_finish(result);
-                } catch(e if e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
-                    return;
-                } catch(e) {
-                    this._reportInitError('Failed to start verification for user', e);
-                    return;
-                }
+           this._userVerifier.call_begin_verification_for_user(serviceName,
+                                                               this._userName,
+                                                               this._cancellable,
+                                                               Lang.bind(this, function(obj, result) {
+               try {
+                   obj.call_begin_verification_for_user_finish(result);
+               } catch(e if e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
+                   return;
+               } catch(e) {
+                   this._reportInitError('Failed to start verification for user', e);
+                   return;
+               }
 
-                this._hold.release();
-            }));
-
-            if (this._haveFingerprintReader) {
-                this._hold.acquire();
-
-                this._userVerifier.call_begin_verification_for_user(FINGERPRINT_SERVICE_NAME,
-                                                                    this._userName,
-                                                                    this._cancellable,
-                                                                    Lang.bind(this, function(obj, result) {
-                    try {
-                        obj.call_begin_verification_for_user_finish(result);
-                    } catch(e if e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
-                        return;
-                    } catch(e) {
-                        this._reportInitError('Failed to start fingerprint verification for user', e);
-                        return;
-                    }
-
-                    this._hold.release();
-                }));
-            }
+               this._hold.release();
+           }));
         } else {
-            this._userVerifier.call_begin_verification(PASSWORD_SERVICE_NAME,
-                                                       this._cancellable,
-                                                       Lang.bind(this, function(obj, result) {
-                try {
-                    obj.call_begin_verification_finish(result);
-                } catch(e if e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
-                    return;
-                } catch(e) {
-                    this._reportInitError('Failed to start verification', e);
-                    return;
-                }
+           this._userVerifier.call_begin_verification(serviceName,
+                                                      this._cancellable,
+                                                      Lang.bind(this, function(obj, result) {
+               try {
+                   obj.call_begin_verification_finish(result);
+               } catch(e if e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
+                   return;
+               } catch(e) {
+                   this._reportInitError('Failed to start verification', e);
+                   return;
+               }
 
-                this._hold.release();
-            }));
+               this._hold.release();
+           }));
         }
     },
 
+    _beginVerification: function() {
+        this._startService(this._getForegroundService());
+
+        if (this._userName && this._haveFingerprintReader && !this.serviceIsForeground(FINGERPRINT_SERVICE_NAME))
+            this._startService(FINGERPRINT_SERVICE_NAME);
+    },
+
     _onInfo: function(client, serviceName, info) {
-        // We don't display fingerprint messages, because they
-        // have words like UPEK in them. Instead we use the messages
-        // as a cue to display our own message.
-        if (serviceName == FINGERPRINT_SERVICE_NAME &&
+        if (this.serviceIsForeground(serviceName)) {
+            this._queueMessage(info, MessageType.INFO);
+        } else if (serviceName == FINGERPRINT_SERVICE_NAME &&
             this._haveFingerprintReader) {
+            // We don't show fingerprint messages directly since it's
+            // not the main auth service. Instead we use the messages
+            // as a cue to display our own message.
 
             // Translators: this message is shown below the password entry field
             // to indicate the user can swipe their finger instead
-            this.emit('show-login-hint', _("(or swipe finger)"));
-        } else if (serviceName == PASSWORD_SERVICE_NAME) {
-            this._queueMessage(info, 'login-dialog-message-info');
+            this._queueMessage(_("(or swipe finger)"), MessageType.HINT);
         }
     },
 
     _onProblem: function(client, serviceName, problem) {
-        // we don't want to show auth failed messages to
-        // users who haven't enrolled their fingerprint.
-        if (serviceName != PASSWORD_SERVICE_NAME)
+        if (!this.serviceIsForeground(serviceName))
             return;
-        this._queueMessage(problem, 'login-dialog-message-warning');
-    },
 
-    _showRealmLoginHint: function() {
-        if (this._realmManager.loginFormat) {
-            let hint = this._realmManager.loginFormat;
-
-            hint = hint.replace(/%U/g, 'user');
-            hint = hint.replace(/%D/g, 'DOMAIN');
-            hint = hint.replace(/%[^UD]/g, '');
-
-            // Translators: this message is shown below the username entry field
-            // to clue the user in on how to login to the local network realm
-            this.emit('show-login-hint',
-                      _("(e.g., user or %s)").format(hint));
-        }
+        this._queueMessage(problem, MessageType.ERROR);
     },
 
     _onInfoQuery: function(client, serviceName, question) {
-        // We only expect questions to come from the main auth service
-        if (serviceName != PASSWORD_SERVICE_NAME)
+        if (!this.serviceIsForeground(serviceName))
             return;
-
-        this._showRealmLoginHint();
-        this._realmLoginHintSignalId = this._realmManager.connect('login-format-changed',
-                                                                  Lang.bind(this, this._showRealmLoginHint));
 
         this.emit('ask-question', serviceName, question, '');
     },
 
     _onSecretInfoQuery: function(client, serviceName, secretQuestion) {
-        // We only expect secret requests to come from the main auth service
-        if (serviceName != PASSWORD_SERVICE_NAME)
+        if (!this.serviceIsForeground(serviceName))
             return;
+
+        if (serviceName == OVIRT_SERVICE_NAME) {
+            // The only question asked by this service is "Token?"
+            this.answerQuery(serviceName, this._oVirtCredentialsManager.getToken());
+            return;
+        }
 
         this.emit('ask-question', serviceName, secretQuestion, '\u25cf');
     },
@@ -415,6 +482,7 @@ const ShellUserVerifier = new Lang.Class({
     _onReset: function() {
         // Clear previous attempts to authenticate
         this._failCounter = 0;
+        this._updateDefaultService();
 
         this.emit('reset');
     },
@@ -443,24 +511,24 @@ const ShellUserVerifier = new Lang.Class({
             this._failCounter < this._settings.get_int(ALLOWED_FAILURES_KEY);
 
         if (canRetry) {
-            if (!this._userVerifier.hasPendingMessages) {
+            if (!this.hasPendingMessages) {
                 this._retry();
             } else {
-                let signalId = this._userVerifier.connect('no-more-messages',
-                                                          Lang.bind(this, function() {
-                                                              this._userVerifier.disconnect(signalId);
-                                                              this._retry();
-                                                          }));
+                let signalId = this.connect('no-more-messages',
+                                            Lang.bind(this, function() {
+                                                this.disconnect(signalId);
+                                                this._retry();
+                                            }));
             }
         } else {
-            if (!this._userVerifier.hasPendingMessages) {
+            if (!this.hasPendingMessages) {
                 this._cancelAndReset();
             } else {
-                let signalId = this._userVerifier.connect('no-more-messages',
-                                                          Lang.bind(this, function() {
-                                                              this._userVerifier.disconnect(signalId);
-                                                              this._cancelAndReset();
-                                                          }));
+                let signalId = this.connect('no-more-messages',
+                                            Lang.bind(this, function() {
+                                                this.disconnect(signalId);
+                                                this._cancelAndReset();
+                                            }));
             }
         }
 
@@ -468,18 +536,21 @@ const ShellUserVerifier = new Lang.Class({
     },
 
     _onConversationStopped: function(client, serviceName) {
+        // If the login failed with the preauthenticated oVirt credentials
+        // then discard the credentials and revert to default authentication
+        // mechanism.
+        if (this.serviceIsForeground(OVIRT_SERVICE_NAME)) {
+            this._oVirtCredentialsManager.resetToken();
+            this._preemptingService = null;
+            this._verificationFailed(false);
+            return;
+        }
+
         // if the password service fails, then cancel everything.
         // But if, e.g., fingerprint fails, still give
         // password authentication a chance to succeed
-        if (serviceName == PASSWORD_SERVICE_NAME) {
+        if (this.serviceIsForeground(serviceName)) {
             this._verificationFailed(true);
-        }
-
-        this.emit('hide-login-hint');
-
-        if (this._realmLoginHintSignalId) {
-            this._realmManager.disconnect(this._realmLoginHintSignalId);
-            this._realmLoginHintSignalId = 0;
         }
     },
 });

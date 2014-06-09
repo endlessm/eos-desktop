@@ -13,8 +13,6 @@ const ModalDialog = imports.ui.modalDialog;
 const ShellEntry = imports.ui.shellEntry;
 const CheckBox = imports.ui.checkBox;
 
-let prompter = null;
-
 const KeyringDialog = new Lang.Class({
     Name: 'KeyringDialog',
     Extends: ModalDialog.ModalDialog,
@@ -25,7 +23,7 @@ const KeyringDialog = new Lang.Class({
         this.prompt = new Shell.KeyringPrompt();
         this.prompt.connect('show-password', Lang.bind(this, this._onShowPassword));
         this.prompt.connect('show-confirm', Lang.bind(this, this._onShowConfirm));
-        this.prompt.connect('hide-prompt', Lang.bind(this, this._onHidePrompt));
+        this.prompt.connect('prompt-close', Lang.bind(this, this._onHidePrompt));
 
         let mainContentBox = new St.BoxLayout({ style_class: 'prompt-dialog-main-layout',
                                                 vertical: false });
@@ -63,34 +61,43 @@ const KeyringDialog = new Lang.Class({
 
         this._cancelButton = this.addButton({ label: '',
                                               action: Lang.bind(this, this._onCancelButton),
-                                              key: Clutter.Escape });
+                                              key: Clutter.Escape },
+                                            { expand: true, x_fill: false, x_align: St.Align.START });
+        this.placeSpinner({ expand: false,
+                            x_fill: false,
+                            y_fill: false,
+                            x_align: St.Align.END,
+                            y_align: St.Align.MIDDLE });
         this._continueButton = this.addButton({ label: '',
                                                 action: Lang.bind(this, this._onContinueButton),
                                                 default: true },
-                                              { expand: true, x_fill: false, x_align: St.Align.END });
+                                              { expand: false, x_fill: false, x_align: St.Align.END });
 
         this.prompt.bind_property('cancel-label', this._cancelButton, 'label', GObject.BindingFlags.SYNC_CREATE);
         this.prompt.bind_property('continue-label', this._continueButton, 'label', GObject.BindingFlags.SYNC_CREATE);
     },
 
     _buildControlTable: function() {
-        let table = new St.Table({ style_class: 'keyring-dialog-control-table' });
+        let layout = new Clutter.TableLayout();
+        let table = new St.Widget({ style_class: 'keyring-dialog-control-table',
+                                    layout_manager: layout });
+        layout.hookup_style(table);
         let row = 0;
 
         if (this.prompt.password_visible) {
-            let label = new St.Label(({ style_class: 'prompt-dialog-password-label' }));
+            let label = new St.Label({ style_class: 'prompt-dialog-password-label' });
             label.set_text(_("Password:"));
-            table.add(label, { row: row, col: 0,
-                               x_expand: false, x_fill: true,
-                               x_align: St.Align.START,
-                               y_fill: false, y_align: St.Align.MIDDLE });
+            label.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+            layout.pack(label, 0, row);
+            layout.child_set(label, { x_expand: false, y_fill: false,
+                                      x_align: Clutter.TableAlignment.START });
             this._passwordEntry = new St.Entry({ style_class: 'prompt-dialog-password-entry',
                                                  text: '',
-                                                 can_focus: true});
+                                                 can_focus: true });
             this._passwordEntry.clutter_text.set_password_char('\u25cf'); // ● U+25CF BLACK CIRCLE
             ShellEntry.addContextMenu(this._passwordEntry, { isPassword: true });
             this._passwordEntry.clutter_text.connect('activate', Lang.bind(this, this._onPasswordActivate));
-            table.add(this._passwordEntry, { row: row, col: 1, x_expand: true, x_fill: true, x_align: St.Align.START });
+            layout.pack(this._passwordEntry, 1, row);
             row++;
         } else {
             this._passwordEntry = null;
@@ -99,17 +106,16 @@ const KeyringDialog = new Lang.Class({
         if (this.prompt.confirm_visible) {
             var label = new St.Label(({ style_class: 'prompt-dialog-password-label' }));
             label.set_text(_("Type again:"));
-            table.add(label, { row: row, col: 0,
-                               x_expand: false, x_fill: true,
-                               x_align: St.Align.START,
-                               y_fill: false, y_align: St.Align.MIDDLE });
+            layout.pack(label, 0, row);
+            layout.child_set(label, { x_expand: false, y_fill: false,
+                                      x_align: Clutter.TableAlignment.START });
             this._confirmEntry = new St.Entry({ style_class: 'prompt-dialog-password-entry',
                                                 text: '',
-                                                can_focus: true});
+                                                can_focus: true });
             this._confirmEntry.clutter_text.set_password_char('\u25cf'); // ● U+25CF BLACK CIRCLE
             ShellEntry.addContextMenu(this._confirmEntry, { isPassword: true });
             this._confirmEntry.clutter_text.connect('activate', Lang.bind(this, this._onConfirmActivate));
-            table.add(this._confirmEntry, { row: row, col: 1, x_expand: true, x_fill: true, x_align: St.Align.START });
+            layout.pack(this._confirmEntry, 1, row);
             row++;
         } else {
             this._confirmEntry = null;
@@ -122,14 +128,14 @@ const KeyringDialog = new Lang.Class({
             let choice = new CheckBox.CheckBox();
             this.prompt.bind_property('choice-label', choice.getLabelActor(), 'text', GObject.BindingFlags.SYNC_CREATE);
             this.prompt.bind_property('choice-chosen', choice.actor, 'checked', GObject.BindingFlags.SYNC_CREATE | GObject.BindingFlags.BIDIRECTIONAL);
-            table.add(choice.actor, { row: row, col: 1, x_expand: false, x_fill: true, x_align: St.Align.START });
+            layout.pack(choice.actor, 1, row);
             row++;
         }
 
         let warning = new St.Label({ style_class: 'prompt-dialog-error-label' });
         warning.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
         warning.clutter_text.line_wrap = true;
-        table.add(warning, { row: row, col: 1, x_expand: false, x_fill: false, x_align: St.Align.START });
+        layout.pack(warning, 1, row);
         this.prompt.bind_property('warning-visible', warning, 'visible', GObject.BindingFlags.SYNC_CREATE);
         this.prompt.bind_property('warning', warning, 'text', GObject.BindingFlags.SYNC_CREATE);
 
@@ -143,11 +149,19 @@ const KeyringDialog = new Lang.Class({
     },
 
     _updateSensitivity: function(sensitive) {
-        this._passwordEntry.reactive = sensitive;
-        this._passwordEntry.clutter_text.editable = sensitive;
+        if (this._passwordEntry) {
+            this._passwordEntry.reactive = sensitive;
+            this._passwordEntry.clutter_text.editable = sensitive;
+        }
+
+        if (this._confirmEntry) {
+            this._confirmEntry.reactive = sensitive;
+            this._confirmEntry.clutter_text.editable = sensitive;
+        }
 
         this._continueButton.can_focus = sensitive;
         this._continueButton.reactive = sensitive;
+        this.setWorking(!sensitive);
     },
 
     _ensureOpen: function() {
@@ -207,27 +221,56 @@ const KeyringDialog = new Lang.Class({
     },
 });
 
+const KeyringDummyDialog = new Lang.Class({
+    Name: 'KeyringDummyDialog',
+
+    _init: function() {
+        this.prompt = new Shell.KeyringPrompt();
+        this.prompt.connect('show-password',
+                            Lang.bind(this, this._cancelPrompt));
+        this.prompt.connect('show-confirm', Lang.bind(this,
+                            this._cancelPrompt));
+    },
+
+    _cancelPrompt: function() {
+        this.prompt.cancel();
+    }
+});
+
 const KeyringPrompter = new Lang.Class({
     Name: 'KeyringPrompter',
 
     _init: function() {
         this._prompter = new Gcr.SystemPrompter();
-        this._prompter.connect('new-prompt', function(prompter) {
-            let dialog = new KeyringDialog();
-            return dialog.prompt;
-        });
+        this._prompter.connect('new-prompt', Lang.bind(this,
+            function() {
+                let dialog = this._enabled ? new KeyringDialog()
+                                           : new KeyringDummyDialog();
+                this._currentPrompt = dialog.prompt;
+                return this._currentPrompt;
+            }));
         this._dbusId = null;
+        this._registered = false;
+        this._enabled = false;
+        this._currentPrompt = null;
     },
 
     enable: function() {
-        this._prompter.register(Gio.DBus.session);
-        this._dbusId = Gio.DBus.session.own_name('org.gnome.keyring.SystemPrompter',
-                                                 Gio.BusNameOwnerFlags.ALLOW_REPLACEMENT, null, null);
+        if (!this._registered) {
+            this._prompter.register(Gio.DBus.session);
+            this._dbusId = Gio.DBus.session.own_name('org.gnome.keyring.SystemPrompter',
+                                                     Gio.BusNameOwnerFlags.ALLOW_REPLACEMENT, null, null);
+            this._registered = true;
+        }
+        this._enabled = true;
     },
 
     disable: function() {
-        this._prompter.unregister(false);
-        Gio.DBus.session.unown_name(this._dbusId);
+        this._enabled = false;
+
+        if (this._prompter.prompting)
+            this._currentPrompt.cancel();
+        this._currentPrompt = null;
     }
 });
 

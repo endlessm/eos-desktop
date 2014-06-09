@@ -16,6 +16,7 @@ const _modes = {
     'restrictive': {
         parentMode: null,
         stylesheetName: 'gnome-shell.css',
+        overridesSchema: 'org.gnome.shell.overrides',
         hasOverview: false,
         showCalendarEvents: false,
         allowSettings: false,
@@ -45,9 +46,8 @@ const _modes = {
         unlockDialog: imports.gdm.loginDialog.LoginDialog,
         components: ['polkitAgent'],
         panel: {
-            left: ['logo'],
-            right: ['dateMenu', 'a11yGreeter', 'display', 'keyboard',
-                    'volume', 'battery', 'powerMenu']
+            left: [],
+            right: ['dateMenu', 'a11yGreeter', 'keyboard', 'aggregateMenu'],
         },
         panelStyle: 'login-screen'
     },
@@ -61,19 +61,9 @@ const _modes = {
         components: ['polkitAgent', 'telepathyClient'],
         panel: {
             left: [],
-            right: ['dateMenu', 'a11y', 'keyboard', 'lockScreen']
+            right: ['dateMenu', 'a11y', 'keyboard', 'aggregateMenu']
         },
         panelStyle: 'unlock-screen'
-    },
-
-    'initial-setup': {
-        hasWindows: true,
-        isPrimary: true,
-        components: [ 'networkAgent', 'keyring'],
-        panel: {
-            left: [],
-            right: ['dateMenu', 'a11yGreeter', 'keyboard', 'volume', 'battery']
-        }
     },
 
     'user': {
@@ -93,9 +83,8 @@ const _modes = {
                      'keyring', 'autorunManager', 'automountManager',
                      'updaterManager', 'socialBar', 'appStore'],
         panel: {
-            left: ['userMenu', 'panelSeparator', 'appIcons'],
-            right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
-                    'network', 'battery', 'socialBar']
+            left: ['aggregateMenu', 'panelSeparator', 'appIcons'],
+            right: ['dateMenu', 'a11y', 'keyboard', 'socialBar']
         }
     }
 };

@@ -7,11 +7,12 @@ data/eos-app-tutorial.desktop.in.in
 data/eos-session.desktop.in.in
 data/eos-shell.desktop.in.in
 data/eos-shell-extension-prefs.desktop.in.in
+data/eos-shell-wayland.desktop.in.in
 data/gdm-eos-shell.desktop.in.in
 data/org.gnome.shell.gschema.xml.in.in
 js/extensionPrefs/main.js
+js/gdm/authPrompt.js
 js/gdm/loginDialog.js
-js/gdm/powerMenu.js
 js/gdm/util.js
 js/misc/util.js
 js/ui/appDisplay.js
@@ -46,16 +47,19 @@ js/ui/shellEntry.js
 js/ui/shellMountOperation.js
 js/ui/status/accessibility.js
 js/ui/status/bluetooth.js
+js/ui/status/brightness.js
 js/ui/status/keyboard.js
-js/ui/status/lockScreenMenu.js
 js/ui/status/network.js
 js/ui/status/power.js
+js/ui/status/rfkill.js
+js/ui/status/system.js
 js/ui/status/volume.js
 js/ui/unlockDialog.js
-js/ui/userMenu.js
 js/ui/viewSelector.js
 js/ui/windowAttentionHandler.js
+js/ui/windowManager.js
 src/calendar-server/evolution-calendar.desktop.in.in
+# Please do not remove this file from POTFILES.in. Run "git submodule init && git submodule update" to get it.
 src/gvc/gvc-mixer-control.c
 src/main.c
 src/shell-app.c

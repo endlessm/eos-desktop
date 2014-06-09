@@ -18,6 +18,7 @@ const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
 const Screencast = imports.ui.screencast;
 const Screenshot = imports.ui.screenshot;
+const ViewSelector = imports.ui.viewSelector;
 
 const GnomeShellIface = '<node> \
 <interface name="org.gnome.Shell"> \
@@ -30,6 +31,10 @@ const GnomeShellIface = '<node> \
 <method name="ShowOSD"> \
     <arg type="a{sv}" direction="in" name="params"/> \
 </method> \
+<method name="FocusApp"> \
+    <arg type="s" direction="in" name="id"/> \
+</method> \
+<method name="ShowApplications" /> \
 <method name="GrabAccelerator"> \
     <arg type="s" direction="in" name="accelerator"/> \
     <arg type="u" direction="in" name="flags"/> \
@@ -111,7 +116,7 @@ const GnomeShell = new Lang.Class({
      */
     Eval: function(code) {
         if (!global.settings.get_boolean('development-tools'))
-            return [false, null];
+            return [false, ''];
 
         let returnValue;
         let success;
@@ -145,6 +150,15 @@ const GnomeShell = new Lang.Class({
         Main.osdWindow.setLevel(params['level']);
 
         Main.osdWindow.show();
+    },
+
+    FocusApp: function(id) {
+        this.ShowApplications();
+        Main.overview.viewSelector.appDisplay.selectApp(id);
+    },
+
+    ShowApplications: function() {
+        Main.overview.viewSelector.showApps();
     },
 
     GrabAcceleratorAsync: function(params, invocation) {
@@ -411,7 +425,7 @@ const ScreenSaverDBus = new Lang.Class({
         if (active)
             this._screenShield.activate(true);
         else
-            this._screenShield.unlock(false);
+            this._screenShield.deactivate(false);
     },
 
     GetActive: function() {

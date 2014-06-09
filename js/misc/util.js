@@ -1,7 +1,9 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+const Lang = imports.lang;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
@@ -21,7 +23,7 @@ const _urlRegexp = new RegExp(
     '(^|' + _leadingJunk + ')' +
     '(' +
         '(?:' +
-            '[a-z][\\w-]+://' +                   // scheme://
+            '(?:http|https|ftp)://' +             // scheme://
             '|' +
             'www\\d{0,3}[.]' +                    // www.
             '|' +
@@ -104,6 +106,22 @@ function spawnCommandLine(command_line, errorNotifier) {
     }
 }
 
+// spawnApp:
+// @argv: an argv array
+//
+// Runs @argv as if it was an application, handling startup notification
+function spawnApp(argv) {
+    try {
+        let app = Gio.AppInfo.create_from_commandline(argv.join(' '), null,
+                                                      Gio.AppInfoCreateFlags.SUPPORTS_STARTUP_NOTIFICATION);
+
+        let context = global.create_app_launch_context();
+        app.launch([], context);
+    } catch(err) {
+        _handleSpawnError(argv[0], err);
+    }
+}
+
 // trySpawn:
 // @argv: an argv array
 //
@@ -163,31 +181,6 @@ function trySpawnCommandLine(command_line) {
 function _handleSpawnError(command, err, errorNotifier) {
     let title = _("Execution of '%s' failed:").format(command);
     errorNotifier(title, err.message);
-}
-
-// killall:
-// @processName: a process name
-//
-// Kills @processName. If no process with the given name is found,
-// this will fail silently.
-function killall(processName) {
-    try {
-        // pkill is more portable than killall, but on Linux at least
-        // it won't match if you pass more than 15 characters of the
-        // process name... However, if you use the '-f' flag to match
-        // the entire command line, it will work, but we have to be
-        // careful in that case that we can match
-        // '/usr/bin/processName' but not 'gedit processName.c' or
-        // whatever...
-
-        let argv = ['pkill', '-f', '^([^ ]*/)?' + processName + '($| )'];
-        GLib.spawn_sync(null, argv, null, GLib.SpawnFlags.SEARCH_PATH, null);
-        // It might be useful to return success/failure, but we'd need
-        // a wrapper around WIFEXITED and WEXITSTATUS. Since none of
-        // the current callers care, we don't bother.
-    } catch (e) {
-        logError(e, 'Failed to kill ' + processName);
-    }
 }
 
 // lowerBound:

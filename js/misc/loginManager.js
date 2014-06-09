@@ -9,20 +9,8 @@ const Signals = imports.signals;
 
 const SystemdLoginManagerIface = '<node> \
 <interface name="org.freedesktop.login1.Manager"> \
-<method name="PowerOff"> \
-    <arg type="b" direction="in"/> \
-</method> \
-<method name="Reboot"> \
-    <arg type="b" direction="in"/> \
-</method> \
 <method name="Suspend"> \
     <arg type="b" direction="in"/> \
-</method> \
-<method name="CanPowerOff"> \
-    <arg type="s" direction="out"/> \
-</method> \
-<method name="CanReboot"> \
-    <arg type="s" direction="out"/> \
 </method> \
 <method name="CanSuspend"> \
     <arg type="s" direction="out"/> \
@@ -84,7 +72,7 @@ const ConsoleKitSession = Gio.DBusProxy.makeProxyWrapper(ConsoleKitSessionIface)
 const ConsoleKitManager = Gio.DBusProxy.makeProxyWrapper(ConsoleKitManagerIface);
 
 function haveSystemd() {
-    return GLib.access("/sys/fs/cgroup/systemd", 0) >= 0;
+    return GLib.access("/run/systemd/seats", 0) >= 0;
 }
 
 function versionCompare(required, reference) {
@@ -169,24 +157,6 @@ const LoginManagerSystemd = new Lang.Class({
             }));
     },
 
-    canPowerOff: function(asyncCallback) {
-        this._proxy.CanPowerOffRemote(function(result, error) {
-            if (error)
-                asyncCallback(false);
-            else
-                asyncCallback(result[0] != 'no');
-        });
-    },
-
-    canReboot: function(asyncCallback) {
-        this._proxy.CanRebootRemote(function(result, error) {
-            if (error)
-                asyncCallback(false);
-            else
-                asyncCallback(result[0] != 'no');
-        });
-    },
-
     canSuspend: function(asyncCallback) {
         this._proxy.CanSuspendRemote(function(result, error) {
             if (error)
@@ -203,14 +173,6 @@ const LoginManagerSystemd = new Lang.Class({
             else
                 asyncCallback(result[0]);
         });
-    },
-
-    powerOff: function() {
-        this._proxy.PowerOffRemote(true);
-    },
-
-    reboot: function() {
-        this._proxy.RebootRemote(true);
     },
 
     suspend: function() {
@@ -274,38 +236,12 @@ const LoginManagerConsoleKit = new Lang.Class({
             }));
     },
 
-    canPowerOff: function(asyncCallback) {
-        this._proxy.CanStopRemote(function(result, error) {
-            if (error)
-                asyncCallback(false);
-            else
-                asyncCallback(result[0]);
-        });
-    },
-
-    canReboot: function(asyncCallback) {
-        this._proxy.CanRestartRemote(function(result, error) {
-            if (error)
-                asyncCallback(false);
-            else
-                asyncCallback(result[0]);
-        });
-    },
-
     canSuspend: function(asyncCallback) {
         asyncCallback(false);
     },
 
     listSessions: function(asyncCallback) {
         asyncCallback([]);
-    },
-
-    powerOff: function() {
-        this._proxy.StopRemote();
-    },
-
-    reboot: function() {
-        this._proxy.RestartRemote();
     },
 
     suspend: function() {

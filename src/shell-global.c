@@ -81,6 +81,8 @@ struct _ShellGlobal {
   const char *userdatadir;
   StFocusManager *focus_manager;
 
+  GFile *runtime_state_path;
+
   guint work_count;
   GSList *leisure_closures;
   guint leisure_function_id;
@@ -223,7 +225,9 @@ shell_global_init (ShellGlobal *global)
 {
   const char *datadir = g_getenv ("GNOME_SHELL_DATADIR");
   const char *shell_js = g_getenv("GNOME_SHELL_JS");
-  char *imagedir, **search_path, *path;
+  char *imagedir, **search_path;
+  char *path;
+  const char *byteorder_string;
 
   if (!datadir)
     datadir = GNOME_SHELL_DATADIR;
@@ -256,6 +260,20 @@ shell_global_init (ShellGlobal *global)
   path = g_build_filename (g_get_user_data_dir (), "desktop-directories", NULL);
   g_mkdir_with_parents (path, 0700);
   g_free (path);
+
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+  byteorder_string = "LE";
+#else
+  byteorder_string = "BE";
+#endif
+
+  /* And the runtime state */
+  path = g_strdup_printf ("%s/gnome-shell/runtime-state-%s.%s",
+                          g_get_user_runtime_dir (),
+                          byteorder_string,
+                          XDisplayName (NULL));
+  (void) g_mkdir_with_parents (path, 0700);
+  global->runtime_state_path = g_file_new_for_path (path);
 
   global->settings = g_settings_new ("org.gnome.shell");
   
@@ -299,6 +317,8 @@ shell_global_finalize (GObject *object)
   g_object_unref (global->settings);
 
   the_object = NULL;
+
+  g_clear_object (&global->runtime_state_path);
 
   G_OBJECT_CLASS(shell_global_parent_class)->finalize (object);
 }
@@ -731,6 +751,20 @@ global_stage_after_paint (gpointer data)
   return TRUE;
 }
 
+
+static void
+update_scale_factor (GdkScreen *screen, gpointer data)
+{
+  ShellGlobal *global = SHELL_GLOBAL (data);
+  ClutterStage *stage = CLUTTER_STAGE (global->stage);
+  StThemeContext *context = st_theme_context_get_for_stage (stage);
+  GValue value = G_VALUE_INIT;
+
+  g_value_init (&value, G_TYPE_INT);
+  gdk_screen_get_setting (global->gdk_screen, "gdk-window-scaling-factor", &value);
+  g_object_set (context, "scale-factor", g_value_get_int (&value), NULL);
+}
+
 /* This is an IBus workaround. The flow of events with IBus is that every time
  * it gets gets a key event, it:
  *
@@ -849,9 +883,36 @@ _shell_global_set_plugin (ShellGlobal *global,
                                                meta_screen_get_screen_number (global->meta_screen));
 
   global->stage = CLUTTER_STAGE (meta_get_stage_for_screen (global->meta_screen));
-  global->stage_xwindow = clutter_x11_get_stage_window (global->stage);
-  global->ibus_window = gdk_x11_window_foreign_new_for_display (global->gdk_display,
-                                                                global->stage_xwindow);
+
+#ifdef HAVE_WAYLAND
+  if (meta_is_wayland_compositor ())
+    {
+      /* When Mutter is acting as its own display server then the
+         stage does not have a window, so create a different window
+         which we use to communicate with IBus, and leave stage_xwindow
+         as None.
+      */
+
+      GdkWindowAttr attributes;
+
+      attributes.wclass = GDK_INPUT_OUTPUT;
+      attributes.width = 100;
+      attributes.height = 100;
+      attributes.window_type = GDK_WINDOW_TOPLEVEL;
+
+      global->ibus_window = gdk_window_new (NULL,
+                                            &attributes,
+                                            0 /* attributes_mask */);
+      global->stage_xwindow = None;
+    }
+  else
+#endif
+    {
+      global->stage_xwindow = clutter_x11_get_stage_window (global->stage);
+      global->ibus_window = gdk_x11_window_foreign_new_for_display (global->gdk_display,
+                                                                    global->stage_xwindow);
+    }
+
   st_im_text_set_event_window (global->ibus_window);
   st_entry_set_cursor_func (entry_cursor_func, global);
 
@@ -882,9 +943,19 @@ _shell_global_set_plugin (ShellGlobal *global,
   g_signal_connect (global->meta_display, "notify::focus-window",
                     G_CALLBACK (focus_window_changed), global);
 
+  /*
+   * We connect to GdkScreen's monitors-changed here to avoid
+   * a race condition. GdkScreen's monitors-changed signal is
+   * emitted *after* the xsetting has been updated.
+   */
+  g_signal_connect (global->gdk_screen, "monitors-changed",
+                    G_CALLBACK (update_scale_factor), global);
+
   gdk_event_handler_set (gnome_shell_gdk_event_handler, global, NULL);
 
   global->focus_manager = st_focus_manager_get_for_stage (global->stage);
+
+  update_scale_factor (global->gdk_screen, global);
 }
 
 GjsContext *
@@ -934,8 +1005,6 @@ void
 shell_global_end_modal (ShellGlobal *global,
                         guint32      timestamp)
 {
-  ClutterActor *actor;
-
   if (!global->has_modal)
     return;
 
@@ -953,6 +1022,14 @@ shell_global_end_modal (ShellGlobal *global,
                                       get_current_time_maybe_roundtrip (global));
 
   sync_input_region (global);
+}
+
+void
+shell_global_freeze_keyboard (ShellGlobal *global,
+                              guint32      timestamp)
+{
+  if (global->stage_xwindow != None)
+    meta_display_freeze_keyboard (global->meta_display, global->stage_xwindow, timestamp);
 }
 
 /* Code to close all file descriptors before we exec; copied from gspawn.c in GLib.
@@ -1658,4 +1735,88 @@ shell_global_get_session_mode (ShellGlobal *global)
   g_return_val_if_fail (SHELL_IS_GLOBAL (global), "user");
 
   return global->session_mode;
+}
+
+static GFile *
+get_runtime_state_path (ShellGlobal  *global,
+                        const char   *property_name)
+{
+  return g_file_get_child (global->runtime_state_path, property_name);
+}
+
+/**
+ * shell_global_set_runtime_state:
+ * @global: a #ShellGlobal
+ * @property_name: Name of the property
+ * @variant: (allow-none): A #GVariant, or %NULL to unset
+ *
+ * Change the value of serialized runtime state.
+ */
+void
+shell_global_set_runtime_state (ShellGlobal  *global,
+                                const char   *property_name,
+                                GVariant     *variant)
+{
+  GFile *path;
+
+  path = get_runtime_state_path (global, property_name);
+
+  if (variant == NULL)
+    (void) g_file_delete (path, NULL, NULL);
+  else
+    {
+      gsize size = g_variant_get_size (variant);
+      g_file_replace_contents (path, g_variant_get_data (variant), size,
+                               NULL, FALSE, G_FILE_CREATE_REPLACE_DESTINATION,
+                               NULL, NULL, NULL);
+    }
+
+  g_object_unref (path);
+}
+
+/**
+ * shell_global_get_runtime_state:
+ * @global: a #ShellGlobal
+ * @property_type: Expected data type
+ * @property_name: Name of the property
+ *
+ * The shell maintains "runtime" state which does not persist across
+ * logout or reboot.
+ *
+ * Returns: (transfer floating): The value of a serialized property, or %NULL if none stored
+ */
+GVariant *
+shell_global_get_runtime_state (ShellGlobal  *global,
+                                const char   *property_type,
+                                const char   *property_name)
+{
+  GVariant *res = NULL;
+  GMappedFile *mfile;
+  GFile *path;
+  char *pathstr;
+  GError *local_error = NULL;
+
+  path = get_runtime_state_path (global, property_name);
+  pathstr = g_file_get_path (path);
+  mfile = g_mapped_file_new (pathstr, FALSE, &local_error);
+  if (!mfile)
+    {
+      if (!g_error_matches (local_error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+        {
+          g_warning ("Failed to open runtime state: %s", local_error->message);
+        }
+      g_clear_error (&local_error);
+    }
+  else
+    {
+      GBytes *bytes = g_mapped_file_get_bytes (mfile);
+      res = g_variant_new_from_bytes (G_VARIANT_TYPE (property_type), bytes, TRUE);
+      g_bytes_unref (bytes);
+      g_mapped_file_unref (mfile);
+    }
+
+  g_object_unref (path);
+  g_free (pathstr);
+
+  return res;
 }

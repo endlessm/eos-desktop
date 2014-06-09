@@ -44,6 +44,7 @@ struct _ShellAppSystemPrivate {
   GHashTable *running_apps;
   GHashTable *id_to_app;
   GHashTable *startup_wm_class_to_id;
+  GHashTable *startup_wm_class_to_app;
 
   EmtrEventRecorder *event_recorder;
 };
@@ -281,6 +282,20 @@ shell_app_system_lookup_desktop_wmclass (ShellAppSystem *system,
   if (wmclass == NULL)
     return NULL;
 
+  /* First try without changing the case (this handles
+     org.example.Foo.Bar.desktop applications)
+
+     Note that is slightly wrong in that Gtk+ would set
+     the WM_CLASS to Org.example.Foo.Bar, but it also
+     sets the instance part to org.example.Foo.Bar, so we're ok
+  */
+  desktop_file = g_strconcat (wmclass, ".desktop", NULL);
+  app = shell_app_system_lookup_heuristic_basename (system, desktop_file);
+  g_free (desktop_file);
+
+  if (app)
+    return app;
+
   canonicalized = g_ascii_strdown (wmclass, -1);
 
   /* This handles "Fedora Eclipse", probably others.
@@ -345,6 +360,7 @@ _shell_app_system_notify_app_state_changed (ShellAppSystem *self,
                                           g_variant_new ("s", app_address), 
                                           g_variant_new ("s", app_info_id));
       }
+    case SHELL_APP_STATE_BUSY:
       g_hash_table_insert (self->priv->running_apps, g_object_ref (app), NULL);
       break;
     case SHELL_APP_STATE_STARTING:

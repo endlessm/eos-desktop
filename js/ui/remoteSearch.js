@@ -160,16 +160,32 @@ function loadRemoteSearchProviders(addProviderCallback) {
         let idxA, idxB;
         let appIdA, appIdB;
 
-        appIdA = providerA.app.get_id();
-        appIdB = providerB.app.get_id();
+        appIdA = providerA.appInfo.get_id();
+        appIdB = providerB.appInfo.get_id();
 
         idxA = sortOrder.indexOf(appIdA);
         idxB = sortOrder.indexOf(appIdB);
 
         // if no provider is found in the order, use alphabetical order
         if ((idxA == -1) && (idxB == -1)) {
-            let nameA = providerA.app.get_name();
-            let nameB = providerB.app.get_name();
+            let nameA = providerA.appInfo.get_name();
+            let nameB = providerB.appInfo.get_name();
+
+            return GLib.utf8_collate(nameA, nameB);
+        }
+||||||| merged common ancestors
+            // if no provider is found in the order, use alphabetical order
+            if ((idxA == -1) && (idxB == -1)) {
+                let nameA = providerA.appInfo.get_name();
+                let nameB = providerB.appInfo.get_name();
+
+                return GLib.utf8_collate(nameA, nameB);
+            }
+
+        // if no provider is found in the order, use alphabetical order
+        if ((idxA == -1) && (idxB == -1)) {
+            let nameA = providerA.appInfo.get_name();
+            let nameB = providerB.appInfo.get_name();
 
             return GLib.utf8_collate(nameA, nameB);
         }
@@ -213,7 +229,9 @@ const RemoteSearchProvider = new Lang.Class({
     },
 
     createIcon: function(size, meta) {
-        let gicon;
+        let gicon = null;
+        let icon = null;
+
         if (meta['icon']) {
             gicon = Gio.icon_deserialize(meta['icon']);
         } else if (meta['gicon']) {
@@ -225,33 +243,52 @@ const RemoteSearchProvider = new Lang.Class({
                                                        bitsPerSample, width, height, rowStride);
         }
 
-        return new St.Icon({ gicon: gicon,
-                             icon_size: size });
+        if (gicon)
+            icon = new St.Icon({ gicon: gicon,
+                                 icon_size: size });
+        return icon;
+    },
+
+    filterResults: function(results, maxNumber) {
+        if (results.length <= maxNumber)
+            return results;
+
+        let regularResults = results.filter(function(r) { return !r.startsWith('special:'); });
+        let specialResults = results.filter(function(r) { return r.startsWith('special:'); });
+
+        return regularResults.slice(0, maxNumber).concat(specialResults.slice(0, maxNumber));
     },
 
     _getResultsFinished: function(results, error) {
-        if (error) {
-            if (!error.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                log('Received error from DBus search provider %s: %s'.format(this.id, String(error)));
-        } else {
-            this.searchSystem.setResults(this, results[0]);
-        }
+        if (error)
+            return;
+        this.searchSystem.setResults(this, results[0]);
     },
 
     getInitialResultSet: function(terms) {
         this._cancellable.cancel();
         this._cancellable.reset();
-        this.proxy.GetInitialResultSetRemote(terms,
-                                             Lang.bind(this, this._getResultsFinished),
-                                             this._cancellable);
+        try {
+            this.proxy.GetInitialResultSetRemote(terms,
+                                                 Lang.bind(this, this._getResultsFinished),
+                                                 this._cancellable);
+        } catch(e) {
+            log('Error calling GetInitialResultSet for provider %s: %s'.format(this.id, e.toString()));
+            this.searchSystem.setResults(this, []);
+        }
     },
 
     getSubsearchResultSet: function(previousResults, newTerms) {
         this._cancellable.cancel();
         this._cancellable.reset();
-        this.proxy.GetSubsearchResultSetRemote(previousResults, newTerms,
-                                               Lang.bind(this, this._getResultsFinished),
-                                               this._cancellable);
+        try {
+            this.proxy.GetSubsearchResultSetRemote(previousResults, newTerms,
+                                                   Lang.bind(this, this._getResultsFinished),
+                                                   this._cancellable);
+        } catch(e) {
+            log('Error calling GetSubsearchResultSet for provider %s: %s'.format(this.id, e.toString()));
+            this.searchSystem.setResults(this, []);
+        }
     },
 
     _getResultMetasFinished: function(results, error, callback) {

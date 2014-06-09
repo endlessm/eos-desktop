@@ -9,6 +9,7 @@ const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
+const Gettext = imports.gettext;
 
 try {
     var IBus = imports.gi.IBus;
@@ -33,6 +34,32 @@ const KEY_INPUT_SOURCES = 'sources';
 const INPUT_SOURCE_TYPE_XKB = 'xkb';
 const INPUT_SOURCE_TYPE_IBUS = 'ibus';
 
+// This is the longest we'll keep the keyboard frozen until an input
+// source is active.
+const MAX_INPUT_SOURCE_ACTIVATION_TIME = 4000; // ms
+
+const BUS_NAME = 'org.gnome.SettingsDaemon.Keyboard';
+const OBJECT_PATH = '/org/gnome/SettingsDaemon/Keyboard';
+
+const KeyboardManagerInterface = <interface name="org.gnome.SettingsDaemon.Keyboard">
+<method name="SetInputSource">
+    <arg type="u" direction="in" />
+</method>
+</interface>;
+
+const KeyboardManagerProxy = Gio.DBusProxy.makeProxyWrapper(KeyboardManagerInterface);
+
+function releaseKeyboard() {
+    if (Main.modalCount > 0)
+        global.display.unfreeze_keyboard(global.get_current_time());
+    else
+        global.display.ungrab_keyboard(global.get_current_time());
+}
+
+function holdKeyboard() {
+    global.freeze_keyboard(global.get_current_time());
+}
+
 const IBusManager = new Lang.Class({
     Name: 'IBusManager',
 
@@ -45,26 +72,24 @@ const IBusManager = new Lang.Class({
         this._readyCallback = readyCallback;
         this._candidatePopup = new IBusCandidatePopup.CandidatePopup();
 
-        this._ibus = null;
         this._panelService = null;
         this._engines = {};
         this._ready = false;
         this._registerPropertiesId = 0;
         this._currentEngineName = null;
 
-        this._nameWatcherId = Gio.DBus.session.watch_name(IBus.SERVICE_IBUS,
-                                                          Gio.BusNameWatcherFlags.NONE,
-                                                          Lang.bind(this, this._onNameAppeared),
-                                                          Lang.bind(this, this._clear));
+        this._ibus = IBus.Bus.new_async();
+        this._ibus.connect('connected', Lang.bind(this, this._onConnected));
+        this._ibus.connect('disconnected', Lang.bind(this, this._clear));
+        // Need to set this to get 'global-engine-changed' emitions
+        this._ibus.set_watch_ibus_signal(true);
+        this._ibus.connect('global-engine-changed', Lang.bind(this, this._engineChanged));
     },
 
     _clear: function() {
         if (this._panelService)
             this._panelService.destroy();
-        if (this._ibus)
-            this._ibus.destroy();
 
-        this._ibus = null;
         this._panelService = null;
         this._candidatePopup.setPanelService(null);
         this._engines = {};
@@ -76,18 +101,12 @@ const IBusManager = new Lang.Class({
             this._readyCallback(false);
     },
 
-    _onNameAppeared: function() {
-        this._ibus = IBus.Bus.new_async();
-        this._ibus.connect('connected', Lang.bind(this, this._onConnected));
-    },
-
     _onConnected: function() {
         this._ibus.list_engines_async(-1, null, Lang.bind(this, this._initEngines));
         this._ibus.request_name_async(IBus.SERVICE_PANEL,
                                       IBus.BusNameFlag.REPLACE_EXISTING,
                                       -1, null,
                                       Lang.bind(this, this._initPanelService));
-        this._ibus.connect('disconnected', Lang.bind(this, this._clear));
     },
 
     _initEngines: function(ibus, result) {
@@ -109,9 +128,6 @@ const IBusManager = new Lang.Class({
             this._panelService = new IBus.PanelService({ connection: this._ibus.get_connection(),
                                                          object_path: IBus.PATH_PANEL });
             this._candidatePopup.setPanelService(this._panelService);
-            // Need to set this to get 'global-engine-changed' emitions
-            this._ibus.set_watch_ibus_signal(true);
-            this._ibus.connect('global-engine-changed', Lang.bind(this, this._engineChanged));
             this._panelService.connect('update-property', Lang.bind(this, this._updateProperty));
             // If an engine is already active we need to get its properties
             this._ibus.get_global_engine_async(-1, null, Lang.bind(this, function(i, result) {
@@ -140,6 +156,9 @@ const IBusManager = new Lang.Class({
     },
 
     _engineChanged: function(bus, engineName) {
+        if (!this._ready)
+            return;
+
         this._currentEngineName = engineName;
 
         if (this._registerPropertiesId != 0)
@@ -183,8 +202,8 @@ const LayoutMenuItem = new Lang.Class({
 
         this.label = new St.Label({ text: displayName });
         this.indicator = new St.Label({ text: shortName });
-        this.addActor(this.label);
-        this.addActor(this.indicator);
+        this.actor.add(this.label, { expand: true });
+        this.actor.add(this.indicator);
         this.actor.label_actor = this.label;
     }
 });
@@ -317,7 +336,12 @@ const InputSourceIndicator = new Lang.Class({
         this._container.connect('get-preferred-width', Lang.bind(this, this._containerGetPreferredWidth));
         this._container.connect('get-preferred-height', Lang.bind(this, this._containerGetPreferredHeight));
         this._container.connect('allocate', Lang.bind(this, this._containerAllocate));
-        this.actor.add_actor(this._container);
+
+        this._hbox = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
+        this._hbox.add_child(this._container);
+        this._hbox.add_child(PopupMenu.unicodeArrow(St.Side.BOTTOM));
+
+        this.actor.add_child(this._hbox);
         this.actor.add_style_class_name('panel-status-button');
 
         // All valid input sources currently in the gsettings
@@ -337,14 +361,14 @@ const InputSourceIndicator = new Lang.Class({
             Main.wm.addKeybinding('switch-input-source',
                                   new Gio.Settings({ schema: "org.gnome.desktop.wm.keybindings" }),
                                   Meta.KeyBindingFlags.REVERSES,
-                                  Shell.KeyBindingMode.ALL & ~Shell.KeyBindingMode.MESSAGE_TRAY,
+                                  Shell.KeyBindingMode.ALL,
                                   Lang.bind(this, this._switchInputSource));
         this._keybindingActionBackward =
             Main.wm.addKeybinding('switch-input-source-backward',
                                   new Gio.Settings({ schema: "org.gnome.desktop.wm.keybindings" }),
                                   Meta.KeyBindingFlags.REVERSES |
                                   Meta.KeyBindingFlags.REVERSED,
-                                  Shell.KeyBindingMode.ALL & ~Shell.KeyBindingMode.MESSAGE_TRAY,
+                                  Shell.KeyBindingMode.ALL,
                                   Lang.bind(this, this._switchInputSource));
         this._settings = new Gio.Settings({ schema: DESKTOP_INPUT_SOURCES_SCHEMA });
         this._settings.connect('changed::' + KEY_CURRENT_INPUT_SOURCE, Lang.bind(this, this._currentInputSourceChanged));
@@ -364,13 +388,20 @@ const InputSourceIndicator = new Lang.Class({
         this._ibusManager.connect('property-updated', Lang.bind(this, this._ibusPropertyUpdated));
         this._inputSourcesChanged();
 
+        this._keyboardManager = new KeyboardManagerProxy(Gio.DBus.session, BUS_NAME, OBJECT_PATH,
+                                                         function(proxy, error) {
+                                                             if (error)
+                                                                 log(error.message);
+                                                         });
+        this._keyboardManager.g_default_timeout = MAX_INPUT_SOURCE_ACTIVATION_TIME;
+
+        global.display.connect('modifiers-accelerator-activated', Lang.bind(this, this._modifiersSwitcher));
+
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         this._showLayoutItem = this.menu.addAction(_("Show Keyboard Layout"), Lang.bind(this, this._showLayout));
 
         Main.sessionMode.connect('updated', Lang.bind(this, this._sessionUpdated));
         this._sessionUpdated();
-
-        this.menu.addSettingsAction(_("Region & Language Settings"), 'gnome-region-panel.desktop');
 
         this._sourcesPerWindow = false;
         this._focusWindowNotifyId = 0;
@@ -397,9 +428,42 @@ const InputSourceIndicator = new Lang.Class({
         this._inputSourcesChanged();
     },
 
+    _modifiersSwitcher: function() {
+        let sourceIndexes = Object.keys(this._inputSources);
+        if (sourceIndexes.length == 0) {
+            releaseKeyboard();
+            return true;
+        }
+
+        let is = this._currentSource;
+        if (!is)
+            is = this._inputSources[sourceIndexes[0]];
+
+        let nextIndex = is.index + 1;
+        if (nextIndex > sourceIndexes[sourceIndexes.length - 1])
+            nextIndex = 0;
+
+        while (!(is = this._inputSources[nextIndex]))
+            nextIndex += 1;
+
+        is.activate();
+        return true;
+    },
+
     _switchInputSource: function(display, screen, window, binding) {
         if (this._mruSources.length < 2)
             return;
+
+        // HACK: Fall back on simple input source switching since we
+        // can't show a popup switcher while a GrabHelper grab is in
+        // effect without considerable work to consolidate the usage
+        // of pushModal/popModal and grabHelper. See
+        // https://bugzilla.gnome.org/show_bug.cgi?id=695143 .
+        if (Main.keybindingMode == Shell.KeyBindingMode.MESSAGE_TRAY ||
+            Main.keybindingMode == Shell.KeyBindingMode.TOPBAR_POPUP) {
+            this._modifiersSwitcher();
+            return;
+        }
 
         let popup = new InputSourcePopup(this._mruSources, this._keybindingAction, this._keybindingActionBackward);
         let modifiers = binding.get_modifiers();
@@ -417,7 +481,7 @@ const InputSourceIndicator = new Lang.Class({
         [oldSource, this._currentSource] = [this._currentSource, newSource];
 
         if (oldSource) {
-            oldSource.menuItem.setShowDot(false);
+            oldSource.menuItem.setOrnament(PopupMenu.Ornament.NONE);
             oldSource.indicatorLabel.hide();
         }
 
@@ -435,7 +499,7 @@ const InputSourceIndicator = new Lang.Class({
 
         this.actor.show();
 
-        newSource.menuItem.setShowDot(true);
+        newSource.menuItem.setOrnament(PopupMenu.Ornament.DOT);
         newSource.indicatorLabel.show();
 
         this._buildPropSection(newSource.properties);
@@ -459,6 +523,7 @@ const InputSourceIndicator = new Lang.Class({
 
         this._inputSources = {};
         this._ibusSources = {};
+        this._currentSource = null;
 
         let inputSourcesByShortName = {};
 
@@ -475,8 +540,12 @@ const InputSourceIndicator = new Lang.Class({
                 let engineDesc = this._ibusManager.getEngineDesc(id);
                 if (engineDesc) {
                     let language = IBus.get_language_name(engineDesc.get_language());
+                    let longName = engineDesc.get_longname();
+                    let textdomain = engineDesc.get_textdomain();
+                    if (textdomain != '')
+                        longName = Gettext.dgettext(textdomain, longName);
                     exists = true;
-                    displayName = language + ' (' + engineDesc.get_longname() + ')';
+                    displayName = '%s (%s)'.format(language, longName);
                     shortName = this._makeEngineShortName(engineDesc);
                 }
             }
@@ -487,10 +556,8 @@ const InputSourceIndicator = new Lang.Class({
             let is = new InputSource(type, id, displayName, shortName, i);
 
             is.connect('activate', Lang.bind(this, function() {
-                if (this._currentSource && this._currentSource.index == is.index)
-                    return;
-                this._settings.set_value(KEY_CURRENT_INPUT_SOURCE,
-                                         GLib.Variant.new_uint32(is.index));
+                holdKeyboard();
+                this._keyboardManager.SetInputSourceRemote(is.index, releaseKeyboard);
             }));
 
             if (!(is.shortName in inputSourcesByShortName))
@@ -660,7 +727,8 @@ const InputSourceIndicator = new Lang.Class({
                 item.prop = prop;
                 radioGroup.push(item);
                 item.radioGroup = radioGroup;
-                item.setShowDot(prop.get_state() == IBus.PropState.CHECKED);
+                item.setOrnament(prop.get_state() == IBus.PropState.CHECKED ?
+                                 PopupMenu.Ornament.DOT : PopupMenu.Ornament.NONE);
                 item.connect('activate', Lang.bind(this, function() {
                     if (item.prop.get_state() == IBus.PropState.CHECKED)
                         return;
@@ -668,12 +736,12 @@ const InputSourceIndicator = new Lang.Class({
                     let group = item.radioGroup;
                     for (let i = 0; i < group.length; ++i) {
                         if (group[i] == item) {
-                            item.setShowDot(true);
+                            item.setOrnament(PopupMenu.Ornament.DOT);
                             item.prop.set_state(IBus.PropState.CHECKED);
                             this._ibusManager.activateProperty(item.prop.get_key(),
                                                                IBus.PropState.CHECKED);
                         } else {
-                            group[i].setShowDot(false);
+                            group[i].setOrnament(PopupMenu.Ornament.NONE);
                             group[i].prop.set_state(IBus.PropState.UNCHECKED);
                             this._ibusManager.activateProperty(group[i].prop.get_key(),
                                                                IBus.PropState.UNCHECKED);
@@ -837,7 +905,7 @@ const InputSourceIndicator = new Lang.Class({
 
         for (let i in this._inputSources) {
             let is = this._inputSources[i];
-            is.indicatorLabel.allocate_align_fill(box, 0.5, 0, false, false, flags);
+            is.indicatorLabel.allocate_align_fill(box, 0.5, 0.5, false, false, flags);
         }
     }
 });

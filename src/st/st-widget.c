@@ -459,7 +459,7 @@ st_widget_allocate (ClutterActor          *actor,
  * @widget: The #StWidget
  *
  * Paint the background of the widget. This is meant to be called by
- * subclasses of StWiget that need to paint the background without
+ * subclasses of StWidget that need to paint the background without
  * painting children.
  */
 void
@@ -650,8 +650,9 @@ st_widget_get_theme_node (StWidget *widget)
 
       if (stage == NULL)
         {
-          g_error ("st_widget_get_theme_node called on the widget %s which is not in the stage.",
-                    st_describe_actor (CLUTTER_ACTOR (widget)));
+          g_critical ("st_widget_get_theme_node called on the widget %s which is not in the stage.",
+                      st_describe_actor (CLUTTER_ACTOR (widget)));
+          return g_object_new (ST_TYPE_THEME_NODE, NULL);
         }
 
       if (parent_node == NULL)
@@ -782,7 +783,7 @@ st_widget_key_press_event (ClutterActor    *actor,
       (event->keyval == CLUTTER_KEY_F10 &&
        (event->modifier_state & CLUTTER_SHIFT_MASK)))
     {
-      g_signal_emit (actor, signals[POPUP_MENU], 0);
+      st_widget_popup_menu (ST_WIDGET (actor));
       return TRUE;
     }
 
@@ -1840,6 +1841,18 @@ st_widget_get_can_focus (StWidget *widget)
   return widget->priv->can_focus;
 }
 
+/**
+ * st_widget_popup_menu:
+ * @self: A #StWidget
+ *
+ * Asks the widget to pop-up a context menu.
+ */
+void
+st_widget_popup_menu (StWidget *self)
+{
+  g_signal_emit (self, signals[POPUP_MENU], 0);
+}
+
 /* filter @children to contain only only actors that overlap @rbox
  * when moving in @direction. (Assuming no transformations.)
  */
@@ -2571,6 +2584,43 @@ st_widget_get_accessible (ClutterActor *actor)
   return widget->priv->accessible;
 }
 
+/**
+ * st_widget_set_accessible:
+ * @widget: A #StWidget
+ * @accessible: an accessible (#AtkObject)
+ *
+ * This method allows to set a customly created accessible object to
+ * this widget. For example if you define a new subclass of
+ * #StWidgetAccessible at the javascript code.
+ *
+ * NULL is a valid value for @accessible. That contemplates the
+ * hypothetical case of not needing anymore a custom accessible object
+ * for the widget. Next call of st_widget_get_accessible() would
+ * create and return a default accessible.
+ *
+ * It assumes that the call to atk_object_initialize that bound the
+ * gobject with the custom accessible object was already called, so
+ * not a responsibility of this method.
+ *
+ */
+void
+st_widget_set_accessible (StWidget    *widget,
+                          AtkObject   *accessible)
+{
+  g_return_if_fail (ST_IS_WIDGET (widget));
+
+  if (widget->priv->accessible != accessible)
+    {
+      if (widget->priv->accessible)
+        g_object_unref (widget->priv->accessible);
+
+      if (accessible)
+        widget->priv->accessible =  g_object_ref (accessible);
+      else
+        widget->priv->accessible = NULL;
+    }
+}
+
 static const gchar *
 st_widget_accessible_get_name (AtkObject *obj)
 {
@@ -2873,4 +2923,64 @@ GList *
 st_widget_get_focus_chain (StWidget *widget)
 {
   return ST_WIDGET_GET_CLASS (widget)->get_focus_chain (widget);
+}
+
+/**
+ * st_get_align_factors:
+ * @x_align: an #StAlign
+ * @y_align: an #StAlign
+ * @x_align_out: (out) (allow-none): @x_align as a #gdouble
+ * @y_align_out: (out) (allow-none): @y_align as a #gdouble
+ *
+ * Converts @x_align and @y_align to #gdouble values.
+ */
+void
+st_get_align_factors (StAlign   x_align,
+                      StAlign   y_align,
+                      gdouble  *x_align_out,
+                      gdouble  *y_align_out)
+{
+  if (x_align_out)
+    {
+      switch (x_align)
+        {
+        case ST_ALIGN_START:
+          *x_align_out = 0.0;
+          break;
+
+        case ST_ALIGN_MIDDLE:
+          *x_align_out = 0.5;
+          break;
+
+        case ST_ALIGN_END:
+          *x_align_out = 1.0;
+          break;
+
+        default:
+          g_warn_if_reached ();
+          break;
+        }
+    }
+
+  if (y_align_out)
+    {
+      switch (y_align)
+        {
+        case ST_ALIGN_START:
+          *y_align_out = 0.0;
+          break;
+
+        case ST_ALIGN_MIDDLE:
+          *y_align_out = 0.5;
+          break;
+
+        case ST_ALIGN_END:
+          *y_align_out = 1.0;
+          break;
+
+        default:
+          g_warn_if_reached ();
+          break;
+        }
+    }
 }

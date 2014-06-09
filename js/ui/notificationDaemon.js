@@ -108,126 +108,6 @@ const STANDARD_TRAY_ICON_IMPLEMENTATIONS = {
     'ibus-ui-gtk': 'keyboard'
 };
 
-const NotificationGenericPolicy = new Lang.Class({
-    Name: 'NotificationGenericPolicy',
-    Extends: MessageTray.NotificationPolicy,
-
-    _init: function() {
-        // Don't chain to parent, it would try setting
-        // our properties to the defaults
-
-        this.id = 'generic';
-
-        this._masterSettings = new Gio.Settings({ schema: 'org.gnome.desktop.notifications' });
-        this._masterSettings.connect('changed', Lang.bind(this, this._changed));
-    },
-
-    store: function() { },
-
-    destroy: function() {
-        this._masterSettings.run_dispose();
-    },
-
-    _changed: function(settings, key) {
-        this.emit('policy-changed', key);
-    },
-
-    get enable() {
-        return true;
-    },
-
-    get enableSound() {
-        return true;
-    },
-
-    get showBanners() {
-        return this._masterSettings.get_boolean('show-banners');
-    },
-
-    get forceExpanded() {
-        return false;
-    },
-
-    get showInLockScreen() {
-        return this._masterSettings.get_boolean('show-in-lock-screen');
-    },
-
-    get detailsInLockScreen() {
-        return false;
-    }
-});
-
-const NotificationApplicationPolicy = new Lang.Class({
-    Name: 'NotificationApplicationPolicy',
-    Extends: MessageTray.NotificationPolicy,
-
-    _init: function(id) {
-        // Don't chain to parent, it would try setting
-        // our properties to the defaults
-
-        this.id = id;
-        this._canonicalId = this._canonicalizeId(id)
-
-        this._masterSettings = new Gio.Settings({ schema: 'org.gnome.desktop.notifications' });
-        this._settings = new Gio.Settings({ schema: 'org.gnome.desktop.notifications.application',
-                                            path: '/org/gnome/desktop/notifications/application/' + this._canonicalId + '/' });
-
-        this._masterSettings.connect('changed', Lang.bind(this, this._changed));
-        this._settings.connect('changed', Lang.bind(this, this._changed));
-    },
-
-    store: function() {
-        this._settings.set_string('application-id', this.id + '.desktop');
-
-        let apps = this._masterSettings.get_strv('application-children');
-        if (apps.indexOf(this._canonicalId) < 0) {
-            apps.push(this._canonicalId);
-            this._masterSettings.set_strv('application-children', apps);
-        }
-    },
-
-    destroy: function() {
-        this._masterSettings.run_dispose();
-        this._settings.run_dispose();
-    },
-
-    _changed: function(settings, key) {
-        this.emit('policy-changed', key);
-    },
-
-    _canonicalizeId: function(id) {
-        // Keys are restricted to lowercase alphanumeric characters and dash,
-        // and two dashes cannot be in succession
-        return id.toLowerCase().replace(/[^a-z0-9\-]/g, '-').replace(/--+/g, '-');
-    },
-
-    get enable() {
-        return this._settings.get_boolean('enable');
-    },
-
-    get enableSound() {
-        return this._settings.get_boolean('enable-sound-alerts');
-    },
-
-    get showBanners() {
-        return this._masterSettings.get_boolean('show-banners') &&
-            this._settings.get_boolean('show-banners');
-    },
-
-    get forceExpanded() {
-        return this._settings.get_boolean('force-expanded');
-    },
-
-    get showInLockScreen() {
-        return this._masterSettings.get_boolean('show-in-lock-screen') &&
-            this._settings.get_boolean('show-in-lock-screen');
-    },
-
-    get detailsInLockScreen() {
-        return this._settings.get_boolean('details-in-lock-screen');
-    }
-});
-
 const NotificationDaemon = new Lang.Class({
     Name: 'NotificationDaemon',
 
@@ -401,12 +281,13 @@ const NotificationDaemon = new Lang.Class({
         if (!hints['image-path'] && hints['image_path'])
             hints['image-path'] = hints['image_path']; // version 1.1 of the spec
 
-        if (!hints['image-data'])
+        if (!hints['image-data']) {
             if (hints['image_data'])
                 hints['image-data'] = hints['image_data']; // version 1.1 of the spec
             else if (hints['icon_data'] && !hints['image-path'])
                 // early versions of the spec; 'icon_data' should only be used if 'image-path' is not available
                 hints['image-data'] = hints['icon_data'];
+        }
 
         let ndata = { appName: appName,
                       icon: icon,
@@ -679,9 +560,9 @@ const Source = new Lang.Class({
     _createPolicy: function() {
         if (this.app) {
             let id = this.app.get_id().replace(/\.desktop$/,'');
-            return new NotificationApplicationPolicy(id);
+            return new MessageTray.NotificationApplicationPolicy(id);
         } else {
-            return new NotificationGenericPolicy();
+            return new MessageTray.NotificationGenericPolicy();
         }
     },
 
@@ -723,8 +604,8 @@ const Source = new Lang.Class({
             return false;
         }
 
-        let id = global.connect('notify::stage-input-mode', Lang.bind(this, function () {
-            global.disconnect(id);
+        let id = global.stage.connect('deactivate', Lang.bind(this, function () {
+            global.stage.disconnect(id);
             this.trayIcon.click(event);
         }));
 
@@ -740,6 +621,10 @@ const Source = new Lang.Class({
             return app;
 
         if (this.trayIcon) {
+            app = Shell.AppSystem.get_default().lookup_startup_wmclass(this.trayIcon.wm_class);
+            if (app != null)
+                return app;
+
             app = Shell.AppSystem.get_default().lookup_desktop_wmclass(this.trayIcon.wm_class);
             if (app != null)
                 return app;
@@ -754,22 +639,6 @@ const Source = new Lang.Class({
         return null;
     },
 
-    _setApp: function(appId) {
-        if (this.app)
-            return;
-
-        this.app = this._getApp(appId);
-        if (!this.app)
-            return;
-
-        // Only override the icon if we were previously using
-        // notification-based icons (ie, not a trayicon) or if it was unset before
-        if (!this.trayIcon) {
-            this.useNotificationIcon = false;
-            this.iconUpdated();
-        }
-    },
-
     setTitle: function(title) {
         // Do nothing if .app is set, we don't want to override the
         // app name with whatever is provided through libnotify (usually
@@ -781,8 +650,8 @@ const Source = new Lang.Class({
     },
 
     open: function(notification) {
-        this.destroyNonResidentNotifications();
         this.openApp();
+        this.destroyNonResidentNotifications();
     },
 
     _lastNotificationRemoved: function() {
@@ -794,11 +663,8 @@ const Source = new Lang.Class({
         if (this.app == null)
             return;
 
-        let windows = this.app.get_windows();
-        if (windows.length > 0) {
-            let mostRecentWindow = windows[0];
-            Main.activateWindow(mostRecentWindow);
-        }
+        this.app.activate();
+        Main.overview.hide();
     },
 
     destroy: function() {

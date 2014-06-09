@@ -1,8 +1,10 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
+const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
+const St = imports.gi.St;
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -18,25 +20,36 @@ const KEY_MOUSE_KEYS_ENABLED  = 'mousekeys-enable';
 
 const APPLICATIONS_SCHEMA = 'org.gnome.desktop.a11y.applications';
 
-const DPI_FACTOR_LARGE   = 1.25;
 
-const WM_SCHEMA            = 'org.gnome.desktop.wm.preferences';
-const KEY_VISUAL_BELL      = 'visual-bell';
+const DPI_FACTOR_LARGE              = 1.25;
 
-const DESKTOP_INTERFACE_SCHEMA = 'org.gnome.desktop.interface';
-const KEY_GTK_THEME      = 'gtk-theme';
-const KEY_ICON_THEME     = 'icon-theme';
-const KEY_WM_THEME       = 'theme';
-const KEY_TEXT_SCALING_FACTOR = 'text-scaling-factor';
+const WM_SCHEMA                     = 'org.gnome.desktop.wm.preferences';
+const KEY_VISUAL_BELL               = 'visual-bell';
 
-const HIGH_CONTRAST_THEME = 'HighContrast';
+const DESKTOP_INTERFACE_SCHEMA      = 'org.gnome.desktop.interface';
+const KEY_GTK_THEME                 = 'gtk-theme';
+const KEY_ICON_THEME                = 'icon-theme';
+const KEY_WM_THEME                  = 'theme';
+const KEY_TEXT_SCALING_FACTOR       = 'text-scaling-factor';
+
+const HIGH_CONTRAST_THEME           = 'HighContrast';
 
 const ATIndicator = new Lang.Class({
     Name: 'ATIndicator',
-    Extends: PanelMenu.SystemStatusButton,
+    Extends: PanelMenu.Button,
 
     _init: function() {
-        this.parent('preferences-desktop-accessibility-symbolic', _("Accessibility"));
+        this.parent(0.0, _("Accessibility"));
+
+        this._hbox = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
+        this._hbox.add_child(new St.Icon({ style_class: 'system-status-icon',
+                                           icon_name: 'preferences-desktop-accessibility-symbolic' }));
+        this._hbox.add_child(PopupMenu.unicodeArrow(St.Side.BOTTOM));
+
+        this.actor.add_child(this._hbox);
+
+        this._a11ySettings = new Gio.Settings({ schema: A11Y_SCHEMA });
+        this._a11ySettings.connect('changed::' + KEY_ALWAYS_SHOW, Lang.bind(this, this._queueSyncMenuVisibility));
 
         this._a11ySettings = new Gio.Settings({ schema: A11Y_SCHEMA });
         this._a11ySettings.connect('changed::' + KEY_ALWAYS_SHOW, Lang.bind(this, this._queueSyncMenuVisibility));
@@ -73,9 +86,6 @@ const ATIndicator = new Lang.Class({
 
         let mouseKeys = this._buildItem(_("Mouse Keys"), A11Y_KEYBOARD_SCHEMA, KEY_MOUSE_KEYS_ENABLED);
         this.menu.addMenuItem(mouseKeys);
-
-        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        this.menu.addSettingsAction(_("Universal Access Settings"), 'gnome-universal-access-panel.desktop');
 
         this._syncMenuVisibility();
     },

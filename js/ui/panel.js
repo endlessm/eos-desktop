@@ -1,5 +1,6 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
+const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
@@ -14,6 +15,7 @@ const Signals = imports.signals;
 const Atk = imports.gi.Atk;
 
 
+const Animation = imports.ui.animation;
 const BoxPointer = imports.ui.boxpointer;
 const Config = imports.misc.config;
 const CtrlAltTab = imports.ui.ctrlAltTab;
@@ -21,6 +23,7 @@ const DND = imports.ui.dnd;
 const Overview = imports.ui.overview;
 const PopupMenu = imports.ui.popupMenu;
 const PanelMenu = imports.ui.panelMenu;
+const RemoteMenu = imports.ui.remoteMenu;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
 
@@ -28,163 +31,7 @@ const PANEL_ICON_SIZE = 24;
 
 const BUTTON_DND_ACTIVATION_TIMEOUT = 250;
 
-const ANIMATED_ICON_UPDATE_TIMEOUT = 100;
 const SPINNER_ANIMATION_TIME = 0.2;
-
-const Animation = new Lang.Class({
-    Name: 'Animation',
-
-    _init: function(filename, width, height, speed, skipEndFrames) {
-        this.actor = new St.Bin({ width: width, height: height });
-        this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
-
-        this._speed = speed;
-        this._skipEndFrames = skipEndFrames;
-
-        this._isLoaded = false;
-        this._isPlaying = false;
-        this._timeoutId = 0;
-        this._frame = 0;
-        this._frames = null;
-
-        St.TextureCache.get_default().load_sliced_image_async(filename, width, height,
-                                                              Lang.bind(this, this._animationsLoaded));
-    },
-
-    play: function() {
-        if (this._isLoaded && this._timeoutId == 0) {
-            if (this._frame == 0)
-                this._showFrame(0);
-
-            this._setTimeoutSource();
-        }
-
-        this._isPlaying = true;
-    },
-
-    stop: function() {
-        this._clearTimeoutSource();
-        this._isPlaying = false;
-    },
-
-    _clearTimeoutSource: function() {
-        if (this._timeoutId > 0) {
-            Mainloop.source_remove(this._timeoutId);
-            this._timeoutId = 0;
-        }
-    },
-
-    _setTimeoutSource: function() {
-        this._timeoutId = Mainloop.timeout_add(this._speed * St.get_slow_down_factor(),
-                                               Lang.bind(this, this._update));
-    },
-
-    _showFrame: function(frame) {
-        this._frame = (frame % this._frames.length);
-        let newFrame = this._frames[this._frame];
-        this.actor.set_content(newFrame);
-    },
-
-    _update: function() {
-        let showFrameNum = this._frame + 1;
-
-        // Skip a number of frames at the end of the sequence if desired
-        if (showFrameNum == this._frames.length - this._skipEndFrames) {
-            showFrameNum = this._frames.length;
-        }
-
-        this._showFrame(showFrameNum);
-        return true;
-    },
-
-    _animationsLoaded: function(cache, res) {
-        try {
-            this._frames = cache.load_sliced_image_finish(res);
-        } catch (e) {
-            logError(e, ' Unable to load sliced image for animation');
-            return;
-        }
-
-        this._isLoaded = true;
-
-        if (this._isPlaying)
-            this.play();
-    },
-
-    _onDestroy: function() {
-        this.stop();
-    }
-});
-
-const VariableSpeedAnimation = new Lang.Class({
-    Name: 'VariableSpeedAnimation',
-    Extends: Animation,
-
-    _init: function(name, size, initialTimeout, skipEndFrames) {
-        this.parent(global.datadir + '/theme/' + name, size, size,
-                    initialTimeout, skipEndFrames);
-    },
-
-    _updateSpeed: function(newSpeed) {
-        if (newSpeed == this._speed) {
-            return;
-        }
-
-        this._clearTimeoutSource();
-        this._speed = newSpeed;
-        this._setTimeoutSource();
-    },
-
-    completeInTime: function(time, callback) {
-        // Note: the skipEndFrames does not apply to the final steps
-        // in the sequence once this method is called
-        let frameTime = Math.floor(time / (this._frames.length - this._frame));
-        this._updateSpeed(frameTime);
-
-        this._completeCallback = callback;
-        this._completeTimeGoal = time;
-        this._completeStartTime = GLib.get_monotonic_time();
-        this._completeStartFrame = this._frame;
-    },
-
-    _update: function() {
-        if (!this._completeCallback) {
-            return this.parent();
-        }
-
-        if (this._frame == (this._frames.length - 1)) {
-            // we finished
-            this.stop();
-
-            this._completeCallback();
-            this._completeCallback = null;
-
-            return false;
-        }
-        
-        let elapsedTime = (GLib.get_monotonic_time() - this._completeStartTime) / 1000;
-        let percentage =  Math.min(1, elapsedTime / this._completeTimeGoal);
-        let frameNum = this._completeStartFrame +
-            Math.floor((this._frames.length - this._completeStartFrame) * percentage);
-
-        if (frameNum == this._frames.length) {
-            frameNum--;
-        }
-
-        this._showFrame(frameNum);
-
-        return true;
-    }
-});
-
-const AnimatedIcon = new Lang.Class({
-    Name: 'AnimatedIcon',
-    Extends: Animation,
-
-    _init: function(name, size) {
-        this.parent(global.datadir + '/theme/' + name, size, size, ANIMATED_ICON_UPDATE_TIMEOUT, 0);
-    }
-});
 
 const TextShadower = new Lang.Class({
     Name: 'TextShadower',
@@ -270,33 +117,66 @@ const TextShadower = new Lang.Class({
     }
 });
 
+const AggregateMenu = new Lang.Class({
+    Name: 'AggregateMenu',
+    Extends: PanelMenu.Button,
+
+    _init: function() {
+        this.parent(0.0, _("Settings"), false);
+        this.menu.actor.add_style_class_name('aggregate-menu');
+
+        this._indicators = new St.BoxLayout({ style_class: 'panel-status-indicators-box' });
+        this.actor.add_child(this._indicators);
+
+        this._network = new imports.ui.status.network.NMApplet();
+        if (Config.HAVE_BLUETOOTH) {
+            this._bluetooth = new imports.ui.status.bluetooth.Indicator();
+        } else {
+            this._bluetooth = null;
+        }
+
+        this._power = new imports.ui.status.power.Indicator();
+        this._rfkill = new imports.ui.status.rfkill.Indicator();
+        this._volume = new imports.ui.status.volume.Indicator();
+        this._brightness = new imports.ui.status.brightness.Indicator();
+        this._system = new imports.ui.status.system.Indicator();
+        this._screencast = new imports.ui.status.screencast.Indicator();
+
+        this._indicators.add_child(this._screencast.indicators);
+        this._indicators.add_child(this._network.indicators);
+        if (this._bluetooth) {
+            this._indicators.add_child(this._bluetooth.indicators);
+        }
+        this._indicators.add_child(this._rfkill.indicators);
+        this._indicators.add_child(this._volume.indicators);
+        this._indicators.add_child(this._power.indicators);
+        this._indicators.add_child(PopupMenu.unicodeArrow(St.Side.BOTTOM));
+
+        this.menu.addMenuItem(this._volume.menu);
+        this.menu.addMenuItem(this._brightness.menu);
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        this.menu.addMenuItem(this._network.menu);
+        if (this._bluetooth) {
+            this.menu.addMenuItem(this._bluetooth.menu);
+        }
+        this.menu.addMenuItem(this._rfkill.menu);
+        this.menu.addMenuItem(this._power.menu);
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        this.menu.addMenuItem(this._system.menu);
+    },
+});
+
 const PANEL_ITEM_IMPLEMENTATIONS = {
     'appIcons': imports.ui.appIconBar.AppIconBar,
+    'aggregateMenu': AggregateMenu,
     'dateMenu': imports.ui.dateMenu.DateMenuButton,
     'a11y': imports.ui.status.accessibility.ATIndicator,
     'a11yGreeter': imports.ui.status.accessibility.ATGreeterIndicator,
-    'volume': imports.ui.status.volume.Indicator,
-    'battery': imports.ui.status.power.Indicator,
-    'lockScreen': imports.ui.status.lockScreenMenu.Indicator,
-    'logo': imports.gdm.loginDialog.LogoMenuButton,
     'keyboard': imports.ui.status.keyboard.InputSourceIndicator,
-    'powerMenu': imports.gdm.powerMenu.PowerMenuButton,
-    'userMenu': imports.ui.userMenu.UserMenuButton,
     'chatButton': imports.ui.status.chat.ChatButton,
     'socialBar': imports.ui.status.social.SocialBarButton,
     'panelSeparator': imports.ui.panelSeparator.PanelSeparator
 };
-
-if (Config.HAVE_BLUETOOTH)
-    PANEL_ITEM_IMPLEMENTATIONS['bluetooth'] =
-        imports.ui.status.bluetooth.Indicator;
-
-try {
-    PANEL_ITEM_IMPLEMENTATIONS['network'] =
-        imports.ui.status.network.NMApplet;
-} catch(e) {
-    log('NMApplet is not supported. It is possible that your NetworkManager version is too old');
-}
 
 const Panel = new Lang.Class({
     Name: 'Panel',
@@ -310,7 +190,7 @@ const Panel = new Lang.Class({
 
         this.statusArea = {};
 
-        this.menuManager = new PopupMenu.PopupMenuManager(this);
+        this.menuManager = new PopupMenu.PopupMenuManager(this, { keybindingMode: Shell.KeyBindingMode.TOPBAR_POPUP });
 
         this._leftBox = new St.BoxLayout({ name: 'panelLeft', x_expand: true });
         this.actor.add_actor(this._leftBox);

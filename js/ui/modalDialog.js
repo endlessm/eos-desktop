@@ -14,6 +14,7 @@ const Atk = imports.gi.Atk;
 
 const Params = imports.misc.params;
 
+const Animation = imports.ui.animation;
 const Layout = imports.ui.layout;
 const Lightbox = imports.ui.lightbox;
 const Main = imports.ui.main;
@@ -21,6 +22,10 @@ const Tweener = imports.ui.tweener;
 
 const OPEN_AND_CLOSE_TIME = 0.1;
 const FADE_OUT_DIALOG_TIME = 1.0;
+
+const WORK_SPINNER_ICON_SIZE = 24;
+const WORK_SPINNER_ANIMATION_DELAY = 1.0;
+const WORK_SPINNER_ANIMATION_TIME = 0.3;
 
 const State = {
     OPENED: 0,
@@ -38,13 +43,15 @@ const ModalDialog = new Lang.Class({
                                         styleClass: null,
                                         parentActor: Main.uiGroup,
                                         keybindingMode: Shell.KeyBindingMode.SYSTEM_MODAL,
-                                        shouldFadeIn: true });
+                                        shouldFadeIn: true,
+                                        destroyOnClose: true });
 
         this.state = State.CLOSED;
         this._hasModal = false;
         this._keybindingMode = params.keybindingMode;
         this._shellReactive = params.shellReactive;
         this._shouldFadeIn = params.shouldFadeIn;
+        this._destroyOnClose = params.destroyOnClose;
 
         this._group = new St.Widget({ visible: false,
                                       x: 0,
@@ -63,36 +70,38 @@ const ModalDialog = new Lang.Class({
         this._group.connect('key-press-event', Lang.bind(this, this._onKeyPressEvent));
         this._group.connect('key-release-event', Lang.bind(this, this._onKeyReleaseEvent));
 
-        this._backgroundBin = new St.Bin();
+        this.backgroundStack = new St.Widget({ layout_manager: new Clutter.BinLayout() });
+        this._backgroundBin = new St.Bin({ child: this.backgroundStack,
+                                           x_fill: true, y_fill: true });
         this._monitorConstraint = new Layout.MonitorConstraint();
         this._backgroundBin.add_constraint(this._monitorConstraint);
         this._group.add_actor(this._backgroundBin);
 
         this.dialogLayout = new St.BoxLayout({ style_class: 'modal-dialog',
                                                vertical:    true });
-        if (params.styleClass != null) {
+        // modal dialogs are fixed width and grow vertically; set the request
+        // mode accordingly so wrapped labels are handled correctly during
+        // size requests.
+        this.dialogLayout.request_mode = Clutter.RequestMode.HEIGHT_FOR_WIDTH;
+
+        if (params.styleClass != null)
             this.dialogLayout.add_style_class_name(params.styleClass);
-        }
 
         if (!this._shellReactive) {
             this._lightbox = new Lightbox.Lightbox(this._group,
                                                    { inhibitEvents: true });
             this._lightbox.highlight(this._backgroundBin);
 
-            let stack = new Shell.Stack();
-            this._backgroundBin.child = stack;
-
             this._eventBlocker = new Clutter.Actor({ reactive: true });
-            stack.add_actor(this._eventBlocker);
-            stack.add_actor(this.dialogLayout);
-        } else {
-            this._backgroundBin.child = this.dialogLayout;
+            this.backgroundStack.add_actor(this._eventBlocker);
         }
+        this.backgroundStack.add_actor(this.dialogLayout);
 
 
         this.contentLayout = new St.BoxLayout({ vertical: true });
         this.dialogLayout.add(this.contentLayout,
-                              { x_fill:  true,
+                              { expand:  true,
+                                x_fill:  true,
                                 y_fill:  true,
                                 x_align: St.Align.MIDDLE,
                                 y_align: St.Align.START });
@@ -100,14 +109,15 @@ const ModalDialog = new Lang.Class({
         this.buttonLayout = new St.BoxLayout({ style_class: 'modal-dialog-button-box',
                                                vertical: false });
         this.dialogLayout.add(this.buttonLayout,
-                              { expand:  true,
-                                x_align: St.Align.MIDDLE,
+                              { x_align: St.Align.MIDDLE,
                                 y_align: St.Align.END });
 
         global.focus_manager.add_group(this.dialogLayout);
         this._initialKeyFocus = this.dialogLayout;
         this._initialKeyFocusDestroyId = 0;
         this._savedKeyFocus = null;
+
+        this._workSpinner = null;
     },
 
     destroy: function() {
@@ -179,6 +189,42 @@ const ModalDialog = new Lang.Class({
         this.buttonLayout.add(button, layoutInfo);
 
         return button;
+    },
+
+    placeSpinner: function(layoutInfo) {
+        let spinnerIcon = global.datadir + '/theme/process-working.svg';
+        this._workSpinner = new Animation.AnimatedIcon(spinnerIcon, WORK_SPINNER_ICON_SIZE);
+        this._workSpinner.actor.opacity = 0;
+        this._workSpinner.actor.show();
+
+        this.buttonLayout.add(this._workSpinner.actor, layoutInfo);
+    },
+
+    setWorking: function(working) {
+        if (!this._workSpinner)
+            return;
+
+        Tweener.removeTweens(this._workSpinner.actor);
+        if (working) {
+            this._workSpinner.play();
+            Tweener.addTween(this._workSpinner.actor,
+                             { opacity: 255,
+                               delay: WORK_SPINNER_ANIMATION_DELAY,
+                               time: WORK_SPINNER_ANIMATION_TIME,
+                               transition: 'linear'
+                             });
+        } else {
+            Tweener.addTween(this._workSpinner.actor,
+                             { opacity: 0,
+                               time: WORK_SPINNER_ANIMATION_TIME,
+                               transition: 'linear',
+                               onCompleteScope: this,
+                               onComplete: function() {
+                                   if (this._workSpinner)
+                                       this._workSpinner.stop();
+                               }
+                             });
+        }
     },
 
     _onKeyPressEvent: function(object, event) {
@@ -277,6 +323,9 @@ const ModalDialog = new Lang.Class({
                                    this.state = State.CLOSED;
                                    this._group.hide();
                                    this.emit('closed');
+
+                                   if (this._destroyOnClose)
+                                       this.destroy();
                                })
                          });
     },
@@ -312,8 +361,9 @@ const ModalDialog = new Lang.Class({
         if (this._savedKeyFocus) {
             this._savedKeyFocus.grab_key_focus();
             this._savedKeyFocus = null;
-        } else
+        } else {
             this._initialKeyFocus.grab_key_focus();
+        }
 
         if (!this._shellReactive)
             this._eventBlocker.lower_bottom();

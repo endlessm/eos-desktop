@@ -4,6 +4,7 @@ const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Shell = imports.gi.Shell;
+const Signals = imports.signals;
 
 const Hash = imports.misc.hash;
 const Main = imports.ui.main;
@@ -43,8 +44,11 @@ const ScreencastService = new Lang.Class({
 
         this._recorders = new Hash.Map();
 
-        Main.sessionMode.connect('updated',
-                                 Lang.bind(this, this._sessionModeChanged));
+        Main.sessionMode.connect('updated', Lang.bind(this, this._sessionUpdated));
+    },
+
+    get isRecording() {
+        return this._recorders.size() > 0;
     },
 
     _ensureRecorderForSender: function(sender) {
@@ -56,16 +60,18 @@ const ScreencastService = new Lang.Class({
                 Gio.bus_watch_name(Gio.BusType.SESSION, sender, 0, null,
                                    Lang.bind(this, this._onNameVanished));
             this._recorders.set(sender, recorder);
+            this.emit('updated');
         }
         return recorder;
     },
 
-    _sessionModeChanged: function() {
+    _sessionUpdated: function() {
         if (Main.sessionMode.allowScreencast)
             return;
 
         for (let sender in this._recorders.keys())
             this._recorders.delete(sender);
+        this.emit('updated');
     },
 
     _onNameVanished: function(connection, name) {
@@ -80,6 +86,7 @@ const ScreencastService = new Lang.Class({
         Gio.bus_unwatch_name(recorder._watchNameId);
         recorder.close();
         this._recorders.delete(sender);
+        this.emit('updated');
 
         return true;
     },
@@ -98,8 +105,10 @@ const ScreencastService = new Lang.Class({
 
     ScreencastAsync: function(params, invocation) {
         let returnValue = [false, ''];
-        if (!Main.sessionMode.allowScreencast)
+        if (!Main.sessionMode.allowScreencast) {
             invocation.return_value(GLib.Variant.new('(bs)', returnValue));
+            return;
+        }
 
         let sender = invocation.get_sender();
         let recorder = this._ensureRecorderForSender(sender);
@@ -108,7 +117,8 @@ const ScreencastService = new Lang.Class({
 
             recorder.set_file_template(fileTemplate);
             this._applyOptionalParameters(recorder, options);
-            returnValue = recorder.record();
+            let [success, fileName] = recorder.record();
+            returnValue = [success, fileName ? fileName : ''];
         }
 
         invocation.return_value(GLib.Variant.new('(bs)', returnValue));
@@ -116,8 +126,10 @@ const ScreencastService = new Lang.Class({
 
     ScreencastAreaAsync: function(params, invocation) {
         let returnValue = [false, ''];
-        if (!Main.sessionMode.allowScreencast)
+        if (!Main.sessionMode.allowScreencast) {
             invocation.return_value(GLib.Variant.new('(bs)', returnValue));
+            return;
+        }
 
         let sender = invocation.get_sender();
         let recorder = this._ensureRecorderForSender(sender);
@@ -125,10 +137,21 @@ const ScreencastService = new Lang.Class({
         if (!recorder.is_recording()) {
             let [x, y, width, height, fileTemplate, options] = params;
 
+            if (x < 0 || y < 0 ||
+                width <= 0 || height <= 0 ||
+                x + width > global.screen_width ||
+                y + height > global.screen_height) {
+                invocation.return_error_literal(Gio.IOErrorEnum,
+                                                Gio.IOErrorEnum.CANCELLED,
+                                                "Invalid params");
+                return;
+            }
+
             recorder.set_file_template(fileTemplate);
             recorder.set_area(x, y, width, height);
             this._applyOptionalParameters(recorder, options);
-            returnValue = recorder.record();
+            let [success, fileName] = recorder.record();
+            returnValue = [success, fileName ? fileName : ''];
         }
 
         invocation.return_value(GLib.Variant.new('(bs)', returnValue));
@@ -139,3 +162,4 @@ const ScreencastService = new Lang.Class({
         invocation.return_value(GLib.Variant.new('(b)', [success]));
     }
 });
+Signals.addSignalMethods(ScreencastService.prototype);

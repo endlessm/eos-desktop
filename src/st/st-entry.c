@@ -81,6 +81,8 @@ enum
   PROP_HINT_TEXT,
   PROP_HINT_ACTOR,
   PROP_TEXT,
+  PROP_INPUT_PURPOSE,
+  PROP_INPUT_HINTS,
 };
 
 /* signals */
@@ -154,6 +156,14 @@ st_entry_set_property (GObject      *gobject,
       st_entry_set_text (entry, g_value_get_string (value));
       break;
 
+    case PROP_INPUT_PURPOSE:
+      st_entry_set_input_purpose (entry, g_value_get_enum (value));
+      break;
+
+    case PROP_INPUT_HINTS:
+      st_entry_set_input_hints (entry, g_value_get_flags (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -192,6 +202,14 @@ st_entry_get_property (GObject    *gobject,
 
     case PROP_TEXT:
       g_value_set_string (value, clutter_text_get_text (CLUTTER_TEXT (priv->entry)));
+      break;
+
+    case PROP_INPUT_PURPOSE:
+      g_value_set_enum (value, st_im_text_get_input_purpose (ST_IM_TEXT (priv->entry)));
+      break;
+
+    case PROP_INPUT_HINTS:
+      g_value_set_flags (value, st_im_text_get_input_hints (ST_IM_TEXT (priv->entry)));
       break;
 
     default:
@@ -493,6 +511,18 @@ st_entry_allocate (ClutterActor          *actor,
   gfloat icon_w, icon_h;
   gfloat hint_w, hint_h;
   gfloat entry_h, min_h, pref_h, avail_h;
+  ClutterActor *left_icon, *right_icon;
+
+  if (clutter_actor_get_text_direction (actor) == CLUTTER_TEXT_DIRECTION_RTL)
+    {
+      right_icon = priv->primary_icon;
+      left_icon = priv->secondary_icon;
+    }
+  else
+    {
+      left_icon = priv->primary_icon;
+      right_icon = priv->secondary_icon;
+    }
 
   clutter_actor_set_allocation (actor, box, flags);
 
@@ -503,12 +533,10 @@ st_entry_allocate (ClutterActor          *actor,
   child_box.x1 = content_box.x1;
   child_box.x2 = content_box.x2;
 
-  if (priv->primary_icon)
+  if (left_icon)
     {
-      clutter_actor_get_preferred_width (priv->primary_icon,
-                                         -1, NULL, &icon_w);
-      clutter_actor_get_preferred_height (priv->primary_icon,
-                                          -1, NULL, &icon_h);
+      clutter_actor_get_preferred_width (left_icon, -1, NULL, &icon_w);
+      clutter_actor_get_preferred_height (left_icon, -1, NULL, &icon_h);
 
       icon_box.x1 = content_box.x1;
       icon_box.x2 = icon_box.x1 + icon_w;
@@ -516,20 +544,16 @@ st_entry_allocate (ClutterActor          *actor,
       icon_box.y1 = (int) (content_box.y1 + avail_h / 2 - icon_h / 2);
       icon_box.y2 = icon_box.y1 + icon_h;
 
-      clutter_actor_allocate (priv->primary_icon,
-                              &icon_box,
-                              flags);
+      clutter_actor_allocate (left_icon, &icon_box, flags);
 
       /* reduce the size for the entry */
       child_box.x1 = MIN (child_box.x2, child_box.x1 + icon_w + priv->spacing);
     }
 
-  if (priv->secondary_icon)
+  if (right_icon)
     {
-      clutter_actor_get_preferred_width (priv->secondary_icon,
-                                         -1, NULL, &icon_w);
-      clutter_actor_get_preferred_height (priv->secondary_icon,
-                                          -1, NULL, &icon_h);
+      clutter_actor_get_preferred_width (right_icon, -1, NULL, &icon_w);
+      clutter_actor_get_preferred_height (right_icon, -1, NULL, &icon_h);
 
       icon_box.x2 = content_box.x2;
       icon_box.x1 = icon_box.x2 - icon_w;
@@ -537,9 +561,7 @@ st_entry_allocate (ClutterActor          *actor,
       icon_box.y1 = (int) (content_box.y1 + avail_h / 2 - icon_h / 2);
       icon_box.y2 = icon_box.y1 + icon_h;
 
-      clutter_actor_allocate (priv->secondary_icon,
-                              &icon_box,
-                              flags);
+      clutter_actor_allocate (right_icon, &icon_box, flags);
 
       /* reduce the size for the entry */
       child_box.x2 = MAX (child_box.x1, child_box.x2 - icon_w + priv->spacing);
@@ -965,9 +987,31 @@ st_entry_class_init (StEntryClass *klass)
                                NULL, G_PARAM_READWRITE);
   g_object_class_install_property (gobject_class, PROP_TEXT, pspec);
 
+  pspec = g_param_spec_enum ("input-purpose",
+                             "Purpose",
+                             "Purpose of the text field",
+                             GTK_TYPE_INPUT_PURPOSE,
+                             GTK_INPUT_PURPOSE_FREE_FORM,
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (gobject_class,
+                                   PROP_INPUT_PURPOSE,
+                                   pspec);
+
+  pspec = g_param_spec_flags ("input-hints",
+                              "hints",
+                              "Hints for the text field behaviour",
+                              GTK_TYPE_INPUT_HINTS,
+                              GTK_INPUT_HINT_NONE,
+                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (gobject_class,
+                                   PROP_INPUT_HINTS,
+                                   pspec);
+
   /* signals */
   /**
    * StEntry::primary-icon-clicked:
+   * @self: the #StEntry
+   *
    *
    * Emitted when the primary icon is clicked
    */
@@ -980,6 +1024,7 @@ st_entry_class_init (StEntryClass *klass)
                   G_TYPE_NONE, 0);
   /**
    * StEntry::secondary-icon-clicked:
+   * @self: the #StEntry
    *
    * Emitted when the secondary icon is clicked
    */
@@ -1174,6 +1219,87 @@ st_entry_get_hint_text (StEntry *entry)
   g_return_val_if_fail (ST_IS_ENTRY (entry), NULL);
 
   return entry->priv->hint;
+}
+
+/**
+ * st_entry_set_input_purpose:
+ * @entry: a #StEntry
+ * @purpose: the purpose
+ *
+ * Sets the #StEntry:input-purpose property which
+ * can be used by on-screen keyboards and other input
+ * methods to adjust their behaviour.
+ */
+void
+st_entry_set_input_purpose (StEntry        *entry,
+                            GtkInputPurpose purpose)
+{
+  StIMText *imtext;
+
+  g_return_if_fail (ST_IS_ENTRY (entry));
+
+  imtext = ST_IM_TEXT (entry->priv->entry);
+
+  if (st_im_text_get_input_purpose (imtext) != purpose)
+    {
+      st_im_text_set_input_purpose (imtext, purpose);
+
+      g_object_notify (G_OBJECT (entry), "input-purpose");
+    }
+}
+
+/**
+ * st_entry_get_input_purpose:
+ * @entry: a #StEntry
+ *
+ * Gets the value of the #StEntry:input-purpose property.
+ */
+GtkInputPurpose
+st_entry_get_input_purpose (StEntry *entry)
+{
+  g_return_val_if_fail (ST_IS_ENTRY (entry), GTK_INPUT_PURPOSE_FREE_FORM);
+
+  return st_im_text_get_input_purpose (ST_IM_TEXT (entry->priv->entry));
+}
+
+/**
+ * st_entry_set_input_hints:
+ * @entry: a #StEntry
+ * @hints: the hints
+ *
+ * Sets the #StEntry:input-hints property, which
+ * allows input methods to fine-tune their behaviour.
+ */
+void
+st_entry_set_input_hints (StEntry      *entry,
+                          GtkInputHints hints)
+{
+  StIMText *imtext;
+
+  g_return_if_fail (ST_IS_ENTRY (entry));
+
+  imtext = ST_IM_TEXT (entry->priv->entry);
+
+  if (st_im_text_get_input_hints (imtext) != hints)
+    {
+      st_im_text_set_input_hints (imtext, hints);
+
+      g_object_notify (G_OBJECT (entry), "input-hints");
+    }
+}
+
+/**
+ * st_entry_get_input_hints:
+ * @entry: a #StEntry
+ *
+ * Gets the value of the #StEntry:input-hints property.
+ */
+GtkInputHints
+st_entry_get_input_hints (StEntry *entry)
+{
+  g_return_val_if_fail (ST_IS_ENTRY (entry), GTK_INPUT_HINT_NONE);
+
+  return st_im_text_get_input_hints (ST_IM_TEXT (entry->priv->entry));
 }
 
 static gboolean

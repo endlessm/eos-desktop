@@ -23,6 +23,18 @@ const MAX_WORKSPACES = 16;
 
 const OVERRIDE_SCHEMA = 'org.gnome.shell.overrides';
 
+function rectEqual(one, two) {
+    if (one == two)
+        return true;
+
+    if (!one || !two)
+        return false;
+
+    return (one.x == two.x &&
+            one.y == two.y &&
+            one.width == two.width &&
+            one.height == two.height);
+}
 
 const WorkspacesView = new Lang.Class({
     Name: 'WorkspacesView',
@@ -43,15 +55,13 @@ const WorkspacesView = new Lang.Class({
                 this._updateWorkspaceActors(false);
             }));
 
-        this._width = 0;
-        this._height = 0;
-        this._x = 0;
-        this._y = 0;
+        this._fullGeometry = null;
+        this._actualGeometry = null;
+
         this._spacing = 0;
         this._animating = false; // tweening
         this._scrolling = false; // swipe-scrolling
         this._animatingScroll = false; // programatically updating the adjustment
-        this._zoomOut = false; // zoom to a larger area
         this._inDrag = false; // dragging a window
 
         this._settings = new Gio.Settings({ schema: OVERRIDE_SCHEMA });
@@ -85,8 +95,8 @@ const WorkspacesView = new Lang.Class({
         this._overviewShownId =
             Main.overview.connect('shown',
                                  Lang.bind(this, function() {
-                this.actor.set_clip(this._x, this._y,
-                                    this._width, this._height);
+                this.actor.set_clip(this._fullGeometry.x, this._fullGeometry.y,
+                                    this._fullGeometry.width, this._fullGeometry.height);
         }));
 
         this.scrollAdjustment = new St.Adjustment({ value: activeWorkspaceIndex,
@@ -120,10 +130,8 @@ const WorkspacesView = new Lang.Class({
                 continue;
 
             let ws = new Workspace.Workspace(null, i);
-            ws.setGeometry(monitors[i].x,
-                           monitors[i].y,
-                           monitors[i].width,
-                           monitors[i].height);
+            ws.setFullGeometry(monitors[i]);
+            ws.setActualGeometry(monitors[i]);
             this.actor.bind_property('opacity', ws.actor, 'opacity',
                                      GObject.BindingFlags.SYNC_CREATE);
             this.actor.bind_property('visible', ws.actor, 'visible',
@@ -139,29 +147,24 @@ const WorkspacesView = new Lang.Class({
         this._extraWorkspaces = [];
     },
 
-    setGeometry: function(x, y, width, height) {
-      if (this._x == x && this._y == y &&
-          this._width == width && this._height == height)
-          return;
+    setFullGeometry: function(geom) {
+        if (rectEqual(this._fullGeometry, geom))
+            return;
 
-        this._width = width;
-        this._height = height;
-        this._x = x;
-        this._y = y;
+        this._fullGeometry = geom;
 
         for (let i = 0; i < this._workspaces.length; i++)
-            this._workspaces[i].setGeometry(x, y, width, height);
-
-        if (Main.overview.visible && !Main.overview.animationInProgress)
-            this.actor.set_clip(this._x, this._y, this._width, this._height);
+            this._workspaces[i].setFullGeometry(geom);
     },
 
-    _lookupWorkspaceForMetaWindow: function (metaWindow) {
-        for (let i = 0; i < this._workspaces.length; i++) {
-            if (this._workspaces[i].containsMetaWindow(metaWindow))
-                return this._workspaces[i];
-        }
-        return null;
+    setActualGeometry: function(geom) {
+        if (rectEqual(this._actualGeometry, geom))
+            return;
+
+        this._actualGeometry = geom;
+
+        for (let i = 0; i < this._workspaces.length; i++)
+            this._workspaces[i].setActualGeometry(geom);
     },
 
     getActiveWorkspace: function() {
@@ -213,7 +216,7 @@ const WorkspacesView = new Lang.Class({
 
             Tweener.removeTweens(workspace.actor);
 
-            let y = (w - active) * (this._height + this._spacing);
+            let y = (w - active) * (this._fullGeometry.height + this._spacing);
 
             if (showAnimation) {
                 let params = { y: y,
@@ -284,8 +287,9 @@ const WorkspacesView = new Lang.Class({
 
         if (newNumWorkspaces > oldNumWorkspaces) {
             for (let w = oldNumWorkspaces; w < newNumWorkspaces; w++) {
-                this._workspaces[w].setGeometry(this._x, this._y,
-                                                this._width, this._height);
+                this._workspaces[w].setFullGeometry(this._fullGeometry);
+                if (this._actualGeometry)
+                    this._workspaces[w].setActualGeometry(this._actualGeometry);
                 this.actor.add_actor(this._workspaces[w].actor);
             }
 
@@ -412,10 +416,6 @@ const WorkspacesView = new Lang.Class({
             this._workspaces[i].actor.y += dy;
         }
     },
-
-    _getWorkspaceIndexToRemove: function() {
-        return global.screen.get_active_workspace_index();
-    }
 });
 Signals.addSignalMethods(WorkspacesView.prototype);
 
@@ -425,7 +425,7 @@ const WorkspacesDisplay = new Lang.Class({
 
     _init: function() {
         this.actor = new St.Widget({ clip_to_allocation: true });
-        this.actor.connect('notify::allocation', Lang.bind(this, this._updateWorkspacesGeometry));
+        this.actor.connect('notify::allocation', Lang.bind(this, this._updateWorkspacesActualGeometry));
         this.actor.connect('parent-set', Lang.bind(this, this._parentSet));
 
         let clickAction = new Clutter.ClickAction();
@@ -473,6 +473,8 @@ const WorkspacesDisplay = new Lang.Class({
 
         this._notifyOpacityId = 0;
         this._scrollEventId = 0;
+
+        this._fullGeometry = null;
     },
 
     _onPan: function(action) {
@@ -511,12 +513,6 @@ const WorkspacesDisplay = new Lang.Class({
         for (let i = 0; i < this._workspacesViews.length; i++)
             this._workspacesViews[i].destroy();
         this._workspacesViews = [];
-
-        for (let i = 0; i < this._workspaces.length; i++)
-            for (let w = 0; w < this._workspaces[i].length; w++) {
-                this._workspaces[i][w].disconnectAll();
-                this._workspaces[i][w].destroy();
-            }
     },
 
     _workspacesOnlyOnPrimaryChanged: function() {
@@ -531,10 +527,6 @@ const WorkspacesDisplay = new Lang.Class({
     _updateWorkspacesViews: function() {
         for (let i = 0; i < this._workspacesViews.length; i++)
             this._workspacesViews[i].destroy();
-
-        for (let i = 0; i < this._workspaces.length; i++)
-            for (let w = 0; w < this._workspaces[i].length; w++)
-                this._workspaces[i][w].destroy();
 
         this._workspacesViews = [];
         this._workspaces = [];
@@ -561,7 +553,8 @@ const WorkspacesDisplay = new Lang.Class({
             this._workspacesViews.push(view);
         }
 
-        this._updateWorkspacesGeometry();
+        this._updateWorkspacesFullGeometry();
+        this._updateWorkspacesActualGeometry();
         this._updateOpacityFromParent();
 
         for (let i = 0; i < this._workspacesViews.length; i++)
@@ -630,29 +623,48 @@ const WorkspacesDisplay = new Lang.Class({
         }
     },
 
-    _updateWorkspacesGeometry: function() {
+    // This geometry should always be the fullest geometry
+    // the workspaces switcher can ever be allocated, as if
+    // the sliding controls were never slid in at all.
+    setWorkspacesFullGeometry: function(geom) {
+        this._fullGeometry = geom;
+        this._updateWorkspacesFullGeometry();
+    },
+
+    _updateWorkspacesFullGeometry: function() {
         if (!this._workspacesViews.length)
             return;
-
-        let fullWidth = this.actor.allocation.x2 - this.actor.allocation.x1;
-        let fullHeight = this.actor.allocation.y2 - this.actor.allocation.y1;
-
-        let width = fullWidth;
-        let height = fullHeight;
-
-        let [x, y] = this.actor.get_transformed_position();
 
         let monitors = Main.layoutManager.monitors;
         let m = 0;
         for (let i = 0; i < monitors.length; i++) {
             if (i == this._primaryIndex) {
-                this._workspacesViews[m].setGeometry(x, y, width, height);
+                this._workspacesViews[m].setFullGeometry(this._fullGeometry);
                 m++;
             } else if (!this._workspacesOnlyOnPrimary) {
-                this._workspacesViews[m].setGeometry(monitors[i].x,
-                                                     monitors[i].y,
-                                                     monitors[i].width,
-                                                     monitors[i].height);
+                this._workspacesViews[m].setFullGeometry(monitors[i]);
+                m++;
+            }
+        }
+    },
+
+    _updateWorkspacesActualGeometry: function() {
+        if (!this._workspacesViews.length)
+            return;
+
+        let [x, y] = this.actor.get_transformed_position();
+        let width = this.actor.allocation.x2 - this.actor.allocation.x1;
+        let height = this.actor.allocation.y2 - this.actor.allocation.y1;
+        let geometry = { x: x, y: y, width: width, height: height };
+
+        let monitors = Main.layoutManager.monitors;
+        let m = 0;
+        for (let i = 0; i < monitors.length; i++) {
+            if (i == this._primaryIndex) {
+                this._workspacesViews[m].setActualGeometry(geometry);
+                m++;
+            } else if (!this._workspacesOnlyOnPrimary) {
+                this._workspacesViews[m].setActualGeometry(monitors[i]);
                 m++;
             }
         }
@@ -720,15 +732,20 @@ const WorkspacesDisplay = new Lang.Class({
     _onScrollEvent: function(actor, event) {
         if (!this.actor.mapped)
             return false;
+        let activeWs = global.screen.get_active_workspace();
+        let ws;
         switch (event.get_scroll_direction()) {
         case Clutter.ScrollDirection.UP:
-            Main.wm.actionMoveWorkspace(Meta.MotionDirection.UP);
-            return true;
+            ws = activeWs.get_neighbor(Meta.MotionDirection.UP);
+            break;
         case Clutter.ScrollDirection.DOWN:
-            Main.wm.actionMoveWorkspace(Meta.MotionDirection.DOWN);
-            return true;
+            ws = activeWs.get_neighbor(Meta.MotionDirection.DOWN);
+            break;
+        default:
+            return false;
         }
-        return false;
+        Main.wm.actionMoveWorkspace(ws);
+        return true;
     }
 });
 Signals.addSignalMethods(WorkspacesDisplay.prototype);
