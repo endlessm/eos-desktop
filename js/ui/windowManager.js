@@ -328,7 +328,7 @@ const WindowManager = new Lang.Class({
         }
 
         let endX;
-        if (actor.x == monitor.x) {
+        if (actor.x <= monitor.x) {
             endX = monitor.x - actor.width;
         } else {
             endX = monitor.x + monitor.width;
