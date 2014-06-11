@@ -174,8 +174,32 @@ const AppActivationContext = new Lang.Class({
             ' seconds to launch');
     },
 
+    _isBogusWindow: function(app) {
+        let launchedAppId = this._app.get_id();
+        let appId = app.get_id();
+
+        // When the application IDs match, the window is not bogus
+        if (appId == launchedAppId) {
+            return false;
+        }
+
+        // Special case for Libreoffice splash screen; we will get a non-matching
+        // app with 'Soffice' as its name when the recovery screen comes up,
+        // so special case that too
+        if (launchedAppId.indexOf('eos-app-libreoffice') != -1 &&
+            app.get_name() != 'Soffice') {
+            return true;
+        }
+
+        return false;
+    },
+
     _onAppStateChanged: function(appSystem, app) {
         if (app.state != Shell.AppState.RUNNING) {
+            return;
+        }
+
+        if (this._isBogusWindow(app)) {
             return;
         }
 
