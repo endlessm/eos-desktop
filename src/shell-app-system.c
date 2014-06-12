@@ -108,6 +108,9 @@ app_is_stale (ShellApp *app)
   if (shell_app_is_window_backed (app))
     return FALSE;
 
+  if (shell_app_get_id (app) == NULL)
+    return TRUE;
+
   info = g_desktop_app_info_new (shell_app_get_id (app));
   is_stale = (info == NULL);
 
@@ -203,6 +206,9 @@ shell_app_system_lookup_app (ShellAppSystem   *self,
   ShellAppSystemPrivate *priv = self->priv;
   ShellApp *app;
   GDesktopAppInfo *info;
+
+  if (!id)
+    return NULL;
 
   app = g_hash_table_lookup (priv->id_to_app, id);
   if (app)
