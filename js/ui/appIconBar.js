@@ -674,12 +674,14 @@ const ScrolledIconList = new Lang.Class({
     },
 
     _addButton: function(app) {
-        if (!this._runningApps.has(app)) {
-            let newChild = new AppIconButton(app, this._iconSize);
-            newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
-            this._runningApps.set(app, newChild);
-            this._container.add_actor(newChild.actor);
+        if (this._runningApps.has(app)) {
+            return;
         }
+
+        let newChild = new AppIconButton(app, this._iconSize);
+        newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
+        this._runningApps.set(app, newChild);
+        this._container.add_actor(newChild.actor);
     },
 
     _onAppStateChanged: function(appSys, app) {
