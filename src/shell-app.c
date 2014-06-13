@@ -1270,12 +1270,13 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   g_free (new_path);
   g_free (buf);
 
-  if (!appinfo) {
-      return FALSE;
-  } else {
-      _shell_app_set_app_info (app, appinfo);
-      return TRUE;
-  }
+  if (appinfo == NULL)
+    return FALSE;
+
+  _shell_app_set_app_info (app, appinfo);
+  g_object_unref (appinfo);
+
+  return TRUE;
 }
 
 static void
