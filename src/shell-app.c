@@ -1264,7 +1264,7 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
       return FALSE;
     }
 
-  // update the app's information with the newly created file
+  /* Update the app's information with the newly created file */
   appinfo = g_desktop_app_info_new_from_filename (new_path);
 
   g_free (new_path);
