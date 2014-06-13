@@ -462,42 +462,31 @@ const AppStoreService = new Lang.Class({
         IconGridLayout.layout.connect('changed', Lang.bind(this, this._emitApplicationsChanged));
     },
 
-    _addItem: function(id, forFolder) {
-        let isFolder = IconGridLayout.layout.iconIsFolder(id);
-        if (isFolder != forFolder) {
-            return;
-        }
-
-        IconGridLayout.layout.appendIcon(id, IconGridLayout.DESKTOP_GRID_ID);
-    },
-
-    _removeItem: function(id, forFolder) {
-        let isFolder = IconGridLayout.layout.iconIsFolder(id);
-        if (isFolder != forFolder) {
-            return;
-        }
-
-        IconGridLayout.layout.removeIcon(id);
-    },
-
     AddApplication: function(id) {
         let eventRecorder = EosMetrics.EventRecorder.prototype.get_default();
         eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_ADDED, new GLib.Variant('s', id));
-        this._addItem(id, false);
+
+        if (!IconGridLayout.layout.iconIsFolder(id)) {
+            IconGridLayout.layout.appendIcon(id, IconGridLayout.DESKTOP_GRID_ID);
+        }
     },
 
     RemoveApplication: function(id) {
-        let eventRecorder = EosMetrics.EventRecorder.prototype.get_default();
-        eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_REMOVED, new GLib.Variant('s', id));
-        this._removeItem(id, false);
+        if (!IconGridLayout.layout.iconIsFolder(id)) {
+            IconGridLayout.layout.removeIcon(id, true);
+        }
     },
 
     AddFolder: function(id) {
-        this._addItem(id, true);
+        if (IconGridLayout.layout.iconIsFolder(id)) {
+            IconGridLayout.layout.appendIcon(id, IconGridLayout.DESKTOP_GRID_ID);
+        }
     },
 
     RemoveFolder: function(id) {
-        this._removeItem(id, true);
+        if (IconGridLayout.layout.iconIsFolder(id)) {
+            IconGridLayout.layout.removeIcon(id, true);
+        }
     },
 
     ResetDesktop: function() {
