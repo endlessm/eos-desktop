@@ -673,8 +673,35 @@ const ScrolledIconList = new Lang.Class({
         this._updatePage();
     },
 
+    _isAppInteresting: function(app) {
+        let retval = false;
+
+        switch (app.state) {
+        case Shell.AppState.STARTING:
+            retval = true;
+            break;
+        case Shell.AppState.RUNNING:
+            let windows = app.get_windows();
+            let tracker = Shell.WindowTracker.get_default();
+
+            retval = windows.some(function(metaWindow) {
+                return tracker.is_window_interesting(metaWindow);
+            });
+            break;
+        case Shell.AppState.STOPPED:
+        default:
+            break;
+        }
+
+        return retval;
+    },
+
     _addButton: function(app) {
         if (this._runningApps.has(app)) {
+            return;
+        }
+
+        if (!this._isAppInteresting(app)) {
             return;
         }
 
