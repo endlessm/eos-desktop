@@ -258,8 +258,8 @@ void
 shell_wm_completed_destroy (ShellWM         *wm,
                             MetaWindowActor *actor)
 {
-  meta_plugin_destroy_completed (wm->plugin, actor);
   g_signal_emit (wm, shell_wm_signals[DESTROY_COMPLETED], 0, actor);
+  meta_plugin_destroy_completed (wm->plugin, actor);
 }
 
 void
