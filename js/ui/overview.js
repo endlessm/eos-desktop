@@ -101,6 +101,10 @@ const ShellInfo = new Lang.Class({
             notification.setForFeedback(forFeedback);
             notification.ignoreHover = true;
         } else {
+            // as we reuse the notification, ensure that the previous _destroyCallback() is called
+            if (this._destroyCallback) {
+                this._destroyCallback();
+            }
             notification = this._source.notifications[0];
             notification.update(text, null, { clear: true });
         }
