@@ -1,7 +1,6 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
-const EosMetrics = imports.gi.EosMetrics;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
@@ -1740,10 +1739,6 @@ const AppStoreIcon = new Lang.Class({
 
         this.canDrop = true;
 
-        this._removeUndone = false;
-        this._removedItemPos = -1;
-        this._removedItemFolder = null;
-
         this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
     },
 
@@ -1799,14 +1794,7 @@ const AppStoreIcon = new Lang.Class({
     _removeItem: function(source) {
         source.blockHandler = true;
 
-        // store the location of the removed item in order to undo it
-        let folderId = source.parentView.getViewId();
-        let idx = source.parentView.indexOf(source);
-        this._removedItemFolder = folderId;
-        this._removedItemPos = idx;
-        this._removeUndone = false;
-
-        IconGridLayout.layout.removeIcon(source.getId());
+        IconGridLayout.layout.removeIcon(source.getId(), true);
 
         source.blockHandler = false;
 
@@ -1815,66 +1803,6 @@ const AppStoreIcon = new Lang.Class({
         }
 
         this.handleViewDragEnd();
-
-        Main.overview.setMessage(_("%s has been deleted").format(source.getName()),
-                                 { forFeedback: true,
-                                   destroyCallback: Lang.bind(this, this._onMessageDestroy, source),
-                                   undoCallback: Lang.bind(this, this._undoRemoveItem, source)
-                                 });
-    },
-
-    _canDelete: function(item) {
-        let canDelete = false;
-        let filename = item.get_filename();
-        let userDir = GLib.get_user_data_dir();
-        if (filename && userDir && GLib.str_has_prefix(filename, userDir)) {
-            canDelete = true;
-        }
-        return canDelete;
-    },
-
-    _deleteItem: function(source) {
-        if (source.app) {
-            let eventRecorder = EosMetrics.EventRecorder.prototype.get_default();
-            eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_REMOVED, new GLib.Variant('s', source.getId()));
-
-            let appInfo = source.app.get_app_info();
-            if (this._canDelete(appInfo)) {
-                appInfo.delete();
-            }
-        }
-
-        if (source.folder) {
-            if (this._canDelete(source.folder)) {
-                source.folder.delete();
-            }
-        }
-    },
-
-    _onMessageDestroy: function(source) {
-        if (!this._removeUndone) {
-            this._deleteItem(source);
-        }
-
-        this._removeUndone = false;
-        this._removedItemFolder = null;
-        this._removedItemPos = -1;
-    },
-
-    _undoRemoveItem: function(source) {
-        let allView = this.parentView;
-        let folderId = this._removedItemFolder;
-        let view = allView.getViewForId(folderId);
-
-        if (!view) {
-            return;
-        }
-
-        this._removeUndone = true;
-
-        let icon = view.getIconForIndex(this._removedItemPos);
-        let iconId = (icon != null) ? icon.getId() : null;
-        IconGridLayout.layout.repositionIcon(source.getId(), iconId, folderId);
     },
 
     _acceptFolderDrop: function(source) {

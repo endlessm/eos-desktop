@@ -7,6 +7,9 @@ const GLib = imports.gi.GLib;
 const Json = imports.gi.Json;
 
 const Config = imports.misc.config;
+const EosMetrics = imports.gi.EosMetrics;
+const Main = imports.ui.main;
+const Shell = imports.gi.Shell;
 const Util = imports.misc.util;
 
 const DESKTOP_GRID_ID = 'desktop';
@@ -28,6 +31,9 @@ const IconGridLayout = new Lang.Class({
     _init: function(params) {
         this._initSubstitutions();
         this._updateIconTree();
+
+        this._removeUndone = false;
+        this._previousLayout = null;
 
         global.settings.connect('changed::' + SCHEMA_KEY, Lang.bind(this, function() {
             this._updateIconTree();
@@ -167,8 +173,65 @@ const IconGridLayout = new Lang.Class({
         this.repositionIcon(id, null, folderId);
     },
 
-    removeIcon: function(id) {
+    removeIcon: function(id, interactive) {
+        this._previousLayout = global.settings.get_value(SCHEMA_KEY);
+        this._removeUndone = false;
+
         this.repositionIcon(id, null, null);
+
+        let info = null;
+        if (this.iconIsFolder(id)) {
+            info = Shell.DesktopDirInfo.new(id);
+        } else {
+            let appSystem = Shell.AppSystem.get_default();
+            let app = appSystem.lookup_app(id);
+            if (app) {
+                info = app.get_app_info();
+            }
+        }
+
+        if (!info) {
+            return;
+        }
+
+        if (interactive) {
+            Main.overview.setMessage(_("%s has been deleted").format(info.get_name()),
+                                     { forFeedback: true,
+                                       destroyCallback: Lang.bind(this, this._onMessageDestroy, info),
+                                       undoCallback: Lang.bind(this, this._undoRemoveItem, info)
+                                     });
+        } else {
+            this._onMessageDestroy(info);
+        }
+    },
+
+    _onMessageDestroy: function(info) {
+        this._previousLayout = null;
+
+        if (this._removeUndone) {
+            this._removeUndone = false;
+            return;
+        }
+
+        if (!this.iconIsFolder(info.get_id())) {
+            let eventRecorder = EosMetrics.EventRecorder.prototype.get_default();
+            eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_REMOVED, new GLib.Variant('s', info.get_id()));
+        }
+
+        let filename = info.get_filename();
+        let userDir = GLib.get_user_data_dir();
+        if (filename && userDir && GLib.str_has_prefix(filename, userDir)) {
+            // only delete .desktop files in the user's local data folder
+            info.delete();
+        }
+    },
+
+    _undoRemoveItem: function(info) {
+        if (this._previousLayout) {
+            global.settings.set_value(SCHEMA_KEY, this._previousLayout);
+        }
+        this._removeUndone = true;
+        this._previousLayout = null;
     },
 
     listApplications: function() {
