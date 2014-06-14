@@ -673,13 +673,42 @@ const ScrolledIconList = new Lang.Class({
         this._updatePage();
     },
 
-    _addButton: function(app) {
-        if (!this._runningApps.has(app)) {
-            let newChild = new AppIconButton(app, this._iconSize);
-            newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
-            this._runningApps.set(app, newChild);
-            this._container.add_actor(newChild.actor);
+    _isAppInteresting: function(app) {
+        let retval = false;
+
+        switch (app.state) {
+        case Shell.AppState.STARTING:
+            retval = true;
+            break;
+        case Shell.AppState.RUNNING:
+            let windows = app.get_windows();
+            let tracker = Shell.WindowTracker.get_default();
+
+            retval = windows.some(function(metaWindow) {
+                return tracker.is_window_interesting(metaWindow);
+            });
+            break;
+        case Shell.AppState.STOPPED:
+        default:
+            break;
         }
+
+        return retval;
+    },
+
+    _addButton: function(app) {
+        if (this._runningApps.has(app)) {
+            return;
+        }
+
+        if (!this._isAppInteresting(app)) {
+            return;
+        }
+
+        let newChild = new AppIconButton(app, this._iconSize);
+        newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
+        this._runningApps.set(app, newChild);
+        this._container.add_actor(newChild.actor);
     },
 
     _onAppStateChanged: function(appSys, app) {

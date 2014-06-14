@@ -12,6 +12,7 @@ const WorkspaceMonitor = new Lang.Class({
     _init: function() {
         this._metaScreen = global.screen;
 
+        this._destroyedWindows = new Hash.Map();
         this._minimizedWindows = new Hash.Map();
         this._knownWindows = new Hash.Map();
 
@@ -52,6 +53,18 @@ const WorkspaceMonitor = new Lang.Class({
 
     _removeMinimizedWindow: function(metaWindow) {
         this._minimizedWindows.delete(metaWindow);
+    },
+
+    _windowIsDestroyed: function(metaWindow) {
+        return this._destroyedWindows.has(metaWindow);
+    },
+
+    _addDestroyedWindow: function(metaWindow) {
+        this._destroyedWindows.set(metaWindow, true);
+    },
+
+    _removeDestroyedWindow: function(metaWindow) {
+        this._destroyedWindows.delete(metaWindow);
     },
 
     _trackWorkspace: function(workspace, shouldUpdate) {
@@ -167,14 +180,18 @@ const WorkspaceMonitor = new Lang.Class({
             return;
         }
 
-        this._visibleWindows -= 1;
+        // We'll show the overview when the destroy animation ends
+        this._addDestroyedWindow(actor.meta_window);
     },
 
     _destroyWindowCompleted: function(shellwm, actor) {
-        // Show the overview when the animation has ended. The split between the
-        // callbacks for 'destroy' and 'destroy-completed' is because the
-        // MetaWindow might be already NULL after the latter has been emitted.
-        this._updateOverview();
+        if (this._windowIsDestroyed(actor.meta_window)) {
+            // Show the overview when the animation has ended.
+            this._visibleWindows -= 1;
+            this._updateOverview();
+
+            this._removeDestroyedWindow(actor.meta_window);
+        }
     },
 
     _minimizeWindow: function(shellwm, actor) {
