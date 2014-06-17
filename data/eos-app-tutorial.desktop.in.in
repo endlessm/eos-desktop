@@ -6,6 +6,6 @@ Type=Application
 Exec=gnome-welcome-tour
 Icon=
 Categories=Utility;
-X-Endless-Splash-Screen=false
+X-Endless-LaunchMaximized=false
 X-Endless-ShowInAppStore=false
 

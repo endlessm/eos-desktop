@@ -6,6 +6,6 @@ Type=Application
 Exec=chromium-browser chrome-extension://kilnnmemaannmgjifgmiifljomfeaaig/index.html#feedback
 Icon=
 Categories=Utility;
-X-Endless-Splash-Screen=false
+X-Endless-LaunchMaximized=false
 X-Endless-ShowInAppStore=false
 
