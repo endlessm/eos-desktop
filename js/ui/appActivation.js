@@ -24,7 +24,7 @@ const SPLASH_SCREEN_TIMEOUT = 700; // ms
 const SPLASH_SCREEN_FADE_OUT = 0.2;
 const SPLASH_SCREEN_COMPLETE_TIME = 0.2;
 
-const SPLASH_SCREEN_DESKTOP_KEY = 'X-Endless-SplashScreen';
+const LAUNCH_MAXIMIZED_DESKTOP_KEY = 'X-Endless-LaunchMaximized';
 const SPLASH_BACKGROUND_DESKTOP_KEY = 'X-Endless-SplashBackground';
 const DEFAULT_SPLASH_SCREEN_BACKGROUND = global.datadir + '/theme/splash-background-default.jpg';
 const SPINNER_IMAGES_DIR = global.datadir + '/theme/';
@@ -56,10 +56,10 @@ const AppActivationContext = new Lang.Class({
     },
 
     showSplash: function() {
-        // Don't show splash screen if the splash screen key is false
+        // Don't show splash screen if the launch maximized key is false
         let info = this._app.get_app_info();
 
-        if (info && info.has_key(SPLASH_SCREEN_DESKTOP_KEY) && !info.get_boolean(SPLASH_SCREEN_DESKTOP_KEY)) {
+        if (info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) && !info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY)) {
             return;
         }
 
@@ -449,6 +449,13 @@ const DesktopAppClient = new Lang.Class({
     },
 
     _windowCreated: function(metaDisplay, metaWindow) {
+        // Don't maximize if the launch maximized key is false
+        let info = this._app.get_app_info();
+
+        if (info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) && !info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY)) {
+            return;
+        }
+
         // Don't maximize if key to disable default maximize is set
         if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
             return;
