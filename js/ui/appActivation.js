@@ -449,13 +449,6 @@ const DesktopAppClient = new Lang.Class({
     },
 
     _windowCreated: function(metaDisplay, metaWindow) {
-        // Don't maximize if the launch maximized key is false
-        let info = this._app.get_app_info();
-
-        if (info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) && !info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY)) {
-            return;
-        }
-
         // Don't maximize if key to disable default maximize is set
         if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
             return;
@@ -468,6 +461,13 @@ const DesktopAppClient = new Lang.Class({
         let tracker = Shell.WindowTracker.get_default();
         let app = tracker.get_window_app(metaWindow);
         if (!app) {
+            return;
+        }
+
+        // Don't maximize if the launch maximized key is false
+        let info = app.get_app_info();
+
+        if (info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) && !info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY)) {
             return;
         }
 
