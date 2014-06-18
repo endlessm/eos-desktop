@@ -260,6 +260,27 @@ shell_app_system_lookup_heuristic_basename (ShellAppSystem *system,
   return NULL;
 }
 
+static char *
+canonicalize_and_sanitize_wmclass (const char *wmclass)
+{
+  char *canonicalized;
+
+  canonicalized = g_ascii_strdown (wmclass, -1);
+
+  /* This handles "Fedora Eclipse", probably others.
+   * Note g_strdelimit is modify-in-place. */
+  g_strdelimit (canonicalized, " ", '-');
+
+  /* HACK: Handle GIMP here as a special case. */
+  if (g_strcmp0 (canonicalized, "gimp-2.8") == 0)
+    {
+      g_free (canonicalized);
+      canonicalized = g_strdup ("gimp");
+    }
+
+  return canonicalized;
+}
+
 /**
  * shell_app_system_lookup_desktop_wmclass:
  * @system: a #ShellAppSystem
@@ -281,12 +302,7 @@ shell_app_system_lookup_desktop_wmclass (ShellAppSystem *system,
   if (wmclass == NULL)
     return NULL;
 
-  canonicalized = g_ascii_strdown (wmclass, -1);
-
-  /* This handles "Fedora Eclipse", probably others.
-   * Note g_strdelimit is modify-in-place. */
-  g_strdelimit (canonicalized, " ", '-');
-
+  canonicalized = canonicalize_and_sanitize_wmclass (wmclass);
   desktop_file = g_strconcat (canonicalized, ".desktop", NULL);
 
   app = shell_app_system_lookup_heuristic_basename (system, desktop_file);

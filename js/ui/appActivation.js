@@ -130,7 +130,7 @@ const AppActivationContext = new Lang.Class({
                                                              this._splash.destroy();
                                                              this._splash = null;
 
-                                                             if (this._cancelled) {
+                                                             if (this._cancelled && Main.workspaceMonitor.visibleWindows == 0) {
                                                                 Main.overview.showApps();
                                                              }
                                                          })
