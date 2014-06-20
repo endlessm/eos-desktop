@@ -9,7 +9,6 @@ const Config = imports.misc.config;
 const Tweener = imports.ui.tweener;
 
 const BROWSER_DESKTOP_ENTRY = 'eos-app-chromium-browser.desktop';
-const WIKIPEDIA_DESKTOP_ENTRY = 'eos-app-com.endlessm.wikipedia.desktop';
 const PERSONALITY_FILE = Config.SYSCONFDIR + '/EndlessOS/personality.conf';
 
 // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
@@ -244,12 +243,6 @@ function getBrowserApp() {
     let appSystem = Shell.AppSystem.get_default();
     let browserApp = appSystem.lookup_app(BROWSER_DESKTOP_ENTRY);
     return browserApp;
-}
-
-function getWikipediaApp() {
-    let appSystem = Shell.AppSystem.get_default();
-    let wikipediaApp = appSystem.lookup_app(WIKIPEDIA_DESKTOP_ENTRY);
-    return wikipediaApp;
 }
 
 function getRectForActor(actor) {

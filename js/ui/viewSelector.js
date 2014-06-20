@@ -260,26 +260,6 @@ const ViewsDisplay = new Lang.Class({
         }
     },
 
-    _activateWikipediaSearch: function() {
-        let wikipediaApp = Util.getWikipediaApp();
-        if (!wikipediaApp) {
-            return;
-        }
-
-        let wikipediaAppInfo = wikipediaApp.get_app_info();
-        let cmdline = wikipediaAppInfo.get_commandline() + ' --query ' +
-            this.entry.getSearchTerms().join(' ');
-
-        try {
-            let launchInfo = Gio.AppInfo.create_from_commandline(cmdline, null,
-                Gio.AppInfoCreateFlags.SUPPORTS_STARTUP_NOTIFICATION);
-            launchInfo.launch([], global.create_app_launch_context());
-            Main.overview.hide();
-        } catch (e) {
-            logError(e, 'Unable to launch wikipedia app');
-        }
-    },
-
     _doLocalSearch: function() {
         this._searchTimeoutId = 0;
 
@@ -324,8 +304,6 @@ const ViewsDisplay = new Lang.Class({
             this._activateGoogleSearch();
         } else if (searchState == ShellEntry.EntrySearchMenuState.LOCAL) {
             this._searchResults.activateDefault();
-        } else if (searchState == ShellEntry.EntrySearchMenuState.WIKIPEDIA) {
-            this._activateWikipediaSearch();
         }
     },
 
