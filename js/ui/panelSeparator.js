@@ -4,8 +4,6 @@ const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 const St = imports.gi.St;
 
-const PanelMenu = imports.ui.panelMenu;
-
 const PanelSeparator = new Lang.Class({
     Name: 'PanelSeparator',
     Extends: St.Bin,
@@ -22,5 +20,17 @@ const PanelSeparator = new Lang.Class({
                                         style_class: 'panel-separator-icon' });
 
         this.add_actor(this._separator);
+    }
+});
+
+const PanelEmptySpace = new Lang.Class({
+    Name: 'PanelEmptySpace',
+    Extends: St.Bin,
+
+    _init: function() {
+        this.parent({ style_class: 'panel-empty-space' });
+
+        // Needed otherwise automatic adding of this button fails
+        this.container = this;
     }
 });

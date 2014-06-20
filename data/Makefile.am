@@ -70,6 +70,7 @@ dist_theme_DATA =				\
 	theme/folder-shadow-pressed.png		\
 	theme/gnome-shell.css			\
 	theme/google-logo-symbolic.svg		\
+	theme/hot-corner-indicator-symbolic.svg	\
 	theme/internet-hover.png		\
 	theme/internet-normal.png		\
 	theme/internet-pressed.png		\
