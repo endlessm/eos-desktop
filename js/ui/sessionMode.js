@@ -93,9 +93,9 @@ const _modes = {
                      'keyring', 'autorunManager', 'automountManager',
                      'updaterManager', 'socialBar', 'appStore'],
         panel: {
-            left: ['userMenu', 'panelSeparator', 'appIcons'],
+            left: ['emptySpace', 'userMenu', 'panelSeparator', 'appIcons'],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
-                    'network', 'battery', 'socialBar']
+                    'network', 'battery', 'socialBar', 'hotCornerIndicator']
         }
     }
 };

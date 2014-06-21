@@ -556,6 +556,11 @@ StScrollBar StButton#vhandle:active {
     -natural-hpadding: 4px;
 }
 
+.hot-corner-indicator.panel-button {
+    -minimum-hpadding: 0px;
+    -natural-hpadding: 0px;
+}
+
 .app-icon-button {
     background: none;
 }
@@ -588,6 +593,10 @@ StScrollBar StButton#vhandle:active {
     -icon-size: 24px;
     height: 30px;
     spacing: 10px;
+}
+
+.panel-empty-space {
+    width: 10px;
 }
 
 .panel-separator {
@@ -748,7 +757,7 @@ StScrollBar StButton#vhandle:active {
 
 .system-status-social-icon {
     icon-size: 28px;
-    padding-right: 5px;
+    padding-right: 6px;
 }
 
 /* Overview */

@@ -284,7 +284,9 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'userMenu': imports.ui.userMenu.UserMenuButton,
     'chatButton': imports.ui.status.chat.ChatButton,
     'socialBar': imports.ui.status.social.SocialBarButton,
-    'panelSeparator': imports.ui.panelSeparator.PanelSeparator
+    'panelSeparator': imports.ui.panelSeparator.PanelSeparator,
+    'emptySpace': imports.ui.panelSeparator.PanelEmptySpace,
+    'hotCornerIndicator': imports.ui.status.hotCornerIndicator.HotCornerIndicator
 };
 
 if (Config.HAVE_BLUETOOTH)
