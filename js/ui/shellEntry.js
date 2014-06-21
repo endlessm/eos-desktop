@@ -49,8 +49,7 @@ const EntryMenu = new Lang.Class({
 
 const EntrySearchMenuState = {
     GOOGLE: 1,
-    WIKIPEDIA: 2,
-    LOCAL: 3
+    LOCAL: 2
 };
 
 const EntrySearchMenuItem = new Lang.Class({
@@ -110,13 +109,6 @@ const EntrySearchMenu = new Lang.Class({
         this.addMenuItem(item);
         this._googleItem = item;
 
-        if (Util.getWikipediaApp()) {
-            item = new EntrySearchMenuItem('list-icon_wikipedia.png', _("Wikipedia"));
-            item.connect('activate', Lang.bind(this, this._onWikipediaActivated));
-            this.addMenuItem(item);
-            this._wikipediaItem = item;
-        }
-
         item = new EntrySearchMenuItem('list-icon_my-computer.png', _("My Computer"));
         item.connect('activate', Lang.bind(this, this._onLocalActivated));
         this.addMenuItem(item);
@@ -152,19 +144,11 @@ const EntrySearchMenu = new Lang.Class({
         this._googleItem.setChecked(this._state == EntrySearchMenuState.GOOGLE);
         this._localItem.setChecked(this._state == EntrySearchMenuState.LOCAL);
 
-        if (this._wikipediaItem) {
-            this._wikipediaItem.setChecked(this._state == EntrySearchMenuState.WIKIPEDIA);
-        }
-
         this.emit('search-state-changed');
     },
 
     _onGoogleActivated: function() {
         this._setState(EntrySearchMenuState.GOOGLE);
-    },
-
-    _onWikipediaActivated: function() {
-        this._setState(EntrySearchMenuState.WIKIPEDIA);
     },
 
     _onLocalActivated: function() {
@@ -360,8 +344,6 @@ const OverviewEntry = new Lang.Class({
 
         this._googleHint = new St.Label({ text: _("Google"),
                                           style_class: 'search-entry-text-hint' });
-        this._wikipediaHint = new St.Label({ text: _("Wikipedia"),
-                                             style_class: 'search-entry-text-hint' });
         this._localHint = new St.Label({ text: _("My computer"),
                                          style_class: 'search-entry-text-hint' });
 
@@ -398,8 +380,6 @@ const OverviewEntry = new Lang.Class({
 
         if (state == EntrySearchMenuState.GOOGLE) {
             this.hint_actor = this._googleHint;
-        } else if (state == EntrySearchMenuState.WIKIPEDIA) {
-            this.hint_actor = this._wikipediaHint;
         } else if (state == EntrySearchMenuState.LOCAL) {
             this.hint_actor = this._localHint;
         }
