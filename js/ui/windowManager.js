@@ -1,16 +1,19 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
+const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
-const St = imports.gi.St;
 const Shell = imports.gi.Shell;
+const Signals = imports.signals;
+const St = imports.gi.St;
 
 const AltTab = imports.ui.altTab;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
+const Layout = imports.ui.layout;
 const Main = imports.ui.main;
 const SideComponent = imports.ui.sideComponent;
 const BackgroundMenu = imports.ui.backgroundMenu;
@@ -72,6 +75,257 @@ function getWindowDimmer(actor) {
     }
 }
 
+const DesktopOverlay = new Lang.Class({
+    Name: 'DesktopOverlay',
+    Extends: St.Widget,
+
+    _init: function() {
+        this.parent({ reactive: true });
+
+        this._shellwm = global.window_manager;
+
+        this._actorDestroyId = 0;
+        this._allocationId = 0;
+        this._destroyId = 0;
+        this._mapId = 0;
+        this._visibleId = 0;
+        this._showing = false;
+
+        this._overlayActor = null;
+        this._transientActors = [];
+
+        let action = new Clutter.ClickAction();
+        action.connect('clicked', Lang.bind(this, function(action) {
+            if (action.get_button() != ButtonConstants.LEFT_MOUSE_BUTTON) {
+                return;
+            }
+
+            if (this._showing && this._overlayActor) {
+                this.emit('clicked');
+            }
+        }));
+        this.add_action(action);
+        BackgroundMenu.addBackgroundMenu(action, Main.layoutManager);
+
+        Main.overview.connect('showing', Lang.bind(this, function() {
+            // hide the overlay so it doesn't conflict with the desktop
+            if (this._showing) {
+                this.hide();
+            }
+        }));
+        Main.overview.connect('hiding', Lang.bind(this, function() {
+            // show the overlay if needed
+            if (this._showing) {
+                this.show();
+            }
+        }));
+
+        Main.uiGroup.add_actor(this);
+        if (Main.uiGroup.contains(global.top_window_group))
+            Main.uiGroup.set_child_below_sibling(this, global.top_window_group);
+    },
+
+    _rebuildRegion: function() {
+        if (!this._overlayActor.get_paint_visibility()) {
+            Main.layoutManager.setOverlayRegion(null);
+            return;
+        }
+
+        let overlayWindow = this._overlayActor.meta_window;
+        let monitorIdx = overlayWindow.get_monitor();
+        let monitor = Main.layoutManager.monitors[monitorIdx];
+        if (!monitor) {
+            return;
+        }
+
+        let workArea = Main.layoutManager.getWorkAreaForMonitor(overlayWindow.get_monitor());
+        let region = new Cairo.Region();
+        region.unionRectangle(workArea);
+
+        let [x, y] = this._overlayActor.get_transformed_position();
+        let [width, height] = this._overlayActor.get_transformed_size();
+        let rect = { x: Math.round(x), y: Math.round(y),
+                     width: Math.round(width), height: Math.round(height) };
+
+        region.subtractRectangle(rect);
+
+        this._transientActors.forEach(Lang.bind(this, function(actorData) {
+            let transientActor = actorData.actor;
+
+            let [x, y] = transientActor.get_transformed_position();
+            let [width, height] = transientActor.get_transformed_size();
+            let rect = { x: Math.round(x), y: Math.round(y),
+                         width: Math.round(width), height: Math.round(height) };
+
+            region.subtractRectangle(rect);
+        }));
+
+        Main.layoutManager.setOverlayRegion(region);
+    },
+
+    _findTransientActor: function(actor) {
+        for (let i = 0; i < this._transientActors.length; i++) {
+            let actorData = this._transientActors[i];
+            if (actorData.actor == actor)
+                return i;
+        }
+        return -1;
+    },
+
+    _untrackTransientActor: function(actor) {
+        let idx = this._findTransientActor(actor);
+        if (idx == -1) {
+            log('Trying to untrack a non-tracked transient actor!');
+            return;
+        }
+
+        let actorData = this._transientActors[idx];
+        this._transientActors.splice(idx, 1);
+
+        actor.disconnect(actorData.visibleId);
+        actor.disconnect(actorData.allocationId);
+        actor.disconnect(actorData.destroyId);
+
+        this._rebuildRegion();
+    },
+
+    _trackTransientActor: function(actor) {
+        if (this._findTransientActor(actor) != -1) {
+            log('Trying to track twice the same transient actor!');
+            return;
+        }
+
+        let actorData = {};
+        actorData.actor = actor;
+        actorData.visibleId = actor.connect('notify::visible',
+                                            Lang.bind(this, this._rebuildRegion));
+        actorData.allocationId = actor.connect('notify::allocation',
+                                               Lang.bind(this, this._rebuildRegion));
+        actorData.destroyId = actor.connect('destroy',
+                                            Lang.bind(this, this._untrackTransientActor));
+
+        this._transientActors.push(actorData);
+        this._rebuildRegion();
+    },
+
+    _untrackActor: function() {
+        this._transientActors.forEach(Lang.bind(this, function(actorData) {
+            this._untrackTransientActor(actorData.actor);
+        }));
+        this._transientActors = [];
+
+        if (this._visibleId > 0) {
+            this._overlayActor.disconnect(this._visibleId);
+            this._visibleId = 0;
+        }
+
+        if (this._allocationId > 0) {
+            this._overlayActor.disconnect(this._allocationId);
+            this._allocationId = 0;
+        }
+
+        if (this._actorDestroyId > 0) {
+            this._overlayActor.disconnect(this._actorDestroyId);
+            this._actorDestroyId = 0;
+        }
+
+        if (this._destroyId > 0) {
+            this._shellwm.disconnect(this._destroyId);
+            this._destroyId = 0;
+        }
+
+        if (this._mapId > 0) {
+            this._shellwm.disconnect(this._mapId);
+            this._mapId = 0;
+        }
+
+        Main.layoutManager.setOverlayRegion(null);
+    },
+
+    _trackActor: function() {
+        let overlayWindow = this._overlayActor.meta_window;
+        let monitorIdx = overlayWindow.get_monitor();
+        let monitor = Main.layoutManager.monitors[monitorIdx];
+        if (!monitor) {
+            return;
+        }
+
+        // cover other windows with an invisible overlay at the side of the SideComponent
+        let workArea = Main.layoutManager.getWorkAreaForMonitor(monitorIdx);
+        this.width = monitor.width - this._overlayActor.width;
+        this.height = workArea.height;
+        this.y = this._overlayActor.y;
+
+        if (this._overlayActor.x <= monitor.x) {
+            this.x = monitor.x + monitor.width - this.width;
+        } else {
+            this.x = monitor.x;
+        }
+
+        this._visibleId = this._overlayActor.connect('notify::visible',
+                                                     Lang.bind(this, this._rebuildRegion));
+        this._allocationId = this._overlayActor.connect('notify::allocation',
+                                                        Lang.bind(this, this._rebuildRegion));
+        this._actorDestroyId = this._overlayActor.connect('destroy',
+                                                          Lang.bind(this, this._untrackActor));
+
+        this._mapId = this._shellwm.connect('map', Lang.bind(this, function(shellwm, actor) {
+            let newWindow = actor.meta_window;
+            if (overlayWindow.is_ancestor_of_transient(newWindow)) {
+                this._trackTransientActor(actor);
+            }
+        }));
+        this._destroyId = this._shellwm.connect('destroy', Lang.bind(this, function(shellwm, actor) {
+            let destroyedWindow = actor.meta_window;
+            if (overlayWindow.is_ancestor_of_transient(destroyedWindow)) {
+                this._untrackTransientActor(actor);
+            }
+        }));
+
+        // seed the transient actors
+        overlayWindow.foreach_transient(Lang.bind(this, function(transientWindow) {
+            let transientActor = overlayWindow.get_compositor_private();
+            if (transientActor != null) {
+                this._trackTransientActor(transientActor);
+            }
+        }));
+
+        this._rebuildRegion();
+    },
+
+    _setOverlayActor: function(actor) {
+        if (actor == this._overlayActor) {
+            return;
+        }
+
+        this._untrackActor();
+        this._overlayActor = actor;
+
+        if (this._overlayActor) {
+            this._trackActor();
+        }
+    },
+
+    get overlayActor() {
+        return this._overlayActor;
+    },
+
+    showOverlay: function(actor) {
+        this._setOverlayActor(actor);
+
+        this._showing = true;
+        this.show();
+    },
+
+    hideOverlay: function() {
+        this._setOverlayActor(null);
+
+        this._showing = false;
+        this.hide();
+    }
+});
+Signals.addSignalMethods(DesktopOverlay.prototype);
+
 const WindowManager = new Lang.Class({
     Name: 'WindowManager',
 
@@ -92,29 +346,17 @@ const WindowManager = new Lang.Class({
 
         this._allowedKeybindings = {};
 
-        this._desktopOverlay = new St.Widget({ reactive: true });
-        Main.layoutManager.addChrome(this._desktopOverlay);
-        this._desktopOverlayShowing = false;
-        this._desktopOverlayActor = null;
+        this._desktopOverlay = new DesktopOverlay();
         this._showDesktopOnDestroyDone = false;
 
         // The desktop overlay needs to replicate the background's functionality;
         // when clicked, we animate the side component out before emitting "background-clicked".
-        this._desktopOverlayBgAction = new Clutter.ClickAction();
-        this._desktopOverlayBgAction.connect('clicked', Lang.bind(this, function(action) {
-            if (action.get_button() == ButtonConstants.LEFT_MOUSE_BUTTON) {
-                if (this._desktopOverlayShowing && this._desktopOverlayActor) {
-                    this._slideSideComponentOut(this._shellwm,
-                                                this._desktopOverlayActor,
-                                                function () { Main.layoutManager.emit('background-clicked'); },
-                                                function () { Main.layoutManager.emit('background-clicked'); });
-                } else {
-                    Main.layoutManager.emit('background-clicked');
-                }
-            }
+        this._desktopOverlay.connect('clicked', Lang.bind(this, function() {
+            this._slideSideComponentOut(this._shellwm,
+                                        this._desktopOverlay.overlayActor,
+                                        function () { Main.layoutManager.emit('background-clicked'); },
+                                        function () { Main.layoutManager.emit('background-clicked'); });
         }));
-        this._desktopOverlay.add_action(this._desktopOverlayBgAction);
-        BackgroundMenu.addBackgroundMenu(this._desktopOverlayBgAction, Main.layoutManager);
 
         this._switchData = null;
         this._shellwm.connect('kill-switch-workspace', Lang.bind(this, this._switchWorkspaceDone));
@@ -206,20 +448,10 @@ const WindowManager = new Lang.Class({
             for (let i = 0; i < this._dimmedWindows.length; i++) {
                 this._undimWindow(this._dimmedWindows[i]);
             }
-
-            // hide the overlay so it doesn't conflict with the desktop
-            if (this._desktopOverlayShowing) {
-                this._desktopOverlay.hide();
-            }
         }));
         Main.overview.connect('hiding', Lang.bind(this, function() {
             for (let i = 0; i < this._dimmedWindows.length; i++) {
                 this._dimWindow(this._dimmedWindows[i]);
-            }
-
-            // show the overlay if needed
-            if (this._desktopOverlayShowing) {
-                this._desktopOverlay.show();
             }
         }));
     },
@@ -500,11 +732,6 @@ const WindowManager = new Lang.Class({
     },
 
     _hideOtherWindows: function(actor, animate) {
-        let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
-        if (!monitor) {
-            return;
-        }
-
         let winActors = global.get_window_actors();
         for (let i = 0; i < winActors.length; i++) {
             if (!winActors[i].get_meta_window().showing_on_its_workspace()) {
@@ -531,21 +758,7 @@ const WindowManager = new Lang.Class({
             }
         }
 
-        // cover other windows with an invisible overlay at the side of the SideComponent
-        let workArea = Main.layoutManager.getWorkAreaForMonitor(actor.meta_window.get_monitor());
-        this._desktopOverlay.width = monitor.width - actor.width;
-        this._desktopOverlay.height = workArea.height;
-        this._desktopOverlay.y = actor.y;
-
-        if (actor.x <= monitor.x) {
-            this._desktopOverlay.x = monitor.x + monitor.width - this._desktopOverlay.width;
-        } else {
-            this._desktopOverlay.x = monitor.x;
-        }
-
-        this._desktopOverlayActor = actor;
-        this._desktopOverlayShowing = true;
-        this._desktopOverlay.show();
+        this._desktopOverlay.showOverlay(actor);
     },
 
     _showOtherWindows: function(actor, animate) {
@@ -574,9 +787,7 @@ const WindowManager = new Lang.Class({
             }
         }
 
-        this._desktopOverlayActor = null;
-        this._desktopOverlayShowing = false;
-        this._desktopOverlay.hide();
+        this._desktopOverlay.hideOverlay();
     },
 
     _mapSideComponent : function (shellwm, actor, animateFade) {
