@@ -205,6 +205,7 @@ const LayoutManager = new Lang.Class({
         this._inOverview = false;
         this._updateRegionIdle = 0;
 
+        this._overlayRegion = null;
         this._trackedActors = [];
         this._topActors = [];
         this._isPopupWindowVisible = false;
@@ -885,6 +886,11 @@ const LayoutManager = new Lang.Class({
         this._trackActor(actor, params);
     },
 
+    setOverlayRegion: function(region) {
+        this._overlayRegion = region;
+        this._queueUpdateRegions();
+    },
+
     // trackChrome:
     // @actor: a descendant of the chrome to begin tracking
     // @params: parameters describing how to track @actor
@@ -1182,6 +1188,18 @@ const LayoutManager = new Lang.Class({
                 let strutRect = new Meta.Rectangle({ x: x1, y: y1, width: x2 - x1, height: y2 - y1});
                 let strut = new Meta.Strut({ rect: strutRect, side: side });
                 struts.push(strut);
+            }
+        }
+
+        if (this._overlayRegion != null) {
+            let numOverlayRects = this._overlayRegion.numRectangles();
+            for (let idx = 0; idx < numOverlayRects; idx++) {
+                let rect = this._overlayRegion.getRectangle(idx);
+                let metaRect = new Meta.Rectangle({ x: rect.x,
+                                                    y: rect.y,
+                                                    width: rect.width,
+                                                    height: rect.height });
+                rects.push(metaRect);
             }
         }
 
