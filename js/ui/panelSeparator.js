@@ -22,15 +22,3 @@ const PanelSeparator = new Lang.Class({
         this.add_actor(this._separator);
     }
 });
-
-const PanelEmptySpace = new Lang.Class({
-    Name: 'PanelEmptySpace',
-    Extends: St.Bin,
-
-    _init: function() {
-        this.parent({ style_class: 'panel-empty-space' });
-
-        // Needed otherwise automatic adding of this button fails
-        this.container = this;
-    }
-});
