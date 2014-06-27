@@ -285,7 +285,6 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'chatButton': imports.ui.status.chat.ChatButton,
     'socialBar': imports.ui.status.social.SocialBarButton,
     'panelSeparator': imports.ui.panelSeparator.PanelSeparator,
-    'emptySpace': imports.ui.panelSeparator.PanelEmptySpace,
     'hotCornerIndicator': imports.ui.status.hotCornerIndicator.HotCornerIndicator
 };
 
