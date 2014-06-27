@@ -27,6 +27,10 @@ const HotCornerIndicator = new Lang.Class({
 
         // Remove menu entirely to prevent clicks here to close other menus
         this.setMenu(null);
+
+        this._hotCorner = Main.layoutManager.hotCorners[Main.layoutManager.primaryIndex];
+        this._hotCorner.connect('hover-changed', Lang.bind(this, this._syncHover));
+        this._syncHover();
     },
 
     // overrides default implementation from PanelMenu.Button
@@ -34,5 +38,13 @@ const HotCornerIndicator = new Lang.Class({
 	if (Main.overview.shouldToggleByCornerOrButton()) {
 	    Main.overview.toggle();
 	}
+    },
+
+    _syncHover: function() {
+        if (this._hotCorner.hover) {
+            this.actor.add_style_pseudo_class('hover');
+        } else {
+            this.actor.remove_style_pseudo_class('hover');
+        }
     }
 });

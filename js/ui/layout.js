@@ -1231,6 +1231,7 @@ const HotCorner = new Lang.Class({
         // guard area (the "environs"). This avoids triggering the hot corner
         // multiple times due to an accidental jitter.
         this._entered = false;
+        this._enteredEnvirons = false;
 
         this._monitor = monitor;
 
@@ -1371,6 +1372,8 @@ const HotCorner = new Lang.Class({
                 }
             }
 
+            this.actor.connect('enter-event',
+                               Lang.bind(this, this._onEnvironsEntered));
             this.actor.connect('leave-event',
                                Lang.bind(this, this._onEnvironsLeft));
 
@@ -1470,9 +1473,23 @@ const HotCorner = new Lang.Class({
         return DND.DragMotionResult.CONTINUE;
     },
 
+    _setEntered: function(entered) {
+        if (entered != this._entered) {
+            this._entered = entered;
+            this.emit('hover-changed');
+        }
+    },
+
+    _setEnteredEnvirons: function(entered) {
+        if (entered != this._enteredEnvirons) {
+            this._enteredEnvirons = entered;
+            this.emit('hover-changed');
+        }
+    },
+
     _onCornerEntered : function() {
         if (!this._entered) {
-            this._entered = true;
+            this._setEntered(true);
             this._toggleOverview();
         }
         return false;
@@ -1480,17 +1497,29 @@ const HotCorner = new Lang.Class({
 
     _onCornerLeft : function(actor, event) {
         if (event.get_related() != this.actor)
-            this._entered = false;
+            this._setEntered(false);
+        this._setEnteredEnvirons(false);
         // Consume event, otherwise this will confuse onEnvironsLeft
         return true;
     },
 
+    _onEnvironsEntered: function() {
+        this._setEnteredEnvirons(true);
+        return false;
+    },
+
     _onEnvironsLeft : function(actor, event) {
         if (event.get_related() != this._corner)
-            this._entered = false;
+            this._setEntered(false);
+        this._setEnteredEnvirons(false);
         return false;
+    },
+
+    get hover() {
+        return this._entered || this._enteredEnvirons;
     }
 });
+Signals.addSignalMethods(HotCorner.prototype);
 
 const PressureBarrier = new Lang.Class({
     Name: 'PressureBarrier',
