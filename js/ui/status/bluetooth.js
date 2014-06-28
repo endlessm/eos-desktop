@@ -62,9 +62,11 @@ const Indicator = new Lang.Class({
         this._hasDevices = false;
 
         this._fullMenuItems[1].connect('activate', function() {
+            Main.overview.hide();
             GLib.spawn_command_line_async('bluetooth-sendto');
         });
         this._fullMenuItems[2].connect('activate', function() {
+            Main.overview.hide();
             GLib.spawn_command_line_async('bluetooth-wizard');
         });
 
