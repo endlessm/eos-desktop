@@ -64,13 +64,6 @@ const AppSearchProvider = new Lang.Class({
         this.id = 'applications';
     },
 
-    _filterLayoutIds: function(results) {
-        return results.filter(function(app) {
-            let appId = app.get_id();
-            return IconGridLayout.layout.hasIcon(appId);
-        });
-    },
-
     getResultMetas: function(apps, callback) {
         let metas = [];
         for (let i = 0; i < apps.length; i++) {
