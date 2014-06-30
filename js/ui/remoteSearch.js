@@ -90,18 +90,20 @@ function loadRemoteSearchProviders(addProviderCallback) {
             if (objectPaths[objectPath])
                 return;
 
-            let app = null;
+            let desktopId;
             try {
-                let desktopId = keyfile.get_string(group, 'DesktopId');
-                app = appSys.lookup_heuristic_basename(desktopId);
+                desktopId = keyfile.get_string(group, 'DesktopId');
             } catch (e) {
                 log('Ignoring search provider ' + path + ': missing DesktopId');
                 return;
             }
 
             // Check if it is available on desktop
-            if (!IconGridLayout.layout.hasIcon(app.get_id()))
+            if (!IconGridLayout.layout.hasIcon(desktopId)) {
                 return
+            }
+
+            let app = appSys.lookup_heuristic_basename(desktopId);
             
             let version = '1';
             try {
