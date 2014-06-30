@@ -171,7 +171,7 @@ const EndlessApplicationView = new Lang.Class({
         if (IconGridLayout.layout.iconIsFolder(itemId)) {
             item = Shell.DesktopDirInfo.new(itemId);
         } else {
-            item = appSystem.lookup_app(itemId);
+            item = appSystem.lookup_heuristic_basename(itemId);
         }
 
         return item;
@@ -227,7 +227,9 @@ const EndlessApplicationView = new Lang.Class({
         let appSystem = Shell.AppSystem.get_default();
         return items.filter(Lang.bind(this,
             function(itemId) {
-                return IconGridLayout.layout.iconIsFolder(itemId) || appSystem.lookup_app(itemId) || (itemId == EOS_APP_STORE_ID);
+                return IconGridLayout.layout.iconIsFolder(itemId) ||
+                    appSystem.lookup_heuristic_basename(itemId) ||
+                    (itemId == EOS_APP_STORE_ID);
             }));
     },
 
