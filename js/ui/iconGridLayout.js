@@ -144,6 +144,10 @@ const IconGridLayout = new Lang.Class({
     },
 
     removeIcon: function(id, interactive) {
+        if (!this.hasIcon(id)) {
+            return;
+        }
+
         this._previousLayout = global.settings.get_value(SCHEMA_KEY);
         this._removeUndone = false;
 
