@@ -164,7 +164,7 @@ const EndlessApplicationView = new Lang.Class({
         if (IconGridLayout.layout.iconIsFolder(itemId)) {
             item = Shell.DesktopDirInfo.new(itemId);
         } else {
-            item = appSystem.lookup_heuristic_basename(itemId);
+            item = appSystem.lookup_app(itemId);
         }
 
         return item;
@@ -221,7 +221,7 @@ const EndlessApplicationView = new Lang.Class({
         return items.filter(Lang.bind(this,
             function(itemId) {
                 return IconGridLayout.layout.iconIsFolder(itemId) ||
-                    appSystem.lookup_heuristic_basename(itemId) ||
+                    appSystem.lookup_app(itemId) ||
                     (itemId == EOS_APP_STORE_ID);
             }));
     },
@@ -1481,7 +1481,13 @@ const AppIcon = new Lang.Class({
                                         isDraggable: true,
                                         parentView: null });
 
-        this.app = app;
+        this._baseApp = app;
+
+        let id = app.get_id();
+        let appSystem = Shell.AppSystem.get_default();
+        let displayApp = appSystem.lookup_heuristic_basename(id);
+
+        this.app = displayApp;
         this._name = this.app.get_name();
 
         this._isDeletable = true;
@@ -1620,7 +1626,7 @@ const AppIcon = new Lang.Class({
     },
 
     getId: function() {
-        return this.app.get_id();
+        return this._baseApp.get_id();
     },
 
     getName: function() {
