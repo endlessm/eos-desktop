@@ -30,7 +30,6 @@ const IconGridLayout = new Lang.Class({
         this._updateIconTree();
 
         this._removeUndone = false;
-        this._previousLayout = null;
 
         global.settings.connect('changed::' + SCHEMA_KEY, Lang.bind(this, function() {
             this._updateIconTree();
@@ -117,14 +116,36 @@ const IconGridLayout = new Lang.Class({
     },
 
     hasIcon: function(id) {
-        for (let folderIdx in this._iconTree) {
-            let folder = this._iconTree[folderIdx];
+        for (let folderId in this._iconTree) {
+            let folder = this._iconTree[folderId];
             if (folder.indexOf(id) != -1) {
                 return true;
             }
         }
 
         return false;
+    },
+
+    _getIconLocation: function(id) {
+        for (let folderId in this._iconTree) {
+            let folder = this._iconTree[folderId];
+            let nIcons = folder.length;
+
+            let itemIdx = folder.indexOf(id);
+            let nextId;
+
+            if (itemIdx < nIcons) {
+                nextId = folder[itemIdx + 1];
+            } else {
+                // append to the folder
+                nextId = null;
+            }
+
+            if (itemIdx != -1) {
+                return [folderId, nextId];
+            }
+        }
+        return null;
     },
 
     getIcons: function(folder) {
@@ -148,8 +169,15 @@ const IconGridLayout = new Lang.Class({
             return;
         }
 
-        this._previousLayout = global.settings.get_value(SCHEMA_KEY);
         this._removeUndone = false;
+
+        let undoInfo = null;
+        let currentLocation = this._getIconLocation(id);
+        if (currentLocation) {
+            undoInfo = { id: id,
+                         folderId: currentLocation[0],
+                         insertId: currentLocation[1] };
+        }
 
         this.repositionIcon(id, null, null);
 
@@ -172,7 +200,7 @@ const IconGridLayout = new Lang.Class({
             Main.overview.setMessage(_("%s has been deleted").format(info.get_name()),
                                      { forFeedback: true,
                                        destroyCallback: Lang.bind(this, this._onMessageDestroy, info),
-                                       undoCallback: Lang.bind(this, this._undoRemoveItem, info)
+                                       undoCallback: Lang.bind(this, this._undoRemoveItem, undoInfo)
                                      });
         } else {
             this._onMessageDestroy(info);
@@ -180,8 +208,6 @@ const IconGridLayout = new Lang.Class({
     },
 
     _onMessageDestroy: function(info) {
-        this._previousLayout = null;
-
         if (this._removeUndone) {
             this._removeUndone = false;
             return;
@@ -200,19 +226,18 @@ const IconGridLayout = new Lang.Class({
         }
     },
 
-    _undoRemoveItem: function(info) {
-        if (this._previousLayout) {
-            global.settings.set_value(SCHEMA_KEY, this._previousLayout);
+    _undoRemoveItem: function(undoInfo) {
+        if (undoInfo != null) {
+            this.repositionIcon(undoInfo.id, undoInfo.insertId, undoInfo.folderId);
         }
         this._removeUndone = true;
-        this._previousLayout = null;
     },
 
     listApplications: function() {
         let allApplications = [];
 
-        for (let folderIdx in this._iconTree) {
-            let folder = this._iconTree[folderIdx];
+        for (let folderId in this._iconTree) {
+            let folder = this._iconTree[folderId];
             for (let iconIdx in folder) {
                 let icon = folder[iconIdx];
                 if (!this.iconIsFolder(icon)) {
@@ -224,7 +249,7 @@ const IconGridLayout = new Lang.Class({
         return allApplications;
     },
 
-    repositionIcon: function(id, insertId, newFolder) {
+    repositionIcon: function(id, insertId, newFolderId) {
         let icons;
         let existing = false;
         let isFolder = this.iconIsFolder(id);
@@ -239,9 +264,9 @@ const IconGridLayout = new Lang.Class({
             }
         }
 
-        if (newFolder != null) {
+        if (newFolderId != null) {
             // We're adding or repositioning an icon
-            icons = this._iconTree[newFolder];
+            icons = this._iconTree[newFolderId];
             if (!icons) {
                 // Invalid destination folder
                 return;

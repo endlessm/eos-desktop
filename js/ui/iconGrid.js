@@ -549,30 +549,13 @@ const IconGrid = new Lang.Class({
                 leftPadding = availWidth - usedWidth;
         }
 
-        let x = box.x1 + leftPadding;
-        let y = box.y1;
-        let columnIndex = 0;
-        let rowIndex = 0;
+        // Store some information about the allocated layout
+        this._leftPadding = leftPadding;
+        this._allocatedColumns = nColumns;
+
         for (let i = 0; i < children.length; i++) {
-            let [childMinWidth, childMinHeight, childNaturalWidth, childNaturalHeight]
-                = children[i].get_preferred_size();
-
-            /* Center the item in its allocation horizontally */
-            let width = Math.max(this._hItemSize, childNaturalWidth);
-            let childXSpacing = Math.max(0, width - childNaturalWidth) / 2;
-            let height = Math.max(this._vItemSize, childNaturalHeight);
-            let childYSpacing = Math.max(0, height - childNaturalHeight) / 2;
-
-            let childBox = new Clutter.ActorBox();
-            if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL) {
-                let _x = box.x2 - (x + width);
-                childBox.x1 = Math.floor(_x - childXSpacing);
-            } else {
-                childBox.x1 = Math.floor(x + childXSpacing);
-            }
-            childBox.y1 = Math.floor(y + childYSpacing);
-            childBox.x2 = childBox.x1 + childNaturalWidth;
-            childBox.y2 = childBox.y1 + childNaturalHeight;
+            let rowIndex = Math.floor((i + 1) / this._allocatedColumns);
+            let childBox = this._childAllocation(children[i], box, i);
 
             if (this._rowLimit && rowIndex >= this._rowLimit ||
                 this._fillParent && childBox.y2 > availHeight) {
@@ -581,24 +564,36 @@ const IconGrid = new Lang.Class({
                 children[i].allocate(childBox, flags);
                 this.actor.set_skip_paint(children[i], false);
             }
-
-            columnIndex++;
-            if (columnIndex == nColumns) {
-                columnIndex = 0;
-                rowIndex++;
-            }
-
-            if (columnIndex == 0) {
-                y += this._vItemSize + this._spacing;
-                x = box.x1 + leftPadding;
-            } else {
-                x += this._hItemSize + this._spacing;
-            }
         }
+    },
 
-        // Store some information about the allocated layout
-        this._leftPadding = leftPadding;
-        this._allocatedColumns = nColumns;
+    _childAllocation: function(child, box, index) {
+        let [childMinWidth, childMinHeight, childNaturalWidth, childNaturalHeight]
+            = child.get_preferred_size();
+
+        let column = index % this._allocatedColumns;
+        let row = Math.floor(index / this._allocatedColumns);
+        let x = box.x1 + this._leftPadding + column * (this._hItemSize + this._spacing);
+        let y = box.y1 + row * (this._vItemSize + this._spacing);
+
+        /* Center the item in its allocation horizontally */
+        let width = Math.max(this._hItemSize, childNaturalWidth);
+        let childXSpacing = Math.max(0, width - childNaturalWidth) / 2;
+        let height = Math.max(this._vItemSize, childNaturalHeight);
+        let childYSpacing = Math.max(0, height - childNaturalHeight) / 2;
+
+        let childBox = new Clutter.ActorBox();
+        if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL) {
+            let _x = box.x2 - (x + width);
+            childBox.x1 = Math.floor(_x - childXSpacing);
+        } else {
+            childBox.x1 = Math.floor(x + childXSpacing);
+        }
+        childBox.y1 = Math.floor(y + childYSpacing);
+        childBox.x2 = childBox.x1 + childNaturalWidth;
+        childBox.y2 = childBox.y1 + childNaturalHeight;
+
+        return childBox;
     },
 
     childrenInRow: function(rowWidth) {
@@ -683,17 +678,26 @@ const IconGrid = new Lang.Class({
         this.actor.paint();
 
         let children = this.actor.get_children();
+        let node = this.actor.get_theme_node();
+        let contentBox = node.get_content_box(this.actor.allocation);
 
         let movementMatrix = {};
         // Find out where icons need to move
         for (let sourceIndex in changedItems) {
             let targetIndex = changedItems[sourceIndex];
-            if (targetIndex < children.length) {
-                movementMatrix[sourceIndex] = this._findActorOffset(children[sourceIndex], children[targetIndex]);
+            let sourceActor = children[sourceIndex];
+            let actorOffset;
+
+            if (targetIndex >= children.length) {
+                // calculate the position of the new slot
+                let oldBox = sourceActor.allocation;
+                let newBox = this._childAllocation(sourceActor, contentBox, targetIndex);
+                actorOffset = [newBox.x1 - oldBox.x1, newBox.y1 - oldBox.y1];
             } else {
-                delete changedItems[sourceIndex];
-                removedItems.push(sourceIndex);
+                actorOffset = this._findActorOffset(sourceActor, children[targetIndex]);
             }
+
+            movementMatrix[sourceIndex] = actorOffset;
         }
 
         // Make the original icon look like it fell into its place

@@ -235,12 +235,12 @@ const EndlessApplicationView = new Lang.Class({
             let oldItem = oldItemLayout[oldItemIdx];
             let newItemIdx = newItemLayout.indexOf(oldItem);
 
-            // Did this icon move?
-            if (newItemIdx != -1 && oldItemIdx != newItemIdx) {
-                movedList[oldItemIdx] = newItemIdx;
-            // Did it get removed?
-            } else if (newItemIdx == -1) {
-                removedList.push(oldItemIdx);
+            if (oldItemIdx != newItemIdx) {
+                if (newItemIdx < 0) {
+                    removedList.push(oldItemIdx);
+                } else {
+                    movedList[oldItemIdx] = newItemIdx;
+                }
             }
         }
 
