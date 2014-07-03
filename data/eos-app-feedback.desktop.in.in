@@ -7,5 +7,3 @@ Exec=chromium-browser chrome-extension://kilnnmemaannmgjifgmiifljomfeaaig/index.
 Icon=
 Categories=Utility;
 X-Endless-LaunchMaximized=false
-X-Endless-ShowInAppStore=false
-
