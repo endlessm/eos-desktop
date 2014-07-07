@@ -51,8 +51,6 @@ const DRAG_SCROLL_PIXELS_PER_SEC = 800;
 const FOLDER_POPUP_ANIMATION_PIXELS_PER_SEC = 600;
 const FOLDER_POPUP_ANIMATION_TYPE = 'easeOutQuad';
 
-const SHOW_IN_APP_STORE_DESKTOP_KEY = 'X-Endless-ShowInAppStore';
-
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
 
@@ -1490,14 +1488,6 @@ const AppIcon = new Lang.Class({
         this.app = displayApp;
         this._name = this.app.get_name();
 
-        this._isDeletable = true;
-        let appInfo = app.get_app_info();
-        if (appInfo &&
-            appInfo.has_key(SHOW_IN_APP_STORE_DESKTOP_KEY) &&
-            !appInfo.get_boolean(SHOW_IN_APP_STORE_DESKTOP_KEY)) {
-            this._isDeletable = false;
-        }
-
         this._showMenu = params.showMenu;
 
         iconParams = Params.parse(iconParams, { createIcon: Lang.bind(this, this._createIcon),
@@ -1709,12 +1699,7 @@ const AppIcon = new Lang.Class({
     },
 
     canDragOver: function(dest) {
-        let canDragOver = true;
-
-        if (!this._isDeletable && dest instanceof AppStoreIcon) {
-            canDragOver = false;
-        }
-        return canDragOver;
+        return true;
     }
 });
 Signals.addSignalMethods(AppIcon.prototype);
