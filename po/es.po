@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-10 11:13+0100\n"
-"PO-Revision-Date: 2014-07-02 01:10+0000\n"
+"PO-Revision-Date: 2014-07-07 21:50+0000\n"
 "Last-Translator: c.sanchez <cassandra@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/eos-shell/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -507,7 +507,7 @@ msgstr "Todo el día"
 #: ../js/ui/calendar.js:68
 msgctxt "event list time"
 msgid "%H∶%M"
-msgstr ""
+msgstr "%H∶%M"
 
 #. Transators: Shown in calendar event list, if 12h format,
 #. \u2236 is a ratio character, similar to : and \u2009 is
@@ -515,7 +515,7 @@ msgstr ""
 #: ../js/ui/calendar.js:77
 msgctxt "event list time"
 msgid "%l∶%M %p"
-msgstr ""
+msgstr "%l∶%M %p"
 
 #. Translators: Calendar grid abbreviation for Sunday.
 #. *
@@ -612,7 +612,7 @@ msgstr "S"
 
 #: ../js/ui/calendar.js:389
 msgid "calendar:MY"
-msgstr ""
+msgstr "calendar:MY"
 
 #. Translators: Text to show if there are no events */
 #: ../js/ui/calendar.js:720
