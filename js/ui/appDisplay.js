@@ -1752,7 +1752,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     getName: function() {
-        return _("Add");
+        return _("More Apps");
     },
 
     getId: function() {
