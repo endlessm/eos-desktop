@@ -1461,7 +1461,9 @@ const Workspace = new Lang.Class({
     // Tests if @win should be shown in the Overview
     _isOverviewWindow : function (win) {
         let tracker = Shell.WindowTracker.get_default();
-        return tracker.is_window_interesting(win.get_meta_window());
+        let metaWindow = win.get_meta_window();
+        return tracker.is_window_interesting(metaWindow) &&
+            !SideComponent.isSideComponentWindow(metaWindow);
     },
 
     // Create a clone of a side component window and add it to the
