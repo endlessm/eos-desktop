@@ -355,7 +355,7 @@ _shell_app_system_notify_app_state_changed (ShellAppSystem *self,
   switch (state)
     {
     case SHELL_APP_STATE_RUNNING:
-      if (app_info_id != NULL) 
+      if (app_info_id != NULL)
       {
         emtr_event_recorder_record_start (emtr_event_recorder_get_default (),
                                           EMTR_EVENT_SHELL_APP_IS_OPEN,
@@ -367,14 +367,13 @@ _shell_app_system_notify_app_state_changed (ShellAppSystem *self,
     case SHELL_APP_STATE_STARTING:
       break;
     case SHELL_APP_STATE_STOPPED:
-      if (app_info_id != NULL) 
+      if (g_hash_table_remove (self->priv->running_apps, app) && app_info_id != NULL)
       {
         emtr_event_recorder_record_stop (emtr_event_recorder_get_default (),
                                          EMTR_EVENT_SHELL_APP_IS_OPEN,
                                          g_variant_new ("s", app_address),
                                          NULL);
       }
-      g_hash_table_remove (self->priv->running_apps, app);
       break;
     }
   g_free (app_address);
