@@ -6,3 +6,4 @@ X-MultipleArgs=false
 Categories=EndlessOS;Utility;Core;
 MimeType=x-scheme-handler/endlessm-app;
 Type=Application
+NoDisplay=true
