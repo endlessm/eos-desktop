@@ -43,8 +43,6 @@
 static ShellGlobal *the_object = NULL;
 
 static void grab_notify (GtkWidget *widget, gboolean is_grab, gpointer user_data);
-static void shell_global_on_gc (GjsContext   *context,
-                                ShellGlobal  *global);
 
 struct _ShellGlobal {
   GObject parent;
@@ -934,8 +932,6 @@ void
 shell_global_end_modal (ShellGlobal *global,
                         guint32      timestamp)
 {
-  ClutterActor *actor;
-
   if (!global->has_modal)
     return;
 

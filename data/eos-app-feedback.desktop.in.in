@@ -6,4 +6,5 @@ Type=Application
 Exec=chromium-browser chrome-extension://kilnnmemaannmgjifgmiifljomfeaaig/index.html#feedback
 Icon=
 Categories=Utility;
+NoDisplay=true
 X-Endless-LaunchMaximized=false

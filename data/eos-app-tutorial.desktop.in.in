@@ -6,4 +6,5 @@ Type=Application
 Exec=gnome-welcome-tour
 Icon=
 Categories=Utility;
+NoDisplay=true
 X-Endless-LaunchMaximized=false
