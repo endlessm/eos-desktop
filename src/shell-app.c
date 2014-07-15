@@ -183,7 +183,6 @@ shell_app_create_icon_texture (ShellApp   *app,
 {
   GIcon *icon;
   ClutterActor *ret;
-  GAppInfo *info;
   const gchar *executable;
 
   ret = NULL;
@@ -197,7 +196,7 @@ shell_app_create_icon_texture (ShellApp   *app,
 
   if (ret == NULL)
     {
-      executable = g_app_info_get_executable (info);
+      executable = g_app_info_get_executable (G_APP_INFO (app->info));
       if (g_strcmp0 (executable, "eos-browser") == 0)
         icon = g_themed_icon_new ("generic-link");
       else
@@ -814,8 +813,6 @@ int
 shell_app_compare (ShellApp *app,
                    ShellApp *other)
 {
-  gboolean vis_app, vis_other;
-
   if (app->state != other->state)
     {
       if (app->state == SHELL_APP_STATE_RUNNING)

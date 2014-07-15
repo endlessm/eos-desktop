@@ -37,7 +37,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-
+#include <glib/gstdio.h>
 
 /**
  * SECTION:shelldesktopdirinfo
@@ -729,8 +729,6 @@ ShellDirInfo *
 shell_dir_info_create_from_directory_name (const char           *directory_name,
                                            GError              **error)
 {
-  char **split;
-  char *basename;
   ShellDesktopDirInfo *info;
 
   g_return_val_if_fail (directory_name, NULL);
@@ -762,19 +760,6 @@ shell_desktop_dir_info_iface_init (ShellDirInfoIface *iface)
   iface->can_delete = shell_desktop_dir_info_can_delete;
   iface->do_delete = shell_desktop_dir_info_delete;
   iface->get_display_name = shell_desktop_dir_info_get_display_name;
-}
-
-static gboolean
-dir_info_in_list (ShellDirInfo *info, 
-                  GList    *list)
-{
-  while (list != NULL)
-    {
-      if (shell_dir_info_equal (info, list->data))
-        return TRUE;
-      list = list->next;
-    }
-  return FALSE;
 }
 
 static void
@@ -887,19 +872,6 @@ shell_dir_info_get_all (void)
   g_hash_table_destroy (entries);
 
   return g_list_reverse (infos);
-}
-
-static GList *
-append_desktop_entry (GList      *list, 
-                      const char *desktop_entry,
-                      GList      *removed_entries)
-{
-  /* Add if not already in list, and valid */
-  if (!g_list_find_custom (list, desktop_entry, (GCompareFunc) strcmp) &&
-      !g_list_find_custom (removed_entries, desktop_entry, (GCompareFunc) strcmp))
-    list = g_list_prepend (list, g_strdup (desktop_entry));
-  
-  return list;
 }
 
 /**

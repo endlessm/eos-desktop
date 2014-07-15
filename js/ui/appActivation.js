@@ -440,6 +440,7 @@ const DesktopAppClient = new Lang.Class({
         let showSplash =
             (this._lastDesktopApp != null) &&
             (this._lastDesktopApp.state != Shell.AppState.RUNNING) &&
+            (this._lastDesktopApp.get_app_info().should_show()) &&
             !launchedByShell;
 
         if (showSplash) {
