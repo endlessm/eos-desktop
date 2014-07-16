@@ -7,6 +7,7 @@ const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
+const Pango = imports.gi.Pango;
 const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
@@ -18,6 +19,7 @@ const Main = imports.ui.main;
 const SideComponent = imports.ui.sideComponent;
 const BackgroundMenu = imports.ui.backgroundMenu;
 const ButtonConstants = imports.ui.buttonConstants;
+const ModalDialog = imports.ui.modalDialog;
 const Tweener = imports.ui.tweener;
 const ViewSelector = imports.ui.viewSelector;
 
@@ -28,6 +30,108 @@ const DIM_BRIGHTNESS = -0.3;
 const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
 const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
+
+const DISPLAY_REVERT_TIMEOUT = 20; // in seconds - keep in sync with mutter
+const ONE_SECOND = 1000; // in ms
+
+const DisplayChangeDialog = new Lang.Class({
+    Name: 'DisplayChangeDialog',
+    Extends: ModalDialog.ModalDialog,
+
+    _init: function(wm) {
+        this.parent({ styleClass: 'prompt-dialog' });
+
+        this._wm = wm;
+
+        let mainContentBox = new St.BoxLayout({ style_class: 'prompt-dialog-main-layout',
+                                                vertical: false });
+        this.contentLayout.add(mainContentBox,
+                               { x_fill: true,
+                                 y_fill: true });
+
+        let icon = new St.Icon({ icon_name: 'preferences-desktop-display-symbolic' });
+        mainContentBox.add(icon,
+                           { x_fill:  true,
+                             y_fill:  false,
+                             x_align: St.Align.END,
+                             y_align: St.Align.START });
+
+        let messageBox = new St.BoxLayout({ style_class: 'prompt-dialog-message-layout',
+                                            vertical: true });
+        mainContentBox.add(messageBox,
+                           { expand: true, y_align: St.Align.START });
+
+        let subjectLabel = new St.Label({ style_class: 'prompt-dialog-headline',
+                                            text: _("Do you want to keep these display settings?") });
+        messageBox.add(subjectLabel,
+                       { y_fill:  false,
+                         y_align: St.Align.START });
+
+        this._countDown = DISPLAY_REVERT_TIMEOUT;
+        let message = this._formatCountDown();
+        this._descriptionLabel = new St.Label({ style_class: 'prompt-dialog-description',
+                                                text: this._formatCountDown() });
+        this._descriptionLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        this._descriptionLabel.clutter_text.line_wrap = true;
+
+        messageBox.add(this._descriptionLabel,
+                       { y_fill:  true,
+                         y_align: St.Align.START });
+
+        /* Translators: this and the following message should be limited in lenght,
+           to avoid ellipsizing the labels.
+        */
+        this._cancelButton = this.addButton({ label: _("Revert Settings"),
+                                              action: Lang.bind(this, this._onFailure),
+                                              key: Clutter.Escape },
+                                            { expand: true, x_fill: false, x_align: St.Align.START });
+        this._okButton = this.addButton({ label:  _("Keep Changes"),
+                                          action: Lang.bind(this, this._onSuccess),
+                                          default: true },
+                                        { expand: false, x_fill: false, x_align: St.Align.END });
+
+        this._timeoutId = Mainloop.timeout_add(ONE_SECOND, Lang.bind(this, this._tick));
+    },
+
+    close: function(timestamp) {
+        if (this._timeoutId > 0) {
+            Mainloop.source_remove(this._timeoutId);
+            this._timeoutId = 0;
+        }
+
+        this.parent(timestamp);
+    },
+
+    _formatCountDown: function() {
+        let fmt = ngettext("Settings changes will revert in %d second",
+                           "Settings changes will revert in %d seconds");
+        return fmt.format(this._countDown);
+    },
+
+    _tick: function() {
+        this._countDown--;
+
+        if (this._countDown == 0) {
+            /* mutter already takes care of failing at timeout */
+            this._timeoutId = 0;
+            this.close();
+            return false;
+        }
+
+        this._descriptionLabel.text = this._formatCountDown();
+        return true;
+    },
+
+    _onFailure: function() {
+        this._wm.complete_display_change(false);
+        this.close();
+    },
+
+    _onSuccess: function() {
+        this._wm.complete_display_change(true);
+        this.close();
+    },
+});
 
 const WindowDimmer = new Lang.Class({
     Name: 'WindowDimmer',
@@ -377,6 +481,7 @@ const WindowManager = new Lang.Class({
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
         this._shellwm.connect_after('destroy', Lang.bind(this, this._destroyWindow));
         this._shellwm.connect('filter-keybinding', Lang.bind(this, this._filterKeybinding));
+        this._shellwm.connect('confirm-display-change', Lang.bind(this, this._confirmDisplayChange));
 
         this._workspaceSwitcherPopup = null;
         this.setCustomKeybindingHandler('switch-to-workspace-left',
@@ -1252,5 +1357,10 @@ const WindowManager = new Lang.Class({
         }
 
         return toActivate;
+    },
+
+    _confirmDisplayChange: function() {
+        let dialog = new DisplayChangeDialog(this._shellwm);
+        dialog.open();
     },
 });
