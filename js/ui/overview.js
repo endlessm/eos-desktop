@@ -713,128 +713,7 @@ const Overview = new Lang.Class({
         }
     },
 
-    _checkFirstLaunchId: function() {
-        if (this._firstLaunchId > 0) {
-            let browser = Util.getBrowserApp();
-            browser.disconnect(this._firstLaunchId);
-            this._firstLaunchId = 0;
-        }
-
-        if (this._minimizeStartWindowsId > 0) {
-            global.display.disconnect(this._minimizeStartWindowsId);
-            this._minimizeStartWindowsId = 0;
-        }
-    },
-
-    _startBrowser: function() {
-        // Start the browser, without exiting the overview,
-        // if it's not running already.
-        // At the same time, minimize all the windows beloging to auto-started applications.
-        this._minimizeStartWindowsId = global.display.connect('window-created', function(metaDisplay, metaWindow) {
-            if (!SideComponent.isSideComponentWindow(metaWindow)) {
-                metaWindow.minimize();
-            }
-        });
-
-        let browser = Util.getBrowserApp();
-        if (browser && browser.get_state() != Shell.AppState.RUNNING) {
-            browser.activate();
-
-            this._firstLaunchId = browser.connect('windows-changed', Lang.bind(this, function() {
-                let windows = browser.get_windows();
-                let win = windows[0];
-                let raisedId = win.connect('raised', Lang.bind(this, function(win) {
-                    if (this._firstLaunchId > 0) {
-                        win.minimize();
-                    } else {
-                        win.disconnect(raisedId);
-                    }
-                }));
-            }));
-        }
-    },
-
-    _isTourShowing: function() {
-        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
-                                         'run-welcome-tour']);
-        return GLib.file_test(path, GLib.FileTest.EXISTS);
-    },
-
-    _startBrowserAfterTour: function() {
-        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
-                                         'run-welcome-tour']);
-        let file = Gio.File.new_for_path(path);
-
-        // Check when the welcome tour video finishes
-        let monitor = file.monitor_file(Gio.FileMonitorFlags.NONE, null);
-
-        // Keep the monitor from being garbage collected
-        this._welcomeTourMonitor = monitor;
-
-        let changeId = monitor.connect('changed', Lang.bind(this,
-            function(mon, file, otherFile, eventType) {
-                if (eventType !== Gio.FileMonitorEvent.DELETED) {
-                    return;
-                }
-
-                monitor.disconnect(changeId);
-                this._welcomeTourMonitor = null;
-
-                // Start the browser now that the welcome tour has finished
-                this._startBrowser();
-            }));
-    },
-
-    _isInitialSetupRunning: function() {
-        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
-                                         'gnome-initial-setup-done']);
-        return !GLib.file_test(path, GLib.FileTest.EXISTS);
-    },
-
-    _startBrowserAfterInitialSetup: function() {
-        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
-                                         'gnome-initial-setup-done']);
-        let file = Gio.File.new_for_path(path);
-
-        // Check when gnome-initial-setup finishes
-        let monitor = file.monitor_file(Gio.FileMonitorFlags.NONE, null);
-
-        // Keep the monitor from being garbage collected
-        this._initialSetupMonitor = monitor;
-
-        let changeId = monitor.connect('changed', Lang.bind(this,
-            function(mon, file, otherFile, eventType) {
-                if (eventType !== Gio.FileMonitorEvent.CREATED) {
-                    return;
-                }
-
-                monitor.disconnect(changeId);
-                this._initialSetupMonitor = null;
-
-                // Start the browser once the tour video finishes
-
-                if (this._isTourShowing()) {
-                    this._startBrowserAfterTour();
-                    return;
-                }
-
-                this._startBrowser();
-            }));
-    },
-
     startupState: function() {
-        if (this._isInitialSetupRunning()) {
-            this._startBrowserAfterInitialSetup();
-            return;
-        }
-
-        if (this._isTourShowing()) {
-            this._startBrowserAfterTour();
-            return;
-        }
-
-        this._startBrowser();
-
         this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
 
         /* Show Shared Account warning */
@@ -959,7 +838,6 @@ const Overview = new Lang.Class({
         if (!this._shown)
             return;
 
-        this._checkFirstLaunchId();
         this._animateNotVisible();
 
         this._shown = false;

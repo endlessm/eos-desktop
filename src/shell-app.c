@@ -183,7 +183,7 @@ shell_app_create_icon_texture (ShellApp   *app,
 {
   GIcon *icon;
   ClutterActor *ret;
-  const gchar *executable;
+  const gchar *id;
 
   ret = NULL;
 
@@ -196,8 +196,8 @@ shell_app_create_icon_texture (ShellApp   *app,
 
   if (ret == NULL)
     {
-      executable = g_app_info_get_executable (G_APP_INFO (app->info));
-      if (g_strcmp0 (executable, "eos-browser") == 0)
+      id = g_app_info_get_id (G_APP_INFO (app->info));
+      if (id != NULL && g_str_has_prefix (id, "eos-link-"))
         icon = g_themed_icon_new ("generic-link");
       else
         icon = g_themed_icon_new ("generic-app");

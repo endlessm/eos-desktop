@@ -10,6 +10,7 @@ const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
 const Tweener = imports.ui.tweener;
 
+const AppActivation = imports.ui.appActivation;
 const BoxPointer = imports.ui.boxpointer;
 const ButtonConstants = imports.ui.buttonConstants;
 const Hash = imports.misc.hash;
@@ -313,7 +314,8 @@ const AppIconButton = new Lang.Class({
         // The multiple windows case is handled in button-press-event
         let windows = this._app.get_windows();
         if (windows.length == 0) {
-            this._app.activate();
+            let activationContext = new AppActivation.AppActivationContext(this._app);
+            activationContext.activate();
             Main.overview.hide();
         } else if (windows.length == 1) {
             let win = windows[0];
