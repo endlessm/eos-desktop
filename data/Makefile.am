@@ -44,7 +44,10 @@ dist_theme_DATA =				\
 	theme/app-shadow-hover.png		\
 	theme/app-shadow-normal.png		\
 	theme/app-shadow-pressed.png		\
-	theme/app-store-symbolic.svg		\
+	theme/app-store-shadow-hover.png	\
+	theme/app-store-shadow-normal.png	\
+	theme/app-store-shadow-pressed.png	\
+	theme/app-store.png			\
 	theme/calendar-arrow-left.svg		\
 	theme/calendar-arrow-right.svg		\
 	theme/calendar-today.svg		\
