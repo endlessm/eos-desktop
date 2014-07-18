@@ -1721,7 +1721,7 @@ const AppStoreIcon = new Lang.Class({
 
         this.parent(parentView, buttonParams, iconParams);
 
-        this.actor.add_style_class_name('app-folder');
+        this.actor.add_style_class_name('app-store-icon');
 
         this.canDrop = true;
 
@@ -1735,7 +1735,7 @@ const AppStoreIcon = new Lang.Class({
         } else if (state == AppStoreIconState.FULL_TRASH) {
             iconName = 'trash-icon-full.png';
         } else {
-            iconName = 'app-store-symbolic.svg';
+            iconName = 'app-store.png';
         }
 
         let gfile = Gio.File.new_for_path(global.datadir + '/theme/' + iconName);

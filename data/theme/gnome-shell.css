@@ -1205,6 +1205,11 @@ StScrollBar StButton#vhandle:active {
     background-size: 64px;
 }
 
+.app-well-app.app-store-icon .icon-button .shadow-icon {
+    background-image: url("app-store-shadow-normal.png");
+    background-size: 64px;
+}
+
 .app-well-app.dnd-begin .icon-button .shadow-icon,
 .app-well-app.app-folder.dnd-begin .icon-button .shadow-icon {
     background: none;
@@ -1227,6 +1232,11 @@ StScrollBar StButton#vhandle:active {
 
 .app-well-app.app-folder .icon-button:hover .shadow-icon {
     background-image: url("folder-shadow-hover.png");
+    background-size: 64px;
+}
+
+.app-well-app.app-store-icon .icon-button:hover .shadow-icon {
+    background-image: url("app-store-shadow-hover.png");
     background-size: 64px;
 }
 
@@ -1265,6 +1275,12 @@ StScrollBar StButton#vhandle:active {
 .app-well-app.app-folder .icon-button:checked .shadow-icon,
 .app-well-app.app-folder .icon-button:active .shadow-icon {
     background-image: url("folder-shadow-pressed.png");
+    background-size: 64px;
+}
+
+.app-well-app.app-store-icon .icon-button:checked .shadow-icon,
+.app-well-app.app-store-icon .icon-button:active .shadow-icon {
+    background-image: url("app-store-shadow-pressed.png");
     background-size: 64px;
 }
 
