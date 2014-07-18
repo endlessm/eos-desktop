@@ -55,6 +55,7 @@ js/ui/unlockDialog.js
 js/ui/userMenu.js
 js/ui/viewSelector.js
 js/ui/windowAttentionHandler.js
+js/ui/windowManager.js
 src/calendar-server/evolution-calendar.desktop.in.in
 src/gvc/gvc-mixer-control.c
 src/main.c

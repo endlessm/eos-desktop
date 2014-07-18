@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-09 13:58-0700\n"
+"POT-Creation-Date: 2014-07-17 11:57-0700\n"
 "PO-Revision-Date: 2013-03-07 20:50+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
@@ -1348,7 +1348,7 @@ msgstr "Vrstica sporočanja"
 msgid "System Information"
 msgstr "Podrobnosti sistema"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:377
+#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:376
 msgctxt "program"
 msgid "Unknown"
 msgstr "Neznano"
@@ -1909,6 +1909,31 @@ msgstr "Programi"
 msgid "'%s' is ready"
 msgstr "'%s' storitev je pripravljena"
 
+#: ../js/ui/windowManager.js:65
+msgid "Do you want to keep these display settings?"
+msgstr ""
+
+#. Translators: this and the following message should be limited in lenght,
+#. to avoid ellipsizing the labels.
+#.
+#: ../js/ui/windowManager.js:84
+#, fuzzy
+msgid "Revert Settings"
+msgstr "Upravljanje napajanja"
+
+#: ../js/ui/windowManager.js:88
+msgid "Keep Changes"
+msgstr ""
+
+#: ../js/ui/windowManager.js:106
+#, c-format
+msgid "Settings changes will revert in %d second"
+msgid_plural "Settings changes will revert in %d seconds"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "Koledar Evolution "
@@ -1955,7 +1980,7 @@ msgstr "Uporabi poseben način, npr.: \"gdm\" za prijavni zaslon"
 msgid "List possible modes"
 msgstr "Seznam mogočih načinov"
 
-#: ../src/shell-app.c:629
+#: ../src/shell-app.c:628
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "Zaganjanje '%s' je spodletelo"
@@ -1964,7 +1989,7 @@ msgstr "Zaganjanje '%s' je spodletelo"
 msgid "Unnamed"
 msgstr ""
 
-#: ../src/shell-desktop-dir-info.c:747
+#: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
 msgstr ""

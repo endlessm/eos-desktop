@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell MASTER\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-09 13:58-0700\n"
+"POT-Creation-Date: 2014-07-17 11:57-0700\n"
 "PO-Revision-Date: 2013-03-12 16:28+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <>\n"
@@ -1340,7 +1340,7 @@ msgstr "Teateala"
 msgid "System Information"
 msgstr "Süsteemi andmed"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:377
+#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:376
 msgctxt "program"
 msgid "Unknown"
 msgstr "Tundmatu"
@@ -1893,6 +1893,29 @@ msgstr "Rakendused"
 msgid "'%s' is ready"
 msgstr "'%s' on valmis"
 
+#: ../js/ui/windowManager.js:65
+msgid "Do you want to keep these display settings?"
+msgstr ""
+
+#. Translators: this and the following message should be limited in lenght,
+#. to avoid ellipsizing the labels.
+#.
+#: ../js/ui/windowManager.js:84
+#, fuzzy
+msgid "Revert Settings"
+msgstr "Toitesätted..."
+
+#: ../js/ui/windowManager.js:88
+msgid "Keep Changes"
+msgstr ""
+
+#: ../js/ui/windowManager.js:106
+#, c-format
+msgid "Settings changes will revert in %d second"
+msgid_plural "Settings changes will revert in %d seconds"
+msgstr[0] ""
+msgstr[1] ""
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "Evolutioni kalender"
@@ -1935,7 +1958,7 @@ msgstr "Erirežiimi kasutamine, nt sisselogimisakna jaoks \"gdm\""
 msgid "List possible modes"
 msgstr "Võimalike režiimide loetelu"
 
-#: ../src/shell-app.c:629
+#: ../src/shell-app.c:628
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "'%s' käivitamine nurjus"
@@ -1944,7 +1967,7 @@ msgstr "'%s' käivitamine nurjus"
 msgid "Unnamed"
 msgstr ""
 
-#: ../src/shell-desktop-dir-info.c:747
+#: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
 msgstr ""

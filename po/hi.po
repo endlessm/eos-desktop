@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell.master.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-09 13:58-0700\n"
+"POT-Creation-Date: 2014-07-17 11:57-0700\n"
 "PO-Revision-Date: 2013-03-22 17:59+0530\n"
 "Last-Translator: raj <raj>\n"
 "Language-Team: Hindi <kde-i18n-doc@kde.org>\n"
@@ -1326,7 +1326,7 @@ msgstr "संदेश तश्तरी"
 msgid "System Information"
 msgstr "तंत्र जानकारी"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:377
+#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:376
 msgctxt "program"
 msgid "Unknown"
 msgstr "अज्ञात"
@@ -1879,6 +1879,29 @@ msgstr "अनुप्रयोग"
 msgid "'%s' is ready"
 msgstr "'%s' तैयार है"
 
+#: ../js/ui/windowManager.js:65
+msgid "Do you want to keep these display settings?"
+msgstr ""
+
+#. Translators: this and the following message should be limited in lenght,
+#. to avoid ellipsizing the labels.
+#.
+#: ../js/ui/windowManager.js:84
+#, fuzzy
+msgid "Revert Settings"
+msgstr "बिजली सेटिंग्स"
+
+#: ../js/ui/windowManager.js:88
+msgid "Keep Changes"
+msgstr ""
+
+#: ../js/ui/windowManager.js:106
+#, c-format
+msgid "Settings changes will revert in %d second"
+msgid_plural "Settings changes will revert in %d seconds"
+msgstr[0] ""
+msgstr[1] ""
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "एवोल्यूशन पंचांग"
@@ -1921,7 +1944,7 @@ msgstr "विशेष अवस्था का उपयोग करें, 
 msgid "List possible modes"
 msgstr "संभावित अवस्था सूचीबद्ध करें"
 
-#: ../src/shell-app.c:629
+#: ../src/shell-app.c:628
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "'%s' लॉन्च करने में विफल"
@@ -1930,7 +1953,7 @@ msgstr "'%s' लॉन्च करने में विफल"
 msgid "Unnamed"
 msgstr ""
 
-#: ../src/shell-desktop-dir-info.c:747
+#: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
 msgstr ""

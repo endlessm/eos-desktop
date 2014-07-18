@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-09 13:58-0700\n"
+"POT-Creation-Date: 2014-07-17 11:57-0700\n"
 "PO-Revision-Date: 2013-03-11 00:03+0100\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -1349,7 +1349,7 @@ msgstr "Safata de missatges"
 msgid "System Information"
 msgstr "Informació de l'ordinador"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:377
+#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:376
 msgctxt "program"
 msgid "Unknown"
 msgstr "Desconegut"
@@ -1902,6 +1902,29 @@ msgstr "Aplicacions"
 msgid "'%s' is ready"
 msgstr "«%s» ja està a punt"
 
+#: ../js/ui/windowManager.js:65
+msgid "Do you want to keep these display settings?"
+msgstr ""
+
+#. Translators: this and the following message should be limited in lenght,
+#. to avoid ellipsizing the labels.
+#.
+#: ../js/ui/windowManager.js:84
+#, fuzzy
+msgid "Revert Settings"
+msgstr "Paràmetres d'energia"
+
+#: ../js/ui/windowManager.js:88
+msgid "Keep Changes"
+msgstr ""
+
+#: ../js/ui/windowManager.js:106
+#, c-format
+msgid "Settings changes will revert in %d second"
+msgid_plural "Settings changes will revert in %d seconds"
+msgstr[0] ""
+msgstr[1] ""
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "Calendari de l'Evolution"
@@ -1944,7 +1967,7 @@ msgstr "Utilitza un mode específic, p. ex. «gdm» per la pantalla d'entrada"
 msgid "List possible modes"
 msgstr "Llista els modes possibles"
 
-#: ../src/shell-app.c:629
+#: ../src/shell-app.c:628
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "No s'ha pogut iniciar «%s»"
@@ -1953,7 +1976,7 @@ msgstr "No s'ha pogut iniciar «%s»"
 msgid "Unnamed"
 msgstr ""
 
-#: ../src/shell-desktop-dir-info.c:747
+#: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
 msgstr ""
