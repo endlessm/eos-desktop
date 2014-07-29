@@ -36,6 +36,10 @@ const MENU_POPUP_TIMEOUT = 600;
 const MAX_COLUMNS = 7;
 const ROWS_FOR_ENTRY = 4;
 
+const ICON_ANIMATION_TIME = 0.6;
+const ICON_ANIMATION_DELAY = 0.3;
+const ICON_ANIMATION_TRANSLATION = 50;
+
 const DRAG_OVER_FOLDER_OPACITY = 128;
 const INACTIVE_GRID_OPACITY = 96;
 const ACTIVE_GRID_OPACITY = 255;
@@ -334,7 +338,7 @@ const EndlessApplicationView = new Lang.Class({
         return false;
     },
 
-    addIcons: function() {
+    addIcons: function(is_hidden) {
         // Don't do anything if we don't have more up-to-date information, since
         // re-adding icons unnecessarily can cause UX problems
         if (!this.iconsNeedRedraw()) {
@@ -356,6 +360,10 @@ const EndlessApplicationView = new Lang.Class({
             }
 
             if (icon) {
+                if (is_hidden) {
+                    icon.actor.hide();
+                }
+
                 this.addIcon(icon);
                 icon.actor.connect('key-focus-in',
                                    Lang.bind(this, this._ensureIconVisible));
@@ -514,7 +522,10 @@ const AllView = new Lang.Class({
 
     _redisplay: function() {
         if (this.getAllIcons().length == 0) {
-            this.addIcons();
+            this.addIcons(true);
+
+            Main.layoutManager.connect('startup-complete',
+                Lang.bind(this, this._animateIconsIn));
         } else {
             let animateView = this._repositionedView;
             if (!animateView) {
@@ -525,6 +536,23 @@ const AllView = new Lang.Class({
             animateView.animateMovement();
         }
     },
+
+    _animateIconsIn: function() {
+        let allIcons = this.getAllIcons();
+        for (let i in allIcons) {
+            let icon = allIcons[i];
+            icon.actor.opacity = 0;
+            icon.actor.translation_y = ICON_ANIMATION_TRANSLATION;
+            icon.actor.show();
+
+            Tweener.addTween(icon.actor, {
+                translation_y: 0,
+                opacity: 255,
+                time: ICON_ANIMATION_TIME,
+                delay: ICON_ANIMATION_DELAY
+            });
+        }
+     },
 
     _closePopup: function() {
         if (!this._currentPopup) {
