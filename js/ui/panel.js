@@ -14,6 +14,7 @@ const Signals = imports.signals;
 const Atk = imports.gi.Atk;
 
 
+const AppDisplay = imports.ui.appDisplay;
 const BoxPointer = imports.ui.boxpointer;
 const Config = imports.misc.config;
 const CtrlAltTab = imports.ui.ctrlAltTab;
@@ -30,6 +31,12 @@ const BUTTON_DND_ACTIVATION_TIMEOUT = 250;
 
 const ANIMATED_ICON_UPDATE_TIMEOUT = 100;
 const SPINNER_ANIMATION_TIME = 0.2;
+
+const PANEL_ANIMATION_TIME = 0.5;
+
+const ICON_ENTER_ANIMATION_DELTA = PANEL_ICON_SIZE * 0.25;
+const ICON_ENTER_ANIMATION_SPEED = ICON_ENTER_ANIMATION_DELTA * 0.0012;
+const ICON_ENTER_ANIMATION_DELAY = ICON_ENTER_ANIMATION_SPEED * ICON_ENTER_ANIMATION_DELTA * 0.5 + PANEL_ANIMATION_TIME;
 
 const Animation = new Lang.Class({
     Name: 'Animation',
@@ -306,6 +313,13 @@ const Panel = new Lang.Class({
         this.actor = new Shell.GenericContainer({ name: 'panel',
                                                   reactive: true });
         this.actor._delegate = this;
+        this.actor.hide();
+
+        if (Main.sessionMode.isGreeter)
+            this._panelAnimationDelay = 0.0;
+        else
+            this._panelAnimationDelay = AppDisplay.ICON_ANIMATION_DELAY +
+                                        AppDisplay.ICON_ANIMATION_TIME;
 
         this._sessionStyle = null;
 
@@ -347,6 +361,26 @@ const Panel = new Lang.Class({
 
         this._updatePanel();
         this._updateBackground();
+
+        Main.layoutManager.connect('startup-complete',
+            Lang.bind(this, function() {
+                this.actor.opacity = 0;
+                this.actor.translation_y = this.actor.height;
+                this.actor.show();
+                Tweener.addTween(this.actor, {
+                    opacity: 255,
+                    time: PANEL_ANIMATION_TIME,
+                    transition: 'easeOutCubic',
+                    delay: this._panelAnimationDelay
+                });
+                Tweener.addTween(this.actor, {
+                    translation_y: 0,
+                    time: PANEL_ANIMATION_TIME,
+                    transition: 'easeOutBack',
+                    delay: this._panelAnimationDelay
+                });
+            })
+        );
     },
 
     closeActiveMenu: function() {
@@ -523,11 +557,23 @@ const Panel = new Lang.Class({
             if (indicator == null)
                 continue;
 
-            this._addToPanelBox(role, indicator, i + nChildren, box);
+            this._addToPanelBox(role, indicator, i + nChildren, box, elements.length);
         }
     },
 
-    _addToPanelBox: function(role, indicator, position, box) {
+    animateIconIn: function(icon, index) {
+        let delta = PANEL_ICON_SIZE + ICON_ENTER_ANIMATION_DELTA * index;
+        icon.translation_y = delta;
+        icon.show();
+        Tweener.addTween(icon, {
+            translation_y: 0,
+            time: ICON_ENTER_ANIMATION_SPEED * delta,
+            transition: 'easeOutBack',
+            delay: ICON_ENTER_ANIMATION_DELAY + this._panelAnimationDelay
+        });
+    },
+
+    _addToPanelBox: function(role, indicator, position, box, nElements) {
         let container = indicator.container;
         container.show();
 
@@ -535,7 +581,21 @@ const Panel = new Lang.Class({
         if (parent)
             parent.remove_actor(container);
 
-        box.insert_child_at_index(container, position);
+        if (!nElements) {
+            box.insert_child_at_index(container, position);
+        } else {
+            let index = position;
+            if (box === this._rightBox)
+                index = nElements - index;
+            container.hide();
+            box.insert_child_at_index(container, position);
+            Main.layoutManager.connect('startup-complete',
+                Lang.bind(this, function() {
+                    this.animateIconIn(container, index);
+                })
+            );
+        }
+
         if (indicator.menu)
             this.menuManager.addMenu(indicator.menu);
         this.statusArea[role] = indicator;
