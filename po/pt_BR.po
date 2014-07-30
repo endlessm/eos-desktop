@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-17 11:57-0700\n"
-"PO-Revision-Date: 2014-07-17 20:37+0000\n"
+"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"PO-Revision-Date: 2014-07-29 21:36+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/eos-shell/language/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -517,12 +517,12 @@ msgid "Change Background…"
 msgstr "Alterar plano de fundo…"
 
 #: ../js/ui/backgroundMenu.js:25
-msgid "Add Application"
-msgstr "Adicionar Aplicativos"
+msgid "Add App"
+msgstr ""
 
 #: ../js/ui/backgroundMenu.js:29
-msgid "Add Website Link"
-msgstr "Adicionar Atalho Para Sites"
+msgid "Add Website"
+msgstr ""
 
 #: ../js/ui/backgroundMenu.js:33
 msgid "Add Folder"

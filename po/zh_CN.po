@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-17 11:57-0700\n"
+"POT-Creation-Date: 2014-07-29 14:35-0700\n"
 "PO-Revision-Date: 2013-01-09 06:40+0800\n"
 "Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -527,11 +527,11 @@ msgstr ""
 
 #: ../js/ui/backgroundMenu.js:25
 #, fuzzy
-msgid "Add Application"
+msgid "Add App"
 msgstr "应用程序"
 
 #: ../js/ui/backgroundMenu.js:29
-msgid "Add Website Link"
+msgid "Add Website"
 msgstr ""
 
 #: ../js/ui/backgroundMenu.js:33

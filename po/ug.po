@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-17 11:57-0700\n"
+"POT-Creation-Date: 2014-07-29 14:35-0700\n"
 "PO-Revision-Date: 2013-03-07 21:01+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -543,11 +543,11 @@ msgstr "تەگلىكنى ئۆزگەرتىش…"
 
 #: ../js/ui/backgroundMenu.js:25
 #, fuzzy
-msgid "Add Application"
+msgid "Add App"
 msgstr "پروگراممىلار"
 
 #: ../js/ui/backgroundMenu.js:29
-msgid "Add Website Link"
+msgid "Add Website"
 msgstr ""
 
 #: ../js/ui/backgroundMenu.js:33
