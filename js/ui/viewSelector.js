@@ -271,7 +271,7 @@ const ViewsDisplay = new Lang.Class({
 
     _clearLocalSearch: function() {
         if (this._searchTimeoutId > 0) {
-            Mainloop.source_remove(this._searchTimeout);
+            Mainloop.source_remove(this._searchTimeoutId);
             this._searchTimeoutId = 0;
         }
 
