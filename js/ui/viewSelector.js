@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const EosMetrics = imports.gi.EosMetrics;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
@@ -29,7 +30,19 @@ const BASE_SEARCH_URI = 'http://www.google.com/';
 const QUERY_URI_PATH = 'search?q=';
 
 const SEARCH_TIMEOUT = 150;
+const SEARCH_METRIC_INACTIVITY_TIMEOUT_SECONDS = 3;
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
+
+// Occurs when a user initiates a search from the desktop. The payload, with
+// type `(us)`, consists of an enum value from the DesktopSearchProvider enum
+// telling what kind of search was requested; followed by the search query.
+const EVENT_DESKTOP_SEARCH = 'b02266bc-b010-44b2-ae0f-8f116ffa50eb';
+// Represents the various search providers that can be used for searching from
+// the desktop.
+const DesktopSearchProvider = {
+    MY_COMPUTER: 0,
+    GOOGLE: 1
+};
 
 const ViewPage = {
     WINDOWS: 1,
@@ -170,6 +183,7 @@ const ViewsDisplay = new Lang.Class({
 
     _init: function() {
         this._searchTimeoutId = 0;
+        this._localSearchMetricTimeoutId = 0;
 
         this._appSystem = Shell.AppSystem.get_default();
         this._allView = new AppDisplay.AllView();
@@ -233,10 +247,21 @@ const ViewsDisplay = new Lang.Class({
         this.actor.showPage(this._allView.actor);
     },
 
+    _recordDesktopSearchMetric: function (query, searchProvider) {
+        let recorder = EosMetrics.EventRecorder.get_default();
+        recorder.record_event(EVENT_DESKTOP_SEARCH,
+            new GLib.Variant('(us)', [
+                searchProvider,
+                query
+            ]));
+    },
+
     _activateGoogleSearch: function() {
         let uri = BASE_SEARCH_URI;
         let terms = this.entry.getSearchTerms();
         if (terms.length != 0) {
+            this._recordDesktopSearchMetric(terms.join(' '),
+                DesktopSearchProvider.GOOGLE);
             let searchedUris = Util.findSearchUrls(terms);
             // Make sure search contains only a uri
             // Avoid cases like "what is github.com"
@@ -284,6 +309,22 @@ const ViewsDisplay = new Lang.Class({
             this._searchTimeoutId = Mainloop.timeout_add(SEARCH_TIMEOUT,
                 Lang.bind(this, this._doLocalSearch));
         }
+
+        // Since the search is live, only record a metric a few seconds after
+        // the user has stopped typing. Don't record one if the user deleted
+        // what they wrote and left it at that.
+        if (this._localSearchMetricTimeoutId > 0)
+            Mainloop.source_remove(this._localSearchMetricTimeoutId);
+        this._localSearchMetricTimeoutId = Mainloop.timeout_add_seconds(
+            SEARCH_METRIC_INACTIVITY_TIMEOUT_SECONDS,
+            function () {
+                let query = this.entry.getSearchTerms().join(' ');
+                if (query !== '')
+                    this._recordDesktopSearchMetric(query,
+                        DesktopSearchProvider.MY_COMPUTER);
+                this._localSearchMetricTimeoutId = 0;
+                return GLib.SOURCE_REMOVE;
+            }.bind(this));
     },
 
     _enterLocalSearch: function() {
