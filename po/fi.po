@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-17 11:57-0700\n"
+"POT-Creation-Date: 2014-07-29 14:35-0700\n"
 "PO-Revision-Date: 2013-03-07 19:56+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -539,11 +539,11 @@ msgstr "Muuta työpöydän taustaa…"
 
 #: ../js/ui/backgroundMenu.js:25
 #, fuzzy
-msgid "Add Application"
+msgid "Add App"
 msgstr "Sovellukset"
 
 #: ../js/ui/backgroundMenu.js:29
-msgid "Add Website Link"
+msgid "Add Website"
 msgstr ""
 
 #: ../js/ui/backgroundMenu.js:33

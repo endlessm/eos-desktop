@@ -22,11 +22,11 @@ const BackgroundMenu = new Lang.Class({
 
         this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-        this.addAction(_("Add Application"), Lang.bind(this, function() {
+        this.addAction(_("Add App"), Lang.bind(this, function() {
             Main.appStore.showPage(global.get_current_time(), 'apps');
         }));
 
-        this.addAction(_("Add Website Link"), Lang.bind(this, function() {
+        this.addAction(_("Add Website"), Lang.bind(this, function() {
             Main.appStore.showPage(global.get_current_time(), 'web');
         }));
 

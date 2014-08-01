@@ -2901,10 +2901,6 @@ StScrollBar StButton#vhandle:active {
 }
 
 /* EndlessOS Overrides */
-.app-store-icon {
-    padding: 13px 5px 5px 5px;
-    spacing: 5px;
-}
 
 .panel-window-menu-item-clone:indented {
     padding-left: 6px;

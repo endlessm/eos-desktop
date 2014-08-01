@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell.po.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-17 11:57-0700\n"
+"POT-Creation-Date: 2014-07-29 14:35-0700\n"
 "PO-Revision-Date: 2013-03-03 13:22+0300\n"
 "Last-Translator: Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>\n"
 "Language-Team: team@gnome.gr\n"
@@ -554,11 +554,11 @@ msgstr "Αλλαγή παρασκηνίου…"
 
 #: ../js/ui/backgroundMenu.js:25
 #, fuzzy
-msgid "Add Application"
+msgid "Add App"
 msgstr "Εφαρμογές"
 
 #: ../js/ui/backgroundMenu.js:29
-msgid "Add Website Link"
+msgid "Add Website"
 msgstr ""
 
 #: ../js/ui/backgroundMenu.js:33

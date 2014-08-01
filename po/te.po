@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell gnome-3-0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-17 11:57-0700\n"
+"POT-Creation-Date: 2014-07-29 14:35-0700\n"
 "PO-Revision-Date: 2013-03-26 18:52+0530\n"
 "Last-Translator: Praveen Illa <mail2ipn@gmail.com>\n"
 "Language-Team: Telugu <indlinux-telugu@lists.sourceforge.net>\n"
@@ -531,11 +531,11 @@ msgstr "నేపథ్యాన్ని మార్చు..."
 
 #: ../js/ui/backgroundMenu.js:25
 #, fuzzy
-msgid "Add Application"
+msgid "Add App"
 msgstr "అనువర్తనాలు"
 
 #: ../js/ui/backgroundMenu.js:29
-msgid "Add Website Link"
+msgid "Add Website"
 msgstr ""
 
 #: ../js/ui/backgroundMenu.js:33
