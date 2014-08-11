@@ -595,10 +595,10 @@ const LayoutManager = new Lang.Class({
         let bgManager = new Background.BackgroundManager({ container: this._backgroundGroup,
                                                            layoutManager: this,
                                                            monitorIndex: monitorIndex });
-        this._addBackgroundClickHandler(bgManager.background.actor);
+        this._addBackgroundClickHandler(bgManager.backgroundActor);
 
         bgManager.connect('changed', Lang.bind(this, function() {
-            this._addBackgroundClickHandler(bgManager.background.actor);
+            this._addBackgroundClickHandler(bgManager.backgroundActor);
         }));
 
         return bgManager;
@@ -607,10 +607,10 @@ const LayoutManager = new Lang.Class({
     _showSecondaryBackgrounds: function() {
         for (let i = 0; i < this.monitors.length; i++) {
             if (i != this.primaryIndex) {
-                let background = this._bgManagers[i].background;
-                background.actor.show();
-                background.actor.opacity = 0;
-                Tweener.addTween(background.actor,
+                let backgroundActor = this._bgManagers[i].backgroundActor;
+                backgroundActor.show();
+                backgroundActor.opacity = 0;
+                Tweener.addTween(backgroundActor,
                                  { opacity: 255,
                                    time: BACKGROUND_FADE_ANIMATION_TIME,
                                    transition: 'easeOutQuad' });
@@ -633,7 +633,7 @@ const LayoutManager = new Lang.Class({
             this._bgManagers.push(bgManager);
 
             if (i != this.primaryIndex && this._startingUp)
-                bgManager.background.actor.hide();
+                bgManager.backgroundActor.hide();
         }
     },
 
