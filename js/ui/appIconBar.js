@@ -29,8 +29,10 @@ const NAV_BUTTON_SIZE = 15;
 const ICON_SCROLL_ANIMATION_TIME = 0.3;
 const ICON_SCROLL_ANIMATION_TYPE = 'linear';
 
-const ICON_ROTATE_ANIMATION_TIME = 0.2;
-const ICON_ROTATE_ANIMATION_TYPE = 'easeOutInSine';
+const ICON_BOUNCE_MAX_SCALE = 0.4;
+const ICON_BOUNCE_ANIMATION_TIME = 0.4;
+const ICON_BOUNCE_ANIMATION_TYPE_1 = 'easeOutSine';
+const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
 
 const PANEL_WINDOW_MENU_THUMBNAIL_SIZE = 128;
 
@@ -339,7 +341,7 @@ const AppIconButton = new Lang.Class({
                 Main.activateWindow(win);
             }
         }
-        this._animateRotation();
+        this._animateBounce();
     },
 
     _hideHoverState: function() {
@@ -369,16 +371,25 @@ const AppIconButton = new Lang.Class({
         }
     },
 
-    _animateRotation: function() {
+    _animateBounce: function() {
         if (!Tweener.isTweening(this.actor)) {
-            if (!this._flipEffect) {
-                this._flipEffect = new Shell.PageFlipEffect({ x_tiles: 3, y_tiles: 1 });
-                this.actor.add_effect(this._flipEffect);
-            }
-
-            Tweener.addTween(this._flipEffect, { angle: MAX_ANGLE,
-                                                 time: ICON_ROTATE_ANIMATION_TIME,
-                                                 transition: ICON_ROTATE_ANIMATION_TYPE });
+            Tweener.addTween(this.actor, {
+                scale_y: 1 - ICON_BOUNCE_MAX_SCALE,
+                scale_x: 1 + ICON_BOUNCE_MAX_SCALE,
+                translation_y: this.actor.height * ICON_BOUNCE_MAX_SCALE,
+                translation_x: -this.actor.width * ICON_BOUNCE_MAX_SCALE / 2,
+                time: ICON_BOUNCE_ANIMATION_TIME * 0.25,
+                transition: ICON_BOUNCE_ANIMATION_TYPE_1
+            });
+            Tweener.addTween(this.actor, {
+                scale_y: 1,
+                scale_x: 1,
+                translation_y: 0,
+                translation_x: 0,
+                time: ICON_BOUNCE_ANIMATION_TIME * 0.75,
+                transition: ICON_BOUNCE_ANIMATION_TYPE_2,
+                delay: ICON_BOUNCE_ANIMATION_TIME * 0.25
+            });
         }
     },
 
@@ -442,7 +453,7 @@ const AppIconButton = new Lang.Class({
                 let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
                 this._menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
 
-                this._animateRotation();
+                this._animateBounce();
             }));
     }
 });
