@@ -55,6 +55,9 @@ const DRAG_SCROLL_PIXELS_PER_SEC = 800;
 const FOLDER_POPUP_ANIMATION_PIXELS_PER_SEC = 600;
 const FOLDER_POPUP_ANIMATION_TYPE = 'easeOutQuad';
 
+const NEW_ICON_ANIMATION_TIME = 0.5;
+const NEW_ICON_ANIMATION_DELAY = 0.7;
+
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
 
@@ -251,6 +254,26 @@ const EndlessApplicationView = new Lang.Class({
         return [movedList, removedList];
     },
 
+    _findAddedIcons: function() {
+        let oldItemLayout = this._allIcons.map(function(icon) { return icon.getId(); });
+        if (oldItemLayout.length === 0) return [];
+
+        let newItemLayout = this.getLayoutIds();
+        newItemLayout = this._trimInvisible(newItemLayout);
+
+        let addedIds = [];
+        for (let newItemIdx in newItemLayout) {
+            let newItem = newItemLayout[newItemIdx];
+            let oldItemIdx = oldItemLayout.indexOf(newItem);
+
+            if (oldItemIdx < 0) {
+                addedIds.push(newItem);
+            }
+        }
+
+        return addedIds;
+    },
+
     animateMovement: function() {
         let [movedList, removedList] = this._findIconChanges();
         this._grid.animateShuffling(movedList,
@@ -345,6 +368,8 @@ const EndlessApplicationView = new Lang.Class({
             return;
         }
 
+        let addedIds = this._findAddedIcons();
+
         this.removeAll();
 
         let ids = this.getLayoutIds();
@@ -360,12 +385,33 @@ const EndlessApplicationView = new Lang.Class({
             }
 
             if (icon) {
+                let iconActor = icon.actor;
+
                 if (is_hidden) {
-                    icon.actor.hide();
+                    iconActor.hide();
                 }
 
+                if (addedIds.indexOf(itemId) != -1) {
+                    iconActor.scale_x = 0;
+                    iconActor.scale_y = 0;
+                    iconActor.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+                    Main.overview.connect('shown', function() {
+                        Tweener.addTween(iconActor, {
+                            scale_x: 1,
+                            scale_y: 1,
+                            time: NEW_ICON_ANIMATION_TIME,
+                            delay: NEW_ICON_ANIMATION_DELAY,
+                            transition: function(t, b, c, d) {
+                                // Similar to easeOutElastic, but less aggressive.
+                                t /= d;
+                                let p = 0.5;
+                                return b + c * (Math.pow(2, -11 * t) * Math.sin(2 * Math.PI * (t - p / 4) / p) + 1);
+                            }
+                        });
+                    });
+                }
                 this.addIcon(icon);
-                icon.actor.connect('key-focus-in',
+                iconActor.connect('key-focus-in',
                                    Lang.bind(this, this._ensureIconVisible));
             }
         }
