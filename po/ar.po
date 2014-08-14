@@ -7,13 +7,14 @@
 # Ibrahim Saed <ibraheem5000@gmail.com>, 2012
 # Khaled Hosny <khaledhosny@eglug.org>, 2009-2012,2014
 # Muhammed Abd-ulaziz Abd-ullah <thenubianmuha_idrecy@yahoo.co.uk>, 2012
+# Yasmin Diab <yasmin.diab.lopez@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-29 14:35-0700\n"
-"PO-Revision-Date: 2014-08-05 21:20+0000\n"
-"Last-Translator: Philip Chimento <philip.chimento@gmail.com>\n"
+"PO-Revision-Date: 2014-08-14 11:20+0000\n"
+"Last-Translator: Yasmin Diab <yasmin.diab.lopez@gmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-shell/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43,7 +44,7 @@ msgstr "افتح قائمة التطبيقات"
 
 #: ../data/eos-app-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
+msgstr "تعليق"
 
 #: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
 msgid "Tutorial"
@@ -369,7 +370,7 @@ msgstr "اختر امتدادا لضبطه من القائمة أعلاه."
 
 #: ../js/gdm/loginDialog.js:405
 msgid "Session…"
-msgstr ""
+msgstr "جلسة..."
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -456,15 +457,15 @@ msgstr "فشل تنفيذ '%s':‏"
 
 #: ../js/ui/appDisplay.js:1755
 msgid "More Apps"
-msgstr ""
+msgstr "المزيد من التطبيقات"
 
 #: ../js/ui/appDisplay.js:1764
 msgid "Delete"
-msgstr ""
+msgstr "حذف"
 
 #: ../js/ui/appDisplay.js:1816
 msgid "Warning"
-msgstr ""
+msgstr "تحذير"
 
 #: ../js/ui/appDisplay.js:1822
 msgid ""
@@ -503,19 +504,19 @@ msgstr "أُزيل %s من مفضّلتك."
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
-msgstr ""
+msgstr "خلفية التغيير..."
 
 #: ../js/ui/backgroundMenu.js:25
 msgid "Add App"
-msgstr ""
+msgstr "إضافة تطبيق"
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website"
-msgstr ""
+msgstr " إضافة موقع على الإنترنت"
 
 #: ../js/ui/backgroundMenu.js:33
 msgid "Add Folder"
-msgstr ""
+msgstr "إضافة حافظة"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -1029,11 +1030,11 @@ msgstr "السبب غير معروف"
 
 #: ../js/ui/components/updaterManager.js:184
 msgid "Software Update"
-msgstr ""
+msgstr "تحديث البرامج"
 
 #: ../js/ui/components/updaterManager.js:200
 msgid "Updates available"
-msgstr ""
+msgstr "التحديثات المتوفرة"
 
 #: ../js/ui/components/updaterManager.js:201
 msgid "Software updates are available for your system"
@@ -1041,11 +1042,11 @@ msgstr ""
 
 #: ../js/ui/components/updaterManager.js:202
 msgid "Download now"
-msgstr ""
+msgstr "تنزيل الآن"
 
 #: ../js/ui/components/updaterManager.js:215
 msgid "Updates ready"
-msgstr ""
+msgstr "التحديثات جاهزة"
 
 #: ../js/ui/components/updaterManager.js:216
 msgid "Software updates are ready to be installed on your system"
@@ -1053,11 +1054,11 @@ msgstr ""
 
 #: ../js/ui/components/updaterManager.js:217
 msgid "Install now"
-msgstr ""
+msgstr "تثبيت الآن"
 
 #: ../js/ui/components/updaterManager.js:226
 msgid "Updates installed"
-msgstr ""
+msgstr "التحديثات المثبّتة"
 
 #: ../js/ui/components/updaterManager.js:227
 msgid "Software updates were installed on your system"
@@ -1065,11 +1066,11 @@ msgstr ""
 
 #: ../js/ui/components/updaterManager.js:228
 msgid "Restart now"
-msgstr ""
+msgstr "أعِد التشغيل الآن"
 
 #: ../js/ui/components/updaterManager.js:251
 msgid "Update failed"
-msgstr ""
+msgstr "فشل تحديث"
 
 #: ../js/ui/components/updaterManager.js:252
 msgid "We could not update your system"
@@ -1099,7 +1100,7 @@ msgstr "افتح الساعات"
 
 #: ../js/ui/dateMenu.js:105
 msgid "Date & Time Settings"
-msgstr ""
+msgstr "إعدادات التاريخ والوقت"
 
 #. Translators: This is the date format to use when the calendar popup is
 #. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29
@@ -1291,11 +1292,11 @@ msgstr "أزِل"
 
 #: ../js/ui/messageTray.js:1545
 msgid "Clear Messages"
-msgstr ""
+msgstr "مسح الرسائل"
 
 #: ../js/ui/messageTray.js:1572
 msgid "Notification Settings"
-msgstr ""
+msgstr "إعدادات الإعلام"
 
 #: ../js/ui/messageTray.js:1762
 msgid "No Messages"
@@ -1367,7 +1368,7 @@ msgstr ""
 
 #: ../js/ui/shellEntry.js:112
 msgid "My Computer"
-msgstr ""
+msgstr "جهاز الكتروني"
 
 #: ../js/ui/shellEntry.js:176
 msgid "Copy"
@@ -1387,7 +1388,7 @@ msgstr "أخفِ النص"
 
 #: ../js/ui/shellEntry.js:347
 msgid "My computer"
-msgstr ""
+msgstr "جهاز الكتروني"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1462,11 +1463,11 @@ msgstr "الرؤية"
 
 #: ../js/ui/status/bluetooth.js:59
 msgid "Send Files to Device…"
-msgstr ""
+msgstr "أرسِل ملفات للجهاز..."
 
 #: ../js/ui/status/bluetooth.js:60
 msgid "Set Up a New Device…"
-msgstr ""
+msgstr "اضبط جهازا جديدا..."
 
 #: ../js/ui/status/bluetooth.js:86
 msgid "Bluetooth Settings"
@@ -1492,7 +1493,7 @@ msgstr "يتّصل..."
 
 #: ../js/ui/status/bluetooth.js:241
 msgid "Send Files…"
-msgstr ""
+msgstr "أرسل ملفات..."
 
 #: ../js/ui/status/bluetooth.js:248
 msgid "Keyboard Settings"
@@ -1568,7 +1569,7 @@ msgstr "أظهر تخطيط لوحة المفاتيح"
 
 #: ../js/ui/status/keyboard.js:373
 msgid "Region & Language Settings"
-msgstr ""
+msgstr "إعدادات المنطقة واللغة"
 
 #: ../js/ui/status/lockScreenMenu.js:43
 msgid "Volume, network, battery"
@@ -1708,7 +1709,7 @@ msgstr "إعدادات الطاقة"
 #. to estimate battery life
 #: ../js/ui/status/power.js:101
 msgid "Estimating…"
-msgstr ""
+msgstr "حساب..."
 
 #: ../js/ui/status/power.js:108
 #, c-format
@@ -1770,7 +1771,7 @@ msgstr ""
 
 #: ../js/ui/status/power.js:205
 msgid "Laptop Battery"
-msgstr ""
+msgstr "بطارية حاسوب محمول"
 
 #: ../js/ui/status/power.js:207
 msgid "UPS"
@@ -1790,11 +1791,11 @@ msgstr "مساعد رقمي (PDA)"
 
 #: ../js/ui/status/power.js:217
 msgid "Cell Phone"
-msgstr ""
+msgstr "الهاتف المحمول"
 
 #: ../js/ui/status/power.js:219
 msgid "Media Player"
-msgstr ""
+msgstr "مشغل وسائط"
 
 #: ../js/ui/status/power.js:221
 msgid "Tablet"
@@ -1811,7 +1812,7 @@ msgstr "غير معروف"
 
 #: ../js/ui/status/volume.js:124
 msgid "Volume changed"
-msgstr ""
+msgstr "شدة الصوت"
 
 #. Translators: This is the label for audio volume
 #: ../js/ui/status/volume.js:249 ../js/ui/status/volume.js:297
@@ -1891,7 +1892,7 @@ msgstr ""
 #. to avoid ellipsizing the labels.
 #: ../js/ui/windowManager.js:84
 msgid "Revert Settings"
-msgstr ""
+msgstr "تعود إعدادات"
 
 #: ../js/ui/windowManager.js:88
 msgid "Keep Changes"
@@ -1965,7 +1966,7 @@ msgstr "فشل تشغيل '%s'"
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
-msgstr ""
+msgstr "مجهول"
 
 #: ../src/shell-desktop-dir-info.c:745
 #, c-format
