@@ -17,6 +17,7 @@ const GnomeSession = imports.misc.gnomeSession;
 const LoginManager = imports.misc.loginManager;
 const Main = imports.ui.main;
 const ModalDialog = imports.ui.modalDialog;
+const Panel = imports.ui.panel;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Params = imports.misc.params;
@@ -244,7 +245,14 @@ const UserMenuButton = new Lang.Class({
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
         this._icon = new St.Icon({ style_class: 'settings-menu-icon' });
+
+        this._icon.hide();
         box.add(this._icon);
+        Main.layoutManager.connect('startup-complete',
+            Lang.bind(this, function() {
+                Main.panel.animateIconIn(this._icon, 0);
+            })
+        );
 
         let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/settings-normal.png');
         this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });

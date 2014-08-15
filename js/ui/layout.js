@@ -727,7 +727,6 @@ const LayoutManager = new Lang.Class({
 
         if (Main.sessionMode.isGreeter) {
             this.trayBox.hide();
-            this.panelBox.translation_y = this.panelBox.height;
         } else {
             this._updateBackgrounds();
 
@@ -767,18 +766,9 @@ const LayoutManager = new Lang.Class({
 
     _startupAnimation: function() {
         if (Main.sessionMode.isGreeter)
-            this._startupAnimationGreeter();
+            this._startupAnimationComplete();
         else
             this._startupAnimationSession();
-    },
-
-    _startupAnimationGreeter: function() {
-        Tweener.addTween(this.panelBox,
-                         { translation_y: 0,
-                           time: STARTUP_ANIMATION_TIME,
-                           transition: 'easeOutQuad',
-                           onComplete: this._startupAnimationComplete,
-                           onCompleteScope: this });
     },
 
     _startupAnimationSession: function() {

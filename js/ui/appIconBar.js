@@ -15,6 +15,7 @@ const BoxPointer = imports.ui.boxpointer;
 const ButtonConstants = imports.ui.buttonConstants;
 const Hash = imports.misc.hash;
 const Main = imports.ui.main;
+const Panel = imports.ui.panel;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Util = imports.misc.util;
@@ -565,7 +566,7 @@ const ScrolledIconList = new Lang.Class({
         for (let i = 0; i < sortedPids.length; i++) {
             let pid = sortedPids[i];
             let app = appsByPid.get(pid);
-            this._addButton(app);
+            this._addButtonAnimated(app, i + 2); // offset for user menu and browser icon
         }
 
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
@@ -709,7 +710,7 @@ const ScrolledIconList = new Lang.Class({
         return retval;
     },
 
-    _addButton: function(app) {
+    _addButtonAnimated: function(app, index) {
         if (this._runningApps.has(app)) {
             return;
         }
@@ -721,7 +722,23 @@ const ScrolledIconList = new Lang.Class({
         let newChild = new AppIconButton(app, this._iconSize);
         newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
         this._runningApps.set(app, newChild);
-        this._container.add_actor(newChild.actor);
+
+        if (index == -1) {
+            this._container.add_actor(newChild.actor);
+        } else {
+            let newActor = newChild.actor;
+            newActor.hide();
+            this._container.add_actor(newActor);
+            Main.layoutManager.connect('startup-complete',
+                Lang.bind(this, function() {
+                    Main.panel.animateIconIn(newActor, index);
+                })
+            );
+        }
+    },
+
+    _addButton: function(app) {
+        this._addButtonAnimated(app, -1);
     },
 
     _onAppStateChanged: function(appSys, app) {
@@ -852,7 +869,14 @@ const AppIconBar = new Lang.Class({
         if (this._browserApp) {
             this._browserButton = new BrowserButton(this._browserApp, ICON_SIZE);
             this._browserButton.connect('app-icon-pressed', Lang.bind(this, function() { panel.closeActiveMenu(); }));
+
+            this._browserButton.actor.hide();
             this._container.add_actor(this._browserButton.actor);
+            Main.layoutManager.connect('startup-complete',
+                Lang.bind(this, function() {
+                    Main.panel.animateIconIn(this._browserButton.actor, 1);
+                })
+            );
         }
 
         this._scrolledIconList = new ScrolledIconList([this._browserApp]);
