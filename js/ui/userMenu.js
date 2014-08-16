@@ -246,13 +246,8 @@ const UserMenuButton = new Lang.Class({
 
         this._icon = new St.Icon({ style_class: 'settings-menu-icon' });
 
-        this._icon.hide();
+        Main.panel.animateIconIn(this._icon, 0);
         box.add(this._icon);
-        Main.layoutManager.connect('startup-complete',
-            Lang.bind(this, function() {
-                Main.panel.animateIconIn(this._icon, 0);
-            })
-        );
 
         let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/settings-normal.png');
         this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });

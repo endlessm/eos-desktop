@@ -727,13 +727,8 @@ const ScrolledIconList = new Lang.Class({
             this._container.add_actor(newChild.actor);
         } else {
             let newActor = newChild.actor;
-            newActor.hide();
+            Main.panel.animateIconIn(newActor, index);
             this._container.add_actor(newActor);
-            Main.layoutManager.connect('startup-complete',
-                Lang.bind(this, function() {
-                    Main.panel.animateIconIn(newActor, index);
-                })
-            );
         }
     },
 
@@ -870,13 +865,8 @@ const AppIconBar = new Lang.Class({
             this._browserButton = new BrowserButton(this._browserApp, ICON_SIZE);
             this._browserButton.connect('app-icon-pressed', Lang.bind(this, function() { panel.closeActiveMenu(); }));
 
-            this._browserButton.actor.hide();
+            Main.panel.animateIconIn(this._browserButton.actor, 1);
             this._container.add_actor(this._browserButton.actor);
-            Main.layoutManager.connect('startup-complete',
-                Lang.bind(this, function() {
-                    Main.panel.animateIconIn(this._browserButton.actor, 1);
-                })
-            );
         }
 
         this._scrolledIconList = new ScrolledIconList([this._browserApp]);

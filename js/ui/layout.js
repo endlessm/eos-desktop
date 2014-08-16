@@ -810,6 +810,10 @@ const LayoutManager = new Lang.Class({
         this.emit('startup-complete');
     },
 
+    get startingUp() {
+        return this._startingUp;
+    },
+
     showKeyboard: function () {
         Tweener.addTween(this.keyboardBox,
                          { anchor_y: this.keyboardBox.height,
