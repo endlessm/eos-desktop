@@ -38,6 +38,32 @@ const ICON_ENTER_ANIMATION_DELTA = PANEL_ICON_SIZE * 0.25;
 const ICON_ENTER_ANIMATION_SPEED = ICON_ENTER_ANIMATION_DELTA * 0.0012;
 const ICON_ENTER_ANIMATION_DELAY = ICON_ENTER_ANIMATION_SPEED * ICON_ENTER_ANIMATION_DELTA * 0.5 + PANEL_ANIMATION_TIME;
 
+function animateIconIn (icon, index) {
+    if (!Main.layoutManager.startingUp) {
+        return;
+    }
+
+    icon.hide();
+    Main.layoutManager.connect('startup-complete', function () {
+        let panelAnimationDelay;
+        if (Main.sessionMode.isGreeter)
+            panelAnimationDelay = 0.0;
+        else
+            panelAnimationDelay = AppDisplay.ICON_ANIMATION_DELAY +
+                AppDisplay.ICON_ANIMATION_TIME;
+
+        let delta = PANEL_ICON_SIZE + ICON_ENTER_ANIMATION_DELTA * index;
+        icon.translation_y = delta;
+        icon.show();
+        Tweener.addTween(icon, {
+            translation_y: 0,
+            time: ICON_ENTER_ANIMATION_SPEED * delta,
+            transition: 'easeOutBack',
+            delay: ICON_ENTER_ANIMATION_DELAY + panelAnimationDelay
+        });
+    });
+}
+
 const Animation = new Lang.Class({
     Name: 'Animation',
 
@@ -562,26 +588,6 @@ const Panel = new Lang.Class({
         }
     },
 
-    animateIconIn: function(icon, index) {
-        if (!Main.layoutManager.startingUp)
-            return;
-
-        icon.hide();
-        Main.layoutManager.connect('startup-complete',
-            Lang.bind(this, function() {
-                let delta = PANEL_ICON_SIZE + ICON_ENTER_ANIMATION_DELTA * index;
-                icon.translation_y = delta;
-                icon.show();
-                Tweener.addTween(icon, {
-                    translation_y: 0,
-                    time: ICON_ENTER_ANIMATION_SPEED * delta,
-                    transition: 'easeOutBack',
-                    delay: ICON_ENTER_ANIMATION_DELAY + this._panelAnimationDelay
-                });
-            })
-        );
-    },
-
     _addToPanelBox: function(role, indicator, position, box, nElements) {
         let container = indicator.container;
         container.show();
@@ -597,8 +603,7 @@ const Panel = new Lang.Class({
             if (box === this._rightBox)
                 index = nElements - index;
 
-                this.animateIconIn(container, index);
-            }
+            animateIconIn(container, index);
             box.insert_child_at_index(container, position);
         }
 

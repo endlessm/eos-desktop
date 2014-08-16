@@ -246,7 +246,7 @@ const UserMenuButton = new Lang.Class({
 
         this._icon = new St.Icon({ style_class: 'settings-menu-icon' });
 
-        Main.panel.animateIconIn(this._icon, 0);
+        Panel.animateIconIn(this._icon, 0);
         box.add(this._icon);
 
         let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/settings-normal.png');
