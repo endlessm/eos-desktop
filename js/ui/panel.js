@@ -313,7 +313,8 @@ const Panel = new Lang.Class({
         this.actor = new Shell.GenericContainer({ name: 'panel',
                                                   reactive: true });
         this.actor._delegate = this;
-        this.actor.hide();
+        if (Main.layoutManager.startingUp)
+            this.actor.hide();
 
         if (Main.sessionMode.isGreeter)
             this._panelAnimationDelay = 0.0;
@@ -562,15 +563,23 @@ const Panel = new Lang.Class({
     },
 
     animateIconIn: function(icon, index) {
-        let delta = PANEL_ICON_SIZE + ICON_ENTER_ANIMATION_DELTA * index;
-        icon.translation_y = delta;
-        icon.show();
-        Tweener.addTween(icon, {
-            translation_y: 0,
-            time: ICON_ENTER_ANIMATION_SPEED * delta,
-            transition: 'easeOutBack',
-            delay: ICON_ENTER_ANIMATION_DELAY + this._panelAnimationDelay
-        });
+        if (!Main.layoutManager.startingUp)
+            return;
+
+        icon.hide();
+        Main.layoutManager.connect('startup-complete',
+            Lang.bind(this, function() {
+                let delta = PANEL_ICON_SIZE + ICON_ENTER_ANIMATION_DELTA * index;
+                icon.translation_y = delta;
+                icon.show();
+                Tweener.addTween(icon, {
+                    translation_y: 0,
+                    time: ICON_ENTER_ANIMATION_SPEED * delta,
+                    transition: 'easeOutBack',
+                    delay: ICON_ENTER_ANIMATION_DELAY + this._panelAnimationDelay
+                });
+            })
+        );
     },
 
     _addToPanelBox: function(role, indicator, position, box, nElements) {
@@ -587,13 +596,10 @@ const Panel = new Lang.Class({
             let index = position;
             if (box === this._rightBox)
                 index = nElements - index;
-            container.hide();
+
+                this.animateIconIn(container, index);
+            }
             box.insert_child_at_index(container, position);
-            Main.layoutManager.connect('startup-complete',
-                Lang.bind(this, function() {
-                    this.animateIconIn(container, index);
-                })
-            );
         }
 
         if (indicator.menu)
