@@ -189,8 +189,13 @@ const LayoutManager = new Lang.Class({
 
     _init: function () {
         this._cornerEnabled = global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
-        this._cornerOnRight = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+
+        let cornerRightSetting = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+        let textDirection = Clutter.get_default_text_direction();
+        this._cornerOnRight = (cornerRightSetting && textDirection == Clutter.TextDirection.LTR) ||
+            (!cornerRightSetting && textDirection == Clutter.TextDirection.RTL);
         this._cornerOnBottom  = global.settings.get_boolean(HOT_CORNER_ON_BOTTOM_KEY);
+
         this.monitors = [];
         this.bottomMonitor = null;
         this.bottomIndex = -1;
@@ -362,7 +367,11 @@ const LayoutManager = new Lang.Class({
 
     _updateHotCorners: function() {
         this._cornerEnabled = global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
-        this._cornerOnRight = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+
+        let cornerRightSetting = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+        let textDirection = Clutter.get_default_text_direction();
+        this._cornerOnRight = (cornerRightSetting && textDirection == Clutter.TextDirection.LTR) ||
+            (!cornerRightSetting && textDirection == Clutter.TextDirection.RTL);
         this._cornerOnBottom  = global.settings.get_boolean(HOT_CORNER_ON_BOTTOM_KEY);
 
         // destroy old hot corners
@@ -1233,7 +1242,11 @@ const HotCorner = new Lang.Class({
         this._y = y;
 
         this._cornerEnabled = global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
-        this._cornerOnRight = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+
+        let cornerRightSetting = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
+        let textDirection = Clutter.get_default_text_direction();
+        this._cornerOnRight = (cornerRightSetting && textDirection == Clutter.TextDirection.LTR) ||
+            (!cornerRightSetting && textDirection == Clutter.TextDirection.RTL);
         this._cornerOnBottom = global.settings.get_boolean(HOT_CORNER_ON_BOTTOM_KEY);
         this._targetSize = global.settings.get_int(HOT_CORNER_SIZE_KEY);
 
@@ -1305,7 +1318,7 @@ const HotCorner = new Lang.Class({
         }
 
         if (size > 0) {
-            if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL) {
+            if (this._cornerOnRight) {
                 this._verticalBarrier = new Meta.Barrier({ display: global.display,
                                                            x1: this._x, x2: this._x, y1: this._y, y2: this._y + size,
                                                            directions: Meta.BarrierDirection.NEGATIVE_X });
