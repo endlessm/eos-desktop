@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-29 14:35-0700\n"
-"PO-Revision-Date: 2014-08-14 11:20+0000\n"
+"PO-Revision-Date: 2014-08-21 22:56+0000\n"
 "Last-Translator: Yasmin Diab <yasmin.diab.lopez@gmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-shell/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -149,22 +149,22 @@ msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:15
 msgid "Prevent apps from being automatically maximized on launch"
-msgstr ""
+msgstr "منع التطبيقات من الفتح مكبرة بشكل تلقائي عند البدء"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
 "screens, prevents applications from being forced to open maximized, and does"
 " not automatically switch to the app selector when a window is minimized."
-msgstr ""
+msgstr "يجعل إدارة النوافذ أشبه بجنوم القياسي. يخفي شاشات البداية للتطبيق، ويمنع التطبيقات من إجبارها على الفتح مكبرة، ولا يتحول بشكل تلقائي إلى محدد التطبيق عندما يتم تصغير نافذة."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:17
 msgid "Whether the app store is displayed"
-msgstr ""
+msgstr "ما إذا تم عرض متجر التطبيقات"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:18
 msgid "Whether the application grid displays the app store icon."
-msgstr ""
+msgstr "ما إذا كان تطبيق الشبكة يعرض أيقونة متجر التطبيقات."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:19
 msgid "Uuids of extensions to enable"
@@ -176,7 +176,7 @@ msgid ""
 " should be loaded. Any extension that wants to be loaded needs to be in this"
 " list. You can also manipulate this list with the EnableExtension and "
 "DisableExtension DBus methods on org.gnome.Shell."
-msgstr ""
+msgstr "ملحقات Shell من جينوم لها خاصية uuid، يحتوي هذا المفتاح على قائمة بالملحقات التي ينبغي تحميلها. أي ملحق يريد التحميل لابد أن يوجد في هذه القائمة. يمكنك أيضا التحكم في هذه القائمة بطرق EnableExtension وDisableExtension ودي-بس على org.gnome.Shell."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:21
 msgid "Whether to collect stats about applications usage"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:23
 msgid "List of desktop file IDs for favorite applications"
-msgstr ""
+msgstr "قائمة معرفات ملف سطح المكتب للتطبيقات المفضلة"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:24
 msgid ""
@@ -202,7 +202,7 @@ msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
 msgid "List of categories that should be displayed as folders"
-msgstr ""
+msgstr "قائمة الفئات التي يجب أن يتم عرضها كمجلدات"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:26
 msgid ""
@@ -238,7 +238,7 @@ msgstr ""
 msgid ""
 "This key overrides the automatic hiding of the 'Log out' menuitem in single-"
 "user, single-session situations."
-msgstr ""
+msgstr "هذا المفتاح يتجاوز الاخفاء التلقائي ل'Log out' في MENUITEM ، أثناء حالات الجلسة الواحدة للمستخدم الواحد."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid ""
@@ -1074,7 +1074,7 @@ msgstr "فشل تحديث"
 
 #: ../js/ui/components/updaterManager.js:252
 msgid "We could not update your system"
-msgstr ""
+msgstr "لم نتمكن من تحديث نظامك"
 
 #: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
 msgid "Windows"
