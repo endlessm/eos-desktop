@@ -31,7 +31,7 @@ const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
 const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
 
-const DISPLAY_REVERT_TIMEOUT = 20; // in seconds - keep in sync with mutter
+const DISPLAY_REVERT_TIMEOUT = 30; // in seconds - keep in sync with mutter
 const ONE_SECOND = 1000; // in ms
 
 const DisplayChangeDialog = new Lang.Class({
