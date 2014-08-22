@@ -55,6 +55,9 @@ const DRAG_SCROLL_PIXELS_PER_SEC = 800;
 const FOLDER_POPUP_ANIMATION_PIXELS_PER_SEC = 600;
 const FOLDER_POPUP_ANIMATION_TYPE = 'easeOutQuad';
 
+const NEW_ICON_ANIMATION_TIME = 0.5;
+const NEW_ICON_ANIMATION_DELAY = 0.7;
+
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
 
@@ -251,6 +254,26 @@ const EndlessApplicationView = new Lang.Class({
         return [movedList, removedList];
     },
 
+    _findAddedIcons: function() {
+        let oldItemLayout = this._allIcons.map(function(icon) { return icon.getId(); });
+        if (oldItemLayout.length === 0) return [];
+
+        let newItemLayout = this.getLayoutIds();
+        newItemLayout = this._trimInvisible(newItemLayout);
+
+        let addedIds = [];
+        for (let newItemIdx in newItemLayout) {
+            let newItem = newItemLayout[newItemIdx];
+            let oldItemIdx = oldItemLayout.indexOf(newItem);
+
+            if (oldItemIdx < 0) {
+                addedIds.push(newItem);
+            }
+        }
+
+        return addedIds;
+    },
+
     animateMovement: function() {
         let [movedList, removedList] = this._findIconChanges();
         this._grid.animateShuffling(movedList,
@@ -338,12 +361,14 @@ const EndlessApplicationView = new Lang.Class({
         return false;
     },
 
-    addIcons: function(is_hidden) {
+    addIcons: function(isHidden) {
         // Don't do anything if we don't have more up-to-date information, since
         // re-adding icons unnecessarily can cause UX problems
         if (!this.iconsNeedRedraw()) {
             return;
         }
+
+        let addedIds = this._findAddedIcons();
 
         this.removeAll();
 
@@ -360,12 +385,18 @@ const EndlessApplicationView = new Lang.Class({
             }
 
             if (icon) {
-                if (is_hidden) {
-                    icon.actor.hide();
+                let iconActor = icon.actor;
+
+                if (isHidden) {
+                    iconActor.hide();
+                }
+
+                if (addedIds.indexOf(itemId) != -1) {
+                    icon.scheduleScaleIn();
                 }
 
                 this.addIcon(icon);
-                icon.actor.connect('key-focus-in',
+                iconActor.connect('key-focus-in',
                                    Lang.bind(this, this._ensureIconVisible));
             }
         }
@@ -1119,6 +1150,7 @@ const ViewIcon = new Lang.Class({
         this.blockHandler = false;
 
         this._iconState = ViewIconState.NORMAL;
+        this._scaleInId = 0;
 
         this.actor = new St.Bin({ style_class: 'app-well-app' });
         this.actor.x_fill = true;
@@ -1148,6 +1180,7 @@ const ViewIcon = new Lang.Class({
     },
 
     _onDestroy: function() {
+        this._unscheduleScaleIn();
         this.iconButton._delegate = null;
         this.actor._delegate = null;
     },
@@ -1163,6 +1196,48 @@ const ViewIcon = new Lang.Class({
 
     _onLabelCancel: function() {
         this.actor.sync_hover();
+    },
+
+    _scaleIn: function() {
+        this.actor.scale_x = 0;
+        this.actor.scale_y = 0;
+        this.actor.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+
+        Tweener.addTween(this.actor, {
+            scale_x: 1,
+            scale_y: 1,
+            time: NEW_ICON_ANIMATION_TIME,
+            delay: NEW_ICON_ANIMATION_DELAY,
+            transition: function(t, b, c, d) {
+                // Similar to easeOutElastic, but less aggressive.
+                t /= d;
+                let p = 0.5;
+                return b + c * (Math.pow(2, -11 * t) * Math.sin(2 * Math.PI * (t - p / 4) / p) + 1);
+            }
+        });
+    },
+
+    _unscheduleScaleIn: function() {
+        if (this._scaleInId != 0) {
+            Main.overview.disconnect(this._scaleInId);
+            this._scaleInId = 0;
+        }
+    },
+
+    scheduleScaleIn: function() {
+        if (this._scaleInId != 0) {
+            return;
+        }
+
+        if (Main.overview.visible) {
+            this._scaleIn();
+            return;
+        }
+
+        this._scaleInId = Main.overview.connect('shown', Lang.bind(this, function() {
+            this._unscheduleScaleIn();
+            this._scaleIn();
+        }));
     },
 
     replaceText: function(newText) {
