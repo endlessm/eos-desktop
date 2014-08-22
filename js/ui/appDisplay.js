@@ -361,7 +361,7 @@ const EndlessApplicationView = new Lang.Class({
         return false;
     },
 
-    addIcons: function(is_hidden) {
+    addIcons: function(isHidden) {
         // Don't do anything if we don't have more up-to-date information, since
         // re-adding icons unnecessarily can cause UX problems
         if (!this.iconsNeedRedraw()) {
@@ -387,7 +387,7 @@ const EndlessApplicationView = new Lang.Class({
             if (icon) {
                 let iconActor = icon.actor;
 
-                if (is_hidden) {
+                if (isHidden) {
                     iconActor.hide();
                 }
 
