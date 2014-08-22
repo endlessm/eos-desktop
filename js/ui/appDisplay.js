@@ -392,24 +392,9 @@ const EndlessApplicationView = new Lang.Class({
                 }
 
                 if (addedIds.indexOf(itemId) != -1) {
-                    iconActor.scale_x = 0;
-                    iconActor.scale_y = 0;
-                    iconActor.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-                    Main.overview.connect('shown', function() {
-                        Tweener.addTween(iconActor, {
-                            scale_x: 1,
-                            scale_y: 1,
-                            time: NEW_ICON_ANIMATION_TIME,
-                            delay: NEW_ICON_ANIMATION_DELAY,
-                            transition: function(t, b, c, d) {
-                                // Similar to easeOutElastic, but less aggressive.
-                                t /= d;
-                                let p = 0.5;
-                                return b + c * (Math.pow(2, -11 * t) * Math.sin(2 * Math.PI * (t - p / 4) / p) + 1);
-                            }
-                        });
-                    });
+                    icon.scheduleScaleIn();
                 }
+
                 this.addIcon(icon);
                 iconActor.connect('key-focus-in',
                                    Lang.bind(this, this._ensureIconVisible));
@@ -1165,6 +1150,7 @@ const ViewIcon = new Lang.Class({
         this.blockHandler = false;
 
         this._iconState = ViewIconState.NORMAL;
+        this._scaleInId = 0;
 
         this.actor = new St.Bin({ style_class: 'app-well-app' });
         this.actor.x_fill = true;
@@ -1194,6 +1180,7 @@ const ViewIcon = new Lang.Class({
     },
 
     _onDestroy: function() {
+        this._unscheduleScaleIn();
         this.iconButton._delegate = null;
         this.actor._delegate = null;
     },
@@ -1209,6 +1196,48 @@ const ViewIcon = new Lang.Class({
 
     _onLabelCancel: function() {
         this.actor.sync_hover();
+    },
+
+    _scaleIn: function() {
+        this.actor.scale_x = 0;
+        this.actor.scale_y = 0;
+        this.actor.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+
+        Tweener.addTween(this.actor, {
+            scale_x: 1,
+            scale_y: 1,
+            time: NEW_ICON_ANIMATION_TIME,
+            delay: NEW_ICON_ANIMATION_DELAY,
+            transition: function(t, b, c, d) {
+                // Similar to easeOutElastic, but less aggressive.
+                t /= d;
+                let p = 0.5;
+                return b + c * (Math.pow(2, -11 * t) * Math.sin(2 * Math.PI * (t - p / 4) / p) + 1);
+            }
+        });
+    },
+
+    _unscheduleScaleIn: function() {
+        if (this._scaleInId != 0) {
+            Main.overview.disconnect(this._scaleInId);
+            this._scaleInId = 0;
+        }
+    },
+
+    scheduleScaleIn: function() {
+        if (this._scaleInId != 0) {
+            return;
+        }
+
+        if (Main.overview.visible) {
+            this._scaleIn();
+            return;
+        }
+
+        this._scaleInId = Main.overview.connect('shown', Lang.bind(this, function() {
+            this._unscheduleScaleIn();
+            this._scaleIn();
+        }));
     },
 
     replaceText: function(newText) {
