@@ -962,36 +962,61 @@ const AppIconBar = new Lang.Class({
 
         let [minWidth, minHeight, naturalWidth, naturalHeight] = this._container.get_preferred_size();
         let yPadding = Math.floor(Math.max(0, allocHeight - naturalHeight) / 2);
+        let maxIconSpace = allocWidth - 2 * (this._navButtonSize + this._navButtonSpacing);
 
         let childBox = new Clutter.ActorBox();
         childBox.y1 = yPadding;
         childBox.y2 = childBox.y1 + Math.min(naturalHeight, allocHeight);
 
-        childBox.x1 = 0;
-        childBox.x2 = 0;
+        if (actor.get_text_direction() == Clutter.TextDirection.RTL) {
+            childBox.x1 = allocWidth;
+            childBox.x2 = allocWidth;
 
-        if (this._scrolledIconList.isBackAllowed()) {
-            childBox.x2 = childBox.x1 + this._navButtonSize;
-            this._backButton.allocate(childBox, flags);
+            if (this._scrolledIconList.isBackAllowed()) {
+                childBox.x1 = childBox.x2 - this._navButtonSize;
+                this._backButton.allocate(childBox, flags);
 
-            childBox.x2 += this._navButtonSpacing;
-        }
+                childBox.x1 -= this._navButtonSpacing;
+            }
 
-        if (this._browserButton) {
+            if (this._browserButton) {
+                childBox.x2 = childBox.x1;
+                childBox.x1 = childBox.x2 - this._scrolledIconList.getIconSize();
+                this._browserButton.actor.allocate(childBox, flags);
+            }
+
+            childBox.x2 = childBox.x1;
+            childBox.x1 = childBox.x2 - this._scrolledIconList.calculateNaturalSize(maxIconSpace) - 2 * this._navButtonSpacing;
+            this._scrolledIconList.actor.allocate(childBox, flags);
+
+            childBox.x2 = childBox.x1;
+            childBox.x1 = childBox.x2 - this._navButtonSize;
+            this._forwardButton.allocate(childBox, flags);
+        } else {
+            childBox.x1 = 0;
+            childBox.x2 = 0;
+
+            if (this._scrolledIconList.isBackAllowed()) {
+                childBox.x2 = childBox.x1 + this._navButtonSize;
+                this._backButton.allocate(childBox, flags);
+
+                childBox.x2 += this._navButtonSpacing;
+            }
+
+            if (this._browserButton) {
+                childBox.x1 = childBox.x2;
+                childBox.x2 = childBox.x1 + this._scrolledIconList.getIconSize();
+                this._browserButton.actor.allocate(childBox, flags);
+            }
+
             childBox.x1 = childBox.x2;
-            childBox.x2 = childBox.x1 + this._scrolledIconList.getIconSize();
-            this._browserButton.actor.allocate(childBox, flags);
+            childBox.x2 = childBox.x1 + this._scrolledIconList.calculateNaturalSize(maxIconSpace) + 2 * this._navButtonSpacing;
+            this._scrolledIconList.actor.allocate(childBox, flags);
+
+            childBox.x1 = childBox.x2;
+            childBox.x2 = childBox.x1 + this._navButtonSize;
+            this._forwardButton.allocate(childBox, flags);
         }
-
-        let iconListStart = childBox.x2;
-        let maxIconSpace = allocWidth - 2 * (this._navButtonSize + this._navButtonSpacing);
-        childBox.x1 = iconListStart;
-        childBox.x2 = childBox.x1 + this._scrolledIconList.calculateNaturalSize(maxIconSpace) + 2 * this._navButtonSpacing;
-        this._scrolledIconList.actor.allocate(childBox, flags);
-
-        childBox.x1 = childBox.x2;
-        childBox.x2 = childBox.x1 + this._navButtonSize;
-        this._forwardButton.allocate(childBox, flags);
 
         this._updateNavButtonState();
     }
