@@ -1,7 +1,6 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const AccountsService = imports.gi.AccountsService;
-const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
 const Gdk = imports.gi.Gdk;
 const Gio = imports.gi.Gio;
@@ -124,115 +123,6 @@ const ShellInfo = new Lang.Class({
     }
 });
 
-const RoundedCorner = new Lang.Class({
-    Name: 'RoundedCorner',
-
-    _init: function(side) {
-        this._side = side;
-
-        this.actor = new St.DrawingArea({ style_class: 'rounded-corner' });
-        this.actor.connect('style-changed', Lang.bind(this, this._styleChanged));
-        this.actor.connect('repaint', Lang.bind(this, this._repaint));
-    },
-
-    // To make sure the panel corners blend nicely with the panel,
-    // we draw background and borders the same way, e.g. drawing
-    // them as filled shapes from the outside inwards instead of
-    // using cairo stroke(). So in order to give the border the
-    // appearance of being drawn on top of the background, we need
-    // to blend border and background color together.
-    // For that purpose we use the following helper methods, taken
-    // from st-theme-node-drawing.c
-    _unpremultiply: function(color) {
-        if (color.alpha == 0)
-            return new Clutter.Color();
-
-        let red = Math.min((color.red * 255 + 127) / color.alpha, 255);
-        let green = Math.min((color.green * 255 + 127) / color.alpha, 255);
-        let blue = Math.min((color.blue * 255 + 127) / color.alpha, 255);
-        return new Clutter.Color({ red: red, green: green,
-                                   blue: blue, alpha: color.alpha });
-    },
-
-    _norm: function(x) {
-        return Math.round(x / 255);
-    },
-
-    _premultiply: function(color) {
-        return new Clutter.Color({ red: this._norm(color.red * color.alpha),
-                                   green: this._norm(color.green * color.alpha),
-                                   blue: this._norm(color.blue * color.alpha),
-                                   alpha: color.alpha });
-    },
-
-    _over: function(srcColor, dstColor) {
-        let src = this._premultiply(srcColor);
-        let dst = this._premultiply(dstColor);
-        let result = new Clutter.Color();
-
-        result.alpha = src.alpha + this._norm((255 - src.alpha) * dst.alpha);
-        result.red = src.red + this._norm((255 - src.alpha) * dst.red);
-        result.green = src.green + this._norm((255 - src.alpha) * dst.green);
-        result.blue = src.blue + this._norm((255 - src.alpha) * dst.blue);
-
-        return this._unpremultiply(result);
-    },
-
-    _repaint: function() {
-        let node = this.actor.get_theme_node();
-
-        let cornerRadius = node.get_length("-rounded-corner-radius");
-        let borderWidth = node.get_length('-rounded-corner-border-width');
-
-        let backgroundColor = node.get_color('-rounded-corner-background-color');
-        let borderColor = node.get_color('-rounded-corner-border-color');
-
-        let cr = this.actor.get_context();
-        cr.setOperator(Cairo.Operator.SOURCE);
-
-        cr.moveTo(0, 0);
-        if (this._side == St.Side.LEFT)
-            cr.arc(cornerRadius,
-                   cornerRadius,
-                   cornerRadius, Math.PI, 3 * Math.PI / 2);
-        else
-            cr.arc(0,
-                   cornerRadius,
-                   cornerRadius, 3 * Math.PI / 2, 2 * Math.PI);
-        cr.lineTo(cornerRadius, 0);
-        cr.closePath();
-
-        let savedPath = cr.copyPath();
-
-        let xOffsetDirection = this._side == St.Side.LEFT ? -1 : 1;
-        let over = this._over(borderColor, backgroundColor);
-        Clutter.cairo_set_source_color(cr, over);
-        cr.fill();
-
-        if (borderColor.alpha != 0) {
-            let offset = borderWidth;
-            Clutter.cairo_set_source_color(cr, backgroundColor);
-
-            cr.save();
-            cr.translate(xOffsetDirection * offset, - offset);
-            cr.appendPath(savedPath);
-            cr.fill();
-            cr.restore();
-        }
-
-        cr.$dispose();
-    },
-
-    _styleChanged: function() {
-        let node = this.actor.get_theme_node();
-
-        let cornerRadius = node.get_length("-rounded-corner-radius");
-        let borderWidth = node.get_length('-rounded-corner-border-width');
-
-        this.actor.set_size(cornerRadius, cornerRadius);
-    }
-});
-
 const Overview = new Lang.Class({
     Name: 'Overview',
 
@@ -312,7 +202,6 @@ const Overview = new Lang.Class({
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
         this.visibleTarget = false;
-        this._screenDecorators = [];
 
         // During transitions, we raise this to the top to avoid having the overview
         // area be reactive; it causes too many issues such as double clicks on
@@ -349,40 +238,6 @@ const Overview = new Lang.Class({
 
     setViewsClone: function(actor) {
         this._backgroundGroup.add_child(actor);        
-    },
-
-    _updateDecorators: function() {
-        // Remove old decorators
-        for (let i = 0; i < this._screenDecorators.length; i++) {
-            this._screenDecorators[i].destroy();
-        }
-
-        this._screenDecorators = [];
-
-        // Add new decorators
-        for (let i = 0; i < Main.layoutManager.monitors.length; i++) {
-            let screenDecoratorLayout = new Clutter.BoxLayout();
-            let screenDecorator = new St.Widget({ layout_manager: screenDecoratorLayout,
-                                                  x_expand: true
-                                                });
-
-            let topLeftCorner = new RoundedCorner(St.Side.LEFT);
-            let topRightCorner = new RoundedCorner(St.Side.RIGHT);
-
-            screenDecorator.add_child(topLeftCorner.actor);
-            // We add a spacer here to push the right corner to the right edge
-            screenDecorator.add_child(new Clutter.Actor({ x_expand: true }));
-            screenDecorator.add_child(topRightCorner.actor);
-
-            Main.layoutManager.overviewGroup.add_actor(screenDecorator);
-
-            // Set the size and position
-            let monitorWorkArea = Main.layoutManager.getWorkAreaForMonitor(i);
-            screenDecorator.set_size(monitorWorkArea.width, -1);
-            screenDecorator.set_position(monitorWorkArea.x, monitorWorkArea.y);
-
-            this._screenDecorators.push(screenDecorator);
-        }
     },
 
     _updateBackgrounds: function() {
@@ -644,7 +499,6 @@ const Overview = new Lang.Class({
         this._coverPane.set_position(0, workArea.y);
         this._coverPane.set_size(workArea.width, workArea.height);
 
-        this._updateDecorators();
         this._updateBackgrounds();
     },
 
