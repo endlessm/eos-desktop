@@ -198,7 +198,6 @@ const Overview = new Lang.Class({
         this._shown = false;            // show() and not hide()
         this._toggledFromApp = false;   // was the last call to toggle from an app?
         this._targetPage = null;        // do we have a target page to animate to?
-        this._targetDisableFade = false; // will we fade when showing next?
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
         this.visibleTarget = false;
@@ -557,12 +556,11 @@ const Overview = new Lang.Class({
         this._animateVisible();
     },
 
-    _showOrSwitchPage: function(page, disableFade) {
+    _showOrSwitchPage: function(page) {
         if (this.visible) {
             this._viewSelector.setActivePage(page);
         } else {
             this._targetPage = page;
-            this._targetDisableFade = !!disableFade;
             this.show();
         }
     },
@@ -654,8 +652,7 @@ const Overview = new Lang.Class({
         this._coverPane.show();
         this.emit('showing');
 
-        if (this._targetDisableFade) {
-            this._targetDisableFade = false;
+        if (Main.layoutManager.startingUp) {
             this._showDone();
         } else {
             this._overview.opacity = startOpacity;
