@@ -597,6 +597,9 @@ const ViewSelector = new Lang.Class({
     },
 
     show: function(viewPage) {
+        this._stageKeyPressId = global.stage.connect('key-press-event',
+                                                     Lang.bind(this, this._onStageKeyPress));
+
         this._entry.resetSearch();
         this._workspacesDisplay.show();
 
@@ -614,6 +617,11 @@ const ViewSelector = new Lang.Class({
     },
 
     hide: function() {
+        if (this._stageKeyPressId != 0) {
+            global.stage.disconnect(this._stageKeyPressId);
+            this._stageKeyPressId = 0;
+        }
+
         this._workspacesDisplay.hide();
     },
 
@@ -647,25 +655,11 @@ const ViewSelector = new Lang.Class({
         return page;
     },
 
-    _enableSearch: function() {
-        this._stageKeyPressId = global.stage.connect('key-press-event',
-            Lang.bind(this, this._onStageKeyPress));
-    },
-
-    _disableSearch: function() {
-        if (this._stageKeyPressId != 0) {
-            global.stage.disconnect(this._stageKeyPressId);
-            this._stageKeyPressId = 0;
-        }
-    },
-
     _pageChanged: function() {
         if (this._activePage == this._appsPage) {
             this._showAppsButton.checked = true;
-            this._enableSearch();
         } else {
             this._showAppsButton.checked = false;
-            this._disableSearch();
         }
 
         this.emit('page-changed');
@@ -743,6 +737,16 @@ const ViewSelector = new Lang.Class({
         if (Main.modalCount > 1)
             return false;
 
+        let symbol = event.get_key_symbol();
+
+        if (this._activePage == this._workspacesPage) {
+            if (symbol == Clutter.Escape) {
+                Main.overview.toggle();
+                return true;
+            }
+            return false;
+        }
+
         if (this._entry.handleStageEvent(event)) {
             return true;
         }
@@ -750,8 +754,6 @@ const ViewSelector = new Lang.Class({
         if (this._entry.active) {
             return false;
         }
-
-        let symbol = event.get_key_symbol();
 
         if (symbol == Clutter.Tab || symbol == Clutter.Down) {
             this._activePage.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
