@@ -639,10 +639,9 @@ const Overview = new Lang.Class({
         }
 
         let startOpacity = 0;
-        let shouldAnimateSaturation = false;
         if (this._targetPage == ViewSelector.ViewPage.APPS) {
-            startOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
-            shouldAnimateSaturation = true;
+            // short circuit opacity change if we're showing the apps page
+            startOpacity = AppDisplay.ACTIVE_GRID_OPACITY;
         }
 
         this._viewSelector.show(this._targetPage);
@@ -657,25 +656,12 @@ const Overview = new Lang.Class({
         } else {
             this._overview.opacity = startOpacity;
             Tweener.addTween(this._overview,
-                             { opacity: 255,
+                             { opacity: AppDisplay.ACTIVE_GRID_OPACITY,
                                transition: 'easeOutQuad',
                                time: ANIMATION_TIME,
                                onComplete: this._showDone,
                                onCompleteScope: this
                              });
-
-            if (shouldAnimateSaturation) {
-                this._overviewSaturation.enabled = true;
-                this._overviewSaturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
-                Tweener.addTween(this._overviewSaturation,
-                                 { factor: AppDisplay.ACTIVE_GRID_SATURATION,
-                                   transition: 'easeOutQuad',
-                                   time: ANIMATION_TIME,
-                                   onComplete: Lang.bind(this, function() {
-                                       this._overviewSaturation.enabled = false;
-                                   })
-                                 });
-            }
         }
     },
 

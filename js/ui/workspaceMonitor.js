@@ -194,6 +194,11 @@ const WorkspaceMonitor = new Lang.Class({
             return;
         }
 
+        // Check if we're minimizing the very last window
+        if (this.visibleWindows == 1) {
+            Main.layoutManager.prepareForOverview();
+        }
+
         // We'll show the overview when the destroy animation ends
         this._addMinimizedWindow(actor.meta_window);
     },

@@ -500,14 +500,20 @@ const ViewsClone = new Lang.Class({
         container.showPage(appGridContainer);
         this.add_child(container);
 
+        this.saturation = iconGridSaturation;
+
         let workareaConstraint = new LayoutManager.MonitorConstraint({ primary: true,
                                                                        use_workarea: true });
         this.add_constraint(workareaConstraint);
 
         Main.overview.connect('showing', Lang.bind(this, function() {
+            this.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            iconGridSaturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
             iconGridSaturation.enabled = this._forOverview;
         }));
         Main.overview.connect('hidden', Lang.bind(this, function() {
+            this.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            iconGridSaturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
             iconGridSaturation.enabled = !this._forOverview;
         }));
     }
