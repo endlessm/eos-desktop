@@ -86,6 +86,9 @@ const AppActivationContext = new Lang.Class({
         this._splash = new AppSplashPage(this._app);
         Main.uiGroup.add_actor(this._splash);
 
+        let decorator = Main.layoutManager.screenDecorators[Main.layoutManager.primaryIndex];
+        Main.uiGroup.set_child_below_sibling(this._splash, decorator);
+
         // Make sure that our events are captured
         this._grabHelper = new GrabHelper.GrabHelper(this._splash);
         this._grabHelper.addActor(this._splash);

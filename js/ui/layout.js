@@ -312,6 +312,7 @@ const LayoutManager = new Lang.Class({
         this.primaryMonitor = null;
         this.primaryIndex = -1;
         this.hotCorners = [];
+        this.screenDecorators = [];
 
         this._keyboardIndex = -1;
         this._rightPanelBarrier = null;
@@ -321,7 +322,6 @@ const LayoutManager = new Lang.Class({
         this._updateRegionIdle = 0;
 
         this._overlayRegion = null;
-        this._screenDecorators = [];
         this._trackedActors = [];
         this._topActors = [];
         this._isPopupWindowVisible = false;
@@ -622,11 +622,11 @@ const LayoutManager = new Lang.Class({
 
     _updateDecorators: function() {
         // Remove old decorators
-        for (let i = 0; i < this._screenDecorators.length; i++) {
-            this._screenDecorators[i].destroy();
+        for (let i = 0; i < this.screenDecorators.length; i++) {
+            this.screenDecorators[i].destroy();
         }
 
-        this._screenDecorators = [];
+        this.screenDecorators = [];
 
         // Add new decorators
         for (let i = 0; i < this.monitors.length; i++) {
@@ -652,7 +652,7 @@ const LayoutManager = new Lang.Class({
             screenDecorator.set_size(monitorWorkArea.width, -1);
             screenDecorator.set_position(monitorWorkArea.x, monitorWorkArea.y);
 
-            this._screenDecorators.push(screenDecorator);
+            this.screenDecorators.push(screenDecorator);
         }
     },
 
