@@ -15,6 +15,7 @@ const BoxPointer = imports.ui.boxpointer;
 const ButtonConstants = imports.ui.buttonConstants;
 const Hash = imports.misc.hash;
 const Main = imports.ui.main;
+const Panel = imports.ui.panel;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Util = imports.misc.util;
@@ -29,8 +30,10 @@ const NAV_BUTTON_SIZE = 15;
 const ICON_SCROLL_ANIMATION_TIME = 0.3;
 const ICON_SCROLL_ANIMATION_TYPE = 'linear';
 
-const ICON_ROTATE_ANIMATION_TIME = 0.2;
-const ICON_ROTATE_ANIMATION_TYPE = 'easeOutInSine';
+const ICON_BOUNCE_MAX_SCALE = 0.4;
+const ICON_BOUNCE_ANIMATION_TIME = 0.4;
+const ICON_BOUNCE_ANIMATION_TYPE_1 = 'easeOutSine';
+const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
 
 const PANEL_WINDOW_MENU_THUMBNAIL_SIZE = 128;
 
@@ -339,7 +342,7 @@ const AppIconButton = new Lang.Class({
                 Main.activateWindow(win);
             }
         }
-        this._animateRotation();
+        this._animateBounce();
     },
 
     _hideHoverState: function() {
@@ -369,16 +372,25 @@ const AppIconButton = new Lang.Class({
         }
     },
 
-    _animateRotation: function() {
+    _animateBounce: function() {
         if (!Tweener.isTweening(this.actor)) {
-            if (!this._flipEffect) {
-                this._flipEffect = new Shell.PageFlipEffect({ x_tiles: 3, y_tiles: 1 });
-                this.actor.add_effect(this._flipEffect);
-            }
-
-            Tweener.addTween(this._flipEffect, { angle: MAX_ANGLE,
-                                                 time: ICON_ROTATE_ANIMATION_TIME,
-                                                 transition: ICON_ROTATE_ANIMATION_TYPE });
+            Tweener.addTween(this.actor, {
+                scale_y: 1 - ICON_BOUNCE_MAX_SCALE,
+                scale_x: 1 + ICON_BOUNCE_MAX_SCALE,
+                translation_y: this.actor.height * ICON_BOUNCE_MAX_SCALE,
+                translation_x: -this.actor.width * ICON_BOUNCE_MAX_SCALE / 2,
+                time: ICON_BOUNCE_ANIMATION_TIME * 0.25,
+                transition: ICON_BOUNCE_ANIMATION_TYPE_1
+            });
+            Tweener.addTween(this.actor, {
+                scale_y: 1,
+                scale_x: 1,
+                translation_y: 0,
+                translation_x: 0,
+                time: ICON_BOUNCE_ANIMATION_TIME * 0.75,
+                transition: ICON_BOUNCE_ANIMATION_TYPE_2,
+                delay: ICON_BOUNCE_ANIMATION_TIME * 0.25
+            });
         }
     },
 
@@ -442,7 +454,7 @@ const AppIconButton = new Lang.Class({
                 let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
                 this._menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
 
-                this._animateRotation();
+                this._animateBounce();
             }));
     }
 });
@@ -554,7 +566,7 @@ const ScrolledIconList = new Lang.Class({
         for (let i = 0; i < sortedPids.length; i++) {
             let pid = sortedPids[i];
             let app = appsByPid.get(pid);
-            this._addButton(app);
+            this._addButtonAnimated(app, i + 2); // offset for user menu and browser icon
         }
 
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
@@ -698,7 +710,7 @@ const ScrolledIconList = new Lang.Class({
         return retval;
     },
 
-    _addButton: function(app) {
+    _addButtonAnimated: function(app, index) {
         if (this._runningApps.has(app)) {
             return;
         }
@@ -710,7 +722,18 @@ const ScrolledIconList = new Lang.Class({
         let newChild = new AppIconButton(app, this._iconSize);
         newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
         this._runningApps.set(app, newChild);
-        this._container.add_actor(newChild.actor);
+
+        if (index == -1) {
+            this._container.add_actor(newChild.actor);
+        } else {
+            let newActor = newChild.actor;
+            Panel.animateIconIn(newActor, index);
+            this._container.add_actor(newActor);
+        }
+    },
+
+    _addButton: function(app) {
+        this._addButtonAnimated(app, -1);
     },
 
     _onAppStateChanged: function(appSys, app) {
@@ -841,6 +864,8 @@ const AppIconBar = new Lang.Class({
         if (this._browserApp) {
             this._browserButton = new BrowserButton(this._browserApp, ICON_SIZE);
             this._browserButton.connect('app-icon-pressed', Lang.bind(this, function() { panel.closeActiveMenu(); }));
+
+            Panel.animateIconIn(this._browserButton.actor, 1);
             this._container.add_actor(this._browserButton.actor);
         }
 
@@ -937,36 +962,61 @@ const AppIconBar = new Lang.Class({
 
         let [minWidth, minHeight, naturalWidth, naturalHeight] = this._container.get_preferred_size();
         let yPadding = Math.floor(Math.max(0, allocHeight - naturalHeight) / 2);
+        let maxIconSpace = allocWidth - 2 * (this._navButtonSize + this._navButtonSpacing);
 
         let childBox = new Clutter.ActorBox();
         childBox.y1 = yPadding;
         childBox.y2 = childBox.y1 + Math.min(naturalHeight, allocHeight);
 
-        childBox.x1 = 0;
-        childBox.x2 = 0;
+        if (actor.get_text_direction() == Clutter.TextDirection.RTL) {
+            childBox.x1 = allocWidth;
+            childBox.x2 = allocWidth;
 
-        if (this._scrolledIconList.isBackAllowed()) {
-            childBox.x2 = childBox.x1 + this._navButtonSize;
-            this._backButton.allocate(childBox, flags);
+            if (this._scrolledIconList.isBackAllowed()) {
+                childBox.x1 = childBox.x2 - this._navButtonSize;
+                this._backButton.allocate(childBox, flags);
 
-            childBox.x2 += this._navButtonSpacing;
-        }
+                childBox.x1 -= this._navButtonSpacing;
+            }
 
-        if (this._browserButton) {
+            if (this._browserButton) {
+                childBox.x2 = childBox.x1;
+                childBox.x1 = childBox.x2 - this._scrolledIconList.getIconSize();
+                this._browserButton.actor.allocate(childBox, flags);
+            }
+
+            childBox.x2 = childBox.x1;
+            childBox.x1 = childBox.x2 - this._scrolledIconList.calculateNaturalSize(maxIconSpace) - 2 * this._navButtonSpacing;
+            this._scrolledIconList.actor.allocate(childBox, flags);
+
+            childBox.x2 = childBox.x1;
+            childBox.x1 = childBox.x2 - this._navButtonSize;
+            this._forwardButton.allocate(childBox, flags);
+        } else {
+            childBox.x1 = 0;
+            childBox.x2 = 0;
+
+            if (this._scrolledIconList.isBackAllowed()) {
+                childBox.x2 = childBox.x1 + this._navButtonSize;
+                this._backButton.allocate(childBox, flags);
+
+                childBox.x2 += this._navButtonSpacing;
+            }
+
+            if (this._browserButton) {
+                childBox.x1 = childBox.x2;
+                childBox.x2 = childBox.x1 + this._scrolledIconList.getIconSize();
+                this._browserButton.actor.allocate(childBox, flags);
+            }
+
             childBox.x1 = childBox.x2;
-            childBox.x2 = childBox.x1 + this._scrolledIconList.getIconSize();
-            this._browserButton.actor.allocate(childBox, flags);
+            childBox.x2 = childBox.x1 + this._scrolledIconList.calculateNaturalSize(maxIconSpace) + 2 * this._navButtonSpacing;
+            this._scrolledIconList.actor.allocate(childBox, flags);
+
+            childBox.x1 = childBox.x2;
+            childBox.x2 = childBox.x1 + this._navButtonSize;
+            this._forwardButton.allocate(childBox, flags);
         }
-
-        let iconListStart = childBox.x2;
-        let maxIconSpace = allocWidth - 2 * (this._navButtonSize + this._navButtonSpacing);
-        childBox.x1 = iconListStart;
-        childBox.x2 = childBox.x1 + this._scrolledIconList.calculateNaturalSize(maxIconSpace) + 2 * this._navButtonSpacing;
-        this._scrolledIconList.actor.allocate(childBox, flags);
-
-        childBox.x1 = childBox.x2;
-        childBox.x2 = childBox.x1 + this._navButtonSize;
-        this._forwardButton.allocate(childBox, flags);
 
         this._updateNavButtonState();
     }

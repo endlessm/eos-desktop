@@ -31,7 +31,7 @@ const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
 const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
 
-const DISPLAY_REVERT_TIMEOUT = 20; // in seconds - keep in sync with mutter
+const DISPLAY_REVERT_TIMEOUT = 30; // in seconds - keep in sync with mutter
 const ONE_SECOND = 1000; // in ms
 
 const DisplayChangeDialog = new Lang.Class({
@@ -987,13 +987,28 @@ const WindowManager = new Lang.Class({
         } else {
             /* Fade window in */
             actor.opacity = 0;
+            actor.scale_x = 0;
+            actor.scale_y = 0;
+            actor.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
             actor.show();
             this._mapping.push(actor);
 
             Tweener.addTween(actor,
+                             { scale_x: 1,
+                               scale_y: 1,
+                               time: WINDOW_ANIMATION_TIME * 2, // Entire animation takes twice the normal time,
+                                                                // but it appears to take about the same duration
+                               transition: function(t, b, c, d) {
+                                   // Easing function similar to easeOutElastic, but less aggressive.
+                                   t /= d;
+                                   let p = 0.5;
+                                   return b + c * (Math.pow(2, -11 * t) * Math.sin(2 * Math.PI * (t - p / 4) / p) + 1);
+                               }
+                             });
+            Tweener.addTween(actor,
                              { opacity: 255,
-                               time: WINDOW_ANIMATION_TIME,
-                               transition: 'easeOutQuad',
+                               time: WINDOW_ANIMATION_TIME * 2,
+                               transition: 'easeOutCubic',
                                onComplete: this._mapWindowDone,
                                onCompleteScope: this,
                                onCompleteParams: [shellwm, actor],

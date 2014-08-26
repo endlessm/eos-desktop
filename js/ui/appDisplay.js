@@ -36,6 +36,10 @@ const MENU_POPUP_TIMEOUT = 600;
 const MAX_COLUMNS = 7;
 const ROWS_FOR_ENTRY = 4;
 
+const ICON_ANIMATION_TIME = 0.6;
+const ICON_ANIMATION_DELAY = 0.3;
+const ICON_ANIMATION_TRANSLATION = 50;
+
 const DRAG_OVER_FOLDER_OPACITY = 128;
 const INACTIVE_GRID_OPACITY = 96;
 const ACTIVE_GRID_OPACITY = 255;
@@ -50,6 +54,9 @@ const DRAG_SCROLL_PIXELS_PER_SEC = 800;
 
 const FOLDER_POPUP_ANIMATION_PIXELS_PER_SEC = 600;
 const FOLDER_POPUP_ANIMATION_TYPE = 'easeOutQuad';
+
+const NEW_ICON_ANIMATION_TIME = 0.5;
+const NEW_ICON_ANIMATION_DELAY = 0.7;
 
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
@@ -247,6 +254,26 @@ const EndlessApplicationView = new Lang.Class({
         return [movedList, removedList];
     },
 
+    _findAddedIcons: function() {
+        let oldItemLayout = this._allIcons.map(function(icon) { return icon.getId(); });
+        if (oldItemLayout.length === 0) return [];
+
+        let newItemLayout = this.getLayoutIds();
+        newItemLayout = this._trimInvisible(newItemLayout);
+
+        let addedIds = [];
+        for (let newItemIdx in newItemLayout) {
+            let newItem = newItemLayout[newItemIdx];
+            let oldItemIdx = oldItemLayout.indexOf(newItem);
+
+            if (oldItemIdx < 0) {
+                addedIds.push(newItem);
+            }
+        }
+
+        return addedIds;
+    },
+
     animateMovement: function() {
         let [movedList, removedList] = this._findIconChanges();
         this._grid.animateShuffling(movedList,
@@ -334,12 +361,14 @@ const EndlessApplicationView = new Lang.Class({
         return false;
     },
 
-    addIcons: function() {
+    addIcons: function(isHidden) {
         // Don't do anything if we don't have more up-to-date information, since
         // re-adding icons unnecessarily can cause UX problems
         if (!this.iconsNeedRedraw()) {
             return;
         }
+
+        let addedIds = this._findAddedIcons();
 
         this.removeAll();
 
@@ -356,8 +385,18 @@ const EndlessApplicationView = new Lang.Class({
             }
 
             if (icon) {
+                let iconActor = icon.actor;
+
+                if (isHidden) {
+                    iconActor.hide();
+                }
+
+                if (addedIds.indexOf(itemId) != -1) {
+                    icon.scheduleScaleIn();
+                }
+
                 this.addIcon(icon);
-                icon.actor.connect('key-focus-in',
+                iconActor.connect('key-focus-in',
                                    Lang.bind(this, this._ensureIconVisible));
             }
         }
@@ -514,7 +553,10 @@ const AllView = new Lang.Class({
 
     _redisplay: function() {
         if (this.getAllIcons().length == 0) {
-            this.addIcons();
+            this.addIcons(true);
+
+            Main.layoutManager.connect('startup-complete',
+                Lang.bind(this, this._animateIconsIn));
         } else {
             let animateView = this._repositionedView;
             if (!animateView) {
@@ -525,6 +567,23 @@ const AllView = new Lang.Class({
             animateView.animateMovement();
         }
     },
+
+    _animateIconsIn: function() {
+        let allIcons = this.getAllIcons();
+        for (let i in allIcons) {
+            let icon = allIcons[i];
+            icon.actor.opacity = 0;
+            icon.actor.translation_y = ICON_ANIMATION_TRANSLATION;
+            icon.actor.show();
+
+            Tweener.addTween(icon.actor, {
+                translation_y: 0,
+                opacity: 255,
+                time: ICON_ANIMATION_TIME,
+                delay: ICON_ANIMATION_DELAY
+            });
+        }
+     },
 
     _closePopup: function() {
         if (!this._currentPopup) {
@@ -1091,6 +1150,7 @@ const ViewIcon = new Lang.Class({
         this.blockHandler = false;
 
         this._iconState = ViewIconState.NORMAL;
+        this._scaleInId = 0;
 
         this.actor = new St.Bin({ style_class: 'app-well-app' });
         this.actor.x_fill = true;
@@ -1120,6 +1180,7 @@ const ViewIcon = new Lang.Class({
     },
 
     _onDestroy: function() {
+        this._unscheduleScaleIn();
         this.iconButton._delegate = null;
         this.actor._delegate = null;
     },
@@ -1135,6 +1196,48 @@ const ViewIcon = new Lang.Class({
 
     _onLabelCancel: function() {
         this.actor.sync_hover();
+    },
+
+    _scaleIn: function() {
+        this.actor.scale_x = 0;
+        this.actor.scale_y = 0;
+        this.actor.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+
+        Tweener.addTween(this.actor, {
+            scale_x: 1,
+            scale_y: 1,
+            time: NEW_ICON_ANIMATION_TIME,
+            delay: NEW_ICON_ANIMATION_DELAY,
+            transition: function(t, b, c, d) {
+                // Similar to easeOutElastic, but less aggressive.
+                t /= d;
+                let p = 0.5;
+                return b + c * (Math.pow(2, -11 * t) * Math.sin(2 * Math.PI * (t - p / 4) / p) + 1);
+            }
+        });
+    },
+
+    _unscheduleScaleIn: function() {
+        if (this._scaleInId != 0) {
+            Main.overview.disconnect(this._scaleInId);
+            this._scaleInId = 0;
+        }
+    },
+
+    scheduleScaleIn: function() {
+        if (this._scaleInId != 0) {
+            return;
+        }
+
+        if (Main.overview.visible) {
+            this._scaleIn();
+            return;
+        }
+
+        this._scaleInId = Main.overview.connect('shown', Lang.bind(this, function() {
+            this._unscheduleScaleIn();
+            this._scaleIn();
+        }));
     },
 
     replaceText: function(newText) {

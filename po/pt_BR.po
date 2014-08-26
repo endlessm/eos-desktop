@@ -18,12 +18,13 @@
 # Roddy Shuler <roddy@endlessm.com>, 2013-2014
 # Rodrigo Flores <mail@rodrigoflores.org>, 2009
 # Rodrigo Padula <contato@rodrigopadula.com>, 2011
+# Silva <michele@endlessm.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
-"PO-Revision-Date: 2014-07-29 21:36+0000\n"
+"POT-Creation-Date: 2014-08-25 21:32-0700\n"
+"PO-Revision-Date: 2014-08-26 04:40+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/eos-shell/language/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +57,7 @@ msgstr "Abre o menu do aplicativo"
 msgid "Feedback"
 msgstr "Comentários"
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr "Tutorial"
 
@@ -393,7 +394,7 @@ msgstr "Não listado?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -423,7 +424,7 @@ msgstr "Janela de início de sessão"
 msgid "Power"
 msgstr "Ligar"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "Suspender"
 
@@ -465,40 +466,40 @@ msgstr "Não foi possível analisar comando:"
 msgid "Execution of '%s' failed:"
 msgstr "A execução de \"%s\" falhou:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1858
 msgid "More Apps"
 msgstr "Mais Apps"
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1867
 msgid "Delete"
 msgstr "Excluir"
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1919
 msgid "Warning"
 msgstr "Aviso"
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1925
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para excluir uma pasta que você tem que remover todos os arquivos de dentro primeiro."
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1931
 msgid "We are just trying to keep you safe."
 msgstr "Estamos apenas tentando manter a segurança dos seus dados."
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1937 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2020
 msgid "New Window"
 msgstr "Nova janela"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2023 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Remover dos favoritos"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2024
 msgid "Add to Favorites"
 msgstr "Adicionar aos favoritos"
 
@@ -518,11 +519,11 @@ msgstr "Alterar plano de fundo…"
 
 #: ../js/ui/backgroundMenu.js:25
 msgid "Add App"
-msgstr ""
+msgstr "Adicionar Aplicativo"
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website"
-msgstr ""
+msgstr "Adicionar Website"
 
 #: ../js/ui/backgroundMenu.js:33
 msgid "Add Folder"
@@ -1086,7 +1087,7 @@ msgstr "Ocorreu um erro durante à atualização"
 msgid "We could not update your system"
 msgstr "Não foi possível atualizar o seu sistema"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:545
 msgid "Windows"
 msgstr "Janelas"
 
@@ -1119,7 +1120,7 @@ msgstr "Configurações de data & hora"
 msgid "%A %B %e, %Y"
 msgstr "%A, %e de %B de %Y"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:46
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1223,6 +1224,11 @@ msgstr "Instalar"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Baixar e instalar \"%s\" de extensions.gnome.org?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr "%s foi eliminado"
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1309,15 +1315,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:118
 msgid "Undo"
 msgstr "Desfazer"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:169
 msgid "Overview"
 msgstr "Visão geral"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:375
 msgid "Top Bar"
 msgstr "Barra superior"
 
@@ -1809,51 +1815,51 @@ msgstr "Iniciar sessão como outro usuário"
 msgid "Unlock Window"
 msgstr "Desbloquear janela"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "Encerrar sessão"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "Bloquear"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr "Sair"
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "Configurações"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr "Nos dê a sua opinião"
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "Trocar usuário"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "Outros usuários estão com sessão aberta."
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "O desligamento pode fazer com que eles percam seus trabalhos não salvos."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (remoto)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:549
 msgid "Applications"
 msgstr "Aplicativos"
 
@@ -1864,24 +1870,24 @@ msgstr "\"%s\" está pronto"
 
 #: ../js/ui/windowManager.js:65
 msgid "Do you want to keep these display settings?"
-msgstr ""
+msgstr "Você deseja manter essas configurações de tela? "
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #: ../js/ui/windowManager.js:84
 msgid "Revert Settings"
-msgstr ""
+msgstr "Reverter Configurações"
 
 #: ../js/ui/windowManager.js:88
 msgid "Keep Changes"
-msgstr ""
+msgstr "Manter Alterações"
 
 #: ../js/ui/windowManager.js:106
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Mudanças nas configurações serão revertidas em %d segundos"
+msgstr[1] "Mudanças nas configurações serão revertidas em %d segundos"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"

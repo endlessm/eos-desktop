@@ -16,7 +16,12 @@ const HotCornerIndicator = new Lang.Class({
         this.parent(null, _("Hot Corner Indicator"));
         this.actor.add_style_class_name('hot-corner-indicator');
 
-        let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/hot-corner-indicator-symbolic.svg');
+        let iconFileNormal;
+        if (this.actor.get_text_direction() == Clutter.TextDirection.RTL) {
+            iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/hot-corner-indicator-rtl-symbolic.svg');
+        } else {
+            iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/hot-corner-indicator-symbolic.svg');
+        }
         this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
 
         this.setGIcon(this._giconNormal);
