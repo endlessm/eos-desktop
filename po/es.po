@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
-"PO-Revision-Date: 2014-08-14 18:59+0000\n"
-"Last-Translator: Joel Gil Leon <joel@endlessm.com>\n"
+"POT-Creation-Date: 2014-08-25 21:32-0700\n"
+"PO-Revision-Date: 2014-08-26 04:40+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/eos-shell/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,7 +49,7 @@ msgstr "Abrir el menú de la aplicación"
 msgid "Feedback"
 msgstr "Comentarios"
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr "Tutorial"
 
@@ -386,7 +386,7 @@ msgstr "¿No está en la lista?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -416,7 +416,7 @@ msgstr "Ventana de inicio de sesión"
 msgid "Power"
 msgstr "Energía"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "Suspender"
 
@@ -458,40 +458,40 @@ msgstr "No se pudo analizar el comando:"
 msgid "Execution of '%s' failed:"
 msgstr "Falló la ejecución de «%s»:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1858
 msgid "More Apps"
 msgstr "Más Programas"
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1867
 msgid "Delete"
 msgstr "Remover"
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1919
 msgid "Warning"
 msgstr "Advertencia"
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1925
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para eliminar una carpeta usted debe remover primero todos los elementos contenidos dentro."
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1931
 msgid "We are just trying to keep you safe."
 msgstr "Estamos tratando de mantener la seguridad de sus datos."
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1937 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Aceptar"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2020
 msgid "New Window"
 msgstr "Ventana nueva"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2023 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Quitar de los favoritos"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2024
 msgid "Add to Favorites"
 msgstr "Añadir a los favoritos"
 
@@ -1079,7 +1079,7 @@ msgstr "Hubo un error durante la actualización"
 msgid "We could not update your system"
 msgstr "Tu sistema no se pudo actualizar"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:545
 msgid "Windows"
 msgstr "Ventanas"
 
@@ -1112,7 +1112,7 @@ msgstr "Configuración de hora y fecha"
 msgid "%A %B %e, %Y"
 msgstr "%A, %e de %B de %Y"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:46
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1216,6 +1216,11 @@ msgstr "Instalar"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "¿Descargar e instalar «%s» desde extensions.gnome.org?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr "%s ha sido borrado"
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1302,15 +1307,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:118
 msgid "Undo"
 msgstr "Deshacer"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:169
 msgid "Overview"
 msgstr "Vista general"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:375
 msgid "Top Bar"
 msgstr "Barra superior"
 
@@ -1802,51 +1807,51 @@ msgstr "Iniciar sesión como otro usuario"
 msgid "Unlock Window"
 msgstr "Desbloquear ventana"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "Cerrar sesión"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "Bloquear"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr "Salir"
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "Configuración"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr "Denos su opinión"
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "Cambiar de usuario"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "Hay otros usuarios con la sesión iniciada"
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "Apagar puede hacer que pierdan el trabajo que no hayan guardado."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (remoto)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (consola)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:549
 msgid "Applications"
 msgstr "Aplicaciones"
 

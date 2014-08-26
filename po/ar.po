@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
-"PO-Revision-Date: 2014-08-24 16:11+0000\n"
-"Last-Translator: Yasmin Diab <yasmin.diab.lopez@gmail.com>\n"
+"POT-Creation-Date: 2014-08-25 21:32-0700\n"
+"PO-Revision-Date: 2014-08-26 04:37+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-shell/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -46,7 +46,7 @@ msgstr "افتح قائمة التطبيقات"
 msgid "Feedback"
 msgstr "تعليق"
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr "تعليمات"
 
@@ -383,7 +383,7 @@ msgstr "غير مدرج؟"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "ألغِ"
 
@@ -413,7 +413,7 @@ msgstr "نافذة الولوج"
 msgid "Power"
 msgstr "الطاقة"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "علّق"
 
@@ -455,40 +455,40 @@ msgstr "تعذّر تحليل الأمر:"
 msgid "Execution of '%s' failed:"
 msgstr "فشل تنفيذ '%s':‏"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1858
 msgid "More Apps"
 msgstr "المزيد من التطبيقات"
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1867
 msgid "Delete"
 msgstr "حذف"
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1919
 msgid "Warning"
 msgstr "تحذير"
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1925
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "لحذف مجلد عليك إزالة كافة العناصر داخله أولاً."
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1931
 msgid "We are just trying to keep you safe."
 msgstr "نحاول فقط المحافظة على أمنك."
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1937 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "حسنا"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2020
 msgid "New Window"
 msgstr "نافذة جديدة"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2023 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "أزِل من المفضّلة"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2024
 msgid "Add to Favorites"
 msgstr "أضِف إلى المفضّلة"
 
@@ -1076,7 +1076,7 @@ msgstr "فشل تحديث"
 msgid "We could not update your system"
 msgstr "لم نتمكن من تحديث نظامك"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:545
 msgid "Windows"
 msgstr "النوافذ"
 
@@ -1109,7 +1109,7 @@ msgstr "إعدادات التاريخ والوقت"
 msgid "%A %B %e, %Y"
 msgstr "%A %e %B، %Y"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:46
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1229,6 +1229,11 @@ msgstr "ثبت"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "هل تريد تنزيل وتثبيت '%s' من extensions.gnome.org؟"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1315,15 +1320,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "غير معروف"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:118
 msgid "Undo"
 msgstr "تراجع"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:169
 msgid "Overview"
 msgstr "نظرة عامة"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:375
 msgid "Top Bar"
 msgstr "الشريط العلوي"
 
@@ -1831,51 +1836,51 @@ msgstr "لِج كمستخدم آخر"
 msgid "Unlock Window"
 msgstr "افتح قفل النافذة"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "اخرج"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "أوصِد"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr "خروج"
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "الإعدادات"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr "تعطينا تعليق"
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "بدّل المستخدم"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "تم تسجيل دخول مستخدمين آخرين."
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "إيقاف التشغيل قد يتسبب في فقدهم للعمل الذي لم يتم حفظه."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (عن بعد)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (وحدة تحكم)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:549
 msgid "Applications"
 msgstr "التطبيقات"
 
