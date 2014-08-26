@@ -18,13 +18,14 @@
 # Roddy Shuler <roddy@endlessm.com>, 2013-2014
 # Rodrigo Flores <mail@rodrigoflores.org>, 2009
 # Rodrigo Padula <contato@rodrigopadula.com>, 2011
+# Silva <michele@endlessm.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-29 14:35-0700\n"
-"PO-Revision-Date: 2014-07-29 21:36+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"PO-Revision-Date: 2014-08-25 16:57+0000\n"
+"Last-Translator: Silva <michele@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/eos-shell/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -518,11 +519,11 @@ msgstr "Alterar plano de fundo…"
 
 #: ../js/ui/backgroundMenu.js:25
 msgid "Add App"
-msgstr ""
+msgstr "Adicionar Aplicativo"
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website"
-msgstr ""
+msgstr "Adicionar Website"
 
 #: ../js/ui/backgroundMenu.js:33
 msgid "Add Folder"
@@ -1864,24 +1865,24 @@ msgstr "\"%s\" está pronto"
 
 #: ../js/ui/windowManager.js:65
 msgid "Do you want to keep these display settings?"
-msgstr ""
+msgstr "Você deseja manter essas configurações de tela? "
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #: ../js/ui/windowManager.js:84
 msgid "Revert Settings"
-msgstr ""
+msgstr "Reverter Configurações"
 
 #: ../js/ui/windowManager.js:88
 msgid "Keep Changes"
-msgstr ""
+msgstr "Manter Alterações"
 
 #: ../js/ui/windowManager.js:106
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Mudanças nas configurações serão revertidas em %d segundos"
+msgstr[1] "Mudanças nas configurações serão revertidas em %d segundos"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"

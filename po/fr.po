@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-29 14:35-0700\n"
-"PO-Revision-Date: 2014-08-21 22:22+0000\n"
+"PO-Revision-Date: 2014-08-23 10:44+0000\n"
 "Last-Translator: Philip Chimento <philip.chimento@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/eos-shell/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -46,20 +46,20 @@ msgstr "Ouvrir le menu de l'application"
 
 #: ../data/eos-app-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
+msgstr "Feedback"
 
 #: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
 msgid "Tutorial"
-msgstr ""
+msgstr "Tutoriel"
 
 #: ../data/eos-app-tutorial.desktop.in.in.h:2
 msgid "Tutorial video and help"
-msgstr ""
+msgstr "Tutoriel vidéo et aide"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
 msgid "EOS Shell"
-msgstr ""
+msgstr "EOS Shell"
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -87,86 +87,86 @@ msgstr "Autoriser l'accès aux outils internes de débogage et de surveillance g
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:3
 msgid "Separate the power off and log out buttons on the user menu"
-msgstr ""
+msgstr "Séparer les boutons de mise hors tension et de déconnexion dans le menu de l'utilisateur"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:4
 msgid ""
 "By default, use a single exit button to power off or log out (with the log "
 "out option on the power off confirmation dialog). Set true for separate "
 "buttons on the user menu."
-msgstr ""
+msgstr "Par défaut, utilisez un seul bouton \"Quitter\" pour éteindre ou vous déconnecter (avec l'option de déconnexion située sur la boîte de dialogue de confirmation de la mise hors tension). Vous pouvez faire des réglages pour avoir des boutons séparés, en allant dans le menu utilisateur."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:5
 msgid "Enables the hot corner for the window picker"
-msgstr ""
+msgstr "Autoriser le coin pour le sélecteur de fenêtre"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:6
 msgid ""
 "By default, the hot corner for the window picker is enabled. Set false to "
 "disable the hot corner."
-msgstr ""
+msgstr "Par défaut, le coin du sélecteur de fenêtre est activé. Mettez Faux pour désactiver le coin."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:7
 msgid "Set the left/right position of the hot corner for the window picker"
-msgstr ""
+msgstr "Réglez la position gauche/droite du coin du sélecteur de fenêtre "
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:8
 msgid ""
 "Default position of the hot corner is in a right corner. Set false to move "
 "the hot corner to a left corner. The position is not affected by the RTL vs."
 " LTR text direction."
-msgstr ""
+msgstr "La position par défaut du coin est située en haut à droite. Réglez Faux pour déplacer le coin à gauche. La position n'est pas affectée par le sens du texte RTL contre LTR."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:9
 msgid "Set the top/bottom position of the hot corner for the window picker"
-msgstr ""
+msgstr "Réglez la position supérieure/inférieure du coin du sélecteur de fenêtre "
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:10
 msgid ""
 "Default position of the hot corner is in a bottom corner. Set false to move "
 "the hot corner to a top corner."
-msgstr ""
+msgstr "La position par défaut du coin chaud est située en bas. Réglez Faux pour déplacer le coin sur le coin supérieur."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:11
 msgid "Set the size of the hot corner target"
-msgstr ""
+msgstr "Définissez la taille de la cible du coin"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:12
 msgid ""
 "Number of pixels in one dimension of the square target for the hot corner. "
 "Default is for a single pixel in the very corner. For some virtual machines,"
 " this value may need to be set larger than the default."
-msgstr ""
+msgstr "Nombre de pixels à une dimension de la cible carrée pour le coin. Par défaut, elle est d'un seul pixel dans le coin. Pour certaines machines virtuelles, cette valeur peut être nécessaire pour la définir plus grande que la valeur par défaut."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:13
 msgid "Set the left/right position of the dash on the overview"
-msgstr ""
+msgstr "Régler la position gauche/droite du tableau de bord sur l'aperçu"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:14
 msgid ""
 "Default position of the dash is at the end of the screen (right edge for LTR"
 " text direction). Unlike the hot corners, the opposite side is used for RTL "
 "text direction."
-msgstr ""
+msgstr "La position par défaut du tableau de bord est située en bas de l'écran (le bord droit pour la direction du texte LTR). Contrairement aux coins, le côté opposé est utilisé pour le sens du texte RTL."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:15
 msgid "Prevent apps from being automatically maximized on launch"
-msgstr ""
+msgstr "Prévenir que les applications soient automatiquement maximisée sur le lancement"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
 "screens, prevents applications from being forced to open maximized, and does"
 " not automatically switch to the app selector when a window is minimized."
-msgstr ""
+msgstr "Rend la gestion des fenêtres plus similaire au Gnome standard. Masque les écrans de démarrage de l'application, empêche les applications d'être forcées à s'ouvrir et ne passe pas automatiquement à la sélection de l'application lorsqu'une fenêtre est minimisée."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:17
 msgid "Whether the app store is displayed"
-msgstr ""
+msgstr "Si l'app store est affiché"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:18
 msgid "Whether the application grid displays the app store icon."
-msgstr ""
+msgstr "Si la grille d'application affiche l'icône App Store."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:19
 msgid "Uuids of extensions to enable"
@@ -257,13 +257,13 @@ msgstr "Le shell demandera un mot de passe au montage d'un périphérique chiffr
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid "Layout of application launcher icons in the grid"
-msgstr ""
+msgstr "Disposition des icônes d'application de lancement dans la grille"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:36
 msgid ""
 "This key specifies the exact order of the icons shown in the applications "
 "launcher view."
-msgstr ""
+msgstr "Cette clé spécifie l'ordre exact dans lequel les icônes affichées dans la vue du lanceur d'applications."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Show the week date in the calendar"
@@ -459,24 +459,24 @@ msgstr "Exécution de « %s » impossible :"
 
 #: ../js/ui/appDisplay.js:1755
 msgid "More Apps"
-msgstr ""
+msgstr "Plus d'Apps"
 
 #: ../js/ui/appDisplay.js:1764
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 #: ../js/ui/appDisplay.js:1816
 msgid "Warning"
-msgstr ""
+msgstr "Avertissement"
 
 #: ../js/ui/appDisplay.js:1822
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr ""
+msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
 #: ../js/ui/appDisplay.js:1828
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "Nous essayons simplement de vous garder en sécurité."
 
 #: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
 msgid "OK"
@@ -510,15 +510,15 @@ msgstr "Modifier l'arrière-plan…"
 
 #: ../js/ui/backgroundMenu.js:25
 msgid "Add App"
-msgstr ""
+msgstr "Ajouter une App"
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website"
-msgstr ""
+msgstr "Ajouter un site"
 
 #: ../js/ui/backgroundMenu.js:33
 msgid "Add Folder"
-msgstr ""
+msgstr "Ajouter un dossier"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -1032,51 +1032,51 @@ msgstr "Raison inconnue"
 
 #: ../js/ui/components/updaterManager.js:184
 msgid "Software Update"
-msgstr ""
+msgstr "Mise à jour logicielle"
 
 #: ../js/ui/components/updaterManager.js:200
 msgid "Updates available"
-msgstr ""
+msgstr "Mises à jour disponibles"
 
 #: ../js/ui/components/updaterManager.js:201
 msgid "Software updates are available for your system"
-msgstr ""
+msgstr "Les mises à jour logicielles sont disponibles pour votre système"
 
 #: ../js/ui/components/updaterManager.js:202
 msgid "Download now"
-msgstr ""
+msgstr "Télécharger maintenant"
 
 #: ../js/ui/components/updaterManager.js:215
 msgid "Updates ready"
-msgstr ""
+msgstr "Mises à jour prête"
 
 #: ../js/ui/components/updaterManager.js:216
 msgid "Software updates are ready to be installed on your system"
-msgstr ""
+msgstr "Les mises à jour logicielles sont prêtes à être installées sur votre système"
 
 #: ../js/ui/components/updaterManager.js:217
 msgid "Install now"
-msgstr ""
+msgstr "Installer maintenant"
 
 #: ../js/ui/components/updaterManager.js:226
 msgid "Updates installed"
-msgstr ""
+msgstr "Mises à jour installées"
 
 #: ../js/ui/components/updaterManager.js:227
 msgid "Software updates were installed on your system"
-msgstr ""
+msgstr "Les mises à jour logicielles ont été installées sur votre système"
 
 #: ../js/ui/components/updaterManager.js:228
 msgid "Restart now"
-msgstr ""
+msgstr "Redémarrer maintenant"
 
 #: ../js/ui/components/updaterManager.js:251
 msgid "Update failed"
-msgstr ""
+msgstr "Echec d'une tentative de mise à jour"
 
 #: ../js/ui/components/updaterManager.js:252
 msgid "We could not update your system"
-msgstr ""
+msgstr "Nous n'avons pas pu mettre à jour votre système"
 
 #: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
 msgid "Windows"
@@ -1115,7 +1115,7 @@ msgstr "%A %e %B %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr ""
+msgstr "Rappelez-vous que les comptes partagés ne sont pas protégés par un mot de passe, assurez-vous donc de supprimer tous les fichiers que vous souhaitez garder privés."
 
 #: ../js/ui/endSessionDialog.js:77
 #, c-format
@@ -1350,11 +1350,11 @@ msgstr "Le verrouillage a été bloqué par une application"
 
 #: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
 msgid "Google"
-msgstr ""
+msgstr "Google"
 
 #: ../js/ui/shellEntry.js:112
 msgid "My Computer"
-msgstr ""
+msgstr "Mon ordinateur"
 
 #: ../js/ui/shellEntry.js:176
 msgid "Copy"
@@ -1374,7 +1374,7 @@ msgstr "Masquer le texte"
 
 #: ../js/ui/shellEntry.js:347
 msgid "My computer"
-msgstr ""
+msgstr "Mon ordinateur"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1811,7 +1811,7 @@ msgstr "Verrouiller"
 
 #: ../js/ui/userMenu.js:38
 msgid "Exit"
-msgstr ""
+msgstr "Sortir"
 
 #: ../js/ui/userMenu.js:41
 msgid "Settings"
@@ -1819,7 +1819,7 @@ msgstr "Paramètres"
 
 #: ../js/ui/userMenu.js:42
 msgid "Give Us Feedback"
-msgstr ""
+msgstr "Donnez-nous un feedback"
 
 #: ../js/ui/userMenu.js:439
 msgid "Switch User"
@@ -1856,24 +1856,24 @@ msgstr "« %s » est prêt"
 
 #: ../js/ui/windowManager.js:65
 msgid "Do you want to keep these display settings?"
-msgstr ""
+msgstr "Voulez-vous conserver ces paramètres d'affichage ?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #: ../js/ui/windowManager.js:84
 msgid "Revert Settings"
-msgstr ""
+msgstr "Rétablir les paramètres"
 
 #: ../js/ui/windowManager.js:88
 msgid "Keep Changes"
-msgstr ""
+msgstr "Conserver les modifications"
 
 #: ../js/ui/windowManager.js:106
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Les changements de paramètres seront réinitialisés dans %d secondes"
+msgstr[1] "Les changements de paramètres seront réinitialisés dans %d secondes"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
@@ -1924,12 +1924,12 @@ msgstr "Impossible de lancer « %s »"
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
-msgstr ""
+msgstr "Innomé"
 
 #: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
-msgstr ""
+msgstr "Définition personnalisée pour %s"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."

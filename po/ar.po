@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-29 14:35-0700\n"
-"PO-Revision-Date: 2014-08-21 22:56+0000\n"
+"PO-Revision-Date: 2014-08-24 16:11+0000\n"
 "Last-Translator: Yasmin Diab <yasmin.diab.lopez@gmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-shell/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -52,12 +52,12 @@ msgstr "تعليمات"
 
 #: ../data/eos-app-tutorial.desktop.in.in.h:2
 msgid "Tutorial video and help"
-msgstr ""
+msgstr "فيديو تعليمي ومساعدة"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
 msgid "EOS Shell"
-msgstr ""
+msgstr "صدفة EOS"
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -85,67 +85,67 @@ msgstr "السماح بالوصول إلى التنقيح الداخلي ومر�
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:3
 msgid "Separate the power off and log out buttons on the user menu"
-msgstr ""
+msgstr "افصل بين زر إيقاف التشغيل وزر تسجيل الخروج في قائمة المستخدم"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:4
 msgid ""
 "By default, use a single exit button to power off or log out (with the log "
 "out option on the power off confirmation dialog). Set true for separate "
 "buttons on the user menu."
-msgstr ""
+msgstr "افتراضياً، استخدم زر خروج واحد لإيقاف التشغيل أو تسجيل الخروج (مع خيار تسجيل الخروج على مربع حوار تأكيد إيقاف التشغيل). قم بتعيين قيمة صحيح بالنسبة للأزرار المنفصلة في قائمة المستخدم."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:5
 msgid "Enables the hot corner for the window picker"
-msgstr ""
+msgstr "مكن الزاوية الساخنة لمنتقي النافذة"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:6
 msgid ""
 "By default, the hot corner for the window picker is enabled. Set false to "
 "disable the hot corner."
-msgstr ""
+msgstr "بشكلٍ افتراضي، يتم تمكين الزاوية الساخنة لمنتقي النافذة. قم بتعيين القيمة false لتعطيل الزاوية الساخنة."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:7
 msgid "Set the left/right position of the hot corner for the window picker"
-msgstr ""
+msgstr "اضبط الموضع الأيسر/الأيمن من الزاوية الساخنة لمنتقي النافذة"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:8
 msgid ""
 "Default position of the hot corner is in a right corner. Set false to move "
 "the hot corner to a left corner. The position is not affected by the RTL vs."
 " LTR text direction."
-msgstr ""
+msgstr "الموضع الافتراضي للزاوية الساخنة هو في زاوية يمنى. قم بتعيين القيمة false لتحريك الزاوية الساخنة إلى زاوية يسرى. لا يتأثر الوضع من قِبل اتجاه النص من اليمين إلى اليسار في مقابل اتجاهه من اليسار إلى اليمين."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:9
 msgid "Set the top/bottom position of the hot corner for the window picker"
-msgstr ""
+msgstr "اضبط الموضع الأعلى / الأسفل من الزاوية الساخنة لمنتقي الإطار"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:10
 msgid ""
 "Default position of the hot corner is in a bottom corner. Set false to move "
 "the hot corner to a top corner."
-msgstr ""
+msgstr "الموضع الافتراضي من الزاوية الساخنة هو في زاوية سفلى. قم بتعيين القيمة false لتحريك الزاوية الساخنة إلى زاوية عليا."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:11
 msgid "Set the size of the hot corner target"
-msgstr ""
+msgstr "تعيين حجم هدف الزاوية الساخنة"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:12
 msgid ""
 "Number of pixels in one dimension of the square target for the hot corner. "
 "Default is for a single pixel in the very corner. For some virtual machines,"
 " this value may need to be set larger than the default."
-msgstr ""
+msgstr "عدد وحدات البكسل في بعدٍ واحدٍ من الهدف المربع للزاوية الساخنة. الوضع الافتراضي هو بكسل واحد في الزاوية ذاتها. بالنسبة لبعض الأجهزة الافتراضية، قد تحتاج لجعل هذه القيمة أكبر من الافتراضي."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:13
 msgid "Set the left/right position of the dash on the overview"
-msgstr ""
+msgstr "اضبط موضع الشرطة الأيسر / الأيمن في المعاينة"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:14
 msgid ""
 "Default position of the dash is at the end of the screen (right edge for LTR"
 " text direction). Unlike the hot corners, the opposite side is used for RTL "
 "text direction."
-msgstr ""
+msgstr "الموضع الافتراضي للشرطة هو في نهاية الشاشة (الحافة اليمنى لاتجاه النص من اليسار لليمين). وبخلاف الزوايا الساخنة، يستخدم الجانب المقابل لاتجاه النص من اليمين لليسار."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:15
 msgid "Prevent apps from being automatically maximized on launch"
@@ -188,7 +188,7 @@ msgid ""
 " used ones (e.g. in launchers). While this data will be kept private, you "
 "may want to disable this for privacy reasons. Please note that doing so "
 "won't remove already saved data."
-msgstr ""
+msgstr "تراقب الصَدفة عادةً التطبيقات النشطة من أجل عرض أكثرها استخداماً (على سبيل المثال في المشغلات). في حين سيتم الاحتفاظ بهذه البيانات سرية، فقد ترغب في تعطيل هذا لأسباب تتعلق بالخصوصية. يرجى ملاحظة أن القيام بذلك لن يزيل البيانات المحفوظة بالفعل."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:23
 msgid "List of desktop file IDs for favorite applications"
@@ -198,7 +198,7 @@ msgstr "قائمة معرفات ملف سطح المكتب للتطبيقات ا
 msgid ""
 "The applications corresponding to these identifiers will be displayed in the"
 " favorites area."
-msgstr ""
+msgstr "سيتم عرض التطبيقات المقابلة لهذه المعرفات في منطقة المفضلات."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
 msgid "List of categories that should be displayed as folders"
@@ -208,7 +208,7 @@ msgstr "قائمة الفئات التي يجب أن يتم عرضها كمجل�
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
-msgstr ""
+msgstr "سيتم تمثيل كل اسم فئة في هذه القائمة كمجلد في معرض التطبيق، بدلاً من عرضها متضمنةً في العرض الرئيسي."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "History for command (Alt-F2) dialog"
@@ -216,23 +216,23 @@ msgstr "التأريخ لنافذة حوار الأمر (Alt-F2)"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:28
 msgid "History for the looking glass dialog"
-msgstr ""
+msgstr "تاريخ حوار المرآة السحرية"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:29
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
-msgstr ""
+msgstr "يستخدم داخلياً لتخزين آخر وجود للرسائل الفورية والذي تم تعيينه بشكلٍ صريحٍ من قبل المستخدم. القيمة هنا هي من التعداد TpConnectionPresenceType."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:30
 msgid ""
 "Internally used to store the last session presence status for the user. The "
 "value here is from the GsmPresenceStatus enumeration."
-msgstr ""
+msgstr "تستخدم داخلياً لتخزين آخر حالة تواجد في جلسة للمستخدم. القيمة هنا هي من التعداد GsmPresenceStatus."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid "Always show the 'Log out' menuitem in the user menu."
-msgstr ""
+msgstr "أظهر دائماً عنصر قائمة ’تسجيل الخروج Log out’  في قائمة المستخدم."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:32
 msgid ""
@@ -243,7 +243,7 @@ msgstr "هذا المفتاح يتجاوز الاخفاء التلقائي ل'Lo
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid ""
 "Whether to remember password for mounting encrypted or remote filesystems"
-msgstr ""
+msgstr "سواءً لتذكر كلمة المرور لتحميل أنظمة الملفات عن بعد أو المشفرة"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:34
 msgid ""
@@ -251,17 +251,17 @@ msgid ""
 "filesystem is mounted. If the password can be saved for future use a "
 "'Remember Password' checkbox will be present. This key sets the default "
 "state of the checkbox."
-msgstr ""
+msgstr "ستطلب الصَدَفة كلمة مرور عندما يتم تحميل جهاز مشفر أو نظام ملفات عن بعد. إذا كان يمكن حفظ كلمة المرور لاستخدامها في المستقبل ستكون خانة الاختيار ’تذكر كلمة المرور Remember Password’ موجودة. هذا المفتاح يحدد الحالة الافتراضية لخانة الاختيار."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid "Layout of application launcher icons in the grid"
-msgstr ""
+msgstr "تصميم أيقونات مشغل التطبيق في الشبكة"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:36
 msgid ""
 "This key specifies the exact order of the icons shown in the applications "
 "launcher view."
-msgstr ""
+msgstr "يحدد هذا المفتاح الترتيب الدقيق للأيقونات الظاهرة في معرض مشغل التطبيقات."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Show the week date in the calendar"
@@ -269,41 +269,41 @@ msgstr "اعرض تاريخ الأسبوع في التقويم"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:38
 msgid "If true, display the ISO week date in the calendar."
-msgstr ""
+msgstr "إذا كان هذا صحيحاً، اعرض تقويم أسبوع ايزو في التقويم."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Keybinding to open the application menu"
-msgstr ""
+msgstr "رابط المفتاح لفتح قائمة التطبيقات"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:40
 msgid "Keybinding to open the application menu."
-msgstr ""
+msgstr "رابط المفتاح لفتح قائمة التطبيقات."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:41
 msgid "Keybinding to open the \"Show Applications\" view"
-msgstr ""
+msgstr "رابط المفتاح لفتح  معرض \"إظهار التطبيقات Show Applications\""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid ""
 "Keybinding to open the \"Show Applications\" view of the Activities "
 "Overview."
-msgstr ""
+msgstr "رابط المفتاح لفتح معرض لمحة الأنشطة في ’إظهار التطبيقات Show Applications’."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:43
 msgid "Keybinding to toggle the visibility of the message tray"
-msgstr ""
+msgstr "رابط المفتاح لتبديل رؤية علبة الرسائل"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:44
 msgid "Keybinding to toggle the visibility of the message tray."
-msgstr ""
+msgstr "رابط المفتاح لتبديل رؤية علبة الرسائل."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:45
 msgid "Keybinding to focus the active notification"
-msgstr ""
+msgstr "رابط المفتاح لتركيز الإخطار النشط"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:46
 msgid "Keybinding to focus the active notification."
-msgstr ""
+msgstr "رابط المفتاح لتركيز الإخطار النشط."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "Which keyboard to use"
@@ -315,45 +315,45 @@ msgstr "نوع لوحة المفاتيح التي ترغب باستخدامها.
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "The application icon mode."
-msgstr ""
+msgstr "نمط أيقونة البرنامج."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
 "(shows only the application icon) or 'both'."
-msgstr ""
+msgstr "يقوم بتكوين كيفية عرض النوافذ في وحدات التحويل. الاحتمالات الصالحة هي ’مصغرات فقط’ (يُظهر صورة مصغرة للنافذة)، ’أيقونة تطبيق-فقط '(يُظهر فقط أيقونة التطبيق) أو’ كلاهما ’."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid "Attach modal dialog to the parent window"
-msgstr ""
+msgstr "إرفاق مربع حوار مشروط إلى النافذة الأصلية"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
-msgstr ""
+msgstr "هذا المفتاح يتجاوز المفتاح في org.gnome.mutter عند تشغيل صَدفة جنوم."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid "Arrangement of buttons on the titlebar"
-msgstr ""
+msgstr "ترتيب الأزرار على شريط العناوين"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
-msgstr ""
+msgstr "هذا المفتاح يتجاوز المفتاح في org.gnome.desktop.wm.preferences عند تشغيل صدفة جنوم."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid "Enable edge tiling when dropping windows on screen edges"
-msgstr ""
+msgstr "تمكين امالة الحافة عند اسقاط النوافذ على حواف الشاشة"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Workspaces are managed dynamically"
-msgstr ""
+msgstr "تدار مساحات العمل بشكل ديناميكي"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid "Workspaces only on primary monitor"
-msgstr ""
+msgstr "مساحات عمل على جهاز العرض الأساسي فقط"
 
 #: ../js/extensionPrefs/main.js:127
 #, c-format
@@ -470,11 +470,11 @@ msgstr "تحذير"
 #: ../js/ui/appDisplay.js:1822
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr ""
+msgstr "لحذف مجلد عليك إزالة كافة العناصر داخله أولاً."
 
 #: ../js/ui/appDisplay.js:1828
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "نحاول فقط المحافظة على أمنك."
 
 #: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
 msgid "OK"
@@ -530,7 +530,7 @@ msgstr "طوال اليوم"
 #: ../js/ui/calendar.js:68
 msgctxt "event list time"
 msgid "%H\\u2236%M"
-msgstr ""
+msgstr " %H\\u2236%M"
 
 #. Transators: Shown in calendar event list, if 12h format,
 #. \u2236 is a ratio character, similar to : and \u2009 is
@@ -538,7 +538,7 @@ msgstr ""
 #: ../js/ui/calendar.js:77
 msgctxt "event list time"
 msgid "%l\\u2236%M\\u2009%p"
-msgstr ""
+msgstr " %l\\u2236%M\\u2009%p"
 
 #. Translators: Calendar grid abbreviation for Sunday.
 #. *
@@ -668,11 +668,11 @@ msgstr "الأسبوع القادم"
 
 #: ../js/ui/components/automountManager.js:90
 msgid "External drive connected"
-msgstr ""
+msgstr "تم توصيل محرك أقراص خارجي"
 
 #: ../js/ui/components/automountManager.js:101
 msgid "External drive disconnected"
-msgstr ""
+msgstr "تم فصل محرك الأقراص الخارجي"
 
 #: ../js/ui/components/autorunManager.js:305
 msgid "Removable Devices"
@@ -1038,7 +1038,7 @@ msgstr "التحديثات المتوفرة"
 
 #: ../js/ui/components/updaterManager.js:201
 msgid "Software updates are available for your system"
-msgstr ""
+msgstr "تتوفر تحديثات برامج لنظامك"
 
 #: ../js/ui/components/updaterManager.js:202
 msgid "Download now"
@@ -1050,7 +1050,7 @@ msgstr "التحديثات جاهزة"
 
 #: ../js/ui/components/updaterManager.js:216
 msgid "Software updates are ready to be installed on your system"
-msgstr ""
+msgstr "تحديثات البرامج جاهزة ليتم تثبيتها على النظام الخاص بك"
 
 #: ../js/ui/components/updaterManager.js:217
 msgid "Install now"
@@ -1062,7 +1062,7 @@ msgstr "التحديثات المثبّتة"
 
 #: ../js/ui/components/updaterManager.js:227
 msgid "Software updates were installed on your system"
-msgstr ""
+msgstr "تم تثبيت تحديثات البرامج على جهازك"
 
 #: ../js/ui/components/updaterManager.js:228
 msgid "Restart now"
@@ -1113,7 +1113,7 @@ msgstr "%A %e %B، %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr ""
+msgstr "تذكر أن الحسابات المشتركة غير محمية بكلمة مرور، لذلك تأكد من حذف أي ملفات تريد الاحتفاظ بها سراً."
 
 #: ../js/ui/endSessionDialog.js:77
 #, c-format
@@ -1346,7 +1346,7 @@ msgstr "أغلِق"
 
 #: ../js/ui/screenShield.js:133
 msgid "GNOME needs to lock the screen"
-msgstr ""
+msgstr "يحتاج جنوم لقفل الشاشة"
 
 #. We could not become modal, so we can't activate the
 #. screenshield. The user is probably very upset at this
@@ -1356,15 +1356,15 @@ msgstr ""
 #. screen, where we're not affected by grabs
 #: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:422
 msgid "Unable to lock"
-msgstr ""
+msgstr "لا يمكن القفل"
 
 #: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:423
 msgid "Lock was blocked by an application"
-msgstr ""
+msgstr "تم حجب القفل بواسطة تطبيق"
 
 #: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
 msgid "Google"
-msgstr ""
+msgstr "جوجل"
 
 #: ../js/ui/shellEntry.js:112
 msgid "My Computer"
@@ -1767,7 +1767,7 @@ msgstr "%d%%"
 
 #: ../js/ui/status/power.js:203
 msgid "AC Adapter"
-msgstr ""
+msgstr "محول تيار متردد"
 
 #: ../js/ui/status/power.js:205
 msgid "Laptop Battery"
@@ -1857,23 +1857,23 @@ msgstr "بدّل المستخدم"
 
 #: ../js/ui/userMenu.js:512
 msgid "Other users are logged in."
-msgstr ""
+msgstr "تم تسجيل دخول مستخدمين آخرين."
 
 #: ../js/ui/userMenu.js:517
 msgid "Shutting down might cause them to lose unsaved work."
-msgstr ""
+msgstr "إيقاف التشغيل قد يتسبب في فقدهم للعمل الذي لم يتم حفظه."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
 #: ../js/ui/userMenu.js:545
 #, c-format
 msgid "%s (remote)"
-msgstr ""
+msgstr "%s (عن بعد)"
 
 #. Translators: Console here refers to a tty like a VT console
 #: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (console)"
-msgstr ""
+msgstr "%s (وحدة تحكم)"
 
 #: ../js/ui/viewSelector.js:508
 msgid "Applications"
@@ -1886,7 +1886,7 @@ msgstr "‏'%s' جاهز"
 
 #: ../js/ui/windowManager.js:65
 msgid "Do you want to keep these display settings?"
-msgstr ""
+msgstr "هل ترغب في الاحتفاظ بإعدادات العرض هذه؟"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
@@ -1896,18 +1896,18 @@ msgstr "تعود إعدادات"
 
 #: ../js/ui/windowManager.js:88
 msgid "Keep Changes"
-msgstr ""
+msgstr "إبقاء التغييرات"
 
 #: ../js/ui/windowManager.js:106
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "سوف يتم ابطال تغييرات الإعدادات في %d ثانية"
+msgstr[1] "سوف يتم إبطال تغييرات الإعدادات في %d ثانية"
+msgstr[2] "سوف يتم ابطال تغييرات الإعدادات في %d ثانية"
+msgstr[3] "سوف يتم ابطال تغييرات الإعدادات في %d ثانية"
+msgstr[4] "سوف يتم ابطال تغييرات الإعدادات في %d ثانية"
+msgstr[5] "سوف يتم ابطال تغييرات الإعدادات في %d ثانية"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
@@ -1971,7 +1971,7 @@ msgstr "مجهول"
 #: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
-msgstr ""
+msgstr "تعريف مخصص ل%s"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."
