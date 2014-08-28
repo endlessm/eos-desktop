@@ -299,6 +299,11 @@ const AppIconButton = new Lang.Class({
             this.emit('app-icon-pressed');
 
             let windows = this._app.get_windows();
+            let tracker = Shell.WindowTracker.get_default();
+            windows = windows.filter(function(metaWindow) {
+                return tracker.is_window_interesting(metaWindow);
+            });
+
             if (windows.length > 1) {
                 this._ensureMenu();
                 this._menu.popup();
@@ -316,6 +321,11 @@ const AppIconButton = new Lang.Class({
     _handleClickEvent: function() {
         // The multiple windows case is handled in button-press-event
         let windows = this._app.get_windows();
+        let tracker = Shell.WindowTracker.get_default();
+        windows = windows.filter(function(metaWindow) {
+            return tracker.is_window_interesting(metaWindow);
+        });
+
         if (windows.length == 0) {
             let activationContext = new AppActivation.AppActivationContext(this._app);
             activationContext.activate();
