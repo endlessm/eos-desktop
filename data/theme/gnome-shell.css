@@ -1206,7 +1206,17 @@ StScrollBar StButton#vhandle:active {
 }
 
 .app-well-app.app-store-icon .icon-button .shadow-icon {
-    background-image: url("app-store-shadow-normal.png");
+    background-image: url("app-store-icon-normal.png");
+    background-size: 64px;
+}
+
+.app-well-app.trash-icon-empty .icon-button .shadow-icon {
+    background-image: url("trash-icon-empty.png");
+    background-size: 64px;
+}
+
+.app-well-app.trash-icon-full .icon-button .shadow-icon {
+    background-image: url("trash-icon-full.png");
     background-size: 64px;
 }
 
@@ -1236,7 +1246,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .app-well-app.app-store-icon .icon-button:hover .shadow-icon {
-    background-image: url("app-store-shadow-hover.png");
+    background-image: url("app-store-icon-hover.png");
     background-size: 64px;
 }
 
@@ -1280,7 +1290,7 @@ StScrollBar StButton#vhandle:active {
 
 .app-well-app.app-store-icon .icon-button:checked .shadow-icon,
 .app-well-app.app-store-icon .icon-button:active .shadow-icon {
-    background-image: url("app-store-shadow-pressed.png");
+    background-image: url("app-store-icon-pressed.png");
     background-size: 64px;
 }
 
