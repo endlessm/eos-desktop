@@ -1023,6 +1023,7 @@ const WindowManager = new Lang.Class({
         if (this._removeEffect(this._mapping, actor)) {
             Tweener.removeTweens(actor);
             actor.opacity = 255;
+            actor.scale_x = 1;
             actor.scale_y = 1;
             shellwm.completed_map(actor);
         }

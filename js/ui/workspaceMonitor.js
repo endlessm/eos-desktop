@@ -17,7 +17,8 @@ const WorkspaceMonitor = new Lang.Class({
         this._knownWindows = new Hash.Map();
 
         this._shellwm = global.window_manager;
-        this._shellwm.connect('minimize-completed', Lang.bind(this, this._minimizeWindow));
+        this._shellwm.connect('minimize', Lang.bind(this, this._minimizeWindow));
+        this._shellwm.connect('minimize-completed', Lang.bind(this, this._minimizeWindowCompleted));
         this._shellwm.connect('unminimize', Lang.bind(this, this._unminimizeWindow));
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
         this._shellwm.connect('destroy', Lang.bind(this, this._destroyWindow));
@@ -165,12 +166,6 @@ const WorkspaceMonitor = new Lang.Class({
         }
 
         this._removeKnownWindow(metaWindow);
-
-        // This window may also have been minimized
-        // but this doesn't affect the visibleWindows count
-        if (this._windowIsMinimized(metaWindow)) {
-            this._removeMinimizedWindow(metaWindow);
-        }
     },
 
     _destroyWindow: function(shellwm, actor) {
@@ -199,19 +194,23 @@ const WorkspaceMonitor = new Lang.Class({
             return;
         }
 
-        // Don't handle this window if it's already in the minimized
-        // windows hashtable. Something has gone wrong and we've got
-        // another minimize event without the window being remapped.
-        if (this._windowIsMinimized(actor.meta_window)) {
-            this._updateOverview();
-            return;
+        // Check if we're minimizing the very last window
+        if (this.visibleWindows == 1) {
+            Main.layoutManager.prepareForOverview();
         }
 
-
-        this._visibleWindows -= 1;
-
+        // We'll show the overview when the destroy animation ends
         this._addMinimizedWindow(actor.meta_window);
-        this._updateOverview();
+    },
+
+    _minimizeWindowCompleted: function(shellwm, actor) {
+        if (this._windowIsMinimized(actor.meta_window)) {
+            // Show the overview when the animation has ended.
+            this._visibleWindows -= 1;
+            this._updateOverview();
+
+            this._removeMinimizedWindow(actor.meta_window);
+        }
     },
 
     _realMapWindow: function(metaWindow) {

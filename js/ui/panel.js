@@ -403,7 +403,7 @@ const Panel = new Lang.Class({
                 Tweener.addTween(this.actor, {
                     translation_y: 0,
                     time: PANEL_ANIMATION_TIME,
-                    transition: 'easeOutCubic',
+                    transition: 'easeOutQuint',
                     delay: this._panelAnimationDelay
                 });
             })

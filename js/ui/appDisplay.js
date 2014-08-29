@@ -1831,23 +1831,24 @@ const AppStoreIcon = new Lang.Class({
         this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
     },
 
-    _stIconFromState: function(state, iconSize) {
-        let iconName = null;
+    _setStyleClass: function(state) {
         if (state == AppStoreIconState.EMPTY_TRASH) {
-            iconName = 'trash-icon-empty.png';
+            this.actor.remove_style_class_name('trash-icon-full');
+            this.actor.add_style_class_name('trash-icon-empty');
         } else if (state == AppStoreIconState.FULL_TRASH) {
-            iconName = 'trash-icon-full.png';
+            this.actor.remove_style_class_name('trash-icon-empty');
+            this.actor.add_style_class_name('trash-icon-full');
         } else {
-            iconName = 'app-store.png';
+            this.actor.remove_style_class_name('trash-icon-empty');
+            this.actor.remove_style_class_name('trash-icon-full');
         }
-
-        let gfile = Gio.File.new_for_path(global.datadir + '/theme/' + iconName);
-        return new St.Icon({ icon_size: iconSize,
-                             gicon: new Gio.FileIcon({ file: gfile }) });
     },
 
     _createIcon: function(iconSize) {
-        return this._stIconFromState(this.iconState, iconSize);
+        // Set the icon image as a background via CSS,
+        // and return an empty icon to satisfy the caller
+        this._setStyleClass(this.iconState);
+        return new St.Icon({ icon_size: iconSize });
     },
 
     _onClicked: function(actor, button) {

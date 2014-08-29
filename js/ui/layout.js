@@ -10,6 +10,7 @@ const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
 
+const AppDisplay = imports.ui.appDisplay;
 const Background = imports.ui.background;
 const BackgroundMenu = imports.ui.backgroundMenu;
 const ButtonConstants = imports.ui.buttonConstants;
@@ -571,7 +572,19 @@ const LayoutManager = new Lang.Class({
     },
 
     setViewsClone: function(actor) {
-        this._backgroundGroup.add_child(actor);        
+        this._viewsClone = actor;
+        this._backgroundGroup.add_child(this._viewsClone);
+    },
+
+    prepareForOverview: function() {
+        Tweener.addTween(this._viewsClone.saturation,
+                         { factor: AppDisplay.ACTIVE_GRID_SATURATION,
+                           time: 0.25,
+                           transition: AppDisplay.ACTIVE_GRID_TRANSITION });
+        Tweener.addTween(this._viewsClone,
+                         { opacity: AppDisplay.ACTIVE_GRID_OPACITY,
+                           time: 0.25,
+                           transition: AppDisplay.ACTIVE_GRID_TRANSITION });
     },
 
     _createBackgroundManager: function(monitorIndex) {

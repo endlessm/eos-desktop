@@ -198,7 +198,6 @@ const Overview = new Lang.Class({
         this._shown = false;            // show() and not hide()
         this._toggledFromApp = false;   // was the last call to toggle from an app?
         this._targetPage = null;        // do we have a target page to animate to?
-        this._targetDisableFade = false; // will we fade when showing next?
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
         this.visibleTarget = false;
@@ -557,12 +556,11 @@ const Overview = new Lang.Class({
         this._animateVisible();
     },
 
-    _showOrSwitchPage: function(page, disableFade) {
+    _showOrSwitchPage: function(page) {
         if (this.visible) {
             this._viewSelector.setActivePage(page);
         } else {
             this._targetPage = page;
-            this._targetDisableFade = !!disableFade;
             this.show();
         }
     },
@@ -641,10 +639,9 @@ const Overview = new Lang.Class({
         }
 
         let startOpacity = 0;
-        let shouldAnimateSaturation = false;
         if (this._targetPage == ViewSelector.ViewPage.APPS) {
-            startOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
-            shouldAnimateSaturation = true;
+            // short circuit opacity change if we're showing the apps page
+            startOpacity = AppDisplay.ACTIVE_GRID_OPACITY;
         }
 
         this._viewSelector.show(this._targetPage);
@@ -654,31 +651,17 @@ const Overview = new Lang.Class({
         this._coverPane.show();
         this.emit('showing');
 
-        if (this._targetDisableFade) {
-            this._targetDisableFade = false;
+        if (Main.layoutManager.startingUp) {
             this._showDone();
         } else {
             this._overview.opacity = startOpacity;
             Tweener.addTween(this._overview,
-                             { opacity: 255,
+                             { opacity: AppDisplay.ACTIVE_GRID_OPACITY,
                                transition: 'easeOutQuad',
                                time: ANIMATION_TIME,
                                onComplete: this._showDone,
                                onCompleteScope: this
                              });
-
-            if (shouldAnimateSaturation) {
-                this._overviewSaturation.enabled = true;
-                this._overviewSaturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
-                Tweener.addTween(this._overviewSaturation,
-                                 { factor: AppDisplay.ACTIVE_GRID_SATURATION,
-                                   transition: 'easeOutQuad',
-                                   time: ANIMATION_TIME,
-                                   onComplete: Lang.bind(this, function() {
-                                       this._overviewSaturation.enabled = false;
-                                   })
-                                 });
-            }
         }
     },
 
