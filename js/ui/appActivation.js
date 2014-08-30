@@ -24,6 +24,10 @@ const SPLASH_SCREEN_TIMEOUT = 700; // ms
 const SPLASH_SCREEN_FADE_OUT = 0.2;
 const SPLASH_SCREEN_COMPLETE_TIME = 0.2;
 
+// By default, maximized windows are 75% of the workarea
+// of the monitor they're on when unmaximized.
+const DEFAULT_MAXIMIZED_WINDOW_SIZE = 0.75;
+
 const LAUNCH_MAXIMIZED_DESKTOP_KEY = 'X-Endless-LaunchMaximized';
 const SPLASH_BACKGROUND_DESKTOP_KEY = 'X-Endless-SplashBackground';
 const DEFAULT_SPLASH_SCREEN_BACKGROUND = global.datadir + '/theme/splash-background-default.jpg';
@@ -483,6 +487,15 @@ const DesktopAppClient = new Lang.Class({
         this._lastDesktopApp = null;
 
         if (tracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
+            // Position the window so it's at where we want it to be if the user
+            // unmaximizes the window.
+            let workArea = Main.layoutManager.getWorkAreaForMonitor(metaWindow.get_monitor());
+            let width = workArea.width * DEFAULT_MAXIMIZED_WINDOW_SIZE;
+            let height = workArea.height * DEFAULT_MAXIMIZED_WINDOW_SIZE;
+            let x = workArea.x + (workArea.width - width) / 2;
+            let y = workArea.y + (workArea.height - height) / 2;
+            metaWindow.move_resize_frame(false, x, y, width, height);
+
             metaWindow.maximize(Meta.MaximizeFlags.HORIZONTAL |
                                 Meta.MaximizeFlags.VERTICAL);
         }
