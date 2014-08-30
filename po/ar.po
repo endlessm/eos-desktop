@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-25 21:32-0700\n"
-"PO-Revision-Date: 2014-08-28 06:14+0000\n"
+"PO-Revision-Date: 2014-08-29 01:53+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-shell/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -1232,7 +1232,7 @@ msgstr "هل تريد تنزيل وتثبيت '%s' من extensions.gnome.org؟"
 #: ../js/ui/iconGridLayout.js:200
 #, c-format
 msgid "%s has been deleted"
-msgstr ""
+msgstr "%s تم حذفه"
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
