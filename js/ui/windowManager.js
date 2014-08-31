@@ -22,6 +22,7 @@ const ButtonConstants = imports.ui.buttonConstants;
 const ModalDialog = imports.ui.modalDialog;
 const Tweener = imports.ui.tweener;
 const ViewSelector = imports.ui.viewSelector;
+const Wobbly = imports.ui.wobbly;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 const NO_DEFAULT_MAXIMIZE_KEY = 'no-default-maximize';
@@ -559,6 +560,8 @@ const WindowManager = new Lang.Class({
                 this._dimWindow(this._dimmedWindows[i]);
             }
         }));
+
+        this._wobblyWindows = new Wobbly.WobblyWindowManager();
     },
 
     setCustomKeybindingHandler: function(name, modes, handler) {

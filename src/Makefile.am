@@ -124,6 +124,7 @@ shell_public_headers_h =		\
 	shell-util.h			\
 	shell-window-tracker.h		\
 	shell-wm.h			\
+	shell-wobbly-effect.h		\
 	$(NULL)
 
 shell_private_sources = \
@@ -173,6 +174,7 @@ libeos_shell_sources =			\
 	shell-util.c			\
 	shell-window-tracker.c		\
 	shell-wm.c			\
+	shell-wobbly-effect.c		\
 	$(NULL)
 
 libeos_shell_built_sources =		\
