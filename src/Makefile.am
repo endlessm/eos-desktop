@@ -195,7 +195,7 @@ eos_shell_real_DEPENDENCIES = libeos-shell.la
 eos_shell_extension_prefs_SOURCES = 	\
 	gnome-shell-extension-prefs.c 	\
 	$(NULL)
-nodist_gnome_shell_extension_prefs_SOURCES = \
+nodist_eos_shell_extension_prefs_SOURCES = \
 	$(top_builddir)/js/js-resources.c		\
 	$(top_builddir)/js/js-resources.h		\
 	$(NULL)
