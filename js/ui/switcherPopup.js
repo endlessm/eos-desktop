@@ -101,16 +101,12 @@ const SwitcherPopup = new Lang.Class({
         this._switcherList.actor.allocate(childBox, flags);
     },
 
-    _createSwitcher: function() {
-        throw new Error('Not implemented');
-    },
-
     _initialSelection: function(backward, binding) {
         throw new Error('Not implemented');
     },
 
     show: function(backward, binding, mask) {
-        if (!this._createSwitcher())
+        if (this._items.length == 0)
             return false;
 
         if (!Main.pushModal(this.actor)) {
