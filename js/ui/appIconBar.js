@@ -286,13 +286,13 @@ const AppIconButton = new Lang.Class({
         this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
         this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
 
-        this._menuManager = new PopupMenu.PopupMenuManager(this);
+        this._rightClickMenuManager = new PopupMenu.PopupMenuManager(this);
 
         this._rightClickMenu = new PopupMenu.PopupMenu(this.actor, 0.0, St.Side.TOP, 0);
         this._rightClickMenu.addAction(_("Quit %s").format(this._app.get_name()), Lang.bind(this, function() {
             this._app.request_quit();
         }));
-        this._menuManager.addMenu(this._rightClickMenu);
+        this._rightClickMenuManager.addMenu(this._rightClickMenu);
         this._rightClickMenu.actor.hide();
         Main.uiGroup.add_actor(this._rightClickMenu.actor);
     },
@@ -464,6 +464,8 @@ const AppIconButton = new Lang.Class({
         if (this._menu) {
             return;
         }
+
+        this._menuManager = new PopupMenu.PopupMenuManager(this);
 
         this._menu = new AppIconMenu(this._app, this.actor);
         this._menuManager.addMenu(this._menu);
