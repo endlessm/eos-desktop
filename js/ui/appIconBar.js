@@ -289,7 +289,7 @@ const AppIconButton = new Lang.Class({
         this._menuManager = new PopupMenu.PopupMenuManager(this);
 
         this._rightClickMenu = new PopupMenu.PopupMenu(this.actor, 0.0, St.Side.TOP, 0);
-        this._rightClickMenu.addAction(_("Quit"), Lang.bind(this, function() {
+        this._rightClickMenu.addAction(_("Quit %s").format(this._app.get_name()), Lang.bind(this, function() {
             this._app.request_quit();
         }));
         this._menuManager.addMenu(this._rightClickMenu);
