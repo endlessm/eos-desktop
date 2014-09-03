@@ -289,6 +289,7 @@ const AppIconButton = new Lang.Class({
         this._rightClickMenuManager = new PopupMenu.PopupMenuManager(this);
 
         this._rightClickMenu = new PopupMenu.PopupMenu(this.actor, 0.0, St.Side.TOP, 0);
+        this._rightClickMenu.blockSourceEvents = true;
         this._quitMenuItem = this._rightClickMenu.addAction(_("Quit %s").format(this._app.get_name()), Lang.bind(this, function() {
             this._app.request_quit();
         }));
@@ -333,6 +334,7 @@ const AppIconButton = new Lang.Class({
         } else if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
             this._hideHoverState();
             this._rightClickMenu.open();
+            this._rightClickMenuManager.ignoreRelease();
             return true;
         }
 
