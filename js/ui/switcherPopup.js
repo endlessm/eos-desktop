@@ -102,7 +102,12 @@ const SwitcherPopup = new Lang.Class({
     },
 
     _initialSelection: function(backward, binding) {
-        throw new Error('Not implemented');
+        if (backward)
+            this._select(this._items.length - 1);
+        else if (this._items.length == 1)
+            this._select(0);
+        else
+            this._select(1);
     },
 
     show: function(backward, binding, mask) {
@@ -133,11 +138,6 @@ const SwitcherPopup = new Lang.Class({
         this.actor.opacity = 0;
         this.actor.show();
         this.actor.get_allocation_box();
-
-        if (this._items.length > 1)
-            this._selectedIndex = 1;
-        else
-            this._selectedIndex = 0;
 
         this._initialSelection(backward, binding);
 
