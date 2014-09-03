@@ -546,7 +546,7 @@ st_entry_allocate (ClutterActor          *actor,
       clutter_actor_allocate (right_icon, &icon_box, flags);
 
       /* reduce the size for the entry */
-      child_box.x2 = MAX (child_box.x1, child_box.x2 - icon_w + priv->spacing);
+      child_box.x2 = MAX (child_box.x1, child_box.x2 - icon_w - priv->spacing);
     }
 
   if (priv->hint_actor)
