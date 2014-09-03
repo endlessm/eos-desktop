@@ -323,6 +323,7 @@ const AppIconButton = new Lang.Class({
                 return true;
             }
         } else if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
+            this._hideHoverState();
             this._rightClickMenu.open();
             return true;
         }
