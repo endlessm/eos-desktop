@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-25 21:32-0700\n"
+"POT-Creation-Date: 2014-09-04 14:48-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -450,40 +450,40 @@ msgstr ""
 msgid "Execution of '%s' failed:"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1858
+#: ../js/ui/appDisplay.js:1861
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1867
+#: ../js/ui/appDisplay.js:1870
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1919
+#: ../js/ui/appDisplay.js:1922
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1925
+#: ../js/ui/appDisplay.js:1928
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1931
+#: ../js/ui/appDisplay.js:1934
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1937 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1940 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2020
+#: ../js/ui/appDisplay.js:2023
 msgid "New Window"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2023 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2026 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2024
+#: ../js/ui/appDisplay.js:2027
 msgid "Add to Favorites"
 msgstr ""
 
@@ -1068,7 +1068,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:545
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:551
 msgid "Windows"
 msgstr ""
 
@@ -1342,6 +1342,14 @@ msgstr ""
 
 #: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:423
 msgid "Lock was blocked by an application"
+msgstr ""
+
+#: ../js/ui/searchDisplay.js:449
+msgid "Searching…"
+msgstr ""
+
+#: ../js/ui/searchDisplay.js:493
+msgid "No results."
 msgstr ""
 
 #: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
@@ -1833,7 +1841,7 @@ msgstr ""
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:549
+#: ../js/ui/viewSelector.js:555
 msgid "Applications"
 msgstr ""
 
