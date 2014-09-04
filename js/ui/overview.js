@@ -43,8 +43,6 @@ const DND_WINDOW_SWITCH_TIMEOUT = 1250;
 
 const OVERVIEW_ACTIVATION_TIMEOUT = 0.5;
 
-const SHARED_ACCOUNT_MESSAGE = _("Remember that shared accounts are not protected by a password, so make sure to delete any files that you want to keep private.");
-
 const ShellInfo = new Lang.Class({
     Name: 'ShellInfo',
 
@@ -568,11 +566,6 @@ const Overview = new Lang.Class({
     startupState: function() {
         this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
 
-        /* Show Shared Account warning */
-        let username = GLib.get_user_name();
-        if (username == "shared") {
-            this.setMessage(SHARED_ACCOUNT_MESSAGE, { forFeedback: true });
-        }
     },
 
     showApps: function() {

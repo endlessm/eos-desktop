@@ -34,6 +34,8 @@ const SPINNER_ANIMATION_TIME = 0.2;
 
 const PANEL_ANIMATION_TIME = 0.5;
 
+const SHARED_ACCOUNT_MESSAGE = _("Remember that shared accounts are not protected by a password, so make sure to delete any files that you want to keep private.");
+
 const ICON_ENTER_ANIMATION_DELTA = PANEL_ICON_SIZE * 0.25;
 const ICON_ENTER_ANIMATION_SPEED = ICON_ENTER_ANIMATION_DELTA * 0.0012;
 const ICON_ENTER_ANIMATION_DELAY = ICON_ENTER_ANIMATION_SPEED * ICON_ENTER_ANIMATION_DELTA * 0.5 + PANEL_ANIMATION_TIME;
@@ -398,7 +400,9 @@ const Panel = new Lang.Class({
                     opacity: 255,
                     time: PANEL_ANIMATION_TIME,
                     transition: 'easeOutCubic',
-                    delay: this._panelAnimationDelay
+                    delay: this._panelAnimationDelay,
+                    onComplete: this._panelAnimationComplete,
+                    onCompleteScope: this
                 });
                 Tweener.addTween(this.actor, {
                     translation_y: 0,
@@ -408,6 +412,14 @@ const Panel = new Lang.Class({
                 });
             })
         );
+    },
+
+    _panelAnimationComplete: function() {
+        /* Show Shared Account warning */
+        let username = GLib.get_user_name();
+        if (username == "shared") {
+            Main.overview.setMessage(SHARED_ACCOUNT_MESSAGE, { forFeedback: true });
+        }
     },
 
     closeActiveMenu: function() {
