@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-25 21:32-0700\n"
-"PO-Revision-Date: 2014-08-28 06:14+0000\n"
+"POT-Creation-Date: 2014-09-04 14:48-0700\n"
+"PO-Revision-Date: 2014-09-04 22:08+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/eos-shell/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -457,40 +457,40 @@ msgstr "Impossible d'analyser la commande :"
 msgid "Execution of '%s' failed:"
 msgstr "Exécution de « %s » impossible :"
 
-#: ../js/ui/appDisplay.js:1858
+#: ../js/ui/appDisplay.js:1861
 msgid "More Apps"
 msgstr "Plus d'Apps"
 
-#: ../js/ui/appDisplay.js:1867
+#: ../js/ui/appDisplay.js:1870
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ../js/ui/appDisplay.js:1919
+#: ../js/ui/appDisplay.js:1922
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../js/ui/appDisplay.js:1925
+#: ../js/ui/appDisplay.js:1928
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
-#: ../js/ui/appDisplay.js:1931
+#: ../js/ui/appDisplay.js:1934
 msgid "We are just trying to keep you safe."
 msgstr "Nous essayons simplement de vous garder en sécurité."
 
-#: ../js/ui/appDisplay.js:1937 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1940 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Valider"
 
-#: ../js/ui/appDisplay.js:2020
+#: ../js/ui/appDisplay.js:2023
 msgid "New Window"
 msgstr "Nouvelle fenêtre"
 
-#: ../js/ui/appDisplay.js:2023 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2026 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Enlever des favoris"
 
-#: ../js/ui/appDisplay.js:2024
+#: ../js/ui/appDisplay.js:2027
 msgid "Add to Favorites"
 msgstr "Ajouter aux favoris"
 
@@ -1078,7 +1078,7 @@ msgstr "Echec d'une tentative de mise à jour"
 msgid "We could not update your system"
 msgstr "Nous n'avons pas pu mettre à jour votre système"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:545
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:551
 msgid "Windows"
 msgstr "Fenêtres"
 
@@ -1218,7 +1218,7 @@ msgstr "Télécharger et installer « %s » à partir de extensions.gnome.org�
 #: ../js/ui/iconGridLayout.js:200
 #, c-format
 msgid "%s has been deleted"
-msgstr ""
+msgstr "%s a été effacé"
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
@@ -1352,6 +1352,14 @@ msgstr "Impossible de verrouiller"
 #: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:423
 msgid "Lock was blocked by an application"
 msgstr "Le verrouillage a été bloqué par une application"
+
+#: ../js/ui/searchDisplay.js:449
+msgid "Searching…"
+msgstr ""
+
+#: ../js/ui/searchDisplay.js:493
+msgid "No results."
+msgstr ""
 
 #: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
 msgid "Google"
@@ -1850,7 +1858,7 @@ msgstr "%s (distant)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:549
+#: ../js/ui/viewSelector.js:555
 msgid "Applications"
 msgstr "Applications"
 
