@@ -205,8 +205,6 @@ function _initializeUI() {
     layoutManager.connect('startup-prepared', function() {
         if (sessionMode.isGreeter && screenShield) {
             screenShield.showDialog();
-        } else if (sessionMode.hasOverview) {
-            overview.startupState();
         }
     });
 
