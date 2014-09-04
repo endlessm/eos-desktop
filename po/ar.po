@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-25 21:32-0700\n"
-"PO-Revision-Date: 2014-08-29 01:53+0000\n"
+"POT-Creation-Date: 2014-09-04 14:48-0700\n"
+"PO-Revision-Date: 2014-09-04 22:08+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-shell/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -455,40 +455,40 @@ msgstr "تعذّر تحليل الأمر:"
 msgid "Execution of '%s' failed:"
 msgstr "فشل تنفيذ '%s':‏"
 
-#: ../js/ui/appDisplay.js:1858
+#: ../js/ui/appDisplay.js:1861
 msgid "More Apps"
 msgstr "المزيد من التطبيقات"
 
-#: ../js/ui/appDisplay.js:1867
+#: ../js/ui/appDisplay.js:1870
 msgid "Delete"
 msgstr "حذف"
 
-#: ../js/ui/appDisplay.js:1919
+#: ../js/ui/appDisplay.js:1922
 msgid "Warning"
 msgstr "تحذير"
 
-#: ../js/ui/appDisplay.js:1925
+#: ../js/ui/appDisplay.js:1928
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "لحذف مجلد عليك إزالة كافة العناصر داخله أولاً."
 
-#: ../js/ui/appDisplay.js:1931
+#: ../js/ui/appDisplay.js:1934
 msgid "We are just trying to keep you safe."
 msgstr "نحاول فقط المحافظة على أمنك."
 
-#: ../js/ui/appDisplay.js:1937 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1940 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "حسنا"
 
-#: ../js/ui/appDisplay.js:2020
+#: ../js/ui/appDisplay.js:2023
 msgid "New Window"
 msgstr "نافذة جديدة"
 
-#: ../js/ui/appDisplay.js:2023 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2026 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "أزِل من المفضّلة"
 
-#: ../js/ui/appDisplay.js:2024
+#: ../js/ui/appDisplay.js:2027
 msgid "Add to Favorites"
 msgstr "أضِف إلى المفضّلة"
 
@@ -1076,7 +1076,7 @@ msgstr "فشل تحديث"
 msgid "We could not update your system"
 msgstr "لم نتمكن من تحديث نظامك"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:545
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:551
 msgid "Windows"
 msgstr "النوافذ"
 
@@ -1366,6 +1366,14 @@ msgstr "لا يمكن القفل"
 #: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:423
 msgid "Lock was blocked by an application"
 msgstr "تم حجب القفل بواسطة تطبيق"
+
+#: ../js/ui/searchDisplay.js:449
+msgid "Searching…"
+msgstr ""
+
+#: ../js/ui/searchDisplay.js:493
+msgid "No results."
+msgstr ""
 
 #: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
 msgid "Google"
@@ -1880,7 +1888,7 @@ msgstr "%s (عن بعد)"
 msgid "%s (console)"
 msgstr "%s (وحدة تحكم)"
 
-#: ../js/ui/viewSelector.js:549
+#: ../js/ui/viewSelector.js:555
 msgid "Applications"
 msgstr "التطبيقات"
 
