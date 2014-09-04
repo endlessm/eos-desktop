@@ -359,6 +359,7 @@ const Overview = new Lang.Class({
         // clicking the desktop displays the app grid
         Main.layoutManager.connect('background-clicked', Lang.bind(this, this.showApps));
 
+        Main.layoutManager.connect('startup-prepared', Lang.bind(this, this._onStartupPrepared));
         Main.layoutManager.connect('monitors-changed', Lang.bind(this, this._relayout));
         global.screen.connect('workareas-changed', Lang.bind(this, this._relayoutNoHide));
         this._relayoutNoHide();
@@ -563,9 +564,11 @@ const Overview = new Lang.Class({
         }
     },
 
-    startupState: function() {
-        this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
+    _onStartupPrepared: function() {
+        if (this.isDummy)
+            return;
 
+        this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
     },
 
     showApps: function() {
