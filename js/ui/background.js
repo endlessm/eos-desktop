@@ -786,7 +786,7 @@ const BackgroundManager = new Lang.Class({
                 background.disconnect(changeSignalId);
 
             if (backgroundActor.loadedSignalId)
-                backgroundActor.background._delegate.disconnect(backgroundActor.loadedSignalId);
+                background.disconnect(backgroundActor.loadedSignalId);
         }));
 
         return backgroundActor;
