@@ -923,6 +923,11 @@ StScrollBar StButton#vhandle:active {
     -minimum-vpadding: 24px;
 }
 
+#searchEntry:rtl {
+    padding-left: 4px;
+    padding-right: 8px;
+}
+
 #searchEntry:hover,
 #searchEntry:focus {
     color: #ffffff ;
