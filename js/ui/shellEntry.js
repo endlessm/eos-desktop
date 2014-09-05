@@ -264,43 +264,6 @@ const EntryEditMenu = new Lang.Class({
     }
 });
 
-const ENTRY_HINT_ASSET_WIDTH = 57;
-const ENTRY_HINT_ASSET_HEIGHT = 21;
-
-const EntryHint = new Lang.Class({
-    Name: 'EntryHint',
-    Extends: St.Bin,
-
-    _init: function(styleClass, assetName) {
-        this.parent({ style_class: styleClass });
-
-        let hintFile = Gio.File.new_for_path(global.datadir + '/theme/' + assetName);
-        this._gicon = new Gio.FileIcon({ file: hintFile });
-
-        this._updateIcon();
-    },
-
-    vfunc_style_changed: function(params) {
-        this.parent(params);
-        this._updateIcon();
-    },
-
-    _updateIcon: function() {
-        let themeNode = this.peek_theme_node();
-        if (!themeNode) {
-            return;
-        }
-
-        let textureCache = St.TextureCache.get_default();
-        let actor = textureCache.load_gicon_full(themeNode, this._gicon,
-                                                 ENTRY_HINT_ASSET_WIDTH,
-                                                 ENTRY_HINT_ASSET_HEIGHT,
-                                                 Lang.bind(this, function() {
-                                                     this.set_child(actor);
-                                                 }));
-    }
-});
-
 const OverviewEntry = new Lang.Class({
     Name: 'OverviewEntry',
     Extends: St.Entry,
