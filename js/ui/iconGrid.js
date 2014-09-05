@@ -33,8 +33,8 @@ const SHUFFLE_ANIMATION_OPACITY = 255;
 const CursorLocation = {
     DEFAULT: 0,
     ON_ICON: 1,
-    LEFT_EDGE: 2,
-    RIGHT_EDGE: 3,
+    START_EDGE: 2,
+    END_EDGE: 3,
     EMPTY_AREA: 4
 }
 
@@ -656,7 +656,7 @@ const IconGrid = new Lang.Class({
         let nudgeIdx = index;
         let rtl = (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL);
 
-        if (cursorLocation != CursorLocation.LEFT_EDGE) {
+        if (cursorLocation != CursorLocation.START_EDGE) {
             let leftItem = this.getItemAtIndex(nudgeIdx - 1);
             this._animateNudge(leftItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION,
                                rtl ? Math.floor(this._hItemSize * NUDGE_FACTOR) : Math.floor(-this._hItemSize * NUDGE_FACTOR)
@@ -665,7 +665,7 @@ const IconGrid = new Lang.Class({
 
         // Nudge the icon to the right if we are the first item or not at the
         // end of row
-        if (cursorLocation != CursorLocation.RIGHT_EDGE) {
+        if (cursorLocation != CursorLocation.END_EDGE) {
             let rightItem = this.getItemAtIndex(nudgeIdx);
             this._animateNudge(rightItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION,
                                rtl ? Math.floor(-this._hItemSize * NUDGE_FACTOR) : Math.floor(this._hItemSize * NUDGE_FACTOR)
@@ -893,10 +893,10 @@ const IconGrid = new Lang.Class({
                 // We are before the leftmost icon on the grid
                 if (rtl) {
                     dropIdx = childIdx + 1;
-                    cursorLocation = CursorLocation.RIGHT_EDGE;
+                    cursorLocation = CursorLocation.END_EDGE;
                 } else {
                     dropIdx = childIdx;
-                    cursorLocation = CursorLocation.LEFT_EDGE;
+                    cursorLocation = CursorLocation.START_EDGE;
                 }
             } else {
                 // We are between the previous icon (next in RTL) and this one
@@ -919,10 +919,10 @@ const IconGrid = new Lang.Class({
                 // We are beyond the rightmost icon on the grid
                 if (rtl) {
                     dropIdx = childIdx;
-                    cursorLocation = CursorLocation.LEFT_EDGE;
+                    cursorLocation = CursorLocation.START_EDGE;
                 } else {
                     dropIdx = childIdx + 1;
-                    cursorLocation = CursorLocation.RIGHT_EDGE;
+                    cursorLocation = CursorLocation.END_EDGE;
                 }
             } else {
                 // We are between this icon and the next one (previous in RTL)
