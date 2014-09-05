@@ -94,9 +94,12 @@ dist_theme_DATA =				\
 	theme/search-button_active-normal.png	\
 	theme/search-button_hover.png	\
 	theme/search-button_pressed.png	\
-	theme/search-icon_active.png	\
+	theme/search-icon_active.png		\
 	theme/search-icon_hover.png		\
-	theme/search-icon_normal.png	\
+	theme/search-icon_normal.png		\
+	theme/search-icon_active-rtl.png	\
+	theme/search-icon_hover-rtl.png		\
+	theme/search-icon_normal-rtl.png	\
 	theme/settings-hover.png		\
 	theme/settings-normal.png		\
 	theme/settings-symbolic.svg		\

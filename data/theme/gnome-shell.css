@@ -936,14 +936,28 @@ StScrollBar StButton#vhandle:active {
     background-position: 0px 4px;
 }
 
+.search-entry-source:rtl {
+    background-image: url("search-icon_normal-rtl.png");
+}
+
 .search-entry-source:focus,
 .search-entry-source:hover {
     background-image: url("search-icon_hover.png");
 }
 
+.search-entry-source:focus:rtl,
+.search-entry-source:hover:rtl {
+    background-image: url("search-icon_hover-rtl.png");
+}
+
 .search-entry-source:checked,
 .search-entry-source:pressed {
     background-image: url("search-icon_active.png");
+}
+
+.search-entry-source:checked:rtl,
+.search-entry-source:pressed:rtl {
+    background-image: url("search-icon_active-rtl.png");
 }
 
 .search-entry-button {
