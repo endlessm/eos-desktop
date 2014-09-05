@@ -26,7 +26,6 @@ const EntryMenu = new Lang.Class({
         this.parent(actor, 0.025, St.Side.BOTTOM);
 
         this._entry = entry;
-        this.actor.add_style_class_name('entry-context-menu');
 
         Main.uiGroup.add_actor(this.actor);
         this.actor.hide();
@@ -261,43 +260,6 @@ const EntryEditMenu = new Lang.Class({
     _onPasswordActivated: function() {
         let visible = !!(this._entry.clutter_text.password_char);
         this._entry.clutter_text.set_password_char(visible ? '' : '\u25cf');
-    }
-});
-
-const ENTRY_HINT_ASSET_WIDTH = 57;
-const ENTRY_HINT_ASSET_HEIGHT = 21;
-
-const EntryHint = new Lang.Class({
-    Name: 'EntryHint',
-    Extends: St.Bin,
-
-    _init: function(styleClass, assetName) {
-        this.parent({ style_class: styleClass });
-
-        let hintFile = Gio.File.new_for_path(global.datadir + '/theme/' + assetName);
-        this._gicon = new Gio.FileIcon({ file: hintFile });
-
-        this._updateIcon();
-    },
-
-    vfunc_style_changed: function(params) {
-        this.parent(params);
-        this._updateIcon();
-    },
-
-    _updateIcon: function() {
-        let themeNode = this.peek_theme_node();
-        if (!themeNode) {
-            return;
-        }
-
-        let textureCache = St.TextureCache.get_default();
-        let actor = textureCache.load_gicon_full(themeNode, this._gicon,
-                                                 ENTRY_HINT_ASSET_WIDTH,
-                                                 ENTRY_HINT_ASSET_HEIGHT,
-                                                 Lang.bind(this, function() {
-                                                     this.set_child(actor);
-                                                 }));
     }
 });
 
