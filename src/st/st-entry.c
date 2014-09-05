@@ -494,8 +494,11 @@ st_entry_allocate (ClutterActor          *actor,
   gfloat hint_w, hint_h;
   gfloat entry_h, min_h, pref_h, avail_h;
   ClutterActor *left_icon, *right_icon;
+  gboolean is_rtl;
 
-  if (clutter_actor_get_text_direction (actor) == CLUTTER_TEXT_DIRECTION_RTL)
+  is_rtl = (clutter_actor_get_text_direction (actor) == CLUTTER_TEXT_DIRECTION_RTL);
+
+  if (is_rtl)
     {
       right_icon = priv->primary_icon;
       left_icon = priv->secondary_icon;
@@ -559,7 +562,10 @@ st_entry_allocate (ClutterActor          *actor,
       clutter_actor_get_preferred_width (priv->hint_actor, -1,
                                          NULL, &hint_w);
 
-      hint_box.x2 = hint_box.x1 + hint_w;
+      if (is_rtl)
+        hint_box.x1 = hint_box.x2 - hint_w;
+      else
+        hint_box.x2 = hint_box.x1 + hint_w;
 
       hint_box.y1 = ceil (content_box.y1 + avail_h / 2 - hint_h / 2);
       hint_box.y2 = hint_box.y1 + hint_h;
