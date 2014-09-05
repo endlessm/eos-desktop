@@ -43,8 +43,6 @@ const DND_WINDOW_SWITCH_TIMEOUT = 1250;
 
 const OVERVIEW_ACTIVATION_TIMEOUT = 0.5;
 
-const SHARED_ACCOUNT_MESSAGE = _("Remember that shared accounts are not protected by a password, so make sure to delete any files that you want to keep private.");
-
 const ShellInfo = new Lang.Class({
     Name: 'ShellInfo',
 
@@ -361,6 +359,7 @@ const Overview = new Lang.Class({
         // clicking the desktop displays the app grid
         Main.layoutManager.connect('background-clicked', Lang.bind(this, this.showApps));
 
+        Main.layoutManager.connect('startup-prepared', Lang.bind(this, this._onStartupPrepared));
         Main.layoutManager.connect('monitors-changed', Lang.bind(this, this._relayout));
         global.screen.connect('workareas-changed', Lang.bind(this, this._relayoutNoHide));
         this._relayoutNoHide();
@@ -565,14 +564,11 @@ const Overview = new Lang.Class({
         }
     },
 
-    startupState: function() {
-        this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
+    _onStartupPrepared: function() {
+        if (this.isDummy)
+            return;
 
-        /* Show Shared Account warning */
-        let username = GLib.get_user_name();
-        if (username == "shared") {
-            this.setMessage(SHARED_ACCOUNT_MESSAGE, { forFeedback: true });
-        }
+        this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
     },
 
     showApps: function() {
