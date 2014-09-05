@@ -26,7 +26,6 @@ const EntryMenu = new Lang.Class({
         this.parent(actor, 0.025, St.Side.BOTTOM);
 
         this._entry = entry;
-        this.actor.add_style_class_name('entry-context-menu');
 
         Main.uiGroup.add_actor(this.actor);
         this.actor.hide();
