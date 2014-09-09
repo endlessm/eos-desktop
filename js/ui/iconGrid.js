@@ -554,7 +554,7 @@ const IconGrid = new Lang.Class({
         this._allocatedColumns = nColumns;
 
         for (let i = 0; i < children.length; i++) {
-            let rowIndex = Math.floor((i + 1) / this._allocatedColumns);
+            let rowIndex = Math.floor(i / this._allocatedColumns);
             let childBox = this._childAllocation(children[i], box, i);
 
             if (this._rowLimit && rowIndex >= this._rowLimit ||
