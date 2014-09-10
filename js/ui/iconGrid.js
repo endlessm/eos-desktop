@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const GObject = imports.gi.GObject;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
@@ -8,7 +9,6 @@ const Tweener = imports.ui.tweener;
 const Mainloop = imports.mainloop;
 const Main = imports.ui.main;
 
-const ButtonConstants = imports.ui.buttonConstants;
 const GrabHelper = imports.ui.grabHelper;
 const Lang = imports.lang;
 const Params = imports.misc.params;
@@ -78,7 +78,7 @@ const EditableLabel = new Lang.Class({
 
     _onButtonPressEvent: function(label, event) {
         let button = event.get_button();
-        if (button != ButtonConstants.LEFT_MOUSE_BUTTON) {
+        if (button != Gdk.BUTTON_PRIMARY) {
             return false;
         }
 

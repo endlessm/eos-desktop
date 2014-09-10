@@ -30,7 +30,6 @@
     <file>ui/backgroundMenu.js</file>
     <file>ui/background.js</file>
     <file>ui/boxpointer.js</file>
-    <file>ui/buttonConstants.js</file>
     <file>ui/calendar.js</file>
     <file>ui/checkBox.js</file>
     <file>ui/closeButton.js</file>

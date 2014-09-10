@@ -1,13 +1,13 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 const St = imports.gi.St;
 const Shell = imports.gi.Shell;
 
 const BoxPointer = imports.ui.boxpointer;
-const ButtonConstants = imports.ui.buttonConstants;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 
@@ -79,7 +79,7 @@ function addBackgroundMenu(clickAction, layoutManager) {
     });
     clickAction.connect('clicked', function(action) {
         let button = action.get_button();
-        if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
+        if (button == Gdk.BUTTON_SECONDARY) {
             openMenu();
         }
     });

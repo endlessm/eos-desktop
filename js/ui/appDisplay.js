@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
@@ -19,7 +20,6 @@ const AppFavorites = imports.ui.appFavorites;
 const BackgroundMenu = imports.ui.backgroundMenu;
 const BoxPointer = imports.ui.boxpointer;
 const CloseButton = imports.ui.closeButton;
-const ButtonConstants = imports.ui.buttonConstants;
 const DND = imports.ui.dnd;
 const Hash = imports.misc.hash;
 const IconGrid = imports.ui.iconGrid;
@@ -1711,7 +1711,7 @@ const AppIcon = new Lang.Class({
 
     _onButtonPress: function(actor, event) {
         let button = event.get_button();
-        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+        if (button == Gdk.BUTTON_PRIMARY) {
             this._removeMenuTimeout();
             this._menuTimeoutId = Mainloop.timeout_add(MENU_POPUP_TIMEOUT,
                 Lang.bind(this, function() {
@@ -1719,7 +1719,7 @@ const AppIcon = new Lang.Class({
                     this.popupMenu();
                     return false;
                 }));
-        } else if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
+        } else if (button == Gdk.BUTTON_SECONDARY) {
             this.popupMenu();
             return true;
         }
@@ -1729,9 +1729,9 @@ const AppIcon = new Lang.Class({
     _onClicked: function(actor, button) {
         this._removeMenuTimeout();
 
-        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+        if (button == Gdk.BUTTON_PRIMARY) {
             this._onActivate(Clutter.get_current_event());
-        } else if (button == ButtonConstants.MIDDLE_MOUSE_BUTTON) {
+        } else if (button == Gdk.BUTTON_MIDDLE) {
             // Last workspace is always empty
             let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
             launchWorkspace.activate(global.get_current_time());
