@@ -103,8 +103,6 @@ const EditableLabel = new Lang.Class({
             return true;
         }
 
-        // this._labelMode == EditableLableMode.EDIT:
-        //
         // ensure focus stays in the text field when clicking
         // on the entry empty space
         this.grab_key_focus();
