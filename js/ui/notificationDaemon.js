@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const GdkPixbuf = imports.gi.GdkPixbuf;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
@@ -10,7 +11,6 @@ const Mainloop = imports.mainloop;
 const St = imports.gi.St;
 
 const Config = imports.misc.config;
-const ButtonConstants = imports.ui.buttonConstants;
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
 const Params = imports.misc.params;
@@ -718,7 +718,7 @@ const Source = new Lang.Class({
         // notifications, so it possible to open them in summary mode; right
         // clicks are always forwarded, as the right click menu is not useful for
         // tray icons
-        if (button == ButtonConstants.LEFT_MOUSE_BUTTON &&
+        if (button == Gdk.BUTTON_PRIMARY &&
             this.notifications.length > 0) {
             return false;
         }

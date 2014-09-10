@@ -2,6 +2,7 @@
 
 const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
@@ -18,7 +19,6 @@ const Layout = imports.ui.layout;
 const Main = imports.ui.main;
 const SideComponent = imports.ui.sideComponent;
 const BackgroundMenu = imports.ui.backgroundMenu;
-const ButtonConstants = imports.ui.buttonConstants;
 const ModalDialog = imports.ui.modalDialog;
 const Tweener = imports.ui.tweener;
 const ViewSelector = imports.ui.viewSelector;
@@ -200,7 +200,7 @@ const DesktopOverlay = new Lang.Class({
 
         let action = new Clutter.ClickAction();
         action.connect('clicked', Lang.bind(this, function(action) {
-            if (action.get_button() != ButtonConstants.LEFT_MOUSE_BUTTON) {
+            if (action.get_button() != Gdk.BUTTON_PRIMARY) {
                 return;
             }
 
