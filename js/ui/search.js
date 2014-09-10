@@ -335,7 +335,7 @@ const SearchResultsBase = new Lang.Class({
 
     _activateResult: function(result, id) {
         this.provider.activateResult(id, this._terms);
-        Main.overview.toggle();
+        Main.overview.hide();
     },
 
     _setMoreIconVisible: function(visible) {
@@ -421,7 +421,7 @@ const ListSearchResults = new Lang.Class({
         this.providerIcon.connect('clicked', Lang.bind(this,
             function() {
                 provider.launchSearch(this._terms);
-                Main.overview.toggle();
+                Main.overview.hide();
             }));
 
         this._container.add(this.providerIcon, { x_fill: false,
