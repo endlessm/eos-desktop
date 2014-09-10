@@ -77,8 +77,12 @@ const EditableLabel = new Lang.Class({
     },
 
     _onButtonPressEvent: function(label, event) {
-        let button = event.get_button();
-        if (button != Gdk.BUTTON_PRIMARY) {
+        if (event.get_button() != Gdk.BUTTON_PRIMARY) {
+            return false;
+        }
+
+        if (event.get_click_count() > 1 &&
+            this._labelMode != EditableLabelMode.HIGHLIGHT) {
             return false;
         }
 

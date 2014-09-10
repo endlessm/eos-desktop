@@ -1729,6 +1729,11 @@ const AppIcon = new Lang.Class({
     _onClicked: function(actor, button) {
         this._removeMenuTimeout();
 
+        let event = Clutter.get_current_event();
+        if (event.get_click_count() > 1) {
+            return;
+        }
+
         if (button == Gdk.BUTTON_PRIMARY) {
             this._onActivate(Clutter.get_current_event());
         } else if (button == Gdk.BUTTON_MIDDLE) {
