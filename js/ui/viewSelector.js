@@ -241,22 +241,6 @@ const ViewsDisplay = new Lang.Class({
 
     _enterLocalSearch: function() {
         this.actor.showPage(this._searchResults.actor);
-
-        // Since the search is live, only record a metric a few seconds after
-        // the user has stopped typing. Don't record one if the user deleted
-        // what they wrote and left it at that.
-        if (this._localSearchMetricTimeoutId > 0)
-            Mainloop.source_remove(this._localSearchMetricTimeoutId);
-        this._localSearchMetricTimeoutId = Mainloop.timeout_add_seconds(
-            SEARCH_METRIC_INACTIVITY_TIMEOUT_SECONDS,
-            function () {
-                let query = this.entry.getSearchTerms().join(' ');
-                if (query !== '')
-                    this._recordDesktopSearchMetric(query,
-                        DesktopSearchProvider.MY_COMPUTER);
-                this._localSearchMetricTimeoutId = 0;
-                return GLib.SOURCE_REMOVE;
-            }.bind(this));
     },
 
     _leaveLocalSearch: function() {
@@ -282,6 +266,22 @@ const ViewsDisplay = new Lang.Class({
     _onSearchTermsChanged: function() {
         let terms = this.entry.getSearchTerms();
         this._searchResults.setTerms(terms);
+
+        // Since the search is live, only record a metric a few seconds after
+        // the user has stopped typing. Don't record one if the user deleted
+        // what they wrote and left it at that.
+        if (this._localSearchMetricTimeoutId > 0)
+            Mainloop.source_remove(this._localSearchMetricTimeoutId);
+        this._localSearchMetricTimeoutId = Mainloop.timeout_add_seconds(
+            SEARCH_METRIC_INACTIVITY_TIMEOUT_SECONDS,
+            function () {
+                let query = terms.join(' ');
+                if (query !== '')
+                    this._recordDesktopSearchMetric(query,
+                        DesktopSearchProvider.MY_COMPUTER);
+                this._localSearchMetricTimeoutId = 0;
+                return GLib.SOURCE_REMOVE;
+            }.bind(this));
     },
 
     acceptDrop: function(source, actor, x, y, time) {
