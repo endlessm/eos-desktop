@@ -347,9 +347,8 @@ const OverviewEntry = new Lang.Class({
         }
     },
 
-    // the entry does not show the hint
     _isActivated: function() {
-        return this.clutter_text.text == this.get_text();
+        return !this.hint_actor.visible;
     },
 
     _getTermsForSearchString: function(searchString) {
