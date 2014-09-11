@@ -24,9 +24,6 @@ const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
 const WorkspacesView = imports.ui.workspacesView;
 
-const BASE_SEARCH_URI = 'http://www.google.com/';
-const QUERY_URI_PATH = 'search?q=';
-
 const SEARCH_TIMEOUT = 150;
 const SEARCH_METRIC_INACTIVITY_TIMEOUT_SECONDS = 3;
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
@@ -39,7 +36,6 @@ const EVENT_DESKTOP_SEARCH = 'b02266bc-b010-44b2-ae0f-8f116ffa50eb';
 // the desktop.
 const DesktopSearchProvider = {
     MY_COMPUTER: 0,
-    GOOGLE: 1
 };
 
 const ViewPage = {
@@ -203,7 +199,6 @@ const ViewsDisplay = new Lang.Class({
         this.entry.connect('search-activated', Lang.bind(this, this._onSearchActivated));
         this.entry.connect('search-active-changed', Lang.bind(this, this._onSearchActiveChanged));
         this.entry.connect('search-navigate-focus', Lang.bind(this, this._onSearchNavigateFocus));
-        this.entry.connect('search-state-changed', Lang.bind(this, this._onSearchStateChanged));
         this.entry.connect('search-terms-changed', Lang.bind(this, this._onSearchTermsChanged));
 
         this.entry.clutter_text.connect('key-focus-in', Lang.bind(this, function() {
@@ -237,35 +232,6 @@ const ViewsDisplay = new Lang.Class({
                 searchProvider,
                 query
             ]));
-    },
-
-    _activateGoogleSearch: function() {
-        let uri = BASE_SEARCH_URI;
-        let terms = this.entry.getSearchTerms();
-        if (terms.length != 0) {
-            this._recordDesktopSearchMetric(terms.join(' '),
-                DesktopSearchProvider.GOOGLE);
-            let searchedUris = Util.findSearchUrls(terms);
-            // Make sure search contains only a uri
-            // Avoid cases like "what is github.com"
-            if (searchedUris.length == 1 && terms.length == 1) {
-                uri = searchedUris[0];
-                // Ensure all uri has a scheme name
-                if(!GLib.uri_parse_scheme(uri)) {
-                    uri = "http://" + uri;
-                }
-            } else {
-                uri = uri + QUERY_URI_PATH + encodeURI(terms.join(' '));
-            }
-        }
-
-        try {
-            Gio.AppInfo.launch_default_for_uri(uri, null);
-            Main.overview.hide();
-        } catch (e) {
-            logError(e, 'error while launching the browser for uri: '
-                     + uri);
-        }
     },
 
     _doLocalSearch: function() {
@@ -323,20 +289,10 @@ const ViewsDisplay = new Lang.Class({
 
     _onSearchActivated: function() {
         this.entry.pulseAnimation();
-        let searchState = this.entry.getSearchState();
-        if (searchState == ShellEntry.EntrySearchMenuState.GOOGLE) {
-            this._activateGoogleSearch();
-        } else if (searchState == ShellEntry.EntrySearchMenuState.LOCAL) {
-            this._searchResults.activateDefault();
-        }
+        this._searchResults.activateDefault();
     },
 
     _onSearchActiveChanged: function() {
-        let searchState = this.entry.getSearchState();
-        if (searchState != ShellEntry.EntrySearchMenuState.LOCAL) {
-            return;
-        }
-
         if (this.entry.active) {
             this._enterLocalSearch();
         } else {
@@ -345,30 +301,10 @@ const ViewsDisplay = new Lang.Class({
     },
 
     _onSearchNavigateFocus: function(entry, direction) {
-        let searchState = this.entry.getSearchState();
-        if (searchState != ShellEntry.EntrySearchMenuState.LOCAL) {
-            return;
-        }
-
         this._searchResults.navigateFocus(direction);
     },
 
-    _onSearchStateChanged: function() {
-        let searchState = this.entry.getSearchState();
-        if (searchState == ShellEntry.EntrySearchMenuState.LOCAL &&
-            this.entry.active) {
-            this._enterLocalSearch();
-        } else {
-            this._leaveLocalSearch();
-        }
-    },
-
     _onSearchTermsChanged: function() {
-        let searchState = this.entry.getSearchState();
-        if (searchState != ShellEntry.EntrySearchMenuState.LOCAL) {
-            return;
-        }
-
         this._queueLocalSearch();
     },
 
