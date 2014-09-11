@@ -585,10 +585,14 @@ const AllView = new Lang.Class({
 
     _redisplay: function() {
         if (this.getAllIcons().length == 0) {
-            this.addIcons(true);
+            if (Main.layoutManager.startingUp) {
+                this.addIcons(true);
 
-            Main.layoutManager.connect('startup-complete',
-                Lang.bind(this, this._animateIconsIn));
+                Main.layoutManager.connect('startup-complete',
+                                           Lang.bind(this, this._animateIconsIn));
+            } else {
+                this.addIcons();
+            }
         } else {
             let animateView = this._repositionedView;
             if (!animateView) {
