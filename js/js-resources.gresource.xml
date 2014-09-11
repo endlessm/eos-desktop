@@ -45,6 +45,7 @@
     <file>ui/grabHelper.js</file>
     <file>ui/iconGrid.js</file>
     <file>ui/iconGridLayout.js</file>
+    <file>ui/internetSearch.js</file>
     <file>ui/keyboard.js</file>
     <file>ui/layout.js</file>
     <file>ui/lightbox.js</file>

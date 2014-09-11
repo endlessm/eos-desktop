@@ -14,6 +14,7 @@ const AppDisplay = imports.ui.appDisplay;
 const DND = imports.ui.dnd;
 const IconGrid = imports.ui.iconGrid;
 const IconGridLayout = imports.ui.iconGridLayout;
+const InternetSearch = imports.ui.internetSearch;
 const Main = imports.ui.main;
 const Overview = imports.ui.overview;
 const RemoteSearch = imports.ui.remoteSearch;
@@ -31,6 +32,7 @@ const SearchSystem = new Lang.Class({
         this._providers = [];
 
         this._registerProvider(new AppDisplay.AppSearchProvider());
+        this._registerProvider(new InternetSearch.InternetSearchProvider());
 
         this._searchSettings = new Gio.Settings({ schema: SEARCH_PROVIDERS_SCHEMA });
         this._searchSettings.connect('changed::disabled', Lang.bind(this, this._reloadRemoteProviders));
