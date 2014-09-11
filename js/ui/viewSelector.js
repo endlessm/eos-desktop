@@ -183,6 +183,7 @@ const ViewsDisplay = new Lang.Class({
         this._allView = new AppDisplay.AllView();
 
         this._searchResults = new Search.SearchResults();
+        this._searchResults.connect('search-progress-updated', Lang.bind(this, this._updateSpinner));
 
         // Since the entry isn't inside the results container we install this
         // dummy widget as the last results container child so that we can
@@ -234,9 +235,11 @@ const ViewsDisplay = new Lang.Class({
             ]));
     },
 
-    _enterLocalSearch: function() {
-        this.entry.pulseAnimation();
+    _updateSpinner: function() {
+        this.entry.setSpinning(this._searchResults.searchInProgress);
+    },
 
+    _enterLocalSearch: function() {
         this.actor.showPage(this._searchResults.actor);
 
         // Since the search is live, only record a metric a few seconds after
@@ -261,7 +264,6 @@ const ViewsDisplay = new Lang.Class({
     },
 
     _onSearchActivated: function() {
-        this.entry.pulseAnimation();
         this._searchResults.activateDefault();
     },
 

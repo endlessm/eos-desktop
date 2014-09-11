@@ -657,6 +657,8 @@ const SearchResults = new Lang.Class({
                 this._statusText.set_text(_("No results."));
             }
         }
+
+        this.emit('search-progress-updated');
     },
 
     _updateResults: function(provider, results) {
@@ -703,6 +705,7 @@ const SearchResults = new Lang.Class({
         this.actor.navigate_focus(from, direction, false);
     }
 });
+Signals.addSignalMethods(SearchResults.prototype);
 
 const ProviderIcon = new Lang.Class({
     Name: 'ProviderIcon',
