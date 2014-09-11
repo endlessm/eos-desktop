@@ -174,7 +174,7 @@ const OverviewEntry = new Lang.Class({
         this._spinnerAnimation.actor.hide();
         this._spinnerAnimationTimeoutId = 0;
 
-        let hintActor = new St.Label({ text: _("My computer"),
+        let hintActor = new St.Label({ text: _("Type to search…"),
                                        style_class: 'search-entry-text-hint' });
 
         this.parent({ name: 'searchEntry',
