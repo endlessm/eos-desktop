@@ -234,30 +234,10 @@ const ViewsDisplay = new Lang.Class({
             ]));
     },
 
-    _doLocalSearch: function() {
-        this._searchTimeoutId = 0;
-
-        let terms = this.entry.getSearchTerms();
-        this._searchResults.setTerms(terms);
-
-        return false;
-    },
-
-    _clearLocalSearch: function() {
-        if (this._searchTimeoutId > 0) {
-            Mainloop.source_remove(this._searchTimeoutId);
-            this._searchTimeoutId = 0;
-        }
-
-        this._searchResults.reset();
-    },
-
-    _queueLocalSearch: function() {
+    _enterLocalSearch: function() {
         this.entry.pulseAnimation();
-        if (this._searchTimeoutId == 0) {
-            this._searchTimeoutId = Mainloop.timeout_add(SEARCH_TIMEOUT,
-                Lang.bind(this, this._doLocalSearch));
-        }
+
+        this.actor.showPage(this._searchResults.actor);
 
         // Since the search is live, only record a metric a few seconds after
         // the user has stopped typing. Don't record one if the user deleted
@@ -276,14 +256,7 @@ const ViewsDisplay = new Lang.Class({
             }.bind(this));
     },
 
-    _enterLocalSearch: function() {
-        this._searchResults.startingSearch();
-        this._queueLocalSearch();
-        this.actor.showPage(this._searchResults.actor);
-    },
-
     _leaveLocalSearch: function() {
-        this._clearLocalSearch();
         this.actor.showPage(this._allView.actor);
     },
 
@@ -305,7 +278,8 @@ const ViewsDisplay = new Lang.Class({
     },
 
     _onSearchTermsChanged: function() {
-        this._queueLocalSearch();
+        let terms = this.entry.getSearchTerms();
+        this._searchResults.setTerms(terms);
     },
 
     acceptDrop: function(source, actor, x, y, time) {
