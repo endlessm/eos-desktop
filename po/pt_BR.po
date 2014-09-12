@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-08 15:13-0700\n"
-"PO-Revision-Date: 2014-09-08 22:15+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"PO-Revision-Date: 2014-09-12 16:42+0000\n"
+"Last-Translator: Silva <michele@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/eos-shell/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -515,16 +515,16 @@ msgstr "%s foi removido dos seus favoritos."
 
 #: ../js/ui/appIconBar.js:216
 msgid "Other workspaces"
-msgstr ""
+msgstr "Outras áreas de trabalho  "
 
 #: ../js/ui/appIconBar.js:225
 msgid "Current workspace"
-msgstr ""
+msgstr "Área de trabalho atual "
 
 #: ../js/ui/appIconBar.js:293
 #, c-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Sair %s"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
