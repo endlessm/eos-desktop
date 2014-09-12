@@ -183,6 +183,7 @@ const ViewsDisplay = new Lang.Class({
         this._allView = new AppDisplay.AllView();
 
         this._searchResults = new Search.SearchResults();
+        this._searchResults.connect('search-progress-updated', Lang.bind(this, this._updateSpinner));
 
         // Since the entry isn't inside the results container we install this
         // dummy widget as the last results container child so that we can
@@ -234,61 +235,19 @@ const ViewsDisplay = new Lang.Class({
             ]));
     },
 
-    _doLocalSearch: function() {
-        this._searchTimeoutId = 0;
-
-        let terms = this.entry.getSearchTerms();
-        this._searchResults.setTerms(terms);
-
-        return false;
-    },
-
-    _clearLocalSearch: function() {
-        if (this._searchTimeoutId > 0) {
-            Mainloop.source_remove(this._searchTimeoutId);
-            this._searchTimeoutId = 0;
-        }
-
-        this._searchResults.reset();
-    },
-
-    _queueLocalSearch: function() {
-        this.entry.pulseAnimation();
-        if (this._searchTimeoutId == 0) {
-            this._searchTimeoutId = Mainloop.timeout_add(SEARCH_TIMEOUT,
-                Lang.bind(this, this._doLocalSearch));
-        }
-
-        // Since the search is live, only record a metric a few seconds after
-        // the user has stopped typing. Don't record one if the user deleted
-        // what they wrote and left it at that.
-        if (this._localSearchMetricTimeoutId > 0)
-            Mainloop.source_remove(this._localSearchMetricTimeoutId);
-        this._localSearchMetricTimeoutId = Mainloop.timeout_add_seconds(
-            SEARCH_METRIC_INACTIVITY_TIMEOUT_SECONDS,
-            function () {
-                let query = this.entry.getSearchTerms().join(' ');
-                if (query !== '')
-                    this._recordDesktopSearchMetric(query,
-                        DesktopSearchProvider.MY_COMPUTER);
-                this._localSearchMetricTimeoutId = 0;
-                return GLib.SOURCE_REMOVE;
-            }.bind(this));
+    _updateSpinner: function() {
+        this.entry.setSpinning(this._searchResults.searchInProgress);
     },
 
     _enterLocalSearch: function() {
-        this._searchResults.startingSearch();
-        this._queueLocalSearch();
         this.actor.showPage(this._searchResults.actor);
     },
 
     _leaveLocalSearch: function() {
-        this._clearLocalSearch();
         this.actor.showPage(this._allView.actor);
     },
 
     _onSearchActivated: function() {
-        this.entry.pulseAnimation();
         this._searchResults.activateDefault();
     },
 
@@ -305,7 +264,24 @@ const ViewsDisplay = new Lang.Class({
     },
 
     _onSearchTermsChanged: function() {
-        this._queueLocalSearch();
+        let terms = this.entry.getSearchTerms();
+        this._searchResults.setTerms(terms);
+
+        // Since the search is live, only record a metric a few seconds after
+        // the user has stopped typing. Don't record one if the user deleted
+        // what they wrote and left it at that.
+        if (this._localSearchMetricTimeoutId > 0)
+            Mainloop.source_remove(this._localSearchMetricTimeoutId);
+        this._localSearchMetricTimeoutId = Mainloop.timeout_add_seconds(
+            SEARCH_METRIC_INACTIVITY_TIMEOUT_SECONDS,
+            function () {
+                let query = terms.join(' ');
+                if (query !== '')
+                    this._recordDesktopSearchMetric(query,
+                        DesktopSearchProvider.MY_COMPUTER);
+                this._localSearchMetricTimeoutId = 0;
+                return GLib.SOURCE_REMOVE;
+            }.bind(this));
     },
 
     acceptDrop: function(source, actor, x, y, time) {

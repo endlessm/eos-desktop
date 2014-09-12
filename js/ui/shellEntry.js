@@ -162,7 +162,6 @@ const OverviewEntry = new Lang.Class({
 
     _init: function() {
         this._active = false;
-        this._ongoing = false;
 
         this._capturedEventId = 0;
 
@@ -172,7 +171,6 @@ const OverviewEntry = new Lang.Class({
 
         this._spinnerAnimation = new Panel.AnimatedIcon('process-working.svg', SPINNER_ICON_SIZE);
         this._spinnerAnimation.actor.hide();
-        this._spinnerAnimationTimeoutId = 0;
 
         let hintActor = new St.Label({ text: _("Type to search…"),
                                        style_class: 'search-entry-text-hint' });
@@ -370,25 +368,10 @@ const OverviewEntry = new Lang.Class({
         return false;
     },
 
-    _updateSecondaryIcon: function() {
-        if (this._spinnerAnimationTimeoutId) {
-            // cancel the ongoing timeout to extend the life of the animation
-            GLib.source_remove (this._spinnerAnimationTimeoutId);
-            this._spinnerAnimationTimeoutId = 0;
-        }
-
-        if (this._ongoing) {
-            this._ongoing = false;
+    setSpinning: function(visible) {
+        if (visible) {
             this._spinnerAnimation.play();
             this._spinnerAnimation.actor.show();
-            // the spinner will appear for a minimum of SPINNER_MIN_DURATION msecs.
-            this._spinnerAnimationTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT,
-                                                               SPINNER_MIN_DURATION,
-                                                               Lang.bind(this, function() {
-                                                                   this._spinnerAnimationTimeoutId = 0;
-                                                                   this._updateSecondaryIcon();
-                                                                   return false;
-                                                               }));
         } else {
             this._spinnerAnimation.stop();
             this._spinnerAnimation.actor.hide();
@@ -402,7 +385,6 @@ const OverviewEntry = new Lang.Class({
 
         this._active = value;
         this._ongoing = false;
-        this._updateSecondaryIcon();
 
         if (!this._active) {
             this._searchCancelled();
@@ -413,11 +395,6 @@ const OverviewEntry = new Lang.Class({
 
     get active() {
         return this._active;
-    },
-
-    pulseAnimation: function() {
-        this._ongoing = true;
-        this._updateSecondaryIcon();
     },
 
     getSearchTerms: function() {
