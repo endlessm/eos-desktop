@@ -915,6 +915,7 @@ StScrollBar StButton#vhandle:active {
     font-size: 15px;
 
     color: #c5bcb6;
+    selected-color: #333;
     caret-color: #ffffff;
     border: 1px solid rgba(245,245,245,0.15);
     background-color: rgba(42,42,42,0.70);
