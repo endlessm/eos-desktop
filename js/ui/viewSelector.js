@@ -241,10 +241,12 @@ const ViewsDisplay = new Lang.Class({
 
     _enterLocalSearch: function() {
         this.actor.showPage(this._searchResults.actor);
+        this._searchResults.reset();
     },
 
     _leaveLocalSearch: function() {
         this.actor.showPage(this._allView.actor);
+        this._searchResults.reset();
     },
 
     _onSearchActivated: function() {
