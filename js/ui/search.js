@@ -538,6 +538,16 @@ const SearchResults = new Lang.Class({
         return GLib.SOURCE_REMOVE;
     },
 
+    reset: function() {
+        this._terms = [];
+        this._results = {};
+        this._clearDisplay();
+        this._defaultResult = null;
+        this._startingSearch = false;
+
+        this._updateSearchProgress();
+    },
+
     setTerms: function(terms) {
         this._startingSearch = true;
 
