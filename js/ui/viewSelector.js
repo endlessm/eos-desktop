@@ -18,16 +18,11 @@ const LayoutManager = imports.ui.layout;
 const Main = imports.ui.main;
 const OverviewControls = imports.ui.overviewControls;
 const Params = imports.misc.params;
-const RemoteSearch = imports.ui.remoteSearch;
 const Search = imports.ui.search;
-const SearchDisplay = imports.ui.searchDisplay;
 const ShellEntry = imports.ui.shellEntry;
 const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
 const WorkspacesView = imports.ui.workspacesView;
-
-const BASE_SEARCH_URI = 'http://www.google.com/';
-const QUERY_URI_PATH = 'search?q=';
 
 const SEARCH_TIMEOUT = 150;
 const SEARCH_METRIC_INACTIVITY_TIMEOUT_SECONDS = 3;
@@ -41,7 +36,6 @@ const EVENT_DESKTOP_SEARCH = 'b02266bc-b010-44b2-ae0f-8f116ffa50eb';
 // the desktop.
 const DesktopSearchProvider = {
     MY_COMPUTER: 0,
-    GOOGLE: 1
 };
 
 const ViewPage = {
@@ -188,8 +182,8 @@ const ViewsDisplay = new Lang.Class({
         this._appSystem = Shell.AppSystem.get_default();
         this._allView = new AppDisplay.AllView();
 
-        this._searchSystem = new Search.SearchSystem();
-        this._searchResults = new SearchDisplay.SearchResults(this._searchSystem);
+        this._searchResults = new Search.SearchResults();
+        this._searchResults.connect('search-progress-updated', Lang.bind(this, this._updateSpinner));
 
         // Since the entry isn't inside the results container we install this
         // dummy widget as the last results container child so that we can
@@ -206,7 +200,6 @@ const ViewsDisplay = new Lang.Class({
         this.entry.connect('search-activated', Lang.bind(this, this._onSearchActivated));
         this.entry.connect('search-active-changed', Lang.bind(this, this._onSearchActiveChanged));
         this.entry.connect('search-navigate-focus', Lang.bind(this, this._onSearchNavigateFocus));
-        this.entry.connect('search-state-changed', Lang.bind(this, this._onSearchStateChanged));
         this.entry.connect('search-terms-changed', Lang.bind(this, this._onSearchTermsChanged));
 
         this.entry.clutter_text.connect('key-focus-in', Lang.bind(this, function() {
@@ -220,20 +213,6 @@ const ViewsDisplay = new Lang.Class({
         // This makes sure that any DnD ops get channeled to the icon grid logic
         // otherwise dropping an item outside of the grid bounds fails
         this.actor._delegate = this;
-
-        // Setup search
-        this._searchSettings = new Gio.Settings({ schema: Search.SEARCH_PROVIDERS_SCHEMA });
-        this._searchSettings.connect('changed::disabled', Lang.bind(this, this._reloadRemoteProviders));
-        this._searchSettings.connect('changed::disable-external', Lang.bind(this, this._reloadRemoteProviders));
-        this._searchSettings.connect('changed::sort-order', Lang.bind(this, this._reloadRemoteProviders));
-
-        // Default search providers
-        this._addSearchProvider(new AppDisplay.AppSearchProvider());
-
-        // Load remote search providers provided by applications
-        RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, this._addSearchProvider));
-
-        IconGridLayout.layout.connect('changed', Lang.bind(this, this._reloadRemoteProviders));
 
         // Add and show all the pages
         this.actor.addPage(this._allView.actor);
@@ -256,59 +235,39 @@ const ViewsDisplay = new Lang.Class({
             ]));
     },
 
-    _activateGoogleSearch: function() {
-        let uri = BASE_SEARCH_URI;
-        let terms = this.entry.getSearchTerms();
-        if (terms.length != 0) {
-            this._recordDesktopSearchMetric(terms.join(' '),
-                DesktopSearchProvider.GOOGLE);
-            let searchedUris = Util.findSearchUrls(terms);
-            // Make sure search contains only a uri
-            // Avoid cases like "what is github.com"
-            if (searchedUris.length == 1 && terms.length == 1) {
-                uri = searchedUris[0];
-                // Ensure all uri has a scheme name
-                if(!GLib.uri_parse_scheme(uri)) {
-                    uri = "http://" + uri;
-                }
-            } else {
-                uri = uri + QUERY_URI_PATH + encodeURI(terms.join(' '));
-            }
-        }
-
-        try {
-            Gio.AppInfo.launch_default_for_uri(uri, null);
-            Main.overview.hide();
-        } catch (e) {
-            logError(e, 'error while launching the browser for uri: '
-                     + uri);
-        }
+    _updateSpinner: function() {
+        this.entry.setSpinning(this._searchResults.searchInProgress);
     },
 
-    _doLocalSearch: function() {
-        this._searchTimeoutId = 0;
-
-        let terms = this.entry.getSearchTerms();
-        this._searchSystem.updateSearchResults(terms);
-
-        return false;
-    },
-
-    _clearLocalSearch: function() {
-        if (this._searchTimeoutId > 0) {
-            Mainloop.source_remove(this._searchTimeoutId);
-            this._searchTimeoutId = 0;
-        }
-
+    _enterLocalSearch: function() {
+        this.actor.showPage(this._searchResults.actor);
         this._searchResults.reset();
     },
 
-    _queueLocalSearch: function() {
-        this.entry.pulseAnimation();
-        if (this._searchTimeoutId == 0) {
-            this._searchTimeoutId = Mainloop.timeout_add(SEARCH_TIMEOUT,
-                Lang.bind(this, this._doLocalSearch));
+    _leaveLocalSearch: function() {
+        this.actor.showPage(this._allView.actor);
+        this._searchResults.reset();
+    },
+
+    _onSearchActivated: function() {
+        this._searchResults.activateDefault();
+    },
+
+    _onSearchActiveChanged: function() {
+        if (this.entry.active) {
+            this._enterLocalSearch();
+        } else {
+            this._leaveLocalSearch();
         }
+    },
+
+    _onSearchNavigateFocus: function(entry, direction) {
+        this._searchResults.navigateFocus(direction);
+    },
+
+    _onSearchTermsChanged: function() {
+        let terms = this.entry.getSearchTerms();
+        this._searchResults.setTerms(terms);
 
         // Since the search is live, only record a metric a few seconds after
         // the user has stopped typing. Don't record one if the user deleted
@@ -318,121 +277,13 @@ const ViewsDisplay = new Lang.Class({
         this._localSearchMetricTimeoutId = Mainloop.timeout_add_seconds(
             SEARCH_METRIC_INACTIVITY_TIMEOUT_SECONDS,
             function () {
-                let query = this.entry.getSearchTerms().join(' ');
+                let query = terms.join(' ');
                 if (query !== '')
                     this._recordDesktopSearchMetric(query,
                         DesktopSearchProvider.MY_COMPUTER);
                 this._localSearchMetricTimeoutId = 0;
                 return GLib.SOURCE_REMOVE;
             }.bind(this));
-    },
-
-    _enterLocalSearch: function() {
-        this._searchResults.startingSearch();
-        this._queueLocalSearch();
-        this.actor.showPage(this._searchResults.actor);
-    },
-
-    _leaveLocalSearch: function() {
-        this._clearLocalSearch();
-        this.actor.showPage(this._allView.actor);
-    },
-
-    _onSearchActivated: function() {
-        this.entry.pulseAnimation();
-        let searchState = this.entry.getSearchState();
-        if (searchState == ShellEntry.EntrySearchMenuState.GOOGLE) {
-            this._activateGoogleSearch();
-        } else if (searchState == ShellEntry.EntrySearchMenuState.LOCAL) {
-            this._searchResults.activateDefault();
-        }
-    },
-
-    _onSearchActiveChanged: function() {
-        let searchState = this.entry.getSearchState();
-        if (searchState != ShellEntry.EntrySearchMenuState.LOCAL) {
-            return;
-        }
-
-        if (this.entry.active) {
-            this._enterLocalSearch();
-        } else {
-            this._leaveLocalSearch();
-        }
-    },
-
-    _onSearchNavigateFocus: function(entry, direction) {
-        let searchState = this.entry.getSearchState();
-        if (searchState != ShellEntry.EntrySearchMenuState.LOCAL) {
-            return;
-        }
-
-        this._searchResults.navigateFocus(direction);
-    },
-
-    _onSearchStateChanged: function() {
-        let searchState = this.entry.getSearchState();
-        if (searchState == ShellEntry.EntrySearchMenuState.LOCAL &&
-            this.entry.active) {
-            this._enterLocalSearch();
-        } else {
-            this._leaveLocalSearch();
-        }
-    },
-
-    _onSearchTermsChanged: function() {
-        let searchState = this.entry.getSearchState();
-        if (searchState != ShellEntry.EntrySearchMenuState.LOCAL) {
-            return;
-        }
-
-        this._queueLocalSearch();
-    },
-
-    _shouldUseSearchProvider: function(provider) {
-        // the disable-external GSetting only affects remote providers
-        if (!provider.isRemoteProvider) {
-            return true;
-        }
-
-        if (this._searchSettings.get_boolean('disable-external')) {
-            return false;
-        }
-
-        let appId = provider.app.get_id();
-        let disable = this._searchSettings.get_strv('disabled');
-        disable = disable.map(function(appId) {
-            let shellApp = this._appSystem.lookup_heuristic_basename(appId);
-            if (shellApp) {
-                return shellApp.get_id();
-            } else {
-                return null;
-            }
-        });
-        return disable.indexOf(appId) == -1;
-    },
-
-    _reloadRemoteProviders: function() {
-        // removeSearchProvider() modifies the provider list we iterate on,
-        // so make a copy first
-        let remoteProviders = this._searchSystem.getRemoteProviders().slice(0);
-
-        remoteProviders.forEach(Lang.bind(this, this._removeSearchProvider));
-        RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, this._addSearchProvider));
-    },
-
-    _addSearchProvider: function(provider) {
-        if (!this._shouldUseSearchProvider(provider)) {
-            return;
-        }
-
-        this._searchSystem.registerProvider(provider);
-        this._searchResults.createProviderDisplay(provider);
-    },
-
-    _removeSearchProvider: function(provider) {
-        this._searchSystem.unregisterProvider(provider);
-        this._searchResults.destroyProviderDisplay(provider);
     },
 
     acceptDrop: function(source, actor, x, y, time) {

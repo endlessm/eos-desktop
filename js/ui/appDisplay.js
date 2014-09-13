@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
@@ -19,8 +20,8 @@ const AppFavorites = imports.ui.appFavorites;
 const BackgroundMenu = imports.ui.backgroundMenu;
 const BoxPointer = imports.ui.boxpointer;
 const CloseButton = imports.ui.closeButton;
-const ButtonConstants = imports.ui.buttonConstants;
 const DND = imports.ui.dnd;
+const Hash = imports.misc.hash;
 const IconGrid = imports.ui.iconGrid;
 const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
@@ -61,6 +62,16 @@ const NEW_ICON_ANIMATION_DELAY = 0.7;
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
 
+const EOS_APP_PREFIX = 'eos-app-';
+
+function _sanitizeAppId(appId) {
+    if (appId.startsWith(EOS_APP_PREFIX)) {
+        return appId.substr(EOS_APP_PREFIX.length);
+    }
+
+    return appId;
+}
+
 const AppSearchProvider = new Lang.Class({
     Name: 'AppSearchProvider',
 
@@ -83,25 +94,46 @@ const AppSearchProvider = new Lang.Class({
         callback(metas);
     },
 
-    getInitialResultSet: function(terms) {
+    filterResults: function(results, maxNumber) {
+        return results.slice(0, maxNumber);
+    },
+
+    getInitialResultSet: function(terms, callback, cancellable) {
         let query = terms.join(' ');
         let groups = Gio.DesktopAppInfo.search(query);
         let usage = Shell.AppUsage.get_default();
         let results = [];
+        let seenIds = new Hash.Map();
+
         groups.forEach(function(group) {
-            group = group.filter(function(appID) {
-                let app = Gio.DesktopAppInfo.new(appID);
-                return app && app.should_show() && IconGridLayout.layout.hasIcon(appID);
+            group.forEach(function(appID) {
+                let actualId = _sanitizeAppId(appID);
+                if (seenIds.has(actualId)) {
+                    return;
+                }
+
+                if (!IconGridLayout.layout.hasIcon(actualId)) {
+                    return;
+                }
+
+                let app = Gio.DesktopAppInfo.new(actualId);
+                if (app && app.should_show()) {
+                    results.push(actualId);
+                }
+
+                seenIds.set(actualId, true);
             });
-            results = results.concat(group.sort(function(a, b) {
-                return usage.compare('', a, b);
-            }));
         });
-        this.searchSystem.setResults(this, results);
+
+        results = results.sort(function(a, b) {
+            return usage.compare('', a, b);
+        });
+
+        callback(results);
     },
 
-    getSubsearchResultSet: function(previousResults, terms) {
-        this.getInitialResultSet(terms);
+    getSubsearchResultSet: function(previousResults, terms, callback, cancellable) {
+        this.getInitialResultSet(terms, callback, cancellable);
     },
 
     activateResult: function(app) {
@@ -127,7 +159,7 @@ const AppSearchProvider = new Lang.Class({
         app.open_new_window(workspace);
     },
 
-    createResultObject: function (resultMeta, terms) {
+    createResultObject: function (resultMeta) {
         let app = resultMeta['id'];
         return new AppIcon(app);
     }
@@ -154,7 +186,7 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     removeAll: function() {
-        this._grid.removeAll();
+        this._grid.destroyAll();
         this._allIcons = [];
     },
 
@@ -553,10 +585,14 @@ const AllView = new Lang.Class({
 
     _redisplay: function() {
         if (this.getAllIcons().length == 0) {
-            this.addIcons(true);
+            if (Main.layoutManager.startingUp) {
+                this.addIcons(true);
 
-            Main.layoutManager.connect('startup-complete',
-                Lang.bind(this, this._animateIconsIn));
+                Main.layoutManager.connect('startup-complete',
+                                           Lang.bind(this, this._animateIconsIn));
+            } else {
+                this.addIcons();
+            }
         } else {
             let animateView = this._repositionedView;
             if (!animateView) {
@@ -1679,7 +1715,7 @@ const AppIcon = new Lang.Class({
 
     _onButtonPress: function(actor, event) {
         let button = event.get_button();
-        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+        if (button == Gdk.BUTTON_PRIMARY) {
             this._removeMenuTimeout();
             this._menuTimeoutId = Mainloop.timeout_add(MENU_POPUP_TIMEOUT,
                 Lang.bind(this, function() {
@@ -1687,7 +1723,7 @@ const AppIcon = new Lang.Class({
                     this.popupMenu();
                     return false;
                 }));
-        } else if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
+        } else if (button == Gdk.BUTTON_SECONDARY) {
             this.popupMenu();
             return true;
         }
@@ -1697,9 +1733,14 @@ const AppIcon = new Lang.Class({
     _onClicked: function(actor, button) {
         this._removeMenuTimeout();
 
-        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+        let event = Clutter.get_current_event();
+        if (event.get_click_count() > 1) {
+            return;
+        }
+
+        if (button == Gdk.BUTTON_PRIMARY) {
             this._onActivate(Clutter.get_current_event());
-        } else if (button == ButtonConstants.MIDDLE_MOUSE_BUTTON) {
+        } else if (button == Gdk.BUTTON_MIDDLE) {
             // Last workspace is always empty
             let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
             launchWorkspace.activate(global.get_current_time());

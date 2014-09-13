@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
@@ -15,7 +16,6 @@ const Signals = imports.signals;
 const St = imports.gi.St;
 
 const BoxPointer = imports.ui.boxpointer;
-const ButtonConstants = imports.ui.buttonConstants;
 const CtrlAltTab = imports.ui.ctrlAltTab;
 const CloseButton = imports.ui.closeButton;
 const GnomeSession = imports.misc.gnomeSession;
@@ -1775,10 +1775,10 @@ const MessageTray = new Lang.Class({
 
         clickAction.connect('clicked', Lang.bind(this, function(action) {
             let button = action.get_button();
-            if (button == ButtonConstants.RIGHT_MOUSE_BUTTON) {
+            if (button == Gdk.BUTTON_SECONDARY) {
                 this._openContextMenu();
             }
-            if (button == ButtonConstants.LEFT_MOUSE_BUTTON && this._contextMenu.isOpen) {
+            if (button == Gdk.BUTTON_PRIMARY && this._contextMenu.isOpen) {
                 this._grabHelper.ungrab({ actor: this._contextMenu.actor });
             }
         }));

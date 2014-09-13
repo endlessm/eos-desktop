@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const Lang = imports.lang;
 const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
@@ -12,7 +13,6 @@ const Tweener = imports.ui.tweener;
 
 const AppActivation = imports.ui.appActivation;
 const BoxPointer = imports.ui.boxpointer;
-const ButtonConstants = imports.ui.buttonConstants;
 const Hash = imports.misc.hash;
 const Main = imports.ui.main;
 const Panel = imports.ui.panel;
@@ -285,6 +285,25 @@ const AppIconButton = new Lang.Class({
             this._onDestroy));
         this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
         this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
+
+        this._rightClickMenuManager = new PopupMenu.PopupMenuManager(this);
+
+        this._rightClickMenu = new PopupMenu.PopupMenu(this.actor, 0.0, St.Side.TOP, 0);
+        this._rightClickMenu.blockSourceEvents = true;
+        this._quitMenuItem = this._rightClickMenu.addAction(_("Quit %s").format(this._app.get_name()), Lang.bind(this, function() {
+            this._app.request_quit();
+        }));
+        this._rightClickMenuManager.addMenu(this._rightClickMenu);
+        this._rightClickMenu.actor.hide();
+        Main.uiGroup.add_actor(this._rightClickMenu.actor);
+
+        this._appStateUpdatedId = this._app.connect('notify::state', Lang.bind(this, this._syncQuitMenuItemVisible));
+        this._syncQuitMenuItemVisible();
+    },
+
+    _syncQuitMenuItemVisible: function() {
+        let visible = (this._app.get_state() == Shell.AppState.RUNNING);
+        this._quitMenuItem.actor.visible = visible;
     },
 
     _createIcon: function() {
@@ -294,7 +313,7 @@ const AppIconButton = new Lang.Class({
     _handleButtonPressEvent: function(actor, event) {
         let button = event.get_button();
 
-        if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+        if (button == Gdk.BUTTON_PRIMARY) {
             this._hideHoverState();
             this.emit('app-icon-pressed');
 
@@ -312,6 +331,11 @@ const AppIconButton = new Lang.Class({
                 // This will block the clicked signal from being emitted
                 return true;
             }
+        } else if (button == Gdk.BUTTON_SECONDARY) {
+            this._hideHoverState();
+            this._rightClickMenu.open();
+            this._rightClickMenuManager.ignoreRelease();
+            return true;
         }
 
         this.actor.sync_hover();
@@ -414,6 +438,11 @@ const AppIconButton = new Lang.Class({
     _onDestroy: function() {
         this._label.destroy();
         this._resetIconGeometry();
+
+        if (this._appStateUpdatedId > 0) {
+            this._app.disconnect(this._appStateUpdatedId);
+            this._appStateUpdatedId = 0;
+        }
     },
 
     _resetIconGeometry: function() {

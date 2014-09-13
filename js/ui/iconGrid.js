@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const GObject = imports.gi.GObject;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
@@ -8,7 +9,6 @@ const Tweener = imports.ui.tweener;
 const Mainloop = imports.mainloop;
 const Main = imports.ui.main;
 
-const ButtonConstants = imports.ui.buttonConstants;
 const GrabHelper = imports.ui.grabHelper;
 const Lang = imports.lang;
 const Params = imports.misc.params;
@@ -33,8 +33,8 @@ const SHUFFLE_ANIMATION_OPACITY = 255;
 const CursorLocation = {
     DEFAULT: 0,
     ON_ICON: 1,
-    LEFT_EDGE: 2,
-    RIGHT_EDGE: 3,
+    START_EDGE: 2,
+    END_EDGE: 3,
     EMPTY_AREA: 4
 }
 
@@ -77,8 +77,12 @@ const EditableLabel = new Lang.Class({
     },
 
     _onButtonPressEvent: function(label, event) {
-        let button = event.get_button();
-        if (button != ButtonConstants.LEFT_MOUSE_BUTTON) {
+        if (event.get_button() != Gdk.BUTTON_PRIMARY) {
+            return false;
+        }
+
+        if (event.get_click_count() > 1 &&
+            this._labelMode != EditableLabelMode.HIGHLIGHT) {
             return false;
         }
 
@@ -103,8 +107,6 @@ const EditableLabel = new Lang.Class({
             return true;
         }
 
-        // this._labelMode == EditableLableMode.EDIT:
-        //
         // ensure focus stays in the text field when clicking
         // on the entry empty space
         this.grab_key_focus();
@@ -554,7 +556,7 @@ const IconGrid = new Lang.Class({
         this._allocatedColumns = nColumns;
 
         for (let i = 0; i < children.length; i++) {
-            let rowIndex = Math.floor((i + 1) / this._allocatedColumns);
+            let rowIndex = Math.floor(i / this._allocatedColumns);
             let childBox = this._childAllocation(children[i], box, i);
 
             if (this._rowLimit && rowIndex >= this._rowLimit ||
@@ -629,6 +631,10 @@ const IconGrid = new Lang.Class({
     },
 
     removeAll: function() {
+        this.actor.remove_all_children();
+    },
+
+    destroyAll: function() {
         this.actor.destroy_all_children();
     },
 
@@ -654,20 +660,21 @@ const IconGrid = new Lang.Class({
         }
 
         let nudgeIdx = index;
+        let rtl = (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL);
 
-        if (cursorLocation != CursorLocation.LEFT_EDGE) {
+        if (cursorLocation != CursorLocation.START_EDGE) {
             let leftItem = this.getItemAtIndex(nudgeIdx - 1);
             this._animateNudge(leftItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION,
-                               Math.floor(-this._hItemSize * NUDGE_FACTOR)
+                               rtl ? Math.floor(this._hItemSize * NUDGE_FACTOR) : Math.floor(-this._hItemSize * NUDGE_FACTOR)
                               );
         }
 
         // Nudge the icon to the right if we are the first item or not at the
         // end of row
-        if (cursorLocation != CursorLocation.RIGHT_EDGE) {
+        if (cursorLocation != CursorLocation.END_EDGE) {
             let rightItem = this.getItemAtIndex(nudgeIdx);
             this._animateNudge(rightItem, NUDGE_ANIMATION_TYPE, NUDGE_DURATION,
-                               Math.floor(this._hItemSize * NUDGE_FACTOR)
+                               rtl ? Math.floor(-this._hItemSize * NUDGE_FACTOR) : Math.floor(this._hItemSize * NUDGE_FACTOR)
                               );
         }
     },
@@ -805,6 +812,7 @@ const IconGrid = new Lang.Class({
         let [sw, sh] = this.actor.get_transformed_size();
         let [ok, sx, sy] = this.actor.transform_stage_point(x, y);
 
+        let rtl = (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL);
         let usedWidth = sw;
 
         // Undo the align translation from _allocate()
@@ -820,6 +828,10 @@ const IconGrid = new Lang.Class({
         // Correct sx to handle the left padding
         // to correctly calculate the column
         let gridx = sx - this._leftPadding;
+        if (rtl) {
+            gridx = usedWidth - gridx;
+        }
+
         let columnWidth = this._hItemSize + this._spacing;
         let column = Math.floor(gridx / columnWidth);
 
@@ -850,12 +862,17 @@ const IconGrid = new Lang.Class({
         let child = children[childIdx];
         let [childMinWidth, childMinHeight, childNaturalWidth, childNaturalHeight] = child.get_preferred_size();
 
-        // Calculate the original position of the child icon (prior to nudging)
-        let cx = this._leftPadding + (childIdx % this._allocatedColumns) * columnWidth;
-
         // This is the width of the cell that contains the icon
         // (excluding spacing between cells)
         let childIconWidth = Math.max(this._hItemSize, childNaturalWidth);
+
+        // Calculate the original position of the child icon (prior to nudging)
+        let cx;
+        if (rtl) {
+            cx = this._leftPadding + usedWidth - (column * columnWidth) - childIconWidth;
+        } else {
+            cx = this._leftPadding + (column * columnWidth);
+        }
 
         // childIconWidth is used to determine whether or not a drag point
         // is inside the icon or the divider.
@@ -880,11 +897,21 @@ const IconGrid = new Lang.Class({
             // We are to the left of the icon target
             if (sx < leftEdge) {
                 // We are before the leftmost icon on the grid
-                dropIdx = childIdx;
-                cursorLocation = CursorLocation.LEFT_EDGE;
+                if (rtl) {
+                    dropIdx = childIdx + 1;
+                    cursorLocation = CursorLocation.END_EDGE;
+                } else {
+                    dropIdx = childIdx;
+                    cursorLocation = CursorLocation.START_EDGE;
+                }
             } else {
-                // We are between the previous icon and this one
-                dropIdx = childIdx;
+                // We are between the previous icon (next in RTL) and this one
+                if (rtl) {
+                    dropIdx = childIdx + 1;
+                } else {
+                    dropIdx = childIdx;
+                }
+
                 cursorLocation = CursorLocation.DEFAULT;
             }
         } else if (sx >= iconRightX) {
@@ -896,11 +923,21 @@ const IconGrid = new Lang.Class({
                 cursorLocation = CursorLocation.DEFAULT;
             } else if (sx >= rightEdge) {
                 // We are beyond the rightmost icon on the grid
-                dropIdx = childIdx + 1;
-                cursorLocation = CursorLocation.RIGHT_EDGE;
+                if (rtl) {
+                    dropIdx = childIdx;
+                    cursorLocation = CursorLocation.START_EDGE;
+                } else {
+                    dropIdx = childIdx + 1;
+                    cursorLocation = CursorLocation.END_EDGE;
+                }
             } else {
-                // We are between this icon and the next one
-                dropIdx = childIdx + 1;
+                // We are between this icon and the next one (previous in RTL)
+                if (rtl) {
+                    dropIdx = childIdx;
+                } else {
+                    dropIdx = childIdx + 1;
+                }
+
                 cursorLocation = CursorLocation.DEFAULT;
             }
         } else {

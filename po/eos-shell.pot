@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-04 14:48-0700\n"
+"POT-Creation-Date: 2014-09-08 15:13-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -450,40 +450,40 @@ msgstr ""
 msgid "Execution of '%s' failed:"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1861
+#: ../js/ui/appDisplay.js:1859
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1870
+#: ../js/ui/appDisplay.js:1868
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1922
+#: ../js/ui/appDisplay.js:1920
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1928
+#: ../js/ui/appDisplay.js:1926
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1934
+#: ../js/ui/appDisplay.js:1932
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1940 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1938 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2023
+#: ../js/ui/appDisplay.js:2021
 msgid "New Window"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2026 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2024 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2027
+#: ../js/ui/appDisplay.js:2025
 msgid "Add to Favorites"
 msgstr ""
 
@@ -495,6 +495,19 @@ msgstr ""
 #: ../js/ui/appFavorites.js:121
 #, c-format
 msgid "%s has been removed from your favorites."
+msgstr ""
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, c-format
+msgid "Quit %s"
 msgstr ""
 
 #: ../js/ui/backgroundMenu.js:21
@@ -1101,7 +1114,7 @@ msgstr ""
 msgid "%A %B %e, %Y"
 msgstr ""
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:46
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1296,15 +1309,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr ""
 
-#: ../js/ui/overview.js:118
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr ""
 
-#: ../js/ui/overview.js:169
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr ""
 
-#: ../js/ui/panel.js:375
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr ""
 
@@ -1352,31 +1365,31 @@ msgstr ""
 msgid "No results."
 msgstr ""
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
+#: ../js/ui/shellEntry.js:106 ../js/ui/shellEntry.js:307
 msgid "Google"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:112
+#: ../js/ui/shellEntry.js:111
 msgid "My Computer"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/shellEntry.js:175
 msgid "Copy"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:180
 msgid "Paste"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:239
 msgid "Show Text"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:241
 msgid "Hide Text"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:309
 msgid "My computer"
 msgstr ""
 

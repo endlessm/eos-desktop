@@ -63,7 +63,7 @@ const SearchProvider2Iface = '<node> \
 var SearchProviderProxyInfo = Gio.DBusInterfaceInfo.new_for_xml(SearchProviderIface);
 var SearchProvider2ProxyInfo = Gio.DBusInterfaceInfo.new_for_xml(SearchProvider2Iface);
 
-function loadRemoteSearchProviders(addProviderCallback) {
+function loadRemoteSearchProviders(callback) {
     let objectPaths = {};
     let loadedProviders = [];
     let appSys = Shell.AppSystem.get_default();
@@ -124,6 +124,12 @@ function loadRemoteSearchProviders(addProviderCallback) {
         }
     }
 
+    let searchSettings = new Gio.Settings({ schema: Search.SEARCH_PROVIDERS_SCHEMA });
+    if (searchSettings.get_boolean('disable-external')) {
+        callback([]);
+        return;
+    }
+
     let dataDirs = GLib.get_system_data_dirs();
     dataDirs.forEach(function(dataDir) {
         let path = GLib.build_filenamev([dataDir, 'gnome-shell', 'search-providers']);
@@ -142,7 +148,6 @@ function loadRemoteSearchProviders(addProviderCallback) {
         }
     });
 
-    let searchSettings = new Gio.Settings({ schema: Search.SEARCH_PROVIDERS_SCHEMA });
     let sortOrder = searchSettings.get_strv('sort-order');
 
     // Special case gnome-control-center to be always active and always first
@@ -156,6 +161,12 @@ function loadRemoteSearchProviders(addProviderCallback) {
         } else {
             return null;
         }
+    });
+
+    loadedProviders = loadedProviders.filter(function(provider) {
+        let appId = provider.app.get_id();
+        let disabled = searchSettings.get_strv('disabled');
+        return disabled.indexOf(appId) == -1;
     });
 
     loadedProviders.sort(function(providerA, providerB) {
@@ -188,7 +199,7 @@ function loadRemoteSearchProviders(addProviderCallback) {
         return (idxA - idxB);
     });
 
-    loadedProviders.forEach(addProviderCallback);
+    callback(loadedProviders);
 }
 
 const RemoteSearchProvider = new Lang.Class({
@@ -210,8 +221,6 @@ const RemoteSearchProvider = new Lang.Class({
         this.app = shellApp;
         this.id = shellApp.get_id();
         this.isRemoteProvider = true;
-
-        this._cancellable = new Gio.Cancellable();
     },
 
     createIcon: function(size, meta) {
@@ -235,29 +244,37 @@ const RemoteSearchProvider = new Lang.Class({
         return icon;
     },
 
-    _getResultsFinished: function(results, error) {
+    filterResults: function(results, maxNumber) {
+        if (results.length <= maxNumber)
+            return results;
+
+        let regularResults = results.filter(function(r) { return !r.startsWith('special:'); });
+        let specialResults = results.filter(function(r) { return r.startsWith('special:'); });
+
+        return regularResults.slice(0, maxNumber).concat(specialResults.slice(0, maxNumber));
+    },
+
+    _getResultsFinished: function(results, error, callback) {
         if (error) {
             if (!error.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
                 log('Received error from DBus search provider %s: %s'.format(this.id, String(error)));
-        } else {
-            this.searchSystem.setResults(this, results[0]);
+            callback([]);
+            return;
         }
+
+        callback(results[0]);
     },
 
-    getInitialResultSet: function(terms) {
-        this._cancellable.cancel();
-        this._cancellable.reset();
+    getInitialResultSet: function(terms, callback, cancellable) {
         this.proxy.GetInitialResultSetRemote(terms,
-                                             Lang.bind(this, this._getResultsFinished),
-                                             this._cancellable);
+                                             Lang.bind(this, this._getResultsFinished, callback),
+                                             cancellable);
     },
 
-    getSubsearchResultSet: function(previousResults, newTerms) {
-        this._cancellable.cancel();
-        this._cancellable.reset();
+    getSubsearchResultSet: function(previousResults, newTerms, callback, cancellable) {
         this.proxy.GetSubsearchResultSetRemote(previousResults, newTerms,
-                                               Lang.bind(this, this._getResultsFinished),
-                                               this._cancellable);
+                                               Lang.bind(this, this._getResultsFinished, callback),
+                                               cancellable);
     },
 
     _getResultMetasFinished: function(results, error, callback) {
@@ -285,12 +302,10 @@ const RemoteSearchProvider = new Lang.Class({
         callback(resultMetas);
     },
 
-    getResultMetas: function(ids, callback) {
-        this._cancellable.cancel();
-        this._cancellable.reset();
+    getResultMetas: function(ids, callback, cancellable) {
         this.proxy.GetResultMetasRemote(ids,
                                         Lang.bind(this, this._getResultMetasFinished, callback),
-                                        this._cancellable);
+                                        cancellable);
     },
 
     activateResult: function(id) {

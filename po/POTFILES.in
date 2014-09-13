@@ -16,6 +16,7 @@ js/gdm/util.js
 js/misc/util.js
 js/ui/appDisplay.js
 js/ui/appFavorites.js
+js/ui/appIconBar.js
 js/ui/backgroundMenu.js
 js/ui/calendar.js
 js/ui/components/automountManager.js
@@ -32,6 +33,7 @@ js/ui/endSessionDialog.js
 js/ui/extensionDownloader.js
 js/ui/extensionSystem.js
 js/ui/iconGridLayout.js
+js/ui/internetSearch.js
 js/ui/keyboard.js
 js/ui/lookingGlass.js
 js/ui/main.js
@@ -43,7 +45,7 @@ js/ui/panel.js
 js/ui/popupMenu.js
 js/ui/runDialog.js
 js/ui/screenShield.js
-js/ui/searchDisplay.js
+js/ui/search.js
 js/ui/shellEntry.js
 js/ui/shellMountOperation.js
 js/ui/status/accessibility.js

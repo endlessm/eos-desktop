@@ -2,6 +2,7 @@
 
 const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
 const Lang = imports.lang;
@@ -13,8 +14,6 @@ const St = imports.gi.St;
 const AppDisplay = imports.ui.appDisplay;
 const Background = imports.ui.background;
 const BackgroundMenu = imports.ui.backgroundMenu;
-const ButtonConstants = imports.ui.buttonConstants;
-
 const DND = imports.ui.dnd;
 const Main = imports.ui.main;
 const Params = imports.misc.params;
@@ -565,7 +564,7 @@ const LayoutManager = new Lang.Class({
 
         clickAction.connect('clicked', Lang.bind(this, function(action) {
             let button = action.get_button();
-            if (button == ButtonConstants.LEFT_MOUSE_BUTTON) {
+            if (button == Gdk.BUTTON_PRIMARY) {
                 this.emit('background-clicked');
             }
         }));

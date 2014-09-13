@@ -915,6 +915,7 @@ StScrollBar StButton#vhandle:active {
     font-size: 15px;
 
     color: #c5bcb6;
+    selected-color: #333;
     caret-color: #ffffff;
     border: 1px solid rgba(245,245,245,0.15);
     background-color: rgba(42,42,42,0.70);
@@ -923,86 +924,20 @@ StScrollBar StButton#vhandle:active {
     -minimum-vpadding: 24px;
 }
 
+#searchEntry:rtl {
+    padding-left: 4px;
+    padding-right: 8px;
+}
+
 #searchEntry:hover,
 #searchEntry:focus {
     color: #ffffff ;
     background-color: rgba(42,42,42,0.65);
 }
 
-.search-entry-source {
-    height: 24px;
-    width: 24px;
-    background-image: url("search-icon_normal.png");
-    background-position: 0px 4px;
-}
-
-.search-entry-source:focus,
-.search-entry-source:hover {
-    background-image: url("search-icon_hover.png");
-}
-
-.search-entry-source:checked,
-.search-entry-source:pressed {
-    background-image: url("search-icon_active.png");
-}
-
-.search-entry-button {
-    height: 24px;
-    width: 24px;
-    background-image: url("search-button_active-normal.png");
-}
-
-.search-entry-button:focus,
-.search-entry-button:hover {
-    background-image: url("search-button_hover.png");
-}
-
-.search-entry-button:checked,
-.search-entry-button:pressed {
-    background-image: url("search-button_pressed.png");
-}
-
 .search-entry-text-hint {
     padding-top: 1px;
     padding-bottom: 2px;
-}
-
-.entry-search-menu {
-    -boxpointer-gap: 6px;
-    -arrow-border-radius: 4px;
-    -arrow-border-width: 0px;
-    -arrow-border-color: transparent;
-    -arrow-base: 17px;
-    -arrow-rise: 9px;
-
-    border-top: 4px;
-    border-bottom: 4px;
-    padding: 0px;
-    min-width: 145px;
-
-    font-family: lato, sans-serif;
-    font-size: 13px;
-    color: #ffffff;
-}
-
-.entry-search-menu .popup-menu-item {
-    -opacity: 0.6;
-    padding-left: 12px;
-    padding-right: 25px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    height: 30px;
-}
-
-.entry-search-menu .popup-menu-item:active {
-    background-color: #333333;
-}
-.entry-search-menu .popup-menu-item:checked {
-    -opacity: 1.0;
-}
-
-.entry-search-menu .source-icon {
-    icon-size: 16px;
 }
 
 .dash-label {

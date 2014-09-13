@@ -564,11 +564,22 @@ const Overview = new Lang.Class({
         }
     },
 
+    _isInitialSetupRunning: function() {
+        let path = GLib.build_filenamev([GLib.get_user_config_dir(),
+                                         'gnome-initial-setup-done']);
+        return !GLib.file_test(path, GLib.FileTest.EXISTS);
+    },
+
     _onStartupPrepared: function() {
         if (this.isDummy)
             return;
 
-        this._showOrSwitchPage(ViewSelector.ViewPage.APPS, true);
+        // do not show overview when FBE is running
+        if (this._isInitialSetupRunning()) {
+            this._viewSelector.setActivePage(ViewSelector.ViewPage.APPS);
+        } else {
+            this._showOrSwitchPage(ViewSelector.ViewPage.APPS);
+        }
     },
 
     showApps: function() {
