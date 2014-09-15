@@ -541,10 +541,11 @@ const SearchResults = new Lang.Class({
         return GLib.SOURCE_REMOVE;
     },
 
-    reset: function() {
+    _reset: function() {
         this._terms = [];
         this._results = {};
         this._clearDisplay();
+        this._clearSearchTimeout();
         this._defaultResult = null;
         this._startingSearch = false;
 
@@ -558,7 +559,7 @@ const SearchResults = new Lang.Class({
         this._cancellable.reset();
 
         if (terms.length == 0) {
-            this.reset();
+            this._reset();
             return;
         }
 
