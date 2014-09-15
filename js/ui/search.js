@@ -558,7 +558,7 @@ const SearchResults = new Lang.Class({
         this._cancellable.reset();
 
         if (terms.length == 0) {
-            this._clearSearchTimeout();
+            this.reset();
             return;
         }
 
