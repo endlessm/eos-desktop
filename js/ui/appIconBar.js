@@ -259,7 +259,6 @@ const AppIconButton = new Lang.Class({
     _init: function(app, iconSize) {
         this._app = app;
 
-        this._flipEffect = null;
         this._iconSize = iconSize;
         let icon = this._createIcon();
 
