@@ -492,7 +492,9 @@ const AppIconButton = new Lang.Class({
                 let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
                 this._menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
 
-                this._animateBounce();
+                if (open) {
+                    this._animateBounce();
+                }
             }));
     }
 });
