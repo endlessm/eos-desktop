@@ -298,12 +298,9 @@ const OverviewEntry = new Lang.Class({
     },
 
     _onTextChanged: function (se, prop) {
+        this.emit('search-terms-changed');
         let terms = this._getTermsForSearchString(this.get_text());
         this.active = (terms.length > 0);
-
-        if (this.active) {
-            this.emit('search-terms-changed');
-        }
     },
 
     _searchCancelled: function() {
