@@ -254,11 +254,13 @@ Signals.addSignalMethods(AppIconMenu.prototype);
 const AppIconButton = new Lang.Class({
     Name: 'AppIconButton',
 
-    _init: function(app, iconSize) {
+    _init: function(app, iconSize, menuManager) {
         this._app = app;
 
         this._iconSize = iconSize;
         let icon = this._createIcon();
+
+        this._menuManager = menuManager;
 
         this.actor = new St.Button({ style_class: 'app-icon-button',
                                      child: icon,
@@ -295,7 +297,6 @@ const AppIconButton = new Lang.Class({
         Main.uiGroup.add_actor(this._rightClickMenu.actor);
 
         this._menu = new AppIconMenu(this._app, this.actor);
-        this._menuManager = new PopupMenu.PopupMenuManager(this);
         this._menuManager.addMenu(this._menu);
         this._menu.actor.hide();
         Main.uiGroup.add_actor(this._menu.actor);
@@ -537,12 +538,14 @@ const AppIconBarNavButton = Lang.Class({
 const ScrolledIconList = new Lang.Class({
     Name: 'ScrolledIconList',
 
-    _init: function(excludedApps) {
+    _init: function(excludedApps, menuManager) {
         this.actor = new St.ScrollView({ hscrollbar_policy: Gtk.PolicyType.NEVER,
                                          style_class: 'scrolled-icon-list hfade',
                                          vscrollbar_policy: Gtk.PolicyType.NEVER,
                                          x_fill: true,
                                          y_fill: true });
+
+        this._menuManager = menuManager;
 
         // Due to the interactions with StScrollView,
         // StBoxLayout clips its painting to the content box, effectively
@@ -750,7 +753,7 @@ const ScrolledIconList = new Lang.Class({
             return;
         }
 
-        let newChild = new AppIconButton(app, this._iconSize);
+        let newChild = new AppIconButton(app, this._iconSize, this._menuManager);
         newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
         this._runningApps.set(app, newChild);
 
@@ -838,8 +841,8 @@ const BrowserButton = new Lang.Class({
     Name: 'BrowserButton',
     Extends: AppIconButton,
 
-    _init: function(app, iconSize) {
-        this.parent(app, iconSize);
+    _init: function(app, iconSize, menuManager) {
+        this.parent(app, iconSize, menuManager);
         this.actor.add_style_class_name('browser-icon');
     },
 
@@ -869,6 +872,8 @@ const AppIconBar = new Lang.Class({
         this.parent(0.0, null, true);
         this.actor.add_style_class_name('app-icon-bar');
 
+        this._menuManager = new PopupMenu.PopupMenuManager(this);
+
         let bin = new St.Bin({ name: 'appIconBar',
                                x_fill: true });
         this.actor.connect('style-changed', Lang.bind(this, this._updateStyleConstants));
@@ -893,14 +898,14 @@ const AppIconBar = new Lang.Class({
         this._browserButton = null;
         this._browserApp = Util.getBrowserApp();
         if (this._browserApp) {
-            this._browserButton = new BrowserButton(this._browserApp, ICON_SIZE);
+            this._browserButton = new BrowserButton(this._browserApp, ICON_SIZE, this._menuManager);
             this._browserButton.connect('app-icon-pressed', Lang.bind(this, function() { panel.closeActiveMenu(); }));
 
             Panel.animateIconIn(this._browserButton.actor, 1);
             this._container.add_actor(this._browserButton.actor);
         }
 
-        this._scrolledIconList = new ScrolledIconList([this._browserApp]);
+        this._scrolledIconList = new ScrolledIconList([this._browserApp], this._menuManager);
         this._container.add_actor(this._scrolledIconList.actor);
 
         this._container.add_actor(this._forwardButton);
