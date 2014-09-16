@@ -396,9 +396,6 @@ _shell_app_system_notify_app_state_changed (ShellAppSystem *self,
                                          NULL);
       }
       break;
-    case SHELL_APP_STATE_BUSY:
-    default:
-      break;
     }
   g_free (app_address);
 
