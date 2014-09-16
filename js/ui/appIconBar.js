@@ -264,7 +264,7 @@ const AppIconButton = new Lang.Class({
 
         this.actor = new St.Button({ style_class: 'app-icon-button',
                                      child: icon,
-                                     button_mask: St.ButtonMask.ONE
+                                     button_mask: St.ButtonMask.ONE | St.ButtonMask.THREE
                                    });
         this.actor.reactive = true;
 
@@ -348,11 +348,6 @@ const AppIconButton = new Lang.Class({
                 // This will block the clicked signal from being emitted
                 return true;
             }
-        } else if (button == Gdk.BUTTON_SECONDARY) {
-            this._hideHoverState();
-            this._rightClickMenu.open();
-            this._rightClickMenuManager.ignoreRelease();
-            return true;
         }
 
         this.actor.sync_hover();
@@ -360,6 +355,16 @@ const AppIconButton = new Lang.Class({
     },
 
     _handleClickEvent: function() {
+        let event = Clutter.get_current_event();
+        let button = event.get_button();
+
+        if (button == Gdk.BUTTON_SECONDARY) {
+            this._hideHoverState();
+            this._rightClickMenu.open();
+            this._rightClickMenuManager.ignoreRelease();
+            return;
+        }
+
         // The multiple windows case is handled in button-press-event
         let windows = this._app.get_windows();
         let tracker = Shell.WindowTracker.get_default();
