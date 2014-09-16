@@ -234,10 +234,14 @@ const AppIconMenu = new Lang.Class({
         }
     },
 
-    popup: function() {
-        this._redisplay();
-        this.open();
-        this._submenuItem.menu.open(BoxPointer.PopupAnimation.NONE);
+    toggle: function() {
+        if (this.isOpen) {
+            this.close();
+        } else {
+            this._redisplay();
+            this.open();
+            this._submenuItem.menu.open(BoxPointer.PopupAnimation.NONE);
+        }
     },
 
     _onActivate: function (actor, item) {
@@ -342,7 +346,7 @@ const AppIconButton = new Lang.Class({
 
             if (windows.length > 1) {
                 this.actor.fake_release();
-                this._menu.popup();
+                this._menu.toggle();
                 this._menuManager.ignoreRelease();
 
                 // This will block the clicked signal from being emitted
@@ -877,6 +881,8 @@ const AppIconBar = new Lang.Class({
         this.parent(0.0, null, true);
         this.actor.add_style_class_name('app-icon-bar');
 
+        this._panel = panel;
+
         this._menuManager = new PopupMenu.PopupMenuManager(this);
 
         let bin = new St.Bin({ name: 'appIconBar',
@@ -904,7 +910,7 @@ const AppIconBar = new Lang.Class({
         this._browserApp = Util.getBrowserApp();
         if (this._browserApp) {
             this._browserButton = new BrowserButton(this._browserApp, ICON_SIZE, this._menuManager);
-            this._browserButton.connect('app-icon-pressed', Lang.bind(this, function() { panel.closeActiveMenu(); }));
+            this._browserButton.connect('app-icon-pressed', Lang.bind(this, this._onAppIconPressed));
 
             Panel.animateIconIn(this._browserButton.actor, 1);
             this._container.add_actor(this._browserButton.actor);
@@ -916,7 +922,7 @@ const AppIconBar = new Lang.Class({
         this._container.add_actor(this._forwardButton);
 
         this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, this._updateNavButtonState));
-        this._scrolledIconList.connect('app-icon-pressed', Lang.bind(this, function() { panel.closeActiveMenu(); }));
+        this._scrolledIconList.connect('app-icon-pressed', Lang.bind(this, this._onAppIconPressed));
 
         this._windowTracker = Shell.WindowTracker.get_default();
         this._windowTracker.connect('notify::focus-app', Lang.bind(this, this._updateActiveApp));
@@ -924,6 +930,15 @@ const AppIconBar = new Lang.Class({
         Main.overview.connect('hidden', Lang.bind(this, this._updateActiveApp));
 
         this._updateActiveApp();
+    },
+
+    _onAppIconPressed: function() {
+        this._panel.closeActiveMenu();
+
+        let activeIconMenu = this._menuManager.activeMenu;
+        if (activeIconMenu && activeIconMenu.isOpen) {
+            activeIconMenu.toggle();
+        }
     },
 
     _updateActiveApp: function() {
