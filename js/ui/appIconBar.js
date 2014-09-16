@@ -147,7 +147,7 @@ const AppIconMenu = new Lang.Class({
         this._submenuItem.menu.connect('activate', Lang.bind(this, this._onActivate));
 
         // We want to popdown the menu when clicked on the source icon itself
-        this.blockSourceEvents = true;
+        this.shouldSwitchToOnHover = false;
 
         this._app = app;
 
