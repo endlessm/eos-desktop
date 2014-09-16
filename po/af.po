@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # F Wolff <friedel@translate.org.za>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-08 15:13-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2014-09-16 04:45+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
-"Language-Team: Afrikaans (http://www.transifex.com/projects/p/eos-shell/language/af/)\n"
+"Language-Team: Afrikaans (http://www.transifex.com/projects/p/eos-shell/"
+"language/af/)\n"
+"Language: af\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: af\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
@@ -107,8 +108,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:8
 msgid ""
 "Default position of the hot corner is in a right corner. Set false to move "
-"the hot corner to a left corner. The position is not affected by the RTL vs."
-" LTR text direction."
+"the hot corner to a left corner. The position is not affected by the RTL vs. "
+"LTR text direction."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:9
@@ -128,8 +129,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:12
 msgid ""
 "Number of pixels in one dimension of the square target for the hot corner. "
-"Default is for a single pixel in the very corner. For some virtual machines,"
-" this value may need to be set larger than the default."
+"Default is for a single pixel in the very corner. For some virtual machines, "
+"this value may need to be set larger than the default."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:13
@@ -138,8 +139,8 @@ msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:14
 msgid ""
-"Default position of the dash is at the end of the screen (right edge for LTR"
-" text direction). Unlike the hot corners, the opposite side is used for RTL "
+"Default position of the dash is at the end of the screen (right edge for LTR "
+"text direction). Unlike the hot corners, the opposite side is used for RTL "
 "text direction."
 msgstr ""
 
@@ -150,8 +151,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
-"screens, prevents applications from being forced to open maximized, and does"
-" not automatically switch to the app selector when a window is minimized."
+"screens, prevents applications from being forced to open maximized, and does "
+"not automatically switch to the app selector when a window is minimized."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:17
@@ -168,9 +169,9 @@ msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:20
 msgid ""
-"GNOME Shell extensions have a uuid property; this key lists extensions which"
-" should be loaded. Any extension that wants to be loaded needs to be in this"
-" list. You can also manipulate this list with the EnableExtension and "
+"GNOME Shell extensions have a uuid property; this key lists extensions which "
+"should be loaded. Any extension that wants to be loaded needs to be in this "
+"list. You can also manipulate this list with the EnableExtension and "
 "DisableExtension DBus methods on org.gnome.Shell."
 msgstr ""
 
@@ -180,10 +181,10 @@ msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:22
 msgid ""
-"The shell normally monitors active applications in order to present the most"
-" used ones (e.g. in launchers). While this data will be kept private, you "
-"may want to disable this for privacy reasons. Please note that doing so "
-"won't remove already saved data."
+"The shell normally monitors active applications in order to present the most "
+"used ones (e.g. in launchers). While this data will be kept private, you may "
+"want to disable this for privacy reasons. Please note that doing so won't "
+"remove already saved data."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:23
@@ -192,8 +193,8 @@ msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:24
 msgid ""
-"The applications corresponding to these identifiers will be displayed in the"
-" favorites area."
+"The applications corresponding to these identifiers will be displayed in the "
+"favorites area."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
@@ -281,8 +282,7 @@ msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid ""
-"Keybinding to open the \"Show Applications\" view of the Activities "
-"Overview."
+"Keybinding to open the \"Show Applications\" view of the Activities Overview."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:43
@@ -316,8 +316,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
-"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
-"(shows only the application icon) or 'both'."
+"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
+"only' (shows only the application icon) or 'both'."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:51
@@ -451,40 +451,40 @@ msgstr ""
 msgid "Execution of '%s' failed:"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1859
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1868
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1920
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1926
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1932
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1938 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2021
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2024 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2025
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr ""
 
@@ -529,6 +529,7 @@ msgstr ""
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
+#.
 #: ../js/ui/calendar.js:62
 msgctxt "event list time"
 msgid "All Day"
@@ -553,6 +554,7 @@ msgstr ""
 #. *
 #. * NOTE: These grid abbreviations are always shown together
 #. * and in order, e.g. "S M T W T F S".
+#.
 #: ../js/ui/calendar.js:108
 msgctxt "grid sunday"
 msgid "S"
@@ -599,6 +601,7 @@ msgstr ""
 #. * NOTE: These list abbreviations are normally not shown together
 #. * so they need to be unique (e.g. Tuesday and Thursday cannot
 #. * both be 'T').
+#.
 #: ../js/ui/calendar.js:133
 msgctxt "list sunday"
 msgid "Su"
@@ -645,15 +648,13 @@ msgstr ""
 msgid "Nothing Scheduled"
 msgstr ""
 
-#. Translators: Shown on calendar heading when selected day occurs on current
-#. year
+#. Translators: Shown on calendar heading when selected day occurs on current year
 #: ../js/ui/calendar.js:738
 msgctxt "calendar heading"
 msgid "%A, %B %d"
 msgstr ""
 
-#. Translators: Shown on calendar heading when selected day occurs on
-#. different year
+#. Translators: Shown on calendar heading when selected day occurs on different year
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
@@ -826,36 +827,31 @@ msgstr ""
 msgid "Mute"
 msgstr ""
 
-#. Translators: this is the word "Yesterday" followed by a time string. i.e.
-#. "Yesterday, 14:30"
+#. Translators: this is the word "Yesterday" followed by a time string. i.e. "Yesterday, 14:30"
 #: ../js/ui/components/telepathyClient.js:942
 #, no-c-format
 msgid "<b>Yesterday</b>, <b>%H:%M</b>"
 msgstr ""
 
-#. Translators: this is the week day name followed by a time string. i.e.
-#. "Monday, 14:30
+#. Translators: this is the week day name followed by a time string. i.e. "Monday, 14:30
 #: ../js/ui/components/telepathyClient.js:948
 #, no-c-format
 msgid "<b>%A</b>, <b>%H:%M</b>"
 msgstr ""
 
-#. Translators: this is the month name and day number followed by a time
-#. string. i.e. "May 25, 14:30"
+#. Translators: this is the month name and day number followed by a time string. i.e. "May 25, 14:30"
 #: ../js/ui/components/telepathyClient.js:953
 #, no-c-format
 msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
 msgstr ""
 
-#. Translators: this is the month name, day number, year number followed by a
-#. time string. i.e. "May 25 2012, 14:30"
+#. Translators: this is the month name, day number, year number followed by a time string. i.e. "May 25 2012, 14:30"
 #: ../js/ui/components/telepathyClient.js:957
 #, no-c-format
 msgid "<b>%B</b> <b>%d</b> <b>%Y</b>, <b>%H:%M</b> "
 msgstr ""
 
-#. Translators: this is the other person changing their old IM name to their
-#. new
+#. Translators: this is the other person changing their old IM name to their new
 #. IM name.
 #: ../js/ui/components/telepathyClient.js:987
 #, c-format
@@ -911,6 +907,7 @@ msgstr ""
 #. * the contact's alias and the second one is the
 #. * file name. The string will be something
 #. * like: "Alice is sending you test.ogg"
+#.
 #: ../js/ui/components/telepathyClient.js:1173
 #, c-format
 msgid "%s is sending you %s"
@@ -1014,8 +1011,8 @@ msgstr ""
 
 #: ../js/ui/components/telepathyClient.js:1344
 msgid ""
-"The length of the server certificate, or the depth of the server certificate"
-" chain, exceed the limits imposed by the cryptography library"
+"The length of the server certificate, or the depth of the server certificate "
+"chain, exceed the limits imposed by the cryptography library"
 msgstr ""
 
 #: ../js/ui/components/telepathyClient.js:1346
@@ -1085,7 +1082,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:551
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr ""
 
@@ -1112,8 +1109,8 @@ msgid "Date & Time Settings"
 msgstr ""
 
 #. Translators: This is the date format to use when the calendar popup is
-#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29
-#. AM").
+#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
+#.
 #: ../js/ui/dateMenu.js:215
 msgid "%A %B %e, %Y"
 msgstr ""
@@ -1225,6 +1222,16 @@ msgstr ""
 #: ../js/ui/iconGridLayout.js:200
 #, c-format
 msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
 msgstr ""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
@@ -1350,6 +1357,7 @@ msgstr ""
 #. screenshield. The user is probably very upset at this
 #. point, but any application using global grabs is broken
 #. Just tell him to stop using this app
+#.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
 #: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:422
@@ -1360,40 +1368,32 @@ msgstr ""
 msgid "Lock was blocked by an application"
 msgstr ""
 
-#: ../js/ui/searchDisplay.js:449
+#: ../js/ui/search.js:666
 msgid "Searching…"
 msgstr ""
 
-#: ../js/ui/searchDisplay.js:493
+#: ../js/ui/search.js:668
 msgid "No results."
 msgstr ""
 
-#: ../js/ui/shellEntry.js:106 ../js/ui/shellEntry.js:307
-msgid "Google"
-msgstr ""
-
-#: ../js/ui/shellEntry.js:111
-msgid "My Computer"
-msgstr ""
-
-#: ../js/ui/shellEntry.js:175
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:180
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:239
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:241
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:309
-msgid "My computer"
+#: ../js/ui/shellEntry.js:175
+msgid "Type to search…"
 msgstr ""
 
 #: ../js/ui/shellMountOperation.js:370
@@ -1585,40 +1585,34 @@ msgstr ""
 msgid "<unknown>"
 msgstr ""
 
-#. Translators: this indicates that wireless or wwan is disabled by hardware
-#. killswitch
+#. Translators: this indicates that wireless or wwan is disabled by hardware killswitch
 #: ../js/ui/status/network.js:200
 msgid "disabled"
 msgstr ""
 
-#. Translators: this is for network devices that are physically present but
-#. are not
+#. Translators: this is for network devices that are physically present but are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
 #: ../js/ui/status/network.js:458
 msgid "unmanaged"
 msgstr ""
 
-#. Translators: this is for network connections that require some kind of key
-#. or password
+#. Translators: this is for network connections that require some kind of key or password
 #: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
 msgid "authentication required"
 msgstr ""
 
-#. Translators: this is for devices that require some kind of firmware or
-#. kernel
+#. Translators: this is for devices that require some kind of firmware or kernel
 #. module, which is missing
 #: ../js/ui/status/network.js:479
 msgid "firmware missing"
 msgstr ""
 
-#. Translators: this is for wired network devices that are physically
-#. disconnected
+#. Translators: this is for wired network devices that are physically disconnected
 #: ../js/ui/status/network.js:486
 msgid "cable unplugged"
 msgstr ""
 
-#. Translators: this is for a network device that cannot be activated (for
-#. example it
+#. Translators: this is for a network device that cannot be activated (for example it
 #. is disabled by rfkill, or it has no coverage
 #: ../js/ui/status/network.js:491
 msgid "unavailable"
@@ -1633,8 +1627,7 @@ msgstr ""
 msgid "More…"
 msgstr ""
 
-#. TRANSLATORS: this is the indication that a connection for another logged in
-#. user is active,
+#. TRANSLATORS: this is the indication that a connection for another logged in user is active,
 #. and we cannot access its settings (including the name)
 #: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1366
 msgid "Connected (private)"
@@ -1660,8 +1653,7 @@ msgstr ""
 msgid "Auto dial-up"
 msgstr ""
 
-#. TRANSLATORS: this the automatic wireless connection name (including the
-#. network name)
+#. TRANSLATORS: this the automatic wireless connection name (including the network name)
 #: ../js/ui/status/network.js:862 ../js/ui/status/network.js:1383
 #, c-format
 msgid "Auto %s"
@@ -1865,7 +1857,7 @@ msgstr ""
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:555
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr ""
 
@@ -1880,6 +1872,7 @@ msgstr ""
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
+#.
 #: ../js/ui/windowManager.js:84
 msgid "Revert Settings"
 msgstr ""

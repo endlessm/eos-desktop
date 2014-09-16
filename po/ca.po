@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Gil Forcada <gilforcada@guifi.net>, 2010-2011,2013
 # Jordi Serratosa <jordis@softcatala.cat>, 2012
@@ -10,14 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-08 15:13-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2014-09-16 05:00+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
-"Language-Team: Catalan (http://www.transifex.com/projects/p/eos-shell/language/ca/)\n"
+"Language-Team: Catalan (http://www.transifex.com/projects/p/eos-shell/"
+"language/ca/)\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
@@ -73,13 +74,17 @@ msgstr "Configureu les extensions del GNOME Shell"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:1
 msgid "Enable internal tools useful for developers and testers from Alt-F2"
-msgstr "Habilita les eines internes en el diàleg de l'Alt+F2 que són útils per als desenvolupadors i provadors"
+msgstr ""
+"Habilita les eines internes en el diàleg de l'Alt+F2 que són útils per als "
+"desenvolupadors i provadors"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:2
 msgid ""
 "Allows access to internal debugging and monitoring tools using the Alt-F2 "
 "dialog."
-msgstr "Permet l'accés a les eines de depuració i de seguiment internes a través del diàleg de l'Alt+F2."
+msgstr ""
+"Permet l'accés a les eines de depuració i de seguiment internes a través del "
+"diàleg de l'Alt+F2."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:3
 msgid "Separate the power off and log out buttons on the user menu"
@@ -109,8 +114,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:8
 msgid ""
 "Default position of the hot corner is in a right corner. Set false to move "
-"the hot corner to a left corner. The position is not affected by the RTL vs."
-" LTR text direction."
+"the hot corner to a left corner. The position is not affected by the RTL vs. "
+"LTR text direction."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:9
@@ -130,8 +135,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:12
 msgid ""
 "Number of pixels in one dimension of the square target for the hot corner. "
-"Default is for a single pixel in the very corner. For some virtual machines,"
-" this value may need to be set larger than the default."
+"Default is for a single pixel in the very corner. For some virtual machines, "
+"this value may need to be set larger than the default."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:13
@@ -140,8 +145,8 @@ msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:14
 msgid ""
-"Default position of the dash is at the end of the screen (right edge for LTR"
-" text direction). Unlike the hot corners, the opposite side is used for RTL "
+"Default position of the dash is at the end of the screen (right edge for LTR "
+"text direction). Unlike the hot corners, the opposite side is used for RTL "
 "text direction."
 msgstr ""
 
@@ -152,8 +157,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
-"screens, prevents applications from being forced to open maximized, and does"
-" not automatically switch to the app selector when a window is minimized."
+"screens, prevents applications from being forced to open maximized, and does "
+"not automatically switch to the app selector when a window is minimized."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:17
@@ -170,11 +175,16 @@ msgstr "Identificadors universals únics de les extensions a habilitar"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:20
 msgid ""
-"GNOME Shell extensions have a uuid property; this key lists extensions which"
-" should be loaded. Any extension that wants to be loaded needs to be in this"
-" list. You can also manipulate this list with the EnableExtension and "
+"GNOME Shell extensions have a uuid property; this key lists extensions which "
+"should be loaded. Any extension that wants to be loaded needs to be in this "
+"list. You can also manipulate this list with the EnableExtension and "
 "DisableExtension DBus methods on org.gnome.Shell."
-msgstr "Les extensions del GNOME Shell tenen un identificador universal. Aquesta clau conté una llista de les extensions que s'han de carregar. Qualsevol extensió que s'hagi de carregar ha de ser-hi. Podeu modificar aquesta llista amb els mètodes de D-Bus «EnableExtension» (activa una extensió) i «DisableExtension» (desactiva una extensió) a org.gnome.Shell."
+msgstr ""
+"Les extensions del GNOME Shell tenen un identificador universal. Aquesta "
+"clau conté una llista de les extensions que s'han de carregar. Qualsevol "
+"extensió que s'hagi de carregar ha de ser-hi. Podeu modificar aquesta llista "
+"amb els mètodes de D-Bus «EnableExtension» (activa una extensió) i "
+"«DisableExtension» (desactiva una extensió) a org.gnome.Shell."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:21
 msgid "Whether to collect stats about applications usage"
@@ -182,21 +192,29 @@ msgstr "Si s'han de recollir estadístiques d'ús de les aplicacions"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:22
 msgid ""
-"The shell normally monitors active applications in order to present the most"
-" used ones (e.g. in launchers). While this data will be kept private, you "
-"may want to disable this for privacy reasons. Please note that doing so "
-"won't remove already saved data."
-msgstr "El GNOME Shell normalment fa un seguiment de les aplicacions actives per tal de mostrar les més utilitzades (per exemple en els llançadors). Tot i que les dades es mantindran en privat, podeu inhabilitar-ho per motius de privadesa. Tingueu en compte que si ho inhabiliteu no es suprimiran les dades ja recollides."
+"The shell normally monitors active applications in order to present the most "
+"used ones (e.g. in launchers). While this data will be kept private, you may "
+"want to disable this for privacy reasons. Please note that doing so won't "
+"remove already saved data."
+msgstr ""
+"El GNOME Shell normalment fa un seguiment de les aplicacions actives per tal "
+"de mostrar les més utilitzades (per exemple en els llançadors). Tot i que "
+"les dades es mantindran en privat, podeu inhabilitar-ho per motius de "
+"privadesa. Tingueu en compte que si ho inhabiliteu no es suprimiran les "
+"dades ja recollides."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:23
 msgid "List of desktop file IDs for favorite applications"
-msgstr "Llista d'identificadors de fitxers d'escriptori de les aplicacions preferides"
+msgstr ""
+"Llista d'identificadors de fitxers d'escriptori de les aplicacions preferides"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:24
 msgid ""
-"The applications corresponding to these identifiers will be displayed in the"
-" favorites area."
-msgstr "Es mostraran, a l'àrea de preferits, les aplicacions que corresponguin a aquests identificadors."
+"The applications corresponding to these identifiers will be displayed in the "
+"favorites area."
+msgstr ""
+"Es mostraran, a l'àrea de preferits, les aplicacions que corresponguin a "
+"aquests identificadors."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
 msgid "List of categories that should be displayed as folders"
@@ -206,7 +224,9 @@ msgstr "Llista de categories que s'haurien de mostrar com a carpetes"
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
-msgstr "Cada nom de categoria d'aquesta llista es mostrarà com una carpeta a la vista de l'aplicació, en comptes de mostrar-se en la pròpia vista principal."
+msgstr ""
+"Cada nom de categoria d'aquesta llista es mostrarà com una carpeta a la "
+"vista de l'aplicació, en comptes de mostrar-se en la pròpia vista principal."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "History for command (Alt-F2) dialog"
@@ -220,13 +240,18 @@ msgstr "Historial del depurador del GNOME Shell"
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
-msgstr "S'utilitza internament per desar l'últim estat de presència de la missatgeria instantània establerta explícitament per l'usuari. El valor prové de l'enumeració «TpConnectionPresenceType»."
+msgstr ""
+"S'utilitza internament per desar l'últim estat de presència de la "
+"missatgeria instantània establerta explícitament per l'usuari. El valor "
+"prové de l'enumeració «TpConnectionPresenceType»."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:30
 msgid ""
 "Internally used to store the last session presence status for the user. The "
 "value here is from the GsmPresenceStatus enumeration."
-msgstr "S'utilitza internament per desar l'últim estat de presencia de la sessió de l'usuari. El valor prové de l'enumeració «GsmPresenceStatus»."
+msgstr ""
+"S'utilitza internament per desar l'últim estat de presencia de la sessió de "
+"l'usuari. El valor prové de l'enumeració «GsmPresenceStatus»."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid "Always show the 'Log out' menuitem in the user menu."
@@ -236,12 +261,16 @@ msgstr "Mostra sempre l'element de menú «Surt» en el menú d'usuari."
 msgid ""
 "This key overrides the automatic hiding of the 'Log out' menuitem in single-"
 "user, single-session situations."
-msgstr "Aquesta clau sobreescriu l'ocultació automàtica de l'element de menú «Surt» quan només hi ha un usuari i un sol tipus de sessió."
+msgstr ""
+"Aquesta clau sobreescriu l'ocultació automàtica de l'element de menú «Surt» "
+"quan només hi ha un usuari i un sol tipus de sessió."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid ""
 "Whether to remember password for mounting encrypted or remote filesystems"
-msgstr "Si s'han de recordar les contrasenyes dels punts de muntatge encriptats o els sistemes de fitxers remots"
+msgstr ""
+"Si s'han de recordar les contrasenyes dels punts de muntatge encriptats o "
+"els sistemes de fitxers remots"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:34
 msgid ""
@@ -249,7 +278,12 @@ msgid ""
 "filesystem is mounted. If the password can be saved for future use a "
 "'Remember Password' checkbox will be present. This key sets the default "
 "state of the checkbox."
-msgstr "El GNOME Shell us demanarà la contrasenya quan es munti un dispositiu encriptat o un sistema de fitxers remot. Si es pot desar la contrasenya per utilitzar-lo en el futur, es mostrarà la casella de verificació «Recorda la contrasenya». Aquesta clau estableix el valor per defecte d'aquesta casella de verificació."
+msgstr ""
+"El GNOME Shell us demanarà la contrasenya quan es munti un dispositiu "
+"encriptat o un sistema de fitxers remot. Si es pot desar la contrasenya per "
+"utilitzar-lo en el futur, es mostrarà la casella de verificació «Recorda la "
+"contrasenya». Aquesta clau estableix el valor per defecte d'aquesta casella "
+"de verificació."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid "Layout of application launcher icons in the grid"
@@ -283,9 +317,10 @@ msgstr "Vinculació per obrir la vista «Mostra les aplicacions»"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid ""
-"Keybinding to open the \"Show Applications\" view of the Activities "
-"Overview."
-msgstr "Vinculació per obrir la vista «Mostra les aplicacions» de les activitats de la vista general."
+"Keybinding to open the \"Show Applications\" view of the Activities Overview."
+msgstr ""
+"Vinculació per obrir la vista «Mostra les aplicacions» de les activitats de "
+"la vista general."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:43
 msgid "Keybinding to toggle the visibility of the message tray"
@@ -318,9 +353,13 @@ msgstr "El mode d'icona de les aplicacions."
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
-"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
-"(shows only the application icon) or 'both'."
-msgstr "Configureu com es mostren les finestres en l'intercanviador. Els valors possibles són: «thumbnail-only» (mostra una miniatura de la finestra), «app-icon-only» (mostra la icona de l'aplicació) o «both» (ambdues coses: mostra la miniatura de la finestra i la icona de l'aplicació)."
+"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
+"only' (shows only the application icon) or 'both'."
+msgstr ""
+"Configureu com es mostren les finestres en l'intercanviador. Els valors "
+"possibles són: «thumbnail-only» (mostra una miniatura de la finestra), «app-"
+"icon-only» (mostra la icona de l'aplicació) o «both» (ambdues coses: mostra "
+"la miniatura de la finestra i la icona de l'aplicació)."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid "Attach modal dialog to the parent window"
@@ -329,7 +368,9 @@ msgstr "Adjunta el diàleg modal a la finestra pare"
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
-msgstr "Si s'executa el GNOME Shell, aquesta clau sobreescriu la clau «org.gnome.mutter»."
+msgstr ""
+"Si s'executa el GNOME Shell, aquesta clau sobreescriu la clau «org.gnome."
+"mutter»."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid "Arrangement of buttons on the titlebar"
@@ -339,11 +380,15 @@ msgstr "Disposició dels botons en la barra de títol"
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
-msgstr "Si s'executa el GNOME Shell, aquesta clau sobreescriu la clau «org.gnome.desktop.wm.preferences»."
+msgstr ""
+"Si s'executa el GNOME Shell, aquesta clau sobreescriu la clau «org.gnome."
+"desktop.wm.preferences»."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid "Enable edge tiling when dropping windows on screen edges"
-msgstr "Habilita la tesselització a les vores en deixar anar les finestres a les vores de la pantalla"
+msgstr ""
+"Habilita la tesselització a les vores en deixar anar les finestres a les "
+"vores de la pantalla"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Workspaces are managed dynamically"
@@ -453,40 +498,40 @@ msgstr "No s'ha pogut analitzar l'ordre:"
 msgid "Execution of '%s' failed:"
 msgstr "No s'ha pogut executar «%s»:"
 
-#: ../js/ui/appDisplay.js:1859
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1868
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1920
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1926
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1932
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1938 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "D'acord"
 
-#: ../js/ui/appDisplay.js:2021
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "Finestra nova"
 
-#: ../js/ui/appDisplay.js:2024 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Suprimeix dels preferits"
 
-#: ../js/ui/appDisplay.js:2025
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "Afegeix als preferits"
 
@@ -531,6 +576,7 @@ msgstr ""
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
+#.
 #: ../js/ui/calendar.js:62
 msgctxt "event list time"
 msgid "All Day"
@@ -555,6 +601,7 @@ msgstr "%l\\u2236%M\\u2009%p"
 #. *
 #. * NOTE: These grid abbreviations are always shown together
 #. * and in order, e.g. "S M T W T F S".
+#.
 #: ../js/ui/calendar.js:108
 msgctxt "grid sunday"
 msgid "S"
@@ -601,6 +648,7 @@ msgstr "Ds"
 #. * NOTE: These list abbreviations are normally not shown together
 #. * so they need to be unique (e.g. Tuesday and Thursday cannot
 #. * both be 'T').
+#.
 #: ../js/ui/calendar.js:133
 msgctxt "list sunday"
 msgid "Su"
@@ -647,15 +695,13 @@ msgstr "Ds."
 msgid "Nothing Scheduled"
 msgstr "No hi ha res apuntat"
 
-#. Translators: Shown on calendar heading when selected day occurs on current
-#. year
+#. Translators: Shown on calendar heading when selected day occurs on current year
 #: ../js/ui/calendar.js:738
 msgctxt "calendar heading"
 msgid "%A, %B %d"
 msgstr "%A %d de %B"
 
-#. Translators: Shown on calendar heading when selected day occurs on
-#. different year
+#. Translators: Shown on calendar heading when selected day occurs on different year
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
@@ -745,7 +791,9 @@ msgstr "La xarxa sense fil requereix autenticació"
 msgid ""
 "Passwords or encryption keys are required to access the wireless network "
 "'%s'."
-msgstr "Per accedir a la xarxa sense fil «%s» calen les contrasenyes o les claus d'encriptació."
+msgstr ""
+"Per accedir a la xarxa sense fil «%s» calen les contrasenyes o les claus "
+"d'encriptació."
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
@@ -828,36 +876,31 @@ msgstr "Amb so"
 msgid "Mute"
 msgstr "Silencia"
 
-#. Translators: this is the word "Yesterday" followed by a time string. i.e.
-#. "Yesterday, 14:30"
+#. Translators: this is the word "Yesterday" followed by a time string. i.e. "Yesterday, 14:30"
 #: ../js/ui/components/telepathyClient.js:942
 #, no-c-format
 msgid "<b>Yesterday</b>, <b>%H:%M</b>"
 msgstr "<b>Ahir</b> a les <b>%H:%M</b>"
 
-#. Translators: this is the week day name followed by a time string. i.e.
-#. "Monday, 14:30
+#. Translators: this is the week day name followed by a time string. i.e. "Monday, 14:30
 #: ../js/ui/components/telepathyClient.js:948
 #, no-c-format
 msgid "<b>%A</b>, <b>%H:%M</b>"
 msgstr "<b>%A</b> a les <b>%H:%M</b>"
 
-#. Translators: this is the month name and day number followed by a time
-#. string. i.e. "May 25, 14:30"
+#. Translators: this is the month name and day number followed by a time string. i.e. "May 25, 14:30"
 #: ../js/ui/components/telepathyClient.js:953
 #, no-c-format
 msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
 msgstr "<b>%d</b> de <b>%B</b> a les <b>%H:%M</b>"
 
-#. Translators: this is the month name, day number, year number followed by a
-#. time string. i.e. "May 25 2012, 14:30"
+#. Translators: this is the month name, day number, year number followed by a time string. i.e. "May 25 2012, 14:30"
 #: ../js/ui/components/telepathyClient.js:957
 #, no-c-format
 msgid "<b>%B</b> <b>%d</b> <b>%Y</b>, <b>%H:%M</b> "
 msgstr "<b>%d</b> de <b>%B</b> de <b>%Y</b> a les <b>%H:%M</b> "
 
-#. Translators: this is the other person changing their old IM name to their
-#. new
+#. Translators: this is the other person changing their old IM name to their new
 #. IM name.
 #: ../js/ui/components/telepathyClient.js:987
 #, c-format
@@ -913,6 +956,7 @@ msgstr "Contesta"
 #. * the contact's alias and the second one is the
 #. * file name. The string will be something
 #. * like: "Alice is sending you test.ogg"
+#.
 #: ../js/ui/components/telepathyClient.js:1173
 #, c-format
 msgid "%s is sending you %s"
@@ -995,7 +1039,9 @@ msgstr "Aquest compte ja està connectat al servidor"
 #: ../js/ui/components/telepathyClient.js:1334
 msgid ""
 "Connection has been replaced by a new connection using the same resource"
-msgstr "S'ha reemplaçat la connexió per una altra de nova fent servir el mateix recurs"
+msgstr ""
+"S'ha reemplaçat la connexió per una altra de nova fent servir el mateix "
+"recurs"
 
 #: ../js/ui/components/telepathyClient.js:1336
 msgid "The account already exists on the server"
@@ -1012,13 +1058,17 @@ msgstr "S'ha revocat el certificat"
 #: ../js/ui/components/telepathyClient.js:1342
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
-msgstr "El certificat utilitza un algorisme criptògraf no segur o la seva fortalesa criptogràfica és feble"
+msgstr ""
+"El certificat utilitza un algorisme criptògraf no segur o la seva fortalesa "
+"criptogràfica és feble"
 
 #: ../js/ui/components/telepathyClient.js:1344
 msgid ""
-"The length of the server certificate, or the depth of the server certificate"
-" chain, exceed the limits imposed by the cryptography library"
-msgstr "La llargada del certificat del servidor o la profunditat de la cadena de certificació excedeix els límits de la biblioteca criptogràfica"
+"The length of the server certificate, or the depth of the server certificate "
+"chain, exceed the limits imposed by the cryptography library"
+msgstr ""
+"La llargada del certificat del servidor o la profunditat de la cadena de "
+"certificació excedeix els límits de la biblioteca criptogràfica"
 
 #: ../js/ui/components/telepathyClient.js:1346
 msgid "Internal error"
@@ -1087,7 +1137,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:551
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "Finestres"
 
@@ -1114,8 +1164,8 @@ msgid "Date & Time Settings"
 msgstr "Configuració de la data i l'hora"
 
 #. Translators: This is the date format to use when the calendar popup is
-#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29
-#. AM").
+#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
+#.
 #: ../js/ui/dateMenu.js:215
 msgid "%A %B %e, %Y"
 msgstr "%A %d de %B, %Y"
@@ -1202,7 +1252,8 @@ msgstr "Reinici"
 
 #: ../js/ui/endSessionDialog.js:135
 msgid "Click Restart to quit these applications and restart the system."
-msgstr "Feu clic a «Reinicia» per tancar les aplicacions i reiniciar l'ordinador."
+msgstr ""
+"Feu clic a «Reinicia» per tancar les aplicacions i reiniciar l'ordinador."
 
 #: ../js/ui/endSessionDialog.js:138
 #, c-format
@@ -1227,6 +1278,16 @@ msgstr "Voleu baixar i instal·lar «%s» de extensions.gnome.org?"
 #: ../js/ui/iconGridLayout.js:200
 #, c-format
 msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
 msgstr ""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
@@ -1352,6 +1413,7 @@ msgstr "El GNOME necessita bloquejar la pantalla"
 #. screenshield. The user is probably very upset at this
 #. point, but any application using global grabs is broken
 #. Just tell him to stop using this app
+#.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
 #: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:422
@@ -1362,40 +1424,32 @@ msgstr "No es pot blocar"
 msgid "Lock was blocked by an application"
 msgstr "Una aplicació està bloquejant el bloqueig"
 
-#: ../js/ui/searchDisplay.js:449
+#: ../js/ui/search.js:666
 msgid "Searching…"
 msgstr ""
 
-#: ../js/ui/searchDisplay.js:493
+#: ../js/ui/search.js:668
 msgid "No results."
 msgstr ""
 
-#: ../js/ui/shellEntry.js:106 ../js/ui/shellEntry.js:307
-msgid "Google"
-msgstr ""
-
-#: ../js/ui/shellEntry.js:111
-msgid "My Computer"
-msgstr ""
-
-#: ../js/ui/shellEntry.js:175
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "Copia"
 
-#: ../js/ui/shellEntry.js:180
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "Enganxa"
 
-#: ../js/ui/shellEntry.js:239
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "Mostra el text"
 
-#: ../js/ui/shellEntry.js:241
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "Oculta el text"
 
-#: ../js/ui/shellEntry.js:309
-msgid "My computer"
+#: ../js/ui/shellEntry.js:175
+msgid "Type to search…"
 msgstr ""
 
 #: ../js/ui/shellMountOperation.js:370
@@ -1587,40 +1641,34 @@ msgstr "Volum, xarxa, bateria"
 msgid "<unknown>"
 msgstr "<desconegut>"
 
-#. Translators: this indicates that wireless or wwan is disabled by hardware
-#. killswitch
+#. Translators: this indicates that wireless or wwan is disabled by hardware killswitch
 #: ../js/ui/status/network.js:200
 msgid "disabled"
 msgstr "inhabilitada"
 
-#. Translators: this is for network devices that are physically present but
-#. are not
+#. Translators: this is for network devices that are physically present but are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
 #: ../js/ui/status/network.js:458
 msgid "unmanaged"
 msgstr "no gestionat"
 
-#. Translators: this is for network connections that require some kind of key
-#. or password
+#. Translators: this is for network connections that require some kind of key or password
 #: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
 msgid "authentication required"
 msgstr "cal autenticació"
 
-#. Translators: this is for devices that require some kind of firmware or
-#. kernel
+#. Translators: this is for devices that require some kind of firmware or kernel
 #. module, which is missing
 #: ../js/ui/status/network.js:479
 msgid "firmware missing"
 msgstr "manca el microprogramari"
 
-#. Translators: this is for wired network devices that are physically
-#. disconnected
+#. Translators: this is for wired network devices that are physically disconnected
 #: ../js/ui/status/network.js:486
 msgid "cable unplugged"
 msgstr "s'ha desconnectat el cable"
 
-#. Translators: this is for a network device that cannot be activated (for
-#. example it
+#. Translators: this is for a network device that cannot be activated (for example it
 #. is disabled by rfkill, or it has no coverage
 #: ../js/ui/status/network.js:491
 msgid "unavailable"
@@ -1635,8 +1683,7 @@ msgstr "ha fallat la connexió"
 msgid "More…"
 msgstr "Més…"
 
-#. TRANSLATORS: this is the indication that a connection for another logged in
-#. user is active,
+#. TRANSLATORS: this is the indication that a connection for another logged in user is active,
 #. and we cannot access its settings (including the name)
 #: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1366
 msgid "Connected (private)"
@@ -1662,8 +1709,7 @@ msgstr "Banda ampla automàtica"
 msgid "Auto dial-up"
 msgstr "Marcatge directe automàtic"
 
-#. TRANSLATORS: this the automatic wireless connection name (including the
-#. network name)
+#. TRANSLATORS: this the automatic wireless connection name (including the network name)
 #: ../js/ui/status/network.js:862 ../js/ui/status/network.js:1383
 #, c-format
 msgid "Auto %s"
@@ -1867,7 +1913,7 @@ msgstr "%s (remot)"
 msgid "%s (console)"
 msgstr "%s (consola)"
 
-#: ../js/ui/viewSelector.js:555
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "Aplicacions"
 
@@ -1882,6 +1928,7 @@ msgstr ""
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
+#.
 #: ../js/ui/windowManager.js:84
 msgid "Revert Settings"
 msgstr ""

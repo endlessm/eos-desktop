@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2013-03-03 07:08+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -41,7 +41,7 @@ msgstr "ਐਪਲੀਕੇਸ਼ਨ ਮੇਨੂ ਖੋਲ੍ਹੋ"
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -402,7 +402,7 @@ msgstr "ਲਿਸਟ ਵਿੱਚ ਨਹੀਂ ਹੈ?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "ਰੱਦ ਕਰੋ"
 
@@ -432,7 +432,7 @@ msgstr "ਲਾਗਇਨ ਵਿੰਡੋ"
 msgid "Power"
 msgstr "ਪਾਵਰ"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "ਸਸਪੈਂਡ"
 
@@ -474,40 +474,40 @@ msgstr "ਕਮਾਂਡ ਪਾਰਸ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ:
 msgid "Execution of '%s' failed:"
 msgstr "'%s' ਚਲਾਉਣ ਲਈ ਫੇਲ੍ਹ:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "ਠੀਕ ਹੈ"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "ਨਵੀਂ ਵਿੰਡੋ"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "ਪਸੰਦ ਵਿੱਚੋਂ ਹਟਾਓ"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "ਪਸੰਦ 'ਚ ਸ਼ਾਮਲ ਕਰੋ"
 
@@ -520,6 +520,19 @@ msgstr "%s ਨੂੰ ਤੁਹਾਡੀ ਪਸੰਦ ਵਿੱਚ ਸ਼ਾਮ�
 #, c-format
 msgid "%s has been removed from your favorites."
 msgstr "%s ਨੂੰ ਤੁਹਾਡੀ ਪਸੰਦ ਤੋਂ ਹਟਾਇਆ ਜਾ ਚੁੱਕਿਆ ਹੈ।"
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, fuzzy, c-format
+msgid "Quit %s"
+msgstr "ਬਾਹਰ"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -1101,7 +1114,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "ਵਿੰਡੋ"
 
@@ -1134,7 +1147,7 @@ msgstr "ਮਿਤੀ ਤੇ ਸਮਾਂ ਸੈਟਿੰਗ"
 msgid "%A %B %e, %Y"
 msgstr "%A, %e %B %Y"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1238,6 +1251,21 @@ msgstr "ਇੰਸਟਾਲ ਕਰੋ"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "ਕੀ extensions.gnome.org ਤੋਂ '%s' ਡਾਊਨਲੋਡ ਅਤੇ ਇੰਸਟਾਲ ਕਰਨੀ ਹੈ?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1324,15 +1352,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "ਅਣਜਾਣ"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "ਵਾਪਸ"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "ਸੰਖੇਪ"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "ਉੱਤਲੀ ਪੱਟੀ"
 
@@ -1372,35 +1400,34 @@ msgstr "ਅਣਲਾਕ ਕਰਨ ਲਈ ਅਸਮਰੱਥ"
 msgid "Lock was blocked by an application"
 msgstr "ਲਾਕ ਨੂੰ ਐਪਲੀਕੇਸ਼ਨ ਵਲੋਂ ਪਾਬੰਦੀ ਲਗਾਈ"
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
-msgstr ""
+#: ../js/ui/search.js:666
+msgid "Searching…"
+msgstr "…ਖੋਜ ਜਾਰੀ ਹੈ"
 
-#: ../js/ui/shellEntry.js:112
-#, fuzzy
-msgid "My Computer"
-msgstr "ਕੰਪਿਊਟਰ"
+#: ../js/ui/search.js:668
+msgid "No results."
+msgstr "ਕੋਈ ਨਤੀਜਾ ਨਹੀਂ।"
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "ਕਾਪੀ ਕਰੋ"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "ਚੇਪੋ"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "ਟੈਕਸਟ ਵੇਖੋ"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "ਟੈਕਸਟ ਓਹਲੇ"
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:175
 #, fuzzy
-msgid "My computer"
-msgstr "ਕੰਪਿਊਟਰ"
+msgid "Type to search…"
+msgstr "…ਲੱਭਣ ਲਈ ਲਿਖੋ"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1819,51 +1846,51 @@ msgstr "ਹੋਰ ਯੂਜ਼ਰ ਵਜੋਂ ਲਾਗਇਨ"
 msgid "Unlock Window"
 msgstr "ਵਿੰਡੋ ਅਣਲਾਕ"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "ਲਾਗ ਆਉਟ"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "ਲਾਕ"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "ਸੈਟਿੰਗ"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "ਯੂਜ਼ਰ ਬਦਲੋ"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "ਹੋਰ ਯੂਜ਼ਰ ਲਾਗਇਨ ਹੈ।"
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "ਬੰਦ ਕਰਨ ਨਾਲ ਉਹਨਾਂ ਵਲੋਂ ਨਾ-ਸੰਭਾਲਿਆ ਕੰਮ ਖਰਾਬ ਹੋ ਸਕਦਾ ਹੈ।"
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (ਰਿਮੋਟ)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (ਕਨਸੋਲ)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "ਐਪਲੀਕੇਸ਼ਨ"
 
@@ -1963,6 +1990,14 @@ msgstr "ਪਾਸਵਰਡ ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ ਹੈ"
 msgid "Authentication dialog was dismissed by the user"
 msgstr "ਪਰਮਾਣਕਿਤਾ ਡਾਈਲਾਗ ਯੂਜ਼ਰ ਵਲੋਂ ਰੱਦ ਕੀਤਾ"
 
+#, fuzzy
+#~ msgid "My Computer"
+#~ msgstr "ਕੰਪਿਊਟਰ"
+
+#, fuzzy
+#~ msgid "My computer"
+#~ msgstr "ਕੰਪਿਊਟਰ"
+
 #~ msgid "Screenshots"
 #~ msgstr "ਸਕਰੀਨਸ਼ਾਟ"
 
@@ -2028,10 +2063,6 @@ msgstr "ਪਰਮਾਣਕਿਤਾ ਡਾਈਲਾਗ ਯੂਜ਼ਰ ਵਲੋ
 #~ msgstr "%d %t ਤੋਂ ਸਕਰੀਨਕਾਸਟ"
 
 #, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "…ਲੱਭਣ ਲਈ ਲਿਖੋ"
-
-#, fuzzy
 #~ msgid "Type to search your computer"
 #~ msgstr "ਆਪਣੇ ਕੰਪਿਊਟਰ ਉੱਤੇ ਲੱਭੋ"
 
@@ -2046,9 +2077,6 @@ msgstr "ਪਰਮਾਣਕਿਤਾ ਡਾਈਲਾਗ ਯੂਜ਼ਰ ਵਲੋ
 #~ msgstr[0] "%d ਨਵਾਂ ਸੁਨੇਹਾ"
 #~ msgstr[1] "%d ਨਵੇਂ ਸੁਨੇਹੇ"
 
-#~ msgid "Quit"
-#~ msgstr "ਬਾਹਰ"
-
 #~ msgid "Activities"
 #~ msgstr "ਸਰਗਰਮੀਆਂ"
 
@@ -2059,13 +2087,6 @@ msgstr "ਪਰਮਾਣਕਿਤਾ ਡਾਈਲਾਗ ਯੂਜ਼ਰ ਵਲੋ
 #~ msgid_plural "%d new notifications"
 #~ msgstr[0] "%d ਨਵਾਂ ਸੂਚਨਾ"
 #~ msgstr[1] "%d ਨਵੀਆਂ ਸੂਚਨਾਵਾਂ"
-
-#~| msgid "Searching..."
-#~ msgid "Searching…"
-#~ msgstr "…ਖੋਜ ਜਾਰੀ ਹੈ"
-
-#~ msgid "No results."
-#~ msgstr "ਕੋਈ ਨਤੀਜਾ ਨਹੀਂ।"
 
 #~ msgid "Available"
 #~ msgstr "ਉਪਲੱਬਧ"

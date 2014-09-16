@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # sandeeps <sshedmak@redhat.com>, 2011-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-08 15:13-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2014-09-16 04:33+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
-"Language-Team: Marathi (http://www.transifex.com/projects/p/eos-shell/language/mr/)\n"
+"Language-Team: Marathi (http://www.transifex.com/projects/p/eos-shell/"
+"language/mr/)\n"
+"Language: mr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: mr\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
@@ -107,8 +108,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:8
 msgid ""
 "Default position of the hot corner is in a right corner. Set false to move "
-"the hot corner to a left corner. The position is not affected by the RTL vs."
-" LTR text direction."
+"the hot corner to a left corner. The position is not affected by the RTL vs. "
+"LTR text direction."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:9
@@ -128,8 +129,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:12
 msgid ""
 "Number of pixels in one dimension of the square target for the hot corner. "
-"Default is for a single pixel in the very corner. For some virtual machines,"
-" this value may need to be set larger than the default."
+"Default is for a single pixel in the very corner. For some virtual machines, "
+"this value may need to be set larger than the default."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:13
@@ -138,8 +139,8 @@ msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:14
 msgid ""
-"Default position of the dash is at the end of the screen (right edge for LTR"
-" text direction). Unlike the hot corners, the opposite side is used for RTL "
+"Default position of the dash is at the end of the screen (right edge for LTR "
+"text direction). Unlike the hot corners, the opposite side is used for RTL "
 "text direction."
 msgstr ""
 
@@ -150,8 +151,8 @@ msgstr ""
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
-"screens, prevents applications from being forced to open maximized, and does"
-" not automatically switch to the app selector when a window is minimized."
+"screens, prevents applications from being forced to open maximized, and does "
+"not automatically switch to the app selector when a window is minimized."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:17
@@ -168,11 +169,14 @@ msgstr "सुरू करण्याजोगी एक्सटेंशन�
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:20
 msgid ""
-"GNOME Shell extensions have a uuid property; this key lists extensions which"
-" should be loaded. Any extension that wants to be loaded needs to be in this"
-" list. You can also manipulate this list with the EnableExtension and "
+"GNOME Shell extensions have a uuid property; this key lists extensions which "
+"should be loaded. Any extension that wants to be loaded needs to be in this "
+"list. You can also manipulate this list with the EnableExtension and "
 "DisableExtension DBus methods on org.gnome.Shell."
-msgstr "GNOME शेल एक्सटेंशन्सकडे uuid गुणधर्म असते; हि कि एक्सटेंशन्स् दाखवते ज्यास लोड करणे आवश्यक आहे. लोड करण्याजोगी कोणत्याहि एक्सटेंशला सूचीत असणे आवश्यक आहे. org.gnome.Shell वरील EnableExtension व DisableExtension DBus मेथडससह या सूचीत बदल करणे शक्य आहे."
+msgstr ""
+"GNOME शेल एक्सटेंशन्सकडे uuid गुणधर्म असते; हि कि एक्सटेंशन्स् दाखवते ज्यास लोड करणे आवश्यक "
+"आहे. लोड करण्याजोगी कोणत्याहि एक्सटेंशला सूचीत असणे आवश्यक आहे. org.gnome.Shell वरील "
+"EnableExtension व DisableExtension DBus मेथडससह या सूचीत बदल करणे शक्य आहे."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:21
 msgid "Whether to collect stats about applications usage"
@@ -180,11 +184,15 @@ msgstr "ॲप्लिकेशन वापरविषयी स्थित�
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:22
 msgid ""
-"The shell normally monitors active applications in order to present the most"
-" used ones (e.g. in launchers). While this data will be kept private, you "
-"may want to disable this for privacy reasons. Please note that doing so "
-"won't remove already saved data."
-msgstr "The shell normally monitors active applications in order to present the most used ones (e.g. in launchers). हा डाटा व्यक्तिगत असेपर्यंत, यांस गोपणीय कारणास्तव you may want to disable this for privacy reasons. कृपया लक्षात ठेवा असे केल्यास आधिपासूनच साठवलेला डाटा काढून टाकणे अशक्य होईल."
+"The shell normally monitors active applications in order to present the most "
+"used ones (e.g. in launchers). While this data will be kept private, you may "
+"want to disable this for privacy reasons. Please note that doing so won't "
+"remove already saved data."
+msgstr ""
+"The shell normally monitors active applications in order to present the most "
+"used ones (e.g. in launchers). हा डाटा व्यक्तिगत असेपर्यंत, यांस गोपणीय कारणास्तव "
+"you may want to disable this for privacy reasons. कृपया लक्षात ठेवा असे केल्यास "
+"आधिपासूनच साठवलेला डाटा काढून टाकणे अशक्य होईल."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:23
 msgid "List of desktop file IDs for favorite applications"
@@ -192,8 +200,8 @@ msgstr "पसंतीच्या ॲप्लिकेशन्स् कर�
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:24
 msgid ""
-"The applications corresponding to these identifiers will be displayed in the"
-" favorites area."
+"The applications corresponding to these identifiers will be displayed in the "
+"favorites area."
 msgstr "या आइडेंटिफायर्स् सह परस्पर ॲप्लिकेशन्स् पसंतीचे कक्षात दाखवले जाईल."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
@@ -204,7 +212,9 @@ msgstr "फोल्डर्स नुरूप दाखवण्याजो�
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
-msgstr "या सूचीतील प्रत्येक विभागाचे नाव ॲप्लिकेशन दृष्यमध्ये फोल्डर म्हणून प्रस्तुत केले जाईल, मुख्य दृष्यमध्ये इनलाइन दाखवण्याऐवजी."
+msgstr ""
+"या सूचीतील प्रत्येक विभागाचे नाव ॲप्लिकेशन दृष्यमध्ये फोल्डर म्हणून प्रस्तुत केले जाईल, मुख्य "
+"दृष्यमध्ये इनलाइन दाखवण्याऐवजी."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "History for command (Alt-F2) dialog"
@@ -218,13 +228,17 @@ msgstr "लूकिंग ग्लास संवादकरीता इत
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
-msgstr "वापरकर्तातर्फे ठरवलेले शेवटचे IM हाजेरी साठवण्याकरीता आंतरिकपणे वापरले जाते. येथील मूल्य TpConnectionPresenceType एन्युमरेशनपासूनचे आहे."
+msgstr ""
+"वापरकर्तातर्फे ठरवलेले शेवटचे IM हाजेरी साठवण्याकरीता आंतरिकपणे वापरले जाते. येथील मूल्य "
+"TpConnectionPresenceType एन्युमरेशनपासूनचे आहे."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:30
 msgid ""
 "Internally used to store the last session presence status for the user. The "
 "value here is from the GsmPresenceStatus enumeration."
-msgstr "वापरकर्तातर्फे ठरवलेले शेवटचे सत्र हाजेरी साठवण्याकरीता आंतरिकपणे वापरले जाते. येथील मूल्य GsmPresenceStatus एन्युमरेशनपासूनचे आहे."
+msgstr ""
+"वापरकर्तातर्फे ठरवलेले शेवटचे सत्र हाजेरी साठवण्याकरीता आंतरिकपणे वापरले जाते. येथील मूल्य "
+"GsmPresenceStatus एन्युमरेशनपासूनचे आहे."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid "Always show the 'Log out' menuitem in the user menu."
@@ -234,12 +248,15 @@ msgstr "नेहमी वापरकर्ता मेन्युमध्�
 msgid ""
 "This key overrides the automatic hiding of the 'Log out' menuitem in single-"
 "user, single-session situations."
-msgstr "हि कि एकमेव-वापरकर्ता, एक-सत्र घटनांमध्ये 'बाहेर पडा' मेन्युघटकाला स्वयंचलितरित्या छुपे करणे ओव्हरराइड करतो."
+msgstr ""
+"हि कि एकमेव-वापरकर्ता, एक-सत्र घटनांमध्ये 'बाहेर पडा' मेन्युघटकाला स्वयंचलितरित्या छुपे करणे "
+"ओव्हरराइड करतो."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid ""
 "Whether to remember password for mounting encrypted or remote filesystems"
-msgstr "एनक्रिप्टेड किंवा रिमोट फाइलसिस्टम माउंट करण्यासाठी पासवर्ड लक्षात ठेवायचे किंवा नाही"
+msgstr ""
+"एनक्रिप्टेड किंवा रिमोट फाइलसिस्टम माउंट करण्यासाठी पासवर्ड लक्षात ठेवायचे किंवा नाही"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:34
 msgid ""
@@ -247,7 +264,10 @@ msgid ""
 "filesystem is mounted. If the password can be saved for future use a "
 "'Remember Password' checkbox will be present. This key sets the default "
 "state of the checkbox."
-msgstr "एनक्रिप्टेड साधन किंवा रिमोट फाइलसिस्टम माउंट केल्यानंतर शेल पासवर्डकरीता विनंती करेल. पासवर्डला भविष्यातील वापरकरीता साठवायचे असल्यास 'पासवर्ड लक्षात ठेवा' चेकबॉक्सचा वापर करा. हि कि चेकबॉक्सचे पूर्वनिर्धारित स्तर ठरवते."
+msgstr ""
+"एनक्रिप्टेड साधन किंवा रिमोट फाइलसिस्टम माउंट केल्यानंतर शेल पासवर्डकरीता विनंती करेल. "
+"पासवर्डला भविष्यातील वापरकरीता साठवायचे असल्यास 'पासवर्ड लक्षात ठेवा' चेकबॉक्सचा वापर "
+"करा. हि कि चेकबॉक्सचे पूर्वनिर्धारित स्तर ठरवते."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid "Layout of application launcher icons in the grid"
@@ -281,8 +301,7 @@ msgstr "\"ॲप्लिकेशन्स दाखवा\" दृष्य �
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid ""
-"Keybinding to open the \"Show Applications\" view of the Activities "
-"Overview."
+"Keybinding to open the \"Show Applications\" view of the Activities Overview."
 msgstr "क्रिया अवलोकनचे \"ॲप्लिकेशन्स दाखवा\" दृष्य उघडण्यासाठी किबाइंडिंग."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:43
@@ -316,9 +335,11 @@ msgstr "ॲप्लिकेशन चिन्ह मोड."
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
-"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
-"(shows only the application icon) or 'both'."
-msgstr "स्विचरमध्ये पटल कसे दाखवले जातात ते संरचीत करते. वैध पर्याय 'फक्त थंबनेल' (पटलाचे थंबनेल दाखवते), 'फक्त-ॲप-चिन्ह' (फक्त ॲप्लिकेशन चिन्ह दाखवते) किंवा 'दोंही'."
+"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
+"only' (shows only the application icon) or 'both'."
+msgstr ""
+"स्विचरमध्ये पटल कसे दाखवले जातात ते संरचीत करते. वैध पर्याय 'फक्त थंबनेल' (पटलाचे थंबनेल "
+"दाखवते), 'फक्त-ॲप-चिन्ह' (फक्त ॲप्लिकेशन चिन्ह दाखवते) किंवा 'दोंही'."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid "Attach modal dialog to the parent window"
@@ -337,7 +358,9 @@ msgstr "शीर्षकपट्टीवर बटनांची मां�
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
-msgstr "GNOME शेल चालवतेवेळी हि कि org.gnome.desktop.wm.preferences मधील कि खोडून पुनः लिहते."
+msgstr ""
+"GNOME शेल चालवतेवेळी हि कि org.gnome.desktop.wm.preferences मधील कि खोडून पुनः "
+"लिहते."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid "Enable edge tiling when dropping windows on screen edges"
@@ -451,40 +474,40 @@ msgstr "आदेश वाचणे अशक्य:"
 msgid "Execution of '%s' failed:"
 msgstr "'%s' चालवणे अपयशी:"
 
-#: ../js/ui/appDisplay.js:1859
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1868
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1920
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1926
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1932
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1938 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "ठीक आहे"
 
-#: ../js/ui/appDisplay.js:2021
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "नविन पटल"
 
-#: ../js/ui/appDisplay.js:2024 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "पंसतीतून काढून टाका"
 
-#: ../js/ui/appDisplay.js:2025
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "पसंतीमध्ये समाविष्ट करा"
 
@@ -529,6 +552,7 @@ msgstr ""
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
+#.
 #: ../js/ui/calendar.js:62
 msgctxt "event list time"
 msgid "All Day"
@@ -553,6 +577,7 @@ msgstr "%l\\u2236%M\\u2009%p"
 #. *
 #. * NOTE: These grid abbreviations are always shown together
 #. * and in order, e.g. "S M T W T F S".
+#.
 #: ../js/ui/calendar.js:108
 msgctxt "grid sunday"
 msgid "S"
@@ -599,6 +624,7 @@ msgstr "S"
 #. * NOTE: These list abbreviations are normally not shown together
 #. * so they need to be unique (e.g. Tuesday and Thursday cannot
 #. * both be 'T').
+#.
 #: ../js/ui/calendar.js:133
 msgctxt "list sunday"
 msgid "Su"
@@ -645,15 +671,13 @@ msgstr "S"
 msgid "Nothing Scheduled"
 msgstr "काहीच वेळपत्रानुरूप नाही"
 
-#. Translators: Shown on calendar heading when selected day occurs on current
-#. year
+#. Translators: Shown on calendar heading when selected day occurs on current year
 #: ../js/ui/calendar.js:738
 msgctxt "calendar heading"
 msgid "%A, %B %d"
 msgstr "%A, %B %d"
 
-#. Translators: Shown on calendar heading when selected day occurs on
-#. different year
+#. Translators: Shown on calendar heading when selected day occurs on different year
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
@@ -826,36 +850,31 @@ msgstr "बंद करणे अशक्य करा"
 msgid "Mute"
 msgstr "बंद करा"
 
-#. Translators: this is the word "Yesterday" followed by a time string. i.e.
-#. "Yesterday, 14:30"
+#. Translators: this is the word "Yesterday" followed by a time string. i.e. "Yesterday, 14:30"
 #: ../js/ui/components/telepathyClient.js:942
 #, no-c-format
 msgid "<b>Yesterday</b>, <b>%H:%M</b>"
 msgstr "<b>काल</b>, <b>%H:%M</b>"
 
-#. Translators: this is the week day name followed by a time string. i.e.
-#. "Monday, 14:30
+#. Translators: this is the week day name followed by a time string. i.e. "Monday, 14:30
 #: ../js/ui/components/telepathyClient.js:948
 #, no-c-format
 msgid "<b>%A</b>, <b>%H:%M</b>"
 msgstr "<b>%A</b>, <b>%H:%M</b>"
 
-#. Translators: this is the month name and day number followed by a time
-#. string. i.e. "May 25, 14:30"
+#. Translators: this is the month name and day number followed by a time string. i.e. "May 25, 14:30"
 #: ../js/ui/components/telepathyClient.js:953
 #, no-c-format
 msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
 msgstr "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
 
-#. Translators: this is the month name, day number, year number followed by a
-#. time string. i.e. "May 25 2012, 14:30"
+#. Translators: this is the month name, day number, year number followed by a time string. i.e. "May 25 2012, 14:30"
 #: ../js/ui/components/telepathyClient.js:957
 #, no-c-format
 msgid "<b>%B</b> <b>%d</b> <b>%Y</b>, <b>%H:%M</b> "
 msgstr "<b>%B</b> <b>%d</b> <b>%Y</b>, <b>%H:%M</b> "
 
-#. Translators: this is the other person changing their old IM name to their
-#. new
+#. Translators: this is the other person changing their old IM name to their new
 #. IM name.
 #: ../js/ui/components/telepathyClient.js:987
 #, c-format
@@ -911,6 +930,7 @@ msgstr "उत्तर"
 #. * the contact's alias and the second one is the
 #. * file name. The string will be something
 #. * like: "Alice is sending you test.ogg"
+#.
 #: ../js/ui/components/telepathyClient.js:1173
 #, c-format
 msgid "%s is sending you %s"
@@ -1010,13 +1030,16 @@ msgstr "प्रमाणपत्र रद्द केले"
 #: ../js/ui/components/telepathyClient.js:1342
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
-msgstr "प्रमाणपत्र असुरक्षित सिफर अल्गोरिदमचा वापर करते किंवा क्रिप्टोग्राफिकरित्या खूप कमजोर आहे"
+msgstr ""
+"प्रमाणपत्र असुरक्षित सिफर अल्गोरिदमचा वापर करते किंवा क्रिप्टोग्राफिकरित्या खूप कमजोर आहे"
 
 #: ../js/ui/components/telepathyClient.js:1344
 msgid ""
-"The length of the server certificate, or the depth of the server certificate"
-" chain, exceed the limits imposed by the cryptography library"
-msgstr "सर्व्हर प्रमाणपत्राची लांबी, किंवा सर्व्हर प्रमाणपत्र चैनचे गांभीर्य, क्रिप्टोग्राफि लाइब्ररितर्फे लादलेल्या मर्यादापेक्षा जास्त आहे"
+"The length of the server certificate, or the depth of the server certificate "
+"chain, exceed the limits imposed by the cryptography library"
+msgstr ""
+"सर्व्हर प्रमाणपत्राची लांबी, किंवा सर्व्हर प्रमाणपत्र चैनचे गांभीर्य, क्रिप्टोग्राफि "
+"लाइब्ररितर्फे लादलेल्या मर्यादापेक्षा जास्त आहे"
 
 #: ../js/ui/components/telepathyClient.js:1346
 msgid "Internal error"
@@ -1085,7 +1108,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:551
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "पटल"
 
@@ -1112,8 +1135,8 @@ msgid "Date & Time Settings"
 msgstr "दिनांक व वेळ सेटिंग्ज"
 
 #. Translators: This is the date format to use when the calendar popup is
-#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29
-#. AM").
+#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
+#.
 #: ../js/ui/dateMenu.js:215
 msgid "%A %B %e, %Y"
 msgstr "%A %B %e, %Y"
@@ -1225,6 +1248,16 @@ msgstr " extensions.gnome.org पासून '%s' डाऊनलोड व प
 #: ../js/ui/iconGridLayout.js:200
 #, c-format
 msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
 msgstr ""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
@@ -1350,6 +1383,7 @@ msgstr "GNOME ने पडदा बंद करायला हवे"
 #. screenshield. The user is probably very upset at this
 #. point, but any application using global grabs is broken
 #. Just tell him to stop using this app
+#.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
 #: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:422
@@ -1360,40 +1394,32 @@ msgstr "बंद करणे अशक्य"
 msgid "Lock was blocked by an application"
 msgstr "ॲप्लिकेशनतर्फे लॉक रोखले गेले"
 
-#: ../js/ui/searchDisplay.js:449
+#: ../js/ui/search.js:666
 msgid "Searching…"
 msgstr ""
 
-#: ../js/ui/searchDisplay.js:493
+#: ../js/ui/search.js:668
 msgid "No results."
 msgstr ""
 
-#: ../js/ui/shellEntry.js:106 ../js/ui/shellEntry.js:307
-msgid "Google"
-msgstr ""
-
-#: ../js/ui/shellEntry.js:111
-msgid "My Computer"
-msgstr ""
-
-#: ../js/ui/shellEntry.js:175
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "प्रत बनवा"
 
-#: ../js/ui/shellEntry.js:180
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "चिकटवा"
 
-#: ../js/ui/shellEntry.js:239
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "मजकूर दाखवा"
 
-#: ../js/ui/shellEntry.js:241
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "मजकूर लपवा"
 
-#: ../js/ui/shellEntry.js:309
-msgid "My computer"
+#: ../js/ui/shellEntry.js:175
+msgid "Type to search…"
 msgstr ""
 
 #: ../js/ui/shellMountOperation.js:370
@@ -1585,40 +1611,34 @@ msgstr "वॉल्यूम, नेटवर्क, बॅटरि"
 msgid "<unknown>"
 msgstr "<अपरिचीत>"
 
-#. Translators: this indicates that wireless or wwan is disabled by hardware
-#. killswitch
+#. Translators: this indicates that wireless or wwan is disabled by hardware killswitch
 #: ../js/ui/status/network.js:200
 msgid "disabled"
 msgstr "बंद केले"
 
-#. Translators: this is for network devices that are physically present but
-#. are not
+#. Translators: this is for network devices that are physically present but are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
 #: ../js/ui/status/network.js:458
 msgid "unmanaged"
 msgstr "अव्यवस्थापीत"
 
-#. Translators: this is for network connections that require some kind of key
-#. or password
+#. Translators: this is for network connections that require some kind of key or password
 #: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
 msgid "authentication required"
 msgstr "ओळख पटवणे आवश्यक आहे"
 
-#. Translators: this is for devices that require some kind of firmware or
-#. kernel
+#. Translators: this is for devices that require some kind of firmware or kernel
 #. module, which is missing
 #: ../js/ui/status/network.js:479
 msgid "firmware missing"
 msgstr "फर्मवेअर आढळले नाही"
 
-#. Translators: this is for wired network devices that are physically
-#. disconnected
+#. Translators: this is for wired network devices that are physically disconnected
 #: ../js/ui/status/network.js:486
 msgid "cable unplugged"
 msgstr "केबल जोडले नाही"
 
-#. Translators: this is for a network device that cannot be activated (for
-#. example it
+#. Translators: this is for a network device that cannot be activated (for example it
 #. is disabled by rfkill, or it has no coverage
 #: ../js/ui/status/network.js:491
 msgid "unavailable"
@@ -1633,8 +1653,7 @@ msgstr "जोडणी अपयशी"
 msgid "More…"
 msgstr "आणखी…"
 
-#. TRANSLATORS: this is the indication that a connection for another logged in
-#. user is active,
+#. TRANSLATORS: this is the indication that a connection for another logged in user is active,
 #. and we cannot access its settings (including the name)
 #: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1366
 msgid "Connected (private)"
@@ -1660,8 +1679,7 @@ msgstr "स्वयं ब्रॉडबँड"
 msgid "Auto dial-up"
 msgstr "स्वयं डायल-अप"
 
-#. TRANSLATORS: this the automatic wireless connection name (including the
-#. network name)
+#. TRANSLATORS: this the automatic wireless connection name (including the network name)
 #: ../js/ui/status/network.js:862 ../js/ui/status/network.js:1383
 #, c-format
 msgid "Auto %s"
@@ -1865,7 +1883,7 @@ msgstr "%s (रिमोट)"
 msgid "%s (console)"
 msgstr "%s (कंसोल)"
 
-#: ../js/ui/viewSelector.js:555
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "ॲप्लिकेशन्स्"
 
@@ -1880,6 +1898,7 @@ msgstr ""
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
+#.
 #: ../js/ui/windowManager.js:84
 msgid "Revert Settings"
 msgstr ""

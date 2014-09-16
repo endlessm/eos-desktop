@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2013-03-24 13:41+0200\n"
 "Last-Translator: Kris Thomsen <lakristho@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -51,7 +51,7 @@ msgstr "Åbn program-menuen"
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -426,7 +426,7 @@ msgstr "Ikke listet?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Annullér"
 
@@ -456,7 +456,7 @@ msgstr "Indlogningsvindue"
 msgid "Power"
 msgstr "Strøm"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "Hviletilstand"
 
@@ -498,40 +498,40 @@ msgstr "Kunne ikke fortolke kommando:"
 msgid "Execution of '%s' failed:"
 msgstr "Kørsel af \"%s\" mislykkedes:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "O.k."
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "Nyt vindue"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Fjern fra favoritter"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "Føj til favoritter"
 
@@ -544,6 +544,19 @@ msgstr "%s er blevet føjet til dine favoritter."
 #, c-format
 msgid "%s has been removed from your favorites."
 msgstr "%s er blevet fjernet fra dine favoritter."
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, fuzzy, c-format
+msgid "Quit %s"
+msgstr "Afslut"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -1130,7 +1143,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "Vinduer"
 
@@ -1163,7 +1176,7 @@ msgstr "Indstillinger for dato og tid"
 msgid "%A %B %e, %Y"
 msgstr "%A, %e. %B %Y"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1267,6 +1280,21 @@ msgstr "Installér"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Hent og installér \"%s\" fra extensions.gnome.org?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1353,15 +1381,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Ukendt"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "Fortryd"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "Oversigt"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "Toppanel"
 
@@ -1401,35 +1429,34 @@ msgstr "Kunne ikke låse"
 msgid "Lock was blocked by an application"
 msgstr "Lås blev blokeret af et program"
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
-msgstr ""
+#: ../js/ui/search.js:666
+msgid "Searching…"
+msgstr "Søger…"
 
-#: ../js/ui/shellEntry.js:112
-#, fuzzy
-msgid "My Computer"
-msgstr "Computer"
+#: ../js/ui/search.js:668
+msgid "No results."
+msgstr "Ingen resultater."
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "Kopiér"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "Indsæt"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "Vis tekst"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "Skjul tekst"
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:175
 #, fuzzy
-msgid "My computer"
-msgstr "Computer"
+msgid "Type to search…"
+msgstr "Skriv for at søge…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1849,51 +1876,51 @@ msgstr "Log ind som en anden bruger"
 msgid "Unlock Window"
 msgstr "Lås vindue op"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "Log ud"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "Lås"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "Indstillinger"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "Skift bruger"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "Andre brugere er logget ind."
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "Nedlukning kan resultere i tab af arbejde, som ikke er gemt."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (fjern)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (konsol)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "Programmer"
 
@@ -1993,6 +2020,14 @@ msgstr "Adgangskode må ikke være tom"
 msgid "Authentication dialog was dismissed by the user"
 msgstr "Godkendelsesdialogen blev afvist af brugeren"
 
+#, fuzzy
+#~ msgid "My Computer"
+#~ msgstr "Computer"
+
+#, fuzzy
+#~ msgid "My computer"
+#~ msgstr "Computer"
+
 #~ msgid "Screenshots"
 #~ msgstr "Skærmbilleder"
 
@@ -2059,10 +2094,6 @@ msgstr "Godkendelsesdialogen blev afvist af brugeren"
 #~ msgstr "Skærmoptagelse fra %d %t"
 
 #, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "Skriv for at søge…"
-
-#, fuzzy
 #~ msgid "Type to search your computer"
 #~ msgstr "Skriv for at søge…"
 
@@ -2077,9 +2108,6 @@ msgstr "Godkendelsesdialogen blev afvist af brugeren"
 #~ msgstr[0] "%d ny besked"
 #~ msgstr[1] "%d nye beskeder"
 
-#~ msgid "Quit"
-#~ msgstr "Afslut"
-
 #~ msgid "Activities"
 #~ msgstr "Aktiviteter"
 
@@ -2090,12 +2118,6 @@ msgstr "Godkendelsesdialogen blev afvist af brugeren"
 #~ msgid_plural "%d new notifications"
 #~ msgstr[0] "%d ny påmindelse"
 #~ msgstr[1] "%d nye påmindelser"
-
-#~ msgid "Searching…"
-#~ msgstr "Søger…"
-
-#~ msgid "No results."
-#~ msgstr "Ingen resultater."
 
 #~ msgid "Available"
 #~ msgstr "Tilgængelig"

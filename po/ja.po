@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2013-03-24 01:53+0900\n"
 "Last-Translator: Jiro Matsuzawa <jmatsuzawa@gnome.org>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -47,7 +47,7 @@ msgstr "アプリケーションメニューを開く"
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -417,7 +417,7 @@ msgstr "アカウントが見つかりませんか?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -447,7 +447,7 @@ msgstr "ログインウィンドウ"
 msgid "Power"
 msgstr "電源"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "サスペンド"
 
@@ -489,40 +489,40 @@ msgstr "次のコマンドは解析できません:"
 msgid "Execution of '%s' failed:"
 msgstr "'%s'の実行に失敗しました:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "新しいウィンドウで開く"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "お気に入りから削除"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "お気に入りに追加"
 
@@ -535,6 +535,19 @@ msgstr "%s をお気に入りに追加しました。"
 #, c-format
 msgid "%s has been removed from your favorites."
 msgstr "%s をお気に入りから削除しました。"
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, fuzzy, c-format
+msgid "Quit %s"
+msgstr "終了"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -1118,7 +1131,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "ウィンドウ"
 
@@ -1151,7 +1164,7 @@ msgstr "日時の設定"
 msgid "%A %B %e, %Y"
 msgstr "%Y年%B%-e日 (%a)"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1257,6 +1270,21 @@ msgstr "インストール"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "extensions.gnome.org から '%s' をダウンロードしてインストールしますか?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1343,15 +1371,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "不明なプログラム"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "元に戻す"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "アクティビティ画面"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "トップバー"
 
@@ -1391,35 +1419,34 @@ msgstr "ロックできません"
 msgid "Lock was blocked by an application"
 msgstr "アプリケーションによってロックがブロックされました"
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
-msgstr ""
+#: ../js/ui/search.js:666
+msgid "Searching…"
+msgstr "検索しています…"
 
-#: ../js/ui/shellEntry.js:112
-#, fuzzy
-msgid "My Computer"
-msgstr "コンピューター"
+#: ../js/ui/search.js:668
+msgid "No results."
+msgstr "一致するものがありません。"
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "コピー"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "貼り付け"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "文字を表示"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "文字を非表示"
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:175
 #, fuzzy
-msgid "My computer"
-msgstr "コンピューター"
+msgid "Type to search…"
+msgstr "検索ワードを入力…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1834,53 +1861,53 @@ msgstr "他のユーザーでログイン"
 msgid "Unlock Window"
 msgstr "ロック解除"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "ログアウト"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "ロック"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "設定"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "ユーザーの切り替え"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "他のユーザーがログインしています。"
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr ""
 "シャットダウンすると、他のユーザーによる未保存の作業が失われる可能性がありま"
 "す。"
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (リモート)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (コンソール)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "アプリケーション"
 
@@ -1977,6 +2004,14 @@ msgstr "パスワードを空白にすることはできません。"
 msgid "Authentication dialog was dismissed by the user"
 msgstr "認証ダイアログはユーザーに拒否されました"
 
+#, fuzzy
+#~ msgid "My Computer"
+#~ msgstr "コンピューター"
+
+#, fuzzy
+#~ msgid "My computer"
+#~ msgstr "コンピューター"
+
 #~ msgid "Screenshots"
 #~ msgstr "スクリーンショット"
 
@@ -2045,10 +2080,6 @@ msgstr "認証ダイアログはユーザーに拒否されました"
 #~ msgstr "Screencast_from_%d_%t"
 
 #, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "検索ワードを入力…"
-
-#, fuzzy
 #~ msgid "Type to search your computer"
 #~ msgstr "検索ワードを入力…"
 
@@ -2062,9 +2093,6 @@ msgstr "認証ダイアログはユーザーに拒否されました"
 #~ msgid_plural "%d new messages"
 #~ msgstr[0] "%d 件の新しいメッセージ"
 
-#~ msgid "Quit"
-#~ msgstr "終了"
-
 #~ msgid "Activities"
 #~ msgstr "アクティビティ"
 
@@ -2074,12 +2102,6 @@ msgstr "認証ダイアログはユーザーに拒否されました"
 #~ msgid "%d new notification"
 #~ msgid_plural "%d new notifications"
 #~ msgstr[0] "%d 件の新しい通知"
-
-#~ msgid "Searching…"
-#~ msgstr "検索しています…"
-
-#~ msgid "No results."
-#~ msgstr "一致するものがありません。"
 
 #~ msgid "Available"
 #~ msgstr "在席中"

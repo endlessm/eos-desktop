@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2013-03-23 15:10+0300\n"
 "Last-Translator: Daniel Korostil <ted.korostiled@gmail.com>\n"
 "Language-Team: linux.org.ua\n"
@@ -46,7 +46,7 @@ msgstr "Відкрити меню програм"
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -416,7 +416,7 @@ msgstr "Немає в переліку?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -446,7 +446,7 @@ msgstr "Вікно входу"
 msgid "Power"
 msgstr "Вимкнути"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "Призупинити"
 
@@ -488,40 +488,40 @@ msgstr "Неможливо розібрати команду:"
 msgid "Execution of '%s' failed:"
 msgstr "Не вдалось виконати «%s»:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Гаразд"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "Нове вікно"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Вилучити з улюбленого"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "Додати до улюбленого"
 
@@ -534,6 +534,19 @@ msgstr "%s додано до улюбленого."
 #, c-format
 msgid "%s has been removed from your favorites."
 msgstr "%s вилучено з улюбленого."
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, fuzzy, c-format
+msgid "Quit %s"
+msgstr "Вийти"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -1117,7 +1130,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "Вікна"
 
@@ -1150,7 +1163,7 @@ msgstr "Параметри дати та часу"
 msgid "%A %B %e, %Y"
 msgstr "%A %B %e, %Y"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1259,6 +1272,21 @@ msgstr "Встановити"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Звантажити і встановити «%s» з extensions.gnome.org?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1345,15 +1373,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "Повернути"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "Огляд"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "Верхня панель"
 
@@ -1393,35 +1421,34 @@ msgstr "Неможливо заблокувати"
 msgid "Lock was blocked by an application"
 msgstr "Блокування заборонено програмою"
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
-msgstr ""
+#: ../js/ui/search.js:666
+msgid "Searching…"
+msgstr "Пошуки…"
 
-#: ../js/ui/shellEntry.js:112
-#, fuzzy
-msgid "My Computer"
-msgstr "Комп'ютер"
+#: ../js/ui/search.js:668
+msgid "No results."
+msgstr "Безрезультатно."
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "Копіювати"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "Вставити"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "Показати текст"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "Сховати текст"
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:175
 #, fuzzy
-msgid "My computer"
-msgstr "Комп'ютер"
+msgid "Type to search…"
+msgstr "Введіть для пошуку…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1844,51 +1871,51 @@ msgstr "Увійти як інший користувач"
 msgid "Unlock Window"
 msgstr "Розблокувати вікно"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "Вийти"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "Заблокувати"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "Параметри"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "Змінити користувача"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "Інші користувачі є в сеансі."
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "Вимкнення може спричинити до втрати їхніх незбережених даних."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (віддалено)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (консоль)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "Програми"
 
@@ -1991,6 +2018,14 @@ msgstr "Пароль не може бути порожнім"
 msgid "Authentication dialog was dismissed by the user"
 msgstr "Вікно авторизації відхилено користувачем"
 
+#, fuzzy
+#~ msgid "My Computer"
+#~ msgstr "Комп'ютер"
+
+#, fuzzy
+#~ msgid "My computer"
+#~ msgstr "Комп'ютер"
+
 #~ msgid "Screenshots"
 #~ msgstr "Знімки"
 
@@ -2059,10 +2094,6 @@ msgstr "Вікно авторизації відхилено користува�
 #~ msgstr "Трансляція з екрана від %d %t"
 
 #, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "Введіть для пошуку…"
-
-#, fuzzy
 #~ msgid "Type to search your computer"
 #~ msgstr "Пошук на комп'ютері"
 
@@ -2078,9 +2109,6 @@ msgstr "Вікно авторизації відхилено користува�
 #~ msgstr[1] "%d нових повідомлення"
 #~ msgstr[2] "%d нових повідомлень"
 
-#~ msgid "Quit"
-#~ msgstr "Вийти"
-
 #~ msgid "Activities"
 #~ msgstr "Діяльність"
 
@@ -2092,12 +2120,6 @@ msgstr "Вікно авторизації відхилено користува�
 #~ msgstr[0] "%d нове сповіщення"
 #~ msgstr[1] "%d нових сповіщення"
 #~ msgstr[2] "%d нових сповіщень"
-
-#~ msgid "Searching…"
-#~ msgstr "Пошуки…"
-
-#~ msgid "No results."
-#~ msgstr "Безрезультатно."
 
 #~ msgid "Available"
 #~ msgstr "Доступний"

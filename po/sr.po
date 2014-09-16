@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2013-03-08 20:26+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
@@ -43,7 +43,7 @@ msgstr "Отворите изборник програма"
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -413,7 +413,7 @@ msgstr "Није на списку?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Откажи"
 
@@ -443,7 +443,7 @@ msgstr "Прозор за пријављивање"
 msgid "Power"
 msgstr "Угаси"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "Обустави"
 
@@ -485,40 +485,40 @@ msgstr "Не могу да обрадим наредбу:"
 msgid "Execution of '%s' failed:"
 msgstr "Није успело покретање „%s“:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "У реду"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "Нови прозор"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Уклони из омиљених"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "Додај у омиљене"
 
@@ -531,6 +531,19 @@ msgstr "„%s“ је додат међу омиљене."
 #, c-format
 msgid "%s has been removed from your favorites."
 msgstr "„%s“ је уклоњен из омиљених."
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, fuzzy, c-format
+msgid "Quit %s"
+msgstr "Изађи"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -1113,7 +1126,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "Прозори"
 
@@ -1146,7 +1159,7 @@ msgstr "Подешавања датума и времена"
 msgid "%A %B %e, %Y"
 msgstr "%A, %e. %b., %R"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1262,6 +1275,21 @@ msgstr "Инсталирај"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Да преузмем и да инсталирам „%s“ са extensions.gnome.org?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1348,15 +1376,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Непознат"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "Опозови"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "Преглед"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "Горња трака"
 
@@ -1396,35 +1424,34 @@ msgstr "Не могу да закључам"
 msgid "Lock was blocked by an application"
 msgstr "Неки програм је блокирао закључавање"
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
-msgstr ""
+#: ../js/ui/search.js:666
+msgid "Searching…"
+msgstr "Тражим…"
 
-#: ../js/ui/shellEntry.js:112
-#, fuzzy
-msgid "My Computer"
-msgstr "Рачунар"
+#: ../js/ui/search.js:668
+msgid "No results."
+msgstr "Нема одговарајућих резултата."
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "Умножи"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "Убаци"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "Прикажи текст"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "Сакриј текст"
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:175
 #, fuzzy
-msgid "My computer"
-msgstr "Рачунар"
+msgid "Type to search…"
+msgstr "Упишите текст за претрагу…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1851,51 +1878,51 @@ msgstr "Пријавите се као други корсник"
 msgid "Unlock Window"
 msgstr "Откључај прозор"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "Одјави ме"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "Закључај"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "Подешавања"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "Промени корисника"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "Други корисници су пријављени."
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "Искључивање може да доведе до тога да изгубе несачувани рад."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (удаљено)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (љуска)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "Програми"
 
@@ -2001,6 +2028,14 @@ msgstr "Лозинка не може бити празна"
 msgid "Authentication dialog was dismissed by the user"
 msgstr "Корисник је одбацио прозорче за потврђивање идентитета"
 
+#, fuzzy
+#~ msgid "My Computer"
+#~ msgstr "Рачунар"
+
+#, fuzzy
+#~ msgid "My computer"
+#~ msgstr "Рачунар"
+
 #~ msgid "Screenshots"
 #~ msgstr "Снимци екрана"
 
@@ -2068,10 +2103,6 @@ msgstr "Корисник је одбацио прозорче за потврђ�
 #~ msgstr "Запис екрана са %d %t"
 
 #, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "Упишите текст за претрагу…"
-
-#, fuzzy
 #~ msgid "Type to search your computer"
 #~ msgstr "Упишите текст за претрагу…"
 
@@ -2088,9 +2119,6 @@ msgstr "Корисник је одбацио прозорче за потврђ�
 #~ msgstr[2] "%d нових порука"
 #~ msgstr[3] "Једна нова порука"
 
-#~ msgid "Quit"
-#~ msgstr "Изађи"
-
 #~ msgid "Activities"
 #~ msgstr "Активности"
 
@@ -2103,13 +2131,6 @@ msgstr "Корисник је одбацио прозорче за потврђ�
 #~ msgstr[1] "%d нова обавештења"
 #~ msgstr[2] "%d нових обавештења"
 #~ msgstr[3] "Једно ново обавештење"
-
-#~| msgid "Searching..."
-#~ msgid "Searching…"
-#~ msgstr "Тражим…"
-
-#~ msgid "No results."
-#~ msgstr "Нема одговарајућих резултата."
 
 #~ msgid "Available"
 #~ msgstr "Доступан"
