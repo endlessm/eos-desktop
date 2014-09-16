@@ -158,8 +158,6 @@ const AppIconMenu = new Lang.Class({
             }
         }));
         parentActor.connect('destroy', Lang.bind(this, function () { this.actor.destroy(); }));
-
-        Main.uiGroup.add_actor(this.actor);
     },
 
     _redisplay: function() {
@@ -296,6 +294,25 @@ const AppIconButton = new Lang.Class({
         this._rightClickMenu.actor.hide();
         Main.uiGroup.add_actor(this._rightClickMenu.actor);
 
+        this._menu = new AppIconMenu(this._app, this.actor);
+        this._menuManager = new PopupMenu.PopupMenuManager(this);
+        this._menuManager.addMenu(this._menu);
+        this._menu.actor.hide();
+        Main.uiGroup.add_actor(this._menu.actor);
+
+        this._menu.connect('open-state-changed', Lang.bind(this,
+            function(menu, open) {
+                // Setting the max-height won't do any good if the minimum height of the
+                // menu is higher then the screen; it's useful if part of the menu is
+                // scrollable so the minimum height is smaller than the natural height
+                let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
+                this._menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
+
+                if (open) {
+                    this._animateBounce();
+                }
+            }));
+
         this._appStateUpdatedId = this._app.connect('notify::state', Lang.bind(this, this._syncQuitMenuItemVisible));
         this._syncQuitMenuItemVisible();
     },
@@ -323,7 +340,7 @@ const AppIconButton = new Lang.Class({
             });
 
             if (windows.length > 1) {
-                this._ensureMenu();
+                this.actor.fake_release();
                 this._menu.popup();
                 this._menuManager.ignoreRelease();
 
@@ -470,32 +487,6 @@ const AppIconButton = new Lang.Class({
 
     _updateStyle: function(actor, forHeight, alloc) {
         this._labelOffsetY = this._label.get_theme_node().get_length('-label-offset-y');
-    },
-
-    _ensureMenu: function() {
-        this.actor.fake_release();
-
-        if (this._menu) {
-            return;
-        }
-
-        this._menuManager = new PopupMenu.PopupMenuManager(this);
-
-        this._menu = new AppIconMenu(this._app, this.actor);
-        this._menuManager.addMenu(this._menu);
-
-        this._menu.connect('open-state-changed', Lang.bind(this,
-            function(menu, open) {
-                // Setting the max-height won't do any good if the minimum height of the
-                // menu is higher then the screen; it's useful if part of the menu is
-                // scrollable so the minimum height is smaller than the natural height
-                let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
-                this._menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
-
-                if (open) {
-                    this._animateBounce();
-                }
-            }));
     }
 });
 Signals.addSignalMethods(AppIconButton.prototype);
