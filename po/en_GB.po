@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2012-09-27 23:56-0400\n"
 "Last-Translator: Chris Leonard <cjlhomeaddress@gmail.com>\n"
 "Language-Team: Sugar Labs\n"
@@ -47,7 +47,7 @@ msgstr "Keybinding to open the application menu"
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -405,7 +405,7 @@ msgstr "Not listed?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -436,7 +436,7 @@ msgstr "Login Window"
 msgid "Power"
 msgstr "Power"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "Suspend"
 
@@ -478,40 +478,40 @@ msgstr "Could not parse command:"
 msgid "Execution of '%s' failed:"
 msgstr "Execution of '%s' failed:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "New Window"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Remove from Favourites"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "Add to Favourites"
 
@@ -524,6 +524,19 @@ msgstr "%s has been added to your favourites."
 #, c-format
 msgid "%s has been removed from your favorites."
 msgstr "%s has been removed from your favourites."
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, fuzzy, c-format
+msgid "Quit %s"
+msgstr "Quit"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -1110,7 +1123,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "Windows"
 
@@ -1144,7 +1157,7 @@ msgstr "Date and Time Settings"
 msgid "%A %B %e, %Y"
 msgstr "%A %e %B, %Y"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1248,6 +1261,21 @@ msgstr "Install"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Download and install '%s' from extensions.gnome.org?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1336,15 +1364,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Unknown"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "Undo"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "Overview"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "Top Bar"
 
@@ -1387,35 +1415,35 @@ msgstr "Unlock"
 msgid "Lock was blocked by an application"
 msgstr "No such application"
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
-msgstr ""
-
-#: ../js/ui/shellEntry.js:112
+#: ../js/ui/search.js:666
 #, fuzzy
-msgid "My Computer"
-msgstr "Computer"
+msgid "Searching…"
+msgstr "Searching…"
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/search.js:668
+msgid "No results."
+msgstr "No results."
+
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "Copy"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "Paste"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "Show Text"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "Hide Text"
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:175
 #, fuzzy
-msgid "My computer"
-msgstr "Computer"
+msgid "Type to search…"
+msgstr "Type to search…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1845,52 +1873,52 @@ msgstr "Log in as another user"
 msgid "Unlock Window"
 msgstr "Login Window"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "Log Out"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "Lock"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 #, fuzzy
 msgid "Settings"
 msgstr "Mouse Settings"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "Switch User"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr ""
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr ""
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr ""
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "Applications"
 
@@ -1990,6 +2018,14 @@ msgstr "Password cannot be blank"
 msgid "Authentication dialog was dismissed by the user"
 msgstr "Authentication dialogue was dismissed by the user"
 
+#, fuzzy
+#~ msgid "My Computer"
+#~ msgstr "Computer"
+
+#, fuzzy
+#~ msgid "My computer"
+#~ msgstr "Computer"
+
 #~ msgid "Screenshots"
 #~ msgstr "Screenshots"
 
@@ -2056,10 +2092,6 @@ msgstr "Authentication dialogue was dismissed by the user"
 #~ msgstr "Screencast from %d %t"
 
 #, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "Type to search…"
-
-#, fuzzy
 #~ msgid "Type to search your computer"
 #~ msgstr "Type to search…"
 
@@ -2105,9 +2137,6 @@ msgstr "Authentication dialogue was dismissed by the user"
 #~ msgid "tray"
 #~ msgstr "tray"
 
-#~ msgid "Quit"
-#~ msgstr "Quit"
-
 #~ msgid "Activities"
 #~ msgstr "Activities"
 
@@ -2118,12 +2147,6 @@ msgstr "Authentication dialogue was dismissed by the user"
 #~ msgid_plural "%d new messages"
 #~ msgstr[0] "%d new message"
 #~ msgstr[1] "%d new messages"
-
-#~ msgid "Searching..."
-#~ msgstr "Searching…"
-
-#~ msgid "No results."
-#~ msgstr "No results."
 
 #~ msgid "Browse Files..."
 #~ msgstr "Browse Files…"

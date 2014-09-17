@@ -10,12 +10,13 @@
 # Mathieu Bridon <bochecha@fedoraproject.org>, 2009
 # Pablo Martin-Gomez <pablo.martin-gomez@laposte.net>, 2010
 # Pierre Henry <pierrehenry73@yahoo.fr>, 2012
+# Roddy Shuler <roddy@endlessm.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-08 15:13-0700\n"
-"PO-Revision-Date: 2014-09-10 23:15+0000\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
+"PO-Revision-Date: 2014-09-17 03:27+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/eos-shell/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -457,40 +458,40 @@ msgstr "Impossible d'analyser la commande :"
 msgid "Execution of '%s' failed:"
 msgstr "Exécution de « %s » impossible :"
 
-#: ../js/ui/appDisplay.js:1859
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr "Plus d'Apps"
 
-#: ../js/ui/appDisplay.js:1868
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ../js/ui/appDisplay.js:1920
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../js/ui/appDisplay.js:1926
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
-#: ../js/ui/appDisplay.js:1932
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr "Nous essayons simplement de vous garder en sécurité."
 
-#: ../js/ui/appDisplay.js:1938 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Valider"
 
-#: ../js/ui/appDisplay.js:2021
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "Nouvelle fenêtre"
 
-#: ../js/ui/appDisplay.js:2024 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Enlever des favoris"
 
-#: ../js/ui/appDisplay.js:2025
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "Ajouter aux favoris"
 
@@ -1091,7 +1092,7 @@ msgstr "Echec d'une tentative de mise à jour"
 msgid "We could not update your system"
 msgstr "Nous n'avons pas pu mettre à jour votre système"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:551
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "Fenêtres"
 
@@ -1233,6 +1234,16 @@ msgstr "Télécharger et installer « %s » à partir de extensions.gnome.org�
 msgid "%s has been deleted"
 msgstr "%s a été effacé"
 
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1366,41 +1377,33 @@ msgstr "Impossible de verrouiller"
 msgid "Lock was blocked by an application"
 msgstr "Le verrouillage a été bloqué par une application"
 
-#: ../js/ui/searchDisplay.js:449
+#: ../js/ui/search.js:666
 msgid "Searching…"
 msgstr "Recherche en cours..."
 
-#: ../js/ui/searchDisplay.js:493
+#: ../js/ui/search.js:668
 msgid "No results."
 msgstr "Pas de résultats."
 
-#: ../js/ui/shellEntry.js:106 ../js/ui/shellEntry.js:307
-msgid "Google"
-msgstr "Google"
-
-#: ../js/ui/shellEntry.js:111
-msgid "My Computer"
-msgstr "Mon ordinateur"
-
-#: ../js/ui/shellEntry.js:175
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "Copier"
 
-#: ../js/ui/shellEntry.js:180
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "Coller"
 
-#: ../js/ui/shellEntry.js:239
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "Afficher le texte"
 
-#: ../js/ui/shellEntry.js:241
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "Masquer le texte"
 
-#: ../js/ui/shellEntry.js:309
-msgid "My computer"
-msgstr "Mon ordinateur"
+#: ../js/ui/shellEntry.js:175
+msgid "Type to search…"
+msgstr "Rechercher…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1871,7 +1874,7 @@ msgstr "%s (distant)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:555
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "Applications"
 

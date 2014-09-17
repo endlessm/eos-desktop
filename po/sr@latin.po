@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2013-03-08 20:26+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
@@ -43,7 +43,7 @@ msgstr "Otvorite izbornik programa"
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -418,7 +418,7 @@ msgstr "Nije na spisku?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Otkaži"
 
@@ -448,7 +448,7 @@ msgstr "Prozor za prijavljivanje"
 msgid "Power"
 msgstr "Ugasi"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "Obustavi"
 
@@ -490,40 +490,40 @@ msgstr "Ne mogu da obradim naredbu:"
 msgid "Execution of '%s' failed:"
 msgstr "Nije uspelo pokretanje „%s“:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "U redu"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "Novi prozor"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Ukloni iz omiljenih"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "Dodaj u omiljene"
 
@@ -536,6 +536,19 @@ msgstr "„%s“ je dodat među omiljene."
 #, c-format
 msgid "%s has been removed from your favorites."
 msgstr "„%s“ je uklonjen iz omiljenih."
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, fuzzy, c-format
+msgid "Quit %s"
+msgstr "Izađi"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -1119,7 +1132,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "Prozori"
 
@@ -1152,7 +1165,7 @@ msgstr "Podešavanja datuma i vremena"
 msgid "%A %B %e, %Y"
 msgstr "%A, %e. %b., %R"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1268,6 +1281,21 @@ msgstr "Instaliraj"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Da preuzmem i da instaliram „%s“ sa extensions.gnome.org?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1354,15 +1382,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Nepoznat"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "Opozovi"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "Pregled"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "Gornja traka"
 
@@ -1402,35 +1430,34 @@ msgstr "Ne mogu da zaključam"
 msgid "Lock was blocked by an application"
 msgstr "Neki program je blokirao zaključavanje"
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
-msgstr ""
+#: ../js/ui/search.js:666
+msgid "Searching…"
+msgstr "Tražim…"
 
-#: ../js/ui/shellEntry.js:112
-#, fuzzy
-msgid "My Computer"
-msgstr "Računar"
+#: ../js/ui/search.js:668
+msgid "No results."
+msgstr "Nema odgovarajućih rezultata."
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "Umnoži"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "Ubaci"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "Prikaži tekst"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "Sakrij tekst"
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:175
 #, fuzzy
-msgid "My computer"
-msgstr "Računar"
+msgid "Type to search…"
+msgstr "Upišite tekst za pretragu…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1857,51 +1884,51 @@ msgstr "Prijavite se kao drugi korsnik"
 msgid "Unlock Window"
 msgstr "Otključaj prozor"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "Odjavi me"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "Zaključaj"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "Podešavanja"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "Promeni korisnika"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "Drugi korisnici su prijavljeni."
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "Isključivanje može da dovede do toga da izgube nesačuvani rad."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (udaljeno)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (ljuska)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "Programi"
 
@@ -2007,6 +2034,14 @@ msgstr "Lozinka ne može biti prazna"
 msgid "Authentication dialog was dismissed by the user"
 msgstr "Korisnik je odbacio prozorče za potvrđivanje identiteta"
 
+#, fuzzy
+#~ msgid "My Computer"
+#~ msgstr "Računar"
+
+#, fuzzy
+#~ msgid "My computer"
+#~ msgstr "Računar"
+
 #~ msgid "Screenshots"
 #~ msgstr "Snimci ekrana"
 
@@ -2075,10 +2110,6 @@ msgstr "Korisnik je odbacio prozorče za potvrđivanje identiteta"
 #~ msgstr "Zapis ekrana sa %d %t"
 
 #, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "Upišite tekst za pretragu…"
-
-#, fuzzy
 #~ msgid "Type to search your computer"
 #~ msgstr "Upišite tekst za pretragu…"
 
@@ -2095,9 +2126,6 @@ msgstr "Korisnik je odbacio prozorče za potvrđivanje identiteta"
 #~ msgstr[2] "%d novih poruka"
 #~ msgstr[3] "Jedna nova poruka"
 
-#~ msgid "Quit"
-#~ msgstr "Izađi"
-
 #~ msgid "Activities"
 #~ msgstr "Aktivnosti"
 
@@ -2110,13 +2138,6 @@ msgstr "Korisnik je odbacio prozorče za potvrđivanje identiteta"
 #~ msgstr[1] "%d nova obaveštenja"
 #~ msgstr[2] "%d novih obaveštenja"
 #~ msgstr[3] "Jedno novo obaveštenje"
-
-#~| msgid "Searching..."
-#~ msgid "Searching…"
-#~ msgstr "Tražim…"
-
-#~ msgid "No results."
-#~ msgstr "Nema odgovarajućih rezultata."
 
 #~ msgid "Available"
 #~ msgstr "Dostupan"

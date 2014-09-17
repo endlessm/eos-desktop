@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-3-6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2012-09-24 14:29+0600\n"
 "Last-Translator: Timur Zhamakeev <ztimur@gmail.com>\n"
 "Language-Team: Kirghiz <gnome-i18n@gnome.org>\n"
@@ -48,7 +48,7 @@ msgstr "Тиркеме менюсун ачуу үчүн клавиштик ай�
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -393,7 +393,7 @@ msgstr "Тизмеде жокпу?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Айнуу"
 
@@ -425,7 +425,7 @@ msgstr "Кирүү терезеси"
 msgid "Power"
 msgstr "Өчүрүү"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "Күтүүчү режим"
 
@@ -468,40 +468,40 @@ msgstr "Команданы талдоого мүмкүн эмес:"
 msgid "Execution of '%s' failed:"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "Жаңы терезе"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Тандалмадан өчүрүү"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "Тандалмага кошуу"
 
@@ -514,6 +514,19 @@ msgstr "Cиздин тандалмаларыңызга %s кошулду."
 #, c-format
 msgid "%s has been removed from your favorites."
 msgstr "Cиздин тандалмаларыңыздан %s алынды."
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, fuzzy, c-format
+msgid "Quit %s"
+msgstr "Жабуу"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -1093,7 +1106,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "Терезелер"
 
@@ -1128,7 +1141,7 @@ msgstr "Дата жана убакытты ырастоо"
 msgid "%A %B %e, %Y"
 msgstr "%Y-ж. %B айынын %e %a"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1229,6 +1242,21 @@ msgstr "Орнотуу"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "extensions.gnome.org сайтынан «%s» кеңейтмесин жүктөп орнотосузбу?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1316,15 +1344,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Белгисиз"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "Жокко чыгаруу"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "Сереп"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "Үстүңкү панель"
 
@@ -1366,35 +1394,36 @@ msgstr "Ачуу"
 msgid "Lock was blocked by an application"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
-msgstr ""
-
-#: ../js/ui/shellEntry.js:112
+#: ../js/ui/search.js:666
 #, fuzzy
-msgid "My Computer"
-msgstr "Компьютер"
+msgid "Searching…"
+msgstr "Издөө…"
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/search.js:668
+#, fuzzy
+msgid "No results."
+msgstr "Дал келген натыйжалар жок."
+
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "Копиялоо"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "Коюу"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "Текстти көрсөтүү"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "Текстти катуу"
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:175
 #, fuzzy
-msgid "My computer"
-msgstr "Компьютер"
+msgid "Type to search…"
+msgstr "Табуу…"
 
 #: ../js/ui/shellMountOperation.js:370
 #, fuzzy
@@ -1825,52 +1854,52 @@ msgstr "Башка колдонуучу катары кирүү"
 msgid "Unlock Window"
 msgstr "Кирүү терезеси"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "Системадан чыгуу"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "Камалоо"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 #, fuzzy
 msgid "Settings"
 msgstr "Чычканды ырастоо"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "Колдонуучуну которуу"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr ""
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr ""
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr ""
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "Тиркемелер"
 
@@ -1967,6 +1996,14 @@ msgstr "Сырсөз бош боло албайт"
 msgid "Authentication dialog was dismissed by the user"
 msgstr "Аутентификация диалогун колдонуучу кабыл албады"
 
+#, fuzzy
+#~ msgid "My Computer"
+#~ msgstr "Компьютер"
+
+#, fuzzy
+#~ msgid "My computer"
+#~ msgstr "Компьютер"
+
 #~ msgid "Keybinding to toggle the screen recorder"
 #~ msgstr "Экран тарткычты которуучу клавиштик айкалыш"
 
@@ -1981,10 +2018,6 @@ msgstr "Аутентификация диалогун колдонуучу ка�
 
 #~ msgid "Screencast from %d %t"
 #~ msgstr "Скринкаст %d %t"
-
-#, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "Табуу…"
 
 #, fuzzy
 #~ msgid "Type to search your computer"
@@ -2026,9 +2059,6 @@ msgstr "Аутентификация диалогун колдонуучу ка�
 #~ msgid "tray"
 #~ msgstr "жайма"
 
-#~ msgid "Quit"
-#~ msgstr "Жабуу"
-
 #~ msgid "Activities"
 #~ msgstr "Сереп"
 
@@ -2037,14 +2067,6 @@ msgstr "Аутентификация диалогун колдонуучу ка�
 #~| msgid "%A, %B %d"
 #~ msgid "%A, %B %d"
 #~ msgstr "%B айынын %e %a"
-
-#~ msgid "Searching..."
-#~ msgstr "Издөө…"
-
-#, fuzzy
-#~| msgid "No matching results."
-#~ msgid "No results."
-#~ msgstr "Дал келген натыйжалар жок."
 
 #~ msgid "Browse Files..."
 #~ msgstr "Файлдарды кароо…"

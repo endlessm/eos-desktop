@@ -1,22 +1,23 @@
-# translation of mr.po to Marathi
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Sandeep Shedmake <sshedmak@redhat.com>, 2011, 2012, 2013.
+# Translators:
+# sandeeps <sshedmak@redhat.com>, 2011-2013
 msgid ""
 msgstr ""
-"Project-Id-Version: mr\n"
+"Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
-"PO-Revision-Date: 2013-03-21 09:26+0530\n"
-"Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
-"Language-Team: Marathi <maajhe-sanganak@freelists.org>\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
+"PO-Revision-Date: 2014-09-16 04:33+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"Language-Team: Marathi (http://www.transifex.com/projects/p/eos-shell/"
+"language/mr/)\n"
 "Language: mr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
 msgid "System"
@@ -42,7 +43,7 @@ msgstr "ॲप्लिकेशन मेन्यु उघडा"
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -52,9 +53,8 @@ msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
-#, fuzzy
 msgid "EOS Shell"
-msgstr "GNOME शेल"
+msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -402,7 +402,7 @@ msgstr "सूचीत नाही?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "रद्द करा"
 
@@ -432,7 +432,7 @@ msgstr "प्रवेश पटल"
 msgid "Power"
 msgstr "पावर"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "निलंबित"
 
@@ -474,40 +474,40 @@ msgstr "आदेश वाचणे अशक्य:"
 msgid "Execution of '%s' failed:"
 msgstr "'%s' चालवणे अपयशी:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "ठीक आहे"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "नविन पटल"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "पंसतीतून काढून टाका"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "पसंतीमध्ये समाविष्ट करा"
 
@@ -521,23 +521,34 @@ msgstr "%s ला पसंतीमध्ये समाविष्ट के
 msgid "%s has been removed from your favorites."
 msgstr "%s ला पसंतीतून काढून टाकले."
 
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, c-format
+msgid "Quit %s"
+msgstr ""
+
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
 msgstr "पार्श्वभूमी बदला…"
 
 #: ../js/ui/backgroundMenu.js:25
-#, fuzzy
 msgid "Add App"
-msgstr "ॲप्लिकेशन्स्"
+msgstr ""
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website"
 msgstr ""
 
 #: ../js/ui/backgroundMenu.js:33
-#, fuzzy
 msgid "Add Folder"
-msgstr "होम फोल्डर"
+msgstr ""
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -1054,18 +1065,16 @@ msgid "Software Update"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:200
-#, fuzzy
 msgid "Updates available"
-msgstr "अनुपलब्ध"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:201
 msgid "Software updates are available for your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:202
-#, fuzzy
 msgid "Download now"
-msgstr "डाऊनलोड करत आहे"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:215
 msgid "Updates ready"
@@ -1076,23 +1085,20 @@ msgid "Software updates are ready to be installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:217
-#, fuzzy
 msgid "Install now"
-msgstr "प्रतिष्ठापीत करा"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:226
-#, fuzzy
 msgid "Updates installed"
-msgstr "एक्सटेंशन्स् प्रतिष्ठापीत केले नाही"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:227
 msgid "Software updates were installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:228
-#, fuzzy
 msgid "Restart now"
-msgstr "पुनः सुरू करा"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:251
 msgid "Update failed"
@@ -1102,7 +1108,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "पटल"
 
@@ -1135,7 +1141,7 @@ msgstr "दिनांक व वेळ सेटिंग्ज"
 msgid "%A %B %e, %Y"
 msgstr "%A %B %e, %Y"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1239,6 +1245,21 @@ msgstr "प्रतिष्ठापीत करा"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr " extensions.gnome.org पासून '%s' डाऊनलोड व प्रतिष्ठापीत करा?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1325,15 +1346,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "अपरिचीत"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "पूर्ववत् करा"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "पूर्वावलोकन"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "वरची पट्टी"
 
@@ -1373,35 +1394,33 @@ msgstr "बंद करणे अशक्य"
 msgid "Lock was blocked by an application"
 msgstr "ॲप्लिकेशनतर्फे लॉक रोखले गेले"
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
+#: ../js/ui/search.js:666
+msgid "Searching…"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:112
-#, fuzzy
-msgid "My Computer"
-msgstr "संगणक"
+#: ../js/ui/search.js:668
+msgid "No results."
+msgstr ""
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "प्रत बनवा"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "चिकटवा"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "मजकूर दाखवा"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "मजकूर लपवा"
 
-#: ../js/ui/shellEntry.js:347
-#, fuzzy
-msgid "My computer"
-msgstr "संगणक"
+#: ../js/ui/shellEntry.js:175
+msgid "Type to search…"
+msgstr ""
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1820,51 +1839,51 @@ msgstr "इतर वापरकर्ता म्हणून प्रवे
 msgid "Unlock Window"
 msgstr "पटल उघडा"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "बाहेर पडा"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "कुलूपबंद"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "सेटिंग्ज"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "उपयोक्ता बदला"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "इतर वापरकर्त्यांनी प्रवेश केला आहे."
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "बंद केल्याने न साठवलेले कार्य गमवण्याची शक्यता आहे."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (रिमोट)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (कंसोल)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "ॲप्लिकेशन्स्"
 
@@ -1881,9 +1900,8 @@ msgstr ""
 #. to avoid ellipsizing the labels.
 #.
 #: ../js/ui/windowManager.js:84
-#, fuzzy
 msgid "Revert Settings"
-msgstr "पावर सेटिंग्ज"
+msgstr ""
 
 #: ../js/ui/windowManager.js:88
 msgid "Keep Changes"
@@ -1963,373 +1981,3 @@ msgstr "पासवर्ड रिकामे असणे अशक्य"
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
 msgstr "ओळख पटवा संवाद वापरकर्त्याद्वारे वगळले"
-
-#~ msgid "Screenshots"
-#~ msgstr "स्क्रीनशॉटस्"
-
-#~ msgid "Record a screencast"
-#~ msgstr "स्क्रीनकास्ट रेकॉर्ड करा"
-
-#~ msgid "Keybinding to toggle the screen recorder"
-#~ msgstr "स्क्रीन रेकॉर्डरमधील बदलसाठी किबाइंडिंग"
-
-#~ msgid "Keybinding to start/stop the builtin screen recorder."
-#~ msgstr "बिल्टइन स्क्रीन रेकॉर्डर सुरू किंवा थांबवण्यासाठी किबाइंडिंग."
-
-#~ msgid "Framerate used for recording screencasts."
-#~ msgstr "स्क्रिनकास्ट्स् रेकॉर्ड करण्यासाठी वापरलेले फ्रेमरेट."
-
-#~ msgid ""
-#~ "The framerate of the resulting screencast recordered by GNOME Shell's "
-#~ "screencast recorder in frames-per-second."
-#~ msgstr ""
-#~ "फ्रेम्स्-दर-सेकंदमध्ये GNOME शेलच्या सक्रीनकास्ट रेकॉर्डरद्वारे रेकॉर्ड केलेल्या परिणामक "
-#~ "सक्रीनकास्टचा फ्रेमरेट."
-
-#~ msgid "The gstreamer pipeline used to encode the screencast"
-#~ msgstr "स्क्रीनकास्ट एंकोड करण्यासाठी वापरलेले gstreamer पाइपलाइन"
-
-#~ msgid ""
-#~ "Sets the GStreamer pipeline used to encode recordings. It follows the "
-#~ "syntax used for gst-launch. The pipeline should have an unconnected sink "
-#~ "pad where the recorded video is recorded. It will normally have a "
-#~ "unconnected source pad; output from that pad will be written into the "
-#~ "output file. However the pipeline can also take care of its own output - "
-#~ "this might be used to send the output to an icecast server via shout2send "
-#~ "or similar. When unset or set to an empty value, the default pipeline "
-#~ "will be used. This is currently 'vp8enc min_quantizer=13 max_quantizer=13 "
-#~ "cpu-used=5 deadline=1000000 threads=%T ! queue ! webmmux' and records to "
-#~ "WEBM using the VP8 codec. %T is used as a placeholder for a guess at the "
-#~ "optimal thread count on the system."
-#~ msgstr ""
-#~ "रेकॉर्डिंग्स् एंकोड करण्यासाठी GStreamer पाइपलाइन ठरवतो. gst-launch सुरू करण्यासाठी "
-#~ "मांडणीचा वापर करतो. पाइपलाइनमध्ये जोडणी अशक्य सिंक पॅड असायला हवे जेथे रेकॉर्डेड "
-#~ "व्हिडीओ रेकॉर्ड केले जाते. सहसा जोडणी अशक्य स्रोत पॅड असते; पॅडपासूनचे आऊटपुट, आऊटपुट "
-#~ "फाइलमध्ये लिहले जाते. तरी पाइपलाइन स्वतःच्या आऊटपुटची काळजी घेतो - याचा वापर "
-#~ "shout2send किंवा समानतर्फे icecast सर्व्हरकरीता आऊटपुट पाठवण्याकरीता केला जातो. "
-#~ "रिकामे मूल्यकरीता सेट अशक्य किंवा शक्य केल्यावर, मूळ पाइपलाइनचा वापर केला जातो. हे "
-#~ "सध्या 'vp8enc min_quantizer=13 max_quantizer=13 cpu-used=5 "
-#~ "deadline=1000000 threads=%T ! queue ! webmmux' आहे व VP8 कोडेकचा वापर करून "
-#~ "WEBM करीता रेकॉर्डिंग करतो. %T चा वापर प्रणालीवरील कमाल थ्रेड गणणा ओळखण्यासाठी "
-#~ "प्लेसहोल्डर म्हणून केला जातो."
-
-#~ msgid "File extension used for storing the screencast"
-#~ msgstr "स्क्रिनकास्ट साठवण्याकरीता वापरलेले फाइल एक्सटेंशन"
-
-#~ msgid ""
-#~ "The filename for recorded screencasts will be a unique filename based on "
-#~ "the current date, and use this extension. It should be changed when "
-#~ "recording to a different container format."
-#~ msgstr ""
-#~ "सध्याच्या दिनांकवर आधारित रेकॉर्डेड स्क्रिनकास्ट्स्करीता फाइलचेना एकमेव फाइलनाव असणार, "
-#~ "व या एक्सटेंशनचा वापर करा. वेगळ्या कंटेनर स्वरूपकरीता रेकॉर्डिंग करतेवेळी बदलणे आवश्यक आहे."
-
-#~ msgid "Screencast from %d %t"
-#~ msgstr "%d %t पासून स्क्रीनकास्ट"
-
-#, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "शोधण्याकरीता टाइप करा…"
-
-#, fuzzy
-#~ msgid "Type to search your computer"
-#~ msgstr "शोधण्याकरीता टाइप करा…"
-
-#~ msgid "Frequent"
-#~ msgstr "वारंवारता"
-
-#~ msgid "All"
-#~ msgstr "सर्व"
-
-#~ msgid "%d new message"
-#~ msgid_plural "%d new messages"
-#~ msgstr[0] "%d नवीन संदेश"
-#~ msgstr[1] "%d नवीन संदेश"
-
-#~ msgid "Quit"
-#~ msgstr "बाहेर पडा"
-
-#~ msgid "Activities"
-#~ msgstr "क्रिया"
-
-#~ msgid "%A, %B %d"
-#~ msgstr "%A, %B %d"
-
-#~ msgid "%d new notification"
-#~ msgid_plural "%d new notifications"
-#~ msgstr[0] "%d नवीन सूचना"
-#~ msgstr[1] "%d नवीन सूचना"
-
-#~| msgid "Searching..."
-#~ msgid "Searching…"
-#~ msgstr "शोधत आहे..."
-
-#~ msgid "No results."
-#~ msgstr "परिणाम नाही."
-
-#~ msgid "Available"
-#~ msgstr "उपलब्ध"
-
-#~ msgid "Busy"
-#~ msgstr "व्यस्त"
-
-#~ msgid "Invisible"
-#~ msgstr "अदृष्य"
-
-#~ msgid "Away"
-#~ msgstr "दूर आहे"
-
-#~ msgid "Idle"
-#~ msgstr "रिकामे"
-
-#~ msgid "Offline"
-#~ msgstr "ऑफलाइन"
-
-#~ msgid "Notifications"
-#~ msgstr "सूचना"
-
-#~ msgid "Install Updates & Restart"
-#~ msgstr "सुधारणा प्रतिष्ठापीत करा व पुनः सुरू करा"
-
-#~ msgid "Your chat status will be set to busy"
-#~ msgstr "तुमची चॅट स्थिती व्यस्थकरीता ठरवले जाईल"
-
-#~ msgid ""
-#~ "Notifications are now disabled, including chat messages. Your online "
-#~ "status has been adjusted to let others know that you might not see their "
-#~ "messages."
-#~ msgstr ""
-#~ "सूचना आता बंद केले आहे, चॅट संदेश समाविष्टीत. इतरांना तुमचे संदेश दिसणार नाही हे "
-#~ "कळवण्यासाठी ऑनलाइन स्थिती सुस्थीत केली आहे."
-
-#~ msgid "Search"
-#~ msgstr "शोधा"
-
-#~ msgid ""
-#~ "Sorry, no wisdom for you today:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "माफ करा, चातुर्या आढळले नाही:\n"
-#~ "%s"
-
-#~ msgid "%s the Oracle says"
-#~ msgstr "%s ऑरॅकल म्हणतो"
-
-#~ msgctxt "title"
-#~ msgid "Sign In"
-#~ msgstr "प्रवेश करा"
-
-#~ msgid "APPLICATIONS"
-#~ msgstr "APPLICATIONS"
-
-#~ msgid "SETTINGS"
-#~ msgstr "SETTINGS"
-
-#~ msgctxt "event list time"
-#~ msgid "%H:%M"
-#~ msgstr "%H:%M"
-
-#~ msgctxt "event list time"
-#~ msgid "%l:%M %p"
-#~ msgstr "%l:%M %p"
-
-#~ msgid "Subscription request"
-#~ msgstr "सबस्क्रिप्शन विनंती"
-
-#~ msgid "Connection error"
-#~ msgstr "जोडणी त्रुटी"
-
-#~ msgid "Sent at <b>%X</b> on <b>%A</b>"
-#~ msgstr "<b>%X</b> वेळी, <b>%A</b> ला पाठवले"
-
-#~ msgid "Sent on <b>%A</b>, <b>%B %d</b>, %Y"
-#~ msgstr "<b>%A</b>, <b>%B %d</b>, %Y वेळी पाठवले"
-
-#~ msgid "Connection to %s failed"
-#~ msgstr "%s सह जोडणी अपयशी"
-
-#~ msgid "Reconnect"
-#~ msgstr "पुनःजोडणी करा"
-
-#~ msgid "tray"
-#~ msgstr "ट्रे"
-
-#~ msgid "Browse Files..."
-#~ msgstr "फाइल्स् तपासा..."
-
-#~ msgid "Error browsing device"
-#~ msgstr "साधनाची तपासणी करतेवेळी त्रुटी"
-
-#~ msgid "The requested device cannot be browsed, error is '%s'"
-#~ msgstr "विनंती केलेल्या साधनाची तपासणी अशक्य, त्रुटी '%s' आहे"
-
-#~ msgid "More..."
-#~ msgstr "अधिक..."
-
-#~ msgid "Wireless"
-#~ msgstr "वायरलेस्"
-
-#~ msgid "VPN Connections"
-#~ msgstr "VPN जोडणी"
-
-#~ msgid "Switch Session"
-#~ msgstr "सत्र बदला"
-
-#~ msgid "System Settings"
-#~ msgstr "प्रणाली मांडणी"
-
-#~ msgid "Your favorite Easter Egg"
-#~ msgstr "तुमच्या पसंतीचा इस्टर एग"
-
-#~ msgid "United Kingdom"
-#~ msgstr "यूनाइटेड किंगडम"
-
-#~ msgid "Default"
-#~ msgstr "मुलभूत"
-
-#~ msgid "Failed to unmount '%s'"
-#~ msgstr "'%s' माऊंट अशक्य करण्यास अपयशी"
-
-#~ msgid "Retry"
-#~ msgstr "पुनःप्रयत्न करा"
-
-#~ msgid "PLACES & DEVICES"
-#~ msgstr "PLACES & DEVICES"
-
-#~ msgid "Home"
-#~ msgstr "होम"
-
-#~ msgid "%1$s: %2$s"
-#~ msgstr "%1$s: %2$s"
-
-#~ msgid "disabled OpenSearch providers"
-#~ msgstr "OpenSearch प्रोव्हाइडर्स् बंद केले"
-
-#~ msgid "Connect to..."
-#~ msgstr "यासह जोडणी करा..."
-
-#~ msgid "Passphrase"
-#~ msgstr "पासफ्रेज"
-
-#~ msgid "Show time with seconds"
-#~ msgstr "सेकंदात वेळ दाखवा"
-
-#~ msgid "If true, display seconds in time."
-#~ msgstr "खरे असल्यास, वेळेत सेकंद दाखवा."
-
-#~ msgid "Show date in clock"
-#~ msgstr "घड्याळात दिनांक दाखवा"
-
-#~ msgid "If true, display date in the clock, in addition to time."
-#~ msgstr "खरे असल्यास,वेळेबरोबर तारीख पण घड्याळात दाखवा."
-
-#~ msgid "CONTACTS"
-#~ msgstr "संपर्क"
-
-#~ msgid "%a %b %e, %R:%S"
-#~ msgstr "%a %b %e, %R:%S"
-
-#~ msgid "%a %b %e, %R"
-#~ msgstr "%a %b %e, %R"
-
-#~ msgid "%a %R:%S"
-#~ msgstr "%a %R:%S"
-
-#~ msgid "%a %R"
-#~ msgstr "%a %R"
-
-#~ msgid "%a %b %e, %l:%M:%S %p"
-#~ msgstr "%a %b %e, %l:%M:%S %p"
-
-#~ msgid "%a %b %e, %l:%M %p"
-#~ msgstr "%a %b %e, %l:%M %p"
-
-#~ msgid "%a %l:%M:%S %p"
-#~ msgstr "%a %l:%M:%S %p"
-
-#~ msgid "%a %l:%M %p"
-#~ msgstr "%a %l:%M %p"
-
-#~ msgid "Wrong password, please try again"
-#~ msgstr "चुकिचा पासवर्ड, कृपया पुनः प्रयत्न करा"
-
-#~ msgid "Network"
-#~ msgstr "नेटवर्क"
-
-#~ msgid "%s is online."
-#~ msgstr "%s ऑनलाइन आहे."
-
-#~ msgid "%s is offline."
-#~ msgstr "%s ऑफलाइन आहे."
-
-#~ msgid "%s is away."
-#~ msgstr "%s दूर आहे."
-
-#~ msgid "%s is busy."
-#~ msgstr "%s व्यग्र आहे."
-
-#~ msgid "Hidden"
-#~ msgstr "लवपलेले"
-
-#~ msgid "Power Off..."
-#~ msgstr "बंद करा..."
-
-#~ msgid "Online Accounts"
-#~ msgstr "ऑनलाइन खाते"
-
-#~ msgid "Lock Screen"
-#~ msgstr "पडदा कुलूपबंद करा"
-
-#~ msgid "Log Out..."
-#~ msgstr "बाहेर पडा..."
-
-#~ msgid ""
-#~ "GNOME Shell extensions have a uuid property; this key lists extensions "
-#~ "which should not be loaded."
-#~ msgstr ""
-#~ "GNOME शेल एक्सटेंशन्स्मध्ये uuid गुणधर्म आढळते; या किमध्ये एक्सटेंशन्स् आहेत ज्यांना लोड "
-#~ "करायची आवश्यकता नाही."
-
-#~ msgid "RECENT ITEMS"
-#~ msgstr "RECENT ITEMS"
-
-#~ msgid "Localization Settings"
-#~ msgstr "भाषांतरन सेटिंग्ज"
-
-#~ msgid "You're now connected to mobile broadband connection '%s'"
-#~ msgstr "तुम्ही आत्ता मोबाईल ब्रॉडबँड जोडणी '%s' शी जुळले आहात"
-
-#~ msgid "You're now connected to wireless network '%s'"
-#~ msgstr "तुम्ही आत्ता वायरलेस नेटवर्क '%s' शी जुळले आहात"
-
-#~ msgid "You're now connected to wired network '%s'"
-#~ msgstr "तुम्ही आत्ता वायर्ड् नेटवर्क '%s' शी जुळले आहात"
-
-#~ msgid "You're now connected to VPN network '%s'"
-#~ msgstr "तुम्ही आत्ता VPN नेटवर्क '%s' शी जुळले आहात"
-
-#~ msgid "%s has finished starting"
-#~ msgstr "%s ने सुरवात पूर्ण केले"
-
-#~ msgid "Less than a minute ago"
-#~ msgstr "एका मिनीटापूर्वी"
-
-#~ msgid "%d minute ago"
-#~ msgid_plural "%d minutes ago"
-#~ msgstr[0] "%d मिनीट पूर्वी"
-#~ msgstr[1] "%d मिनीट पूर्वी"
-
-#~ msgid "%d hour ago"
-#~ msgid_plural "%d hours ago"
-#~ msgstr[0] "%d तास पूर्वी"
-#~ msgstr[1] "%d तास पूर्वी"
-
-#~ msgid "%d day ago"
-#~ msgid_plural "%d days ago"
-#~ msgstr[0] "%d दिवस पूर्वी"
-#~ msgstr[1] "%d दिवस पूर्वी"
-
-#~ msgid "%d week ago"
-#~ msgid_plural "%d weeks ago"
-#~ msgstr[0] "%d आठवडा पूर्वी"
-#~ msgstr[1] "%d आठवडा पूर्वी"

@@ -508,6 +508,13 @@ const SearchResults = new Lang.Class({
         this._updateResults(provider, results);
     },
 
+    _clearSearchTimeout: function() {
+        if (this._searchTimeoutId > 0) {
+            GLib.source_remove(this._searchTimeoutId);
+            this._searchTimeoutId = 0;
+        }
+    },
+
     _doSearch: function() {
         this._startingSearch = false;
 
@@ -525,11 +532,7 @@ const SearchResults = new Lang.Class({
         }));
 
         this._updateSearchProgress();
-
-        if (this._searchTimeoutId > 0) {
-            GLib.source_remove(this._searchTimeoutId);
-            this._searchTimeoutId = 0;
-        }
+        this._clearSearchTimeout();
     },
 
     _onSearchTimeout: function() {
@@ -538,10 +541,11 @@ const SearchResults = new Lang.Class({
         return GLib.SOURCE_REMOVE;
     },
 
-    reset: function() {
+    _reset: function() {
         this._terms = [];
         this._results = {};
         this._clearDisplay();
+        this._clearSearchTimeout();
         this._defaultResult = null;
         this._startingSearch = false;
 
@@ -554,11 +558,8 @@ const SearchResults = new Lang.Class({
         this._cancellable.cancel();
         this._cancellable.reset();
 
-        if (!terms) {
-            if (this._searchTimeoutId > 0) {
-                GLib.source_remove(this._searchTimeoutId);
-                this._searchTimeoutId = 0;
-            }
+        if (terms.length == 0) {
+            this._reset();
             return;
         }
 

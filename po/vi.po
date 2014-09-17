@@ -1,17 +1,18 @@
-# Vietnamese translation for gnome-shell.
-# Copyright (C) 2010 GNOME i18n Project for Vietnamese.
-# This file is distributed under the same license as the gnome-shell package.
-# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2010-2013.
-# Ngô Chin <ndtrung4419@gmail.com>, 2011.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 #
+# Translators:
+# Trung Ngô <ndtrung4419@gmail.com>, 2011
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-shell\n"
+"Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
-"PO-Revision-Date: 2013-03-03 11:13+0700\n"
-"Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
-"Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
+"PO-Revision-Date: 2014-09-16 04:33+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/projects/p/eos-shell/"
+"language/vi/)\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,7 +43,7 @@ msgstr "Mở trình đơn ứng dụng"
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -52,9 +53,8 @@ msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
-#, fuzzy
 msgid "EOS Shell"
-msgstr "GNOME Shell"
+msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -393,7 +393,7 @@ msgstr "Không có trong danh sách?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Thôi"
 
@@ -423,7 +423,7 @@ msgstr "Cửa sổ đặt nhập"
 msgid "Power"
 msgstr "Nguồn"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "Ngưng"
 
@@ -465,40 +465,40 @@ msgstr "Không thể phân tích lệnh:"
 msgid "Execution of '%s' failed:"
 msgstr "Lỗi thực hiện '%s':"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "Cửa sổ mới"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Bỏ đánh dấu ưa thích"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "Đánh dấu ưa thích"
 
@@ -512,23 +512,34 @@ msgstr "Đã được đánh dấu ưa thích cho %s."
 msgid "%s has been removed from your favorites."
 msgstr "Đã bỏ đánh dấu ưa thích cho %s"
 
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, c-format
+msgid "Quit %s"
+msgstr ""
+
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
 msgstr "Thay đổi nền…"
 
 #: ../js/ui/backgroundMenu.js:25
-#, fuzzy
 msgid "Add App"
-msgstr "Ứng dụng"
+msgstr ""
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website"
 msgstr ""
 
 #: ../js/ui/backgroundMenu.js:33
-#, fuzzy
 msgid "Add Folder"
-msgstr "Thư mục riêng"
+msgstr ""
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -1044,18 +1055,16 @@ msgid "Software Update"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:200
-#, fuzzy
 msgid "Updates available"
-msgstr "Không có mặt"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:201
 msgid "Software updates are available for your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:202
-#, fuzzy
 msgid "Download now"
-msgstr "Đang tải về"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:215
 msgid "Updates ready"
@@ -1066,23 +1075,20 @@ msgid "Software updates are ready to be installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:217
-#, fuzzy
 msgid "Install now"
-msgstr "Cài đặt"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:226
-#, fuzzy
 msgid "Updates installed"
-msgstr "Chưa cài phần mở rộng"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:227
 msgid "Software updates were installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:228
-#, fuzzy
 msgid "Restart now"
-msgstr "Khởi động lại"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:251
 msgid "Update failed"
@@ -1092,7 +1098,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "Cửa sổ"
 
@@ -1125,7 +1131,7 @@ msgstr "Thiết lập ngày giờ"
 msgid "%A %B %e, %Y"
 msgstr "%A %e %B, %Y"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1226,6 +1232,21 @@ msgstr "Cài đặt"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Tải và cài đặt '%s' từ extensions.gnome.org chứ?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1312,15 +1333,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Không biết"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "Hoàn lại"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "Tổng quan"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "Thanh đỉnh"
 
@@ -1360,35 +1381,33 @@ msgstr "Không thể khoá"
 msgid "Lock was blocked by an application"
 msgstr "Một ứng dụng đã ngăn cản khoá"
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
+#: ../js/ui/search.js:666
+msgid "Searching…"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:112
-#, fuzzy
-msgid "My Computer"
-msgstr "Máy tính"
+#: ../js/ui/search.js:668
+msgid "No results."
+msgstr ""
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "Chép"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "Dán"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "Hiện chữ"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "Ẩn chữ"
 
-#: ../js/ui/shellEntry.js:347
-#, fuzzy
-msgid "My computer"
-msgstr "Máy tính"
+#: ../js/ui/shellEntry.js:175
+msgid "Type to search…"
+msgstr ""
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1803,51 +1822,51 @@ msgstr "Đăng nhập người dùng khác"
 msgid "Unlock Window"
 msgstr "Bỏ khoá cửa sổ"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "Đăng xuất"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "Khoá"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "Thiết lập"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "Chuyển người dùng"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "Người dùng khác đang đăng nhập."
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "Tắt sẽ làm mất những kết quả chưa được lưu."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (ở xa)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "Ứng dụng"
 
@@ -1864,9 +1883,8 @@ msgstr ""
 #. to avoid ellipsizing the labels.
 #.
 #: ../js/ui/windowManager.js:84
-#, fuzzy
 msgid "Revert Settings"
-msgstr "Thiết lập năng lượng"
+msgstr ""
 
 #: ../js/ui/windowManager.js:88
 msgid "Keep Changes"
@@ -1943,486 +1961,3 @@ msgstr "Mật khẩu không thể không có"
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
 msgstr "Hộp thoại xác thực bị người dùng bỏ qua"
-
-#~ msgid "Screenshots"
-#~ msgstr "Chụp hình"
-
-#~ msgid "Record a screencast"
-#~ msgstr "Thu screencast"
-
-#~ msgid "Keybinding to toggle the screen recorder"
-#~ msgstr "Phím bật/tắt trình thu màn hình"
-
-#~ msgid "Keybinding to start/stop the builtin screen recorder."
-#~ msgstr "Phím chạy hoặc ngừng trình thu màn hình."
-
-#~ msgid "Framerate used for recording screencasts."
-#~ msgstr "Tốc độ khung dùng lưu screencast."
-
-#~ msgid ""
-#~ "The framerate of the resulting screencast recordered by GNOME Shell's "
-#~ "screencast recorder in frames-per-second."
-#~ msgstr ""
-#~ "Tốc độ khung của screencast lưu bởi bộ thu GNOME Shell theo số khung mỗi "
-#~ "giây."
-
-#~ msgid "The gstreamer pipeline used to encode the screencast"
-#~ msgstr "Ống dẫn gstreamer để thu screencast"
-
-#~ msgid ""
-#~ "Sets the GStreamer pipeline used to encode recordings. It follows the "
-#~ "syntax used for gst-launch. The pipeline should have an unconnected sink "
-#~ "pad where the recorded video is recorded. It will normally have a "
-#~ "unconnected source pad; output from that pad will be written into the "
-#~ "output file. However the pipeline can also take care of its own output - "
-#~ "this might be used to send the output to an icecast server via shout2send "
-#~ "or similar. When unset or set to an empty value, the default pipeline "
-#~ "will be used. This is currently 'vp8enc min_quantizer=13 max_quantizer=13 "
-#~ "cpu-used=5 deadline=1000000 threads=%T ! queue ! webmmux' and records to "
-#~ "WEBM using the VP8 codec. %T is used as a placeholder for a guess at the "
-#~ "optimal thread count on the system."
-#~ msgstr ""
-#~ "Đặt ống dẫn GStreamer dùng để thu hình. Tuân theo cú pháp gst-launch. Ống "
-#~ "dẫn nên có pad sink không kết nối, nơi bắt đầu thu. Bình thường cũng nên "
-#~ "có source pad không kết nối; đầu ra từ pad sẽ được ghi vào tập tin kết "
-#~ "quả. Tuy nhiên ống dẫn có thể tự lưu đầu ra riêng - có thể hữu dụng để "
-#~ "gửi kết quả đến máy chủ icecast thông qua shout2send hoặc tương tự. Nếu "
-#~ "bỏ chọn hoặc đặt giá trị rỗng, ống dẫn mặc định sẽ được dùng, hiện thời "
-#~ "là 'vp8enc min_quantizer=13 max_quantizer=13 cpu-used=5 deadline=1000000 "
-#~ "threads=%T ! queue ! webmmux' và lưu ở dạng WEBM dùng VP8 codec. %T được "
-#~ "dùng để thế chỗ cho số thread dự đoán tối ưu cho hệ thống."
-
-#~ msgid "File extension used for storing the screencast"
-#~ msgstr "Phần mở rộng dùng để lưu screencast"
-
-#~ msgid ""
-#~ "The filename for recorded screencasts will be a unique filename based on "
-#~ "the current date, and use this extension. It should be changed when "
-#~ "recording to a different container format."
-#~ msgstr ""
-#~ "Tên tập tin cho screencast được lưu sẽ là tên độc nhất dự trên ngày hiện "
-#~ "thời, và dùng phần mở rộng này. Khi lưu ở định dạng khác nhau thì tên này "
-#~ "cũng nên khác nhau."
-
-#~ msgid "Screencast from %d %t"
-#~ msgstr "Screencast from %d %t"
-
-#, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "Nhập để tìm…"
-
-#, fuzzy
-#~ msgid "Type to search your computer"
-#~ msgstr "Tìm trong máy"
-
-#~ msgid "Frequent"
-#~ msgstr "Thường dùng"
-
-#~ msgid "All"
-#~ msgstr "Tất cả"
-
-#~ msgid "%d new message"
-#~ msgid_plural "%d new messages"
-#~ msgstr[0] "%d tin nhắn mới"
-
-#~ msgid "Quit"
-#~ msgstr "Thoát"
-
-#~ msgid "Activities"
-#~ msgstr "Hoạt động"
-
-#~ msgid "%A, %B %d"
-#~ msgstr "%A, %d %B"
-
-#~ msgid "%d new notification"
-#~ msgid_plural "%d new notifications"
-#~ msgstr[0] "%d thông báo mới"
-
-#~ msgid "Searching…"
-#~ msgstr "Đang tìm…"
-
-#~ msgid "No results."
-#~ msgstr "Không có kết quả."
-
-#~ msgid "Available"
-#~ msgstr "Có mặt"
-
-#~ msgid "Busy"
-#~ msgstr "Bận"
-
-#~ msgid "Invisible"
-#~ msgstr "Giấu mặt"
-
-#~ msgid "Away"
-#~ msgstr "Vắng mặt"
-
-#~ msgid "Idle"
-#~ msgstr "Nhàn rỗi"
-
-#~ msgid "Offline"
-#~ msgstr "Ngoại tuyến"
-
-#~ msgid "Notifications"
-#~ msgstr "Thông báo"
-
-#~ msgid "Install Updates & Restart"
-#~ msgstr "Cài đặt bản cập nhật và khởi động lại"
-
-#~ msgid "Your chat status will be set to busy"
-#~ msgstr "Trạng thái nhắn tin của bạn sẽ được đặt là bận"
-
-#~ msgid ""
-#~ "Notifications are now disabled, including chat messages. Your online "
-#~ "status has been adjusted to let others know that you might not see their "
-#~ "messages."
-#~ msgstr ""
-#~ "Thông báo đã bị tắt, bao gồm tin nhắn. Trạng thái trực tuyến của bạn đã "
-#~ "được điều chỉnh để mọi người biết bạn sẽ không xem tin nhắn họ gửi đến."
-
-#~ msgid "Search"
-#~ msgstr "Tìm"
-
-#~ msgid ""
-#~ "Sorry, no wisdom for you today:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Rất tiếc, không có lời thông thái nào hôm nay:\n"
-#~ "%s"
-
-#~ msgid "%s the Oracle says"
-#~ msgstr "Nhà tiên tri %s nói"
-
-#~ msgctxt "title"
-#~ msgid "Sign In"
-#~ msgstr "Đăng nhập"
-
-#~ msgid "tray"
-#~ msgstr "khay"
-
-#~ msgid "Clear"
-#~ msgstr "Xoá trắng"
-
-#~ msgid "More..."
-#~ msgstr "Nữa..."
-
-#~ msgid "disabled OpenSearch providers"
-#~ msgstr "Phần cung cấp OpenSearch bị tắt"
-
-#~ msgid "APPLICATIONS"
-#~ msgstr "ỨNG DỤNG"
-
-#~ msgid "SETTINGS"
-#~ msgstr "THIẾT LẬP"
-
-#~ msgctxt "event list time"
-#~ msgid "%H:%M"
-#~ msgstr "%H:%M"
-
-#~ msgctxt "event list time"
-#~ msgid "%l:%M %p"
-#~ msgstr "%l:%M %p"
-
-#~ msgid "Failed to unmount '%s'"
-#~ msgstr "Lỗi bỏ gắn kết '%s'"
-
-#~ msgid "Retry"
-#~ msgstr "Thử lại"
-
-#~ msgid "PLACES & DEVICES"
-#~ msgstr "ĐỊA ĐIỂM & THIẾT BỊ"
-
-#~ msgid "Browse Files..."
-#~ msgstr "Duyệt tập tin..."
-
-#~ msgid "Error browsing device"
-#~ msgstr "Lỗi duyệt tập tin"
-
-#~ msgid "The requested device cannot be browsed, error is '%s'"
-#~ msgstr "Không thể duyệt thiết bị yêu cầu , lỗi là '%s'"
-
-#~ msgid "Wireless"
-#~ msgstr "Mạng không dây"
-
-#~ msgid "VPN Connections"
-#~ msgstr "Kết nối VPN"
-
-#~ msgid "Subscription request"
-#~ msgstr "Yêu cầu đăng ký"
-
-#~ msgid "Connection error"
-#~ msgstr "Lỗi kết nối"
-
-#~ msgid "Sent at <b>%X</b> on <b>%A</b>"
-#~ msgstr "Đã gửi <b>%X</b> lúc <b>%A</b>"
-
-#~ msgid "Sent on <b>%A</b>, <b>%B %d</b>, %Y"
-#~ msgstr "Đã gửi <b>%A</b>, <b>%d %B</b>, %Y"
-
-#~ msgid "Connection to %s failed"
-#~ msgstr "Kết nối %s thất bại"
-
-#~ msgid "Reconnect"
-#~ msgstr "Tái kết nối"
-
-#~ msgid "Switch Session"
-#~ msgstr "Chuyển phiên làm việc"
-
-#~ msgid "System Settings"
-#~ msgstr "Thiết lập hệ thống"
-
-#~ msgid "Your favorite Easter Egg"
-#~ msgstr "Trứng phục sinh yêu thích của bạn"
-
-#~ msgid "United Kingdom"
-#~ msgstr "Vương quốc Anh"
-
-#~ msgid "Default"
-#~ msgstr "Mặc định"
-
-#~ msgid "Home"
-#~ msgstr "Thư mục riêng"
-
-#~ msgid "%1$s: %2$s"
-#~ msgstr "%1$s: %2$s"
-
-#~ msgid "Connect to..."
-#~ msgstr "Kết nối đến..."
-
-#~ msgid "Passphrase"
-#~ msgstr "Mật khẩu"
-
-#~ msgid "%s is online."
-#~ msgstr "%s đang trực tuyến."
-
-#~ msgid "%s is offline."
-#~ msgstr "%s đã ngoại tuyến."
-
-#~ msgid "%s is away."
-#~ msgstr "%s đi vắng."
-
-#~ msgid "%s is busy."
-#~ msgstr "%s bận."
-
-#~ msgid "Show time with seconds"
-#~ msgstr "Hiện giây"
-
-#~ msgid "If true, display seconds in time."
-#~ msgstr "Nếu đúng (true), hiện giây."
-
-#~ msgid "Show date in clock"
-#~ msgstr "Hiện ngày trên đồng hồ"
-
-#~ msgid "If true, display date in the clock, in addition to time."
-#~ msgstr "Nếu đúng (true), hiện ngày trên đồng hồ, bên cạnh giờ."
-
-#~ msgid "CONTACTS"
-#~ msgstr "LIÊN LẠC"
-
-#~ msgid "%a %b %e, %R:%S"
-#~ msgstr "%a %R:%S, %e %b"
-
-#~ msgid "%a %b %e, %R"
-#~ msgstr "%a %R, %e %b"
-
-#~ msgid "%a %R:%S"
-#~ msgstr "%a %R:%S"
-
-#~ msgid "%a %R"
-#~ msgstr "%a %R"
-
-#~ msgid "%a %b %e, %l:%M:%S %p"
-#~ msgstr "%a %e %b, %l:%M:%S %p"
-
-#~ msgid "%a %b %e, %l:%M %p"
-#~ msgstr "%a %e %b, %l:%M %p"
-
-#~ msgid "%a %l:%M:%S %p"
-#~ msgstr "%a %l:%M:%S %p"
-
-#~ msgid "%a %l:%M %p"
-#~ msgstr "%a %l:%M %p"
-
-#~ msgid "Wrong password, please try again"
-#~ msgstr "Nhập sai mật khẩu, xin hãy thử lại"
-
-#~ msgid "Network"
-#~ msgstr "Mạng"
-
-#~ msgid "Hidden"
-#~ msgstr "Ẩn"
-
-#~ msgid "Power Off..."
-#~ msgstr "Tắt máy..."
-
-#~ msgid "Online Accounts"
-#~ msgstr "Tài khoản trực tuyến"
-
-#~ msgid "Lock Screen"
-#~ msgstr "Khoá màn hình"
-
-#~ msgid "Log Out..."
-#~ msgstr "Đăng xuất..."
-
-#~ msgid "RECENT ITEMS"
-#~ msgstr "MỤC GẦN ĐÂY"
-
-#~ msgid ""
-#~ "GNOME Shell extensions have a uuid property; this key lists extensions "
-#~ "which should be loaded. disabled-extensions overrides this setting for "
-#~ "extensions that appear in both lists."
-#~ msgstr ""
-#~ "Phần mở rộng GNOME Shell có thuộc tính uuid. Khoá này liệt kê danh sách "
-#~ "phần mở rộng cần phải nạp. disabled-extensions ghi đè vào khóa này đối "
-#~ "với những phần mở rộng có mặt ở cả hai danh sách."
-
-#~ msgid "Show password"
-#~ msgstr "Hiện mật khẩu"
-
-#~| msgid "If true, display seconds in time."
-#~ msgid "If true, display onscreen keyboard."
-#~ msgstr "Nếu đúng (true), hiện bàn phím màn hình."
-
-#~| msgid "Screen Keyboard"
-#~ msgid "Show the onscreen keyboard"
-#~ msgstr "Hiện bàn phím màn hình"
-
-#~ msgid "%s has finished starting"
-#~ msgstr "%s đã hoàn tất khởi chạy"
-
-#~ msgid "Uuids of extensions to disable"
-#~ msgstr "UUID của phần mở rộng cần tắt"
-
-#~ msgid "You're now connected to mobile broadband connection '%s'"
-#~ msgstr "Đã nối mạng '%s' (băng thông rộng)"
-
-#~ msgid "You're now connected to wireless network '%s'"
-#~ msgstr "Đã nối mạng '%s' (không dây)"
-
-#~ msgid "You're now connected to wired network '%s'"
-#~ msgstr "Đã nối mạng '%s' (dây)"
-
-#~ msgid "You're now connected to VPN network '%s'"
-#~ msgstr "Đã nối mạng VPN '%s'"
-
-#~ msgid "Localization Settings"
-#~ msgstr "Thiết lập bản địa hoá"
-
-#~ msgid "Less than a minute ago"
-#~ msgstr "Chưa đến một phút"
-
-#~ msgid "%d minute ago"
-#~ msgid_plural "%d minutes ago"
-#~ msgstr[0] "%d phút trước"
-
-#~ msgid "%d hour ago"
-#~ msgid_plural "%d hours ago"
-#~ msgstr[0] "%d giờ trước"
-
-#~ msgid "%d day ago"
-#~ msgid_plural "%d days ago"
-#~ msgstr[0] "%d ngày trước"
-
-#~ msgid "%d week ago"
-#~ msgid_plural "%d weeks ago"
-#~ msgstr[0] "%d tuần trước"
-
-#~ msgid "Shut Down"
-#~ msgstr "Tắt máy"
-
-#~ msgid "Click Shut Down to quit these applications and shut down the system."
-#~ msgstr "Nhấn Tắt máy để thoát những ứng dụng này và tắt hệ thống."
-
-#~ msgid "The system will shut down automatically in %d seconds."
-#~ msgstr "Hệ thống sẽ tự động tắt sau %d giây."
-
-#~ msgid "Shutting down the system."
-#~ msgstr "Tắt hệ thống."
-
-#~ msgid "Confirm"
-#~ msgstr "Xác nhận"
-
-#~ msgid "Clip the crosshairs at the center"
-#~ msgstr "Cắt lưới chéo ở giữa"
-
-#~ msgid "Color of the crosshairs"
-#~ msgstr "Màu lưới chéo"
-
-#~ msgid ""
-#~ "Determines the length of the vertical and horizontal lines that make up "
-#~ "the crosshairs."
-#~ msgstr "Xác định độ dài và rộng của những dòng tạo nên lưới chéo."
-
-#~ msgid ""
-#~ "Determines the transparency of the crosshairs, from fully opaque to fully "
-#~ "transparent."
-#~ msgstr "Xác định độ trong suốt của lưới chéo, từ đặc đến trong suốt."
-
-#~ msgid "Enable lens mode"
-#~ msgstr "Bật chế độ gương"
-
-#~ msgid "Show or hide crosshairs"
-#~ msgstr "Hiện hoặc ẩn lưới chéo"
-
-#~ msgid "Show or hide the magnifier"
-#~ msgstr "Hiện hoặc ẩn kính lúp"
-
-#~ msgid "Thickness of the crosshairs"
-#~ msgstr "Độ dày lưới chéo"
-
-#~ msgid ""
-#~ "Width of the vertical and horizontal lines that make up the crosshairs."
-#~ msgstr "Độ rộng của đường dọc/ngang hình thành dấu gạch chéo."
-
-#~ msgid "PREFERENCES"
-#~ msgstr "TUỲ THÍCH"
-
-#~ msgid "Shut Down..."
-#~ msgstr "Tắt máy..."
-
-#~ msgid "Customize the panel clock"
-#~ msgstr "Tuỳ biến đồng hồ"
-
-#~ msgid "Clock Format"
-#~ msgstr "Dạng đồng hồ"
-
-#~| msgid "System Preferences..."
-#~ msgid "Clock Preferences"
-#~ msgstr "Thiết lập đồng hồ"
-
-#~ msgid "Panel Display"
-#~ msgstr "Khung hiển thị"
-
-#~ msgid "Show seco_nds"
-#~ msgstr "Hiện _giây"
-
-#~ msgid "_12 hour format"
-#~ msgstr "Dạng _12 giờ"
-
-#~ msgid "_24 hour format"
-#~ msgstr "Dạng _24 giờ"
-
-#~| msgid "System Preferences..."
-#~ msgid "Preferences"
-#~ msgstr "Thiết lập"
-
-#~ msgid ""
-#~ "Can't add a new workspace because maximum workspaces limit has been "
-#~ "reached."
-#~ msgstr ""
-#~ "Không thể thêm vùng làm việc mới vì đã đạt giới hạn số vùng làm việc tối "
-#~ "đa."
-
-#~ msgid "Can't remove the first workspace."
-#~ msgstr "Không thể bỏ vùng làm việc đầu tiên."
-
-#~ msgid "Drag here to add favorites"
-#~ msgstr "Kéo vào đây để thêm vào danh mục ưa thích"
-
-#~ msgid "Find..."
-#~ msgstr "Tìm"
-
-#~ msgid "Sidebar"
-#~ msgstr "Thanh bên"
-
-#~ msgid "Recent Documents"
-#~ msgstr "Tài liệu gần đây"

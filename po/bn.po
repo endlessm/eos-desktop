@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2011-04-04 11:04+0600\n"
 "Last-Translator: Israt Jahan <israt@ankur.org.bd>\n"
 "Language-Team: Bengali <ankur-bd-l10n@googlegroups.com>\n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -379,7 +379,7 @@ msgstr ""
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "বাতিল"
 
@@ -412,7 +412,7 @@ msgstr "নতুন উইন্ডো"
 msgid "Power"
 msgstr "পাওয়ার বন্ধ..."
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "বাতিল"
 
@@ -456,40 +456,40 @@ msgstr "কমান্ড পার্স করা যায়নি:"
 msgid "Execution of '%s' failed:"
 msgstr "'%s' কার্যকর করা ব্যর্থ:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "ঠিক আছে"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "নতুন উইন্ডো"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "পছন্দ থেকে অপসারণ"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "পছন্দে যোগ"
 
@@ -502,6 +502,19 @@ msgstr "আপনার পছন্দে %s যোগ করা হয়েছ�
 #, c-format
 msgid "%s has been removed from your favorites."
 msgstr "আপনার পছন্দ থেকে  %s বাদ হয়েছে।"
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, c-format
+msgid "Quit %s"
+msgstr "%s বন্ধ"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -1095,7 +1108,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "উইন্ডো"
 
@@ -1130,7 +1143,7 @@ msgstr "তারিখ ও সময় এর সেটিং"
 msgid "%A %B %e, %Y"
 msgstr "%A %B %e, %Y"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1242,6 +1255,21 @@ msgstr ""
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr ""
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1332,15 +1360,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "অজানা"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "পূর্বাবস্থায় ফিরিয়ে নেয়া"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr ""
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "শীর্ষ বার"
 
@@ -1381,36 +1409,37 @@ msgstr ""
 msgid "Lock was blocked by an application"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
-msgstr ""
-
-#: ../js/ui/shellEntry.js:112
+#: ../js/ui/search.js:666
 #, fuzzy
-msgid "My Computer"
-msgstr "কম্পিউটার"
+msgid "Searching…"
+msgstr "অনুসন্ধান..."
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/search.js:668
+#, fuzzy
+msgid "No results."
+msgstr "মিলযুক্ত কোনো ফলাফল নেই।"
+
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 #, fuzzy
 msgid "Hide Text"
 msgstr "বড় টেক্সট"
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:175
 #, fuzzy
-msgid "My computer"
-msgstr "কম্পিউটার"
+msgid "Type to search…"
+msgstr "অনুসন্ধান করতে লিখুন..."
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1848,52 +1877,52 @@ msgstr ""
 msgid "Unlock Window"
 msgstr "নতুন উইন্ডো"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "লগআউট"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr ""
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 #, fuzzy
 msgid "Settings"
 msgstr "মাউস সেটিং"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "ব্যবহারকারী পরিবর্তন"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr ""
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr ""
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr ""
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "অ্যাপ্লিকেশন"
 
@@ -1996,8 +2025,12 @@ msgid "Authentication dialog was dismissed by the user"
 msgstr "ব্যবহারকারী কর্তৃক প্রমাণীকরণ ডায়ালগ বাতিল"
 
 #, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "অনুসন্ধান করতে লিখুন..."
+#~ msgid "My Computer"
+#~ msgstr "কম্পিউটার"
+
+#, fuzzy
+#~ msgid "My computer"
+#~ msgstr "কম্পিউটার"
 
 #, fuzzy
 #~ msgid "Type to search your computer"
@@ -2047,9 +2080,6 @@ msgstr "ব্যবহারকারী কর্তৃক প্রমাণ�
 #~ msgid "RECENT ITEMS"
 #~ msgstr "সাম্প্রতিক আইটেম"
 
-#~ msgid "Quit %s"
-#~ msgstr "%s বন্ধ"
-
 #~ msgid "Activities"
 #~ msgstr "অ্যাক্টিভিটিজ"
 
@@ -2064,12 +2094,6 @@ msgstr "ব্যবহারকারী কর্তৃক প্রমাণ�
 
 #~ msgid "PLACES & DEVICES"
 #~ msgstr "স্থান এবং ডিভাইস"
-
-#~ msgid "Searching..."
-#~ msgstr "অনুসন্ধান..."
-
-#~ msgid "No matching results."
-#~ msgstr "মিলযুক্ত কোনো ফলাফল নেই।"
 
 #~ msgid "Power Off..."
 #~ msgstr "পাওয়ার বন্ধ..."

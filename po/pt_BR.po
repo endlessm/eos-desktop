@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-08 15:13-0700\n"
-"PO-Revision-Date: 2014-09-12 16:42+0000\n"
-"Last-Translator: Silva <michele@endlessm.com>\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
+"PO-Revision-Date: 2014-09-17 03:26+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/eos-shell/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -47,11 +47,11 @@ msgstr "Ativar as notificações ativas"
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
 msgid "Show all applications"
-msgstr "Mostrar todos os aplicativos"
+msgstr "Mostrar todos os programas"
 
 #: ../data/50-gnome-shell-system.xml.in.h:5
 msgid "Open the application menu"
-msgstr "Abre o menu do aplicativo"
+msgstr "Abrir o menu do programa"
 
 #: ../data/eos-app-feedback.desktop.in.in.h:1
 msgid "Feedback"
@@ -73,7 +73,7 @@ msgstr "EOS Shell"
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
 msgid "Window management and application launching"
-msgstr "Gerenciamento de janelas e lançador de aplicativos"
+msgstr "Gerenciamento de janelas e lançador de programas"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 #: ../js/extensionPrefs/main.js:155
@@ -138,14 +138,14 @@ msgstr " A posição padrão para o Canto de Acesso Rápido é o canto inferior.
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:11
 msgid "Set the size of the hot corner target"
-msgstr "Defina o tamanho do painel de aplicativos escolhido"
+msgstr "Defina o tamanho do painel de programas escolhido"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:12
 msgid ""
 "Number of pixels in one dimension of the square target for the hot corner. "
 "Default is for a single pixel in the very corner. For some virtual machines,"
 " this value may need to be set larger than the default."
-msgstr "Número de pixeis numa dimensão do quadrado alvo do painel de aplicativos. Por padrão é um único pixel no mesmo canto. Para algumas máquinas virtuais, este valor pode necessitar ser definido como maior que o existente por padrão"
+msgstr "Número de pixeis numa dimensão do quadrado alvo do painel de programas. Por padrão é um único pixel no mesmo canto. Para algumas máquinas virtuais, este valor pode necessitar ser definido como maior que o existente por padrão"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:13
 msgid "Set the left/right position of the dash on the overview"
@@ -160,22 +160,22 @@ msgstr "Posição padrão do Painel Lateral está no final da tela ( margem dire
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:15
 msgid "Prevent apps from being automatically maximized on launch"
-msgstr "Previne que as aplicações sejam automaticamente maximizadas ao iniciar"
+msgstr "Previne que os programas sejam automaticamente maximizadas ao iniciar"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
 "screens, prevents applications from being forced to open maximized, and does"
 " not automatically switch to the app selector when a window is minimized."
-msgstr "Torna a gestão de janelas como o padrão do Gnome. Esconde os ecrãs totais das aplicações, previne as aplicações de serem forçadas a iniciar maximizadas e, não muda automaticamente o seletor de aplicações quando uma janela é minimizada."
+msgstr "Torna a gestão de janelas como o padrão do Gnome. Esconde os ecrãs totais dos programas, previne que eles sejam forçados a iniciar maximizados e não muda automaticamente o seletor de programas quando uma janela é minimizada."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:17
 msgid "Whether the app store is displayed"
-msgstr "Se a Central de Aplicações é exibida"
+msgstr "Se a Central de Programas é exibida"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:18
 msgid "Whether the application grid displays the app store icon."
-msgstr "Se o grid de aplicações mostra o ícone da Central de Aplicativos."
+msgstr "Se o grid de aplicações mostra o ícone da Central de Programas."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:19
 msgid "Uuids of extensions to enable"
@@ -191,7 +191,7 @@ msgstr "As extensões do GNOME Shell tem uma propriedade uuid; esta chave lista 
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:21
 msgid "Whether to collect stats about applications usage"
-msgstr "Quando coletar dados sobre uso de aplicativos"
+msgstr "Quando coletar dados sobre uso de programas"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:22
 msgid ""
@@ -199,17 +199,17 @@ msgid ""
 " used ones (e.g. in launchers). While this data will be kept private, you "
 "may want to disable this for privacy reasons. Please note that doing so "
 "won't remove already saved data."
-msgstr "O shell normalmente monitora os aplicativos em execução para apresentar os mais usados (ex: em lançadores). Embora esses dados sejam mantidos em segurança, você pode querer desabilitá-los por razões de privacidade. Por favor, note que ao fazer isso não removerá os dados já salvos."
+msgstr "O shell normalmente monitora os programas em execução para apresentar os mais usados (ex: em lançadores). Embora esses dados sejam mantidos em segurança, você pode querer desabilitá-los por razões de privacidade. Por favor, note que ao fazer isso não removerá os dados já salvos."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:23
 msgid "List of desktop file IDs for favorite applications"
-msgstr "Lista dos IDs de arquivo de área de trabalho para os aplicativos favoritos"
+msgstr "Lista dos IDs de arquivo de área de trabalho para os programas favoritos"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:24
 msgid ""
 "The applications corresponding to these identifiers will be displayed in the"
 " favorites area."
-msgstr "Os aplicativos correspondentes a estes identificadores serão exibidos na área de favoritos."
+msgstr "Os programas correspondentes a estes identificadores serão exibidos na área de favoritos."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
 msgid "List of categories that should be displayed as folders"
@@ -219,7 +219,7 @@ msgstr "Lista de categorias que devem ser exibidas como pastas"
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
-msgstr "Cada nome de categoria nesta lista será representado como uma pasta na visualização do aplicativo, ao invés de ser exibido incorporado à visualização principal."
+msgstr "Cada nome de categoria nesta lista será representado como uma pasta na visualização do programa, ao invés de ser exibido incorporado à visualização principal."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "History for command (Alt-F2) dialog"
@@ -272,7 +272,7 @@ msgstr "Visual dos ícones de iniciação das aplicações no grid"
 msgid ""
 "This key specifies the exact order of the icons shown in the applications "
 "launcher view."
-msgstr "Esta chave especifica a ordem exata dos ícones apresentados na visualização de iniciação de aplicações."
+msgstr "Esta chave especifica a ordem exata dos ícones apresentados na visualização de iniciação dos programas."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Show the week date in the calendar"
@@ -284,21 +284,21 @@ msgstr "Se verdadeiro, exibe o data da semana na agenda."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Keybinding to open the application menu"
-msgstr "Atalho de teclado para abrir um menu de aplicativo"
+msgstr "Atalho de teclado para abrir um menu de programa"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:40
 msgid "Keybinding to open the application menu."
-msgstr "Atalho de teclado para abrir um menu de aplicativo."
+msgstr "Atalho de teclado para abrir um menu de programa."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:41
 msgid "Keybinding to open the \"Show Applications\" view"
-msgstr "Atalho de teclado para abrir a visualização \"Mostrar aplicativos\""
+msgstr "Atalho de teclado para abrir a visualização \"Mostrar programas\""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid ""
 "Keybinding to open the \"Show Applications\" view of the Activities "
 "Overview."
-msgstr "Atalho de teclado para abrir a visualização \"Mostrar aplicativos\" da visualização geral de atividades."
+msgstr "Atalho de teclado para abrir a visualização \"Mostrar programas\" da visualização geral de atividades."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:43
 msgid "Keybinding to toggle the visibility of the message tray"
@@ -326,14 +326,14 @@ msgstr "O tipo do teclado para usar."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "The application icon mode."
-msgstr "O modo ícone do aplicativo."
+msgstr "O modo ícone do programa."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
 "(shows only the application icon) or 'both'."
-msgstr "Configura como as janelas são mostradas no alternador. As possibilidades válidas são 'thumbnail-only' (mostra uma miniatura da janela), 'app-icon-only' (mostra apenas o ícone do aplicativo) ou 'both'."
+msgstr "Configura como as janelas são mostradas no alternador. As possibilidades válidas são 'thumbnail-only' (mostra uma miniatura da janela), 'app-icon-only' (mostra apenas o ícone do programa) ou 'both'."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid "Attach modal dialog to the parent window"
@@ -466,40 +466,40 @@ msgstr "Não foi possível analisar comando:"
 msgid "Execution of '%s' failed:"
 msgstr "A execução de \"%s\" falhou:"
 
-#: ../js/ui/appDisplay.js:1859
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
-msgstr "Mais Apps"
+msgstr "Mais Programas"
 
-#: ../js/ui/appDisplay.js:1868
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr "Excluir"
 
-#: ../js/ui/appDisplay.js:1920
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr "Aviso"
 
-#: ../js/ui/appDisplay.js:1926
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para excluir uma pasta que você tem que remover todos os arquivos de dentro primeiro."
 
-#: ../js/ui/appDisplay.js:1932
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr "Estamos apenas tentando manter a segurança dos seus dados."
 
-#: ../js/ui/appDisplay.js:1938 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:2021
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "Nova janela"
 
-#: ../js/ui/appDisplay.js:2024 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Remover dos favoritos"
 
-#: ../js/ui/appDisplay.js:2025
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "Adicionar aos favoritos"
 
@@ -524,7 +524,7 @@ msgstr "Área de trabalho atual "
 #: ../js/ui/appIconBar.js:293
 #, c-format
 msgid "Quit %s"
-msgstr "Sair %s"
+msgstr "Fechar %s"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -532,15 +532,15 @@ msgstr "Alterar plano de fundo…"
 
 #: ../js/ui/backgroundMenu.js:25
 msgid "Add App"
-msgstr "Adicionar Aplicativo"
+msgstr "Adicionar programa"
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website"
-msgstr "Adicionar Website"
+msgstr "Adicionar website"
 
 #: ../js/ui/backgroundMenu.js:33
 msgid "Add Folder"
-msgstr "Adicionar Nova Pasta"
+msgstr "Adicionar nova pasta"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -1100,13 +1100,13 @@ msgstr "Ocorreu um erro durante à atualização"
 msgid "We could not update your system"
 msgstr "Não foi possível atualizar o seu sistema"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:551
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "Janelas"
 
 #: ../js/ui/dash.js:261 ../js/ui/dash.js:299
 msgid "Show Applications"
-msgstr "Mostrar aplicativos"
+msgstr "Mostrar programas"
 
 #. Translators: this is the name of the dock/favorites area on
 #. the left of the overview
@@ -1152,7 +1152,7 @@ msgstr "Encerrar sessão"
 
 #: ../js/ui/endSessionDialog.js:80
 msgid "Click Log Out to quit these applications and log out of the system."
-msgstr "Clique em Encerrar Sessão para finalizar estes aplicativos e sair do sistema."
+msgstr "Clique em Encerrar Sessão para finalizar estes programas e sair do sistema."
 
 #: ../js/ui/endSessionDialog.js:83
 #, c-format
@@ -1184,7 +1184,7 @@ msgstr "Desligar"
 
 #: ../js/ui/endSessionDialog.js:103
 msgid "Click Power Off to quit these applications and power off the system."
-msgstr "Clique em Desligar para fechar os aplicativos e desligar o sistema."
+msgstr "Clique em Desligar para fechar os programas e desligar o sistema."
 
 #: ../js/ui/endSessionDialog.js:106
 #, c-format
@@ -1215,7 +1215,7 @@ msgstr "Reiniciar"
 
 #: ../js/ui/endSessionDialog.js:135
 msgid "Click Restart to quit these applications and restart the system."
-msgstr "Clique em Reiniciar para fechar os aplicativos e reiniciar o sistema."
+msgstr "Clique em Reiniciar para fechar os programas e reiniciar o sistema."
 
 #: ../js/ui/endSessionDialog.js:138
 #, c-format
@@ -1241,6 +1241,16 @@ msgstr "Baixar e instalar \"%s\" de extensions.gnome.org?"
 #, c-format
 msgid "%s has been deleted"
 msgstr "%s foi eliminado"
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
@@ -1373,43 +1383,35 @@ msgstr "Não foi possível bloquear"
 
 #: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:423
 msgid "Lock was blocked by an application"
-msgstr "O bloqueio foi impedido por um aplicativo"
+msgstr "O bloqueio foi impedido por um programa"
 
-#: ../js/ui/searchDisplay.js:449
+#: ../js/ui/search.js:666
 msgid "Searching…"
 msgstr "Procurando..."
 
-#: ../js/ui/searchDisplay.js:493
+#: ../js/ui/search.js:668
 msgid "No results."
 msgstr "Sem resultados. "
 
-#: ../js/ui/shellEntry.js:106 ../js/ui/shellEntry.js:307
-msgid "Google"
-msgstr "Google"
-
-#: ../js/ui/shellEntry.js:111
-msgid "My Computer"
-msgstr "Meu Computador"
-
-#: ../js/ui/shellEntry.js:175
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "Copiar"
 
-#: ../js/ui/shellEntry.js:180
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "Colar"
 
-#: ../js/ui/shellEntry.js:239
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "Mostrar texto"
 
-#: ../js/ui/shellEntry.js:241
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "Ocultar texto"
 
-#: ../js/ui/shellEntry.js:309
-msgid "My computer"
-msgstr "Meu computador"
+#: ../js/ui/shellEntry.js:175
+msgid "Type to search…"
+msgstr "Digite para pesquisar…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1880,9 +1882,9 @@ msgstr "%s (remoto)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:555
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
-msgstr "Aplicativos"
+msgstr "Programas"
 
 #: ../js/ui/windowAttentionHandler.js:19
 #, c-format

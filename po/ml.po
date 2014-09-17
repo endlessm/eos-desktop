@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2013-03-25 14:57+0530\n"
 "Last-Translator: Ani Peter <peter.ani@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -46,7 +46,7 @@ msgstr "പ്രയോഗത്തിന്റെ മെനു തുറക്�
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -412,7 +412,7 @@ msgstr "ലഭ്യമല്ലേ?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "വേണ്ട"
 
@@ -442,7 +442,7 @@ msgstr "പ്രവേശന ജാലകം"
 msgid "Power"
 msgstr "ഓഫ്"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "താത്കാലികമായി നിര്‍ത്തുക"
 
@@ -484,40 +484,40 @@ msgstr "ആജ്ഞ പ്രാവര്‍ത്തികമാക്കാ�
 msgid "Execution of '%s' failed:"
 msgstr "'%s' നടപ്പിലാക്കുന്നതില്‍ പരാജയപ്പെട്ടു:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "ശരി"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "പുതിയ വിന്‍ഡോ"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "ഇഷ്ടപ്പെട്ടവയില്‍ നിന്നും നീക്കം ചെയ്യുക"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "ഇഷ്ടപ്പെട്ടവയിലേക്ക് ചേര്‍ക്കുക"
 
@@ -530,6 +530,19 @@ msgstr "%s നിങ്ങള്‍ക്കിഷ്ടപ്പെട്ടവ
 #, c-format
 msgid "%s has been removed from your favorites."
 msgstr "%s നിങ്ങള്‍ക്കിഷ്ടപ്പെട്ടവയില്‍ നിന്നും നീക്കം ചെയ്തിട്ടുണ്ട്."
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, fuzzy, c-format
+msgid "Quit %s"
+msgstr "നിര്‍ത്തുക"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -1113,7 +1126,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "ജാലകങ്ങള്‍"
 
@@ -1146,7 +1159,7 @@ msgstr "തീയതി, സമയ ക്രമീകരണങ്ങള്‍"
 msgid "%A %B %e, %Y"
 msgstr "%A %B %e, %Y"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1254,6 +1267,21 @@ msgstr "ഇന്‍സ്റ്റോള്‍"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "extensions.gnome.org ഇല്‍ നിന്നും '%s' ഡൗണ്‍ലോട് ചെയ്ത് ഇന്‍സ്റ്റോള്‍ ചെയ്യേണമോ?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1340,15 +1368,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "അജ്ഞാതം"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "വേണ്ട"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "അവലോകനം"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "മുകളിലുള്ള ബാര്‍"
 
@@ -1388,35 +1416,34 @@ msgstr "പൂട്ടുവാന്‍ സാധ്യമല്ല"
 msgid "Lock was blocked by an application"
 msgstr "പൂട്ടുന്ന സംവിധാനം ഒരു പ്രയോഗം തടസ്സപ്പെടുത്തിയിരിയ്ക്കുന്നു"
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
-msgstr ""
+#: ../js/ui/search.js:666
+msgid "Searching…"
+msgstr "തെരയുന്നു..."
 
-#: ../js/ui/shellEntry.js:112
-#, fuzzy
-msgid "My Computer"
-msgstr "കമ്പ്യൂട്ടര്‍"
+#: ../js/ui/search.js:668
+msgid "No results."
+msgstr "ഫലങ്ങളില്ല."
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "പകര്‍ത്തുക"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "ഒട്ടിയ്ക്കുക"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "പദാവലി കാണിക്കുക"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "പദാവലി മറക്കുക"
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:175
 #, fuzzy
-msgid "My computer"
-msgstr "കമ്പ്യൂട്ടര്‍"
+msgid "Type to search…"
+msgstr "തെരയുന്നതിനായി ടൈപ്പ് ചെയ്യുക..."
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1835,51 +1862,51 @@ msgstr "മറ്റൊരു ഉപയോക്താവായി പ്രവ�
 msgid "Unlock Window"
 msgstr "ജാലകത്തിന്റെ പൂട്ടു തുറക്കുക"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "പുറത്ത് കടക്കുക"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "പൂട്ടുക"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "സജ്ജീകരണങ്ങള്‍"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "ഉപയോക്താവിനെ മാറ്റുക"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "വേറേ ഉപയോക്താക്കള്‍ ലോഗിന്‍ ചെയ്തിട്ടുണ്ട്."
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "അടച്ചുപൂട്ടുന്നത് അവരുടെ സൂക്ഷിക്കാത്ത ജോലികള്‍ നഷ്ട്ടപ്പെടുത്താം."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (വിദൂരം)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (കണ്‍സോള്‍)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "പ്രയോഗങ്ങള്‍"
 
@@ -1979,6 +2006,14 @@ msgstr "രഹസ്യവാക്ക് കാലിയാകുവാന്�
 msgid "Authentication dialog was dismissed by the user"
 msgstr "ഉപയോക്താവു് ആധികാരികത ഉറപ്പാക്കല്‍ ഡയലോഗ് നിര്‍ത്തുന്നു"
 
+#, fuzzy
+#~ msgid "My Computer"
+#~ msgstr "കമ്പ്യൂട്ടര്‍"
+
+#, fuzzy
+#~ msgid "My computer"
+#~ msgstr "കമ്പ്യൂട്ടര്‍"
+
 #~ msgid "Screenshots"
 #~ msgstr "സ്ക്രീന്‍ഷോട്ടുകള്‍"
 
@@ -2037,10 +2072,6 @@ msgstr "ഉപയോക്താവു് ആധികാരികത ഉറപ�
 #~ msgstr "%d-ല്‍ നിന്നുള്ള സ്ക്രീന്‍കാസ്റ്റ്, %t-ല്‍"
 
 #, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "തെരയുന്നതിനായി ടൈപ്പ് ചെയ്യുക..."
-
-#, fuzzy
 #~ msgid "Type to search your computer"
 #~ msgstr "നിങ്ങളുടെ കമ്പ്യൂട്ടര്‍ തിരയുക"
 
@@ -2055,9 +2086,6 @@ msgstr "ഉപയോക്താവു് ആധികാരികത ഉറപ�
 #~ msgstr[0] "%d പുതിയ സന്ദേശം"
 #~ msgstr[1] "%d പുതിയ സന്ദേശങ്ങള്‍"
 
-#~ msgid "Quit"
-#~ msgstr "നിര്‍ത്തുക"
-
 #~ msgid "Activities"
 #~ msgstr "പ്രവര്‍ത്തനങ്ങള്‍"
 
@@ -2068,13 +2096,6 @@ msgstr "ഉപയോക്താവു് ആധികാരികത ഉറപ�
 #~ msgid_plural "%d new notifications"
 #~ msgstr[0] "%d പുതിയ അറിയിപ്പു്"
 #~ msgstr[1] "%d പുതിയ അറിയിപ്പുകള്‍"
-
-#~| msgid "Searching..."
-#~ msgid "Searching…"
-#~ msgstr "തെരയുന്നു..."
-
-#~ msgid "No results."
-#~ msgstr "ഫലങ്ങളില്ല."
 
 #~ msgid "Available"
 #~ msgstr "ലഭ്യമാണ്"

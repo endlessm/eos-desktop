@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 14:35-0700\n"
+"POT-Creation-Date: 2014-09-16 10:07-0700\n"
 "PO-Revision-Date: 2013-03-10 14:55+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
@@ -44,7 +44,7 @@ msgstr "Atvērt lietotnes izvēlni"
 msgid "Feedback"
 msgstr ""
 
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:40
+#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
 msgid "Tutorial"
 msgstr ""
 
@@ -412,7 +412,7 @@ msgstr "Nav sarakstā?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
 #: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:562
+#: ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Atcelt"
 
@@ -442,7 +442,7 @@ msgstr "Ierakstīšanās logs"
 msgid "Power"
 msgstr "Barošana"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
 msgid "Suspend"
 msgstr "Iesnaudināt"
 
@@ -484,40 +484,40 @@ msgstr "Neizdevās apstrādāt komandu:"
 msgid "Execution of '%s' failed:"
 msgstr "“%s” izpilde neizdevās:"
 
-#: ../js/ui/appDisplay.js:1755
+#: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1764
+#: ../js/ui/appDisplay.js:1909
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1816
+#: ../js/ui/appDisplay.js:1961
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1822
+#: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1828
+#: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1834 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Labi"
 
-#: ../js/ui/appDisplay.js:1917
+#: ../js/ui/appDisplay.js:2062
 msgid "New Window"
 msgstr "Jauns logs"
 
-#: ../js/ui/appDisplay.js:1920 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Izņemt no izlases"
 
-#: ../js/ui/appDisplay.js:1921
+#: ../js/ui/appDisplay.js:2066
 msgid "Add to Favorites"
 msgstr "Pievienot izlasei"
 
@@ -530,6 +530,19 @@ msgstr "%s ir pievienots izlasei."
 #, c-format
 msgid "%s has been removed from your favorites."
 msgstr "%s ir izņemts no izlases."
+
+#: ../js/ui/appIconBar.js:216
+msgid "Other workspaces"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:225
+msgid "Current workspace"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:293
+#, fuzzy, c-format
+msgid "Quit %s"
+msgstr "Iziet"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -1117,7 +1130,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:504
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
 msgid "Windows"
 msgstr "Logi"
 
@@ -1150,7 +1163,7 @@ msgstr "Datuma un laika iestatījumi"
 msgid "%A %B %e, %Y"
 msgstr "%A, %e. %B, %Y."
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/overview.js:47
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -1261,6 +1274,21 @@ msgstr "Instalēt"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Lejupielādēt un instalēt “%s” no extensions.gnome.org?"
 
+#: ../js/ui/iconGridLayout.js:200
+#, c-format
+msgid "%s has been deleted"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:59
+#, c-format
+msgid "Open \"%s\" in browser"
+msgstr ""
+
+#: ../js/ui/internetSearch.js:62
+#, c-format
+msgid "Search Google for \"%s\""
+msgstr ""
+
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
 msgid "Keyboard"
@@ -1347,15 +1375,15 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Nezināma"
 
-#: ../js/ui/overview.js:119
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr "Atsaukt"
 
-#: ../js/ui/overview.js:279
+#: ../js/ui/overview.js:167
 msgid "Overview"
 msgstr "Pārskats"
 
-#: ../js/ui/panel.js:334
+#: ../js/ui/panel.js:377
 msgid "Top Bar"
 msgstr "Augšējā josla"
 
@@ -1395,35 +1423,34 @@ msgstr "Nevar bloķēt"
 msgid "Lock was blocked by an application"
 msgstr "Lietotne neļāva bloķēt"
 
-#: ../js/ui/shellEntry.js:107 ../js/ui/shellEntry.js:345
-msgid "Google"
-msgstr ""
+#: ../js/ui/search.js:666
+msgid "Searching…"
+msgstr "Meklē…"
 
-#: ../js/ui/shellEntry.js:112
-#, fuzzy
-msgid "My Computer"
-msgstr "Dators"
+#: ../js/ui/search.js:668
+msgid "No results."
+msgstr "Nav rezultātu."
 
-#: ../js/ui/shellEntry.js:176
+#: ../js/ui/shellEntry.js:62
 msgid "Copy"
 msgstr "Kopēt"
 
-#: ../js/ui/shellEntry.js:181
+#: ../js/ui/shellEntry.js:67
 msgid "Paste"
 msgstr "Ielīmēt"
 
-#: ../js/ui/shellEntry.js:240
+#: ../js/ui/shellEntry.js:126
 msgid "Show Text"
 msgstr "Rādīt tekstu"
 
-#: ../js/ui/shellEntry.js:242
+#: ../js/ui/shellEntry.js:128
 msgid "Hide Text"
 msgstr "Slēpt tekstu"
 
-#: ../js/ui/shellEntry.js:347
+#: ../js/ui/shellEntry.js:175
 #, fuzzy
-msgid "My computer"
-msgstr "Dators"
+msgid "Type to search…"
+msgstr "Rakstiet, lai meklētu…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1846,51 +1873,51 @@ msgstr "Ierakstīties kā citam lietotājam"
 msgid "Unlock Window"
 msgstr "Atbloķēšanas logs"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Log Out"
 msgstr "Izrakstīties"
 
-#: ../js/ui/userMenu.js:37
+#: ../js/ui/userMenu.js:38
 msgid "Lock"
 msgstr "Bloķēt"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "Iestatījumi"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:439
+#: ../js/ui/userMenu.js:442
 msgid "Switch User"
 msgstr "Mainīt lietotāju"
 
-#: ../js/ui/userMenu.js:512
+#: ../js/ui/userMenu.js:515
 msgid "Other users are logged in."
 msgstr "Citi lietotāji ir ierakstījušies."
 
-#: ../js/ui/userMenu.js:517
+#: ../js/ui/userMenu.js:520
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "Izslēgšanas dēļ tie var zaudēt nesaglabātu darbu."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:545
+#: ../js/ui/userMenu.js:548
 #, c-format
 msgid "%s (remote)"
 msgstr "%s (attālināts)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:548
+#: ../js/ui/userMenu.js:551
 #, c-format
 msgid "%s (console)"
 msgstr "%s (konsole)"
 
-#: ../js/ui/viewSelector.js:508
+#: ../js/ui/viewSelector.js:404
 msgid "Applications"
 msgstr "Lietotnes"
 
@@ -1993,6 +2020,14 @@ msgstr "Parole nevar būt tukša"
 msgid "Authentication dialog was dismissed by the user"
 msgstr "Lietotājs noraidīja autentifikācijas dialoglodziņu"
 
+#, fuzzy
+#~ msgid "My Computer"
+#~ msgstr "Dators"
+
+#, fuzzy
+#~ msgid "My computer"
+#~ msgstr "Dators"
+
 #~ msgid "Screenshots"
 #~ msgstr "Ekrānattēli"
 
@@ -2059,10 +2094,6 @@ msgstr "Lietotājs noraidīja autentifikācijas dialoglodziņu"
 #~ msgstr "Ekrānieraksts %d %t"
 
 #, fuzzy
-#~ msgid "Type to search Wikipedia"
-#~ msgstr "Rakstiet, lai meklētu…"
-
-#, fuzzy
 #~ msgid "Type to search your computer"
 #~ msgstr "Rakstiet, lai meklētu…"
 
@@ -2078,9 +2109,6 @@ msgstr "Lietotājs noraidīja autentifikācijas dialoglodziņu"
 #~ msgstr[1] "%d jauni ziņojumi"
 #~ msgstr[2] "%d jaunu ziņojumu"
 
-#~ msgid "Quit"
-#~ msgstr "Iziet"
-
 #~ msgid "Activities"
 #~ msgstr "Aktivitātes"
 
@@ -2092,13 +2120,6 @@ msgstr "Lietotājs noraidīja autentifikācijas dialoglodziņu"
 #~ msgstr[0] "%d jauns paziņojums"
 #~ msgstr[1] "%d jauni paziņojumi"
 #~ msgstr[2] "%d jaunu paziņojumu"
-
-#~| msgid "Searching..."
-#~ msgid "Searching…"
-#~ msgstr "Meklē…"
-
-#~ msgid "No results."
-#~ msgstr "Nav rezultātu."
 
 #~ msgid "Available"
 #~ msgstr "Pieejams"
