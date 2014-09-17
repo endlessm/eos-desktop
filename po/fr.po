@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Alexandre Franke <alexandre.franke@gmail.com>, 2012
 # Cyril Arnaud <cyril dot arnaud at gmail dot com>, 2011
@@ -10,19 +10,19 @@
 # Mathieu Bridon <bochecha@fedoraproject.org>, 2009
 # Pablo Martin-Gomez <pablo.martin-gomez@laposte.net>, 2010
 # Pierre Henry <pierrehenry73@yahoo.fr>, 2012
+# Roddy Shuler <roddy@endlessm.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-16 10:07-0700\n"
-"PO-Revision-Date: 2014-09-10 23:15+0000\n"
+"PO-Revision-Date: 2014-09-17 03:27+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
-"Language-Team: French (http://www.transifex.com/projects/p/eos-shell/"
-"language/fr/)\n"
-"Language: fr\n"
+"Language-Team: French (http://www.transifex.com/projects/p/eos-shell/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
@@ -78,34 +78,24 @@ msgstr "Configurer les extensions GNOME Shell"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:1
 msgid "Enable internal tools useful for developers and testers from Alt-F2"
-msgstr ""
-"Activer les outils internes pour les développeurs et les testeurs depuis Alt-"
-"F2"
+msgstr "Activer les outils internes pour les développeurs et les testeurs depuis Alt-F2"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:2
 msgid ""
 "Allows access to internal debugging and monitoring tools using the Alt-F2 "
 "dialog."
-msgstr ""
-"Autoriser l'accès aux outils internes de débogage et de surveillance grâce à "
-"la boîte de dialogue de lancement d'application (Alt-F2)."
+msgstr "Autoriser l'accès aux outils internes de débogage et de surveillance grâce à la boîte de dialogue de lancement d'application (Alt-F2)."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:3
 msgid "Separate the power off and log out buttons on the user menu"
-msgstr ""
-"Séparer les boutons de mise hors tension et de déconnexion dans le menu de "
-"l'utilisateur"
+msgstr "Séparer les boutons de mise hors tension et de déconnexion dans le menu de l'utilisateur"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:4
 msgid ""
 "By default, use a single exit button to power off or log out (with the log "
 "out option on the power off confirmation dialog). Set true for separate "
 "buttons on the user menu."
-msgstr ""
-"Par défaut, utilisez un seul bouton \"Quitter\" pour éteindre ou vous "
-"déconnecter (avec l'option de déconnexion située sur la boîte de dialogue de "
-"confirmation de la mise hors tension). Vous pouvez faire des réglages pour "
-"avoir des boutons séparés, en allant dans le menu utilisateur."
+msgstr "Par défaut, utilisez un seul bouton \"Quitter\" pour éteindre ou vous déconnecter (avec l'option de déconnexion située sur la boîte de dialogue de confirmation de la mise hors tension). Vous pouvez faire des réglages pour avoir des boutons séparés, en allant dans le menu utilisateur."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:5
 msgid "Enables the hot corner for the window picker"
@@ -115,9 +105,7 @@ msgstr "Autoriser le coin pour le sélecteur de fenêtre"
 msgid ""
 "By default, the hot corner for the window picker is enabled. Set false to "
 "disable the hot corner."
-msgstr ""
-"Par défaut, le coin du sélecteur de fenêtre est activé. Mettez Faux pour "
-"désactiver le coin."
+msgstr "Par défaut, le coin du sélecteur de fenêtre est activé. Mettez Faux pour désactiver le coin."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:7
 msgid "Set the left/right position of the hot corner for the window picker"
@@ -126,25 +114,19 @@ msgstr "Réglez la position gauche/droite du coin du sélecteur de fenêtre "
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:8
 msgid ""
 "Default position of the hot corner is in a right corner. Set false to move "
-"the hot corner to a left corner. The position is not affected by the RTL vs. "
-"LTR text direction."
-msgstr ""
-"La position par défaut du coin est située en haut à droite. Réglez Faux pour "
-"déplacer le coin à gauche. La position n'est pas affectée par le sens du "
-"texte RTL contre LTR."
+"the hot corner to a left corner. The position is not affected by the RTL vs."
+" LTR text direction."
+msgstr "La position par défaut du coin est située en haut à droite. Réglez Faux pour déplacer le coin à gauche. La position n'est pas affectée par le sens du texte RTL contre LTR."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:9
 msgid "Set the top/bottom position of the hot corner for the window picker"
-msgstr ""
-"Réglez la position supérieure/inférieure du coin du sélecteur de fenêtre "
+msgstr "Réglez la position supérieure/inférieure du coin du sélecteur de fenêtre "
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:10
 msgid ""
 "Default position of the hot corner is in a bottom corner. Set false to move "
 "the hot corner to a top corner."
-msgstr ""
-"La position par défaut du coin chaud est située en bas. Réglez Faux pour "
-"déplacer le coin sur le coin supérieur."
+msgstr "La position par défaut du coin chaud est située en bas. Réglez Faux pour déplacer le coin sur le coin supérieur."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:11
 msgid "Set the size of the hot corner target"
@@ -153,13 +135,9 @@ msgstr "Définissez la taille de la cible du coin"
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:12
 msgid ""
 "Number of pixels in one dimension of the square target for the hot corner. "
-"Default is for a single pixel in the very corner. For some virtual machines, "
-"this value may need to be set larger than the default."
-msgstr ""
-"Nombre de pixels à une dimension de la cible carrée pour le coin. Par "
-"défaut, elle est d'un seul pixel dans le coin. Pour certaines machines "
-"virtuelles, cette valeur peut être nécessaire pour la définir plus grande "
-"que la valeur par défaut."
+"Default is for a single pixel in the very corner. For some virtual machines,"
+" this value may need to be set larger than the default."
+msgstr "Nombre de pixels à une dimension de la cible carrée pour le coin. Par défaut, elle est d'un seul pixel dans le coin. Pour certaines machines virtuelles, cette valeur peut être nécessaire pour la définir plus grande que la valeur par défaut."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:13
 msgid "Set the left/right position of the dash on the overview"
@@ -167,30 +145,21 @@ msgstr "Régler la position gauche/droite du tableau de bord sur l'aperçu"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:14
 msgid ""
-"Default position of the dash is at the end of the screen (right edge for LTR "
-"text direction). Unlike the hot corners, the opposite side is used for RTL "
+"Default position of the dash is at the end of the screen (right edge for LTR"
+" text direction). Unlike the hot corners, the opposite side is used for RTL "
 "text direction."
-msgstr ""
-"La position par défaut du tableau de bord est située en bas de l'écran (le "
-"bord droit pour la direction du texte LTR). Contrairement aux coins, le côté "
-"opposé est utilisé pour le sens du texte RTL."
+msgstr "La position par défaut du tableau de bord est située en bas de l'écran (le bord droit pour la direction du texte LTR). Contrairement aux coins, le côté opposé est utilisé pour le sens du texte RTL."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:15
 msgid "Prevent apps from being automatically maximized on launch"
-msgstr ""
-"Prévenir que les applications soient automatiquement maximisée sur le "
-"lancement"
+msgstr "Prévenir que les applications soient automatiquement maximisée sur le lancement"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
-"screens, prevents applications from being forced to open maximized, and does "
-"not automatically switch to the app selector when a window is minimized."
-msgstr ""
-"Rend la gestion des fenêtres plus similaire au Gnome standard. Masque les "
-"écrans de démarrage de l'application, empêche les applications d'être "
-"forcées à s'ouvrir et ne passe pas automatiquement à la sélection de "
-"l'application lorsqu'une fenêtre est minimisée."
+"screens, prevents applications from being forced to open maximized, and does"
+" not automatically switch to the app selector when a window is minimized."
+msgstr "Rend la gestion des fenêtres plus similaire au Gnome standard. Masque les écrans de démarrage de l'application, empêche les applications d'être forcées à s'ouvrir et ne passe pas automatiquement à la sélection de l'application lorsqu'une fenêtre est minimisée."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:17
 msgid "Whether the app store is displayed"
@@ -206,16 +175,11 @@ msgstr "Identifiants UUID des extensions à activer"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:20
 msgid ""
-"GNOME Shell extensions have a uuid property; this key lists extensions which "
-"should be loaded. Any extension that wants to be loaded needs to be in this "
-"list. You can also manipulate this list with the EnableExtension and "
+"GNOME Shell extensions have a uuid property; this key lists extensions which"
+" should be loaded. Any extension that wants to be loaded needs to be in this"
+" list. You can also manipulate this list with the EnableExtension and "
 "DisableExtension DBus methods on org.gnome.Shell."
-msgstr ""
-"Les extensions GNOME Shell ont une propriété UUID. Cette clé énumère les "
-"extensions qui doivent être chargées. Toute extension qui voudrait être "
-"chargée doit être ajoutée dans cette liste. Vous pouvez aussi manipuler "
-"cette liste avec les méthodes DBus EnableExtension et DisableExtension de "
-"org.gnome.Shell."
+msgstr "Les extensions GNOME Shell ont une propriété UUID. Cette clé énumère les extensions qui doivent être chargées. Toute extension qui voudrait être chargée doit être ajoutée dans cette liste. Vous pouvez aussi manipuler cette liste avec les méthodes DBus EnableExtension et DisableExtension de org.gnome.Shell."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:21
 msgid "Whether to collect stats about applications usage"
@@ -223,29 +187,21 @@ msgstr "Collecter des statistiques sur l'utilisation des applications"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:22
 msgid ""
-"The shell normally monitors active applications in order to present the most "
-"used ones (e.g. in launchers). While this data will be kept private, you may "
-"want to disable this for privacy reasons. Please note that doing so won't "
-"remove already saved data."
-msgstr ""
-"Normalement GNOME Shell surveille les applications actives afin de "
-"déterminer les plus utilisées (par ex. pour les lanceurs). Bien que ces "
-"données soient gardées secrètes, des motifs de confidentialité peuvent vous "
-"pousser à désactiver cette fonctionnalité. Remarquez que cette désactivation "
-"ne supprime pas d'éventuelles données déjà enregistrées."
+"The shell normally monitors active applications in order to present the most"
+" used ones (e.g. in launchers). While this data will be kept private, you "
+"may want to disable this for privacy reasons. Please note that doing so "
+"won't remove already saved data."
+msgstr "Normalement GNOME Shell surveille les applications actives afin de déterminer les plus utilisées (par ex. pour les lanceurs). Bien que ces données soient gardées secrètes, des motifs de confidentialité peuvent vous pousser à désactiver cette fonctionnalité. Remarquez que cette désactivation ne supprime pas d'éventuelles données déjà enregistrées."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:23
 msgid "List of desktop file IDs for favorite applications"
-msgstr ""
-"Liste d'identifiants de fichiers desktop pour les applications favorites"
+msgstr "Liste d'identifiants de fichiers desktop pour les applications favorites"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:24
 msgid ""
-"The applications corresponding to these identifiers will be displayed in the "
-"favorites area."
-msgstr ""
-"Les applications correspondant à ces identifiants sont affichées dans la "
-"zone des favoris."
+"The applications corresponding to these identifiers will be displayed in the"
+" favorites area."
+msgstr "Les applications correspondant à ces identifiants sont affichées dans la zone des favoris."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
 msgid "List of categories that should be displayed as folders"
@@ -255,9 +211,7 @@ msgstr "Liste des catégories qui devraient être affichées comme des dossiers"
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
-msgstr ""
-"Chaque nom de catégorie dans cette liste sera représentée comme un dossier "
-"dans la vue des applications, plutôt qu'alignée dans la vue principale."
+msgstr "Chaque nom de catégorie dans cette liste sera représentée comme un dossier dans la vue des applications, plutôt qu'alignée dans la vue principale."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "History for command (Alt-F2) dialog"
@@ -271,40 +225,28 @@ msgstr "Historique de la boîte de dialogue d'inspection"
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
-msgstr ""
-"Utilisé en interne pour enregistrer la dernière présence de messagerie "
-"instantanée IM explicitement définie par l'utilisateur. Ici la valeur est "
-"tirée de l'énumération TpConnectionPresenceType."
+msgstr "Utilisé en interne pour enregistrer la dernière présence de messagerie instantanée IM explicitement définie par l'utilisateur. Ici la valeur est tirée de l'énumération TpConnectionPresenceType."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:30
 msgid ""
 "Internally used to store the last session presence status for the user. The "
 "value here is from the GsmPresenceStatus enumeration."
-msgstr ""
-"Utilisé en interne pour enregistrer le dernier statut de présence de la "
-"session pour l'utilisateur. Ici la valeur est tirée de l'énumération "
-"GsmPresenceStatus."
+msgstr "Utilisé en interne pour enregistrer le dernier statut de présence de la session pour l'utilisateur. Ici la valeur est tirée de l'énumération GsmPresenceStatus."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid "Always show the 'Log out' menuitem in the user menu."
-msgstr ""
-"Toujours afficher l'élément « Se déconnecter » dans le menu utilisateur."
+msgstr "Toujours afficher l'élément « Se déconnecter » dans le menu utilisateur."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:32
 msgid ""
 "This key overrides the automatic hiding of the 'Log out' menuitem in single-"
 "user, single-session situations."
-msgstr ""
-"Cette clé affiche l'élément « Se déconnecter » du menu utilisateur "
-"normalement caché automatiquement dans le cas d'une session ou d'un "
-"utilisateur unique."
+msgstr "Cette clé affiche l'élément « Se déconnecter » du menu utilisateur normalement caché automatiquement dans le cas d'une session ou d'un utilisateur unique."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid ""
 "Whether to remember password for mounting encrypted or remote filesystems"
-msgstr ""
-"Se souvenir des mots de passe pour les montages des systèmes de fichiers "
-"chiffrés ou distants"
+msgstr "Se souvenir des mots de passe pour les montages des systèmes de fichiers chiffrés ou distants"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:34
 msgid ""
@@ -312,12 +254,7 @@ msgid ""
 "filesystem is mounted. If the password can be saved for future use a "
 "'Remember Password' checkbox will be present. This key sets the default "
 "state of the checkbox."
-msgstr ""
-"Le shell demandera un mot de passe au montage d'un périphérique chiffré ou "
-"d'un système de fichiers distant. Si le mot de passe peut être enregistré "
-"pour une utilisation ultérieure, une case à cocher « Se souvenir du mot de "
-"passe » sera présente. Cette clé détermine l'état par défaut de cette case à "
-"cocher."
+msgstr "Le shell demandera un mot de passe au montage d'un périphérique chiffré ou d'un système de fichiers distant. Si le mot de passe peut être enregistré pour une utilisation ultérieure, une case à cocher « Se souvenir du mot de passe » sera présente. Cette clé détermine l'état par défaut de cette case à cocher."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid "Layout of application launcher icons in the grid"
@@ -327,9 +264,7 @@ msgstr "Disposition des icônes d'application de lancement dans la grille"
 msgid ""
 "This key specifies the exact order of the icons shown in the applications "
 "launcher view."
-msgstr ""
-"Cette clé spécifie l'ordre exact dans lequel les icônes affichées dans la "
-"vue du lanceur d'applications."
+msgstr "Cette clé spécifie l'ordre exact dans lequel les icônes affichées dans la vue du lanceur d'applications."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Show the week date in the calendar"
@@ -349,25 +284,21 @@ msgstr "Combinaison de touches pour ouvrir le menu de l'application."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:41
 msgid "Keybinding to open the \"Show Applications\" view"
-msgstr ""
-"Combinaison de touches pour ouvrir la vue « Afficher les applications »"
+msgstr "Combinaison de touches pour ouvrir la vue « Afficher les applications »"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid ""
-"Keybinding to open the \"Show Applications\" view of the Activities Overview."
-msgstr ""
-"Combinaison de touches pour ouvrir la vue « Afficher les applications » de "
-"la vue d'ensemble des activités."
+"Keybinding to open the \"Show Applications\" view of the Activities "
+"Overview."
+msgstr "Combinaison de touches pour ouvrir la vue « Afficher les applications » de la vue d'ensemble des activités."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:43
 msgid "Keybinding to toggle the visibility of the message tray"
-msgstr ""
-"Combinaison de touches pour basculer la visibilité du tiroir de messagerie"
+msgstr "Combinaison de touches pour basculer la visibilité du tiroir de messagerie"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:44
 msgid "Keybinding to toggle the visibility of the message tray."
-msgstr ""
-"Combinaison de touches pour basculer la visibilité du tiroir de messagerie."
+msgstr "Combinaison de touches pour basculer la visibilité du tiroir de messagerie."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:45
 msgid "Keybinding to focus the active notification"
@@ -392,13 +323,9 @@ msgstr "Le type d'icône des applications."
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
-"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
-"only' (shows only the application icon) or 'both'."
-msgstr ""
-"Configure la façon dont les fenêtres sont affichées dans le sélecteur. Les "
-"choix possibles sont « thumbnail-only » (affiche une miniature de la "
-"fenêtre), « app-icon-only » (affiche uniquement l'icône de l'application), "
-"ou « both » (affiche les deux)."
+"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
+"(shows only the application icon) or 'both'."
+msgstr "Configure la façon dont les fenêtres sont affichées dans le sélecteur. Les choix possibles sont « thumbnail-only » (affiche une miniature de la fenêtre), « app-icon-only » (affiche uniquement l'icône de l'application), ou « both » (affiche les deux)."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid "Attach modal dialog to the parent window"
@@ -407,9 +334,7 @@ msgstr "Attacher les dialogues modaux à leur fenêtre parente"
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
-msgstr ""
-"Cette clé prend le pas sur la clé dans org.gnome.mutter lorsque GNOME Shell "
-"est lancé."
+msgstr "Cette clé prend le pas sur la clé dans org.gnome.mutter lorsque GNOME Shell est lancé."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid "Arrangement of buttons on the titlebar"
@@ -419,9 +344,7 @@ msgstr "La disposition des boutons dans la barre de titre"
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
-msgstr ""
-"Cette clé prend le pas sur la clé dans org.gnome.desktop.wm.preferences "
-"lorsque GNOME Shell est lancé."
+msgstr "Cette clé prend le pas sur la clé dans org.gnome.desktop.wm.preferences lorsque GNOME Shell est lancé."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid "Enable edge tiling when dropping windows on screen edges"
@@ -438,9 +361,7 @@ msgstr "Les espaces de travail sont uniquement sur l'écran principal"
 #: ../js/extensionPrefs/main.js:127
 #, c-format
 msgid "There was an error loading the preferences dialog for %s:"
-msgstr ""
-"Une erreur s'est produite lors du chargement de la boîte de dialogue des "
-"préférences de %s :"
+msgstr "Une erreur s'est produite lors du chargement de la boîte de dialogue des préférences de %s :"
 
 #: ../js/extensionPrefs/main.js:167
 msgid "Extension"
@@ -448,9 +369,7 @@ msgstr "Extension"
 
 #: ../js/extensionPrefs/main.js:191
 msgid "Select an extension to configure using the combobox above."
-msgstr ""
-"Sélectionnez une extension à configurer en utilisant la boîte combinée ci-"
-"dessus."
+msgstr "Sélectionnez une extension à configurer en utilisant la boîte combinée ci-dessus."
 
 #: ../js/gdm/loginDialog.js:405
 msgid "Session…"
@@ -554,9 +473,7 @@ msgstr "Avertissement"
 #: ../js/ui/appDisplay.js:1967
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr ""
-"Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à "
-"l'intérieur de celui-ci."
+msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
 #: ../js/ui/appDisplay.js:1973
 msgid "We are just trying to keep you safe."
@@ -619,7 +536,6 @@ msgstr "Ajouter un dossier"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
-#.
 #: ../js/ui/calendar.js:62
 msgctxt "event list time"
 msgid "All Day"
@@ -644,7 +560,6 @@ msgstr "%l\\u2236%M\\u2009%p"
 #. *
 #. * NOTE: These grid abbreviations are always shown together
 #. * and in order, e.g. "S M T W T F S".
-#.
 #: ../js/ui/calendar.js:108
 msgctxt "grid sunday"
 msgid "S"
@@ -691,7 +606,6 @@ msgstr "S"
 #. * NOTE: These list abbreviations are normally not shown together
 #. * so they need to be unique (e.g. Tuesday and Thursday cannot
 #. * both be 'T').
-#.
 #: ../js/ui/calendar.js:133
 msgctxt "list sunday"
 msgid "Su"
@@ -738,13 +652,15 @@ msgstr "Sa"
 msgid "Nothing Scheduled"
 msgstr "Rien de prévu"
 
-#. Translators: Shown on calendar heading when selected day occurs on current year
+#. Translators: Shown on calendar heading when selected day occurs on current
+#. year
 #: ../js/ui/calendar.js:738
 msgctxt "calendar heading"
 msgid "%A, %B %d"
 msgstr "%A %d %B"
 
-#. Translators: Shown on calendar heading when selected day occurs on different year
+#. Translators: Shown on calendar heading when selected day occurs on
+#. different year
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
@@ -834,9 +750,7 @@ msgstr "L'authentification est requise par le réseau sans fil"
 msgid ""
 "Passwords or encryption keys are required to access the wireless network "
 "'%s'."
-msgstr ""
-"Il faut un mot de passe ou une clé de chiffrement pour accéder au réseau "
-"sans fil « %s »"
+msgstr "Il faut un mot de passe ou une clé de chiffrement pour accéder au réseau sans fil « %s »"
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
@@ -919,31 +833,36 @@ msgstr "Non muet"
 msgid "Mute"
 msgstr "Muet"
 
-#. Translators: this is the word "Yesterday" followed by a time string. i.e. "Yesterday, 14:30"
+#. Translators: this is the word "Yesterday" followed by a time string. i.e.
+#. "Yesterday, 14:30"
 #: ../js/ui/components/telepathyClient.js:942
 #, no-c-format
 msgid "<b>Yesterday</b>, <b>%H:%M</b>"
 msgstr "<b>Hier</b>, <b>%H:%M</b>"
 
-#. Translators: this is the week day name followed by a time string. i.e. "Monday, 14:30
+#. Translators: this is the week day name followed by a time string. i.e.
+#. "Monday, 14:30
 #: ../js/ui/components/telepathyClient.js:948
 #, no-c-format
 msgid "<b>%A</b>, <b>%H:%M</b>"
 msgstr "<b>%A</b>, <b>%H:%M</b>"
 
-#. Translators: this is the month name and day number followed by a time string. i.e. "May 25, 14:30"
+#. Translators: this is the month name and day number followed by a time
+#. string. i.e. "May 25, 14:30"
 #: ../js/ui/components/telepathyClient.js:953
 #, no-c-format
 msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
 msgstr "<b>%d</b> <b>%B</b>, <b>%H:%M</b>"
 
-#. Translators: this is the month name, day number, year number followed by a time string. i.e. "May 25 2012, 14:30"
+#. Translators: this is the month name, day number, year number followed by a
+#. time string. i.e. "May 25 2012, 14:30"
 #: ../js/ui/components/telepathyClient.js:957
 #, no-c-format
 msgid "<b>%B</b> <b>%d</b> <b>%Y</b>, <b>%H:%M</b> "
 msgstr "<b>%d</b> <b>%B</b> <b>%Y</b>, <b>%H:%M</b> "
 
-#. Translators: this is the other person changing their old IM name to their new
+#. Translators: this is the other person changing their old IM name to their
+#. new
 #. IM name.
 #: ../js/ui/components/telepathyClient.js:987
 #, c-format
@@ -999,7 +918,6 @@ msgstr "Répondre"
 #. * the contact's alias and the second one is the
 #. * file name. The string will be something
 #. * like: "Alice is sending you test.ogg"
-#.
 #: ../js/ui/components/telepathyClient.js:1173
 #, c-format
 msgid "%s is sending you %s"
@@ -1082,9 +1000,7 @@ msgstr "Ce compte est déjà connectée au serveur"
 #: ../js/ui/components/telepathyClient.js:1334
 msgid ""
 "Connection has been replaced by a new connection using the same resource"
-msgstr ""
-"La connexion a été remplacée par une nouvelle connexion utilisant la même "
-"ressource"
+msgstr "La connexion a été remplacée par une nouvelle connexion utilisant la même ressource"
 
 #: ../js/ui/components/telepathyClient.js:1336
 msgid "The account already exists on the server"
@@ -1101,17 +1017,13 @@ msgstr "Le certificat a été révoqué"
 #: ../js/ui/components/telepathyClient.js:1342
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
-msgstr ""
-"Le certificat utilise un algorithme de chiffrement douteux, ou est faible "
-"cryptographiquement"
+msgstr "Le certificat utilise un algorithme de chiffrement douteux, ou est faible cryptographiquement"
 
 #: ../js/ui/components/telepathyClient.js:1344
 msgid ""
-"The length of the server certificate, or the depth of the server certificate "
-"chain, exceed the limits imposed by the cryptography library"
-msgstr ""
-"La longueur du certificat du serveur, ou la taille de sa chaîne de "
-"certification, dépasse les limites de la bibliothèque de cryptographie"
+"The length of the server certificate, or the depth of the server certificate"
+" chain, exceed the limits imposed by the cryptography library"
+msgstr "La longueur du certificat du serveur, ou la taille de sa chaîne de certification, dépasse les limites de la bibliothèque de cryptographie"
 
 #: ../js/ui/components/telepathyClient.js:1346
 msgid "Internal error"
@@ -1154,8 +1066,7 @@ msgstr "Mises à jour prête"
 
 #: ../js/ui/components/updaterManager.js:216
 msgid "Software updates are ready to be installed on your system"
-msgstr ""
-"Les mises à jour logicielles sont prêtes à être installées sur votre système"
+msgstr "Les mises à jour logicielles sont prêtes à être installées sur votre système"
 
 #: ../js/ui/components/updaterManager.js:217
 msgid "Install now"
@@ -1208,8 +1119,8 @@ msgid "Date & Time Settings"
 msgstr "Paramètres de date et heure"
 
 #. Translators: This is the date format to use when the calendar popup is
-#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
-#.
+#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29
+#. AM").
 #: ../js/ui/dateMenu.js:215
 msgid "%A %B %e, %Y"
 msgstr "%A %e %B %Y"
@@ -1218,10 +1129,7 @@ msgstr "%A %e %B %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr ""
-"Rappelez-vous que les comptes partagés ne sont pas protégés par un mot de "
-"passe, assurez-vous donc de supprimer tous les fichiers que vous souhaitez "
-"garder privés."
+msgstr "Rappelez-vous que les comptes partagés ne sont pas protégés par un mot de passe, assurez-vous donc de supprimer tous les fichiers que vous souhaitez garder privés."
 
 #: ../js/ui/endSessionDialog.js:77
 #, c-format
@@ -1236,9 +1144,7 @@ msgstr "Fermer la session"
 
 #: ../js/ui/endSessionDialog.js:80
 msgid "Click Log Out to quit these applications and log out of the system."
-msgstr ""
-"Cliquez sur « Fermer la session » pour quitter ces applications et fermer la "
-"session."
+msgstr "Cliquez sur « Fermer la session » pour quitter ces applications et fermer la session."
 
 #: ../js/ui/endSessionDialog.js:83
 #, c-format
@@ -1270,9 +1176,7 @@ msgstr "Éteindre"
 
 #: ../js/ui/endSessionDialog.js:103
 msgid "Click Power Off to quit these applications and power off the system."
-msgstr ""
-"Cliquez sur « Éteindre » pour quitter ces applications et éteindre "
-"l'ordinateur."
+msgstr "Cliquez sur « Éteindre » pour quitter ces applications et éteindre l'ordinateur."
 
 #: ../js/ui/endSessionDialog.js:106
 #, c-format
@@ -1303,9 +1207,7 @@ msgstr "Redémarrer"
 
 #: ../js/ui/endSessionDialog.js:135
 msgid "Click Restart to quit these applications and restart the system."
-msgstr ""
-"Cliquez sur « Redémarrer » pour quitter ces applications et redémarrer "
-"l'ordinateur."
+msgstr "Cliquez sur « Redémarrer » pour quitter ces applications et redémarrer l'ordinateur."
 
 #: ../js/ui/endSessionDialog.js:138
 #, c-format
@@ -1465,7 +1367,6 @@ msgstr "GNOME a besoin de verrouiller l'écran"
 #. screenshield. The user is probably very upset at this
 #. point, but any application using global grabs is broken
 #. Just tell him to stop using this app
-#.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
 #: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:422
@@ -1502,7 +1403,7 @@ msgstr "Masquer le texte"
 
 #: ../js/ui/shellEntry.js:175
 msgid "Type to search…"
-msgstr ""
+msgstr "Rechercher…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1657,9 +1558,7 @@ msgstr "Le périphérique « %s » souhaite se connecter à cet ordinateur"
 #: ../js/ui/status/bluetooth.js:368
 #, c-format
 msgid "Please confirm whether the PIN '%06d' matches the one on the device."
-msgstr ""
-"Veuillez confirmer que le numéro d'identification personnel (PIN) « %06d » "
-"correspond à celui du périphérique."
+msgstr "Veuillez confirmer que le numéro d'identification personnel (PIN) « %06d » correspond à celui du périphérique."
 
 #. Translators: this is the verb, not the noun
 #: ../js/ui/status/bluetooth.js:371
@@ -1677,9 +1576,7 @@ msgstr "Demande de liaison pour « %s »"
 
 #: ../js/ui/status/bluetooth.js:399
 msgid "Please enter the PIN mentioned on the device."
-msgstr ""
-"Veuillez saisir le numéro d'identification personnel (PIN) mentionné sur le "
-"périphérique."
+msgstr "Veuillez saisir le numéro d'identification personnel (PIN) mentionné sur le périphérique."
 
 #: ../js/ui/status/keyboard.js:368
 msgid "Show Keyboard Layout"
@@ -1697,34 +1594,40 @@ msgstr "Volume, réseau, batterie"
 msgid "<unknown>"
 msgstr "<inconnu>"
 
-#. Translators: this indicates that wireless or wwan is disabled by hardware killswitch
+#. Translators: this indicates that wireless or wwan is disabled by hardware
+#. killswitch
 #: ../js/ui/status/network.js:200
 msgid "disabled"
 msgstr "désactivé"
 
-#. Translators: this is for network devices that are physically present but are not
+#. Translators: this is for network devices that are physically present but
+#. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
 #: ../js/ui/status/network.js:458
 msgid "unmanaged"
 msgstr "non géré"
 
-#. Translators: this is for network connections that require some kind of key or password
+#. Translators: this is for network connections that require some kind of key
+#. or password
 #: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
 msgid "authentication required"
 msgstr "authentification nécessaire"
 
-#. Translators: this is for devices that require some kind of firmware or kernel
+#. Translators: this is for devices that require some kind of firmware or
+#. kernel
 #. module, which is missing
 #: ../js/ui/status/network.js:479
 msgid "firmware missing"
 msgstr "micrologiciel absent"
 
-#. Translators: this is for wired network devices that are physically disconnected
+#. Translators: this is for wired network devices that are physically
+#. disconnected
 #: ../js/ui/status/network.js:486
 msgid "cable unplugged"
 msgstr "câble débranché"
 
-#. Translators: this is for a network device that cannot be activated (for example it
+#. Translators: this is for a network device that cannot be activated (for
+#. example it
 #. is disabled by rfkill, or it has no coverage
 #: ../js/ui/status/network.js:491
 msgid "unavailable"
@@ -1739,7 +1642,8 @@ msgstr "échec de connexion"
 msgid "More…"
 msgstr "Plus…"
 
-#. TRANSLATORS: this is the indication that a connection for another logged in user is active,
+#. TRANSLATORS: this is the indication that a connection for another logged in
+#. user is active,
 #. and we cannot access its settings (including the name)
 #: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1366
 msgid "Connected (private)"
@@ -1765,7 +1669,8 @@ msgstr "Connexion large bande automatique"
 msgid "Auto dial-up"
 msgstr "Connexion par téléphone automatique"
 
-#. TRANSLATORS: this the automatic wireless connection name (including the network name)
+#. TRANSLATORS: this the automatic wireless connection name (including the
+#. network name)
 #: ../js/ui/status/network.js:862 ../js/ui/status/network.js:1383
 #, c-format
 msgid "Auto %s"
@@ -1984,7 +1889,6 @@ msgstr "Voulez-vous conserver ces paramètres d'affichage ?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#.
 #: ../js/ui/windowManager.js:84
 msgid "Revert Settings"
 msgstr "Rétablir les paramètres"
@@ -2036,8 +1940,7 @@ msgstr "Mode utilisé par GDM pour l'écran de connexion"
 
 #: ../src/main.c:357
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
-msgstr ""
-"Utiliser un mode particulier, par ex. « gdm » pour l'écran de connexion"
+msgstr "Utiliser un mode particulier, par ex. « gdm » pour l'écran de connexion"
 
 #: ../src/main.c:363
 msgid "List possible modes"
@@ -2068,12 +1971,3 @@ msgstr "Le mot de passe ne peut pas être vide"
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
 msgstr "La fenêtre d'authentification a été écartée par l'utilisateur"
-
-#~ msgid "Google"
-#~ msgstr "Google"
-
-#~ msgid "My Computer"
-#~ msgstr "Mon ordinateur"
-
-#~ msgid "My computer"
-#~ msgstr "Mon ordinateur"
