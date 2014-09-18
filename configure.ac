@@ -212,6 +212,12 @@ AC_SUBST([JASMINE_REPORT_ARGUMENT])
 # Enable coverage reporting
 EOS_COVERAGE_REPORT([c js])
 
+AC_ARG_VAR([GDBUS_CODEGEN],[the gdbus-codegen programme])
+AC_PATH_PROG([GDBUS_CODEGEN],[gdbus-codegen],[])
+if test -z "$GDBUS_CODEGEN"; then
+  AC_MSG_ERROR([gdbus-codegen not found])
+fi
+
 AC_CONFIG_FILES([
   Makefile
   data/Makefile
