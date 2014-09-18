@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-16 10:07-0700\n"
-"PO-Revision-Date: 2014-09-17 03:23+0000\n"
+"PO-Revision-Date: 2014-09-17 17:45+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/eos-shell/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -461,7 +461,7 @@ msgstr "Falló la ejecución de «%s»:"
 
 #: ../js/ui/appDisplay.js:1900
 msgid "More Apps"
-msgstr "Más Programas"
+msgstr "Más programas"
 
 #: ../js/ui/appDisplay.js:1909
 msgid "Delete"
@@ -1849,7 +1849,7 @@ msgstr "Configuración"
 
 #: ../js/ui/userMenu.js:43
 msgid "Give Us Feedback"
-msgstr "Denos tu opinión"
+msgstr "Danos tu opinión"
 
 #: ../js/ui/userMenu.js:442
 msgid "Switch User"
