@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-16 10:07-0700\n"
-"PO-Revision-Date: 2014-09-17 03:26+0000\n"
+"PO-Revision-Date: 2014-09-18 23:33+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/eos-shell/language/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -1245,12 +1245,12 @@ msgstr "%s foi eliminado"
 #: ../js/ui/internetSearch.js:59
 #, c-format
 msgid "Open \"%s\" in browser"
-msgstr ""
+msgstr "Abrir \"%s\" na Internet"
 
 #: ../js/ui/internetSearch.js:62
 #, c-format
 msgid "Search Google for \"%s\""
-msgstr ""
+msgstr "Pesquisar por \"%s\" no Google"
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
