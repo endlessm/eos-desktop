@@ -343,8 +343,10 @@ const AppIconButton = new Lang.Class({
 
     _handleButtonPressEvent: function(actor, event) {
         let button = event.get_button();
+        let clickCount = event.get_click_count();
 
-        if (button == Gdk.BUTTON_PRIMARY) {
+        if (button == Gdk.BUTTON_PRIMARY &&
+            clickCount == 1) {
             this._hideHoverState();
             this.emit('app-icon-pressed');
 
