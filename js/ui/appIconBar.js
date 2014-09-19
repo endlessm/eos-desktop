@@ -345,6 +345,14 @@ const AppIconButton = new Lang.Class({
             });
 
             if (windows.length > 1) {
+                // close any other active menu
+                let activeIconMenu = this._menuManager.activeMenu;
+                if (activeIconMenu &&
+                    activeIconMenu != this._menu &&
+                    activeIconMenu.isOpen) {
+                    activeIconMenu.toggle();
+                }
+
                 this.actor.fake_release();
                 this._menu.toggle();
                 this._menuManager.ignoreRelease();
@@ -934,11 +942,6 @@ const AppIconBar = new Lang.Class({
 
     _onAppIconPressed: function() {
         this._panel.closeActiveMenu();
-
-        let activeIconMenu = this._menuManager.activeMenu;
-        if (activeIconMenu && activeIconMenu.isOpen) {
-            activeIconMenu.toggle();
-        }
     },
 
     _updateActiveApp: function() {
