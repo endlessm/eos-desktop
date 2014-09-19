@@ -382,6 +382,9 @@ const AppIconButton = new Lang.Class({
             return;
         }
 
+        this._closeOtherMenus();
+        this._animateBounce();
+
         // The multiple windows case is handled in button-press-event
         let windows = this._app.get_windows();
         let tracker = Shell.WindowTracker.get_default();
@@ -415,7 +418,6 @@ const AppIconButton = new Lang.Class({
                 Main.activateWindow(win);
             }
         }
-        this._animateBounce();
     },
 
     _hideHoverState: function() {
