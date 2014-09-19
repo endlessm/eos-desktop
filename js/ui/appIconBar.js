@@ -384,6 +384,7 @@ const AppIconButton = new Lang.Class({
             return;
         }
 
+        let hasOtherMenu = this._hasOtherMenuOpen();
         this._closeOtherMenus();
         this._animateBounce();
 
@@ -400,7 +401,7 @@ const AppIconButton = new Lang.Class({
             Main.overview.hide();
         } else if (windows.length == 1) {
             let win = windows[0];
-            if (win.has_focus() && !Main.overview.visible) {
+            if (win.has_focus() && !Main.overview.visible && !hasOtherMenu) {
                 // The overview is not visible, and this is the
                 // currently focused application; minimize it
                 win.minimize();
