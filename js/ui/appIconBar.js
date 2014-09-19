@@ -367,7 +367,7 @@ const AppIconButton = new Lang.Class({
                 this._animateBounce();
 
                 this.actor.fake_release();
-                this._menu.toggle();
+                this._menu.toggle(animation);
                 this._menuManager.ignoreRelease();
 
                 // This will block the clicked signal from being emitted
