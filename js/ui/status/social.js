@@ -14,13 +14,13 @@ const SocialBarButton = new Lang.Class({
         this.parent(null, _("Social Bar"));
         this.actor.add_style_class_name('social-button');
 
-        let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/social-bar-normal.png');
+        let iconFileNormal = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/social-bar-normal.png');
         this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
 
-        let iconFileHover = Gio.File.new_for_path(global.datadir + '/theme/social-bar-hover.png');
+        let iconFileHover = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/social-bar-hover.png');
         this._giconHover = new Gio.FileIcon({ file: iconFileHover });
 
-        let iconFilePressed = Gio.File.new_for_path(global.datadir + '/theme/social-bar-pressed.png');
+        let iconFilePressed = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/social-bar-pressed.png');
         this._giconPressed = new Gio.FileIcon({ file: iconFilePressed });
 
         this.setGIcon(this._giconNormal);

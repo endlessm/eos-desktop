@@ -18,9 +18,9 @@ const HotCornerIndicator = new Lang.Class({
 
         let iconFileNormal;
         if (this.actor.get_text_direction() == Clutter.TextDirection.RTL) {
-            iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/hot-corner-indicator-rtl-symbolic.svg');
+            iconFileNormal = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/hot-corner-indicator-rtl-symbolic.svg');
         } else {
-            iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/hot-corner-indicator-symbolic.svg');
+            iconFileNormal = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/hot-corner-indicator-symbolic.svg');
         }
         this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
 

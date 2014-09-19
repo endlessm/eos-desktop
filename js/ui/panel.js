@@ -156,7 +156,7 @@ const VariableSpeedAnimation = new Lang.Class({
     Extends: Animation,
 
     _init: function(name, size, initialTimeout, skipEndFrames) {
-        this.parent(Gio.File.new_for_path(global.datadir + '/theme/' + name), size, size,
+        this.parent(Gio.File.new_for_uri('resource:///org/gnome/shell/theme/' + name), size, size,
                     initialTimeout, skipEndFrames);
     },
 
@@ -217,7 +217,7 @@ const AnimatedIcon = new Lang.Class({
     Extends: Animation,
 
     _init: function(name, size) {
-        this.parent(Gio.File.new_for_path(global.datadir + '/theme/' + name), size, size, ANIMATED_ICON_UPDATE_TIMEOUT, 0);
+        this.parent(Gio.File.new_for_uri('resource:///org/gnome/shell/theme/' + name), size, size, ANIMATED_ICON_UPDATE_TIMEOUT, 0);
     }
 });
 

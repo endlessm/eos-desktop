@@ -26,10 +26,10 @@ const ChatButton = new Lang.Class({
 
         this.actor.add_style_class_name('chat-button');
 
-        let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/chat-button-symbolic.svg');
+        let iconFileNormal = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/chat-button-symbolic.svg');
         this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
 
-        let blueDotFile = Gio.File.new_for_path(global.datadir + '/theme/notification-blue_dot.png');
+        let blueDotFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/notification-blue_dot.png');
         this._blueDotIcon = new Gio.FileIcon({ file: blueDotFile });
         this._giconNotify = new Gio.EmblemedIcon({ gicon: this._giconNormal });
         this._giconNotify.add_emblem(new Gio.Emblem({ icon: this._blueDotIcon }));

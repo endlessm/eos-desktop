@@ -694,7 +694,7 @@ const SystemBackground = new Lang.Class({
         this.actor = new Meta.BackgroundActor();
 
         this._cache.getImageContent({ style: GDesktopEnums.BackgroundStyle.WALLPAPER,
-                                      file: Gio.File.new_for_path(global.datadir + '/theme/noise-texture.png'),
+                                      file: Gio.File.new_for_uri('resource:///org/gnome/shell/theme/noise-texture.png'),
                                       effects: Meta.BackgroundEffects.NONE,
                                       onFinished: Lang.bind(this, function(content) {
                                           this.actor.content = content;
