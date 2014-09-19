@@ -80,7 +80,7 @@ const LogoMenuButton = new Lang.Class({
         if (path) {
             let file = Gio.file_new_for_path(path);
             let cache = St.TextureCache.get_default();
-            icon = cache.load_uri_async(file.get_uri(), -1, _LOGO_ICON_HEIGHT);
+            icon = cache.load_file_async(file, -1, _LOGO_ICON_HEIGHT);
         }
         this._iconBin.set_child(icon);
     }

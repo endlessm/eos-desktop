@@ -387,9 +387,9 @@ const SplashSpinner = new Lang.Class({
     _loadImage: function(name, size) {
         let textureCache = St.TextureCache.get_default();
         let path = GLib.build_filenamev([SPINNER_IMAGES_DIR, name]);
-        let uri = GLib.filename_to_uri(path, null, null);
+        let file = Gio.File.new_for_path(path);
 
-        return textureCache.load_uri_async(uri, size, size);
+        return textureCache.load_file_async(file, size, size);
     },
 
     play: function() {

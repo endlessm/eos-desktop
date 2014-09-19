@@ -182,7 +182,7 @@ void st_theme_node_get_background_gradient (StThemeNode   *node,
                                             ClutterColor   *start,
                                             ClutterColor   *end);
 
-const char *st_theme_node_get_background_image (StThemeNode *node);
+GFile *st_theme_node_get_background_image (StThemeNode *node);
 
 int    st_theme_node_get_border_width  (StThemeNode  *node,
                                         StSide        side);
