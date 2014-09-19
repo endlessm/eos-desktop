@@ -400,8 +400,8 @@ function _loadDefaultStylesheet() {
     if (!sessionMode.isPrimary)
         return;
 
-    let stylesheet = global.datadir + '/theme/' + sessionMode.stylesheetName;
-    if (_defaultCssStylesheet == stylesheet)
+    let stylesheet = Gio.File.new_for_path(global.datadir + '/theme/' + sessionMode.stylesheetName);
+    if (_defaultCssStylesheet && _defaultCssStylesheet.equal(stylesheet))
         return;
 
     _defaultCssStylesheet = stylesheet;
@@ -430,7 +430,7 @@ function getThemeStylesheet()
  */
 function setThemeStylesheet(cssStylesheet)
 {
-    _cssStylesheet = cssStylesheet;
+    _cssStylesheet = Gio.File.new_for_path(cssStylesheet);
 }
 
 /**
