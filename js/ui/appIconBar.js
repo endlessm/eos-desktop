@@ -234,12 +234,12 @@ const AppIconMenu = new Lang.Class({
         }
     },
 
-    toggle: function() {
+    toggle: function(animation) {
         if (this.isOpen) {
-            this.close();
+            this.close(animation);
         } else {
             this._redisplay();
-            this.open();
+            this.open(animation);
             this._submenuItem.menu.open(BoxPointer.PopupAnimation.NONE);
         }
     },
@@ -334,10 +334,10 @@ const AppIconButton = new Lang.Class({
                 activeIconMenu.isOpen);
     },
 
-    _closeOtherMenus: function() {
+    _closeOtherMenus: function(animation) {
         // close any other open menu
         if (this._hasOtherMenuOpen()) {
-            this._menuManager.activeMenu.toggle();
+            this._menuManager.activeMenu.toggle(animation);
         }
     },
 
@@ -385,7 +385,7 @@ const AppIconButton = new Lang.Class({
         }
 
         let hasOtherMenu = this._hasOtherMenuOpen();
-        this._closeOtherMenus();
+        this._closeOtherMenus(BoxPointer.PopupAnimation.FULL);
         this._animateBounce();
 
         // The multiple windows case is handled in button-press-event
