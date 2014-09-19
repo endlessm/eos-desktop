@@ -357,7 +357,13 @@ const AppIconButton = new Lang.Class({
             });
 
             if (windows.length > 1) {
-                this._closeOtherMenus();
+                let hasOtherMenu = this._hasOtherMenuOpen();
+                let animation = BoxPointer.PopupAnimation.FULL;
+                if (hasOtherMenu) {
+                    animation = BoxPointer.PopupAnimation.NONE;
+                }
+
+                this._closeOtherMenus(animation);
                 this._animateBounce();
 
                 this.actor.fake_release();
