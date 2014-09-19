@@ -312,10 +312,6 @@ const AppIconButton = new Lang.Class({
                 // scrollable so the minimum height is smaller than the natural height
                 let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
                 this._menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
-
-                if (open) {
-                    this._animateBounce();
-                }
             }));
 
         this._appStateUpdatedId = this._app.connect('notify::state', Lang.bind(this, this._syncQuitMenuItemVisible));
@@ -329,6 +325,20 @@ const AppIconButton = new Lang.Class({
 
     _createIcon: function() {
         return this._app.create_icon_texture(this._iconSize);
+    },
+
+    _hasOtherMenuOpen: function() {
+        let activeIconMenu = this._menuManager.activeMenu;
+        return (activeIconMenu &&
+                activeIconMenu != this._menu &&
+                activeIconMenu.isOpen);
+    },
+
+    _closeOtherMenus: function() {
+        // close any other open menu
+        if (this._hasOtherMenuOpen()) {
+            this._menuManager.activeMenu.toggle();
+        }
     },
 
     _handleButtonPressEvent: function(actor, event) {
@@ -345,13 +355,8 @@ const AppIconButton = new Lang.Class({
             });
 
             if (windows.length > 1) {
-                // close any other active menu
-                let activeIconMenu = this._menuManager.activeMenu;
-                if (activeIconMenu &&
-                    activeIconMenu != this._menu &&
-                    activeIconMenu.isOpen) {
-                    activeIconMenu.toggle();
-                }
+                this._closeOtherMenus();
+                this._animateBounce();
 
                 this.actor.fake_release();
                 this._menu.toggle();
