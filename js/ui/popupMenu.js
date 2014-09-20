@@ -1572,6 +1572,10 @@ const PopupSubMenu = new Lang.Class({
         if (animate && needsScrollbar)
             animate = false;
 
+        // Remove tweens and reset actor height requests
+        Tweener.removeTweens(this.actor);
+        this.actor.set_height(-1);
+
         if (animate) {
             let [minHeight, naturalHeight] = this.actor.get_preferred_height(-1);
             this.actor.height = 0;
@@ -1608,6 +1612,8 @@ const PopupSubMenu = new Lang.Class({
         if (animate && this._needsScrollbar())
             animate = false;
 
+        Tweener.removeTweens(this.actor);
+
         if (animate) {
             this.actor._arrow_rotation = this._arrow.rotation_angle_z;
             Tweener.addTween(this.actor,
@@ -1631,6 +1637,7 @@ const PopupSubMenu = new Lang.Class({
                 this._arrow.rotation_angle_z = 0;
                 this.actor.vscrollbar_policy = Gtk.PolicyType.NEVER;
                 this.actor.hide();
+                this.actor.set_height(-1);
 
                 this.isOpen = false;
                 this.emit('open-state-changed', false);
