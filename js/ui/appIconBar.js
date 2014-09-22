@@ -234,12 +234,12 @@ const AppIconMenu = new Lang.Class({
         }
     },
 
-    toggle: function() {
+    toggle: function(animation) {
         if (this.isOpen) {
-            this.close();
+            this.close(animation);
         } else {
             this._redisplay();
-            this.open();
+            this.open(animation);
             this._submenuItem.menu.open(BoxPointer.PopupAnimation.NONE);
         }
     },
@@ -312,10 +312,6 @@ const AppIconButton = new Lang.Class({
                 // scrollable so the minimum height is smaller than the natural height
                 let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
                 this._menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
-
-                if (open) {
-                    this._animateBounce();
-                }
             }));
 
         this._appStateUpdatedId = this._app.connect('notify::state', Lang.bind(this, this._syncQuitMenuItemVisible));
@@ -331,10 +327,26 @@ const AppIconButton = new Lang.Class({
         return this._app.create_icon_texture(this._iconSize);
     },
 
+    _hasOtherMenuOpen: function() {
+        let activeIconMenu = this._menuManager.activeMenu;
+        return (activeIconMenu &&
+                activeIconMenu != this._menu &&
+                activeIconMenu.isOpen);
+    },
+
+    _closeOtherMenus: function(animation) {
+        // close any other open menu
+        if (this._hasOtherMenuOpen()) {
+            this._menuManager.activeMenu.toggle(animation);
+        }
+    },
+
     _handleButtonPressEvent: function(actor, event) {
         let button = event.get_button();
+        let clickCount = event.get_click_count();
 
-        if (button == Gdk.BUTTON_PRIMARY) {
+        if (button == Gdk.BUTTON_PRIMARY &&
+            clickCount == 1) {
             this._hideHoverState();
             this.emit('app-icon-pressed');
 
@@ -345,8 +357,17 @@ const AppIconButton = new Lang.Class({
             });
 
             if (windows.length > 1) {
+                let hasOtherMenu = this._hasOtherMenuOpen();
+                let animation = BoxPointer.PopupAnimation.FULL;
+                if (hasOtherMenu) {
+                    animation = BoxPointer.PopupAnimation.NONE;
+                }
+
+                this._closeOtherMenus(animation);
+                this._animateBounce();
+
                 this.actor.fake_release();
-                this._menu.toggle();
+                this._menu.toggle(animation);
                 this._menuManager.ignoreRelease();
 
                 // This will block the clicked signal from being emitted
@@ -369,6 +390,10 @@ const AppIconButton = new Lang.Class({
             return;
         }
 
+        let hasOtherMenu = this._hasOtherMenuOpen();
+        this._closeOtherMenus(BoxPointer.PopupAnimation.FULL);
+        this._animateBounce();
+
         // The multiple windows case is handled in button-press-event
         let windows = this._app.get_windows();
         let tracker = Shell.WindowTracker.get_default();
@@ -382,7 +407,7 @@ const AppIconButton = new Lang.Class({
             Main.overview.hide();
         } else if (windows.length == 1) {
             let win = windows[0];
-            if (win.has_focus() && !Main.overview.visible) {
+            if (win.has_focus() && !Main.overview.visible && !hasOtherMenu) {
                 // The overview is not visible, and this is the
                 // currently focused application; minimize it
                 win.minimize();
@@ -402,7 +427,6 @@ const AppIconButton = new Lang.Class({
                 Main.activateWindow(win);
             }
         }
-        this._animateBounce();
     },
 
     _hideHoverState: function() {
@@ -934,11 +958,6 @@ const AppIconBar = new Lang.Class({
 
     _onAppIconPressed: function() {
         this._panel.closeActiveMenu();
-
-        let activeIconMenu = this._menuManager.activeMenu;
-        if (activeIconMenu && activeIconMenu.isOpen) {
-            activeIconMenu.toggle();
-        }
     },
 
     _updateActiveApp: function() {
