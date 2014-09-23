@@ -14,6 +14,7 @@ const Signals = imports.signals;
 const St = imports.gi.St;
 
 const AltTab = imports.ui.altTab;
+const ForceAppExitDialog = imports.ui.forceAppExitDialog;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Layout = imports.ui.layout;
 const Main = imports.ui.main;
@@ -548,6 +549,12 @@ const WindowManager = new Lang.Class({
                                         Shell.KeyBindingMode.UNLOCK_SCREEN |
                                         Shell.KeyBindingMode.LOGIN_SCREEN,
                                         Lang.bind(this, this._startA11ySwitcher));
+
+        this.addKeybinding('show-force-app-exit-dialog',
+                           new Gio.Settings({ schema_id: SHELL_KEYBINDINGS_SCHEMA }),
+                           Meta.KeyBindingFlags.NONE,
+                           Shell.KeyBindingMode.NORMAL,
+                           Lang.bind(this, this._showForceAppExitDialog));
 
         Main.overview.connect('showing', Lang.bind(this, function() {
             for (let i = 0; i < this._dimmedWindows.length; i++) {
@@ -1316,6 +1323,11 @@ const WindowManager = new Lang.Class({
         let modifiers = binding.get_modifiers();
         let backwards = modifiers & Meta.VirtualModifier.SHIFT_MASK;
         Main.ctrlAltTabManager.popup(backwards, binding.get_name(), binding.get_mask());
+    },
+
+    _showForceAppExitDialog: function() {
+        let dialog = new ForceAppExitDialog.ForceAppExitDialog();
+        dialog.open();
     },
 
     _showWorkspaceSwitcher : function(display, screen, window, binding) {

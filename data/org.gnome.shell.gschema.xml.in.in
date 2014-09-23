@@ -230,6 +230,11 @@ value here is from the GsmPresenceStatus enumeration.</_summary>
         Keybinding to focus the active notification.
       </_description>
     </key>
+    <key name="show-force-app-exit-dialog" type="as">
+      <default>["&lt;Ctrl&gt;&lt;Alt&gt;Delete"]</default>
+      <_summary>Keybinding that shows the force app exit dialog</_summary>
+      <_description></_description>
+    </key>
   </schema>
 
   <schema id="org.gnome.shell.keyboard" path="/org/gnome/shell/keyboard/"

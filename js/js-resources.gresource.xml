@@ -41,6 +41,7 @@
     <file>ui/extensionSystem.js</file>
     <file>ui/extensionDownloader.js</file>
     <file>ui/environment.js</file>
+    <file>ui/forceAppExitDialog.js</file>
     <file>ui/ibusCandidatePopup.js</file>
     <file>ui/grabHelper.js</file>
     <file>ui/iconGrid.js</file>
