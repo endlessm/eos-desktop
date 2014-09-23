@@ -1015,7 +1015,7 @@ const PopupUserMenuItem = new Lang.Class({
         let gicon = null;
 
         if (imagePath) {
-            let iconFile = Gio.File.new_for_path(global.datadir + imagePath);
+            let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell' + imagePath);
             gicon = new Gio.FileIcon({ file: iconFile });
         } else if (iconName) {
             gicon = new Gio.ThemedIcon({ name: iconName });

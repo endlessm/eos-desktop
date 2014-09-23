@@ -29,6 +29,7 @@ data/eos-shell.desktop.in
 data/eos-shell.session
 data/eos-shell-extension-prefs.desktop
 data/eos-shell-extension-prefs.desktop.in
+data/gnome-shell-theme.gresource
 data/gdm-eos-shell.desktop.in
 data/gdm-eos-shell.desktop
 data/gschemas.compiled

@@ -69,7 +69,7 @@ GType st_texture_cache_get_type (void) G_GNUC_CONST;
 StTextureCache* st_texture_cache_get_default (void);
 
 void st_texture_cache_load_sliced_image_async (StTextureCache      *cache,
-                                               const gchar         *path,
+                                               GFile               *file,
                                                gint                 grid_width,
                                                gint                 grid_height,
                                                GAsyncReadyCallback  callback,
@@ -96,16 +96,16 @@ ClutterActor * st_texture_cache_load_gicon_full (StTextureCache     *cache,
                                                  GAsyncReadyCallback callback,
                                                  gpointer            user_data);
 
-ClutterActor *st_texture_cache_load_uri_async (StTextureCache    *cache,
-                                               const gchar       *uri,
-                                               int                available_width,
-                                               int                available_height);
+ClutterActor *st_texture_cache_load_file_async (StTextureCache    *cache,
+                                                GFile             *file,
+                                                int                available_width,
+                                                int                available_height);
 
 CoglHandle    st_texture_cache_load_file_to_cogl_texture (StTextureCache *cache,
-                                                          const gchar    *file_path);
+                                                          GFile          *file);
 
 cairo_surface_t *st_texture_cache_load_file_to_cairo_surface (StTextureCache *cache,
-                                                              const gchar    *file_path);
+                                                              GFile          *file);
 
 /**
  * StTextureCacheLoader: (skip)

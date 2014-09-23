@@ -534,7 +534,7 @@ const AppIconBarNavButton = Lang.Class({
     Extends: St.Button,
 
     _init: function(imagePath, pressHandler) {
-        let iconFile = Gio.File.new_for_path(global.datadir + imagePath);
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell' + imagePath);
         let gicon = new Gio.FileIcon({ file: iconFile });
 
         this._icon = new St.Icon({ style_class: 'app-bar-nav-icon',
@@ -880,7 +880,7 @@ const BrowserButton = new Lang.Class({
     },
 
     _createIcon: function() {
-        let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/internet-normal.png');
+        let iconFileNormal = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/internet-normal.png');
         let giconNormal = new Gio.FileIcon({ file: iconFileNormal });
         return new St.Icon({ gicon: giconNormal,
                              style_class: 'browser-icon' });

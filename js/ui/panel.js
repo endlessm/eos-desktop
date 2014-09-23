@@ -69,7 +69,7 @@ function animateIconIn (icon, index) {
 const Animation = new Lang.Class({
     Name: 'Animation',
 
-    _init: function(filename, width, height, speed, skipEndFrames) {
+    _init: function(file, width, height, speed, skipEndFrames) {
         this.actor = new St.Bin({ width: width, height: height });
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
@@ -82,7 +82,7 @@ const Animation = new Lang.Class({
         this._frame = 0;
         this._frames = null;
 
-        St.TextureCache.get_default().load_sliced_image_async(filename, width, height,
+        St.TextureCache.get_default().load_sliced_image_async(file, width, height,
                                                               Lang.bind(this, this._animationsLoaded));
     },
 
@@ -156,7 +156,7 @@ const VariableSpeedAnimation = new Lang.Class({
     Extends: Animation,
 
     _init: function(name, size, initialTimeout, skipEndFrames) {
-        this.parent(global.datadir + '/theme/' + name, size, size,
+        this.parent(Gio.File.new_for_uri('resource:///org/gnome/shell/theme/' + name), size, size,
                     initialTimeout, skipEndFrames);
     },
 
@@ -217,7 +217,7 @@ const AnimatedIcon = new Lang.Class({
     Extends: Animation,
 
     _init: function(name, size) {
-        this.parent(global.datadir + '/theme/' + name, size, size, ANIMATED_ICON_UPDATE_TIMEOUT, 0);
+        this.parent(Gio.File.new_for_uri('resource:///org/gnome/shell/theme/' + name), size, size, ANIMATED_ICON_UPDATE_TIMEOUT, 0);
     }
 });
 

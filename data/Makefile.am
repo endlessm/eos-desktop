@@ -37,88 +37,11 @@ introspection_DATA =				\
 	org.gnome.ShellSearchProvider.xml	\
 	org.gnome.ShellSearchProvider2.xml
 
-themedir = $(pkgdatadir)/theme
-dist_theme_DATA =				\
-	theme/app-bar-back-symbolic.svg		\
-	theme/app-bar-forward-symbolic.svg	\
-	theme/app-shadow-hover.png		\
-	theme/app-shadow-normal.png		\
-	theme/app-shadow-pressed.png		\
-	theme/app-store-icon-hover.png		\
-	theme/app-store-icon-normal.png		\
-	theme/app-store-icon-pressed.png	\
-	theme/calendar-arrow-left.svg		\
-	theme/calendar-arrow-right.svg		\
-	theme/calendar-today.svg		\
-	theme/chat-button-symbolic.svg		\
-	theme/checkbox-focused.svg		\
-	theme/checkbox-off-focused.svg		\
-	theme/checkbox-off.svg			\
-	theme/checkbox.svg			\
-	theme/close-splash-hover.png		\
-	theme/close-splash-normal.png		\
-	theme/close-splash-pressed.png		\
-	theme/close-window.svg			\
-	theme/close.svg				\
-	theme/corner-ripple-bl.png		\
-	theme/corner-ripple-br.png		\
-	theme/corner-ripple-tl.png		\
-	theme/corner-ripple-tr.png		\
-	theme/dash-placeholder.svg		\
-	theme/filter-selected-ltr.svg		\
-	theme/filter-selected-rtl.svg		\
-	theme/folder-shadow-hover.png		\
-	theme/folder-shadow-normal.png		\
-	theme/folder-shadow-pressed.png		\
-	theme/gnome-shell.css			\
-	theme/hot-corner-indicator-symbolic.svg	\
-	theme/hot-corner-indicator-rtl-symbolic.svg \
-	theme/internet-hover.png		\
-	theme/internet-normal.png		\
-	theme/internet-pressed.png		\
-	theme/logged-in-indicator.svg		\
-	theme/message-tray-background.png	\
-	theme/mini-icon-active-indicator.png    \
-	theme/more-results.svg			\
-	theme/noise-texture.png			\
-	theme/notification-blue_dot.png		\
-	theme/panel-button-border.svg		\
-	theme/panel-button-highlight-narrow.svg	\
-	theme/panel-button-highlight-wide.svg	\
-	theme/process-working.svg		\
-	theme/running-indicator.svg		\
-	theme/settings-hover.png		\
-	theme/settings-normal.png		\
-	theme/settings-symbolic.svg		\
-	theme/social-bar-hover.png		\
-	theme/social-bar-normal.png		\
-	theme/social-bar-pressed.png		\
-	theme/separator.png			\
-	theme/source-button-border.svg		\
-	theme/splash-background-default.jpg	\
-	theme/splash-noise-texture.png		\
-	theme/splash-spinner-channel-glow.png \
-	theme/splash-spinner-channel.png	\
-	theme/splash-spinner-glow.png	\
-	theme/splash-spinner.png		\
-	theme/summary-counter.svg		\
-	theme/toggle-off-us.svg			\
-	theme/toggle-off-intl.svg		\
-	theme/toggle-on-us.svg			\
-	theme/toggle-on-intl.svg		\
-	theme/trash-can_release-pop-up.png	\
-	theme/trash-icon-empty.png		\
-	theme/trash-icon-full.png		\
-	theme/trash-pop-up_cancel-btn_hover.png	\
-	theme/trash-pop-up_cancel-btn_normal.png	\
-	theme/trash-pop-up_cancel-btn_pressed.png	\
-	theme/trash-pop-up_ok-btn_hover.png	\
-	theme/trash-pop-up_ok-btn_normal.png	\
-	theme/trash-pop-up_ok-btn_pressed.png	\
-	theme/tutorial-symbolic.svg		\
-	theme/feedback-symbolic.svg		\
-	theme/ws-switch-arrow-up.png		\
-	theme/ws-switch-arrow-down.png
+resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/theme --generate-dependencies $(srcdir)/gnome-shell-theme.gresource.xml)
+gnome-shell-theme.gresource: gnome-shell-theme.gresource.xml $(resource_files)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir)/theme $<
+resourcedir = $(pkgdatadir)
+resource_DATA = gnome-shell-theme.gresource
 
 keysdir = @GNOME_KEYBINDINGS_KEYSDIR@
 keys_in_files =					\
@@ -178,7 +101,9 @@ EXTRA_DIST =					\
 	$(convert_DATA)				\
 	$(keys_in_files)			\
 	org.gnome.shell.gschema.xml.in.in	\
-	eos-launch.desktop.in.in
+	eos-launch.desktop.in.in		\
+	gnome-shell-theme.gresource.xml		\
+	$(resource_files)
 
 CLEANFILES =					\
 	gdm-eos-shell.desktop.in		\
@@ -197,5 +122,5 @@ CLEANFILES =					\
 	gschemas.compiled			\
 	org.gnome.shell.gschema.valid		\
 	org.gnome.shell.gschema.xml.in		\
-	eos-launch.desktop.in
-
+	eos-launch.desktop.in			\
+	gnome-shell-theme.gresource
