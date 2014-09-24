@@ -2908,6 +2908,12 @@ StScrollBar StButton#vhandle:active {
     font-weight: bold;
 }
 
+.force-app-exit-dialog-subtitle {
+    color: #ccc;
+    font-size: 12pt;
+    max-width: 330px;
+}
+
 .force-app-exit-dialog-scroll-view {
     border: 2px solid #666;
     border-radius: 6px;

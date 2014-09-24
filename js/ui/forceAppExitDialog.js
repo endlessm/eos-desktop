@@ -55,6 +55,12 @@ const ForceAppExitDialog = new Lang.Class({
         this.contentLayout.style_class = 'force-app-exit-dialog-content';
         this.contentLayout.add(title);
 
+        let subtitle = new St.Label({ style_class: 'force-app-exit-dialog-subtitle',
+                                      text: _("If an application doesn't respond for a while, select its name and click Quit Application.") });
+        subtitle.clutter_text.line_wrap = true;
+        this.contentLayout.add(subtitle, { x_fill: false,
+                                           x_align: St.Align.START });
+
         this._itemBox = new St.BoxLayout({ vertical: true });
         this._scrollView = new St.ScrollView({ style_class: 'force-app-exit-dialog-scroll-view',
                                                hscrollbar_policy: Gtk.PolicyType.NEVER,
