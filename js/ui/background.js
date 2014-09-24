@@ -370,7 +370,8 @@ const Background = new Lang.Class({
         let signalId = this._cache.connect('file-changed',
                                            Lang.bind(this, function(cache, changedFile) {
                                                if (changedFile.equal(file)) {
-                                                   this._invalidateCacheFile(file);
+                                                   let imageCache = Meta.BackgroundImageCache.get_default();
+                                                   imageCache.purge(changedFile);
                                                    this.emit('changed');
                                                }
                                            }));
