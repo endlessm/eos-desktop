@@ -553,7 +553,8 @@ const WindowManager = new Lang.Class({
         this.addKeybinding('show-force-app-exit-dialog',
                            new Gio.Settings({ schema_id: SHELL_KEYBINDINGS_SCHEMA }),
                            Meta.KeyBindingFlags.NONE,
-                           Shell.KeyBindingMode.NORMAL,
+                           Shell.KeyBindingMode.NORMAL |
+                           Shell.KeyBindingMode.OVERVIEW,
                            Lang.bind(this, this._showForceAppExitDialog));
 
         Main.overview.connect('showing', Lang.bind(this, function() {
