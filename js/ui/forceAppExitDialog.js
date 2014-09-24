@@ -50,7 +50,7 @@ const ForceAppExitDialog = new Lang.Class({
         this.parent({ styleClass: 'force-app-exit-dialog' });
 
         let title = new St.Label({ style_class: 'force-app-exit-dialog-header',
-                                   text: _("Quit application...") });
+                                   text: _("Quit applications…") });
 
         this.contentLayout.style_class = 'force-app-exit-dialog-content';
         this.contentLayout.add(title);
