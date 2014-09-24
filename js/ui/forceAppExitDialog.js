@@ -80,6 +80,7 @@ const ForceAppExitDialog = new Lang.Class({
             this._itemBox.add_child(item.actor);
         }));
 
+        this._selectedAppItem = null;
         this._updateSensitivity();
     },
 
