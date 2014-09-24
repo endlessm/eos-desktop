@@ -70,7 +70,7 @@ const ForceAppExitDialog = new Lang.Class({
                                               label: _("Cancel"),
                                               key: Clutter.Escape });
         this._quitButton = this.addButton({ action: Lang.bind(this, this._quitApp),
-                                            label: _("Quit"),
+                                            label: _("Quit Application"),
                                             key: Clutter.Return },
                                           { expand: true,
                                             x_fill: false,
