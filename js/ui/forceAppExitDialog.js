@@ -54,11 +54,12 @@ const ForceAppExitDialog = new Lang.Class({
         this.contentLayout.add(title);
 
         this._itemBox = new St.BoxLayout({ vertical: true });
-        this._scrollView = new St.ScrollView({ style_class: 'force-app-exit-dialog-scroll-view' });
+        this._scrollView = new St.ScrollView({ style_class: 'force-app-exit-dialog-scroll-view',
+                                               hscrollbar_policy: Gtk.PolicyType.NEVER,
+                                               vscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
+                                               overlay_scrollbars: true });
         this._scrollView.set_x_expand(true);
         this._scrollView.set_y_expand(true);
-        this._scrollView.set_policy(Gtk.PolicyType.NEVER,
-                                    Gtk.PolicyType.AUTOMATIC);
         this._scrollView.add_actor(this._itemBox);
 
         this.contentLayout.add(this._scrollView, { expand: true });
