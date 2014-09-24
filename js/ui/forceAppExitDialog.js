@@ -12,6 +12,7 @@ const ModalDialog = imports.ui.modalDialog;
 
 const ForceAppExitDialogItem = new Lang.Class({
     Name: 'ForceAppExitDialogItem',
+    ICON_SIZE: 32,
 
     _init: function(app) {
         this.app = app;
@@ -28,7 +29,7 @@ const ForceAppExitDialogItem = new Lang.Class({
         }));
         this.actor.add_action(action);
 
-        this._icon = this.app.create_icon_texture(32);
+        this._icon = this.app.create_icon_texture(this.ICON_SIZE);
         this.actor.add(this._icon);
 
         this._label = new St.Label({ text: this.app.get_name(),
