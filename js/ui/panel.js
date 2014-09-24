@@ -364,7 +364,6 @@ const Panel = new Lang.Class({
         this.actor.connect('get-preferred-width', Lang.bind(this, this._getPreferredWidth));
         this.actor.connect('get-preferred-height', Lang.bind(this, this._getPreferredHeight));
         this.actor.connect('allocate', Lang.bind(this, this._allocate));
-        this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
 
         Main.overview.connect('showing', Lang.bind(this, function () {
             this.actor.add_style_pseudo_class('overview');
@@ -491,48 +490,6 @@ const Panel = new Lang.Class({
             childBox.x2 = allocWidth;
         }
         this._rightBox.allocate(childBox, flags);
-    },
-
-    _onButtonPress: function(actor, event) {
-        if (Main.modalCount > 0)
-            return false;
-
-        if (event.get_source() != actor)
-            return false;
-
-        let button = event.get_button();
-        if (button != 1)
-            return false;
-
-        let focusWindow = global.display.focus_window;
-        if (!focusWindow)
-            return false;
-
-        let dragWindow = focusWindow.is_attached_dialog() ? focusWindow.get_transient_for()
-                                                          : focusWindow;
-        if (!dragWindow)
-            return false;
-
-        let rect = dragWindow.get_outer_rect();
-        let [stageX, stageY] = event.get_coords();
-
-        let allowDrag = dragWindow.maximized_vertically &&
-                        stageX > rect.x && stageX < rect.x + rect.width;
-
-        if (!allowDrag)
-            return false;
-
-        global.display.begin_grab_op(global.screen,
-                                     dragWindow,
-                                     Meta.GrabOp.MOVING,
-                                     false, /* pointer grab */
-                                     true, /* frame action */
-                                     button,
-                                     event.get_state(),
-                                     event.get_time(),
-                                     stageX, stageY);
-
-        return true;
     },
 
     set boxOpacity(value) {
