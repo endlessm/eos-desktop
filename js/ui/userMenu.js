@@ -43,7 +43,7 @@ const SETTINGS_TEXT = _("Settings");
 const FEEDBACK_TEXT = _("Give Us Feedback");
 
 const FEEDBACK_LAUNCHER = "eos-app-feedback.desktop";
-const TUTORIAL_LAUNCHER = "eos-app-tutorial.desktop";
+const TUTORIAL_LAUNCHER = "com.endlessm.Tutorial.desktop";
 
 const DIALOG_ICON_SIZE = 64;
 
