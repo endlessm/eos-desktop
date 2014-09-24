@@ -30,7 +30,7 @@ const DEFAULT_MAXIMIZED_WINDOW_SIZE = 0.75;
 
 const LAUNCH_MAXIMIZED_DESKTOP_KEY = 'X-Endless-LaunchMaximized';
 const SPLASH_BACKGROUND_DESKTOP_KEY = 'X-Endless-SplashBackground';
-const DEFAULT_SPLASH_SCREEN_BACKGROUND = 'splash-background-default.jpg';
+const DEFAULT_SPLASH_SCREEN_BACKGROUND = 'resource:///org/gnome/shell/theme/splash-background-default.jpg';
 const SPINNER_IMAGES_DIR = 'resource:///org/gnome/shell/theme/';
 
 const AppActivationContext = new Lang.Class({
