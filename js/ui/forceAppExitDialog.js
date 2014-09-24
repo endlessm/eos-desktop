@@ -19,7 +19,8 @@ const ForceAppExitDialogItem = new Lang.Class({
 
         this.actor = new St.BoxLayout({ style_class: 'force-app-exit-dialog-item',
                                         can_focus: true,
-                                        reactive: true });
+                                        reactive: true,
+                                        track_hover: true });
         this.actor.connect('key-focus-in', Lang.bind(this, function() {
             this.emit('selected');
         }));

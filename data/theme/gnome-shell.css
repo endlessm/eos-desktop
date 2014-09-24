@@ -2920,6 +2920,10 @@ StScrollBar StButton#vhandle:active {
     spacing: 20px;
 }
 
+.force-app-exit-dialog-item:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
 .force-app-exit-dialog-item:selected {
     background-color: #333;
 }
