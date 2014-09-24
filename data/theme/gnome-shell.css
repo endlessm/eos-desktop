@@ -2917,13 +2917,14 @@ StScrollBar StButton#vhandle:active {
 .force-app-exit-dialog-scroll-view {
     border: 2px solid #666;
     border-radius: 6px;
+    height: 288px;
 }
 
 .force-app-exit-dialog-item {
-    font-size: 12pt;
-    border-bottom: 1px solid #666;
-    padding: 6px;
-    spacing: 20px;
+    border: solid #242424;
+    padding: 16px;
+    spacing: 16px;
+    border-bottom-width: 1px;
 }
 
 .force-app-exit-dialog-item:hover {
