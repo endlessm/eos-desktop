@@ -38,12 +38,12 @@ const LOG_OUT_TEXT = _("Log Out");
 const LOCK_TEXT = _("Lock");
 const EXIT_TEXT = _("Exit");
 
-const TUTORIAL_TEXT = _("Tutorial");
+const YELP_TEXT = _("Tutorial");
 const SETTINGS_TEXT = _("Settings");
 const FEEDBACK_TEXT = _("Give Us Feedback");
 
 const FEEDBACK_LAUNCHER = "eos-app-feedback.desktop";
-const TUTORIAL_LAUNCHER = "com.endlessm.Tutorial.desktop";
+const YELP_LAUNCHER = "yelp.desktop";
 
 const DIALOG_ICON_SIZE = 64;
 
@@ -425,10 +425,10 @@ const UserMenuButton = new Lang.Class({
         this._systemSettings.connect('activate', Lang.bind(this, this._onPreferencesActivate));
         this.menu.addMenuItem(this._systemSettings);
 
-        if (this._haveLauncher(TUTORIAL_LAUNCHER)) {
-            item = new PopupMenu.PopupUserMenuItem(TUTORIAL_TEXT,
+        if (this._haveLauncher(YELP_LAUNCHER)) {
+            item = new PopupMenu.PopupUserMenuItem(YELP_TEXT,
                                                    { imagePath: '/theme/tutorial-symbolic.svg' });
-            item.connect('activate', Lang.bind(this, this._onTutorialActivate));
+            item.connect('activate', Lang.bind(this, this._onYelpActivate));
             this.menu.addMenuItem(item);
         }
 
@@ -467,9 +467,9 @@ const UserMenuButton = new Lang.Class({
         return app != null;
     },
 
-    _onTutorialActivate: function() {
+    _onYelpActivate: function() {
         Main.overview.hide();
-        let app = Shell.AppSystem.get_default().lookup_app(TUTORIAL_LAUNCHER);
+        let app = Shell.AppSystem.get_default().lookup_app(YELP_LAUNCHER);
         app.activate();
     },
 
