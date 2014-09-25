@@ -14,7 +14,7 @@ const PanelSeparator = new Lang.Class({
         // Needed otherwise automatic adding of this button fails
         this.container = this;
 
-        let iconFileSeparator = Gio.File.new_for_path(global.datadir + '/theme/separator.png');
+        let iconFileSeparator = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/separator.png');
         let giconSeparator = new Gio.FileIcon({ file: iconFileSeparator });
         this._separator = new St.Icon({ gicon: giconSeparator ,
                                         style_class: 'panel-separator-icon' });

@@ -69,7 +69,7 @@ function animateIconIn (icon, index) {
 const Animation = new Lang.Class({
     Name: 'Animation',
 
-    _init: function(filename, width, height, speed, skipEndFrames) {
+    _init: function(file, width, height, speed, skipEndFrames) {
         this.actor = new St.Bin({ width: width, height: height });
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
@@ -82,7 +82,7 @@ const Animation = new Lang.Class({
         this._frame = 0;
         this._frames = null;
 
-        St.TextureCache.get_default().load_sliced_image_async(filename, width, height,
+        St.TextureCache.get_default().load_sliced_image_async(file, width, height,
                                                               Lang.bind(this, this._animationsLoaded));
     },
 
@@ -156,7 +156,7 @@ const VariableSpeedAnimation = new Lang.Class({
     Extends: Animation,
 
     _init: function(name, size, initialTimeout, skipEndFrames) {
-        this.parent(global.datadir + '/theme/' + name, size, size,
+        this.parent(Gio.File.new_for_uri('resource:///org/gnome/shell/theme/' + name), size, size,
                     initialTimeout, skipEndFrames);
     },
 
@@ -217,7 +217,7 @@ const AnimatedIcon = new Lang.Class({
     Extends: Animation,
 
     _init: function(name, size) {
-        this.parent(global.datadir + '/theme/' + name, size, size, ANIMATED_ICON_UPDATE_TIMEOUT, 0);
+        this.parent(Gio.File.new_for_uri('resource:///org/gnome/shell/theme/' + name), size, size, ANIMATED_ICON_UPDATE_TIMEOUT, 0);
     }
 });
 
@@ -364,7 +364,6 @@ const Panel = new Lang.Class({
         this.actor.connect('get-preferred-width', Lang.bind(this, this._getPreferredWidth));
         this.actor.connect('get-preferred-height', Lang.bind(this, this._getPreferredHeight));
         this.actor.connect('allocate', Lang.bind(this, this._allocate));
-        this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
 
         Main.overview.connect('showing', Lang.bind(this, function () {
             this.actor.add_style_pseudo_class('overview');
@@ -491,48 +490,6 @@ const Panel = new Lang.Class({
             childBox.x2 = allocWidth;
         }
         this._rightBox.allocate(childBox, flags);
-    },
-
-    _onButtonPress: function(actor, event) {
-        if (Main.modalCount > 0)
-            return false;
-
-        if (event.get_source() != actor)
-            return false;
-
-        let button = event.get_button();
-        if (button != 1)
-            return false;
-
-        let focusWindow = global.display.focus_window;
-        if (!focusWindow)
-            return false;
-
-        let dragWindow = focusWindow.is_attached_dialog() ? focusWindow.get_transient_for()
-                                                          : focusWindow;
-        if (!dragWindow)
-            return false;
-
-        let rect = dragWindow.get_outer_rect();
-        let [stageX, stageY] = event.get_coords();
-
-        let allowDrag = dragWindow.maximized_vertically &&
-                        stageX > rect.x && stageX < rect.x + rect.width;
-
-        if (!allowDrag)
-            return false;
-
-        global.display.begin_grab_op(global.screen,
-                                     dragWindow,
-                                     Meta.GrabOp.MOVING,
-                                     false, /* pointer grab */
-                                     true, /* frame action */
-                                     button,
-                                     event.get_state(),
-                                     event.get_time(),
-                                     stageX, stageY);
-
-        return true;
     },
 
     set boxOpacity(value) {

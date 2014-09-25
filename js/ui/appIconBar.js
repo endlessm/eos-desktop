@@ -147,7 +147,7 @@ const AppIconMenu = new Lang.Class({
         this._submenuItem.menu.connect('activate', Lang.bind(this, this._onActivate));
 
         // We want to popdown the menu when clicked on the source icon itself
-        this.blockSourceEvents = true;
+        this.shouldSwitchToOnHover = false;
 
         this._app = app;
 
@@ -158,8 +158,6 @@ const AppIconMenu = new Lang.Class({
             }
         }));
         parentActor.connect('destroy', Lang.bind(this, function () { this.actor.destroy(); }));
-
-        Main.uiGroup.add_actor(this.actor);
     },
 
     _redisplay: function() {
@@ -236,10 +234,14 @@ const AppIconMenu = new Lang.Class({
         }
     },
 
-    popup: function() {
-        this._redisplay();
-        this.open();
-        this._submenuItem.menu.open(BoxPointer.PopupAnimation.NONE);
+    toggle: function(animation) {
+        if (this.isOpen) {
+            this.close(animation);
+        } else {
+            this._redisplay();
+            this.open(animation);
+            this._submenuItem.menu.open(BoxPointer.PopupAnimation.NONE);
+        }
     },
 
     _onActivate: function (actor, item) {
@@ -256,16 +258,17 @@ Signals.addSignalMethods(AppIconMenu.prototype);
 const AppIconButton = new Lang.Class({
     Name: 'AppIconButton',
 
-    _init: function(app, iconSize) {
+    _init: function(app, iconSize, menuManager) {
         this._app = app;
 
-        this._flipEffect = null;
         this._iconSize = iconSize;
         let icon = this._createIcon();
 
+        this._menuManager = menuManager;
+
         this.actor = new St.Button({ style_class: 'app-icon-button',
                                      child: icon,
-                                     button_mask: St.ButtonMask.ONE
+                                     button_mask: St.ButtonMask.ONE | St.ButtonMask.THREE
                                    });
         this.actor.reactive = true;
 
@@ -297,6 +300,20 @@ const AppIconButton = new Lang.Class({
         this._rightClickMenu.actor.hide();
         Main.uiGroup.add_actor(this._rightClickMenu.actor);
 
+        this._menu = new AppIconMenu(this._app, this.actor);
+        this._menuManager.addMenu(this._menu);
+        this._menu.actor.hide();
+        Main.uiGroup.add_actor(this._menu.actor);
+
+        this._menu.connect('open-state-changed', Lang.bind(this,
+            function(menu, open) {
+                // Setting the max-height won't do any good if the minimum height of the
+                // menu is higher then the screen; it's useful if part of the menu is
+                // scrollable so the minimum height is smaller than the natural height
+                let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
+                this._menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
+            }));
+
         this._appStateUpdatedId = this._app.connect('notify::state', Lang.bind(this, this._syncQuitMenuItemVisible));
         this._syncQuitMenuItemVisible();
     },
@@ -310,10 +327,26 @@ const AppIconButton = new Lang.Class({
         return this._app.create_icon_texture(this._iconSize);
     },
 
+    _hasOtherMenuOpen: function() {
+        let activeIconMenu = this._menuManager.activeMenu;
+        return (activeIconMenu &&
+                activeIconMenu != this._menu &&
+                activeIconMenu.isOpen);
+    },
+
+    _closeOtherMenus: function(animation) {
+        // close any other open menu
+        if (this._hasOtherMenuOpen()) {
+            this._menuManager.activeMenu.toggle(animation);
+        }
+    },
+
     _handleButtonPressEvent: function(actor, event) {
         let button = event.get_button();
+        let clickCount = event.get_click_count();
 
-        if (button == Gdk.BUTTON_PRIMARY) {
+        if (button == Gdk.BUTTON_PRIMARY &&
+            clickCount == 1) {
             this._hideHoverState();
             this.emit('app-icon-pressed');
 
@@ -324,18 +357,22 @@ const AppIconButton = new Lang.Class({
             });
 
             if (windows.length > 1) {
-                this._ensureMenu();
-                this._menu.popup();
+                let hasOtherMenu = this._hasOtherMenuOpen();
+                let animation = BoxPointer.PopupAnimation.FULL;
+                if (hasOtherMenu) {
+                    animation = BoxPointer.PopupAnimation.NONE;
+                }
+
+                this._closeOtherMenus(animation);
+                this._animateBounce();
+
+                this.actor.fake_release();
+                this._menu.toggle(animation);
                 this._menuManager.ignoreRelease();
 
                 // This will block the clicked signal from being emitted
                 return true;
             }
-        } else if (button == Gdk.BUTTON_SECONDARY) {
-            this._hideHoverState();
-            this._rightClickMenu.open();
-            this._rightClickMenuManager.ignoreRelease();
-            return true;
         }
 
         this.actor.sync_hover();
@@ -343,6 +380,20 @@ const AppIconButton = new Lang.Class({
     },
 
     _handleClickEvent: function() {
+        let event = Clutter.get_current_event();
+        let button = event.get_button();
+
+        if (button == Gdk.BUTTON_SECONDARY) {
+            this._hideHoverState();
+            this._rightClickMenu.open();
+            this._rightClickMenuManager.ignoreRelease();
+            return;
+        }
+
+        let hasOtherMenu = this._hasOtherMenuOpen();
+        this._closeOtherMenus(BoxPointer.PopupAnimation.FULL);
+        this._animateBounce();
+
         // The multiple windows case is handled in button-press-event
         let windows = this._app.get_windows();
         let tracker = Shell.WindowTracker.get_default();
@@ -356,7 +407,7 @@ const AppIconButton = new Lang.Class({
             Main.overview.hide();
         } else if (windows.length == 1) {
             let win = windows[0];
-            if (win.has_focus() && !Main.overview.visible) {
+            if (win.has_focus() && !Main.overview.visible && !hasOtherMenu) {
                 // The overview is not visible, and this is the
                 // currently focused application; minimize it
                 win.minimize();
@@ -376,7 +427,6 @@ const AppIconButton = new Lang.Class({
                 Main.activateWindow(win);
             }
         }
-        this._animateBounce();
     },
 
     _hideHoverState: function() {
@@ -471,30 +521,6 @@ const AppIconButton = new Lang.Class({
 
     _updateStyle: function(actor, forHeight, alloc) {
         this._labelOffsetY = this._label.get_theme_node().get_length('-label-offset-y');
-    },
-
-    _ensureMenu: function() {
-        this.actor.fake_release();
-
-        if (this._menu) {
-            return;
-        }
-
-        this._menuManager = new PopupMenu.PopupMenuManager(this);
-
-        this._menu = new AppIconMenu(this._app, this.actor);
-        this._menuManager.addMenu(this._menu);
-
-        this._menu.connect('open-state-changed', Lang.bind(this,
-            function(menu, open) {
-                // Setting the max-height won't do any good if the minimum height of the
-                // menu is higher then the screen; it's useful if part of the menu is
-                // scrollable so the minimum height is smaller than the natural height
-                let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
-                this._menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
-
-                this._animateBounce();
-            }));
     }
 });
 Signals.addSignalMethods(AppIconButton.prototype);
@@ -508,7 +534,7 @@ const AppIconBarNavButton = Lang.Class({
     Extends: St.Button,
 
     _init: function(imagePath, pressHandler) {
-        let iconFile = Gio.File.new_for_path(global.datadir + imagePath);
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell' + imagePath);
         let gicon = new Gio.FileIcon({ file: iconFile });
 
         this._icon = new St.Icon({ style_class: 'app-bar-nav-icon',
@@ -545,12 +571,14 @@ const AppIconBarNavButton = Lang.Class({
 const ScrolledIconList = new Lang.Class({
     Name: 'ScrolledIconList',
 
-    _init: function(excludedApps) {
+    _init: function(excludedApps, menuManager) {
         this.actor = new St.ScrollView({ hscrollbar_policy: Gtk.PolicyType.NEVER,
                                          style_class: 'scrolled-icon-list hfade',
                                          vscrollbar_policy: Gtk.PolicyType.NEVER,
                                          x_fill: true,
                                          y_fill: true });
+
+        this._menuManager = menuManager;
 
         // Due to the interactions with StScrollView,
         // StBoxLayout clips its painting to the content box, effectively
@@ -758,7 +786,7 @@ const ScrolledIconList = new Lang.Class({
             return;
         }
 
-        let newChild = new AppIconButton(app, this._iconSize);
+        let newChild = new AppIconButton(app, this._iconSize, this._menuManager);
         newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
         this._runningApps.set(app, newChild);
 
@@ -846,13 +874,13 @@ const BrowserButton = new Lang.Class({
     Name: 'BrowserButton',
     Extends: AppIconButton,
 
-    _init: function(app, iconSize) {
-        this.parent(app, iconSize);
+    _init: function(app, iconSize, menuManager) {
+        this.parent(app, iconSize, menuManager);
         this.actor.add_style_class_name('browser-icon');
     },
 
     _createIcon: function() {
-        let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/internet-normal.png');
+        let iconFileNormal = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/internet-normal.png');
         let giconNormal = new Gio.FileIcon({ file: iconFileNormal });
         return new St.Icon({ gicon: giconNormal,
                              style_class: 'browser-icon' });
@@ -876,6 +904,10 @@ const AppIconBar = new Lang.Class({
     _init: function(panel) {
         this.parent(0.0, null, true);
         this.actor.add_style_class_name('app-icon-bar');
+
+        this._panel = panel;
+
+        this._menuManager = new PopupMenu.PopupMenuManager(this);
 
         let bin = new St.Bin({ name: 'appIconBar',
                                x_fill: true });
@@ -901,20 +933,20 @@ const AppIconBar = new Lang.Class({
         this._browserButton = null;
         this._browserApp = Util.getBrowserApp();
         if (this._browserApp) {
-            this._browserButton = new BrowserButton(this._browserApp, ICON_SIZE);
-            this._browserButton.connect('app-icon-pressed', Lang.bind(this, function() { panel.closeActiveMenu(); }));
+            this._browserButton = new BrowserButton(this._browserApp, ICON_SIZE, this._menuManager);
+            this._browserButton.connect('app-icon-pressed', Lang.bind(this, this._onAppIconPressed));
 
             Panel.animateIconIn(this._browserButton.actor, 1);
             this._container.add_actor(this._browserButton.actor);
         }
 
-        this._scrolledIconList = new ScrolledIconList([this._browserApp]);
+        this._scrolledIconList = new ScrolledIconList([this._browserApp], this._menuManager);
         this._container.add_actor(this._scrolledIconList.actor);
 
         this._container.add_actor(this._forwardButton);
 
         this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, this._updateNavButtonState));
-        this._scrolledIconList.connect('app-icon-pressed', Lang.bind(this, function() { panel.closeActiveMenu(); }));
+        this._scrolledIconList.connect('app-icon-pressed', Lang.bind(this, this._onAppIconPressed));
 
         this._windowTracker = Shell.WindowTracker.get_default();
         this._windowTracker.connect('notify::focus-app', Lang.bind(this, this._updateActiveApp));
@@ -922,6 +954,10 @@ const AppIconBar = new Lang.Class({
         Main.overview.connect('hidden', Lang.bind(this, this._updateActiveApp));
 
         this._updateActiveApp();
+    },
+
+    _onAppIconPressed: function() {
+        this._panel.closeActiveMenu();
     },
 
     _updateActiveApp: function() {

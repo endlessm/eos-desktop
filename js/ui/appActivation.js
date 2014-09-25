@@ -30,8 +30,8 @@ const DEFAULT_MAXIMIZED_WINDOW_SIZE = 0.75;
 
 const LAUNCH_MAXIMIZED_DESKTOP_KEY = 'X-Endless-LaunchMaximized';
 const SPLASH_BACKGROUND_DESKTOP_KEY = 'X-Endless-SplashBackground';
-const DEFAULT_SPLASH_SCREEN_BACKGROUND = global.datadir + '/theme/splash-background-default.jpg';
-const SPINNER_IMAGES_DIR = global.datadir + '/theme/';
+const DEFAULT_SPLASH_SCREEN_BACKGROUND = 'resource:///org/gnome/shell/theme/splash-background-default.jpg';
+const SPINNER_IMAGES_DIR = 'resource:///org/gnome/shell/theme/';
 
 const AppActivationContext = new Lang.Class({
     Name: 'AppActivationContext',
@@ -387,9 +387,9 @@ const SplashSpinner = new Lang.Class({
     _loadImage: function(name, size) {
         let textureCache = St.TextureCache.get_default();
         let path = GLib.build_filenamev([SPINNER_IMAGES_DIR, name]);
-        let uri = GLib.filename_to_uri(path, null, null);
+        let file = Gio.File.new_for_uri(path);
 
-        return textureCache.load_uri_async(uri, size, size);
+        return textureCache.load_file_async(file, size, size);
     },
 
     play: function() {

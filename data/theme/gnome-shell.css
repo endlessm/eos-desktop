@@ -2891,3 +2891,46 @@ StScrollBar StButton#vhandle:active {
     background-repeat: no-repeat;
     background-position: 0px 0px;
 }
+
+/* Force app exit dialog */
+
+.force-app-exit-dialog {
+    max-height: 500px;
+    min-height: 450px;
+    min-width: 470px;
+}
+
+.force-app-exit-dialog-content {
+    spacing: 20px;
+}
+
+.force-app-exit-dialog-header {
+    font-weight: bold;
+}
+
+.force-app-exit-dialog-subtitle {
+    color: #ccc;
+    font-size: 12pt;
+    max-width: 330px;
+}
+
+.force-app-exit-dialog-scroll-view {
+    border: 2px solid #666;
+    border-radius: 6px;
+    height: 288px;
+}
+
+.force-app-exit-dialog-item {
+    border: solid #242424;
+    padding: 16px;
+    spacing: 16px;
+    border-bottom-width: 1px;
+}
+
+.force-app-exit-dialog-item:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.force-app-exit-dialog-item:selected {
+    background-color: #333;
+}

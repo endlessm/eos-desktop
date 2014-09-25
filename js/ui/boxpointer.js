@@ -457,8 +457,10 @@ const BoxPointer = new Lang.Class({
         let sourceNode = sourceActor.get_theme_node();
         let sourceContentBox = sourceNode.get_content_box(sourceActor.get_allocation_box());
         let sourceAllocation = Shell.util_get_transformed_allocation(sourceActor);
-        let sourceCenterX = sourceAllocation.x1 + sourceContentBox.x1 + (sourceContentBox.x2 - sourceContentBox.x1) * this._sourceAlignment;
-        let sourceCenterY = sourceAllocation.y1 + sourceContentBox.y1 + (sourceContentBox.y2 - sourceContentBox.y1) * this._sourceAlignment;
+        let sourceTranslationX = sourceActor.translation_x;
+        let sourceTranslationY = sourceActor.translation_y;
+        let sourceCenterX = sourceAllocation.x1 + sourceContentBox.x1 - sourceTranslationX + (sourceContentBox.x2 - sourceContentBox.x1) * this._sourceAlignment;
+        let sourceCenterY = sourceAllocation.y1 + sourceContentBox.y1 - sourceTranslationY + (sourceContentBox.y2 - sourceContentBox.y1) * this._sourceAlignment;
         let [minWidth, minHeight, natWidth, natHeight] = this.actor.get_preferred_size();
 
         // We also want to keep it onscreen, and separated from the
@@ -476,16 +478,16 @@ const BoxPointer = new Lang.Class({
 
         switch (this._arrowSide) {
         case St.Side.TOP:
-            resY = sourceAllocation.y2;
+            resY = sourceAllocation.y2 - sourceTranslationY;
             break;
         case St.Side.BOTTOM:
-            resY = sourceAllocation.y1 - natHeight;
+            resY = sourceAllocation.y1 - natHeight - sourceTranslationY;
             break;
         case St.Side.LEFT:
-            resX = sourceAllocation.x2;
+            resX = sourceAllocation.x2 - sourceTranslationX;
             break;
         case St.Side.RIGHT:
-            resX = sourceAllocation.x1 - natWidth;
+            resX = sourceAllocation.x1 - natWidth - sourceTranslationX;
             break;
         }
 

@@ -173,17 +173,21 @@ assert_background_image (StThemeNode *node,
 			 const char  *node_description,
 			 const char  *expected)
 {
-  const char *value = st_theme_node_get_background_image (node);
-  if (expected == NULL)
-    expected = "(null)";
-  if (value == NULL)
-    value = "(null)";
+  GFile *value = st_theme_node_get_background_image (node);
+  GFile *expected_file;
 
-  if (strcmp (expected, value) != 0)
+  if (expected != NULL && value != NULL)
     {
-      g_print ("%s: %s.background-image: expected: %s, got: %s\n",
-	       test, node_description, expected, value);
-      fail = TRUE;
+      expected_file = g_file_new_for_path (expected);
+
+      if (!g_file_equal (expected_file, value))
+        {
+          char *uri = g_file_get_uri (expected_file);
+          g_print ("%s: %s.background-image: expected: %s, got: %s\n",
+                   test, node_description, expected, uri);
+          fail = TRUE;
+          g_free (uri);
+        }
     }
 }
 
@@ -426,14 +430,16 @@ main (int argc, char **argv)
   StTheme *theme;
   StThemeContext *context;
   PangoFontDescription *font_desc;
+  GFile *file;
 
   gtk_init (&argc, &argv);
 
   if (clutter_init (&argc, &argv) != CLUTTER_INIT_SUCCESS)
     return 1;
 
-  theme = st_theme_new ("st/test-theme.css",
-                        NULL, NULL);
+  file = g_file_new_for_path ("st/test-theme.css");
+  theme = st_theme_new (file, NULL, NULL);
+  g_object_unref (file);
 
   stage = clutter_stage_new ();
   context = st_theme_context_get_for_stage (CLUTTER_STAGE (stage));

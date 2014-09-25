@@ -43,7 +43,7 @@ const SETTINGS_TEXT = _("Settings");
 const FEEDBACK_TEXT = _("Give Us Feedback");
 
 const FEEDBACK_LAUNCHER = "eos-app-feedback.desktop";
-const TUTORIAL_LAUNCHER = "eos-app-tutorial.desktop";
+const TUTORIAL_LAUNCHER = "com.endlessm.Tutorial.desktop";
 
 const DIALOG_ICON_SIZE = 64;
 
@@ -249,10 +249,10 @@ const UserMenuButton = new Lang.Class({
         Panel.animateIconIn(this._icon, 0);
         box.add(this._icon);
 
-        let iconFileNormal = Gio.File.new_for_path(global.datadir + '/theme/settings-normal.png');
+        let iconFileNormal = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/settings-normal.png');
         this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
 
-        let iconFileHover = Gio.File.new_for_path(global.datadir + '/theme/settings-hover.png');
+        let iconFileHover = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/settings-hover.png');
         this._giconHover = new Gio.FileIcon({ file: iconFileHover });
 
         this._icon.gicon = this._giconNormal;
