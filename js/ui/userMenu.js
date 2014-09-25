@@ -38,7 +38,7 @@ const LOG_OUT_TEXT = _("Log Out");
 const LOCK_TEXT = _("Lock");
 const EXIT_TEXT = _("Exit");
 
-const YELP_TEXT = _("Tutorial");
+const YELP_TEXT = _("Help");
 const SETTINGS_TEXT = _("Settings");
 const FEEDBACK_TEXT = _("Give Us Feedback");
 
