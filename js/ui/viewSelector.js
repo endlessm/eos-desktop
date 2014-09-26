@@ -333,10 +333,11 @@ const ViewsClone = new Lang.Class({
                                            opacity: 0 }));
 
         let allView = this._viewsDisplay.allView;
-        let entry = this._viewsDisplay.entry;
-        let entryClone = new St.Bin({ child: new Clutter.Clone({ source: entry }) });
+        let entry = new ShellEntry.OverviewEntry();
+        entry.reactive = false;
+        entry.clutter_text.reactive = false;
 
-        let container = new ViewsDisplayContainer(entryClone, allView);
+        let container = new ViewsDisplayContainer(entry, allView, true);
         let iconGridClone = new Clutter.Clone({ source: allView.gridActor,
                                                 x_expand: true });
         let appGridContainer = new AppDisplay.AllViewContainer(iconGridClone);
