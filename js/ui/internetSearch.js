@@ -97,7 +97,7 @@ const InternetSearchProvider = new Lang.Class({
     activateResult: function(metaId) {
         if (metaId.startsWith('uri:')) {
             let uri = metaId.slice('uri:'.length);
-            uri = getURIForSearch(uri);
+            uri = getURIForSearch([uri]);
             activateURI(uri);
         } else if (metaId.startsWith('search:')) {
             let query = metaId.slice('search:'.length);
