@@ -21,7 +21,6 @@ const BackgroundMenu = imports.ui.backgroundMenu;
 const BoxPointer = imports.ui.boxpointer;
 const CloseButton = imports.ui.closeButton;
 const DND = imports.ui.dnd;
-const Hash = imports.misc.hash;
 const IconGrid = imports.ui.iconGrid;
 const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
@@ -62,16 +61,6 @@ const NEW_ICON_ANIMATION_DELAY = 0.7;
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
 
-const EOS_APP_PREFIX = 'eos-app-';
-
-function _sanitizeAppId(appId) {
-    if (appId.startsWith(EOS_APP_PREFIX)) {
-        return appId.substr(EOS_APP_PREFIX.length);
-    }
-
-    return appId;
-}
-
 const AppSearchProvider = new Lang.Class({
     Name: 'AppSearchProvider',
 
@@ -103,32 +92,15 @@ const AppSearchProvider = new Lang.Class({
         let groups = Gio.DesktopAppInfo.search(query);
         let usage = Shell.AppUsage.get_default();
         let results = [];
-        let seenIds = new Hash.Map();
-
         groups.forEach(function(group) {
-            group.forEach(function(appID) {
-                let actualId = _sanitizeAppId(appID);
-                if (seenIds.has(actualId)) {
-                    return;
-                }
-
-                if (!IconGridLayout.layout.hasIcon(actualId)) {
-                    return;
-                }
-
-                let app = Gio.DesktopAppInfo.new(actualId);
-                if (app && app.should_show()) {
-                    results.push(actualId);
-                }
-
-                seenIds.set(actualId, true);
+            group = group.filter(function(appID) {
+                let app = Gio.DesktopAppInfo.new(appID);
+                return app && app.should_show() && IconGridLayout.layout.hasIcon(appID);
             });
+            results = results.concat(group.sort(function(a, b) {
+                return usage.compare('', a, b);
+            }));
         });
-
-        results = results.sort(function(a, b) {
-            return usage.compare('', a, b);
-        });
-
         callback(results);
     },
 
