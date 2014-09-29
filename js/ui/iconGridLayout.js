@@ -44,7 +44,16 @@ const IconGridLayout = new Lang.Class({
             let context = allIcons.get_child_value(i);
             let [folder, ] = context.get_child_value(0).get_string();
             let children = context.get_child_value(1).get_strv();
-            iconTree[folder] = children;
+            iconTree[folder] = children.map(function(appId) {
+                // Some older versions of eos-app-store incorrectly added eos-app-*.desktop
+                // files to the icon grid layout, instead of the proper unprefixed .desktop
+                // files, which should never leak out of the Shell. Take these out of the
+                // icon layout.
+                if (appId.startsWith('eos-app-'))
+                    return appId.slice('eos-app-'.length);
+                else
+                    return appId;
+            });
         }
 
         return iconTree;
