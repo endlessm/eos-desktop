@@ -21,6 +21,7 @@ const BackgroundMenu = imports.ui.backgroundMenu;
 const BoxPointer = imports.ui.boxpointer;
 const CloseButton = imports.ui.closeButton;
 const DND = imports.ui.dnd;
+const Hash = imports.misc.hash;
 const IconGrid = imports.ui.iconGrid;
 const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
@@ -61,6 +62,16 @@ const NEW_ICON_ANIMATION_DELAY = 0.7;
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
 
+const EOS_APP_PREFIX = 'eos-app-';
+
+function _sanitizeAppId(appId) {
+    if (appId.startsWith(EOS_APP_PREFIX)) {
+        return appId.substr(EOS_APP_PREFIX.length);
+    }
+
+    return appId;
+}
+
 const AppSearchProvider = new Lang.Class({
     Name: 'AppSearchProvider',
 
@@ -92,15 +103,37 @@ const AppSearchProvider = new Lang.Class({
         let groups = Gio.DesktopAppInfo.search(query);
         let usage = Shell.AppUsage.get_default();
         let results = [];
+        let seenIds = new Hash.Map();
+
         groups.forEach(function(group) {
-            group = group.filter(function(appID) {
-                let app = Gio.DesktopAppInfo.new(appID);
-                return app && app.should_show() && IconGridLayout.layout.hasIcon(appID);
+            group.forEach(function(appID) {
+                // GIO will search between both the unprefixed and prefixed
+                // desktop file overrides we install. Since we can potentially
+                // get results for both, and we don't want to show duplicate
+                // results, keep track of the unprefixed desktop files, and discard
+                // those we have already seen.
+                let actualId = _sanitizeAppId(appID);
+                if (seenIds.has(actualId)) {
+                    return;
+                }
+
+                seenIds.set(actualId, true);
+
+                let app = Gio.DesktopAppInfo.new(actualId);
+
+                // The icon grid layout only reasons in terms of unprefixed desktop
+                // names, so only push the result if the unprefixed desktop file
+                // is not on the grid
+                if (app && app.should_show() && IconGridLayout.layout.hasIcon(actualId)) {
+                    results.push(actualId);
+                }
             });
-            results = results.concat(group.sort(function(a, b) {
-                return usage.compare('', a, b);
-            }));
         });
+
+        results = results.sort(function(a, b) {
+            return usage.compare('', a, b);
+        });
+
         callback(results);
     },
 
