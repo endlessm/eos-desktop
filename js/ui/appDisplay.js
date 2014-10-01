@@ -106,6 +106,7 @@ const AppSearchProvider = new Lang.Class({
         let seenIds = new Hash.Map();
 
         groups.forEach(function(group) {
+            let groupResults = [];
             group.forEach(function(appID) {
                 // GIO will search between both the unprefixed and prefixed
                 // desktop file overrides we install. Since we can potentially
@@ -125,13 +126,13 @@ const AppSearchProvider = new Lang.Class({
                 // names, so only push the result if the unprefixed desktop file
                 // is not on the grid
                 if (app && app.should_show() && IconGridLayout.layout.hasIcon(actualId)) {
-                    results.push(actualId);
+                    groupResults.push(actualId);
                 }
             });
-        });
 
-        results = results.sort(function(a, b) {
-            return usage.compare('', a, b);
+            results = results.concat(groupResults.sort(function(a, b) {
+                return usage.compare('', a, b);
+            }));
         });
 
         callback(results);
