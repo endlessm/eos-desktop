@@ -43,6 +43,11 @@ const ViewPage = {
     APPS: 2,
 };
 
+const ViewsDisplayPage = {
+    APP_GRID: 1,
+    SEARCH: 2,
+};
+
 const ViewsDisplayLayout = new Lang.Class({
     Name: 'ViewsDisplayLayout',
     Extends: Clutter.BinLayout,
@@ -116,6 +121,9 @@ const ViewsDisplayLayout = new Lang.Class({
 const ViewsDisplayContainer = new Lang.Class({
     Name: 'ViewsDisplayContainer',
     Extends: St.Widget,
+    Signals: {
+        'views-page-changed': { }
+    },
 
     _init: function(entry, allView) {
         this._activePage = null;
@@ -149,6 +157,7 @@ const ViewsDisplayContainer = new Lang.Class({
         }
 
         this._activePage = page;
+        this.emit('views-page-changed');
 
         if (this._activePage) {
             this._activePage.show();
@@ -294,6 +303,15 @@ const ViewsDisplay = new Lang.Class({
 
     get allView() {
         return this._allView;
+    },
+
+    get activeViewsPage() {
+        let pageActor = this.actor.activePage;
+        if (pageActor == this._allView.actor) {
+            return ViewsDisplayPage.APP_GRID;
+        } else {
+            return ViewsDisplayPage.SEARCH;
+        }
     }
 });
 
@@ -406,6 +424,7 @@ const ViewSelector = new Lang.Class({
         this._appsPage.add_constraint(new ViewsDisplayConstraint({ primary: true,
                                                                    use_workarea: true }));
         this._entry = this._viewsDisplay.entry;
+        this._viewsDisplay.actor.connect('views-page-changed', Lang.bind(this, this._onViewsPageChanged));
 
         this._addViewsPageClone();
 
@@ -426,6 +445,10 @@ const ViewSelector = new Lang.Class({
 
     _onEmptySpaceClicked: function() {
         this.setActivePage(ViewPage.APPS);
+    },
+
+    _onViewsPageChanged: function() {
+        this.emit('views-page-changed');
     },
 
     _pageFromViewPage: function(viewPage) {
@@ -620,6 +643,10 @@ const ViewSelector = new Lang.Class({
         }
 
         return false;
+    },
+
+    getActiveViewsPage: function() {
+        return this._viewsDisplay.activeViewsPage;
     },
 
     getActivePage: function() {

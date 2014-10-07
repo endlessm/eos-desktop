@@ -189,6 +189,7 @@ const Overview = new Lang.Class({
         this._backgroundGroup = new Meta.BackgroundGroup();
         Main.layoutManager.overviewGroup.add_child(this._backgroundGroup);
         this._bgManagers = [];
+        this._viewsClone = null;
 
         this._activationTime = 0;
 
@@ -234,7 +235,36 @@ const Overview = new Lang.Class({
     },
 
     setViewsClone: function(actor) {
-        this._backgroundGroup.add_child(actor);        
+        this._viewsClone = actor;
+        this._backgroundGroup.add_child(this._viewsClone);
+    },
+
+    _unshadeBackgrounds: function() {
+        let backgrounds = this._backgroundGroup.get_children();
+        for (let i = 0; i < backgrounds.length; i++) {
+            let child = backgrounds[i];
+            if (child == this._viewsClone) {
+                continue;
+            }
+            Tweener.addTween(child._delegate,
+                             { brightness: 1.0,
+                               time: SHADE_ANIMATION_TIME,
+                               transition: 'easeOutQuad' });
+        }
+    },
+
+    _shadeBackgrounds: function() {
+        let backgrounds = this._backgroundGroup.get_children();
+        for (let i = 0; i < backgrounds.length; i++) {
+            let child = backgrounds[i];
+            if (child == this._viewsClone) {
+                continue;
+            }
+            Tweener.addTween(child._delegate,
+                             { brightness: 0.7,
+                               time: SHADE_ANIMATION_TIME,
+                               transition: 'easeOutQuad' });
+        }
     },
 
     _updateBackgrounds: function() {
@@ -244,11 +274,8 @@ const Overview = new Lang.Class({
         this._bgManagers = [];
 
         for (let i = 0; i < Main.layoutManager.monitors.length; i++) {
-            // Note: do not set the vignette effect on the background;
-            // we always want to display the background without modification.
             let bgManager = new Background.BackgroundManager({ container: this._backgroundGroup,
                                                                monitorIndex: i });
-
             this._bgManagers.push(bgManager);
         }
     },
@@ -352,9 +379,8 @@ const Overview = new Lang.Class({
                                this.dashIconSize = this._dash.iconSize;
                            }));
 
-        this._viewSelector.connect('page-changed', Lang.bind(this,function() {
-            this.emit('page-changed');
-        }));
+        this._viewSelector.connect('page-changed', Lang.bind(this, this._onPageChanged));
+        this._viewSelector.connect('views-page-changed', Lang.bind(this, this._onViewsPageChanged));
 
         // clicking the desktop displays the app grid
         Main.layoutManager.connect('background-clicked', Lang.bind(this, this.showApps));
@@ -363,6 +389,24 @@ const Overview = new Lang.Class({
         Main.layoutManager.connect('monitors-changed', Lang.bind(this, this._relayout));
         global.screen.connect('workareas-changed', Lang.bind(this, this._relayoutNoHide));
         this._relayoutNoHide();
+    },
+
+    _updateBackgroundShade: function() {
+        if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.WINDOWS ||
+            this._viewSelector.getActiveViewsPage() == ViewSelector.ViewsDisplayPage.SEARCH) {
+            this._shadeBackgrounds();
+        } else {
+            this._unshadeBackgrounds();
+        }
+    },
+
+    _onPageChanged: function() {
+        this.emit('page-changed');
+        this._updateBackgroundShade();
+    },
+
+    _onViewsPageChanged: function() {
+        this._updateBackgroundShade();
     },
 
     //
