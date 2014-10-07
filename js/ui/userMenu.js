@@ -427,7 +427,7 @@ const UserMenuButton = new Lang.Class({
 
         if (this._haveLauncher(YELP_LAUNCHER)) {
             item = new PopupMenu.PopupUserMenuItem(YELP_TEXT,
-                                                   { imagePath: '/theme/tutorial-symbolic.svg' });
+                                                   { imagePath: '/theme/help-symbolic.svg' });
             item.connect('activate', Lang.bind(this, this._onYelpActivate));
             this.menu.addMenuItem(item);
         }
