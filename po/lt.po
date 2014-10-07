@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-16 10:07-0700\n"
+"POT-Creation-Date: 2014-09-25 16:44-0700\n"
 "PO-Revision-Date: 2013-03-26 22:43+0200\n"
 "Last-Translator: Mantas Kriaučiūnas <mantas@akl.lt>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
@@ -45,14 +45,6 @@ msgstr "Atverti programų meniu"
 
 #: ../data/eos-app-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
-msgid "Tutorial"
-msgstr ""
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:2
-msgid "Tutorial video and help"
 msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
@@ -338,18 +330,23 @@ msgid "Keybinding to focus the active notification."
 msgstr "Klavišų susiejimas, kuriuo fokusuojamas aktyvus pranešimas."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#, fuzzy
+msgid "Keybinding that shows the force app exit dialog"
+msgstr "Klavišų susiejimas, kuriuo atveriamas programų meniu"
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Which keyboard to use"
 msgstr "Kurią klaviatūrą naudoti"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "The type of keyboard to use."
 msgstr "Naudotinas klaviatūros tipas."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "The application icon mode."
 msgstr "Programos piktogramos veiksena."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
@@ -359,20 +356,20 @@ msgstr ""
 "„thumbnail-only“ (rodo lango miniatiūrą), „app-icon-only“ (rodo tik "
 "programos piktogramą) arba „both“ (abu)."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "Attach modal dialog to the parent window"
 msgstr "Prikabinti modalinį dialogą prie tėvinio lango"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr "Šis raktas perrašo org.gnome.mutter raktą, kai vykdoma GNOME Shell."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Arrangement of buttons on the titlebar"
 msgstr "Mygtukų išdėstymas pavadinimo juostoje"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
@@ -380,15 +377,15 @@ msgstr ""
 "Šis raktas perrašo org.gnome.desktop.wm.preferences raktą, kai vykdoma GNOME "
 "Shell."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr "Įjungti kraštų išplėtimą, kai langai numetami ekrano kraštuose"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid "Workspaces are managed dynamically"
 msgstr "Darbalaukiai yra valdomi dinamiškai"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Workspaces only on primary monitor"
 msgstr "Darbalaukiai tik pagrindiniame monitoriuje"
 
@@ -418,9 +415,9 @@ msgstr "Nėra sąraše?"
 
 #: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
-#: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
-#: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:565
+#: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:76
+#: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Atsisakyti"
 
@@ -539,15 +536,15 @@ msgstr "%s pridėta prie jūsų mėgstamų."
 msgid "%s has been removed from your favorites."
 msgstr "%s pašalinta iš jūsų mėgstamų."
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:214
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:223
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:293
+#: ../js/ui/appIconBar.js:296
 #, fuzzy, c-format
 msgid "Quit %s"
 msgstr "Užverti"
@@ -920,13 +917,13 @@ msgstr "%s jus kviečia prisijungti prie %s"
 #: ../js/ui/components/telepathyClient.js:1100
 #: ../js/ui/components/telepathyClient.js:1139
 #: ../js/ui/components/telepathyClient.js:1179
-#: ../js/ui/components/telepathyClient.js:1242
+#: ../js/ui/components/telepathyClient.js:1241
 msgid "Decline"
 msgstr "Atmesti"
 
 #: ../js/ui/components/telepathyClient.js:1101
 #: ../js/ui/components/telepathyClient.js:1180
-#: ../js/ui/components/telepathyClient.js:1243
+#: ../js/ui/components/telepathyClient.js:1242
 msgid "Accept"
 msgstr "Priimti"
 
@@ -963,99 +960,99 @@ msgstr "%s jums siunčia %s"
 msgid "%s would like permission to see when you are online"
 msgstr "%s pageidauja matyti, kai esate prisijungę prie interneto"
 
-#: ../js/ui/components/telepathyClient.js:1300
+#: ../js/ui/components/telepathyClient.js:1299
 msgid "Network error"
 msgstr "Tinklo klaida"
 
-#: ../js/ui/components/telepathyClient.js:1302
+#: ../js/ui/components/telepathyClient.js:1301
 msgid "Authentication failed"
 msgstr "Nepavyko patvirtinti tapatybės"
 
-#: ../js/ui/components/telepathyClient.js:1304
+#: ../js/ui/components/telepathyClient.js:1303
 msgid "Encryption error"
 msgstr "Šifravimo klaida"
 
-#: ../js/ui/components/telepathyClient.js:1306
+#: ../js/ui/components/telepathyClient.js:1305
 msgid "Certificate not provided"
 msgstr "Liudijimas nepateiktas"
 
-#: ../js/ui/components/telepathyClient.js:1308
+#: ../js/ui/components/telepathyClient.js:1307
 msgid "Certificate untrusted"
 msgstr "Liudijimas nepatikimas"
 
-#: ../js/ui/components/telepathyClient.js:1310
+#: ../js/ui/components/telepathyClient.js:1309
 msgid "Certificate expired"
 msgstr "Liudijimo galiojimas pasibaigęs"
 
-#: ../js/ui/components/telepathyClient.js:1312
+#: ../js/ui/components/telepathyClient.js:1311
 msgid "Certificate not activated"
 msgstr "Liudijimas neaktyvuotas"
 
-#: ../js/ui/components/telepathyClient.js:1314
+#: ../js/ui/components/telepathyClient.js:1313
 msgid "Certificate hostname mismatch"
 msgstr "Liudijimo serverio vardo nesutapimas"
 
-#: ../js/ui/components/telepathyClient.js:1316
+#: ../js/ui/components/telepathyClient.js:1315
 msgid "Certificate fingerprint mismatch"
 msgstr "Liudijimo piršto atspaudo nesutapimas"
 
-#: ../js/ui/components/telepathyClient.js:1318
+#: ../js/ui/components/telepathyClient.js:1317
 msgid "Certificate self-signed"
 msgstr "Liudijimas pačių pasirašytas"
 
-#: ../js/ui/components/telepathyClient.js:1320
+#: ../js/ui/components/telepathyClient.js:1319
 msgid "Status is set to offline"
 msgstr "Nustatyta atsijungimo būsena"
 
-#: ../js/ui/components/telepathyClient.js:1322
+#: ../js/ui/components/telepathyClient.js:1321
 msgid "Encryption is not available"
 msgstr "Šifravimas negalimas"
 
-#: ../js/ui/components/telepathyClient.js:1324
+#: ../js/ui/components/telepathyClient.js:1323
 msgid "Certificate is invalid"
 msgstr "Liudijimas netinkamas"
 
-#: ../js/ui/components/telepathyClient.js:1326
+#: ../js/ui/components/telepathyClient.js:1325
 msgid "Connection has been refused"
 msgstr "Ryšys atmestas"
 
-#: ../js/ui/components/telepathyClient.js:1328
+#: ../js/ui/components/telepathyClient.js:1327
 msgid "Connection can't be established"
 msgstr "Nepavyko užmegzti ryšio"
 
-#: ../js/ui/components/telepathyClient.js:1330
+#: ../js/ui/components/telepathyClient.js:1329
 msgid "Connection has been lost"
 msgstr "Ryšys nutrūko"
 
-#: ../js/ui/components/telepathyClient.js:1332
+#: ../js/ui/components/telepathyClient.js:1331
 msgid "This account is already connected to the server"
 msgstr "Ši paskyra jau prijungta prie serverio"
 
-#: ../js/ui/components/telepathyClient.js:1334
+#: ../js/ui/components/telepathyClient.js:1333
 msgid ""
 "Connection has been replaced by a new connection using the same resource"
 msgstr "Ryšys pakeistas nauju ryšiu naudojant tą patį išteklių"
 
-#: ../js/ui/components/telepathyClient.js:1336
+#: ../js/ui/components/telepathyClient.js:1335
 msgid "The account already exists on the server"
 msgstr "Tokia paskyra serveryje jau yra"
 
-#: ../js/ui/components/telepathyClient.js:1338
+#: ../js/ui/components/telepathyClient.js:1337
 msgid "Server is currently too busy to handle the connection"
 msgstr "Šiuo metu serveris per daug užimtas šiai užklausai apdoroti"
 
-#: ../js/ui/components/telepathyClient.js:1340
+#: ../js/ui/components/telepathyClient.js:1339
 msgid "Certificate has been revoked"
 msgstr "Liudijimas atšauktas"
 
-#: ../js/ui/components/telepathyClient.js:1342
+#: ../js/ui/components/telepathyClient.js:1341
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
 msgstr ""
 "Liudijimui naudojamas nesaugus šifravimo algoritmas arba jis kriptografiškai "
 "silpnas"
 
-#: ../js/ui/components/telepathyClient.js:1344
+#: ../js/ui/components/telepathyClient.js:1343
 msgid ""
 "The length of the server certificate, or the depth of the server certificate "
 "chain, exceed the limits imposed by the cryptography library"
@@ -1063,22 +1060,22 @@ msgstr ""
 "Serverio liudijimo ilgis arba liudijimų eilės dydis viršija kriptografijos "
 "bibliotekos apribojimus"
 
-#: ../js/ui/components/telepathyClient.js:1346
+#: ../js/ui/components/telepathyClient.js:1345
 msgid "Internal error"
 msgstr "Vidinė klaida"
 
 #. translators: argument is the account name, like
 #. * name@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1356
+#: ../js/ui/components/telepathyClient.js:1355
 #, c-format
 msgid "Unable to connect to %s"
 msgstr "Nepavyksta prisijungti prie %s"
 
-#: ../js/ui/components/telepathyClient.js:1361
+#: ../js/ui/components/telepathyClient.js:1360
 msgid "View account"
 msgstr "Rodyti paskyrą"
 
-#: ../js/ui/components/telepathyClient.js:1400
+#: ../js/ui/components/telepathyClient.js:1399
 msgid "Unknown reason"
 msgstr "Nežinoma priežastis"
 
@@ -1282,6 +1279,22 @@ msgstr "Įdiegti"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Atsiųsti ir įdiegti „%s“ iš extensions.gnome.org?"
 
+#: ../js/ui/forceAppExitDialog.js:53
+#, fuzzy
+msgid "Quit applications…"
+msgstr "Programos"
+
+#: ../js/ui/forceAppExitDialog.js:59
+msgid ""
+"If an application doesn't respond for a while, select its name and click "
+"Quit Application."
+msgstr ""
+
+#: ../js/ui/forceAppExitDialog.js:79
+#, fuzzy
+msgid "Quit Application"
+msgstr "Programos"
+
 #: ../js/ui/iconGridLayout.js:200
 #, c-format
 msgid "%s has been deleted"
@@ -1391,7 +1404,7 @@ msgstr "Atšaukti"
 msgid "Overview"
 msgstr "Apžvalga"
 
-#: ../js/ui/panel.js:377
+#: ../js/ui/panel.js:376
 msgid "Top Bar"
 msgstr "Viršutinė juosta"
 
@@ -1893,6 +1906,10 @@ msgstr "Užrakinti"
 msgid "Exit"
 msgstr ""
 
+#: ../js/ui/userMenu.js:41
+msgid "Help"
+msgstr ""
+
 #: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "Nustatymai"
@@ -1934,23 +1951,23 @@ msgstr "Programos"
 msgid "'%s' is ready"
 msgstr "„%s“ yra pasirengusi"
 
-#: ../js/ui/windowManager.js:65
+#: ../js/ui/windowManager.js:66
 msgid "Do you want to keep these display settings?"
 msgstr ""
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #.
-#: ../js/ui/windowManager.js:84
+#: ../js/ui/windowManager.js:85
 #, fuzzy
 msgid "Revert Settings"
 msgstr "Energijos valdymo nustatymai"
 
-#: ../js/ui/windowManager.js:88
+#: ../js/ui/windowManager.js:89
 msgid "Keep Changes"
 msgstr ""
 
-#: ../js/ui/windowManager.js:106
+#: ../js/ui/windowManager.js:107
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-16 10:07-0700\n"
+"POT-Creation-Date: 2014-09-25 16:44-0700\n"
 "PO-Revision-Date: 2013-03-26 15:55+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
@@ -40,14 +40,6 @@ msgstr "ପ୍ରୟୋଗ ତାଲିକାକୁ ଖୋଲନ୍ତୁ"
 
 #: ../data/eos-app-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
-msgid "Tutorial"
-msgstr ""
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:2
-msgid "Tutorial video and help"
 msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
@@ -320,18 +312,23 @@ msgid "Keybinding to focus the active notification."
 msgstr "ସକ୍ରିୟ ବିଜ୍ଞପ୍ତିକୁ ଲକ୍ଷ୍ଯ କରିବା ପାଇଁ କି ବନ୍ଧନ।"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#, fuzzy
+msgid "Keybinding that shows the force app exit dialog"
+msgstr "ପ୍ରୟୋଗ ମେନୁକୁ ସକ୍ରିୟ କରିବା ପାଇଁ କି ବନ୍ଧନ"
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Which keyboard to use"
 msgstr "କେଉଁ କିବୋର୍ଡକୁ ବ୍ୟବହାର କରିବା ଉଚିତ"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "The type of keyboard to use."
 msgstr "ବ୍ୟବହାର କରିବାକୁ ଥିବା କିବୋର୍ଡ ପ୍ରକାର"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "The application icon mode."
 msgstr "ପ୍ରୟୋଗ ଚିତ୍ରସଂକେତ ଧାରା।"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
@@ -341,21 +338,21 @@ msgstr ""
 "ଅଙ୍ଗିଳିଚିହ୍ନ' (ୱିଣ୍ଡୋର ଏକ ଅଙ୍ଗୁଳି ଚିହ୍ନକୁ ଦର୍ଶାନ୍ତୁ), 'app-icon-only' (କେବଳ ପ୍ରୟୋଗ ଚିତ୍ର ସଂକେତ "
 "ଦର୍ଶାଇଥାଏ) ଅଥବା 'ଉଭୟ'।"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "Attach modal dialog to the parent window"
 msgstr "ମୂଖ୍ୟ ୱିଣ୍ଡୋରେ ମଡେଲ ସଂଳାପ ସଂଲଗ୍ନ କରନ୍ତୁ"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr ""
 "GNOME ସେଲ ଚାଲିଥିବା ସମୟରେ ଏହି ଚାବିଟି  org.gnome.mutter ରେ ଥିବା ଚାବିକୁ ନବଲିଖନ କରିଥାଏ।"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Arrangement of buttons on the titlebar"
 msgstr "ଶୀର୍ଷକ ପଟିରେ ଚାବିର ସଜ୍ଜା"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
@@ -363,15 +360,15 @@ msgstr ""
 "GNOME ସେଲ ଚାଲିଥିବା ସମୟରେ ଏହି ଚାବିଟି  org.gnome.desktop.wm.preferences ରେ ଥିବା ଚାବିକୁ "
 "ନବଲିଖନ କରିଥାଏ।"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr "ୱିଣ୍ଡୋଗୁଡ଼ିକୁ ପରଦା ଧାରରେ ରଖିବା ସମୟରେ ଧାର ଟାଇଲକୁ ସକ୍ରିୟ କରନ୍ତୁ"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid "Workspaces are managed dynamically"
 msgstr "କାର୍ଯ୍ୟକ୍ଷେତ୍ରଗୁଡ଼ିକ ଅସ୍ଥାୟୀ ଭାବରେ ପରିଚାଳିତ ହୋଇଥାଏ"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Workspaces only on primary monitor"
 msgstr "କାର୍ଯ୍ୟକ୍ଷେତ୍ର କେବଳ ପ୍ରାଥମିକ ମନିଟରରେ ଥାଏ"
 
@@ -401,9 +398,9 @@ msgstr "ତାଲିକାଭୁକ୍ତ ନୁହଁ କି?"
 
 #: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
-#: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
-#: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:565
+#: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:76
+#: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "ବାତିଲ କରନ୍ତୁ"
 
@@ -522,15 +519,15 @@ msgstr "%s କୁ ଆପଣଙ୍କର ମନପସନ୍ଦରେ ଯୋଗ �
 msgid "%s has been removed from your favorites."
 msgstr "%s କୁ ମନପସନ୍ଦରୁ ବାହାର କରିଦିଆଯାଇଛି।"
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:214
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:223
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:293
+#: ../js/ui/appIconBar.js:296
 #, fuzzy, c-format
 msgid "Quit %s"
 msgstr "ବିଦାୟ ନିଅନ୍ତୁ"
@@ -902,13 +899,13 @@ msgstr "%s ଆପଣଙ୍କୁ %s ରେ ଯୋଗଦାନ କରିବା �
 #: ../js/ui/components/telepathyClient.js:1100
 #: ../js/ui/components/telepathyClient.js:1139
 #: ../js/ui/components/telepathyClient.js:1179
-#: ../js/ui/components/telepathyClient.js:1242
+#: ../js/ui/components/telepathyClient.js:1241
 msgid "Decline"
 msgstr "ମନା କରନ୍ତୁ"
 
 #: ../js/ui/components/telepathyClient.js:1101
 #: ../js/ui/components/telepathyClient.js:1180
-#: ../js/ui/components/telepathyClient.js:1243
+#: ../js/ui/components/telepathyClient.js:1242
 msgid "Accept"
 msgstr "ଗ୍ରହଣ କରନ୍ତୁ"
 
@@ -945,99 +942,99 @@ msgstr "%s ଆପଣଙ୍କୁ %s ପଠାଉଅଛି"
 msgid "%s would like permission to see when you are online"
 msgstr "ଆପଣ କେତେ ବେଳେ ଅନଲାଇନ ଆସୁଛନ୍ତି ଦେଖିବା ପାଇଁ %s କୁ ଅନୁମତି ଆବଶ୍ୟକ କରୁଛି"
 
-#: ../js/ui/components/telepathyClient.js:1300
+#: ../js/ui/components/telepathyClient.js:1299
 msgid "Network error"
 msgstr "ନେଟୱର୍କ ତ୍ରୁଟି"
 
-#: ../js/ui/components/telepathyClient.js:1302
+#: ../js/ui/components/telepathyClient.js:1301
 msgid "Authentication failed"
 msgstr "ବୈଧିକରଣ ବିଫଳ ହେଲା"
 
-#: ../js/ui/components/telepathyClient.js:1304
+#: ../js/ui/components/telepathyClient.js:1303
 msgid "Encryption error"
 msgstr "ସଂଗୁପ୍ତ ତ୍ରୁଟି"
 
-#: ../js/ui/components/telepathyClient.js:1306
+#: ../js/ui/components/telepathyClient.js:1305
 msgid "Certificate not provided"
 msgstr "ପ୍ରମାଣପତ୍ର ଦିଆଯାଇନାହିଁ"
 
-#: ../js/ui/components/telepathyClient.js:1308
+#: ../js/ui/components/telepathyClient.js:1307
 msgid "Certificate untrusted"
 msgstr "ପ୍ରମାଣପତ୍ର ବିଶ୍ୱସ୍ଥ ନୁହଁ"
 
-#: ../js/ui/components/telepathyClient.js:1310
+#: ../js/ui/components/telepathyClient.js:1309
 msgid "Certificate expired"
 msgstr "ପ୍ରମାଣପତ୍ରର ସମୟ ସମାପ୍ତ"
 
-#: ../js/ui/components/telepathyClient.js:1312
+#: ../js/ui/components/telepathyClient.js:1311
 msgid "Certificate not activated"
 msgstr "ପ୍ରମାଣପତ୍ର ସକ୍ରିୟ କରାଯାଇନାହିଁ"
 
-#: ../js/ui/components/telepathyClient.js:1314
+#: ../js/ui/components/telepathyClient.js:1313
 msgid "Certificate hostname mismatch"
 msgstr "ପ୍ରମାଣପତ୍ର ହୋଷ୍ଟ ନାମ ମେଳଖାଉ ନାହିଁ"
 
-#: ../js/ui/components/telepathyClient.js:1316
+#: ../js/ui/components/telepathyClient.js:1315
 msgid "Certificate fingerprint mismatch"
 msgstr "ପ୍ରମାଣପତ୍ର ଅଙ୍ଗୁଳିଚିହ୍ନ ମେଳଖାଉନାହିଁ"
 
-#: ../js/ui/components/telepathyClient.js:1318
+#: ../js/ui/components/telepathyClient.js:1317
 msgid "Certificate self-signed"
 msgstr "ପ୍ରମାଣପତ୍ର ନିଜ ଦ୍ୱାରା ହସ୍ତାକ୍ଷର ହୋଇଛି"
 
-#: ../js/ui/components/telepathyClient.js:1320
+#: ../js/ui/components/telepathyClient.js:1319
 msgid "Status is set to offline"
 msgstr "ସ୍ଥିତିକୁ ଅଫଲାଇନ ସେଟ କରାଯାଇଛି"
 
-#: ../js/ui/components/telepathyClient.js:1322
+#: ../js/ui/components/telepathyClient.js:1321
 msgid "Encryption is not available"
 msgstr "ସଂଗୁପ୍ତ ଉପଲବ୍ଧ ନାହିଁ"
 
-#: ../js/ui/components/telepathyClient.js:1324
+#: ../js/ui/components/telepathyClient.js:1323
 msgid "Certificate is invalid"
 msgstr "ପ୍ରମାଣପତ୍ରଟି ଅବୈଧ ଅଟେ"
 
-#: ../js/ui/components/telepathyClient.js:1326
+#: ../js/ui/components/telepathyClient.js:1325
 msgid "Connection has been refused"
 msgstr "ସଂଯୋଗକୁ ବାରଣ ହୋଇଛି"
 
-#: ../js/ui/components/telepathyClient.js:1328
+#: ../js/ui/components/telepathyClient.js:1327
 msgid "Connection can't be established"
 msgstr "ସଂଯୋଗ ସ୍ଥାପନ କରିପାରିବେ ନାହିଁ"
 
-#: ../js/ui/components/telepathyClient.js:1330
+#: ../js/ui/components/telepathyClient.js:1329
 msgid "Connection has been lost"
 msgstr "ସଂଯୋଗ ବିଚ୍ଛିନ୍ନ ହୋଇଛି"
 
-#: ../js/ui/components/telepathyClient.js:1332
+#: ../js/ui/components/telepathyClient.js:1331
 msgid "This account is already connected to the server"
 msgstr "ଏହି ଖାତାଟି ସର୍ଭର ସହିତ ପୂର୍ବରୁ ସଂଯୁକ୍ତ ଅଛି"
 
-#: ../js/ui/components/telepathyClient.js:1334
+#: ../js/ui/components/telepathyClient.js:1333
 msgid ""
 "Connection has been replaced by a new connection using the same resource"
 msgstr "ସମାନ ଉତ୍ସ ବ୍ୟବହାର କରି ଏହି ସଂଯୋଗଟି ଏକ ନୂତନ ସଂଯୋଗ ଦ୍ୱାରା ପରିବର୍ତ୍ତିତ ହୋଇଛି"
 
-#: ../js/ui/components/telepathyClient.js:1336
+#: ../js/ui/components/telepathyClient.js:1335
 msgid "The account already exists on the server"
 msgstr "ସର୍ଭରରେ ଏହି ଖାତାଟି ପୂର୍ବରୁ ଅବସ୍ଥିତ ଅଛି"
 
-#: ../js/ui/components/telepathyClient.js:1338
+#: ../js/ui/components/telepathyClient.js:1337
 msgid "Server is currently too busy to handle the connection"
 msgstr "ଏହି ସଂଯୋଗକୁ କାର୍ଯ୍ୟକାରୀ କରିବା ପାଇଁ ସର୍ଭର ବର୍ତ୍ତମାନ ବ୍ୟସ୍ତ ଅଛି"
 
-#: ../js/ui/components/telepathyClient.js:1340
+#: ../js/ui/components/telepathyClient.js:1339
 msgid "Certificate has been revoked"
 msgstr "ପ୍ରମାଣପତ୍ରଟିର ସମୟ ସମାପ୍ତ ହୋଇଛି"
 
-#: ../js/ui/components/telepathyClient.js:1342
+#: ../js/ui/components/telepathyClient.js:1341
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
 msgstr ""
 "ପ୍ରମାଣପତ୍ରଟି ଗୋଟିଏ ଅସୁରକ୍ଷିତ ଆଲଗୋରିଦମ ବ୍ୟବହାର କରିଥାଏ କିମ୍ବା ତାହା କ୍ରିପ୍ଟୋଗ୍ରାଫି ଅନୁଯାୟୀ ଦୁର୍ବଳ "
 "ଅଟେ"
 
-#: ../js/ui/components/telepathyClient.js:1344
+#: ../js/ui/components/telepathyClient.js:1343
 msgid ""
 "The length of the server certificate, or the depth of the server certificate "
 "chain, exceed the limits imposed by the cryptography library"
@@ -1045,22 +1042,22 @@ msgstr ""
 "ସର୍ଭର ପ୍ରମାଣପତ୍ରର ଲମ୍ବ, ଅଥବା ସର୍ଭର ପ୍ରମାଣପତ୍ର ସୃଙ୍ଖଳର ଗଭୀରତା, କ୍ରିପ୍ଟୋଗ୍ରାଫି ଲାଇବ୍ରେରୀ "
 "ଦ୍ୱାରା ନିୟୋଜିତ ସୀମାକୁ ଅତିକ୍ରମ କରିଥାଏ"
 
-#: ../js/ui/components/telepathyClient.js:1346
+#: ../js/ui/components/telepathyClient.js:1345
 msgid "Internal error"
 msgstr "ଆଭ୍ଯନ୍ତରୀଣ ତ୍ରୁଟି"
 
 #. translators: argument is the account name, like
 #. * name@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1356
+#: ../js/ui/components/telepathyClient.js:1355
 #, c-format
 msgid "Unable to connect to %s"
 msgstr "%s ସହିତ ସଂଯୋଗ ହେବାରେ ଅସମର୍ଥ"
 
-#: ../js/ui/components/telepathyClient.js:1361
+#: ../js/ui/components/telepathyClient.js:1360
 msgid "View account"
 msgstr "ଖାତା ଦେଖନ୍ତୁ"
 
-#: ../js/ui/components/telepathyClient.js:1400
+#: ../js/ui/components/telepathyClient.js:1399
 msgid "Unknown reason"
 msgstr "ଅଜ୍ଞାତ କାରଣ"
 
@@ -1258,6 +1255,22 @@ msgstr "ସ୍ଥାପନ କରନ୍ତୁ"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "'%s' କୁ extensions.gnome.org ରୁ ଆହରଣ କରି ସ୍ଥାପନ କରିବେ କି?"
 
+#: ../js/ui/forceAppExitDialog.js:53
+#, fuzzy
+msgid "Quit applications…"
+msgstr "ପ୍ରୟୋଗଗୁଡ଼ିକ"
+
+#: ../js/ui/forceAppExitDialog.js:59
+msgid ""
+"If an application doesn't respond for a while, select its name and click "
+"Quit Application."
+msgstr ""
+
+#: ../js/ui/forceAppExitDialog.js:79
+#, fuzzy
+msgid "Quit Application"
+msgstr "ପ୍ରୟୋଗଗୁଡ଼ିକ"
+
 #: ../js/ui/iconGridLayout.js:200
 #, c-format
 msgid "%s has been deleted"
@@ -1367,7 +1380,7 @@ msgstr "ପଦକ୍ଷେପ ବାତିଲ କରନ୍ତୁ"
 msgid "Overview"
 msgstr "ସମୀକ୍ଷା"
 
-#: ../js/ui/panel.js:377
+#: ../js/ui/panel.js:376
 msgid "Top Bar"
 msgstr "ଉପର ପଟି"
 
@@ -1865,6 +1878,10 @@ msgstr "ଅପରିବର୍ତ୍ତନୀୟ କରନ୍ତୁ"
 msgid "Exit"
 msgstr ""
 
+#: ../js/ui/userMenu.js:41
+msgid "Help"
+msgstr ""
+
 #: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "ବିନ୍ଯାସ"
@@ -1906,23 +1923,23 @@ msgstr "ପ୍ରୟୋଗଗୁଡ଼ିକ"
 msgid "'%s' is ready"
 msgstr "'%s' ପ୍ରସ୍ତୁତ ଅଛି"
 
-#: ../js/ui/windowManager.js:65
+#: ../js/ui/windowManager.js:66
 msgid "Do you want to keep these display settings?"
 msgstr ""
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #.
-#: ../js/ui/windowManager.js:84
+#: ../js/ui/windowManager.js:85
 #, fuzzy
 msgid "Revert Settings"
 msgstr "ବିଦ୍ୟୁତ ଶକ୍ତି ବିନ୍ଯାସ"
 
-#: ../js/ui/windowManager.js:88
+#: ../js/ui/windowManager.js:89
 msgid "Keep Changes"
 msgstr ""
 
-#: ../js/ui/windowManager.js:106
+#: ../js/ui/windowManager.js:107
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
