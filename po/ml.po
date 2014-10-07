@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-25 16:44-0700\n"
+"POT-Creation-Date: 2014-10-07 15:08-0700\n"
 "PO-Revision-Date: 2013-03-25 14:57+0530\n"
 "Last-Translator: Ani Peter <peter.ani@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -407,7 +407,7 @@ msgstr "ലഭ്യമല്ലേ?"
 
 #: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
-#: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:76
+#: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
 #: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:565
 msgid "Cancel"
@@ -481,40 +481,40 @@ msgstr "ആജ്ഞ പ്രാവര്‍ത്തികമാക്കാ�
 msgid "Execution of '%s' failed:"
 msgstr "'%s' നടപ്പിലാക്കുന്നതില്‍ പരാജയപ്പെട്ടു:"
 
-#: ../js/ui/appDisplay.js:1900
+#: ../js/ui/appDisplay.js:1906
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1909
+#: ../js/ui/appDisplay.js:1915
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1961
+#: ../js/ui/appDisplay.js:1967
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1967
+#: ../js/ui/appDisplay.js:1973
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1973
+#: ../js/ui/appDisplay.js:1979
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1985 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "ശരി"
 
-#: ../js/ui/appDisplay.js:2062
+#: ../js/ui/appDisplay.js:2068
 msgid "New Window"
 msgstr "പുതിയ വിന്‍ഡോ"
 
-#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2071 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "ഇഷ്ടപ്പെട്ടവയില്‍ നിന്നും നീക്കം ചെയ്യുക"
 
-#: ../js/ui/appDisplay.js:2066
+#: ../js/ui/appDisplay.js:2072
 msgid "Add to Favorites"
 msgstr "ഇഷ്ടപ്പെട്ടവയിലേക്ക് ചേര്‍ക്കുക"
 
@@ -1123,7 +1123,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:419
 msgid "Windows"
 msgstr "ജാലകങ്ങള്‍"
 
@@ -1264,23 +1264,28 @@ msgstr "ഇന്‍സ്റ്റോള്‍"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "extensions.gnome.org ഇല്‍ നിന്നും '%s' ഡൗണ്‍ലോട് ചെയ്ത് ഇന്‍സ്റ്റോള്‍ ചെയ്യേണമോ?"
 
-#: ../js/ui/forceAppExitDialog.js:53
+#: ../js/ui/forceAppExitDialog.js:55
 #, fuzzy
 msgid "Quit applications…"
 msgstr "പ്രയോഗങ്ങള്‍"
 
-#: ../js/ui/forceAppExitDialog.js:59
+#: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
 msgstr ""
 
-#: ../js/ui/forceAppExitDialog.js:79
+#: ../js/ui/forceAppExitDialog.js:84
+#, fuzzy
+msgid "System Monitor"
+msgstr "മോണിറ്റര്‍"
+
+#: ../js/ui/forceAppExitDialog.js:89
 #, fuzzy
 msgid "Quit Application"
 msgstr "പ്രയോഗങ്ങള്‍"
 
-#: ../js/ui/iconGridLayout.js:200
+#: ../js/ui/iconGridLayout.js:209
 #, c-format
 msgid "%s has been deleted"
 msgstr ""
@@ -1429,11 +1434,11 @@ msgstr "പൂട്ടുവാന്‍ സാധ്യമല്ല"
 msgid "Lock was blocked by an application"
 msgstr "പൂട്ടുന്ന സംവിധാനം ഒരു പ്രയോഗം തടസ്സപ്പെടുത്തിയിരിയ്ക്കുന്നു"
 
-#: ../js/ui/search.js:666
+#: ../js/ui/search.js:671
 msgid "Searching…"
 msgstr "തെരയുന്നു..."
 
-#: ../js/ui/search.js:668
+#: ../js/ui/search.js:673
 msgid "No results."
 msgstr "ഫലങ്ങളില്ല."
 
@@ -1923,7 +1928,7 @@ msgstr "%s (വിദൂരം)"
 msgid "%s (console)"
 msgstr "%s (കണ്‍സോള്‍)"
 
-#: ../js/ui/viewSelector.js:404
+#: ../js/ui/viewSelector.js:423
 msgid "Applications"
 msgstr "പ്രയോഗങ്ങള്‍"
 

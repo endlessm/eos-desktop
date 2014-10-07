@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-25 16:44-0700\n"
+"POT-Creation-Date: 2014-10-07 15:08-0700\n"
 "PO-Revision-Date: 2012-04-01 09:07+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -400,7 +400,7 @@ msgstr "Inte listad?"
 
 #: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
-#: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:76
+#: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
 #: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:565
 msgid "Cancel"
@@ -477,40 +477,40 @@ msgstr "Kunde inte tolka kommando:"
 msgid "Execution of '%s' failed:"
 msgstr "Körning av \"%s\" misslyckades:"
 
-#: ../js/ui/appDisplay.js:1900
+#: ../js/ui/appDisplay.js:1906
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1909
+#: ../js/ui/appDisplay.js:1915
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1961
+#: ../js/ui/appDisplay.js:1967
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1967
+#: ../js/ui/appDisplay.js:1973
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1973
+#: ../js/ui/appDisplay.js:1979
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1985 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:2062
+#: ../js/ui/appDisplay.js:2068
 msgid "New Window"
 msgstr "Nytt fönster"
 
-#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2071 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Ta bort från favoriter"
 
-#: ../js/ui/appDisplay.js:2066
+#: ../js/ui/appDisplay.js:2072
 msgid "Add to Favorites"
 msgstr "Lägg till som favorit"
 
@@ -1121,7 +1121,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:419
 msgid "Windows"
 msgstr "Fönster"
 
@@ -1264,23 +1264,28 @@ msgstr "Installera"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Hämta och installera \"%s\" från extensions.gnome.org?"
 
-#: ../js/ui/forceAppExitDialog.js:53
+#: ../js/ui/forceAppExitDialog.js:55
 #, fuzzy
 msgid "Quit applications…"
 msgstr "Program"
 
-#: ../js/ui/forceAppExitDialog.js:59
+#: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
 msgstr ""
 
-#: ../js/ui/forceAppExitDialog.js:79
+#: ../js/ui/forceAppExitDialog.js:84
+#, fuzzy
+msgid "System Monitor"
+msgstr "Skärm"
+
+#: ../js/ui/forceAppExitDialog.js:89
 #, fuzzy
 msgid "Quit Application"
 msgstr "Program"
 
-#: ../js/ui/iconGridLayout.js:200
+#: ../js/ui/iconGridLayout.js:209
 #, c-format
 msgid "%s has been deleted"
 msgstr ""
@@ -1433,12 +1438,12 @@ msgstr ""
 msgid "Lock was blocked by an application"
 msgstr "Program"
 
-#: ../js/ui/search.js:666
+#: ../js/ui/search.js:671
 #, fuzzy
 msgid "Searching…"
 msgstr "Söker..."
 
-#: ../js/ui/search.js:668
+#: ../js/ui/search.js:673
 #, fuzzy
 msgid "No results."
 msgstr "Inga sökträffar."
@@ -1947,7 +1952,7 @@ msgstr ""
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:404
+#: ../js/ui/viewSelector.js:423
 msgid "Applications"
 msgstr "Program"
 
