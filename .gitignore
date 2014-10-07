@@ -19,8 +19,6 @@ configure
 data/50-gnome-shell-*.xml
 data/eos-app-feedback.desktop
 data/eos-app-feedback.desktop.in
-data/eos-app-tutorial.desktop
-data/eos-app-tutorial.desktop.in
 data/eos-launch.desktop
 data/eos-session.desktop
 data/eos-session.desktop.in

@@ -27,12 +27,14 @@
     <file>corner-ripple-tl.png</file>
     <file>corner-ripple-tr.png</file>
     <file>dash-placeholder.svg</file>
+    <file>feedback-symbolic.svg</file>
     <file>filter-selected-ltr.svg</file>
     <file>filter-selected-rtl.svg</file>
     <file>folder-shadow-hover.png</file>
     <file>folder-shadow-normal.png</file>
     <file>folder-shadow-pressed.png</file>
     <file>gnome-shell.css</file>
+    <file>help-symbolic.svg</file>
     <file>hot-corner-indicator-symbolic.svg</file>
     <file>hot-corner-indicator-rtl-symbolic.svg</file>
     <file>internet-hover.png</file>
@@ -77,8 +79,6 @@
     <file>trash-pop-up_ok-btn_hover.png</file>
     <file>trash-pop-up_ok-btn_normal.png</file>
     <file>trash-pop-up_ok-btn_pressed.png</file>
-    <file>tutorial-symbolic.svg</file>
-    <file>feedback-symbolic.svg</file>
     <file>ws-switch-arrow-up.png</file>
     <file>ws-switch-arrow-down.png</file>
   </gresource>
