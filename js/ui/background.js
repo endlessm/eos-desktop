@@ -458,7 +458,7 @@ const Background = new Lang.Class({
 
         let image = this._images[index];
         if (image.content)
-            this._cache.removeImageContent(content);
+            this._cache.removeImageContent(image.content);
         image.content = content;
         this._watchCacheFile(file);
 
@@ -706,7 +706,10 @@ const SystemBackground = new Lang.Class({
     },
 
     _onDestroy: function() {
-        this._cache.removeImageContent(this.actor.content);
+        let content = this.actor.content;
+
+        if (content)
+            this._cache.removeImageContent(content);
     },
 });
 Signals.addSignalMethods(SystemBackground.prototype);
