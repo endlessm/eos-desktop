@@ -10,6 +10,8 @@ const St = imports.gi.St;
 const Main = imports.ui.main;
 const ModalDialog = imports.ui.modalDialog;
 
+const GNOME_SYSTEM_MONITOR_DESKTOP_ID = 'gnome-system-monitor.desktop';
+
 const ForceAppExitDialogItem = new Lang.Class({
     Name: 'ForceAppExitDialogItem',
     ICON_SIZE: 32,
@@ -75,6 +77,14 @@ const ForceAppExitDialog = new Lang.Class({
         this._cancelButton = this.addButton({ action: Lang.bind(this, this.close),
                                               label: _("Cancel"),
                                               key: Clutter.Escape });
+
+        let appSystem = Shell.AppSystem.get_default();
+        if (appSystem.lookup_app(GNOME_SYSTEM_MONITOR_DESKTOP_ID)) {
+            this.addButton({ action: Lang.bind(this, this._launchSystemMonitor),
+                             label: _("System Monitor") },
+                           { x_align: St.Align.END });
+        }
+
         this._quitButton = this.addButton({ action: Lang.bind(this, this._quitApp),
                                             label: _("Quit Application"),
                                             key: Clutter.Return },
@@ -82,7 +92,7 @@ const ForceAppExitDialog = new Lang.Class({
                                             x_fill: false,
                                             x_align: St.Align.END });
 
-        Shell.AppSystem.get_default().get_running().forEach(Lang.bind(this, function(app) {
+        appSystem.get_running().forEach(Lang.bind(this, function(app) {
             let item = new ForceAppExitDialogItem(app);
             item.connect('selected', Lang.bind(this, this._selectApp));
             this._itemBox.add_child(item.actor);
@@ -96,6 +106,15 @@ const ForceAppExitDialog = new Lang.Class({
         let quitSensitive = this._selectedAppItem != null;
         this._quitButton.reactive = quitSensitive;
         this._quitButton.can_focus = quitSensitive;
+    },
+
+    _launchSystemMonitor: function() {
+        let appSystem = Shell.AppSystem.get_default();
+        let systemMonitor = appSystem.lookup_app(GNOME_SYSTEM_MONITOR_DESKTOP_ID);
+        systemMonitor.activate();
+
+        this.close();
+        Main.overview.hide();
     },
 
     _quitApp: function() {
