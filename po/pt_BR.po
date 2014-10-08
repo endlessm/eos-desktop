@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-16 10:07-0700\n"
-"PO-Revision-Date: 2014-09-30 02:20+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2014-10-07 15:08-0700\n"
+"PO-Revision-Date: 2014-10-07 22:09+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/eos-shell/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -56,14 +56,6 @@ msgstr "Abrir o menu do programa"
 #: ../data/eos-app-feedback.desktop.in.in.h:1
 msgid "Feedback"
 msgstr "Comentários"
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
-msgid "Tutorial"
-msgstr "Tutorial"
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:2
-msgid "Tutorial video and help"
-msgstr "Ajuda e Vídeo Tutorial"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
@@ -317,52 +309,56 @@ msgid "Keybinding to focus the active notification."
 msgstr "Atalho de teclado para ativar a notificação ativa."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+msgid "Keybinding that shows the force app exit dialog"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Which keyboard to use"
 msgstr "Qual teclado usar"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "The type of keyboard to use."
 msgstr "O tipo do teclado para usar."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "The application icon mode."
 msgstr "O modo ícone do programa."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
 "(shows only the application icon) or 'both'."
 msgstr "Configura como as janelas são mostradas no alternador. As possibilidades válidas são 'thumbnail-only' (mostra uma miniatura da janela), 'app-icon-only' (mostra apenas o ícone do programa) ou 'both'."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "Attach modal dialog to the parent window"
 msgstr "Anexar diálogo modal à janela pai"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr "Esta chave sobrescreve a chave em org.gnome.mutter ao executar GNOME Shell."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Arrangement of buttons on the titlebar"
 msgstr "Organização dos botões na barra de título"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
 msgstr "Esta chave sobrescreve a chave em org.gnome.desktop.wm.preferences ao executar GNOME Shell."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr "Habilitar contorno ladrilhado ao arrastar janelas sobre as bordas da tela"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid "Workspaces are managed dynamically"
 msgstr "Espaços de trabalho são gerenciados dinamicamente"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Workspaces only on primary monitor"
 msgstr "Espaços de trabalho apenas no monitor primário"
 
@@ -392,9 +388,9 @@ msgstr "Não listado?"
 
 #: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
-#: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
-#: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:565
+#: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
+#: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -466,40 +462,40 @@ msgstr "Não foi possível analisar comando:"
 msgid "Execution of '%s' failed:"
 msgstr "A execução de \"%s\" falhou:"
 
-#: ../js/ui/appDisplay.js:1900
+#: ../js/ui/appDisplay.js:1906
 msgid "More Apps"
 msgstr "Mais Programas"
 
-#: ../js/ui/appDisplay.js:1909
+#: ../js/ui/appDisplay.js:1915
 msgid "Delete"
 msgstr "Excluir"
 
-#: ../js/ui/appDisplay.js:1961
+#: ../js/ui/appDisplay.js:1967
 msgid "Warning"
 msgstr "Aviso"
 
-#: ../js/ui/appDisplay.js:1967
+#: ../js/ui/appDisplay.js:1973
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para excluir uma pasta que você tem que remover todos os arquivos de dentro primeiro."
 
-#: ../js/ui/appDisplay.js:1973
+#: ../js/ui/appDisplay.js:1979
 msgid "We are just trying to keep you safe."
 msgstr "Estamos apenas tentando manter a segurança dos seus dados."
 
-#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1985 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:2062
+#: ../js/ui/appDisplay.js:2068
 msgid "New Window"
 msgstr "Nova janela"
 
-#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2071 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Remover dos favoritos"
 
-#: ../js/ui/appDisplay.js:2066
+#: ../js/ui/appDisplay.js:2072
 msgid "Add to Favorites"
 msgstr "Adicionar aos favoritos"
 
@@ -513,15 +509,15 @@ msgstr "%s foi adicionado aos seus favoritos."
 msgid "%s has been removed from your favorites."
 msgstr "%s foi removido dos seus favoritos."
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:214
 msgid "Other workspaces"
 msgstr "Outras áreas de trabalho  "
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:223
 msgid "Current workspace"
 msgstr "Área de trabalho atual "
 
-#: ../js/ui/appIconBar.js:293
+#: ../js/ui/appIconBar.js:296
 #, c-format
 msgid "Quit %s"
 msgstr "Fechar %s"
@@ -895,13 +891,13 @@ msgstr "%s está convidando você para participar de %s"
 #: ../js/ui/components/telepathyClient.js:1100
 #: ../js/ui/components/telepathyClient.js:1139
 #: ../js/ui/components/telepathyClient.js:1179
-#: ../js/ui/components/telepathyClient.js:1242
+#: ../js/ui/components/telepathyClient.js:1241
 msgid "Decline"
 msgstr "Recusar"
 
 #: ../js/ui/components/telepathyClient.js:1101
 #: ../js/ui/components/telepathyClient.js:1180
-#: ../js/ui/components/telepathyClient.js:1243
+#: ../js/ui/components/telepathyClient.js:1242
 msgid "Accept"
 msgstr "Aceitar"
 
@@ -937,118 +933,118 @@ msgstr "%s está enviando %s"
 msgid "%s would like permission to see when you are online"
 msgstr "%s quer permissão para vê-lo quando conectado"
 
-#: ../js/ui/components/telepathyClient.js:1300
+#: ../js/ui/components/telepathyClient.js:1299
 msgid "Network error"
 msgstr "Erro de rede"
 
-#: ../js/ui/components/telepathyClient.js:1302
+#: ../js/ui/components/telepathyClient.js:1301
 msgid "Authentication failed"
 msgstr "Falha de autenticação"
 
-#: ../js/ui/components/telepathyClient.js:1304
+#: ../js/ui/components/telepathyClient.js:1303
 msgid "Encryption error"
 msgstr "Erro de criptografia"
 
-#: ../js/ui/components/telepathyClient.js:1306
+#: ../js/ui/components/telepathyClient.js:1305
 msgid "Certificate not provided"
 msgstr "Certificado não fornecido"
 
-#: ../js/ui/components/telepathyClient.js:1308
+#: ../js/ui/components/telepathyClient.js:1307
 msgid "Certificate untrusted"
 msgstr "Certificado não confiável"
 
-#: ../js/ui/components/telepathyClient.js:1310
+#: ../js/ui/components/telepathyClient.js:1309
 msgid "Certificate expired"
 msgstr "Certificado expirado"
 
-#: ../js/ui/components/telepathyClient.js:1312
+#: ../js/ui/components/telepathyClient.js:1311
 msgid "Certificate not activated"
 msgstr "Certificado não ativado"
 
-#: ../js/ui/components/telepathyClient.js:1314
+#: ../js/ui/components/telepathyClient.js:1313
 msgid "Certificate hostname mismatch"
 msgstr "Nome do certificado não confere"
 
-#: ../js/ui/components/telepathyClient.js:1316
+#: ../js/ui/components/telepathyClient.js:1315
 msgid "Certificate fingerprint mismatch"
 msgstr "Impressão digital do certificado não confere"
 
-#: ../js/ui/components/telepathyClient.js:1318
+#: ../js/ui/components/telepathyClient.js:1317
 msgid "Certificate self-signed"
 msgstr "Certificado auto-assinado"
 
-#: ../js/ui/components/telepathyClient.js:1320
+#: ../js/ui/components/telepathyClient.js:1319
 msgid "Status is set to offline"
 msgstr "O status está definido como desconectado."
 
-#: ../js/ui/components/telepathyClient.js:1322
+#: ../js/ui/components/telepathyClient.js:1321
 msgid "Encryption is not available"
 msgstr "Criptografia não disponível"
 
-#: ../js/ui/components/telepathyClient.js:1324
+#: ../js/ui/components/telepathyClient.js:1323
 msgid "Certificate is invalid"
 msgstr "O certificado é inválido"
 
-#: ../js/ui/components/telepathyClient.js:1326
+#: ../js/ui/components/telepathyClient.js:1325
 msgid "Connection has been refused"
 msgstr "A conexão foi recusada"
 
-#: ../js/ui/components/telepathyClient.js:1328
+#: ../js/ui/components/telepathyClient.js:1327
 msgid "Connection can't be established"
 msgstr "A conexão não pode ser estabelecida"
 
-#: ../js/ui/components/telepathyClient.js:1330
+#: ../js/ui/components/telepathyClient.js:1329
 msgid "Connection has been lost"
 msgstr "Conexão perdida"
 
-#: ../js/ui/components/telepathyClient.js:1332
+#: ../js/ui/components/telepathyClient.js:1331
 msgid "This account is already connected to the server"
 msgstr "Esta conta já está conectada ao servidor"
 
-#: ../js/ui/components/telepathyClient.js:1334
+#: ../js/ui/components/telepathyClient.js:1333
 msgid ""
 "Connection has been replaced by a new connection using the same resource"
 msgstr "A conexão foi substituída por uma nova conexão usando o mesmo recurso"
 
-#: ../js/ui/components/telepathyClient.js:1336
+#: ../js/ui/components/telepathyClient.js:1335
 msgid "The account already exists on the server"
 msgstr "A conta já existe no servidor"
 
-#: ../js/ui/components/telepathyClient.js:1338
+#: ../js/ui/components/telepathyClient.js:1337
 msgid "Server is currently too busy to handle the connection"
 msgstr "O servidor está atualmente muito ocupado para controlar a conexão"
 
-#: ../js/ui/components/telepathyClient.js:1340
+#: ../js/ui/components/telepathyClient.js:1339
 msgid "Certificate has been revoked"
 msgstr "O certificado foi revogado"
 
-#: ../js/ui/components/telepathyClient.js:1342
+#: ../js/ui/components/telepathyClient.js:1341
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
 msgstr "O certificado usa um algoritmo de cifragem inseguro ou é criptograficamente fraco"
 
-#: ../js/ui/components/telepathyClient.js:1344
+#: ../js/ui/components/telepathyClient.js:1343
 msgid ""
 "The length of the server certificate, or the depth of the server certificate"
 " chain, exceed the limits imposed by the cryptography library"
 msgstr "O comprimento do certificado do servidor, ou a profundidade da cadeia do certificado excedeu os limites impostos pela biblioteca de criptografia"
 
-#: ../js/ui/components/telepathyClient.js:1346
+#: ../js/ui/components/telepathyClient.js:1345
 msgid "Internal error"
 msgstr "Erro interno"
 
 #. translators: argument is the account name, like
 #. * name@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1356
+#: ../js/ui/components/telepathyClient.js:1355
 #, c-format
 msgid "Unable to connect to %s"
 msgstr "Não foi possível conectar-se a %s"
 
-#: ../js/ui/components/telepathyClient.js:1361
+#: ../js/ui/components/telepathyClient.js:1360
 msgid "View account"
 msgstr "Visualizar conta"
 
-#: ../js/ui/components/telepathyClient.js:1400
+#: ../js/ui/components/telepathyClient.js:1399
 msgid "Unknown reason"
 msgstr "Razão desconhecida"
 
@@ -1100,7 +1096,7 @@ msgstr "Ocorreu um erro durante à atualização"
 msgid "We could not update your system"
 msgstr "Não foi possível atualizar o seu sistema"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:419
 msgid "Windows"
 msgstr "Janelas"
 
@@ -1237,7 +1233,25 @@ msgstr "Instalar"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Baixar e instalar \"%s\" de extensions.gnome.org?"
 
-#: ../js/ui/iconGridLayout.js:200
+#: ../js/ui/forceAppExitDialog.js:55
+msgid "Quit applications…"
+msgstr ""
+
+#: ../js/ui/forceAppExitDialog.js:61
+msgid ""
+"If an application doesn't respond for a while, select its name and click "
+"Quit Application."
+msgstr ""
+
+#: ../js/ui/forceAppExitDialog.js:84
+msgid "System Monitor"
+msgstr ""
+
+#: ../js/ui/forceAppExitDialog.js:89
+msgid "Quit Application"
+msgstr ""
+
+#: ../js/ui/iconGridLayout.js:209
 #, c-format
 msgid "%s has been deleted"
 msgstr "%s foi eliminado"
@@ -1346,7 +1360,7 @@ msgstr "Desfazer"
 msgid "Overview"
 msgstr "Visão geral"
 
-#: ../js/ui/panel.js:377
+#: ../js/ui/panel.js:376
 msgid "Top Bar"
 msgstr "Barra superior"
 
@@ -1385,11 +1399,11 @@ msgstr "Não foi possível bloquear"
 msgid "Lock was blocked by an application"
 msgstr "O bloqueio foi impedido por um programa"
 
-#: ../js/ui/search.js:666
+#: ../js/ui/search.js:671
 msgid "Searching…"
 msgstr "Procurando..."
 
-#: ../js/ui/search.js:668
+#: ../js/ui/search.js:673
 msgid "No results."
 msgstr "Sem resultados. "
 
@@ -1850,6 +1864,10 @@ msgstr "Bloquear"
 msgid "Exit"
 msgstr "Sair"
 
+#: ../js/ui/userMenu.js:41
+msgid "Help"
+msgstr ""
+
 #: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "Configurações"
@@ -1882,7 +1900,7 @@ msgstr "%s (remoto)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:404
+#: ../js/ui/viewSelector.js:423
 msgid "Applications"
 msgstr "Programas"
 
@@ -1891,21 +1909,21 @@ msgstr "Programas"
 msgid "'%s' is ready"
 msgstr "\"%s\" está pronto"
 
-#: ../js/ui/windowManager.js:65
+#: ../js/ui/windowManager.js:66
 msgid "Do you want to keep these display settings?"
 msgstr "Você deseja manter essas configurações de tela? "
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:84
+#: ../js/ui/windowManager.js:85
 msgid "Revert Settings"
 msgstr "Reverter Configurações"
 
-#: ../js/ui/windowManager.js:88
+#: ../js/ui/windowManager.js:89
 msgid "Keep Changes"
 msgstr "Manter Alterações"
 
-#: ../js/ui/windowManager.js:106
+#: ../js/ui/windowManager.js:107
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"

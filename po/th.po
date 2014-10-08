@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-16 10:07-0700\n"
+"POT-Creation-Date: 2014-10-07 15:08-0700\n"
 "PO-Revision-Date: 2012-10-09 18:31+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -43,14 +43,6 @@ msgstr "ปุ่มลัดสำหรับเปิดเมนูโปร
 
 #: ../data/eos-app-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
-msgid "Tutorial"
-msgstr ""
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:2
-msgid "Tutorial video and help"
 msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
@@ -322,52 +314,57 @@ msgid "Keybinding to focus the active notification."
 msgstr "ปุ่มลัดสำหรับเปิดเมนูโปรแกรม"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#, fuzzy
+msgid "Keybinding that shows the force app exit dialog"
+msgstr "ปุ่มลัดสำหรับเปิดเมนูโปรแกรม"
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Which keyboard to use"
 msgstr "ใช้แป้นพิมพ์ชนิดไหน"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "The type of keyboard to use."
 msgstr "ชนิดของแป้นพิมพ์ที่ใช้"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "The application icon mode."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
 "only' (shows only the application icon) or 'both'."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "Attach modal dialog to the parent window"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Arrangement of buttons on the titlebar"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid "Workspaces are managed dynamically"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Workspaces only on primary monitor"
 msgstr ""
 
@@ -398,9 +395,9 @@ msgstr "ไม่มีชื่อของคุณงั้นหรือ?"
 
 #: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
-#: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
-#: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:565
+#: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
+#: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "ยกเลิก"
 
@@ -473,40 +470,40 @@ msgstr "ไม่สามารถแจงคำสั่ง:"
 msgid "Execution of '%s' failed:"
 msgstr "คำสั่ง '%s' ทำงานล้มเหลว:"
 
-#: ../js/ui/appDisplay.js:1900
+#: ../js/ui/appDisplay.js:1906
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1909
+#: ../js/ui/appDisplay.js:1915
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1961
+#: ../js/ui/appDisplay.js:1967
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1967
+#: ../js/ui/appDisplay.js:1973
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1973
+#: ../js/ui/appDisplay.js:1979
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1985 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "ตกลง"
 
-#: ../js/ui/appDisplay.js:2062
+#: ../js/ui/appDisplay.js:2068
 msgid "New Window"
 msgstr "หน้าต่างใหม่"
 
-#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2071 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "ลบออกจากรายการโปรด"
 
-#: ../js/ui/appDisplay.js:2066
+#: ../js/ui/appDisplay.js:2072
 msgid "Add to Favorites"
 msgstr "เพิ่มเข้าในรายการโปรด"
 
@@ -520,15 +517,15 @@ msgstr "%s ถูกเพิ่มเข้าในรายการโปร
 msgid "%s has been removed from your favorites."
 msgstr "%s ถูกลบออกจากรายการโปรดของคุณแล้ว"
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:214
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:223
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:293
+#: ../js/ui/appIconBar.js:296
 #, fuzzy, c-format
 msgid "Quit %s"
 msgstr "ออก"
@@ -900,13 +897,13 @@ msgstr "%s เชิญคุณเข้าร่วมสนทนาที่
 #: ../js/ui/components/telepathyClient.js:1100
 #: ../js/ui/components/telepathyClient.js:1139
 #: ../js/ui/components/telepathyClient.js:1179
-#: ../js/ui/components/telepathyClient.js:1242
+#: ../js/ui/components/telepathyClient.js:1241
 msgid "Decline"
 msgstr "ปฏิเสธ"
 
 #: ../js/ui/components/telepathyClient.js:1101
 #: ../js/ui/components/telepathyClient.js:1180
-#: ../js/ui/components/telepathyClient.js:1243
+#: ../js/ui/components/telepathyClient.js:1242
 msgid "Accept"
 msgstr "ตอบรับ"
 
@@ -943,97 +940,97 @@ msgstr "%s กำลังส่ง %s ให้คุณ"
 msgid "%s would like permission to see when you are online"
 msgstr "%s ขออนุญาตติดต่อกับคุณแบบออนไลน์"
 
-#: ../js/ui/components/telepathyClient.js:1300
+#: ../js/ui/components/telepathyClient.js:1299
 msgid "Network error"
 msgstr "ข้อผิดพลาดเกี่ยวกับเครือข่าย"
 
-#: ../js/ui/components/telepathyClient.js:1302
+#: ../js/ui/components/telepathyClient.js:1301
 msgid "Authentication failed"
 msgstr "การยืนยันตัวบุคคลไม่ผ่าน"
 
-#: ../js/ui/components/telepathyClient.js:1304
+#: ../js/ui/components/telepathyClient.js:1303
 msgid "Encryption error"
 msgstr "ข้อผิดพลาดเกี่ยวกับการเข้ารหัสลับ"
 
-#: ../js/ui/components/telepathyClient.js:1306
+#: ../js/ui/components/telepathyClient.js:1305
 msgid "Certificate not provided"
 msgstr "ไม่มีใบรับรอง"
 
-#: ../js/ui/components/telepathyClient.js:1308
+#: ../js/ui/components/telepathyClient.js:1307
 msgid "Certificate untrusted"
 msgstr "ไม่เชื่อถือใบรับรอง"
 
-#: ../js/ui/components/telepathyClient.js:1310
+#: ../js/ui/components/telepathyClient.js:1309
 msgid "Certificate expired"
 msgstr "ใบรับรองหมดอายุแล้ว"
 
-#: ../js/ui/components/telepathyClient.js:1312
+#: ../js/ui/components/telepathyClient.js:1311
 msgid "Certificate not activated"
 msgstr "ใบรับรองยังไม่มีการเริ่มใช้"
 
-#: ../js/ui/components/telepathyClient.js:1314
+#: ../js/ui/components/telepathyClient.js:1313
 msgid "Certificate hostname mismatch"
 msgstr "ชื่อโฮสต์ในใบรับรองไม่ตรงกัน"
 
-#: ../js/ui/components/telepathyClient.js:1316
+#: ../js/ui/components/telepathyClient.js:1315
 msgid "Certificate fingerprint mismatch"
 msgstr "ลายนิ้วมือในใบรับรองไม่ตรงกัน"
 
-#: ../js/ui/components/telepathyClient.js:1318
+#: ../js/ui/components/telepathyClient.js:1317
 msgid "Certificate self-signed"
 msgstr "ใบรับรองเซ็นรับรองตัวเอง"
 
-#: ../js/ui/components/telepathyClient.js:1320
+#: ../js/ui/components/telepathyClient.js:1319
 msgid "Status is set to offline"
 msgstr "สถานะเปลี่ยนเป็นออฟไลน์"
 
-#: ../js/ui/components/telepathyClient.js:1322
+#: ../js/ui/components/telepathyClient.js:1321
 msgid "Encryption is not available"
 msgstr "ไม่มีการเข้ารหัสลับให้ใช้งาน"
 
-#: ../js/ui/components/telepathyClient.js:1324
+#: ../js/ui/components/telepathyClient.js:1323
 msgid "Certificate is invalid"
 msgstr "ใบรับรองไม่ถูกต้อง"
 
-#: ../js/ui/components/telepathyClient.js:1326
+#: ../js/ui/components/telepathyClient.js:1325
 msgid "Connection has been refused"
 msgstr "การเชื่อมต่อถูกปฏิเสธ"
 
-#: ../js/ui/components/telepathyClient.js:1328
+#: ../js/ui/components/telepathyClient.js:1327
 msgid "Connection can't be established"
 msgstr "เชื่อมต่อไม่สำเร็จ"
 
-#: ../js/ui/components/telepathyClient.js:1330
+#: ../js/ui/components/telepathyClient.js:1329
 msgid "Connection has been lost"
 msgstr "การเชื่อมต่อถูกตัดขาด"
 
-#: ../js/ui/components/telepathyClient.js:1332
+#: ../js/ui/components/telepathyClient.js:1331
 msgid "This account is already connected to the server"
 msgstr "บัญชีนี้ได้เชื่อมต่อกับเซิร์ฟเวอร์อยู่ก่อนแล้ว"
 
-#: ../js/ui/components/telepathyClient.js:1334
+#: ../js/ui/components/telepathyClient.js:1333
 msgid ""
 "Connection has been replaced by a new connection using the same resource"
 msgstr "การเชื่อมต่อถูกแทนที่ด้วยการเชื่อมต่อใหม่โดยใช้ทรัพยากรเดียวกัน"
 
-#: ../js/ui/components/telepathyClient.js:1336
+#: ../js/ui/components/telepathyClient.js:1335
 msgid "The account already exists on the server"
 msgstr "บัญชีนี้มีอยู่แล้วที่เซิร์ฟเวอร์"
 
-#: ../js/ui/components/telepathyClient.js:1338
+#: ../js/ui/components/telepathyClient.js:1337
 msgid "Server is currently too busy to handle the connection"
 msgstr "เซิร์ฟเวอร์ไม่ว่างพอที่จะจัดการการเชื่อมต่อ"
 
-#: ../js/ui/components/telepathyClient.js:1340
+#: ../js/ui/components/telepathyClient.js:1339
 msgid "Certificate has been revoked"
 msgstr "ใบรับรองถูกเพิกถอนไปแล้ว"
 
-#: ../js/ui/components/telepathyClient.js:1342
+#: ../js/ui/components/telepathyClient.js:1341
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
 msgstr "ใบรับรองใช้อัลกอริทึมการเข้ารหัสลับที่ไม่ปลอดภัยหรืออ่อนเกินไป"
 
-#: ../js/ui/components/telepathyClient.js:1344
+#: ../js/ui/components/telepathyClient.js:1343
 msgid ""
 "The length of the server certificate, or the depth of the server certificate "
 "chain, exceed the limits imposed by the cryptography library"
@@ -1041,23 +1038,23 @@ msgstr ""
 "ความยาวของใบรับรอง หรือความลึกของห่วงโซ่ใบรับรองของเซิร์ฟเวอร์ "
 "มีขนาดเกินขีดจำกัดที่ไลบรารีระบบเข้ารหัสลับกำหนดไว้"
 
-#: ../js/ui/components/telepathyClient.js:1346
+#: ../js/ui/components/telepathyClient.js:1345
 msgid "Internal error"
 msgstr "ข้อผิดพลาดภายใน"
 
 #. translators: argument is the account name, like
 #. * name@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1356
+#: ../js/ui/components/telepathyClient.js:1355
 #, c-format
 msgid "Unable to connect to %s"
 msgstr ""
 
-#: ../js/ui/components/telepathyClient.js:1361
+#: ../js/ui/components/telepathyClient.js:1360
 #, fuzzy
 msgid "View account"
 msgstr "แก้ไขบัญชี"
 
-#: ../js/ui/components/telepathyClient.js:1400
+#: ../js/ui/components/telepathyClient.js:1399
 msgid "Unknown reason"
 msgstr "ไม่ทราบสาเหตุ"
 
@@ -1114,7 +1111,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:419
 msgid "Windows"
 msgstr "หน้าต่าง"
 
@@ -1248,7 +1245,28 @@ msgstr "ติดตั้ง"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "จะดาวน์โหลดและติดตั้ง '%s' จาก extensions.gnome.org หรือไม่?"
 
-#: ../js/ui/iconGridLayout.js:200
+#: ../js/ui/forceAppExitDialog.js:55
+#, fuzzy
+msgid "Quit applications…"
+msgstr "โปรแกรม"
+
+#: ../js/ui/forceAppExitDialog.js:61
+msgid ""
+"If an application doesn't respond for a while, select its name and click "
+"Quit Application."
+msgstr ""
+
+#: ../js/ui/forceAppExitDialog.js:84
+#, fuzzy
+msgid "System Monitor"
+msgstr "จอภาพ"
+
+#: ../js/ui/forceAppExitDialog.js:89
+#, fuzzy
+msgid "Quit Application"
+msgstr "โปรแกรม"
+
+#: ../js/ui/iconGridLayout.js:209
 #, c-format
 msgid "%s has been deleted"
 msgstr ""
@@ -1359,7 +1377,7 @@ msgstr "เรียกคืน"
 msgid "Overview"
 msgstr "ภาพรวม"
 
-#: ../js/ui/panel.js:377
+#: ../js/ui/panel.js:376
 msgid "Top Bar"
 msgstr "แถบด้านบน"
 
@@ -1401,12 +1419,12 @@ msgstr "ปลดล็อค"
 msgid "Lock was blocked by an application"
 msgstr ""
 
-#: ../js/ui/search.js:666
+#: ../js/ui/search.js:671
 #, fuzzy
 msgid "Searching…"
 msgstr "กำลังค้นหา..."
 
-#: ../js/ui/search.js:668
+#: ../js/ui/search.js:673
 msgid "No results."
 msgstr "ไม่พบรายการ"
 
@@ -1867,6 +1885,10 @@ msgstr "ล็อค"
 msgid "Exit"
 msgstr ""
 
+#: ../js/ui/userMenu.js:41
+msgid "Help"
+msgstr ""
+
 #: ../js/ui/userMenu.js:42
 #, fuzzy
 msgid "Settings"
@@ -1900,7 +1922,7 @@ msgstr ""
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:404
+#: ../js/ui/viewSelector.js:423
 msgid "Applications"
 msgstr "โปรแกรม"
 
@@ -1909,23 +1931,23 @@ msgstr "โปรแกรม"
 msgid "'%s' is ready"
 msgstr "'%s' พร้อมแล้ว"
 
-#: ../js/ui/windowManager.js:65
+#: ../js/ui/windowManager.js:66
 msgid "Do you want to keep these display settings?"
 msgstr ""
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #.
-#: ../js/ui/windowManager.js:84
+#: ../js/ui/windowManager.js:85
 #, fuzzy
 msgid "Revert Settings"
 msgstr "ตั้งค่าพลังงาน"
 
-#: ../js/ui/windowManager.js:88
+#: ../js/ui/windowManager.js:89
 msgid "Keep Changes"
 msgstr ""
 
-#: ../js/ui/windowManager.js:106
+#: ../js/ui/windowManager.js:107
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-16 10:07-0700\n"
+"POT-Creation-Date: 2014-10-07 15:08-0700\n"
 "PO-Revision-Date: 2013-03-07 21:01+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -43,14 +43,6 @@ msgstr "پروگرامما تىزىملىكىنى كۆرسىتىش"
 
 #: ../data/eos-app-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
-msgid "Tutorial"
-msgstr ""
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:2
-msgid "Tutorial video and help"
 msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
@@ -334,18 +326,23 @@ msgid "Keybinding to focus the active notification."
 msgstr "ئاكتىپ ئۇقتۇرۇشنى كۆرسىتىدىغان كۇنۇپكا بىرىكمىسى."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#, fuzzy
+msgid "Keybinding that shows the force app exit dialog"
+msgstr "پروگرامما تىزىملىكىنى ئاچىدىغان كۇنۇپكا بىرىكمىسى"
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Which keyboard to use"
 msgstr "ئىشلەتمەكچى بولغان كۇنۇپكا تاختىسى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "The type of keyboard to use."
 msgstr "ئىشلەتمەكچى بولغان كۇنۇپكا تاختىسى."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "The application icon mode."
 msgstr "پروگرامما سىنبەلگە ھالىتى."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
@@ -355,22 +352,22 @@ msgstr ""
 "قىممەتلەر: ‹thumbnail-only›(پەقەت كۆزنەكنىڭ كىچىك سۈرىتىنىلا كۆرسىتىدۇ)،‹app-"
 "icon-only›(پروگراممىنىڭ سىنبەلگىسىنىلا كۆرسىتىدۇ) ۋە ‹ئىككىلىسى›"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "Attach modal dialog to the parent window"
 msgstr "ئاتا كۆزنەككە modal سۆزلەشكۈنى قات"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr ""
 "گىنوم Shell ئىجرا بولۇۋاتقاندا مەزكۇر ئاچقۇچ org.gnome.mutter نىڭ ئىچىدىكى "
 "ئاچقۇچنى قاپلىۋېتىدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Arrangement of buttons on the titlebar"
 msgstr "ماۋزۇ بالدىقىدىكى توپچىلارنىڭ ئورۇنلاشتۇرۇلۇشى"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
@@ -378,15 +375,15 @@ msgstr ""
 "گىنوم Shell ئىجرا بولۇۋاتقاندا مەزكۇر ئاچقۇچ org.gnome.desktop.wm."
 "preferences نىڭ ئىچىدىكى ئاچقۇچنى قاپلىۋېتىدۇ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid "Workspaces are managed dynamically"
 msgstr "خىزمەت رايونلىرى جانلىق باشقۇرۇلسۇن"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Workspaces only on primary monitor"
 msgstr "ئاساسىي كۆزەتكۈچتىكى خىزمەت رايونلىرىلا"
 
@@ -416,9 +413,9 @@ msgstr "تىزىمدا يوقمۇ؟"
 
 #: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
-#: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
-#: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:565
+#: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
+#: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "ئەمەلدىن قالدۇر"
 
@@ -490,40 +487,40 @@ msgstr "بۇيرۇقنى تەھلىل قىلالمىدى:"
 msgid "Execution of '%s' failed:"
 msgstr "‹%s› ئىجرا قىلىش مەغلۇپ بولدى:"
 
-#: ../js/ui/appDisplay.js:1900
+#: ../js/ui/appDisplay.js:1906
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1909
+#: ../js/ui/appDisplay.js:1915
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1961
+#: ../js/ui/appDisplay.js:1967
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1967
+#: ../js/ui/appDisplay.js:1973
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1973
+#: ../js/ui/appDisplay.js:1979
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1985 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "تامام"
 
-#: ../js/ui/appDisplay.js:2062
+#: ../js/ui/appDisplay.js:2068
 msgid "New Window"
 msgstr "يېڭى كۆزنەك"
 
-#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2071 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "يىغقۇچتىن چىقىرىۋەت"
 
-#: ../js/ui/appDisplay.js:2066
+#: ../js/ui/appDisplay.js:2072
 msgid "Add to Favorites"
 msgstr "يىغقۇچقا قوش"
 
@@ -537,15 +534,15 @@ msgstr "‏%s يىغقۇچىڭىزغا قوشۇلدى."
 msgid "%s has been removed from your favorites."
 msgstr "‏%s يىغقۇچىڭىزدىن چىقىرىۋېتىلىدۇ."
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:214
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:223
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:293
+#: ../js/ui/appIconBar.js:296
 #, fuzzy, c-format
 msgid "Quit %s"
 msgstr "ئاخىرلاشتۇر"
@@ -919,13 +916,13 @@ msgstr "%s سىزنى %s غا قاتنىشىشنى تەكلىپ قىلىۋاتى
 #: ../js/ui/components/telepathyClient.js:1100
 #: ../js/ui/components/telepathyClient.js:1139
 #: ../js/ui/components/telepathyClient.js:1179
-#: ../js/ui/components/telepathyClient.js:1242
+#: ../js/ui/components/telepathyClient.js:1241
 msgid "Decline"
 msgstr "قوشۇلما"
 
 #: ../js/ui/components/telepathyClient.js:1101
 #: ../js/ui/components/telepathyClient.js:1180
-#: ../js/ui/components/telepathyClient.js:1243
+#: ../js/ui/components/telepathyClient.js:1242
 msgid "Accept"
 msgstr "قوشۇل"
 
@@ -962,98 +959,98 @@ msgstr "%s سىزگە %s نى ئەۋەتتى"
 msgid "%s would like permission to see when you are online"
 msgstr "%s سىزنى توردا بار چېغىڭىزدا كۆرۈشكە ئىجازەت سوراۋاتىدۇ"
 
-#: ../js/ui/components/telepathyClient.js:1300
+#: ../js/ui/components/telepathyClient.js:1299
 msgid "Network error"
 msgstr "تور خاتالىقى"
 
-#: ../js/ui/components/telepathyClient.js:1302
+#: ../js/ui/components/telepathyClient.js:1301
 msgid "Authentication failed"
 msgstr "كىملىك دەلىللەش مەغلۇپ بولدى"
 
-#: ../js/ui/components/telepathyClient.js:1304
+#: ../js/ui/components/telepathyClient.js:1303
 msgid "Encryption error"
 msgstr "شىفىرلاش خاتالىقى"
 
-#: ../js/ui/components/telepathyClient.js:1306
+#: ../js/ui/components/telepathyClient.js:1305
 msgid "Certificate not provided"
 msgstr "گۇۋاھنامە تەمىنلەنمىگەن"
 
-#: ../js/ui/components/telepathyClient.js:1308
+#: ../js/ui/components/telepathyClient.js:1307
 msgid "Certificate untrusted"
 msgstr "گۇۋاھنامە ئىشەنچسىز"
 
-#: ../js/ui/components/telepathyClient.js:1310
+#: ../js/ui/components/telepathyClient.js:1309
 msgid "Certificate expired"
 msgstr "گۇۋاھنامىنىڭ ۋاقتى ئوتكەن"
 
-#: ../js/ui/components/telepathyClient.js:1312
+#: ../js/ui/components/telepathyClient.js:1311
 msgid "Certificate not activated"
 msgstr "گۇۋاھنامە ئاكتىپ ئەمەس"
 
-#: ../js/ui/components/telepathyClient.js:1314
+#: ../js/ui/components/telepathyClient.js:1313
 msgid "Certificate hostname mismatch"
 msgstr "گۇۋاھنامە كومپيۇتېرىنىڭ ئاتى ماسلاشمىدى"
 
-#: ../js/ui/components/telepathyClient.js:1316
+#: ../js/ui/components/telepathyClient.js:1315
 msgid "Certificate fingerprint mismatch"
 msgstr "گۇۋاھنامىنىڭ بارماق ئىزى ماسلاشمىدى"
 
-#: ../js/ui/components/telepathyClient.js:1318
+#: ../js/ui/components/telepathyClient.js:1317
 msgid "Certificate self-signed"
 msgstr "گۇۋاھنامىنىڭ ئۆزىنىڭ ئىمزاسى"
 
-#: ../js/ui/components/telepathyClient.js:1320
+#: ../js/ui/components/telepathyClient.js:1319
 msgid "Status is set to offline"
 msgstr "ھالەت توردا يوق قىلىپ بەلگىلەندى"
 
-#: ../js/ui/components/telepathyClient.js:1322
+#: ../js/ui/components/telepathyClient.js:1321
 msgid "Encryption is not available"
 msgstr "شىفىرلاشنى ئىشلەتكىلى بولمايدۇ"
 
-#: ../js/ui/components/telepathyClient.js:1324
+#: ../js/ui/components/telepathyClient.js:1323
 msgid "Certificate is invalid"
 msgstr "گۇۋاھنامە ئىناۋەتسىز"
 
-#: ../js/ui/components/telepathyClient.js:1326
+#: ../js/ui/components/telepathyClient.js:1325
 msgid "Connection has been refused"
 msgstr "باغلىنىش رەت قىلىندى"
 
-#: ../js/ui/components/telepathyClient.js:1328
+#: ../js/ui/components/telepathyClient.js:1327
 msgid "Connection can't be established"
 msgstr "باغلانغىلى بولمىدى"
 
-#: ../js/ui/components/telepathyClient.js:1330
+#: ../js/ui/components/telepathyClient.js:1329
 msgid "Connection has been lost"
 msgstr "باغلىنىش ئۈزۈلدى"
 
-#: ../js/ui/components/telepathyClient.js:1332
+#: ../js/ui/components/telepathyClient.js:1331
 msgid "This account is already connected to the server"
 msgstr "بۇ ھېسابات ئاللىقاچان مۇلازىمېتىرغا باغلانغان"
 
-#: ../js/ui/components/telepathyClient.js:1334
+#: ../js/ui/components/telepathyClient.js:1333
 msgid ""
 "Connection has been replaced by a new connection using the same resource"
 msgstr "ئوخشاش مەنبە ئىشلەتكەن باغلىنىش ئەسلىدىكىنىڭ ئورنىنى ئىگىلىدى"
 
-#: ../js/ui/components/telepathyClient.js:1336
+#: ../js/ui/components/telepathyClient.js:1335
 msgid "The account already exists on the server"
 msgstr "مۇلازىمېتىردا بۇ ھېسابات ئاللىقاچان بار"
 
-#: ../js/ui/components/telepathyClient.js:1338
+#: ../js/ui/components/telepathyClient.js:1337
 msgid "Server is currently too busy to handle the connection"
 msgstr "مۇلازىمېتىر بەكلا ئالدىراش بولغاچقا بۇ باغلىنىشنى بىر تەرەپ قىلالمايدۇ"
 
-#: ../js/ui/components/telepathyClient.js:1340
+#: ../js/ui/components/telepathyClient.js:1339
 msgid "Certificate has been revoked"
 msgstr "گۇۋاھنامە ئىناۋەتسىز قىلىنغان"
 
-#: ../js/ui/components/telepathyClient.js:1342
+#: ../js/ui/components/telepathyClient.js:1341
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
 msgstr ""
 "گۇۋاھنامە خەتەرلىك شىفىرلاش ئالگورىزىمىنى ئىشلەتكەن ياكى شىفىرلىنىشى ئاجىز"
 
-#: ../js/ui/components/telepathyClient.js:1344
+#: ../js/ui/components/telepathyClient.js:1343
 msgid ""
 "The length of the server certificate, or the depth of the server certificate "
 "chain, exceed the limits imposed by the cryptography library"
@@ -1062,22 +1059,22 @@ msgstr ""
 "زەنجىرىنىڭ چوڭقۇرلۇقى شىفىرلاش فۇنكسىيە ئامبىرىدا بەلگىلەنگەن ئۇزۇنلۇقتىن "
 "ئېشىپ كەتتى"
 
-#: ../js/ui/components/telepathyClient.js:1346
+#: ../js/ui/components/telepathyClient.js:1345
 msgid "Internal error"
 msgstr "ئىچكى خاتالىق"
 
 #. translators: argument is the account name, like
 #. * name@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1356
+#: ../js/ui/components/telepathyClient.js:1355
 #, c-format
 msgid "Unable to connect to %s"
 msgstr "%s غا باغلانغىلى بولمىدى"
 
-#: ../js/ui/components/telepathyClient.js:1361
+#: ../js/ui/components/telepathyClient.js:1360
 msgid "View account"
 msgstr "ھېساباتنى كۆرۈش"
 
-#: ../js/ui/components/telepathyClient.js:1400
+#: ../js/ui/components/telepathyClient.js:1399
 msgid "Unknown reason"
 msgstr "نامەلۇم سەۋەب"
 
@@ -1134,7 +1131,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:419
 msgid "Windows"
 msgstr "كۆزنەكلەر"
 
@@ -1272,7 +1269,28 @@ msgstr "ئورنات"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "مەنبە extensions.gnome.org دىن ‹%s› نى چۈشۈرۈپ ئورنىتامسىز؟"
 
-#: ../js/ui/iconGridLayout.js:200
+#: ../js/ui/forceAppExitDialog.js:55
+#, fuzzy
+msgid "Quit applications…"
+msgstr "پروگراممىلار"
+
+#: ../js/ui/forceAppExitDialog.js:61
+msgid ""
+"If an application doesn't respond for a while, select its name and click "
+"Quit Application."
+msgstr ""
+
+#: ../js/ui/forceAppExitDialog.js:84
+#, fuzzy
+msgid "System Monitor"
+msgstr "ئېكران"
+
+#: ../js/ui/forceAppExitDialog.js:89
+#, fuzzy
+msgid "Quit Application"
+msgstr "پروگراممىلار"
+
+#: ../js/ui/iconGridLayout.js:209
 #, c-format
 msgid "%s has been deleted"
 msgstr ""
@@ -1381,7 +1399,7 @@ msgstr "يېنىۋال"
 msgid "Overview"
 msgstr "قىسقىچە بايان"
 
-#: ../js/ui/panel.js:377
+#: ../js/ui/panel.js:376
 msgid "Top Bar"
 msgstr "ئۈستى بالداق"
 
@@ -1421,11 +1439,11 @@ msgstr "قۇلۇپلىغىلى بولمىدى"
 msgid "Lock was blocked by an application"
 msgstr "بىر پروگرامما قۇلۇپلاشنى توسۇپ قويغان"
 
-#: ../js/ui/search.js:666
+#: ../js/ui/search.js:671
 msgid "Searching…"
 msgstr "ئىزدەۋاتىدۇ…"
 
-#: ../js/ui/search.js:668
+#: ../js/ui/search.js:673
 msgid "No results."
 msgstr "نەتىجە يوق."
 
@@ -1875,6 +1893,10 @@ msgstr "قۇلۇپلا"
 msgid "Exit"
 msgstr ""
 
+#: ../js/ui/userMenu.js:41
+msgid "Help"
+msgstr ""
+
 #: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "تەڭشەكلەر"
@@ -1907,7 +1929,7 @@ msgstr "%s (يىراق)"
 msgid "%s (console)"
 msgstr "%s (تىزگىن كۆزنەك)"
 
-#: ../js/ui/viewSelector.js:404
+#: ../js/ui/viewSelector.js:423
 msgid "Applications"
 msgstr "پروگراممىلار"
 
@@ -1916,23 +1938,23 @@ msgstr "پروگراممىلار"
 msgid "'%s' is ready"
 msgstr "‹%s› تەييار"
 
-#: ../js/ui/windowManager.js:65
+#: ../js/ui/windowManager.js:66
 msgid "Do you want to keep these display settings?"
 msgstr ""
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #.
-#: ../js/ui/windowManager.js:84
+#: ../js/ui/windowManager.js:85
 #, fuzzy
 msgid "Revert Settings"
 msgstr "توك مەنبە تەڭشىكى"
 
-#: ../js/ui/windowManager.js:88
+#: ../js/ui/windowManager.js:89
 msgid "Keep Changes"
 msgstr ""
 
-#: ../js/ui/windowManager.js:106
+#: ../js/ui/windowManager.js:107
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"

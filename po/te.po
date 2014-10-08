@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell gnome-3-0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-16 10:07-0700\n"
+"POT-Creation-Date: 2014-10-07 15:08-0700\n"
 "PO-Revision-Date: 2013-03-26 18:52+0530\n"
 "Last-Translator: Praveen Illa <mail2ipn@gmail.com>\n"
 "Language-Team: Telugu <indlinux-telugu@lists.sourceforge.net>\n"
@@ -45,14 +45,6 @@ msgstr "అనువర్తనం మెనూ తెరువు"
 
 #: ../data/eos-app-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:1 ../js/ui/userMenu.js:41
-msgid "Tutorial"
-msgstr ""
-
-#: ../data/eos-app-tutorial.desktop.in.in.h:2
-msgid "Tutorial video and help"
 msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
@@ -325,18 +317,23 @@ msgid "Keybinding to focus the active notification."
 msgstr "క్రియాశీల ప్రకటన ఫోకస్‌కు కీబందనం."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#, fuzzy
+msgid "Keybinding that shows the force app exit dialog"
+msgstr "అనువర్తనం మెనూ తెరవడానికి  కీ బైండింగ్ "
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Which keyboard to use"
 msgstr "ఏ కీబోర్డ్ ఉపయోగించాలి"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "The type of keyboard to use."
 msgstr "ఉపయోగించుటకు కీబోర్డ్ రకము."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "The application icon mode."
 msgstr "అనువర్తనం ప్రతిమ రీతి."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
@@ -345,20 +342,20 @@ msgstr ""
 "స్విచర్ నందు విండోలు యెలా చూపునో ఆకృతీకరించును. చెల్లునటువంటి సాధ్యాలు 'thumbnail-only' (విండో "
 "థంబ్‌నెయిల్ చూపును), 'app-icon-only' (అనువర్తన ప్రతిమ మాత్రమే చూపును) లేదా 'both'."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "Attach modal dialog to the parent window"
 msgstr "పేరెంట్ విండోనకు మోడల్ డైలాగ్ అనుబందించు"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr "గ్నోమ్ షెల్ నందు నడుచునప్పుడు ఈ కీ org.gnome.mutter నందలి కీను వోవర్‌రైడ్ చేయును."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Arrangement of buttons on the titlebar"
 msgstr "శీర్షికపట్టీ పై బటన్స్ యొక్క పేర్పు"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
@@ -366,15 +363,15 @@ msgstr ""
 "గ్నోమ్ షెల్ నందు నడుచునప్పుడు ఈ కీ org.gnome.desktop.wm.preferences నందలి కీను వోవర్‌రైడ్ "
 "చేయును."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr "తెర అంచులనందు విండోలను విడువునప్పుడు ఎడ్జ్ టైటిలింగ్ చేతనం చేయి"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid "Workspaces are managed dynamically"
 msgstr "కార్యక్షేత్రాలు గతికంగా నిర్వహించబడును"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Workspaces only on primary monitor"
 msgstr "ప్రాధమిక మానిటర్ పైని కార్యక్షేత్రాలు మాత్రమే"
 
@@ -404,9 +401,9 @@ msgstr "జాబితా చేయలేదా?"
 
 #: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
-#: ../js/ui/extensionDownloader.js:195 ../js/ui/shellMountOperation.js:399
-#: ../js/ui/status/bluetooth.js:417 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:565
+#: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
+#: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:565
 msgid "Cancel"
 msgstr "రద్దుచేయి"
 
@@ -478,40 +475,40 @@ msgstr "ఆదేశము పదనిరూపణ వీలుకాదు:"
 msgid "Execution of '%s' failed:"
 msgstr "'%s' అమలుపరుచుట విఫలమైంది:"
 
-#: ../js/ui/appDisplay.js:1900
+#: ../js/ui/appDisplay.js:1906
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1909
+#: ../js/ui/appDisplay.js:1915
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1961
+#: ../js/ui/appDisplay.js:1967
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1967
+#: ../js/ui/appDisplay.js:1973
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1973
+#: ../js/ui/appDisplay.js:1979
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1979 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1985 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "సరే"
 
-#: ../js/ui/appDisplay.js:2062
+#: ../js/ui/appDisplay.js:2068
 msgid "New Window"
 msgstr "కొత్త కిటికీ"
 
-#: ../js/ui/appDisplay.js:2065 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2071 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "ఇష్టాంశాల నుండి తొలగించు"
 
-#: ../js/ui/appDisplay.js:2066
+#: ../js/ui/appDisplay.js:2072
 msgid "Add to Favorites"
 msgstr "ఇష్టాంశాలకు జతచేయి"
 
@@ -525,15 +522,15 @@ msgstr "%s మీ ఇష్టాంశాలకు జతచేయబడిం�
 msgid "%s has been removed from your favorites."
 msgstr "%s మీ ఇష్టాంశాల నుండి తీసివేయబడింది."
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:214
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:223
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:293
+#: ../js/ui/appIconBar.js:296
 #, fuzzy, c-format
 msgid "Quit %s"
 msgstr "నిష్క్రమించు"
@@ -905,13 +902,13 @@ msgstr "%s మిమ్ములను %s పై చేరుటకు ఆహ్
 #: ../js/ui/components/telepathyClient.js:1100
 #: ../js/ui/components/telepathyClient.js:1139
 #: ../js/ui/components/telepathyClient.js:1179
-#: ../js/ui/components/telepathyClient.js:1242
+#: ../js/ui/components/telepathyClient.js:1241
 msgid "Decline"
 msgstr "తిరస్కారం"
 
 #: ../js/ui/components/telepathyClient.js:1101
 #: ../js/ui/components/telepathyClient.js:1180
-#: ../js/ui/components/telepathyClient.js:1243
+#: ../js/ui/components/telepathyClient.js:1242
 msgid "Accept"
 msgstr "ఆమోదించు"
 
@@ -948,98 +945,98 @@ msgstr "%s మీకు %s పంపుచున్నది"
 msgid "%s would like permission to see when you are online"
 msgstr "మీరు ఆన్‌లైన్‌లో వున్నప్పుడు చూడుటకు %s అనుమతి కోరుతున్నారు"
 
-#: ../js/ui/components/telepathyClient.js:1300
+#: ../js/ui/components/telepathyClient.js:1299
 msgid "Network error"
 msgstr "నెట్‍‌వర్క్ దోషం"
 
-#: ../js/ui/components/telepathyClient.js:1302
+#: ../js/ui/components/telepathyClient.js:1301
 msgid "Authentication failed"
 msgstr "ధృవీకరణ వైఫల్యం"
 
-#: ../js/ui/components/telepathyClient.js:1304
+#: ../js/ui/components/telepathyClient.js:1303
 msgid "Encryption error"
 msgstr "ఎన్క్రిప్షన్ దోషం"
 
-#: ../js/ui/components/telepathyClient.js:1306
+#: ../js/ui/components/telepathyClient.js:1305
 msgid "Certificate not provided"
 msgstr "ధృవీకరణపత్రం అందించబడలేదు"
 
-#: ../js/ui/components/telepathyClient.js:1308
+#: ../js/ui/components/telepathyClient.js:1307
 msgid "Certificate untrusted"
 msgstr "ధృవీకరణపత్రం నమ్మలేనిది"
 
-#: ../js/ui/components/telepathyClient.js:1310
+#: ../js/ui/components/telepathyClient.js:1309
 msgid "Certificate expired"
 msgstr "ధృవీకరణపత్రం గడువుతీరెను"
 
-#: ../js/ui/components/telepathyClient.js:1312
+#: ../js/ui/components/telepathyClient.js:1311
 msgid "Certificate not activated"
 msgstr "ధృవీకరణపత్రం క్రియాశీలపరచబడిలేదు"
 
-#: ../js/ui/components/telepathyClient.js:1314
+#: ../js/ui/components/telepathyClient.js:1313
 msgid "Certificate hostname mismatch"
 msgstr "ధృవీకరణపత్రం హోస్టుపేరు సరిపోలలేదు"
 
-#: ../js/ui/components/telepathyClient.js:1316
+#: ../js/ui/components/telepathyClient.js:1315
 msgid "Certificate fingerprint mismatch"
 msgstr "ధృవీకరణపత్రం వ్రేలిముద్ర సరిపోలలేదు"
 
-#: ../js/ui/components/telepathyClient.js:1318
+#: ../js/ui/components/telepathyClient.js:1317
 msgid "Certificate self-signed"
 msgstr "ధృవీకరణపత్రం స్వతహాగా-సంతకంచేయబడెను"
 
-#: ../js/ui/components/telepathyClient.js:1320
+#: ../js/ui/components/telepathyClient.js:1319
 msgid "Status is set to offline"
 msgstr "స్థితి ఆఫ్‌లైన్‌కు అమర్చబడెను"
 
-#: ../js/ui/components/telepathyClient.js:1322
+#: ../js/ui/components/telepathyClient.js:1321
 msgid "Encryption is not available"
 msgstr "ఎన్క్రిప్షన్ అందుబాటులో లేదు"
 
-#: ../js/ui/components/telepathyClient.js:1324
+#: ../js/ui/components/telepathyClient.js:1323
 msgid "Certificate is invalid"
 msgstr "ధృవీకరణపత్రం చెల్లనిది"
 
-#: ../js/ui/components/telepathyClient.js:1326
+#: ../js/ui/components/telepathyClient.js:1325
 msgid "Connection has been refused"
 msgstr "అనుసంధానము తిరస్కరించబడెను"
 
-#: ../js/ui/components/telepathyClient.js:1328
+#: ../js/ui/components/telepathyClient.js:1327
 msgid "Connection can't be established"
 msgstr "అనుసంధానం ఏర్పరచలేము"
 
-#: ../js/ui/components/telepathyClient.js:1330
+#: ../js/ui/components/telepathyClient.js:1329
 msgid "Connection has been lost"
 msgstr "అనుసంధానము కోల్పోయాము"
 
-#: ../js/ui/components/telepathyClient.js:1332
+#: ../js/ui/components/telepathyClient.js:1331
 msgid "This account is already connected to the server"
 msgstr "ఈ ఖాతా ఇదివరకే సేవకానికి అనుసంధానమైంది"
 
-#: ../js/ui/components/telepathyClient.js:1334
+#: ../js/ui/components/telepathyClient.js:1333
 msgid ""
 "Connection has been replaced by a new connection using the same resource"
 msgstr "అనుసంధానం అదే వనరు ఉపయోగించి కొత్త అనుసంధానంచే పునఃస్థాపించబడెను"
 
-#: ../js/ui/components/telepathyClient.js:1336
+#: ../js/ui/components/telepathyClient.js:1335
 msgid "The account already exists on the server"
 msgstr "ఖాతా ఇప్పటికే సేవికపైన ఉన్నది"
 
-#: ../js/ui/components/telepathyClient.js:1338
+#: ../js/ui/components/telepathyClient.js:1337
 msgid "Server is currently too busy to handle the connection"
 msgstr "అనుసంధానంను సంభాలించుటకు సేవిక మరీ వత్తిడిలో వుంది"
 
-#: ../js/ui/components/telepathyClient.js:1340
+#: ../js/ui/components/telepathyClient.js:1339
 msgid "Certificate has been revoked"
 msgstr "ధృవీకరణపత్రం కొట్టివేయబడింది"
 
-#: ../js/ui/components/telepathyClient.js:1342
+#: ../js/ui/components/telepathyClient.js:1341
 msgid ""
 "Certificate uses an insecure cipher algorithm or is cryptographically weak"
 msgstr ""
 "ధృవీకరణపత్రం సురక్షితం కాని సైఫర్ ఆల్గార్దెమ్ వుపయోగించుచున్నది లేదా క్రిప్టోగ్రఫీ పరంగా బలహీనంగా వుంది"
 
-#: ../js/ui/components/telepathyClient.js:1344
+#: ../js/ui/components/telepathyClient.js:1343
 msgid ""
 "The length of the server certificate, or the depth of the server certificate "
 "chain, exceed the limits imposed by the cryptography library"
@@ -1047,22 +1044,22 @@ msgstr ""
 "సేవిక ధృవీకరణపత్రం యొక్క పొడవు, లేదా సేవిక ధృవీకరణపత్రం చైన్ యొక్క లోతు, క్రిప్టోగ్రఫీ లైబ్రరీ చేత "
 "నిర్దేశితమైన పరిమితులను మించును"
 
-#: ../js/ui/components/telepathyClient.js:1346
+#: ../js/ui/components/telepathyClient.js:1345
 msgid "Internal error"
 msgstr "అంతర్గత దోషం"
 
 #. translators: argument is the account name, like
 #. * name@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1356
+#: ../js/ui/components/telepathyClient.js:1355
 #, c-format
 msgid "Unable to connect to %s"
 msgstr "%s కు అనుసంధానం కాలేకపోయింది"
 
-#: ../js/ui/components/telepathyClient.js:1361
+#: ../js/ui/components/telepathyClient.js:1360
 msgid "View account"
 msgstr "ఖాతా దర్శించు"
 
-#: ../js/ui/components/telepathyClient.js:1400
+#: ../js/ui/components/telepathyClient.js:1399
 msgid "Unknown reason"
 msgstr "తెలియని కారణం"
 
@@ -1119,7 +1116,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:400
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:419
 msgid "Windows"
 msgstr "కిటికీలు"
 
@@ -1257,7 +1254,28 @@ msgstr "స్థాపించు"
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "extensions.gnome.org నుండి '%s' దింపుకొని, స్థాపించాలా?"
 
-#: ../js/ui/iconGridLayout.js:200
+#: ../js/ui/forceAppExitDialog.js:55
+#, fuzzy
+msgid "Quit applications…"
+msgstr "అనువర్తనాలు"
+
+#: ../js/ui/forceAppExitDialog.js:61
+msgid ""
+"If an application doesn't respond for a while, select its name and click "
+"Quit Application."
+msgstr ""
+
+#: ../js/ui/forceAppExitDialog.js:84
+#, fuzzy
+msgid "System Monitor"
+msgstr "మానిటర్"
+
+#: ../js/ui/forceAppExitDialog.js:89
+#, fuzzy
+msgid "Quit Application"
+msgstr "అనువర్తనాలు"
+
+#: ../js/ui/iconGridLayout.js:209
 #, c-format
 msgid "%s has been deleted"
 msgstr ""
@@ -1366,7 +1384,7 @@ msgstr "రద్దుచేయి"
 msgid "Overview"
 msgstr "పర్యావలోకనం"
 
-#: ../js/ui/panel.js:377
+#: ../js/ui/panel.js:376
 msgid "Top Bar"
 msgstr "పైన పట్టీ"
 
@@ -1406,11 +1424,11 @@ msgstr "తాళం వేయలేదు"
 msgid "Lock was blocked by an application"
 msgstr "తాళం వొక అనువర్తనంచే బ్లాకైంది"
 
-#: ../js/ui/search.js:666
+#: ../js/ui/search.js:671
 msgid "Searching…"
 msgstr "వెతుకుతోంది..."
 
-#: ../js/ui/search.js:668
+#: ../js/ui/search.js:673
 msgid "No results."
 msgstr "ఏ ఫలితాలు లేవు."
 
@@ -1864,6 +1882,10 @@ msgstr "తాళంవేయి"
 msgid "Exit"
 msgstr ""
 
+#: ../js/ui/userMenu.js:41
+msgid "Help"
+msgstr ""
+
 #: ../js/ui/userMenu.js:42
 msgid "Settings"
 msgstr "అమరికలు"
@@ -1896,7 +1918,7 @@ msgstr "%s (రిమోట్)"
 msgid "%s (console)"
 msgstr "%s (కన్సోల్)"
 
-#: ../js/ui/viewSelector.js:404
+#: ../js/ui/viewSelector.js:423
 msgid "Applications"
 msgstr "అనువర్తనాలు"
 
@@ -1905,23 +1927,23 @@ msgstr "అనువర్తనాలు"
 msgid "'%s' is ready"
 msgstr "'%s' సిద్ధంగా ఉంది"
 
-#: ../js/ui/windowManager.js:65
+#: ../js/ui/windowManager.js:66
 msgid "Do you want to keep these display settings?"
 msgstr ""
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #.
-#: ../js/ui/windowManager.js:84
+#: ../js/ui/windowManager.js:85
 #, fuzzy
 msgid "Revert Settings"
 msgstr "విద్యుత్ అమరికలు"
 
-#: ../js/ui/windowManager.js:88
+#: ../js/ui/windowManager.js:89
 msgid "Keep Changes"
 msgstr ""
 
-#: ../js/ui/windowManager.js:106
+#: ../js/ui/windowManager.js:107
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
