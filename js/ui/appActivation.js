@@ -60,10 +60,10 @@ const AppActivationContext = new Lang.Class({
     },
 
     showSplash: function() {
-        // Don't show splash screen if the launch maximized key is false
+        // Don't show splash screen unless the launch maximized key is true
         let info = this._app.get_app_info();
-
-        if (info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) && !info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY)) {
+        if (!(info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) &&
+              info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY)) {
             return;
         }
 
