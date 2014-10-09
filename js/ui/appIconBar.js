@@ -386,7 +386,6 @@ const AppIconButton = new Lang.Class({
         if (button == Gdk.BUTTON_SECONDARY) {
             this._hideHoverState();
             this._rightClickMenu.open();
-            this._rightClickMenuManager.ignoreRelease();
             return;
         }
 
