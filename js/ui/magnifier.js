@@ -1083,9 +1083,7 @@ const ZoomRegion = new Lang.Class({
 
         // Add a background for when the magnified uiGroup is scrolled
         // out of view (don't want to see desktop showing through).
-        this._background = new Clutter.Actor({ background_color: Main.DEFAULT_BACKGROUND_COLOR,
-                                               width: global.screen_width,
-                                               height: global.screen_height });
+        this._background = (new Background.SystemBackground()).actor;
         mainGroup.add_actor(this._background);
 
         // Clone the group that contains all of UI on the screen.  This is the
