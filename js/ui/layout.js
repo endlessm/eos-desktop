@@ -22,7 +22,6 @@ const Tweener = imports.ui.tweener;
 const STARTUP_ANIMATION_TIME = 0.5;
 const KEYBOARD_ANIMATION_TIME = 0.15;
 const BACKGROUND_FADE_ANIMATION_TIME = 1.0;
-const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
 
 // Gsettings key to enable the message tray pressure barrier.
 const ENABLE_MESSAGE_TRAY_BARRIER_KEY = 'enable-message-tray-barrier'
@@ -330,10 +329,10 @@ const LayoutManager = new Lang.Class({
         this._isPopupWindowVisible = false;
         this._startingUp = true;
 
-        // Normally, the stage is always covered so Clutter doesn't need to clear
-        // it; however it becomes visible during the startup animation
-        // See the comment below for a longer explanation
-        global.stage.color = DEFAULT_BACKGROUND_COLOR;
+        // We don't want to paint the stage background color because either
+        // the SystemBackground we create or the MetaBackgroundActor inside
+        // global.window_group covers the entirety of the screen.
+        global.stage.no_clear_hint = true;
 
         // Set up stage hierarchy to group all UI actors under one container.
         this.uiGroup = new Shell.GenericContainer({ name: 'uiGroup' });
@@ -884,10 +883,6 @@ const LayoutManager = new Lang.Class({
     //
     // When starting a normal user session, we want to grow it out of the middle
     // of the screen.
-    //
-    // Usually, we don't want to paint the stage background color because the
-    // MetaBackgroundActor inside global.window_group covers the entirety of the
-    // screen. So, we set no_clear_hint at the end of the animation.
 
     _prepareStartupAnimation: function() {
         // During the initial transition, add a simple actor to block all events,
@@ -956,10 +951,6 @@ const LayoutManager = new Lang.Class({
     },
 
     _startupAnimationComplete: function() {
-        // At this point, the UI group is covering everything, so
-        // we no longer need to clear the stage
-        global.stage.no_clear_hint = true;
-
         this._coverPane.destroy();
         this._coverPane = null;
 
