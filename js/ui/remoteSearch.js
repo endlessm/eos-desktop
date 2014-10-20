@@ -99,14 +99,6 @@ function loadRemoteSearchProviders(callback) {
                 return;
             }
 
-            // Check if it is available on desktop.
-            // We special case gnome-control-center, since we don't have it on
-            // the desktop but still want to see the results it provides
-            if (!IconGridLayout.layout.hasIcon(desktopId) &&
-                (desktopId != CONTROL_CENTER_DESKTOP_ID)) {
-                return
-            }
-
             let app = appSys.lookup_heuristic_basename(desktopId);
             
             let version = '1';
