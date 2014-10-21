@@ -63,6 +63,7 @@ const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
 
 const EOS_APP_PREFIX = 'eos-app-';
+const EOS_LINK_PREFIX = 'eos-link-';
 
 function _sanitizeAppId(appId) {
     if (appId.startsWith(EOS_APP_PREFIX)) {
@@ -122,10 +123,9 @@ const AppSearchProvider = new Lang.Class({
 
                 let app = Gio.DesktopAppInfo.new(actualId);
 
-                // The icon grid layout only reasons in terms of unprefixed desktop
-                // names, so only push the result if the unprefixed desktop file
-                // is not on the grid
-                if (app && app.should_show() && IconGridLayout.layout.hasIcon(actualId)) {
+                // exclude links that are not part of the desktop grid
+                if (app && app.should_show() &&
+                    !(actualId.startsWith(EOS_LINK_PREFIX) && !IconGridLayout.layout.hasIcon(actualId))) {
                     groupResults.push(actualId);
                 }
             });
@@ -133,6 +133,19 @@ const AppSearchProvider = new Lang.Class({
             results = results.concat(groupResults.sort(function(a, b) {
                 return usage.compare('', a, b);
             }));
+        });
+
+        // resort to keep results on the desktop grid before the others
+        results = results.sort(function(a, b) {
+            let hasA = IconGridLayout.layout.hasIcon(a);
+            let hasB = IconGridLayout.layout.hasIcon(b);
+
+            if (hasA)
+                return -1;
+            if (hasB)
+                return 1;
+
+            return 0;
         });
 
         callback(results);
