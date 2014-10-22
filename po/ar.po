@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-10-07 15:08-0700\n"
-"PO-Revision-Date: 2014-10-07 22:09+0000\n"
+"PO-Revision-Date: 2014-10-22 12:01+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-shell/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -300,7 +300,7 @@ msgstr "رابط المفتاح لتركيز الإخطار النشط."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "Keybinding that shows the force app exit dialog"
-msgstr ""
+msgstr "رابط المفتاح الذي يُظهر المربع الحواري للخروج الإجباري من التطبيق"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Which keyboard to use"
@@ -1241,21 +1241,21 @@ msgstr "هل تريد تنزيل وتثبيت '%s' من extensions.gnome.org؟"
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr ""
+msgstr "جاري الخروج من التطبيقات..."
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr ""
+msgstr "إذا ظل أحد التطبيقات في حالة عدم استجابة لفترة، حدد اسمه وانقر على 'الخروج من التطبيق'."
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
-msgstr ""
+msgstr "شاشة النظام"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr ""
+msgstr "الخروج من التطبيق"
 
 #: ../js/ui/iconGridLayout.js:209
 #, c-format
@@ -1265,12 +1265,12 @@ msgstr "%s تم حذفه"
 #: ../js/ui/internetSearch.js:59
 #, c-format
 msgid "Open \"%s\" in browser"
-msgstr ""
+msgstr "افتح \"%s\" في مستعرض الإنترنت"
 
 #: ../js/ui/internetSearch.js:62
 #, c-format
 msgid "Search Google for \"%s\""
-msgstr ""
+msgstr "البحث في Google عن \"%s\""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
@@ -1888,7 +1888,7 @@ msgstr "خروج"
 
 #: ../js/ui/userMenu.js:41
 msgid "Help"
-msgstr ""
+msgstr "المساعدة"
 
 #: ../js/ui/userMenu.js:42
 msgid "Settings"
