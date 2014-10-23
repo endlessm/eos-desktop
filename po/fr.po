@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-10-07 15:08-0700\n"
-"PO-Revision-Date: 2014-10-07 22:09+0000\n"
+"PO-Revision-Date: 2014-10-22 23:46+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/eos-shell/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -302,7 +302,7 @@ msgstr "Combinaison de touches pour donner le focus à la notification active."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "Keybinding that shows the force app exit dialog"
-msgstr ""
+msgstr "Un raccourci qui fait apparaître l'option de forcer la fermeture de l'application"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Which keyboard to use"
@@ -1227,21 +1227,21 @@ msgstr "Télécharger et installer « %s » à partir de extensions.gnome.org�
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr ""
+msgstr "Fermer les applications..."
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr ""
+msgstr "Si une application ne répond pas pendant un certain temps, sélectionnez son nom et cliquez sur Quitter l'application."
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
-msgstr ""
+msgstr "Moniteur du système"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr ""
+msgstr "Quitter l'application"
 
 #: ../js/ui/iconGridLayout.js:209
 #, c-format
@@ -1251,12 +1251,12 @@ msgstr "%s a été effacé"
 #: ../js/ui/internetSearch.js:59
 #, c-format
 msgid "Open \"%s\" in browser"
-msgstr ""
+msgstr "Ouvrir « %s » dans le navigateur"
 
 #: ../js/ui/internetSearch.js:62
 #, c-format
 msgid "Search Google for \"%s\""
-msgstr ""
+msgstr "Chercher « %s » sur Google."
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
 #: ../js/ui/status/power.js:213
@@ -1858,7 +1858,7 @@ msgstr "Sortir"
 
 #: ../js/ui/userMenu.js:41
 msgid "Help"
-msgstr ""
+msgstr "Aide"
 
 #: ../js/ui/userMenu.js:42
 msgid "Settings"
