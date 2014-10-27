@@ -234,6 +234,7 @@ const BackgroundCache = new Lang.Class({
                     params.onLoaded(this._animation);
                 }));
             }
+            return;
         }
 
         let animation = new Animation({ file: params.file });
