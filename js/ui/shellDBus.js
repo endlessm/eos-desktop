@@ -537,8 +537,12 @@ const AppLauncher = new Lang.Class({
             let app = this._appSys.lookup_app(appName);
 
             if (app) {
-                let activationContext = new AppActivation.AppActivationContext(app);
-                activationContext.activate();
+                if (app.state == Shell.AppState.RUNNING) {
+                    app.activate();
+                } else {
+                    let activationContext = new AppActivation.AppActivationContext(app);
+                    activationContext.activate();
+                }
 
                 return true;
             } else {
