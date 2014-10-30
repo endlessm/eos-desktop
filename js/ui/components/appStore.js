@@ -33,6 +33,7 @@ const AppStore = new Lang.Class({
 
     _init: function() {
         this.parent(AppStoreIface, APP_STORE_NAME, APP_STORE_PATH);
+        this.appLaunched = false;
     },
 
     enable: function() {
