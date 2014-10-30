@@ -170,6 +170,19 @@ const WorkspaceMonitor = new Lang.Class({
         this._removeKnownWindow(metaWindow);
     },
 
+    _windowGoingInvisible: function() {
+        // Check if we're minimizing the very last window
+        if (this.visibleWindows == 1) {
+            Main.layoutManager.prepareForOverview();
+        }
+    },
+
+    _windowGoingInvisibleCompleted: function() {
+        // Show the overview when the animation has ended.
+        this._visibleWindows -= 1;
+        this._updateOverview();
+    },
+
     _destroyWindow: function(shellwm, actor) {
         // _destroyWindow is not called for minimized windows
         // so if the window is in _knownWindows then we handle it
@@ -177,16 +190,15 @@ const WorkspaceMonitor = new Lang.Class({
             return;
         }
 
+        this._windowGoingInvisible();
+
         // We'll show the overview when the destroy animation ends
         this._addDestroyedWindow(actor.meta_window);
     },
 
     _destroyWindowCompleted: function(shellwm, actor) {
         if (this._windowIsDestroyed(actor.meta_window)) {
-            // Show the overview when the animation has ended.
-            this._visibleWindows -= 1;
-            this._updateOverview();
-
+            this._windowGoingInvisibleCompleted();
             this._removeDestroyedWindow(actor.meta_window);
         }
     },
@@ -196,10 +208,7 @@ const WorkspaceMonitor = new Lang.Class({
             return;
         }
 
-        // Check if we're minimizing the very last window
-        if (this.visibleWindows == 1) {
-            Main.layoutManager.prepareForOverview();
-        }
+        this._windowGoingInvisible();
 
         // We'll show the overview when the destroy animation ends
         this._addMinimizedWindow(actor.meta_window);
@@ -207,10 +216,7 @@ const WorkspaceMonitor = new Lang.Class({
 
     _minimizeWindowCompleted: function(shellwm, actor) {
         if (this._windowIsMinimized(actor.meta_window)) {
-            // Show the overview when the animation has ended.
-            this._visibleWindows -= 1;
-            this._updateOverview();
-
+            this._windowGoingInvisibleCompleted();
             this._removeMinimizedWindow(actor.meta_window);
         }
     },
