@@ -392,8 +392,9 @@ const Overview = new Lang.Class({
     },
 
     _updateBackgroundShade: function() {
-        if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.WINDOWS ||
-            this._viewSelector.getActiveViewsPage() == ViewSelector.ViewsDisplayPage.SEARCH) {
+        if (this.visibleTarget &&
+            (this._viewSelector.getActivePage() == ViewSelector.ViewPage.WINDOWS ||
+             this._viewSelector.getActiveViewsPage() == ViewSelector.ViewsDisplayPage.SEARCH)) {
             this._shadeBackgrounds();
         } else {
             this._unshadeBackgrounds();
@@ -674,6 +675,8 @@ const Overview = new Lang.Class({
         this.visibleTarget = true;
         this._activationTime = Date.now() / 1000;
 
+        this._updateBackgroundShade();
+
         // All the the actors in the window group are completely obscured,
         // hiding the group holding them while the Overview is displayed greatly
         // increases performance of the Overview especially when there are many
@@ -815,6 +818,7 @@ const Overview = new Lang.Class({
         this.animationInProgress = true;
         this.visibleTarget = false;
 
+        this._updateBackgroundShade();
         this._viewSelector.zoomFromOverview();
 
         let targetOpacity = 0;
