@@ -25,8 +25,10 @@ const WorkspaceMonitor = new Lang.Class({
         this._shellwm.connect('destroy-completed', Lang.bind(this, this._destroyWindowCompleted));
 
         this._metaScreen.connect('workspace-switched', Lang.bind(this, this._workspaceSwitched));
-        this._metaScreen.connect('in-fullscreen-changed', Lang.bind(this, this._updateOverview));
+        this._metaScreen.connect('in-fullscreen-changed', Lang.bind(this, this._fullscreenChanged));
 
+        let primaryMonitor = Main.layoutManager.primaryMonitor;
+        this._inFullscreen = primaryMonitor && primaryMonitor.inFullscreen;
         this._visibleWindows = 0;
 
         this._trackWorkspace(this._metaScreen.get_active_workspace(), false);
@@ -168,6 +170,19 @@ const WorkspaceMonitor = new Lang.Class({
         this._removeKnownWindow(metaWindow);
     },
 
+    _windowGoingInvisible: function() {
+        // Check if we're minimizing the very last window
+        if (this.visibleWindows == 1) {
+            Main.layoutManager.prepareForOverview();
+        }
+    },
+
+    _windowGoingInvisibleCompleted: function() {
+        // Show the overview when the animation has ended.
+        this._visibleWindows -= 1;
+        this._updateOverview();
+    },
+
     _destroyWindow: function(shellwm, actor) {
         // _destroyWindow is not called for minimized windows
         // so if the window is in _knownWindows then we handle it
@@ -175,16 +190,15 @@ const WorkspaceMonitor = new Lang.Class({
             return;
         }
 
+        this._windowGoingInvisible();
+
         // We'll show the overview when the destroy animation ends
         this._addDestroyedWindow(actor.meta_window);
     },
 
     _destroyWindowCompleted: function(shellwm, actor) {
         if (this._windowIsDestroyed(actor.meta_window)) {
-            // Show the overview when the animation has ended.
-            this._visibleWindows -= 1;
-            this._updateOverview();
-
+            this._windowGoingInvisibleCompleted();
             this._removeDestroyedWindow(actor.meta_window);
         }
     },
@@ -194,10 +208,7 @@ const WorkspaceMonitor = new Lang.Class({
             return;
         }
 
-        // Check if we're minimizing the very last window
-        if (this.visibleWindows == 1) {
-            Main.layoutManager.prepareForOverview();
-        }
+        this._windowGoingInvisible();
 
         // We'll show the overview when the destroy animation ends
         this._addMinimizedWindow(actor.meta_window);
@@ -205,10 +216,7 @@ const WorkspaceMonitor = new Lang.Class({
 
     _minimizeWindowCompleted: function(shellwm, actor) {
         if (this._windowIsMinimized(actor.meta_window)) {
-            // Show the overview when the animation has ended.
-            this._visibleWindows -= 1;
-            this._updateOverview();
-
+            this._windowGoingInvisibleCompleted();
             this._removeMinimizedWindow(actor.meta_window);
         }
     },
@@ -237,18 +245,27 @@ const WorkspaceMonitor = new Lang.Class({
         this._realMapWindow(actor.meta_window);
     },
 
+    _fullscreenChanged: function() {
+        let primaryMonitor = Main.layoutManager.primaryMonitor;
+        let inFullscreen = primaryMonitor && primaryMonitor.inFullscreen;
+
+        if (this._inFullscreen != inFullscreen) {
+            this._inFullscreen = inFullscreen;
+            this._updateOverview();
+        }
+    },
+
     _updateOverview: function() {
         // Check if the count has become messed up somehow
         if (this._visibleWindows < 0) {
             this._visibleWindows = 0;
         }
 
-        let primaryMonitor = Main.layoutManager.primaryMonitor;
 
         // Check the count from the getter to include fullscreen
         if (this.visibleWindows == 0) {
             Main.overview.showApps();
-        } else if (primaryMonitor && primaryMonitor.inFullscreen) {
+        } else if (this._inFullscreen) {
             // Hide in fullscreen mode
             Main.overview.hide();
         }
@@ -256,10 +273,9 @@ const WorkspaceMonitor = new Lang.Class({
 
     get visibleWindows() {
         let visible = this._visibleWindows;
-        let primaryMonitor = Main.layoutManager.primaryMonitor;
 
         // Count anything fullscreen as an extra window
-        if (primaryMonitor && primaryMonitor.inFullscreen) {
+        if (this._inFullscreen) {
             visible += 1;
         }
         return visible;
