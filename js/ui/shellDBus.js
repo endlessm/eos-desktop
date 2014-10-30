@@ -508,6 +508,7 @@ const AppLauncherIface = '<node> \
 <interface name="org.gnome.Shell.AppLauncher"> \
 <method name="Launch"> \
     <arg type="s" direction="in" name="name" /> \
+    <arg type="u" direction="in" name="timestamp" /> \
     <arg type="b" direction="out" name="success" /> \
 </method> \
 </interface> \
@@ -523,7 +524,7 @@ const AppLauncher = new Lang.Class({
         this._appSys = Shell.AppSystem.get_default();
     },
 
-    Launch: function(name) {
+    Launch: function(name, timestamp) {
         if (name == "eos-app-store") {
             Main.appStore.show(global.get_current_time(), true);
 
@@ -533,12 +534,12 @@ const AppLauncher = new Lang.Class({
             let appName = name;
             if (!appName.endsWith('.desktop'))
                 appName += '.desktop';
-            
+
             let app = this._appSys.lookup_app(appName);
 
             if (app) {
                 if (app.state == Shell.AppState.RUNNING) {
-                    app.activate();
+                    app.activate_full(-1, timestamp);
                 } else {
                     let activationContext = new AppActivation.AppActivationContext(app);
                     activationContext.activate();

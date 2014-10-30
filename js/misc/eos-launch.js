@@ -5,6 +5,7 @@ const AppLauncherIface = '<node> \
 <interface name="org.gnome.Shell.AppLauncher"> \
 <method name="Launch"> \
     <arg type="s" direction="in" name="name" /> \
+    <arg type="u" direction="in" name="timestamp" /> \
     <arg type="b" direction="out" name="success" /> \
 </method> \
 </interface> \
@@ -17,7 +18,7 @@ function onError(error) {
 }
 
 function remoteLaunch(proxy, appName) {
-    proxy.LaunchRemote(appName,
+    proxy.LaunchRemote(appName, 0,
                        function(result, error) {
                            if (error)
                                return onError (error);
