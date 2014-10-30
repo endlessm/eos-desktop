@@ -544,6 +544,8 @@ const AppLauncher = new Lang.Class({
                     activationContext.activate();
                 }
 
+                Main.appStore.appLaunched = true;
+
                 return true;
             } else {
                 log('Unable to launch app ' + appName + ': Not installed');
