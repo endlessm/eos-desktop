@@ -3,6 +3,7 @@
 const Clutter = imports.gi.Clutter;
 const Gdk = imports.gi.Gdk;
 const GObject = imports.gi.GObject;
+const Pango = imports.gi.Pango;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 const Tweener = imports.ui.tweener;
@@ -57,6 +58,7 @@ const EditableLabel = new Lang.Class({
 
         this.clutter_text.editable = false;
         this.clutter_text.x_align = Clutter.ActorAlign.CENTER;
+        this.clutter_text.ellipsize = Pango.EllipsizeMode.END;
 
         this._activateId = 0;
         this._keyFocusId = 0;
