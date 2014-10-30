@@ -361,14 +361,12 @@ const ViewsClone = new Lang.Class({
         let appGridContainer = new AppDisplay.AllViewContainer(iconGridClone);
         appGridContainer.reactive = false;
 
-        let iconGridSaturation = new Clutter.DesaturateEffect({ factor: AppDisplay.INACTIVE_GRID_SATURATION,
-                                                                enabled: false });
-        iconGridClone.add_effect(iconGridSaturation);
+        this._saturation = new Clutter.DesaturateEffect({ factor: AppDisplay.INACTIVE_GRID_SATURATION,
+                                                          enabled: false });
+        iconGridClone.add_effect(this._saturation);
         container.addPage(appGridContainer);
         container.showPage(appGridContainer);
         this.add_child(container);
-
-        this.saturation = iconGridSaturation;
 
         let workareaConstraint = new LayoutManager.MonitorConstraint({ primary: true,
                                                                        use_workarea: true });
@@ -376,14 +374,22 @@ const ViewsClone = new Lang.Class({
 
         Main.overview.connect('showing', Lang.bind(this, function() {
             this.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
-            iconGridSaturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
-            iconGridSaturation.enabled = this._forOverview;
+            this._saturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
+            this._saturation.enabled = this._forOverview;
         }));
         Main.overview.connect('hidden', Lang.bind(this, function() {
             this.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
-            iconGridSaturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
-            iconGridSaturation.enabled = !this._forOverview;
+            this._saturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
+            this._saturation.enabled = !this._forOverview;
         }));
+    },
+
+    set saturation(factor) {
+        this._saturation.factor = factor;
+    },
+
+    get saturation() {
+        return this._saturation.factor;
     }
 });
 
