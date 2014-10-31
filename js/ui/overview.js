@@ -171,6 +171,8 @@ const Overview = new Lang.Class({
         this._overview.add_constraint(new LayoutManager.MonitorConstraint({ primary: true }));
         this._allMonitorsGroup.add_actor(this._overview);
 
+        // this effect takes care of animating the saturation when entering
+        // or leaving the overview
         this._overviewSaturation = new Clutter.DesaturateEffect({ factor: AppDisplay.ACTIVE_GRID_SATURATION,
                                                                   enabled: false });
         this._overview.add_effect(this._overviewSaturation);
@@ -837,6 +839,8 @@ const Overview = new Lang.Class({
                            onCompleteScope: this
                          });
 
+        // If we're showing the applications page, also dim the
+        // saturation while fading out
         if (shouldAnimateSaturation) {
             this._overviewSaturation.enabled = true;
             this._overviewSaturation.factor = AppDisplay.ACTIVE_GRID_SATURATION;

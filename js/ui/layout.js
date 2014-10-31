@@ -576,12 +576,9 @@ const LayoutManager = new Lang.Class({
     },
 
     prepareForOverview: function() {
-        Tweener.addTween(this._viewsClone.saturation,
-                         { factor: AppDisplay.ACTIVE_GRID_SATURATION,
-                           time: 0.25,
-                           transition: AppDisplay.ACTIVE_GRID_TRANSITION });
         Tweener.addTween(this._viewsClone,
                          { opacity: AppDisplay.ACTIVE_GRID_OPACITY,
+                           saturation: AppDisplay.ACTIVE_GRID_SATURATION,
                            time: 0.25,
                            transition: AppDisplay.ACTIVE_GRID_TRANSITION });
     },
