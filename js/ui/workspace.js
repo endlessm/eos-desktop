@@ -981,6 +981,15 @@ const Workspace = new Lang.Class({
         return -1;
     },
 
+    _lookupSideComponentIndex: function(metaWindow) {
+        for (let i = 0; i < this._sideComponents.length; i++) {
+            if (this._sideComponents[i].metaWindow == metaWindow) {
+                return i;
+            }
+        }
+        return -1;
+    },
+
     containsMetaWindow: function (metaWindow) {
         return this._lookupIndex(metaWindow) >= 0;
     },
@@ -1194,23 +1203,58 @@ const Workspace = new Lang.Class({
         return false;
     },
 
-    _doRemoveWindow : function(metaWin) {
+    _doRemoveSideComponentWindow: function(metaWin) {
+        // find the position of the window in our list
+        let index = this._lookupSideComponentIndex(metaWin);
         let win = metaWin.get_compositor_private();
 
-        // find the position of the window in our list
-        let index = this._lookupIndex (metaWin);
-
         if (index == -1)
-            return;
+            return null;
 
         // Check if window still should be here
         if (win && this._isMyWindow(win))
-            return;
+            return null;
+
+        let clone = this._sideComponents[index];
+
+        this._sideComponents.splice(index, 1);
+
+        return clone;
+    },
+
+    _doRemoveRegularWindow: function(metaWin) {
+        // find the position of the window in our list
+        let index = this._lookupIndex (metaWin);
+        let win = metaWin.get_compositor_private();
+
+        if (index == -1)
+            return null;
+
+        // Check if window still should be here
+        if (win && this._isMyWindow(win))
+            return null;
 
         let clone = this._windows[index];
 
         this._windows.splice(index, 1);
         this._windowOverlays.splice(index, 1);
+
+        return clone;
+    },
+
+    _doRemoveWindow : function(metaWin) {
+        let win = metaWin.get_compositor_private();
+        let clone = null;
+
+        if (SideComponent.isSideComponentWindow(metaWin)) {
+            clone = this._doRemoveSideComponentWindow(metaWin);
+        } else {
+            clone = this._doRemoveRegularWindow(metaWin);
+        }
+
+        if (!clone) {
+            return;
+        }
 
         // If metaWin.get_compositor_private() returned non-NULL, that
         // means the window still exists (and is just being moved to
@@ -1274,6 +1318,9 @@ const Workspace = new Lang.Class({
         // We might have the window in our list already if it was on all workspaces and
         // now was moved to this workspace
         if (this._lookupIndex (metaWin) != -1)
+            return;
+
+        if (this._lookupSideComponentIndex(metaWin) != -1)
             return;
 
         if (!this._isMyWindow(win) || !this._isOverviewWindow(win) || SideComponent.isSideComponentWindow(win.meta_window))
