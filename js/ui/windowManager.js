@@ -1332,6 +1332,10 @@ const WindowManager = new Lang.Class({
     },
 
     _showForceAppExitDialog: function() {
+        if (!Main.sessionMode.hasOverview) {
+            return;
+        }
+
         let dialog = new ForceAppExitDialog.ForceAppExitDialog();
         dialog.open();
     },
