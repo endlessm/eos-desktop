@@ -190,7 +190,8 @@ const GnomeShell = new Lang.Class({
         let connection = this._dbusImpl.get_connection();
         let info = this._dbusImpl.get_info();
         let params = { 'device-id': GLib.Variant.new('u', deviceid),
-                       'timestamp': GLib.Variant.new('u', timestamp) };
+                       'timestamp': GLib.Variant.new('u', timestamp),
+                       'action-mode': GLib.Variant.new('u', Main.keybindingMode) };
         connection.emit_signal(destination,
                                this._dbusImpl.get_object_path(),
                                info ? info.name : null,
