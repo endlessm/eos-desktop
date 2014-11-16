@@ -2180,7 +2180,7 @@ const NMApplet = new Lang.Class({
     _connectionRemoved: function(connection) {
         let pos = this._connections.indexOf(connection);
         if (pos != -1)
-            this._connections.splice(connection);
+            this._connections.splice(pos, 1);
 
         let section = connection._section;
 
