@@ -218,6 +218,12 @@ const ViewsDisplay = new Lang.Class({
             this._searchResults.highlightDefault(false);
         }));
 
+        // Clicking on any empty area should exit search and get back to the desktop.
+        let clickAction = new Clutter.ClickAction();
+        clickAction.connect('clicked', Lang.bind(this, this._onEmptySpaceClicked));
+        Main.overview.addAction(clickAction, false);
+        this._searchResults.actor.bind_property('mapped', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
+
         this.actor = new ViewsDisplayContainer(this.entry, this._allView);
         // This makes sure that any DnD ops get channeled to the icon grid logic
         // otherwise dropping an item outside of the grid bounds fails
@@ -291,6 +297,11 @@ const ViewsDisplay = new Lang.Class({
                 this._localSearchMetricTimeoutId = 0;
                 return GLib.SOURCE_REMOVE;
             }.bind(this));
+    },
+
+    _onEmptySpaceClicked: function() {
+        this.entry.resetSearch();
+        this._leaveLocalSearch();
     },
 
     acceptDrop: function(source, actor, x, y, time) {
