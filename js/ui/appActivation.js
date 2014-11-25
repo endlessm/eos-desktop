@@ -203,7 +203,8 @@ const AppActivationContext = new Lang.Class({
     },
 
     _onAppStateChanged: function(appSystem, app) {
-        if (app.state != Shell.AppState.RUNNING) {
+        if (app.state != Shell.AppState.RUNNING &&
+            app.state != Shell.AppState.STOPPED) {
             return;
         }
 
@@ -213,6 +214,12 @@ const AppActivationContext = new Lang.Class({
 
         appSystem.disconnect(this._appStateId);
         this._appStateId = 0;
+
+        if (app.state == Shell.AppState.STOPPED) {
+            this._abort = false;
+            this._clearSplash();
+            return;
+        }
 
         if (this._abort) {
             this._abort = false;
