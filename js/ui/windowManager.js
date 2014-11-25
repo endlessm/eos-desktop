@@ -25,6 +25,7 @@ const Tweener = imports.ui.tweener;
 const ViewSelector = imports.ui.viewSelector;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
+const KEYBINDING_FORCE_APP_EXIT = 'show-force-app-exit-dialog';
 const NO_DEFAULT_MAXIMIZE_KEY = 'no-default-maximize';
 const WINDOW_ANIMATION_TIME = 0.25;
 const DIM_BRIGHTNESS = -0.3;
@@ -550,7 +551,7 @@ const WindowManager = new Lang.Class({
                                         Shell.KeyBindingMode.LOGIN_SCREEN,
                                         Lang.bind(this, this._startA11ySwitcher));
 
-        this.addKeybinding('show-force-app-exit-dialog',
+        this.addKeybinding(KEYBINDING_FORCE_APP_EXIT,
                            new Gio.Settings({ schema_id: SHELL_KEYBINDINGS_SCHEMA }),
                            Meta.KeyBindingFlags.NONE,
                            Shell.KeyBindingMode.NORMAL |
