@@ -555,7 +555,8 @@ const WindowManager = new Lang.Class({
                            new Gio.Settings({ schema_id: SHELL_KEYBINDINGS_SCHEMA }),
                            Meta.KeyBindingFlags.NONE,
                            Shell.KeyBindingMode.NORMAL |
-                           Shell.KeyBindingMode.OVERVIEW,
+                           Shell.KeyBindingMode.OVERVIEW |
+                           Shell.KeyBindingMode.SPLASH_SCREEN,
                            Lang.bind(this, this._showForceAppExitDialog));
 
         Main.overview.connect('showing', Lang.bind(this, function() {

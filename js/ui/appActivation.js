@@ -94,7 +94,8 @@ const AppActivationContext = new Lang.Class({
         Main.uiGroup.set_child_below_sibling(this._splash, decorator);
 
         // Make sure that our events are captured
-        this._grabHelper = new GrabHelper.GrabHelper(this._splash);
+        let grabParams = { keybindingMode: Shell.KeyBindingMode.SPLASH_SCREEN };
+        this._grabHelper = new GrabHelper.GrabHelper(this._splash, grabParams);
         this._grabHelper.addActor(this._splash);
         this._grabHelper.grab({ actor: this._splash,
                                 focus: this._splash });
