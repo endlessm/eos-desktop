@@ -499,17 +499,11 @@ const ViewSelector = new Lang.Class({
         this._entry.resetSearch();
         this._workspacesDisplay.show();
 
-        if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
-            Main.overview.fadeOutDesktop();
-
         this._showPage(this._pageFromViewPage(viewPage), true);
     },
 
     zoomFromOverview: function() {
         this._workspacesDisplay.zoomFromOverview();
-
-        if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
-            Main.overview.fadeInDesktop();
     },
 
     hide: function() {

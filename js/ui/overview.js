@@ -148,9 +148,6 @@ const Overview = new Lang.Class({
         // rendering options without duplicating the texture data.
         let monitor = Main.layoutManager.primaryMonitor;
 
-        this._desktopFade = new St.Bin();
-        Main.layoutManager.overviewGroup.add_child(this._desktopFade);
-
         // this._allMonitorsGroup is a simple actor that covers all monitors,
         // used to install actions that apply to all monitors
         this._allMonitorsGroup = new Clutter.Actor({ reactive: true });
@@ -513,22 +510,6 @@ const Overview = new Lang.Class({
         }
     },
 
-    _getDesktopClone: function() {
-        let windows = global.get_window_actors().filter(function(w) {
-            return w.meta_window.get_window_type() == Meta.WindowType.DESKTOP;
-        });
-        if (windows.length == 0)
-            return null;
-
-        let window = windows[0];
-        let clone = new Clutter.Clone({ source: window.get_texture(),
-                                        x: window.x, y: window.y });
-        clone.source.connect('destroy', Lang.bind(this, function() {
-            clone.destroy();
-        }));
-        return clone;
-    },
-
     _relayout: function () {
         // To avoid updating the position and size of the workspaces
         // we just hide the overview. The positions will be updated
@@ -644,28 +625,6 @@ const Overview = new Lang.Class({
     focusSearch: function() {
         this.showApps();
         this._viewSelector.focusSearch();
-    },
-
-    fadeInDesktop: function() {
-            this._desktopFade.opacity = 0;
-            this._desktopFade.show();
-            Tweener.addTween(this._desktopFade,
-                             { opacity: 255,
-                               time: ANIMATION_TIME,
-                               transition: 'easeOutQuad' });
-    },
-
-    fadeOutDesktop: function() {
-        if (!this._desktopFade.child)
-            this._desktopFade.child = this._getDesktopClone();
-
-        this._desktopFade.opacity = 255;
-        this._desktopFade.show();
-        Tweener.addTween(this._desktopFade,
-                         { opacity: 0,
-                           time: ANIMATION_TIME,
-                           transition: 'easeOutQuad'
-                         });
     },
 
     _animateVisible: function() {
@@ -861,7 +820,6 @@ const Overview = new Lang.Class({
 
     _showDone: function() {
         this.animationInProgress = false;
-        this._desktopFade.hide();
         this._coverPane.hide();
 
         this.emit('shown');
@@ -880,7 +838,6 @@ const Overview = new Lang.Class({
         Meta.enable_unredirect_for_screen(global.screen);
 
         this._viewSelector.hide();
-        this._desktopFade.hide();
         this._coverPane.hide();
 
         this.visible = false;
