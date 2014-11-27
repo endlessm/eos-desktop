@@ -778,6 +778,7 @@ const Overview = new Lang.Class({
 
         this.animationInProgress = true;
         this.visibleTarget = false;
+        this.emit('hiding');
 
         this._updateBackgroundShade();
 
@@ -816,7 +817,6 @@ const Overview = new Lang.Class({
 
         this._coverPane.raise_top();
         this._coverPane.show();
-        this.emit('hiding');
     },
 
     _showDone: function() {
