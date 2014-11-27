@@ -690,9 +690,9 @@ const Overview = new Lang.Class({
         if (!this._shown)
             return;
 
-        this._animateNotVisible();
-
         this._shown = false;
+
+        this._animateNotVisible();
         this._syncGrab();
     },
 
