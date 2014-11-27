@@ -233,12 +233,6 @@ const ViewsDisplay = new Lang.Class({
         this.actor.addPage(this._allView.actor);
         this.actor.addPage(this._searchResults.actor);
         this.actor.showPage(this._allView.actor);
-
-        Main.overview.connect('hidden', Lang.bind(this, this._onOverviewHidden));
-    },
-
-    _onOverviewHidden: function() {
-        this.actor.showPage(this._allView.actor);
     },
 
     _recordDesktopSearchMetric: function (query, searchProvider) {
