@@ -782,38 +782,22 @@ const Overview = new Lang.Class({
 
         this._updateBackgroundShade();
 
-        let targetOpacity = 0;
-        let shouldAnimateSaturation = false;
         if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.APPS) {
-            targetOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
-            shouldAnimateSaturation = true;
-        } else {
-            this._viewSelector.zoomFromOverview();
+            this._overview.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            this._hideDone();
+            return;
         }
+
+        this._viewSelector.zoomFromOverview();
 
         // Make other elements fade out.
         Tweener.addTween(this._overview,
-                         { opacity: targetOpacity,
+                         { opacity: 0,
                            transition: 'easeOutQuad',
                            time: ANIMATION_TIME,
                            onComplete: this._hideDone,
                            onCompleteScope: this
                          });
-
-        // If we're showing the applications page, also dim the
-        // saturation while fading out
-        if (shouldAnimateSaturation) {
-            this._overviewSaturation.enabled = true;
-            this._overviewSaturation.factor = AppDisplay.ACTIVE_GRID_SATURATION;
-            Tweener.addTween(this._overviewSaturation,
-                             { factor: AppDisplay.INACTIVE_GRID_SATURATION,
-                               transition: 'easeOutQuad',
-                               time: ANIMATION_TIME,
-                               onComplete: Lang.bind(this, function() {
-                                   this._overviewSaturation.enabled = false;
-                               })
-                             });
-        }
 
         this._coverPane.raise_top();
         this._coverPane.show();
