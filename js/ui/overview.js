@@ -780,13 +780,14 @@ const Overview = new Lang.Class({
         this.visibleTarget = false;
 
         this._updateBackgroundShade();
-        this._viewSelector.zoomFromOverview();
 
         let targetOpacity = 0;
         let shouldAnimateSaturation = false;
         if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.APPS) {
             targetOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
             shouldAnimateSaturation = true;
+        } else {
+            this._viewSelector.zoomFromOverview();
         }
 
         // Make other elements fade out.
