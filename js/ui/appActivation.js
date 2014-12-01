@@ -94,7 +94,8 @@ const AppActivationContext = new Lang.Class({
         Main.uiGroup.set_child_below_sibling(this._splash, decorator);
 
         // Make sure that our events are captured
-        this._grabHelper = new GrabHelper.GrabHelper(this._splash);
+        let grabParams = { keybindingMode: Shell.KeyBindingMode.SPLASH_SCREEN };
+        this._grabHelper = new GrabHelper.GrabHelper(this._splash, grabParams);
         this._grabHelper.addActor(this._splash);
         this._grabHelper.grab({ actor: this._splash,
                                 focus: this._splash });
@@ -202,7 +203,8 @@ const AppActivationContext = new Lang.Class({
     },
 
     _onAppStateChanged: function(appSystem, app) {
-        if (app.state != Shell.AppState.RUNNING) {
+        if (app.state != Shell.AppState.RUNNING &&
+            app.state != Shell.AppState.STOPPED) {
             return;
         }
 
@@ -212,6 +214,12 @@ const AppActivationContext = new Lang.Class({
 
         appSystem.disconnect(this._appStateId);
         this._appStateId = 0;
+
+        if (app.state == Shell.AppState.STOPPED) {
+            this._abort = false;
+            this._clearSplash();
+            return;
+        }
 
         if (this._abort) {
             this._abort = false;

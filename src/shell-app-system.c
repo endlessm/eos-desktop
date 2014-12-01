@@ -42,6 +42,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 struct _ShellAppSystemPrivate {
   GHashTable *running_apps;
+  GHashTable *starting_apps;
   GHashTable *id_to_app;
   GHashTable *startup_wm_class_to_id;
 };
@@ -152,6 +153,7 @@ shell_app_system_init (ShellAppSystem *self)
                                                    ShellAppSystemPrivate);
 
   priv->running_apps = g_hash_table_new_full (NULL, NULL, (GDestroyNotify) g_object_unref, NULL);
+  priv->starting_apps = g_hash_table_new_full (NULL, NULL, (GDestroyNotify) g_object_unref, NULL);
   priv->id_to_app = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            NULL,
                                            (GDestroyNotify)g_object_unref);
@@ -170,6 +172,7 @@ shell_app_system_finalize (GObject *object)
   ShellAppSystemPrivate *priv = self->priv;
 
   g_hash_table_destroy (priv->running_apps);
+  g_hash_table_destroy (priv->starting_apps);
   g_hash_table_destroy (priv->id_to_app);
   g_hash_table_destroy (priv->startup_wm_class_to_id);
 
@@ -363,10 +366,14 @@ _shell_app_system_notify_app_state_changed (ShellAppSystem *self,
                                           g_variant_new ("s", app_info_id));
       }
       g_hash_table_insert (self->priv->running_apps, g_object_ref (app), NULL);
+      g_hash_table_remove (self->priv->starting_apps, app);
       break;
     case SHELL_APP_STATE_STARTING:
+      g_hash_table_insert (self->priv->starting_apps, g_object_ref (app), NULL);
       break;
     case SHELL_APP_STATE_STOPPED:
+      g_hash_table_remove (self->priv->starting_apps, app);
+
       if (g_hash_table_remove (self->priv->running_apps, app) && app_info_id != NULL)
       {
         emtr_event_recorder_record_stop (emtr_event_recorder_get_default (),
@@ -401,6 +408,39 @@ shell_app_system_get_running (ShellAppSystem *self)
   g_hash_table_iter_init (&iter, self->priv->running_apps);
 
   ret = NULL;
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      ShellApp *app = key;
+
+      ret = g_slist_prepend (ret, app);
+    }
+
+  ret = g_slist_sort (ret, (GCompareFunc)shell_app_compare);
+
+  return ret;
+}
+
+/**
+ * shell_app_system_get_starting:
+ * @self: A #ShellAppSystem
+ *
+ * Returns the set of applications which are currently in the starting state
+ * in the current context. The returned list will be sorted by
+ * shell_app_compare().
+ *
+ * Returns: (element-type ShellApp) (transfer container): Applications that are being launched
+ */
+GSList *
+shell_app_system_get_starting (ShellAppSystem *self)
+{
+  gpointer key, value;
+  GSList *ret;
+  GHashTableIter iter;
+
+  ret = NULL;
+
+  g_hash_table_iter_init (&iter, self->priv->starting_apps);
+
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       ShellApp *app = key;
