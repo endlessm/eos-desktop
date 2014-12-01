@@ -576,6 +576,7 @@ const LayoutManager = new Lang.Class({
     },
 
     prepareForOverview: function() {
+        Main.overview.opacityPrepared = true;
         Tweener.addTween(this._viewsClone,
                          { opacity: AppDisplay.ACTIVE_GRID_OPACITY,
                            saturation: AppDisplay.ACTIVE_GRID_SATURATION,

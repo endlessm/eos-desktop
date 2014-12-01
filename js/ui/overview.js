@@ -199,6 +199,7 @@ const Overview = new Lang.Class({
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
         this.visibleTarget = false;
+        this.opacityPrepared = false;
 
         // During transitions, we raise this to the top to avoid having the overview
         // area be reactive; it causes too many issues such as double clicks on
@@ -653,12 +654,6 @@ const Overview = new Lang.Class({
             this._targetPage = ViewSelector.ViewPage.WINDOWS;
         }
 
-        let startOpacity = 0;
-        if (this._targetPage == ViewSelector.ViewPage.APPS) {
-            // short circuit opacity change if we're showing the apps page
-            startOpacity = AppDisplay.ACTIVE_GRID_OPACITY;
-        }
-
         this._viewSelector.show(this._targetPage);
         this._targetPage = null;
 
@@ -666,18 +661,41 @@ const Overview = new Lang.Class({
         this._coverPane.show();
         this.emit('showing');
 
-        if (Main.layoutManager.startingUp) {
+        if (Main.layoutManager.startingUp || this.opacityPrepared) {
+            this._overview.opacity = AppDisplay.ACTIVE_GRID_OPACITY;
+            this.opacityPrepared = false;
             this._showDone();
-        } else {
-            this._overview.opacity = startOpacity;
-            Tweener.addTween(this._overview,
-                             { opacity: AppDisplay.ACTIVE_GRID_OPACITY,
-                               transition: 'easeOutQuad',
-                               time: ANIMATION_TIME,
-                               onComplete: this._showDone,
-                               onCompleteScope: this
-                             });
+            return;
         }
+
+        let saturationTarget = AppDisplay.INACTIVE_GRID_SATURATION;
+        this._overviewSaturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
+        this._overviewSaturation.enabled = true;
+
+        if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.APPS) {
+            this._overview.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            saturationTarget = AppDisplay.ACTIVE_GRID_SATURATION;
+        } else {
+            this._overview.opacity = 0;
+        }
+
+        Tweener.addTween(this._overview,
+                         { opacity: AppDisplay.ACTIVE_GRID_OPACITY,
+                           transition: 'easeOutQuad',
+                           time: ANIMATION_TIME,
+                           onComplete: this._showDone,
+                           onCompleteScope: this
+                         });
+
+        Tweener.addTween(this._overviewSaturation,
+                         { factor: saturationTarget,
+                           transition: 'easeOutQuad',
+                           time: ANIMATION_TIME,
+                           onComplete: function() {
+                               this._overviewSaturation.enabled = false;
+                           },
+                           onCompleteScope: this
+                         });
     },
 
     // hide:
