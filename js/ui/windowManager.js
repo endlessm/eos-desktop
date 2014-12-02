@@ -519,22 +519,28 @@ const WindowManager = new Lang.Class({
                                         Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._showWorkspaceSwitcher));
         this.setCustomKeybindingHandler('switch-applications',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startAppSwitcher));
         this.setCustomKeybindingHandler('switch-group',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startAppSwitcher));
         this.setCustomKeybindingHandler('switch-applications-backward',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startAppSwitcher));
         this.setCustomKeybindingHandler('switch-group-backward',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startAppSwitcher));
         this.setCustomKeybindingHandler('switch-windows',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startWindowSwitcher));
         this.setCustomKeybindingHandler('switch-windows-backward',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startWindowSwitcher));
         this.setCustomKeybindingHandler('switch-panels',
                                         Shell.KeyBindingMode.NORMAL |
