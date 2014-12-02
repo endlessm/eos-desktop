@@ -148,9 +148,6 @@ const Overview = new Lang.Class({
         // rendering options without duplicating the texture data.
         let monitor = Main.layoutManager.primaryMonitor;
 
-        this._desktopFade = new St.Bin();
-        Main.layoutManager.overviewGroup.add_child(this._desktopFade);
-
         // this._allMonitorsGroup is a simple actor that covers all monitors,
         // used to install actions that apply to all monitors
         this._allMonitorsGroup = new Clutter.Actor({ reactive: true });
@@ -202,6 +199,7 @@ const Overview = new Lang.Class({
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
         this.visibleTarget = false;
+        this.opacityPrepared = false;
 
         // During transitions, we raise this to the top to avoid having the overview
         // area be reactive; it causes too many issues such as double clicks on
@@ -513,22 +511,6 @@ const Overview = new Lang.Class({
         }
     },
 
-    _getDesktopClone: function() {
-        let windows = global.get_window_actors().filter(function(w) {
-            return w.meta_window.get_window_type() == Meta.WindowType.DESKTOP;
-        });
-        if (windows.length == 0)
-            return null;
-
-        let window = windows[0];
-        let clone = new Clutter.Clone({ source: window.get_texture(),
-                                        x: window.x, y: window.y });
-        clone.source.connect('destroy', Lang.bind(this, function() {
-            clone.destroy();
-        }));
-        return clone;
-    },
-
     _relayout: function () {
         // To avoid updating the position and size of the workspaces
         // we just hide the overview. The positions will be updated
@@ -646,28 +628,6 @@ const Overview = new Lang.Class({
         this._viewSelector.focusSearch();
     },
 
-    fadeInDesktop: function() {
-            this._desktopFade.opacity = 0;
-            this._desktopFade.show();
-            Tweener.addTween(this._desktopFade,
-                             { opacity: 255,
-                               time: ANIMATION_TIME,
-                               transition: 'easeOutQuad' });
-    },
-
-    fadeOutDesktop: function() {
-        if (!this._desktopFade.child)
-            this._desktopFade.child = this._getDesktopClone();
-
-        this._desktopFade.opacity = 255;
-        this._desktopFade.show();
-        Tweener.addTween(this._desktopFade,
-                         { opacity: 0,
-                           time: ANIMATION_TIME,
-                           transition: 'easeOutQuad'
-                         });
-    },
-
     _animateVisible: function() {
         if (this.visible || this.animationInProgress)
             return;
@@ -694,12 +654,6 @@ const Overview = new Lang.Class({
             this._targetPage = ViewSelector.ViewPage.WINDOWS;
         }
 
-        let startOpacity = 0;
-        if (this._targetPage == ViewSelector.ViewPage.APPS) {
-            // short circuit opacity change if we're showing the apps page
-            startOpacity = AppDisplay.ACTIVE_GRID_OPACITY;
-        }
-
         this._viewSelector.show(this._targetPage);
         this._targetPage = null;
 
@@ -707,18 +661,41 @@ const Overview = new Lang.Class({
         this._coverPane.show();
         this.emit('showing');
 
-        if (Main.layoutManager.startingUp) {
+        if (Main.layoutManager.startingUp || this.opacityPrepared) {
+            this._overview.opacity = AppDisplay.ACTIVE_GRID_OPACITY;
+            this.opacityPrepared = false;
             this._showDone();
-        } else {
-            this._overview.opacity = startOpacity;
-            Tweener.addTween(this._overview,
-                             { opacity: AppDisplay.ACTIVE_GRID_OPACITY,
-                               transition: 'easeOutQuad',
-                               time: ANIMATION_TIME,
-                               onComplete: this._showDone,
-                               onCompleteScope: this
-                             });
+            return;
         }
+
+        let saturationTarget = AppDisplay.INACTIVE_GRID_SATURATION;
+        this._overviewSaturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
+        this._overviewSaturation.enabled = true;
+
+        if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.APPS) {
+            this._overview.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
+            saturationTarget = AppDisplay.ACTIVE_GRID_SATURATION;
+        } else {
+            this._overview.opacity = 0;
+        }
+
+        Tweener.addTween(this._overview,
+                         { opacity: AppDisplay.ACTIVE_GRID_OPACITY,
+                           transition: 'easeOutQuad',
+                           time: ANIMATION_TIME,
+                           onComplete: this._showDone,
+                           onCompleteScope: this
+                         });
+
+        Tweener.addTween(this._overviewSaturation,
+                         { factor: saturationTarget,
+                           transition: 'easeOutQuad',
+                           time: ANIMATION_TIME,
+                           onComplete: function() {
+                               this._overviewSaturation.enabled = false;
+                           },
+                           onCompleteScope: this
+                         });
     },
 
     // hide:
@@ -731,9 +708,9 @@ const Overview = new Lang.Class({
         if (!this._shown)
             return;
 
-        this._animateNotVisible();
-
         this._shown = false;
+
+        this._animateNotVisible();
         this._syncGrab();
     },
 
@@ -819,49 +796,42 @@ const Overview = new Lang.Class({
 
         this.animationInProgress = true;
         this.visibleTarget = false;
+        this.emit('hiding');
 
         this._updateBackgroundShade();
-        this._viewSelector.zoomFromOverview();
 
-        let targetOpacity = 0;
-        let shouldAnimateSaturation = false;
-        if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.APPS) {
-            targetOpacity = AppDisplay.INACTIVE_GRID_OPACITY;
-            shouldAnimateSaturation = true;
+        let hidingFromApps = (this._viewSelector.getActivePage() == ViewSelector.ViewPage.APPS);
+        if (hidingFromApps) {
+            this._overview.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
         }
+
+        if (hidingFromApps &&
+            this._viewSelector.getActiveViewsPage() == ViewSelector.ViewsDisplayPage.APP_GRID) {
+            // When we're hiding from the applications grid, we want to
+            // instantaneously switch to the application, so don't fade anything.
+            // We'll tween the grid clone in the background separately -
+            // see comment in viewSelector.js::ViewsClone.
+            this._hideDone();
+            return;
+        }
+
+        this._viewSelector.zoomFromOverview();
 
         // Make other elements fade out.
         Tweener.addTween(this._overview,
-                         { opacity: targetOpacity,
+                         { opacity: 0,
                            transition: 'easeOutQuad',
                            time: ANIMATION_TIME,
                            onComplete: this._hideDone,
                            onCompleteScope: this
                          });
 
-        // If we're showing the applications page, also dim the
-        // saturation while fading out
-        if (shouldAnimateSaturation) {
-            this._overviewSaturation.enabled = true;
-            this._overviewSaturation.factor = AppDisplay.ACTIVE_GRID_SATURATION;
-            Tweener.addTween(this._overviewSaturation,
-                             { factor: AppDisplay.INACTIVE_GRID_SATURATION,
-                               transition: 'easeOutQuad',
-                               time: ANIMATION_TIME,
-                               onComplete: Lang.bind(this, function() {
-                                   this._overviewSaturation.enabled = false;
-                               })
-                             });
-        }
-
         this._coverPane.raise_top();
         this._coverPane.show();
-        this.emit('hiding');
     },
 
     _showDone: function() {
         this.animationInProgress = false;
-        this._desktopFade.hide();
         this._coverPane.hide();
 
         this.emit('shown');
@@ -880,7 +850,6 @@ const Overview = new Lang.Class({
         Meta.enable_unredirect_for_screen(global.screen);
 
         this._viewSelector.hide();
-        this._desktopFade.hide();
         this._coverPane.hide();
 
         this.visible = false;
