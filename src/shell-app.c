@@ -1084,24 +1084,6 @@ shell_app_request_quit (ShellApp   *app)
   return TRUE;
 }
 
-static void
-_gather_pid_callback (GDesktopAppInfo   *gapp,
-                      GPid               pid,
-                      gpointer           data)
-{
-  ShellApp *app;
-  ShellWindowTracker *tracker;
-
-  g_return_if_fail (data != NULL);
-
-  app = SHELL_APP (data);
-  tracker = shell_window_tracker_get_default ();
-
-  _shell_window_tracker_add_child_process_app (tracker,
-                                               pid,
-                                               app);
-}
-
 /**
  * shell_app_launch:
  * @timestamp: Event timestamp, or 0 for current event timestamp
@@ -1152,9 +1134,9 @@ shell_app_launch (ShellApp     *app,
 
   ret = g_desktop_app_info_launch_uris_as_manager (app->info, NULL,
                                                    G_APP_LAUNCH_CONTEXT (context),
-                                                   G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
+                                                   G_SPAWN_SEARCH_PATH,
                                                    NULL, NULL,
-                                                   _gather_pid_callback, app,
+                                                   NULL, NULL,
                                                    error);
   g_object_unref (context);
 
