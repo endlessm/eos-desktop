@@ -25,6 +25,7 @@ const Tweener = imports.ui.tweener;
 const ViewSelector = imports.ui.viewSelector;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
+const KEYBINDING_FORCE_APP_EXIT = 'show-force-app-exit-dialog';
 const NO_DEFAULT_MAXIMIZE_KEY = 'no-default-maximize';
 const WINDOW_ANIMATION_TIME = 0.25;
 const DIM_BRIGHTNESS = -0.3;
@@ -457,6 +458,7 @@ const WindowManager = new Lang.Class({
         // The desktop overlay needs to replicate the background's functionality;
         // when clicked, we animate the side component out before emitting "background-clicked".
         this._desktopOverlay.connect('clicked', Lang.bind(this, function() {
+            Main.layoutManager.prepareForOverview();
             this._slideSideComponentOut(this._shellwm,
                                         this._desktopOverlay.overlayActor,
                                         function () { Main.layoutManager.emit('background-clicked'); },
@@ -518,22 +520,28 @@ const WindowManager = new Lang.Class({
                                         Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._showWorkspaceSwitcher));
         this.setCustomKeybindingHandler('switch-applications',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startAppSwitcher));
         this.setCustomKeybindingHandler('switch-group',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startAppSwitcher));
         this.setCustomKeybindingHandler('switch-applications-backward',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startAppSwitcher));
         this.setCustomKeybindingHandler('switch-group-backward',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startAppSwitcher));
         this.setCustomKeybindingHandler('switch-windows',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startWindowSwitcher));
         this.setCustomKeybindingHandler('switch-windows-backward',
-                                        Shell.KeyBindingMode.NORMAL,
+                                        Shell.KeyBindingMode.NORMAL |
+                                        Shell.KeyBindingMode.OVERVIEW,
                                         Lang.bind(this, this._startWindowSwitcher));
         this.setCustomKeybindingHandler('switch-panels',
                                         Shell.KeyBindingMode.NORMAL |
@@ -550,11 +558,12 @@ const WindowManager = new Lang.Class({
                                         Shell.KeyBindingMode.LOGIN_SCREEN,
                                         Lang.bind(this, this._startA11ySwitcher));
 
-        this.addKeybinding('show-force-app-exit-dialog',
+        this.addKeybinding(KEYBINDING_FORCE_APP_EXIT,
                            new Gio.Settings({ schema_id: SHELL_KEYBINDINGS_SCHEMA }),
                            Meta.KeyBindingFlags.NONE,
                            Shell.KeyBindingMode.NORMAL |
-                           Shell.KeyBindingMode.OVERVIEW,
+                           Shell.KeyBindingMode.OVERVIEW |
+                           Shell.KeyBindingMode.SPLASH_SCREEN,
                            Lang.bind(this, this._showForceAppExitDialog));
 
         Main.overview.connect('showing', Lang.bind(this, function() {
@@ -1332,6 +1341,10 @@ const WindowManager = new Lang.Class({
     },
 
     _showForceAppExitDialog: function() {
+        if (!Main.sessionMode.hasOverview) {
+            return;
+        }
+
         let dialog = new ForceAppExitDialog.ForceAppExitDialog();
         dialog.open();
     },

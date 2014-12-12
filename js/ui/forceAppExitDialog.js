@@ -92,6 +92,12 @@ const ForceAppExitDialog = new Lang.Class({
                                             x_fill: false,
                                             x_align: St.Align.END });
 
+        appSystem.get_starting().forEach(Lang.bind(this, function(app) {
+            let item = new ForceAppExitDialogItem(app);
+            item.connect('selected', Lang.bind(this, this._selectApp));
+            this._itemBox.add_child(item.actor);
+        }));
+
         appSystem.get_running().forEach(Lang.bind(this, function(app) {
             let item = new ForceAppExitDialogItem(app);
             item.connect('selected', Lang.bind(this, this._selectApp));

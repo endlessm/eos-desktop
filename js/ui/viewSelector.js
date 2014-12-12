@@ -218,6 +218,12 @@ const ViewsDisplay = new Lang.Class({
             this._searchResults.highlightDefault(false);
         }));
 
+        // Clicking on any empty area should exit search and get back to the desktop.
+        let clickAction = new Clutter.ClickAction();
+        clickAction.connect('clicked', Lang.bind(this, this._onEmptySpaceClicked));
+        Main.overview.addAction(clickAction, false);
+        this._searchResults.actor.bind_property('mapped', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
+
         this.actor = new ViewsDisplayContainer(this.entry, this._allView);
         // This makes sure that any DnD ops get channeled to the icon grid logic
         // otherwise dropping an item outside of the grid bounds fails
@@ -226,12 +232,6 @@ const ViewsDisplay = new Lang.Class({
         // Add and show all the pages
         this.actor.addPage(this._allView.actor);
         this.actor.addPage(this._searchResults.actor);
-        this.actor.showPage(this._allView.actor);
-
-        Main.overview.connect('hidden', Lang.bind(this, this._onOverviewHidden));
-    },
-
-    _onOverviewHidden: function() {
         this.actor.showPage(this._allView.actor);
     },
 
@@ -293,6 +293,11 @@ const ViewsDisplay = new Lang.Class({
             }.bind(this));
     },
 
+    _onEmptySpaceClicked: function() {
+        this.entry.resetSearch();
+        this._leaveLocalSearch();
+    },
+
     acceptDrop: function(source, actor, x, y, time) {
         // Forward all DnD releases to the scrollview if we're 
         // displaying apps
@@ -338,7 +343,8 @@ const ViewsClone = new Lang.Class({
     Name: 'ViewsClone',
     Extends: St.Widget,
 
-    _init: function(viewsDisplay, forOverview) {
+    _init: function(viewSelector, viewsDisplay, forOverview) {
+        this._viewSelector = viewSelector;
         this._viewsDisplay = viewsDisplay;
         this._forOverview = forOverview;
 
@@ -381,6 +387,21 @@ const ViewsClone = new Lang.Class({
             this.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
             this._saturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
             this._saturation.enabled = !this._forOverview;
+
+            // When we're hidden and coming from the applications grid,
+            // tween out the clone saturation and opacity in the background
+            // as an override
+            if (!this._forOverview &&
+                this._viewSelector.getActivePage() == ViewPage.APPS &&
+                this._viewSelector.getActiveViewsPage() == ViewsDisplayPage.APP_GRID) {
+                this.opacity = AppDisplay.ACTIVE_GRID_OPACITY;
+                this.saturation = AppDisplay.ACTIVE_GRID_SATURATION;
+                Tweener.addTween(this,
+                                 { opacity: AppDisplay.INACTIVE_GRID_OPACITY,
+                                   saturation: AppDisplay.INACTIVE_GRID_SATURATION,
+                                   time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
+                                   transition: 'easeOutQuad' });
+            }
         }));
     },
 
@@ -438,10 +459,10 @@ const ViewSelector = new Lang.Class({
     },
 
     _addViewsPageClone: function() {
-        let layoutViewsClone = new ViewsClone(this._viewsDisplay, false);
+        let layoutViewsClone = new ViewsClone(this, this._viewsDisplay, false);
         Main.layoutManager.setViewsClone(layoutViewsClone);
 
-        this._overviewViewsClone = new ViewsClone(this._viewsDisplay, true);
+        this._overviewViewsClone = new ViewsClone(this, this._viewsDisplay, true);
         Main.overview.setViewsClone(this._overviewViewsClone);
         this._appsPage.bind_property('visible',
                                      this._overviewViewsClone, 'visible',
@@ -488,17 +509,11 @@ const ViewSelector = new Lang.Class({
         this._entry.resetSearch();
         this._workspacesDisplay.show();
 
-        if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
-            Main.overview.fadeOutDesktop();
-
         this._showPage(this._pageFromViewPage(viewPage), true);
     },
 
     zoomFromOverview: function() {
         this._workspacesDisplay.zoomFromOverview();
-
-        if (!this._workspacesDisplay.activeWorkspaceHasMaximizedWindows())
-            Main.overview.fadeInDesktop();
     },
 
     hide: function() {

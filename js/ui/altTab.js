@@ -237,6 +237,7 @@ const AppSwitcherPopup = new Lang.Class({
         let appIcon = this._items[this._selectedIndex];
         let window = this._currentWindow > 0 ? this._currentWindow : 0;
         appIcon.app.activate_window(appIcon.cachedWindows[window], timestamp);
+        Main.overview.hide();
     },
 
     _onDestroy : function() {
