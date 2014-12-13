@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-07 15:08-0700\n"
+"POT-Creation-Date: 2014-12-13 00:54+0000\n"
 "PO-Revision-Date: 2014-11-03 18:16+0000\n"
 "Last-Translator: Silva <michele@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/eos-shell/language/pt/)\n"
@@ -462,40 +462,40 @@ msgstr "Não foi possível analisar comando:"
 msgid "Execution of '%s' failed:"
 msgstr "A execução de \"%s\" falhou:"
 
-#: ../js/ui/appDisplay.js:1906
+#: ../js/ui/appDisplay.js:1919
 msgid "More Apps"
 msgstr "Mais Programas"
 
-#: ../js/ui/appDisplay.js:1915
+#: ../js/ui/appDisplay.js:1928
 msgid "Delete"
 msgstr "Excluir"
 
-#: ../js/ui/appDisplay.js:1967
+#: ../js/ui/appDisplay.js:1980
 msgid "Warning"
 msgstr "Aviso"
 
-#: ../js/ui/appDisplay.js:1973
+#: ../js/ui/appDisplay.js:1986
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para excluir uma pasta que você tem que remover todos os arquivos de dentro primeiro."
 
-#: ../js/ui/appDisplay.js:1979
+#: ../js/ui/appDisplay.js:1992
 msgid "We are just trying to keep you safe."
 msgstr "Estamos apenas tentando manter a segurança dos seus dados."
 
-#: ../js/ui/appDisplay.js:1985 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1998 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:2068
+#: ../js/ui/appDisplay.js:2081
 msgid "New Window"
 msgstr "Nova janela"
 
-#: ../js/ui/appDisplay.js:2071 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2084 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Remover dos favoritos"
 
-#: ../js/ui/appDisplay.js:2072
+#: ../js/ui/appDisplay.js:2085
 msgid "Add to Favorites"
 msgstr "Adicionar aos favoritos"
 
@@ -509,15 +509,15 @@ msgstr "%s foi adicionado aos seus favoritos."
 msgid "%s has been removed from your favorites."
 msgstr "%s foi removido dos seus favoritos."
 
-#: ../js/ui/appIconBar.js:214
+#: ../js/ui/appIconBar.js:213
 msgid "Other workspaces"
 msgstr "Outras áreas de trabalho  "
 
-#: ../js/ui/appIconBar.js:223
+#: ../js/ui/appIconBar.js:222
 msgid "Current workspace"
 msgstr "Área de trabalho atual "
 
-#: ../js/ui/appIconBar.js:296
+#: ../js/ui/appIconBar.js:295
 #, c-format
 msgid "Quit %s"
 msgstr "Fechar %s"
@@ -1096,7 +1096,7 @@ msgstr "Ocorreu um erro durante à atualização"
 msgid "We could not update your system"
 msgstr "Não foi possível atualizar o seu sistema"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:419
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:446
 msgid "Windows"
 msgstr "Janelas"
 
@@ -1356,7 +1356,7 @@ msgstr "Desconhecido"
 msgid "Undo"
 msgstr "Desfazer"
 
-#: ../js/ui/overview.js:167
+#: ../js/ui/overview.js:164
 msgid "Overview"
 msgstr "Visão geral"
 
@@ -1900,7 +1900,7 @@ msgstr "%s (remoto)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:423
+#: ../js/ui/viewSelector.js:450
 msgid "Applications"
 msgstr "Programas"
 
@@ -1909,21 +1909,21 @@ msgstr "Programas"
 msgid "'%s' is ready"
 msgstr "\"%s\" está pronto"
 
-#: ../js/ui/windowManager.js:66
+#: ../js/ui/windowManager.js:67
 msgid "Do you want to keep these display settings?"
 msgstr "Você deseja manter essas configurações de tela? "
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:85
+#: ../js/ui/windowManager.js:86
 msgid "Revert Settings"
 msgstr "Reverter Configurações"
 
-#: ../js/ui/windowManager.js:89
+#: ../js/ui/windowManager.js:90
 msgid "Keep Changes"
 msgstr "Manter Alterações"
 
-#: ../js/ui/windowManager.js:107
+#: ../js/ui/windowManager.js:108
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
@@ -1972,7 +1972,7 @@ msgstr "Utilizar um modo específico, ex.: \"gdm\" para iniciar sessão"
 msgid "List possible modes"
 msgstr "Listar modos possíveis"
 
-#: ../src/shell-app.c:628
+#: ../src/shell-app.c:639
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "Erro ao lançar \"%s\""

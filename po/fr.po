@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-07 15:08-0700\n"
+"POT-Creation-Date: 2014-12-13 00:54+0000\n"
 "PO-Revision-Date: 2014-10-22 23:46+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/eos-shell/language/fr/)\n"
@@ -454,40 +454,40 @@ msgstr "Impossible d'analyser la commande :"
 msgid "Execution of '%s' failed:"
 msgstr "Exécution de « %s » impossible :"
 
-#: ../js/ui/appDisplay.js:1906
+#: ../js/ui/appDisplay.js:1919
 msgid "More Apps"
 msgstr "Plus d'Apps"
 
-#: ../js/ui/appDisplay.js:1915
+#: ../js/ui/appDisplay.js:1928
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ../js/ui/appDisplay.js:1967
+#: ../js/ui/appDisplay.js:1980
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../js/ui/appDisplay.js:1973
+#: ../js/ui/appDisplay.js:1986
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
-#: ../js/ui/appDisplay.js:1979
+#: ../js/ui/appDisplay.js:1992
 msgid "We are just trying to keep you safe."
 msgstr "Nous essayons simplement de vous garder en sécurité."
 
-#: ../js/ui/appDisplay.js:1985 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1998 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Valider"
 
-#: ../js/ui/appDisplay.js:2068
+#: ../js/ui/appDisplay.js:2081
 msgid "New Window"
 msgstr "Nouvelle fenêtre"
 
-#: ../js/ui/appDisplay.js:2071 ../js/ui/dash.js:297
+#: ../js/ui/appDisplay.js:2084 ../js/ui/dash.js:297
 msgid "Remove from Favorites"
 msgstr "Enlever des favoris"
 
-#: ../js/ui/appDisplay.js:2072
+#: ../js/ui/appDisplay.js:2085
 msgid "Add to Favorites"
 msgstr "Ajouter aux favoris"
 
@@ -501,15 +501,15 @@ msgstr "%s a été ajouté à vos favoris."
 msgid "%s has been removed from your favorites."
 msgstr "%s a été supprimé de vos favoris."
 
-#: ../js/ui/appIconBar.js:214
+#: ../js/ui/appIconBar.js:213
 msgid "Other workspaces"
 msgstr "Les autres espaces de travail"
 
-#: ../js/ui/appIconBar.js:223
+#: ../js/ui/appIconBar.js:222
 msgid "Current workspace"
 msgstr "L'espace de travail en cours"
 
-#: ../js/ui/appIconBar.js:296
+#: ../js/ui/appIconBar.js:295
 #, c-format
 msgid "Quit %s"
 msgstr "Arrêter « %s »"
@@ -1088,7 +1088,7 @@ msgstr "Echec d'une tentative de mise à jour"
 msgid "We could not update your system"
 msgstr "Nous n'avons pas pu mettre à jour votre système"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:419
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:446
 msgid "Windows"
 msgstr "Fenêtres"
 
@@ -1348,7 +1348,7 @@ msgstr "Inconnu"
 msgid "Undo"
 msgstr "Annuler"
 
-#: ../js/ui/overview.js:167
+#: ../js/ui/overview.js:164
 msgid "Overview"
 msgstr "Vue d'ensemble"
 
@@ -1892,7 +1892,7 @@ msgstr "%s (distant)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:423
+#: ../js/ui/viewSelector.js:450
 msgid "Applications"
 msgstr "Applications"
 
@@ -1901,21 +1901,21 @@ msgstr "Applications"
 msgid "'%s' is ready"
 msgstr "« %s » est prêt"
 
-#: ../js/ui/windowManager.js:66
+#: ../js/ui/windowManager.js:67
 msgid "Do you want to keep these display settings?"
 msgstr "Voulez-vous conserver ces paramètres d'affichage ?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:85
+#: ../js/ui/windowManager.js:86
 msgid "Revert Settings"
 msgstr "Rétablir les paramètres"
 
-#: ../js/ui/windowManager.js:89
+#: ../js/ui/windowManager.js:90
 msgid "Keep Changes"
 msgstr "Conserver les modifications"
 
-#: ../js/ui/windowManager.js:107
+#: ../js/ui/windowManager.js:108
 #, c-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
@@ -1964,7 +1964,7 @@ msgstr "Utiliser un mode particulier, par ex. « gdm » pour l'écran de conne
 msgid "List possible modes"
 msgstr "Lister les modes possibles"
 
-#: ../src/shell-app.c:628
+#: ../src/shell-app.c:639
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "Impossible de lancer « %s »"
