@@ -725,10 +725,8 @@ const NMDeviceModem = new Lang.Class({
 
         if (is_wwan) {
             this.category = NMConnectionCategory.WWAN;
-            this._autoConnectionName = _("Auto broadband");
         } else {
             this.category = NMConnectionCategory.WIRED;
-            this._autoConnectionName = _("Auto dial-up");
         }
 
         if (this.mobileDevice) {
