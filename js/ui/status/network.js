@@ -812,6 +812,7 @@ const NMDeviceModem = new Lang.Class({
     _activateAutomaticConnection: function() {
         // Mobile wizard is too complex for the shell UI and
         // is handled by the network panel
+        Main.overview.hide();
         Util.spawn(['gnome-control-center', 'network',
                     'connect-3g', this.device.get_path()],
                     Main.notifyError);
@@ -1418,6 +1419,7 @@ const NMDeviceWireless = new Lang.Class({
                     || (accessPoints[0]._secType == NMAccessPointSecurity.WPA_ENT)) {
                     // 802.1x-enabled APs require further configuration, so they're
                     // handled in gnome-control-center
+                    Main.overview.hide();
                     Util.spawn(['gnome-control-center', 'network', 'connect-8021x-wifi',
                                 this.device.get_path(), accessPoints[0].dbus_path],
                                 Main.notifyError);
