@@ -223,12 +223,14 @@ const DateMenuButton = new Lang.Class({
         let app = Gio.AppInfo.get_default_for_type('text/calendar', false);
         if (app.get_id() == 'evolution')
             app = Gio.DesktopAppInfo.new('evolution-calendar');
+        Main.overview.hide();
         app.launch([], global.create_app_launch_context());
     },
 
     _onOpenClocksActivate: function() {
         this.menu.close();
         let app = Shell.AppSystem.get_default().lookup_app('gnome-clocks.desktop');
+        Main.overview.hide();
         app.activate();
     }
 });
