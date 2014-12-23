@@ -1137,7 +1137,7 @@ const WindowManager = new Lang.Class({
             if (!this._showDesktopOnDestroyDone && SideComponent.shouldHideOtherWindows(actor.meta_window)) {
                 // reveal other windows while we slide out the side component
                 this._showOtherWindows(actor, true);
-            } else {
+            } else if (this._showDesktopOnDestroyDone) {
                 Main.layoutManager.prepareForOverview();
             }
         } else {
