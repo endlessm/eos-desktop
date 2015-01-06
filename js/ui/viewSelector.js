@@ -405,6 +405,32 @@ const ViewsClone = new Lang.Class({
         }));
     },
 
+    set hovering(isHovering) {
+        if (isHovering) {
+            Tweener.addTween(this,
+                    { opacity: AppDisplay.INACTIVE_HOVERED_GRID_OPACITY,
+                      time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
+                      transition: 'easeOutQuad'
+                    });
+            Tweener.addTween(this._saturation,
+                    { factor: AppDisplay.INACTIVE_HOVERED_GRID_SATURATION,
+                      time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
+                      transition: 'easeOutQuad'
+                    });
+        } else {
+            Tweener.addTween(this,
+                    { opacity: AppDisplay.INACTIVE_GRID_OPACITY,
+                      time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
+                      transition: 'easeOutQuad'
+                    });
+            Tweener.addTween(this._saturation,
+                    { factor: AppDisplay.INACTIVE_GRID_SATURATION,
+                      time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
+                      transition: 'easeOutQuad'
+                    });
+        }
+    },
+
     set saturation(factor) {
         this._saturation.factor = factor;
     },
@@ -464,7 +490,7 @@ const ViewSelector = new Lang.Class({
     },
 
     _onDesktopAreaHover: function() {
-       log('Hover: ' + this._workspacesPage.hover);
+        this._overviewViewsClone.hovering = this._workspacesPage.hover;
     },
 
     _addViewsPageClone: function() {
