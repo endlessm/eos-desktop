@@ -445,6 +445,11 @@ const ViewSelector = new Lang.Class({
         this._workspacesPage = this._addPage(this._workspacesDisplay.actor,
                                              _("Windows"), 'emblem-documents-symbolic');
 
+        // Track hover events on desktop (inactive) area
+        this._workspacesPage.reactive = true;
+        this._workspacesPage.track_hover = true;
+        this._workspacesPage.connect('notify::hover', Lang.bind(this, this._onDesktopAreaHover));
+
         this._viewsDisplay = new ViewsDisplay();
         this._appsPage = this._addPage(this._viewsDisplay.actor,
                                        _("Applications"), 'view-grid-symbolic');
@@ -456,6 +461,10 @@ const ViewSelector = new Lang.Class({
         this._addViewsPageClone();
 
         this._stageKeyPressId = 0;
+    },
+
+    _onDesktopAreaHover: function() {
+       log('Hover: ' + this._workspacesPage.hover);
     },
 
     _addViewsPageClone: function() {
