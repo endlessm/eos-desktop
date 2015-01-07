@@ -6,6 +6,7 @@ const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
 const Meta = imports.gi.Meta;
+const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
 const Atk = imports.gi.Atk;
@@ -467,7 +468,8 @@ const SearchResults = new Lang.Class({
         this._searchSettings.connect('changed::disable-external', Lang.bind(this, this._reloadRemoteProviders));
         this._searchSettings.connect('changed::sort-order', Lang.bind(this, this._reloadRemoteProviders));
 
-        IconGridLayout.layout.connect('changed', Lang.bind(this, this._reloadRemoteProviders));
+        let appSystem = Shell.AppSystem.get_default();
+        appSystem.connect('installed-changed', Lang.bind(this, this._reloadRemoteProviders));
 
         this._searchTimeoutId = 0;
         this._cancellable = new Gio.Cancellable();
