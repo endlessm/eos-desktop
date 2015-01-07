@@ -116,7 +116,7 @@ const ListSearchResult = new Lang.Class({
 
         if (this.metaInfo['description']) {
             let description = new St.Label({ style_class: 'list-search-result-description' });
-            description.clutter_text.set_markup(this.metaInfo['description']);
+            description.clutter_text.set_markup(GLib.markup_escape_text(this.metaInfo['description'], -1));
             details.add(description, { x_fill: false,
                                        y_fill: false,
                                        x_align: St.Align.START,
@@ -253,12 +253,9 @@ const SearchResultsBase = new Lang.Class({
             this._cancellable.reset();
 
             this.provider.getResultMetas(metasNeeded, Lang.bind(this, function(metas) {
-                if (metas.length == 0) {
-                    callback(false);
-                    return;
-                }
                 if (metas.length != metasNeeded.length) {
-                    log('Wrong number of result metas returned by search provider');
+                    log('Wrong number of result metas returned by search provider ' + this.provider.id +
+                        ': expected ' + metasNeeded.length + ' but got ' + metas.length);
                     callback(false);
                     return;
                 }
@@ -290,6 +287,7 @@ const SearchResultsBase = new Lang.Class({
             this._ensureResultActors(results, Lang.bind(this, function(successful) {
                 if (!successful) {
                     this._clearResultDisplay();
+                    callback();
                     return;
                 }
 
