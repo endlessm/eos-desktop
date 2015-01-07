@@ -424,7 +424,9 @@ const WorkspacesDisplay = new Lang.Class({
     Name: 'WorkspacesDisplay',
 
     _init: function() {
-        this.actor = new St.Widget({ clip_to_allocation: true });
+        this.actor = new St.Widget({ clip_to_allocation: true,
+                                     reactive: true,
+                                     track_hover: true });
         this.actor.connect('notify::allocation', Lang.bind(this, this._updateWorkspacesGeometry));
         this.actor.connect('parent-set', Lang.bind(this, this._parentSet));
 
