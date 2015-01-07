@@ -289,6 +289,7 @@ const SearchResultsBase = new Lang.Class({
             this._ensureResultActors(results, Lang.bind(this, function(successful) {
                 if (!successful) {
                     this._clearResultDisplay();
+                    callback();
                     return;
                 }
 
