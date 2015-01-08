@@ -473,7 +473,7 @@ const ViewSelector = new Lang.Class({
                                              _("Windows"), 'emblem-documents-symbolic');
 
         // Track hover events on desktop (inactive) area
-        this._workspacesDisplay.actor.connect('notify::hover', Lang.bind(this, this._onDesktopAreaHover));
+        this._workspacesDisplay.actor.connect('notify::has-pointer', Lang.bind(this, this._onDesktopAreaHover));
 
         // Update desktop area hover state when going from app view to overview
         Main.overview.connect('showing', Lang.bind(this, this._onDesktopAreaHover));
@@ -492,7 +492,7 @@ const ViewSelector = new Lang.Class({
     },
 
     _onDesktopAreaHover: function() {
-        this._overviewViewsClone.hovering = this._workspacesDisplay.actor.hover;
+        this._overviewViewsClone.hovering = this._workspacesDisplay.actor.has_pointer;
     },
 
     _addViewsPageClone: function() {
@@ -617,9 +617,25 @@ const ViewSelector = new Lang.Class({
             Tweener.addTween(this._activePage,
                 { opacity: 255,
                   time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
+                  onComplete: function() {
+                      this._updateDesktopAreaHoverState();
+                  },
+                  onCompleteScope: this,
                   transition: 'easeOutQuad'
                 });
         }
+    },
+
+    // This callback makes sure that the initial state of the desktop area when
+    // activating the overview is consistent with the pointer location:
+    // - if on desktop area, highlight it and otherwise leave it desaturated.
+    _updateDesktopAreaHoverState: function() {
+        let [x, y, mask] = global.get_pointer();
+        let actor = global.stage.get_actor_at_pos(Clutter.PickMode.REACTIVE, x, y);
+
+        let isDesktopAreaHovered = (actor == this._workspacesDisplay.actor);
+
+        this._overviewViewsClone.hovering = isDesktopAreaHovered
     },
 
     _showPage: function(page, noFade) {
