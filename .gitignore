@@ -1,3 +1,5 @@
+*.gcda
+*.gcno
 *.la
 *.lo
 *.o
@@ -16,6 +18,7 @@ config.log
 config.status
 config
 configure
+_coverage/
 data/50-gnome-shell-*.xml
 data/eos-app-feedback.desktop
 data/eos-app-feedback.desktop.in

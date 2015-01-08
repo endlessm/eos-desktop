@@ -6,6 +6,7 @@ st_cflags =					\
 	-DG_LOG_DOMAIN=\"St\"			\
 	-DST_COMPILATION			\
 	-DPACKAGE_DATA_DIR=\"$(pkgdatadir)\"	\
+	@EOS_C_COVERAGE_CFLAGS@			\
 	$(ST_CFLAGS)				\
 	$(NULL)
 
@@ -161,11 +162,15 @@ nodist_libst_1_0_la_SOURCES =			\
 	st.h					\
 	$(NULL)
 libst_1_0_la_CPPFLAGS = $(st_cflags)
-libst_1_0_la_LDFLAGS = $(LDADD)
+libst_1_0_la_LDFLAGS =			\
+	$(LDADD) 			\
+	@EOS_C_COVERAGE_LDFLAGS@	\
+	$(NULL)
 
 noinst_PROGRAMS += test-theme
 
 test_theme_CPPFLAGS = $(st_cflags)
 test_theme_LDADD = libst-1.0.la
+test_theme_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
 
 test_theme_SOURCES = st/test-theme.c

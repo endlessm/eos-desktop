@@ -9,14 +9,16 @@ gnome_shell_hotplug_sniffer_SOURCES =								\
 	hotplug-sniffer/hotplug-sniffer.c \
 	$(NULL)
 
-gnome_shell_hotplug_sniffer_CFLAGS =		\
-	-I$(top_srcdir)/src			\
-	-DG_DISABLE_DEPRECATED			\
-	$(SHELL_HOTPLUG_SNIFFER_CFLAGS)		\
+gnome_shell_hotplug_sniffer_CFLAGS =	\
+	-I$(top_srcdir)/src		\
+	-DG_DISABLE_DEPRECATED		\
+	$(SHELL_HOTPLUG_SNIFFER_CFLAGS)	\
+	@EOS_C_COVERAGE_CFLAGS@		\
 	$(NULL)
 
-gnome_shell_hotplug_sniffer_LDFLAGS =		\
-	$(SHELL_HOTPLUG_SNIFFER_LIBS)		\
+gnome_shell_hotplug_sniffer_LDFLAGS =	\
+	$(SHELL_HOTPLUG_SNIFFER_LIBS)	\
+	@EOS_C_COVERAGE_LDFLAGS@ 	\
 	$(NULL)
 
 EXTRA_DIST += 							  \
