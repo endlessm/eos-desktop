@@ -1220,6 +1220,12 @@ const ViewIcon = new Lang.Class({
         this._createIconFunc = iconParams['createIcon'];
         iconParams['createIcon'] = Lang.bind(this, this._createIconBase);
 
+        buttonParams = Params.parse(buttonParams,
+                                    { button_mask: St.ButtonMask.ONE |
+                                                   St.ButtonMask.TWO |
+                                                   St.ButtonMask.THREE },
+                                    true);
+
         this.icon = new IconGrid.BaseIcon(this.getName(), iconParams, buttonParams);
         if (iconParams['showLabel'] !== false &&
             iconParams['editableLabel']) {
@@ -1373,8 +1379,7 @@ const FolderIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init: function(dirInfo, parentView) {
-        let buttonParams = { button_mask: St.ButtonMask.ONE,
-                             toggle_mode: true };
+        let buttonParams = { toggle_mode: true };
         let iconParams = { createIcon: Lang.bind(this, this._createIcon),
                            editableLabel: true };
 
@@ -1417,6 +1422,11 @@ const FolderIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
+        if (button != Gdk.BUTTON_PRIMARY) {
+            actor.checked = false;
+            return;
+        }
+
         if (this._createPopup()) {
             this._popup.toggle();
         }
@@ -1657,9 +1667,7 @@ const AppIcon = new Lang.Class({
                                                 shadowAbove: true },
                                   true);
 
-        let buttonParams = { button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
-
-        this.parent(params.parentView, buttonParams, iconParams);
+        this.parent(params.parentView, null, iconParams);
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
         this.actor.connect('popup-menu', Lang.bind(this, this._onKeyboardPopupMenu));
@@ -1880,12 +1888,11 @@ const AppStoreIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init : function(parentView) {
-        let buttonParams = { button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
         let iconParams = { createIcon: Lang.bind(this, this._createIcon),
                            editableLabel: false,
                            shadowAbove: false };
 
-        this.parent(parentView, buttonParams, iconParams);
+        this.parent(parentView, null, iconParams);
 
         this.actor.add_style_class_name('app-store-icon');
 
@@ -1913,6 +1920,10 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
+        if (button != Gdk.BUTTON_PRIMARY) {
+            return;
+        }
+
         Main.appStore.show(global.get_current_time(), true);
     },
 
