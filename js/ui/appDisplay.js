@@ -1232,12 +1232,17 @@ const ViewIcon = new Lang.Class({
 
         this.iconButton = this.icon.iconButton;
         this.iconButton._delegate = this;
+        this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
     },
 
     _onDestroy: function() {
         this._unscheduleScaleIn();
         this.iconButton._delegate = null;
         this.actor._delegate = null;
+    },
+
+    _onClicked: function(actor, button) {
+        // left empty for subclasses to override
     },
 
     _createIconBase: function(iconSize) {
@@ -1384,13 +1389,6 @@ const FolderIcon = new Lang.Class({
         this.view = new FolderView(this);
         this.view.actor.reactive = false;
 
-        this.iconButton.connect('clicked', Lang.bind(this,
-            function() {
-                if (this._createPopup()) {
-                    this._popup.toggle();
-                }
-            }));
-
         this.actor.connect('notify::mapped', Lang.bind(this,
             function() {
                 if (!this.actor.mapped && this._popup)
@@ -1416,6 +1414,12 @@ const FolderIcon = new Lang.Class({
     _onDestroy: function() {
         this.parent();
         this.view.actor.destroy();
+    },
+
+    _onClicked: function(actor, button) {
+        if (this._createPopup()) {
+            this._popup.toggle();
+        }
     },
 
     _onLabelUpdate: function(label, newText) {
@@ -1658,7 +1662,6 @@ const AppIcon = new Lang.Class({
         this.parent(params.parentView, buttonParams, iconParams);
 
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
-        this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
         this.actor.connect('popup-menu', Lang.bind(this, this._onKeyboardPopupMenu));
 
         this._menu = null;
@@ -1887,8 +1890,6 @@ const AppStoreIcon = new Lang.Class({
         this.actor.add_style_class_name('app-store-icon');
 
         this.canDrop = true;
-
-        this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
     },
 
     _setStyleClass: function(state) {
