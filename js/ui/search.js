@@ -116,7 +116,7 @@ const ListSearchResult = new Lang.Class({
 
         if (this.metaInfo['description']) {
             let description = new St.Label({ style_class: 'list-search-result-description' });
-            description.clutter_text.set_markup(GLib.markup_escape_text(this.metaInfo['description'], -1));
+            description.clutter_text.set_markup(this.metaInfo['description']);
             details.add(description, { x_fill: false,
                                        y_fill: false,
                                        x_align: St.Align.START,
