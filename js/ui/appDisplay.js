@@ -1314,7 +1314,6 @@ const ViewIcon = new Lang.Class({
         Main.overview.connect('hiding', Lang.bind(this, function () { this._menu.close(); }));
 
         this._menuManager.addMenu(this._menu);
-        this.emit('menu-state-changed', true);
 
         this.actor.set_hover(true);
         this._menu.popup();
@@ -1332,7 +1331,6 @@ const ViewIcon = new Lang.Class({
 
     _onMenuPoppedDown: function() {
         this.actor.sync_hover();
-        this.emit('menu-state-changed', false);
     },
 
     _createPopupMenu: function() {
