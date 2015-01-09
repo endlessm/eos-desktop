@@ -1198,8 +1198,12 @@ const ViewIcon = new Lang.Class({
     Name: 'ViewIcon',
 
     _init: function(params, buttonParams, iconParams) {
-        params = Params.parse(params, { parentView: null }, true);
+        params = Params.parse(params,
+                              { parentView: null,
+                                showMenu: true },
+                              true);
         this.parentView = params.parentView;
+        this.showMenu = params.showMenu;
 
         this.canDrop = false;
         this.customName = false;
@@ -1214,8 +1218,11 @@ const ViewIcon = new Lang.Class({
         this.actor.can_focus = true;
 
         this.actor._delegate = this;
-
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+
+        this._menu = null;
+        this._menuTimeoutId = 0;
+        this._menuManager = new PopupMenu.PopupMenuManager(this);
 
         this._origText = null;
         this._createIconFunc = iconParams['createIcon'];
@@ -1240,15 +1247,97 @@ const ViewIcon = new Lang.Class({
         this.iconButton = this.icon.iconButton;
         this.iconButton._delegate = this;
         this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
+        this.iconButton.connect('button-press-event', Lang.bind(this, this._onButtonPress));
+        this.iconButton.connect('popup-menu', Lang.bind(this, this._onKeyboardPopupMenu));
     },
 
     _onDestroy: function() {
         this._unscheduleScaleIn();
+        this._removeMenuTimeout();
+
         this.iconButton._delegate = null;
         this.actor._delegate = null;
     },
 
     _onClicked: function(actor, button) {
+        this._removeMenuTimeout();
+    },
+
+    _onButtonPress: function(actor, event) {
+        let button = event.get_button();
+
+        if (button == Gdk.BUTTON_PRIMARY) {
+            this._removeMenuTimeout();
+            this._menuTimeoutId = Mainloop.timeout_add(MENU_POPUP_TIMEOUT,
+                Lang.bind(this, function() {
+                    this._menuTimeoutId = 0;
+                    this._popupMenu();
+                    return false;
+                }));
+        } else if (button == Gdk.BUTTON_SECONDARY) {
+            return this._popupMenu();
+        }
+
+        return false;
+    },
+
+    _onKeyboardPopupMenu: function() {
+        if (this._popupMenu()) {
+            this._menu.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
+        }
+    },
+
+    _popupMenu: function() {
+        this._removeMenuTimeout();
+
+        if (!this.showMenu) {
+            return false;
+        }
+
+        if (!this._menu) {
+            this._menu = this._createPopupMenu();
+        }
+
+        if (!this._menu) {
+            return false;
+        }
+
+        this.iconButton.fake_release();
+
+        if (this._draggable) {
+            this._draggable.fakeRelease();
+        }
+
+        this._menu.connect('open-state-changed', Lang.bind(this, function (menu, isPoppedUp) {
+            if (!isPoppedUp) {
+                this._onMenuPoppedDown();
+            }
+        }));
+        Main.overview.connect('hiding', Lang.bind(this, function () { this._menu.close(); }));
+
+        this._menuManager.addMenu(this._menu);
+        this.emit('menu-state-changed', true);
+
+        this.actor.set_hover(true);
+        this._menu.popup();
+        this._menuManager.ignoreRelease();
+
+        return true;
+    },
+
+    _removeMenuTimeout: function() {
+        if (this._menuTimeoutId > 0) {
+            Mainloop.source_remove(this._menuTimeoutId);
+            this._menuTimeoutId = 0;
+        }
+    },
+
+    _onMenuPoppedDown: function() {
+        this.actor.sync_hover();
+        this.emit('menu-state-changed', false);
+    },
+
+    _createPopupMenu: function() {
         // left empty for subclasses to override
     },
 
@@ -1424,6 +1513,8 @@ const FolderIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
+        this.parent(actor, button);
+
         if (button != Gdk.BUTTON_PRIMARY) {
             actor.checked = false;
             return;
@@ -1649,9 +1740,7 @@ const AppIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init : function(app, iconParams, params) {
-        params = Params.parse(params, { showMenu: true,
-                                        isDraggable: true,
-                                        parentView: null });
+        params = Params.parse(params, { isDraggable: true }, true);
 
         this._baseApp = app;
 
@@ -1662,20 +1751,12 @@ const AppIcon = new Lang.Class({
         this.app = displayApp;
         this._name = this.app.get_name();
 
-        this._showMenu = params.showMenu;
-
         iconParams = Params.parse(iconParams, { createIcon: Lang.bind(this, this._createIcon),
                                                 editableLabel: true,
                                                 shadowAbove: true },
                                   true);
 
-        this.parent(params.parentView, null, iconParams);
-
-        this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
-        this.actor.connect('popup-menu', Lang.bind(this, this._onKeyboardPopupMenu));
-
-        this._menu = null;
-        this._menuManager = new PopupMenu.PopupMenuManager(this);
+        this.parent(params, null, iconParams);
 
         if (params.isDraggable) {
             this._draggable = DND.makeDraggable(this.iconButton);
@@ -1696,7 +1777,6 @@ const AppIcon = new Lang.Class({
                 }));
         }
 
-        this._menuTimeoutId = 0;
         this._stateChangedId = this.app.connect('notify::state',
                                                 Lang.bind(this,
                                                           this._onStateChanged));
@@ -1710,18 +1790,19 @@ const AppIcon = new Lang.Class({
             this.app.disconnect(this._stateChangedId);
         }
         this._stateChangedId = 0;
-        this._removeMenuTimeout();
     },
 
     _createIcon: function(iconSize) {
         return this.app.create_icon_texture(iconSize);
     },
 
-    _removeMenuTimeout: function() {
-        if (this._menuTimeoutId > 0) {
-            Mainloop.source_remove(this._menuTimeoutId);
-            this._menuTimeoutId = 0;
-        }
+    _createPopupMenu: function() {
+        let menu = new AppIconMenu(this);
+        menu.connect('activate-window', Lang.bind(this, function (menu, window) {
+            this.activateWindow(window);
+        }));
+
+        return menu;
     },
 
     _onStateChanged: function() {
@@ -1745,25 +1826,8 @@ const AppIcon = new Lang.Class({
         }
     },
 
-    _onButtonPress: function(actor, event) {
-        let button = event.get_button();
-        if (button == Gdk.BUTTON_PRIMARY) {
-            this._removeMenuTimeout();
-            this._menuTimeoutId = Mainloop.timeout_add(MENU_POPUP_TIMEOUT,
-                Lang.bind(this, function() {
-                    this._menuTimeoutId = 0;
-                    this.popupMenu();
-                    return false;
-                }));
-        } else if (button == Gdk.BUTTON_SECONDARY) {
-            this.popupMenu();
-            return true;
-        }
-        return false;
-    },
-
     _onClicked: function(actor, button) {
-        this._removeMenuTimeout();
+        this.parent(actor, button);
 
         let event = Clutter.get_current_event();
         if (event.get_click_count() > 1) {
@@ -1782,15 +1846,6 @@ const AppIcon = new Lang.Class({
         }
     },
 
-    _onKeyboardPopupMenu: function() {
-        if (!this._showMenu) {
-            return;
-        }
-
-        this.popupMenu();
-        this._menu.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
-    },
-
     getId: function() {
         return this._baseApp.get_id();
     },
@@ -1799,54 +1854,12 @@ const AppIcon = new Lang.Class({
         return this._name;
     },
 
-    popupMenu: function() {
-        this._removeMenuTimeout();
-
-        if (!this._showMenu) {
-            return false;
-        }
-
-        this.iconButton.fake_release();
-
-        if (this._draggable) {
-            this._draggable.fakeRelease();
-        }
-
-        if (!this._menu) {
-            this._menu = new AppIconMenu(this);
-            this._menu.connect('activate-window', Lang.bind(this, function (menu, window) {
-                this.activateWindow(window);
-            }));
-            this._menu.connect('open-state-changed', Lang.bind(this, function (menu, isPoppedUp) {
-                if (!isPoppedUp) {
-                    this._onMenuPoppedDown();
-                }
-            }));
-            Main.overview.connect('hiding', Lang.bind(this, function () { this._menu.close(); }));
-
-            this._menuManager.addMenu(this._menu);
-        }
-
-        this.emit('menu-state-changed', true);
-
-        this.actor.set_hover(true);
-        this._menu.popup();
-        this._menuManager.ignoreRelease();
-
-        return false;
-    },
-
     activateWindow: function(metaWindow) {
         if (metaWindow) {
             Main.activateWindow(metaWindow);
         } else {
             Main.overview.hide();
         }
-    },
-
-    _onMenuPoppedDown: function() {
-        this.actor.sync_hover();
-        this.emit('menu-state-changed', false);
     },
 
     _onActivate: function (event) {
@@ -1923,6 +1936,8 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
+        this.parent(actor, button);
+
         if (button != Gdk.BUTTON_PRIMARY) {
             return;
         }
