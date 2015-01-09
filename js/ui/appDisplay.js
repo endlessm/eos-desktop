@@ -1197,8 +1197,9 @@ const ViewIconState = {
 const ViewIcon = new Lang.Class({
     Name: 'ViewIcon',
 
-    _init: function(parentView, buttonParams, iconParams) {
-        this.parentView = parentView;
+    _init: function(params, buttonParams, iconParams) {
+        params = Params.parse(params, { parentView: null }, true);
+        this.parentView = params.parentView;
 
         this.canDrop = false;
         this.customName = false;
@@ -1379,13 +1380,14 @@ const FolderIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init: function(dirInfo, parentView) {
+        let params = { parentView: parentView };
         let buttonParams = { toggle_mode: true };
         let iconParams = { createIcon: Lang.bind(this, this._createIcon),
                            editableLabel: true };
 
         this.folder = dirInfo;
         this._name = this.folder.get_name();
-        this.parent(parentView, buttonParams, iconParams);
+        this.parent(params, buttonParams, iconParams);
 
         this.actor.add_style_class_name('app-folder');
 
@@ -1888,11 +1890,12 @@ const AppStoreIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init : function(parentView) {
+        let params = { parentView: parentView };
         let iconParams = { createIcon: Lang.bind(this, this._createIcon),
                            editableLabel: false,
                            shadowAbove: false };
 
-        this.parent(parentView, null, iconParams);
+        this.parent(params, null, iconParams);
 
         this.actor.add_style_class_name('app-store-icon');
 
