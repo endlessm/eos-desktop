@@ -1247,7 +1247,8 @@ const ViewIcon = new Lang.Class({
 
     _init: function(params, buttonParams, iconParams) {
         params = Params.parse(params,
-                              { parentView: null,
+                              { isDraggable: true,
+                                parentView: null,
                                 showMenu: true },
                               true);
         this.parentView = params.parentView;
@@ -1296,6 +1297,22 @@ const ViewIcon = new Lang.Class({
         this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
         this.iconButton.connect('button-press-event', Lang.bind(this, this._onButtonPress));
         this.iconButton.connect('popup-menu', Lang.bind(this, this._onKeyboardPopupMenu));
+
+        if (params.isDraggable) {
+            this._draggable = DND.makeDraggable(this.iconButton);
+            this._draggable.connect('drag-begin', Lang.bind(this,
+                function () {
+                    Main.overview.beginItemDrag(this);
+                }));
+            this._draggable.connect('drag-cancelled', Lang.bind(this,
+                function () {
+                    Main.overview.cancelledItemDrag(this);
+                }));
+            this._draggable.connect('drag-end', Lang.bind(this,
+                function () {
+                    Main.overview.endItemDrag(this);
+                }));
+        }
     },
 
     _onDestroy: function() {
@@ -1522,21 +1539,6 @@ const FolderIcon = new Lang.Class({
             function() {
                 if (!this.actor.mapped && this._popup)
                     this._popup.popdown();
-            }));
-
-        // DND implementation
-        this._draggable = DND.makeDraggable(this.iconButton);
-        this._draggable.connect('drag-begin', Lang.bind(this,
-            function () {
-                Main.overview.beginItemDrag(this);
-            }));
-        this._draggable.connect('drag-cancelled', Lang.bind(this,
-            function () {
-                Main.overview.cancelledItemDrag(this);
-            }));
-        this._draggable.connect('drag-end', Lang.bind(this,
-            function () {
-                Main.overview.endItemDrag(this);
             }));
     },
 
@@ -1820,8 +1822,6 @@ const AppIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init : function(app, iconParams, params) {
-        params = Params.parse(params, { isDraggable: true }, true);
-
         this._baseApp = app;
 
         let id = app.get_id();
@@ -1837,24 +1837,6 @@ const AppIcon = new Lang.Class({
                                   true);
 
         this.parent(params, null, iconParams);
-
-        if (params.isDraggable) {
-            this._draggable = DND.makeDraggable(this.iconButton);
-            this._draggable.connect('drag-begin', Lang.bind(this,
-                function () {
-                    // Notify view that something is dragging
-                    Main.overview.beginItemDrag(this);
-                }));
-            this._draggable.connect('drag-cancelled', Lang.bind(this,
-                function () {
-                    Main.overview.cancelledItemDrag(this);
-                }));
-            this._draggable.connect('drag-end', Lang.bind(this,
-                function () {
-                    // Are we in the trashcan area?
-                    Main.overview.endItemDrag(this);
-                }));
-        }
 
         this._stateChangedId = this.app.connect('notify::state',
                                                 Lang.bind(this,
@@ -1963,7 +1945,8 @@ const AppStoreIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init : function(parentView) {
-        let params = { parentView: parentView,
+        let params = { isDraggable: false,
+                       parentView: parentView,
                        showMenu: false };
         let iconParams = { createIcon: Lang.bind(this, this._createIcon),
                            editableLabel: false,
