@@ -1797,12 +1797,7 @@ const AppIcon = new Lang.Class({
     },
 
     _createPopupMenu: function() {
-        let menu = new AppIconMenu(this);
-        menu.connect('activate-window', Lang.bind(this, function (menu, window) {
-            this.activateWindow(window);
-        }));
-
-        return menu;
+        return new AppIconMenu(this);
     },
 
     _onStateChanged: function() {
@@ -1852,14 +1847,6 @@ const AppIcon = new Lang.Class({
 
     getName: function() {
         return this._name;
-    },
-
-    activateWindow: function(metaWindow) {
-        if (metaWindow) {
-            Main.activateWindow(metaWindow);
-        } else {
-            Main.overview.hide();
-        }
     },
 
     _onActivate: function (event) {
@@ -2056,11 +2043,7 @@ const AppIconMenu = new Lang.Class({
     Extends: PopupMenu.PopupMenu,
 
     _init: function(source) {
-        let side = St.Side.LEFT;
-        if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
-            side = St.Side.RIGHT;
-
-        this.parent(source.actor, 0.5, side);
+        this.parent(source.actor, 0.5, St.Side.TOP);
 
         // We want to keep the item hovered while the menu is up
         this.blockSourceEvents = true;
@@ -2083,37 +2066,6 @@ const AppIconMenu = new Lang.Class({
 
     _redisplay: function() {
         this.removeAll();
-
-        let windows = this._source.app.get_windows().filter(function(w) {
-            return Shell.WindowTracker.is_window_interesting(w);
-        });
-
-        // Display the app windows menu items and the separator between windows
-        // of the current desktop and other windows.
-        let activeWorkspace = global.screen.get_active_workspace();
-        let separatorShown = windows.length > 0 && windows[0].get_workspace() != activeWorkspace;
-
-        for (let i = 0; i < windows.length; i++) {
-            if (!separatorShown && windows[i].get_workspace() != activeWorkspace) {
-                this._appendSeparator();
-                separatorShown = true;
-            }
-            let item = this._appendMenuItem(windows[i].title);
-            item._window = windows[i];
-        }
-
-        if (!this._source.app.is_window_backed()) {
-            if (windows.length > 0)
-                this._appendSeparator();
-
-            let isFavorite = AppFavorites.getAppFavorites().isFavorite(this._source.app.get_id());
-
-            this._newWindowMenuItem = this._appendMenuItem(_("New Window"));
-            this._appendSeparator();
-
-            this._toggleFavoriteMenuItem = this._appendMenuItem(isFavorite ? _("Remove from Favorites")
-                                                                : _("Add to Favorites"));
-        }
     },
 
     _appendSeparator: function () {
@@ -2134,20 +2086,6 @@ const AppIconMenu = new Lang.Class({
     },
 
     _onActivate: function (actor, child) {
-        if (child._window) {
-            let metaWindow = child._window;
-            this.emit('activate-window', metaWindow);
-        } else if (child == this._newWindowMenuItem) {
-            this._source.app.open_new_window(-1);
-            this.emit('activate-window', null);
-        } else if (child == this._toggleFavoriteMenuItem) {
-            let favs = AppFavorites.getAppFavorites();
-            let isFavorite = favs.isFavorite(this._source.app.get_id());
-            if (isFavorite)
-                favs.removeFavorite(this._source.app.get_id());
-            else
-                favs.addFavorite(this._source.app.get_id());
-        }
         this.close();
     }
 });
