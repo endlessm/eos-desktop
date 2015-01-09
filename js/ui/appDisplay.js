@@ -1186,6 +1186,55 @@ const AllView = new Lang.Class({
     }
 });
 
+const ViewIconMenu = new Lang.Class({
+    Name: 'ViewIconMenu',
+    Extends: PopupMenu.PopupMenu,
+
+    _init: function(source) {
+        this.parent(source.actor, 0.5, St.Side.TOP);
+
+        // We want to keep the item hovered while the menu is up
+        this.blockSourceEvents = true;
+
+        this._source = source;
+
+        this.connect('activate', Lang.bind(this, this._onActivate));
+
+        this.actor.add_style_class_name('app-well-menu');
+
+        // Chain our visibility and lifecycle to that of the source
+        source.actor.connect('notify::mapped', Lang.bind(this, function () {
+            if (!source.actor.mapped)
+                this.close();
+        }));
+        source.actor.connect('destroy', Lang.bind(this, function () { this.actor.destroy(); }));
+
+        Main.uiGroup.add_actor(this.actor);
+    },
+
+    _redisplay: function() {
+        this.removeAll();
+        this._removeItem = this._appendMenuItem(_("Remove from desktop"));
+    },
+
+    _appendMenuItem: function(labelText) {
+        let item = new PopupMenu.PopupMenuItem(labelText);
+        this.addMenuItem(item);
+        return item;
+    },
+
+    popup: function(activatingButton) {
+        this._redisplay();
+        this.open();
+    },
+
+    _onActivate: function (actor, child) {
+        if (child == this._removeItem) {
+        }
+        this.close();
+    }
+});
+
 const ViewIconState = {
     NORMAL: 0,
     DND_PLACEHOLDER: 1,
@@ -1334,7 +1383,7 @@ const ViewIcon = new Lang.Class({
     },
 
     _createPopupMenu: function() {
-        // left empty for subclasses to override
+        return new ViewIconMenu(this);
     },
 
     _createIconBase: function(iconSize) {
@@ -1792,10 +1841,6 @@ const AppIcon = new Lang.Class({
         return this.app.create_icon_texture(iconSize);
     },
 
-    _createPopupMenu: function() {
-        return new AppIconMenu(this);
-    },
-
     _onStateChanged: function() {
         if (this.app.state != Shell.AppState.STOPPED) {
             this.actor.add_style_class_name('running');
@@ -2034,56 +2079,3 @@ const AppStoreIcon = new Lang.Class({
     }
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
-
-const AppIconMenu = new Lang.Class({
-    Name: 'AppIconMenu',
-    Extends: PopupMenu.PopupMenu,
-
-    _init: function(source) {
-        this.parent(source.actor, 0.5, St.Side.TOP);
-
-        // We want to keep the item hovered while the menu is up
-        this.blockSourceEvents = true;
-
-        this._source = source;
-
-        this.connect('activate', Lang.bind(this, this._onActivate));
-
-        this.actor.add_style_class_name('app-well-menu');
-
-        // Chain our visibility and lifecycle to that of the source
-        source.actor.connect('notify::mapped', Lang.bind(this, function () {
-            if (!source.actor.mapped)
-                this.close();
-        }));
-        source.actor.connect('destroy', Lang.bind(this, function () { this.actor.destroy(); }));
-
-        Main.uiGroup.add_actor(this.actor);
-    },
-
-    _redisplay: function() {
-        this.removeAll();
-    },
-
-    _appendSeparator: function () {
-        let separator = new PopupMenu.PopupSeparatorMenuItem();
-        this.addMenuItem(separator);
-    },
-
-    _appendMenuItem: function(labelText) {
-        // FIXME: app-well-menu-item style
-        let item = new PopupMenu.PopupMenuItem(labelText);
-        this.addMenuItem(item);
-        return item;
-    },
-
-    popup: function(activatingButton) {
-        this._redisplay();
-        this.open();
-    },
-
-    _onActivate: function (actor, child) {
-        this.close();
-    }
-});
-Signals.addSignalMethods(AppIconMenu.prototype);
