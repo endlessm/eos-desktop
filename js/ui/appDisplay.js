@@ -1230,6 +1230,7 @@ const ViewIconMenu = new Lang.Class({
 
     _onActivate: function (actor, child) {
         if (child == this._removeItem) {
+            this._source.remove();
         }
         this.close();
     }
