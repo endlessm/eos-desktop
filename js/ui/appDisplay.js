@@ -180,7 +180,7 @@ const AppSearchProvider = new Lang.Class({
 
     createResultObject: function (resultMeta) {
         let app = resultMeta['id'];
-        return new AppIcon(app);
+        return new AppIcon(app, null, { showMenu: false });
     }
 });
 
@@ -471,8 +471,7 @@ const FolderView = new Lang.Class({
     },
 
     _createItemIcon: function(item) {
-        return new AppIcon(item, null, { showMenu: false,
-                                         parentView: this });
+        return new AppIcon(item, null, { parentView: this });
     },
 
     getViewId: function() {
@@ -1012,8 +1011,7 @@ const AllView = new Lang.Class({
         if (item == this._appStoreItem) {
             return this._appStoreIcon;
         } else if (item instanceof Shell.App) {
-            return new AppIcon(item, null, { showMenu: false,
-                                             parentView: this });
+            return new AppIcon(item, null, { parentView: this });
         } else {
             return new FolderIcon(item, this);
         }
@@ -1890,7 +1888,8 @@ const AppStoreIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init : function(parentView) {
-        let params = { parentView: parentView };
+        let params = { parentView: parentView,
+                       showMenu: false };
         let iconParams = { createIcon: Lang.bind(this, this._createIcon),
                            editableLabel: false,
                            shadowAbove: false };
