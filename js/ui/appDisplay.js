@@ -1441,6 +1441,14 @@ const ViewIcon = new Lang.Class({
         }));
     },
 
+    remove: function() {
+        this.blockHandler = true;
+        IconGridLayout.layout.removeIcon(this.getId(), true);
+        this.blockHandler = false;
+
+        this.handleViewDragEnd();
+    },
+
     replaceText: function(newText) {
         if (this.icon.label) {
             this._origText = this.icon.label.text;
@@ -2001,16 +2009,7 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _removeItem: function(source) {
-        source.blockHandler = true;
-
-        IconGridLayout.layout.removeIcon(source.getId(), true);
-
-        source.blockHandler = false;
-
-        if (source.handleViewDragEnd) {
-            source.handleViewDragEnd();
-        }
-
+        source.remove();
         this.handleViewDragEnd();
     },
 
