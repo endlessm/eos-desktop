@@ -1269,7 +1269,6 @@ const ViewIcon = new Lang.Class({
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
 
         this._menu = null;
-        this._menuTimeoutId = 0;
         this._menuManager = new PopupMenu.PopupMenuManager(this);
 
         this._origText = null;
@@ -1301,28 +1300,17 @@ const ViewIcon = new Lang.Class({
 
     _onDestroy: function() {
         this._unscheduleScaleIn();
-        this._removeMenuTimeout();
 
         this.iconButton._delegate = null;
         this.actor._delegate = null;
     },
 
     _onClicked: function(actor, button) {
-        this._removeMenuTimeout();
+        logError('onClicked not implemented');
     },
 
     _onButtonPress: function(actor, event) {
-        let button = event.get_button();
-
-        if (button == Gdk.BUTTON_PRIMARY) {
-            this._removeMenuTimeout();
-            this._menuTimeoutId = Mainloop.timeout_add(MENU_POPUP_TIMEOUT,
-                Lang.bind(this, function() {
-                    this._menuTimeoutId = 0;
-                    this._popupMenu();
-                    return false;
-                }));
-        } else if (button == Gdk.BUTTON_SECONDARY) {
+        if (event.get_button() == Gdk.BUTTON_SECONDARY) {
             return this._popupMenu();
         }
 
@@ -1336,8 +1324,6 @@ const ViewIcon = new Lang.Class({
     },
 
     _popupMenu: function() {
-        this._removeMenuTimeout();
-
         if (!this.showMenu) {
             return false;
         }
@@ -1370,13 +1356,6 @@ const ViewIcon = new Lang.Class({
         this._menuManager.ignoreRelease();
 
         return true;
-    },
-
-    _removeMenuTimeout: function() {
-        if (this._menuTimeoutId > 0) {
-            Mainloop.source_remove(this._menuTimeoutId);
-            this._menuTimeoutId = 0;
-        }
     },
 
     _onMenuPoppedDown: function() {
@@ -1567,8 +1546,6 @@ const FolderIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
-        this.parent(actor, button);
-
         if (button != Gdk.BUTTON_PRIMARY) {
             actor.checked = false;
             return;
@@ -1866,7 +1843,6 @@ const AppIcon = new Lang.Class({
             this._draggable.connect('drag-begin', Lang.bind(this,
                 function () {
                     // Notify view that something is dragging
-                    this._removeMenuTimeout();
                     Main.overview.beginItemDrag(this);
                 }));
             this._draggable.connect('drag-cancelled', Lang.bind(this,
@@ -1921,8 +1897,6 @@ const AppIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
-        this.parent(actor, button);
-
         let event = Clutter.get_current_event();
         if (event.get_click_count() > 1) {
             return;
@@ -2023,8 +1997,6 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
-        this.parent(actor, button);
-
         if (button != Gdk.BUTTON_PRIMARY) {
             return;
         }
