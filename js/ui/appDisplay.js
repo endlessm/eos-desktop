@@ -1707,6 +1707,55 @@ const FolderIcon = new Lang.Class({
         let actor = this.parent();
         actor.add_style_class_name('app-folder');
         return actor;
+    },
+
+    remove: function() {
+        let sourceId = this.getId();
+        let icons = IconGridLayout.layout.getIcons(sourceId);
+        let isEmpty = (icons.length == 0);
+        if (!isEmpty) {
+            // ensure the applications in the folder actually exist
+            // on the system
+            let appSystem = Shell.AppSystem.get_default();
+            isEmpty = !icons.some(function(icon) {
+                return appSystem.lookup_app(icon) != null;
+            });
+        }
+
+        if (isEmpty) {
+            // remove if empty
+            this.parent();
+            return;
+        }
+
+        let dialog = new ModalDialog.ModalDialog();
+
+        let subjectLabel = new St.Label({ text: _("Warning"),
+                                          style_class: 'delete-folder-dialog-subject',
+                                          x_align: Clutter.ActorAlign.CENTER });
+        dialog.contentLayout.add(subjectLabel, { y_fill: false,
+                                                 y_align: St.Align.START });
+
+        let descriptionLabel = new St.Label({ text: _("To delete a folder you have to remove all of the items inside of it first."),
+                                              style_class: 'delete-folder-dialog-description' });
+        dialog.contentLayout.add(descriptionLabel, { y_fill: true });
+        descriptionLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        descriptionLabel.clutter_text.line_wrap = true;
+
+        let safeLabel = new St.Label({ text: _("We are just trying to keep you safe."),
+                                       style_class: 'delete-folder-dialog-safe' });
+        dialog.contentLayout.add(safeLabel, { y_fill: true });
+        safeLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        safeLabel.clutter_text.line_wrap = true;
+
+        let okButton = { label: _("OK"),
+                         action: Lang.bind(this, function() {
+                             dialog.close();
+                         }),
+                         key: Clutter.Escape,
+                         default: true };
+        dialog.setButtons([okButton]);
+        dialog.open();
     }
 });
 
@@ -2008,69 +2057,9 @@ const AppStoreIcon = new Lang.Class({
         this.iconState = appStoreIconState;
     },
 
-    _removeItem: function(source) {
-        source.remove();
-        this.handleViewDragEnd();
-    },
-
-    _acceptFolderDrop: function(source) {
-        let folder = source.folder;
-        let sourceId = folder.get_id();
-
-        let icons = IconGridLayout.layout.getIcons(sourceId);
-        let isEmpty = (icons.length == 0);
-        if (!isEmpty) {
-            // ensure the applications in the folder actually exist
-            // on the system
-            let appSystem = Shell.AppSystem.get_default();
-            isEmpty = !icons.some(function(icon) {
-                return appSystem.lookup_app(icon) != null;
-            });
-        }
-
-        if (isEmpty) {
-            this._removeItem(source);
-            return;
-        }
-
-        let dialog = new ModalDialog.ModalDialog();
-
-        let subjectLabel = new St.Label({ text: _("Warning"),
-                                          style_class: 'delete-folder-dialog-subject',
-                                          x_align: Clutter.ActorAlign.CENTER });
-        dialog.contentLayout.add(subjectLabel, { y_fill: false,
-                                                 y_align: St.Align.START });
-
-        let descriptionLabel = new St.Label({ text: _("To delete a folder you have to remove all of the items inside of it first."),
-                                              style_class: 'delete-folder-dialog-description' });
-        dialog.contentLayout.add(descriptionLabel, { y_fill: true });
-        descriptionLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-        descriptionLabel.clutter_text.line_wrap = true;
-
-        let safeLabel = new St.Label({ text: _("We are just trying to keep you safe."),
-                                       style_class: 'delete-folder-dialog-safe' });
-        dialog.contentLayout.add(safeLabel, { y_fill: true });
-        safeLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-        safeLabel.clutter_text.line_wrap = true;
-
-        let okButton = { label: _("OK"),
-                         action: Lang.bind(this, function() {
-                             dialog.close();
-                         }),
-                         key: Clutter.Escape,
-                         default: true };
-        dialog.setButtons([okButton]);
-        dialog.open();
-    },
-
     handleIconDrop: function(source) {
-        if (source.app) {
-            this._removeItem(source);
-            return true;
-        }
-
-        if (source.folder) {
-            this._acceptFolderDrop(source);
+        if (source.remove()) {
+            this.handleViewDragEnd();
             return true;
         }
 
