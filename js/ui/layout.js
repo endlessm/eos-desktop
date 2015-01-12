@@ -391,7 +391,17 @@ const LayoutManager = new Lang.Class({
         global.stage.remove_actor(global.top_window_group);
         this.uiGroup.add_actor(global.top_window_group);
 
-        this._backgroundGroup = new Meta.BackgroundGroup();
+        this._backgroundGroup = new Meta.BackgroundGroup({ reactive: true });
+        this._backgroundGroup.connect('enter-event',
+                                      Lang.bind(this, function () {
+                                          this._viewsClone.hovering = true;
+                                      }));
+
+        this._backgroundGroup.connect('leave-event',
+                                      Lang.bind(this, function () {
+                                          this._viewsClone.hovering = false;
+                                      }));
+
         global.window_group.add_child(this._backgroundGroup);
         this._backgroundGroup.lower_bottom();
         this._bgManagers = [];
