@@ -473,10 +473,10 @@ const ViewSelector = new Lang.Class({
                                              _("Windows"), 'emblem-documents-symbolic');
 
         // Track hover events on desktop (inactive) area
-        this._workspacesDisplay.actor.connect('notify::has-pointer', Lang.bind(this, this._onDesktopAreaHover));
+        this._workspacesDisplay.actor.connect('notify::has-pointer', Lang.bind(this, this._onHasPointerChanged));
 
-        // Update desktop area hover state when going from app view to overview
-        Main.overview.connect('showing', Lang.bind(this, this._onDesktopAreaHover));
+        // Update desktop area hover state when going from windows view to overview
+        Main.overview.connect('showing', Lang.bind(this, this._onHasPointerChanged));
 
         this._viewsDisplay = new ViewsDisplay();
         this._appsPage = this._addPage(this._viewsDisplay.actor,
@@ -491,7 +491,7 @@ const ViewSelector = new Lang.Class({
         this._stageKeyPressId = 0;
     },
 
-    _onDesktopAreaHover: function() {
+    _onHasPointerChanged: function() {
         this._overviewViewsClone.hovering = this._workspacesDisplay.actor.has_pointer;
     },
 
