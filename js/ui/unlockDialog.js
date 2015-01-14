@@ -286,7 +286,7 @@ const UnlockDialog = new Lang.Class({
     _escape: function() {
         if (this.allowCancel) {
             this._userVerifier.cancel();
-            this.emit('failed');
+            this.emit('cancelled');
         }
     },
 
