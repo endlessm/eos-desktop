@@ -826,24 +826,6 @@ StScrollBar StButton#vhandle:active {
     width: 32px;
 }
 
-.splash-close {
-    background-image: url("close-splash-normal.png");
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 12px;
-    height: 26px;
-    width: 26px;
-}
-
-.splash-close:hover {
-    background-image: url("close-splash-hover.png");
-}
-
-.splash-close:checked,
-.splash-close:pressed {
-    background-image: url("close-splash-pressed.png");
-}
-
 .window-close {
     -shell-close-overlap: 16px;
 }
@@ -1140,18 +1122,6 @@ StScrollBar StButton#vhandle:active {
 .overview-icon.dnd,
 .icon-grid .overview-icon {
     icon-size: 64px;
-}
-
-.app-splash-page {
-    icon-size: 64px;
-}
-
-.app-splash-page-title {
-    background-gradient-start: rgb(70,70,70);
-    background-gradient-end: rgb(30,30,30);
-    background-gradient-direction: vertical;
-    background-size: 36px;
-    height: 36px;
 }
 
 .overview-icon.dnd,
@@ -3018,20 +2988,6 @@ StScrollBar StButton#vhandle:active {
 
 .delete-folder-dialog-safe {
     width: 20em;
-}
-
-.app-splash-page {
-    -animation-size: 246px;
-}
-
-.app-splash-page-background {
-    background: #e6e4e4 url(splash-noise-texture.png);
-    background-repeat: repeat;
-}
-
-.app-splash-page-custom-background {
-    background-repeat: no-repeat;
-    background-position: 0px 0px;
 }
 
 /* Force app exit dialog */
