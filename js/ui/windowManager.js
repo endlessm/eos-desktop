@@ -1001,6 +1001,21 @@ const WindowManager = new Lang.Class({
             } else {
                 this._mapSideComponent(shellwm, actor, true);
             }
+        } else if (actor.meta_window.get_role() == 'eos-speedwagon') {
+            // This is a Speedwagon splash screen. Slide it up from the bottom.
+            let workArea = Main.layoutManager.getWorkAreaForMonitor(actor.meta_window.get_monitor());
+            actor.translation_y = workArea.height;
+            Tweener.addTween(actor,
+                             { translation_y: 0,
+                               time: WINDOW_ANIMATION_TIME,
+                               transition: 'linear',
+                               onComplete: this._mapWindowDone,
+                               onCompleteScope: this,
+                               onCompleteParams: [shellwm, actor],
+                               onOverwrite: this._mapWindowOverwrite,
+                               onOverwriteScope: this,
+                               onOverwriteParams: [shellwm, actor]
+                             });
         } else {
             /* Fade window in */
             actor.opacity = 0;
