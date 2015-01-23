@@ -41,7 +41,7 @@ describe('Matching quote search', function() {
             output: 14
         },
         'mixed quotes' : {
-            input: "'mixed \' quotes\''",
+            input: "'mixed \" quotes\"'",
             output: 0
         },
         'escaped quotes' : {
