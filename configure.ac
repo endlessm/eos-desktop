@@ -183,6 +183,9 @@ AM_CONDITIONAL(USE_JHBUILD_WRAPPER_SCRIPT, test "x$enable_jhbuild_wrapper_script
 BROWSER_PLUGIN_DIR="${BROWSER_PLUGIN_DIR:-"\${libdir}/mozilla/plugins"}"
 AC_ARG_VAR([BROWSER_PLUGIN_DIR],[Where to install the plugin to])
 
+# Enable coverage reporting
+EOS_COVERAGE_REPORT([c js])
+
 AC_CONFIG_FILES([
   Makefile
   data/Makefile

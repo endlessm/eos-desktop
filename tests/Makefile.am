@@ -57,10 +57,16 @@ TESTS = \
 TEST_EXTENSIONS = .js
 JASMINE_SUBMODULE_PATH = $(top_srcdir)/tests/jasmine
 
+@EOS_COVERAGE_RULES@
+
+# Pass resource paths to EOS_JS_COVERAGE_FILES
+EOS_JS_COVERAGE_FILES = $(addprefix $(abs_top_srcdir)/js/,$(shell python -c "import xml.etree.ElementTree as ET; import sys; tree = ET.parse('../js/js-resources.gresource.xml'); map(sys.stdout.write, ['{0}\n'.format(e.text) for e in tree.getroot()[0]])"))
+
 AM_JS_LOG_FLAGS = \
 	--include-path=$(top_srcdir) \
 	--include-path=$(top_srcdir)/js \
-	--include-path=$(top_srcdir)/tests/unit
+	--include-path=$(top_srcdir)/tests/unit \
+	@EOS_JS_COVERAGE_LOG_FLAGS@
 
 include $(JASMINE_SUBMODULE_PATH)/Makefile-jasmine.am.inc
 
@@ -76,3 +82,6 @@ TESTS_ENVIRONMENT = \
 
 EXTRA_DIST += \
 	README.txt
+
+echo-am-js-log-flags:
+	@echo $(AM_JS_LOG_FLAGS)
