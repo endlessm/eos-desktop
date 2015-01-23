@@ -68,20 +68,25 @@ AC_DEFUN_ONCE([EOS_COVERAGE_REPORT], [
                         # Turn on the coverage generating flags in GCC. This
                         # does not work with clang
                         # (see llvm.org/bugs/show_bug.cgi?id=16568).
-                        EOS_COVERAGE_COMPILER_FLAGS="-coverage"
-                        EOS_COVERAGE_NODEBUG_COMPILER_FLAGS="-g -O0"
+                        EOS_COVERAGE_COMPILER_FLAGS="-coverage -g -O0"
                         EOS_C_COVERAGE_LDFLAGS="-lgcov"
-                        AS_COMPILER_FLAGS([EOS_SUPPORTED_COVERAGE_CFLAGS], [$EOS_COVERAGE_COMPILER_FLAGS])
+                        EOS_COVERAGE_CFLAGS_SUPPORTED=no
+
+                        LAST_CFLAGS="$CFLAGS"
+                        CFLAGS="$CFLAGS $EOS_COVERAGE_COMPILER_FLAGS"
+                        AC_MSG_CHECKING(if compiler supports $EOS_COVERAGE_COMPILER_FLAGS)
+                        AC_TRY_COMPILE([], [], [EOS_COVERAGE_CFLAGS_SUPPORTED=yes])
+                        CFLAGS="$LAST_CFLAGS"
+                        AC_MSG_RESULT($EOS_COVERAGE_CFLAGS_SUPPORTED)
 
                         # If this is empty then coverage reporting is not
                         # supported by the compiler.
-                        AS_IF([test x"$EOS_SUPPORTED_COVERAGE_CFLAGS" != "x"], [
+                        AS_IF([test x"$EOS_COVERAGE_CFLAGS_SUPPORTED" = "xyes"], [
                             EOS_HAVE_C_COVERAGE=yes
 
                             # These flags aren't mandatory, but they make
                             # coverage reports more accurate
-                            AS_COMPILER_FLAGS([EOS_SUPPORTED_NODEBUG_CFLAGS], [$EOS_COVERAGE_NODEBUG_COMPILER_FLAGS])
-                            EOS_C_COVERAGE_CFLAGS="$EOS_SUPPORTED_COVERAGE_CFLAGS $EOS_SUPPORTED_NODEBUG_CFLAGS"
+                            EOS_C_COVERAGE_CFLAGS="$EOS_COVERAGE_COMPILER_FLAGS"
                         ])
                     ],
                     [js], [
