@@ -714,10 +714,6 @@ const Overview = new Lang.Class({
         this._syncGrab();
     },
 
-    toggleByKey: function() {
-        this.toggle();
-    },
-
     toggle: function() {
         if (this.isDummy)
             return;
