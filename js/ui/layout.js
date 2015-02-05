@@ -710,12 +710,13 @@ const LayoutManager = new Lang.Class({
 
         let primary = this.primaryMonitor;
         if (this.panelBox.height && primary) {
+            let panelY = primary.y + primary.height - this.panelBox.height;
             this._rightPanelBarrier = new Meta.Barrier({ display: global.display,
-                                                         x1: primary.x + primary.width, y1: primary.y,
-                                                         x2: primary.x + primary.width, y2: primary.y + this.panelBox.height,
+                                                         x1: primary.x + primary.width, y1: panelY,
+                                                         x2: primary.x + primary.width, y2: panelY + this.panelBox.height,
                                                          directions: Meta.BarrierDirection.NEGATIVE_X });
 
-            this.panelBox.set_position(primary.x, primary.y + primary.height - this.panelBox.height);
+            this.panelBox.set_position(primary.x, panelY);
         }
     },
 
