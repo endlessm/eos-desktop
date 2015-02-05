@@ -41,7 +41,7 @@ const HotCornerIndicator = new Lang.Class({
     // overrides default implementation from PanelMenu.Button
     _onButtonPress: function(actor, event) {
 	if (Main.overview.shouldToggleByCornerOrButton()) {
-	    Main.overview.toggle();
+	    Main.overview.toggleWindows();
 	}
     },
 
