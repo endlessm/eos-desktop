@@ -159,7 +159,6 @@ const RunDialog = new Lang.Class({
         }
 
         let paths = GLib.getenv('PATH').split(':');
-        paths.push(GLib.get_home_dir());
         let someResults = paths.map(function(path) {
             let results = [];
             try {
@@ -223,10 +222,12 @@ const RunDialog = new Lang.Class({
                 let path = null;
                 if (input.charAt(0) == '/') {
                     path = input;
-                } else {
-                    if (input.charAt(0) == '~')
-                        input = input.slice(1);
+                } else if (input.charAt(0) == '~') {
+                    input = input.slice(1);
                     path = GLib.get_home_dir() + '/' + input;
+                } else {
+                    this._showError(e.message);
+                    return;
                 }
 
                 if (GLib.file_test(path, GLib.FileTest.EXISTS)) {
