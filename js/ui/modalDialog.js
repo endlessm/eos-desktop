@@ -36,6 +36,7 @@ const ModalDialog = new Lang.Class({
     _init: function(params) {
         params = Params.parse(params, { shellReactive: false,
                                         styleClass: null,
+                                        parentActor: Main.layoutManager.modalDialogGroup,
                                         keybindingMode: Shell.KeyBindingMode.SYSTEM_MODAL,
                                         shouldFadeIn: true });
 
@@ -49,7 +50,7 @@ const ModalDialog = new Lang.Class({
                                       x: 0,
                                       y: 0,
                                       accessible_role: Atk.Role.DIALOG });
-        Main.layoutManager.modalDialogGroup.add_actor(this._group);
+        params.parentActor.add_actor(this._group);
 
         let constraint = new Clutter.BindConstraint({ source: global.stage,
                                                       coordinate: Clutter.BindCoordinate.ALL });
