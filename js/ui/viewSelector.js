@@ -531,6 +531,10 @@ const ViewSelector = new Lang.Class({
         }
     },
 
+    blinkSearch: function() {
+        this._entry.blink();
+    },
+
     _addPage: function(actor, name, a11yIcon, params) {
         params = Params.parse(params, { a11yFocus: null });
 
@@ -646,7 +650,6 @@ const ViewSelector = new Lang.Class({
 
     _onShowAppsButtonToggled: function() {
         if (this._showAppsButton.checked) {
-            Main.overview.resetToggledState();
             this.setActivePage(ViewPage.APPS);
         } else {
             this.setActivePage(ViewPage.WINDOWS);
@@ -663,7 +666,7 @@ const ViewSelector = new Lang.Class({
 
         if (this._activePage == this._workspacesPage) {
             if (symbol == Clutter.Escape) {
-                Main.overview.toggle();
+                Main.overview.toggleWindows();
                 return true;
             }
             return false;
