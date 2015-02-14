@@ -109,17 +109,14 @@ const BackgroundCache = new Lang.Class({
             return;
 
         let monitor = file.monitor(Gio.FileMonitorFlags.NONE, null);
-
         let signalId = monitor.connect('changed',
                                        Lang.bind(this, function() {
                                            this._removeAllImages(file);
-
-                                           monitor.disconnect(signalId);
-
                                            this.emit('file-changed', file);
                                        }));
 
-        this._fileMonitors[key] = monitor;
+        this._fileMonitors[key] = { monitor: monitor,
+                                    signalId: signalId };
     },
 
     _removeContent: function(contentList, content) {
@@ -138,8 +135,12 @@ const BackgroundCache = new Lang.Class({
         let key = file.hash();
 
         let hasOtherUsers = this._images.some(function(content) { return _fileEqual0(file, content.get_file()); });
-        if (!hasOtherUsers)
+        if (!hasOtherUsers) {
+            let monitorObj = this._fileMonitors[key];
+            monitorObj.monitor.disconnect(monitorObj.signalId);
+
             delete this._fileMonitors[key];
+        }
 
         this._removeContent(this._images, content);
     },
