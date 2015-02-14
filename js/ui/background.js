@@ -438,6 +438,17 @@ const Background = new Lang.Class({
         this._pattern.content = content;
     },
 
+    _invalidateCacheFile: function(file) {
+        let keys = Object.keys(this._images);
+        for (let i = 0; i < keys.length; i++) {
+            let actor = this._images[keys[i]];
+
+            if (actor.content && _fileEqual0(actor.content.get_file(), file)) {
+                actor.content = null;
+            }
+        }
+    },
+
     _watchCacheFile: function(file) {
         let key = file.hash();
         if (this._fileWatches[key])
@@ -446,6 +457,7 @@ const Background = new Lang.Class({
         let signalId = this._cache.connect('file-changed',
                                            Lang.bind(this, function(cache, changedFile) {
                                                if (changedFile.equal(file)) {
+                                                   this._invalidateCacheFile(file);
                                                    this.emit('changed');
                                                }
                                            }));
