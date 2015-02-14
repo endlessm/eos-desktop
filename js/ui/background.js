@@ -194,6 +194,7 @@ const BackgroundCache = new Lang.Class({
                          cancellable: new Gio.Cancellable(),
                          callers: [] };
         this._attachCallerToFileLoad(caller, fileLoad);
+        this._pendingFileLoads.push(fileLoad);
 
         let content = new Meta.Background({ meta_screen: global.screen });
 
