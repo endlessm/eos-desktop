@@ -112,10 +112,7 @@ const BackgroundCache = new Lang.Class({
 
         let signalId = monitor.connect('changed',
                                        Lang.bind(this, function() {
-                                           for (let i = 0; i < this._images.length; i++) {
-                                               if (_fileEqual0(this._images[i].get_file(), file))
-                                                   this._images.splice(i, 1);
-                                           }
+                                           this._removeAllImages(file);
 
                                            monitor.disconnect(signalId);
 
@@ -145,6 +142,16 @@ const BackgroundCache = new Lang.Class({
             delete this._fileMonitors[key];
 
         this._removeContent(this._images, content);
+    },
+
+    _removeAllImages: function(file) {
+        let images = this._images.filter(function(image) {
+            return _fileEqual0(image.get_file(), file);
+        });
+
+        images.forEach(Lang.bind(this, function(image) {
+            this.removeImageContent(image);
+        }));
     },
 
     _attachCallerToFileLoad: function(caller, fileLoad) {
