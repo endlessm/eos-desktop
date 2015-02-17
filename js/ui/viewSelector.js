@@ -24,7 +24,7 @@ const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
 const WorkspacesView = imports.ui.workspacesView;
 
-const SEARCH_TIMEOUT = 150;
+const SEARCH_ACTIVATION_TIMEOUT = 50;
 const SEARCH_METRIC_INACTIVITY_TIMEOUT_SECONDS = 3;
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 
@@ -205,7 +205,7 @@ const ViewsDisplay = new Lang.Class({
     Name: 'ViewsDisplay',
 
     _init: function() {
-        this._searchTimeoutId = 0;
+        this._enterSearchTimeoutId = 0;
         this._localSearchMetricTimeoutId = 0;
 
         this._appSystem = Shell.AppSystem.get_default();
@@ -264,10 +264,22 @@ const ViewsDisplay = new Lang.Class({
     },
 
     _enterLocalSearch: function() {
-        this.actor.showPage(ViewsDisplayPage.SEARCH, true);
+        if (this._enterSearchTimeoutId > 0)
+            return;
+
+        // We give a very short time for search results to populate before
+        // triggering the animation
+        this._enterSearchTimeoutId = Mainloop.timeout_add(SEARCH_ACTIVATION_TIMEOUT, Lang.bind(this, function () {
+            this._enterSearchTimeoutId = 0;
+            this.actor.showPage(ViewsDisplayPage.SEARCH, true);
+        }));
     },
 
     _leaveLocalSearch: function() {
+        if (this._enterSearchTimeoutId > 0) {
+            Mainloop.source_remove(this._enterSearchTimeoutId);
+            this._enterSearchTimeoutId = 0;
+        }
         this.actor.showPage(ViewsDisplayPage.APP_GRID, true);
     },
 
