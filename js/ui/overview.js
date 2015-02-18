@@ -327,14 +327,6 @@ const Overview = new Lang.Class({
 
         this._shellInfo = new ShellInfo();
 
-        // Add a clone of the panel to the overview so spacing and such is
-        // automatic
-        this._topGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
-                                      reactive: false,
-                                      opacity: 0 });
-
-        this._overview.add_actor(this._topGhost);
-
         this._bottomGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
                                          reactive: false,
                                          opacity: 0 });

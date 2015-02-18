@@ -320,25 +320,6 @@ const ViewsDisplay = new Lang.Class({
     }
 });
 
-const ViewsCloneLayout = new Lang.Class({
-    Name: 'ViewsCloneLayout',
-    Extends: Clutter.BoxLayout,
-
-    vfunc_allocate: function(container, box, flags) {
-        let panelClone = container.get_child_at_index(0);
-        let viewsClone = container.get_child_at_index(1);
-
-        let panelBox = box.copy();
-        let panelHeight = panelClone.get_preferred_height(-1)[1];
-        panelBox.y2 = Math.min(panelBox.y2, panelBox.y1 + panelHeight);
-        panelClone.allocate(panelBox, flags);
-
-        let viewsBox = box.copy();
-        viewsBox.y1 = panelBox.y2;
-        viewsClone.allocate(viewsBox, flags);
-    }
-});
-
 const ViewsClone = new Lang.Class({
     Name: 'ViewsClone',
     Extends: St.Widget,
@@ -348,13 +329,8 @@ const ViewsClone = new Lang.Class({
         this._viewsDisplay = viewsDisplay;
         this._forOverview = forOverview;
 
-        let viewsCloneLayout = new ViewsCloneLayout({ vertical: true });
-
-        this.parent({ layout_manager: viewsCloneLayout,
+        this.parent({ layout_manager: new Clutter.BoxLayout(),
                       opacity: AppDisplay.INACTIVE_GRID_OPACITY });
-
-        this.add_child(new Clutter.Clone({ source: Main.panel.actor,
-                                           opacity: 0 }));
 
         let allView = this._viewsDisplay.allView;
         let entry = new ShellEntry.OverviewEntry();
