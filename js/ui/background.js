@@ -833,15 +833,15 @@ const BackgroundManager = new Lang.Class({
         let oldBackground = this.background;
         this.background = newBackground;
 
-        if (this.background.isLoaded) {
+        if (newBackground.isLoaded) {
             this._tweenOldBackground(oldBackground);
             return;
         }
 
-        this.background.loadedSignalId = this.background.connect('loaded',
+        newBackground.loadedSignalId = newBackground.connect('loaded',
             Lang.bind(this, function() {
-                this.background.disconnect(newBackground.loadedSignalId);
-                this.background.loadedSignalId = 0;
+                newBackground.disconnect(newBackground.loadedSignalId);
+                newBackground.loadedSignalId = 0;
 
                 this._tweenOldBackground(oldBackground);
         }));
