@@ -803,19 +803,25 @@ const BackgroundManager = new Lang.Class({
         this._controlPosition = params.controlPosition;
 
         this.background = this._createBackground();
-        this._newBackground = null;
     },
 
     destroy: function() {
-        if (this._newBackground) {
-            this._newBackground.actor.destroy();
-            this._newBackground = null;
-        }
-
         if (this.background) {
             this.background.actor.destroy();
             this.background = null;
         }
+    },
+
+    _tweenOldBackground: function(oldBackground) {
+        Tweener.addTween(oldBackground.actor,
+                         { opacity: 0,
+                           time: FADE_ANIMATION_TIME,
+                           transition: 'easeOutQuad',
+                           onComplete: Lang.bind(this, function() {
+                               oldBackground.actor.destroy();
+                               this.emit('changed');
+                           })
+                         });
     },
 
     _updateBackground: function() {
@@ -824,32 +830,21 @@ const BackgroundManager = new Lang.Class({
         newBackground.brightness = this.background.brightness;
         newBackground.visible = this.background.visible;
 
-        newBackground.loadedSignalId = newBackground.connect('loaded',
+        let oldBackground = this.background;
+        this.background = newBackground;
+
+        if (this.background.isLoaded) {
+            this._tweenOldBackground(oldBackground);
+            return;
+        }
+
+        this.background.loadedSignalId = this.background.connect('loaded',
             Lang.bind(this, function() {
-                newBackground.disconnect(newBackground.loadedSignalId);
-                newBackground.loadedSignalId = 0;
+                this.background.disconnect(newBackground.loadedSignalId);
+                this.background.loadedSignalId = 0;
 
-                if (this._newBackground != newBackground) {
-                    /* Not interesting, we queued another load */
-                    newBackground.actor.destroy();
-                    return;
-                }
-
-                Tweener.addTween(this.background.actor,
-                                 { opacity: 0,
-                                   time: FADE_ANIMATION_TIME,
-                                   transition: 'easeOutQuad',
-                                   onComplete: Lang.bind(this, function() {
-                                       this.background.actor.destroy();
-                                       this.background = newBackground;
-                                       this._newBackground = null;
-
-                                       this.emit('changed');
-                                   })
-                                 });
+                this._tweenOldBackground(oldBackground);
         }));
-
-        this._newBackground = newBackground;
     },
 
     _createBackground: function() {
