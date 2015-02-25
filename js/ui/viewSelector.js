@@ -388,12 +388,10 @@ const ViewsClone = new Lang.Class({
             this._saturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
             this._saturation.enabled = !this._forOverview;
 
-            // When we're hidden and coming from the applications grid,
-            // tween out the clone saturation and opacity in the background
-            // as an override
+            // When we're hidden and coming from the apps page, tween out the
+            // clone saturation and opacity in the background as an override
             if (!this._forOverview &&
-                this._viewSelector.getActivePage() == ViewPage.APPS &&
-                this._viewSelector.getActiveViewsPage() == ViewsDisplayPage.APP_GRID) {
+                this._viewSelector.getActivePage() == ViewPage.APPS) {
                 this.opacity = AppDisplay.ACTIVE_GRID_OPACITY;
                 this.saturation = AppDisplay.ACTIVE_GRID_SATURATION;
                 Tweener.addTween(this,

@@ -828,12 +828,11 @@ const Overview = new Lang.Class({
             this._overview.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
         }
 
-        if (hidingFromApps &&
-            this._viewSelector.getActiveViewsPage() == ViewSelector.ViewsDisplayPage.APP_GRID) {
-            // When we're hiding from the applications grid, we want to
-            // instantaneously switch to the application, so don't fade anything.
-            // We'll tween the grid clone in the background separately -
-            // see comment in viewSelector.js::ViewsClone.
+        if (hidingFromApps) {
+            // When we're hiding from the apps page, we want to instantaneously
+            // switch to the application, so don't fade anything. We'll tween
+            // the grid clone in the background separately - see comment in
+            // viewSelector.js::ViewsClone.
             this._hideDone();
             return;
         }
