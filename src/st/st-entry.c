@@ -115,7 +115,6 @@ struct _StEntryPrivate
   CoglHandle    text_shadow_material;
   gfloat        shadow_width;
   gfloat        shadow_height;
-  guint8        shadow_opacity;
 };
 
 static guint entry_signals[LAST_SIGNAL] = { 0, };
@@ -858,7 +857,6 @@ st_entry_paint (ClutterActor *actor)
       clutter_actor_box_get_size (&allocation, &width, &height);
 
       if (priv->text_shadow_material == COGL_INVALID_HANDLE ||
-          priv->shadow_opacity != clutter_actor_get_paint_opacity (priv->entry) ||
           width != priv->shadow_width ||
           height != priv->shadow_height)
         {
@@ -870,7 +868,6 @@ st_entry_paint (ClutterActor *actor)
           material = _st_create_shadow_material_from_actor (shadow_spec,
                                                             priv->entry);
 
-          priv->shadow_opacity = clutter_actor_get_paint_opacity (priv->entry);
           priv->shadow_width = width;
           priv->shadow_height = height;
           priv->text_shadow_material = material;
@@ -1031,7 +1028,6 @@ st_entry_init (StEntry *entry)
   priv->text_shadow_material = COGL_INVALID_HANDLE;
   priv->shadow_width = -1.;
   priv->shadow_height = -1.;
-  priv->shadow_opacity = 0;
 
   clutter_actor_add_child (CLUTTER_ACTOR (entry), priv->entry);
   clutter_actor_set_reactive ((ClutterActor *) entry, TRUE);
