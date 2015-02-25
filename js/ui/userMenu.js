@@ -30,7 +30,6 @@ const DISABLE_USER_SWITCH_KEY = 'disable-user-switching';
 const DISABLE_LOCK_SCREEN_KEY = 'disable-lock-screen';
 const DISABLE_LOG_OUT_KEY = 'disable-log-out';
 const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
-const SEPARATE_POWER_OFF_LOG_OUT_KEY = 'separate-power-off-log-out';
 
 const SUSPEND_TEXT = _("Suspend");
 const LOCK_TEXT = _("Lock");
@@ -331,8 +330,6 @@ const UserMenuButton = new Lang.Class({
                                        Lang.bind(this, this._updateSwitchUser));
         this._lockdownSettings.connect('changed::' + DISABLE_LOCK_SCREEN_KEY,
                                        Lang.bind(this, this._updateLockScreen));
-        global.settings.connect('changed::' + SEPARATE_POWER_OFF_LOG_OUT_KEY,
-                                Lang.bind(this, this._updatePowerOff));
         this._updateSwitchUser();
         this._updateLockScreen();
 
