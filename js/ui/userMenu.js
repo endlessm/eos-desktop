@@ -29,12 +29,10 @@ const PRIVACY_SCHEMA = 'org.gnome.desktop.privacy'
 const DISABLE_USER_SWITCH_KEY = 'disable-user-switching';
 const DISABLE_LOCK_SCREEN_KEY = 'disable-lock-screen';
 const DISABLE_LOG_OUT_KEY = 'disable-log-out';
-const ALWAYS_SHOW_LOG_OUT_KEY = 'always-show-log-out';
 const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
 const SEPARATE_POWER_OFF_LOG_OUT_KEY = 'separate-power-off-log-out';
 
 const SUSPEND_TEXT = _("Suspend");
-const LOG_OUT_TEXT = _("Log Out");
 const LOCK_TEXT = _("Lock");
 const EXIT_TEXT = _("Exit");
 
@@ -331,18 +329,11 @@ const UserMenuButton = new Lang.Class({
                             Lang.bind(this, this._updateLockScreen));
         this._lockdownSettings.connect('changed::' + DISABLE_USER_SWITCH_KEY,
                                        Lang.bind(this, this._updateSwitchUser));
-        this._lockdownSettings.connect('changed::' + DISABLE_LOG_OUT_KEY,
-                                       Lang.bind(this, this._updateLogout));
         this._lockdownSettings.connect('changed::' + DISABLE_LOCK_SCREEN_KEY,
                                        Lang.bind(this, this._updateLockScreen));
-        global.settings.connect('changed::' + ALWAYS_SHOW_LOG_OUT_KEY,
-                                Lang.bind(this, this._updateLogout));
-        global.settings.connect('changed::' + SEPARATE_POWER_OFF_LOG_OUT_KEY,
-                                Lang.bind(this, this._updateLogout));
         global.settings.connect('changed::' + SEPARATE_POWER_OFF_LOG_OUT_KEY,
                                 Lang.bind(this, this._updatePowerOff));
         this._updateSwitchUser();
-        this._updateLogout();
         this._updateLockScreen();
 
         // Whether shutdown is available or not depends on both lockdown
@@ -393,7 +384,6 @@ const UserMenuButton = new Lang.Class({
 
     _updateMultiUser: function() {
         this._updateSwitchUser();
-        this._updateLogout();
     },
 
     _updateSwitchUser: function() {
@@ -401,22 +391,6 @@ const UserMenuButton = new Lang.Class({
         let multiUser = this._userManager.can_switch() && this._userManager.has_multiple_users;
 
         this._loginScreenItem.actor.visible = allowSwitch && multiUser;
-    },
-
-    _updateLogout: function() {
-        // FIXME: This is dead code, as it's unclear where to put the log out button now
-        //
-        // let separateFromPowerOff =
-        //     global.settings.get_boolean(SEPARATE_POWER_OFF_LOG_OUT_KEY);
-        // let allowLogout = !this._lockdownSettings.get_boolean(DISABLE_LOG_OUT_KEY);
-        // let alwaysShow = global.settings.get_boolean(ALWAYS_SHOW_LOG_OUT_KEY);
-        // let systemAccount = this._user.system_account;
-        // let localAccount = this._user.local_account;
-        // let multiUser = this._userManager.has_multiple_users;
-        // let multiSession = Gdm.get_session_ids().length > 1;
-
-        // this._logoutOption.visible = separateFromPowerOff && allowLogout &&
-        //     (alwaysShow || multiUser || multiSession || systemAccount || !localAccount);
     },
 
     _updateLockScreen: function() {
@@ -532,10 +506,6 @@ const UserMenuButton = new Lang.Class({
         this._lockScreenAction = this._createActionButtonForIconName(LOCK_TEXT, 'changes-prevent-symbolic');
         this._lockScreenAction.connect('clicked', Lang.bind(this, this._onLockScreenClicked));
         item.actor.add(this._lockScreenAction, { expand: true, x_fill: false })
-
-        // FIXME: This is dead code, as it's unclear where to put the log out button now
-        // this._logoutOption = new PopupMenu.MenuItemOption(LOG_OUT_TEXT, null);
-        // this._logoutOption.connect('clicked', Lang.bind(this, this._onQuitSessionActivate));
 
         this._suspendAction = this._createActionButtonForIconName(SUSPEND_TEXT, 'media-playback-pause-symbolic');
         this._suspendAction.connect('clicked', Lang.bind(this, this._onSuspendClicked));
