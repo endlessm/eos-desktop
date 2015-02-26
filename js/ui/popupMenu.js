@@ -411,114 +411,6 @@ const PopupSeparatorMenuItem = new Lang.Class({
     }
 });
 
-const PopupAlternatingMenuItemState = {
-    DEFAULT: 0,
-    ALTERNATIVE: 1
-}
-
-const PopupAlternatingBaseMenuItem = new Lang.Class({
-    Name: 'PopupAlternatingBaseMenuItem',
-    Extends: PopupBaseMenuItem,
-
-    _init: function(text, alternateText, params) {
-        this.parent(params);
-        this.actor.add_style_class_name('popup-alternating-menu-item');
-
-        this.actor.connect('notify::mapped', Lang.bind(this, this._onMapped));
-    },
-
-    _onMapped: function() {
-        if (this.actor.mapped) {
-            this._capturedEventId = global.stage.connect('captured-event',
-                                                         Lang.bind(this, this._onCapturedEvent));
-            this._updateStateFromModifiers();
-        } else {
-            if (this._capturedEventId != 0) {
-                global.stage.disconnect(this._capturedEventId);
-                this._capturedEventId = 0;
-            }
-        }
-    },
-
-    _setState: function(state) {
-        if (this.state != state) {
-            if (state == PopupAlternatingMenuItemState.ALTERNATIVE && !this.canAlternate())
-                return;
-
-            this.state = state;
-            this.stateChanged();
-        }
-    },
-
-    _updateStateFromModifiers: function() {
-        let [x, y, mods] = global.get_pointer();
-        let state;
-
-        if ((mods & Clutter.ModifierType.MOD1_MASK) == 0) {
-            state = PopupAlternatingMenuItemState.DEFAULT;
-        } else {
-            state = PopupAlternatingMenuItemState.ALTERNATIVE;
-        }
-
-        this._setState(state);
-    },
-
-    _onCapturedEvent: function(actor, event) {
-        if (event.type() != Clutter.EventType.KEY_PRESS &&
-            event.type() != Clutter.EventType.KEY_RELEASE)
-            return false;
-
-        let key = event.get_key_symbol();
-
-        if (key == Clutter.KEY_Alt_L || key == Clutter.KEY_Alt_R)
-            this._updateStateFromModifiers();
-
-        return false;
-    }
-});
-
-const PopupAlternatingMenuItem = new Lang.Class({
-    Name: 'PopupAlternatingMenuItem',
-    Extends: PopupAlternatingBaseMenuItem,
-
-    _init: function(text, alternateText, params) {
-        this.parent(params);
-
-        this._text = text;
-        this._alternateText = alternateText;
-        this.label = new St.Label({ text: text });
-        this.state = PopupAlternatingMenuItemState.DEFAULT;
-        this.addActor(this.label);
-        this.actor.label_actor = this.label;
-    },
-
-    canAlternate: function() {
-        if (this.state == PopupAlternatingMenuItemState.DEFAULT && !this._alternateText)
-            return false;
-        return true;
-    },
-
-    stateChanged: function() {
-        if (this.state == PopupAlternatingMenuItemState.ALTERNATIVE) {
-            this.actor.add_style_pseudo_class('alternate');
-            this.label.set_text(this._alternateText);
-        } else {
-            this.actor.remove_style_pseudo_class('alternate');
-            this.label.set_text(this._text);
-        }
-    },
-
-    updateText: function(text, alternateText) {
-        this._text = text;
-        this._alternateText = alternateText;
-
-        if (!this.canAlternate())
-            this._setState(PopupAlternatingMenuItemState.DEFAULT);
-
-        this.updateState();
-    }
-});
-
 const PopupSliderMenuItem = new Lang.Class({
     Name: 'PopupSliderMenuItem',
     Extends: PopupBaseMenuItem,
@@ -747,154 +639,6 @@ const Switch = new Lang.Class({
 
     toggle: function() {
         this.setToggleState(!this.state);
-    }
-});
-
-const MenuItemOption = new Lang.Class({
-    Name: 'MenuItemOption',
-    Extends: St.Button,
-
-    _init: function(text, alternateText) {
-        this._text = text;
-        this._alternateText = alternateText;
-        this.state = PopupAlternatingMenuItemState.DEFAULT;
-
-        this.parent({ label: text,
-                      style_class: 'popup-options-menu-item-button',
-                      track_hover: true,
-                      can_focus: true,
-                      reactive: true,
-                      x_expand: true
-                    });
-    },
-
-    stateChanged: function(state) {
-        this.state = state;
-
-        if (this.state == PopupAlternatingMenuItemState.ALTERNATIVE &&
-            this._alternateText) {
-            this.add_style_pseudo_class('alternate');
-            this.set_label(this._alternateText);
-        } else {
-            this.remove_style_pseudo_class('alternate');
-            this.set_label(this._text);
-        }
-    },
-
-    updateText: function(text, alternateText) {
-        this._text = text;
-        this._alternateText = alternateText;
-
-        this.stateChanged(this.state);
-    }
-});
-
-const PopupOptionsMenuItem = new Lang.Class({
-    Name: 'PopupOptionsMenuItem',
-    Extends: PopupAlternatingBaseMenuItem,
-
-    _init: function(options, params) {
-        params = Params.parse (params, { hover: false });
-        this.parent(params);
-
-        this._options = options;
-        this._selectedOptionIndex = -1;
-
-        let boxLayout = new Clutter.BoxLayout();
-        boxLayout.set_homogeneous(true);
-        this._container = new St.Widget({ layout_manager: boxLayout,
-                                          style_class: 'popup-options-menu-item' });
-        this._container.connect('key-press-event', Lang.bind(this, this._onKeyPressEvent));
-
-        for (let optionIndex in options) {
-            let option = options[optionIndex];
-
-            if (option instanceof MenuItemOption) {
-                this._container.add_actor(option);
-                option.connect('key-focus-in', Lang.bind(this, this._onOptionFocused));
-                option.connect('notify::hover', Lang.bind(this, this._onOptionHovered));
-            } else {
-                throw TypeError("Invalid argument to PopupOptionsMenuItem constructor");
-            }
-        }
-
-        this.addActor(this._container, { expand: true,
-                                         span: -1
-                                       });
-    },
-
-    _onKeyPressEvent: function(actor, event) {
-        let symbol = event.get_key_symbol();
-        let selectedOption = this._options[this._selectedOptionIndex];
-        let nextFocus = -1;
-
-        if (symbol == Clutter.KEY_Right) {
-            nextFocus = Gtk.DirectionType.RIGHT;
-        } else if (symbol == Clutter.KEY_Left) {
-            nextFocus = Gtk.DirectionType.LEFT;
-        }
-
-        if (selectedOption && (nextFocus != -1)) {
-            this._container.navigate_focus(selectedOption,
-                                           nextFocus, true);
-            return true;
-        }
-
-        return this.parent(actor, event);
-    },
-
-    _onOptionFocused: function(actor) {
-        let index = this._options.indexOf(actor);
-        this._selectedOptionIndex = index;
-    },
-
-    _onOptionHovered: function(actor) {
-        if (actor.hover) {
-            let index = this._options.indexOf(actor);
-            this._selectedOptionIndex = index;
-            this._updateKeyFocus(index);
-        } else {
-            this._selectedOptionIndex = -1;
-            if (actor.has_key_focus()) {
-                // Move the key focus away from the button if it
-                // had it as a consequence of being hovered
-                this._container.grab_key_focus();
-            }
-        }
-    },
-
-    _updateKeyFocus: function(index) {
-        let option = this._options[this._selectedOptionIndex];
-        if (option && option.visible) {
-            option.grab_key_focus();
-        }
-    },
-
-    stateChanged: function() {
-        let option = this._options[this._selectedOptionIndex];
-        if (option) {
-            option.stateChanged(this.state);
-        }
-    },
-
-    canAlternate: function() {
-        return true;
-    },
-
-    // Do nothing, as the key focus code we have already handles
-    // keyboard activation
-    activate: function(event) {
-
-    },
-
-    // Override default focus handling to disable the selection highlight on
-    // the whole MenuItem line
-    setActive: function (active, params) {
-        let activeChanged = active != this.active;
-        if (activeChanged) {
-            this.active = active;
-            this.emit('active-changed', active);
-        }
     }
 });
 
@@ -1227,6 +971,11 @@ const PopupMenuBase = new Lang.Class({
             } else {
                 this.box.add(menuItem.actor);
             }
+        }
+
+        // No need to connect signals for PopupActionsMenuItem.
+        if (menuItem instanceof PopupActionsMenuItem) {
+            return;
         }
 
         if (menuItem instanceof PopupMenuSection) {
@@ -1900,3 +1649,19 @@ const PopupMenuManager = new Lang.Class({
             menu.close(BoxPointer.PopupAnimation.FULL);
     }
 });
+
+const PopupActionsMenuItem = new Lang.Class({
+    Name: 'PopupActionsMenuItem',
+
+    _init: function () {
+        this.actor = new St.BoxLayout({ style_class: 'popup-menu-item',
+                                        accessible_role: Atk.Role.MENU_ITEM });
+        this.actor._delegate = this;
+    },
+
+    destroy: function() {
+        this.actor.destroy();
+        this.emit('destroy');
+    },
+});
+Signals.addSignalMethods(PopupActionsMenuItem.prototype);

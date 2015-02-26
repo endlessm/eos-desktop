@@ -29,12 +29,9 @@ const PRIVACY_SCHEMA = 'org.gnome.desktop.privacy'
 const DISABLE_USER_SWITCH_KEY = 'disable-user-switching';
 const DISABLE_LOCK_SCREEN_KEY = 'disable-lock-screen';
 const DISABLE_LOG_OUT_KEY = 'disable-log-out';
-const ALWAYS_SHOW_LOG_OUT_KEY = 'always-show-log-out';
 const SHOW_FULL_NAME_IN_TOP_BAR_KEY = 'show-full-name-in-top-bar';
-const SEPARATE_POWER_OFF_LOG_OUT_KEY = 'separate-power-off-log-out';
 
 const SUSPEND_TEXT = _("Suspend");
-const LOG_OUT_TEXT = _("Log Out");
 const LOCK_TEXT = _("Lock");
 const EXIT_TEXT = _("Exit");
 
@@ -217,6 +214,63 @@ const IMStatusChooserItem = new Lang.Class({
     }
 });
 
+const AltSwitcher = new Lang.Class({
+    Name: 'AltSwitcher',
+
+    _init: function(standard, alternate) {
+        this._standard = standard;
+        this._standard.connect('notify::visible', Lang.bind(this, this._sync));
+
+        this._alternate = alternate;
+        this._alternate.connect('notify::visible', Lang.bind(this, this._sync));
+
+        this._capturedEventId = global.stage.connect('captured-event', Lang.bind(this, this._onCapturedEvent));
+
+        this.actor = new St.Bin();
+        this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+    },
+
+    _sync: function() {
+        let childToShow = null;
+        if (this._standard.visible && this._alternate.visible) {
+            let [x, y, mods] = global.get_pointer();
+            let altPressed = (mods & Clutter.ModifierType.MOD1_MASK) != 0;
+            childToShow = altPressed ? this._alternate : this._standard;
+        } else if (this._standard.visible) {
+            childToShow = this._standard;
+        } else if (this._alternate.visible) {
+            childToShow = this._alternate;
+        }
+
+        if (this.actor.get_child() != childToShow) {
+            this.actor.set_child(childToShow);
+
+            // The actors might respond to hover, so
+            // sync the pointer to make sure they update.
+            global.sync_pointer();
+        }
+
+        this.actor.visible = (childToShow != null);
+    },
+
+    _onDestroy: function() {
+        if (this._capturedEventId > 0) {
+            global.stage.disconnect(this._capturedEventId);
+            this._capturedEventId = 0;
+        }
+    },
+
+    _onCapturedEvent: function(actor, event) {
+        let type = event.type();
+        if (type == Clutter.EventType.KEY_PRESS || type == Clutter.EventType.KEY_RELEASE) {
+            let key = event.get_key_symbol();
+            if (key == Clutter.KEY_Alt_L || key == Clutter.KEY_Alt_R)
+                this._sync();
+        }
+
+        return false;
+    },
+});
 
 const UserMenuButton = new Lang.Class({
     Name: 'UserMenuButton',
@@ -274,18 +328,9 @@ const UserMenuButton = new Lang.Class({
                             Lang.bind(this, this._updateLockScreen));
         this._lockdownSettings.connect('changed::' + DISABLE_USER_SWITCH_KEY,
                                        Lang.bind(this, this._updateSwitchUser));
-        this._lockdownSettings.connect('changed::' + DISABLE_LOG_OUT_KEY,
-                                       Lang.bind(this, this._updateLogout));
         this._lockdownSettings.connect('changed::' + DISABLE_LOCK_SCREEN_KEY,
                                        Lang.bind(this, this._updateLockScreen));
-        global.settings.connect('changed::' + ALWAYS_SHOW_LOG_OUT_KEY,
-                                Lang.bind(this, this._updateLogout));
-        global.settings.connect('changed::' + SEPARATE_POWER_OFF_LOG_OUT_KEY,
-                                Lang.bind(this, this._updateLogout));
-        global.settings.connect('changed::' + SEPARATE_POWER_OFF_LOG_OUT_KEY,
-                                Lang.bind(this, this._updateSuspendOrPowerOff));
         this._updateSwitchUser();
-        this._updateLogout();
         this._updateLockScreen();
 
         // Whether shutdown is available or not depends on both lockdown
@@ -309,6 +354,14 @@ const UserMenuButton = new Lang.Class({
         this._sessionUpdated();
     },
 
+    _updateActionsVisibility: function() {
+        let visible = (this._lockScreenAction.visible ||
+                       this._altSwitcher.actor.visible ||
+                       this._helpAction.visible);
+
+        this._actionsItem.actor.visible = visible;
+    },
+
     _sessionUpdated: function() {
         this.actor.visible = !Main.sessionMode.isGreeter;
 
@@ -318,6 +371,7 @@ const UserMenuButton = new Lang.Class({
 
         this.setSensitive(!Main.sessionMode.isLocked);
         this._updateButtonIcon();
+        this._updateActionsVisibility();
     },
 
     _onDestroy: function() {
@@ -327,7 +381,6 @@ const UserMenuButton = new Lang.Class({
 
     _updateMultiUser: function() {
         this._updateSwitchUser();
-        this._updateLogout();
     },
 
     _updateSwitchUser: function() {
@@ -337,26 +390,13 @@ const UserMenuButton = new Lang.Class({
         this._loginScreenItem.actor.visible = allowSwitch && multiUser;
     },
 
-    _updateLogout: function() {
-        let separateFromPowerOff =
-            global.settings.get_boolean(SEPARATE_POWER_OFF_LOG_OUT_KEY);
-        let allowLogout = !this._lockdownSettings.get_boolean(DISABLE_LOG_OUT_KEY);
-        let alwaysShow = global.settings.get_boolean(ALWAYS_SHOW_LOG_OUT_KEY);
-        let systemAccount = this._user.system_account;
-        let localAccount = this._user.local_account;
-        let multiUser = this._userManager.has_multiple_users;
-        let multiSession = Gdm.get_session_ids().length > 1;
-
-        this._logoutOption.visible = separateFromPowerOff && allowLogout &&
-            (alwaysShow || multiUser || multiSession || systemAccount || !localAccount);
-    },
-
     _updateLockScreen: function() {
         let allowLockScreen = !this._lockdownSettings.get_boolean(DISABLE_LOCK_SCREEN_KEY);
-        this._lockOption.visible = allowLockScreen
+        this._lockScreenAction.visible = allowLockScreen
             && LoginManager.canLock()
             && !this._user.get_automatic_login()
             && this._user.get_password_mode() == AccountsService.UserPasswordMode.REGULAR;
+        this._updateActionsVisibility();
     },
 
     _updateHaveShutdown: function() {
@@ -364,39 +404,27 @@ const UserMenuButton = new Lang.Class({
             function(result, error) {
                 if (!error) {
                     this._haveShutdown = result[0];
-                    this._updateSuspendOrPowerOff();
+                    this._updatePowerOff();
                 }
             }));
+    },
+
+    _updatePowerOff: function() {
+        this._powerOffAction.visible = this._haveShutdown;
+        this._updateActionsVisibility();
     },
 
     _updateHaveSuspend: function() {
         this._loginManager.canSuspend(Lang.bind(this,
             function(result) {
                 this._haveSuspend = result;
-                this._updateSuspendOrPowerOff();
+                this._updateSuspend();
         }));
     },
 
-    _updateSuspendOrPowerOff: function() {
-        if (!this._suspendOrPowerOffOption)
-            return;
-
-        this._suspendOrPowerOffOption.visible = this._haveShutdown || this._haveSuspend;
-
-        // If the power off and log out functionalities are combined,
-        // show a single exit button
-        if (!global.settings.get_boolean(SEPARATE_POWER_OFF_LOG_OUT_KEY)) {
-            this._suspendOrPowerOffOption.updateText(EXIT_TEXT, null);
-
-        // If we can't power off show Suspend instead
-        // and disable the alt key
-        } else if (!this._haveShutdown) {
-            this._suspendOrPowerOffOption.updateText(SUSPEND_TEXT, null);
-        } else if (!this._haveSuspend) {
-            this._suspendOrPowerOffOption.updateText(EXIT_TEXT, null);
-        } else {
-            this._suspendOrPowerOffOption.updateText(EXIT_TEXT, SUSPEND_TEXT);
-        }
+    _updateSuspend: function() {
+        this._suspendAction.visible = this._haveSuspend;
+        this._updateActionsVisibility();
     },
 
     _updateButtonIcon: function() {
@@ -407,6 +435,31 @@ const UserMenuButton = new Lang.Class({
             this._icon.visible = Main.screenShield.locked;
         else
             this._icon.visible = true;
+    },
+
+    _createActionButton: function(accessibleName) {
+        let item = new St.Button({ style_class: 'system-menu-action',
+                                   track_hover: true,
+                                   can_focus: true,
+                                   reactive: true,
+                                   x_expand: true,
+                                   accessible_name: accessibleName });
+        return item;
+    },
+
+    _createActionButtonForIconName: function(accessibleName, iconName) {
+        let item = this._createActionButton(accessibleName);
+        item.child = new St.Icon({ icon_name: iconName });
+        return item;
+    },
+
+    _createActionButtonForIconPath: function(accessibleName, iconPath) {
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell' + iconPath);
+        let gicon = new Gio.FileIcon({ file: iconFile });
+
+        let item = this._createActionButton(accessibleName);
+        item.child = new St.Icon({ gicon: gicon });
+        return item;
     },
 
     _createSubMenu: function() {
@@ -425,13 +478,6 @@ const UserMenuButton = new Lang.Class({
         this._systemSettings.connect('activate', Lang.bind(this, this._onPreferencesActivate));
         this.menu.addMenuItem(this._systemSettings);
 
-        if (this._haveLauncher(YELP_LAUNCHER)) {
-            item = new PopupMenu.PopupUserMenuItem(YELP_TEXT,
-                                                   { imagePath: '/theme/help-symbolic.svg' });
-            item.connect('activate', Lang.bind(this, this._onYelpActivate));
-            this.menu.addMenuItem(item);
-        }
-
         if (this._haveLauncher(FEEDBACK_LAUNCHER)) {
             item = new PopupMenu.PopupUserMenuItem(FEEDBACK_TEXT,
                                                    { imagePath: '/theme/feedback-symbolic.svg' });
@@ -447,30 +493,33 @@ const UserMenuButton = new Lang.Class({
         item = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(item);
 
-        this._suspendOrPowerOffOption = new PopupMenu.MenuItemOption(EXIT_TEXT, SUSPEND_TEXT);
-        this._suspendOrPowerOffOption.connect('clicked', Lang.bind(this, this._onSystemActionActivate));
+        item = new PopupMenu.PopupActionsMenuItem();
 
-        this._lockOption = new PopupMenu.MenuItemOption(LOCK_TEXT, null);
-        this._lockOption.connect('clicked', Lang.bind(this, this._onLockScreenActivate));
+        this._helpAction = this._createActionButtonForIconPath(YELP_TEXT, '/theme/help-symbolic.svg');
+        this._helpAction.connect('clicked', Lang.bind(this, this._onHelpClicked));
+        this._helpAction.visible = this._haveLauncher(YELP_LAUNCHER);
+        item.actor.add(this._helpAction, { expand: true, x_fill: false })
 
-        this._logoutOption = new PopupMenu.MenuItemOption(LOG_OUT_TEXT, null);
-        this._logoutOption.connect('clicked', Lang.bind(this, this._onQuitSessionActivate));
+        this._lockScreenAction = this._createActionButtonForIconName(LOCK_TEXT, 'changes-prevent-symbolic');
+        this._lockScreenAction.connect('clicked', Lang.bind(this, this._onLockScreenClicked));
+        item.actor.add(this._lockScreenAction, { expand: true, x_fill: false })
 
-        item = new PopupMenu.PopupOptionsMenuItem([this._suspendOrPowerOffOption,
-                                                   this._lockOption,
-                                                   this._logoutOption]);
+        this._suspendAction = this._createActionButtonForIconName(SUSPEND_TEXT, 'media-playback-pause-symbolic');
+        this._suspendAction.connect('clicked', Lang.bind(this, this._onSuspendClicked));
+
+        this._powerOffAction = this._createActionButtonForIconName(EXIT_TEXT, 'system-shutdown-symbolic');
+        this._powerOffAction.connect('clicked', Lang.bind(this, this._onPowerOffClicked));
+
+        this._altSwitcher = new AltSwitcher(this._powerOffAction, this._suspendAction);
+        item.actor.add(this._altSwitcher.actor, { expand: true, x_fill: false });
+
+        this._actionsItem = item
         this.menu.addMenuItem(item);
     },
 
     _haveLauncher: function(launcher) {
         let app = Shell.AppSystem.get_default().lookup_app(launcher);
         return app != null;
-    },
-
-    _onYelpActivate: function() {
-        Main.overview.hide();
-        let app = Shell.AppSystem.get_default().lookup_app(YELP_LAUNCHER);
-        app.activate();
     },
 
     _onFeedbackActivate: function() {
@@ -489,11 +538,6 @@ const UserMenuButton = new Lang.Class({
         Main.overview.hide();
         let app = Shell.AppSystem.get_default().lookup_app('gnome-control-center.desktop');
         app.activate();
-    },
-
-    _onLockScreenActivate: function() {
-        this.menu.close(BoxPointer.PopupAnimation.NONE);
-        Main.screenShield.lock(true);
     },
 
     _onLoginScreenActivate: function() {
@@ -576,51 +620,62 @@ const UserMenuButton = new Lang.Class({
         dialog.open();
     },
 
-    _onSystemActionActivate: function() {
-        if (this._haveShutdown &&
-            this._suspendOrPowerOffOption.state == PopupMenu.PopupAlternatingMenuItemState.DEFAULT) {
-            this.menu.close(BoxPointer.PopupAnimation.NONE);
+    _onHelpClicked: function() {
+        this.menu.close(BoxPointer.PopupAnimation.NONE);
+        Main.overview.hide();
 
-            this._loginManager.listSessions(Lang.bind(this,
-                function(result) {
-                    let sessions = [];
-                    let n = 0;
-                    for (let i = 0; i < result.length; i++) {
-                        let[id, uid, userName, seat, sessionPath] = result[i];
-                        let proxy = new SystemdLoginSession(Gio.DBus.system,
-                                                            'org.freedesktop.login1',
-                                                            sessionPath);
+        let app = Shell.AppSystem.get_default().lookup_app(YELP_LAUNCHER);
+        app.activate();
+    },
 
-                        if (proxy.Class != 'user')
-                            continue;
+    _onLockScreenClicked: function() {
+        this.menu.close(BoxPointer.PopupAnimation.NONE);
+        Main.screenShield.lock(true);
+    },
 
-                        if (proxy.State == 'closing')
-                            continue;
+    _onSuspendClicked: function() {
+        this.menu.close(BoxPointer.PopupAnimation.NONE);
+        this._loginManager.suspend();
+    },
 
-                        if (proxy.Id == GLib.getenv('XDG_SESSION_ID'))
-                            continue;
+    _onPowerOffClicked: function() {
+        this.menu.close(BoxPointer.PopupAnimation.NONE);
+        this._loginManager.listSessions(Lang.bind(this,
+            function(result) {
+                let sessions = [];
+                let n = 0;
+                for (let i = 0; i < result.length; i++) {
+                    let[id, uid, userName, seat, sessionPath] = result[i];
+                    let proxy = new SystemdLoginSession(Gio.DBus.system,
+                                                        'org.freedesktop.login1',
+                                                        sessionPath);
 
-                        sessions.push({ user: this._userManager.get_user(userName),
-                                        username: userName,
-                                        info: { type: proxy.Type,
-                                                remote: proxy.Remote }
-                        });
+                    if (proxy.Class != 'user')
+                        continue;
 
-                        // limit the number of entries
-                        n++;
-                        if (n == MAX_USERS_IN_SESSION_DIALOG)
-                            break;
-                    }
+                    if (proxy.State == 'closing')
+                        continue;
 
-                    if (n != 0)
-                        this._openSessionWarnDialog(sessions);
-                    else
-                        this._session.ShutdownRemote();
+                    if (proxy.Id == GLib.getenv('XDG_SESSION_ID'))
+                        continue;
+
+                    sessions.push({ user: this._userManager.get_user(userName),
+                                    username: userName,
+                                    info: { type: proxy.Type,
+                                            remote: proxy.Remote }
+                    });
+
+                    // limit the number of entries
+                    n++;
+                    if (n == MAX_USERS_IN_SESSION_DIALOG)
+                        break;
+                }
+
+                if (n != 0)
+                    this._openSessionWarnDialog(sessions);
+                else
+                    this._session.ShutdownRemote();
             }));
-        } else {
-            this.menu.close(BoxPointer.PopupAnimation.NONE);
-            this._loginManager.suspend();
-        }
     },
 
     _onHoverChanged: function() {
