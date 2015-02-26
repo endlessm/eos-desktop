@@ -1229,6 +1229,11 @@ const PopupMenuBase = new Lang.Class({
             }
         }
 
+        // No need to connect signals for PopupActionsMenuItem.
+        if (menuItem instanceof PopupActionsMenuItem) {
+            return;
+        }
+
         if (menuItem instanceof PopupMenuSection) {
             this._connectSubMenuSignals(menuItem, menuItem);
             menuItem._parentOpenStateChangedId = this.connect('open-state-changed',
@@ -1900,3 +1905,19 @@ const PopupMenuManager = new Lang.Class({
             menu.close(BoxPointer.PopupAnimation.FULL);
     }
 });
+
+const PopupActionsMenuItem = new Lang.Class({
+    Name: 'PopupActionsMenuItem',
+
+    _init: function () {
+        this.actor = new St.BoxLayout({ style_class: 'popup-menu-item',
+                                        accessible_role: Atk.Role.MENU_ITEM });
+        this.actor._delegate = this;
+    },
+
+    destroy: function() {
+        this.actor.destroy();
+        this.emit('destroy');
+    },
+});
+Signals.addSignalMethods(PopupActionsMenuItem.prototype);
