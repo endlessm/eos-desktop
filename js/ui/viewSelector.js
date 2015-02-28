@@ -159,6 +159,10 @@ const ViewsDisplayContainer = new Lang.Class({
         this._activePage = ViewsDisplayPage.APP_GRID;
     },
 
+    _onTweenComplete: function() {
+        this._searchResults.isAnimating = false;
+    },
+
     showPage: function(page, doAnimation) {
         if (this._activePage !== page) {
             this._activePage = page;
@@ -167,10 +171,13 @@ const ViewsDisplayContainer = new Lang.Class({
 
         let tweenTarget = page == ViewsDisplayPage.SEARCH ? 1 : 0;
         if (doAnimation) {
+            this._searchResults.isAnimating = true;
             Tweener.addTween(this.layout_manager,
                              { searchResultsTween: tweenTarget,
                                transition: 'easeOutQuad',
                                time: 0.25,
+                               onComplete: this._onTweenComplete,
+                               onCompleteScope: this,
                              });
         } else {
             this.layout_manager.searchResultsTween = tweenTarget;
