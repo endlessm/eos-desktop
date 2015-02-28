@@ -35,7 +35,6 @@ const Util = imports.misc.util;
 const MAX_APPLICATION_WORK_MILLIS = 75;
 const MENU_POPUP_TIMEOUT = 600;
 const MAX_COLUMNS = 7;
-const ROWS_FOR_ENTRY = 4;
 
 const ICON_ANIMATION_TIME = 0.6;
 const ICON_ANIMATION_DELAY = 0.3;
@@ -515,6 +514,8 @@ const AllViewContainer = new Lang.Class({
     Extends: St.ScrollView,
 
     _init: function(gridActor) {
+        this.gridActor = gridActor;
+
         gridActor.y_expand = true;
         gridActor.y_align = Clutter.ActorAlign.CENTER;
 
@@ -1173,17 +1174,6 @@ const AllView = new Lang.Class({
                                            transition: transition });
         }
     },
-
-    getEntryAnchor: function() {
-        return this._grid.getHeightForRows(ROWS_FOR_ENTRY);
-    },
-
-    getHeightForEntry: function(forWidth) {
-        let gridHeight = this._grid.actor.get_preferred_height(forWidth);
-        gridHeight[1] = Math.max(gridHeight[1], this.getEntryAnchor());
-
-        return gridHeight;
-    }
 });
 
 const ViewIconMenu = new Lang.Class({

@@ -946,7 +946,7 @@ StScrollBar StButton#vhandle:active {
     background-color: rgba(42,42,42,0.70);
     box-shadow: inset 0px 1px 4px rgba(0,0,0,0.8);
 
-    -minimum-vpadding: 24px;
+    -minimum-vpadding: 48px;
 }
 
 #searchEntry:rtl {
