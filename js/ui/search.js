@@ -26,6 +26,7 @@ const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 
 const MAX_LIST_SEARCH_RESULTS_ROWS = 3;
 const MAX_GRID_SEARCH_RESULTS_ROWS = 1;
+const MAX_GRID_SEARCH_RESULTS_COLS = 8;
 
 const MaxWidthBin = new Lang.Class({
     Name: 'MaxWidthBin',
@@ -368,14 +369,8 @@ const GridSearchResults = new Lang.Class({
     Name: 'GridSearchResults',
     Extends: SearchResultsBase,
 
-    _init: function(provider, parentContainer) {
+    _init: function(provider) {
         this.parent(provider);
-        // We need to use the parent container to know how much results we can show.
-        // None of the actors in this class can be used for that, since the main actor
-        // goes hidden when no results are displayed, and then it lost its allocation.
-        // Then on the next use of _getMaxDisplayedResults allocation is 0, en therefore
-        // it doesn't show any result although we have some.
-        this._parentContainer = parentContainer;
 
         this._grid = new IconGrid.IconGrid({ rowLimit: MAX_GRID_SEARCH_RESULTS_ROWS,
                                              xAlign: St.Align.START });
@@ -386,9 +381,7 @@ const GridSearchResults = new Lang.Class({
     },
 
     _getMaxDisplayedResults: function() {
-        let parentThemeNode = this._parentContainer.get_theme_node();
-        let availableWidth = parentThemeNode.adjust_for_width(this._parentContainer.width);
-        return this._grid.childrenInRow(availableWidth) * this._grid.getRowLimit();
+        return MAX_GRID_SEARCH_RESULTS_ROWS * MAX_GRID_SEARCH_RESULTS_COLS;
     },
 
     _clearResultDisplay: function () {
@@ -616,7 +609,7 @@ const SearchResults = new Lang.Class({
         if (provider.app)
             providerDisplay = new ListSearchResults(provider);
         else
-            providerDisplay = new GridSearchResults(provider, this.actor);
+            providerDisplay = new GridSearchResults(provider);
 
         providerDisplay.connect('key-focus-in', Lang.bind(this, this._keyFocusIn));
         providerDisplay.actor.hide();
