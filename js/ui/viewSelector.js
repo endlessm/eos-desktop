@@ -500,12 +500,16 @@ const ViewSelector = new Lang.Class({
         return viewPage;
     },
 
+    _clearSearch: function() {
+        this._entry.resetSearch();
+        this._viewsDisplay.actor.showPage(ViewsDisplayPage.APP_GRID, false);
+    },
+
     show: function(viewPage) {
         this._stageKeyPressId = global.stage.connect('key-press-event',
                                                      Lang.bind(this, this._onStageKeyPress));
 
-        this._entry.resetSearch();
-        this._viewsDisplay.actor.showPage(ViewsDisplayPage.APP_GRID, false);
+        this._clearSearch();
         this._workspacesDisplay.show();
 
         this._showPage(this._pageFromViewPage(viewPage), true);
@@ -562,6 +566,7 @@ const ViewSelector = new Lang.Class({
         if (this._activePage == this._appsPage) {
             this._showAppsButton.checked = true;
         } else {
+            this._clearSearch();
             this._showAppsButton.checked = false;
         }
 
