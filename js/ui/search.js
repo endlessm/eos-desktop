@@ -562,13 +562,26 @@ const SearchResults = new Lang.Class({
         if (searchString == previousSearchString)
             return;
 
-        this._startingSearch = true;
+        let searchEmpty = searchString.length == 0;
+        let previousSearchEmpty = previousSearchString.length == 0;
 
         this._cancellable.cancel();
         this._cancellable.reset();
 
-        if (terms.length == 0) {
+        // On first search after fade out, reset all state.
+        if (previousSearchEmpty)
             this._reset();
+
+        this._terms = terms;
+
+        // On an empty search leave old results up, we will fade out the actor.
+        if (searchEmpty)
+            return;
+
+        // We won't use a timeout for our first search, to get some results on
+        // screen as quick as possible.
+        if (previousSearchEmpty) {
+            this._doSearch();
             return;
         }
 
@@ -576,10 +589,10 @@ const SearchResults = new Lang.Class({
         if (this._terms.length > 0)
             isSubSearch = searchString.indexOf(previousSearchString) == 0;
 
-        this._terms = terms;
         this._isSubSearch = isSubSearch;
         this._updateSearchProgress();
 
+        this._startingSearch = true;
         if (this._searchTimeoutId == 0)
             this._searchTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, Lang.bind(this, this._onSearchTimeout));
     },
