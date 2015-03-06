@@ -494,7 +494,7 @@ const AllViewLayout = new Lang.Class({
                 continue;
             }
 
-            let childY = child.y;
+            let childY = Math.ceil(child.y);
             let [childMin, childNatural] = child.get_preferred_height(forWidth);
 
             if (childMin + childY > minBottom) {
