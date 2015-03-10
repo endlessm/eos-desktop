@@ -63,7 +63,6 @@ struct _StLabelPrivate
   CoglHandle    text_shadow_material;
   float         shadow_width;
   float         shadow_height;
-  guint8        shadow_opacity;
 };
 
 G_DEFINE_TYPE (StLabel, st_label, ST_TYPE_WIDGET);
@@ -214,7 +213,6 @@ st_label_paint (ClutterActor *actor)
       clutter_actor_box_get_size (&allocation, &width, &height);
 
       if (priv->text_shadow_material == COGL_INVALID_HANDLE ||
-          priv->shadow_opacity != clutter_actor_get_paint_opacity (priv->label) ||
           width != priv->shadow_width ||
           height != priv->shadow_height)
         {
@@ -226,7 +224,6 @@ st_label_paint (ClutterActor *actor)
           material = _st_create_shadow_material_from_actor (shadow_spec,
                                                             priv->label);
 
-          priv->shadow_opacity = clutter_actor_get_paint_opacity (priv->label);
           priv->shadow_width = width;
           priv->shadow_height = height;
           priv->text_shadow_material = material;
@@ -292,7 +289,6 @@ st_label_init (StLabel *label)
   label->priv->text_shadow_material = COGL_INVALID_HANDLE;
   label->priv->shadow_width = -1.;
   label->priv->shadow_height = -1.;
-  label->priv->shadow_opacity = 0;
 
   clutter_actor_add_child (CLUTTER_ACTOR (label), priv->label);
 }

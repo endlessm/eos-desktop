@@ -327,14 +327,6 @@ const Overview = new Lang.Class({
 
         this._shellInfo = new ShellInfo();
 
-        // Add a clone of the panel to the overview so spacing and such is
-        // automatic
-        this._topGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
-                                      reactive: false,
-                                      opacity: 0 });
-
-        this._overview.add_actor(this._topGhost);
-
         this._bottomGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
                                          reactive: false,
                                          opacity: 0 });
@@ -828,12 +820,11 @@ const Overview = new Lang.Class({
             this._overview.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
         }
 
-        if (hidingFromApps &&
-            this._viewSelector.getActiveViewsPage() == ViewSelector.ViewsDisplayPage.APP_GRID) {
-            // When we're hiding from the applications grid, we want to
-            // instantaneously switch to the application, so don't fade anything.
-            // We'll tween the grid clone in the background separately -
-            // see comment in viewSelector.js::ViewsClone.
+        if (hidingFromApps) {
+            // When we're hiding from the apps page, we want to instantaneously
+            // switch to the application, so don't fade anything. We'll tween
+            // the grid clone in the background separately - see comment in
+            // viewSelector.js::ViewsClone.
             this._hideDone();
             return;
         }

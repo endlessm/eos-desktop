@@ -26,6 +26,7 @@ const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 
 const MAX_LIST_SEARCH_RESULTS_ROWS = 3;
 const MAX_GRID_SEARCH_RESULTS_ROWS = 1;
+const MAX_GRID_SEARCH_RESULTS_COLS = 8;
 
 const MaxWidthBin = new Lang.Class({
     Name: 'MaxWidthBin',
@@ -368,14 +369,8 @@ const GridSearchResults = new Lang.Class({
     Name: 'GridSearchResults',
     Extends: SearchResultsBase,
 
-    _init: function(provider, parentContainer) {
+    _init: function(provider) {
         this.parent(provider);
-        // We need to use the parent container to know how much results we can show.
-        // None of the actors in this class can be used for that, since the main actor
-        // goes hidden when no results are displayed, and then it lost its allocation.
-        // Then on the next use of _getMaxDisplayedResults allocation is 0, en therefore
-        // it doesn't show any result although we have some.
-        this._parentContainer = parentContainer;
 
         this._grid = new IconGrid.IconGrid({ rowLimit: MAX_GRID_SEARCH_RESULTS_ROWS,
                                              xAlign: St.Align.START });
@@ -386,9 +381,7 @@ const GridSearchResults = new Lang.Class({
     },
 
     _getMaxDisplayedResults: function() {
-        let parentThemeNode = this._parentContainer.get_theme_node();
-        let availableWidth = parentThemeNode.adjust_for_width(this._parentContainer.width);
-        return this._grid.childrenInRow(availableWidth) * this._grid.getRowLimit();
+        return MAX_GRID_SEARCH_RESULTS_ROWS * MAX_GRID_SEARCH_RESULTS_COLS;
     },
 
     _clearResultDisplay: function () {
@@ -458,6 +451,7 @@ const SearchResults = new Lang.Class({
 
         this._terms = [];
         this._results = {};
+        this._isAnimating = false;
 
         this._providers = [];
 
@@ -562,13 +556,26 @@ const SearchResults = new Lang.Class({
         if (searchString == previousSearchString)
             return;
 
-        this._startingSearch = true;
+        let searchEmpty = searchString.length == 0;
+        let previousSearchEmpty = previousSearchString.length == 0;
 
         this._cancellable.cancel();
         this._cancellable.reset();
 
-        if (terms.length == 0) {
+        // On first search after fade out, reset all state.
+        if (previousSearchEmpty)
             this._reset();
+
+        this._terms = terms;
+
+        // On an empty search leave old results up, we will fade out the actor.
+        if (searchEmpty)
+            return;
+
+        // We won't use a timeout for our first search, to get some results on
+        // screen as quick as possible.
+        if (previousSearchEmpty) {
+            this._doSearch();
             return;
         }
 
@@ -576,10 +583,10 @@ const SearchResults = new Lang.Class({
         if (this._terms.length > 0)
             isSubSearch = searchString.indexOf(previousSearchString) == 0;
 
-        this._terms = terms;
         this._isSubSearch = isSubSearch;
         this._updateSearchProgress();
 
+        this._startingSearch = true;
         if (this._searchTimeoutId == 0)
             this._searchTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, Lang.bind(this, this._onSearchTimeout));
     },
@@ -603,7 +610,7 @@ const SearchResults = new Lang.Class({
         if (provider.app)
             providerDisplay = new ListSearchResults(provider);
         else
-            providerDisplay = new GridSearchResults(provider, this.actor);
+            providerDisplay = new GridSearchResults(provider);
 
         providerDisplay.connect('key-focus-in', Lang.bind(this, this._keyFocusIn));
         providerDisplay.actor.hide();
@@ -657,16 +664,37 @@ const SearchResults = new Lang.Class({
         });
     },
 
+    get isAnimating() {
+        return this._isAnimating;
+    },
+
+    set isAnimating (v) {
+        if (this._isAnimating == v)
+            return;
+
+        this._isAnimating = v;
+        this._updateSearchProgress();
+        if (!this._isAnimating) {
+            this._providers.forEach(Lang.bind(this, function (provider) {
+                let results = this._results[provider.id];
+                if (results) {
+                    this._updateResults(provider, results);
+                }
+            }));
+        }
+    },
+
     _updateSearchProgress: function () {
         let haveResults = this._providers.some(function(provider) {
             let display = provider.display;
             return (display.getFirstResult() != null);
         });
+        let showStatus = !haveResults && !this.isAnimating;
 
         this._scrollView.visible = haveResults;
-        this._statusBin.visible = !haveResults;
+        this._statusBin.visible = showStatus;
 
-        if (!haveResults) {
+        if (!showStatus) {
             if (this.searchInProgress) {
                 this._statusText.set_text(_("Searching…"));
             } else {
@@ -678,6 +706,9 @@ const SearchResults = new Lang.Class({
     },
 
     _updateResults: function(provider, results) {
+        if (this.isAnimating)
+            return;
+
         let terms = this._terms;
         let display = provider.display;
 

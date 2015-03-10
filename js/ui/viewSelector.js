@@ -24,7 +24,7 @@ const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
 const WorkspacesView = imports.ui.workspacesView;
 
-const SEARCH_TIMEOUT = 150;
+const SEARCH_ACTIVATION_TIMEOUT = 50;
 const SEARCH_METRIC_INACTIVITY_TIMEOUT_SECONDS = 3;
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 
@@ -52,69 +52,84 @@ const ViewsDisplayLayout = new Lang.Class({
     Name: 'ViewsDisplayLayout',
     Extends: Clutter.BinLayout,
 
-    _init: function(stack, entry, allView) {
+    _init: function(entry, allViewActor, searchResultsActor) {
         this.parent();
 
-        this._stack = stack;
-
-        this._allView = allView;
-        this._allView.actor.connect('style-changed', Lang.bind(this, this._onStyleChanged));
-
         this._entry = entry;
+        this._allViewActor = allViewActor;
+        this._searchResultsActor = searchResultsActor;
+
         this._entry.connect('style-changed', Lang.bind(this, this._onStyleChanged));
+        this._allViewActor.connect('style-changed', Lang.bind(this, this._onStyleChanged));
+
+        this._heightAboveEntry = 0;
+        this.searchResultsTween = 0;
     },
 
     _onStyleChanged: function() {
         this.layout_changed();
     },
 
+    set searchResultsTween(v) {
+        if (v == this._searchResultsTween || this._searchResultsActor == null)
+            return;
+
+        this._allViewActor.visible = v != 1;
+        this._searchResultsActor.visible = v != 0;
+
+        this._allViewActor.opacity = (1 - v) * 255;
+        this._searchResultsActor.opacity = v * 255;
+
+        let entryTranslation = - this._heightAboveEntry * v;
+        this._entry.translation_y = entryTranslation;
+        this._searchResultsActor.translation_y = entryTranslation;
+
+        this._searchResultsTween = v;
+    },
+
+    get searchResultsTween() {
+        return this._searchResultsTween;
+    },
+
     vfunc_allocate: function(container, box, flags) {
-        let viewActor = this._stack;
-        let entry = this._entry;
+        let centeredHeightAbove = function(height, available) {
+            return Math.floor(Math.max((available - height) / 2, 0));
+        };
 
         let availWidth = box.x2 - box.x1;
         let availHeight = box.y2 - box.y1;
 
-        let viewHeight = viewActor.get_preferred_height(availWidth);
-        viewHeight[1] = Math.max(viewHeight[1], this._allView.getEntryAnchor());
-
-        let themeNode = entry.get_theme_node();
+        let entryHeight = this._entry.get_preferred_height(availWidth)[1];
+        let themeNode = this._entry.get_theme_node();
         let entryMinPadding = themeNode.get_length('-minimum-vpadding');
-        let entryHeight = entry.get_preferred_height(availWidth);
-        entryHeight[0] += entryMinPadding * 2;
-        entryHeight[1] += entryMinPadding * 2;
+        entryHeight += entryMinPadding * 2;
+
+        // We don't want the entry to move when expanding folders in the
+        // allView, so center relative to icon grid
+        let iconGridHeight = this._allViewActor.gridActor.get_preferred_height(availWidth)[1];
+        let heightAboveGrid = centeredHeightAbove(iconGridHeight, availHeight);
+        this._heightAboveEntry = centeredHeightAbove(entryHeight, heightAboveGrid);
 
         let entryBox = box.copy();
-        let viewBox = box.copy();
+        entryBox.y1 = this._heightAboveEntry;
+        entryBox.y2 = entryBox.y1 + entryHeight;
+        this._entry.allocate(entryBox, flags);
 
-        // Always give the view the whole allocation, unless
-        // doing so wouldn't fit the entry
-        let extraSpace = availHeight - viewHeight[1];
-        let viewAllocHeight = viewHeight[1];
+        let allViewBox = box.copy();
+        let allViewHeight = this._allViewActor.get_preferred_height(availWidth)[1];
+        allViewHeight = Math.min(availHeight - entryHeight, allViewHeight);
+        allViewBox.y1 = Math.max(centeredHeightAbove(allViewHeight, availHeight), entryHeight);
+        allViewBox.y2 = allViewBox.y1 + allViewHeight;
+        this._allViewActor.allocate(allViewBox, flags);
 
-        if (extraSpace / 2 < entryHeight[0]) {
-            extraSpace = 0;
-            viewAllocHeight = availHeight - entryHeight[0];
+        // The views clone does not have a searchResultsActor
+        if (this._searchResultsActor) {
+            let searchResultsBox = box.copy();
+            let searchResultsHeight = availHeight - entryHeight;
+            searchResultsBox.y1 = entryBox.y2;
+            searchResultsBox.y2 = searchResultsBox.y1 + searchResultsHeight;
+            this._searchResultsActor.allocate(searchResultsBox, flags);
         }
-
-        viewBox.y1 = Math.floor(extraSpace / 2);
-        viewBox.y2 = viewBox.y1 + viewAllocHeight;
-
-        viewActor.allocate(viewBox, flags);
-
-        // Now center the entry in the space below the grid
-        let gridHeight = this._allView.getHeightForEntry(availWidth);
-
-        extraSpace = availHeight - gridHeight[1];
-        viewAllocHeight = gridHeight[1];
-
-        if (extraSpace / 2 < entryHeight[0]) {
-            extraSpace = 0;
-            viewAllocHeight = availHeight - entryHeight[0];
-        }
-
-        entryBox.y1 = Math.floor(extraSpace / 2) + viewAllocHeight;
-        entry.allocate(entryBox, flags);
     }
 });
 
@@ -125,46 +140,51 @@ const ViewsDisplayContainer = new Lang.Class({
         'views-page-changed': { }
     },
 
-    _init: function(entry, allView) {
+    _init: function(entry, allView, searchResults) {
         this._activePage = null;
 
-        this._stack = new Shell.Stack({ x_expand: true,
-                                        y_expand: true });
         this._entry = entry;
         this._allView = allView;
+        this._searchResults = searchResults;
 
-        let layoutManager = new ViewsDisplayLayout(this._stack, this._entry, this._allView);
+        let layoutManager = new ViewsDisplayLayout(entry, allView.actor, searchResults.actor);
         this.parent({ layout_manager: layoutManager,
                       x_expand: true,
                       y_expand: true });
 
-        this.add_actor(this._stack);
         this.add_actor(this._entry);
+        this.add_actor(this._allView.actor);
+        this.add_actor(this._searchResults.actor);
+
+        this._activePage = ViewsDisplayPage.APP_GRID;
     },
 
-    addPage: function(page) {
-        page.visible = false;
-        this._stack.add_actor(page);
+    _onTweenComplete: function() {
+        this._searchResults.isAnimating = false;
     },
 
-    showPage: function(page) {
-        if (page == this._activePage) {
-            return;
+    showPage: function(page, doAnimation) {
+        if (this._activePage !== page) {
+            this._activePage = page;
+            this.emit('views-page-changed');
         }
 
-        if (this._activePage) {
-            this._activePage.hide();
-        }
-
-        this._activePage = page;
-        this.emit('views-page-changed');
-
-        if (this._activePage) {
-            this._activePage.show();
+        let tweenTarget = page == ViewsDisplayPage.SEARCH ? 1 : 0;
+        if (doAnimation) {
+            this._searchResults.isAnimating = true;
+            Tweener.addTween(this.layout_manager,
+                             { searchResultsTween: tweenTarget,
+                               transition: 'easeOutQuad',
+                               time: 0.25,
+                               onComplete: this._onTweenComplete,
+                               onCompleteScope: this,
+                             });
+        } else {
+            this.layout_manager.searchResultsTween = tweenTarget;
         }
     },
 
-    get activePage() {
+    getActivePage: function() {
         return this._activePage;
     }
 });
@@ -185,7 +205,7 @@ const ViewsDisplay = new Lang.Class({
     Name: 'ViewsDisplay',
 
     _init: function() {
-        this._searchTimeoutId = 0;
+        this._enterSearchTimeoutId = 0;
         this._localSearchMetricTimeoutId = 0;
 
         this._appSystem = Shell.AppSystem.get_default();
@@ -224,15 +244,10 @@ const ViewsDisplay = new Lang.Class({
         Main.overview.addAction(clickAction, false);
         this._searchResults.actor.bind_property('mapped', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
 
-        this.actor = new ViewsDisplayContainer(this.entry, this._allView);
+        this.actor = new ViewsDisplayContainer(this.entry, this._allView, this._searchResults);
         // This makes sure that any DnD ops get channeled to the icon grid logic
         // otherwise dropping an item outside of the grid bounds fails
         this.actor._delegate = this;
-
-        // Add and show all the pages
-        this.actor.addPage(this._allView.actor);
-        this.actor.addPage(this._searchResults.actor);
-        this.actor.showPage(this._allView.actor);
     },
 
     _recordDesktopSearchMetric: function (query, searchProvider) {
@@ -249,11 +264,23 @@ const ViewsDisplay = new Lang.Class({
     },
 
     _enterLocalSearch: function() {
-        this.actor.showPage(this._searchResults.actor);
+        if (this._enterSearchTimeoutId > 0)
+            return;
+
+        // We give a very short time for search results to populate before
+        // triggering the animation
+        this._enterSearchTimeoutId = Mainloop.timeout_add(SEARCH_ACTIVATION_TIMEOUT, Lang.bind(this, function () {
+            this._enterSearchTimeoutId = 0;
+            this.actor.showPage(ViewsDisplayPage.SEARCH, true);
+        }));
     },
 
     _leaveLocalSearch: function() {
-        this.actor.showPage(this._allView.actor);
+        if (this._enterSearchTimeoutId > 0) {
+            Mainloop.source_remove(this._enterSearchTimeoutId);
+            this._enterSearchTimeoutId = 0;
+        }
+        this.actor.showPage(ViewsDisplayPage.APP_GRID, true);
     },
 
     _onSearchActivated: function() {
@@ -311,31 +338,7 @@ const ViewsDisplay = new Lang.Class({
     },
 
     get activeViewsPage() {
-        let pageActor = this.actor.activePage;
-        if (pageActor == this._allView.actor) {
-            return ViewsDisplayPage.APP_GRID;
-        } else {
-            return ViewsDisplayPage.SEARCH;
-        }
-    }
-});
-
-const ViewsCloneLayout = new Lang.Class({
-    Name: 'ViewsCloneLayout',
-    Extends: Clutter.BoxLayout,
-
-    vfunc_allocate: function(container, box, flags) {
-        let panelClone = container.get_child_at_index(0);
-        let viewsClone = container.get_child_at_index(1);
-
-        let panelBox = box.copy();
-        let panelHeight = panelClone.get_preferred_height(-1)[1];
-        panelBox.y2 = Math.min(panelBox.y2, panelBox.y1 + panelHeight);
-        panelClone.allocate(panelBox, flags);
-
-        let viewsBox = box.copy();
-        viewsBox.y1 = panelBox.y2;
-        viewsClone.allocate(viewsBox, flags);
+        return this.actor.getActivePage();
     }
 });
 
@@ -348,31 +351,28 @@ const ViewsClone = new Lang.Class({
         this._viewsDisplay = viewsDisplay;
         this._forOverview = forOverview;
 
-        let viewsCloneLayout = new ViewsCloneLayout({ vertical: true });
-
-        this.parent({ layout_manager: viewsCloneLayout,
-                      opacity: AppDisplay.INACTIVE_GRID_OPACITY });
-
-        this.add_child(new Clutter.Clone({ source: Main.panel.actor,
-                                           opacity: 0 }));
-
         let allView = this._viewsDisplay.allView;
         let entry = new ShellEntry.OverviewEntry();
         entry.reactive = false;
         entry.clutter_text.reactive = false;
 
-        let container = new ViewsDisplayContainer(entry, allView, true);
         let iconGridClone = new Clutter.Clone({ source: allView.gridActor,
                                                 x_expand: true });
         let appGridContainer = new AppDisplay.AllViewContainer(iconGridClone);
         appGridContainer.reactive = false;
 
+        let layoutManager = new ViewsDisplayLayout(entry, appGridContainer, null);
+        this.parent({ layout_manager: layoutManager,
+                      x_expand: true,
+                      y_expand: true,
+                      opacity: AppDisplay.INACTIVE_GRID_OPACITY });
+
         this._saturation = new Clutter.DesaturateEffect({ factor: AppDisplay.INACTIVE_GRID_SATURATION,
                                                           enabled: false });
         iconGridClone.add_effect(this._saturation);
-        container.addPage(appGridContainer);
-        container.showPage(appGridContainer);
-        this.add_child(container);
+
+        this.add_child(entry);
+        this.add_child(appGridContainer);
 
         let workareaConstraint = new LayoutManager.MonitorConstraint({ primary: true,
                                                                        use_workarea: true });
@@ -388,12 +388,10 @@ const ViewsClone = new Lang.Class({
             this._saturation.factor = AppDisplay.INACTIVE_GRID_SATURATION;
             this._saturation.enabled = !this._forOverview;
 
-            // When we're hidden and coming from the applications grid,
-            // tween out the clone saturation and opacity in the background
-            // as an override
+            // When we're hidden and coming from the apps page, tween out the
+            // clone saturation and opacity in the background as an override
             if (!this._forOverview &&
-                this._viewSelector.getActivePage() == ViewPage.APPS &&
-                this._viewSelector.getActiveViewsPage() == ViewsDisplayPage.APP_GRID) {
+                this._viewSelector.getActivePage() == ViewPage.APPS) {
                 this.opacity = AppDisplay.ACTIVE_GRID_OPACITY;
                 this.saturation = AppDisplay.ACTIVE_GRID_SATURATION;
                 Tweener.addTween(this,
@@ -502,11 +500,16 @@ const ViewSelector = new Lang.Class({
         return viewPage;
     },
 
+    _clearSearch: function() {
+        this._entry.resetSearch();
+        this._viewsDisplay.actor.showPage(ViewsDisplayPage.APP_GRID, false);
+    },
+
     show: function(viewPage) {
         this._stageKeyPressId = global.stage.connect('key-press-event',
                                                      Lang.bind(this, this._onStageKeyPress));
 
-        this._entry.resetSearch();
+        this._clearSearch();
         this._workspacesDisplay.show();
 
         this._showPage(this._pageFromViewPage(viewPage), true);
@@ -563,6 +566,7 @@ const ViewSelector = new Lang.Class({
         if (this._activePage == this._appsPage) {
             this._showAppsButton.checked = true;
         } else {
+            this._clearSearch();
             this._showAppsButton.checked = false;
         }
 

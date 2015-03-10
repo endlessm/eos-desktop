@@ -513,7 +513,11 @@ _st_create_shadow_material_from_actor (StShadow     *shadow_spec,
       cogl_clear (&clear_color, COGL_BUFFER_BIT_COLOR);
       cogl_translate (-box.x1, -box.y1, 0);
       cogl_ortho (0, width, height, 0, 0, 1.0);
+
+      clutter_actor_set_opacity_override (actor, 255);
       clutter_actor_paint (actor);
+      clutter_actor_set_opacity_override (actor, -1);
+
       cogl_pop_framebuffer ();
       cogl_handle_unref (offscreen);
 
