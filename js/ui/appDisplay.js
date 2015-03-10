@@ -179,7 +179,7 @@ const AppSearchProvider = new Lang.Class({
 
     createResultObject: function (resultMeta) {
         let app = resultMeta['id'];
-        return new AppIcon(app, null, { showMenu: false });
+        return new AppIcon(app, { editableLabel: false }, { showMenu: false });
     }
 });
 
