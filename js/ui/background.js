@@ -134,6 +134,8 @@ const BackgroundCache = new Lang.Class({
         let file = content.get_file();
         let key = file.hash();
 
+        this._removeContent(this._images, content);
+
         let hasOtherUsers = this._images.some(function(otherContent) {
             return _fileEqual0(file, otherContent.get_file());
         });
@@ -144,8 +146,6 @@ const BackgroundCache = new Lang.Class({
 
             delete this._fileMonitors[key];
         }
-
-        this._removeContent(this._images, content);
     },
 
     _removeAllImages: function(file) {
