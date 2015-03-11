@@ -134,7 +134,10 @@ const BackgroundCache = new Lang.Class({
         let file = content.get_file();
         let key = file.hash();
 
-        let hasOtherUsers = this._images.some(function(content) { return _fileEqual0(file, content.get_file()); });
+        let hasOtherUsers = this._images.some(function(otherContent) {
+            return _fileEqual0(file, otherContent.get_file());
+        });
+
         if (!hasOtherUsers) {
             let monitorObj = this._fileMonitors[key];
             monitorObj.monitor.disconnect(monitorObj.signalId);
