@@ -109,20 +109,14 @@ const BackgroundCache = new Lang.Class({
             return;
 
         let monitor = file.monitor(Gio.FileMonitorFlags.NONE, null);
-
         let signalId = monitor.connect('changed',
                                        Lang.bind(this, function() {
-                                           for (let i = 0; i < this._images.length; i++) {
-                                               if (_fileEqual0(this._images[i].get_file(), file))
-                                                   this._images.splice(i, 1);
-                                           }
-
-                                           monitor.disconnect(signalId);
-
+                                           this._removeAllImages(file);
                                            this.emit('file-changed', file);
                                        }));
 
-        this._fileMonitors[key] = monitor;
+        this._fileMonitors[key] = { monitor: monitor,
+                                    signalId: signalId };
     },
 
     _removeContent: function(contentList, content) {
@@ -140,11 +134,28 @@ const BackgroundCache = new Lang.Class({
         let file = content.get_file();
         let key = file.hash();
 
-        let hasOtherUsers = this._images.some(function(content) { return _fileEqual0(file, content.get_file()); });
-        if (!hasOtherUsers)
-            delete this._fileMonitors[key];
-
         this._removeContent(this._images, content);
+
+        let hasOtherUsers = this._images.some(function(otherContent) {
+            return _fileEqual0(file, otherContent.get_file());
+        });
+
+        if (!hasOtherUsers) {
+            let monitorObj = this._fileMonitors[key];
+            monitorObj.monitor.disconnect(monitorObj.signalId);
+
+            delete this._fileMonitors[key];
+        }
+    },
+
+    _removeAllImages: function(file) {
+        let images = this._images.filter(function(image) {
+            return _fileEqual0(image.get_file(), file);
+        });
+
+        images.forEach(Lang.bind(this, function(image) {
+            this.removeImageContent(image);
+        }));
     },
 
     _attachCallerToFileLoad: function(caller, fileLoad) {
@@ -194,6 +205,7 @@ const BackgroundCache = new Lang.Class({
                          cancellable: new Gio.Cancellable(),
                          callers: [] };
         this._attachCallerToFileLoad(caller, fileLoad);
+        this._pendingFileLoads.push(fileLoad);
 
         let content = new Meta.Background({ meta_screen: global.screen });
 
@@ -426,6 +438,17 @@ const Background = new Lang.Class({
         this._pattern.content = content;
     },
 
+    _invalidateCacheFile: function(file) {
+        let keys = Object.keys(this._images);
+        for (let i = 0; i < keys.length; i++) {
+            let actor = this._images[keys[i]];
+
+            if (actor.content && _fileEqual0(actor.content.get_file(), file)) {
+                actor.content = null;
+            }
+        }
+    },
+
     _watchCacheFile: function(file) {
         let key = file.hash();
         if (this._fileWatches[key])
@@ -434,6 +457,7 @@ const Background = new Lang.Class({
         let signalId = this._cache.connect('file-changed',
                                            Lang.bind(this, function(cache, changedFile) {
                                                if (changedFile.equal(file)) {
+                                                   this._invalidateCacheFile(file);
                                                    this.emit('changed');
                                                }
                                            }));
@@ -779,19 +803,25 @@ const BackgroundManager = new Lang.Class({
         this._controlPosition = params.controlPosition;
 
         this.background = this._createBackground();
-        this._newBackground = null;
     },
 
     destroy: function() {
-        if (this._newBackground) {
-            this._newBackground.actor.destroy();
-            this._newBackground = null;
-        }
-
         if (this.background) {
             this.background.actor.destroy();
             this.background = null;
         }
+    },
+
+    _tweenOldBackground: function(oldBackground) {
+        Tweener.addTween(oldBackground.actor,
+                         { opacity: 0,
+                           time: FADE_ANIMATION_TIME,
+                           transition: 'easeOutQuad',
+                           onComplete: Lang.bind(this, function() {
+                               oldBackground.actor.destroy();
+                               this.emit('changed');
+                           })
+                         });
     },
 
     _updateBackground: function() {
@@ -800,32 +830,21 @@ const BackgroundManager = new Lang.Class({
         newBackground.brightness = this.background.brightness;
         newBackground.visible = this.background.visible;
 
+        let oldBackground = this.background;
+        this.background = newBackground;
+
+        if (newBackground.isLoaded) {
+            this._tweenOldBackground(oldBackground);
+            return;
+        }
+
         newBackground.loadedSignalId = newBackground.connect('loaded',
             Lang.bind(this, function() {
                 newBackground.disconnect(newBackground.loadedSignalId);
                 newBackground.loadedSignalId = 0;
 
-                if (this._newBackground != newBackground) {
-                    /* Not interesting, we queued another load */
-                    newBackground.actor.destroy();
-                    return;
-                }
-
-                Tweener.addTween(this.background.actor,
-                                 { opacity: 0,
-                                   time: FADE_ANIMATION_TIME,
-                                   transition: 'easeOutQuad',
-                                   onComplete: Lang.bind(this, function() {
-                                       this.background.actor.destroy();
-                                       this.background = newBackground;
-                                       this._newBackground = null;
-
-                                       this.emit('changed');
-                                   })
-                                 });
+                this._tweenOldBackground(oldBackground);
         }));
-
-        this._newBackground = newBackground;
     },
 
     _createBackground: function() {
