@@ -373,7 +373,7 @@ const GridSearchResults = new Lang.Class({
         this.parent(provider);
 
         this._grid = new IconGrid.IconGrid({ rowLimit: MAX_GRID_SEARCH_RESULTS_ROWS,
-                                             xAlign: St.Align.START });
+                                             xAlign: St.Align.MIDDLE });
         this._bin = new St.Bin({ x_align: St.Align.MIDDLE });
         this._bin.set_child(this._grid.actor);
 
