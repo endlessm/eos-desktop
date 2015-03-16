@@ -71,6 +71,26 @@ const SearchResultsBin = new Lang.Class({
     }
 });
 
+const SearchIcon = new Lang.Class({
+    Name: 'SearchIcon',
+
+    _init : function(app) {
+        let id = app.get_id();
+        let appSystem = Shell.AppSystem.get_default();
+        let displayApp = appSystem.lookup_heuristic_basename(id);
+        this._app = displayApp;
+
+        this.icon = new IconGrid.BaseIcon(this._app.get_name(),
+                                          { createIcon: Lang.bind(this, this._createIcon) },
+                                          { reactive: false });
+        this.actor = this.icon.actor;
+    },
+
+    _createIcon: function(iconSize) {
+        return this._app.create_icon_texture(iconSize);
+    },
+});
+
 const SearchResult = new Lang.Class({
     Name: 'SearchResult',
 
@@ -158,60 +178,10 @@ const GridSearchResult = new Lang.Class({
 
         this.actor.style_class = 'grid-search-result';
 
-        let content = provider.createResultObject(metaInfo);
-        let dragSource = null;
-
-        if (content == null) {
-            let actor = new St.Bin();
-            let icon = new IconGrid.BaseIcon(this.metaInfo['name'],
-                                             { createIcon: this.metaInfo['createIcon'] });
-            actor.set_child(icon.actor);
-            actor.label_actor = icon.label;
-            dragSource = icon.icon;
-            content = { actor: actor, icon: icon };
-        } else {
-            if (content.getDragActorSource)
-                dragSource = content.getDragActorSource();
-        }
-
-        this.actor.set_child(content.actor);
-        this.actor.label_actor = content.actor.label_actor;
-        this.icon = content.icon;
-
-        let draggable = DND.makeDraggable(this.actor);
-        draggable.connect('drag-begin',
-                          Lang.bind(this, function() {
-                              Main.overview.beginItemDrag(this);
-                          }));
-        draggable.connect('drag-cancelled',
-                          Lang.bind(this, function() {
-                              Main.overview.cancelledItemDrag(this);
-                          }));
-        draggable.connect('drag-end',
-                          Lang.bind(this, function() {
-                              Main.overview.endItemDrag(this);
-                          }));
-
-        if (!dragSource)
-            // not exactly right, but alignment problems are hard to notice
-            dragSource = content.actor;
-        this._dragActorSource = dragSource;
+        let icon = new SearchIcon(metaInfo['id']);
+        this.actor.set_child(icon.actor);
+        this.actor.label_actor = icon.actor.label_actor;
     },
-
-    getDragActorSource: function() {
-        return this._dragActorSource;
-    },
-
-    getDragActor: function() {
-        return this.metaInfo['createIcon'](Main.overview.dashIconSize);
-    },
-
-    shellWorkspaceLaunch: function(params) {
-        if (this.provider.dragActivateResult)
-            this.provider.dragActivateResult(this.metaInfo.id, params);
-        else
-            this.provider.activateResult(this.metaInfo.id, this.terms);
-    }
 });
 
 const SearchResultsBase = new Lang.Class({
@@ -260,9 +230,6 @@ const SearchResultsBase = new Lang.Class({
     _activateResult: function(result, id) {
         this.provider.activateResult(id, this._terms);
         Main.overview.hide();
-    },
-
-    _setMoreIconVisible: function(visible) {
     },
 
     _ensureResultActors: function(results, callback) {
@@ -323,7 +290,6 @@ const SearchResultsBase = new Lang.Class({
                 results.forEach(Lang.bind(this, function(resultId) {
                     this._addItem(this._resultDisplays[resultId]);
                 }));
-                this._setMoreIconVisible(hasMoreResults && this.provider.canLaunchSearch);
                 this.actor.show();
                 callback();
             }));
@@ -339,28 +305,28 @@ const ListSearchResults = new Lang.Class({
         this.parent(provider);
 
         this._container = new St.BoxLayout({ style_class: 'search-section-content' });
-        this.providerIcon = new ProviderIcon(provider);
-        this.providerIcon.connect('key-focus-in', Lang.bind(this, this._keyFocusIn));
-        this.providerIcon.connect('clicked', Lang.bind(this,
+
+        let providerIcon = new SearchIcon(provider.app);
+        let providerButton = new St.Button({ style_class: 'search-provider',
+                                             can_focus: true,
+                                             child: providerIcon.actor });
+        providerButton.connect('key-focus-in', Lang.bind(this, this._keyFocusIn));
+        providerButton.connect('clicked', Lang.bind(this,
             function() {
                 provider.launchSearch(this._terms);
                 Main.overview.hide();
             }));
 
-        this._container.add(this.providerIcon, { x_fill: false,
-                                                 y_fill: false,
-                                                 x_align: St.Align.START,
-                                                 y_align: St.Align.START });
+        this._container.add(providerButton, { x_fill: false,
+                                              y_fill: false,
+                                              x_align: St.Align.START,
+                                              y_align: St.Align.START });
 
         this._content = new St.BoxLayout({ style_class: 'list-search-results',
                                            vertical: true });
         this._container.add(this._content, { expand: true });
 
         this._resultDisplayBin.set_child(this._container);
-    },
-
-    _setMoreIconVisible: function(visible) {
-        this.providerIcon.moreIcon.visible = visible;
     },
 
     _getMaxDisplayedResults: function() {
@@ -803,37 +769,3 @@ const SearchResults = new Lang.Class({
     }
 });
 Signals.addSignalMethods(SearchResults.prototype);
-
-const ProviderIcon = new Lang.Class({
-    Name: 'ProviderIcon',
-    Extends: St.Button,
-
-    PROVIDER_ICON_SIZE: 48,
-
-    _init: function(provider) {
-        this.provider = provider;
-        this.parent({ style_class: 'search-provider-icon',
-                      reactive: true,
-                      can_focus: true,
-                      accessible_name: provider.app.get_name(),
-                      track_hover: true });
-
-        this._content = new St.Widget({ layout_manager: new Clutter.BinLayout() });
-        this.set_child(this._content);
-
-        let rtl = (this.get_text_direction() == Clutter.TextDirection.RTL);
-
-        this.moreIcon = new St.Widget({ style_class: 'search-provider-icon-more',
-                                        visible: false,
-                                        x_align: rtl ? Clutter.ActorAlign.START : Clutter.ActorAlign.END,
-                                        y_align: Clutter.ActorAlign.END,
-                                        x_expand: true,
-                                        y_expand: true });
-
-        let icon = provider.app.create_icon_texture(this.PROVIDER_ICON_SIZE);
-        if (icon) {
-            this._content.add_actor(icon);
-        }
-        this._content.add_actor(this.moreIcon);
-    }
-});

@@ -1038,14 +1038,10 @@ StScrollBar StButton#vhandle:active {
     color: #eeeeec;
 }
 
-.search-provider-icon {
-    padding: 15px;
-}
-
-.search-provider-icon-more {
-    width: 16px;
-    height: 16px;
-    background-image: url("more-results.svg");
+.search-section .overview-icon {
+    icon-size: 64px;
+    spacing: 8px;
+    text-align: center;
 }
 
 .list-search-result {

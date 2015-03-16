@@ -176,11 +176,6 @@ const AppSearchProvider = new Lang.Class({
         let app = this._appSys.lookup_app(id);
         app.open_new_window(workspace);
     },
-
-    createResultObject: function (resultMeta) {
-        let app = resultMeta['id'];
-        return new AppIcon(app, { editableLabel: false }, { showMenu: false });
-    }
 });
 
 const EndlessApplicationView = new Lang.Class({
