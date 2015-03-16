@@ -126,7 +126,7 @@ const ListSearchResult = new Lang.Class({
     Name: 'ListSearchResult',
     Extends: SearchResult,
 
-    ICON_SIZE: 64,
+    ICON_SIZE: 32,
 
     _init: function(provider, metaInfo) {
         this.parent(provider, metaInfo);
