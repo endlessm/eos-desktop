@@ -376,7 +376,11 @@ const ListSearchResults = new Lang.Class({
     },
 
     _addItem: function(display) {
-        this._content.add_actor(display.actor);
+        if (this._content.get_n_children() > 0) {
+            let separator = new Separator.HorizontalSeparator({ style_class: 'search-section-separator' });
+            this._content.add(separator.actor);
+        }
+        this._content.add(display.actor, { expand: true });
     },
 
     getFirstResult: function() {
