@@ -28,9 +28,9 @@ const MAX_LIST_SEARCH_RESULTS_ROWS = 3;
 const MAX_GRID_SEARCH_RESULTS_ROWS = 1;
 const MAX_GRID_SEARCH_RESULTS_COLS = 8;
 
-const SearchResultsBox = new Lang.Class({
-    Name: 'SearchResultsBox',
-    Extends: St.BoxLayout,
+const SearchResultsBin = new Lang.Class({
+    Name: 'SearchResultsBin',
+    Extends: St.Widget,
 
     vfunc_get_preferred_height: function(forHeight) {
         let themeNode = this.get_theme_node();
@@ -432,9 +432,30 @@ const SearchResults = new Lang.Class({
     Name: 'SearchResults',
 
     _init: function() {
-        this.actor = new SearchResultsBox({ name: 'searchResults',
-                                            vertical: true,
-                                            y_align: Clutter.ActorAlign.FILL });
+        this.actor = new SearchResultsBin({ name: 'searchResults',
+                                            y_align: Clutter.ActorAlign.FILL,
+                                            layout_manager: new Clutter.BinLayout() });
+
+        let box = new St.BoxLayout({ name: 'searchResultsBox',
+                                     vertical: true,
+                                     y_align: Clutter.ActorAlign.FILL,
+                                     x_align: Clutter.ActorAlign.FILL,
+                                     x_expand: true,
+                                     y_expand: true });
+        this.actor.add_child(box);
+
+        let closeIcon = new St.Icon({ icon_name: 'window-close-symbolic' });
+        let closeButton = new St.Button({ name: 'searchResultsCloseButton',
+                                          child: closeIcon,
+                                          x_expand: true,
+                                          y_expand: true });
+        // We need to set the ClutterActor align, not St.Bin
+        closeButton.set_x_align(Clutter.ActorAlign.END);
+        closeButton.set_y_align(Clutter.ActorAlign.START);
+        closeButton.connect('clicked', Lang.bind(this, function () {
+            this.emit('search-close-clicked');
+        }));
+        this.actor.add_child(closeButton);
 
         this._topContent = new St.BoxLayout({ name: 'searchResultsTopContent',
                                               vertical: true });
@@ -451,9 +472,9 @@ const SearchResults = new Lang.Class({
         action.connect('pan', Lang.bind(this, this._onPan));
         this._scrollView.add_action(action);
 
-        this.actor.add(this._topContent, { x_fill: true });
+        box.add(this._topContent, { x_fill: true });
 
-        this.actor.add(this._scrollView, { x_fill: true,
+        box.add(this._scrollView, { x_fill: true,
                                            y_fill: true,
                                            expand: true,
                                            x_align: St.Align.START,
@@ -462,7 +483,7 @@ const SearchResults = new Lang.Class({
         this._statusText = new St.Label({ style_class: 'search-statustext' });
         this._statusBin = new St.Bin({ x_align: St.Align.MIDDLE,
                                        y_align: St.Align.MIDDLE });
-        this.actor.add(this._statusBin, { expand: true });
+        box.add(this._statusBin, { expand: true });
         this._statusBin.add_actor(this._statusText);
 
         this._highlightDefault = false;

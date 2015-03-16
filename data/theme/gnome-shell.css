@@ -982,10 +982,17 @@ StScrollBar StButton#vhandle:active {
     -margin-bottom: 33px;
 }
 
-#searchResultsContent {
-    padding-left: 20px;
-    padding-right: 20px;
-    spacing: 16px;
+#searchResultsCloseButton StIcon {
+    icon-size: 14px;
+    color: #444444;
+}
+
+#searchResultsCloseButton:hover StIcon {
+    color: #888888;
+}
+
+#searchResultsCloseButton:active StIcon {
+    color: #444444;
 }
 
 .search-section {
