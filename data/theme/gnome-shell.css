@@ -976,12 +976,10 @@ StScrollBar StButton#vhandle:active {
 /* Search Results */
 
 #searchResults {
-    padding: 20px 10px 0px 10px;
-    spacing: 18px;
-}
-
-#searchResultsBin {
-    max-width: 1000px;
+    padding: 10px;
+    max-width: 875px;
+    -margin-horizontal: 50px;
+    -margin-bottom: 33px;
 }
 
 #searchResultsContent {

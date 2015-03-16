@@ -28,23 +28,46 @@ const MAX_LIST_SEARCH_RESULTS_ROWS = 3;
 const MAX_GRID_SEARCH_RESULTS_ROWS = 1;
 const MAX_GRID_SEARCH_RESULTS_COLS = 8;
 
-const MaxWidthBin = new Lang.Class({
-    Name: 'MaxWidthBin',
-    Extends: St.Bin,
+const SearchResultsBox = new Lang.Class({
+    Name: 'SearchResultsBox',
+    Extends: St.BoxLayout,
+
+    vfunc_get_preferred_height: function(forHeight) {
+        let themeNode = this.get_theme_node();
+        let marginBottom = themeNode.get_length('-margin-bottom');
+
+        let [min, nat] = this.parent(forHeight);
+        return [min + marginBottom, nat + marginBottom];
+    },
+
+    vfunc_get_preferred_width: function(forHeight) {
+        let themeNode = this.get_theme_node();
+        let maxWidth = themeNode.get_max_width();
+        let marginHorizontal = themeNode.get_length('-margin-horizontal');
+
+        let [min, nat] = this.parent(forHeight);
+        return [Math.min(maxWidth, min) + marginHorizontal,
+                Math.min(maxWidth, nat) + marginHorizontal];
+    },
 
     vfunc_allocate: function(box, flags) {
         let themeNode = this.get_theme_node();
         let maxWidth = themeNode.get_max_width();
-        let availWidth = box.x2 - box.x1;
-        let adjustedBox = box;
+        let marginBottom = themeNode.get_length('-margin-bottom');
+        let marginHorizontal = themeNode.get_length('-margin-horizontal');
 
+        box.x1 += marginHorizontal;
+        box.x2 -= marginHorizontal;
+        box.y2 -= marginBottom;
+
+        let availWidth = box.x2 - box.x1;
         if (availWidth > maxWidth) {
             let excessWidth = availWidth - maxWidth;
-            adjustedBox.x1 += Math.floor(excessWidth / 2);
-            adjustedBox.x2 -= Math.floor(excessWidth / 2);
+            box.x1 += Math.floor(excessWidth / 2);
+            box.x2 -= Math.floor(excessWidth / 2);
         }
 
-        this.parent(adjustedBox, flags);
+        this.parent(box, flags);
     }
 });
 
@@ -409,26 +432,19 @@ const SearchResults = new Lang.Class({
     Name: 'SearchResults',
 
     _init: function() {
-        this.actor = new St.BoxLayout({ name: 'searchResults',
-                                        vertical: true,
-                                        y_align: Clutter.ActorAlign.START });
+        this.actor = new SearchResultsBox({ name: 'searchResults',
+                                            vertical: true,
+                                            y_align: Clutter.ActorAlign.FILL });
 
         this._content = new St.BoxLayout({ name: 'searchResultsContent',
                                            vertical: true });
-        this._contentBin = new MaxWidthBin({ name: 'searchResultsBin',
-                                             x_fill: true,
-                                             y_fill: true,
-                                             child: this._content });
-
-        let scrollChild = new St.BoxLayout();
-        scrollChild.add(this._contentBin, { expand: true });
 
         this._scrollView = new St.ScrollView({ x_fill: true,
                                                y_fill: false,
                                                overlay_scrollbars: true,
                                                style_class: 'search-display vfade' });
         this._scrollView.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        this._scrollView.add_actor(scrollChild);
+        this._scrollView.add_actor(this._content);
         let action = new Clutter.PanAction({ interpolate: true });
         action.connect('pan', Lang.bind(this, this._onPan));
         this._scrollView.add_action(action);
