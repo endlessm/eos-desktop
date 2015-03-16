@@ -436,18 +436,22 @@ const SearchResults = new Lang.Class({
                                             vertical: true,
                                             y_align: Clutter.ActorAlign.FILL });
 
-        this._content = new St.BoxLayout({ name: 'searchResultsContent',
-                                           vertical: true });
+        this._topContent = new St.BoxLayout({ name: 'searchResultsTopContent',
+                                              vertical: true });
+
+        this._scrollContent = new St.BoxLayout({ name: 'searchResultsScrollContent',
+                                                 vertical: true });
 
         this._scrollView = new St.ScrollView({ x_fill: true,
-                                               y_fill: false,
-                                               overlay_scrollbars: true,
-                                               style_class: 'search-display vfade' });
+                                               y_fill: true,
+                                               style_class: 'search-scroll vfade' });
         this._scrollView.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        this._scrollView.add_actor(this._content);
+        this._scrollView.add_actor(this._scrollContent);
         let action = new Clutter.PanAction({ interpolate: true });
         action.connect('pan', Lang.bind(this, this._onPan));
         this._scrollView.add_action(action);
+
+        this.actor.add(this._topContent, { x_fill: true });
 
         this.actor.add(this._scrollView, { x_fill: true,
                                            y_fill: true,
@@ -482,7 +486,8 @@ const SearchResults = new Lang.Class({
         this._searchTimeoutId = 0;
         this._cancellable = new Gio.Cancellable();
 
-        this._registerProvider(new AppDisplay.AppSearchProvider());
+        this._appProvider = new AppDisplay.AppSearchProvider();
+        this._registerProvider(this._appProvider);
         this._registerProvider(new InternetSearch.InternetSearchProvider());
         this._reloadRemoteProviders();
     },
@@ -614,8 +619,13 @@ const SearchResults = new Lang.Class({
         return false;
     },
 
+    _ensureResultActorVisible: function(resultActor) {
+        if (this._scrollView.contains(resultActor))
+            ActorVisibility.ensureActorVisibleInScrollView(this._scrollView, resultActor);
+    },
+
     _keyFocusIn: function(provider, actor) {
-        ActorVisibility.ensureActorVisibleInScrollView(this._scrollView, actor);
+        this._ensureResultActorVisible(actor);
     },
 
     _ensureProviderDisplay: function(provider) {
@@ -623,14 +633,16 @@ const SearchResults = new Lang.Class({
             return;
 
         let providerDisplay;
-        if (provider.app)
-            providerDisplay = new ListSearchResults(provider);
-        else
+        if (provider === this._appProvider) {
             providerDisplay = new GridSearchResults(provider);
+            this._topContent.add(providerDisplay.actor);
+        } else {
+            providerDisplay = new ListSearchResults(provider);
+            this._scrollContent.add(providerDisplay.actor);
+        }
 
         providerDisplay.connect('key-focus-in', Lang.bind(this, this._keyFocusIn));
         providerDisplay.actor.hide();
-        this._content.add(providerDisplay.actor);
         provider.display = providerDisplay;
     },
 
@@ -664,7 +676,7 @@ const SearchResults = new Lang.Class({
             if (newDefaultResult) {
                 newDefaultResult.setSelected(this._highlightDefault);
                 if (this._highlightDefault)
-                    ActorVisibility.ensureActorVisibleInScrollView(this._scrollView, newDefaultResult.actor);
+                    this._ensureResultActorVisible(newDefaultResult.actor);
             }
 
             this._defaultResult = newDefaultResult;
@@ -708,6 +720,7 @@ const SearchResults = new Lang.Class({
         let showStatus = !haveResults && !this.isAnimating;
 
         this._scrollView.visible = haveResults;
+        this._topContent.visible = haveResults;
         this._statusBin.visible = showStatus;
 
         if (!showStatus) {
@@ -750,7 +763,7 @@ const SearchResults = new Lang.Class({
         if (this._defaultResult) {
             this._defaultResult.setSelected(highlight);
             if (highlight)
-                ActorVisibility.ensureActorVisibleInScrollView(this._scrollView, this._defaultResult.actor);
+                this._ensureResultActorVisible(this._defaultResult.actor);
         }
     },
 
