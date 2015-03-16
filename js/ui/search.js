@@ -122,6 +122,31 @@ const SearchResult = new Lang.Class({
 });
 Signals.addSignalMethods(SearchResult.prototype);
 
+const ListDescriptionBox = new Lang.Class({
+    Name: 'ListDescriptionBox',
+    Extends: St.BoxLayout,
+
+    _init: function(params) {
+        this.parent(params);
+    },
+
+    vfunc_get_preferred_height: function(forWidth) {
+        // This container requests space for the title and description
+        // regardless of visibility, but allocates normally to visible actors.
+        // This allows us have a constant sized box, but still center the title
+        // label when the description is not present.
+        let min = 0, nat = 0;
+        let children = this.get_children();
+        for (let i = 0; i < children.length; i++) {
+            let child = children[i];
+            let [childMin, childNat] = child.get_preferred_height(forWidth);
+            min += childMin;
+            nat += childNat;
+        }
+        return [min, nat];
+    }
+});
+
 const ListSearchResult = new Lang.Class({
     Name: 'ListSearchResult',
     Extends: SearchResult,
@@ -144,27 +169,30 @@ const ListSearchResult = new Lang.Class({
             content.add(icon);
         }
 
-        let details = new St.BoxLayout({ vertical: true });
+        let details = new ListDescriptionBox({ vertical: true });
         content.add(details, { x_fill: true,
                                y_fill: false,
                                x_align: St.Align.START,
                                y_align: St.Align.MIDDLE });
 
         let title = new St.Label({ style_class: 'list-search-result-title',
-                                   text: this.metaInfo['name'] })
+                                   text: this.metaInfo['name'],
+                                   y_align: Clutter.ActorAlign.CENTER });
         details.add(title, { x_fill: false,
-                             y_fill: false,
+                             y_fill: true,
                              x_align: St.Align.START,
-                             y_align: St.Align.START });
+                             expand: true });
         this.actor.label_actor = title;
 
+        let description = new St.Label({ style_class: 'list-search-result-description',
+                                         visible: false });
+        details.add(description, { x_fill: false,
+                                   y_fill: false,
+                                   x_align: St.Align.START,
+                                   y_align: St.Align.END });
         if (this.metaInfo['description']) {
-            let description = new St.Label({ style_class: 'list-search-result-description' });
             description.clutter_text.set_markup(this.metaInfo['description']);
-            details.add(description, { x_fill: false,
-                                       y_fill: false,
-                                       x_align: St.Align.START,
-                                       y_align: St.Align.END });
+            description.show();
         }
     }
 });
