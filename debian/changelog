@@ -1,3 +1,10 @@
+eos-desktop (3.8.0) unstable; urgency=low
+
+  * Change package name
+  * Update version to match that specified in configure.ac
+
+ -- Roddy Shuler <roddy@endless>  Mon, 16 Mar 2015 13:15:47 -0700
+
 eos-shell (1.1.5~dev1) unstable; urgency=low
 
   * Updating version to 1.1.5~dev1
