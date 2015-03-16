@@ -1038,6 +1038,17 @@ StScrollBar StButton#vhandle:active {
     color: #eeeeec;
 }
 
+.list-search-result-arrow-icon {
+    icon-size: 16px;
+    color: transparent;
+}
+
+.list-search-result:hover .list-search-result-arrow-icon,
+.list-search-result:focus .list-search-result-arrow-icon,
+.list-search-result:selected .list-search-result-arrow-icon {
+    color: white;
+}
+
 .search-section .overview-icon {
     icon-size: 64px;
     spacing: 8px;

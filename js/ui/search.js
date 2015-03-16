@@ -194,6 +194,12 @@ const ListSearchResult = new Lang.Class({
             description.clutter_text.set_markup(this.metaInfo['description']);
             description.show();
         }
+
+        let hoverIcon = new St.Icon({ style_class: 'list-search-result-arrow-icon',
+                                      icon_name: 'go-next-symbolic' });
+        content.add(hoverIcon,  { x_fill: false,
+                                  x_align: St.Align.END,
+                                  expand: true });
     }
 });
 
