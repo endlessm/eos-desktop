@@ -2918,7 +2918,8 @@ parse_shadow_property (StThemeNode       *node,
                        gdouble           *yoffset,
                        gdouble           *blur,
                        gdouble           *spread,
-                       gboolean          *inset)
+                       gboolean          *inset,
+                       gboolean          *is_none)
 {
   GetFromTermResult result;
   CRTerm *term;
@@ -2931,6 +2932,7 @@ parse_shadow_property (StThemeNode       *node,
   *blur = 0.;
   *spread = 0.;
   *inset = FALSE;
+  *is_none = FALSE;
 
   /* The CSS3 draft of the box-shadow property[0] is a lot stricter
    * regarding the order of terms:
@@ -2943,9 +2945,10 @@ parse_shadow_property (StThemeNode       *node,
    */
   for (term = decl->value; term; term = term->next)
     {
-      /* if we found "none", we're all set with the default values */
-      if (term_is_none (term))
+      if (term_is_none (term)) {
+        *is_none = TRUE;
         return VALUE_FOUND;
+      }
 
       if (term->type == TERM_NUMBER)
         {
@@ -3041,7 +3044,8 @@ parse_shadow_property (StThemeNode       *node,
  * See also st_theme_node_get_shadow(), which provides a simpler API.
  *
  * Return value: %TRUE if the property was found in the properties for this
- *  theme node (or in the properties of parent nodes when inheriting.)
+ *  theme node (or in the properties of parent nodes when inheriting.), %FALSE
+ *  if the property was not found, or was explicitly set to 'none'.
  */
 gboolean
 st_theme_node_lookup_shadow (StThemeNode  *node,
@@ -3055,6 +3059,7 @@ st_theme_node_lookup_shadow (StThemeNode  *node,
   gdouble blur = 0.;
   gdouble spread = 0.;
   gboolean inset = FALSE;
+  gboolean is_none = FALSE;
 
   int i;
 
@@ -3073,9 +3078,13 @@ st_theme_node_lookup_shadow (StThemeNode  *node,
                                                             &yoffset,
                                                             &blur,
                                                             &spread,
-                                                            &inset);
+                                                            &inset,
+                                                            &is_none);
           if (result == VALUE_FOUND)
             {
+              if (is_none)
+                return FALSE;
+
               *shadow = st_shadow_new (&color,
                                        xoffset, yoffset,
                                        blur, spread,

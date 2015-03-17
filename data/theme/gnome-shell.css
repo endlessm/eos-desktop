@@ -49,7 +49,7 @@ stage {
 .overview-icon.dnd,
 .app-well-app > .overview-icon,
 .overview-icon .show-apps,
-.grid-search-result .overview-icon {
+.search-section .overview-icon {
     font-size: 11pt;
     font-weight: bold;
 }
@@ -976,79 +976,160 @@ StScrollBar StButton#vhandle:active {
 /* Search Results */
 
 #searchResults {
-    padding: 20px 10px 0px 10px;
-    spacing: 18px;
+    background-color: rgba(255,255,255,0.92);
+    border-radius: 4px;
+
+    padding: 10px;
+    max-width: 875px;
+    -margin-horizontal: 50px;
+    -margin-bottom: 33px;
 }
 
-#searchResultsBin {
-    max-width: 1000px;
+#searchResultsCloseButton StIcon {
+    icon-size: 14px;
+    color: #444444;
 }
 
-#searchResultsContent {
-    padding-left: 20px;
-    padding-right: 20px;
-    spacing: 16px;
+#searchResultsCloseButton:hover StIcon {
+    color: #888888;
+}
+
+#searchResultsCloseButton:active StIcon {
+    color: #444444;
 }
 
 .search-section {
-    /* This should be equal to #searchResultsContent spacing */
-    spacing: 16px;
+    padding: 0px 10px;
 }
 
 .search-section-separator {
     -gradient-height: 1px;
-    -gradient-start: rgba(255,255,255,0);
-    -gradient-end: rgba(255,255,255,0.5);
-    -margin-horizontal: 1.5em;
+    -gradient-start: rgba(208,208,208,0.9);
+    -gradient-end: rgba(208,208,208,0.9);
     height: 1px;
 }
 
 .search-section-content {
+    padding-top: 5px;
+    padding-bottom: 10px;
+
     /* This is the space between the provider icon and the results container */
-    spacing: 32px;
+    spacing: 25px;
 }
 
 .search-statustext {
-    color: #efefef;
+    color: #242424;
     font-size: 2em;
     font-weight: bold;
 }
 
-.list-search-results {
-    spacing: 3px;
-}
-
 .list-search-result-content {
-    spacing: 12px;
-    padding: 12px;
+    spacing: 10px;
 }
 
 .list-search-result-title {
     font-weight: bold;
-    font-size: 14pt;
-    color: white;
+    color: #444444;
 }
 
 .list-search-result-description {
-    color: #eeeeec;
+    color: #444444;
 }
 
-.search-provider-icon {
-    padding: 15px;
+.list-search-result-arrow-icon {
+    icon-size: 16px;
+    color: transparent;
 }
 
-.search-provider-icon-more {
-    width: 16px;
-    height: 16px;
-    background-image: url("more-results.svg");
+.list-search-result:hover .list-search-result-arrow-icon,
+.list-search-result:focus .list-search-result-arrow-icon,
+.list-search-result:selected .list-search-result-arrow-icon {
+    color: #444444;
+}
+
+.search-section .icon-grid {
+    spacing: 20px;
+    padding-bottom: 5px;
+    -shell-grid-horizontal-item-size: 104px;
+    -shell-grid-vertical-item-size: 104px;
+}
+
+.search-section .overview-icon {
+    icon-size: 64px;
+    spacing: 8px;
+    text-align: center;
+}
+
+.search-section .overview-icon-label {
+    color: #444444;
+    text-shadow: none;
 }
 
 .list-search-result {
-    text-shadow: rgba(0,0,0,0.5) 0px 1px 2px;
+    padding: 5px 10px 10px 10px;
+    transition-duration: 100ms;
 }
 
-.list-search-result:hover .list-search-result-description {
-    text-shadow: rgba(0,0,0,0.8) 0px 1px 2px;
+.list-search-result:first-child {
+    border-radius-topright: 4px;
+    border-radius-topleft: 4px;
+}
+
+.list-search-result:last-child {
+    border-radius-bottomright: 4px;
+    border-radius-bottomleft: 4px;
+}
+
+.search-provider,
+.grid-search-result {
+    border-radius: 4px;
+    padding: 7px;
+    transition-duration: 100ms;
+}
+
+.list-search-result:hover,
+.search-provider:hover,
+.grid-search-result:hover {
+    background-color: rgba(226,226,226,0.9);
+}
+
+.list-search-result:focus,
+.search-provider:focus,
+.grid-search-result:focus,
+.list-search-result:selected,
+.search-provider:selected,
+.grid-search-result:selected {
+    background-color: rgba(208,208,208,0.9);
+}
+
+.list-search-result:active,
+.search-provider:active,
+.grid-search-result:active {
+    background-color: rgba(192,192,192,0.9);
+}
+
+.search-scroll.vfade {
+    -st-vfade-offset: 10px;
+}
+
+.search-scroll StScrollBar {
+    padding-top: 18px;
+}
+
+.search-scroll StScrollBar StBin#trough {
+    background-color: #bebebe;
+    border-radius: 8px;
+}
+
+.search-scroll StScrollBar StButton#vhandle {
+    background-color: rgba(255,255,255,0.8);
+    border: 3px solid #bebebe;
+    border-radius: 8px;
+}
+
+.search-scroll StScrollBar StButton#vhandle:hover,
+.search-scroll StScrollBar StButton#vhandle:active {
+    background-color: rgba(226,226,226,0.8);
 }
 
 /* Application Launchers, Grid and List results */
@@ -1122,9 +1203,7 @@ StScrollBar StButton#vhandle:active {
 
 .overview-icon.dnd,
 .app-well-app > .overview-icon,
-.overview-icon .show-apps,
-.list-search-result,
-.grid-search-result .overview-icon {
+.overview-icon .show-apps {
     border-radius: 4px;
     padding: 3px;
     border: 1px rgba(0,0,0,0);
@@ -1214,9 +1293,6 @@ StScrollBar StButton#vhandle:active {
     background-size: 64px;
 }
 
-.search-provider-icon:hover,
-.list-search-result:hover,
-.grid-search-result:hover .overview-icon,
 .overview-icon .show-apps:hover {
     background-color: rgba(255,255,255,0.1);
     text-shadow: black 0px 2px 2px;
@@ -1258,8 +1334,6 @@ StScrollBar StButton#vhandle:active {
     background-size: 64px;
 }
 
-.search-provider-icon:active,
-.list-search-result:active,
 .overview-icon .show-apps:checked,
 .overview-icon .show-apps:active {
     background-gradient-start: rgba(255, 255, 255, .05);
@@ -1276,15 +1350,9 @@ StScrollBar StButton#vhandle:active {
     transition-duration: 100ms;
 }
 
-.grid-search-result:focus .overview-icon,
-.search-provider-icon:focus,
-.list-search-result:focus,
 .app-well-app:focus > .overview-icon,
 .overview-icon .show-apps:focus,
-.app-well-app:selected > .overview-icon,
-.grid-search-result:selected .overview-icon,
-.search-provider-icon:selected,
-.list-search-result:selected {
+.app-well-app:selected > .overview-icon {
     background-color: rgba(255,255,255,0.33);
 }
 

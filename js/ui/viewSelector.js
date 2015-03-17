@@ -213,6 +213,7 @@ const ViewsDisplay = new Lang.Class({
 
         this._searchResults = new Search.SearchResults();
         this._searchResults.connect('search-progress-updated', Lang.bind(this, this._updateSpinner));
+        this._searchResults.connect('search-close-clicked', Lang.bind(this, this._resetSearch));
 
         // Since the entry isn't inside the results container we install this
         // dummy widget as the last results container child so that we can
@@ -240,7 +241,7 @@ const ViewsDisplay = new Lang.Class({
 
         // Clicking on any empty area should exit search and get back to the desktop.
         let clickAction = new Clutter.ClickAction();
-        clickAction.connect('clicked', Lang.bind(this, this._onEmptySpaceClicked));
+        clickAction.connect('clicked', Lang.bind(this, this._resetSearch));
         Main.overview.addAction(clickAction, false);
         this._searchResults.actor.bind_property('mapped', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
 
@@ -320,9 +321,8 @@ const ViewsDisplay = new Lang.Class({
             }.bind(this));
     },
 
-    _onEmptySpaceClicked: function() {
+    _resetSearch: function() {
         this.entry.resetSearch();
-        this._leaveLocalSearch();
     },
 
     acceptDrop: function(source, actor, x, y, time) {
