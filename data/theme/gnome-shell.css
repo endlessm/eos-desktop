@@ -2699,6 +2699,12 @@ StScrollBar StButton#vhandle:active {
     height: 64px;
 }
 
+.login-dialog-password-hint-link {
+    font-size: 12.5pt;
+    font-weight: bold;
+    color: #666666;
+}
+
 .login-dialog-not-listed-label {
     font-size: 12.5pt;
     font-weight: bold;
@@ -2707,7 +2713,9 @@ StScrollBar StButton#vhandle:active {
 }
 
 .login-dialog-not-listed-button:focus .login-dialog-not-listed-label,
-.login-dialog-not-listed-button:hover .login-dialog-not-listed-label {
+.login-dialog-not-listed-button:hover .login-dialog-not-listed-label,
+.login-dialog-password-hint-button:focus .login-dialog-password-hint-link,
+.login-dialog-password-hint-button:hover .login-dialog-password-hint-link {
     color: #E8E8E8;
 }
 
@@ -2727,6 +2735,12 @@ StScrollBar StButton#vhandle:active {
 
 .login-dialog-prompt-label {
     color: #eeeeee;
+    font-size: 16px;
+}
+
+.login-dialog-password-hint-label {
+    color: #eeeeee;
+    font-style: italic;
     font-size: 16px;
 }
 
