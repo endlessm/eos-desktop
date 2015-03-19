@@ -11,17 +11,17 @@
 # goizueta <goizueta@endlessm.com>, 2014
 # Joel Gil Leon <joel@endlessm.com>, 2013-2014
 # Jorge González <jorgegonz@svn.gnome.org>, 2009-2011
-# Nuritzi Sanchez <ns@endlessm.com>, 2013-2014
+# Nuritzi Sanchez <ns@endlessm.com>, 2013-2015
 # Philip Chimento <philip.chimento@gmail.com>, 2014
 # Roddy Shuler <roddy@endlessm.com>, 2013-2014
 msgid ""
 msgstr ""
-"Project-Id-Version: eos-shell\n"
+"Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-13 00:54+0000\n"
-"PO-Revision-Date: 2014-12-22 19:17+0000\n"
+"PO-Revision-Date: 2015-01-10 01:30+0000\n"
 "Last-Translator: Nuritzi Sanchez <ns@endlessm.com>\n"
-"Language-Team: Spanish (http://www.transifex.com/projects/p/eos-shell/language/es/)\n"
+"Language-Team: Spanish (http://www.transifex.com/projects/p/eos-desktop/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -492,7 +492,7 @@ msgstr "Quitar de los favoritos"
 
 #: ../js/ui/appDisplay.js:2085
 msgid "Add to Favorites"
-msgstr "Agregar a Favoritos"
+msgstr "Agregar a los favoritos"
 
 #: ../js/ui/appFavorites.js:87
 #, c-format
