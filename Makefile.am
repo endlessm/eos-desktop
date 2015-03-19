@@ -21,7 +21,7 @@ DIST_EXCLUDE =					\
 	HACKING					\
 	MAINTAINERS				\
 	po/change_msgid.sh			\
-	po/eos-shell.pot			\
+	po/eos-desktop.pot			\
 	tools/build/*				\
 	.tx/config
 

@@ -28,7 +28,7 @@ IT_PROG_INTLTOOL([0.40])
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.17])
 
-GETTEXT_PACKAGE=eos-shell
+GETTEXT_PACKAGE=eos-desktop
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
                    [The prefix for our gettext translation domains.])
