@@ -97,8 +97,12 @@ const Indicator = new Lang.Class({
                 let time = Math.round(seconds / 60);
                 if (time == 0) {
                     // 0 is reported when UPower does not have enough data
-                    // to estimate battery life
-                    this._batteryItem.label.text = _("Estimating…");
+                    // to estimate battery life or when the battery is
+                    // fully charged
+                    if (state == UPDeviceState.FULLY_CHARGED)
+                        this._batteryItem.label.text = _("Fully Charged");
+                    else
+                        this._batteryItem.label.text = _("Estimating…");
                 } else {
                     let minutes = time % 60;
                     let hours = Math.floor(time / 60);

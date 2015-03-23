@@ -1748,6 +1748,9 @@ msgstr "البطارية"
 msgid "Power Settings"
 msgstr "إعدادات الطاقة"
 
+msgid "Fully Charged"
+msgstr "مشحونة بالكامل"
+
 #. 0 is reported when UPower does not have enough data
 #. to estimate battery life
 #: ../js/ui/status/power.js:101
