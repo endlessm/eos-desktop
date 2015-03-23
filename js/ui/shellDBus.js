@@ -468,8 +468,9 @@ const AppStoreService = new Lang.Class({
     },
 
     AddApplication: function(id) {
-        let eventRecorder = EosMetrics.EventRecorder.prototype.get_default();
-        eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_ADDED, new GLib.Variant('s', id));
+        let eventRecorder = EosMetrics.EventRecorder.get_default();
+        let appId = new GLib.Variant('s', id);
+        eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_ADDED, appId);
 
         if (!IconGridLayout.layout.iconIsFolder(id)) {
             IconGridLayout.layout.appendIcon(id, IconGridLayout.DESKTOP_GRID_ID);
