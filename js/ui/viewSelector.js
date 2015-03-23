@@ -252,12 +252,10 @@ const ViewsDisplay = new Lang.Class({
     },
 
     _recordDesktopSearchMetric: function (query, searchProvider) {
-        let recorder = EosMetrics.EventRecorder.get_default();
-        recorder.record_event(EVENT_DESKTOP_SEARCH,
-            new GLib.Variant('(us)', [
-                searchProvider,
-                query
-            ]));
+        let eventRecorder = EosMetrics.EventRecorder.get_default();
+        let auxiliaryPayload =
+            new GLib.Variant('(us)', [searchProvider, query]);
+        eventRecorder.record_event(EVENT_DESKTOP_SEARCH, auxiliaryPayload);
     },
 
     _updateSpinner: function() {
