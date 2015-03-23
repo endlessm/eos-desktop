@@ -40,7 +40,8 @@ const SETTINGS_TEXT = _("Settings");
 const FEEDBACK_TEXT = _("Give Us Feedback");
 
 const FEEDBACK_LAUNCHER = "eos-app-feedback.desktop";
-const YELP_LAUNCHER = "yelp.desktop";
+const YELP_LAUNCHER = "eos-app-yelp.desktop";
+const CONTROL_CENTER_LAUNCHER = "eos-app-gnome-control-center.desktop";
 
 const DIALOG_ICON_SIZE = 64;
 
@@ -536,7 +537,7 @@ const UserMenuButton = new Lang.Class({
 
     _onPreferencesActivate: function() {
         Main.overview.hide();
-        let app = Shell.AppSystem.get_default().lookup_app('gnome-control-center.desktop');
+        let app = Shell.AppSystem.get_default().lookup_app(CONTROL_CENTER_LAUNCHER);
         app.activate();
     },
 
