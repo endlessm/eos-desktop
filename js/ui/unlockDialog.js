@@ -92,7 +92,7 @@ const UnlockDialog = new Lang.Class({
         this._workSpinner = new Panel.AnimatedIcon('process-working.svg', LoginDialog.WORK_SPINNER_ICON_SIZE);
         this._workSpinner.actor.opacity = 0;
 
-        this.allowCancel = false;
+        this.allowCancel = true;
         this.buttonLayout.visible = true;
         this.addButton({ label: _("Cancel"),
                          action: Lang.bind(this, this._escape),
@@ -286,7 +286,7 @@ const UnlockDialog = new Lang.Class({
     _escape: function() {
         if (this.allowCancel) {
             this._userVerifier.cancel();
-            this.emit('failed');
+            this.emit('cancelled');
         }
     },
 

@@ -74,6 +74,12 @@ eos-shell-perf-tool: eos-shell-perf-tool.in Makefile
 
 CLEANFILES += eos-shell $(bin_SCRIPTS)
 
+# Nothing here, no files to cover, but we need to set this so that
+# EOS_COVERAGE_RULES doesn't complain
+EOS_JS_COVERAGE_FILES =
+
+@EOS_COVERAGE_RULES@
+
 include Makefile-st.am
 include Makefile-tray.am
 include Makefile-calendar-server.am
@@ -81,6 +87,7 @@ include Makefile-hotplug-sniffer.am
 
 eos_shell_cflags =				\
 	$(EOS_SHELL_CFLAGS)			\
+	@EOS_C_COVERAGE_CFLAGS@			\
 	-I$(srcdir)/tray			\
 	-DVERSION=\"$(VERSION)\"		\
 	-DLOCALEDIR=\"$(datadir)/locale\" 	\
@@ -190,6 +197,7 @@ eos_shell_real_SOURCES =		\
 	main.c
 eos_shell_real_CPPFLAGS = $(eos_shell_cflags)
 eos_shell_real_LDADD = libeos-shell.la libeos-shell-js.la $(libeos_shell_la_LIBADD)
+eos_shell_real_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
 eos_shell_real_DEPENDENCIES = libeos-shell.la
 
 eos_shell_extension_prefs_SOURCES = 	\
@@ -201,6 +209,7 @@ nodist_eos_shell_extension_prefs_SOURCES = \
 	$(NULL)
 eos_shell_extension_prefs_CPPFLAGS = $(eos_shell_cflags)
 eos_shell_extension_prefs_LDADD = libeos-shell-js.la $(EOS_SHELL_LIBS)
+eos_shell_extension_prefs_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
 
 ########################################
 
@@ -214,10 +223,14 @@ libeos_shell_js_la_LIBADD =		\
 	$(NULL)
 
 libeos_shell_js_la_LDFLAGS =		\
-	-avoid-version
+	-avoid-version			\
+	@EOS_C_COVERAGE_LDFLAGS@	\
+	$(NULL)
 
 libeos_shell_js_la_CPPFLAGS =		\
-	$(EOS_SHELL_JS_CFLAGS)
+	$(EOS_SHELL_JS_CFLAGS)		\
+	@EOS_C_COVERAGE_CFLAGS@		\
+	$(NULL)
 
 ########################################
 
@@ -244,8 +257,16 @@ endif BUILD_RECORDER
 libexec_PROGRAMS += eos-shell-perf-helper
 
 eos_shell_perf_helper_SOURCES = shell-perf-helper.c
-eos_shell_perf_helper_CPPFLAGS = $(SHELL_PERF_HELPER_CFLAGS)
-eos_shell_perf_helper_LDADD = $(SHELL_PERF_HELPER_LIBS)
+eos_shell_perf_helper_CPPFLAGS =	\
+	$(SHELL_PERF_HELPER_CFLAGS)	\
+	@EOS_C_COVERAGE_CFLAGS@		\
+	$(NULL)
+
+eos_shell_perf_helper_LDADD =		\
+	$(SHELL_PERF_HELPER_LIBS)	\
+	$(NULL)
+
+eos_shell_perf_helper_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
 
 ########################################
 
@@ -283,13 +304,15 @@ shell-enum-types.c: $(srcdir)/shell-enum-types.c.in stamp-shell-enum-types.h
 EXTRA_DIST += shell-enum-types.c.in
 
 libeos_shell_la_LDFLAGS = -avoid-version
+
 libeos_shell_la_LIBADD =		\
-	-lm			\
-	$(EOS_SHELL_LIBS)	\
-	$(BLUETOOTH_LIBS)	\
-	libst-1.0.la       	\
-	libtray.la		\
-	gvc/libgvc.la		\
+	-lm				\
+	@EOS_C_COVERAGE_LDFLAGS@	\
+	$(EOS_SHELL_LIBS)		\
+	$(BLUETOOTH_LIBS)		\
+	libst-1.0.la       		\
+	libtray.la			\
+	gvc/libgvc.la			\
 	$(NULL)
 
 libeos_shell_la_CPPFLAGS = $(eos_shell_cflags)

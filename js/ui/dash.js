@@ -554,7 +554,8 @@ const Dash = new Lang.Class({
     _createAppItem: function(app) {
         let appIcon = new AppDisplay.AppIcon(app,
                                              { setSizeManually: true,
-                                               showLabel: false });
+                                               showLabel: false },
+                                             { showMenu: false });
         appIcon._draggable.connect('drag-begin',
                                    Lang.bind(this, function() {
                                        appIcon.actor.opacity = 50;
@@ -563,10 +564,6 @@ const Dash = new Lang.Class({
                                    Lang.bind(this, function() {
                                        appIcon.actor.opacity = 255;
                                    }));
-        appIcon.connect('menu-state-changed',
-                        Lang.bind(this, function(appIcon, opened) {
-                            this._itemMenuStateChanged(item, opened);
-                        }));
 
         let item = new DashItemContainer();
         item.setChild(appIcon.actor);
@@ -580,19 +577,6 @@ const Dash = new Lang.Class({
         this._hookUpLabel(item);
 
         return item;
-    },
-
-    _itemMenuStateChanged: function(item, opened) {
-        // When the menu closes, it calls sync_hover, which means
-        // that the notify::hover handler does everything we need to.
-        if (opened) {
-            if (this._showLabelTimeoutId > 0) {
-                Mainloop.source_remove(this._showLabelTimeoutId);
-                this._showLabelTimeoutId = 0;
-            }
-
-            item.hideLabel();
-        }
     },
 
     _onHover: function (item) {

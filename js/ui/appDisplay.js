@@ -35,7 +35,6 @@ const Util = imports.misc.util;
 const MAX_APPLICATION_WORK_MILLIS = 75;
 const MENU_POPUP_TIMEOUT = 600;
 const MAX_COLUMNS = 7;
-const ROWS_FOR_ENTRY = 4;
 
 const ICON_ANIMATION_TIME = 0.6;
 const ICON_ANIMATION_DELAY = 0.3;
@@ -177,11 +176,6 @@ const AppSearchProvider = new Lang.Class({
         let app = this._appSys.lookup_app(id);
         app.open_new_window(workspace);
     },
-
-    createResultObject: function (resultMeta) {
-        let app = resultMeta['id'];
-        return new AppIcon(app);
-    }
 });
 
 const EndlessApplicationView = new Lang.Class({
@@ -471,8 +465,7 @@ const FolderView = new Lang.Class({
     },
 
     _createItemIcon: function(item) {
-        return new AppIcon(item, null, { showMenu: false,
-                                         parentView: this });
+        return new AppIcon(item, null, { parentView: this });
     },
 
     getViewId: function() {
@@ -496,7 +489,7 @@ const AllViewLayout = new Lang.Class({
                 continue;
             }
 
-            let childY = child.y;
+            let childY = Math.ceil(child.y);
             let [childMin, childNatural] = child.get_preferred_height(forWidth);
 
             if (childMin + childY > minBottom) {
@@ -516,6 +509,8 @@ const AllViewContainer = new Lang.Class({
     Extends: St.ScrollView,
 
     _init: function(gridActor) {
+        this.gridActor = gridActor;
+
         gridActor.y_expand = true;
         gridActor.y_align = Clutter.ActorAlign.CENTER;
 
@@ -1012,8 +1007,7 @@ const AllView = new Lang.Class({
         if (item == this._appStoreItem) {
             return this._appStoreIcon;
         } else if (item instanceof Shell.App) {
-            return new AppIcon(item, null, { showMenu: false,
-                                             parentView: this });
+            return new AppIcon(item, null, { parentView: this });
         } else {
             return new FolderIcon(item, this);
         }
@@ -1175,16 +1169,55 @@ const AllView = new Lang.Class({
                                            transition: transition });
         }
     },
+});
 
-    getEntryAnchor: function() {
-        return this._grid.getHeightForRows(ROWS_FOR_ENTRY);
+const ViewIconMenu = new Lang.Class({
+    Name: 'ViewIconMenu',
+    Extends: PopupMenu.PopupMenu,
+
+    _init: function(source) {
+        this.parent(source.actor, 0.5, St.Side.TOP);
+
+        // We want to keep the item hovered while the menu is up
+        this.blockSourceEvents = true;
+
+        this._source = source;
+
+        this.connect('activate', Lang.bind(this, this._onActivate));
+
+        this.actor.add_style_class_name('app-well-menu');
+
+        // Chain our visibility and lifecycle to that of the source
+        source.actor.connect('notify::mapped', Lang.bind(this, function () {
+            if (!source.actor.mapped)
+                this.close();
+        }));
+        source.actor.connect('destroy', Lang.bind(this, function () { this.actor.destroy(); }));
+
+        Main.uiGroup.add_actor(this.actor);
     },
 
-    getHeightForEntry: function(forWidth) {
-        let gridHeight = this._grid.actor.get_preferred_height(forWidth);
-        gridHeight[1] = Math.max(gridHeight[1], this.getEntryAnchor());
+    _redisplay: function() {
+        this.removeAll();
+        this._removeItem = this._appendMenuItem(_("Remove from desktop"));
+    },
 
-        return gridHeight;
+    _appendMenuItem: function(labelText) {
+        let item = new PopupMenu.PopupMenuItem(labelText);
+        this.addMenuItem(item);
+        return item;
+    },
+
+    popup: function(activatingButton) {
+        this._redisplay();
+        this.open();
+    },
+
+    _onActivate: function (actor, child) {
+        if (child == this._removeItem) {
+            this._source.remove();
+        }
+        this.close();
     }
 });
 
@@ -1197,8 +1230,14 @@ const ViewIconState = {
 const ViewIcon = new Lang.Class({
     Name: 'ViewIcon',
 
-    _init: function(parentView, buttonParams, iconParams) {
-        this.parentView = parentView;
+    _init: function(params, buttonParams, iconParams) {
+        params = Params.parse(params,
+                              { isDraggable: true,
+                                parentView: null,
+                                showMenu: true },
+                              true);
+        this.parentView = params.parentView;
+        this.showMenu = params.showMenu;
 
         this.canDrop = false;
         this.customName = false;
@@ -1213,12 +1252,20 @@ const ViewIcon = new Lang.Class({
         this.actor.can_focus = true;
 
         this.actor._delegate = this;
-
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+
+        this._menu = null;
+        this._menuManager = new PopupMenu.PopupMenuManager(this);
 
         this._origText = null;
         this._createIconFunc = iconParams['createIcon'];
         iconParams['createIcon'] = Lang.bind(this, this._createIconBase);
+
+        buttonParams = Params.parse(buttonParams,
+                                    { button_mask: St.ButtonMask.ONE |
+                                                   St.ButtonMask.TWO |
+                                                   St.ButtonMask.THREE },
+                                    true);
 
         this.icon = new IconGrid.BaseIcon(this.getName(), iconParams, buttonParams);
         if (iconParams['showLabel'] !== false &&
@@ -1232,12 +1279,93 @@ const ViewIcon = new Lang.Class({
 
         this.iconButton = this.icon.iconButton;
         this.iconButton._delegate = this;
+        this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
+        this.iconButton.connect('button-press-event', Lang.bind(this, this._onButtonPress));
+        this.iconButton.connect('popup-menu', Lang.bind(this, this._onKeyboardPopupMenu));
+
+        if (params.isDraggable) {
+            this._draggable = DND.makeDraggable(this.iconButton);
+            this._draggable.connect('drag-begin', Lang.bind(this,
+                function () {
+                    Main.overview.beginItemDrag(this);
+                }));
+            this._draggable.connect('drag-cancelled', Lang.bind(this,
+                function () {
+                    Main.overview.cancelledItemDrag(this);
+                }));
+            this._draggable.connect('drag-end', Lang.bind(this,
+                function () {
+                    Main.overview.endItemDrag(this);
+                }));
+        }
     },
 
     _onDestroy: function() {
         this._unscheduleScaleIn();
+
         this.iconButton._delegate = null;
         this.actor._delegate = null;
+    },
+
+    _onClicked: function(actor, button) {
+        logError('onClicked not implemented');
+    },
+
+    _onButtonPress: function(actor, event) {
+        if (event.get_button() == Gdk.BUTTON_SECONDARY) {
+            return this._popupMenu();
+        }
+
+        return false;
+    },
+
+    _onKeyboardPopupMenu: function() {
+        if (this._popupMenu()) {
+            this._menu.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
+        }
+    },
+
+    _popupMenu: function() {
+        if (!this.showMenu) {
+            return false;
+        }
+
+        if (!this._menu) {
+            this._menu = this._createPopupMenu();
+        }
+
+        if (!this._menu) {
+            return false;
+        }
+
+        this.iconButton.fake_release();
+
+        if (this._draggable) {
+            this._draggable.fakeRelease();
+        }
+
+        this._menu.connect('open-state-changed', Lang.bind(this, function (menu, isPoppedUp) {
+            if (!isPoppedUp) {
+                this._onMenuPoppedDown();
+            }
+        }));
+        Main.overview.connect('hiding', Lang.bind(this, function () { this._menu.close(); }));
+
+        this._menuManager.addMenu(this._menu);
+
+        this.actor.set_hover(true);
+        this._menu.popup();
+        this._menuManager.ignoreRelease();
+
+        return true;
+    },
+
+    _onMenuPoppedDown: function() {
+        this.actor.sync_hover();
+    },
+
+    _createPopupMenu: function() {
+        return new ViewIconMenu(this);
     },
 
     _createIconBase: function(iconSize) {
@@ -1293,6 +1421,14 @@ const ViewIcon = new Lang.Class({
             this._unscheduleScaleIn();
             this._scaleIn();
         }));
+    },
+
+    remove: function() {
+        this.blockHandler = true;
+        IconGridLayout.layout.removeIcon(this.getId(), true);
+        this.blockHandler = false;
+
+        this.handleViewDragEnd();
     },
 
     replaceText: function(newText) {
@@ -1368,14 +1504,14 @@ const FolderIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init: function(dirInfo, parentView) {
-        let buttonParams = { button_mask: St.ButtonMask.ONE,
-                             toggle_mode: true };
+        let params = { parentView: parentView };
+        let buttonParams = { toggle_mode: true };
         let iconParams = { createIcon: Lang.bind(this, this._createIcon),
                            editableLabel: true };
 
         this.folder = dirInfo;
         this._name = this.folder.get_name();
-        this.parent(parentView, buttonParams, iconParams);
+        this.parent(params, buttonParams, iconParams);
 
         this.actor.add_style_class_name('app-folder');
 
@@ -1384,38 +1520,27 @@ const FolderIcon = new Lang.Class({
         this.view = new FolderView(this);
         this.view.actor.reactive = false;
 
-        this.iconButton.connect('clicked', Lang.bind(this,
-            function() {
-                if (this._createPopup()) {
-                    this._popup.toggle();
-                }
-            }));
-
         this.actor.connect('notify::mapped', Lang.bind(this,
             function() {
                 if (!this.actor.mapped && this._popup)
                     this._popup.popdown();
-            }));
-
-        // DND implementation
-        this._draggable = DND.makeDraggable(this.iconButton);
-        this._draggable.connect('drag-begin', Lang.bind(this,
-            function () {
-                Main.overview.beginItemDrag(this);
-            }));
-        this._draggable.connect('drag-cancelled', Lang.bind(this,
-            function () {
-                Main.overview.cancelledItemDrag(this);
-            }));
-        this._draggable.connect('drag-end', Lang.bind(this,
-            function () {
-                Main.overview.endItemDrag(this);
             }));
     },
 
     _onDestroy: function() {
         this.parent();
         this.view.actor.destroy();
+    },
+
+    _onClicked: function(actor, button) {
+        if (button != Gdk.BUTTON_PRIMARY) {
+            actor.checked = false;
+            return;
+        }
+
+        if (this._createPopup()) {
+            this._popup.toggle();
+        }
     },
 
     _onLabelUpdate: function(label, newText) {
@@ -1547,6 +1672,55 @@ const FolderIcon = new Lang.Class({
         let actor = this.parent();
         actor.add_style_class_name('app-folder');
         return actor;
+    },
+
+    remove: function() {
+        let sourceId = this.getId();
+        let icons = IconGridLayout.layout.getIcons(sourceId);
+        let isEmpty = (icons.length == 0);
+        if (!isEmpty) {
+            // ensure the applications in the folder actually exist
+            // on the system
+            let appSystem = Shell.AppSystem.get_default();
+            isEmpty = !icons.some(function(icon) {
+                return appSystem.lookup_app(icon) != null;
+            });
+        }
+
+        if (isEmpty) {
+            // remove if empty
+            this.parent();
+            return;
+        }
+
+        let dialog = new ModalDialog.ModalDialog();
+
+        let subjectLabel = new St.Label({ text: _("Warning"),
+                                          style_class: 'delete-folder-dialog-subject',
+                                          x_align: Clutter.ActorAlign.CENTER });
+        dialog.contentLayout.add(subjectLabel, { y_fill: false,
+                                                 y_align: St.Align.START });
+
+        let descriptionLabel = new St.Label({ text: _("To delete a folder you have to remove all of the items inside of it first."),
+                                              style_class: 'delete-folder-dialog-description' });
+        dialog.contentLayout.add(descriptionLabel, { y_fill: true });
+        descriptionLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        descriptionLabel.clutter_text.line_wrap = true;
+
+        let safeLabel = new St.Label({ text: _("We are just trying to keep you safe."),
+                                       style_class: 'delete-folder-dialog-safe' });
+        dialog.contentLayout.add(safeLabel, { y_fill: true });
+        safeLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        safeLabel.clutter_text.line_wrap = true;
+
+        let okButton = { label: _("OK"),
+                         action: Lang.bind(this, function() {
+                             dialog.close();
+                         }),
+                         key: Clutter.Escape,
+                         default: true };
+        dialog.setButtons([okButton]);
+        dialog.open();
     }
 });
 
@@ -1633,10 +1807,6 @@ const AppIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init : function(app, iconParams, params) {
-        params = Params.parse(params, { showMenu: true,
-                                        isDraggable: true,
-                                        parentView: null });
-
         this._baseApp = app;
 
         let id = app.get_id();
@@ -1646,44 +1816,13 @@ const AppIcon = new Lang.Class({
         this.app = displayApp;
         this._name = this.app.get_name();
 
-        this._showMenu = params.showMenu;
-
         iconParams = Params.parse(iconParams, { createIcon: Lang.bind(this, this._createIcon),
                                                 editableLabel: true,
                                                 shadowAbove: true },
                                   true);
 
-        let buttonParams = { button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
+        this.parent(params, null, iconParams);
 
-        this.parent(params.parentView, buttonParams, iconParams);
-
-        this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
-        this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
-        this.actor.connect('popup-menu', Lang.bind(this, this._onKeyboardPopupMenu));
-
-        this._menu = null;
-        this._menuManager = new PopupMenu.PopupMenuManager(this);
-
-        if (params.isDraggable) {
-            this._draggable = DND.makeDraggable(this.iconButton);
-            this._draggable.connect('drag-begin', Lang.bind(this,
-                function () {
-                    // Notify view that something is dragging
-                    this._removeMenuTimeout();
-                    Main.overview.beginItemDrag(this);
-                }));
-            this._draggable.connect('drag-cancelled', Lang.bind(this,
-                function () {
-                    Main.overview.cancelledItemDrag(this);
-                }));
-            this._draggable.connect('drag-end', Lang.bind(this,
-                function () {
-                    // Are we in the trashcan area?
-                    Main.overview.endItemDrag(this);
-                }));
-        }
-
-        this._menuTimeoutId = 0;
         this._stateChangedId = this.app.connect('notify::state',
                                                 Lang.bind(this,
                                                           this._onStateChanged));
@@ -1697,18 +1836,10 @@ const AppIcon = new Lang.Class({
             this.app.disconnect(this._stateChangedId);
         }
         this._stateChangedId = 0;
-        this._removeMenuTimeout();
     },
 
     _createIcon: function(iconSize) {
         return this.app.create_icon_texture(iconSize);
-    },
-
-    _removeMenuTimeout: function() {
-        if (this._menuTimeoutId > 0) {
-            Mainloop.source_remove(this._menuTimeoutId);
-            this._menuTimeoutId = 0;
-        }
     },
 
     _onStateChanged: function() {
@@ -1732,26 +1863,7 @@ const AppIcon = new Lang.Class({
         }
     },
 
-    _onButtonPress: function(actor, event) {
-        let button = event.get_button();
-        if (button == Gdk.BUTTON_PRIMARY) {
-            this._removeMenuTimeout();
-            this._menuTimeoutId = Mainloop.timeout_add(MENU_POPUP_TIMEOUT,
-                Lang.bind(this, function() {
-                    this._menuTimeoutId = 0;
-                    this.popupMenu();
-                    return false;
-                }));
-        } else if (button == Gdk.BUTTON_SECONDARY) {
-            this.popupMenu();
-            return true;
-        }
-        return false;
-    },
-
     _onClicked: function(actor, button) {
-        this._removeMenuTimeout();
-
         let event = Clutter.get_current_event();
         if (event.get_click_count() > 1) {
             return;
@@ -1769,71 +1881,12 @@ const AppIcon = new Lang.Class({
         }
     },
 
-    _onKeyboardPopupMenu: function() {
-        if (!this._showMenu) {
-            return;
-        }
-
-        this.popupMenu();
-        this._menu.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
-    },
-
     getId: function() {
         return this._baseApp.get_id();
     },
 
     getName: function() {
         return this._name;
-    },
-
-    popupMenu: function() {
-        this._removeMenuTimeout();
-
-        if (!this._showMenu) {
-            return false;
-        }
-
-        this.iconButton.fake_release();
-
-        if (this._draggable) {
-            this._draggable.fakeRelease();
-        }
-
-        if (!this._menu) {
-            this._menu = new AppIconMenu(this);
-            this._menu.connect('activate-window', Lang.bind(this, function (menu, window) {
-                this.activateWindow(window);
-            }));
-            this._menu.connect('open-state-changed', Lang.bind(this, function (menu, isPoppedUp) {
-                if (!isPoppedUp) {
-                    this._onMenuPoppedDown();
-                }
-            }));
-            Main.overview.connect('hiding', Lang.bind(this, function () { this._menu.close(); }));
-
-            this._menuManager.addMenu(this._menu);
-        }
-
-        this.emit('menu-state-changed', true);
-
-        this.actor.set_hover(true);
-        this._menu.popup();
-        this._menuManager.ignoreRelease();
-
-        return false;
-    },
-
-    activateWindow: function(metaWindow) {
-        if (metaWindow) {
-            Main.activateWindow(metaWindow);
-        } else {
-            Main.overview.hide();
-        }
-    },
-
-    _onMenuPoppedDown: function() {
-        this.actor.sync_hover();
-        this.emit('menu-state-changed', false);
     },
 
     _onActivate: function (event) {
@@ -1877,18 +1930,18 @@ const AppStoreIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init : function(parentView) {
-        let buttonParams = { button_mask: St.ButtonMask.ONE | St.ButtonMask.TWO };
+        let params = { isDraggable: false,
+                       parentView: parentView,
+                       showMenu: false };
         let iconParams = { createIcon: Lang.bind(this, this._createIcon),
                            editableLabel: false,
                            shadowAbove: false };
 
-        this.parent(parentView, buttonParams, iconParams);
+        this.parent(params, null, iconParams);
 
         this.actor.add_style_class_name('app-store-icon');
 
         this.canDrop = true;
-
-        this.iconButton.connect('clicked', Lang.bind(this, this._onClicked));
     },
 
     _setStyleClass: function(state) {
@@ -1912,6 +1965,10 @@ const AppStoreIcon = new Lang.Class({
     },
 
     _onClicked: function(actor, button) {
+        if (button != Gdk.BUTTON_PRIMARY) {
+            return;
+        }
+
         Main.appStore.show(global.get_current_time(), true);
     },
 
@@ -1941,78 +1998,9 @@ const AppStoreIcon = new Lang.Class({
         this.iconState = appStoreIconState;
     },
 
-    _removeItem: function(source) {
-        source.blockHandler = true;
-
-        IconGridLayout.layout.removeIcon(source.getId(), true);
-
-        source.blockHandler = false;
-
-        if (source.handleViewDragEnd) {
-            source.handleViewDragEnd();
-        }
-
-        this.handleViewDragEnd();
-    },
-
-    _acceptFolderDrop: function(source) {
-        let folder = source.folder;
-        let sourceId = folder.get_id();
-
-        let icons = IconGridLayout.layout.getIcons(sourceId);
-        let isEmpty = (icons.length == 0);
-        if (!isEmpty) {
-            // ensure the applications in the folder actually exist
-            // on the system
-            let appSystem = Shell.AppSystem.get_default();
-            isEmpty = !icons.some(function(icon) {
-                return appSystem.lookup_app(icon) != null;
-            });
-        }
-
-        if (isEmpty) {
-            this._removeItem(source);
-            return;
-        }
-
-        let dialog = new ModalDialog.ModalDialog();
-
-        let subjectLabel = new St.Label({ text: _("Warning"),
-                                          style_class: 'delete-folder-dialog-subject',
-                                          x_align: Clutter.ActorAlign.CENTER });
-        dialog.contentLayout.add(subjectLabel, { y_fill: false,
-                                                 y_align: St.Align.START });
-
-        let descriptionLabel = new St.Label({ text: _("To delete a folder you have to remove all of the items inside of it first."),
-                                              style_class: 'delete-folder-dialog-description' });
-        dialog.contentLayout.add(descriptionLabel, { y_fill: true });
-        descriptionLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-        descriptionLabel.clutter_text.line_wrap = true;
-
-        let safeLabel = new St.Label({ text: _("We are just trying to keep you safe."),
-                                       style_class: 'delete-folder-dialog-safe' });
-        dialog.contentLayout.add(safeLabel, { y_fill: true });
-        safeLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-        safeLabel.clutter_text.line_wrap = true;
-
-        let okButton = { label: _("OK"),
-                         action: Lang.bind(this, function() {
-                             dialog.close();
-                         }),
-                         key: Clutter.Escape,
-                         default: true };
-        dialog.setButtons([okButton]);
-        dialog.open();
-    },
-
     handleIconDrop: function(source) {
-        if (source.app) {
-            this._removeItem(source);
-            return true;
-        }
-
-        if (source.folder) {
-            this._acceptFolderDrop(source);
+        if (source.remove()) {
+            this.handleViewDragEnd();
             return true;
         }
 
@@ -2020,105 +2008,3 @@ const AppStoreIcon = new Lang.Class({
     }
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
-
-const AppIconMenu = new Lang.Class({
-    Name: 'AppIconMenu',
-    Extends: PopupMenu.PopupMenu,
-
-    _init: function(source) {
-        let side = St.Side.LEFT;
-        if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
-            side = St.Side.RIGHT;
-
-        this.parent(source.actor, 0.5, side);
-
-        // We want to keep the item hovered while the menu is up
-        this.blockSourceEvents = true;
-
-        this._source = source;
-
-        this.connect('activate', Lang.bind(this, this._onActivate));
-
-        this.actor.add_style_class_name('app-well-menu');
-
-        // Chain our visibility and lifecycle to that of the source
-        source.actor.connect('notify::mapped', Lang.bind(this, function () {
-            if (!source.actor.mapped)
-                this.close();
-        }));
-        source.actor.connect('destroy', Lang.bind(this, function () { this.actor.destroy(); }));
-
-        Main.uiGroup.add_actor(this.actor);
-    },
-
-    _redisplay: function() {
-        this.removeAll();
-
-        let windows = this._source.app.get_windows().filter(function(w) {
-            return Shell.WindowTracker.is_window_interesting(w);
-        });
-
-        // Display the app windows menu items and the separator between windows
-        // of the current desktop and other windows.
-        let activeWorkspace = global.screen.get_active_workspace();
-        let separatorShown = windows.length > 0 && windows[0].get_workspace() != activeWorkspace;
-
-        for (let i = 0; i < windows.length; i++) {
-            if (!separatorShown && windows[i].get_workspace() != activeWorkspace) {
-                this._appendSeparator();
-                separatorShown = true;
-            }
-            let item = this._appendMenuItem(windows[i].title);
-            item._window = windows[i];
-        }
-
-        if (!this._source.app.is_window_backed()) {
-            if (windows.length > 0)
-                this._appendSeparator();
-
-            let isFavorite = AppFavorites.getAppFavorites().isFavorite(this._source.app.get_id());
-
-            this._newWindowMenuItem = this._appendMenuItem(_("New Window"));
-            this._appendSeparator();
-
-            this._toggleFavoriteMenuItem = this._appendMenuItem(isFavorite ? _("Remove from Favorites")
-                                                                : _("Add to Favorites"));
-        }
-    },
-
-    _appendSeparator: function () {
-        let separator = new PopupMenu.PopupSeparatorMenuItem();
-        this.addMenuItem(separator);
-    },
-
-    _appendMenuItem: function(labelText) {
-        // FIXME: app-well-menu-item style
-        let item = new PopupMenu.PopupMenuItem(labelText);
-        this.addMenuItem(item);
-        return item;
-    },
-
-    popup: function(activatingButton) {
-        this._redisplay();
-        this.open();
-    },
-
-    _onActivate: function (actor, child) {
-        if (child._window) {
-            let metaWindow = child._window;
-            this.emit('activate-window', metaWindow);
-        } else if (child == this._newWindowMenuItem) {
-            this._source.app.open_new_window(-1);
-            this.emit('activate-window', null);
-        } else if (child == this._toggleFavoriteMenuItem) {
-            let favs = AppFavorites.getAppFavorites();
-            let isFavorite = favs.isFavorite(this._source.app.get_id());
-            if (isFavorite)
-                favs.removeFavorite(this._source.app.get_id());
-            else
-                favs.addFavorite(this._source.app.get_id());
-        }
-        this.close();
-    }
-});
-Signals.addSignalMethods(AppIconMenu.prototype);

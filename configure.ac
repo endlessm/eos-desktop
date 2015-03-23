@@ -28,7 +28,7 @@ IT_PROG_INTLTOOL([0.40])
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.17])
 
-GETTEXT_PACKAGE=eos-shell
+GETTEXT_PACKAGE=eos-desktop
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
                    [The prefix for our gettext translation domains.])
@@ -182,6 +182,9 @@ AM_CONDITIONAL(USE_JHBUILD_WRAPPER_SCRIPT, test "x$enable_jhbuild_wrapper_script
 
 BROWSER_PLUGIN_DIR="${BROWSER_PLUGIN_DIR:-"\${libdir}/mozilla/plugins"}"
 AC_ARG_VAR([BROWSER_PLUGIN_DIR],[Where to install the plugin to])
+
+# Enable coverage reporting
+EOS_COVERAGE_REPORT([c js])
 
 AC_CONFIG_FILES([
   Makefile

@@ -70,6 +70,7 @@ const ScreenSaverIface = '<node> \
 <signal name="ActiveChanged"> \
     <arg name="new_value" type="b" /> \
 </signal> \
+<signal name="ActiveResumed" /> \
 </interface> \
 </node>';
 
@@ -397,6 +398,10 @@ const ScreenSaverDBus = new Lang.Class({
             this._dbusImpl.emit_signal('ActiveChanged', GLib.Variant.new('(b)', [shield.active]));
         }));
 
+        screenShield.connect('active-resumed', Lang.bind(this, function() {
+            this._dbusImpl.emit_signal('ActiveResumed', GLib.Variant.new('()', []));
+        }));
+
         this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(ScreenSaverIface, this);
         this._dbusImpl.export(Gio.DBus.session, '/org/gnome/ScreenSaver');
 
@@ -463,8 +468,9 @@ const AppStoreService = new Lang.Class({
     },
 
     AddApplication: function(id) {
-        let eventRecorder = EosMetrics.EventRecorder.prototype.get_default();
-        eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_ADDED, new GLib.Variant('s', id));
+        let eventRecorder = EosMetrics.EventRecorder.get_default();
+        let appId = new GLib.Variant('s', id);
+        eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_ADDED, appId);
 
         if (!IconGridLayout.layout.iconIsFolder(id)) {
             IconGridLayout.layout.appendIcon(id, IconGridLayout.DESKTOP_GRID_ID);

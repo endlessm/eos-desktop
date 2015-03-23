@@ -11,7 +11,7 @@ const IconGridLayout = imports.ui.iconGridLayout;
 const Search = imports.ui.search;
 
 const KEY_FILE_GROUP = 'Shell Search Provider';
-const CONTROL_CENTER_DESKTOP_ID = 'gnome-control-center.desktop';
+const CONTROL_CENTER_DESKTOP_ID = 'eos-app-gnome-control-center.desktop';
 
 const SearchProviderIface = '<node> \
 <interface name="org.gnome.Shell.SearchProvider"> \
@@ -227,7 +227,8 @@ const RemoteSearchProvider = new Lang.Class({
                                          g_interface_info: proxyInfo,
                                          g_interface_name: proxyInfo.name,
                                          g_flags: (Gio.DBusProxyFlags.DO_NOT_AUTO_START_AT_CONSTRUCTION |
-                                                   Gio.DBusProxyFlags.DO_NOT_LOAD_PROPERTIES) });
+                                                   Gio.DBusProxyFlags.DO_NOT_LOAD_PROPERTIES),
+                                         g_default_timeout: GLib.MAXINT32 });
         this.proxy.init_async(GLib.PRIORITY_DEFAULT, null, null);
 
         this.app = shellApp;

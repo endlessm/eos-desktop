@@ -36,7 +36,7 @@ const ModalDialog = new Lang.Class({
     _init: function(params) {
         params = Params.parse(params, { shellReactive: false,
                                         styleClass: null,
-                                        parentActor: Main.uiGroup,
+                                        parentActor: Main.layoutManager.modalDialogGroup,
                                         keybindingMode: Shell.KeyBindingMode.SYSTEM_MODAL,
                                         shouldFadeIn: true });
 

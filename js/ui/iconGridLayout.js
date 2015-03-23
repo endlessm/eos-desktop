@@ -223,8 +223,10 @@ const IconGridLayout = new Lang.Class({
         }
 
         if (!this.iconIsFolder(info.get_id())) {
-            let eventRecorder = EosMetrics.EventRecorder.prototype.get_default();
-            eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_REMOVED, new GLib.Variant('s', info.get_id()));
+            let eventRecorder = EosMetrics.EventRecorder.get_default();
+            let appId = new GLib.Variant('s', info.get_id());
+            eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_REMOVED,
+                                       appId);
         }
 
         let filename = info.get_filename();

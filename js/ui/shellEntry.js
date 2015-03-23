@@ -13,10 +13,14 @@ const Main = imports.ui.main;
 const Panel = imports.ui.panel;
 const Params = imports.misc.params;
 const PopupMenu = imports.ui.popupMenu;
+const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
 
 const SPINNER_ICON_SIZE = 24;
 const SPINNER_MIN_DURATION = 1000;
+
+const OVERVIEW_ENTRY_BLINK_DURATION = 0.4;
+const OVERVIEW_ENTRY_BLINK_BRIGHTNESS = 1.4;
 
 const EntryMenu = new Lang.Class({
     Name: 'ShellEntryMenu',
@@ -185,6 +189,11 @@ const OverviewEntry = new Lang.Class({
                       secondary_icon: this._spinnerAnimation.actor,
                       x_align: Clutter.ActorAlign.CENTER,
                       y_align: Clutter.ActorAlign.CENTER });
+
+        this._blinkBrightnessEffect = new Clutter.BrightnessContrastEffect({
+            enabled: false,
+        });
+        this.add_effect(this._blinkBrightnessEffect);
 
         addContextMenu(this);
 
@@ -373,6 +382,39 @@ const OverviewEntry = new Lang.Class({
             this._spinnerAnimation.stop();
             this._spinnerAnimation.actor.hide();
         }
+    },
+
+    get blinkBrightness() {
+        return this._blinkBrightness;
+    },
+
+    set blinkBrightness(v) {
+        this._blinkBrightness = v;
+        this._blinkBrightnessEffect.enabled = this._blinkBrightness !== 1;
+        let colorval = this._blinkBrightness * 127;
+        this._blinkBrightnessEffect.brightness = new Clutter.Color({
+            red: colorval,
+            green: colorval,
+            blue: colorval,
+        });
+    },
+
+    blink: function() {
+        let tweenBack = function () {
+            Tweener.addTween(this,
+                             { blinkBrightness: 1,
+                               transition: 'easeOutQuad',
+                               time: OVERVIEW_ENTRY_BLINK_DURATION / 2,
+                             });
+        };
+        this.blinkBrightness = 1;
+        Tweener.addTween(this,
+                         { blinkBrightness: OVERVIEW_ENTRY_BLINK_BRIGHTNESS,
+                           transition: 'easeOutQuad',
+                           time: OVERVIEW_ENTRY_BLINK_DURATION / 2,
+                           onComplete: tweenBack,
+                         });
+
     },
 
     set active(value) {

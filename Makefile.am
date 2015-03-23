@@ -21,7 +21,7 @@ DIST_EXCLUDE =					\
 	HACKING					\
 	MAINTAINERS				\
 	po/change_msgid.sh			\
-	po/eos-shell.pot			\
+	po/eos-desktop.pot			\
 	tools/build/*				\
 	.tx/config
 
@@ -30,3 +30,14 @@ distcheck-hook:
 	@$(srcdir)/tools/check-for-missing.py $(srcdir) $(distdir) $(DIST_EXCLUDE)
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-man
+
+# Pass resource paths to EOS_JS_COVERAGE_FILES
+EOS_JS_COVERAGE_FILES = $(shell python -c "import xml.etree.ElementTree as ET; import sys; tree = ET.parse('js/js-resources.gresource.xml'); map(sys.stdout.write, ['resource://org/gnome/shell/{0}\n'.format(e.text) for e in tree.getroot()[0]])")
+
+@EOS_COVERAGE_RULES@
+
+AM_CFLAGS = @EOS_COVERAGE_CFLAGS@
+AM_LDFLAGS = @EOS_COVERAGE_LDFLAGS@
+
+echo-cov-files:
+	@echo @EOS_JS_COVERAGE_LOG_FLAGS@

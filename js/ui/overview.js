@@ -194,7 +194,7 @@ const Overview = new Lang.Class({
 
         this.visible = false;           // animating to overview, in overview, animating out
         this._shown = false;            // show() and not hide()
-        this._toggledFromApp = false;   // was the last call to toggle from an app?
+        this._toggleToHidden = false;   // Whether to hide the overview when either toggle function is called
         this._targetPage = null;        // do we have a target page to animate to?
         this._modal = false;            // have a modal grab
         this.animationInProgress = false;
@@ -327,14 +327,6 @@ const Overview = new Lang.Class({
 
         this._shellInfo = new ShellInfo();
 
-        // Add a clone of the panel to the overview so spacing and such is
-        // automatic
-        this._topGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
-                                      reactive: false,
-                                      opacity: 0 });
-
-        this._overview.add_actor(this._topGhost);
-
         this._bottomGhost = new St.Bin({ child: new Clutter.Clone({ source: Main.panel.actor }),
                                          reactive: false,
                                          opacity: 0 });
@@ -402,6 +394,10 @@ const Overview = new Lang.Class({
     },
 
     _onPageChanged: function() {
+        // We are switching a pages in the overview, so we should toggle to the
+        // other page rather than hiding the overview.
+        this._toggleToHidden = false;
+
         this.emit('page-changed');
         this._updateBackgroundShade();
     },
@@ -615,7 +611,7 @@ const Overview = new Lang.Class({
         this._showOrSwitchPage(ViewSelector.ViewPage.APPS);
     },
 
-    showWorkspaces: function() {
+    showWindows: function() {
         this._showOrSwitchPage(ViewSelector.ViewPage.WINDOWS);
     },
 
@@ -656,6 +652,10 @@ const Overview = new Lang.Class({
 
         this._viewSelector.show(this._targetPage);
         this._targetPage = null;
+
+        // Since the overview is just becoming visible, we should toggle back
+        // the hidden state
+        this._toggleToHidden = true;
 
         this._coverPane.raise_top();
         this._coverPane.show();
@@ -714,35 +714,50 @@ const Overview = new Lang.Class({
         this._syncGrab();
     },
 
-    toggleByKey: function() {
-        this.toggle();
-    },
-
-    toggle: function() {
+    toggleApps: function() {
         if (this.isDummy)
             return;
 
-        if (this.visible) {
-            if (this._toggledFromApp) {
-                this._toggledFromApp = false;
-                if (Main.workspaceMonitor.visibleWindows > 0) {
-                    this.hide();
-                }
-            } else {
-                if (this._viewSelector.getActivePage() == ViewSelector.ViewPage.APPS) {
-                    this.showWorkspaces();
-                } else {
-                    this.showApps();
-                }
-            }
-        } else {
-            this._toggledFromApp = true;
-            this.showWorkspaces();
+        if (!this.visible ||
+            this._viewSelector.getActivePage() !== ViewSelector.ViewPage.APPS) {
+            this.showApps();
+            return;
         }
+
+        if (!this._toggleToHidden) {
+            this.showWindows();
+            return;
+        }
+
+        if (Main.workspaceMonitor.visibleWindows === 0) {
+            this._viewSelector.blinkSearch();
+            return;
+        }
+
+        this.hide();
     },
 
-    resetToggledState: function() {
-        this._toggledFromApp = false;
+    toggleWindows: function() {
+        if (this.isDummy)
+            return;
+
+        if (!this.visible ||
+            this._viewSelector.getActivePage() !== ViewSelector.ViewPage.WINDOWS) {
+            this.showWindows();
+            return;
+        }
+
+        if (!this._toggleToHidden) {
+            this.showApps();
+            return;
+        }
+
+        if (Main.workspaceMonitor.visibleWindows === 0) {
+            this.showApps();
+            return;
+        }
+
+        this.hide();
     },
 
     // Checks if the Activities button is currently sensitive to
@@ -805,12 +820,11 @@ const Overview = new Lang.Class({
             this._overview.opacity = AppDisplay.INACTIVE_GRID_OPACITY;
         }
 
-        if (hidingFromApps &&
-            this._viewSelector.getActiveViewsPage() == ViewSelector.ViewsDisplayPage.APP_GRID) {
-            // When we're hiding from the applications grid, we want to
-            // instantaneously switch to the application, so don't fade anything.
-            // We'll tween the grid clone in the background separately -
-            // see comment in viewSelector.js::ViewsClone.
+        if (hidingFromApps) {
+            // When we're hiding from the apps page, we want to instantaneously
+            // switch to the application, so don't fade anything. We'll tween
+            // the grid clone in the background separately - see comment in
+            // viewSelector.js::ViewsClone.
             this._hideDone();
             return;
         }

@@ -3,6 +3,7 @@ tray_cflags =					\
 	-DG_DISABLE_DEPRECATED			\
 	-DG_LOG_DOMAIN=\"notification_area\"	\
 	$(TRAY_CFLAGS)				\
+	@EOS_C_COVERAGE_CFLAGS@			\
 	$(NULL)
 
 # please, keep this sorted alphabetically
@@ -20,6 +21,9 @@ libtray_la_SOURCES =		\
 	$(tray_source)		\
 	$(NULL)
 libtray_la_CPPFLAGS = $(tray_cflags)
-libtray_la_LDFLAGS = $(LDADD)
+libtray_la_LDFLAGS = 			\
+	$(LDADD)			\
+	@EOS_C_COVERAGE_LDFLAGS@	\
+	$(NULL)
 
 CLEANFILES += $(TRAY_STAMP_FILES) $(BUILT_SOURCES)
