@@ -509,6 +509,7 @@ const SearchResults = new Lang.Class({
         appSystem.connect('installed-changed', Lang.bind(this, this._reloadRemoteProviders));
 
         this._searchTimeoutId = 0;
+        this._searchProgressUpdatedId = 0;
         this._cancellable = new Gio.Cancellable();
 
         this._appProvider = new AppDisplay.AppSearchProvider();
@@ -789,13 +790,29 @@ const SearchResults = new Lang.Class({
         }));
     },
 
+    _defaultResultActivate: function() {
+        if (this.searchInProgress)
+            return;
+
+        if (this._searchProgressUpdatedId > 0) {
+            this.disconnect(this._searchProgressUpdatedId);
+            this._searchProgressUpdatedId = 0;
+        }
+
+        if (this._defaultResult)
+            this._defaultResult.activate();
+    },
+
     activateDefault: function() {
         // If we have a search queued up, force the search now.
         if (this._searchTimeoutId > 0)
             this._doSearch();
 
-        if (this._defaultResult)
-            this._defaultResult.activate();
+        if (this.searchInProgress)
+            this._searchProgressUpdatedId = this.connect('search-progress-updated',
+                                                         Lang.bind(this, this._defaultResultActivate));
+        else
+            this._defaultResultActivate();
     },
 
     highlightDefault: function(highlight) {
