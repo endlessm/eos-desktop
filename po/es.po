@@ -1737,6 +1737,9 @@ msgstr "Batería"
 msgid "Power Settings"
 msgstr "Configuración de energía"
 
+msgid "Fully Charged"
+msgstr "Cargada completamente"
+
 #. 0 is reported when UPower does not have enough data
 #. to estimate battery life
 #: ../js/ui/status/power.js:101
