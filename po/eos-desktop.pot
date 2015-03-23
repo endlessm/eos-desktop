@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-19 21:53+0000\n"
+"POT-Creation-Date: 2015-03-23 14:12-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1252,7 +1252,7 @@ msgid "Search Google for \"%s\""
 msgstr ""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
-#: ../js/ui/status/power.js:213
+#: ../js/ui/status/power.js:217
 msgid "Keyboard"
 msgstr ""
 
@@ -1385,11 +1385,11 @@ msgstr ""
 msgid "Lock was blocked by an application"
 msgstr ""
 
-#: ../js/ui/search.js:768
+#: ../js/ui/search.js:771
 msgid "Searching…"
 msgstr ""
 
-#: ../js/ui/search.js:770
+#: ../js/ui/search.js:773
 msgid "No results."
 msgstr ""
 
@@ -1716,13 +1716,15 @@ msgstr ""
 msgid "Power Settings"
 msgstr ""
 
-#. 0 is reported when UPower does not have enough data
-#. to estimate battery life
-#: ../js/ui/status/power.js:101
+#: ../js/ui/status/power.js:103
+msgid "Fully Charged"
+msgstr ""
+
+#: ../js/ui/status/power.js:105
 msgid "Estimating…"
 msgstr ""
 
-#: ../js/ui/status/power.js:108
+#: ../js/ui/status/power.js:112
 #, javascript-format
 msgid "%d hour remaining"
 msgid_plural "%d hours remaining"
@@ -1730,77 +1732,77 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. TRANSLATORS: this is a time string, as in "%d hours %d minutes remaining"
-#: ../js/ui/status/power.js:111
+#: ../js/ui/status/power.js:115
 #, javascript-format
 msgid "%d %s %d %s remaining"
 msgstr ""
 
-#: ../js/ui/status/power.js:113
+#: ../js/ui/status/power.js:117
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../js/ui/status/power.js:113
+#: ../js/ui/status/power.js:117
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../js/ui/status/power.js:116
+#: ../js/ui/status/power.js:120
 #, javascript-format
 msgid "%d minute remaining"
 msgid_plural "%d minutes remaining"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../js/ui/status/power.js:119 ../js/ui/status/power.js:193
+#: ../js/ui/status/power.js:123 ../js/ui/status/power.js:197
 #, javascript-format
 msgctxt "percent of battery remaining"
 msgid "%d%%"
 msgstr ""
 
-#: ../js/ui/status/power.js:203
+#: ../js/ui/status/power.js:207
 msgid "AC Adapter"
 msgstr ""
 
-#: ../js/ui/status/power.js:205
+#: ../js/ui/status/power.js:209
 msgid "Laptop Battery"
 msgstr ""
 
-#: ../js/ui/status/power.js:207
+#: ../js/ui/status/power.js:211
 msgid "UPS"
 msgstr ""
 
-#: ../js/ui/status/power.js:209
+#: ../js/ui/status/power.js:213
 msgid "Monitor"
 msgstr ""
 
-#: ../js/ui/status/power.js:211
+#: ../js/ui/status/power.js:215
 msgid "Mouse"
 msgstr ""
 
-#: ../js/ui/status/power.js:215
+#: ../js/ui/status/power.js:219
 msgid "PDA"
 msgstr ""
 
-#: ../js/ui/status/power.js:217
+#: ../js/ui/status/power.js:221
 msgid "Cell Phone"
 msgstr ""
 
-#: ../js/ui/status/power.js:219
+#: ../js/ui/status/power.js:223
 msgid "Media Player"
 msgstr ""
 
-#: ../js/ui/status/power.js:221
+#: ../js/ui/status/power.js:225
 msgid "Tablet"
 msgstr ""
 
-#: ../js/ui/status/power.js:223
+#: ../js/ui/status/power.js:227
 msgid "Computer"
 msgstr ""
 
-#: ../js/ui/status/power.js:225
+#: ../js/ui/status/power.js:229
 msgctxt "device"
 msgid "Unknown"
 msgstr ""
