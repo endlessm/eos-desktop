@@ -1064,6 +1064,7 @@ StScrollBar StButton#vhandle:active {
 .search-section .overview-icon-label {
     color: #444444;
     text-shadow: none;
+    width: 100px;
 }
 
 .list-search-result {
