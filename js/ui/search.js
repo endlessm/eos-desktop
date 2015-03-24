@@ -766,7 +766,7 @@ const SearchResults = new Lang.Class({
         this._topContent.visible = haveResults;
         this._statusBin.visible = showStatus;
 
-        if (!showStatus) {
+        if (showStatus) {
             if (this.searchInProgress) {
                 this._statusText.set_text(_("Searching…"));
             } else {
