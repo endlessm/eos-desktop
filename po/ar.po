@@ -7,14 +7,14 @@
 # Ibrahim Saed <ibraheem5000@gmail.com>, 2012
 # Khaled Hosny <khaledhosny@eglug.org>, 2009-2012,2014
 # Muhammed Abd-ulaziz Abd-ullah <thenubianmuha_idrecy@yahoo.co.uk>, 2012
-# Roddy Shuler <roddy@endlessm.com>, 2014
+# Roddy Shuler <roddy@endlessm.com>, 2014-2015
 # Yasmin Diab <yasmin.diab.lopez@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-13 00:54+0000\n"
-"PO-Revision-Date: 2014-10-22 12:01+0000\n"
+"POT-Creation-Date: 2015-03-23 14:12-0700\n"
+"PO-Revision-Date: 2015-03-23 21:16+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-desktop/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -353,7 +353,7 @@ msgid "Workspaces only on primary monitor"
 msgstr "مساحات عمل على جهاز العرض الأساسي فقط"
 
 #: ../js/extensionPrefs/main.js:127
-#, c-format
+#, javascript-format
 msgid "There was an error loading the preferences dialog for %s:"
 msgstr "حدث خطأ أثناء تشغيل حوار تفضيلات %s‏:"
 
@@ -369,39 +369,43 @@ msgstr "اختر امتدادا لضبطه من القائمة أعلاه."
 msgid "Session…"
 msgstr "جلسة..."
 
+#: ../js/gdm/loginDialog.js:613
+msgid "Can't remember!"
+msgstr "لا أستطيع التذكر!"
+
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
 #. manually entering the username.
-#: ../js/gdm/loginDialog.js:630
+#: ../js/gdm/loginDialog.js:655
 msgid "Not listed?"
 msgstr "غير مدرج؟"
 
-#: ../js/gdm/loginDialog.js:786 ../js/ui/components/networkAgent.js:137
+#: ../js/gdm/loginDialog.js:817 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
-#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:565
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:609
 msgid "Cancel"
 msgstr "ألغِ"
 
-#: ../js/gdm/loginDialog.js:802
+#: ../js/gdm/loginDialog.js:833
 msgctxt "button"
 msgid "Sign In"
 msgstr "ادخل"
 
-#: ../js/gdm/loginDialog.js:802
+#: ../js/gdm/loginDialog.js:833
 msgid "Next"
 msgstr "التالي"
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:917 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:949 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "اسم المستخدم: "
 
-#: ../js/gdm/loginDialog.js:1173
+#: ../js/gdm/loginDialog.js:1209
 msgid "Login Window"
 msgstr "نافذة الولوج"
 
@@ -410,7 +414,7 @@ msgstr "نافذة الولوج"
 msgid "Power"
 msgstr "الطاقة"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:36
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:34
 msgid "Suspend"
 msgstr "علّق"
 
@@ -433,7 +437,7 @@ msgid "(or swipe finger)"
 msgstr "(أو مرر إصبع)"
 
 #: ../js/gdm/util.js:391
-#, c-format
+#, javascript-format
 msgid "(e.g., user or %s)"
 msgstr "(مثلا مستخدم أو %s)"
 
@@ -448,54 +452,46 @@ msgid "Could not parse command:"
 msgstr "تعذّر تحليل الأمر:"
 
 #: ../js/misc/util.js:163
-#, c-format
+#, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "فشل تنفيذ '%s':‏"
 
-#: ../js/ui/appDisplay.js:1919
-msgid "More Apps"
-msgstr "المزيد من التطبيقات"
+#: ../js/ui/appDisplay.js:1202
+msgid "Remove from desktop"
+msgstr "إزالة من سطح المكتب"
 
-#: ../js/ui/appDisplay.js:1928
-msgid "Delete"
-msgstr "حذف"
-
-#: ../js/ui/appDisplay.js:1980
+#: ../js/ui/appDisplay.js:1698
 msgid "Warning"
 msgstr "تحذير"
 
-#: ../js/ui/appDisplay.js:1986
+#: ../js/ui/appDisplay.js:1704
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "لحذف مجلد عليك إزالة كافة العناصر داخله أولاً."
 
-#: ../js/ui/appDisplay.js:1992
+#: ../js/ui/appDisplay.js:1710
 msgid "We are just trying to keep you safe."
 msgstr "نحاول فقط المحافظة على أمنك."
 
-#: ../js/ui/appDisplay.js:1998 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1716 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "حسنا"
 
-#: ../js/ui/appDisplay.js:2081
-msgid "New Window"
-msgstr "نافذة جديدة"
+#: ../js/ui/appDisplay.js:1976
+msgid "More Apps"
+msgstr "المزيد من التطبيقات"
 
-#: ../js/ui/appDisplay.js:2084 ../js/ui/dash.js:297
-msgid "Remove from Favorites"
-msgstr "أزِل من المفضّلة"
-
-#: ../js/ui/appDisplay.js:2085
-msgid "Add to Favorites"
-msgstr "أضِف إلى المفضّلة"
+#: ../js/ui/appDisplay.js:1985
+msgid "Delete"
+msgstr "حذف"
 
 #: ../js/ui/appFavorites.js:87
-#, c-format
+#, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "أُضيف %s إلى مفضلتك."
 
 #: ../js/ui/appFavorites.js:121
-#, c-format
+#, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "أُزيل %s من مفضّلتك."
 
@@ -508,7 +504,7 @@ msgid "Current workspace"
 msgstr "مساحة العمل الحالية "
 
 #: ../js/ui/appIconBar.js:295
-#, c-format
+#, javascript-format
 msgid "Quit %s"
 msgstr "إغلاق %s"
 
@@ -539,16 +535,16 @@ msgstr "طوال اليوم"
 #. \u2236 is a ratio character, similar to :
 #: ../js/ui/calendar.js:68
 msgctxt "event list time"
-msgid "%H\\u2236%M"
-msgstr " %H\\u2236%M"
+msgid "%H∶%M"
+msgstr "%H∶%M"
 
 #. Transators: Shown in calendar event list, if 12h format,
 #. \u2236 is a ratio character, similar to : and \u2009 is
 #. a thin space
 #: ../js/ui/calendar.js:77
 msgctxt "event list time"
-msgid "%l\\u2236%M\\u2009%p"
-msgstr " %l\\u2236%M\\u2009%p"
+msgid "%l∶%M %p"
+msgstr "%l∶%M %p"
 
 #. Translators: Calendar grid abbreviation for Sunday.
 #. *
@@ -641,6 +637,10 @@ msgctxt "list saturday"
 msgid "S"
 msgstr "السبت"
 
+#: ../js/ui/calendar.js:391
+msgid "calendar:MY"
+msgstr "التقويم:شهر سنة"
+
 #. Translators: Text to show if there are no events
 #: ../js/ui/calendar.js:722
 msgid "Nothing Scheduled"
@@ -689,7 +689,7 @@ msgid "Removable Devices"
 msgstr "الأجهزة المنفصلة"
 
 #: ../js/ui/components/autorunManager.js:612
-#, c-format
+#, javascript-format
 msgid "Open with %s"
 msgstr "افتح باستخدام %s"
 
@@ -740,7 +740,7 @@ msgid "Authentication required by wireless network"
 msgstr "تتطلب الشبكة اللاسلكية الاستيثاق"
 
 #: ../js/ui/components/networkAgent.js:310
-#, c-format
+#, javascript-format
 msgid ""
 "Passwords or encryption keys are required to access the wireless network "
 "'%s'."
@@ -775,7 +775,7 @@ msgid "Mobile broadband network password"
 msgstr "كلمة سرّ شبكة الهاتف المحمول"
 
 #: ../js/ui/components/networkAgent.js:337
-#, c-format
+#, javascript-format
 msgid "A password is required to connect to '%s'."
 msgstr "كلمة السرّ مطلوبة للاتصال ب‍ '%s'."
 
@@ -859,14 +859,14 @@ msgstr "<b>%d</b> <b>%B</b> <b>%Y</b>، <b>%H:%M</b> "
 #. new
 #. IM name.
 #: ../js/ui/components/telepathyClient.js:987
-#, c-format
+#, javascript-format
 msgid "%s is now known as %s"
 msgstr "غيّر %s اسمه إلى %s"
 
 #. translators: argument is a room name like
 #. * room@jabber.org for example.
 #: ../js/ui/components/telepathyClient.js:1090
-#, c-format
+#, javascript-format
 msgid "Invitation to %s"
 msgstr "دعوة إلى %s"
 
@@ -874,7 +874,7 @@ msgstr "دعوة إلى %s"
 #. * one the name of a room. "Alice is inviting you to join room@jabber.org
 #. * for example.
 #: ../js/ui/components/telepathyClient.js:1098
-#, c-format
+#, javascript-format
 msgid "%s is inviting you to join %s"
 msgstr "يدعوك %s للانضمام إلى %s"
 
@@ -893,13 +893,13 @@ msgstr "أقْبَل"
 
 #. translators: argument is a contact name like Alice for example.
 #: ../js/ui/components/telepathyClient.js:1131
-#, c-format
+#, javascript-format
 msgid "Video call from %s"
 msgstr "مكالمة فيديو من %s"
 
 #. translators: argument is a contact name like Alice for example.
 #: ../js/ui/components/telepathyClient.js:1134
-#, c-format
+#, javascript-format
 msgid "Call from %s"
 msgstr "مكالمة من %s"
 
@@ -913,13 +913,13 @@ msgstr "أجب"
 #. * file name. The string will be something
 #. * like: "Alice is sending you test.ogg"
 #: ../js/ui/components/telepathyClient.js:1173
-#, c-format
+#, javascript-format
 msgid "%s is sending you %s"
 msgstr "‏%s يرسل لك %s"
 
 #. To translators: The parameter is the contact's alias
 #: ../js/ui/components/telepathyClient.js:1208
-#, c-format
+#, javascript-format
 msgid "%s would like permission to see when you are online"
 msgstr "يريد %s الإذن ليعرف عندما تكون متصلا"
 
@@ -1026,7 +1026,7 @@ msgstr "خطأ داخلي"
 #. translators: argument is the account name, like
 #. * name@jabber.org for example.
 #: ../js/ui/components/telepathyClient.js:1355
-#, c-format
+#, javascript-format
 msgid "Unable to connect to %s"
 msgstr "تعذّر الاتصال مع %s"
 
@@ -1086,13 +1086,17 @@ msgstr "فشل تحديث"
 msgid "We could not update your system"
 msgstr "لم نتمكن من تحديث نظامك"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:446
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:444
 msgid "Windows"
 msgstr "النوافذ"
 
 #: ../js/ui/dash.js:261 ../js/ui/dash.js:299
 msgid "Show Applications"
 msgstr "أظهر التطبيقات"
+
+#: ../js/ui/dash.js:297
+msgid "Remove from Favorites"
+msgstr "أزِل من المفضّلة"
 
 #. Translators: this is the name of the dock/favorites area on
 #. the left of the overview
@@ -1126,7 +1130,7 @@ msgid ""
 msgstr "تذكر أن الحسابات المشتركة غير محمية بكلمة مرور، لذلك تأكد من حذف أي ملفات تريد الاحتفاظ بها سراً."
 
 #: ../js/ui/endSessionDialog.js:77
-#, c-format
+#, javascript-format
 msgctxt "title"
 msgid "Log Out %s"
 msgstr "خروج %s"
@@ -1141,7 +1145,7 @@ msgid "Click Log Out to quit these applications and log out of the system."
 msgstr "انقر على \"اخرج\" لغلق هذه التطبيقات والخروج من النظام."
 
 #: ../js/ui/endSessionDialog.js:83
-#, c-format
+#, javascript-format
 msgid "%s will be logged out automatically in %d second."
 msgid_plural "%s will be logged out automatically in %d seconds."
 msgstr[0] "سيُخرج %s تلقائيا الآن."
@@ -1152,7 +1156,7 @@ msgstr[4] "سيُخرج %s تلقائيا بعد %d ثانية."
 msgstr[5] "سيُخرج %s تلقائيا بعد %d ثانية."
 
 #: ../js/ui/endSessionDialog.js:88
-#, c-format
+#, javascript-format
 msgid "You will be logged out automatically in %d second."
 msgid_plural "You will be logged out automatically in %d seconds."
 msgstr[0] "ستُخرج تلقائيا الآن."
@@ -1181,7 +1185,7 @@ msgid "Click Power Off to quit these applications and power off the system."
 msgstr "انقر على \"أطفئ\" لغلق هذه التطبيقات وإطفاء النظام."
 
 #: ../js/ui/endSessionDialog.js:106
-#, c-format
+#, javascript-format
 msgid "The system will power off automatically in %d second."
 msgid_plural "The system will power off automatically in %d seconds."
 msgstr[0] "سيُطفأ النظام تلقائيا الآن."
@@ -1216,7 +1220,7 @@ msgid "Click Restart to quit these applications and restart the system."
 msgstr "انقر على \"أعِد التشغيل\" لغلق هذه التطبيقات وإعادة تشغيل النظام."
 
 #: ../js/ui/endSessionDialog.js:138
-#, c-format
+#, javascript-format
 msgid "The system will restart automatically in %d second."
 msgid_plural "The system will restart automatically in %d seconds."
 msgstr[0] "سيُعاد تشغيل النظام تلقائيا الآن."
@@ -1235,7 +1239,7 @@ msgid "Install"
 msgstr "ثبت"
 
 #: ../js/ui/extensionDownloader.js:204
-#, c-format
+#, javascript-format
 msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "هل تريد تنزيل وتثبيت '%s' من extensions.gnome.org؟"
 
@@ -1258,22 +1262,22 @@ msgid "Quit Application"
 msgstr "الخروج من التطبيق"
 
 #: ../js/ui/iconGridLayout.js:209
-#, c-format
+#, javascript-format
 msgid "%s has been deleted"
 msgstr "%s تم حذفه"
 
 #: ../js/ui/internetSearch.js:59
-#, c-format
+#, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr "افتح \"%s\" في مستعرض الإنترنت"
 
 #: ../js/ui/internetSearch.js:62
-#, c-format
+#, javascript-format
 msgid "Search Google for \"%s\""
 msgstr "البحث في Google عن \"%s\""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
-#: ../js/ui/status/power.js:213
+#: ../js/ui/status/power.js:217
 msgid "Keyboard"
 msgstr "لوحة المفاتيح"
 
@@ -1283,7 +1287,7 @@ msgstr "لا امتدادات مثبّتة"
 
 #. Translators: argument is an extension UUID.
 #: ../js/ui/lookingGlass.js:698
-#, c-format
+#, javascript-format
 msgid "%s has not emitted any errors."
 msgstr "لم يصدر %s أي خطأ."
 
@@ -1353,7 +1357,7 @@ msgstr "لوحة الرسائل"
 msgid "System Information"
 msgstr "معلومات النظام"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:376
+#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:378
 msgctxt "program"
 msgid "Unknown"
 msgstr "غير معروف"
@@ -1375,7 +1379,7 @@ msgstr "الشريط العلوي"
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:736
+#: ../js/ui/popupMenu.js:628
 msgid "toggle-switch-us"
 msgstr "toggle-switch-intl"
 
@@ -1397,39 +1401,39 @@ msgstr "يحتاج جنوم لقفل الشاشة"
 #. Just tell him to stop using this app
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:422
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:428
 msgid "Unable to lock"
 msgstr "لا يمكن القفل"
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:423
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:429
 msgid "Lock was blocked by an application"
 msgstr "تم حجب القفل بواسطة تطبيق"
 
-#: ../js/ui/search.js:671
+#: ../js/ui/search.js:771
 msgid "Searching…"
 msgstr "جاري البحث..."
 
-#: ../js/ui/search.js:673
+#: ../js/ui/search.js:773
 msgid "No results."
 msgstr "لا توجد نتائج. "
 
-#: ../js/ui/shellEntry.js:62
+#: ../js/ui/shellEntry.js:66
 msgid "Copy"
 msgstr "انسخ"
 
-#: ../js/ui/shellEntry.js:67
+#: ../js/ui/shellEntry.js:71
 msgid "Paste"
 msgstr "ألصق"
 
-#: ../js/ui/shellEntry.js:126
+#: ../js/ui/shellEntry.js:130
 msgid "Show Text"
 msgstr "أظهر النص"
 
-#: ../js/ui/shellEntry.js:128
+#: ../js/ui/shellEntry.js:132
 msgid "Hide Text"
 msgstr "أخفِ النص"
 
-#: ../js/ui/shellEntry.js:175
+#: ../js/ui/shellEntry.js:179
 msgid "Type to search…"
 msgstr "اكتب نصا للبحث عنه…"
 
@@ -1496,7 +1500,7 @@ msgstr "نص كبير"
 #: ../js/ui/status/bluetooth.js:28 ../js/ui/status/bluetooth.js:32
 #: ../js/ui/status/bluetooth.js:291 ../js/ui/status/bluetooth.js:323
 #: ../js/ui/status/bluetooth.js:359 ../js/ui/status/bluetooth.js:390
-#: ../js/ui/status/network.js:827
+#: ../js/ui/status/network.js:826
 msgid "Bluetooth"
 msgstr "بلوتوث"
 
@@ -1551,12 +1555,12 @@ msgid "Sound Settings"
 msgstr "إعدادات الصوت"
 
 #: ../js/ui/status/bluetooth.js:324
-#, c-format
+#, javascript-format
 msgid "Authorization request from %s"
 msgstr "طلب تخويل من %s"
 
 #: ../js/ui/status/bluetooth.js:330
-#, c-format
+#, javascript-format
 msgid "Device %s wants access to the service '%s'"
 msgstr "يريد الجهاز %s صلاحية الوصول للخدمة '%s'"
 
@@ -1574,17 +1578,17 @@ msgstr "ارفض"
 
 #. Translators: argument is the device short name
 #: ../js/ui/status/bluetooth.js:361
-#, c-format
+#, javascript-format
 msgid "Pairing confirmation for %s"
 msgstr "تأكيد مزاوجة %s"
 
 #: ../js/ui/status/bluetooth.js:367 ../js/ui/status/bluetooth.js:398
-#, c-format
+#, javascript-format
 msgid "Device %s wants to pair with this computer"
 msgstr "يريد الجهاز %s المزاوجة مع هذا الحاسوب"
 
 #: ../js/ui/status/bluetooth.js:368
-#, c-format
+#, javascript-format
 msgid "Please confirm whether the PIN '%06d' matches the one on the device."
 msgstr "من فضلك أكد تطابق الرقم '%06d' مع الموجود على الجهاز."
 
@@ -1598,7 +1602,7 @@ msgid "Does not match"
 msgstr "غير مطابق"
 
 #: ../js/ui/status/bluetooth.js:391
-#, c-format
+#, javascript-format
 msgid "Pairing request for %s"
 msgstr "طلب مزاوجة من %s"
 
@@ -1673,7 +1677,7 @@ msgstr "أكثر..."
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1366
+#: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1365
 msgid "Connected (private)"
 msgstr "متّصل (شخصي)"
 
@@ -1689,28 +1693,24 @@ msgstr "إيثرنت تلقائي"
 msgid "Mobile broadband"
 msgstr "شبكة هاتف محمول"
 
-#: ../js/ui/status/network.js:728
-msgid "Auto broadband"
-msgstr "شبكة هاتف محمول تلقائية"
-
-#: ../js/ui/status/network.js:731
-msgid "Auto dial-up"
-msgstr "اتصال هاتفي تلقائي"
-
 #. TRANSLATORS: this the automatic wireless connection name (including the
 #. network name)
-#: ../js/ui/status/network.js:862 ../js/ui/status/network.js:1383
-#, c-format
+#: ../js/ui/status/network.js:861 ../js/ui/status/network.js:1382
+#, javascript-format
 msgid "Auto %s"
 msgstr "‏%s تلقائي"
 
-#: ../js/ui/status/network.js:864
+#: ../js/ui/status/network.js:863
 msgid "Auto bluetooth"
 msgstr "بلوتوث تلقائي"
 
-#: ../js/ui/status/network.js:1385
+#: ../js/ui/status/network.js:1384
 msgid "Auto wireless"
 msgstr "لاسلكي تلقائي"
+
+#: ../js/ui/status/network.js:1669
+msgid "Network"
+msgstr "شبكة الإتصال"
 
 #: ../js/ui/status/network.js:1731
 msgid "Enable networking"
@@ -1748,17 +1748,16 @@ msgstr "البطارية"
 msgid "Power Settings"
 msgstr "إعدادات الطاقة"
 
+#: ../js/ui/status/power.js:103
 msgid "Fully Charged"
 msgstr "مشحونة بالكامل"
 
-#. 0 is reported when UPower does not have enough data
-#. to estimate battery life
-#: ../js/ui/status/power.js:101
+#: ../js/ui/status/power.js:105
 msgid "Estimating…"
 msgstr "حساب..."
 
-#: ../js/ui/status/power.js:108
-#, c-format
+#: ../js/ui/status/power.js:112
+#, javascript-format
 msgid "%d hour remaining"
 msgid_plural "%d hours remaining"
 msgstr[0] "بقي أقل من ساعة"
@@ -1769,12 +1768,12 @@ msgstr[4] "بقيت %d ساعة"
 msgstr[5] "بقيت %d ساعة"
 
 #. TRANSLATORS: this is a time string, as in "%d hours %d minutes remaining"
-#: ../js/ui/status/power.js:111
-#, c-format
+#: ../js/ui/status/power.js:115
+#, javascript-format
 msgid "%d %s %d %s remaining"
 msgstr "بقي %d %s و%d %s"
 
-#: ../js/ui/status/power.js:113
+#: ../js/ui/status/power.js:117
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ساعة"
@@ -1784,7 +1783,7 @@ msgstr[3] "ساعات"
 msgstr[4] "ساعة"
 msgstr[5] "ساعة"
 
-#: ../js/ui/status/power.js:113
+#: ../js/ui/status/power.js:117
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "دقيقة"
@@ -1794,8 +1793,8 @@ msgstr[3] "دقائق"
 msgstr[4] "دقيقة"
 msgstr[5] "دقيقة"
 
-#: ../js/ui/status/power.js:116
-#, c-format
+#: ../js/ui/status/power.js:120
+#, javascript-format
 msgid "%d minute remaining"
 msgid_plural "%d minutes remaining"
 msgstr[0] "بقي أقل من دقيقة"
@@ -1805,53 +1804,53 @@ msgstr[3] "بقيت %d دقائق"
 msgstr[4] "بقيت %d دقيقة"
 msgstr[5] "بقيت %d دقيقة"
 
-#: ../js/ui/status/power.js:119 ../js/ui/status/power.js:193
-#, c-format
+#: ../js/ui/status/power.js:123 ../js/ui/status/power.js:197
+#, javascript-format
 msgctxt "percent of battery remaining"
 msgid "%d%%"
 msgstr "%d%%"
 
-#: ../js/ui/status/power.js:203
+#: ../js/ui/status/power.js:207
 msgid "AC Adapter"
 msgstr "محول تيار متردد"
 
-#: ../js/ui/status/power.js:205
+#: ../js/ui/status/power.js:209
 msgid "Laptop Battery"
 msgstr "بطارية حاسوب محمول"
 
-#: ../js/ui/status/power.js:207
+#: ../js/ui/status/power.js:211
 msgid "UPS"
 msgstr "مزود طاقة لا منقطعة (UPS)"
 
-#: ../js/ui/status/power.js:209
+#: ../js/ui/status/power.js:213
 msgid "Monitor"
 msgstr "شاشة"
 
-#: ../js/ui/status/power.js:211
+#: ../js/ui/status/power.js:215
 msgid "Mouse"
 msgstr "فأرة"
 
-#: ../js/ui/status/power.js:215
+#: ../js/ui/status/power.js:219
 msgid "PDA"
 msgstr "مساعد رقمي (PDA)"
 
-#: ../js/ui/status/power.js:217
+#: ../js/ui/status/power.js:221
 msgid "Cell Phone"
 msgstr "الهاتف المحمول"
 
-#: ../js/ui/status/power.js:219
+#: ../js/ui/status/power.js:223
 msgid "Media Player"
 msgstr "مشغل وسائط"
 
-#: ../js/ui/status/power.js:221
+#: ../js/ui/status/power.js:225
 msgid "Tablet"
 msgstr "لوحي"
 
-#: ../js/ui/status/power.js:223
+#: ../js/ui/status/power.js:227
 msgid "Computer"
 msgstr "حاسوب"
 
-#: ../js/ui/status/power.js:225
+#: ../js/ui/status/power.js:229
 msgctxt "device"
 msgid "Unknown"
 msgstr "غير معروف"
@@ -1877,60 +1876,56 @@ msgstr "لِج كمستخدم آخر"
 msgid "Unlock Window"
 msgstr "افتح قفل النافذة"
 
-#: ../js/ui/userMenu.js:37
-msgid "Log Out"
-msgstr "اخرج"
-
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:35
 msgid "Lock"
 msgstr "أوصِد"
 
-#: ../js/ui/userMenu.js:39
+#: ../js/ui/userMenu.js:36
 msgid "Exit"
 msgstr "خروج"
 
-#: ../js/ui/userMenu.js:41
+#: ../js/ui/userMenu.js:38
 msgid "Help"
 msgstr "المساعدة"
 
-#: ../js/ui/userMenu.js:42
+#: ../js/ui/userMenu.js:39
 msgid "Settings"
 msgstr "الإعدادات"
 
-#: ../js/ui/userMenu.js:43
+#: ../js/ui/userMenu.js:40
 msgid "Give Us Feedback"
 msgstr "تعطينا تعليق"
 
-#: ../js/ui/userMenu.js:442
+#: ../js/ui/userMenu.js:488
 msgid "Switch User"
 msgstr "بدّل المستخدم"
 
-#: ../js/ui/userMenu.js:515
+#: ../js/ui/userMenu.js:559
 msgid "Other users are logged in."
 msgstr "تم تسجيل دخول مستخدمين آخرين."
 
-#: ../js/ui/userMenu.js:520
+#: ../js/ui/userMenu.js:564
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "إيقاف التشغيل قد يتسبب في فقدهم للعمل الذي لم يتم حفظه."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:548
-#, c-format
+#: ../js/ui/userMenu.js:592
+#, javascript-format
 msgid "%s (remote)"
 msgstr "%s (عن بعد)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:551
-#, c-format
+#: ../js/ui/userMenu.js:595
+#, javascript-format
 msgid "%s (console)"
 msgstr "%s (وحدة تحكم)"
 
-#: ../js/ui/viewSelector.js:450
+#: ../js/ui/viewSelector.js:448
 msgid "Applications"
 msgstr "التطبيقات"
 
 #: ../js/ui/windowAttentionHandler.js:19
-#, c-format
+#, javascript-format
 msgid "'%s' is ready"
 msgstr "‏'%s' جاهز"
 
@@ -1949,7 +1944,7 @@ msgid "Keep Changes"
 msgstr "إبقاء التغييرات"
 
 #: ../js/ui/windowManager.js:108
-#, c-format
+#, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
 msgstr[0] "سوف يتم ابطال تغييرات الإعدادات في %d ثانية"
@@ -2009,7 +2004,7 @@ msgstr "استخدم طورا معينا، مثلا: \"gdm\" لشاشة الول
 msgid "List possible modes"
 msgstr "اسرد كل الأطوار الممكنة"
 
-#: ../src/shell-app.c:639
+#: ../src/shell-app.c:641
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "فشل تشغيل '%s'"
