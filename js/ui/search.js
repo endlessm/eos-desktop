@@ -793,6 +793,10 @@ const SearchResults = new Lang.Class({
     },
 
     activateDefault: function() {
+        // If we are about to activate a result, we are done animating and need
+        // to update the display immediately.
+        this.isAnimating = false;
+
         // If we have a search queued up, force the search now.
         if (this._searchTimeoutId > 0)
             this._doSearch();
