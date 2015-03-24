@@ -284,6 +284,7 @@ const ViewsDisplay = new Lang.Class({
 
     _onSearchActivated: function() {
         this._searchResults.activateDefault();
+        this._resetSearch();
     },
 
     _onSearchActiveChanged: function() {
