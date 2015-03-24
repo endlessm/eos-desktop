@@ -1207,10 +1207,18 @@ StScrollBar StButton#vhandle:active {
 .app-well-app > .overview-icon,
 .overview-icon .show-apps {
     border-radius: 4px;
-    padding: 13px;
     border: 1px rgba(0,0,0,0);
     transition-duration: 100ms;
     text-align: center;
+}
+
+.overview-icon.dnd,
+.app-well-app > .overview-icon {
+    padding: 13px;
+}
+
+.overview-icon .show-apps {
+    padding: 3px;
 }
 
 .dash-item-container .overview-icon {
