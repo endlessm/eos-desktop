@@ -267,7 +267,12 @@ const ViewsDisplay = new Lang.Class({
             return;
 
         // We give a very short time for search results to populate before
-        // triggering the animation
+        // triggering the animation, unless an animation is already in progress
+        if (this._searchResults.isAnimating) {
+            this.actor.showPage(ViewsDisplayPage.SEARCH, true);
+            return;
+        }
+
         this._enterSearchTimeoutId = Mainloop.timeout_add(SEARCH_ACTIVATION_TIMEOUT, Lang.bind(this, function () {
             this._enterSearchTimeoutId = 0;
             this.actor.showPage(ViewsDisplayPage.SEARCH, true);
