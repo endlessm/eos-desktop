@@ -47,6 +47,7 @@ const InternetSearchProvider = new Lang.Class({
     _init: function() {
         this.id = 'internet';
         this.app = Util.getBrowserApp();
+        this.canLaunchSearch = true;
 
         this._networkMonitor = Gio.NetworkMonitor.get_default();
     },
@@ -103,5 +104,12 @@ const InternetSearchProvider = new Lang.Class({
             let query = metaId.slice('search:'.length);
             activateGoogleSearch(query);
         }
+    },
+
+    launchSearch: function(terms) {
+        this.getInitialResultSet(terms, Lang.bind(this, function(results) {
+            if (results)
+                this.activateResult(results[0]);
+        }));
     },
 });
