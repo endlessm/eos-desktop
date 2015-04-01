@@ -152,6 +152,7 @@ const ModalDialog = new Lang.Class({
         let action = buttonInfo['action'];
         let key = buttonInfo['key'];
         let isDefault = buttonInfo['default'];
+        let styleClass = buttonInfo['style_class'];
 
         let keys;
 
@@ -173,6 +174,9 @@ const ModalDialog = new Lang.Class({
 
         if (isDefault)
             button.add_style_pseudo_class('default');
+
+        if (styleClass)
+            button.add_style_class_name(styleClass);
 
         if (!this._initialKeyFocusDestroyId)
             this._initialKeyFocus = button;

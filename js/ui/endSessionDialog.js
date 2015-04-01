@@ -124,7 +124,8 @@ const shutdownDialogContent = {
                      { signal: 'ConfirmedReboot',
                        label:  C_("button", "Restart") },
                      { signal: 'ConfirmedShutdown',
-                       label:  C_("button", "Power Off") }],
+                       label:  C_("button", "Power Off"),
+                       style_class: 'shutdown' }],
     iconName: 'system-shutdown-symbolic',
     iconStyleClass: 'end-session-dialog-shutdown-icon'
 };
@@ -424,6 +425,7 @@ const EndSessionDialog = new Lang.Class({
         for (let i = 0; i < dialogContent.confirmButtons.length; i++) {
             let signal = dialogContent.confirmButtons[i].signal;
             let label = dialogContent.confirmButtons[i].label;
+            let style_class = dialogContent.confirmButtons[i].style_class;
             buttons.push({ action: Lang.bind(this, function() {
                                        this.close(true);
                                        let signalId = this.connect('closed',
@@ -432,7 +434,8 @@ const EndSessionDialog = new Lang.Class({
                                                                        this._confirm(signal);
                                                                    }));
                                    }),
-                           label: label });
+                           label: label,
+                           style_class: style_class });
         }
 
         this.setButtons(buttons);
