@@ -1,5 +1,4 @@
 const Gio = imports.gi.Gio;
-const Mainloop = imports.mainloop;
 
 const AppLauncherIface = '<node> \
 <interface name="org.gnome.Shell.AppLauncher"> \
@@ -11,54 +10,28 @@ const AppLauncherIface = '<node> \
 </interface> \
 </node>';
 
-function onError(error) {
-    log(error);
-    Mainloop.quit('main');
-    return false;
-}
-
-function remoteLaunch(proxy, appName) {
-    proxy.LaunchRemote(appName, 0,
-                       function(result, error) {
-                           if (error)
-                               return onError (error);
-
-                           if (result)
-                               log("Application '" + appName + "' successfully launched");
-                           else
-                               log("Failed to launch application '" + appName + "'");
-
-                           return Mainloop.quit('main');
-                       });
-}
+const AppLauncherProxy = Gio.DBusProxy.makeProxyWrapper(AppLauncherIface);
 
 function createProxyAndLaunch(appName) {
-
-    function onProxy(proxy, error) {
-        if (error)
-            return onError(error);
-
-        return remoteLaunch(proxy, appName);
+    try {
+        var proxy = new AppLauncherProxy(Gio.DBus.session,
+                                         'org.gnome.Shell',
+                                         '/org/gnome/Shell');
+        proxy.LaunchSync(appName, 0);
+        log("Application '" + appName + "' successfully launched");
+    } catch (error) {
+        logError(error, "Failed to launch application '" + appName + "'");
     }
-
-    const ProxyClass = Gio.DBusProxy.makeProxyWrapper(AppLauncherIface);
-    var proxy = new ProxyClass(Gio.DBus.session,
-                               'org.gnome.Shell',
-                               '/org/gnome/Shell',
-                               onProxy);
 }
 
 var uri = ARGV[0];
 if (! uri) {
     print("Usage: eos-launch endlessm-app://<application-name>\n");
-}
-else {
+} else {
     var tokens = uri.match(/(endlessm-app:\/\/|)([0-9,a-z,A-Z,-_.]+)/);
     if (tokens) {
         var appName = tokens[2];
 
         createProxyAndLaunch(appName);
-
-        Mainloop.run('main');
     }
 }
