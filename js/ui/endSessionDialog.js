@@ -118,7 +118,8 @@ const shutdownDialogContent = {
                     [{ signal: 'ConfirmedReboot',
                        label:  C_("button", "Restart") },
                      { signal: 'ConfirmedShutdown',
-                       label:  C_("button", "Power Off") }] :
+                       label:  C_("button", "Power Off"),
+                       style_class: 'shutdown' }] :
                     [{ signal: 'ConfirmedLogout',
                        label:  C_("button", "Log Out") },
                      { signal: 'ConfirmedReboot',
