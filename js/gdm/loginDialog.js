@@ -691,6 +691,7 @@ const LoginDialog = new Lang.Class({
     _showPasswordHint: function() {
         this._passwordHintLabel.set_text(this._user.get_password_hint());
         this._passwordHintLabel.show();
+        this._passwordHintButton.hide();
     },
 
     _updateDisableUserList: function() {
