@@ -5,6 +5,7 @@ const Lang = imports.lang;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
+const Gdk = imports.gi.Gdk;
 const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const Signals = imports.signals;
@@ -440,8 +441,19 @@ const SearchResults = new Lang.Class({
 
     _init: function() {
         this.actor = new SearchResultsBin({ name: 'searchResults',
+                                            reactive: true,
                                             y_align: Clutter.ActorAlign.FILL,
                                             layout_manager: new Clutter.BinLayout() });
+        this.actor.connect('button-press-event', function (actor, event) {
+            if (event.get_button() != Gdk.BUTTON_PRIMARY) {
+                return true;
+            }
+        });
+        this.actor.connect('button-release-event', function (actor, event) {
+            if (event.get_button() != Gdk.BUTTON_PRIMARY) {
+                return true;
+            }
+        });
 
         let box = new St.BoxLayout({ name: 'searchResultsBox',
                                      vertical: true,
