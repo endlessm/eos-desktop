@@ -364,7 +364,7 @@ msgid "Session…"
 msgstr ""
 
 #: ../js/gdm/loginDialog.js:613
-msgid "Can't remember!"
+msgid "Show password hint"
 msgstr ""
 
 #. translators: this message is shown below the user list on the

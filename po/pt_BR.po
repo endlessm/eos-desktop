@@ -381,8 +381,8 @@ msgid "Session…"
 msgstr "Sessão…"
 
 #: ../js/gdm/loginDialog.js:613
-msgid "Can't remember!"
-msgstr "Não consigo lembrar! "
+msgid "Show password hint"
+msgstr "Mostrar dica de senha"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for

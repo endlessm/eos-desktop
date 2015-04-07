@@ -370,8 +370,8 @@ msgid "Session…"
 msgstr "جلسة..."
 
 #: ../js/gdm/loginDialog.js:613
-msgid "Can't remember!"
-msgstr "لا أستطيع التذكر!"
+msgid "Show password hint"
+msgstr "مشاهدة تلميح كلمة مرور"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
