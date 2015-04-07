@@ -140,6 +140,10 @@ const UpdaterManager = new Lang.Class({
     _onStateChanged: function() {
         let state = this._proxy.State;
 
+        if (state == this._currentState) {
+            return;
+        }
+
         if (state == UpdaterState.UPDATE_AVAILABLE) {
             this._notifyUpdateAvailable();
         } else if (state == UpdaterState.UPDATE_READY) {
