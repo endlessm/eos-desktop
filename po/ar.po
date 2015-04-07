@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-31 01:27+0000\n"
+"POT-Creation-Date: 2015-04-07 01:29+0000\n"
 "PO-Revision-Date: 2015-03-23 21:16+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-desktop/language/ar/)\n"
@@ -370,8 +370,8 @@ msgid "Session…"
 msgstr "جلسة..."
 
 #: ../js/gdm/loginDialog.js:613
-msgid "Show password hint"
-msgstr "مشاهدة تلميح كلمة مرور"
+msgid "Can't remember!"
+msgstr "لا أستطيع التذكر!"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -381,7 +381,7 @@ msgid "Not listed?"
 msgstr "غير مدرج؟"
 
 #: ../js/gdm/loginDialog.js:817 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:422
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
 #: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:610
@@ -1200,7 +1200,7 @@ msgid "Powering off the system."
 msgstr "يُطفأ النظام."
 
 #: ../js/ui/endSessionDialog.js:119 ../js/ui/endSessionDialog.js:125
-#: ../js/ui/endSessionDialog.js:146
+#: ../js/ui/endSessionDialog.js:147
 msgctxt "button"
 msgid "Restart"
 msgstr "أعِد التشغيل"
@@ -1210,16 +1210,16 @@ msgctxt "button"
 msgid "Power Off"
 msgstr "أطفئ"
 
-#: ../js/ui/endSessionDialog.js:133
+#: ../js/ui/endSessionDialog.js:134
 msgctxt "title"
 msgid "Restart"
 msgstr "إعادة التشغيل"
 
-#: ../js/ui/endSessionDialog.js:135
+#: ../js/ui/endSessionDialog.js:136
 msgid "Click Restart to quit these applications and restart the system."
 msgstr "انقر على \"أعِد التشغيل\" لغلق هذه التطبيقات وإعادة تشغيل النظام."
 
-#: ../js/ui/endSessionDialog.js:138
+#: ../js/ui/endSessionDialog.js:139
 #, javascript-format
 msgid "The system will restart automatically in %d second."
 msgid_plural "The system will restart automatically in %d seconds."
@@ -1230,7 +1230,7 @@ msgstr[3] "سيُعاد تشغيل النظام تلقائيا بعد %d ثوا�
 msgstr[4] "سيُعاد تشغيل النظام تلقائيا بعد %d ثانية."
 msgstr[5] "سيُعاد تشغيل النظام تلقائيا بعد %d ثانية."
 
-#: ../js/ui/endSessionDialog.js:143
+#: ../js/ui/endSessionDialog.js:144
 msgid "Restarting the system."
 msgstr "يُعاد تشغيل النظام."
 

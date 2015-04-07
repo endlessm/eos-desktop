@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-31 01:27+0000\n"
+"POT-Creation-Date: 2015-04-07 01:29+0000\n"
 "PO-Revision-Date: 2015-03-23 21:17+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/eos-desktop/language/fr/)\n"
@@ -372,8 +372,8 @@ msgid "Session…"
 msgstr "Session…"
 
 #: ../js/gdm/loginDialog.js:613
-msgid "Show password hint"
-msgstr "Afficher le mot de passe soupçon"
+msgid "Can't remember!"
+msgstr "Ne peut pas se souvenir !"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -383,7 +383,7 @@ msgid "Not listed?"
 msgstr "Absent de la liste ?"
 
 #: ../js/gdm/loginDialog.js:817 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:422
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
 #: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:610
@@ -1190,7 +1190,7 @@ msgid "Powering off the system."
 msgstr "Extinction du système."
 
 #: ../js/ui/endSessionDialog.js:119 ../js/ui/endSessionDialog.js:125
-#: ../js/ui/endSessionDialog.js:146
+#: ../js/ui/endSessionDialog.js:147
 msgctxt "button"
 msgid "Restart"
 msgstr "Redémarrer"
@@ -1200,23 +1200,23 @@ msgctxt "button"
 msgid "Power Off"
 msgstr "Éteindre"
 
-#: ../js/ui/endSessionDialog.js:133
+#: ../js/ui/endSessionDialog.js:134
 msgctxt "title"
 msgid "Restart"
 msgstr "Redémarrer"
 
-#: ../js/ui/endSessionDialog.js:135
+#: ../js/ui/endSessionDialog.js:136
 msgid "Click Restart to quit these applications and restart the system."
 msgstr "Cliquez sur « Redémarrer » pour quitter ces applications et redémarrer l'ordinateur."
 
-#: ../js/ui/endSessionDialog.js:138
+#: ../js/ui/endSessionDialog.js:139
 #, javascript-format
 msgid "The system will restart automatically in %d second."
 msgid_plural "The system will restart automatically in %d seconds."
 msgstr[0] "Cet ordinateur redémarrera automatiquement dans %d seconde."
 msgstr[1] "Cet ordinateur redémarrera automatiquement dans %d secondes."
 
-#: ../js/ui/endSessionDialog.js:143
+#: ../js/ui/endSessionDialog.js:144
 msgid "Restarting the system."
 msgstr "Redémarrage du système."
 

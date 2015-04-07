@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-31 01:27+0000\n"
+"POT-Creation-Date: 2015-04-07 01:29+0000\n"
 "PO-Revision-Date: 2015-03-23 21:17+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/eos-desktop/language/es/)\n"
@@ -375,8 +375,8 @@ msgid "Session…"
 msgstr "Sesión…"
 
 #: ../js/gdm/loginDialog.js:613
-msgid "Show password hint"
-msgstr "Mostrar sugerencia de contraseña"
+msgid "Can't remember!"
+msgstr "¡No recuerdo!"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -386,7 +386,7 @@ msgid "Not listed?"
 msgstr "¿No está en la lista?"
 
 #: ../js/gdm/loginDialog.js:817 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:422
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
 #: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:610
@@ -1193,7 +1193,7 @@ msgid "Powering off the system."
 msgstr "Apagando el sistema."
 
 #: ../js/ui/endSessionDialog.js:119 ../js/ui/endSessionDialog.js:125
-#: ../js/ui/endSessionDialog.js:146
+#: ../js/ui/endSessionDialog.js:147
 msgctxt "button"
 msgid "Restart"
 msgstr "Reiniciar"
@@ -1203,23 +1203,23 @@ msgctxt "button"
 msgid "Power Off"
 msgstr "Apagar"
 
-#: ../js/ui/endSessionDialog.js:133
+#: ../js/ui/endSessionDialog.js:134
 msgctxt "title"
 msgid "Restart"
 msgstr "Reiniciar"
 
-#: ../js/ui/endSessionDialog.js:135
+#: ../js/ui/endSessionDialog.js:136
 msgid "Click Restart to quit these applications and restart the system."
 msgstr "Pulse «Reiniciar» para salir de eses programas y reiniciar el sistema."
 
-#: ../js/ui/endSessionDialog.js:138
+#: ../js/ui/endSessionDialog.js:139
 #, javascript-format
 msgid "The system will restart automatically in %d second."
 msgid_plural "The system will restart automatically in %d seconds."
 msgstr[0] "El sistema se reiniciará automáticamente en %d segundo."
 msgstr[1] "El sistema se reiniciará automáticamente en %d segundos."
 
-#: ../js/ui/endSessionDialog.js:143
+#: ../js/ui/endSessionDialog.js:144
 msgid "Restarting the system."
 msgstr "Reiniciando el sistema."
 
