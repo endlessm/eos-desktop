@@ -1,4 +1,5 @@
 const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
 
 const AppLauncherIface = '<node> \
 <interface name="org.gnome.Shell.AppLauncher"> \
@@ -12,16 +13,45 @@ const AppLauncherIface = '<node> \
 
 const AppLauncherProxy = Gio.DBusProxy.makeProxyWrapper(AppLauncherIface);
 
+function getLocalizedAppNames(appName) {
+    // trim .desktop part, if present
+    let idx = appName.indexOf('.desktop');
+    if (idx != -1) {
+        appName = appName.substring(0, idx);
+    }
+
+    let appNames = [appName];
+
+    let languageNames = GLib.get_language_names();
+    let variants = GLib.get_locale_variants(languageNames[0]);
+    variants.filter(function(variant) {
+        // discard variants with an encoding
+        return (variant.indexOf('.') == -1)
+    }).forEach(function(variant) {
+        appNames.push(appName + '-' + variant);
+    });
+
+    appNames.push(appName + '-en');
+    return appNames;
+}
+
 function createProxyAndLaunch(appName) {
+    var launched = false;
+
     try {
         var proxy = new AppLauncherProxy(Gio.DBus.session,
                                          'org.gnome.Shell',
                                          '/org/gnome/Shell');
-        proxy.LaunchSync(appName, 0);
-        log("Application '" + appName + "' successfully launched");
+        [launched, ] = proxy.LaunchSync(appName, 0);
     } catch (error) {
         logError(error, "Failed to launch application '" + appName + "'");
     }
+
+    if (launched) {
+        log("Application '" + appName + "' successfully launched");
+    }
+
+    return launched;
 }
 
 var uri = ARGV[0];
@@ -30,8 +60,7 @@ if (! uri) {
 } else {
     var tokens = uri.match(/(endlessm-app:\/\/|)([0-9,a-z,A-Z,-_.]+)/);
     if (tokens) {
-        var appName = tokens[2];
-
-        createProxyAndLaunch(appName);
+        var appNames = getLocalizedAppNames(tokens[2]);
+        appNames.some(createProxyAndLaunch);
     }
 }
