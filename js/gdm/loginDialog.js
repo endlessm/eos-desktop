@@ -739,6 +739,11 @@ const LoginDialog = new Lang.Class({
     _verificationFailed: function() {
         this._promptEntry.text = '';
 
+        if (this._user.get_password_hint().length > 0)
+            this._passwordHintButton.visible = true;
+        else
+            this._passwordHintButton.visible = false;
+
         this._updateSensitivity(true);
         this._setWorking(false);
     },
@@ -1168,10 +1173,6 @@ const LoginDialog = new Lang.Class({
                      }];
 
         this._user = activatedItem.user;
-        if (this._user.get_password_hint().length > 0)
-            this._passwordHintButton.visible = true;
-        else
-            this._passwordHintButton.visible = false;
 
         let batch = new Batch.ConcurrentBatch(this, [new Batch.ConsecutiveBatch(this, tasks),
                                                      this._beginVerificationForItem(activatedItem)]);
