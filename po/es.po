@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-23 14:12-0700\n"
+"POT-Creation-Date: 2015-03-31 01:27+0000\n"
 "PO-Revision-Date: 2015-03-23 21:17+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/eos-desktop/language/es/)\n"
@@ -389,7 +389,7 @@ msgstr "¿No está en la lista?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
-#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:609
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:610
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -1091,7 +1091,7 @@ msgstr "Hubo un error durante la actualización"
 msgid "We could not update your system"
 msgstr "Tu sistema no se pudo actualizar"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:444
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:448
 msgid "Windows"
 msgstr "Ventanas"
 
@@ -1255,12 +1255,12 @@ msgstr "Cerrar Programa"
 msgid "%s has been deleted"
 msgstr "%s ha sido borrado"
 
-#: ../js/ui/internetSearch.js:59
+#: ../js/ui/internetSearch.js:60
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr "Abre \"%s\" en el navegador"
 
-#: ../js/ui/internetSearch.js:62
+#: ../js/ui/internetSearch.js:63
 #, javascript-format
 msgid "Search Google for \"%s\""
 msgstr "Buscar \"%s\" en Google"
@@ -1869,31 +1869,31 @@ msgstr "Configuración"
 msgid "Give Us Feedback"
 msgstr "Danos tu opinión"
 
-#: ../js/ui/userMenu.js:488
+#: ../js/ui/userMenu.js:489
 msgid "Switch User"
 msgstr "Cambiar de usuario"
 
-#: ../js/ui/userMenu.js:559
+#: ../js/ui/userMenu.js:560
 msgid "Other users are logged in."
 msgstr "Hay otros usuarios con la sesión iniciada"
 
-#: ../js/ui/userMenu.js:564
+#: ../js/ui/userMenu.js:565
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "Apagar puede hacer que pierdan el trabajo que no hayan guardado."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:592
+#: ../js/ui/userMenu.js:593
 #, javascript-format
 msgid "%s (remote)"
 msgstr "%s (remoto)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:595
+#: ../js/ui/userMenu.js:596
 #, javascript-format
 msgid "%s (console)"
 msgstr "%s (consola)"
 
-#: ../js/ui/viewSelector.js:448
+#: ../js/ui/viewSelector.js:452
 msgid "Applications"
 msgstr "Programas"
 
