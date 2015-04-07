@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-23 14:12-0700\n"
+"POT-Creation-Date: 2015-03-31 01:27+0000\n"
 "PO-Revision-Date: 2015-03-23 21:16+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-desktop/language/ar/)\n"
@@ -384,7 +384,7 @@ msgstr "غير مدرج؟"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:421
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
-#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:609
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:610
 msgid "Cancel"
 msgstr "ألغِ"
 
@@ -1086,7 +1086,7 @@ msgstr "فشل تحديث"
 msgid "We could not update your system"
 msgstr "لم نتمكن من تحديث نظامك"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:444
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:448
 msgid "Windows"
 msgstr "النوافذ"
 
@@ -1266,12 +1266,12 @@ msgstr "الخروج من التطبيق"
 msgid "%s has been deleted"
 msgstr "%s تم حذفه"
 
-#: ../js/ui/internetSearch.js:59
+#: ../js/ui/internetSearch.js:60
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr "افتح \"%s\" في مستعرض الإنترنت"
 
-#: ../js/ui/internetSearch.js:62
+#: ../js/ui/internetSearch.js:63
 #, javascript-format
 msgid "Search Google for \"%s\""
 msgstr "البحث في Google عن \"%s\""
@@ -1896,31 +1896,31 @@ msgstr "الإعدادات"
 msgid "Give Us Feedback"
 msgstr "تعطينا تعليق"
 
-#: ../js/ui/userMenu.js:488
+#: ../js/ui/userMenu.js:489
 msgid "Switch User"
 msgstr "بدّل المستخدم"
 
-#: ../js/ui/userMenu.js:559
+#: ../js/ui/userMenu.js:560
 msgid "Other users are logged in."
 msgstr "تم تسجيل دخول مستخدمين آخرين."
 
-#: ../js/ui/userMenu.js:564
+#: ../js/ui/userMenu.js:565
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "إيقاف التشغيل قد يتسبب في فقدهم للعمل الذي لم يتم حفظه."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:592
+#: ../js/ui/userMenu.js:593
 #, javascript-format
 msgid "%s (remote)"
 msgstr "%s (عن بعد)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:595
+#: ../js/ui/userMenu.js:596
 #, javascript-format
 msgid "%s (console)"
 msgstr "%s (وحدة تحكم)"
 
-#: ../js/ui/viewSelector.js:448
+#: ../js/ui/viewSelector.js:452
 msgid "Applications"
 msgstr "التطبيقات"
 
