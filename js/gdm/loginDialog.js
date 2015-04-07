@@ -610,21 +610,21 @@ const LoginDialog = new Lang.Class({
                               y_fill: false,
                               x_align: St.Align.START });
 
-        let cantRememberLabel = new St.Label({ text: _("Can't remember!"),
+        let passwordHintLabel = new St.Label({ text: _("Show password hint"),
                                                style_class: 'login-dialog-password-hint-link' });
-        this._cantRememberButton = new St.Button({ style_class: 'login-dialog-password-hint-button',
+        this._passwordHintButton = new St.Button({ style_class: 'login-dialog-password-hint-button',
                                                    button_mask: St.ButtonMask.ONE | St.ButtonMask.THREE,
                                                    can_focus: true,
-                                                   child: cantRememberLabel,
+                                                   child: passwordHintLabel,
                                                    reactive: true,
                                                    x_align: St.Align.START,
                                                    x_fill: true });
-        this._promptBox.add(this._cantRememberButton,
+        this._promptBox.add(this._passwordHintButton,
                             { x_fill: false,
                               x_align: St.Align.START });
 
-        this._cantRememberButton.connect('clicked', Lang.bind(this, this._showPasswordHint));
-        this._cantRememberButton.visible = false;
+        this._passwordHintButton.connect('clicked', Lang.bind(this, this._showPasswordHint));
+        this._passwordHintButton.visible = false;
 
         this._promptMessage = new St.Label({ visible: false });
         this._promptBox.add(this._promptMessage, { x_fill: true });
@@ -691,6 +691,7 @@ const LoginDialog = new Lang.Class({
     _showPasswordHint: function() {
         this._passwordHintLabel.set_text(this._user.get_password_hint());
         this._passwordHintLabel.show();
+        this._passwordHintButton.hide();
     },
 
     _updateDisableUserList: function() {
@@ -726,7 +727,7 @@ const LoginDialog = new Lang.Class({
         this._updateSensitivity(true);
         this._promptMessage.hide();
         this._user = null;
-        this._cantRememberButton.visible = false;
+        this._passwordHintButton.visible = false;
         this._verifyingUser = false;
 
         if (this._disableUserList)
@@ -737,6 +738,11 @@ const LoginDialog = new Lang.Class({
 
     _verificationFailed: function() {
         this._promptEntry.text = '';
+
+        if (this._user.get_password_hint().length > 0)
+            this._passwordHintButton.visible = true;
+        else
+            this._passwordHintButton.visible = false;
 
         this._updateSensitivity(true);
         this._setWorking(false);
@@ -1167,10 +1173,6 @@ const LoginDialog = new Lang.Class({
                      }];
 
         this._user = activatedItem.user;
-        if (this._user.get_password_hint().length > 0)
-            this._cantRememberButton.visible = true;
-        else
-            this._cantRememberButton.visible = false;
 
         let batch = new Batch.ConcurrentBatch(this, [new Batch.ConsecutiveBatch(this, tasks),
                                                      this._beginVerificationForItem(activatedItem)]);
