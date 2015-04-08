@@ -54,6 +54,8 @@ const WORK_SPINNER_ICON_SIZE = 24;
 const WORK_SPINNER_ANIMATION_DELAY = 1.0;
 const WORK_SPINNER_ANIMATION_TIME = 0.3;
 
+const ENTRY_MAX_LENGTH = 80;
+
 let _loginDialog = null;
 
 const LogoMenuButton = new Lang.Class({
@@ -602,6 +604,7 @@ const LoginDialog = new Lang.Class({
 
         this._promptEntry = new St.Entry({ style_class: 'login-dialog-prompt-entry',
                                            can_focus: true });
+        this._promptEntry.clutter_text.set_max_length(ENTRY_MAX_LENGTH);
         this._promptEntryTextChangedId = 0;
         this._promptEntryActivateId = 0;
         this._promptBox.add(this._promptEntry,
