@@ -1,5 +1,5 @@
 const Gio = imports.gi.Gio;
-const Mainloop = imports.mainloop;
+const GLib = imports.gi.GLib;
 
 const AppLauncherIface = '<node> \
 <interface name="org.gnome.Shell.AppLauncher"> \
@@ -11,54 +11,56 @@ const AppLauncherIface = '<node> \
 </interface> \
 </node>';
 
-function onError(error) {
-    log(error);
-    Mainloop.quit('main');
-    return false;
-}
+const AppLauncherProxy = Gio.DBusProxy.makeProxyWrapper(AppLauncherIface);
 
-function remoteLaunch(proxy, appName) {
-    proxy.LaunchRemote(appName, 0,
-                       function(result, error) {
-                           if (error)
-                               return onError (error);
+function getLocalizedAppNames(appName) {
+    // trim .desktop part, if present
+    let idx = appName.indexOf('.desktop');
+    if (idx != -1) {
+        appName = appName.substring(0, idx);
+    }
 
-                           if (result)
-                               log("Application '" + appName + "' successfully launched");
-                           else
-                               log("Failed to launch application '" + appName + "'");
+    let appNames = [appName];
 
-                           return Mainloop.quit('main');
-                       });
+    let languageNames = GLib.get_language_names();
+    let variants = GLib.get_locale_variants(languageNames[0]);
+    variants.filter(function(variant) {
+        // discard variants with an encoding
+        return (variant.indexOf('.') == -1)
+    }).forEach(function(variant) {
+        appNames.push(appName + '-' + variant);
+    });
+
+    appNames.push(appName + '-en');
+    return appNames;
 }
 
 function createProxyAndLaunch(appName) {
+    var launched = false;
 
-    function onProxy(proxy, error) {
-        if (error)
-            return onError(error);
-
-        return remoteLaunch(proxy, appName);
+    try {
+        var proxy = new AppLauncherProxy(Gio.DBus.session,
+                                         'org.gnome.Shell',
+                                         '/org/gnome/Shell');
+        [launched, ] = proxy.LaunchSync(appName, 0);
+    } catch (error) {
+        logError(error, "Failed to launch application '" + appName + "'");
     }
 
-    const ProxyClass = Gio.DBusProxy.makeProxyWrapper(AppLauncherIface);
-    var proxy = new ProxyClass(Gio.DBus.session,
-                               'org.gnome.Shell',
-                               '/org/gnome/Shell',
-                               onProxy);
+    if (launched) {
+        log("Application '" + appName + "' successfully launched");
+    }
+
+    return launched;
 }
 
 var uri = ARGV[0];
 if (! uri) {
     print("Usage: eos-launch endlessm-app://<application-name>\n");
-}
-else {
+} else {
     var tokens = uri.match(/(endlessm-app:\/\/|)([0-9,a-z,A-Z,-_.]+)/);
     if (tokens) {
-        var appName = tokens[2];
-
-        createProxyAndLaunch(appName);
-
-        Mainloop.run('main');
+        var appNames = getLocalizedAppNames(tokens[2]);
+        appNames.some(createProxyAndLaunch);
     }
 }
