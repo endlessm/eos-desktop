@@ -91,11 +91,26 @@ const ViewsDisplayLayout = new Lang.Class({
         return this._searchResultsTween;
     },
 
-    vfunc_allocate: function(container, box, flags) {
-        let centeredHeightAbove = function(height, available) {
-            return Math.floor(Math.max((available - height) / 2, 0));
-        };
+    _centeredHeightAbove: function (height, availHeight) {
+        return Math.floor(Math.max((availHeight - height) / 2, 0));
+    },
 
+    _calcAllViewPlacement: function (viewHeight, entryHeight, availHeight) {
+        // If we have the space for it, we add some padding to the top of the
+        // all view when calculating its centered position. This is to offset
+        // the icon labels at the bottom of the icon grid, so the icons
+        // themselves appears centered.
+        let themeNode = this._allViewActor.get_theme_node();
+        let topPadding = themeNode.get_length('-natural-padding-top');
+        let heightAbove = this._centeredHeightAbove(viewHeight + topPadding, availHeight);
+        let leftover = Math.max(availHeight - viewHeight - heightAbove, 0);
+        heightAbove += Math.min(topPadding, leftover);
+        // Always leave enough room for the search entry at the top
+        heightAbove = Math.max(entryHeight, heightAbove);
+        return heightAbove;
+    },
+
+    vfunc_allocate: function(container, box, flags) {
         let availWidth = box.x2 - box.x1;
         let availHeight = box.y2 - box.y1;
 
@@ -105,10 +120,11 @@ const ViewsDisplayLayout = new Lang.Class({
         entryHeight += entryMinPadding * 2;
 
         // We don't want the entry to move when expanding folders in the
-        // allView, so center relative to icon grid
+        // allView, so we call into _caclAllViewPlacement with just the grid
+        // actor's height, and use that to center the entry above
         let iconGridHeight = this._allViewActor.gridActor.get_preferred_height(availWidth)[1];
-        let heightAboveGrid = centeredHeightAbove(iconGridHeight, availHeight);
-        this._heightAboveEntry = centeredHeightAbove(entryHeight, heightAboveGrid);
+        let heightAboveGrid = this._calcAllViewPlacement(iconGridHeight, entryHeight, availHeight);
+        this._heightAboveEntry = this._centeredHeightAbove(entryHeight, heightAboveGrid);
 
         let entryBox = box.copy();
         entryBox.y1 = this._heightAboveEntry;
@@ -117,9 +133,8 @@ const ViewsDisplayLayout = new Lang.Class({
 
         let allViewBox = box.copy();
         let allViewHeight = this._allViewActor.get_preferred_height(availWidth)[1];
-        allViewHeight = Math.min(availHeight - entryHeight, allViewHeight);
-        allViewBox.y1 = Math.max(centeredHeightAbove(allViewHeight, availHeight), entryHeight);
-        allViewBox.y2 = allViewBox.y1 + allViewHeight;
+        allViewBox.y1 = this._calcAllViewPlacement(allViewHeight, entryHeight, availHeight);
+        allViewBox.y2 = Math.min(allViewBox.y1 + allViewHeight, box.y2);
         this._allViewActor.allocate(allViewBox, flags);
 
         // The views clone does not have a searchResultsActor
