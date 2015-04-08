@@ -18,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-07 01:29+0000\n"
-"PO-Revision-Date: 2015-03-23 21:17+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2015-04-07 22:39+0000\n"
+"PO-Revision-Date: 2015-04-07 23:28+0000\n"
+"Last-Translator: c.sanchez <cassandra@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/eos-desktop/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -375,8 +375,8 @@ msgid "Session…"
 msgstr "Sesión…"
 
 #: ../js/gdm/loginDialog.js:613
-msgid "Can't remember!"
-msgstr "¡No recuerdo!"
+msgid "Show password hint"
+msgstr "Muestra pista para contraseña"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -385,32 +385,32 @@ msgstr "¡No recuerdo!"
 msgid "Not listed?"
 msgstr "¿No está en la lista?"
 
-#: ../js/gdm/loginDialog.js:817 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:422
+#: ../js/gdm/loginDialog.js:823 ../js/ui/components/networkAgent.js:137
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
 #: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:610
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../js/gdm/loginDialog.js:833
+#: ../js/gdm/loginDialog.js:839
 msgctxt "button"
 msgid "Sign In"
 msgstr "Iniciar sesión"
 
-#: ../js/gdm/loginDialog.js:833
+#: ../js/gdm/loginDialog.js:839
 msgid "Next"
 msgstr "Siguiente"
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:949 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:955 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "Nombre de usuario:"
 
-#: ../js/gdm/loginDialog.js:1209
+#: ../js/gdm/loginDialog.js:1211
 msgid "Login Window"
 msgstr "Ventana de inicio de sesión"
 
@@ -1043,51 +1043,51 @@ msgstr "Ver cuenta"
 msgid "Unknown reason"
 msgstr "Razón desconocida"
 
-#: ../js/ui/components/updaterManager.js:184
+#: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
 msgstr "Actualización de software"
 
-#: ../js/ui/components/updaterManager.js:200
+#: ../js/ui/components/updaterManager.js:204
 msgid "Updates available"
 msgstr "Actualizaciones disponibles"
 
-#: ../js/ui/components/updaterManager.js:201
+#: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
 msgstr "Hay actualizaciones disponibles para tu sistema"
 
-#: ../js/ui/components/updaterManager.js:202
+#: ../js/ui/components/updaterManager.js:206
 msgid "Download now"
 msgstr "Descargar ahora"
 
-#: ../js/ui/components/updaterManager.js:215
+#: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
 msgstr "Actualizaciones listas"
 
-#: ../js/ui/components/updaterManager.js:216
+#: ../js/ui/components/updaterManager.js:220
 msgid "Software updates are ready to be installed on your system"
 msgstr "Las actualizaciones están listas para instalar en tu sistema"
 
-#: ../js/ui/components/updaterManager.js:217
+#: ../js/ui/components/updaterManager.js:221
 msgid "Install now"
 msgstr "Instalar ahora"
 
-#: ../js/ui/components/updaterManager.js:226
+#: ../js/ui/components/updaterManager.js:230
 msgid "Updates installed"
 msgstr "Actualizaciones instaladas"
 
-#: ../js/ui/components/updaterManager.js:227
+#: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
 msgstr "Las actualizaciones se han instalado en tu sistema"
 
-#: ../js/ui/components/updaterManager.js:228
+#: ../js/ui/components/updaterManager.js:232
 msgid "Restart now"
 msgstr "Reiniciar ahora"
 
-#: ../js/ui/components/updaterManager.js:251
+#: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
 msgstr "Hubo un error durante la actualización"
 
-#: ../js/ui/components/updaterManager.js:252
+#: ../js/ui/components/updaterManager.js:256
 msgid "We could not update your system"
 msgstr "Tu sistema no se pudo actualizar"
 
@@ -1167,7 +1167,7 @@ msgstr[1] "Su sesión se cerrará automáticamente en %d segundos."
 msgid "Logging out of the system."
 msgstr "Cerrando la sesión."
 
-#: ../js/ui/endSessionDialog.js:96 ../js/ui/endSessionDialog.js:123
+#: ../js/ui/endSessionDialog.js:96 ../js/ui/endSessionDialog.js:124
 msgctxt "button"
 msgid "Log Out"
 msgstr "Cerrar sesión"
@@ -1192,34 +1192,34 @@ msgstr[1] "El sistema se apagará automáticamente en %d segundos."
 msgid "Powering off the system."
 msgstr "Apagando el sistema."
 
-#: ../js/ui/endSessionDialog.js:119 ../js/ui/endSessionDialog.js:125
-#: ../js/ui/endSessionDialog.js:147
+#: ../js/ui/endSessionDialog.js:119 ../js/ui/endSessionDialog.js:126
+#: ../js/ui/endSessionDialog.js:148
 msgctxt "button"
 msgid "Restart"
 msgstr "Reiniciar"
 
-#: ../js/ui/endSessionDialog.js:121 ../js/ui/endSessionDialog.js:127
+#: ../js/ui/endSessionDialog.js:121 ../js/ui/endSessionDialog.js:128
 msgctxt "button"
 msgid "Power Off"
 msgstr "Apagar"
 
-#: ../js/ui/endSessionDialog.js:134
+#: ../js/ui/endSessionDialog.js:135
 msgctxt "title"
 msgid "Restart"
 msgstr "Reiniciar"
 
-#: ../js/ui/endSessionDialog.js:136
+#: ../js/ui/endSessionDialog.js:137
 msgid "Click Restart to quit these applications and restart the system."
 msgstr "Pulse «Reiniciar» para salir de eses programas y reiniciar el sistema."
 
-#: ../js/ui/endSessionDialog.js:139
+#: ../js/ui/endSessionDialog.js:140
 #, javascript-format
 msgid "The system will restart automatically in %d second."
 msgid_plural "The system will restart automatically in %d seconds."
 msgstr[0] "El sistema se reiniciará automáticamente en %d segundo."
 msgstr[1] "El sistema se reiniciará automáticamente en %d segundos."
 
-#: ../js/ui/endSessionDialog.js:144
+#: ../js/ui/endSessionDialog.js:145
 msgid "Restarting the system."
 msgstr "Reiniciando el sistema."
 

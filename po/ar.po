@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-07 01:29+0000\n"
-"PO-Revision-Date: 2015-03-23 21:16+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2015-04-07 22:39+0000\n"
+"PO-Revision-Date: 2015-04-07 23:00+0000\n"
+"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-desktop/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -370,8 +370,8 @@ msgid "Session…"
 msgstr "جلسة..."
 
 #: ../js/gdm/loginDialog.js:613
-msgid "Can't remember!"
-msgstr "لا أستطيع التذكر!"
+msgid "Show password hint"
+msgstr "إظهار لمحة عن كلمة السر"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -380,32 +380,32 @@ msgstr "لا أستطيع التذكر!"
 msgid "Not listed?"
 msgstr "غير مدرج؟"
 
-#: ../js/gdm/loginDialog.js:817 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:422
+#: ../js/gdm/loginDialog.js:823 ../js/ui/components/networkAgent.js:137
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
 #: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:610
 msgid "Cancel"
 msgstr "ألغِ"
 
-#: ../js/gdm/loginDialog.js:833
+#: ../js/gdm/loginDialog.js:839
 msgctxt "button"
 msgid "Sign In"
 msgstr "ادخل"
 
-#: ../js/gdm/loginDialog.js:833
+#: ../js/gdm/loginDialog.js:839
 msgid "Next"
 msgstr "التالي"
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:949 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:955 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "اسم المستخدم: "
 
-#: ../js/gdm/loginDialog.js:1209
+#: ../js/gdm/loginDialog.js:1211
 msgid "Login Window"
 msgstr "نافذة الولوج"
 
@@ -1038,51 +1038,51 @@ msgstr "أظهر الحساب"
 msgid "Unknown reason"
 msgstr "السبب غير معروف"
 
-#: ../js/ui/components/updaterManager.js:184
+#: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
 msgstr "تحديث البرامج"
 
-#: ../js/ui/components/updaterManager.js:200
+#: ../js/ui/components/updaterManager.js:204
 msgid "Updates available"
 msgstr "التحديثات المتوفرة"
 
-#: ../js/ui/components/updaterManager.js:201
+#: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
 msgstr "تتوفر تحديثات برامج لنظامك"
 
-#: ../js/ui/components/updaterManager.js:202
+#: ../js/ui/components/updaterManager.js:206
 msgid "Download now"
 msgstr "تنزيل الآن"
 
-#: ../js/ui/components/updaterManager.js:215
+#: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
 msgstr "التحديثات جاهزة"
 
-#: ../js/ui/components/updaterManager.js:216
+#: ../js/ui/components/updaterManager.js:220
 msgid "Software updates are ready to be installed on your system"
 msgstr "تحديثات البرامج جاهزة ليتم تثبيتها على النظام الخاص بك"
 
-#: ../js/ui/components/updaterManager.js:217
+#: ../js/ui/components/updaterManager.js:221
 msgid "Install now"
 msgstr "تثبيت الآن"
 
-#: ../js/ui/components/updaterManager.js:226
+#: ../js/ui/components/updaterManager.js:230
 msgid "Updates installed"
 msgstr "التحديثات المثبّتة"
 
-#: ../js/ui/components/updaterManager.js:227
+#: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
 msgstr "تم تثبيت تحديثات البرامج على جهازك"
 
-#: ../js/ui/components/updaterManager.js:228
+#: ../js/ui/components/updaterManager.js:232
 msgid "Restart now"
 msgstr "أعِد التشغيل الآن"
 
-#: ../js/ui/components/updaterManager.js:251
+#: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
 msgstr "فشل تحديث"
 
-#: ../js/ui/components/updaterManager.js:252
+#: ../js/ui/components/updaterManager.js:256
 msgid "We could not update your system"
 msgstr "لم نتمكن من تحديث نظامك"
 
@@ -1170,7 +1170,7 @@ msgstr[5] "ستُخرج تلقائيا بعد %d ثانية."
 msgid "Logging out of the system."
 msgstr "يخرج من النظام."
 
-#: ../js/ui/endSessionDialog.js:96 ../js/ui/endSessionDialog.js:123
+#: ../js/ui/endSessionDialog.js:96 ../js/ui/endSessionDialog.js:124
 msgctxt "button"
 msgid "Log Out"
 msgstr "اخرج"
@@ -1199,27 +1199,27 @@ msgstr[5] "سيُطفأ النظام تلقائيا بعد %d ثانية."
 msgid "Powering off the system."
 msgstr "يُطفأ النظام."
 
-#: ../js/ui/endSessionDialog.js:119 ../js/ui/endSessionDialog.js:125
-#: ../js/ui/endSessionDialog.js:147
+#: ../js/ui/endSessionDialog.js:119 ../js/ui/endSessionDialog.js:126
+#: ../js/ui/endSessionDialog.js:148
 msgctxt "button"
 msgid "Restart"
 msgstr "أعِد التشغيل"
 
-#: ../js/ui/endSessionDialog.js:121 ../js/ui/endSessionDialog.js:127
+#: ../js/ui/endSessionDialog.js:121 ../js/ui/endSessionDialog.js:128
 msgctxt "button"
 msgid "Power Off"
 msgstr "أطفئ"
 
-#: ../js/ui/endSessionDialog.js:134
+#: ../js/ui/endSessionDialog.js:135
 msgctxt "title"
 msgid "Restart"
 msgstr "إعادة التشغيل"
 
-#: ../js/ui/endSessionDialog.js:136
+#: ../js/ui/endSessionDialog.js:137
 msgid "Click Restart to quit these applications and restart the system."
 msgstr "انقر على \"أعِد التشغيل\" لغلق هذه التطبيقات وإعادة تشغيل النظام."
 
-#: ../js/ui/endSessionDialog.js:139
+#: ../js/ui/endSessionDialog.js:140
 #, javascript-format
 msgid "The system will restart automatically in %d second."
 msgid_plural "The system will restart automatically in %d seconds."
@@ -1230,7 +1230,7 @@ msgstr[3] "سيُعاد تشغيل النظام تلقائيا بعد %d ثوا�
 msgstr[4] "سيُعاد تشغيل النظام تلقائيا بعد %d ثانية."
 msgstr[5] "سيُعاد تشغيل النظام تلقائيا بعد %d ثانية."
 
-#: ../js/ui/endSessionDialog.js:144
+#: ../js/ui/endSessionDialog.js:145
 msgid "Restarting the system."
 msgstr "يُعاد تشغيل النظام."
 
