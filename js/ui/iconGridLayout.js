@@ -23,6 +23,12 @@ const FOLDER_DIR_NAME = 'desktop-directories';
 const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/EndlessOS/personality-defaults';
 const DEFAULT_CONFIG_NAME_BASE = 'icon-grid';
 
+/* Occurs when an application is uninstalled, meaning removed from the desktop's
+ * app grid. Applications can be uninstalled in the app store or via dragging
+ * and dropping to the trash.
+ */
+const SHELL_APP_REMOVED_EVENT = '683b40a7-cac0-4f9a-994c-4b274693a0a0';
+
 const IconGridLayout = new Lang.Class({
     Name: 'IconGridLayout',
 
@@ -225,8 +231,7 @@ const IconGridLayout = new Lang.Class({
         if (!this.iconIsFolder(info.get_id())) {
             let eventRecorder = EosMetrics.EventRecorder.get_default();
             let appId = new GLib.Variant('s', info.get_id());
-            eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_REMOVED,
-                                       appId);
+            eventRecorder.record_event(SHELL_APP_REMOVED_EVENT, appId);
         }
 
         let filename = info.get_filename();
