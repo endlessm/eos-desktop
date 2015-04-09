@@ -19,6 +19,11 @@ const Main = imports.ui.main;
 const Screencast = imports.ui.screencast;
 const Screenshot = imports.ui.screenshot;
 
+/* Occurs when an application is installed, meaning added to the desktop's app
+ * grid.
+ */
+const SHELL_APP_ADDED_EVENT = '51640a4e-79aa-47ac-b7e2-d3106a06e129';
+
 const GnomeShellIface = '<node> \
 <interface name="org.gnome.Shell"> \
 <method name="Eval"> \
@@ -470,7 +475,7 @@ const AppStoreService = new Lang.Class({
     AddApplication: function(id) {
         let eventRecorder = EosMetrics.EventRecorder.get_default();
         let appId = new GLib.Variant('s', id);
-        eventRecorder.record_event(EosMetrics.EVENT_SHELL_APP_ADDED, appId);
+        eventRecorder.record_event(SHELL_APP_ADDED_EVENT, appId);
 
         if (!IconGridLayout.layout.iconIsFolder(id)) {
             IconGridLayout.layout.appendIcon(id, IconGridLayout.DESKTOP_GRID_ID);
