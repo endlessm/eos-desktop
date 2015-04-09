@@ -279,22 +279,28 @@ const AppSplashPage = new Lang.Class({
                                           x_expand: true,
                                           y_expand: true });
 
+        let bgPath = null;
         let info = app.get_app_info();
 
-        if (info !== undefined) {
-            let bg_path;
-            if (info.has_key(SPLASH_BACKGROUND_DESKTOP_KEY)) {
-                bg_path = info.get_string(SPLASH_BACKGROUND_DESKTOP_KEY);
+        if (info !== undefined &&
+            info.has_key(SPLASH_BACKGROUND_DESKTOP_KEY)) {
+            let bgKey = info.get_string(SPLASH_BACKGROUND_DESKTOP_KEY);
+            if (GLib.file_test(bgKey, GLib.FileTest.EXISTS)) {
+                bgPath = bgKey;
             } else {
-                bg_path = DEFAULT_SPLASH_SCREEN_BACKGROUND;
+                log('Application ' + app.get_id() + ' requested non-existing splash ' + bgKey + '. Using default.');
             }
-
-            this.background.connect('allocation-changed', Lang.bind(this, function(actor, box, flags) {
-                this.background.style_class = 'app-splash-page-custom-background';
-                this.background.style =
-                    'background-image: url("%s");background-size: cover;background-position: center center;'.format(bg_path);
-            }));
         }
+
+        if (bgPath == null) {
+            bgPath = DEFAULT_SPLASH_SCREEN_BACKGROUND;
+        }
+
+        this.background.connect('allocation-changed', Lang.bind(this, function(actor, box, flags) {
+            this.background.style_class = 'app-splash-page-custom-background';
+            this.background.style =
+                'background-image: url("%s");background-size: cover;background-position: center center;'.format(bgPath);
+        }));
 
         let title = new St.Widget({ style_class: 'app-splash-page-title',
                                     layout_manager: new Clutter.BinLayout(),
