@@ -327,14 +327,10 @@ const OverviewEntry = new Lang.Class({
     _shouldTriggerSearch: function(symbol) {
         let unicode = Clutter.keysym_to_unicode(symbol);
         if (unicode == 0) {
-            return false;
+            return symbol == Clutter.BackSpace && this.active;
         }
 
-        if (this._getTermsForSearchString(String.fromCharCode(unicode)).length > 0) {
-            return true;
-        }
-
-        return symbol == Clutter.BackSpace && this.active;
+        return this._getTermsForSearchString(String.fromCharCode(unicode)).length > 0;
     },
 
     _activateSearch: function() {
