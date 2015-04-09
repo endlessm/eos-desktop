@@ -343,7 +343,7 @@ const OverviewEntry = new Lang.Class({
 
     _startSearch: function(event) {
         global.stage.set_key_focus(this.clutter_text);
-        this.clutter_text.event(event, true);
+        this.clutter_text.event(event, false);
     },
 
     resetSearch: function () {
