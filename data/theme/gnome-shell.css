@@ -2769,6 +2769,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .login-dialog-password-hint-label {
+    width: 40em;
     color: #eeeeee;
     font-style: italic;
     font-size: 16px;

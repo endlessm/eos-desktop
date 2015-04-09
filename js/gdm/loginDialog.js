@@ -593,10 +593,12 @@ const LoginDialog = new Lang.Class({
                               x_align: St.Align.START });
 
         this._passwordHintLabel = new St.Label({ style_class: 'login-dialog-password-hint-label' });
+        this._passwordHintLabel.clutter_text.line_wrap = true;
+        this._passwordHintLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
         this._promptBox.add(this._passwordHintLabel,
                             { expand: true,
-                              x_fill: true,
-                              y_fill: true,
+                              x_fill: false,
+                              y_fill: false,
                               x_align: St.Align.START });
         this._passwordHintLabel.visible = false;
 
