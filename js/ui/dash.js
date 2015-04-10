@@ -15,6 +15,7 @@ const IconGrid = imports.ui.iconGrid;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
 const Workspace = imports.ui.workspace;
+const Util = imports.misc.util;
 
 const DASH_ANIMATION_TIME = 0.2;
 const DASH_ITEM_LABEL_SHOW_TIME = 0.15;
@@ -353,6 +354,7 @@ const DashActor = new Lang.Class({
         this.parent({ name: dashPosition == DashPosition.END ? 'dash-end' : 'dash',
                       layout_manager: layout,
                       clip_to_allocation: true });
+        Util.blockClickEventsOnActor(this);
     },
 
     vfunc_allocate: function(box, flags) {
