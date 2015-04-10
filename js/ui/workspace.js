@@ -16,6 +16,7 @@ const Overview = imports.ui.overview;
 const Panel = imports.ui.panel;
 const SideComponent = imports.ui.sideComponent;
 const Tweener = imports.ui.tweener;
+const Util = imports.misc.util;
 
 const FOCUS_ANIMATION_TIME = 0.15;
 
@@ -289,6 +290,8 @@ const WindowOverlay = new Lang.Class({
 
         let title = new St.Label({ style_class: 'window-caption',
                                    text: metaWindow.title });
+        Util.blockClickEventsOnActor(title);
+
         title.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         title._spacing = 0;
 
