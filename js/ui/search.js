@@ -440,8 +440,11 @@ const SearchResults = new Lang.Class({
 
     _init: function() {
         this.actor = new SearchResultsBin({ name: 'searchResults',
+                                            reactive: true,
                                             y_align: Clutter.ActorAlign.FILL,
                                             layout_manager: new Clutter.BinLayout() });
+        this.actor.connect('button-press-event', function () { return true; });
+        this.actor.connect('button-release-event', function () { return true; });
 
         let box = new St.BoxLayout({ name: 'searchResultsBox',
                                      vertical: true,
