@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
@@ -288,7 +289,19 @@ const WindowOverlay = new Lang.Class({
         this.border = new St.Bin({ style_class: 'window-clone-border' });
 
         let title = new St.Label({ style_class: 'window-caption',
+                                   reactive: true,
                                    text: metaWindow.title });
+        title.connect('button-press-event', function (actor, event) {
+            if (event.get_button() != Gdk.BUTTON_PRIMARY) {
+                return true;
+            }
+        });
+        title.connect('button-release-event', function (actor, event) {
+            if (event.get_button() != Gdk.BUTTON_PRIMARY) {
+                return true;
+            }
+        });
+
         title.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         title._spacing = 0;
 

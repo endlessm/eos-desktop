@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const Signals = imports.signals;
 const Lang = imports.lang;
 const Meta = imports.gi.Meta;
@@ -352,7 +353,19 @@ const DashActor = new Lang.Class({
         let layout = new Clutter.BoxLayout({ orientation: Clutter.Orientation.VERTICAL });
         this.parent({ name: dashPosition == DashPosition.END ? 'dash-end' : 'dash',
                       layout_manager: layout,
+                      reactive: true,
                       clip_to_allocation: true });
+        this.connect('button-press-event', function (actor, event) {
+            if (event.get_button() != Gdk.BUTTON_PRIMARY) {
+                return true;
+            }
+        });
+        this.connect('button-release-event', function (actor, event) {
+            if (event.get_button() != Gdk.BUTTON_PRIMARY) {
+                return true;
+            }
+        });
+
     },
 
     vfunc_allocate: function(box, flags) {
