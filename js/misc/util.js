@@ -255,6 +255,16 @@ function getRectForActor(actor) {
     return rect;
 }
 
+function blockClickEventsOnActor(actor) {
+    actor.reactive = true;
+    actor.connect('button-press-event', function (actor, event) {
+        return true;
+    });
+    actor.connect('button-release-event', function (actor, event) {
+        return true;
+    });
+}
+
 let _personalityCache = null;
 function getPersonality() {
     if (_personalityCache !== null) {

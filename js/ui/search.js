@@ -21,6 +21,7 @@ const Main = imports.ui.main;
 const Overview = imports.ui.overview;
 const RemoteSearch = imports.ui.remoteSearch;
 const Separator = imports.ui.separator;
+const Util = imports.misc.util;
 
 const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 
@@ -442,6 +443,7 @@ const SearchResults = new Lang.Class({
         this.actor = new SearchResultsBin({ name: 'searchResults',
                                             y_align: Clutter.ActorAlign.FILL,
                                             layout_manager: new Clutter.BinLayout() });
+        Util.blockClickEventsOnActor(this.actor);
 
         let box = new St.BoxLayout({ name: 'searchResultsBox',
                                      vertical: true,
