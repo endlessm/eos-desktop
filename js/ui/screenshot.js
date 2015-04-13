@@ -64,13 +64,51 @@ const ScreenshotService = new Lang.Class({
         this._dbusImpl = Gio.DBusExportedObject.wrapJSObject(ScreenshotIface, this);
         this._dbusImpl.export(Gio.DBus.session, '/org/gnome/Shell/Screenshot');
 
+        this._screenShooter = new Map();
+
         Gio.DBus.session.own_name('org.gnome.Shell.Screenshot', Gio.BusNameOwnerFlags.REPLACE, null, null);
     },
 
+    _createScreenshot: function(invocation) {
+        let sender = invocation.get_sender();
+        if (this._screenShooter.has(sender)) {
+            invocation.return_value(GLib.Variant.new('(bs)', [false, '']));
+            return null;
+        }
+
+        let shooter = new Shell.Screenshot();
+        shooter._watchNameId =
+                        Gio.bus_watch_name(Gio.BusType.SESSION, sender, 0, null,
+                                           Lang.bind(this, this._onNameVanished));
+
+        this._screenShooter.set(sender, shooter);
+
+        return shooter;
+    },
+
+    _onNameVanished: function(connection, name) {
+        this._removeShooterForSender(name);
+    },
+
+    _removeShooterForSender: function(sender) {
+        let shooter = this._screenShooter.get(sender);
+        if (!shooter)
+            return;
+
+        Gio.bus_unwatch_name(shooter._watchNameId);
+        this._screenShooter.delete(sender);
+    },
+
     _onScreenshotComplete: function(obj, result, area, filenameUsed, flash, invocation) {
-        if (flash && result) {
-            let flashspot = new Flashspot(area);
-            flashspot.fire();
+        if (result) {
+            if (flash) {
+                let flashspot = new Flashspot(area);
+                flashspot.fire(Lang.bind(this, function() {
+                    this._removeShooterForSender(invocation.get_sender());
+                }));
+            }
+            else
+                this._removeShooterForSender(invocation.get_sender());
         }
 
         let retval = GLib.Variant.new('(bs)', [result, filenameUsed]);
@@ -84,7 +122,9 @@ const ScreenshotService = new Lang.Class({
                         "Invalid params");
             return;
         }
-        let screenshot = new Shell.Screenshot();
+        let screenshot = this._createScreenshot(invocation);
+        if (!screenshot)
+            return;
         screenshot.screenshot_area (x, y, width, height, filename,
                                 Lang.bind(this, this._onScreenshotComplete,
                                           flash, invocation));
@@ -92,7 +132,9 @@ const ScreenshotService = new Lang.Class({
 
     ScreenshotWindowAsync : function (params, invocation) {
         let [include_frame, include_cursor, flash, filename] = params;
-        let screenshot = new Shell.Screenshot();
+        let screenshot = this._createScreenshot(invocation);
+        if (!screenshot)
+            return;
         screenshot.screenshot_window (include_frame, include_cursor, filename,
                                   Lang.bind(this, this._onScreenshotComplete,
                                             flash, invocation));
@@ -100,7 +142,9 @@ const ScreenshotService = new Lang.Class({
 
     ScreenshotAsync : function (params, invocation) {
         let [include_cursor, flash, filename] = params;
-        let screenshot = new Shell.Screenshot();
+        let screenshot = this._createScreenshot(invocation);
+        if (!screenshot)
+            return;
         screenshot.screenshot(include_cursor, filename,
                           Lang.bind(this, this._onScreenshotComplete,
                                     flash, invocation));
@@ -265,7 +309,7 @@ const Flashspot = new Lang.Class({
         this.actor.set_position(area.x, area.y);
     },
 
-    fire: function() {
+    fire: function(doneCallback) {
         this.actor.show();
         this.actor.opacity = 255;
         Tweener.addTween(this.actor,
@@ -273,6 +317,8 @@ const Flashspot = new Lang.Class({
                            time: FLASHSPOT_ANIMATION_OUT_TIME,
                            transition: 'easeOutQuad',
                            onComplete: Lang.bind(this, function() {
+                               if (doneCallback)
+                                   doneCallback();
                                this.destroy();
                            })
                          });
