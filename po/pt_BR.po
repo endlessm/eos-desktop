@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-07 22:39+0000\n"
+"POT-Creation-Date: 2015-04-14 01:28+0000\n"
 "PO-Revision-Date: 2015-04-08 13:11+0000\n"
 "Last-Translator: Silva <michele@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/eos-desktop/language/pt/)\n"
@@ -380,18 +380,18 @@ msgstr "Selecione uma extensão para configurar usando a caixa de seleção abai
 msgid "Session…"
 msgstr "Sessão…"
 
-#: ../js/gdm/loginDialog.js:613
+#: ../js/gdm/loginDialog.js:615
 msgid "Show password hint"
 msgstr "Mostrar lembrete de senha"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
 #. manually entering the username.
-#: ../js/gdm/loginDialog.js:655
+#: ../js/gdm/loginDialog.js:657
 msgid "Not listed?"
 msgstr "Não listado?"
 
-#: ../js/gdm/loginDialog.js:823 ../js/ui/components/networkAgent.js:137
+#: ../js/gdm/loginDialog.js:825 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
@@ -399,24 +399,24 @@ msgstr "Não listado?"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../js/gdm/loginDialog.js:839
+#: ../js/gdm/loginDialog.js:841
 msgctxt "button"
 msgid "Sign In"
 msgstr "Entrar"
 
-#: ../js/gdm/loginDialog.js:839
+#: ../js/gdm/loginDialog.js:841
 msgid "Next"
 msgstr "Próximo"
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:955 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:957 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "Nome de usuário: "
 
-#: ../js/gdm/loginDialog.js:1211
+#: ../js/gdm/loginDialog.js:1213
 msgid "Login Window"
 msgstr "Janela de início de sessão"
 
@@ -1097,21 +1097,21 @@ msgstr "Ocorreu um erro durante à atualização"
 msgid "We could not update your system"
 msgstr "Não foi possível atualizar o seu sistema"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:448
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:463
 msgid "Windows"
 msgstr "Janelas"
 
-#: ../js/ui/dash.js:261 ../js/ui/dash.js:299
+#: ../js/ui/dash.js:262 ../js/ui/dash.js:300
 msgid "Show Applications"
 msgstr "Mostrar programas"
 
-#: ../js/ui/dash.js:297
+#: ../js/ui/dash.js:298
 msgid "Remove from Favorites"
 msgstr "Remover dos favoritos"
 
 #. Translators: this is the name of the dock/favorites area on
 #. the left of the overview
-#: ../js/ui/dash.js:454
+#: ../js/ui/dash.js:456
 msgid "Dash"
 msgstr "Dash"
 
@@ -1256,7 +1256,7 @@ msgstr "Monitor do Sistema"
 msgid "Quit Application"
 msgstr "Sair do Programa"
 
-#: ../js/ui/iconGridLayout.js:209
+#: ../js/ui/iconGridLayout.js:215
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s foi eliminado"
@@ -1404,11 +1404,11 @@ msgstr "Não foi possível bloquear"
 msgid "Lock was blocked by an application"
 msgstr "O bloqueio foi impedido por um programa"
 
-#: ../js/ui/search.js:771
+#: ../js/ui/search.js:773
 msgid "Searching…"
 msgstr "Procurando..."
 
-#: ../js/ui/search.js:773
+#: ../js/ui/search.js:775
 msgid "No results."
 msgstr "Sem resultados. "
 
@@ -1899,7 +1899,7 @@ msgstr "%s (remoto)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:452
+#: ../js/ui/viewSelector.js:467
 msgid "Applications"
 msgstr "Programas"
 

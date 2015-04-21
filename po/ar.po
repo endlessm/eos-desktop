@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-07 22:39+0000\n"
+"POT-Creation-Date: 2015-04-14 01:28+0000\n"
 "PO-Revision-Date: 2015-04-07 23:00+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-desktop/language/ar/)\n"
@@ -369,18 +369,18 @@ msgstr "اختر امتدادا لضبطه من القائمة أعلاه."
 msgid "Session…"
 msgstr "جلسة..."
 
-#: ../js/gdm/loginDialog.js:613
+#: ../js/gdm/loginDialog.js:615
 msgid "Show password hint"
 msgstr "إظهار لمحة عن كلمة السر"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
 #. manually entering the username.
-#: ../js/gdm/loginDialog.js:655
+#: ../js/gdm/loginDialog.js:657
 msgid "Not listed?"
 msgstr "غير مدرج؟"
 
-#: ../js/gdm/loginDialog.js:823 ../js/ui/components/networkAgent.js:137
+#: ../js/gdm/loginDialog.js:825 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
@@ -388,24 +388,24 @@ msgstr "غير مدرج؟"
 msgid "Cancel"
 msgstr "ألغِ"
 
-#: ../js/gdm/loginDialog.js:839
+#: ../js/gdm/loginDialog.js:841
 msgctxt "button"
 msgid "Sign In"
 msgstr "ادخل"
 
-#: ../js/gdm/loginDialog.js:839
+#: ../js/gdm/loginDialog.js:841
 msgid "Next"
 msgstr "التالي"
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:955 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:957 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "اسم المستخدم: "
 
-#: ../js/gdm/loginDialog.js:1211
+#: ../js/gdm/loginDialog.js:1213
 msgid "Login Window"
 msgstr "نافذة الولوج"
 
@@ -1086,21 +1086,21 @@ msgstr "فشل تحديث"
 msgid "We could not update your system"
 msgstr "لم نتمكن من تحديث نظامك"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:448
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:463
 msgid "Windows"
 msgstr "النوافذ"
 
-#: ../js/ui/dash.js:261 ../js/ui/dash.js:299
+#: ../js/ui/dash.js:262 ../js/ui/dash.js:300
 msgid "Show Applications"
 msgstr "أظهر التطبيقات"
 
-#: ../js/ui/dash.js:297
+#: ../js/ui/dash.js:298
 msgid "Remove from Favorites"
 msgstr "أزِل من المفضّلة"
 
 #. Translators: this is the name of the dock/favorites area on
 #. the left of the overview
-#: ../js/ui/dash.js:454
+#: ../js/ui/dash.js:456
 msgid "Dash"
 msgstr "الشريط"
 
@@ -1261,7 +1261,7 @@ msgstr "شاشة النظام"
 msgid "Quit Application"
 msgstr "الخروج من التطبيق"
 
-#: ../js/ui/iconGridLayout.js:209
+#: ../js/ui/iconGridLayout.js:215
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s تم حذفه"
@@ -1409,11 +1409,11 @@ msgstr "لا يمكن القفل"
 msgid "Lock was blocked by an application"
 msgstr "تم حجب القفل بواسطة تطبيق"
 
-#: ../js/ui/search.js:771
+#: ../js/ui/search.js:773
 msgid "Searching…"
 msgstr "جاري البحث..."
 
-#: ../js/ui/search.js:773
+#: ../js/ui/search.js:775
 msgid "No results."
 msgstr "لا توجد نتائج. "
 
@@ -1920,7 +1920,7 @@ msgstr "%s (عن بعد)"
 msgid "%s (console)"
 msgstr "%s (وحدة تحكم)"
 
-#: ../js/ui/viewSelector.js:452
+#: ../js/ui/viewSelector.js:467
 msgid "Applications"
 msgstr "التطبيقات"
 
