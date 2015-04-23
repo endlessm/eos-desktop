@@ -189,13 +189,10 @@ const LoginManagerSystemd = new Lang.Class({
 
     canSuspend: function(asyncCallback) {
         this._proxy.CanSuspendRemote(function(result, error) {
-            // FIXME: we disable all suspend actions from the UI for now
-            // if (error)
-            //     asyncCallback(false);
-            // else
-            //     asyncCallback(result[0] != 'no');
-
-            asyncCallback(false);
+            if (error)
+                asyncCallback(false);
+            else
+                asyncCallback(result[0] != 'no');
         });
     },
 
