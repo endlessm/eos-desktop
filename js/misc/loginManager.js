@@ -174,7 +174,7 @@ const LoginManagerSystemd = new Lang.Class({
             if (error)
                 asyncCallback(false);
             else
-                asyncCallback(result[0] != 'no');
+                asyncCallback(result[0] != 'no' && result[0] != 'na');
         });
     },
 
@@ -183,19 +183,16 @@ const LoginManagerSystemd = new Lang.Class({
             if (error)
                 asyncCallback(false);
             else
-                asyncCallback(result[0] != 'no');
+                asyncCallback(result[0] != 'no' && result[0] != 'na');
         });
     },
 
     canSuspend: function(asyncCallback) {
         this._proxy.CanSuspendRemote(function(result, error) {
-            // FIXME: we disable all suspend actions from the UI for now
-            // if (error)
-            //     asyncCallback(false);
-            // else
-            //     asyncCallback(result[0] != 'no');
-
-            asyncCallback(false);
+            if (error)
+                asyncCallback(false);
+            else
+                asyncCallback(result[0] != 'no' && result[0] != 'na');
         });
     },
 
