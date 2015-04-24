@@ -55,7 +55,6 @@ TESTS = \
   $(JS_TESTS) \
   $(NULL)
 TEST_EXTENSIONS = .js
-JASMINE_SUBMODULE_PATH = $(top_srcdir)/tests/jasmine
 
 @EOS_COVERAGE_RULES@
 
@@ -67,8 +66,6 @@ AM_JS_LOG_FLAGS = \
 	--include-path=$(top_srcdir)/js \
 	--include-path=$(top_srcdir)/tests/unit \
 	@EOS_JS_COVERAGE_LOG_FLAGS@
-
-include $(JASMINE_SUBMODULE_PATH)/Makefile-jasmine.am.inc
 
 LOG_COMPILER = gtester
 AM_LOG_FLAGS = -k --verbose
