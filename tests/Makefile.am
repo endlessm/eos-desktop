@@ -6,14 +6,6 @@ JS_TESTS = \
 	unit/url_test.js
 
 TEST_JS =					\
-	jasmine_runner.js			\
-	jenkinsTestPlugin.js			\
-	run-gjs-tests				\
-	run-test.sh.in				\
-	eos_harness_test/subdir/testbar.js	\
-	eos_harness_test/testNoSetupOrTearDown.js \
-	eos_harness_test/testbar.js		\
-	eos_harness_test/testfoo.js		\
 	interactive/background-repeat.js	\
 	interactive/background-size.js		\
 	interactive/borders.js			\
@@ -40,14 +32,11 @@ TEST_JS =					\
 	testcommon/border-image.png		\
 	testcommon/face-plain.png		\
 	testcommon/ui.js                        \
-	test_example/foo_test.js		\
-	test_example/some_class.js		\
 	$(JS_TESTS)
 
 EXTRA_DIST = $(TEST_JS)
 
 TEST_MISC =					\
-	eos_harness_test/badextension.txt	\
 	testcommon/test.css
 EXTRA_DIST += $(TEST_MISC)
 

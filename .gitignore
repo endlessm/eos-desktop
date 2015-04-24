@@ -102,7 +102,6 @@ src/stamp-st.h.tmp
 src/st-scroll-view-fade-generated.c
 src/stamp-st-scroll-view-fade-generated.c
 stamp-h1
-tests/run-test.sh
 xmldocs.make
 *~
 *.patch
