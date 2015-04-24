@@ -62,8 +62,8 @@ AM_LOG_FLAGS = -k --verbose
 # Use locally built versions of Shell-1.0 and libraries; this may need to
 # be changed to AM_TESTS_ENVIRONMENT in a future version of Automake
 TESTS_ENVIRONMENT = \
-	GI_TYPELIB_PATH='$(top_builddir)/src:$(MUTTER_TYPELIB_DIR):${GI_TYPELIB_PATH}' \
-	LD_LIBRARY_PATH='$(top_builddir)/src/:${GI_TYPELIB_PATH}' \
+	export GI_TYPELIB_PATH='$(top_builddir)/src:$(MUTTER_TYPELIB_DIR):${GI_TYPELIB_PATH}'; \
+	export LD_LIBRARY_PATH='$(top_builddir)/src/:${GI_TYPELIB_PATH}'; \
 	$(NULL)
 
 EXTRA_DIST += \
