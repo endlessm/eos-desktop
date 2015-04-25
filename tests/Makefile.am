@@ -1,4 +1,5 @@
 JS_TESTS = \
+	js/ui/sessionModeTest.js			\
 	unit/format_test.js				\
 	unit/insertSorted_test.js			\
 	unit/markup_test.js				\
@@ -25,7 +26,6 @@ TEST_JS =					\
 	interactive/table.js			\
 	interactive/test-title.js		\
 	interactive/transitions.js		\
-	js/ui/sessionModeTest.js		\
 	testcommon/100-200.svg			\
 	testcommon/200-100.svg			\
 	testcommon/200-200.svg			\
@@ -68,7 +68,7 @@ AM_LOG_FLAGS = -k --verbose
 # be changed to AM_TESTS_ENVIRONMENT in a future version of Automake
 TESTS_ENVIRONMENT = \
 	export GJS_PATH='$(top_srcdir):$(top_srcdir)/js:$(top_srcdir)/tests/unit'; \
-	export GI_TYPELIB_PATH='$(top_builddir)/src:$(MUTTER_TYPELIB_DIR):${GI_TYPELIB_PATH}'; \
+	export GI_TYPELIB_PATH='$(top_builddir)/src:$(top_builddir)/src/gvc:$(MUTTER_TYPELIB_DIR):${GI_TYPELIB_PATH}'; \
 	export LD_LIBRARY_PATH='$(top_builddir)/src/:${GI_TYPELIB_PATH}'; \
 	$(NULL)
 
