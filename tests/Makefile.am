@@ -50,10 +50,15 @@ TEST_EXTENSIONS = .js
 # Pass resource paths to EOS_JS_COVERAGE_FILES
 EOS_JS_COVERAGE_FILES = $(addprefix $(abs_top_srcdir)/js/,$(shell python -c "import xml.etree.ElementTree as ET; import sys; tree = ET.parse('../js/js-resources.gresource.xml'); map(sys.stdout.write, ['{0}\n'.format(e.text) for e in tree.getroot()[0]])"))
 
+JS_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) $(top_srcdir)/config/tap-driver.sh
+JS_LOG_DRIVER_FLAGS = --comments
+# run-js-test is a binary that is linked to libeos-shell and runs a GJS script;
+# libst isn't built as a shared library, so it's impossible to import the St-1.0
+# typelib directly from GJS.
+JS_LOG_COMPILER = $(top_builddir)/src/run-js-test
 AM_JS_LOG_FLAGS = \
-	--include-path=$(top_srcdir) \
-	--include-path=$(top_srcdir)/js \
-	--include-path=$(top_srcdir)/tests/unit \
+	$(JASMINE) \
+	--tap \
 	@EOS_JS_COVERAGE_LOG_FLAGS@
 
 LOG_COMPILER = gtester
@@ -62,6 +67,7 @@ AM_LOG_FLAGS = -k --verbose
 # Use locally built versions of Shell-1.0 and libraries; this may need to
 # be changed to AM_TESTS_ENVIRONMENT in a future version of Automake
 TESTS_ENVIRONMENT = \
+	export GJS_PATH='$(top_srcdir):$(top_srcdir)/js:$(top_srcdir)/tests/unit'; \
 	export GI_TYPELIB_PATH='$(top_builddir)/src:$(MUTTER_TYPELIB_DIR):${GI_TYPELIB_PATH}'; \
 	export LD_LIBRARY_PATH='$(top_builddir)/src/:${GI_TYPELIB_PATH}'; \
 	$(NULL)

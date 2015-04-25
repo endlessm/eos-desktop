@@ -3,6 +3,8 @@
 *.la
 *.lo
 *.o
+*.log
+*.trs
 .deps
 .libs
 ABOUT-NLS
