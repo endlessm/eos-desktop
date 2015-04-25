@@ -645,7 +645,7 @@ const Background = new Lang.Class({
         }
 
         log('No default background images found!');
-        return '';
+        return null;
     },
 
     _load: function () {
@@ -669,7 +669,9 @@ const Background = new Lang.Class({
             file = Gio.File.new_for_uri(uri);
         }
 
-        this._loadFile(file);
+        if (file) {
+            this._loadFile(file);
+        }
     },
 
     get brightness() {
