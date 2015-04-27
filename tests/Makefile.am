@@ -70,6 +70,7 @@ TESTS_ENVIRONMENT = \
 	export GJS_PATH='$(top_srcdir):$(top_srcdir)/js:$(top_srcdir)/tests/unit'; \
 	export GI_TYPELIB_PATH='$(top_builddir)/src:$(top_builddir)/src/gvc:$(MUTTER_TYPELIB_DIR):${GI_TYPELIB_PATH}'; \
 	export LD_LIBRARY_PATH='$(top_builddir)/src/:${GI_TYPELIB_PATH}'; \
+	export GSETTINGS_SCHEMA_DIR='$(top_builddir)/data'; \
 	$(NULL)
 
 EXTRA_DIST += \
