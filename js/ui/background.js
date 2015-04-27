@@ -22,7 +22,7 @@ const COLOR_SHADING_TYPE_KEY = 'color-shading-type';
 const BACKGROUND_STYLE_KEY = 'picture-options';
 const PICTURE_OPACITY_KEY = 'picture-opacity';
 const PICTURE_URI_KEY = 'picture-uri';
-const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/EndlessOS/personality-defaults';
+const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/EndlessOS/language-defaults';
 const BACKGROUND_NAME_BASE = 'desktop-background';
 
 const FADE_ANIMATION_TIME = 1.0;
@@ -631,23 +631,21 @@ const Background = new Lang.Class({
     },
 
     _getDefaultBackgroundFile: function() {
-        let personality = Util.getPersonality();
+        let langNames = GLib.get_language_names().filter(function(name) {
+            return name.indexOf('.') == -1;
+        });
 
-        let files = [];
-        files.push(GLib.build_filenamev([DEFAULT_CONFIGS_DIR,
-            BACKGROUND_NAME_BASE + '-' + personality + '.jpg']));
+        for (let i = 0; i < langNames.length; i++) {
+            let path = GLib.build_filenamev([DEFAULT_CONFIGS_DIR,
+                BACKGROUND_NAME_BASE + '-' + langNames[i] + '.jpg']);
 
-        files.push(GLib.build_filenamev([DEFAULT_CONFIGS_DIR,
-            BACKGROUND_NAME_BASE + '-default.jpg']));
-
-        for (let i = 0; i < files.length; i++) {
-            if (GLib.file_test(files[i], GLib.FileTest.EXISTS)) {
-                return Gio.File.new_for_path(files[i]);
+            if (GLib.file_test(path, GLib.FileTest.EXISTS)) {
+                return Gio.File.new_for_path(path);
             }
         }
 
         log('No default background images found!');
-        return '';
+        return null;
     },
 
     _load: function () {
@@ -664,14 +662,16 @@ const Background = new Lang.Class({
         let uri = this._settings.get_string(PICTURE_URI_KEY);
 
         let file;
-        // This URI indicates that the per-personality default should be used
+        // This URI indicates that the per-language default should be used
         if (uri === 'eos:///default') {
             file = this._getDefaultBackgroundFile();
         } else {
             file = Gio.File.new_for_uri(uri);
         }
 
-        this._loadFile(file);
+        if (file) {
+            this._loadFile(file);
+        }
     },
 
     get brightness() {
