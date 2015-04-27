@@ -3,6 +3,8 @@
 *.la
 *.lo
 *.o
+*.log
+*.trs
 .deps
 .libs
 ABOUT-NLS
@@ -102,7 +104,6 @@ src/stamp-st.h.tmp
 src/st-scroll-view-fade-generated.c
 src/stamp-st-scroll-view-fade-generated.c
 stamp-h1
-tests/run-test.sh
 xmldocs.make
 *~
 *.patch
