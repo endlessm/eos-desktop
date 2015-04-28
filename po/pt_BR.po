@@ -269,11 +269,11 @@ msgstr "Esta chave especifica a ordem exata dos ícones apresentados na visualiz
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Show the week date in the calendar"
-msgstr "Mostrar o data da semana na agenda"
+msgstr "Mostrar a data da semana na agenda"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:38
 msgid "If true, display the ISO week date in the calendar."
-msgstr "Se verdadeiro, exibe o data da semana na agenda."
+msgstr "Se verdadeiro, exibe a data da semana na agenda."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Keybinding to open the application menu"
@@ -478,7 +478,7 @@ msgstr "Aviso"
 #: ../js/ui/appDisplay.js:1704
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr "Para excluir uma pasta que você tem que remover todos os arquivos de dentro primeiro."
+msgstr "Para excluir uma pasta você tem que remover todos os arquivos de dentro primeiro."
 
 #: ../js/ui/appDisplay.js:1710
 msgid "We are just trying to keep you safe."
@@ -1138,7 +1138,7 @@ msgstr "%A, %e de %B de %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr "Lembre-se de que contas compartilhadas não são protegidos por uma senha, por isso certifique-se de apagar todos os arquivos que você deseja manter privados."
+msgstr "Lembre-se de que contas compartilhadas não são protegidas por uma senha, por isso certifique-se de apagar todos os arquivos que você deseja manter privados."
 
 #: ../js/ui/endSessionDialog.js:77
 #, javascript-format
