@@ -1503,7 +1503,11 @@ const HotCorner = new Lang.Class({
     },
 
     _setupFallbackCornerIfNeeded: function(layoutManager) {
-        if (!global.display.supports_extended_barriers()) {
+        // FIXME: The pressure barrier is not working properly.
+        //        It is preventing use of the hot corner,
+        //        so temporarily disable it.
+        // if (!global.display.supports_extended_barriers()) {
+        if (true) {
             this.actor = new Clutter.Actor({ name: 'hot-corner-environs',
                                              x: this._x, y: this._y,
                                              width: 3,
