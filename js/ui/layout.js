@@ -1481,21 +1481,38 @@ const HotCorner = new Lang.Class({
         }
 
         if (size > 0) {
+            // The corner itself is at (this._x, this._y).
+            // Extend the barrier by size towards the center of the screen.
+
+            let x1, x2, y1, y2;
+            let xDir, yDir;
+
             if (this._cornerOnRight) {
-                this._verticalBarrier = new Meta.Barrier({ display: global.display,
-                                                           x1: this._x, x2: this._x, y1: this._y, y2: this._y + size,
-                                                           directions: Meta.BarrierDirection.NEGATIVE_X });
-                this._horizontalBarrier = new Meta.Barrier({ display: global.display,
-                                                             x1: this._x - size, x2: this._x, y1: this._y, y2: this._y,
-                                                             directions: Meta.BarrierDirection.POSITIVE_Y });
+                x1 = this._x - size;
+                x2 = this._x;
+                xDir = Meta.BarrierDirection.NEGATIVE_X;
             } else {
-                this._verticalBarrier = new Meta.Barrier({ display: global.display,
-                                                           x1: this._x, x2: this._x, y1: this._y, y2: this._y + size,
-                                                           directions: Meta.BarrierDirection.POSITIVE_X });
-                this._horizontalBarrier = new Meta.Barrier({ display: global.display,
-                                                             x1: this._x, x2: this._x + size, y1: this._y, y2: this._y,
-                                                             directions: Meta.BarrierDirection.POSITIVE_Y });
+                x1 = this._x;
+                x2 = this._x + size;
+                xDir = Meta.BarrierDirection.POSITIVE_X;
             }
+
+            if (this._cornerOnBottom) {
+                y1 = this._y - size;
+                y2 = this._y;
+                yDir = Meta.BarrierDirection.NEGATIVE_Y;
+            } else {
+                y1 = this._y;
+                y2 = this._y + size;
+                yDir = Meta.BarrierDirection.POSITIVE_Y;
+            }
+
+            this._verticalBarrier = new Meta.Barrier({ display: global.display,
+                                                       x1: this._x, x2: this._x, y1: y1, y2: y2,
+                                                       directions: xDir });
+            this._horizontalBarrier = new Meta.Barrier({ display: global.display,
+                                                         x1: x1, x2: x2, y1: this._y, y2: this._y,
+                                                         directions: yDir });
 
             this._pressureBarrier.addBarrier(this._verticalBarrier);
             this._pressureBarrier.addBarrier(this._horizontalBarrier);
