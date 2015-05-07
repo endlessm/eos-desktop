@@ -24,6 +24,9 @@ const KEYBOARD_ANIMATION_TIME = 0.15;
 const BACKGROUND_FADE_ANIMATION_TIME = 1.0;
 const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
 
+// Gsettings key to enable the message tray pressure barrier.
+const ENABLE_MESSAGE_TRAY_BARRIER_KEY = 'enable-message-tray-barrier'
+
 // The message tray takes this much pressure
 // in the pressure barrier at once to release it.
 const MESSAGE_TRAY_PRESSURE_THRESHOLD = 250; // pixels
@@ -734,7 +737,9 @@ const LayoutManager = new Lang.Class({
             if (Main.layoutManager.bottomMonitor.inFullscreen)
                 return;
 
-            Main.messageTray.openTray();
+            if (global.settings.get_boolean(ENABLE_MESSAGE_TRAY_BARRIER_KEY)) {
+                Main.messageTray.openTray();
+            }
         });
     },
 

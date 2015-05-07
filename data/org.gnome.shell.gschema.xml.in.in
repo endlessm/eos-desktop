@@ -183,6 +183,17 @@ value here is from the GsmPresenceStatus enumeration.</_summary>
         This key specifies the exact order of the icons shown in the applications launcher view.
       </_description>
     </key>
+    <key name="enable-message-tray-barrier" type="b">
+      <default>false</default>
+      <_summary>
+        Enables the pressure barrier for the message tray
+      </_summary>
+      <_description>
+        By default, the message tray is only shown on key press.
+        Set true to show the message tray when exerting downward pressure
+        with the cursor on the bottom of the taskbar.
+      </_description>
+    </key>
     <child name="calendar" schema="org.gnome.shell.calendar"/>
     <child name="keybindings" schema="org.gnome.shell.keybindings"/>
     <child name="keyboard" schema="org.gnome.shell.keyboard"/>
