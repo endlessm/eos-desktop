@@ -10,7 +10,6 @@ const Config = imports.misc.config;
 const EosMetrics = imports.gi.EosMetrics;
 const Main = imports.ui.main;
 const Shell = imports.gi.Shell;
-const Util = imports.misc.util;
 
 const DESKTOP_GRID_ID = 'desktop';
 
@@ -20,7 +19,7 @@ const DIRECTORY_EXT = '.directory';
 const APP_DIR_NAME = 'applications';
 const FOLDER_DIR_NAME = 'desktop-directories';
 
-const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/EndlessOS/personality-defaults';
+const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/EndlessOS/language-defaults';
 const DEFAULT_CONFIG_NAME_BASE = 'icon-grid';
 
 /* Occurs when an application is uninstalled, meaning removed from the desktop's
@@ -89,37 +88,29 @@ const IconGridLayout = new Lang.Class({
     },
 
     _getDefaultIcons: function() {
-        let personality = Util.getPersonality();
-        let defaultsFiles = [];
-
-        // Look for the personality-specific config file
-        let specificPath = DEFAULT_CONFIGS_DIR + '/' +
-            DEFAULT_CONFIG_NAME_BASE + '-' + personality + '.json';
-        defaultsFiles.push(Gio.File.new_for_path(specificPath));
-
-        // Also add a default file for fallback
-        if (personality != 'default') {
-            let fallbackPath = DEFAULT_CONFIGS_DIR + '/' +
-                    DEFAULT_CONFIG_NAME_BASE + '-default.json';
-            defaultsFiles.push(Gio.File.new_for_path(fallbackPath));
-        }
-
         let iconTree = null;
-        for (let i = 0; i < defaultsFiles.length; i++) {
-            let defaultsFile = defaultsFiles[i];
-            try {
-                let [success, data] = defaultsFile.load_contents(null, null,
-                                                                 null);
-                iconTree = Json.gvariant_deserialize_data(data.toString(), -1,
-                                                          'a{sas}');
-                break;
-            } catch (e) {
-                // Print an error even if we later find the fallback, since
-                // there should always be a personality-specific file
-                logError(e, 'Failed to read icon grid defaults file ' +
-                            defaultsFile.get_path());
-            }
-        }
+        let defaultFiles = GLib.get_language_names()
+            .filter(function(name) {
+                return name.indexOf('.') == -1;
+            })
+            .map(function(name) {
+                let path = GLib.build_filenamev([DEFAULT_CONFIGS_DIR,
+                                                 DEFAULT_CONFIG_NAME_BASE + '-' + name + '.json']);
+                return Gio.File.new_for_path(path);
+            })
+            .some(function(defaultsFile) {
+                try {
+                    let [success, data] = defaultsFile.load_contents(null, null,
+                                                                     null);
+                    iconTree = Json.gvariant_deserialize_data(data.toString(), -1,
+                                                              'a{sas}');
+                    return true;
+                } catch (e) {
+                    // Ignore errors, as we always have a fallback
+                }
+
+                return false;
+            });
 
         if (iconTree === null || iconTree.n_children() == 0) {
             log('No icon grid defaults found!');
