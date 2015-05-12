@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-05 01:28+0000\n"
+"POT-Creation-Date: 2015-05-12 01:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -252,97 +252,108 @@ msgid ""
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:37
-msgid "Show the week date in the calendar"
+msgid "Enables the pressure barrier for the message tray"
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:38
-msgid "If true, display the ISO week date in the calendar."
+msgid ""
+"By default, the message tray is only shown on key press. Set true to show "
+"the message tray when exerting downward pressure with the cursor on the "
+"bottom of the taskbar."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:39
-msgid "Keybinding to open the application menu"
+msgid "Show the week date in the calendar"
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:40
-msgid "Keybinding to open the application menu."
+msgid "If true, display the ISO week date in the calendar."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:41
-msgid "Keybinding to open the \"Show Applications\" view"
+msgid "Keybinding to open the application menu"
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:42
+msgid "Keybinding to open the application menu."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
+msgid "Keybinding to open the \"Show Applications\" view"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
 msgid ""
 "Keybinding to open the \"Show Applications\" view of the Activities Overview."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
 msgid "Keybinding to toggle the visibility of the message tray"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
 msgid "Keybinding to toggle the visibility of the message tray."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "Keybinding to focus the active notification"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Keybinding to focus the active notification."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "Keybinding that shows the force app exit dialog"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "Which keyboard to use"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid "The type of keyboard to use."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "The application icon mode."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
 "only' (shows only the application icon) or 'both'."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Attach modal dialog to the parent window"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Arrangement of buttons on the titlebar"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
 msgid "Workspaces are managed dynamically"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
 msgid "Workspaces only on primary monitor"
 msgstr ""
 
