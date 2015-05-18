@@ -11,6 +11,8 @@ EXTRA_DIST =		\
 	.project	\
 	.settings	\
 	autogen.sh	\
+	jasmine		\
+	jasmine.json	\
 	tools/check-for-missing.py
 
 # These are files checked into Git that we don't want to distribute
