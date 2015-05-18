@@ -54,7 +54,8 @@ JS_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) $(top_srcdir)/config/tap-driver
 JS_LOG_DRIVER_FLAGS = --comments
 # run-js-test is a binary that is linked to libeos-shell and runs a GJS script;
 # libst isn't built as a shared library, so it's impossible to import the St-1.0
-# typelib directly from GJS.
+# typelib directly from GJS. Unfortunately, this means we can't run tests by
+# just typing "jasmine" - we need the ./jasmine script.
 JS_LOG_COMPILER = $(top_builddir)/src/run-js-test
 AM_JS_LOG_FLAGS = \
 	$(JASMINE) \
