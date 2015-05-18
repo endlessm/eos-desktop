@@ -1,0 +1,8 @@
+#!/bin/bash
+
+MUTTER_TYPELIB_DIR=`pkg-config --variable=typelibdir libmutter`
+export GI_TYPELIB_PATH="src:src/gvc:$MUTTER_TYPELIB_DIR:$GI_TYPELIB_PATH"
+export LD_LIBRARY_PATH="src:$GI_TYPELIB_PATH"
+export GSETTINGS_SCHEMA_DIR=data
+
+src/run-js-test `which jasmine`
