@@ -5,5 +5,4 @@ host = https://www.transifex.com
 source_file = po/eos-desktop.pot
 source_lang = en
 file_filter = po/<lang>.po
-trans.pt = po/pt_BR.po
 type = PO
