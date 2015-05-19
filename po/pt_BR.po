@@ -24,9 +24,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-05 01:28+0000\n"
-"PO-Revision-Date: 2015-04-29 22:34+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2015-05-12 01:30+0000\n"
+"PO-Revision-Date: 2015-05-12 01:30+0000\n"
+"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/eos-desktop/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -268,98 +268,109 @@ msgid ""
 msgstr "Esta chave especifica a ordem exata dos ícones apresentados na visualização de iniciação dos programas."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:37
+msgid "Enables the pressure barrier for the message tray"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
+msgid ""
+"By default, the message tray is only shown on key press. Set true to show "
+"the message tray when exerting downward pressure with the cursor on the "
+"bottom of the taskbar."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Show the week date in the calendar"
 msgstr "Mostrar a data da semana na agenda"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
 msgid "If true, display the ISO week date in the calendar."
 msgstr "Se verdadeiro, exibe a data da semana na agenda."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
 msgid "Keybinding to open the application menu"
 msgstr "Atalho de teclado para abrir um menu de programa"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid "Keybinding to open the application menu."
 msgstr "Atalho de teclado para abrir um menu de programa."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
 msgid "Keybinding to open the \"Show Applications\" view"
 msgstr "Atalho de teclado para abrir a visualização \"Mostrar programas\""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
 msgid ""
 "Keybinding to open the \"Show Applications\" view of the Activities "
 "Overview."
 msgstr "Atalho de teclado para abrir a visualização \"Mostrar programas\" da visualização geral de atividades."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
 msgid "Keybinding to toggle the visibility of the message tray"
 msgstr "Atalho de teclado para alternar a visibilidade da área de notificação"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
 msgid "Keybinding to toggle the visibility of the message tray."
 msgstr "Atalho de teclado para alternar a visibilidade da área de notificação."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "Keybinding to focus the active notification"
 msgstr "Atalho de teclado para ativar a notificação ativa"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Keybinding to focus the active notification."
 msgstr "Atalho de teclado para ativar a notificação ativa."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "Keybinding that shows the force app exit dialog"
 msgstr "Atalho que revela janela de forçar saída do aplicativo"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "Which keyboard to use"
 msgstr "Qual teclado usar"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid "The type of keyboard to use."
 msgstr "O tipo do teclado para usar."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "The application icon mode."
 msgstr "O modo ícone do programa."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
 "(shows only the application icon) or 'both'."
 msgstr "Configura como as janelas são mostradas no alternador. As possibilidades válidas são 'thumbnail-only' (mostra uma miniatura da janela), 'app-icon-only' (mostra apenas o ícone do programa) ou 'both'."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Attach modal dialog to the parent window"
 msgstr "Anexar diálogo modal à janela pai"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr "Esta chave sobrescreve a chave em org.gnome.mutter ao executar GNOME Shell."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Arrangement of buttons on the titlebar"
 msgstr "Organização dos botões na barra de título"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
 msgstr "Esta chave sobrescreve a chave em org.gnome.desktop.wm.preferences ao executar GNOME Shell."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr "Habilitar contorno ladrilhado ao arrastar janelas sobre as bordas da tela"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
 msgid "Workspaces are managed dynamically"
 msgstr "Espaços de trabalho são gerenciados dinamicamente"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
 msgid "Workspaces only on primary monitor"
 msgstr "Espaços de trabalho apenas no monitor primário"
 
