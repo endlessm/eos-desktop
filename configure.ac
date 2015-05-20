@@ -184,6 +184,16 @@ AM_CONDITIONAL(USE_JHBUILD_WRAPPER_SCRIPT, test "x$enable_jhbuild_wrapper_script
 BROWSER_PLUGIN_DIR="${BROWSER_PLUGIN_DIR:-"\${libdir}/mozilla/plugins"}"
 AC_ARG_VAR([BROWSER_PLUGIN_DIR],[Where to install the plugin to])
 
+# JASMINE_JUNIT_REPORTS_DIR: Where to put test reports
+AC_MSG_CHECKING([where to put test reports])
+AC_ARG_VAR([JASMINE_JUNIT_REPORTS_DIR], [Where to put test reports])
+AS_IF([test -n "$JASMINE_JUNIT_REPORTS_DIR"],
+  [JASMINE_REPORT_ARGUMENT="--junit $JASMINE_JUNIT_REPORTS_DIR/\$\${log/%.log/.js.xml}"
+  AC_MSG_RESULT([in $JASMINE_JUNIT_REPORTS_DIR])],
+  [JASMINE_REPORT_ARGUMENT=
+  AC_MSG_RESULT([nowhere])])
+AC_SUBST([JASMINE_REPORT_ARGUMENT])
+
 # Enable coverage reporting
 EOS_COVERAGE_REPORT([c js])
 
