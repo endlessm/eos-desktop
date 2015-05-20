@@ -60,6 +60,7 @@ JS_LOG_COMPILER = $(top_builddir)/src/run-js-test
 AM_JS_LOG_FLAGS = \
 	$(JASMINE) \
 	--tap \
+	@JASMINE_REPORT_ARGUMENT@ \
 	@EOS_JS_COVERAGE_LOG_FLAGS@
 
 LOG_COMPILER = gtester
