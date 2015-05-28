@@ -9,7 +9,6 @@ const Config = imports.misc.config;
 const Tweener = imports.ui.tweener;
 
 const BROWSER_DESKTOP_ENTRY = 'eos-app-chromium-browser.desktop';
-const PERSONALITY_FILE = Config.SYSCONFDIR + '/EndlessOS/personality.conf';
 
 // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
 const _balancedParens = '\\((?:[^\\s()<>]+|(?:\\(?:[^\\s()<>]+\\)))*\\)';
@@ -263,33 +262,4 @@ function blockClickEventsOnActor(actor) {
     actor.connect('button-release-event', function (actor, event) {
         return true;
     });
-}
-
-let _personalityCache = null;
-function getPersonality() {
-    if (_personalityCache !== null) {
-        return _personalityCache;
-    }
-
-    // Check if we have a personality configured
-    let personalityFile = new GLib.KeyFile();
-    let personality = null;
-
-    // Read the file
-    try {
-        personalityFile.load_from_file(PERSONALITY_FILE,
-                                       GLib.KeyFileFlags.NONE);
-        personality = personalityFile.get_string ("Personality",
-                                                  "PersonalityName");
-    } catch (e) {
-        log('Personality file \'' + PERSONALITY_FILE + '\' cannot be read: ' +
-            e.message + '. Will use default personality.');
-    }
-
-    if (personality === null) {
-        personality = 'default';
-    }
-
-    _personalityCache = personality;
-    return personality;
 }
