@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-26 01:31+0000\n"
+"POT-Creation-Date: 2015-06-02 01:28+0000\n"
 "PO-Revision-Date: 2015-05-12 01:30+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-desktop/language/ar/)\n"
@@ -452,17 +452,17 @@ msgstr "(أو مرر إصبع)"
 msgid "(e.g., user or %s)"
 msgstr "(مثلا مستخدم أو %s)"
 
-#: ../js/misc/util.js:122
+#: ../js/misc/util.js:121
 msgid "Command not found"
 msgstr "لم يُعثَر على الأمر"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:155
+#: ../js/misc/util.js:154
 msgid "Could not parse command:"
 msgstr "تعذّر تحليل الأمر:"
 
-#: ../js/misc/util.js:163
+#: ../js/misc/util.js:162
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "فشل تنفيذ '%s':‏"
@@ -1272,7 +1272,7 @@ msgstr "شاشة النظام"
 msgid "Quit Application"
 msgstr "الخروج من التطبيق"
 
-#: ../js/ui/iconGridLayout.js:215
+#: ../js/ui/iconGridLayout.js:206
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s تم حذفه"
