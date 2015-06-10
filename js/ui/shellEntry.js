@@ -142,6 +142,7 @@ const EntryEditMenu = new Lang.Class({
             function(clipboard, text) {
                 if (!text)
                     return;
+                this._entry.grab_key_focus();
                 this._entry.clutter_text.delete_selection();
                 let pos = this._entry.clutter_text.get_cursor_position();
                 this._entry.clutter_text.insert_text(text, pos);
