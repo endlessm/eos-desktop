@@ -379,12 +379,6 @@ const EndlessApplicationView = new Lang.Class({
             }
 
             let isFolder = IconGridLayout.layout.iconIsFolder(itemId);
-
-            if (isFolder && currentIcon.view.iconsNeedRedraw()) {
-                // Items inside the folder changed
-                return true;
-            }
-
             let oldIconInfo = null;
             let newIconInfo = null;
 
@@ -1497,19 +1491,11 @@ const FolderIcon = new Lang.Class({
 
         this.canDrop = true;
 
-        this.view = new FolderView(this);
-        this.view.actor.reactive = false;
-
         this.actor.connect('notify::mapped', Lang.bind(this,
             function() {
                 if (!this.actor.mapped && this._popup)
                     this._popup.popdown();
             }));
-    },
-
-    _onDestroy: function() {
-        this.parent();
-        this.view.actor.destroy();
     },
 
     _onClicked: function(actor, button) {
@@ -1569,12 +1555,6 @@ const FolderIcon = new Lang.Class({
                 if (this._popup.actor.visible) {
                     return;
                 }
-
-                // save the view for future reuse before destroying
-                // the popup
-                let viewActor = this.view.actor;
-                let viewParent = viewActor.get_parent();
-                viewParent.remove_actor(viewActor);
 
                 this._popup.actor.destroy();
                 this._popup = null;
@@ -1709,7 +1689,6 @@ const AppFolderPopup = new Lang.Class({
 
     _init: function(source, side) {
         this._source = source;
-        this._view = source.view;
         this._arrowSide = side;
 
         this._isOpen = false;
@@ -1728,6 +1707,7 @@ const AppFolderPopup = new Lang.Class({
                                      y_expand: true,
                                      x_align: Clutter.ActorAlign.CENTER,
                                      y_align: Clutter.ActorAlign.START });
+        this._view = new FolderView(source);
         this._boxPointer = new BoxPointer.BoxPointer(this._arrowSide,
                                                      { style_class: 'app-folder-popup-bin',
                                                        x_fill: true,
