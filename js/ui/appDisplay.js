@@ -379,12 +379,6 @@ const EndlessApplicationView = new Lang.Class({
             }
 
             let isFolder = IconGridLayout.layout.iconIsFolder(itemId);
-
-            if (isFolder && currentIcon.view.iconsNeedRedraw()) {
-                // Items inside the folder changed
-                return true;
-            }
-
             let oldIconInfo = null;
             let newIconInfo = null;
 
@@ -1025,26 +1019,6 @@ const AllView = new Lang.Class({
         return IconGridLayout.DESKTOP_GRID_ID;
     },
 
-    getViewForId: function(viewId) {
-        if (viewId == this.getViewId()) {
-            return this;
-        }
-
-        let icons = this.getAllIcons();
-        for (let idx in icons) {
-            let icon = icons[idx];
-            if (!icon.view) {
-                continue;
-            }
-
-            if (icon.view.getViewId() == viewId) {
-                return icon.view;
-            }
-        }
-
-        return null;
-    },
-
     addFolderPopup: function(popup, source) {
         this.stack.add_actor(popup.actor);
         popup.connect('open-state-changed', Lang.bind(this,
@@ -1429,6 +1403,7 @@ const ViewIcon = new Lang.Class({
         this.blockHandler = false;
 
         this.handleViewDragEnd();
+        this.actor.hide();
     },
 
     replaceText: function(newText) {
@@ -1517,19 +1492,11 @@ const FolderIcon = new Lang.Class({
 
         this.canDrop = true;
 
-        this.view = new FolderView(this);
-        this.view.actor.reactive = false;
-
         this.actor.connect('notify::mapped', Lang.bind(this,
             function() {
                 if (!this.actor.mapped && this._popup)
                     this._popup.popdown();
             }));
-    },
-
-    _onDestroy: function() {
-        this.parent();
-        this.view.actor.destroy();
     },
 
     _onClicked: function(actor, button) {
@@ -1589,12 +1556,6 @@ const FolderIcon = new Lang.Class({
                 if (this._popup.actor.visible) {
                     return;
                 }
-
-                // save the view for future reuse before destroying
-                // the popup
-                let viewActor = this.view.actor;
-                let viewParent = viewActor.get_parent();
-                viewParent.remove_actor(viewActor);
 
                 this._popup.actor.destroy();
                 this._popup = null;
@@ -1729,7 +1690,6 @@ const AppFolderPopup = new Lang.Class({
 
     _init: function(source, side) {
         this._source = source;
-        this._view = source.view;
         this._arrowSide = side;
 
         this._isOpen = false;
@@ -1748,6 +1708,7 @@ const AppFolderPopup = new Lang.Class({
                                      y_expand: true,
                                      x_align: Clutter.ActorAlign.CENTER,
                                      y_align: Clutter.ActorAlign.START });
+        this._view = new FolderView(source);
         this._boxPointer = new BoxPointer.BoxPointer(this._arrowSide,
                                                      { style_class: 'app-folder-popup-bin',
                                                        x_fill: true,
@@ -1999,12 +1960,9 @@ const AppStoreIcon = new Lang.Class({
     },
 
     handleIconDrop: function(source) {
-        if (source.remove()) {
-            this.handleViewDragEnd();
-            return true;
-        }
-
-        return false;
+        source.remove();
+        this.handleViewDragEnd();
+        return true;
     }
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
