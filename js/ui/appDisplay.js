@@ -1025,26 +1025,6 @@ const AllView = new Lang.Class({
         return IconGridLayout.DESKTOP_GRID_ID;
     },
 
-    getViewForId: function(viewId) {
-        if (viewId == this.getViewId()) {
-            return this;
-        }
-
-        let icons = this.getAllIcons();
-        for (let idx in icons) {
-            let icon = icons[idx];
-            if (!icon.view) {
-                continue;
-            }
-
-            if (icon.view.getViewId() == viewId) {
-                return icon.view;
-            }
-        }
-
-        return null;
-    },
-
     addFolderPopup: function(popup, source) {
         this.stack.add_actor(popup.actor);
         popup.connect('open-state-changed', Lang.bind(this,
