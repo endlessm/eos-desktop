@@ -1959,12 +1959,9 @@ const AppStoreIcon = new Lang.Class({
     },
 
     handleIconDrop: function(source) {
-        if (source.remove()) {
-            this.handleViewDragEnd();
-            return true;
-        }
-
-        return false;
+        source.remove();
+        this.handleViewDragEnd();
+        return true;
     }
 });
 Signals.addSignalMethods(AppStoreIcon.prototype);
