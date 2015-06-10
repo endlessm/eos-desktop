@@ -1403,6 +1403,7 @@ const ViewIcon = new Lang.Class({
         this.blockHandler = false;
 
         this.handleViewDragEnd();
+        this.actor.hide();
     },
 
     replaceText: function(newText) {
