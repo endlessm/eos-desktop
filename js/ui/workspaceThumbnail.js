@@ -426,8 +426,7 @@ const WorkspaceThumbnail = new Lang.Class({
 
     // Tests if @win should be shown in the Overview
     _isOverviewWindow : function (win) {
-        let tracker = Shell.WindowTracker.get_default();
-        return tracker.is_window_interesting(win.get_meta_window()) &&
+        return Shell.WindowTracker.is_window_interesting(win.get_meta_window()) &&
                win.get_meta_window().showing_on_its_workspace();
     },
 

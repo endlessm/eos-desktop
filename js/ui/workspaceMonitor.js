@@ -146,8 +146,7 @@ const WorkspaceMonitor = new Lang.Class({
     //                 ways a window can be taken off the screen: minimizing and
     //                 closing
     _realWindowAdded: function(metaWindow) {
-        let tracker = Shell.WindowTracker.get_default();
-        if (!tracker.is_window_interesting(metaWindow)) {
+        if (!Shell.WindowTracker.is_window_interesting(metaWindow)) {
             return false;
         }
 
