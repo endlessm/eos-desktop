@@ -162,7 +162,6 @@ const AppIconMenu = new Lang.Class({
     _redisplay: function() {
         this._submenuItem.menu.removeAll();
 
-        let tracker = Shell.WindowTracker.get_default();
         let activeWorkspace = global.screen.get_active_workspace();
 
         let windows = this._app.get_windows();
@@ -170,7 +169,7 @@ const AppIconMenu = new Lang.Class({
         let otherWindows = [];
 
         windows.forEach(function(w) {
-            if (!tracker.is_window_interesting(w)) {
+            if (!Shell.WindowTracker.is_window_interesting(w)) {
                 return;
             }
 
@@ -350,9 +349,8 @@ const AppIconButton = new Lang.Class({
             this.emit('app-icon-pressed');
 
             let windows = this._app.get_windows();
-            let tracker = Shell.WindowTracker.get_default();
             windows = windows.filter(function(metaWindow) {
-                return tracker.is_window_interesting(metaWindow);
+                return Shell.WindowTracker.is_window_interesting(metaWindow);
             });
 
             if (windows.length > 1) {
@@ -394,9 +392,8 @@ const AppIconButton = new Lang.Class({
 
         // The multiple windows case is handled in button-press-event
         let windows = this._app.get_windows();
-        let tracker = Shell.WindowTracker.get_default();
         windows = windows.filter(function(metaWindow) {
-            return tracker.is_window_interesting(metaWindow);
+            return Shell.WindowTracker.is_window_interesting(metaWindow);
         });
 
         if (windows.length == 0) {
@@ -750,10 +747,8 @@ const ScrolledIconList = new Lang.Class({
             break;
         case Shell.AppState.RUNNING:
             let windows = app.get_windows();
-            let tracker = Shell.WindowTracker.get_default();
-
             retval = windows.some(function(metaWindow) {
-                return tracker.is_window_interesting(metaWindow);
+                return Shell.WindowTracker.is_window_interesting(metaWindow);
             });
             break;
         case Shell.AppState.STOPPED:

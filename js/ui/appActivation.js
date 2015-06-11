@@ -511,7 +511,7 @@ const DesktopAppClient = new Lang.Class({
 
         this._lastDesktopApp = null;
 
-        if (tracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
+        if (Shell.WindowTracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
             // Position the window so it's at where we want it to be if the user
             // unmaximizes the window.
             let workArea = Main.layoutManager.getWorkAreaForMonitor(metaWindow.get_monitor());
