@@ -9,7 +9,7 @@ const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
 
 const UpdaterIface = '<node> \
-<interface name="org.gnome.OSTree"> \
+<interface name="com.endlessm.Updater"> \
   <method name="Poll"/> \
   <method name="Fetch"/> \
   <method name="Apply"/> \
@@ -76,8 +76,8 @@ const UpdaterManager = new Lang.Class({
     Name: 'UpdaterManager',
 
     _init: function() {
-        this._proxy = new UpdaterProxy(Gio.DBus.system, 'org.gnome.OSTree',
-                                       '/org/gnome/OSTree', Lang.bind(this, this._onProxyConstructed));
+        this._proxy = new UpdaterProxy(Gio.DBus.system, 'com.endlessm.Updater',
+                                       '/com/endlessm/Updater', Lang.bind(this, this._onProxyConstructed));
 
         this._session = new GnomeSession.SessionManager();
 
