@@ -48,7 +48,7 @@ TEST_EXTENSIONS = .js
 @EOS_COVERAGE_RULES@
 
 # Pass resource paths to EOS_JS_COVERAGE_FILES
-EOS_JS_COVERAGE_FILES = $(addprefix $(abs_top_srcdir)/js/,$(shell python -c "import xml.etree.ElementTree as ET; import sys; tree = ET.parse('../js/js-resources.gresource.xml'); map(sys.stdout.write, ['{0}\n'.format(e.text) for e in tree.getroot()[0]])"))
+EOS_JS_COVERAGE_FILES = $(addprefix $(abs_top_srcdir)/js/,$(shell python -c "import xml.etree.ElementTree as ET; import sys; tree = ET.parse('../js/js-resources.gresource.xml'); map(sys.stdout.write, ['resource:///org/gnome/shell/{0}\n'.format(e.text) for e in tree.getroot()[0]])"))
 
 JS_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) $(top_srcdir)/config/tap-driver.sh
 JS_LOG_DRIVER_FLAGS = --comments
