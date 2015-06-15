@@ -34,15 +34,20 @@
 #include <gdk/gdkx.h>
 #include <girepository.h>
 #include <gjs/gjs.h>
+#include <gjs/coverage.h>
 #include <gtk/gtk.h>
 
 #include "shell-global.h"
 #include "shell-global-private.h"
 
 static char *command = NULL;
+static char **coverage_prefixes = NULL;
+static char *coverage_output_path = NULL;
 
 static GOptionEntry entries[] = {
   { "command", 'c', 0, G_OPTION_ARG_STRING, &command, "Program passed in as a string", "COMMAND" },
+  { "coverage-prefix", 'C', 0, G_OPTION_ARG_STRING_ARRAY, &coverage_prefixes, "Add the prefix PREFIX to the list of files to generate coverage info for", "PREFIX" },
+  { "coverage-output", 0, 0, G_OPTION_ARG_STRING, &coverage_output_path, "Write coverage output to a directory DIR. This option is mandatory when using --coverage-path", "DIR", },
   { NULL }
 };
 
@@ -66,6 +71,7 @@ main(int argc, char **argv)
   GError *error = NULL;
   ShellGlobal *global;
   GjsContext *js_context;
+  GjsCoverage *coverage = NULL;
   char *script;
   const char *filename;
   char *title;
@@ -134,6 +140,19 @@ main(int argc, char **argv)
   g_irepository_prepend_search_path (BLUETOOTH_DIR);
 #endif
 
+  if (coverage_prefixes) {
+    if (!coverage_output_path)
+      g_error ("--coverage-output is required when taking coverage statistics");
+
+    char *path_to_cache_file = g_build_filename (coverage_output_path,
+                                                 ".internal-gjs-coverage-cache",
+                                                 NULL);
+    coverage = gjs_coverage_new_from_cache ((const gchar **) coverage_prefixes,
+                                            js_context,
+                                            path_to_cache_file);
+    g_free(path_to_cache_file);
+  }
+
   /* evaluate the script */
   error = NULL;
   if (!gjs_context_eval (js_context, script, len,
@@ -145,6 +164,10 @@ main(int argc, char **argv)
 
   gjs_context_gc (js_context);
   gjs_context_gc (js_context);
+
+  /* Probably doesn't make sense to write statistics on failure */
+  if (coverage && code == 0)
+    gjs_coverage_write_statistics (coverage, coverage_output_path);
 
   g_free (script);
   exit (code);
