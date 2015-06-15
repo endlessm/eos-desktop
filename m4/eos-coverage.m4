@@ -261,7 +261,7 @@ _eos_js_coverage_data_output_file := $(_eos_js_coverage_trace_path)/coverage.lco
 _eos_coverage_outputs += $(_eos_js_coverage_data_output_file)
 '
 
-        # This small fragment collects all the paths and add the --coverage-path
+        # This small fragment collects all the paths and add the --coverage-prefix
         # prefix to each one, finally adding --coverage-output. This makes the list
         # of flags we will pass to gjs to enable coverage reports.
         #
@@ -286,7 +286,7 @@ _eos_coverage_outputs += $(_eos_js_coverage_data_output_file)
         #
         # flags = []
         # foreach (p in paths) {
-        #     flags.push('--coverage-path=' + p)
+        #     flags.push('--coverage-prefix=' + p)
         # }
         #
         # $(filter resource,$(firstword $(subst :, ,$(p)))) is a Makefile
@@ -304,7 +304,7 @@ _eos_coverage_outputs += $(_eos_js_coverage_data_output_file)
         # cond evalutes to a non-empty string. The documentation on this
         # point suggests that conditional operators can be used. This is
         # misleading.
-        EOS_JS_COVERAGE_LOG_FLAGS='$(addprefix --coverage-path=,$(foreach p,$(EOS_JS_COVERAGE_FILES),$(if $(filter resource,$(firstword $(subst :, ,$(p)))),$(p),$(abspath $(p))))) --coverage-output=$(_eos_js_coverage_trace_path)'
+        EOS_JS_COVERAGE_LOG_FLAGS='$(addprefix --coverage-prefix=,$(foreach p,$(EOS_JS_COVERAGE_FILES),$(if $(filter resource,$(firstword $(subst :, ,$(p)))),$(p),$(abspath $(p))))) --coverage-output=$(_eos_js_coverage_trace_path)'
 ], [
         EOS_JS_COVERAGE_RULES=''
 ])
