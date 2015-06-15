@@ -58,10 +58,10 @@ JS_LOG_DRIVER_FLAGS = --comments
 # just typing "jasmine" - we need the ./jasmine script.
 JS_LOG_COMPILER = $(top_builddir)/src/run-js-test
 AM_JS_LOG_FLAGS = \
+	@EOS_JS_COVERAGE_LOG_FLAGS@ \
 	$(JASMINE) \
 	--tap \
-	@JASMINE_REPORT_ARGUMENT@ \
-	@EOS_JS_COVERAGE_LOG_FLAGS@
+	@JASMINE_REPORT_ARGUMENT@
 
 LOG_COMPILER = gtester
 AM_LOG_FLAGS = -k --verbose
