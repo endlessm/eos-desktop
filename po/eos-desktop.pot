@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-09 01:28+0000\n"
+"POT-Creation-Date: 2015-06-16 01:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -461,32 +461,32 @@ msgstr ""
 msgid "Execution of '%s' failed:"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1202
+#: ../js/ui/appDisplay.js:1176
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1659
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1665
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1710
+#: ../js/ui/appDisplay.js:1671
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1716 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1677 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1976
+#: ../js/ui/appDisplay.js:1937
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1985
+#: ../js/ui/appDisplay.js:1946
 msgid "Delete"
 msgstr ""
 
@@ -500,15 +500,15 @@ msgstr ""
 msgid "%s has been removed from your favorites."
 msgstr ""
 
-#: ../js/ui/appIconBar.js:213
+#: ../js/ui/appIconBar.js:212
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:222
+#: ../js/ui/appIconBar.js:221
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:295
+#: ../js/ui/appIconBar.js:294
 #, javascript-format
 msgid "Quit %s"
 msgstr ""
@@ -1420,7 +1420,7 @@ msgstr ""
 msgid "Hide Text"
 msgstr ""
 
-#: ../js/ui/shellEntry.js:179
+#: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
 msgstr ""
 
