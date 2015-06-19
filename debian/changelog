@@ -1,3 +1,11 @@
+eos-shell (3.8.0) master; urgency=medium
+
+  * Change source package name back to eos-shell. The installed paths are
+    derived from the source package name and break the binary packages.
+  [endlessm/eos-shell#5208]
+
+ -- Dan Nicholson <nicholson@endlessm.com>  Thu, 18 Jun 2015 16:24:15 -0700
+
 eos-desktop (3.8.0) unstable; urgency=low
 
   * Change package name
