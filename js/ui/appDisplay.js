@@ -72,6 +72,23 @@ function _sanitizeAppId(appId) {
     return appId;
 }
 
+function _activateApp(app, event) {
+    let modifiers = event ? event.get_state() : 0;
+
+    if (app.state == Shell.AppState.RUNNING) {
+        if (modifiers & Clutter.ModifierType.CONTROL_MASK) {
+            app.open_new_window(-1);
+        } else {
+            app.activate();
+        }
+    } else {
+        let activationContext = new AppActivation.AppActivationContext(app);
+        activationContext.activate();
+    }
+
+    Main.overview.hide();
+}
+
 const AppSearchProvider = new Lang.Class({
     Name: 'AppSearchProvider',
 
@@ -156,17 +173,7 @@ const AppSearchProvider = new Lang.Class({
 
     activateResult: function(app) {
         let event = Clutter.get_current_event();
-        let modifiers = event ? event.get_state() : 0;
-        let openNewWindow = modifiers & Clutter.ModifierType.CONTROL_MASK;
-
-        if (openNewWindow) {
-            app.open_new_window(-1);
-        } else {
-            let activationContext = new AppActivation.AppActivationContext(app);
-            activationContext.activate();
-        }
-
-        Main.overview.hide();
+        _activateApp(app, event);
     },
 
     dragActivateResult: function(id, params) {
@@ -1891,20 +1898,7 @@ const AppIcon = new Lang.Class({
 
     _onActivate: function (event) {
         this.emit('launching');
-
-        if (this.app.state == Shell.AppState.RUNNING) {
-            let modifiers = event.get_state();
-            if (modifiers & Clutter.ModifierType.CONTROL_MASK) {
-                this.app.open_new_window(-1);
-            } else {
-                this.app.activate();
-            }
-        } else {
-            let activationContext = new AppActivation.AppActivationContext(this.app);
-            activationContext.activate();
-        }
-
-        Main.overview.hide();
+        _activateApp(this.app, event);
     },
 
     shellWorkspaceLaunch : function(params) {
