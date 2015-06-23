@@ -66,7 +66,7 @@ const WindowClone = new Lang.Class({
         this.origX = realWindow.x + borderX;
         this.origY = realWindow.y + borderY;
 
-        let outerRect = realWindow.meta_window.get_outer_rect();
+        let outerRect = realWindow.meta_window.get_frame_rect();
 
         // The MetaShapedTexture that we clone has a size that includes
         // the invisible border; this is inconvenient; rather than trying
@@ -176,7 +176,7 @@ const WindowClone = new Lang.Class({
         // containing the positions of the visible frame. The input
         // rect contains everything, including the invisible border
         // padding.
-        let outerRect = this.metaWindow.get_outer_rect();
+        let outerRect = this.metaWindow.get_frame_rect();
         let inputRect = this.metaWindow.get_input_rect();
         let [borderX, borderY] = [outerRect.x - inputRect.x,
                                   outerRect.y - inputRect.y];
@@ -186,7 +186,7 @@ const WindowClone = new Lang.Class({
 
     _onRealWindowSizeChanged: function() {
         let [borderX, borderY] = this._getInvisibleBorderPadding();
-        let outerRect = this.metaWindow.get_outer_rect();
+        let outerRect = this.metaWindow.get_frame_rect();
         this.actor.set_size(outerRect.width, outerRect.height);
         this._windowClone.set_position(-borderX, -borderY);
         this.emit('size-changed');
