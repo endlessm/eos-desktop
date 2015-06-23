@@ -591,7 +591,7 @@ const BackgroundSource = new Lang.Class({
                 BACKGROUND_NAME_BASE + '-' + langNames[i] + '.jpg']);
 
             if (GLib.file_test(path, GLib.FileTest.EXISTS))
-                return GLib.File.new_for_path(path);
+                return Gio.File.new_for_path(path);
         }
 
         log('No default background images found!');
@@ -613,7 +613,7 @@ const BackgroundSource = new Lang.Class({
             style = this._settings.get_enum(BACKGROUND_STYLE_KEY);
             if (style != GDesktopEnums.BackgroundStyle.NONE) {
                 let uri = this._settings.get_string(PICTURE_URI_KEY);
-                if (uri == 'eos://default')
+                if (uri == 'eos:///default')
                     file = this._getDefaultBackgroundFile();
                 else
                     file = Gio.File.new_for_commandline_arg(uri);
