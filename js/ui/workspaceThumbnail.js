@@ -41,7 +41,7 @@ const WindowClone = new Lang.Class({
         this.realWindow = realWindow;
         this.metaWindow = realWindow.meta_window;
 
-        this._positionChangedId = this.realWindow.connect('position-changed',
+        this._positionChangedId = this.metaWindow.connect('position-changed',
                                                           Lang.bind(this, this._onPositionChanged));
         this._realWindowDestroyedId = this.realWindow.connect('destroy',
                                                               Lang.bind(this, this._disconnectRealWindowSignals));
@@ -104,7 +104,7 @@ const WindowClone = new Lang.Class({
 
     _disconnectRealWindowSignals: function() {
         if (this._positionChangedId != 0) {
-            this.realWindow.disconnect(this._positionChangedId);
+            this.metaWindow.disconnect(this._positionChangedId);
             this._positionChangedId = 0;
         }
 
