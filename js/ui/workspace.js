@@ -177,7 +177,7 @@ const WindowClone = new Lang.Class({
         // rect contains everything, including the invisible border
         // padding.
         let outerRect = this.metaWindow.get_frame_rect();
-        let inputRect = this.metaWindow.get_input_rect();
+        let inputRect = this.metaWindow.get_buffer_rect();
         let [borderX, borderY] = [outerRect.x - inputRect.x,
                                   outerRect.y - inputRect.y];
 
