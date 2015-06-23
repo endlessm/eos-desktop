@@ -246,7 +246,7 @@ const Overview = new Lang.Class({
             if (child == this._viewsClone) {
                 continue;
             }
-            Tweener.addTween(child._delegate,
+            Tweener.addTween(child,
                              { brightness: 1.0,
                                time: SHADE_ANIMATION_TIME,
                                transition: 'easeOutQuad' });
@@ -260,7 +260,7 @@ const Overview = new Lang.Class({
             if (child == this._viewsClone) {
                 continue;
             }
-            Tweener.addTween(child._delegate,
+            Tweener.addTween(child,
                              { brightness: 0.7,
                                time: SHADE_ANIMATION_TIME,
                                transition: 'easeOutQuad' });
