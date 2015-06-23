@@ -98,7 +98,7 @@ const WindowClone = new Lang.Class({
     },
 
     _onPositionChanged: function() {
-        let rect = this.metaWindow.get_outer_rect();
+        let rect = this.metaWindow.get_frame_rect();
         this.actor.set_position(this.realWindow.x, this.realWindow.y);
     },
 
