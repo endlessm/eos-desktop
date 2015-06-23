@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-09 01:28+0000\n"
+"POT-Creation-Date: 2015-06-16 01:28+0000\n"
 "PO-Revision-Date: 2015-05-12 01:30+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/eos-desktop/language/ar/)\n"
@@ -467,32 +467,32 @@ msgstr "تعذّر تحليل الأمر:"
 msgid "Execution of '%s' failed:"
 msgstr "فشل تنفيذ '%s':‏"
 
-#: ../js/ui/appDisplay.js:1202
+#: ../js/ui/appDisplay.js:1176
 msgid "Remove from desktop"
 msgstr "إزالة من سطح المكتب"
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1659
 msgid "Warning"
 msgstr "تحذير"
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1665
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "لحذف مجلد عليك إزالة كافة العناصر داخله أولاً."
 
-#: ../js/ui/appDisplay.js:1710
+#: ../js/ui/appDisplay.js:1671
 msgid "We are just trying to keep you safe."
 msgstr "نحاول فقط المحافظة على أمنك."
 
-#: ../js/ui/appDisplay.js:1716 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1677 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "حسنا"
 
-#: ../js/ui/appDisplay.js:1976
+#: ../js/ui/appDisplay.js:1937
 msgid "More Apps"
 msgstr "المزيد من التطبيقات"
 
-#: ../js/ui/appDisplay.js:1985
+#: ../js/ui/appDisplay.js:1946
 msgid "Delete"
 msgstr "حذف"
 
@@ -506,15 +506,15 @@ msgstr "أُضيف %s إلى مفضلتك."
 msgid "%s has been removed from your favorites."
 msgstr "أُزيل %s من مفضّلتك."
 
-#: ../js/ui/appIconBar.js:213
+#: ../js/ui/appIconBar.js:212
 msgid "Other workspaces"
 msgstr "مساحات عمل أخرى"
 
-#: ../js/ui/appIconBar.js:222
+#: ../js/ui/appIconBar.js:221
 msgid "Current workspace"
 msgstr "مساحة العمل الحالية "
 
-#: ../js/ui/appIconBar.js:295
+#: ../js/ui/appIconBar.js:294
 #, javascript-format
 msgid "Quit %s"
 msgstr "إغلاق %s"
@@ -1444,7 +1444,7 @@ msgstr "أظهر النص"
 msgid "Hide Text"
 msgstr "أخفِ النص"
 
-#: ../js/ui/shellEntry.js:179
+#: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
 msgstr "اكتب نصا للبحث عنه…"
 

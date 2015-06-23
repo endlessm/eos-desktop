@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-09 01:28+0000\n"
+"POT-Creation-Date: 2015-06-16 01:28+0000\n"
 "PO-Revision-Date: 2015-06-12 17:46+0000\n"
 "Last-Translator: c.sanchez <cassandra@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/eos-desktop/language/es/)\n"
@@ -472,32 +472,32 @@ msgstr "No se pudo analizar el comando:"
 msgid "Execution of '%s' failed:"
 msgstr "Falló la ejecución de «%s»:"
 
-#: ../js/ui/appDisplay.js:1202
+#: ../js/ui/appDisplay.js:1176
 msgid "Remove from desktop"
 msgstr "Quitar del escritorio"
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1659
 msgid "Warning"
 msgstr "Advertencia"
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1665
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para eliminar una carpeta usted debe remover primero todos los elementos contenidos dentro."
 
-#: ../js/ui/appDisplay.js:1710
+#: ../js/ui/appDisplay.js:1671
 msgid "We are just trying to keep you safe."
 msgstr "Estamos tratando de mantener la seguridad de sus datos."
 
-#: ../js/ui/appDisplay.js:1716 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1677 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Aceptar"
 
-#: ../js/ui/appDisplay.js:1976
+#: ../js/ui/appDisplay.js:1937
 msgid "More Apps"
 msgstr "Más programas"
 
-#: ../js/ui/appDisplay.js:1985
+#: ../js/ui/appDisplay.js:1946
 msgid "Delete"
 msgstr "Remover"
 
@@ -511,15 +511,15 @@ msgstr "Se ha añadido %s a tus favoritos."
 msgid "%s has been removed from your favorites."
 msgstr "Se ha quitado %s de tus favoritos."
 
-#: ../js/ui/appIconBar.js:213
+#: ../js/ui/appIconBar.js:212
 msgid "Other workspaces"
 msgstr "Otros espacios de trabajo"
 
-#: ../js/ui/appIconBar.js:222
+#: ../js/ui/appIconBar.js:221
 msgid "Current workspace"
 msgstr "Espacio de trabajo actual"
 
-#: ../js/ui/appIconBar.js:295
+#: ../js/ui/appIconBar.js:294
 #, javascript-format
 msgid "Quit %s"
 msgstr "Cerrar %s"
@@ -1433,7 +1433,7 @@ msgstr "Mostrar texto"
 msgid "Hide Text"
 msgstr "Ocultar texto"
 
-#: ../js/ui/shellEntry.js:179
+#: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
 msgstr "Escribe aquí para buscar…"
 
