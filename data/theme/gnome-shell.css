@@ -2164,17 +2164,17 @@ StScrollBar StButton#vhandle:active {
 
 .tile-preview-left.on-primary {
     /* keep in sync with -panel-corner-radius */
-    border-radius: 6px 0 0 0;
+    border-radius: 4px 0 0 0;
 }
 
 .tile-preview-right.on-primary {
     /* keep in sync with -panel-corner-radius */
-    border-radius: 0 6px 0 0;
+    border-radius: 0 4px 0 0;
 }
 
 .tile-preview-left.tile-preview-right.on-primary {
     /* keep in sync with -panel-corner-radius */
-    border-radius: 6px 6px 0 0;
+    border-radius: 4px 4px 0 0;
 }
 
 /* Modal Dialogs */
