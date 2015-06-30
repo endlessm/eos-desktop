@@ -8,9 +8,10 @@
 # Enrico Nicoletto <liverig@gmail.com>, 2013
 # Felipe Borges <felipe10borges@gmail.com>, 2010
 # Gabriel F. Vilar <cogumm@gmail.com>, 2011
+# Ivan G. Gonçalves <i@endlessm.com>, 2015
 # Jonh Wendell <wendell@bani.com.br>, 2010
 # Og Maciel <ogmaciel@gnome.org>, 2009
-# Rafael Ferreira <rafael.f.f1@gmail.com>, 2013
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2013
 # Ricardo Pitanga <pitanga@endlessm.com>, 2013
 # Richard Vignais, 2014
 # Rodrigo Flores <mail@rodrigoflores.org>, 2009
@@ -19,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-16 01:28+0000\n"
-"PO-Revision-Date: 2015-05-19 22:22+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2015-06-23 01:28+0000\n"
+"PO-Revision-Date: 2015-06-26 00:46+0000\n"
+"Last-Translator: Ivan G. Gonçalves <i@endlessm.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/eos-desktop/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -264,14 +265,14 @@ msgstr "Esta chave especifica a ordem exata dos ícones apresentados na visualiz
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Enables the pressure barrier for the message tray"
-msgstr ""
+msgstr "Habilita a barreira de pressão na área de notificação"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:38
 msgid ""
 "By default, the message tray is only shown on key press. Set true to show "
 "the message tray when exerting downward pressure with the cursor on the "
 "bottom of the taskbar."
-msgstr ""
+msgstr "Por padrão, a área de notificação aparece apenas quando a tecla é pressionada. Selecione para que a área de notificação apareça quando efetuar pressão com o cursor para baixo na parte inferior da barra de tarefas. "
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Show the week date in the calendar"
@@ -473,32 +474,32 @@ msgstr "Não foi possível analisar comando:"
 msgid "Execution of '%s' failed:"
 msgstr "A execução de \"%s\" falhou:"
 
-#: ../js/ui/appDisplay.js:1176
+#: ../js/ui/appDisplay.js:1183
 msgid "Remove from desktop"
 msgstr "Remover da área de trabalho"
 
-#: ../js/ui/appDisplay.js:1659
+#: ../js/ui/appDisplay.js:1666
 msgid "Warning"
 msgstr "Aviso"
 
-#: ../js/ui/appDisplay.js:1665
+#: ../js/ui/appDisplay.js:1672
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para excluir uma pasta você tem que remover todos os arquivos de dentro primeiro."
 
-#: ../js/ui/appDisplay.js:1671
+#: ../js/ui/appDisplay.js:1678
 msgid "We are just trying to keep you safe."
 msgstr "Estamos apenas tentando manter a segurança dos seus dados."
 
-#: ../js/ui/appDisplay.js:1677 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1684 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1937
+#: ../js/ui/appDisplay.js:1931
 msgid "More Apps"
 msgstr "Mais Programas"
 
-#: ../js/ui/appDisplay.js:1946
+#: ../js/ui/appDisplay.js:1940
 msgid "Delete"
 msgstr "Excluir"
 

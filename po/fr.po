@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-16 01:28+0000\n"
+"POT-Creation-Date: 2015-06-23 01:28+0000\n"
 "PO-Revision-Date: 2015-05-12 01:30+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/eos-desktop/language/fr/)\n"
@@ -469,32 +469,32 @@ msgstr "Impossible d'analyser la commande :"
 msgid "Execution of '%s' failed:"
 msgstr "Exécution de « %s » impossible :"
 
-#: ../js/ui/appDisplay.js:1176
+#: ../js/ui/appDisplay.js:1183
 msgid "Remove from desktop"
 msgstr "Supprimer du bureau"
 
-#: ../js/ui/appDisplay.js:1659
+#: ../js/ui/appDisplay.js:1666
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../js/ui/appDisplay.js:1665
+#: ../js/ui/appDisplay.js:1672
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
-#: ../js/ui/appDisplay.js:1671
+#: ../js/ui/appDisplay.js:1678
 msgid "We are just trying to keep you safe."
 msgstr "Nous essayons simplement de vous garder en sécurité."
 
-#: ../js/ui/appDisplay.js:1677 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1684 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Valider"
 
-#: ../js/ui/appDisplay.js:1937
+#: ../js/ui/appDisplay.js:1931
 msgid "More Apps"
 msgstr "Plus d'Apps"
 
-#: ../js/ui/appDisplay.js:1946
+#: ../js/ui/appDisplay.js:1940
 msgid "Delete"
 msgstr "Supprimer"
 

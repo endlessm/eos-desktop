@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-16 01:28+0000\n"
+"POT-Creation-Date: 2015-06-23 01:28+0000\n"
 "PO-Revision-Date: 2015-06-12 17:46+0000\n"
 "Last-Translator: c.sanchez <cassandra@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/eos-desktop/language/es/)\n"
@@ -472,32 +472,32 @@ msgstr "No se pudo analizar el comando:"
 msgid "Execution of '%s' failed:"
 msgstr "Falló la ejecución de «%s»:"
 
-#: ../js/ui/appDisplay.js:1176
+#: ../js/ui/appDisplay.js:1183
 msgid "Remove from desktop"
 msgstr "Quitar del escritorio"
 
-#: ../js/ui/appDisplay.js:1659
+#: ../js/ui/appDisplay.js:1666
 msgid "Warning"
 msgstr "Advertencia"
 
-#: ../js/ui/appDisplay.js:1665
+#: ../js/ui/appDisplay.js:1672
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para eliminar una carpeta usted debe remover primero todos los elementos contenidos dentro."
 
-#: ../js/ui/appDisplay.js:1671
+#: ../js/ui/appDisplay.js:1678
 msgid "We are just trying to keep you safe."
 msgstr "Estamos tratando de mantener la seguridad de sus datos."
 
-#: ../js/ui/appDisplay.js:1677 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1684 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Aceptar"
 
-#: ../js/ui/appDisplay.js:1937
+#: ../js/ui/appDisplay.js:1931
 msgid "More Apps"
 msgstr "Más programas"
 
-#: ../js/ui/appDisplay.js:1946
+#: ../js/ui/appDisplay.js:1940
 msgid "Delete"
 msgstr "Remover"
 
