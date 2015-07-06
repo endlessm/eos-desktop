@@ -564,6 +564,7 @@ const WindowManager = new Lang.Class({
         this._shellwm.connect('hide-tile-preview', Lang.bind(this, this._hideTilePreview));
         this._shellwm.connect('minimize', Lang.bind(this, this._minimizeWindow));
         this._shellwm.connect('unminimize', Lang.bind(this, this._unminimizeWindow));
+        this._shellwm.connect('size-change', Lang.bind(this, this._sizeChangeWindow));
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
         this._shellwm.connect_after('destroy', Lang.bind(this, this._destroyWindow));
         this._shellwm.connect('filter-keybinding', Lang.bind(this, this._filterKeybinding));
