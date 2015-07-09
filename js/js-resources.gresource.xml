@@ -80,7 +80,6 @@
     <file>ui/shellDBus.js</file>
     <file>ui/sideComponent.js</file>
     <file>ui/status/accessibility.js</file>
-    <file>ui/status/chat.js</file>
     <file>ui/status/hotCornerIndicator.js</file>
     <file>ui/status/keyboard.js</file>
     <file>ui/status/lockScreenMenu.js</file>
