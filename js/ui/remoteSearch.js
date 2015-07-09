@@ -11,7 +11,7 @@ const IconGridLayout = imports.ui.iconGridLayout;
 const Search = imports.ui.search;
 
 const KEY_FILE_GROUP = 'Shell Search Provider';
-const CONTROL_CENTER_DESKTOP_ID = 'eos-app-gnome-control-center.desktop';
+const CONTROL_CENTER_DESKTOP_ID = 'gnome-control-center.desktop';
 
 const SearchProviderIface = '<node> \
 <interface name="org.gnome.Shell.SearchProvider"> \
