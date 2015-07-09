@@ -8,7 +8,7 @@ const St = imports.gi.St;
 const Config = imports.misc.config;
 const Tweener = imports.ui.tweener;
 
-const BROWSER_DESKTOP_ENTRY = 'eos-app-chromium-browser.desktop';
+const BROWSER_DESKTOP_ENTRY = 'chromium-browser.desktop';
 
 // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
 const _balancedParens = '\\((?:[^\\s()<>]+|(?:\\(?:[^\\s()<>]+\\)))*\\)';
