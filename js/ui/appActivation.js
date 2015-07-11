@@ -191,17 +191,6 @@ const AppActivationContext = new Lang.Class({
             return false;
         }
 
-        // Or if what was launched is an override for the current app
-        if (!app.is_window_backed()) {
-            let appSystem = Shell.AppSystem.get_default();
-            let heuristicApp = appSystem.lookup_heuristic_basename(appId);
-            let heuristicAppId = heuristicApp.get_id();
-
-            if (heuristicAppId == launchedAppId) {
-                return false;
-            }
-        }
-
         // Special case for Libreoffice splash screen; we will get a non-matching
         // app with 'Soffice' as its name when the recovery screen comes up,
         // so special case that too
