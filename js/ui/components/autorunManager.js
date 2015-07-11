@@ -58,16 +58,18 @@ function isMountNonLocal(mount) {
     return (volume.get_identifier("class") == "network");
 }
 
-function startAppForMount(app, mount) {
-    let files = [];
+function startAppForMount(appId, mount) {
+    let uris = [];
     let root = mount.get_root();
     let retval = false;
 
-    files.push(root);
+    uris.push(root.get_uri());
+
+    let appSystem = Shell.AppSystem.get_default();
+    let app = appSystem.lookup_heuristic_basename(appId);
 
     try {
-        retval = app.launch(files,
-                            global.create_app_launch_context());
+        [retval, ] = app.launch(0, uris, -1);
 
         // Make sure to exit the overview and message tray,
         // to give input to the application window
@@ -153,19 +155,21 @@ const ContentTypeDiscoverer = new Lang.Class({
             return (type != 'x-content/win32-software');
         });
 
-        let apps = [];
+        let appIds = [];
         contentTypes.forEach(function(type) {
             let app = Gio.app_info_get_default_for_type(type, false);
 
             if (app)
-                apps.push(app);
+                appIds.push(app.get_id());
         });
 
-        if (apps.length == 0) {
-            apps.push(Gio.app_info_get_default_for_type('inode/directory', false));
+        if (appIds.length == 0) {
+            let app = Gio.app_info_get_default_for_type('inode/directory', false);
+            if (app)
+                appIds.push(app.get_id());
         }
 
-        this._callback(mount, apps, contentTypes);
+        this._callback(mount, appIds, contentTypes);
     }
 });
 
@@ -205,12 +209,12 @@ const AutorunManager = new Lang.Class({
     },
 
     _processMount: function(mount, hotplug) {
-        let discoverer = new ContentTypeDiscoverer(Lang.bind(this, function(mount, apps, contentTypes) {
+        let discoverer = new ContentTypeDiscoverer(Lang.bind(this, function(mount, appIds, contentTypes) {
             this._ensureResidentSource();
-            this._residentSource.addMount(mount, apps);
+            this._residentSource.addMount(mount, appIds);
 
             if (hotplug)
-                this._transDispatcher.addMount(mount, apps, contentTypes);
+                this._transDispatcher.addMount(mount, appIds, contentTypes);
         }));
         discoverer.guessContentTypes(mount);
     },
@@ -319,7 +323,7 @@ const AutorunResidentSource = new Lang.Class({
         return null;
     },
 
-    addMount: function(mount, apps) {
+    addMount: function(mount, appIds) {
         if (!shouldAutorunMount(mount, false))
             return;
 
@@ -330,7 +334,7 @@ const AutorunResidentSource = new Lang.Class({
         if (filtered.length != 0)
             return;
 
-        let element = { mount: mount, apps: apps };
+        let element = { mount: mount, appIds: appIds };
         this._mounts.push(element);
         this._redisplay();
     },
@@ -388,13 +392,13 @@ const AutorunResidentNotification = new Lang.Class({
         for (let idx = 0; idx < mounts.length; idx++) {
             let element = mounts[idx];
 
-            let actor = this._itemForMount(element.mount, element.apps);
+            let actor = this._itemForMount(element.mount, element.appIds);
             this._layout.add(actor, { x_fill: true,
                                       expand: true });
         }
     },
 
-    _itemForMount: function(mount, apps) {
+    _itemForMount: function(mount, appIds) {
         let item = new St.BoxLayout();
 
         // prepare the mount button content
@@ -433,7 +437,7 @@ const AutorunResidentNotification = new Lang.Class({
 
         // now connect signals
         mountButton.connect('clicked', Lang.bind(this, function(actor, event) {
-            startAppForMount(apps[0], mount);
+            startAppForMount(appIds[0], mount);
         }));
 
         ejectButton.connect('clicked', Lang.bind(this, function() {
@@ -484,17 +488,17 @@ const AutorunTransientDispatcher = new Lang.Class({
         return null;
     },
 
-    _addSource: function(mount, apps) {
+    _addSource: function(mount, appIds) {
         // if we already have a source showing for this 
         // mount, return
         if (this._getSourceForMount(mount))
             return;
      
         // add a new source
-        this._sources.push(new AutorunTransientSource(this._manager, mount, apps));
+        this._sources.push(new AutorunTransientSource(this._manager, mount, appIds));
     },
 
-    addMount: function(mount, apps, contentTypes) {
+    addMount: function(mount, appIds, contentTypes) {
         // if autorun is disabled globally, return
         if (this._settings.get_boolean(SETTING_DISABLE_AUTORUN))
             return;
@@ -520,12 +524,12 @@ const AutorunTransientDispatcher = new Lang.Class({
         }
 
         if (app)
-            success = startAppForMount(app, mount);
+            success = startAppForMount(app.get_id(), mount);
 
         // we fallback here also in case the settings did not specify 'ask',
         // but we failed launching the default app or the default file manager
         if (!success)
-            this._addSource(mount, apps);
+            this._addSource(mount, appIds);
     },
 
     removeMount: function(mount) {
@@ -544,10 +548,10 @@ const AutorunTransientSource = new Lang.Class({
     Name: 'AutorunTransientSource',
     Extends: MessageTray.Source,
 
-    _init: function(manager, mount, apps) {
+    _init: function(manager, mount, appIds) {
         this._manager = manager;
         this.mount = mount;
-        this.apps = apps;
+        this.appIds = appIds;
 
         this.parent(mount.get_name());
 
@@ -577,8 +581,8 @@ const AutorunTransientNotification = new Lang.Class({
 
         this._mount = source.mount;
 
-        source.apps.forEach(Lang.bind(this, function (app) {
-            let actor = this._buttonForApp(app);
+        source.appIds.forEach(Lang.bind(this, function (appId) {
+            let actor = this._buttonForApp(appId);
 
             if (actor)
                 this._box.add(actor, { x_fill: true,
@@ -594,22 +598,19 @@ const AutorunTransientNotification = new Lang.Class({
         this.setUrgency(MessageTray.Urgency.CRITICAL);
     },
 
-    _buttonForApp: function(app) {
-        // Use the ShellApp for icon and label, since that will
-        // include vendor-overridden desktop files, but launch the
-        // original app instead
+    _buttonForApp: function(appId) {
         let appSystem = Shell.AppSystem.get_default();
-        let shellApp = appSystem.lookup_heuristic_basename(app.get_id());
+        let app = appSystem.lookup_heuristic_basename(appId);
 
         let box = new St.BoxLayout();
-        let texture = shellApp.create_icon_texture(AUTORUN_NOTIFICATION_ICON_SIZE);
+        let texture = app.create_icon_texture(AUTORUN_NOTIFICATION_ICON_SIZE);
         let icon = new St.Widget({ style_class: 'hotplug-notification-item-icon' });
         icon.add_child(texture);
         box.add(icon);
 
         let label = new St.Bin({ y_align: St.Align.MIDDLE,
                                  child: new St.Label
-                                 ({ text: _("Open with %s").format(shellApp.get_name()) })
+                                 ({ text: _("Open with %s").format(app.get_name()) })
                                });
         box.add(label);
 
@@ -620,7 +621,7 @@ const AutorunTransientNotification = new Lang.Class({
                                      style_class: 'hotplug-notification-item' });
 
         button.connect('clicked', Lang.bind(this, function() {
-            startAppForMount(app, this._mount);
+            startAppForMount(appId, this._mount);
             this.destroy();
         }));
 
