@@ -100,7 +100,7 @@ const AppSearchProvider = new Lang.Class({
     getResultMetas: function(apps, callback) {
         let metas = [];
         for (let i = 0; i < apps.length; i++) {
-            let app = this._appSys.lookup_heuristic_basename(apps[i]);
+            let app = this._appSys.lookup_app(apps[i]);
             metas.push({ 'id': app,
                          'name': app.get_name(),
                          'createIcon': function(size) {
