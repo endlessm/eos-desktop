@@ -28,8 +28,7 @@
 /* Vendor prefixes are something that can be preprended to a .desktop
  * file name.  Undo this.
  */
-static const char*const vendor_prefixes[] = { "eos-app-",
-                                              "gnome-",
+static const char*const vendor_prefixes[] = { "gnome-",
                                               "fedora-",
                                               "mozilla-",
                                               "debian-",
