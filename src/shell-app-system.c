@@ -36,11 +36,6 @@ static const char*const vendor_prefixes[] = { "eos-app-",
                                               NULL };
 
 enum {
-   PROP_0,
-
-};
-
-enum {
   APP_STATE_CHANGED,
   INSTALLED_CHANGED,
   LAST_SIGNAL
