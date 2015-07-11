@@ -91,7 +91,7 @@ const AppSearchProvider = new Lang.Class({
         let metas = [];
         for (let i = 0; i < apps.length; i++) {
             let app = this._appSys.lookup_app(apps[i]);
-            metas.push({ 'id': app,
+            metas.push({ 'id': app.get_id(),
                          'name': app.get_name(),
                          'createIcon': function(size) {
                              return app.create_icon_texture(size);

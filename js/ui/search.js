@@ -210,7 +210,7 @@ const GridSearchResult = new Lang.Class({
 
         this.actor.style_class = 'grid-search-result';
 
-        let icon = new SearchIcon(metaInfo['id']);
+        let icon = new SearchIcon(Gio.DesktopAppInfo.new(metaInfo['id']));
         this.actor.set_child(icon.actor);
         this.actor.label_actor = icon.actor.label_actor;
     },
