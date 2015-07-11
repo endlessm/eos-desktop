@@ -248,7 +248,10 @@ shell_app_system_lookup_heuristic_basename (ShellAppSystem *system,
   ShellApp *result;
   const char *const *prefix;
 
-  /* Lookup for vendor-prefixed desktop files first */
+  result = shell_app_system_lookup_app (system, name);
+  if (result != NULL)
+    return result;
+
   for (prefix = vendor_prefixes; *prefix != NULL; prefix++)
     {
       char *tmpid = g_strconcat (*prefix, name, NULL);
@@ -257,11 +260,6 @@ shell_app_system_lookup_heuristic_basename (ShellAppSystem *system,
       if (result != NULL)
         return result;
     }
-
-  /* Otherwise, just look for the desktop file as-is */
-  result = shell_app_system_lookup_app (system, name);
-  if (result != NULL)
-    return result;
 
   return NULL;
 }
