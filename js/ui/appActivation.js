@@ -194,7 +194,7 @@ const AppActivationContext = new Lang.Class({
         // Special case for Libreoffice splash screen; we will get a non-matching
         // app with 'Soffice' as its name when the recovery screen comes up,
         // so special case that too
-        if (launchedAppId.indexOf('eos-app-libreoffice') != -1 &&
+        if (launchedAppId.indexOf('libreoffice') != -1 &&
             app.get_name() != 'Soffice') {
             return true;
         }
