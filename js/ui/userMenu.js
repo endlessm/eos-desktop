@@ -40,7 +40,7 @@ const SETTINGS_TEXT = _("Settings");
 const FEEDBACK_TEXT = _("Give Us Feedback");
 
 const FEEDBACK_LAUNCHER = "eos-app-feedback.desktop";
-const YELP_LAUNCHER = "eos-app-yelp.desktop";
+const YELP_LAUNCHER = "yelp.desktop";
 const CONTROL_CENTER_LAUNCHER = "gnome-control-center.desktop";
 
 const DIALOG_ICON_SIZE = 64;
