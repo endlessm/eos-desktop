@@ -67,7 +67,6 @@ var SearchProvider2ProxyInfo = Gio.DBusInterfaceInfo.new_for_xml(SearchProvider2
 function loadRemoteSearchProviders(callback) {
     let objectPaths = {};
     let loadedProviders = [];
-    let appSys = Shell.AppSystem.get_default();
 
     function loadRemoteSearchProvider(file) {
         let keyfile = new GLib.KeyFile();
@@ -91,10 +90,10 @@ function loadRemoteSearchProviders(callback) {
             if (objectPaths[objectPath])
                 return;
 
-            let app = null;
+            let appInfo = null;
             try {
                 let desktopId = keyfile.get_string(group, 'DesktopId');
-                app = appSys.lookup_heuristic_basename(desktopId);
+                appInfo = Gio.DesktopAppInfo.new(desktopId);
             } catch (e) {
                 log('Ignoring search provider ' + path + ': missing DesktopId');
                 return;
@@ -108,9 +107,9 @@ function loadRemoteSearchProviders(callback) {
             }
 
             if (version >= 2)
-                remoteProvider = new RemoteSearchProvider2(app, busName, objectPath);
+                remoteProvider = new RemoteSearchProvider2(appInfo, busName, objectPath);
             else
-                remoteProvider = new RemoteSearchProvider(app, busName, objectPath);
+                remoteProvider = new RemoteSearchProvider(appInfo, busName, objectPath);
 
             objectPaths[objectPath] = remoteProvider;
             loadedProviders.push(remoteProvider);
@@ -147,19 +146,9 @@ function loadRemoteSearchProviders(callback) {
 
     // Special case gnome-control-center to be always active and always first
     sortOrder.unshift('gnome-control-center.desktop');
-    // Make sure we get the vendor-prefixed versions of the app IDs, as the
-    // provider will use that as well
-    sortOrder = sortOrder.map(function(appId) {
-        let shellApp = appSys.lookup_heuristic_basename(appId);
-        if (shellApp) {
-            return shellApp.get_id();
-        } else {
-            return null;
-        }
-    });
 
     loadedProviders = loadedProviders.filter(function(provider) {
-        let appId = provider.app.get_id();
+        let appId = provider.appInfo.get_id();
         let disabled = searchSettings.get_strv('disabled');
         return disabled.indexOf(appId) == -1;
     });
@@ -168,8 +157,8 @@ function loadRemoteSearchProviders(callback) {
         let idxA, idxB;
         let appIdA, appIdB;
 
-        appIdA = providerA.app.get_id();
-        appIdB = providerB.app.get_id();
+        appIdA = providerA.appInfo.get_id();
+        appIdB = providerB.appInfo.get_id();
 
         idxA = sortOrder.indexOf(appIdA);
         idxB = sortOrder.indexOf(appIdB);
@@ -192,8 +181,8 @@ function loadRemoteSearchProviders(callback) {
                 return 1;
 
             // fall back to alphabetical order
-            let nameA = providerA.app.get_name();
-            let nameB = providerB.app.get_name();
+            let nameA = providerA.appInfo.get_name();
+            let nameB = providerB.appInfo.get_name();
 
             return GLib.utf8_collate(nameA, nameB);
         }
@@ -216,7 +205,7 @@ function loadRemoteSearchProviders(callback) {
 const RemoteSearchProvider = new Lang.Class({
     Name: 'RemoteSearchProvider',
 
-    _init: function(shellApp, dbusName, dbusPath, proxyInfo) {
+    _init: function(appInfo, dbusName, dbusPath, proxyType) {
         if (!proxyInfo)
             proxyInfo = SearchProviderProxyInfo;
 
@@ -230,8 +219,8 @@ const RemoteSearchProvider = new Lang.Class({
                                          g_default_timeout: GLib.MAXINT32 });
         this.proxy.init_async(GLib.PRIORITY_DEFAULT, null, null);
 
-        this.app = shellApp;
-        this.id = shellApp.get_id();
+        this.appInfo = appInfo;
+        this.id = appInfo.get_id();
         this.isRemoteProvider = true;
     },
 
@@ -327,8 +316,8 @@ const RemoteSearchProvider = new Lang.Class({
     launchSearch: function(terms) {
         // the provider is not compatible with the new version of the interface, launch
         // the app itself but warn so we can catch the error in logs
-        log('Search provider ' + this.id + ' does not implement LaunchSearch');
-        this.app.activate();
+        log('Search provider ' + this.appInfo.get_id() + ' does not implement LaunchSearch');
+        this.appInfo.launch([], global.create_app_launch_context());
     }
 });
 
@@ -336,8 +325,8 @@ const RemoteSearchProvider2 = new Lang.Class({
     Name: 'RemoteSearchProvider2',
     Extends: RemoteSearchProvider,
 
-    _init: function(shellApp, dbusName, dbusPath) {
-        this.parent(shellApp, dbusName, dbusPath, SearchProvider2ProxyInfo);
+    _init: function(appInfo, dbusName, dbusPath) {
+        this.parent(appInfo, dbusName, dbusPath, SearchProvider2ProxyInfo);
 
         this.canLaunchSearch = true;
     },
