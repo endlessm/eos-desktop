@@ -91,15 +91,14 @@ function loadRemoteSearchProviders(callback) {
             if (objectPaths[objectPath])
                 return;
 
-            let desktopId;
+            let app = null;
             try {
-                desktopId = keyfile.get_string(group, 'DesktopId');
+                let desktopId = keyfile.get_string(group, 'DesktopId');
+                app = appSys.lookup_heuristic_basename(desktopId);
             } catch (e) {
                 log('Ignoring search provider ' + path + ': missing DesktopId');
                 return;
             }
-
-            let app = appSys.lookup_heuristic_basename(desktopId);
             
             let version = '1';
             try {
