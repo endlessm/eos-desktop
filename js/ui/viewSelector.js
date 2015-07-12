@@ -223,7 +223,6 @@ const ViewsDisplay = new Lang.Class({
         this._enterSearchTimeoutId = 0;
         this._localSearchMetricTimeoutId = 0;
 
-        this._appSystem = Shell.AppSystem.get_default();
         this._allView = new AppDisplay.AllView();
 
         this._searchResults = new Search.SearchResults();

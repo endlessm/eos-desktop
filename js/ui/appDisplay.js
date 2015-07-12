@@ -21,7 +21,6 @@ const BackgroundMenu = imports.ui.backgroundMenu;
 const BoxPointer = imports.ui.boxpointer;
 const CloseButton = imports.ui.closeButton;
 const DND = imports.ui.dnd;
-const Hash = imports.misc.hash;
 const IconGrid = imports.ui.iconGrid;
 const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
@@ -61,16 +60,7 @@ const NEW_ICON_ANIMATION_DELAY = 0.7;
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
 const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
 
-const EOS_APP_PREFIX = 'eos-app-';
 const EOS_LINK_PREFIX = 'eos-link-';
-
-function _sanitizeAppId(appId) {
-    if (appId.startsWith(EOS_APP_PREFIX)) {
-        return appId.substr(EOS_APP_PREFIX.length);
-    }
-
-    return appId;
-}
 
 function _activateApp(app, event) {
     let modifiers = event ? event.get_state() : 0;
@@ -100,8 +90,8 @@ const AppSearchProvider = new Lang.Class({
     getResultMetas: function(apps, callback) {
         let metas = [];
         for (let i = 0; i < apps.length; i++) {
-            let app = this._appSys.lookup_heuristic_basename(apps[i]);
-            metas.push({ 'id': app,
+            let app = this._appSys.lookup_app(apps[i]);
+            metas.push({ 'id': app.get_id(),
                          'name': app.get_name(),
                          'createIcon': function(size) {
                              return app.create_icon_texture(size);
@@ -120,33 +110,16 @@ const AppSearchProvider = new Lang.Class({
         let groups = Gio.DesktopAppInfo.search(query);
         let usage = Shell.AppUsage.get_default();
         let results = [];
-        let seenIds = new Hash.Map();
-
         groups.forEach(function(group) {
-            let groupResults = [];
-            group.forEach(function(appID) {
-                // GIO will search between both the unprefixed and prefixed
-                // desktop file overrides we install. Since we can potentially
-                // get results for both, and we don't want to show duplicate
-                // results, keep track of the unprefixed desktop files, and discard
-                // those we have already seen.
-                let actualId = _sanitizeAppId(appID);
-                if (seenIds.has(actualId)) {
-                    return;
-                }
-
-                seenIds.set(actualId, true);
-
-                let app = Gio.DesktopAppInfo.new(actualId);
+            group = group.filter(function(appID) {
+                let app = Gio.DesktopAppInfo.new(appID);
+                let isLink = appID.startsWith(EOS_LINK_PREFIX);
+                let isOnDesktop = IconGridLayout.layout.hasIcon(appID);
 
                 // exclude links that are not part of the desktop grid
-                if (app && app.should_show() &&
-                    !(actualId.startsWith(EOS_LINK_PREFIX) && !IconGridLayout.layout.hasIcon(actualId))) {
-                    groupResults.push(actualId);
-                }
+                return app && app.should_show() && !(isLink && !isOnDesktop);
             });
-
-            results = results.concat(groupResults.sort(function(a, b) {
+            results = results.concat(group.sort(function(a, b) {
                 return usage.compare('', a, b);
             }));
         });
@@ -163,7 +136,6 @@ const AppSearchProvider = new Lang.Class({
 
             return 0;
         });
-
         callback(results);
     },
 
@@ -277,9 +249,7 @@ const EndlessApplicationView = new Lang.Class({
         let appSystem = Shell.AppSystem.get_default();
         return items.filter(Lang.bind(this,
             function(itemId) {
-                return IconGridLayout.layout.iconIsFolder(itemId) ||
-                    appSystem.lookup_app(itemId) ||
-                    (itemId == EOS_APP_STORE_ID);
+                return IconGridLayout.layout.iconIsFolder(itemId) || appSystem.lookup_app(itemId) || (itemId == EOS_APP_STORE_ID);
             }));
     },
 
@@ -1775,13 +1745,7 @@ const AppIcon = new Lang.Class({
     Extends: ViewIcon,
 
     _init : function(app, iconParams, params) {
-        this._baseApp = app;
-
-        let id = app.get_id();
-        let appSystem = Shell.AppSystem.get_default();
-        let displayApp = appSystem.lookup_heuristic_basename(id);
-
-        this.app = displayApp;
+        this.app = app;
         this._name = this.app.get_name();
 
         iconParams = Params.parse(iconParams, { createIcon: Lang.bind(this, this._createIcon),
@@ -1850,7 +1814,7 @@ const AppIcon = new Lang.Class({
     },
 
     getId: function() {
-        return this._baseApp.get_id();
+        return this.app.get_id();
     },
 
     getName: function() {

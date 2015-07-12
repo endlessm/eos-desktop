@@ -2,7 +2,6 @@
 
 const Lang = imports.lang;
 const Gio = imports.gi.Gio;
-const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const GnomeSession = imports.misc.gnomeSession;
@@ -16,8 +15,6 @@ const SETTING_DISABLE_AUTORUN = 'autorun-never';
 const SETTING_START_APP = 'autorun-x-content-start-app';
 const SETTING_IGNORE = 'autorun-x-content-ignore';
 const SETTING_OPEN_FOLDER = 'autorun-x-content-open-folder';
-
-const AUTORUN_NOTIFICATION_ICON_SIZE = 24;
 
 const AutorunSetting = {
     RUN: 0,
@@ -66,8 +63,8 @@ function startAppForMount(app, mount) {
     files.push(root);
 
     try {
-        retval = app.launch(files,
-                            global.create_app_launch_context());
+        retval = app.launch(files, 
+                            global.create_app_launch_context())
 
         // Make sure to exit the overview and message tray,
         // to give input to the application window
@@ -161,9 +158,8 @@ const ContentTypeDiscoverer = new Lang.Class({
                 apps.push(app);
         });
 
-        if (apps.length == 0) {
+        if (apps.length == 0)
             apps.push(Gio.app_info_get_default_for_type('inode/directory', false));
-        }
 
         this._callback(mount, apps, contentTypes);
     }
@@ -595,21 +591,14 @@ const AutorunTransientNotification = new Lang.Class({
     },
 
     _buttonForApp: function(app) {
-        // Use the ShellApp for icon and label, since that will
-        // include vendor-overridden desktop files, but launch the
-        // original app instead
-        let appSystem = Shell.AppSystem.get_default();
-        let shellApp = appSystem.lookup_heuristic_basename(app.get_id());
-
         let box = new St.BoxLayout();
-        let texture = shellApp.create_icon_texture(AUTORUN_NOTIFICATION_ICON_SIZE);
-        let icon = new St.Widget({ style_class: 'hotplug-notification-item-icon' });
-        icon.add_child(texture);
+        let icon = new St.Icon({ gicon: app.get_icon(),
+                                 style_class: 'hotplug-notification-item-icon' });
         box.add(icon);
 
         let label = new St.Bin({ y_align: St.Align.MIDDLE,
                                  child: new St.Label
-                                 ({ text: _("Open with %s").format(shellApp.get_name()) })
+                                 ({ text: _("Open with %s").format(app.get_name()) })
                                });
         box.add(label);
 

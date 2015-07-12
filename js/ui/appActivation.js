@@ -191,21 +191,10 @@ const AppActivationContext = new Lang.Class({
             return false;
         }
 
-        // Or if what was launched is an override for the current app
-        if (!app.is_window_backed()) {
-            let appSystem = Shell.AppSystem.get_default();
-            let heuristicApp = appSystem.lookup_heuristic_basename(appId);
-            let heuristicAppId = heuristicApp.get_id();
-
-            if (heuristicAppId == launchedAppId) {
-                return false;
-            }
-        }
-
         // Special case for Libreoffice splash screen; we will get a non-matching
         // app with 'Soffice' as its name when the recovery screen comes up,
         // so special case that too
-        if (launchedAppId.indexOf('eos-app-libreoffice') != -1 &&
+        if (launchedAppId.indexOf('libreoffice') != -1 &&
             app.get_name() != 'Soffice') {
             return true;
         }
@@ -465,7 +454,7 @@ const DesktopAppClient = new Lang.Class({
 
         let launchedByShell = (sender_name == Gio.DBus.session.get_unique_name());
         let desktopId = GLib.path_get_basename(desktopIdPath.toString());
-        this._lastDesktopApp = Shell.AppSystem.get_default().lookup_heuristic_basename(desktopId);
+        this._lastDesktopApp = Shell.AppSystem.get_default().lookup_app(desktopId);
 
         // Show the splash page if we didn't launch this ourselves, since in that case
         // we already explicitly control when the splash screen should be used

@@ -46,7 +46,7 @@ const InternetSearchProvider = new Lang.Class({
 
     _init: function() {
         this.id = 'internet';
-        this.app = Util.getBrowserApp();
+        this.appInfo = Util.getBrowserApp().get_app_info();
         this.canLaunchSearch = true;
 
         this._networkMonitor = Gio.NetworkMonitor.get_default();

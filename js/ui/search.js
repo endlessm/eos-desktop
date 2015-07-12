@@ -75,20 +75,17 @@ const SearchResultsBin = new Lang.Class({
 const SearchIcon = new Lang.Class({
     Name: 'SearchIcon',
 
-    _init : function(app) {
-        let id = app.get_id();
-        let appSystem = Shell.AppSystem.get_default();
-        let displayApp = appSystem.lookup_heuristic_basename(id);
-        this._app = displayApp;
-
-        this.icon = new IconGrid.BaseIcon(this._app.get_name(),
+    _init : function(appInfo) {
+        this._appInfo = appInfo;
+        this.icon = new IconGrid.BaseIcon(this._appInfo.get_name(),
                                           { createIcon: Lang.bind(this, this._createIcon) },
                                           { reactive: false });
         this.actor = this.icon.actor;
     },
 
     _createIcon: function(iconSize) {
-        return this._app.create_icon_texture(iconSize);
+        return new St.Icon({ icon_size: iconSize,
+                             gicon: this._appInfo.get_icon() });
     },
 });
 
@@ -213,7 +210,7 @@ const GridSearchResult = new Lang.Class({
 
         this.actor.style_class = 'grid-search-result';
 
-        let icon = new SearchIcon(metaInfo['id']);
+        let icon = new SearchIcon(Gio.DesktopAppInfo.new(metaInfo['id']));
         this.actor.set_child(icon.actor);
         this.actor.label_actor = icon.actor.label_actor;
     },
@@ -341,7 +338,7 @@ const ListSearchResults = new Lang.Class({
 
         this._container = new St.BoxLayout({ style_class: 'search-section-content' });
 
-        let providerIcon = new SearchIcon(provider.app);
+        let providerIcon = new SearchIcon(provider.appInfo);
         let providerButton = new St.Button({ style_class: 'search-provider',
                                              can_focus: true,
                                              child: providerIcon.actor });
