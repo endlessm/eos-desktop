@@ -143,8 +143,9 @@ const AppSearchProvider = new Lang.Class({
         this.getInitialResultSet(terms, callback, cancellable);
     },
 
-    activateResult: function(app) {
+    activateResult: function(appId) {
         let event = Clutter.get_current_event();
+        let app = this._appSys.lookup_app(appId);
         _activateApp(app, event);
     },
 
