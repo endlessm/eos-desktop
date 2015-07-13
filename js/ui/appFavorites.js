@@ -26,6 +26,14 @@ const AppFavorites = new Lang.Class({
         let ids = global.settings.get_strv(this.FAVORITE_APPS_KEY);
         let appSys = Shell.AppSystem.get_default();
         let apps = ids.map(function (id) {
+                // Some older versions of eos-theme incorrectly added
+                // eos-app-*.desktop to the dash favorites.
+                // Make sure to strip those.
+                if (id.startsWith('eos-app-'))
+                    return id.slice('eos-app-'.length);
+                else
+                    return id;
+            }).map(function (id) {
                 return appSys.lookup_app(id);
             }).filter(function (app) {
                 return app != null;
