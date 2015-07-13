@@ -205,7 +205,7 @@ function loadRemoteSearchProviders(callback) {
 const RemoteSearchProvider = new Lang.Class({
     Name: 'RemoteSearchProvider',
 
-    _init: function(appInfo, dbusName, dbusPath, proxyType) {
+    _init: function(appInfo, dbusName, dbusPath, proxyInfo) {
         if (!proxyInfo)
             proxyInfo = SearchProviderProxyInfo;
 
