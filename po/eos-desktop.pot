@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-07 01:29+0000\n"
+"POT-Creation-Date: 2015-07-14 01:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -461,41 +461,41 @@ msgstr ""
 msgid "Execution of '%s' failed:"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1183
+#: ../js/ui/appDisplay.js:1154
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1666
+#: ../js/ui/appDisplay.js:1637
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1672
+#: ../js/ui/appDisplay.js:1643
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1678
+#: ../js/ui/appDisplay.js:1649
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1684 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1655 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1931
+#: ../js/ui/appDisplay.js:1896
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1940
+#: ../js/ui/appDisplay.js:1905
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appFavorites.js:87
+#: ../js/ui/appFavorites.js:95
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr ""
 
-#: ../js/ui/appFavorites.js:121
+#: ../js/ui/appFavorites.js:129
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr ""
@@ -690,16 +690,16 @@ msgstr ""
 msgid "External drive disconnected"
 msgstr ""
 
-#: ../js/ui/components/autorunManager.js:305
+#: ../js/ui/components/autorunManager.js:301
 msgid "Removable Devices"
 msgstr ""
 
-#: ../js/ui/components/autorunManager.js:612
+#: ../js/ui/components/autorunManager.js:601
 #, javascript-format
 msgid "Open with %s"
 msgstr ""
 
-#: ../js/ui/components/autorunManager.js:638
+#: ../js/ui/components/autorunManager.js:627
 msgid "Eject"
 msgstr ""
 
@@ -1088,7 +1088,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:463
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:462
 msgid "Windows"
 msgstr ""
 
@@ -1356,7 +1356,7 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
-#: ../js/ui/panel.js:376
+#: ../js/ui/panel.js:375
 msgid "Top Bar"
 msgstr ""
 
@@ -1396,11 +1396,11 @@ msgstr ""
 msgid "Lock was blocked by an application"
 msgstr ""
 
-#: ../js/ui/search.js:773
+#: ../js/ui/search.js:770
 msgid "Searching…"
 msgstr ""
 
-#: ../js/ui/search.js:775
+#: ../js/ui/search.js:772
 msgid "No results."
 msgstr ""
 
@@ -1883,7 +1883,7 @@ msgstr ""
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:467
+#: ../js/ui/viewSelector.js:466
 msgid "Applications"
 msgstr ""
 
