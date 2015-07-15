@@ -139,19 +139,6 @@ const AppActivationContext = new Lang.Class({
             ' seconds to launch');
     },
 
-    _isSplashWindow: function(app) {
-        let windows = app.get_windows();
-        if (windows.length == 0) {
-            return false;
-        }
-
-        if (windows[0].get_role() == 'eos-speedwagon') {
-            return true;
-        }
-
-        return false;
-    },
-
     _isBogusWindow: function(app) {
         let launchedAppId = this._app.get_id();
         let appId = app.get_id();
@@ -179,10 +166,6 @@ const AppActivationContext = new Lang.Class({
         }
 
         if (this._isBogusWindow(app)) {
-            return;
-        }
-
-        if (this._isSplashWindow(app)) {
             return;
         }
 
