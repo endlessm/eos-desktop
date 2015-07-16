@@ -1110,10 +1110,16 @@ _shell_app_remove_window (ShellApp   *app,
 
   if (shell_window_tracker_is_window_interesting (window))
     app->running_state->interesting_windows--;
-  shell_app_sync_running_state (app);
 
-  if (app->running_state && app->running_state->windows == NULL)
-    g_clear_pointer (&app->running_state, unref_running_state);
+  if (app->running_state->windows == NULL)
+    {
+      g_clear_pointer (&app->running_state, unref_running_state);
+      shell_app_state_transition (app, SHELL_APP_STATE_STOPPED);
+    }
+  else
+    {
+      shell_app_sync_running_state (app);
+    }
 
   g_signal_emit (app, shell_app_signals[WINDOWS_CHANGED], 0);
 }
