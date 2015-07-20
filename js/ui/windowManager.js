@@ -973,9 +973,9 @@ const WindowManager = new Lang.Class({
             // The _showingSplash state here is a bit dirty -- it's set by appActivation.js
             let tracker = Shell.WindowTracker.get_default();
             let app = tracker.get_window_app(window);
-            let hasSplashWindow = app.get_windows().some(function(window) {
+            let hasSplashWindow = (app && app.get_windows().some(function(window) {
                 return (window.get_role() == 'eos-speedwagon')
-            });
+            }));
             if (hasSplashWindow) {
                 shellwm.completed_map(actor);
                 return;
