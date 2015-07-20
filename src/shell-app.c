@@ -1063,6 +1063,15 @@ shell_app_ensure_busy_watch (ShellApp *app)
                                        g_object_ref (app));
 }
 
+static gboolean
+shell_app_is_interesting_window (MetaWindow *window)
+{
+  if (g_strcmp0 (meta_window_get_role (window), "eos-speedwagon") == 0)
+    return FALSE;
+
+  return shell_window_tracker_is_window_interesting (window);
+}
+
 void
 _shell_app_add_window (ShellApp        *app,
                        MetaWindow      *window)
@@ -1084,7 +1093,7 @@ _shell_app_add_window (ShellApp        *app,
   shell_app_update_app_menu (app, window);
   shell_app_ensure_busy_watch (app);
 
-  if (shell_window_tracker_is_window_interesting (window))
+  if (shell_app_is_interesting_window (window))
     app->running_state->interesting_windows++;
   shell_app_sync_running_state (app);
 
@@ -1108,7 +1117,7 @@ _shell_app_remove_window (ShellApp   *app,
   g_object_unref (window);
   app->running_state->windows = g_slist_remove (app->running_state->windows, window);
 
-  if (shell_window_tracker_is_window_interesting (window))
+  if (shell_app_is_interesting_window (window))
     app->running_state->interesting_windows--;
 
   if (app->running_state->windows == NULL)

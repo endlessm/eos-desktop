@@ -157,9 +157,6 @@ shell_window_tracker_is_window_interesting (MetaWindow *window)
   if (g_strcmp0 (meta_window_get_title (window), "JavaEmbeddedFrame") == 0)
     return FALSE;
 
-  if (g_strcmp0 (meta_window_get_role (window), "eos-speedwagon") == 0)
-    return FALSE;
-
   return TRUE;
 }
 
