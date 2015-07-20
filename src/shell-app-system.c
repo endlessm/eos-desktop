@@ -416,49 +416,20 @@ GSList *
 shell_app_system_get_running (ShellAppSystem *self)
 {
   gpointer key, value;
-  GSList *ret;
+  GSList *ret = NULL;
   GHashTableIter iter;
 
   g_hash_table_iter_init (&iter, self->priv->running_apps);
-
-  ret = NULL;
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       ShellApp *app = key;
-
       ret = g_slist_prepend (ret, app);
     }
 
-  ret = g_slist_sort (ret, (GCompareFunc)shell_app_compare);
-
-  return ret;
-}
-
-/**
- * shell_app_system_get_starting:
- * @self: A #ShellAppSystem
- *
- * Returns the set of applications which are currently in the starting state
- * in the current context. The returned list will be sorted by
- * shell_app_compare().
- *
- * Returns: (element-type ShellApp) (transfer container): Applications that are being launched
- */
-GSList *
-shell_app_system_get_starting (ShellAppSystem *self)
-{
-  gpointer key, value;
-  GSList *ret;
-  GHashTableIter iter;
-
-  ret = NULL;
-
   g_hash_table_iter_init (&iter, self->priv->starting_apps);
-
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       ShellApp *app = key;
-
       ret = g_slist_prepend (ret, app);
     }
 
