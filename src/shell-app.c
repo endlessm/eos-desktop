@@ -16,7 +16,14 @@
 #include "shell-app-system-private.h"
 #include "shell-window-tracker-private.h"
 #include "st.h"
-#include "gactionmuxer.h"
+#include "gtkactionmuxer.h"
+#include "org-gtk-application.h"
+
+#ifdef HAVE_SYSTEMD
+#include <systemd/sd-journal.h>
+#include <errno.h>
+#include <unistd.h>
+#endif
 
 typedef enum {
   MATCH_NONE,
@@ -37,13 +44,21 @@ typedef struct {
 
   GSList *windows;
 
+  guint interesting_windows;
+
   /* Whether or not we need to resort the windows; this is done on demand */
   gboolean window_sort_stale : 1;
 
   /* See GApplication documentation */
   GDBusMenuModel   *remote_menu;
-  GActionMuxer     *muxer;
-  char * unique_bus_name;
+  GtkActionMuxer   *muxer;
+  char             *unique_bus_name;
+  GDBusConnection  *session;
+
+  /* GDBus Proxy for getting application busy state */
+  ShellOrgGtkApplication *application_proxy;
+  GCancellable           *cancellable;
+
 } ShellAppRunningState;
 
 /**
@@ -78,6 +93,7 @@ struct _ShellApp
 enum {
   PROP_0,
   PROP_STATE,
+  PROP_BUSY,
   PROP_ID,
   PROP_DBUS_ID,
   PROP_ACTION_GROUP,
@@ -108,6 +124,9 @@ shell_app_get_property (GObject    *gobject,
     {
     case PROP_STATE:
       g_value_set_enum (value, app->state);
+      break;
+    case PROP_BUSY:
+      g_value_set_boolean (value, shell_app_get_busy (app));
       break;
     case PROP_ID:
       g_value_set_string (value, shell_app_get_id (app));
@@ -532,7 +551,7 @@ shell_app_activate_window (ShellApp     *app,
         {
           MetaWindow *other_window = iter->data;
 
-          if (other_window != window)
+          if (other_window != window && meta_window_get_workspace (other_window) == workspace)
             meta_window_raise (other_window);
         }
       g_slist_free (windows_reversed);
@@ -569,16 +588,14 @@ shell_app_update_window_actions (ShellApp *app, MetaWindow *window)
       actions = g_object_get_data (G_OBJECT (window), "actions");
       if (actions == NULL)
         {
-          actions = G_ACTION_GROUP (g_dbus_action_group_get (g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL),
+          actions = G_ACTION_GROUP (g_dbus_action_group_get (app->running_state->session,
                                                              meta_window_get_gtk_unique_bus_name (window),
                                                              object_path));
           g_object_set_data_full (G_OBJECT (window), "actions", actions, g_object_unref);
         }
 
-      if (!app->running_state->muxer)
-        app->running_state->muxer = g_action_muxer_new ();
-
-      g_action_muxer_insert (app->running_state->muxer, "win", actions);
+      g_assert (app->running_state->muxer);
+      gtk_action_muxer_insert (app->running_state->muxer, "win", actions);
       g_object_notify (G_OBJECT (app), "action-group");
     }
 }
@@ -630,12 +647,7 @@ shell_app_activate_full (ShellApp      *app,
       case SHELL_APP_STATE_STOPPED:
         {
           GError *my_error = NULL;
-          if (!shell_app_launch (app,
-                                 timestamp,
-                                 NULL,
-                                 workspace,
-                                 NULL,
-                                 &my_error))
+          if (!shell_app_launch (app, timestamp, workspace, &my_error))
             {
               char *msg;
               msg = g_strdup_printf (_("Failed to launch '%s'"), shell_app_get_name (app));
@@ -676,12 +688,7 @@ shell_app_open_new_window (ShellApp      *app,
    * as say Pidgin.  Ideally, we have the application express to us
    * that it supports an explicit new-window action.
    */
-  shell_app_launch (app,
-                    0,
-                    NULL,
-                    workspace,
-                    NULL,
-                    NULL);
+  shell_app_launch (app, 0, workspace, NULL);
 }
 
 /**
@@ -894,12 +901,6 @@ shell_app_state_transition (ShellApp      *app,
                       state == SHELL_APP_STATE_STARTING));
   app->state = state;
 
-  if (app->state == SHELL_APP_STATE_STOPPED && app->running_state)
-    {
-      unref_running_state (app->running_state);
-      app->running_state = NULL;
-    }
-
   _shell_app_system_notify_app_state_changed (shell_app_system_get_default (), app);
 
   g_object_notify (G_OBJECT (app), "state");
@@ -930,6 +931,40 @@ shell_app_on_user_time_changed (MetaWindow *window,
 }
 
 static void
+shell_app_sync_running_state (ShellApp *app)
+{
+  g_return_if_fail (app->running_state != NULL);
+
+  if (app->state != SHELL_APP_STATE_STARTING)
+    {
+      if (app->running_state->interesting_windows == 0)
+        shell_app_state_transition (app, SHELL_APP_STATE_STOPPED);
+      else
+        shell_app_state_transition (app, SHELL_APP_STATE_RUNNING);
+    }
+}
+
+
+static void
+shell_app_on_skip_taskbar_changed (MetaWindow *window,
+                                   GParamSpec *pspec,
+                                   ShellApp   *app)
+{
+  g_assert (app->running_state != NULL);
+
+  /* we rely on MetaWindow:skip-taskbar only being notified
+   * when it actually changes; when that assumption breaks,
+   * we'll have to track the "interesting" windows themselves
+   */
+  if (meta_window_is_skip_taskbar (window))
+    app->running_state->interesting_windows--;
+  else
+    app->running_state->interesting_windows++;
+
+  shell_app_sync_running_state (app);
+}
+
+static void
 shell_app_on_ws_switch (MetaScreen         *screen,
                         int                 from,
                         int                 to,
@@ -943,6 +978,89 @@ shell_app_on_ws_switch (MetaScreen         *screen,
   app->running_state->window_sort_stale = TRUE;
 
   g_signal_emit (app, shell_app_signals[WINDOWS_CHANGED], 0);
+}
+
+gboolean
+shell_app_get_busy (ShellApp *app)
+{
+  if (app->running_state != NULL &&
+      app->running_state->application_proxy != NULL &&
+      shell_org_gtk_application_get_busy (app->running_state->application_proxy))
+    return TRUE;
+
+  return FALSE;
+}
+
+static void
+busy_changed_cb (GObject    *object,
+                 GParamSpec *pspec,
+                 gpointer    user_data)
+{
+  ShellApp *app = user_data;
+
+  g_assert (SHELL_IS_APP (app));
+
+  g_object_notify (G_OBJECT (app), "busy");
+}
+
+static void
+get_application_proxy (GObject      *source,
+                       GAsyncResult *result,
+                       gpointer      user_data)
+{
+  ShellApp *app = user_data;
+  ShellOrgGtkApplication *proxy;
+
+  g_assert (SHELL_IS_APP (app));
+
+  proxy = shell_org_gtk_application_proxy_new_finish (result, NULL);
+  if (proxy != NULL)
+    {
+      app->running_state->application_proxy = proxy;
+      g_signal_connect (proxy,
+                        "notify::busy",
+                        G_CALLBACK (busy_changed_cb),
+                        app);
+      if (shell_org_gtk_application_get_busy (proxy))
+        g_object_notify (G_OBJECT (app), "busy");
+    }
+
+  if (app->running_state != NULL)
+    g_clear_object (&app->running_state->cancellable);
+
+  g_object_unref (app);
+}
+
+static void
+shell_app_ensure_busy_watch (ShellApp *app)
+{
+  ShellAppRunningState *running_state = app->running_state;
+  MetaWindow *window;
+  const gchar *object_path;
+
+  if (running_state->application_proxy != NULL ||
+      running_state->cancellable != NULL)
+    return;
+
+  if (running_state->unique_bus_name == NULL)
+    return;
+
+  window = g_slist_nth_data (running_state->windows, 0);
+  object_path = meta_window_get_gtk_application_object_path (window);
+
+  if (object_path == NULL)
+    return;
+
+  running_state->cancellable = g_cancellable_new();
+  /* Take a reference to app to make sure it isn't finalized before
+     get_application_proxy runs */
+  shell_org_gtk_application_proxy_new (running_state->session,
+                                       G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+                                       running_state->unique_bus_name,
+                                       object_path,
+                                       running_state->cancellable,
+                                       get_application_proxy,
+                                       g_object_ref (app));
 }
 
 void
@@ -961,11 +1079,14 @@ _shell_app_add_window (ShellApp        *app,
   app->running_state->windows = g_slist_prepend (app->running_state->windows, g_object_ref (window));
   g_signal_connect (window, "unmanaged", G_CALLBACK(shell_app_on_unmanaged), app);
   g_signal_connect (window, "notify::user-time", G_CALLBACK(shell_app_on_user_time_changed), app);
+  g_signal_connect (window, "notify::skip-taskbar", G_CALLBACK(shell_app_on_skip_taskbar_changed), app);
 
   shell_app_update_app_menu (app, window);
+  shell_app_ensure_busy_watch (app);
 
-  if (app->state != SHELL_APP_STATE_STARTING)
-    shell_app_state_transition (app, SHELL_APP_STATE_RUNNING);
+  if (shell_window_tracker_is_window_interesting (window))
+    app->running_state->interesting_windows++;
+  shell_app_sync_running_state (app);
 
   g_object_thaw_notify (G_OBJECT (app));
 
@@ -983,11 +1104,22 @@ _shell_app_remove_window (ShellApp   *app,
 
   g_signal_handlers_disconnect_by_func (window, G_CALLBACK(shell_app_on_unmanaged), app);
   g_signal_handlers_disconnect_by_func (window, G_CALLBACK(shell_app_on_user_time_changed), app);
+  g_signal_handlers_disconnect_by_func (window, G_CALLBACK(shell_app_on_skip_taskbar_changed), app);
   g_object_unref (window);
   app->running_state->windows = g_slist_remove (app->running_state->windows, window);
 
+  if (shell_window_tracker_is_window_interesting (window))
+    app->running_state->interesting_windows--;
+
   if (app->running_state->windows == NULL)
-    shell_app_state_transition (app, SHELL_APP_STATE_STOPPED);
+    {
+      g_clear_pointer (&app->running_state, unref_running_state);
+      shell_app_state_transition (app, SHELL_APP_STATE_STOPPED);
+    }
+  else
+    {
+      shell_app_sync_running_state (app);
+    }
 
   g_signal_emit (app, shell_app_signals[WINDOWS_CHANGED], 0);
 }
@@ -1084,38 +1216,39 @@ shell_app_request_quit (ShellApp   *app)
   return TRUE;
 }
 
+#ifdef HAVE_SYSTEMD
+/* This sets up the launched application to log to the journal
+ * using its own identifier, instead of just "gnome-session".
+ */
 static void
-_gather_pid_callback (GDesktopAppInfo   *gapp,
-                      GPid               pid,
-                      gpointer           data)
+app_child_setup (gpointer user_data)
 {
-  ShellApp *app;
-  ShellWindowTracker *tracker;
-
-  g_return_if_fail (data != NULL);
-
-  app = SHELL_APP (data);
-  tracker = shell_window_tracker_get_default ();
-
-  _shell_window_tracker_add_child_process_app (tracker,
-                                               pid,
-                                               app);
+  const char *appid = user_data;
+  int res;
+  int journalfd = sd_journal_stream_fd (appid, LOG_INFO, FALSE);
+  if (journalfd >= 0)
+    {
+      do
+        res = dup2 (journalfd, 1);
+      while (G_UNLIKELY (res == -1 && errno == EINTR));
+      do
+        res = dup2 (journalfd, 2);
+      while (G_UNLIKELY (res == -1 && errno == EINTR));
+      (void) close (journalfd);
+    }
 }
+#endif
 
 /**
  * shell_app_launch:
  * @timestamp: Event timestamp, or 0 for current event timestamp
- * @uris: (element-type utf8): List of uris to pass to application
  * @workspace: Start on this workspace, or -1 for default
- * @startup_id: (out): Returned startup notification ID, or %NULL if none
  * @error: A #GError
  */
 gboolean
 shell_app_launch (ShellApp     *app,
                   guint         timestamp,
-                  GList        *uris,
                   int           workspace,
-                  char        **startup_id,
                   GError      **error)
 {
   GdkAppLaunchContext *context;
@@ -1127,11 +1260,6 @@ shell_app_launch (ShellApp     *app,
   if (app->info == NULL)
     {
       MetaWindow *window = window_backed_app_get_window (app);
-      /* We can't pass URIs into a window; shouldn't hit this
-       * code path.  If we do, fix the caller to disallow it.
-       */
-      g_return_val_if_fail (uris == NULL, TRUE);
-
       meta_window_activate (window, timestamp);
       return TRUE;
     }
@@ -1152,9 +1280,13 @@ shell_app_launch (ShellApp     *app,
 
   ret = g_desktop_app_info_launch_uris_as_manager (app->info, NULL,
                                                    G_APP_LAUNCH_CONTEXT (context),
-                                                   G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
+                                                   G_SPAWN_SEARCH_PATH,
+#ifdef HAVE_SYSTEMD
+                                                   app_child_setup, (gpointer)shell_app_get_id (app),
+#else
                                                    NULL, NULL,
-                                                   _gather_pid_callback, app,
+#endif
+                                                   NULL, NULL,
                                                    error);
   g_object_unref (context);
 
@@ -1302,7 +1434,9 @@ create_running_state (ShellApp *app)
   app->running_state->workspace_switch_id =
     g_signal_connect (screen, "workspace-switched", G_CALLBACK(shell_app_on_ws_switch), app);
 
-  app->running_state->muxer = g_action_muxer_new ();
+  app->running_state->session = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+  g_assert (app->running_state->session != NULL);
+  app->running_state->muxer = gtk_action_muxer_new ();
 }
 
 void
@@ -1328,7 +1462,6 @@ shell_app_update_app_menu (ShellApp   *app,
     {
       const gchar *application_object_path;
       const gchar *app_menu_object_path;
-      GDBusConnection *session;
       GDBusActionGroup *actions;
 
       application_object_path = meta_window_get_gtk_application_object_path (window);
@@ -1337,16 +1470,13 @@ shell_app_update_app_menu (ShellApp   *app,
       if (application_object_path == NULL || app_menu_object_path == NULL || unique_bus_name == NULL)
         return;
 
-      session = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-      g_assert (session != NULL);
       g_clear_pointer (&app->running_state->unique_bus_name, g_free);
       app->running_state->unique_bus_name = g_strdup (unique_bus_name);
       g_clear_object (&app->running_state->remote_menu);
-      app->running_state->remote_menu = g_dbus_menu_model_get (session, unique_bus_name, app_menu_object_path);
-      actions = g_dbus_action_group_get (session, unique_bus_name, application_object_path);
-      g_action_muxer_insert (app->running_state->muxer, "app", G_ACTION_GROUP (actions));
+      app->running_state->remote_menu = g_dbus_menu_model_get (app->running_state->session, unique_bus_name, app_menu_object_path);
+      actions = g_dbus_action_group_get (app->running_state->session, unique_bus_name, application_object_path);
+      gtk_action_muxer_insert (app->running_state->muxer, "app", G_ACTION_GROUP (actions));
       g_object_unref (actions);
-      g_object_unref (session);
     }
 }
 
@@ -1364,8 +1494,17 @@ unref_running_state (ShellAppRunningState *state)
   screen = shell_global_get_screen (shell_global_get ());
   g_signal_handler_disconnect (screen, state->workspace_switch_id);
 
+  g_clear_object (&state->application_proxy);
+
+  if (state->cancellable != NULL)
+    {
+      g_cancellable_cancel (state->cancellable);
+      g_clear_object (&state->cancellable);
+    }
+
   g_clear_object (&state->remote_menu);
   g_clear_object (&state->muxer);
+  g_clear_object (&state->session);
   g_clear_pointer (&state->unique_bus_name, g_free);
   g_clear_pointer (&state->remote_menu, g_free);
 
@@ -1401,11 +1540,9 @@ shell_app_dispose (GObject *object)
 
   g_clear_object (&app->info);
 
-  if (app->running_state)
-    {
-      while (app->running_state->windows)
-        _shell_app_remove_window (app, app->running_state->windows->data);
-    }
+  while (app->running_state)
+    _shell_app_remove_window (app, app->running_state->windows->data);
+
   /* We should have been transitioned when we removed all of our windows */
   g_assert (app->state == SHELL_APP_STATE_STOPPED);
   g_assert (app->running_state == NULL);
@@ -1455,6 +1592,19 @@ shell_app_class_init(ShellAppClass *klass)
                                                       SHELL_TYPE_APP_STATE,
                                                       SHELL_APP_STATE_STOPPED,
                                                       G_PARAM_READABLE));
+
+  /**
+   * ShellApp:busy:
+   *
+   * Whether the application has marked itself as busy.
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_BUSY,
+                                   g_param_spec_boolean ("busy",
+                                                         "Busy",
+                                                         "Busy state",
+                                                         FALSE,
+                                                         G_PARAM_READABLE));
 
   /**
    * ShellApp:id:

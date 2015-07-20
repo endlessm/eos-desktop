@@ -72,9 +72,7 @@ gboolean shell_app_is_on_workspace (ShellApp *app, MetaWorkspace *workspace);
 
 gboolean shell_app_launch (ShellApp     *app,
                            guint         timestamp,
-                           GList        *uris,
                            int           workspace,
-                           char        **startup_id,
                            GError      **error);
 
 int shell_app_compare_by_name (ShellApp *app, ShellApp *other);
@@ -83,6 +81,8 @@ int shell_app_compare (ShellApp *app, ShellApp *other);
 
 void shell_app_update_window_actions (ShellApp *app, MetaWindow *window);
 void shell_app_update_app_menu       (ShellApp *app, MetaWindow *window);
+
+gboolean shell_app_get_busy          (ShellApp *app);
 
 gboolean shell_app_create_custom_launcher_with_name (ShellApp *app, const char *label, GError **error);
 

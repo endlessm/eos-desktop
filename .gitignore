@@ -79,6 +79,7 @@ src/*.gir
 src/*.typelib
 src/*-enum-types.[ch]
 src/*-marshal.[ch]
+src/org-gtk-application.[ch]
 src/Makefile
 src/Makefile.in
 src/calendar-server/evolution-calendar.desktop

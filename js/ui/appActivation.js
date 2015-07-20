@@ -19,19 +19,12 @@ const Panel = imports.ui.panel;
 const Tweener = imports.ui.tweener;
 const WindowManager = imports.ui.windowManager;
 
-const SPLASH_CIRCLE_PERIOD = 2;
 const SPLASH_SCREEN_TIMEOUT = 700; // ms
-const SPLASH_SCREEN_FADE_OUT = 0.2;
-const SPLASH_SCREEN_COMPLETE_TIME = 0.2;
 
 // By default, maximized windows are 75% of the workarea
 // of the monitor they're on when unmaximized.
 const DEFAULT_MAXIMIZED_WINDOW_SIZE = 0.75;
-
 const LAUNCH_MAXIMIZED_DESKTOP_KEY = 'X-Endless-LaunchMaximized';
-const SPLASH_BACKGROUND_DESKTOP_KEY = 'X-Endless-SplashBackground';
-const DEFAULT_SPLASH_SCREEN_BACKGROUND = 'resource:///org/gnome/shell/theme/splash-background-default.jpg';
-const SPINNER_IMAGES_DIR = 'resource:///org/gnome/shell/theme/';
 
 const AppActivationContext = new Lang.Class({
     Name: 'AppActivationContext',
@@ -72,7 +65,27 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
-        this._animateSplash();
+        this._cancelled = false;
+        this._splash = new SpeedwagonSplash(this._app);
+        this._splash.connect('close-clicked', Lang.bind(this, function() {
+            // If application doesn't quit very likely is because it
+            // didn't reach running state yet; so wait for it to
+            // finish
+            this._cancelled = true;
+            this._clearSplash();
+            if (!this._app.request_quit()) {
+                this._abort = true;
+            }
+        }));
+        this._splash.show();
+
+        // Scale the timeout by the slow down factor, because otherwise
+        // we could be trying to destroy the splash screen window before
+        // the map animation has finished.
+        // This buffer time ensures that the user can never destroy the
+        // splash before the animation is completed.
+        this._splashId = Mainloop.timeout_add(SPLASH_SCREEN_TIMEOUT * St.get_slow_down_factor(),
+                                              Lang.bind(this, this._checkSplash));
 
         // We can't fully trust windows-changed to be emitted with the
         // same ShellApp we called activate() on, as WMClass matching might
@@ -84,66 +97,10 @@ const AppActivationContext = new Lang.Class({
         this._appActivationTime = GLib.get_monotonic_time();
     },
 
-    _animateSplash: function() {
-        this._cancelled = false;
-
-        this._splash = new AppSplashPage(this._app);
-        Main.uiGroup.add_actor(this._splash);
-
-        let decorator = Main.layoutManager.screenDecorators[Main.layoutManager.primaryIndex];
-        Main.uiGroup.set_child_below_sibling(this._splash, decorator);
-
-        // Make sure that our events are captured
-        let grabParams = { keybindingMode: Shell.KeyBindingMode.SPLASH_SCREEN };
-        this._grabHelper = new GrabHelper.GrabHelper(this._splash, grabParams);
-        this._grabHelper.addActor(this._splash);
-        this._grabHelper.grab({ actor: this._splash,
-                                focus: this._splash });
-
-        this._splash.connect('close-clicked', Lang.bind(this, function() {
-            // If application doesn't quit very likely is because it
-            // didn't reach running state yet; so wait for it to
-            // finish
-            this._cancelled = true;
-            this._clearSplash();
-            if (!this._app.request_quit()) {
-                this._abort = true;
-            }
-        }));
-
-        this._splash.translation_y = this._splash.height;
-        Tweener.addTween(this._splash, { translation_y: 0,
-                                         time: Overview.ANIMATION_TIME,
-                                         transition: 'linear',
-                                         onComplete: Lang.bind(this, function() {
-                                             this._splash.spin();
-                                             this._splashId = Mainloop.timeout_add(SPLASH_SCREEN_TIMEOUT,
-                                                 Lang.bind(this, this._checkSplash));
-                                         })
-                                       });
-    },
-
     _clearSplash: function() {
         if (this._splash) {
-            this._splash.completeInTime(SPLASH_SCREEN_COMPLETE_TIME, Lang.bind(this,
-                function() {
-                    Tweener.addTween(this._splash, { opacity: 0,
-                                                     time: SPLASH_SCREEN_FADE_OUT,
-                                                     transition: 'linear',
-                                                     onComplete: Lang.bind(this,
-                                                         function() {
-                                                             // Release keybinding to overview again
-                                                             this._grabHelper.ungrab({ actor: this._splash });
-
-                                                             this._splash.destroy();
-                                                             this._splash = null;
-
-                                                             if (this._cancelled && Main.workspaceMonitor.visibleWindows == 0) {
-                                                                Main.overview.showApps();
-                                                             }
-                                                         })
-                                                   });
-                }));
+            this._splash.rampOut();
+            this._splash = null;
         }
     },
 
@@ -237,200 +194,44 @@ const AppActivationContext = new Lang.Class({
     }
 });
 
-const AppSplashPage = new Lang.Class({
-    Name: 'AppSplashPage',
-    Extends: St.Widget,
+const SpeedwagonIface = '<node> \
+<interface name="com.endlessm.Speedwagon"> \
+<method name="ShowSplash"> \
+    <arg type="s" direction="in" name="desktopFile" /> \
+</method> \
+<method name="HideSplash"> \
+    <arg type="s" direction="in" name="desktopFile" /> \
+</method> \
+<signal name="SplashClosed"> \
+    <arg type="s" name="desktopFile" /> \
+</signal> \
+</interface> \
+</node>';
+const SpeedwagonProxy = Gio.DBusProxy.makeProxyWrapper(SpeedwagonIface);
+
+const SpeedwagonSplash = new Lang.Class({
+    Name: 'SpeedwagonSplash',
 
     _init: function(app) {
-        this.layout = new St.BoxLayout({ vertical: true,
-                                         x_expand: true,
-                                         y_expand: true });
-
-        let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
-        this.parent({ x: workArea.x,
-                      y: workArea.y,
-                      width: workArea.width,
-                      height: workArea.height,
-                      layout_manager: new Clutter.BinLayout(),
-                      style_class: 'app-splash-page' });
-
-        this.add_child(this.layout);
-
         this._app = app;
-        this._appIcon = null;
-        this._spinner = null;
-        this._iconSize = -1;
-        this._animationSize = -1;
 
-        this.background = new St.Widget({ style_class: 'app-splash-page-background',
-                                          layout_manager: new Clutter.BinLayout(),
-                                          clip_to_allocation: true,
-                                          x_expand: true,
-                                          y_expand: true });
-
-        let bgPath = null;
-        let info = app.get_app_info();
-
-        if (info !== undefined &&
-            info.has_key(SPLASH_BACKGROUND_DESKTOP_KEY)) {
-            let bgKey = info.get_string(SPLASH_BACKGROUND_DESKTOP_KEY);
-            if (GLib.file_test(bgKey, GLib.FileTest.EXISTS)) {
-                bgPath = bgKey;
-            } else {
-                log('Application ' + app.get_id() + ' requested non-existing splash ' + bgKey + '. Using default.');
-            }
-        }
-
-        if (bgPath == null) {
-            bgPath = DEFAULT_SPLASH_SCREEN_BACKGROUND;
-        }
-
-        this.background.connect('allocation-changed', Lang.bind(this, function(actor, box, flags) {
-            this.background.style_class = 'app-splash-page-custom-background';
-            this.background.style =
-                'background-image: url("%s");background-size: cover;background-position: center center;'.format(bgPath);
+        this._proxy = new SpeedwagonProxy(Gio.DBus.session,
+                                          'com.endlessm.Speedwagon',
+                                          '/com/endlessm/Speedwagon');
+        this._proxy.connectSignal('SplashClosed', Lang.bind(this, function() {
+            this.emit('close-clicked');
         }));
-
-        let title = new St.Widget({ style_class: 'app-splash-page-title',
-                                    layout_manager: new Clutter.BinLayout(),
-                                    x_expand: true,
-                                    y_expand: false });
-
-        title.add_child(this._createCloseButton());
-
-        this.layout.add(title);
-        this.layout.add(this.background, { expand: true,
-                                           x_fill: true,
-                                           y_fill: true });
     },
 
-    _createCloseButton: function() {
-        let closeButton = new St.Button({ style_class: 'splash-close'});
-        closeButton.set_x_align(Clutter.ActorAlign.END);
-        closeButton.set_y_align(Clutter.ActorAlign.START);
-
-        // XXX Clutter 2.0 workaround: ClutterBinLayout needs expand
-        // to respect the alignments.
-        closeButton.set_x_expand(true);
-        closeButton.set_y_expand(true);
-
-        closeButton.connect('clicked', Lang.bind(this, function() { this.emit('close-clicked'); }));
-
-        return closeButton;
+    show: function() {
+        this._proxy.ShowSplashRemote(this._app.get_id());
     },
 
-    vfunc_style_changed: function() {
-        let themeNode = this.get_theme_node();
-        let iconSize = themeNode.get_length('icon-size');
-        let animationSize = themeNode.get_length('-animation-size');
-
-        if (this._iconSize == iconSize &&
-            this._animationSize == animationSize) {
-            return;
-        }
-
-        this._iconSize = iconSize;
-        this._animationSize = animationSize;
-
-        if (this._spinner) {
-            this._spinner.actor.destroy();
-            this._spinner = null;
-        }
-
-        if (this._appIcon) {
-            this._appIcon.destroy();
-            this._appIcon = null;
-        }
-
-        let appIcon = this._app.create_icon_texture(iconSize);
-        if (appIcon) {
-            appIcon.x_align = Clutter.ActorAlign.CENTER;
-            appIcon.y_align = Clutter.ActorAlign.CENTER;
-            appIcon.set_x_expand(true);
-            appIcon.set_y_expand(true);
-            this.background.add_child(appIcon);
-            this._appIcon = appIcon;
-        }
-
-        this._spinner = new SplashSpinner(animationSize, SPLASH_CIRCLE_PERIOD);
-        this._spinner.actor.x_align = Clutter.ActorAlign.CENTER;
-        this._spinner.actor.y_align = Clutter.ActorAlign.CENTER;
-        this.background.add_child(this._spinner.actor);
+    rampOut: function() {
+        this._proxy.HideSplashRemote(this._app.get_id());
     },
-
-    spin: function() {
-        this._spinner.play();
-    },
-
-    completeInTime: function(time, callback) {
-        this._spinner.completeInTime(time, callback);
-    }
 });
-Signals.addSignalMethods(AppSplashPage.prototype);
-
-const SplashSpinner = new Lang.Class({
-    Name: 'SplashSpinner',
-    _init: function(size, rotationTime) {
-        this.actor = new St.Widget({ layout_manager: new Clutter.BinLayout(),
-                                     x_expand: true,
-                                     y_expand: true });
-
-        this.actor.add_child(this._loadImage('splash-spinner-channel.png',
-                                             size));
-
-        this._spinner = new St.Widget({ layout_manager: new Clutter.BinLayout(),
-                                        x_expand: true,
-                                        y_expand: true });
-        this.actor.add_child(this._spinner);
-
-        this._spinner.add_child(this._loadImage('splash-spinner.png', size));
-
-        // Start loading glow images now, but they won't be added until
-        // completeInTime is called
-        this._channelGlow = this._loadImage('splash-spinner-channel-glow.png',
-                                            size);
-        this._spinnerGlow = this._loadImage('splash-spinner-glow.png', size);
-        this._channelGlow.bind_property('opacity', this._spinnerGlow,
-                                        'opacity',
-                                        GObject.BindingFlags.SYNC_CREATE);
-
-        this.rotationTime = rotationTime;
-        this._completeCallback = null;
-    },
-
-    _loadImage: function(name, size) {
-        let textureCache = St.TextureCache.get_default();
-        let path = GLib.build_filenamev([SPINNER_IMAGES_DIR, name]);
-        let file = Gio.File.new_for_uri(path);
-
-        return textureCache.load_file_async(file, size, size);
-    },
-
-    play: function() {
-        this._spinner.set_z_rotation_from_gravity(0, Clutter.Gravity.CENTER);
-        Tweener.addTween(this._spinner, { rotation_angle_z: 360,
-                                          time: this.rotationTime,
-                                          transition: 'linear',
-                                          onComplete: Lang.bind(this, this.play)
-                                        });        
-    },
-
-    completeInTime: function(time, callback) {
-        if (this._completeCallback === null) {
-            this._channelGlow.set_opacity(0);
-            this.actor.add_child(this._channelGlow);
-            this._spinner.add_child(this._spinnerGlow);
-        }
-
-        this._completeCallback = callback;
-
-        Tweener.addTween(this._channelGlow, { opacity: 255,
-                                              time: time,
-                                              transition: 'linear',
-                                              onComplete: this._completeCallback
-                                            });
-    }
-});
+Signals.addSignalMethods(SpeedwagonSplash.prototype);
 
 const DesktopAppClient = new Lang.Class({
     Name: 'DesktopAppClient',

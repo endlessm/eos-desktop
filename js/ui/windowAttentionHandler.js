@@ -32,6 +32,10 @@ const WindowAttentionHandler = new Lang.Class({
         if (!window || window.has_focus() || window.is_skip_taskbar())
             return;
 
+	let focusWindow = global.display.focus_window;
+	if (focusWindow && focusWindow.get_role() == 'eos-speedwagon')
+	    return;
+
         let app = this._tracker.get_window_app(window);
         let source = new Source(app, window);
         Main.messageTray.add(source);

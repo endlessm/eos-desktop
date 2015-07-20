@@ -16,9 +16,6 @@
     <file>checkbox-off-focused.svg</file>
     <file>checkbox-off.svg</file>
     <file>checkbox.svg</file>
-    <file>close-splash-hover.png</file>
-    <file>close-splash-normal.png</file>
-    <file>close-splash-pressed.png</file>
     <file>close-window.svg</file>
     <file>close.svg</file>
     <file>corner-ripple-bl.png</file>
@@ -57,12 +54,6 @@
     <file>social-bar-pressed.png</file>
     <file>separator.png</file>
     <file>source-button-border.svg</file>
-    <file>splash-background-default.jpg</file>
-    <file>splash-noise-texture.png</file>
-    <file>splash-spinner-channel-glow.png</file>
-    <file>splash-spinner-channel.png</file>
-    <file>splash-spinner-glow.png</file>
-    <file>splash-spinner.png</file>
     <file>summary-counter.svg</file>
     <file>toggle-off-us.svg</file>
     <file>toggle-off-intl.svg</file>

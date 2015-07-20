@@ -49,9 +49,6 @@ struct _ShellWindowTracker
 
   /* <MetaWindow * window, ShellApp *app> */
   GHashTable *window_to_app;
-
-  /* <int, ShellApp *app> */
-  GHashTable *launched_pid_to_app;
 };
 
 G_DEFINE_TYPE (ShellWindowTracker, shell_window_tracker, G_TYPE_OBJECT);
@@ -189,6 +186,9 @@ shell_window_tracker_is_window_interesting (MetaWindow *window)
   if (g_strcmp0 (meta_window_get_title (window), "JavaEmbeddedFrame") == 0)
     return FALSE;
 
+  if (g_strcmp0 (meta_window_get_role (window), "eos-speedwagon") == 0)
+    return FALSE;
+
   return TRUE;
 }
 
@@ -210,16 +210,61 @@ get_app_from_window_wmclass (MetaWindow  *window)
   const char *wm_instance;
 
   appsys = shell_app_system_get_default ();
-  wm_class = meta_window_get_wm_class (window);
-  wm_instance = meta_window_get_wm_class_instance (window);
 
-  /* try a match from WM_CLASS to .desktop */
-  app = shell_app_system_lookup_desktop_wmclass (appsys, wm_class);
+  /* Notes on the heuristics used here:
+     much of the complexity here comes from the desire to support
+     Chrome apps.
+
+     From https://bugzilla.gnome.org/show_bug.cgi?id=673657#c13
+
+     Currently chrome sets WM_CLASS as follows (the first string is the 'instance',
+     the second one is the 'class':
+
+     For the normal browser:
+     WM_CLASS(STRING) = "chromium", "Chromium"
+
+     For a bookmarked page (through 'Tools -> Create application shortcuts')
+     WM_CLASS(STRING) = "wiki.gnome.org__GnomeShell_ApplicationBased", "Chromium"
+
+     For an application from the chrome store (with a .desktop file created through
+     right click, "Create shortcuts" from Chrome's apps overview)
+     WM_CLASS(STRING) = "crx_blpcfgokakmgnkcojhhkbfbldkacnbeo", "Chromium"
+
+     The .desktop file has a matching StartupWMClass, but the name differs, e.g. for
+     the store app (youtube) there is
+
+     .local/share/applications/chrome-blpcfgokakmgnkcojhhkbfbldkacnbeo-Default.desktop
+
+     with
+
+     StartupWMClass=crx_blpcfgokakmgnkcojhhkbfbldkacnbeo
+
+     Note that chromium (but not google-chrome!) includes a StartupWMClass=chromium
+     in their .desktop file, so we must match the instance first.
+
+     Also note that in the good case (regular gtk+ app without hacks), instance and
+     class are the same except for case and there is no StartupWMClass at all.
+  */
+
+  /* first try a match from WM_CLASS (instance part) to StartupWMClass */
+  wm_instance = meta_window_get_wm_class_instance (window);
+  app = shell_app_system_lookup_startup_wmclass (appsys, wm_instance);
+  if (app != NULL)
+    return g_object_ref (app);
+
+  /* then try a match from WM_CLASS to StartupWMClass */
+  wm_class = meta_window_get_wm_class (window);
+  app = shell_app_system_lookup_startup_wmclass (appsys, wm_class);
   if (app != NULL)
     return g_object_ref (app);
 
   /* then try a match from WM_CLASS (instance part) to .desktop */
   app = shell_app_system_lookup_desktop_wmclass (appsys, wm_instance);
+  if (app != NULL)
+    return g_object_ref (app);
+
+  /* finally, try a match from WM_CLASS to .desktop */
+  app = shell_app_system_lookup_desktop_wmclass (appsys, wm_class);
   if (app != NULL)
     return g_object_ref (app);
 
@@ -314,7 +359,7 @@ get_app_from_window_group (ShellWindowTracker  *tracker,
  * @window: a #MetaWindow
  *
  * Check if the pid associated with @window corresponds to an
- * application we launched.
+ * application.
  *
  * Return value: (transfer full): A newly-referenced #ShellApp, or %NULL
  */
@@ -333,7 +378,7 @@ get_app_from_window_pid (ShellWindowTracker  *tracker,
   if (pid == -1)
     return NULL;
 
-  result = g_hash_table_lookup (tracker->launched_pid_to_app, GINT_TO_POINTER (pid));
+  result = shell_window_tracker_get_app_from_pid (tracker, pid);
   if (result != NULL)
     g_object_ref (result);
 
@@ -354,11 +399,16 @@ get_app_for_window (ShellWindowTracker    *tracker,
                     MetaWindow            *window)
 {
   ShellApp *result = NULL;
+  MetaWindow *transient_for;
   const char *startup_id;
 
   /* Side components don't have an associated app */
   if (g_strcmp0 (meta_window_get_role (window), SIDE_COMPONENT_ROLE) == 0)
     return NULL;
+
+  transient_for = meta_window_get_transient_for (window);
+  if (transient_for != NULL)
+    return get_app_for_window (tracker, transient_for);
 
   /* First, we check whether we already know about this window,
    * if so, just return that.
@@ -444,6 +494,16 @@ update_focus_app (ShellWindowTracker *self)
   ShellApp *new_focus_app;
 
   new_focus_win = meta_display_get_focus_window (shell_global_get_display (shell_global_get ()));
+
+  /* we only consider an app focused if the focus window can be clearly
+   * associated with a running app; this is the case if the focus window
+   * or one of its parents is visible in the taskbar, e.g.
+   *   - 'nautilus' should appear focused when its about dialog has focus
+   *   - 'nautilus' should not appear focused when the DESKTOP has focus
+   */
+  while (new_focus_win && meta_window_is_skip_taskbar (new_focus_win))
+    new_focus_win = meta_window_get_transient_for (new_focus_win);
+
   new_focus_app = new_focus_win ? shell_window_tracker_get_window_app (self, new_focus_win) : NULL;
 
   if (new_focus_app)
@@ -458,18 +518,33 @@ update_focus_app (ShellWindowTracker *self)
 }
 
 static void
-on_wm_class_changed (MetaWindow  *window,
-                     GParamSpec  *pspec,
-                     gpointer     user_data)
+tracked_window_changed (ShellWindowTracker *self,
+                        MetaWindow         *window)
 {
-  ShellWindowTracker *self = SHELL_WINDOW_TRACKER (user_data);
-
   /* It's simplest to just treat this as a remove + add. */
   disassociate_window (self, window);
   track_window (self, window);
   /* also just recaulcuate the focused app, in case it was the focused
      window that changed */
   update_focus_app (self);
+}
+
+static void
+on_wm_class_changed (MetaWindow  *window,
+                     GParamSpec  *pspec,
+                     gpointer     user_data)
+{
+  ShellWindowTracker *self = SHELL_WINDOW_TRACKER (user_data);
+  tracked_window_changed (self, window);
+}
+
+static void
+on_gtk_application_id_changed (MetaWindow  *window,
+                               GParamSpec  *pspec,
+                               gpointer     user_data)
+{
+  ShellWindowTracker *self = SHELL_WINDOW_TRACKER (user_data);
+  tracked_window_changed (self, window);
 }
 
 static void
@@ -486,6 +561,7 @@ track_window (ShellWindowTracker *self,
   g_hash_table_insert (self->window_to_app, window, app);
 
   g_signal_connect (window, "notify::wm-class", G_CALLBACK (on_wm_class_changed), self);
+  g_signal_connect (window, "notify::gtk-application-id", G_CALLBACK (on_gtk_application_id_changed), self);
 
   _shell_app_add_window (app, window);
 
@@ -517,7 +593,8 @@ disassociate_window (ShellWindowTracker   *self,
   g_hash_table_remove (self->window_to_app, window);
 
   _shell_app_remove_window (app, window);
-  g_signal_handlers_disconnect_by_func (window, G_CALLBACK(on_wm_class_changed), self);
+  g_signal_handlers_disconnect_by_func (window, G_CALLBACK (on_wm_class_changed), self);
+  g_signal_handlers_disconnect_by_func (window, G_CALLBACK (on_gtk_application_id_changed), self);
 
   g_signal_emit (self, signals[TRACKED_WINDOWS_CHANGED], 0);
 
@@ -624,8 +701,6 @@ shell_window_tracker_init (ShellWindowTracker *self)
   self->window_to_app = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                                NULL, (GDestroyNotify) g_object_unref);
 
-  self->launched_pid_to_app = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_object_unref);
-
   screen = shell_global_get_screen (shell_global_get ());
 
   g_signal_connect (G_OBJECT (screen), "startup-sequence-changed",
@@ -641,7 +716,6 @@ shell_window_tracker_finalize (GObject *object)
   ShellWindowTracker *self = SHELL_WINDOW_TRACKER (object);
 
   g_hash_table_destroy (self->window_to_app);
-  g_hash_table_destroy (self->launched_pid_to_app);
 
   G_OBJECT_CLASS (shell_window_tracker_parent_class)->finalize(object);
 }
@@ -657,12 +731,7 @@ ShellApp *
 shell_window_tracker_get_window_app (ShellWindowTracker *tracker,
                                      MetaWindow         *metawin)
 {
-  MetaWindow *transient_for;
   ShellApp *app;
-
-  transient_for = meta_window_get_transient_for (metawin);
-  if (transient_for != NULL)
-    metawin = transient_for;
 
   app = g_hash_table_lookup (tracker->window_to_app, metawin);
   if (app)
@@ -713,40 +782,6 @@ shell_window_tracker_get_app_from_pid (ShellWindowTracker *tracker,
   g_slist_free (running);
 
   return result;
-}
-
-static void
-on_child_exited (GPid      pid,
-                 gint      status,
-                 gpointer  unused_data)
-{
-  ShellWindowTracker *tracker;
-
-  tracker = shell_window_tracker_get_default ();
-
-  g_hash_table_remove (tracker->launched_pid_to_app, GINT_TO_POINTER((gint)pid));
-}
-
-void
-_shell_window_tracker_add_child_process_app (ShellWindowTracker *tracker,
-                                             GPid                pid,
-                                             ShellApp           *app)
-{
-  gpointer pid_ptr = GINT_TO_POINTER((int)pid);
-
-  if (g_hash_table_lookup (tracker->launched_pid_to_app,
-                           &pid_ptr))
-    return;
-
-  g_hash_table_insert (tracker->launched_pid_to_app,
-                       pid_ptr,
-                       g_object_ref (app));
-  g_child_watch_add (pid, on_child_exited, NULL);
-  /* TODO: rescan unassociated windows
-   * Unlikely in practice that the launched app gets ahead of us
-   * enough to map an X window before we get scheduled after the fork(),
-   * but adding this note for future reference.
-   */
 }
 
 static void

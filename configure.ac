@@ -62,6 +62,21 @@ fi
 
 AM_CONDITIONAL(BUILD_RECORDER, $build_recorder)
 
+AC_ARG_ENABLE([systemd],
+              AS_HELP_STRING([--enable-systemd], [Use systemd]),
+              [enable_systemd=$enableval],
+              [enable_systemd=auto])
+AS_IF([test x$enable_systemd != xno], [
+  AC_MSG_CHECKING([for libsystemd-journal])
+  PKG_CHECK_EXISTS([libsystemd-journal],
+                   [have_systemd=yes
+                    AC_DEFINE([HAVE_SYSTEMD], [1], [Define if we have systemd])],
+                   [have_systemd=no])
+  AC_MSG_RESULT($have_systemd)
+])
+
+AC_MSG_RESULT($enable_systemd)
+
 CLUTTER_MIN_VERSION=1.13.4
 GOBJECT_INTROSPECTION_MIN_VERSION=0.10.1
 GJS_MIN_VERSION=1.36.1
@@ -196,6 +211,12 @@ AC_SUBST([JASMINE_REPORT_ARGUMENT])
 
 # Enable coverage reporting
 EOS_COVERAGE_REPORT([c js])
+
+AC_ARG_VAR([GDBUS_CODEGEN],[the gdbus-codegen programme])
+AC_PATH_PROG([GDBUS_CODEGEN],[gdbus-codegen],[])
+if test -z "$GDBUS_CODEGEN"; then
+  AC_MSG_ERROR([gdbus-codegen not found])
+fi
 
 AC_CONFIG_FILES([
   Makefile

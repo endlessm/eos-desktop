@@ -89,12 +89,18 @@ scan_startup_wm_class_to_id (ShellAppSystem *self)
   for (l = apps; l != NULL; l = l->next)
     {
       GAppInfo *info = l->data;
-      const char *startup_wm_class, *id;
+      const char *startup_wm_class, *id, *old_id;
 
       id = g_app_info_get_id (info);
       startup_wm_class = g_desktop_app_info_get_startup_wm_class (G_DESKTOP_APP_INFO (info));
 
-      if (startup_wm_class != NULL)
+      if (startup_wm_class == NULL)
+        continue;
+
+      /* In case multiple .desktop files set the same StartupWMClass, prefer
+       * the one where ID and StartupWMClass match */
+      old_id = g_hash_table_lookup (priv->startup_wm_class_to_id, startup_wm_class);
+      if (old_id == NULL || strcmp (id, startup_wm_class) == 0)
         g_hash_table_insert (priv->startup_wm_class_to_id,
                              g_strdup (startup_wm_class), g_strdup (id));
     }
@@ -110,9 +116,6 @@ app_is_stale (ShellApp *app)
 
   if (shell_app_is_window_backed (app))
     return FALSE;
-
-  if (shell_app_get_id (app) == NULL)
-    return TRUE;
 
   info = g_desktop_app_info_new (shell_app_get_id (app));
   is_stale = (info == NULL);
@@ -212,9 +215,6 @@ shell_app_system_lookup_app (ShellAppSystem   *self,
   ShellApp *app;
   GDesktopAppInfo *info;
 
-  if (!id)
-    return NULL;
-
   app = g_hash_table_lookup (priv->id_to_app, id);
   if (app)
     return app;
@@ -304,6 +304,20 @@ shell_app_system_lookup_desktop_wmclass (ShellAppSystem *system,
 
   if (wmclass == NULL)
     return NULL;
+
+  /* First try without changing the case (this handles
+     org.example.Foo.Bar.desktop applications)
+
+     Note that is slightly wrong in that Gtk+ would set
+     the WM_CLASS to Org.example.Foo.Bar, but it also
+     sets the instance part to org.example.Foo.Bar, so we're ok
+  */
+  desktop_file = g_strconcat (wmclass, ".desktop", NULL);
+  app = shell_app_system_lookup_heuristic_basename (system, desktop_file);
+  g_free (desktop_file);
+
+  if (app)
+    return app;
 
   canonicalized = canonicalize_and_sanitize_wmclass (wmclass);
   desktop_file = g_strconcat (canonicalized, ".desktop", NULL);

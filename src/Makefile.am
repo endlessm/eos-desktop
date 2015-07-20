@@ -80,6 +80,12 @@ EOS_JS_COVERAGE_FILES =
 
 @EOS_COVERAGE_RULES@
 
+org-gtk-application.c org-gtk-application.h: org.gtk.Application.xml Makefile
+	$(AM_V_GEN) $(GDBUS_CODEGEN) \
+			--generate-c-code org-gtk-application \
+			--c-namespace Shell \
+			$<
+
 include Makefile-st.am
 include Makefile-tray.am
 include Makefile-calendar-server.am
@@ -101,6 +107,8 @@ privlibdir = $(pkglibdir)
 privlib_LTLIBRARIES = libeos-shell.la libeos-shell-js.la
 
 shell_built_sources = \
+	org-gtk-application.h \
+	org-gtk-application.c \
 	shell-enum-types.h \
 	shell-enum-types.c
 
@@ -132,13 +140,13 @@ shell_public_headers_h =		\
 	shell-window-tracker.h		\
 	shell-wm.h
 
-shell_private_sources = \
-	gactionmuxer.h			\
-	gactionmuxer.c			\
-	gactionobservable.h		\
-	gactionobservable.c		\
-	gactionobserver.h		\
-	gactionobserver.c
+shell_private_sources = 		\
+	gtkactionmuxer.h		\
+	gtkactionmuxer.c		\
+	gtkactionobservable.h		\
+	gtkactionobservable.c		\
+	gtkactionobserver.h		\
+	gtkactionobserver.c
 
 libeos_shell_sources =			\
 	$(shell_public_headers_h)	\
@@ -190,8 +198,12 @@ libeos_shell_built_sources =		\
 libeos_shell_la_SOURCES = $(libeos_shell_sources)
 nodist_libeos_shell_la_SOURCES = $(libeos_shell_built_sources)
 
+shell_no_gir_sources = \
+	org-gtk-application.h \
+	org-gtk-application.c
+
 libeos_shell_la_gir_sources = \
-	$(filter-out %-private.h $(shell_private_sources), $(shell_public_headers_h) $(libeos_shell_sources) $(libeos_shell_built_sources))
+	$(filter-out %-private.h $(shell_private_sources) $(shell_no_gir_sources), $(shell_public_headers_h) $(libeos_shell_sources) $(libeos_shell_built_sources))
 
 eos_shell_real_SOURCES =		\
 	main.c
