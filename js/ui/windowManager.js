@@ -949,9 +949,11 @@ const WindowManager = new Lang.Class({
     },
 
     _mapWindow : function(shellwm, actor) {
-        actor._windowType = actor.meta_window.get_window_type();
-        actor._notifyWindowTypeSignalId = actor.meta_window.connect('notify::window-type', Lang.bind(this, function () {
-            let type = actor.meta_window.get_window_type();
+        let window = actor.meta_window;
+
+        actor._windowType = window.get_window_type();
+        actor._notifyWindowTypeSignalId = window.connect('notify::window-type', Lang.bind(this, function () {
+            let type = window.get_window_type();
             if (type == actor._windowType)
                 return;
             if (type == Meta.WindowType.MODAL_DIALOG ||
@@ -964,13 +966,29 @@ const WindowManager = new Lang.Class({
             actor._windowType = type;
         }));
 
+        let isSplashWindow = (window.get_role() == 'eos-speedwagon');
+
+        if (!isSplashWindow) {
+            // If we have an active splash window for the app, don't animate it.
+            // The _showingSplash state here is a bit dirty -- it's set by appActivation.js
+            let tracker = Shell.WindowTracker.get_default();
+            let app = tracker.get_window_app(window);
+            let hasSplashWindow = app.get_windows().some(function(window) {
+                return (window.get_role() == 'eos-speedwagon')
+            });
+            if (hasSplashWindow) {
+                shellwm.completed_map(actor);
+                return;
+            }
+        }
+
         // for side components, we will hide the overview and then animate
-        if (!this._shouldAnimateActor(actor) && !(SideComponent.isSideComponentWindow(actor.meta_window) && Main.overview.visible)) {
+        if (!this._shouldAnimateActor(actor) && !(SideComponent.isSideComponentWindow(window) && Main.overview.visible)) {
             shellwm.completed_map(actor);
             return;
         }
 
-        if (actor.meta_window.is_attached_dialog()) {
+        if (window.is_attached_dialog()) {
             /* Scale the window from the center of the parent */
             this._checkDimming(actor.get_meta_window().get_transient_for());
             actor.set_scale(1.0, 0.0);
@@ -989,7 +1007,7 @@ const WindowManager = new Lang.Class({
                                onOverwriteScope: this,
                                onOverwriteParams: [shellwm, actor]
                              });
-        } else if (SideComponent.isSideComponentWindow(actor.meta_window)) {
+        } else if (SideComponent.isSideComponentWindow(window)) {
             this._mapping.push(actor);
 
             if (Main.overview.visible) {
@@ -1001,9 +1019,9 @@ const WindowManager = new Lang.Class({
             } else {
                 this._mapSideComponent(shellwm, actor, true);
             }
-        } else if (actor.meta_window.get_role() == 'eos-speedwagon') {
+        } else if (isSplashWindow) {
             // This is a Speedwagon splash screen. Slide it up from the bottom.
-            let workArea = Main.layoutManager.getWorkAreaForMonitor(actor.meta_window.get_monitor());
+            let workArea = Main.layoutManager.getWorkAreaForMonitor(window.get_monitor());
             actor.translation_y = workArea.height;
             actor.show();
             this._mapping.push(actor);
