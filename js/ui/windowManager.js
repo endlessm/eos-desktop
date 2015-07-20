@@ -966,6 +966,22 @@ const WindowManager = new Lang.Class({
             actor._windowType = type;
         }));
 
+        let isSplashWindow = (window.get_role() == 'eos-speedwagon');
+
+        if (!isSplashWindow) {
+            // If we have an active splash window for the app, don't animate it.
+            // The _showingSplash state here is a bit dirty -- it's set by appActivation.js
+            let tracker = Shell.WindowTracker.get_default();
+            let app = tracker.get_window_app(window);
+            let hasSplashWindow = app.get_windows().some(function(window) {
+                return (window.get_role() == 'eos-speedwagon')
+            });
+            if (hasSplashWindow) {
+                shellwm.completed_map(actor);
+                return;
+            }
+        }
+
         // for side components, we will hide the overview and then animate
         if (!this._shouldAnimateActor(actor) && !(SideComponent.isSideComponentWindow(window) && Main.overview.visible)) {
             shellwm.completed_map(actor);
@@ -1003,7 +1019,7 @@ const WindowManager = new Lang.Class({
             } else {
                 this._mapSideComponent(shellwm, actor, true);
             }
-        } else if (window.get_role() == 'eos-speedwagon') {
+        } else if (isSplashWindow) {
             // This is a Speedwagon splash screen. Slide it up from the bottom.
             let workArea = Main.layoutManager.getWorkAreaForMonitor(window.get_monitor());
             actor.translation_y = workArea.height;
