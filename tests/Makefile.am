@@ -42,8 +42,9 @@ EXTRA_DIST += $(TEST_MISC)
 
 TESTS = \
   $(JS_TESTS) \
+  run_coverage.coverage \
   $(NULL)
-TEST_EXTENSIONS = .js
+TEST_EXTENSIONS = .js .coverage
 
 @EOS_COVERAGE_RULES@
 
