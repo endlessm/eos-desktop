@@ -40,6 +40,3 @@ EOS_JS_COVERAGE_FILES = $(shell python -c "import xml.etree.ElementTree as ET; i
 
 AM_CFLAGS = @EOS_COVERAGE_CFLAGS@
 AM_LDFLAGS = @EOS_COVERAGE_LDFLAGS@
-
-echo-cov-files:
-	@echo @EOS_JS_COVERAGE_LOG_FLAGS@

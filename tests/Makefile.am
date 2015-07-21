@@ -77,6 +77,3 @@ TESTS_ENVIRONMENT = \
 
 EXTRA_DIST += \
 	README.txt
-
-echo-am-js-log-flags:
-	@echo $(AM_JS_LOG_FLAGS)
