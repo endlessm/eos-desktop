@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-07 01:29+0000\n"
+"POT-Creation-Date: 2015-07-14 01:27+0000\n"
 "PO-Revision-Date: 2015-05-12 01:30+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/p/eos-desktop/language/fr/)\n"
@@ -469,41 +469,41 @@ msgstr "Impossible d'analyser la commande :"
 msgid "Execution of '%s' failed:"
 msgstr "Exécution de « %s » impossible :"
 
-#: ../js/ui/appDisplay.js:1183
+#: ../js/ui/appDisplay.js:1154
 msgid "Remove from desktop"
 msgstr "Supprimer du bureau"
 
-#: ../js/ui/appDisplay.js:1666
+#: ../js/ui/appDisplay.js:1637
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../js/ui/appDisplay.js:1672
+#: ../js/ui/appDisplay.js:1643
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
-#: ../js/ui/appDisplay.js:1678
+#: ../js/ui/appDisplay.js:1649
 msgid "We are just trying to keep you safe."
 msgstr "Nous essayons simplement de vous garder en sécurité."
 
-#: ../js/ui/appDisplay.js:1684 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1655 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Valider"
 
-#: ../js/ui/appDisplay.js:1931
+#: ../js/ui/appDisplay.js:1896
 msgid "More Apps"
 msgstr "Plus d'Apps"
 
-#: ../js/ui/appDisplay.js:1940
+#: ../js/ui/appDisplay.js:1905
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ../js/ui/appFavorites.js:87
+#: ../js/ui/appFavorites.js:95
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s a été ajouté à vos favoris."
 
-#: ../js/ui/appFavorites.js:121
+#: ../js/ui/appFavorites.js:129
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s a été supprimé de vos favoris."
@@ -697,16 +697,16 @@ msgstr "Disque externe connecté"
 msgid "External drive disconnected"
 msgstr "Disque externe déconnecté"
 
-#: ../js/ui/components/autorunManager.js:305
+#: ../js/ui/components/autorunManager.js:301
 msgid "Removable Devices"
 msgstr "Périphériques amovibles"
 
-#: ../js/ui/components/autorunManager.js:612
+#: ../js/ui/components/autorunManager.js:601
 #, javascript-format
 msgid "Open with %s"
 msgstr "Ouvrir avec %s"
 
-#: ../js/ui/components/autorunManager.js:638
+#: ../js/ui/components/autorunManager.js:627
 msgid "Eject"
 msgstr "Éjecter"
 
@@ -1099,7 +1099,7 @@ msgstr "Echec d'une tentative de mise à jour"
 msgid "We could not update your system"
 msgstr "Nous n'avons pas pu mettre à jour votre système"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:463
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:462
 msgid "Windows"
 msgstr "Fenêtres"
 
@@ -1367,7 +1367,7 @@ msgstr "Annuler"
 msgid "Overview"
 msgstr "Vue d'ensemble"
 
-#: ../js/ui/panel.js:376
+#: ../js/ui/panel.js:375
 msgid "Top Bar"
 msgstr "Barre supérieure"
 
@@ -1406,11 +1406,11 @@ msgstr "Impossible de verrouiller"
 msgid "Lock was blocked by an application"
 msgstr "Le verrouillage a été bloqué par une application"
 
-#: ../js/ui/search.js:773
+#: ../js/ui/search.js:770
 msgid "Searching…"
 msgstr "Recherche en cours..."
 
-#: ../js/ui/search.js:775
+#: ../js/ui/search.js:772
 msgid "No results."
 msgstr "Pas de résultats."
 
@@ -1901,7 +1901,7 @@ msgstr "%s (distant)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:467
+#: ../js/ui/viewSelector.js:466
 msgid "Applications"
 msgstr "Applications"
 

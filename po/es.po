@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-07 01:29+0000\n"
-"PO-Revision-Date: 2015-06-12 17:46+0000\n"
+"POT-Creation-Date: 2015-07-14 01:27+0000\n"
+"PO-Revision-Date: 2015-07-20 22:47+0000\n"
 "Last-Translator: c.sanchez <cassandra@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/p/eos-desktop/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgstr "Mostrar la bandeja de mensajes"
 
 #: ../data/50-gnome-shell-system.xml.in.h:3
 msgid "Focus the active notification"
-msgstr "Enfocar lla notificación activa"
+msgstr "Enfocar la notificación activa"
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
 msgid "Show all applications"
@@ -79,11 +79,11 @@ msgstr "Activar las herramientas internas, útiles para desarrolladores y probad
 msgid ""
 "Allows access to internal debugging and monitoring tools using the Alt-F2 "
 "dialog."
-msgstr "Permitir acceder a las herramientas internas de depuración  y monitorización usando el diálogo Alt+F2"
+msgstr "Permitir acceder a las herramientas internas de depuración y monitorización usando el diálogo Alt+F2"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:3
 msgid "Separate the power off and log out buttons on the user menu"
-msgstr "Separar los botones de apagado y cierre de sesión en el menú de usuario"
+msgstr "Separar los botones para apagar y cerrar sesión en el menú de usuario"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:4
 msgid ""
@@ -100,7 +100,7 @@ msgstr "Permite la esquina activa para la selección de pantallas"
 msgid ""
 "By default, the hot corner for the window picker is enabled. Set false to "
 "disable the hot corner."
-msgstr "Como condición base, la esquina activa para la selección de pantalla está activada. Selecciona falso para desactivar la esquina activa."
+msgstr "Como predeterminado, la esquina activa para la selección de pantalla está activada. Selecciona falso para desactivar la esquina activa."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:7
 msgid "Set the left/right position of the hot corner for the window picker"
@@ -121,7 +121,7 @@ msgstr "Activar la posición de arriba y abajo para la esquina activa para la se
 msgid ""
 "Default position of the hot corner is in a bottom corner. Set false to move "
 "the hot corner to a top corner."
-msgstr "La condición base para la esquina activa es en las esquinas de abajo. Selecciona falso para mover la esquina activa a las esquinas de arriba."
+msgstr "La condición base para la esquina activa es en las esquinas inferiores. Selecciona falso para mover la esquina activa a las esquinas superiores."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:11
 msgid "Set the size of the hot corner target"
@@ -132,37 +132,37 @@ msgid ""
 "Number of pixels in one dimension of the square target for the hot corner. "
 "Default is for a single pixel in the very corner. For some virtual machines,"
 " this value may need to be set larger than the default."
-msgstr "Número de píxeles en una dimensión del objetivo cuadrado de la esquina activa. Por defecto, aparece un único píxel en la misma esquina. En algunas máquinas virtuales, puede ser necesario establecer este valor de modo que sea superior al predeterminado. "
+msgstr "Número de píxeles en una dimensión del objetivo cuadrado de la esquina activa. Como predeterminado, aparece un único píxel en la misma esquina. En algunas máquinas virtuales, puede ser necesario establecer este valor de modo que sea superior al predeterminado. "
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:13
 msgid "Set the left/right position of the dash on the overview"
-msgstr "Ajusta la posición de la barra a la izquierda / derecha del tablero"
+msgstr "Ajusta la posición de la barra a la izquierda/derecha del tablero"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:14
 msgid ""
 "Default position of the dash is at the end of the screen (right edge for LTR"
 " text direction). Unlike the hot corners, the opposite side is used for RTL "
 "text direction."
-msgstr "La posición estándar de la barra es al borde de la pantalla (borde derecho para la dirección del texto desde la izquierda hacia la derecha). En contraste a las esquinas calientes, el lado opuesto se utiliza para la dirección del texto desde la derecha hacia la izquierda."
+msgstr "La posición predeterminada de la barra es al borde de la pantalla (borde derecho para la dirección del texto desde la izquierda hacia la derecha). En contraste a las esquinas calientes, el lado opuesto se utiliza para la dirección del texto desde la derecha hacia la izquierda."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:15
 msgid "Prevent apps from being automatically maximized on launch"
-msgstr "Impedir que los programas se maximicen automáticamente al iniciarse"
+msgstr "Impide que los programas se maximicen automáticamente al iniciarse"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
 "screens, prevents applications from being forced to open maximized, and does"
 " not automatically switch to the app selector when a window is minimized."
-msgstr "Gestiona las ventanas al estilo del Gnome estándar. Oculta pantallas de inicio de programas, impide que los programas se abran maximizadas forzosamente y no cambia automáticamene al selector de programas cuando se minimiza una ventana."
+msgstr "Hace que la gestión de las ventanas sea más como el estilo del Gnome estándar. Oculta pantallas de inicio de programas, impide que los programas automáticamente se abran maximizados y no cambia automáticamene al selector de programas cuando se minimiza una ventana."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:17
 msgid "Whether the app store is displayed"
-msgstr "Si la tienda de programas se muestra o no"
+msgstr "Si el centro de programas se muestra o no"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:18
 msgid "Whether the application grid displays the app store icon."
-msgstr "Si el ícono de la tienda de programas aparece o no en la cuadrícula de programas."
+msgstr "Si el ícono del centro de programas aparece o no en la cuadrícula de programas."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:19
 msgid "Uuids of extensions to enable"
@@ -174,7 +174,7 @@ msgid ""
 " should be loaded. Any extension that wants to be loaded needs to be in this"
 " list. You can also manipulate this list with the EnableExtension and "
 "DisableExtension DBus methods on org.gnome.Shell."
-msgstr "Las extensiones de GNOME Shell tienen una propiedad uuid; esta clave lista las extensiones que se deben cargar. Cualquier extensión que se quiere cargar debe estar en la lista. También puede manipular esta lista con los métodos de DBus «EnableExtension» y «DisableExtension» en org.gnome.Shell."
+msgstr "Las extensiones de GNOME Shell tienen una propiedad uuid; esta clave lista las extensiones que se deben cargar. Cualquier extensión que se quiere cargar debe estar en esta lista. También puedes manipular esta lista con los métodos de DBus «EnableExtension» y «DisableExtension» en org.gnome.Shell."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:21
 msgid "Whether to collect stats about applications usage"
@@ -186,11 +186,11 @@ msgid ""
 " used ones (e.g. in launchers). While this data will be kept private, you "
 "may want to disable this for privacy reasons. Please note that doing so "
 "won't remove already saved data."
-msgstr "La «shell» normalmente monitoriza todas los programas activas para presentar las más usadas (ej. en los lanzadores). Aunque estos datos se mantienen de forma privada, puede querer desactivarlo por razones de privacidad. Nota que haciéndolo no eliminará los datos ya guardados."
+msgstr "El shell normalmente monitoriza todos los programas activos para presentar los más usados (ej. en los lanzadores). Aunque estos datos se mantienen de forma privada, puede ser que quieras desactivarlos por razones de privacidad. Nota que haciéndolo no eliminará los datos ya guardados."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:23
 msgid "List of desktop file IDs for favorite applications"
-msgstr "Lista de ID de archivos de escritorio para los programas favoritos"
+msgstr "Lista de ID de archivos de escritorio para programas favoritos"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:24
 msgid ""
@@ -249,7 +249,7 @@ msgid ""
 "filesystem is mounted. If the password can be saved for future use a "
 "'Remember Password' checkbox will be present. This key sets the default "
 "state of the checkbox."
-msgstr "La shell solicitará una contraseña cuando se monte un dispositivo cifrado o un sistema de archivos remoto. Si la contraseña se puede guardar para usarla en el futuro, se mostrará la casilla «Recordar contraseña». Esta clave establece el valor predeterminado de la casilla."
+msgstr "El shell solicitará una contraseña cuando se monte un dispositivo cifrado o un sistema de archivos remoto. Si la contraseña se puede guardar para usarla en el futuro, se mostrará la casilla «Recordar contraseña». Esta clave establece el valor predeterminado de la casilla."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid "Layout of application launcher icons in the grid"
@@ -270,7 +270,7 @@ msgid ""
 "By default, the message tray is only shown on key press. Set true to show "
 "the message tray when exerting downward pressure with the cursor on the "
 "bottom of the taskbar."
-msgstr "Por defecto, la bandeja de mensajes sólo se muestra al pulsar la tecla. Establece cierto para mostrar la bandeja de mensajes cuando haya presión hacia abajo con el cursor en la parte inferior de la barra de tareas."
+msgstr "Como predeterminado, la bandeja de mensajes sólo se muestra al pulsar la tecla. Establece cierto para mostrar la bandeja de mensajes cuando haya presión hacia abajo con el cursor en la parte inferior de la barra de tareas."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Show the week date in the calendar"
@@ -308,15 +308,15 @@ msgstr "Asociación de teclas cambiar la visibilidad de la bandeja de mensajes."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "Keybinding to focus the active notification"
-msgstr "Asociación de teclas para dar el foco a la notificación activa"
+msgstr "Asociación de teclas para enfocarse en la notificación activa"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Keybinding to focus the active notification."
-msgstr "Asociación de teclas para dar el foco a la notificación activa."
+msgstr "Asociación de teclas para enfocarse en la notificación activa."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "Keybinding that shows the force app exit dialog"
-msgstr "Combinación de teclas para cerrar programas"
+msgstr "Combinación de teclas que muestra el texto para cerrar programas"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "Which keyboard to use"
@@ -328,14 +328,14 @@ msgstr "El tipo de teclado que usar."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "The application icon mode."
-msgstr "El modo de icono del programa."
+msgstr "El modo de ícono del programa."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
 "(shows only the application icon) or 'both'."
-msgstr "Configura cómo se muestran las ventanas en el selector. Los valore posibles son «thumbnail-only» (muestra una miniatura de la ventana), «app-icon-only» (sólo muestra el icono del programa) «both»."
+msgstr "Configura cómo se muestran las ventanas en el selector. Los valore posibles son «thumbnail-only» (muestra una imagen miniatura de la ventana), «app-icon-only» (sólo muestra el ícono del programa) o «both»."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "Attach modal dialog to the parent window"
@@ -362,7 +362,7 @@ msgstr "Activar el mosaico en los bordes al arrastrar ventanas a los bordes de l
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:59
 msgid "Workspaces are managed dynamically"
-msgstr "Las áreas de trabajo se gestionan dinámicamente"
+msgstr "Las áreas de trabajo se gestionan dinámicamente"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:60
 msgid "Workspaces only on primary monitor"
@@ -379,7 +379,7 @@ msgstr "Extensión"
 
 #: ../js/extensionPrefs/main.js:191
 msgid "Select an extension to configure using the combobox above."
-msgstr "Selecciona una extensión que configurar usando la caja combinada de arriba."
+msgstr "Selecciona una extensión para configurar usando la caja combinada de arriba."
 
 #: ../js/gdm/loginDialog.js:405
 msgid "Session…"
@@ -387,14 +387,14 @@ msgstr "Sesión…"
 
 #: ../js/gdm/loginDialog.js:615
 msgid "Show password hint"
-msgstr "Muestra pista para contraseña"
+msgstr "Mostrar recordatorio"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
 #. manually entering the username.
 #: ../js/gdm/loginDialog.js:657
 msgid "Not listed?"
-msgstr "¿No está en la lista?"
+msgstr "¿No estás en la lista?"
 
 #: ../js/gdm/loginDialog.js:825 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
@@ -472,41 +472,41 @@ msgstr "No se pudo analizar el comando:"
 msgid "Execution of '%s' failed:"
 msgstr "Falló la ejecución de «%s»:"
 
-#: ../js/ui/appDisplay.js:1183
+#: ../js/ui/appDisplay.js:1154
 msgid "Remove from desktop"
 msgstr "Quitar del escritorio"
 
-#: ../js/ui/appDisplay.js:1666
+#: ../js/ui/appDisplay.js:1637
 msgid "Warning"
 msgstr "Advertencia"
 
-#: ../js/ui/appDisplay.js:1672
+#: ../js/ui/appDisplay.js:1643
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr "Para eliminar una carpeta usted debe remover primero todos los elementos contenidos dentro."
+msgstr "Para eliminar una carpeta tienes que remover primero todos los elementos contenidos dentro."
 
-#: ../js/ui/appDisplay.js:1678
+#: ../js/ui/appDisplay.js:1649
 msgid "We are just trying to keep you safe."
-msgstr "Estamos tratando de mantener la seguridad de sus datos."
+msgstr "Estamos tratando de mantener la seguridad de tus datos."
 
-#: ../js/ui/appDisplay.js:1684 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1655 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Aceptar"
 
-#: ../js/ui/appDisplay.js:1931
+#: ../js/ui/appDisplay.js:1896
 msgid "More Apps"
 msgstr "Más programas"
 
-#: ../js/ui/appDisplay.js:1940
+#: ../js/ui/appDisplay.js:1905
 msgid "Delete"
-msgstr "Remover"
+msgstr "Eliminar"
 
-#: ../js/ui/appFavorites.js:87
+#: ../js/ui/appFavorites.js:95
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "Se ha añadido %s a tus favoritos."
 
-#: ../js/ui/appFavorites.js:121
+#: ../js/ui/appFavorites.js:129
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "Se ha quitado %s de tus favoritos."
@@ -700,16 +700,16 @@ msgstr "Dispositivo externo conectado"
 msgid "External drive disconnected"
 msgstr "Dispositivo externo desconectado"
 
-#: ../js/ui/components/autorunManager.js:305
+#: ../js/ui/components/autorunManager.js:301
 msgid "Removable Devices"
 msgstr "Dispositivos extraíbles"
 
-#: ../js/ui/components/autorunManager.js:612
+#: ../js/ui/components/autorunManager.js:601
 #, javascript-format
 msgid "Open with %s"
 msgstr "Abrir con %s"
 
-#: ../js/ui/components/autorunManager.js:638
+#: ../js/ui/components/autorunManager.js:627
 msgid "Eject"
 msgstr "Expulsar"
 
@@ -719,7 +719,7 @@ msgstr "Contraseña:"
 
 #: ../js/ui/components/keyring.js:101
 msgid "Type again:"
-msgstr "Escriba de nuevo:"
+msgstr "Escribe de nuevo:"
 
 #: ../js/ui/components/networkAgent.js:132
 msgid "Connect"
@@ -768,7 +768,7 @@ msgstr "Autenticación 802.1X cableada"
 
 #: ../js/ui/components/networkAgent.js:316
 msgid "Network name: "
-msgstr "Nombre de la red"
+msgstr "Nombre de la red:"
 
 #: ../js/ui/components/networkAgent.js:321
 msgid "DSL authentication"
@@ -813,7 +813,7 @@ msgstr "Autenticar"
 #. * for instance.
 #: ../js/ui/components/polkitAgent.js:256 ../js/ui/shellMountOperation.js:383
 msgid "Sorry, that didn't work. Please try again."
-msgstr "Inténtelo de nuevo,"
+msgstr "Eso no funciono. Por favor inténtalo de nuevo."
 
 #. FIXME: We don't have a 'chat room' icon (bgo #653737) use
 #. system-users for now as Empathy does.
@@ -892,7 +892,7 @@ msgstr "Invitación a %s"
 #: ../js/ui/components/telepathyClient.js:1098
 #, javascript-format
 msgid "%s is inviting you to join %s"
-msgstr "%s le está invitando a unirse a %s"
+msgstr "%s te está invitando a unirte a %s"
 
 #: ../js/ui/components/telepathyClient.js:1100
 #: ../js/ui/components/telepathyClient.js:1139
@@ -922,7 +922,7 @@ msgstr "Llamada de %s"
 #. translators: this is a button label (verb), not a noun
 #: ../js/ui/components/telepathyClient.js:1141
 msgid "Answer"
-msgstr "Responder"
+msgstr "Contestar"
 
 #. To translators: The first parameter is
 #. * the contact's alias and the second one is the
@@ -931,13 +931,13 @@ msgstr "Responder"
 #: ../js/ui/components/telepathyClient.js:1173
 #, javascript-format
 msgid "%s is sending you %s"
-msgstr "%s le está enviando %s"
+msgstr "%s te está enviando %s"
 
 #. To translators: The parameter is the contact's alias
 #: ../js/ui/components/telepathyClient.js:1208
 #, javascript-format
 msgid "%s would like permission to see when you are online"
-msgstr "%s solicita permiso para ver cuándo está en línea"
+msgstr "%s solicita permiso para ver cuándo estás en línea"
 
 #: ../js/ui/components/telepathyClient.js:1299
 msgid "Network error"
@@ -1102,7 +1102,7 @@ msgstr "Hubo un error durante la actualización"
 msgid "We could not update your system"
 msgstr "Tu sistema no se pudo actualizar"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:463
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:462
 msgid "Windows"
 msgstr "Ventanas"
 
@@ -1143,7 +1143,7 @@ msgstr "%A, %e de %B de %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr "Recuerde que las cuentas compartidas no están protegidas por ninguna contraseña, así que asegúrese de borrar todos los ficheros que desee mantener privados."
+msgstr "Recuerda que las cuentas compartidas no están protegidas por ninguna contraseña, así que asegúrate de borrar todos los archivos que deseas mantener privados."
 
 #: ../js/ui/endSessionDialog.js:77
 #, javascript-format
@@ -1158,7 +1158,7 @@ msgstr "Cerrar la sesión"
 
 #: ../js/ui/endSessionDialog.js:80
 msgid "Click Log Out to quit these applications and log out of the system."
-msgstr "Pulse «Cerrar sesión» para salir de eses programas y cerrar la sesión del sistema."
+msgstr "Haz clic en «Cerrar sesión» para salir de esos programas y cerrar la sesión del sistema."
 
 #: ../js/ui/endSessionDialog.js:83
 #, javascript-format
@@ -1172,7 +1172,7 @@ msgstr[1] "se cerrará automáticamente la sesión de %s en %d segundos."
 msgid "You will be logged out automatically in %d second."
 msgid_plural "You will be logged out automatically in %d seconds."
 msgstr[0] "Su sesión se cerrará automáticamente en %d segundo."
-msgstr[1] "Su sesión se cerrará automáticamente en %d segundos."
+msgstr[1] "Tu sesión se cerrará automáticamente en %d segundos."
 
 #: ../js/ui/endSessionDialog.js:93
 msgid "Logging out of the system."
@@ -1190,7 +1190,7 @@ msgstr "Apagar"
 
 #: ../js/ui/endSessionDialog.js:103
 msgid "Click Power Off to quit these applications and power off the system."
-msgstr "Pulse «Apagar» para salir de eses programas y apagar el sistema."
+msgstr "Haz clic en «Apagar» para salir de esos programas y apagar el sistema."
 
 #: ../js/ui/endSessionDialog.js:106
 #, javascript-format
@@ -1221,7 +1221,7 @@ msgstr "Reiniciar"
 
 #: ../js/ui/endSessionDialog.js:137
 msgid "Click Restart to quit these applications and restart the system."
-msgstr "Pulse «Reiniciar» para salir de eses programas y reiniciar el sistema."
+msgstr "Haz clic en «Reiniciar» para salir de esos programas y reiniciar el sistema."
 
 #: ../js/ui/endSessionDialog.js:140
 #, javascript-format
@@ -1259,7 +1259,7 @@ msgstr "Pantalla de administración"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr "Cerrar Programa"
+msgstr "Cerrar programa"
 
 #: ../js/ui/iconGridLayout.js:206
 #, javascript-format
@@ -1339,7 +1339,7 @@ msgstr "Quitar"
 
 #: ../js/ui/messageTray.js:1545
 msgid "Clear Messages"
-msgstr "Limpiar mensajes"
+msgstr "Borrar mensajes"
 
 #: ../js/ui/messageTray.js:1572
 msgid "Notification Settings"
@@ -1370,7 +1370,7 @@ msgstr "Deshacer"
 msgid "Overview"
 msgstr "Vista general"
 
-#: ../js/ui/panel.js:376
+#: ../js/ui/panel.js:375
 msgid "Top Bar"
 msgstr "Barra superior"
 
@@ -1409,11 +1409,11 @@ msgstr "No se pudo bloquear"
 msgid "Lock was blocked by an application"
 msgstr "Un programa impidió el bloqueo"
 
-#: ../js/ui/search.js:773
+#: ../js/ui/search.js:770
 msgid "Searching…"
 msgstr "Buscando..."
 
-#: ../js/ui/search.js:775
+#: ../js/ui/search.js:772
 msgid "No results."
 msgstr "No hay resultados."
 
@@ -1608,7 +1608,7 @@ msgstr "Solicitud de emparejamiento para «%s»"
 
 #: ../js/ui/status/bluetooth.js:399
 msgid "Please enter the PIN mentioned on the device."
-msgstr "Introduzca el PIN mencionado en el dispositivo."
+msgstr "Introduce el PIN mencionado en el dispositivo."
 
 #: ../js/ui/status/keyboard.js:368
 msgid "Show Keyboard Layout"
@@ -1761,7 +1761,7 @@ msgstr "Estimando…"
 msgid "%d hour remaining"
 msgid_plural "%d hours remaining"
 msgstr[0] "Queda %d hora"
-msgstr[1] "Queda %d horas"
+msgstr[1] "Quedan %d horas"
 
 #. TRANSLATORS: this is a time string, as in "%d hours %d minutes remaining"
 #: ../js/ui/status/power.js:115
@@ -1832,7 +1832,7 @@ msgstr "Tableta"
 
 #: ../js/ui/status/power.js:227
 msgid "Computer"
-msgstr "Equipo"
+msgstr "Computadora"
 
 #: ../js/ui/status/power.js:229
 msgctxt "device"
@@ -1904,7 +1904,7 @@ msgstr "%s (remoto)"
 msgid "%s (console)"
 msgstr "%s (consola)"
 
-#: ../js/ui/viewSelector.js:467
+#: ../js/ui/viewSelector.js:466
 msgid "Applications"
 msgstr "Programas"
 
@@ -1936,7 +1936,7 @@ msgstr[1] "Los cambios de las configuraciones se revertirán en %d segundos"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
-msgstr "Calendario de Evolution"
+msgstr "Calendario de evolución"
 
 #. translators:
 #. * The number of sound outputs on a particular device
