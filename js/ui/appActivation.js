@@ -37,8 +37,9 @@ const AppActivationContext = new Lang.Class({
         this._splash = null;
 
         this._appStateId = 0;
+        this._timeoutId = 0;
+
         this._appActivationTime = 0;
-        this._splashId = 0;
     },
 
     activate: function() {
@@ -84,8 +85,8 @@ const AppActivationContext = new Lang.Class({
         // the map animation has finished.
         // This buffer time ensures that the user can never destroy the
         // splash before the animation is completed.
-        this._splashId = Mainloop.timeout_add(SPLASH_SCREEN_TIMEOUT * St.get_slow_down_factor(),
-                                              Lang.bind(this, this._checkSplash));
+        this._timeoutId = Mainloop.timeout_add(SPLASH_SCREEN_TIMEOUT * St.get_slow_down_factor(),
+                                               Lang.bind(this, this._splashTimeout));
 
         // We can't fully trust windows-changed to be emitted with the
         // same ShellApp we called activate() on, as WMClass matching might
@@ -104,17 +105,23 @@ const AppActivationContext = new Lang.Class({
         }
     },
 
-    _checkSplash: function() {
-        this._splashId = 0;
+    _maybeClearSplash: function() {
+        // Clear the splash only when we've waited at least 700ms,
+        // and when the app has transitioned to the running state...
+        if (this._appStateId == 0 && this._timeoutId == 0)
+            this._clearSplash();
+    },
+
+    _splashTimeout: function() {
+        this._timeoutId = 0;
 
         // FIXME: we can't rely on windows-changed being emited on the same
         // desktop file, as web apps right now all open tabs in the default browser
         let isLink = (this._app.get_id().indexOf('eos-link-') != -1);
-
-        // (appStateId == 0) => window already created
-        if (this._appStateId == 0 || isLink) {
+        if (isLink)
             this._clearSplash();
-        }
+        else
+            this._maybeClearSplash();
 
         return false;
     },
@@ -160,36 +167,27 @@ const AppActivationContext = new Lang.Class({
     },
 
     _onAppStateChanged: function(appSystem, app) {
-        if (app.state != Shell.AppState.RUNNING &&
-            app.state != Shell.AppState.STOPPED) {
+        if (!(app.state == Shell.AppState.RUNNING ||
+              app.state == Shell.AppState.STOPPED))
             return;
-        }
 
-        if (this._isBogusWindow(app)) {
+        if (this._isBogusWindow(app))
             return;
-        }
 
         appSystem.disconnect(this._appStateId);
         this._appStateId = 0;
 
-        if (app.state == Shell.AppState.STOPPED) {
-            this._abort = false;
-            this._clearSplash();
-            return;
-        }
+        let aborted = this._abort;
+        this._abort = false;
 
-        if (this._abort) {
-            this._abort = false;
+        if (aborted) {
             this._app.request_quit();
-            return;
-        }
-
-        this._recordLaunchTime();
-
-        // (splashId == 0) => the window took more than the stock
-        // splash timeout to display
-        if (this._splashId == 0) {
             this._clearSplash();
+        } else if (app.state == Shell.AppState.STOPPED) {
+            this._clearSplash();
+        } else {
+            this._recordLaunchTime();
+            this._maybeClearSplash();
         }
     }
 });
