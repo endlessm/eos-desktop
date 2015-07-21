@@ -31,7 +31,7 @@ distcheck-hook:
 	@echo "Checking disted files against files in git"
 	@$(srcdir)/tools/check-for-missing.py $(srcdir) $(distdir) $(DIST_EXCLUDE)
 
-DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-man
+AM_DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-man
 
 # Pass resource paths to EOS_JS_COVERAGE_FILES
 EOS_JS_COVERAGE_FILES = $(shell python -c "import xml.etree.ElementTree as ET; import sys; tree = ET.parse('js/js-resources.gresource.xml'); map(sys.stdout.write, ['resource://org/gnome/shell/{0}\n'.format(e.text) for e in tree.getroot()[0]])")
