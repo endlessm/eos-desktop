@@ -95,8 +95,7 @@ const UnlockDialog = new Lang.Class({
         this.allowCancel = true;
         this.buttonLayout.visible = true;
         this.addButton({ label: _("Cancel"),
-                         action: Lang.bind(this, this._escape),
-                         key: Clutter.KEY_Escape },
+                         action: Lang.bind(this, this._escape) },
                        { expand: true,
                          x_fill: false,
                          y_fill: false,
