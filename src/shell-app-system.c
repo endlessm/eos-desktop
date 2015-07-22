@@ -112,12 +112,23 @@ static gboolean
 app_is_stale (ShellApp *app)
 {
   GDesktopAppInfo *info;
+  const char *id;
   gboolean is_stale;
 
   if (shell_app_is_window_backed (app))
     return FALSE;
 
-  info = g_desktop_app_info_new (shell_app_get_id (app));
+  /* If g_app_info_delete() was called, such as when a custom desktop
+   * icon is removed, the desktop ID of the underlying GDesktopAppInfo
+   * will be set to NULL.
+   * So we explicitly check for that case and mark the app as stale.
+   * See https://git.gnome.org/browse/glib/tree/gio/gdesktopappinfo.c?h=glib-2-44&id=2.44.0#n3682
+   */
+  id = shell_app_get_id (app);
+  if (id == NULL)
+    return TRUE;
+
+  info = g_desktop_app_info_new (id);
   is_stale = (info == NULL);
 
   if (info)
