@@ -270,6 +270,10 @@ const DesktopAppClient = new Lang.Class({
     },
 
     _windowCreated: function(metaDisplay, metaWindow) {
+        // Ignore splash screens, which will already be maximized.
+        if (metaWindow.get_role() == 'eos-speedwagon')
+            return;
+
         // Don't maximize if key to disable default maximize is set
         if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
             return;
