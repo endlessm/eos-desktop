@@ -78,3 +78,8 @@ TESTS_ENVIRONMENT = \
 
 EXTRA_DIST += \
 	README.txt
+
+clean-run-coverage:
+	rm -rf $(abs_top_builddir)/tests/run_coverage.coverage
+
+clean-local: clean-coverage clean-run-coverage
