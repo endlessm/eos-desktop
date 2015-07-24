@@ -142,8 +142,15 @@ PKG_CHECK_MODULES(CALENDAR_SERVER, libecal-1.2 >= $LIBECAL_MIN_VERSION libedatas
 AC_SUBST(CALENDAR_SERVER_CFLAGS)
 AC_SUBST(CALENDAR_SERVER_LIBS)
 
+AC_ARG_ENABLE([install-keybindings],
+              AS_HELP_STRING([--disable-install-keybindings], [Install keybindings globally]),
+              [install_gnome_keybindings=no],
+              [install_gnome_keybindings=yes])
+
 GNOME_KEYBINDINGS_KEYSDIR=`$PKG_CONFIG --variable keysdir gnome-keybindings`
 AC_SUBST([GNOME_KEYBINDINGS_KEYSDIR])
+AM_CONDITIONAL([INSTALL_GNOME_KEYBINDINGS],
+               [test "x$install_gnome_keybindings" = "xyes"])
 
 GOBJECT_INTROSPECTION_CHECK([$GOBJECT_INTROSPECTION_MIN_VERSION])
 
