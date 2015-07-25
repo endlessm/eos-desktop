@@ -415,7 +415,7 @@ clean-local: clean-coverage
  '
 
     EOS_DISTCHECK_CONFIGURE_FLAGS_RULES="
-        DISTCHECK_CONFIGURE_FLAGS += --enable-coverage --with-coverage-dir=$EOS_COVERAGE_DIR
+DISTCHECK_CONFIGURE_FLAGS += --enable-coverage --with-coverage-dir=$EOS_COVERAGE_DIR
     "
 
     EOS_COVERAGE_RULES_FOOTER='
