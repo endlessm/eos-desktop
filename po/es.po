@@ -18,10 +18,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-14 01:27+0000\n"
+"POT-Creation-Date: 2015-07-21 01:34+0000\n"
 "PO-Revision-Date: 2015-07-20 22:47+0000\n"
 "Last-Translator: c.sanchez <cassandra@endlessm.com>\n"
-"Language-Team: Spanish (http://www.transifex.com/p/eos-desktop/language/es/)\n"
+"Language-Team: Spanish (http://www.transifex.com/projects/p/eos-desktop/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1357,7 +1357,7 @@ msgstr "Bandeja de mensajes"
 msgid "System Information"
 msgstr "Información del sistema"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:378
+#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:397
 msgctxt "program"
 msgid "Unknown"
 msgstr "Desconocido"
@@ -1976,7 +1976,7 @@ msgstr "Usar un modo específico, por ejemplo, «gdm» para la pantalla de inici
 msgid "List possible modes"
 msgstr "Listar los modos posibles"
 
-#: ../src/shell-app.c:641
+#: ../src/shell-app.c:653
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "Falló al lanzar «%s»"
