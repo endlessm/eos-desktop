@@ -12,6 +12,7 @@ const St = imports.gi.St;
 const Atk = imports.gi.Atk;
 const Clutter = imports.gi.Clutter;
 
+const AppActivation = imports.ui.appActivation;
 const BoxPointer = imports.ui.boxpointer;
 const GnomeSession = imports.misc.gnomeSession;
 const LoginManager = imports.misc.loginManager;
@@ -626,7 +627,8 @@ const UserMenuButton = new Lang.Class({
         Main.overview.hide();
 
         let app = Shell.AppSystem.get_default().lookup_app(YELP_LAUNCHER);
-        app.activate();
+        let context = new AppActivation.AppActivationContext(app);
+        context.activate();
     },
 
     _onLockScreenClicked: function() {
