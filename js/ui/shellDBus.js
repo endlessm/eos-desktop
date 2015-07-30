@@ -536,34 +536,29 @@ const AppLauncher = new Lang.Class({
     },
 
     Launch: function(name, timestamp) {
-        if (name == "eos-app-store") {
+        if (name == 'eos-app-store') {
             Main.appStore.show(timestamp, true);
-
             return true;
         }
-        else {
-            let appName = name;
-            if (!appName.endsWith('.desktop'))
-                appName += '.desktop';
 
-            let app = this._appSys.lookup_app(appName);
+        let appName = name;
+        if (!appName.endsWith('.desktop'))
+            appName += '.desktop';
 
-            if (app) {
-                if (app.state == Shell.AppState.RUNNING) {
-                    app.activate_full(-1, timestamp);
-                } else {
-                    let activationContext = new AppActivation.AppActivationContext(app);
-                    activationContext.activate();
-                }
-
-                Main.appStore.appLaunched = true;
-
-                return true;
-            } else {
-                log('Unable to launch app ' + appName + ': Not installed');
-            }
+        let app = this._appSys.lookup_app(appName);
+        if (!app) {
+            log('Unable to launch app ' + appName + ': Not installed');
+            return false;
         }
 
-        return false;
+        if (app.state == Shell.AppState.RUNNING) {
+            app.activate_full(-1, timestamp);
+        } else {
+            let activationContext = new AppActivation.AppActivationContext(app);
+            activationContext.activate();
+        }
+
+        Main.appStore.appLaunched = true;
+        return true;
     }
 });
