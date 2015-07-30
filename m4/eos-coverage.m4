@@ -38,6 +38,9 @@ dnl Add clean-coverage to the clean-local target in your Makefile to get the
 dnl clean rules for the coverage data. Or, if clean-local is not defined in your
 dnl Makefile, you can just use EOS_COVERAGE_CLEAN_RULES.
 dnl
+dnl You should also add run_coverage.coverage to TESTS and add .coverage to
+dnl TEST_EXTENSIONS
+dnl
 dnl Variables that affect the operation of the inserted make rules:
 dnl
 dnl  - EOS_JS_COVERAGE_FILES: The list of JavaScript files to be included
@@ -77,7 +80,7 @@ AC_DEFUN_ONCE([EOS_COVERAGE_REPORT], [
 
     # This needs to be defined here so that AC_MSG_RESULT sees it
     EOS_COVERAGE_REQUESTED=no
-    AC_MSG_CHECKING(whether code coverage support was requested)
+    AC_MSG_CHECKING([whether code coverage support was requested])
     AS_IF([test "x$enable_coverage" = "xyes"], [
         EOS_COVERAGE_REQUESTED=yes
     ])
@@ -103,7 +106,7 @@ AC_DEFUN_ONCE([EOS_COVERAGE_REPORT], [
 
                         LAST_CFLAGS="$CFLAGS"
                         CFLAGS="$CFLAGS $EOS_COVERAGE_COMPILER_FLAGS"
-                        AC_MSG_CHECKING(if compiler supports $EOS_COVERAGE_COMPILER_FLAGS)
+                        AC_MSG_CHECKING([if compiler supports $EOS_COVERAGE_COMPILER_FLAGS])
                         AC_TRY_COMPILE([], [], [EOS_COVERAGE_CFLAGS_SUPPORTED=yes])
                         CFLAGS="$LAST_CFLAGS"
                         AC_MSG_RESULT($EOS_COVERAGE_CFLAGS_SUPPORTED)
@@ -125,7 +128,18 @@ AC_DEFUN_ONCE([EOS_COVERAGE_REPORT], [
                     ])
             ])
 
-            EOS_COVERAGE_SUBDIR='_coverage'
+            AC_MSG_CHECKING([where to put coverage data])
+            EOS_DEFAULT_COVERAGE_DIR='$(abs_top_builddir)/_coverage'
+            AC_ARG_WITH([coverage-dir], [
+                AS_HELP_STRING([--with-coverage-dir=DIRECTORY],
+                    [Where to put coverage reports @<:@default=_coverage@:>@])
+            ], [
+                EOS_COVERAGE_DIR="$withval"
+                AC_MSG_RESULT([in $EOS_COVERAGE_DIR])
+            ], [
+                EOS_COVERAGE_DIR="$EOS_DEFAULT_COVERAGE_DIR"
+                AC_MSG_RESULT([in default location (_coverage)])
+            ])
 
             AS_IF([test "x$EOS_HAVE_C_COVERAGE" = "xyes" || test "x$EOS_HAVE_JS_COVERAGE" = "xyes"], [
                 AC_PATH_PROG([GENHTML], [genhtml], [notfound])
@@ -138,7 +152,7 @@ AC_DEFUN_ONCE([EOS_COVERAGE_REPORT], [
                 AC_PATH_PROG([LCOV_RESULT_MERGER], [node-lcov-result-merger], [notfound])
                 AC_ARG_VAR([LCOV_RESULT_MERGER], [Path to lcov-result-merger])
 
-                AC_MSG_CHECKING(for lcov_cobertura)
+                AC_MSG_CHECKING([for lcov_cobertura])
                 python -c "import lcov_cobertura" > /dev/null 2>&1
                 AS_IF([test "$?" = "0"], [
                     EOS_COVERAGE_HAVE_LCOV_COBERTURA=yes
@@ -171,7 +185,7 @@ AC_DEFUN_ONCE([EOS_COVERAGE_REPORT], [
                 EOS_ENABLE_JS_COVERAGE=$EOS_HAVE_JS_COVERAGE
                 EOS_ENABLE_COVERAGE=yes
             ])
-            AC_MSG_CHECKING(whether code coverage support can be enabled)
+            AC_MSG_CHECKING([whether code coverage support can be enabled])
             AC_MSG_RESULT([$EOS_ENABLE_COVERAGE])
         ])
     ])
@@ -187,10 +201,10 @@ _eos_collect_coverage_targets =
 _eos_clean_coverage_targets =
 
 # Full path to coverage report folder
-_eos_coverage_report_path := $(abs_top_builddir)/$(EOS_COVERAGE_SUBDIR)/report
+_eos_coverage_report_path := $(EOS_COVERAGE_DIR)/report
 
 # Full path to coverage tracefile output
-_eos_coverage_trace_path := $(abs_top_builddir)/$(EOS_COVERAGE_SUBDIR)/output
+_eos_coverage_trace_path := $(EOS_COVERAGE_DIR)/output
 
 '
 
@@ -220,8 +234,14 @@ eos-collect-coverage: $(_eos_collect_coverage_targets)
 
 # The clean-coverage target runs the language specific
 # clean rules and also cleans the generated html reports
+#
+# NOTE: We only delete the default coverage dir and not
+# any overriden coverage dir. The reason is that the user
+# may have specified a coverage dir that is outside
+# the source or build directory and wants to keep
+# coverage reports for some later use.
 clean-coverage: $(_eos_clean_coverage_targets)
-	rm -rf $(EOS_COVERAGE_SUBDIR)
+	rm -rf $(EOS_DEFAULT_COVERAGE_DIR)
 '
   ], [
         EOS_COVERAGE_RULES_TARGETS='
@@ -245,12 +265,15 @@ $(if $(GENHTML),,$(error GenHTML not found, ensure that eos-coverage.m4 was incl
 coverage-genhtml: eos-collect-coverage
 	$(GENHTML) --legend -o $(_eos_genhtml_coverage_report_path) $(_eos_coverage_trace_path)/coverage.lcov
 '
+        EOS_GENHTML_AUTO_COVERAGE_CMD='make coverage-genhtml'
   ], [
         EOS_GENHTML_COVERAGE_RULES='
 coverage-genhtml:
 	@echo "Cannot generate GenHTML coverage report as genhtml was not found in PATH"
 	@exit 1
-'])
+'
+        EOS_GENHTML_AUTO_COVERAGE_CMD='echo "Not generating GenHTML report"'
+])
 
     AS_IF([test "x$EOS_HAVE_COBERTURA" = "xyes"], [
         EOS_COBERTURA_COVERAGE_RULES='
@@ -268,12 +291,15 @@ coverage-cobertura: eos-collect-coverage
 	$(LCOV_RESULT_MERGER) $(_eos_coverage_trace_path)/coverage.lcov $(_eos_cobertura_merged_path)
 	python -c "from lcov_cobertura import LcovCobertura; open(\"$(_eos_cobertura_xml_path)\", \"w\").write(LcovCobertura(open(\"$(_eos_cobertura_merged_path)\", \"r\").read()).convert())"
 '
+        EOS_COBERTURA_AUTO_COVERAGE_CMD='make coverage-cobertura'
 ], [
         EOS_COBERTURA_COVERAGE_RULES='
 coverage-cobertura:
-	@echo "Cannot generate Cobertura coverage report as lcov-result-merger or lcov_cobertura was not found in PATH"
+	@echo "Cannot generate Cobertura coverage report as lcov-result-merger was not found in PATH or lcov_cobertura was not found in PYTHONPATH"
 	@exit 1
-'])
+'
+        EOS_COBERTURA_AUTO_COVERAGE_CMD='echo "Not generating Cobertura report"'
+])
 
     AS_IF([test "x$EOS_ENABLE_JS_COVERAGE" = "xyes"], [
         EOS_JS_COVERAGE_RULES='
@@ -336,7 +362,7 @@ _eos_coverage_outputs += $(_eos_js_coverage_data_output_file)
         # cond evalutes to a non-empty string. The documentation on this
         # point suggests that conditional operators can be used. This is
         # misleading.
-        EOS_JS_COVERAGE_LOG_FLAGS='$(addprefix --coverage-prefix=,$(foreach p,$(filter-out $(subst */,,$(EOS_COVERAGE_BLACKLIST_PATTERNS)),$(filter-out $(subst *,%,$(EOS_COVERAGE_BLACKLIST_PATTERNS)),$(EOS_JS_COVERAGE_FILES))),$(if $(filter resource,$(firstword $(subst :, ,$(p)))),$(p),$(abspath $(p))))) --coverage-output=$(_eos_js_coverage_trace_path)'
+        EOS_JS_COVERAGE_LOG_FLAGS='$(addprefix --coverage-prefix=,$(foreach p,$(filter-out $(subst */,,$(EOS_COVERAGE_BLACKLIST_PATTERNS)),$(filter-out $(subst *,%,$(EOS_COVERAGE_BLACKLIST_PATTERNS)),$(EOS_JS_COVERAGE_FILES))),$(if $(filter resource,$(firstword $(subst :, ,$(p)))),$(p),$(abspath $(abs_top_srcdir)/$(p))))) --coverage-output=$(_eos_js_coverage_trace_path)'
 ], [
         EOS_JS_COVERAGE_RULES=''
 ])
@@ -379,22 +405,39 @@ eos-clean-c-coverage: eos-c-coverage
 '
 ])
 
-    EOS_COVERAGE_RULES_FOOTER='
-.PHONY: eos-clean-c-coverage eos-c-coverage clean-coverage eos-collect-coverage coverage-cobertura coverage-genhtml
-  '
+    EOS_COVERAGE_AUTORUN_GENERATED_TARGET="
+run_coverage.coverage:
+	@echo '$EOS_GENHTML_AUTO_COVERAGE_CMD && $EOS_COBERTURA_AUTO_COVERAGE_CMD' > run_coverage.coverage
+"
 
     EOS_COVERAGE_CLEAN_RULES='
 clean-local: clean-coverage
+ '
+
+    EOS_DISTCHECK_CONFIGURE_FLAGS_RULES="
+        DISTCHECK_CONFIGURE_FLAGS += --enable-coverage --with-coverage-dir=$EOS_COVERAGE_DIR
+    "
+
+    EOS_COVERAGE_RULES_FOOTER='
+run_coverage.log: $(filter-out run_coverage.log,$(TEST_LOGS))
+
+COVERAGE_LOG_COMPILER = bash
+CLEANFILES += run_coverage.coverage
+.PHONY: eos-clean-c-coverage eos-c-coverage clean-coverage eos-collect-coverage coverage-cobertura coverage-genhtml
 '
 
-    EOS_COVERAGE_RULES="$EOS_COVERAGE_RULES_HEADER $EOS_GENHTML_COVERAGE_RULES $EOS_COBERTURA_COVERAGE_RULES $EOS_C_COVERAGE_RULES $EOS_JS_COVERAGE_RULES $EOS_COVERAGE_RULES_TARGETS $EOS_COVERAGE_RULES_FOOTER"
+    EOS_COVERAGE_RULES="$EOS_COVERAGE_RULES_HEADER $EOS_GENHTML_COVERAGE_RULES $EOS_COBERTURA_COVERAGE_RULES $EOS_C_COVERAGE_RULES $EOS_JS_COVERAGE_RULES $EOS_COVERAGE_RULES_TARGETS $EOS_COVERAGE_AUTORUN_GENERATED_TARGET $EOS_DISTCHECK_CONFIGURE_FLAGS_RULES $EOS_COVERAGE_RULES_FOOTER"
 
     # Substitute at the top first
-    AC_SUBST([EOS_COVERAGE_SUBDIR])
+    AC_SUBST([EOS_COVERAGE_DIR])
+    AC_SUBST([EOS_DEFAULT_COVERAGE_DIR])
 
     # We only want to define this to use it for full substitution, not as a variable
     AC_SUBST([EOS_COVERAGE_RULES])
     AM_SUBST_NOTMAKE([EOS_COVERAGE_RULES])
+
+    AC_SUBST([EOS_COVERAGE_CLEAN_RULES])
+    AM_SUBST_NOTMAKE([EOS_COVERAGE_CLEAN_RULES])
 
     AC_SUBST([EOS_JS_COVERAGE_LOG_FLAGS])
     AC_SUBST(EOS_C_COVERAGE_CFLAGS)

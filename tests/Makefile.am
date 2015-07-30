@@ -42,13 +42,14 @@ EXTRA_DIST += $(TEST_MISC)
 
 TESTS = \
   $(JS_TESTS) \
+  run_coverage.coverage \
   $(NULL)
-TEST_EXTENSIONS = .js
+TEST_EXTENSIONS = .js .coverage
 
 @EOS_COVERAGE_RULES@
 
 # Pass resource paths to EOS_JS_COVERAGE_FILES
-EOS_JS_COVERAGE_FILES = $(addprefix $(abs_top_srcdir)/js/,$(shell python -c "import xml.etree.ElementTree as ET; import sys; tree = ET.parse('../js/js-resources.gresource.xml'); map(sys.stdout.write, ['resource:///org/gnome/shell/{0}\n'.format(e.text) for e in tree.getroot()[0]])"))
+EOS_JS_COVERAGE_FILES = $(shell python -c "import xml.etree.ElementTree as ET; import sys; tree = ET.parse(\"$(abspath $(abs_top_srcdir)/js/js-resources.gresource.xml)\"); map(sys.stdout.write, ['resource:///org/gnome/shell/{0}\n'.format(e.text) for e in tree.getroot()[0]])")
 
 JS_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) $(top_srcdir)/config/tap-driver.sh
 JS_LOG_DRIVER_FLAGS = --comments
@@ -78,5 +79,7 @@ TESTS_ENVIRONMENT = \
 EXTRA_DIST += \
 	README.txt
 
-echo-am-js-log-flags:
-	@echo $(AM_JS_LOG_FLAGS)
+clean-run-coverage:
+	rm -rf $(abs_top_builddir)/tests/run_coverage.coverage
+
+clean-local: clean-coverage clean-run-coverage
