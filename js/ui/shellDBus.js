@@ -551,12 +551,8 @@ const AppLauncher = new Lang.Class({
             return false;
         }
 
-        if (app.state == Shell.AppState.RUNNING) {
-            app.activate_full(-1, timestamp);
-        } else {
-            let activationContext = new AppActivation.AppActivationContext(app);
-            activationContext.activate();
-        }
+        let activationContext = new AppActivation.AppActivationContext(app);
+        activationContext.activate(null, timestamp);
 
         Main.appStore.appLaunched = true;
         return true;
