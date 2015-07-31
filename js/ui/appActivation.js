@@ -42,15 +42,37 @@ const AppActivationContext = new Lang.Class({
         this._appActivationTime = 0;
     },
 
-    activate: function() {
+    _doActivate: function(showSplash, timestamp) {
+        if (!timestamp) {
+            timestamp = global.get_current_time();
+        }
+
         try {
-            this._app.activate();
+            this._app.activate_full(-1, timestamp);
         } catch (e) {
             logError(e, 'error while activating: ' + this._app.get_id());
             return;
         }
 
-        this.showSplash();
+        if (showSplash) {
+            this.showSplash();
+        }
+    },
+
+    activate: function(event, timestamp) {
+        let modifiers = event ? event.get_state() : 0;
+
+        if (this._app.state == Shell.AppState.RUNNING) {
+            if (modifiers & Clutter.ModifierType.CONTROL_MASK) {
+                this._app.open_new_window(-1);
+            } else {
+                this._doActivate(false, timestamp);
+            }
+        } else {
+            this._doActivate(true, timestamp);
+        }
+
+        Main.overview.hide();
     },
 
     showSplash: function() {

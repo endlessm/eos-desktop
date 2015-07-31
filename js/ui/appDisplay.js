@@ -62,23 +62,6 @@ const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
 
 const EOS_LINK_PREFIX = 'eos-link-';
 
-function _activateApp(app, event) {
-    let modifiers = event ? event.get_state() : 0;
-
-    if (app.state == Shell.AppState.RUNNING) {
-        if (modifiers & Clutter.ModifierType.CONTROL_MASK) {
-            app.open_new_window(-1);
-        } else {
-            app.activate();
-        }
-    } else {
-        let activationContext = new AppActivation.AppActivationContext(app);
-        activationContext.activate();
-    }
-
-    Main.overview.hide();
-}
-
 const AppSearchProvider = new Lang.Class({
     Name: 'AppSearchProvider',
 
@@ -146,7 +129,8 @@ const AppSearchProvider = new Lang.Class({
     activateResult: function(appId) {
         let event = Clutter.get_current_event();
         let app = this._appSys.lookup_app(appId);
-        _activateApp(app, event);
+        let activationContext = new AppActivation.AppActivationContext(app);
+        activationContext.activate(event);
     },
 
     dragActivateResult: function(id, params) {
@@ -1824,7 +1808,8 @@ const AppIcon = new Lang.Class({
 
     _onActivate: function (event) {
         this.emit('launching');
-        _activateApp(this.app, event);
+        let activationContext = new AppActivation.AppActivationContext(this.app);
+        activationContext.activate(event);
     },
 
     shellWorkspaceLaunch : function(params) {

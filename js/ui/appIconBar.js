@@ -399,7 +399,6 @@ const AppIconButton = new Lang.Class({
         if (windows.length == 0) {
             let activationContext = new AppActivation.AppActivationContext(this._app);
             activationContext.activate();
-            Main.overview.hide();
         } else if (windows.length == 1) {
             let win = windows[0];
             if (win.has_focus() && !Main.overview.visible && !hasOtherMenu) {
