@@ -350,6 +350,10 @@ get_app_from_window_pid (ShellWindowTracker  *tracker,
     return NULL;
 
   result = shell_window_tracker_get_app_from_pid (tracker, pid);
+
+  if (result == NULL)
+    result = g_hash_table_lookup (tracker->launched_pid_to_app, GINT_TO_POINTER (pid));
+
   if (result != NULL)
     g_object_ref (result);
 
