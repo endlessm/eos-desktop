@@ -43,11 +43,14 @@ gnome-shell-theme.gresource: gnome-shell-theme.gresource.xml $(resource_files)
 resourcedir = $(pkgdatadir)
 resource_DATA = gnome-shell-theme.gresource
 
-keysdir = $(GNOME_KEYBINDINGS_KEYSDIR)
 keys_in_files =					\
 	50-gnome-shell-system.xml.in		\
 	$(NULL)
 keys_DATA = $(keys_in_files:.xml.in=.xml)
+
+if INSTALL_GNOME_KEYBINDINGS
+keysdir = $(GNOME_KEYBINDINGS_KEYSDIR)
+endif
 
 gsettings_SCHEMAS = org.gnome.shell.gschema.xml
 
