@@ -608,10 +608,16 @@ const Overview = new Lang.Class({
     },
 
     showApps: function() {
+        if (this.isDummy)
+            return;
+
         this._showOrSwitchPage(ViewSelector.ViewPage.APPS);
     },
 
     showWindows: function() {
+        if (this.isDummy)
+            return;
+
         this._showOrSwitchPage(ViewSelector.ViewPage.WINDOWS);
     },
 
