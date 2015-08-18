@@ -146,6 +146,8 @@ AC_ARG_ENABLE([install-keybindings],
               AS_HELP_STRING([--disable-install-keybindings], [Install keybindings globally]),
               [install_gnome_keybindings=no],
               [install_gnome_keybindings=yes])
+AC_MSG_CHECKING([whether to install keybindings globally])
+AC_MSG_RESULT($install_gnome_keybindings)
 
 GNOME_KEYBINDINGS_KEYSDIR=`$PKG_CONFIG --variable keysdir gnome-keybindings`
 AC_SUBST([GNOME_KEYBINDINGS_KEYSDIR])
