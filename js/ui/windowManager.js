@@ -608,7 +608,8 @@ const WindowManager = new Lang.Class({
     },
 
     _shouldAnimate: function() {
-        return !(Main.overview.visible || this._animationBlockCount > 0);
+        return !(Main.overview.visible || !Main.sessionMode.hasWindows ||
+                 this._animationBlockCount > 0);
     },
 
     _shouldAnimateActor: function(actor) {
