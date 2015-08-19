@@ -74,6 +74,7 @@ po/Makevars.template
 po/POTFILES
 po/Rules-quot
 po/stamp-it
+run_coverage.coverage
 scripts/launcher.pyc
 src/*.gir
 src/*.typelib
