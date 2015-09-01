@@ -4,7 +4,7 @@ const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 
-const GnomeSession = imports.misc.gnomeSession;
+const LoginManager = imports.misc.loginManager;
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
 
@@ -79,7 +79,7 @@ const UpdaterManager = new Lang.Class({
         this._proxy = new UpdaterProxy(Gio.DBus.system, 'com.endlessm.Updater',
                                        '/com/endlessm/Updater', Lang.bind(this, this._onProxyConstructed));
 
-        this._session = new GnomeSession.SessionManager();
+        this._loginManager = LoginManager.getLoginManager();
 
         this._config = new GLib.KeyFile();
         this._lastAutoStep = AUTO_UPDATES_DEFAULT_STEP;
@@ -167,7 +167,7 @@ const UpdaterManager = new Lang.Class({
         } else if (actionId == 'apply-updates') {
             this._proxy.ApplyRemote();
         } else if (actionId == 'restart-updates') {
-            this._session.RebootRemote();
+            this._loginManager.reboot();
         }
     },
 
