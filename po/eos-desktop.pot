@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-28 01:50+0000\n"
+"POT-Creation-Date: 2015-09-02 18:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -389,7 +389,7 @@ msgstr ""
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
-#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:610
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:611
 msgid "Cancel"
 msgstr ""
 
@@ -419,7 +419,7 @@ msgstr ""
 msgid "Power"
 msgstr ""
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:34
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
 msgid "Suspend"
 msgstr ""
 
@@ -461,32 +461,32 @@ msgstr ""
 msgid "Execution of '%s' failed:"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1154
+#: ../js/ui/appDisplay.js:1138
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1637
+#: ../js/ui/appDisplay.js:1621
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1643
+#: ../js/ui/appDisplay.js:1627
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1649
+#: ../js/ui/appDisplay.js:1633
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1655 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1639 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1896
+#: ../js/ui/appDisplay.js:1881
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1905
+#: ../js/ui/appDisplay.js:1890
 msgid "Delete"
 msgstr ""
 
@@ -1839,46 +1839,46 @@ msgstr ""
 msgid "Unlock Window"
 msgstr ""
 
-#: ../js/ui/userMenu.js:35
+#: ../js/ui/userMenu.js:36
 msgid "Lock"
 msgstr ""
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Exit"
 msgstr ""
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Help"
 msgstr ""
 
-#: ../js/ui/userMenu.js:39
+#: ../js/ui/userMenu.js:40
 msgid "Settings"
 msgstr ""
 
-#: ../js/ui/userMenu.js:40
+#: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
 msgstr ""
 
-#: ../js/ui/userMenu.js:489
+#: ../js/ui/userMenu.js:490
 msgid "Switch User"
 msgstr ""
 
-#: ../js/ui/userMenu.js:560
+#: ../js/ui/userMenu.js:561
 msgid "Other users are logged in."
 msgstr ""
 
-#: ../js/ui/userMenu.js:565
+#: ../js/ui/userMenu.js:566
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr ""
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:593
+#: ../js/ui/userMenu.js:594
 #, javascript-format
 msgid "%s (remote)"
 msgstr ""
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:596
+#: ../js/ui/userMenu.js:597
 #, javascript-format
 msgid "%s (console)"
 msgstr ""
