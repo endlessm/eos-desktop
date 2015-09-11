@@ -33,7 +33,8 @@ const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 // telling what kind of search was requested; followed by the search query.
 const EVENT_DESKTOP_SEARCH = 'b02266bc-b010-44b2-ae0f-8f116ffa50eb';
 // Represents the various search providers that can be used for searching from
-// the desktop.
+// the desktop. Keep in sync with the corresponding enum in
+// https://github.com/endlessm/eos-analytics/tree/master/src/main/java/com/endlessm/postprocessing/query/SearchQuery.java.
 const DesktopSearchProvider = {
     MY_COMPUTER: 0,
 };
