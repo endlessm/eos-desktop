@@ -17,6 +17,7 @@ const Main = imports.ui.main;
 const Overview = imports.ui.overview;
 const Panel = imports.ui.panel;
 const Tweener = imports.ui.tweener;
+const Util = imports.misc.util;
 const WindowManager = imports.ui.windowManager;
 
 const SPLASH_SCREEN_TIMEOUT = 700; // ms
@@ -88,6 +89,14 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
+        // Don't show splash screen if this is a link and the browser is
+        // running. We can't rely on any signal being emitted in that
+        // case, as links open in browser tabs.
+        if (this._app.get_id().indexOf('eos-link-') != -1 &&
+            Util.getBrowserApp().state != Shell.AppState.STOPPED) {
+            return;
+        }
+
         this._cancelled = false;
         this._splash = new SpeedwagonSplash(this._app);
         this._splash.connect('close-clicked', Lang.bind(this, function() {
@@ -136,14 +145,7 @@ const AppActivationContext = new Lang.Class({
 
     _splashTimeout: function() {
         this._timeoutId = 0;
-
-        // FIXME: we can't rely on windows-changed being emited on the same
-        // desktop file, as web apps right now all open tabs in the default browser
-        let isLink = (this._app.get_id().indexOf('eos-link-') != -1);
-        if (isLink)
-            this._clearSplash();
-        else
-            this._maybeClearSplash();
+        this._maybeClearSplash();
 
         return false;
     },
