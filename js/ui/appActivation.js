@@ -316,6 +316,11 @@ const DesktopAppClient = new Lang.Class({
             return;
         }
 
+        // Skip applications we are not aware of
+        if (!this._lastDesktopApp) {
+            return;
+        }
+
         // Don't maximize if the launch maximized key is false
         let info = app.get_app_info();
         if (info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) &&
@@ -323,8 +328,10 @@ const DesktopAppClient = new Lang.Class({
             return;
         }
 
-        // Skip if the window does not belong to the launched app
-        if (app != this._lastDesktopApp) {
+        // Skip if the window does not belong to the launched app, but
+        // special case eos-link launchers if we detect a browser window
+        if (app != this._lastDesktopApp &&
+            !(this._lastDesktopApp.get_id().indexOf('eos-link-') != -1 && app == Util.getBrowserApp())) {
             return;
         }
 
