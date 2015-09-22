@@ -295,18 +295,21 @@ const DesktopAppClient = new Lang.Class({
 
     _windowCreated: function(metaDisplay, metaWindow) {
         // Ignore splash screens, which will already be maximized.
-        if (metaWindow.get_role() == 'eos-speedwagon')
+        if (metaWindow.get_role() == 'eos-speedwagon') {
             return;
+        }
 
         // Don't maximize if key to disable default maximize is set
         if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
             return;
         }
 
+        // Don't maximize windows in non-overview sessions (e.g. initial setup)
         if (!Main.sessionMode.hasOverview) {
             return;
         }
 
+        // Skip unknown applications
         let tracker = Shell.WindowTracker.get_default();
         let app = tracker.get_window_app(metaWindow);
         if (!app) {
@@ -315,8 +318,8 @@ const DesktopAppClient = new Lang.Class({
 
         // Don't maximize if the launch maximized key is false
         let info = app.get_app_info();
-
-        if (info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) && !info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY)) {
+        if (info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) &&
+            !info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY)) {
             return;
         }
 
@@ -327,18 +330,21 @@ const DesktopAppClient = new Lang.Class({
 
         this._lastDesktopApp = null;
 
-        if (Shell.WindowTracker.is_window_interesting(metaWindow) && metaWindow.resizeable) {
-            // Position the window so it's at where we want it to be if the user
-            // unmaximizes the window.
-            let workArea = Main.layoutManager.getWorkAreaForMonitor(metaWindow.get_monitor());
-            let width = workArea.width * DEFAULT_MAXIMIZED_WINDOW_SIZE;
-            let height = workArea.height * DEFAULT_MAXIMIZED_WINDOW_SIZE;
-            let x = workArea.x + (workArea.width - width) / 2;
-            let y = workArea.y + (workArea.height - height) / 2;
-            metaWindow.move_resize_frame(false, x, y, width, height);
-
-            metaWindow.maximize(Meta.MaximizeFlags.HORIZONTAL |
-                                Meta.MaximizeFlags.VERTICAL);
+        if (!Shell.WindowTracker.is_window_interesting(metaWindow) ||
+            !metaWindow.resizeable) {
+            return;
         }
+
+        // Position the window so it's at where we want it to be if the user
+        // unmaximizes the window.
+        let workArea = Main.layoutManager.getWorkAreaForMonitor(metaWindow.get_monitor());
+        let width = workArea.width * DEFAULT_MAXIMIZED_WINDOW_SIZE;
+        let height = workArea.height * DEFAULT_MAXIMIZED_WINDOW_SIZE;
+        let x = workArea.x + (workArea.width - width) / 2;
+        let y = workArea.y + (workArea.height - height) / 2;
+        metaWindow.move_resize_frame(false, x, y, width, height);
+
+        metaWindow.maximize(Meta.MaximizeFlags.HORIZONTAL |
+                            Meta.MaximizeFlags.VERTICAL);
     }
 });
