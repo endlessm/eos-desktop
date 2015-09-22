@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-02 18:47+0000\n"
+"POT-Creation-Date: 2015-09-22 01:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1088,7 +1088,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:462
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:463
 msgid "Windows"
 msgstr ""
 
@@ -1357,7 +1357,7 @@ msgid "Overview"
 msgstr ""
 
 #: ../js/ui/panel.js:375
-msgid "Top Bar"
+msgid "Taskbar"
 msgstr ""
 
 #. Translators: this MUST be either "toggle-switch-us"
@@ -1883,7 +1883,7 @@ msgstr ""
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:466
+#: ../js/ui/viewSelector.js:467
 msgid "Applications"
 msgstr ""
 

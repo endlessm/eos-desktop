@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-28 01:50+0000\n"
+"POT-Creation-Date: 2015-09-02 18:47+0000\n"
 "PO-Revision-Date: 2015-05-12 01:30+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
@@ -395,7 +395,7 @@ msgstr "غير مدرج؟"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
-#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:610
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:611
 msgid "Cancel"
 msgstr "ألغِ"
 
@@ -425,7 +425,7 @@ msgstr "نافذة الولوج"
 msgid "Power"
 msgstr "الطاقة"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:34
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
 msgid "Suspend"
 msgstr "علّق"
 
@@ -467,32 +467,32 @@ msgstr "تعذّر تحليل الأمر:"
 msgid "Execution of '%s' failed:"
 msgstr "فشل تنفيذ '%s':‏"
 
-#: ../js/ui/appDisplay.js:1154
+#: ../js/ui/appDisplay.js:1138
 msgid "Remove from desktop"
 msgstr "إزالة من سطح المكتب"
 
-#: ../js/ui/appDisplay.js:1637
+#: ../js/ui/appDisplay.js:1621
 msgid "Warning"
 msgstr "تحذير"
 
-#: ../js/ui/appDisplay.js:1643
+#: ../js/ui/appDisplay.js:1627
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "لحذف مجلد عليك إزالة كافة العناصر داخله أولاً."
 
-#: ../js/ui/appDisplay.js:1649
+#: ../js/ui/appDisplay.js:1633
 msgid "We are just trying to keep you safe."
 msgstr "نحاول فقط المحافظة على أمنك."
 
-#: ../js/ui/appDisplay.js:1655 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1639 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "حسنا"
 
-#: ../js/ui/appDisplay.js:1896
+#: ../js/ui/appDisplay.js:1881
 msgid "More Apps"
 msgstr "المزيد من التطبيقات"
 
-#: ../js/ui/appDisplay.js:1905
+#: ../js/ui/appDisplay.js:1890
 msgid "Delete"
 msgstr "حذف"
 
@@ -1887,46 +1887,46 @@ msgstr "لِج كمستخدم آخر"
 msgid "Unlock Window"
 msgstr "افتح قفل النافذة"
 
-#: ../js/ui/userMenu.js:35
+#: ../js/ui/userMenu.js:36
 msgid "Lock"
 msgstr "أوصِد"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Exit"
 msgstr "خروج"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Help"
 msgstr "المساعدة"
 
-#: ../js/ui/userMenu.js:39
+#: ../js/ui/userMenu.js:40
 msgid "Settings"
 msgstr "الإعدادات"
 
-#: ../js/ui/userMenu.js:40
+#: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
 msgstr "تعطينا تعليق"
 
-#: ../js/ui/userMenu.js:489
+#: ../js/ui/userMenu.js:490
 msgid "Switch User"
 msgstr "بدّل المستخدم"
 
-#: ../js/ui/userMenu.js:560
+#: ../js/ui/userMenu.js:561
 msgid "Other users are logged in."
 msgstr "تم تسجيل دخول مستخدمين آخرين."
 
-#: ../js/ui/userMenu.js:565
+#: ../js/ui/userMenu.js:566
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "إيقاف التشغيل قد يتسبب في فقدهم للعمل الذي لم يتم حفظه."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:593
+#: ../js/ui/userMenu.js:594
 #, javascript-format
 msgid "%s (remote)"
 msgstr "%s (عن بعد)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:596
+#: ../js/ui/userMenu.js:597
 #, javascript-format
 msgid "%s (console)"
 msgstr "%s (وحدة تحكم)"

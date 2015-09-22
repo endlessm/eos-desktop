@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-28 01:50+0000\n"
+"POT-Creation-Date: 2015-09-02 18:47+0000\n"
 "PO-Revision-Date: 2015-06-26 00:46+0000\n"
 "Last-Translator: Ivan G. Gonçalves <i@endlessm.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/pt_BR/)\n"
@@ -402,7 +402,7 @@ msgstr "Não listado?"
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
-#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:610
+#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:611
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -432,7 +432,7 @@ msgstr "Janela de início de sessão"
 msgid "Power"
 msgstr "Ligar"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:34
+#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
 msgid "Suspend"
 msgstr "Suspender"
 
@@ -474,32 +474,32 @@ msgstr "Não foi possível analisar comando:"
 msgid "Execution of '%s' failed:"
 msgstr "A execução de \"%s\" falhou:"
 
-#: ../js/ui/appDisplay.js:1154
+#: ../js/ui/appDisplay.js:1138
 msgid "Remove from desktop"
 msgstr "Remover da área de trabalho"
 
-#: ../js/ui/appDisplay.js:1637
+#: ../js/ui/appDisplay.js:1621
 msgid "Warning"
 msgstr "Aviso"
 
-#: ../js/ui/appDisplay.js:1643
+#: ../js/ui/appDisplay.js:1627
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para excluir uma pasta você tem que remover todos os arquivos de dentro primeiro."
 
-#: ../js/ui/appDisplay.js:1649
+#: ../js/ui/appDisplay.js:1633
 msgid "We are just trying to keep you safe."
 msgstr "Estamos apenas tentando manter a segurança dos seus dados."
 
-#: ../js/ui/appDisplay.js:1655 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1639 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1896
+#: ../js/ui/appDisplay.js:1881
 msgid "More Apps"
 msgstr "Mais Programas"
 
-#: ../js/ui/appDisplay.js:1905
+#: ../js/ui/appDisplay.js:1890
 msgid "Delete"
 msgstr "Excluir"
 
@@ -1862,46 +1862,46 @@ msgstr "Iniciar sessão como outro usuário"
 msgid "Unlock Window"
 msgstr "Desbloquear janela"
 
-#: ../js/ui/userMenu.js:35
+#: ../js/ui/userMenu.js:36
 msgid "Lock"
 msgstr "Bloquear"
 
-#: ../js/ui/userMenu.js:36
+#: ../js/ui/userMenu.js:37
 msgid "Exit"
 msgstr "Sair"
 
-#: ../js/ui/userMenu.js:38
+#: ../js/ui/userMenu.js:39
 msgid "Help"
 msgstr "Ajuda"
 
-#: ../js/ui/userMenu.js:39
+#: ../js/ui/userMenu.js:40
 msgid "Settings"
 msgstr "Configurações"
 
-#: ../js/ui/userMenu.js:40
+#: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
 msgstr "Nos dê a sua opinião"
 
-#: ../js/ui/userMenu.js:489
+#: ../js/ui/userMenu.js:490
 msgid "Switch User"
 msgstr "Trocar usuário"
 
-#: ../js/ui/userMenu.js:560
+#: ../js/ui/userMenu.js:561
 msgid "Other users are logged in."
 msgstr "Outros usuários estão com sessão aberta."
 
-#: ../js/ui/userMenu.js:565
+#: ../js/ui/userMenu.js:566
 msgid "Shutting down might cause them to lose unsaved work."
 msgstr "O desligamento pode fazer com que eles percam seus trabalhos não salvos."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:593
+#: ../js/ui/userMenu.js:594
 #, javascript-format
 msgid "%s (remote)"
 msgstr "%s (remoto)"
 
 #. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:596
+#: ../js/ui/userMenu.js:597
 #, javascript-format
 msgid "%s (console)"
 msgstr "%s (console)"
