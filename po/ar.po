@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-02 18:47+0000\n"
-"PO-Revision-Date: 2015-05-12 01:30+0000\n"
+"POT-Creation-Date: 2015-09-22 01:31+0000\n"
+"PO-Revision-Date: 2015-09-22 01:31+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -1097,7 +1097,7 @@ msgstr "فشل تحديث"
 msgid "We could not update your system"
 msgstr "لم نتمكن من تحديث نظامك"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:462
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:463
 msgid "Windows"
 msgstr "النوافذ"
 
@@ -1382,8 +1382,8 @@ msgid "Overview"
 msgstr "نظرة عامة"
 
 #: ../js/ui/panel.js:375
-msgid "Top Bar"
-msgstr "الشريط العلوي"
+msgid "Taskbar"
+msgstr ""
 
 #. Translators: this MUST be either "toggle-switch-us"
 #. (for toggle switches containing the English words
@@ -1931,7 +1931,7 @@ msgstr "%s (عن بعد)"
 msgid "%s (console)"
 msgstr "%s (وحدة تحكم)"
 
-#: ../js/ui/viewSelector.js:466
+#: ../js/ui/viewSelector.js:467
 msgid "Applications"
 msgstr "التطبيقات"
 
