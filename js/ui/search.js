@@ -559,6 +559,11 @@ const SearchResults = new Lang.Class({
 
     _doSearch: function() {
         this._startingSearch = false;
+        if (this._terms.length == 0) {
+            // We are already animating panel hidden, just return.
+            this._clearSearchTimeout();
+            return;
+        }
 
         let previousResults = this._results;
         this._results = {};
