@@ -23,7 +23,7 @@ const PopupMenu = imports.ui.popupMenu;
 const MAX_OPACITY = 255;
 const MAX_ANGLE = 360;
 
-const ICON_SIZE = 24;
+const ICON_SIZE = 32;
 const NAV_BUTTON_SIZE = 15;
 
 const ICON_SCROLL_ANIMATION_TIME = 0.3;

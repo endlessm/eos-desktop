@@ -337,13 +337,13 @@ StScrollBar StButton#vhandle:active {
 }
 
 .settings-menu-icon {
-    icon-size: 30px;
+    icon-size: 40px;
 }
 
 .panel-separator-icon {
     width: 1px;
-    height: 30px;
-    icon-size: 30px
+    height: 40px;
+    icon-size: 40px;
 }
 
 .popup-options-menu-item {
@@ -544,7 +544,7 @@ StScrollBar StButton#vhandle:active {
 #panel {
     background-color: black;
     font-weight: bold;
-    height: 30px;
+    height: 40px;
     transition-duration: 250ms;
 }
 
@@ -607,14 +607,14 @@ StScrollBar StButton#vhandle:active {
 .panel-button {
     -natural-hpadding: 6px;
     -minimum-hpadding: 6px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     color: #ccc;
     transition-duration: 100ms;
 }
 
 #appIconBar {
-    padding-left: 2px;
+    padding-left: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
     padding-top: 0px;
@@ -625,8 +625,8 @@ StScrollBar StButton#vhandle:active {
 }
 
 .app-icon-bar.panel-button {
-    -minimum-hpadding: 6px;
-    -natural-hpadding: 6px;
+    -minimum-hpadding: 0px;
+    -natural-hpadding: 0px;
 }
 
 .user-menu-icon.panel-button {
@@ -647,7 +647,7 @@ StScrollBar StButton#vhandle:active {
 
 .app-icon-button:highlighted {
     background-image: url("mini-icon-active-indicator.png");
-    background-position: 2px 24px;
+    background-position: 6px 34px;
 }
 
 .social-button {
@@ -657,9 +657,9 @@ StScrollBar StButton#vhandle:active {
 }
 
 .scrolled-icon-container {
-    -icon-size: 24px;
-    height: 30px;
-    spacing: 10px;
+    -icon-size: 32px;
+    height: 40px;
+    spacing: 12px;
 }
 
 .panel-separator {
@@ -762,7 +762,7 @@ StScrollBar StButton#vhandle:active {
 
 #panelUserMenu {
     padding-left: 6px;
-    width: 34px;
+    width: 44px;
 }
 
 .status-chooser {
@@ -817,11 +817,11 @@ StScrollBar StButton#vhandle:active {
 }
 
 .system-status-icon {
-    icon-size: 1.09em;
+    icon-size: 1.2em;
 }
 
 .system-status-social-icon {
-    icon-size: 28px;
+    icon-size: 32px;
     padding-right: 1px;
 }
 
