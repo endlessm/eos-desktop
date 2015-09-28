@@ -25,7 +25,7 @@ const PanelMenu = imports.ui.panelMenu;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
 
-const PANEL_ICON_SIZE = 24;
+const PANEL_ICON_SIZE = 32;
 
 const BUTTON_DND_ACTIVATION_TIMEOUT = 250;
 

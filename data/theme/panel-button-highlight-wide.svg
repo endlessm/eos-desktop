@@ -11,10 +11,10 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="84"
-   height="25"
+   height="40"
    id="svg10621"
    version="1.1"
-   inkscape:version="0.48.0 r9654"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="panel-button-highlight-wide.svg">
   <defs
      id="defs10623">
@@ -61,8 +61,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="-118.50071"
-     inkscape:cy="27.304508"
+     inkscape:cx="-209.41444"
+     inkscape:cy="7.1014572"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -70,10 +70,10 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1440"
-     inkscape:window-height="843"
+     inkscape:window-width="1920"
+     inkscape:window-height="1004"
      inkscape:window-x="0"
-     inkscape:window-y="26"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata10626">
@@ -83,7 +83,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -91,16 +91,16 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-441.08632,-537.03477)">
+     transform="translate(-441.08632,-522.03477)">
     <path
        sodipodi:type="arc"
-       style="opacity:0.4625;color:#000000;fill:url(#radialGradient10592);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.4625;fill:url(#radialGradient10592);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;marker:none;enable-background:accumulate"
        id="path34506-3"
        sodipodi:cx="51"
        sodipodi:cy="30"
        sodipodi:rx="42"
        sodipodi:ry="16"
-       d="M 9,29.999999 C 9.0000011,21.163443 27.804042,14 51.000002,14 74.195961,14 93,21.163444 93,30 l -42,0 z"
+       d="M 9,29.999999 A 42,16 0 0 1 51.000001,14 42,16 0 0 1 93,30 l -42,0 z"
        sodipodi:start="3.1415927"
        sodipodi:end="6.2831853"
        transform="matrix(1,0,0,1.5625,432.08632,515.15977)"
