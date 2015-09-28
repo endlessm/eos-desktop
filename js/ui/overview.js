@@ -15,12 +15,10 @@ const St = imports.gi.St;
 
 const AppDisplay = imports.ui.appDisplay;
 const Background = imports.ui.background;
-const Dash = imports.ui.dash;
 const DND = imports.ui.dnd;
 const LayoutManager = imports.ui.layout;
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
-const OverviewControls = imports.ui.overviewControls;
 const Panel = imports.ui.panel;
 const Params = imports.misc.params;
 const SideComponent = imports.ui.sideComponent;
@@ -333,44 +331,16 @@ const Overview = new Lang.Class({
                                          opacity: 0 });
 
         // Create controls
-        this._dash = new Dash.Dash();
-        this._viewSelector = new ViewSelector.ViewSelector(this._dash.showAppsButton);
-        this._thumbnailsBox = new WorkspaceThumbnail.ThumbnailsBox();
-        this._controls = new OverviewControls.ControlsManager(this._dash,
-                                                              this._thumbnailsBox,
-                                                              this._viewSelector);
+        this._viewSelector = new ViewSelector.ViewSelector();
 
-        this._controls.dashActor.x_align =
-            this._dash.dashPosition == Dash.DashPosition.END ?
-            Clutter.ActorAlign.END : Clutter.ActorAlign.START;
-        this._controls.dashActor.y_expand = true;
-
-        // Put the dash in a separate layer to allow content to be centered
-        this._groupStack.add_actor(this._controls.dashActor);
-
-        // Pack all the actors into the group
-        if (this._dash.dashPosition == Dash.DashPosition.START) {
-            this._group.add_actor(this._controls.dashSpacer);
-        }
         this._group.add(this._viewSelector.actor, { x_fill: true,
                                                     expand: true });
-        this._group.add_actor(this._controls.thumbnailsActor);
-        if (this._dash.dashPosition == Dash.DashPosition.END) {
-            this._group.add_actor(this._controls.dashSpacer);
-        }
 
         // Add the group to the overview box
         this._overview.add(this._groupStack, { y_fill: true, expand: true });
 
         // Add the panel ghost to give some spacing
         this._overview.add_actor(this._bottomGhost);
-
-        // TODO - recalculate everything when desktop size changes
-        this.dashIconSize = this._dash.iconSize;
-        this._dash.connect('icon-size-changed',
-                           Lang.bind(this, function() {
-                               this.dashIconSize = this._dash.iconSize;
-                           }));
 
         this._viewSelector.connect('page-changed', Lang.bind(this, this._onPageChanged));
         this._viewSelector.connect('views-page-changed', Lang.bind(this, this._onViewsPageChanged));
