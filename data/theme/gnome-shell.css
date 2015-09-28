@@ -1528,6 +1528,10 @@ StScrollBar StButton#vhandle:active {
     background-color: #aaaaaa;
 }
 
+.datemenu-button.panel-button {
+    padding-right: 4px;
+}
+
 .datemenu-date-label {
     padding: .4em 1.7em;
     font-weight: bold;

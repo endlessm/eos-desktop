@@ -46,8 +46,8 @@ const _modes = {
         components: ['polkitAgent'],
         panel: {
             left: ['logo'],
-            right: ['dateMenu', 'a11yGreeter', 'display', 'keyboard',
-                    'volume', 'battery', 'powerMenu']
+            right: ['a11yGreeter', 'display', 'keyboard',
+                    'volume', 'battery', 'powerMenu', 'dateMenu']
         },
         panelStyle: 'login-screen'
     },
@@ -61,7 +61,7 @@ const _modes = {
         components: ['polkitAgent'],
         panel: {
             left: [],
-            right: ['dateMenu', 'a11y', 'keyboard', 'lockScreen']
+            right: ['a11y', 'keyboard', 'lockScreen', 'dateMenu']
         },
         panelStyle: 'unlock-screen'
     },
@@ -72,7 +72,7 @@ const _modes = {
         components: [ 'networkAgent', 'keyring'],
         panel: {
             left: [],
-            right: ['dateMenu', 'a11yGreeter', 'keyboard', 'volume', 'battery']
+            right: ['a11yGreeter', 'keyboard', 'volume', 'battery', 'dateMenu']
         }
     },
 
@@ -94,8 +94,8 @@ const _modes = {
                      'updaterManager', 'socialBar', 'appStore'],
         panel: {
             left: ['userMenu', 'panelSeparator', 'appIcons'],
-            right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
-                    'network', 'battery', 'socialBar', 'hotCornerIndicator']
+            right: ['a11y', 'keyboard', 'volume', 'bluetooth',
+                    'network', 'battery', 'socialBar', 'hotCornerIndicator', 'dateMenu']
         }
     }
 };
