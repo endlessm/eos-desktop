@@ -492,13 +492,10 @@ const ViewsDisplayConstraint = new Lang.Class({
 const ViewSelector = new Lang.Class({
     Name: 'ViewSelector',
 
-    _init : function(showAppsButton) {
+    _init : function() {
         this.actor = new Shell.Stack({ name: 'viewSelector',
                                        x_expand: true,
                                        y_expand: true });
-
-        this._showAppsButton = showAppsButton;
-        this._showAppsButton.connect('notify::checked', Lang.bind(this, this._onShowAppsButtonToggled));
 
         this._activePage = null;
 
@@ -627,11 +624,8 @@ const ViewSelector = new Lang.Class({
     },
 
     _pageChanged: function() {
-        if (this._activePage == this._appsPage) {
-            this._showAppsButton.checked = true;
-        } else {
+        if (this._activePage != this._appsPage) {
             this._clearSearch();
-            this._showAppsButton.checked = false;
         }
 
         this.emit('page-changed');
@@ -712,16 +706,7 @@ const ViewSelector = new Lang.Class({
     },
 
     _a11yFocusPage: function(page) {
-        this._showAppsButton.checked = page == this._appsPage;
         page.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
-    },
-
-    _onShowAppsButtonToggled: function() {
-        if (this._showAppsButton.checked) {
-            this.setActivePage(ViewPage.APPS);
-        } else {
-            this.setActivePage(ViewPage.WINDOWS);
-        }
     },
 
     _onStageKeyPress: function(actor, event) {
