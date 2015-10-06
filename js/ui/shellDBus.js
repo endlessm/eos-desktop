@@ -484,7 +484,7 @@ const AppStoreService = new Lang.Class({
 
     RemoveApplication: function(id) {
         if (!IconGridLayout.layout.iconIsFolder(id)) {
-            IconGridLayout.layout.removeIcon(id, true);
+            IconGridLayout.layout.removeIcon(id, false);
         }
     },
 
@@ -496,7 +496,7 @@ const AppStoreService = new Lang.Class({
 
     RemoveFolder: function(id) {
         if (IconGridLayout.layout.iconIsFolder(id)) {
-            IconGridLayout.layout.removeIcon(id, true);
+            IconGridLayout.layout.removeIcon(id, false);
         }
     },
 
