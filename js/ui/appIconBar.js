@@ -382,6 +382,12 @@ const AppIconButton = new Lang.Class({
 
         if (button == Gdk.BUTTON_SECONDARY) {
             this._hideHoverState();
+
+            this._closeOtherMenus(BoxPointer.PopupAnimation.FULL);
+            if (this._menu.isOpen) {
+                this._menu.toggle(BoxPointer.PopupAnimation.FULL);
+            }
+
             this._rightClickMenu.open();
             return;
         }
