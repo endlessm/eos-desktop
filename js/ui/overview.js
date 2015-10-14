@@ -72,12 +72,14 @@ const ShellInfo = new Lang.Class({
     setMessage: function(text, options) {
         options = Params.parse(options, { undoCallback: null,
                                           destroyCallback: null,
-                                          forFeedback: false
+                                          forFeedback: false,
+                                          isTransient: true
                                         });
 
         let undoCallback = options.undoCallback;
         let destroyCallback = options.destroyCallback;
         let forFeedback = options.forFeedback;
+        let isTransient = options.isTransient;
 
         if (this._source == null) {
             this._source = new MessageTray.SystemNotificationSource();
@@ -94,7 +96,7 @@ const ShellInfo = new Lang.Class({
         let notification = null;
         if (this._source.notifications.length == 0) {
             notification = new MessageTray.Notification(this._source, text, null);
-            notification.setTransient(true);
+            notification.setTransient(isTransient);
             notification.setForFeedback(forFeedback);
             notification.ignoreHover = true;
         } else {
