@@ -416,7 +416,9 @@ const Panel = new Lang.Class({
         /* Show Shared Account warning */
         let username = GLib.get_user_name();
         if (username == "shared") {
-            Main.overview.setMessage(SHARED_ACCOUNT_MESSAGE, { forFeedback: true });
+            Main.overview.setMessage(SHARED_ACCOUNT_MESSAGE,
+                                     { forFeedback: true,
+                                       isTransient: false });
         }
     },
 
