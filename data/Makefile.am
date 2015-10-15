@@ -1,5 +1,5 @@
 desktopdir=$(datadir)/applications
-desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop eos-app-feedback.desktop eos-launch.desktop
+desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop eos-link-feedback.desktop eos-launch.desktop
 
 sessionsdir=$(datadir)/xsessions
 sessions_DATA = eos-session.desktop
@@ -96,7 +96,7 @@ EXTRA_DIST =					\
 	eos-session.desktop.in.in		\
 	eos-shell.session.in.in			\
 	eos-shell-extension-prefs.desktop.in.in	\
-	eos-app-feedback.desktop.in.in		\
+	eos-link-feedback.desktop.in.in		\
 	resfix					\
 	$(introspection_DATA)			\
 	$(menu_DATA)				\
@@ -114,7 +114,7 @@ CLEANFILES =					\
 	eos-shell-extension-prefs.in		\
 	eos-shell.session			\
 	eos-shell.session.in			\
-	eos-app-feedback.desktop.in		\
+	eos-link-feedback.desktop.in		\
 	$(desktop_DATA)				\
 	$(greeterdesktop_DATA)			\
 	$(sessions_DATA)			\

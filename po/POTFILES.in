@@ -2,7 +2,7 @@
 # Please keep this file sorted alphabetically.
 [encoding: UTF-8]
 data/50-gnome-shell-system.xml.in
-data/eos-app-feedback.desktop.in.in
+data/eos-link-feedback.desktop.in.in
 data/eos-session.desktop.in.in
 data/eos-shell.desktop.in.in
 data/eos-shell-extension-prefs.desktop.in.in
