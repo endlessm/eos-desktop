@@ -40,7 +40,7 @@ const YELP_TEXT = _("Help");
 const SETTINGS_TEXT = _("Settings");
 const FEEDBACK_TEXT = _("Give Us Feedback");
 
-const FEEDBACK_LAUNCHER = "eos-app-feedback.desktop";
+const FEEDBACK_LAUNCHER = "eos-link-feedback.desktop";
 const YELP_LAUNCHER = "yelp.desktop";
 const CONTROL_CENTER_LAUNCHER = "gnome-control-center.desktop";
 

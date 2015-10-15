@@ -22,9 +22,9 @@ config
 configure
 _coverage/
 data/50-gnome-shell-*.xml
-data/eos-app-feedback.desktop
-data/eos-app-feedback.desktop.in
 data/eos-launch.desktop
+data/eos-link-feedback.desktop
+data/eos-link-feedback.desktop.in
 data/eos-session.desktop
 data/eos-session.desktop.in
 data/eos-shell.desktop
