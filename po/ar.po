@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-06 01:31+0000\n"
-"PO-Revision-Date: 2015-09-22 01:31+0000\n"
+"POT-Creation-Date: 2015-10-13 01:32+0000\n"
+"PO-Revision-Date: 2015-10-13 20:30+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr "أظهر كل التطبيقات"
 msgid "Open the application menu"
 msgstr "افتح قائمة التطبيقات"
 
-#: ../data/eos-app-feedback.desktop.in.in.h:1
+#: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
 msgstr "تعليق"
 
@@ -258,14 +258,14 @@ msgstr "يحدد هذا المفتاح الترتيب الدقيق للأيقو�
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Enables the pressure barrier for the message tray"
-msgstr ""
+msgstr "يُمَكِّنْ عائق الضغط لعلبة الرسائل"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:38
 msgid ""
 "By default, the message tray is only shown on key press. Set true to show "
 "the message tray when exerting downward pressure with the cursor on the "
 "bottom of the taskbar."
-msgstr ""
+msgstr "تُعرض علبة الرسائل فقط مع ضغط المفتاح، هذا هو الوضع الافتراضي. اضبط على قيمة: صحيح، لعرض علبة الرسائل عند إحداث ضغظ لأسفل بالمؤشر بأسفل شريط المهام."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Show the week date in the calendar"
@@ -1383,7 +1383,7 @@ msgstr "نظرة عامة"
 
 #: ../js/ui/panel.js:375
 msgid "Taskbar"
-msgstr ""
+msgstr "شريط المهام"
 
 #. Translators: this MUST be either "toggle-switch-us"
 #. (for toggle switches containing the English words
