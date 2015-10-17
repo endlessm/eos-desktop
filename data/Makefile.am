@@ -30,6 +30,9 @@ gnomesession_DATA = eos-shell.session gdm-eos-shell.session
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_XML_NOMERGE_RULE@
 
+rulesdir = $(sysconfdir)/polkit-1/rules.d
+rules_DATA = 40-gdm.rules
+
 introspectiondir = $(datadir)/dbus-1/interfaces
 introspection_DATA =				\
 	org.gnome.Shell.Screencast.xml		\
@@ -105,7 +108,8 @@ EXTRA_DIST =					\
 	org.gnome.shell.gschema.xml.in.in	\
 	eos-launch.desktop.in.in		\
 	gnome-shell-theme.gresource.xml		\
-	$(resource_files)
+	$(resource_files)			\
+	$(rules_DATA)
 
 CLEANFILES =					\
 	gdm-eos-shell.desktop.in		\
