@@ -19,6 +19,7 @@
  */
 
 const AccountsService = imports.gi.AccountsService;
+const ByteArray = imports.byteArray;
 const Clutter = imports.gi.Clutter;
 const CtrlAltTab = imports.ui.ctrlAltTab;
 const Gio = imports.gi.Gio;
@@ -49,6 +50,8 @@ const _FADE_ANIMATION_TIME = 0.25;
 const _SCROLL_ANIMATION_TIME = 0.5;
 const _TIMED_LOGIN_IDLE_THRESHOLD = 5.0;
 const _LOGO_ICON_HEIGHT = 16;
+
+const _RESET_CODE_LENGTH = 7;
 
 const WORK_SPINNER_ICON_SIZE = 24;
 const WORK_SPINNER_ANIMATION_DELAY = 1.0;
@@ -628,6 +631,21 @@ const LoginDialog = new Lang.Class({
         this._passwordHintButton.connect('clicked', Lang.bind(this, this._showPasswordHint));
         this._passwordHintButton.visible = false;
 
+        let passwordResetLabel = new St.Label({ text: _("Forgot password?"),
+                                                style_class: 'login-dialog-password-hint-link' }); // FIXME rename style class
+        this._passwordResetButton = new St.Button({ style_class: 'login-dialog-password-hint-button', // FIXME rename style class
+                                                    button_mask: St.ButtonMask.ONE | St.ButtonMask.THREE,
+                                                    can_focus: true,
+                                                    child: passwordResetLabel,
+                                                    reactive: true,
+                                                    x_align: St.Align.START,
+                                                    x_fill: true });
+        this._promptBox.add(this._passwordResetButton,
+                            { x_fill: false,
+                              x_align: St.Align.START });
+        this._passwordResetButton.connect('clicked', Lang.bind(this, this._showPasswordResetPrompt));
+        this._passwordResetButton.visible = false;
+
         this._promptMessage = new St.Label({ visible: false });
         this._promptBox.add(this._promptMessage, { x_fill: true });
 
@@ -694,6 +712,46 @@ const LoginDialog = new Lang.Class({
         this._passwordHintLabel.set_text(this._user.get_password_hint());
         this._passwordHintLabel.show();
         this._passwordHintButton.hide();
+        this._passwordResetButton.show();
+    },
+
+    _generateResetCode: function() {
+        // Note: These are not secure random numbers. Doesn't matter. The
+        // mechanism to convert a reset code to unlock code is well-known, so
+        // who cares how random the reset code is?
+        let resetCode = '';
+        for (let n = 0; n < _RESET_CODE_LENGTH; n++)
+            resetCode = '%s%d'.format(resetCode, GLib.random_int_range(0, 10));
+        return resetCode;
+    },
+
+    _computeUnlockCode: function(resetCode) {
+        let checksum = new GLib.Checksum(GLib.ChecksumType.MD5);
+        checksum.update(ByteArray.fromString(resetCode));
+
+        let unlockCode = checksum.get_string();
+        unlockCode = unlockCode.replace(/\D/g, '');
+        unlockCode = unlockCode.slice(0, _RESET_CODE_LENGTH);
+
+        while (unlockCode.length < _RESET_CODE_LENGTH)
+            unlockCode += '0';
+
+        return unlockCode;
+    },
+
+    _showPasswordResetPrompt: function() {
+        this._passwordHintLabel.hide();
+        this._passwordResetButton.hide();
+
+        this._promptEntry.clutter_text.set_password_char('');
+
+        this._passwordResetCode = this._generateResetCode();
+
+        // Translators: During a password reset, prompt for the "secret code" provided by customer support.
+        this._promptLabel.set_text(_("Unlock Code:"));
+        // Translators: Shown during a password reset.
+        this._promptMessage.set_text(_("Please contact customer support. Your verification code is %s.").format(this._passwordResetCode));
+        this._signInButton.set_label(_("Reset Password"));
     },
 
     _updateDisableUserList: function() {
@@ -726,6 +784,7 @@ const LoginDialog = new Lang.Class({
     _reset: function() {
         this._userVerifier.clear();
 
+        this._passwordResetCode = null;
         this._updateSensitivity(true);
         this._promptMessage.hide();
         this._user = null;
@@ -743,8 +802,10 @@ const LoginDialog = new Lang.Class({
 
         if (this._user && this._user.get_password_hint().length > 0)
             this._passwordHintButton.visible = true;
-        else
+        } else {
             this._passwordHintButton.visible = false;
+            this._passwordResetButton.visible = true;
+        }
 
         this._updateSensitivity(true);
         this._setWorking(false);
@@ -812,6 +873,16 @@ const LoginDialog = new Lang.Class({
         return batch.run();
     },
 
+    _onPromptEntryTextChanged: function() {
+        if (this._passwordResetCode == null) {
+            this._updateSignInButtonSensitivity(this._promptEntry.text.length > 0);
+        } else {
+            this._updateSignInButtonSensitivity(
+                this._promptEntry.text.length == _RESET_CODE_LENGTH &&
+                this._promptEntry.text.search(/\D/) == -1);
+        }
+    },
+
     _prepareDialog: function(forSecret, hold) {
         this._workSpinner = new Panel.AnimatedIcon('process-working.svg', WORK_SPINNER_ICON_SIZE);
         this._workSpinner.actor.opacity = 0;
@@ -835,6 +906,7 @@ const LoginDialog = new Lang.Class({
                                 y_fill: false,
                                 x_align: St.Align.END,
                                 y_align: St.Align.MIDDLE });
+
         this._signInButton = this.addButton({ action: Lang.bind(this, function() {
                                                           hold.release();
                                                       }),
@@ -850,9 +922,7 @@ const LoginDialog = new Lang.Class({
 
         this._promptEntryTextChangedId =
             this._promptEntry.clutter_text.connect('text-changed',
-                                                    Lang.bind(this, function() {
-                                                        this._updateSignInButtonSensitivity(this._promptEntry.text.length > 0);
-                                                    }));
+                                                    Lang.bind(this, this._onPromptEntryTextChanged));
 
         this._promptEntryActivateId =
             this._promptEntry.clutter_text.connect('activate', function() {
@@ -943,10 +1013,30 @@ const LoginDialog = new Lang.Class({
                      },
 
                      function() {
-                         let text = this._promptEntry.get_text();
                          this._updateSensitivity(false);
-                         this._setWorking(true);
-                         this._userVerifier.answerQuery(serviceName, text);
+
+                         let text = this._promptEntry.get_text();
+
+                         if (this._passwordResetCode == null) {
+                             this._setWorking(true);
+                             this._userVerifier.answerQuery(serviceName, text);
+                         } else if (text == this._computeUnlockCode(this._passwordResetCode)) {
+                             // FIXME: This will HANG FOREVER if the user is not local and active.
+                             // We need to either hide the forgot password? button in that case, or
+                             // else change 40-gdm.rules to allow this.
+                             this._user.set_password_mode(AccountsService.UserPasswordMode.SET_AT_LOGIN);
+
+                             // FIXME: Go straight to setting the new password. Don't reset.
+                             //this._reset();
+
+                             //this._userVerifier.clear();
+                             this._beginVerificationForUser(this._user.get_user_name());
+                             //this._passwordResetCode = null;
+                         } else {
+                             // FIXME: Show a message when the unlock code is incorrect. Don't reset.
+                             //this._passwordResetCode = null;
+                             this._reset();
+                         }
                      }];
 
         let batch = new Batch.ConsecutiveBatch(this, tasks);
