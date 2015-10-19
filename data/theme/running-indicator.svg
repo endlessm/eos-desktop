@@ -14,7 +14,7 @@
    height="119.97824"
    id="svg7355"
    version="1.1"
-   inkscape:version="0.48.1 r9760"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="running-indicator.svg">
   <metadata
      id="metadata4175">
@@ -37,14 +37,14 @@
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1141"
+     inkscape:window-height="1004"
      id="namedview4173"
      showgrid="false"
      inkscape:zoom="8.1348081"
-     inkscape:cx="81.120662"
-     inkscape:cy="58.117986"
+     inkscape:cx="36.866391"
+     inkscape:cy="48.283704"
      inkscape:window-x="0"
-     inkscape:window-y="26"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="g30864" />
   <defs
@@ -53,7 +53,7 @@
        xlink:href="#linearGradient36429"
        id="radialGradient7461"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.011539,0,0,0.57582113,-0.39262194,71.83807)"
+       gradientTransform="matrix(0.83324162,-0.00594535,0.00346525,0.48565545,7.4845559,83.492212)"
        cx="47.428951"
        cy="167.16817"
        fx="47.428951"
@@ -97,7 +97,7 @@
        fx="49.067139"
        cy="242.50381"
        cx="49.067139"
-       gradientTransform="matrix(1.1891549,0,0,0.15252127,-9.281289,132.52772)"
+       gradientTransform="matrix(0.81422289,0.0225369,-0.00422002,0.15246288,10.138924,127.73538)"
        gradientUnits="userSpaceOnUse"
        id="radialGradient7488"
        xlink:href="#linearGradient36471" />
@@ -112,7 +112,7 @@
       <rect
          ry="3.4593496"
          rx="3.4593496"
-         y="99.596962"
+         y="95.896286"
          x="12.596948"
          height="71.116341"
          width="71.116341"
@@ -120,7 +120,7 @@
          style="opacity:0.37187500000000001;fill:url(#radialGradient7461);fill-opacity:1;stroke:none" />
       <path
          id="rect34520"
-         d="m 83.273151,166.72152 c 0,1.96759 -1.584022,3.55163 -3.551629,3.55163 l -63.443032,0 c -1.967608,0 -3.551648,-1.58402 -3.551643,-3.55164 0,-5.85318 0,-5.85318 0,0"
+         d="m 83.273151,163.02084 c 0,1.96759 -1.584022,3.55163 -3.551629,3.55163 l -63.443032,0 c -1.967608,0 -3.551648,-1.58402 -3.551643,-3.55164 0,-5.85318 0,-5.85318 0,0"
          style="opacity:0.35;fill:none;stroke:url(#radialGradient7488);stroke-width:1;stroke-opacity:1"
          connector-curvature="0"
          inkscape:connector-curvature="0"

@@ -50,8 +50,7 @@ stage {
 .app-well-app > .overview-icon,
 .overview-icon .show-apps,
 .search-section .overview-icon {
-    font-size: 11pt;
-    font-weight: bold;
+    font-size: 12pt;
 }
 
 /* Scroll Bars */
@@ -910,11 +909,13 @@ StScrollBar StButton#vhandle:active {
 /* Search Box */
 #searchEntry {
     width: 300px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     padding-left: 8px;
     padding-right: 4px;
 
     font-family: lato, sans-serif;
-    font-size: 11.5pt;
+    font-size: 16px;
 
     color: #c5bcb6;
     selected-color: #333;
@@ -1044,6 +1045,7 @@ StScrollBar StButton#vhandle:active {
 
 .search-section .overview-icon-label {
     color: #444444;
+    font-weight: bold;
     text-shadow: none;
     width: 100px;
 }
@@ -1263,7 +1265,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .app-well-app.running > .overview-icon {
-    text-shadow: black 0px 2px 2px;
+    text-shadow: black 0px 2px 3px;
     background-image: url("running-indicator.svg");
     background-size: contain;
 }
@@ -1289,7 +1291,7 @@ StScrollBar StButton#vhandle:active {
 
 .overview-icon .show-apps:hover {
     background-color: rgba(255,255,255,0.1);
-    text-shadow: black 0px 2px 2px;
+    text-shadow: black 0px 2px 3px;
     transition-duration: 100ms;
     color: white;
 }
