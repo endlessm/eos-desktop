@@ -14,6 +14,7 @@ const AppFavorites = new Lang.Class({
     _init: function() {
         this._favorites = {};
         global.settings.connect('changed::' + this.FAVORITE_APPS_KEY, Lang.bind(this, this._onFavsChanged));
+        Shell.AppSystem.get_default().connect('installed-changed', Lang.bind(this, this._onFavsChanged));
         this._reload();
     },
 
