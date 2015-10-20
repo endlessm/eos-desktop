@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-16 11:46-0700\n"
+"POT-Creation-Date: 2015-10-20 01:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -490,12 +490,12 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appFavorites.js:95
+#: ../js/ui/appFavorites.js:96
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr ""
 
-#: ../js/ui/appFavorites.js:129
+#: ../js/ui/appFavorites.js:130
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr ""
