@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-13 01:32+0000\n"
+"POT-Creation-Date: 2015-10-20 01:28+0000\n"
 "PO-Revision-Date: 2015-10-14 00:47+0000\n"
 "Last-Translator: c.sanchez <cassandra@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/es/)\n"
@@ -501,12 +501,12 @@ msgstr "Más programas"
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ../js/ui/appFavorites.js:95
+#: ../js/ui/appFavorites.js:96
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "Se ha añadido %s a tus favoritos."
 
-#: ../js/ui/appFavorites.js:129
+#: ../js/ui/appFavorites.js:130
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "Se ha quitado %s de tus favoritos."
@@ -1362,11 +1362,11 @@ msgctxt "program"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../js/ui/overview.js:116
+#: ../js/ui/overview.js:118
 msgid "Undo"
 msgstr "Deshacer"
 
-#: ../js/ui/overview.js:164
+#: ../js/ui/overview.js:166
 msgid "Overview"
 msgstr "Vista general"
 
