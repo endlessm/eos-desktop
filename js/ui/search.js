@@ -530,6 +530,8 @@ const SearchResults = new Lang.Class({
         RemoteSearch.loadRemoteSearchProviders(Lang.bind(this, function(providers) {
             providers.forEach(Lang.bind(this, this._registerProvider));
         }));
+
+        this._doSearch();
     },
 
     _registerProvider: function (provider) {
