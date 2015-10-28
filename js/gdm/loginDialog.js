@@ -1013,6 +1013,34 @@ const LoginDialog = new Lang.Class({
         }
     },
 
+    _onAnswerProvided: function(serviceName) {
+
+         this._updateSensitivity(false);
+
+         let text = this._promptEntry.get_text();
+
+         if (this._passwordResetCode == null) {
+             this._setWorking(true);
+             this._userVerifier.answerQuery(serviceName, text);
+         } else if (text == this._computeUnlockCode(this._passwordResetCode)) {
+             // FIXME: This will HANG FOREVER if the user is not local and active.
+             // We need to either hide the forgot password? button in that case, or
+             // else change 40-gdm.rules to allow this.
+             this._user.set_password_mode(AccountsService.UserPasswordMode.SET_AT_LOGIN);
+             let user = this._user;
+             this._userVerifier.cancel();
+             this._reset();
+             this._user = user;
+
+             this._beginVerificationForUser(user.get_user_name());
+             this._passwordResetCode = null;
+         } else {
+             // FIXME: Show a message when the unlock code is incorrect. Don't reset.
+             //this._passwordResetCode = null;
+             this._reset();
+         }
+    },
+
     _askQuestion: function(verifier, serviceName, question, passwordChar) {
         this._promptLabel.set_text(question);
 
@@ -1025,35 +1053,8 @@ const LoginDialog = new Lang.Class({
                      },
 
                      function() {
-                         // Authentication cancelled?
-                         if (this._user == null)
-                           return;
-
-                         this._updateSensitivity(false);
-
-                         let text = this._promptEntry.get_text();
-
-                         if (this._passwordResetCode == null) {
-                             this._setWorking(true);
-                             this._userVerifier.answerQuery(serviceName, text);
-                         } else if (text == this._computeUnlockCode(this._passwordResetCode)) {
-                             // FIXME: This will HANG FOREVER if the user is not local and active.
-                             // We need to either hide the forgot password? button in that case, or
-                             // else change 40-gdm.rules to allow this.
-                             this._user.set_password_mode(AccountsService.UserPasswordMode.SET_AT_LOGIN);
-
-                             let user = this._user;
-                             this._userVerifier.cancel();
-                             this._reset();
-                             this._user = user;
-
-                             this._beginVerificationForUser(user.get_user_name());
-                             this._passwordResetCode = null;
-                         } else {
-                             // FIXME: Show a message when the unlock code is incorrect. Don't reset.
-                             //this._passwordResetCode = null;
-                             this._reset();
-                         }
+                         if (this._user)
+                             this._onAnswerProvided(serviceName);
                      }];
 
         let batch = new Batch.ConsecutiveBatch(this, tasks);
