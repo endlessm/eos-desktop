@@ -19,7 +19,7 @@ const DIRECTORY_EXT = '.directory';
 const APP_DIR_NAME = 'applications';
 const FOLDER_DIR_NAME = 'desktop-directories';
 
-const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/EndlessOS/language-defaults';
+const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/eos-shell-content/icon-grid-defaults';
 const DEFAULT_CONFIG_NAME_BASE = 'icon-grid';
 
 /* Occurs when an application is uninstalled, meaning removed from the desktop's
