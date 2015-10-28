@@ -616,8 +616,8 @@ const LoginDialog = new Lang.Class({
                               x_align: St.Align.START });
 
         let passwordHintLabel = new St.Label({ text: _("Show password hint"),
-                                               style_class: 'login-dialog-password-hint-link' });
-        this._passwordHintButton = new St.Button({ style_class: 'login-dialog-password-hint-button',
+                                               style_class: 'login-dialog-password-recovery-link' });
+        this._passwordHintButton = new St.Button({ style_class: 'login-dialog-password-recovery-button',
                                                    button_mask: St.ButtonMask.ONE | St.ButtonMask.THREE,
                                                    can_focus: true,
                                                    child: passwordHintLabel,
@@ -632,8 +632,8 @@ const LoginDialog = new Lang.Class({
         this._passwordHintButton.visible = false;
 
         let passwordResetLabel = new St.Label({ text: _("Forgot password?"),
-                                                style_class: 'login-dialog-password-hint-link' }); // FIXME rename style class
-        this._passwordResetButton = new St.Button({ style_class: 'login-dialog-password-hint-button', // FIXME rename style class
+                                                style_class: 'login-dialog-password-recovery-link' });
+        this._passwordResetButton = new St.Button({ style_class: 'login-dialog-password-recovery-button',
                                                     button_mask: St.ButtonMask.ONE | St.ButtonMask.THREE,
                                                     can_focus: true,
                                                     child: passwordResetLabel,
@@ -649,7 +649,7 @@ const LoginDialog = new Lang.Class({
         this._promptMessage = new St.Label({ visible: false });
         this._promptBox.add(this._promptMessage, { x_fill: true });
 
-        this._promptLoginHint = new St.Label({ style_class: 'login-dialog-prompt-login-hint-message' });
+        this._promptLoginHint = new St.Label({ style_class: 'login-dialog-prompt-password-recovery-message' });
         this._promptLoginHint.hide();
         this._promptBox.add(this._promptLoginHint);
 
