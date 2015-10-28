@@ -796,6 +796,11 @@ const LoginDialog = new Lang.Class({
             this._showUserList();
 
         this._passwordResetCode = null;
+
+        if (this._holdForAnswer) {
+            this._holdForAnswer.release();
+            this._holdForAnswer = null;
+        }
     },
 
     _verificationFailed: function() {
@@ -866,12 +871,12 @@ const LoginDialog = new Lang.Class({
 
         this._promptEntry.grab_key_focus();
 
-        let hold = new Batch.Hold();
+        this._holdForAnswer = new Batch.Hold();
         let tasks = [function() {
-                         this._prepareDialog(forSecret, hold);
+                         this._prepareDialog(forSecret);
                      },
 
-                     hold];
+                     this._holdForAnswer];
 
         let batch = new Batch.ConcurrentBatch(this, tasks);
 
@@ -888,7 +893,7 @@ const LoginDialog = new Lang.Class({
         }
     },
 
-    _prepareDialog: function(forSecret, hold) {
+    _prepareDialog: function(forSecret) {
         this._workSpinner = new Panel.AnimatedIcon('process-working.svg', WORK_SPINNER_ICON_SIZE);
         this._workSpinner.actor.opacity = 0;
         this._workSpinner.actor.show();
@@ -913,7 +918,8 @@ const LoginDialog = new Lang.Class({
                                 y_align: St.Align.MIDDLE });
 
         this._signInButton = this.addButton({ action: Lang.bind(this, function() {
-                                                          hold.release();
+                                                          this._holdForAnswer.release();
+                                                          this._holdForAnswer = null;
                                                       }),
                                               label: forSecret ? C_("button", "Sign In") : _("Next"),
                                               default: true },
@@ -930,9 +936,10 @@ const LoginDialog = new Lang.Class({
                                                     Lang.bind(this, this._onPromptEntryTextChanged));
 
         this._promptEntryActivateId =
-            this._promptEntry.clutter_text.connect('activate', function() {
-                hold.release();
-            });
+            this._promptEntry.clutter_text.connect('activate', Lang.bind(this, function() {
+                this._holdForAnswer.release();
+                this._holdForAnswer = null;
+            }));
     },
 
     _updateSensitivity: function(sensitive) {
@@ -1018,6 +1025,10 @@ const LoginDialog = new Lang.Class({
                      },
 
                      function() {
+                         // Authentication cancelled?
+                         if (this._user == null)
+                           return;
+
                          this._updateSensitivity(false);
 
                          let text = this._promptEntry.get_text();
