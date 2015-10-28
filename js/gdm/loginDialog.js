@@ -799,9 +799,13 @@ const LoginDialog = new Lang.Class({
     },
 
     _verificationFailed: function() {
+        // Nothing to do if we were just reset after too many failed verifications.
+        if (!this._user)
+            return;
+
         this._promptEntry.text = '';
 
-        if (this._user && this._user.get_password_hint().length > 0)
+        if (this._user.get_password_hint().length > 0) {
             this._passwordHintButton.visible = true;
         } else {
             this._passwordHintButton.visible = false;
