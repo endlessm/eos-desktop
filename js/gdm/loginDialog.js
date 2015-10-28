@@ -1065,7 +1065,9 @@ const LoginDialog = new Lang.Class({
         this._promptEntry.set_text('');
         this._promptEntry.clutter_text.set_password_char('');
 
-        let tasks = [this._showPrompt,
+        let tasks = [function() {
+                         return this._showPrompt(false);
+                     },
 
                      function() {
                          let userName = this._promptEntry.get_text();
