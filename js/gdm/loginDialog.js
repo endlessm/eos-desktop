@@ -1054,6 +1054,7 @@ const LoginDialog = new Lang.Class({
 
                      function() {
                          let userName = this._promptEntry.get_text();
+                         this._user = this._userManager.get_user(userName);
                          this._promptEntry.reactive = false;
                          return this._beginVerificationForUser(userName);
                      }];
