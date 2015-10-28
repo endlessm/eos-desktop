@@ -22,7 +22,7 @@ const COLOR_SHADING_TYPE_KEY = 'color-shading-type';
 const BACKGROUND_STYLE_KEY = 'picture-options';
 const PICTURE_OPACITY_KEY = 'picture-opacity';
 const PICTURE_URI_KEY = 'picture-uri';
-const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/EndlessOS/language-defaults';
+const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/eos-media';
 const BACKGROUND_NAME_BASE = 'desktop-background';
 
 const FADE_ANIMATION_TIME = 1.0;
