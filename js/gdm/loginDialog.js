@@ -784,7 +784,6 @@ const LoginDialog = new Lang.Class({
     _reset: function() {
         this._userVerifier.clear();
 
-        this._passwordResetCode = null;
         this._updateSensitivity(true);
         this._promptMessage.hide();
         this._user = null;
@@ -793,8 +792,10 @@ const LoginDialog = new Lang.Class({
 
         if (this._disableUserList)
             this._hideUserListAndLogIn();
-        else
+        else if (!this._passwordResetCode)
             this._showUserList();
+
+        this._passwordResetCode = null;
     },
 
     _verificationFailed: function() {
@@ -1026,12 +1027,13 @@ const LoginDialog = new Lang.Class({
                              // else change 40-gdm.rules to allow this.
                              this._user.set_password_mode(AccountsService.UserPasswordMode.SET_AT_LOGIN);
 
-                             // FIXME: Go straight to setting the new password. Don't reset.
-                             //this._reset();
+                             let user = this._user;
+                             this._userVerifier.cancel();
+                             this._reset();
+                             this._user = user;
 
-                             //this._userVerifier.clear();
-                             this._beginVerificationForUser(this._user.get_user_name());
-                             //this._passwordResetCode = null;
+                             this._beginVerificationForUser(user.get_user_name());
+                             this._passwordResetCode = null;
                          } else {
                              // FIXME: Show a message when the unlock code is incorrect. Don't reset.
                              //this._passwordResetCode = null;
