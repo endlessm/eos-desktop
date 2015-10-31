@@ -853,6 +853,9 @@ const LoginDialog = new Lang.Class({
     },
 
     _showPrompt: function(forSecret) {
+        if (this._holdForAnswer)
+            throw new Error("Previous _showPrompt not yet finished");
+
         this._sessionList.actor.hide();
         this._promptLabel.show();
         this._promptEntry.show();
