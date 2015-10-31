@@ -849,8 +849,7 @@ const LoginDialog = new Lang.Class({
     cancel: function() {
         if (this._verifyingUser)
             this._userVerifier.cancel();
-        else
-            this._reset();
+        this._reset();
     },
 
     _showPrompt: function(forSecret) {
