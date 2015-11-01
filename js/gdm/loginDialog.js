@@ -36,6 +36,7 @@ const St = imports.gi.St;
 const Gdm = imports.gi.Gdm;
 
 const Batch = imports.gdm.batch;
+const Config = imports.misc.config;
 const Fprint = imports.gdm.fingerprint;
 const GdmUtil = imports.gdm.util;
 const Lightbox = imports.ui.lightbox;
@@ -707,6 +708,8 @@ const LoginDialog = new Lang.Class({
                                    this._onUserListActivated(item);
                                }));
 
+        this._customerSupportEmail = null;
+        this._customerSupportPhoneNumber = null;
    },
 
     _showPasswordHint: function() {
@@ -716,7 +719,26 @@ const LoginDialog = new Lang.Class({
         this._maybeShowPasswordResetButton();
     },
 
+    _readCustomerSupportData: function() {
+        try {
+            let keyFile = new GLib.KeyFile();
+            keyFile.load_from_file(Config.PKGDATADIR + '/vendor-customer-support.ini', GLib.KeyFileFlags.NONE);
+            this._customerSupportEmail = keyFile.get_locale_string('Customer Support', 'Email', null);
+            this._customerSupportPhoneNumber = keyFile.get_locale_string('Customer Support', 'Phone', null);
+        } catch (e) {
+            logError(e, 'Failed to read customer support data');
+            return false;
+        }
+
+        return this._customerSupportEmail && this._customerSupportPhoneNumber;
+    },
+
     _maybeShowPasswordResetButton: function() {
+        if (!this._customerSupportPhoneNumber || !this._customerSupportEmail) {
+            if (!this._readCustomerSupportData())
+                return;
+        }
+
         // There's got to be a better way to get our pid...?
         let credentials = new Gio.Credentials();
         let pid = credentials.get_unix_pid();
@@ -774,9 +796,15 @@ const LoginDialog = new Lang.Class({
         this._passwordResetCode = this._generateResetCode();
 
         // Translators: During a password reset, prompt for the "secret code" provided by customer support.
-        this._promptLabel.set_text(_("Unlock Code:"));
-        // Translators: Shown during a password reset.
-        this._promptMessage.set_text(_("Please contact customer support. Your verification code is %s.").format(this._passwordResetCode));
+        this._promptLabel.set_text(_("Enter unlock code provided by customer support:"));
+
+        this._promptMessage.set_text(
+            // Translators: Password reset. The first %s is an email, the second is one or more phone numbers.
+            _("Please contact customer support at %s or %s. Your verification code is %s.").format(this._customerSupportEmail,
+                                                                                                   this._customerSupportPhoneNumber,
+                                                                                                   this._passwordResetCode));
+
+        // Translators: Button on login dialog, after clicking Forgot Password?
         this._signInButton.set_label(_("Reset Password"));
     },
 
