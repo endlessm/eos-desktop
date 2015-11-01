@@ -1046,7 +1046,7 @@ const LoginDialog = new Lang.Class({
         }
     },
 
-    _onAnswerProvided: function(serviceName) {
+    _onAnswerProvided: function(verifier, serviceName) {
 
          this._updateSensitivity(false);
 
@@ -1065,9 +1065,23 @@ const LoginDialog = new Lang.Class({
              this._beginVerificationForUser(user.get_user_name());
              this._passwordResetCode = null;
          } else {
-             // FIXME: Show a message when the unlock code is incorrect. Don't reset.
-             //this._passwordResetCode = null;
-             this._reset();
+             this._updateSensitivity(true);
+             this._promptEntry.set_text('');
+             this._promptMessage.set_text(_("Your unlock code was incorrect. Please try again.").format(this._passwordResetCode));
+
+             // Use an idle so that _holdForAnswer gets cleared first.
+             let id = Mainloop.idle_add(Lang.bind(this, function() {
+                 let tasks = [function() {
+                                 return this._showPrompt('');
+                             },
+
+                             function() {
+                                 this._onAnswerProvided(verifier, serviceName);
+                             }];
+                 new Batch.ConsecutiveBatch(this, tasks).run();
+                 return GLib.SOURCE_REMOVE;
+             }));
+             GLib.Source.set_name_by_id(id, '[gnome-shell] this._onAnswerProvided');
          }
     },
 
@@ -1084,7 +1098,7 @@ const LoginDialog = new Lang.Class({
 
                      function() {
                          if (this._user)
-                             this._onAnswerProvided(serviceName);
+                             this._onAnswerProvided(verifier, serviceName);
                      }];
 
         let batch = new Batch.ConsecutiveBatch(this, tasks);
