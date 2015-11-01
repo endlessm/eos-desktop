@@ -29,6 +29,7 @@ const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
 const Lang = imports.lang;
 const Pango = imports.gi.Pango;
+const Polkit = imports.gi.Polkit;
 const Signals = imports.signals;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
@@ -712,7 +713,32 @@ const LoginDialog = new Lang.Class({
         this._passwordHintLabel.set_text(this._user.get_password_hint());
         this._passwordHintLabel.show();
         this._passwordHintButton.hide();
-        this._passwordResetButton.show();
+        this._maybeShowPasswordResetButton();
+    },
+
+    _maybeShowPasswordResetButton: function() {
+        // There's got to be a better way to get our pid...?
+        let credentials = new Gio.Credentials();
+        let pid = credentials.get_unix_pid();
+
+        // accountsservice provides no async API, and unconditionally informs
+        // polkit that interactive authorization is permissible. If interactive
+        // authorization is attempted on the login screen during the call to
+        // set_password_mode, it will hang forever. Ensure the password reset
+        // button is hidden in this case. Besides, it's stupid to prompt for a
+        // password in order to perform password reset.
+        Polkit.Permission.new('org.freedesktop.accounts.user-administration',
+                              Polkit.UnixProcess.new_for_owner(pid, 0, -1),
+                              null,
+                              Lang.bind(this, function (obj, result) {
+                                  try {
+                                      let permission = Polkit.Permission.new_finish(result);
+                                      if (permission.get_allowed())
+                                          this._passwordResetButton.show();
+                                  } catch(e) {
+                                      logError(e, 'Failed to determine if password reset is allowed');
+                                  }
+                                }));
     },
 
     _generateResetCode: function() {
@@ -814,7 +840,7 @@ const LoginDialog = new Lang.Class({
             this._passwordHintButton.visible = true;
         } else {
             this._passwordHintButton.visible = false;
-            this._passwordResetButton.visible = true;
+            this._maybeShowPasswordResetButton();
         }
 
         this._updateSensitivity(true);
@@ -1030,9 +1056,6 @@ const LoginDialog = new Lang.Class({
              this._setWorking(true);
              this._userVerifier.answerQuery(serviceName, text);
          } else if (text == this._computeUnlockCode(this._passwordResetCode)) {
-             // FIXME: This will HANG FOREVER if the user is not local and active.
-             // We need to either hide the forgot password? button in that case, or
-             // else change 40-gdm.rules to allow this.
              this._user.set_password_mode(AccountsService.UserPasswordMode.SET_AT_LOGIN);
              let user = this._user;
              this._userVerifier.cancel();
