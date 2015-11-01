@@ -1,3 +1,5 @@
+dist_pkgdata_DATA = vendor-customer-support.ini
+
 desktopdir=$(datadir)/applications
 desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop eos-link-feedback.desktop eos-launch.desktop
 
