@@ -933,15 +933,20 @@ const LoginDialog = new Lang.Class({
 
         this._updateSignInButtonSensitivity(this._promptEntry.text.length > 0);
 
-        this._promptEntryTextChangedId =
-            this._promptEntry.clutter_text.connect('text-changed',
-                                                    Lang.bind(this, this._onPromptEntryTextChanged));
+        // This function can be called multiple times before we disconnect.
+        if (this._promptEntryTextChangedId == 0) {
+            this._promptEntryTextChangedId =
+                this._promptEntry.clutter_text.connect('text-changed',
+                                                        Lang.bind(this, this._onPromptEntryTextChanged));
+        }
 
-        this._promptEntryActivateId =
-            this._promptEntry.clutter_text.connect('activate', Lang.bind(this, function() {
-                this._holdForAnswer.release();
-                this._holdForAnswer = null;
-            }));
+        if (this._promptEntryActivateId == 0) {
+            this._promptEntryActivateId =
+                this._promptEntry.clutter_text.connect('activate', Lang.bind(this, function() {
+                    this._holdForAnswer.release();
+                    this._holdForAnswer = null;
+                }));
+        }
     },
 
     _updateSensitivity: function(sensitive) {
