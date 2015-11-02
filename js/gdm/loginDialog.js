@@ -1075,41 +1075,50 @@ const LoginDialog = new Lang.Class({
         }
     },
 
-    _onAnswerProvided: function(verifier, serviceName) {
-
+    _respondToSessionWorker: function(serviceName) {
          this._updateSensitivity(false);
+         this._setWorking(true);
+         this._userVerifier.answerQuery(serviceName, this._promptEntry.get_text());
+    },
 
-         let text = this._promptEntry.get_text();
+    _performPasswordReset: function() {
+         this._updateSensitivity(false);
+         this._user.set_password_mode(AccountsService.UserPasswordMode.SET_AT_LOGIN);
+         let user = this._user;
+         this._userVerifier.cancel();
+         this._user = user;
+         this._beginVerificationForUser(user.get_user_name());
+         this._passwordResetCode = null;
+    },
 
-         if (this._passwordResetCode == null) {
-             this._setWorking(true);
-             this._userVerifier.answerQuery(serviceName, text);
-         } else if (text == this._computeUnlockCode(this._passwordResetCode)) {
-             this._user.set_password_mode(AccountsService.UserPasswordMode.SET_AT_LOGIN);
-             let user = this._user;
-             this._userVerifier.cancel();
-             this._user = user;
-             this._beginVerificationForUser(user.get_user_name());
-             this._passwordResetCode = null;
-         } else {
-             this._updateSensitivity(true);
-             this._promptEntry.set_text('');
-             this._promptMessage.set_text(_("Your unlock code was incorrect. Please try again.").format(this._passwordResetCode));
+    _handleIncorrectPasswordResetCode: function(verifier, serviceName) {
+         this._updateSensitivity(true);
+         this._promptEntry.set_text('');
+         this._promptMessage.set_text(
+             _("Your unlock code was incorrect. Please try again.").format(this._passwordResetCode));
 
-             // Use an idle so that _holdForAnswer gets cleared first.
-             let id = Mainloop.idle_add(Lang.bind(this, function() {
-                 let tasks = [function() {
-                                 return this._showPrompt('');
-                             },
+         // Use an idle so that _holdForAnswer gets cleared first.
+         let id = Mainloop.idle_add(Lang.bind(this, function() {
+             let tasks = [function() {
+                             return this._showPrompt('');
+                         },
 
-                             function() {
-                                 this._onAnswerProvided(verifier, serviceName);
-                             }];
-                 new Batch.ConsecutiveBatch(this, tasks).run();
-                 return GLib.SOURCE_REMOVE;
-             }));
-             GLib.Source.set_name_by_id(id, '[gnome-shell] this._onAnswerProvided');
-         }
+                         function() {
+                             this._onAnswerProvided(verifier, serviceName);
+                         }];
+             new Batch.ConsecutiveBatch(this, tasks).run();
+             return GLib.SOURCE_REMOVE;
+         }));
+         GLib.Source.set_name_by_id(id, '[gnome-shell] this._handleIncorrectPasswordResetCode');
+    },
+
+    _onAnswerProvided: function(verifier, serviceName) {
+         if (this._passwordResetCode == null)
+            this._respondToSessionWorker(serviceName);
+         else if (this._promptEntry.get_text() == this._computeUnlockCode(this._passwordResetCode))
+            this._performPasswordReset();
+         else
+            this._handleIncorrectPasswordResetCode(verifier, serviceName);
     },
 
     _askQuestion: function(verifier, serviceName, question, passwordChar) {
