@@ -842,14 +842,13 @@ const LoginDialog = new Lang.Class({
         this._promptMessage.hide();
         this._user = null;
         this._passwordHintButton.visible = false;
+        this._passwordResetCode = null;
         this._verifyingUser = false;
 
         if (this._disableUserList)
             this._hideUserListAndLogIn();
-        else if (!this._passwordResetCode)
+        else
             this._showUserList();
-
-        this._passwordResetCode = null;
 
         if (this._holdForAnswer) {
             this._holdForAnswer.release();
