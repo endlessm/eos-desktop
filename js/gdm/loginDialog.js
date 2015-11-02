@@ -1086,9 +1086,7 @@ const LoginDialog = new Lang.Class({
              this._user.set_password_mode(AccountsService.UserPasswordMode.SET_AT_LOGIN);
              let user = this._user;
              this._userVerifier.cancel();
-             this._reset();
              this._user = user;
-
              this._beginVerificationForUser(user.get_user_name());
              this._passwordResetCode = null;
          } else {
