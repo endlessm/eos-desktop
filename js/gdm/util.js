@@ -175,6 +175,10 @@ const ShellUserVerifier = new Lang.Class({
         this._clearMessageQueue();
     },
 
+    resetFailCounter: function() {
+        this._failCounter = 0;
+    },
+
     answerQuery: function(serviceName, answer) {
         if (!this._userVerifier.hasPendingMessages) {
             this._userVerifier.call_answer_query(serviceName, answer, this._cancellable, null);

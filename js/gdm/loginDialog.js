@@ -837,6 +837,7 @@ const LoginDialog = new Lang.Class({
 
     _reset: function() {
         this._userVerifier.clear();
+        this._userVerifier.resetFailCounter();
 
         this._updateSensitivity(true);
         this._promptMessage.hide();
