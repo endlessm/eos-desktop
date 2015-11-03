@@ -641,12 +641,12 @@ const LoginDialog = new Lang.Class({
                                                     child: passwordResetLabel,
                                                     reactive: true,
                                                     x_align: St.Align.START,
-                                                    x_fill: true });
+                                                    x_fill: true,
+                                                    visible: false });
         this._promptBox.add(this._passwordResetButton,
                             { x_fill: false,
                               x_align: St.Align.START });
         this._passwordResetButton.connect('clicked', Lang.bind(this, this._showPasswordResetPrompt));
-        this._passwordResetButton.visible = false;
 
         this._promptMessage = new St.Label({ visible: false });
         this._promptMessage.clutter_text.line_wrap = true;
