@@ -722,7 +722,10 @@ const LoginDialog = new Lang.Class({
         this._maybeShowPasswordResetButton();
     },
 
-    _readCustomerSupportData: function() {
+    _ensureCustomerSupportData: function() {
+        if (this._customerSupportPhoneNumber && this._customerSupportEmail)
+            return true;
+
         const CUSTOMER_SUPPORT_FILENAME = 'vendor-customer-support.ini';
         const CUSTOMER_SUPPORT_GROUP_NAME = 'Customer Support';
         const CUSTOMER_SUPPORT_KEY_EMAIL = 'Email';
@@ -747,10 +750,8 @@ const LoginDialog = new Lang.Class({
     },
 
     _maybeShowPasswordResetButton: function() {
-        if (!this._customerSupportPhoneNumber || !this._customerSupportEmail) {
-            if (!this._readCustomerSupportData())
-                return;
-        }
+        if (!this._ensureCustomerSupportData())
+            return;
 
         // There's got to be a better way to get our pid...?
         let credentials = new Gio.Credentials();
