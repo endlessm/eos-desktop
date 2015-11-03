@@ -925,7 +925,7 @@ const LoginDialog = new Lang.Class({
 
     _showPrompt: function(forSecret) {
         if (this._holdForAnswer)
-            throw new Error("Previous _showPrompt not yet finished");
+            throw new Error("Assertion failure, programmer error: previous _showPrompt not yet finished");
 
         this._sessionList.actor.hide();
         this._promptLabel.show();
