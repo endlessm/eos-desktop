@@ -2739,7 +2739,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .login-dialog-password-hint-label {
-    width: 40em;
+    width: 20em;
     color: #eeeeee;
     font-style: italic;
     font-size: 16px;
@@ -2839,8 +2839,13 @@ StScrollBar StButton#vhandle:active {
     background-color: rgba(102, 102, 102, 0.15);
 }
 
+.login-dialog-message-info {
+    width: 20em;
+}
+
 .login-dialog-message-warning {
     color: orange;
+    width: 20em;
 }
 
 .user-widget {

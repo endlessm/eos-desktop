@@ -649,7 +649,10 @@ const LoginDialog = new Lang.Class({
         this._passwordResetButton.visible = false;
 
         this._promptMessage = new St.Label({ visible: false });
-        this._promptBox.add(this._promptMessage, { x_fill: true });
+        this._promptMessage.clutter_text.line_wrap = true;
+        this._promptMessage.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        this._promptBox.add(this._promptMessage, { expand: false,
+                                                   x_fill: false });
 
         this._promptLoginHint = new St.Label({ style_class: 'login-dialog-prompt-password-recovery-message' });
         this._promptLoginHint.hide();
