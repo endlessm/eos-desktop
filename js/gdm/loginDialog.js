@@ -1111,8 +1111,7 @@ const LoginDialog = new Lang.Class({
     _handleIncorrectPasswordResetCode: function(verifier, serviceName) {
          this._updateSensitivity(true);
          this._promptEntry.set_text('');
-         this._promptMessage.set_text(
-             _("Your unlock code was incorrect. Please try again.").format(this._passwordResetCode));
+         this._promptMessage.set_text(_("Your unlock code was incorrect. Please try again."));
 
          // Use an idle so that _holdForAnswer gets cleared first.
          let id = Mainloop.idle_add(Lang.bind(this, function() {
