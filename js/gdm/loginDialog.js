@@ -723,11 +723,21 @@ const LoginDialog = new Lang.Class({
     },
 
     _readCustomerSupportData: function() {
+        const CUSTOMER_SUPPORT_FILENAME = 'vendor-customer-support.ini';
+        const CUSTOMER_SUPPORT_GROUP_NAME = 'Customer Support';
+        const CUSTOMER_SUPPORT_KEY_EMAIL = 'Email';
+        const CUSTOMER_SUPPORT_KEY_PHONE = 'Phone';
+
         try {
             let keyFile = new GLib.KeyFile();
-            keyFile.load_from_file(Config.PKGDATADIR + '/vendor-customer-support.ini', GLib.KeyFileFlags.NONE);
-            this._customerSupportEmail = keyFile.get_locale_string('Customer Support', 'Email', null);
-            this._customerSupportPhoneNumber = keyFile.get_locale_string('Customer Support', 'Phone', null);
+            keyFile.load_from_file(Config.PKGDATADIR + '/' + CUSTOMER_SUPPORT_FILENAME,
+                                   GLib.KeyFileFlags.NONE);
+            this._customerSupportEmail = keyFile.get_locale_string(CUSTOMER_SUPPORT_GROUP_NAME,
+                                                                   CUSTOMER_SUPPORT_KEY_EMAIL,
+                                                                   null);
+            this._customerSupportPhoneNumber = keyFile.get_locale_string(CUSTOMER_SUPPORT_GROUP_NAME,
+                                                                         CUSTOMER_SUPPORT_KEY_PHONE,
+                                                                         null);
         } catch (e) {
             logError(e, 'Failed to read customer support data');
             return false;
