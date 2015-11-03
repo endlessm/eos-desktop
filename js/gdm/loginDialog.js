@@ -803,9 +803,10 @@ const LoginDialog = new Lang.Class({
 
         this._promptMessage.set_text(
             // Translators: Password reset. The first %s is an email, the second is one or more phone numbers.
-            _("Please contact customer support at %s or %s. Your verification code is %s.").format(this._customerSupportEmail,
-                                                                                                   this._customerSupportPhoneNumber,
-                                                                                                   this._passwordResetCode));
+            _("Please inform customer support of your verification code %s by calling %s or emailing %s. The code will remain valid until you click Cancel or turn off your computer.").format(
+                this._passwordResetCode,
+                this._customerSupportPhoneNumber,
+                this._customerSupportEmail));
 
         // Translators: Button on login dialog, after clicking Forgot Password?
         this._signInButton.set_label(_("Reset Password"));
