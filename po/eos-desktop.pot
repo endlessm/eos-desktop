@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-27 01:28+0000\n"
+"POT-Creation-Date: 2015-11-03 02:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1396,11 +1396,11 @@ msgstr ""
 msgid "Lock was blocked by an application"
 msgstr ""
 
-#: ../js/ui/search.js:775
+#: ../js/ui/search.js:777
 msgid "Searching…"
 msgstr ""
 
-#: ../js/ui/search.js:777
+#: ../js/ui/search.js:779
 msgid "No results."
 msgstr ""
 
