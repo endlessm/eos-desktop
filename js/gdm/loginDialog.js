@@ -792,6 +792,7 @@ const LoginDialog = new Lang.Class({
         checksum.update(ByteArray.fromString(resetCode));
 
         let unlockCode = checksum.get_string();
+        // Remove everything except digits.
         unlockCode = unlockCode.replace(/\D/g, '');
         unlockCode = unlockCode.slice(0, _RESET_CODE_LENGTH);
 
@@ -959,6 +960,7 @@ const LoginDialog = new Lang.Class({
         if (this._passwordResetCode == null) {
             this._updateSignInButtonSensitivity(this._promptEntry.text.length > 0);
         } else {
+            // Password unlock code must contain the right number of digits, and only digits.
             this._updateSignInButtonSensitivity(
                 this._promptEntry.text.length == _RESET_CODE_LENGTH &&
                 this._promptEntry.text.search(/\D/) == -1);
