@@ -1113,6 +1113,10 @@ const LoginDialog = new Lang.Class({
     },
 
     _onAnswerProvided: function(verifier, serviceName) {
+         // Cancelled?
+         if (!this._verifyingUser)
+             return;
+
          if (this._passwordResetCode == null)
             this._respondToSessionWorker(serviceName);
          else if (this._promptEntry.get_text() == this._computeUnlockCode(this._passwordResetCode))
@@ -1133,8 +1137,7 @@ const LoginDialog = new Lang.Class({
                      },
 
                      function() {
-                         if (this._user)
-                             this._onAnswerProvided(verifier, serviceName);
+                         this._onAnswerProvided(verifier, serviceName);
                      }];
 
         let batch = new Batch.ConsecutiveBatch(this, tasks);
