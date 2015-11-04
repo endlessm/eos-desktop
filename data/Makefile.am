@@ -32,7 +32,7 @@ gnomesession_DATA = eos-shell.session gdm-eos-shell.session
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_XML_NOMERGE_RULE@
 
-rulesdir = $(sysconfdir)/polkit-1/rules.d
+rulesdir = $(datadir)/polkit-1/rules.d
 rules_DATA = 40-gdm.rules
 
 introspectiondir = $(datadir)/dbus-1/interfaces
