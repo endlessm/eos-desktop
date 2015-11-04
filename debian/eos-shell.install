@@ -9,3 +9,4 @@ usr/share/man
 usr/share/gdm/greeter/applications/gdm-eos-shell.desktop
 usr/share/gnome-session/sessions/eos-shell.session
 usr/share/gnome-session/sessions/gdm-eos-shell.session
+usr/share/polkit-1/rules.d/40-gdm.rules
