@@ -25,6 +25,7 @@ DIST_EXCLUDE =					\
 	po/change_msgid.sh			\
 	po/eos-desktop.pot			\
 	tools/build/*				\
+	tools/password-unlocker.js		\
 	.tx/config
 
 distcheck-hook:
