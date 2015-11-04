@@ -2623,7 +2623,7 @@ StScrollBar StButton#vhandle:active {
     min-width: 350px;
 }
 
-.login-dialog-prompt-login-hint-message {
+.login-dialog-prompt-password-recovery-message {
     font-size: 12.5pt;
 }
 
@@ -2699,7 +2699,7 @@ StScrollBar StButton#vhandle:active {
     height: 64px;
 }
 
-.login-dialog-password-hint-link {
+.login-dialog-password-recovery-link {
     font-size: 12.5pt;
     font-weight: bold;
     color: #cccccc;
@@ -2714,8 +2714,8 @@ StScrollBar StButton#vhandle:active {
 
 .login-dialog-not-listed-button:focus .login-dialog-not-listed-label,
 .login-dialog-not-listed-button:hover .login-dialog-not-listed-label,
-.login-dialog-password-hint-button:focus .login-dialog-password-hint-link,
-.login-dialog-password-hint-button:hover .login-dialog-password-hint-link {
+.login-dialog-password-recovery-button:focus .login-dialog-password-recovery-link,
+.login-dialog-password-recovery-button:hover .login-dialog-password-recovery-link {
     color: #E8E8E8;
 }
 
@@ -2739,7 +2739,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 .login-dialog-password-hint-label {
-    width: 40em;
+    width: 20em;
     color: #eeeeee;
     font-style: italic;
     font-size: 16px;
@@ -2839,8 +2839,13 @@ StScrollBar StButton#vhandle:active {
     background-color: rgba(102, 102, 102, 0.15);
 }
 
+.login-dialog-message-info {
+    width: 20em;
+}
+
 .login-dialog-message-warning {
     color: orange;
+    width: 20em;
 }
 
 .user-widget {

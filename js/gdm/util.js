@@ -126,6 +126,15 @@ const ShellUserVerifier = new Lang.Class({
     },
 
     begin: function(userName, hold) {
+        // We need to make sure the original _userVerifier is properly destroyed
+        // before creating a new one, so that we don't report messages from the
+        // session worker multiple times. But we must not clear the message
+        // queue, because it still has pending the failure message.
+        if (this._userVerifier) {
+            this._userVerifier.run_dispose();
+            this._userVerifier = null;
+        }
+
         this._cancellable = new Gio.Cancellable();
         this._hold = hold;
         this._userName = userName;
@@ -146,8 +155,10 @@ const ShellUserVerifier = new Lang.Class({
         if (this._cancellable)
             this._cancellable.cancel();
 
-        if (this._userVerifier)
+        if (this._userVerifier) {
             this._userVerifier.call_cancel_sync(null);
+            this.clear();
+        }
     },
 
     clear: function() {
@@ -162,6 +173,10 @@ const ShellUserVerifier = new Lang.Class({
         }
 
         this._clearMessageQueue();
+    },
+
+    resetFailCounter: function() {
+        this._failCounter = 0;
     },
 
     answerQuery: function(serviceName, answer) {

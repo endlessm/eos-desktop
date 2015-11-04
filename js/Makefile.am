@@ -9,6 +9,7 @@ misc/config.js: misc/config.js.in Makefile
 	    -e "s|[@]GETTEXT_PACKAGE@|$(GETTEXT_PACKAGE)|g" \
 	    -e "s|[@]datadir@|$(datadir)|g" \
 	    -e "s|[@]libexecdir@|$(libexecdir)|g" \
+	    -e "s|[@]pkgdatadir@|$(pkgdatadir)|g" \
 	    -e "s|[@]sysconfdir@|$(sysconfdir)|g" \
                $< > $@
 

@@ -19,6 +19,7 @@
  */
 
 const AccountsService = imports.gi.AccountsService;
+const ByteArray = imports.byteArray;
 const Clutter = imports.gi.Clutter;
 const CtrlAltTab = imports.ui.ctrlAltTab;
 const Gio = imports.gi.Gio;
@@ -28,12 +29,14 @@ const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
 const Lang = imports.lang;
 const Pango = imports.gi.Pango;
+const Polkit = imports.gi.Polkit;
 const Signals = imports.signals;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 const Gdm = imports.gi.Gdm;
 
 const Batch = imports.gdm.batch;
+const Config = imports.misc.config;
 const Fprint = imports.gdm.fingerprint;
 const GdmUtil = imports.gdm.util;
 const Lightbox = imports.ui.lightbox;
@@ -49,6 +52,8 @@ const _FADE_ANIMATION_TIME = 0.25;
 const _SCROLL_ANIMATION_TIME = 0.5;
 const _TIMED_LOGIN_IDLE_THRESHOLD = 5.0;
 const _LOGO_ICON_HEIGHT = 16;
+
+const _RESET_CODE_LENGTH = 7;
 
 const WORK_SPINNER_ICON_SIZE = 24;
 const WORK_SPINNER_ANIMATION_DELAY = 1.0;
@@ -613,8 +618,8 @@ const LoginDialog = new Lang.Class({
                               x_align: St.Align.START });
 
         let passwordHintLabel = new St.Label({ text: _("Show password hint"),
-                                               style_class: 'login-dialog-password-hint-link' });
-        this._passwordHintButton = new St.Button({ style_class: 'login-dialog-password-hint-button',
+                                               style_class: 'login-dialog-password-recovery-link' });
+        this._passwordHintButton = new St.Button({ style_class: 'login-dialog-password-recovery-button',
                                                    button_mask: St.ButtonMask.ONE | St.ButtonMask.THREE,
                                                    can_focus: true,
                                                    child: passwordHintLabel,
@@ -628,10 +633,28 @@ const LoginDialog = new Lang.Class({
         this._passwordHintButton.connect('clicked', Lang.bind(this, this._showPasswordHint));
         this._passwordHintButton.visible = false;
 
-        this._promptMessage = new St.Label({ visible: false });
-        this._promptBox.add(this._promptMessage, { x_fill: true });
+        let passwordResetLabel = new St.Label({ text: _("Forgot password?"),
+                                                style_class: 'login-dialog-password-recovery-link' });
+        this._passwordResetButton = new St.Button({ style_class: 'login-dialog-password-recovery-button',
+                                                    button_mask: St.ButtonMask.ONE | St.ButtonMask.THREE,
+                                                    can_focus: true,
+                                                    child: passwordResetLabel,
+                                                    reactive: true,
+                                                    x_align: St.Align.START,
+                                                    x_fill: true,
+                                                    visible: false });
+        this._promptBox.add(this._passwordResetButton,
+                            { x_fill: false,
+                              x_align: St.Align.START });
+        this._passwordResetButton.connect('clicked', Lang.bind(this, this._showPasswordResetPrompt));
 
-        this._promptLoginHint = new St.Label({ style_class: 'login-dialog-prompt-login-hint-message' });
+        this._promptMessage = new St.Label({ visible: false });
+        this._promptMessage.clutter_text.line_wrap = true;
+        this._promptMessage.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        this._promptBox.add(this._promptMessage, { expand: false,
+                                                   x_fill: false });
+
+        this._promptLoginHint = new St.Label({ style_class: 'login-dialog-prompt-password-recovery-message' });
         this._promptLoginHint.hide();
         this._promptBox.add(this._promptLoginHint);
 
@@ -688,12 +711,117 @@ const LoginDialog = new Lang.Class({
                                    this._onUserListActivated(item);
                                }));
 
+        this._customerSupportEmail = null;
+        this._customerSupportPhoneNumber = null;
    },
 
     _showPasswordHint: function() {
         this._passwordHintLabel.set_text(this._user.get_password_hint());
         this._passwordHintLabel.show();
         this._passwordHintButton.hide();
+        this._maybeShowPasswordResetButton();
+    },
+
+    _ensureCustomerSupportData: function() {
+        if (this._customerSupportPhoneNumber && this._customerSupportEmail)
+            return true;
+
+        const CUSTOMER_SUPPORT_FILENAME = 'vendor-customer-support.ini';
+        const CUSTOMER_SUPPORT_GROUP_NAME = 'Customer Support';
+        const CUSTOMER_SUPPORT_KEY_EMAIL = 'Email';
+        const CUSTOMER_SUPPORT_KEY_PHONE = 'Phone';
+
+        try {
+            let keyFile = new GLib.KeyFile();
+            keyFile.load_from_file(Config.PKGDATADIR + '/' + CUSTOMER_SUPPORT_FILENAME,
+                                   GLib.KeyFileFlags.NONE);
+            this._customerSupportEmail = keyFile.get_locale_string(CUSTOMER_SUPPORT_GROUP_NAME,
+                                                                   CUSTOMER_SUPPORT_KEY_EMAIL,
+                                                                   null);
+            this._customerSupportPhoneNumber = keyFile.get_locale_string(CUSTOMER_SUPPORT_GROUP_NAME,
+                                                                         CUSTOMER_SUPPORT_KEY_PHONE,
+                                                                         null);
+        } catch (e) {
+            logError(e, 'Failed to read customer support data');
+            return false;
+        }
+
+        return this._customerSupportEmail && this._customerSupportPhoneNumber;
+    },
+
+    _maybeShowPasswordResetButton: function() {
+        if (!this._ensureCustomerSupportData())
+            return;
+
+        // There's got to be a better way to get our pid...?
+        let credentials = new Gio.Credentials();
+        let pid = credentials.get_unix_pid();
+
+        // accountsservice provides no async API, and unconditionally informs
+        // polkit that interactive authorization is permissible. If interactive
+        // authorization is attempted on the login screen during the call to
+        // set_password_mode, it will hang forever. Ensure the password reset
+        // button is hidden in this case. Besides, it's stupid to prompt for a
+        // password in order to perform password reset.
+        Polkit.Permission.new('org.freedesktop.accounts.user-administration',
+                              Polkit.UnixProcess.new_for_owner(pid, 0, -1),
+                              null,
+                              Lang.bind(this, function (obj, result) {
+                                  try {
+                                      let permission = Polkit.Permission.new_finish(result);
+                                      if (permission.get_allowed())
+                                          this._passwordResetButton.show();
+                                  } catch(e) {
+                                      logError(e, 'Failed to determine if password reset is allowed');
+                                  }
+                                }));
+    },
+
+    _generateResetCode: function() {
+        // Note: These are not secure random numbers. Doesn't matter. The
+        // mechanism to convert a reset code to unlock code is well-known, so
+        // who cares how random the reset code is?
+        let resetCode = '';
+        for (let n = 0; n < _RESET_CODE_LENGTH; n++)
+            resetCode = '%s%d'.format(resetCode, GLib.random_int_range(0, 10));
+        return resetCode;
+    },
+
+    _computeUnlockCode: function(resetCode) {
+        let checksum = new GLib.Checksum(GLib.ChecksumType.MD5);
+        checksum.update(ByteArray.fromString(resetCode));
+
+        let unlockCode = checksum.get_string();
+        // Remove everything except digits.
+        unlockCode = unlockCode.replace(/\D/g, '');
+        unlockCode = unlockCode.slice(0, _RESET_CODE_LENGTH);
+
+        while (unlockCode.length < _RESET_CODE_LENGTH)
+            unlockCode += '0';
+
+        return unlockCode;
+    },
+
+    _showPasswordResetPrompt: function() {
+        this._passwordHintLabel.hide();
+        this._passwordResetButton.hide();
+
+        this._promptEntry.clutter_text.set_password_char('');
+
+        this._passwordResetCode = this._generateResetCode();
+
+        // Translators: During a password reset, prompt for the "secret code" provided by customer support.
+        this._promptLabel.set_text(_("Enter unlock code provided by customer support:"));
+
+        this._promptMessage.set_text(
+            // Translators: Password reset. The first %s is an email, the second is one or more phone numbers.
+            _("Please inform customer support of your verification code %s by calling %s or emailing %s. The code will remain valid until you click Cancel or turn off your computer.").format(
+                this._passwordResetCode,
+                this._customerSupportPhoneNumber,
+                this._customerSupportEmail));
+
+        // Translators: Button on login dialog, after clicking Forgot Password?
+        this._signInButton.set_label(_("Reset Password"));
     },
 
     _updateDisableUserList: function() {
@@ -725,26 +853,40 @@ const LoginDialog = new Lang.Class({
 
     _reset: function() {
         this._userVerifier.clear();
+        this._userVerifier.resetFailCounter();
 
         this._updateSensitivity(true);
         this._promptMessage.hide();
         this._user = null;
         this._passwordHintButton.visible = false;
+        this._passwordResetButton.visible = false;
+        this._passwordResetCode = null;
         this._verifyingUser = false;
 
         if (this._disableUserList)
             this._hideUserListAndLogIn();
         else
             this._showUserList();
+
+        if (this._holdForAnswer) {
+            this._holdForAnswer.release();
+            this._holdForAnswer = null;
+        }
     },
 
     _verificationFailed: function() {
+        // Nothing to do if we were just reset after too many failed verifications.
+        if (!this._user)
+            return;
+
         this._promptEntry.text = '';
 
-        if (this._user && this._user.get_password_hint().length > 0)
+        if (this._user.get_password_hint().length > 0) {
             this._passwordHintButton.visible = true;
-        else
+        } else {
             this._passwordHintButton.visible = false;
+            this._maybeShowPasswordResetButton();
+        }
 
         this._updateSensitivity(true);
         this._setWorking(false);
@@ -778,11 +920,13 @@ const LoginDialog = new Lang.Class({
     cancel: function() {
         if (this._verifyingUser)
             this._userVerifier.cancel();
-        else
-            this._reset();
+        this._reset();
     },
 
     _showPrompt: function(forSecret) {
+        if (this._holdForAnswer)
+            throw new Error("Assertion failure, programmer error: previous _showPrompt not yet finished");
+
         this._sessionList.actor.hide();
         this._promptLabel.show();
         this._promptEntry.show();
@@ -800,19 +944,30 @@ const LoginDialog = new Lang.Class({
 
         this._promptEntry.grab_key_focus();
 
-        let hold = new Batch.Hold();
+        this._holdForAnswer = new Batch.Hold();
         let tasks = [function() {
-                         this._prepareDialog(forSecret, hold);
+                         this._prepareDialog(forSecret);
                      },
 
-                     hold];
+                     this._holdForAnswer];
 
         let batch = new Batch.ConcurrentBatch(this, tasks);
 
         return batch.run();
     },
 
-    _prepareDialog: function(forSecret, hold) {
+    _onPromptEntryTextChanged: function() {
+        if (this._passwordResetCode == null) {
+            this._updateSignInButtonSensitivity(this._promptEntry.text.length > 0);
+        } else {
+            // Password unlock code must contain the right number of digits, and only digits.
+            this._updateSignInButtonSensitivity(
+                this._promptEntry.text.length == _RESET_CODE_LENGTH &&
+                this._promptEntry.text.search(/\D/) == -1);
+        }
+    },
+
+    _prepareDialog: function(forSecret) {
         this._workSpinner = new Panel.AnimatedIcon('process-working.svg', WORK_SPINNER_ICON_SIZE);
         this._workSpinner.actor.opacity = 0;
         this._workSpinner.actor.show();
@@ -835,8 +990,10 @@ const LoginDialog = new Lang.Class({
                                 y_fill: false,
                                 x_align: St.Align.END,
                                 y_align: St.Align.MIDDLE });
+
         this._signInButton = this.addButton({ action: Lang.bind(this, function() {
-                                                          hold.release();
+                                                          this._holdForAnswer.release();
+                                                          this._holdForAnswer = null;
                                                       }),
                                               label: forSecret ? C_("button", "Sign In") : _("Next"),
                                               default: true },
@@ -848,16 +1005,20 @@ const LoginDialog = new Lang.Class({
 
         this._updateSignInButtonSensitivity(this._promptEntry.text.length > 0);
 
-        this._promptEntryTextChangedId =
-            this._promptEntry.clutter_text.connect('text-changed',
-                                                    Lang.bind(this, function() {
-                                                        this._updateSignInButtonSensitivity(this._promptEntry.text.length > 0);
-                                                    }));
+        // This function can be called multiple times before we disconnect.
+        if (this._promptEntryTextChangedId == 0) {
+            this._promptEntryTextChangedId =
+                this._promptEntry.clutter_text.connect('text-changed',
+                                                        Lang.bind(this, this._onPromptEntryTextChanged));
+        }
 
-        this._promptEntryActivateId =
-            this._promptEntry.clutter_text.connect('activate', function() {
-                hold.release();
-            });
+        if (this._promptEntryActivateId == 0) {
+            this._promptEntryActivateId =
+                this._promptEntry.clutter_text.connect('activate', Lang.bind(this, function() {
+                    this._holdForAnswer.release();
+                    this._holdForAnswer = null;
+                }));
+        }
     },
 
     _updateSensitivity: function(sensitive) {
@@ -931,6 +1092,55 @@ const LoginDialog = new Lang.Class({
         }
     },
 
+    _respondToSessionWorker: function(serviceName) {
+         this._updateSensitivity(false);
+         this._setWorking(true);
+         this._userVerifier.answerQuery(serviceName, this._promptEntry.get_text());
+    },
+
+    _performPasswordReset: function() {
+         this._updateSensitivity(false);
+         this._user.set_password_mode(AccountsService.UserPasswordMode.SET_AT_LOGIN);
+         let user = this._user;
+         this._userVerifier.cancel();
+         this._user = user;
+         this._beginVerificationForUser(user.get_user_name());
+         this._passwordResetCode = null;
+    },
+
+    _handleIncorrectPasswordResetCode: function(verifier, serviceName) {
+         this._updateSensitivity(true);
+         this._promptEntry.set_text('');
+         this._promptMessage.set_text(_("Your unlock code was incorrect. Please try again."));
+
+         // Use an idle so that _holdForAnswer gets cleared first.
+         let id = Mainloop.idle_add(Lang.bind(this, function() {
+             let tasks = [function() {
+                             return this._showPrompt('');
+                         },
+
+                         function() {
+                             this._onAnswerProvided(verifier, serviceName);
+                         }];
+             new Batch.ConsecutiveBatch(this, tasks).run();
+             return GLib.SOURCE_REMOVE;
+         }));
+         GLib.Source.set_name_by_id(id, '[gnome-shell] this._handleIncorrectPasswordResetCode');
+    },
+
+    _onAnswerProvided: function(verifier, serviceName) {
+         // Cancelled?
+         if (!this._verifyingUser)
+             return;
+
+         if (this._passwordResetCode == null)
+            this._respondToSessionWorker(serviceName);
+         else if (this._promptEntry.get_text() == this._computeUnlockCode(this._passwordResetCode))
+            this._performPasswordReset();
+         else
+            this._handleIncorrectPasswordResetCode(verifier, serviceName);
+    },
+
     _askQuestion: function(verifier, serviceName, question, passwordChar) {
         this._promptLabel.set_text(question);
 
@@ -943,10 +1153,7 @@ const LoginDialog = new Lang.Class({
                      },
 
                      function() {
-                         let text = this._promptEntry.get_text();
-                         this._updateSensitivity(false);
-                         this._setWorking(true);
-                         this._userVerifier.answerQuery(serviceName, text);
+                         this._onAnswerProvided(verifier, serviceName);
                      }];
 
         let batch = new Batch.ConsecutiveBatch(this, tasks);
@@ -958,10 +1165,13 @@ const LoginDialog = new Lang.Class({
         this._promptEntry.set_text('');
         this._promptEntry.clutter_text.set_password_char('');
 
-        let tasks = [this._showPrompt,
+        let tasks = [function() {
+                         return this._showPrompt(false);
+                     },
 
                      function() {
                          let userName = this._promptEntry.get_text();
+                         this._user = this._userManager.get_user(userName);
                          this._promptEntry.reactive = false;
                          return this._beginVerificationForUser(userName);
                      }];
