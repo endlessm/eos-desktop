@@ -146,7 +146,15 @@ const WorkspaceMonitor = new Lang.Class({
     //                 ways a window can be taken off the screen: minimizing and
     //                 closing
     _realWindowAdded: function(metaWindow) {
-        if (!Shell.WindowTracker.is_window_interesting(metaWindow)) {
+        // We special-case eos-speedwagon here, as we don't want to go
+        // back to the overview if the only window that was dismissed was the
+        // splash screen.
+        // See also shell_app_is_interesting_window() in src/shell-app.c, which
+        // was added for the same purpose.
+        // This code eventually should be changed to track applications instead
+        // of windows.
+        if (!Shell.WindowTracker.is_window_interesting(metaWindow) ||
+            metaWindow.get_role() == 'eos-speedwagon') {
             return false;
         }
 
