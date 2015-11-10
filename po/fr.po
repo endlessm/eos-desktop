@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-27 01:28+0000\n"
+"POT-Creation-Date: 2015-11-03 02:28+0000\n"
 "PO-Revision-Date: 2015-10-13 18:40+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
@@ -1406,11 +1406,11 @@ msgstr "Impossible de verrouiller"
 msgid "Lock was blocked by an application"
 msgstr "Le verrouillage a été bloqué par une application"
 
-#: ../js/ui/search.js:775
+#: ../js/ui/search.js:777
 msgid "Searching…"
 msgstr "Recherche en cours..."
 
-#: ../js/ui/search.js:777
+#: ../js/ui/search.js:779
 msgid "No results."
 msgstr "Pas de résultats."
 
