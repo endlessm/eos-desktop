@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-10 02:28+0000\n"
+"POT-Creation-Date: 2015-11-10 17:20-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -394,7 +394,7 @@ msgstr ""
 msgid "Enter unlock code provided by customer support:"
 msgstr ""
 
-#. Translators: Password reset. The first %s is an email, the second is one or more phone numbers.
+#. Translators: Password reset. The first %s is a verification code, the second is one or more phone numbers, and the third is an email.
 #: ../js/gdm/loginDialog.js:818
 #, javascript-format
 msgid ""

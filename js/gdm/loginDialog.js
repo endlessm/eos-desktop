@@ -814,7 +814,7 @@ const LoginDialog = new Lang.Class({
         this._promptLabel.set_text(_("Enter unlock code provided by customer support:"));
 
         this._promptMessage.set_text(
-            // Translators: Password reset. The first %s is an email, the second is one or more phone numbers.
+            // Translators: Password reset. The first %s is a verification code, the second is one or more phone numbers, and the third is an email.
             _("Please inform customer support of your verification code %s by calling %s or emailing %s. The code will remain valid until you click Cancel or turn off your computer.").format(
                 this._passwordResetCode,
                 this._customerSupportPhoneNumber,
