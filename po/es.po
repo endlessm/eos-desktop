@@ -18,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-03 02:28+0000\n"
-"PO-Revision-Date: 2015-10-14 00:47+0000\n"
-"Last-Translator: c.sanchez <cassandra@endlessm.com>\n"
+"POT-Creation-Date: 2015-11-10 17:20-0800\n"
+"PO-Revision-Date: 2015-11-12 17:00+0000\n"
+"Last-Translator: Nuritzi Sanchez <ns@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -381,22 +381,47 @@ msgstr "Extensión"
 msgid "Select an extension to configure using the combobox above."
 msgstr "Selecciona una extensión para configurar usando la caja combinada de arriba."
 
-#: ../js/gdm/loginDialog.js:405
+#: ../js/gdm/loginDialog.js:410
 msgid "Session…"
 msgstr "Sesión…"
 
-#: ../js/gdm/loginDialog.js:615
+#: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
 msgstr "Mostrar recordatorio"
+
+#: ../js/gdm/loginDialog.js:636
+msgid "Forgot password?"
+msgstr "¿Olvidaste tu contraseña?"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
 #. manually entering the username.
-#: ../js/gdm/loginDialog.js:657
+#: ../js/gdm/loginDialog.js:680
 msgid "Not listed?"
 msgstr "¿No estás en la lista?"
 
-#: ../js/gdm/loginDialog.js:825 ../js/ui/components/networkAgent.js:137
+#. Translators: During a password reset, prompt for the "secret code" provided
+#. by customer support.
+#: ../js/gdm/loginDialog.js:814
+msgid "Enter unlock code provided by customer support:"
+msgstr "Introduce aquí el código de desbloqueo que recibiste de nuestro atención al cliente:"
+
+#. Translators: Password reset. The first %s is a verification code, the
+#. second is one or more phone numbers, and the third is an email.
+#: ../js/gdm/loginDialog.js:818
+#, javascript-format
+msgid ""
+"Please inform customer support of your verification code %s by calling %s or"
+" emailing %s. The code will remain valid until you click Cancel or turn off "
+"your computer."
+msgstr "Por favor infórmanos de tu código de verificación %s llamándonos al %s o enviándonos un correo electrónico a %s. El código seguirá siendo válido hasta que hagas clic en Cancelar o apagues tu computadora."
+
+#. Translators: Button on login dialog, after clicking Forgot Password?
+#: ../js/gdm/loginDialog.js:824
+msgid "Reset Password"
+msgstr "Restablecer contraseña"
+
+#: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
@@ -404,24 +429,28 @@ msgstr "¿No estás en la lista?"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../js/gdm/loginDialog.js:841
+#: ../js/gdm/loginDialog.js:998
 msgctxt "button"
 msgid "Sign In"
 msgstr "Iniciar sesión"
 
-#: ../js/gdm/loginDialog.js:841
+#: ../js/gdm/loginDialog.js:998
 msgid "Next"
 msgstr "Siguiente"
+
+#: ../js/gdm/loginDialog.js:1114
+msgid "Your unlock code was incorrect. Please try again."
+msgstr "Desbloqueo incorrecto. Por favor, ingresa tu codigo de nuevo."
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:957 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:1164 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "Nombre de usuario:"
 
-#: ../js/gdm/loginDialog.js:1213
+#: ../js/gdm/loginDialog.js:1423
 msgid "Login Window"
 msgstr "Ventana de inicio de sesión"
 
@@ -442,17 +471,17 @@ msgstr "Reiniciar"
 msgid "Power Off"
 msgstr "Apagar"
 
-#: ../js/gdm/util.js:249
+#: ../js/gdm/util.js:264
 msgid "Authentication error"
 msgstr "Error de autenticación"
 
 #. Translators: this message is shown below the password entry field
 #. to indicate the user can swipe their finger instead
-#: ../js/gdm/util.js:366
+#: ../js/gdm/util.js:381
 msgid "(or swipe finger)"
 msgstr "(o pase el dedo)"
 
-#: ../js/gdm/util.js:391
+#: ../js/gdm/util.js:406
 #, javascript-format
 msgid "(e.g., user or %s)"
 msgstr "(ej., usuario o %s)"
