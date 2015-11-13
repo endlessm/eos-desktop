@@ -515,7 +515,11 @@ const SearchResults = new Lang.Class({
 
         this._appProvider = new AppDisplay.AppSearchProvider();
         this._registerProvider(this._appProvider);
-        this._registerProvider(new InternetSearch.InternetSearchProvider());
+
+        this._internetProvider = InternetSearch.getInternetSearchProvider();
+        if (this._internetProvider) {
+            this._registerProvider(this._internetProvider);
+        }
         this._reloadRemoteProviders();
     },
 

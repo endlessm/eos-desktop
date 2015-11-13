@@ -41,12 +41,21 @@ function activateGoogleSearch(query) {
     activateURI(uri);
 }
 
+function getInternetSearchProvider() {
+    let browserApp = Util.getBrowserApp();
+    if (browserApp) {
+        return new InternetSearchProvider(browserApp);
+    }
+
+    return null;
+}
+
 const InternetSearchProvider = new Lang.Class({
     Name: 'InternetSearchProvider',
 
-    _init: function() {
+    _init: function(browserApp) {
         this.id = 'internet';
-        this.appInfo = Util.getBrowserApp().get_app_info();
+        this.appInfo = browserApp.get_app_info();
         this.canLaunchSearch = true;
 
         this._networkMonitor = Gio.NetworkMonitor.get_default();
