@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-10 17:20-0800\n"
+"POT-Creation-Date: 2015-11-17 02:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1279,12 +1279,12 @@ msgstr ""
 msgid "%s has been deleted"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:60
+#: ../js/ui/internetSearch.js:69
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:63
+#: ../js/ui/internetSearch.js:72
 #, javascript-format
 msgid "Search Google for \"%s\""
 msgstr ""
@@ -1423,11 +1423,11 @@ msgstr ""
 msgid "Lock was blocked by an application"
 msgstr ""
 
-#: ../js/ui/search.js:777
+#: ../js/ui/search.js:781
 msgid "Searching…"
 msgstr ""
 
-#: ../js/ui/search.js:779
+#: ../js/ui/search.js:783
 msgid "No results."
 msgstr ""
 
