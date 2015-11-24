@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-10 17:20-0800\n"
+"POT-Creation-Date: 2015-11-17 02:28+0000\n"
 "PO-Revision-Date: 2015-11-11 12:33+0000\n"
 "Last-Translator: Mariana Barbosa <mari@endlessm.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/pt_BR/)\n"
@@ -1298,12 +1298,12 @@ msgstr "Sair do Programa"
 msgid "%s has been deleted"
 msgstr "%s foi eliminado"
 
-#: ../js/ui/internetSearch.js:60
+#: ../js/ui/internetSearch.js:69
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr "Abrir \"%s\" na Internet"
 
-#: ../js/ui/internetSearch.js:63
+#: ../js/ui/internetSearch.js:72
 #, javascript-format
 msgid "Search Google for \"%s\""
 msgstr "Pesquisar por \"%s\" no Google"
@@ -1441,11 +1441,11 @@ msgstr "Não foi possível bloquear"
 msgid "Lock was blocked by an application"
 msgstr "O bloqueio foi impedido por um programa"
 
-#: ../js/ui/search.js:777
+#: ../js/ui/search.js:781
 msgid "Searching…"
 msgstr "Procurando..."
 
-#: ../js/ui/search.js:779
+#: ../js/ui/search.js:783
 msgid "No results."
 msgstr "Sem resultados. "
 
