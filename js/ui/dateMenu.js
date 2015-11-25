@@ -43,6 +43,7 @@ const DateMenuButton = new Lang.Class({
         let item;
         let hbox;
         let vbox;
+        let scrollview;
 
         let menuAlignment = 0.25;
         if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
@@ -57,8 +58,11 @@ const DateMenuButton = new Lang.Class({
         this._clockDisplay = new St.Label();
         this.actor.add_actor(this._clockDisplay);
 
+        scrollview = new St.ScrollView({x_fill: true, y_fill: true})
+        this.menu.addActor(scrollview);
+
         hbox = new St.BoxLayout({name: 'calendarArea' });
-        this.menu.addActor(hbox);
+        scrollview.add_actor(hbox);
 
         // Fill up the first column
 
