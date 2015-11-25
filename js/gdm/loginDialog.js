@@ -738,9 +738,9 @@ const LoginDialog = new Lang.Class({
             this._customerSupportEmail = keyFile.get_locale_string(CUSTOMER_SUPPORT_GROUP_NAME,
                                                                    CUSTOMER_SUPPORT_KEY_EMAIL,
                                                                    null);
-            this._customerSupportPhoneNumber = keyFile.get_locale_string(CUSTOMER_SUPPORT_GROUP_NAME,
-                                                                         CUSTOMER_SUPPORT_KEY_PHONE,
-                                                                         null);
+            this._customerSupportPhoneNumber = '\u202a%s\u202c'.format(keyFile.get_locale_string(CUSTOMER_SUPPORT_GROUP_NAME,
+                                                                                                 CUSTOMER_SUPPORT_KEY_PHONE,
+                                                                                                 null));
         } catch (e) {
             logError(e, 'Failed to read customer support data');
             return false;
