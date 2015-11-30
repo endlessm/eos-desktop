@@ -1112,7 +1112,7 @@ const PopupMenu = new Lang.Class({
     Extends: PopupMenuBase,
 
     _init: function(sourceActor, arrowAlignment, arrowSide) {
-        this.parent(sourceActor, 'popup-menu-content');
+        this.parent(sourceActor);
 
         this._arrowAlignment = arrowAlignment;
         this._arrowSide = arrowSide;
@@ -1125,10 +1125,10 @@ const PopupMenu = new Lang.Class({
         this.actor._delegate = this;
         this.actor.style_class = 'popup-menu-boxpointer';
 
-        this._boxWrapper = new Shell.GenericContainer();
-        this._boxWrapper.connect('get-preferred-width', Lang.bind(this, this._boxGetPreferredWidth));
-        this._boxWrapper.connect('get-preferred-height', Lang.bind(this, this._boxGetPreferredHeight));
-        this._boxWrapper.connect('allocate', Lang.bind(this, this._boxAllocate));
+        this._boxWrapper = new St.ScrollView({ hscrollbar_policy: Gtk.PolicyType.NEVER,
+                                               vscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
+                                               overlay_scrollbars: true });
+        this._boxWrapper.add_style_class_name('popup-menu-content');
         this._boxPointer.bin.set_child(this._boxWrapper);
         this._boxWrapper.add_actor(this.box);
         this.actor.add_style_class_name('popup-menu');
@@ -1137,22 +1137,6 @@ const PopupMenu = new Lang.Class({
         this.actor.reactive = true;
 
         this._childMenus = [];
-    },
-
-    _boxGetPreferredWidth: function (actor, forHeight, alloc) {
-        let columnWidths = this.getColumnWidths();
-        this.setColumnWidths(columnWidths);
-
-        // Now they will request the right sizes
-        [alloc.min_size, alloc.natural_size] = this.box.get_preferred_width(forHeight);
-    },
-
-    _boxGetPreferredHeight: function (actor, forWidth, alloc) {
-        [alloc.min_size, alloc.natural_size] = this.box.get_preferred_height(forWidth);
-    },
-
-    _boxAllocate: function (actor, box, flags) {
-        this.box.allocate(box, flags);
     },
 
     setArrowOrigin: function(origin) {
