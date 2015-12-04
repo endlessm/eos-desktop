@@ -73,7 +73,12 @@ const Indicator = new Lang.Class({
 
         this._batteryItem = new PopupMenu.PopupMenuItem('', { reactive: false });
         this._primaryPercentage = new St.Label({ style_class: 'popup-battery-percentage' });
-        this._batteryItem.addActor(this._primaryPercentage, { align: St.Align.END });
+
+        /* The St.Bin below is used to properly make it end-aligned */
+        let bin = new St.Bin({ x_align: St.Align.END });
+        bin.child = this._primaryPercentage;
+
+        this._batteryItem.addActor(bin, { expand: true, span: -1, align: St.Align.END });
         this.menu.addMenuItem(this._batteryItem);
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
@@ -196,7 +201,12 @@ const DeviceItem = new Lang.Class({
 
         let percentLabel = new St.Label({ text: C_("percent of battery remaining", "%d%%").format(Math.round(percentage)),
                                           style_class: 'popup-battery-percentage' });
-        this.addActor(percentLabel, { align: St.Align.END });
+
+        /* The St.Bin below is used to properly make it end-aligned */
+        let bin = new St.Bin({ x_align: St.Align.END });
+        bin.child = percentLabel;
+
+        this.addActor(bin, { expand: true, span: -1, align: St.Align.END });
         //FIXME: ideally we would like to expose this._label and percentLabel
         this.actor.label_actor = percentLabel;
     },
