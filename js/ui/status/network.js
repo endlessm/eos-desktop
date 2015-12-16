@@ -123,7 +123,7 @@ const NMNetworkMenuItem = new Lang.Class({
         this.actor.label_actor = this._label;
         this.addActor(this._label);
         this._icons = new St.Bin({ x_align: St.Align.END });
-        this.addActor(this._icons, { align: St.Align.END });
+        this.addActor(this._icons, { align: St.Align.END, span: -1 });
 
         let hbox = new St.BoxLayout({ style_class: 'nm-menu-item-icons' });
         this._icons.child = hbox;
