@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-08 02:29+0000\n"
+"POT-Creation-Date: 2015-12-15 02:29+0000\n"
 "PO-Revision-Date: 2015-12-01 06:22+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
@@ -1521,7 +1521,7 @@ msgstr "बड़ा पाठ"
 #: ../js/ui/status/bluetooth.js:28 ../js/ui/status/bluetooth.js:32
 #: ../js/ui/status/bluetooth.js:291 ../js/ui/status/bluetooth.js:323
 #: ../js/ui/status/bluetooth.js:359 ../js/ui/status/bluetooth.js:390
-#: ../js/ui/status/network.js:826
+#: ../js/ui/status/network.js:829
 msgid "Bluetooth"
 msgstr "ब्लूटूथ"
 
@@ -1542,7 +1542,7 @@ msgid "Bluetooth Settings"
 msgstr "ब्लूटूथ सेटिंग्स"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:106 ../js/ui/status/network.js:178
+#: ../js/ui/status/bluetooth.js:106 ../js/ui/status/network.js:181
 msgid "hardware disabled"
 msgstr "हार्डवेयर निष्क्रिय"
 
@@ -1550,12 +1550,12 @@ msgstr "हार्डवेयर निष्क्रिय"
 msgid "Connection"
 msgstr "कनेक्शन"
 
-#: ../js/ui/status/bluetooth.js:210 ../js/ui/status/network.js:460
+#: ../js/ui/status/bluetooth.js:210 ../js/ui/status/network.js:463
 msgid "disconnecting..."
 msgstr "डिसकनेक्ट कर रहा है..."
 
-#: ../js/ui/status/bluetooth.js:223 ../js/ui/status/network.js:466
-#: ../js/ui/status/network.js:1548
+#: ../js/ui/status/bluetooth.js:223 ../js/ui/status/network.js:469
+#: ../js/ui/status/network.js:1551
 msgid "connecting..."
 msgstr "कनेक्ट कर रहा है..."
 
@@ -1649,115 +1649,115 @@ msgstr "<अज्ञात>"
 
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
-#: ../js/ui/status/network.js:200
+#: ../js/ui/status/network.js:203
 msgid "disabled"
 msgstr "अक्षम"
 
 #. Translators: this is for network devices that are physically present but
 #. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:458
+#: ../js/ui/status/network.js:461
 msgid "unmanaged"
 msgstr "अप्रबंधित"
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
+#: ../js/ui/status/network.js:472 ../js/ui/status/network.js:1554
 msgid "authentication required"
 msgstr "सत्यापन जरूरी"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:479
+#: ../js/ui/status/network.js:482
 msgid "firmware missing"
 msgstr "फर्मवेयर अनुपस्थित"
 
 #. Translators: this is for wired network devices that are physically
 #. disconnected
-#: ../js/ui/status/network.js:486
+#: ../js/ui/status/network.js:489
 msgid "cable unplugged"
 msgstr "केबल प्लग अलग किया गया"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:491
+#: ../js/ui/status/network.js:494
 msgid "unavailable"
 msgstr "अनुपलब्ध"
 
-#: ../js/ui/status/network.js:493 ../js/ui/status/network.js:1553
+#: ../js/ui/status/network.js:496 ../js/ui/status/network.js:1556
 msgid "connection failed"
 msgstr "संबंधन विफल"
 
-#: ../js/ui/status/network.js:552 ../js/ui/status/network.js:1437
-#: ../js/ui/status/network.js:1629
+#: ../js/ui/status/network.js:555 ../js/ui/status/network.js:1440
+#: ../js/ui/status/network.js:1632
 msgid "More…"
 msgstr "अधिक…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1365
+#: ../js/ui/status/network.js:591 ../js/ui/status/network.js:1368
 msgid "Connected (private)"
 msgstr "कनेक्टेड (निजी)"
 
-#: ../js/ui/status/network.js:667
+#: ../js/ui/status/network.js:670
 msgid "Wired"
 msgstr "तारसहित"
 
-#: ../js/ui/status/network.js:668
+#: ../js/ui/status/network.js:671
 msgid "Auto Ethernet"
 msgstr "स्वतः इथरनेट"
 
-#: ../js/ui/status/network.js:695
+#: ../js/ui/status/network.js:698
 msgid "Mobile broadband"
 msgstr "मोबाइल ब्रॉडबैंड"
 
 #. TRANSLATORS: this the automatic wireless connection name (including the
 #. network name)
-#: ../js/ui/status/network.js:861 ../js/ui/status/network.js:1382
+#: ../js/ui/status/network.js:864 ../js/ui/status/network.js:1385
 #, javascript-format
 msgid "Auto %s"
 msgstr "स्वतः %s"
 
-#: ../js/ui/status/network.js:863
+#: ../js/ui/status/network.js:866
 msgid "Auto bluetooth"
 msgstr "स्वतः ब्लूटूथ"
 
-#: ../js/ui/status/network.js:1384
+#: ../js/ui/status/network.js:1387
 msgid "Auto wireless"
 msgstr "स्वतः बेतार"
 
-#: ../js/ui/status/network.js:1669
+#: ../js/ui/status/network.js:1672
 msgid "Network"
 msgstr ""
 
-#: ../js/ui/status/network.js:1731
+#: ../js/ui/status/network.js:1734
 msgid "Enable networking"
 msgstr "संजालन सक्रिय"
 
-#: ../js/ui/status/network.js:1773
+#: ../js/ui/status/network.js:1776
 msgid "Wi-Fi"
 msgstr "वाई-फाई"
 
-#: ../js/ui/status/network.js:1792
+#: ../js/ui/status/network.js:1795
 msgid "Network Settings"
 msgstr "नेटवर्क सेटिंग्स"
 
-#: ../js/ui/status/network.js:1809
+#: ../js/ui/status/network.js:1812
 msgid "Network Manager"
 msgstr "संजाल प्रबंधक"
 
-#: ../js/ui/status/network.js:1899
+#: ../js/ui/status/network.js:1902
 msgid "Connection failed"
 msgstr "कनेक्शन असफल"
 
-#: ../js/ui/status/network.js:1900
+#: ../js/ui/status/network.js:1903
 msgid "Activation of network connection failed"
 msgstr "संजाल कनेक्शन का सक्रियन असफल"
 
-#: ../js/ui/status/network.js:2284
+#: ../js/ui/status/network.js:2287
 msgid "Networking is disabled"
 msgstr "संजालन निष्क्रिय"
 
