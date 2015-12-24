@@ -135,7 +135,6 @@ shell_public_headers_h =		\
 	shell-screenshot.h		\
 	shell-slicer.h			\
 	shell-stack.h			\
-	shell-tp-client.h		\
 	shell-tray-icon.h		\
 	shell-tray-manager.h		\
 	shell-util.h			\
@@ -183,7 +182,6 @@ libeos_shell_sources =			\
 	shell-secure-text-buffer.h	\
 	shell-slicer.c			\
 	shell-stack.c			\
-	shell-tp-client.c			\
 	shell-tray-icon.c		\
 	shell-tray-manager.c		\
 	shell-util.c			\
@@ -332,7 +330,7 @@ libeos_shell_la_LIBADD =		\
 libeos_shell_la_CPPFLAGS = $(eos_shell_cflags)
 
 Shell-0.1.gir: libeos-shell.la St-1.0.gir
-Shell_0_1_gir_INCLUDES = Clutter-1.0 ClutterX11-1.0 Meta-3.0 TelepathyGLib-0.12 Soup-2.4 NetworkManager-1.0 NMClient-1.0
+Shell_0_1_gir_INCLUDES = Clutter-1.0 ClutterX11-1.0 Meta-3.0 Soup-2.4 NetworkManager-1.0 NMClient-1.0
 Shell_0_1_gir_CFLAGS = $(libeos_shell_la_CPPFLAGS) -I $(srcdir)
 Shell_0_1_gir_LIBS = libeos-shell.la
 Shell_0_1_gir_FILES = $(libeos_shell_la_gir_sources)

@@ -58,7 +58,7 @@ const _modes = {
     'unlock-dialog': {
         isLocked: true,
         unlockDialog: undefined,
-        components: ['polkitAgent', 'telepathyClient'],
+        components: ['polkitAgent'],
         panel: {
             left: [],
             right: ['dateMenu', 'a11y', 'keyboard', 'lockScreen']
@@ -89,7 +89,7 @@ const _modes = {
         isLocked: false,
         isPrimary: true,
         unlockDialog: imports.ui.unlockDialog.UnlockDialog,
-        components: ['networkAgent', 'polkitAgent', 'telepathyClient',
+        components: ['networkAgent', 'polkitAgent',
                      'keyring', 'autorunManager', 'automountManager',
                      'updaterManager', 'socialBar', 'appStore'],
         panel: {
