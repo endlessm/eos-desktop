@@ -85,7 +85,6 @@ GTK_MIN_VERSION=3.7.9
 GIO_MIN_VERSION=2.35.0
 LIBECAL_MIN_VERSION=3.5.3
 LIBEDATASERVER_MIN_VERSION=3.5.3
-TELEPATHY_GLIB_MIN_VERSION=0.17.5
 POLKIT_MIN_VERSION=0.100
 STARTUP_NOTIFICATION_MIN_VERSION=0.11
 GCR_MIN_VERSION=3.3.90
@@ -107,7 +106,6 @@ PKG_CHECK_MODULES(EOS_SHELL, gio-unix-2.0 >= $GIO_MIN_VERSION
                                libstartup-notification-1.0 >= $STARTUP_NOTIFICATION_MIN_VERSION
                                gobject-introspection-1.0 >= $GOBJECT_INTROSPECTION_MIN_VERSION
 			       libcanberra libcanberra-gtk3
-                               telepathy-glib >= $TELEPATHY_GLIB_MIN_VERSION
                                polkit-agent-1 >= $POLKIT_MIN_VERSION xfixes
                                libnm-glib libnm-util >= $NETWORKMANAGER_MIN_VERSION
                                libnm-gtk >= $NETWORKMANAGER_MIN_VERSION
