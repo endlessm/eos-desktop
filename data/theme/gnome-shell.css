@@ -1119,6 +1119,11 @@ StScrollBar StButton#vhandle:active {
     -shell-grid-vertical-item-size: 118px;
 }
 
+.icon-grid.composite-mode {
+    -shell-grid-horizontal-item-size: 104px;
+    -shell-grid-vertical-item-size: 104px;
+}
+
 .overview-icon.dnd,
 .icon-grid .overview-icon {
     icon-size: 64px;

@@ -477,6 +477,11 @@ const IconGrid = new Lang.Class({
         this.saturation = new Shell.GridDesaturateEffect({ factor: 0,
                                                            enabled: false });
         this.actor.add_effect(this.saturation);
+
+        /* Setup the composite mode of the grid */
+        Main.layoutManager.connect('monitors-changed', Lang.bind(this, this._updateCompositeMode));
+
+        this._updateCompositeMode();
     },
 
     _getPreferredWidth: function (grid, forHeight, alloc) {
@@ -949,5 +954,30 @@ const IconGrid = new Lang.Class({
         }
 
         return [dropIdx, cursorLocation];
+    },
+
+    _updateCompositeMode: function() {
+        /* Given that the height of the widget varies according to the
+         * number of icons, we only check the width here.
+         */
+        this.compositeMode = Main.layoutManager.primaryMonitor &&
+                             Main.layoutManager.primaryMonitor.width < 800;
+    },
+
+    set compositeMode(mode) {
+        if (this._compositeMode != mode) {
+            this._compositeMode = mode;
+
+            /* When we're running on small screens, to make it fit 5 columns
+             * on the available space, we shall reduce the icon size. Do
+             * this by adding (or removing, in case the screen is big enough)
+             * the .composite-mode style class.
+             */
+            if (mode) {
+                this.actor.add_style_class_name('composite-mode');
+            } else {
+                this.actor.remove_style_class_name('composite-mode');
+            }
+        }
     }
 });
