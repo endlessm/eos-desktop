@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-15 02:29+0000\n"
-"PO-Revision-Date: 2015-11-11 01:40+0000\n"
+"POT-Creation-Date: 2016-01-05 02:28+0000\n"
+"PO-Revision-Date: 2016-01-05 02:28+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -839,245 +839,6 @@ msgstr "استوثق"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "للأسف لم يُفلح هذا. أعِد المحاولة."
 
-#. FIXME: We don't have a 'chat room' icon (bgo #653737) use
-#. system-users for now as Empathy does.
-#: ../js/ui/components/telepathyClient.js:238
-msgid "Invitation"
-msgstr "دعوة"
-
-#. We got the TpContact
-#: ../js/ui/components/telepathyClient.js:298
-msgid "Call"
-msgstr "اتصال"
-
-#. We got the TpContact
-#: ../js/ui/components/telepathyClient.js:314
-msgid "File Transfer"
-msgstr "نقل ملفات"
-
-#: ../js/ui/components/telepathyClient.js:418
-msgid "Chat"
-msgstr "دردشة"
-
-#: ../js/ui/components/telepathyClient.js:480
-msgid "Unmute"
-msgstr "أطلِق الصوت"
-
-#: ../js/ui/components/telepathyClient.js:480
-msgid "Mute"
-msgstr "أصمِت"
-
-#. Translators: this is the word "Yesterday" followed by a time string. i.e.
-#. "Yesterday, 14:30"
-#: ../js/ui/components/telepathyClient.js:942
-#, no-c-format
-msgid "<b>Yesterday</b>, <b>%H:%M</b>"
-msgstr "<b>بالأمس</b>، <b>%H:%M</b>"
-
-#. Translators: this is the week day name followed by a time string. i.e.
-#. "Monday, 14:30
-#: ../js/ui/components/telepathyClient.js:948
-#, no-c-format
-msgid "<b>%A</b>, <b>%H:%M</b>"
-msgstr "<b>%A</b>، <b>%H:%M</b>"
-
-#. Translators: this is the month name and day number followed by a time
-#. string. i.e. "May 25, 14:30"
-#: ../js/ui/components/telepathyClient.js:953
-#, no-c-format
-msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
-msgstr "<b>%d</b> <b>%B</b>، <b>%H:%M</b>"
-
-#. Translators: this is the month name, day number, year number followed by a
-#. time string. i.e. "May 25 2012, 14:30"
-#: ../js/ui/components/telepathyClient.js:957
-#, no-c-format
-msgid "<b>%B</b> <b>%d</b> <b>%Y</b>, <b>%H:%M</b> "
-msgstr "<b>%d</b> <b>%B</b> <b>%Y</b>، <b>%H:%M</b> "
-
-#. Translators: this is the other person changing their old IM name to their
-#. new
-#. IM name.
-#: ../js/ui/components/telepathyClient.js:987
-#, javascript-format
-msgid "%s is now known as %s"
-msgstr "غيّر %s اسمه إلى %s"
-
-#. translators: argument is a room name like
-#. * room@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1090
-#, javascript-format
-msgid "Invitation to %s"
-msgstr "دعوة إلى %s"
-
-#. translators: first argument is the name of a contact and the second
-#. * one the name of a room. "Alice is inviting you to join room@jabber.org
-#. * for example.
-#: ../js/ui/components/telepathyClient.js:1098
-#, javascript-format
-msgid "%s is inviting you to join %s"
-msgstr "يدعوك %s للانضمام إلى %s"
-
-#: ../js/ui/components/telepathyClient.js:1100
-#: ../js/ui/components/telepathyClient.js:1139
-#: ../js/ui/components/telepathyClient.js:1179
-#: ../js/ui/components/telepathyClient.js:1241
-msgid "Decline"
-msgstr "أرفُض"
-
-#: ../js/ui/components/telepathyClient.js:1101
-#: ../js/ui/components/telepathyClient.js:1180
-#: ../js/ui/components/telepathyClient.js:1242
-msgid "Accept"
-msgstr "أقْبَل"
-
-#. translators: argument is a contact name like Alice for example.
-#: ../js/ui/components/telepathyClient.js:1131
-#, javascript-format
-msgid "Video call from %s"
-msgstr "مكالمة فيديو من %s"
-
-#. translators: argument is a contact name like Alice for example.
-#: ../js/ui/components/telepathyClient.js:1134
-#, javascript-format
-msgid "Call from %s"
-msgstr "مكالمة من %s"
-
-#. translators: this is a button label (verb), not a noun
-#: ../js/ui/components/telepathyClient.js:1141
-msgid "Answer"
-msgstr "أجب"
-
-#. To translators: The first parameter is
-#. * the contact's alias and the second one is the
-#. * file name. The string will be something
-#. * like: "Alice is sending you test.ogg"
-#: ../js/ui/components/telepathyClient.js:1173
-#, javascript-format
-msgid "%s is sending you %s"
-msgstr "‏%s يرسل لك %s"
-
-#. To translators: The parameter is the contact's alias
-#: ../js/ui/components/telepathyClient.js:1208
-#, javascript-format
-msgid "%s would like permission to see when you are online"
-msgstr "يريد %s الإذن ليعرف عندما تكون متصلا"
-
-#: ../js/ui/components/telepathyClient.js:1299
-msgid "Network error"
-msgstr "خطأ في الشبكة"
-
-#: ../js/ui/components/telepathyClient.js:1301
-msgid "Authentication failed"
-msgstr "فشل الاستيثاق"
-
-#: ../js/ui/components/telepathyClient.js:1303
-msgid "Encryption error"
-msgstr "فشل التعمية"
-
-#: ../js/ui/components/telepathyClient.js:1305
-msgid "Certificate not provided"
-msgstr "الشهادة غير متوفرة"
-
-#: ../js/ui/components/telepathyClient.js:1307
-msgid "Certificate untrusted"
-msgstr "الشهادة غير موثوقة"
-
-#: ../js/ui/components/telepathyClient.js:1309
-msgid "Certificate expired"
-msgstr "الشهادة منتهية الصلاحية"
-
-#: ../js/ui/components/telepathyClient.js:1311
-msgid "Certificate not activated"
-msgstr "الشهادة غير مفعلة"
-
-#: ../js/ui/components/telepathyClient.js:1313
-msgid "Certificate hostname mismatch"
-msgstr "الشهادة غير متوافقة مع اسم المستضيف"
-
-#: ../js/ui/components/telepathyClient.js:1315
-msgid "Certificate fingerprint mismatch"
-msgstr "بصمة الشهادة غير متطابقة"
-
-#: ../js/ui/components/telepathyClient.js:1317
-msgid "Certificate self-signed"
-msgstr "الشهادة موقعة ذاتيا"
-
-#: ../js/ui/components/telepathyClient.js:1319
-msgid "Status is set to offline"
-msgstr "الحالة مضبوطة إلى غير متصل"
-
-#: ../js/ui/components/telepathyClient.js:1321
-msgid "Encryption is not available"
-msgstr "التعمية غير متاحة"
-
-#: ../js/ui/components/telepathyClient.js:1323
-msgid "Certificate is invalid"
-msgstr "الشهادة غير صالحة"
-
-#: ../js/ui/components/telepathyClient.js:1325
-msgid "Connection has been refused"
-msgstr "رُفض الاتصال"
-
-#: ../js/ui/components/telepathyClient.js:1327
-msgid "Connection can't be established"
-msgstr "تعذر إنشاء الاتصال"
-
-#: ../js/ui/components/telepathyClient.js:1329
-msgid "Connection has been lost"
-msgstr "فُقد الاتصال"
-
-#: ../js/ui/components/telepathyClient.js:1331
-msgid "This account is already connected to the server"
-msgstr "هذا الحساب متصل بالخادوم بالفعل"
-
-#: ../js/ui/components/telepathyClient.js:1333
-msgid ""
-"Connection has been replaced by a new connection using the same resource"
-msgstr "تم تبديل الاتصال باتصال جديد باستخدام نفس المورد"
-
-#: ../js/ui/components/telepathyClient.js:1335
-msgid "The account already exists on the server"
-msgstr "الحساب موجود بالفعل في الخادوم"
-
-#: ../js/ui/components/telepathyClient.js:1337
-msgid "Server is currently too busy to handle the connection"
-msgstr "الخادوم مشغول للغاية حاليًا ولا يستطيع التعامل مع الاتصال"
-
-#: ../js/ui/components/telepathyClient.js:1339
-msgid "Certificate has been revoked"
-msgstr "نُقِضت الشهادة"
-
-#: ../js/ui/components/telepathyClient.js:1341
-msgid ""
-"Certificate uses an insecure cipher algorithm or is cryptographically weak"
-msgstr "تستخدم الشهادة خوارزمية تعمية غير آمنة أو ضعيفة"
-
-#: ../js/ui/components/telepathyClient.js:1343
-msgid ""
-"The length of the server certificate, or the depth of the server certificate"
-" chain, exceed the limits imposed by the cryptography library"
-msgstr "طول شهادة الخادم أو طول سلسلة الشهادات إلى الخادم تجاوز الحد الذي تفرضه مكتبة التعمية"
-
-#: ../js/ui/components/telepathyClient.js:1345
-msgid "Internal error"
-msgstr "خطأ داخلي"
-
-#. translators: argument is the account name, like
-#. * name@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1355
-#, javascript-format
-msgid "Unable to connect to %s"
-msgstr "تعذّر الاتصال مع %s"
-
-#: ../js/ui/components/telepathyClient.js:1360
-msgid "View account"
-msgstr "أظهر الحساب"
-
-#: ../js/ui/components/telepathyClient.js:1399
-msgid "Unknown reason"
-msgstr "السبب غير معروف"
-
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
 msgstr "تحديث البرامج"
@@ -1321,51 +1082,51 @@ msgstr "البحث في Google عن \"%s\""
 msgid "Keyboard"
 msgstr "لوحة المفاتيح"
 
-#: ../js/ui/lookingGlass.js:644
+#: ../js/ui/lookingGlass.js:643
 msgid "No extensions installed"
 msgstr "لا امتدادات مثبّتة"
 
 #. Translators: argument is an extension UUID.
-#: ../js/ui/lookingGlass.js:698
+#: ../js/ui/lookingGlass.js:697
 #, javascript-format
 msgid "%s has not emitted any errors."
 msgstr "لم يصدر %s أي خطأ."
 
-#: ../js/ui/lookingGlass.js:704
+#: ../js/ui/lookingGlass.js:703
 msgid "Hide Errors"
 msgstr "أخفِ الأخطاء"
 
-#: ../js/ui/lookingGlass.js:708 ../js/ui/lookingGlass.js:768
+#: ../js/ui/lookingGlass.js:707 ../js/ui/lookingGlass.js:767
 msgid "Show Errors"
 msgstr "اظهر الأخطاء"
 
-#: ../js/ui/lookingGlass.js:717
+#: ../js/ui/lookingGlass.js:716
 msgid "Enabled"
 msgstr "مفعّل"
 
 #. translators:
 #. * The device has been disabled
-#: ../js/ui/lookingGlass.js:720 ../src/gvc/gvc-mixer-control.c:1830
+#: ../js/ui/lookingGlass.js:719 ../src/gvc/gvc-mixer-control.c:1830
 msgid "Disabled"
 msgstr "معطّل"
 
-#: ../js/ui/lookingGlass.js:722
+#: ../js/ui/lookingGlass.js:721
 msgid "Error"
 msgstr "خطأ"
 
-#: ../js/ui/lookingGlass.js:724
+#: ../js/ui/lookingGlass.js:723
 msgid "Out of date"
 msgstr "قديم"
 
-#: ../js/ui/lookingGlass.js:726
+#: ../js/ui/lookingGlass.js:725
 msgid "Downloading"
 msgstr "ينزّل"
 
-#: ../js/ui/lookingGlass.js:750
+#: ../js/ui/lookingGlass.js:749
 msgid "View Source"
 msgstr "اعرض المصدر"
 
-#: ../js/ui/lookingGlass.js:759
+#: ../js/ui/lookingGlass.js:758
 msgid "Web Page"
 msgstr "صفحة الوب"
 
@@ -2028,19 +1789,19 @@ msgstr[5] "%u مدخل"
 msgid "System Sounds"
 msgstr "أصوات النظام"
 
-#: ../src/main.c:345
+#: ../src/main.c:325
 msgid "Print version"
 msgstr "اطبع الإصدارة"
 
-#: ../src/main.c:351
+#: ../src/main.c:331
 msgid "Mode used by GDM for login screen"
 msgstr "الوضع الذي يستخدمه مدير ولوج جنوم لشاشة الولوج"
 
-#: ../src/main.c:357
+#: ../src/main.c:337
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "استخدم طورا معينا، مثلا: \"gdm\" لشاشة الولوج"
 
-#: ../src/main.c:363
+#: ../src/main.c:343
 msgid "List possible modes"
 msgstr "اسرد كل الأطوار الممكنة"
 

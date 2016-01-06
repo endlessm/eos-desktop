@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-15 02:29+0000\n"
-"PO-Revision-Date: 2015-11-11 01:33+0000\n"
+"POT-Creation-Date: 2016-01-05 02:28+0000\n"
+"PO-Revision-Date: 2016-01-05 02:28+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -841,245 +841,6 @@ msgstr "S'authentifier"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "Échec de l'authentification. Essayez à nouveau."
 
-#. FIXME: We don't have a 'chat room' icon (bgo #653737) use
-#. system-users for now as Empathy does.
-#: ../js/ui/components/telepathyClient.js:238
-msgid "Invitation"
-msgstr "Invitation"
-
-#. We got the TpContact
-#: ../js/ui/components/telepathyClient.js:298
-msgid "Call"
-msgstr "Appel"
-
-#. We got the TpContact
-#: ../js/ui/components/telepathyClient.js:314
-msgid "File Transfer"
-msgstr "Transfert de fichiers"
-
-#: ../js/ui/components/telepathyClient.js:418
-msgid "Chat"
-msgstr "Discussion"
-
-#: ../js/ui/components/telepathyClient.js:480
-msgid "Unmute"
-msgstr "Non muet"
-
-#: ../js/ui/components/telepathyClient.js:480
-msgid "Mute"
-msgstr "Muet"
-
-#. Translators: this is the word "Yesterday" followed by a time string. i.e.
-#. "Yesterday, 14:30"
-#: ../js/ui/components/telepathyClient.js:942
-#, no-c-format
-msgid "<b>Yesterday</b>, <b>%H:%M</b>"
-msgstr "<b>Hier</b>, <b>%H:%M</b>"
-
-#. Translators: this is the week day name followed by a time string. i.e.
-#. "Monday, 14:30
-#: ../js/ui/components/telepathyClient.js:948
-#, no-c-format
-msgid "<b>%A</b>, <b>%H:%M</b>"
-msgstr "<b>%A</b>, <b>%H:%M</b>"
-
-#. Translators: this is the month name and day number followed by a time
-#. string. i.e. "May 25, 14:30"
-#: ../js/ui/components/telepathyClient.js:953
-#, no-c-format
-msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
-msgstr "<b>%d</b> <b>%B</b>, <b>%H:%M</b>"
-
-#. Translators: this is the month name, day number, year number followed by a
-#. time string. i.e. "May 25 2012, 14:30"
-#: ../js/ui/components/telepathyClient.js:957
-#, no-c-format
-msgid "<b>%B</b> <b>%d</b> <b>%Y</b>, <b>%H:%M</b> "
-msgstr "<b>%d</b> <b>%B</b> <b>%Y</b>, <b>%H:%M</b> "
-
-#. Translators: this is the other person changing their old IM name to their
-#. new
-#. IM name.
-#: ../js/ui/components/telepathyClient.js:987
-#, javascript-format
-msgid "%s is now known as %s"
-msgstr "%s est maintenant connu sous le nom de %s"
-
-#. translators: argument is a room name like
-#. * room@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1090
-#, javascript-format
-msgid "Invitation to %s"
-msgstr "Invitation vers %s"
-
-#. translators: first argument is the name of a contact and the second
-#. * one the name of a room. "Alice is inviting you to join room@jabber.org
-#. * for example.
-#: ../js/ui/components/telepathyClient.js:1098
-#, javascript-format
-msgid "%s is inviting you to join %s"
-msgstr "%s vous invite à rejoindre %s"
-
-#: ../js/ui/components/telepathyClient.js:1100
-#: ../js/ui/components/telepathyClient.js:1139
-#: ../js/ui/components/telepathyClient.js:1179
-#: ../js/ui/components/telepathyClient.js:1241
-msgid "Decline"
-msgstr "Refuser"
-
-#: ../js/ui/components/telepathyClient.js:1101
-#: ../js/ui/components/telepathyClient.js:1180
-#: ../js/ui/components/telepathyClient.js:1242
-msgid "Accept"
-msgstr "Accepter"
-
-#. translators: argument is a contact name like Alice for example.
-#: ../js/ui/components/telepathyClient.js:1131
-#, javascript-format
-msgid "Video call from %s"
-msgstr "Appel vidéo de %s"
-
-#. translators: argument is a contact name like Alice for example.
-#: ../js/ui/components/telepathyClient.js:1134
-#, javascript-format
-msgid "Call from %s"
-msgstr "Appel provenant de %s"
-
-#. translators: this is a button label (verb), not a noun
-#: ../js/ui/components/telepathyClient.js:1141
-msgid "Answer"
-msgstr "Répondre"
-
-#. To translators: The first parameter is
-#. * the contact's alias and the second one is the
-#. * file name. The string will be something
-#. * like: "Alice is sending you test.ogg"
-#: ../js/ui/components/telepathyClient.js:1173
-#, javascript-format
-msgid "%s is sending you %s"
-msgstr "%s vous envoie %s"
-
-#. To translators: The parameter is the contact's alias
-#: ../js/ui/components/telepathyClient.js:1208
-#, javascript-format
-msgid "%s would like permission to see when you are online"
-msgstr "%s aimerait être autorisé à savoir lorsque vous êtes en ligne"
-
-#: ../js/ui/components/telepathyClient.js:1299
-msgid "Network error"
-msgstr "Erreur réseau"
-
-#: ../js/ui/components/telepathyClient.js:1301
-msgid "Authentication failed"
-msgstr "L'authentification a échoué"
-
-#: ../js/ui/components/telepathyClient.js:1303
-msgid "Encryption error"
-msgstr "Erreur de chiffrement"
-
-#: ../js/ui/components/telepathyClient.js:1305
-msgid "Certificate not provided"
-msgstr "Certificat non fourni"
-
-#: ../js/ui/components/telepathyClient.js:1307
-msgid "Certificate untrusted"
-msgstr "Certificat non validé"
-
-#: ../js/ui/components/telepathyClient.js:1309
-msgid "Certificate expired"
-msgstr "Certificat expiré"
-
-#: ../js/ui/components/telepathyClient.js:1311
-msgid "Certificate not activated"
-msgstr "Certificat non activé"
-
-#: ../js/ui/components/telepathyClient.js:1313
-msgid "Certificate hostname mismatch"
-msgstr "Le nom de l'hôte du certificat ne correspond pas"
-
-#: ../js/ui/components/telepathyClient.js:1315
-msgid "Certificate fingerprint mismatch"
-msgstr "L'empreinte du certificat ne correspond pas"
-
-#: ../js/ui/components/telepathyClient.js:1317
-msgid "Certificate self-signed"
-msgstr "Certificat auto-signé"
-
-#: ../js/ui/components/telepathyClient.js:1319
-msgid "Status is set to offline"
-msgstr "Le statut est hors ligne"
-
-#: ../js/ui/components/telepathyClient.js:1321
-msgid "Encryption is not available"
-msgstr "Chiffrement non disponible"
-
-#: ../js/ui/components/telepathyClient.js:1323
-msgid "Certificate is invalid"
-msgstr "Certificat non valide"
-
-#: ../js/ui/components/telepathyClient.js:1325
-msgid "Connection has been refused"
-msgstr "La connexion a été refusée"
-
-#: ../js/ui/components/telepathyClient.js:1327
-msgid "Connection can't be established"
-msgstr "La connexion ne peut pas être établie"
-
-#: ../js/ui/components/telepathyClient.js:1329
-msgid "Connection has been lost"
-msgstr "La connexion a été perdue"
-
-#: ../js/ui/components/telepathyClient.js:1331
-msgid "This account is already connected to the server"
-msgstr "Ce compte est déjà connectée au serveur"
-
-#: ../js/ui/components/telepathyClient.js:1333
-msgid ""
-"Connection has been replaced by a new connection using the same resource"
-msgstr "La connexion a été remplacée par une nouvelle connexion utilisant la même ressource"
-
-#: ../js/ui/components/telepathyClient.js:1335
-msgid "The account already exists on the server"
-msgstr "Ce compte existe déjà sur le serveur"
-
-#: ../js/ui/components/telepathyClient.js:1337
-msgid "Server is currently too busy to handle the connection"
-msgstr "Le serveur est actuellement trop chargé pour traiter la connexion"
-
-#: ../js/ui/components/telepathyClient.js:1339
-msgid "Certificate has been revoked"
-msgstr "Le certificat a été révoqué"
-
-#: ../js/ui/components/telepathyClient.js:1341
-msgid ""
-"Certificate uses an insecure cipher algorithm or is cryptographically weak"
-msgstr "Le certificat utilise un algorithme de chiffrement douteux, ou est faible cryptographiquement"
-
-#: ../js/ui/components/telepathyClient.js:1343
-msgid ""
-"The length of the server certificate, or the depth of the server certificate"
-" chain, exceed the limits imposed by the cryptography library"
-msgstr "La longueur du certificat du serveur, ou la taille de sa chaîne de certification, dépasse les limites de la bibliothèque de cryptographie"
-
-#: ../js/ui/components/telepathyClient.js:1345
-msgid "Internal error"
-msgstr "Erreur interne"
-
-#. translators: argument is the account name, like
-#. * name@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1355
-#, javascript-format
-msgid "Unable to connect to %s"
-msgstr "Impossible de se connecter à %s"
-
-#: ../js/ui/components/telepathyClient.js:1360
-msgid "View account"
-msgstr "Afficher le compte"
-
-#: ../js/ui/components/telepathyClient.js:1399
-msgid "Unknown reason"
-msgstr "Raison inconnue"
-
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
 msgstr "Mise à jour logicielle"
@@ -1307,51 +1068,51 @@ msgstr "Chercher « %s » sur Google."
 msgid "Keyboard"
 msgstr "Clavier"
 
-#: ../js/ui/lookingGlass.js:644
+#: ../js/ui/lookingGlass.js:643
 msgid "No extensions installed"
 msgstr "Aucune extension installée"
 
 #. Translators: argument is an extension UUID.
-#: ../js/ui/lookingGlass.js:698
+#: ../js/ui/lookingGlass.js:697
 #, javascript-format
 msgid "%s has not emitted any errors."
 msgstr "%s n'a émis aucune erreur."
 
-#: ../js/ui/lookingGlass.js:704
+#: ../js/ui/lookingGlass.js:703
 msgid "Hide Errors"
 msgstr "Masquer les erreurs"
 
-#: ../js/ui/lookingGlass.js:708 ../js/ui/lookingGlass.js:768
+#: ../js/ui/lookingGlass.js:707 ../js/ui/lookingGlass.js:767
 msgid "Show Errors"
 msgstr "Afficher les erreurs"
 
-#: ../js/ui/lookingGlass.js:717
+#: ../js/ui/lookingGlass.js:716
 msgid "Enabled"
 msgstr "Activé"
 
 #. translators:
 #. * The device has been disabled
-#: ../js/ui/lookingGlass.js:720 ../src/gvc/gvc-mixer-control.c:1830
+#: ../js/ui/lookingGlass.js:719 ../src/gvc/gvc-mixer-control.c:1830
 msgid "Disabled"
 msgstr "Désactivé"
 
-#: ../js/ui/lookingGlass.js:722
+#: ../js/ui/lookingGlass.js:721
 msgid "Error"
 msgstr "Erreur"
 
-#: ../js/ui/lookingGlass.js:724
+#: ../js/ui/lookingGlass.js:723
 msgid "Out of date"
 msgstr "Périmé"
 
-#: ../js/ui/lookingGlass.js:726
+#: ../js/ui/lookingGlass.js:725
 msgid "Downloading"
 msgstr "Téléchargement"
 
-#: ../js/ui/lookingGlass.js:750
+#: ../js/ui/lookingGlass.js:749
 msgid "View Source"
 msgstr "Afficher la source"
 
-#: ../js/ui/lookingGlass.js:759
+#: ../js/ui/lookingGlass.js:758
 msgid "Web Page"
 msgstr "Page Web"
 
@@ -1986,19 +1747,19 @@ msgstr[1] "%u entrées"
 msgid "System Sounds"
 msgstr "Sons système"
 
-#: ../src/main.c:345
+#: ../src/main.c:325
 msgid "Print version"
 msgstr "Affiche la version"
 
-#: ../src/main.c:351
+#: ../src/main.c:331
 msgid "Mode used by GDM for login screen"
 msgstr "Mode utilisé par GDM pour l'écran de connexion"
 
-#: ../src/main.c:357
+#: ../src/main.c:337
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Utiliser un mode particulier, par ex. « gdm » pour l'écran de connexion"
 
-#: ../src/main.c:363
+#: ../src/main.c:343
 msgid "List possible modes"
 msgstr "Lister les modes possibles"
 
