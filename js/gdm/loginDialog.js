@@ -1015,8 +1015,10 @@ const LoginDialog = new Lang.Class({
         if (this._promptEntryActivateId == 0) {
             this._promptEntryActivateId =
                 this._promptEntry.clutter_text.connect('activate', Lang.bind(this, function() {
-                    this._holdForAnswer.release();
-                    this._holdForAnswer = null;
+                    if (this._signInButton.reactive) {
+                        this._holdForAnswer.release();
+                        this._holdForAnswer = null;
+                    }
                 }));
         }
     },
