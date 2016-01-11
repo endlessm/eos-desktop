@@ -1015,8 +1015,10 @@ const LoginDialog = new Lang.Class({
         if (this._promptEntryActivateId == 0) {
             this._promptEntryActivateId =
                 this._promptEntry.clutter_text.connect('activate', Lang.bind(this, function() {
-                    this._holdForAnswer.release();
-                    this._holdForAnswer = null;
+                    if (this._signInButton.reactive) {
+                        this._holdForAnswer.release();
+                        this._holdForAnswer = null;
+                    }
                 }));
         }
     },
@@ -1171,9 +1173,12 @@ const LoginDialog = new Lang.Class({
 
                      function() {
                          let userName = this._promptEntry.get_text();
-                         this._user = this._userManager.get_user(userName);
-                         this._promptEntry.reactive = false;
-                         return this._beginVerificationForUser(userName);
+                         // An empty username means we got cancelled.
+                         if (userName.length > 0) {
+                             this._user = this._userManager.get_user(userName);
+                             this._promptEntry.reactive = false;
+                             return this._beginVerificationForUser(userName);
+                         }
                      }];
 
         let batch = new Batch.ConsecutiveBatch(this, tasks);
