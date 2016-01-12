@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-06 19:35+0000\n"
+"POT-Creation-Date: 2016-01-12 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -425,19 +425,19 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: ../js/gdm/loginDialog.js:1114
+#: ../js/gdm/loginDialog.js:1116
 msgid "Your unlock code was incorrect. Please try again."
 msgstr ""
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:1164 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:1166 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr ""
 
-#: ../js/gdm/loginDialog.js:1423
+#: ../js/gdm/loginDialog.js:1428
 msgid "Login Window"
 msgstr ""
 
