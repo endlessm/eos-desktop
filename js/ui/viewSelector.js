@@ -65,6 +65,11 @@ const ViewsDisplayLayout = new Lang.Class({
 
         this._heightAboveEntry = 0;
         this.searchResultsTween = 0;
+        this._lowResolutionMode = false;
+
+        /* Setup composite mode */
+        Main.layoutManager.connect('monitors-changed', Lang.bind(this, this._updateLowResolutionMode));
+        this._updateLowResolutionMode();
     },
 
     _onStyleChanged: function() {
@@ -145,6 +150,26 @@ const ViewsDisplayLayout = new Lang.Class({
             searchResultsBox.y1 = entryBox.y2;
             searchResultsBox.y2 = searchResultsBox.y1 + searchResultsHeight;
             this._searchResultsActor.allocate(searchResultsBox, flags);
+        }
+    },
+
+    _updateLowResolutionMode: function() {
+        if (this._lowResolutionMode == Main.lowResolutionDisplay)
+            return;
+
+        this._lowResolutionMode = Main.lowResolutionDisplay;
+
+        /* When running on small screens, to make it fit 3 rows of icons,
+         * reduce the space above and below the search entry by adding (or
+         * removing, in case the screen is big enough) the .composite-mode
+         * style class.
+         */
+        if (this._lowResolutionMode) {
+            this._entry.add_style_class_name('low-resolution');
+            this._allViewActor.add_style_class_name('low-resolution');
+        } else {
+            this.entry.remove_style_class_name('low-resolution');
+            this._allViewActor.remove_style_class_name('low-resolution');
         }
     }
 });
