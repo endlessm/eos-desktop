@@ -927,6 +927,10 @@ StScrollBar StButton#vhandle:active {
     -minimum-vpadding: 48px;
 }
 
+#searchEntry.low-resolution {
+    -minimum-vpadding: 24px;
+}
+
 #searchEntry:rtl {
     padding-left: 4px;
     padding-right: 8px;
@@ -1166,6 +1170,10 @@ StScrollBar StButton#vhandle:active {
 
 .all-apps {
     -natural-padding-top: 25px;
+}
+
+.all-apps.low-resolution {
+    -natural-padding-top: 15px;
 }
 
 .search-display > StBoxLayout,

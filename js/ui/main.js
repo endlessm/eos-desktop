@@ -42,6 +42,8 @@ const Util = imports.misc.util;
 
 const OVERRIDES_SCHEMA = 'org.gnome.shell.overrides';
 const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
+const LOW_RESOLUTION_WIDTH = 800;
+const LOW_RESOLUTION_HEIGHT = 600;
 
 let appStore = null;
 let componentManager = null;
@@ -71,6 +73,7 @@ let keyboard = null;
 let layoutManager = null;
 let workspaceMonitor = null;
 let desktopAppClient = null;
+let lowResolutionDisplay = false;
 let _startDate;
 let _defaultCssStylesheet = null;
 let _cssStylesheet = null;
@@ -141,6 +144,12 @@ function _initializeUI() {
 
     // Setup the stage hierarchy early
     layoutManager = new Layout.LayoutManager();
+
+    // Track the primary display and check whether it's
+    // running on a display with low resolution.
+    layoutManager.connect("display-changed", _updateLowResolution);
+
+    _updateLowResolution();
 
     // Various parts of the codebase still refers to Main.uiGroup
     // instead using the layoutManager.  This keeps that code
@@ -216,6 +225,12 @@ function _initializeUI() {
             keybindingMode = Shell.KeyBindingMode.NORMAL;
         }
     });
+}
+
+function _updateLowResolution() {
+    lowResolutionDisplay = layoutManager.primaryMonitor &&
+                           (layoutManager.primaryMonitor.width < LOW_RESOLUTION_WIDTH ||
+                            layoutManager.primaryMonitor.height < LOW_RESOLUTION_HEIGHT);
 }
 
 let _workspaces = [];
