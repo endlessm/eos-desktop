@@ -1697,6 +1697,7 @@ const AppFolderPopup = new Lang.Class({
 
         this._boxPointer.actor.bind_property('opacity', this.closeButton, 'opacity',
                                              GObject.BindingFlags.SYNC_CREATE);
+        this._boxPointer.bin.connect('realize', Lang.bind(this, this._adjustCloseButton));
     },
 
     toggle: function() {
@@ -1706,9 +1707,18 @@ const AppFolderPopup = new Lang.Class({
             this.popup();
     },
 
+    _adjustCloseButton: function() {
+        // When the popup has its arrow on top, the close button needs to be
+        // positioned a bit lower so it's placed on the boxPointer corner's edge
+        const marginTop = this._boxPointer.bin.get_y();
+        this.closeButton.set_y(this.closeButton.get_y() + marginTop);
+    },
+
     popup: function() {
         if (this._isOpen)
             return;
+
+        this._adjustCloseButton();
 
         this.actor.show();
 
