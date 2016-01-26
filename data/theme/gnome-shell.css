@@ -1123,11 +1123,6 @@ StScrollBar StButton#vhandle:active {
     -shell-grid-vertical-item-size: 118px;
 }
 
-.icon-grid.low-resolution {
-    -shell-grid-horizontal-item-size: 104px;
-    -shell-grid-vertical-item-size: 104px;
-}
-
 .overview-icon.dnd,
 .icon-grid .overview-icon {
     icon-size: 64px;
@@ -1180,6 +1175,13 @@ StScrollBar StButton#vhandle:active {
 .all-apps > StBoxLayout {
     /* horizontal padding to make sure scrollbars or dash don't overlap content */
     padding: 0px 70px;
+}
+
+.search-display.low-resolution > StBoxLayout,
+.all-apps.low-resolution > StBoxLayout {
+    /* when in low resolution screens, shorten the borders' padding to
+     * fit 5 columns */
+    padding: 0px 35px;
 }
 
 .app-folder-icon {
