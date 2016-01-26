@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-19 02:29+0000\n"
+"POT-Creation-Date: 2016-01-26 02:27+0000\n"
 "PO-Revision-Date: 2016-01-06 04:17+0000\n"
 "Last-Translator: chenzibing <chenzibing_endless@126.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
@@ -505,32 +505,32 @@ msgstr "不能解析命令："
 msgid "Execution of '%s' failed:"
 msgstr "运行“%s”失败："
 
-#: ../js/ui/appDisplay.js:1138
+#: ../js/ui/appDisplay.js:1148
 msgid "Remove from desktop"
 msgstr "从桌面删除"
 
-#: ../js/ui/appDisplay.js:1621
+#: ../js/ui/appDisplay.js:1631
 msgid "Warning"
 msgstr "警告"
 
-#: ../js/ui/appDisplay.js:1627
+#: ../js/ui/appDisplay.js:1637
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "删除文件夹前请先删除文件夹内所有文件。"
 
-#: ../js/ui/appDisplay.js:1633
+#: ../js/ui/appDisplay.js:1643
 msgid "We are just trying to keep you safe."
 msgstr "保障用户安全"
 
-#: ../js/ui/appDisplay.js:1639 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1649 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "确定"
 
-#: ../js/ui/appDisplay.js:1881
+#: ../js/ui/appDisplay.js:1901
 msgid "More Apps"
 msgstr "更多的Apps"
 
-#: ../js/ui/appDisplay.js:1890
+#: ../js/ui/appDisplay.js:1910
 msgid "Delete"
 msgstr "删除"
 
@@ -896,7 +896,7 @@ msgstr "更新失败"
 msgid "We could not update your system"
 msgstr "我们未能升级您的系统"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:463
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
 msgid "Windows"
 msgstr "窗口"
 
@@ -1690,7 +1690,7 @@ msgstr "%s（远程控制）"
 msgid "%s (console)"
 msgstr "%s （控制台）"
 
-#: ../js/ui/viewSelector.js:467
+#: ../js/ui/viewSelector.js:492
 msgid "Applications"
 msgstr "应用程序"
 

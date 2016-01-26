@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-19 02:29+0000\n"
+"POT-Creation-Date: 2016-01-26 02:27+0000\n"
 "PO-Revision-Date: 2016-01-05 02:28+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
@@ -498,32 +498,32 @@ msgstr "Impossible d'analyser la commande :"
 msgid "Execution of '%s' failed:"
 msgstr "Exécution de « %s » impossible :"
 
-#: ../js/ui/appDisplay.js:1138
+#: ../js/ui/appDisplay.js:1148
 msgid "Remove from desktop"
 msgstr "Supprimer du bureau"
 
-#: ../js/ui/appDisplay.js:1621
+#: ../js/ui/appDisplay.js:1631
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../js/ui/appDisplay.js:1627
+#: ../js/ui/appDisplay.js:1637
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
-#: ../js/ui/appDisplay.js:1633
+#: ../js/ui/appDisplay.js:1643
 msgid "We are just trying to keep you safe."
 msgstr "Nous essayons simplement de vous garder en sécurité."
 
-#: ../js/ui/appDisplay.js:1639 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1649 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Valider"
 
-#: ../js/ui/appDisplay.js:1881
+#: ../js/ui/appDisplay.js:1901
 msgid "More Apps"
 msgstr "Plus d'Apps"
 
-#: ../js/ui/appDisplay.js:1890
+#: ../js/ui/appDisplay.js:1910
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -889,7 +889,7 @@ msgstr "Echec d'une tentative de mise à jour"
 msgid "We could not update your system"
 msgstr "Nous n'avons pas pu mettre à jour votre système"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:463
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
 msgid "Windows"
 msgstr "Fenêtres"
 
@@ -1691,7 +1691,7 @@ msgstr "%s (distant)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:467
+#: ../js/ui/viewSelector.js:492
 msgid "Applications"
 msgstr "Applications"
 
