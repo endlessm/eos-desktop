@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-19 02:29+0000\n"
+"POT-Creation-Date: 2016-01-26 02:27+0000\n"
 "PO-Revision-Date: 2016-01-05 02:28+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/pt_BR/)\n"
@@ -505,32 +505,32 @@ msgstr "Não foi possível analisar comando:"
 msgid "Execution of '%s' failed:"
 msgstr "A execução de \"%s\" falhou:"
 
-#: ../js/ui/appDisplay.js:1138
+#: ../js/ui/appDisplay.js:1148
 msgid "Remove from desktop"
 msgstr "Remover da área de trabalho"
 
-#: ../js/ui/appDisplay.js:1621
+#: ../js/ui/appDisplay.js:1631
 msgid "Warning"
 msgstr "Aviso"
 
-#: ../js/ui/appDisplay.js:1627
+#: ../js/ui/appDisplay.js:1637
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para excluir uma pasta você tem que remover todos os arquivos de dentro primeiro."
 
-#: ../js/ui/appDisplay.js:1633
+#: ../js/ui/appDisplay.js:1643
 msgid "We are just trying to keep you safe."
 msgstr "Estamos apenas tentando manter a segurança dos seus dados."
 
-#: ../js/ui/appDisplay.js:1639 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1649 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1881
+#: ../js/ui/appDisplay.js:1901
 msgid "More Apps"
 msgstr "Mais Programas"
 
-#: ../js/ui/appDisplay.js:1890
+#: ../js/ui/appDisplay.js:1910
 msgid "Delete"
 msgstr "Excluir"
 
@@ -896,7 +896,7 @@ msgstr "Ocorreu um erro durante à atualização"
 msgid "We could not update your system"
 msgstr "Não foi possível atualizar o seu sistema"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:463
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
 msgid "Windows"
 msgstr "Janelas"
 
@@ -1698,7 +1698,7 @@ msgstr "%s (remoto)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:467
+#: ../js/ui/viewSelector.js:492
 msgid "Applications"
 msgstr "Programas"
 
