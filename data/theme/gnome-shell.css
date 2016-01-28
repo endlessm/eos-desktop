@@ -932,7 +932,7 @@ StScrollBar StButton#vhandle:active {
 }
 
 #searchEntry.low-resolution {
-    -minimum-vpadding: 24px;
+    -minimum-vpadding: 20px;
 }
 
 #searchEntry:rtl {
