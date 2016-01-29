@@ -1125,11 +1125,14 @@ const PopupMenu = new Lang.Class({
         this.actor._delegate = this;
         this.actor.style_class = 'popup-menu-boxpointer';
 
+        // We will manually control when and how we show the scrollbars.
         this._boxWrapper = new St.ScrollView({ hscrollbar_policy: Gtk.PolicyType.NEVER,
-                                               vscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
+                                               vscrollbar_policy: Gtk.PolicyType.NEVER,
                                                overlay_scrollbars: true });
         this._boxWrapper.add_style_class_name('popup-menu-content');
         this._boxPointer.bin.set_child(this._boxWrapper);
+
+        this.box.add_style_class_name('popup-menu-content-box');
         this._boxWrapper.add_actor(this.box);
         this.actor.add_style_class_name('popup-menu');
 
@@ -1169,6 +1172,41 @@ const PopupMenu = new Lang.Class({
         this.emit('child-menu-removed', menu);
     },
 
+    _showScrollbarIfNeeded: function(orientation) {
+        let minSize;
+        let naturalSize;
+        let availableSpace;
+
+        // The BoxPointer class uses the distance from the source object to the
+        // box also as a padding to separate the box from the edges of the work
+        // area, which we need to calculate whether we need to force scrollbars.
+        let boxPointerThemeNode = this._boxPointer.actor.get_theme_node();
+        let marginToEdge = boxPointerThemeNode.get_length('-arrow-rise');
+
+        // We need the workspace area (from Mutter) to check the available space.
+        let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
+
+        if (orientation == Clutter.Orientation.HORIZONTAL) {
+            [minSize, naturalSize] = this.actor.get_preferred_width(-1);
+            availableSpace = workArea.width - (2 * marginToEdge);
+            if (naturalSize > availableSpace) {
+                this._boxWrapper.hscrollbar_policy = Gtk.PolicyType.ALWAYS;
+                this.actor.set_width(availableSpace);
+            } else {
+                this._boxWrapper.hscrollbar_policy = Gtk.PolicyType.NEVER;
+            }
+        } else {
+            [minSize, naturalSize] = this.actor.get_preferred_height(-1);
+            availableSpace = workArea.height - marginToEdge;
+            if (naturalSize > availableSpace) {
+                this._boxWrapper.vscrollbar_policy = Gtk.PolicyType.ALWAYS;
+                this.actor.set_height(availableSpace);
+            } else {
+                this._boxWrapper.vscrollbar_policy = Gtk.PolicyType.NEVER;
+            }
+        }
+    },
+
     open: function(animate) {
         if (this.isOpen)
             return;
@@ -1177,6 +1215,9 @@ const PopupMenu = new Lang.Class({
             return;
 
         this.isOpen = true;
+
+        this._showScrollbarIfNeeded(Clutter.Orientation.VERTICAL);
+        this._showScrollbarIfNeeded(Clutter.Orientation.HORIZONTAL);
 
         this._boxPointer.setPosition(this.sourceActor, this._arrowAlignment);
         this._boxPointer.show(animate);
@@ -1196,6 +1237,13 @@ const PopupMenu = new Lang.Class({
 
         if (this._boxPointer.actor.visible)
             this._boxPointer.hide(animate);
+
+        // We might have changed the dimensions of the popup to something different
+        // than the preferred ones if needed to force scrollbars, so we need to reset
+        // them here to make sure they will have the right size next time the popup
+        // is open, regardless of whether the effective resolution has changed or not.
+        this.actor.set_height(-1);
+        this.actor.set_width(-1);
 
         if (!this.isOpen)
             return;
