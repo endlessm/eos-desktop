@@ -183,6 +183,10 @@ StScrollBar StButton#vhandle:active {
  * override .popup-menu.font-size, everything else will scale with it.
  */
 .popup-menu-content {
+    padding: 0em 0em;
+}
+
+.popup-menu-content-box {
     padding: 1em 0em;
 }
 

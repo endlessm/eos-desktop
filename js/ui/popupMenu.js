@@ -1131,6 +1131,8 @@ const PopupMenu = new Lang.Class({
                                                overlay_scrollbars: true });
         this._boxWrapper.add_style_class_name('popup-menu-content');
         this._boxPointer.bin.set_child(this._boxWrapper);
+
+        this.box.add_style_class_name('popup-menu-content-box');
         this._boxWrapper.add_actor(this.box);
         this.actor.add_style_class_name('popup-menu');
 
