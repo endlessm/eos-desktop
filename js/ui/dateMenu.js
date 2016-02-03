@@ -156,7 +156,7 @@ const DateMenuButton = new Lang.Class({
     },
 
     _appInstalledChanged: function() {
-        let app = Shell.AppSystem.get_default().lookup_app('gnome-clocks.desktop');
+        let app = Shell.AppSystem.get_default().lookup_app('org.gnome.clocks.desktop');
         this._openClocksItem.actor.visible = app !== null;
     },
 
@@ -228,7 +228,7 @@ const DateMenuButton = new Lang.Class({
 
     _onOpenClocksActivate: function() {
         this.menu.close();
-        let app = Shell.AppSystem.get_default().lookup_app('gnome-clocks.desktop');
+        let app = Shell.AppSystem.get_default().lookup_app('org.gnome.clocks.desktop');
         Main.overview.hide();
         app.activate();
     }
