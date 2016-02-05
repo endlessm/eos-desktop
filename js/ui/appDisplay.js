@@ -283,16 +283,6 @@ const EndlessApplicationView = new Lang.Class({
 
     animateMovement: function() {
         let [movedList, removedList] = this._findIconChanges();
-
-        // When an app is removed and added again quickly, this
-        // method may remove the icons but when addIcons is called
-        // it may find that there were no icon changes erroneously
-        // (because _allIcons still has the removed icon).
-        // So we update _allIcons to avoid this and make sure it
-        // reflects what has been done "on the screen".
-        for (let idx in removedList)
-           this._allIcons.splice(idx, 1);
-
         this._grid.animateShuffling(movedList,
                                     removedList,
                                     this.repositionedIconData,
