@@ -291,7 +291,7 @@ const EndlessApplicationView = new Lang.Class({
         // So we update _allIcons to avoid this and make sure it
         // reflects what has been done "on the screen".
         for (let idx in removedList)
-           this._allIcons.splice(idx, 1);
+           this._allIcons.splice(removedList[idx], 1);
 
         this._grid.animateShuffling(movedList,
                                     removedList,
