@@ -292,6 +292,26 @@ const AppIconButton = new Lang.Class({
 
         this._rightClickMenu = new PopupMenu.PopupMenu(this.actor, 0.0, St.Side.TOP, 0);
         this._rightClickMenu.blockSourceEvents = true;
+
+        let favorites = AppFavorites.getAppFavorites();
+
+        this._pinMenuItem = this._rightClickMenu.addAction(_("Pin to Taskbar"), Lang.bind(this, function() {
+            favorites.addFavorite(this._app.get_id());
+            this._pinMenuItem.actor.visible = false;
+            this._unpinMenuItem.actor.visible = true;
+        }));
+
+        this._unpinMenuItem = this._rightClickMenu.addAction(_("Unpin from Taskbar"), Lang.bind(this, function() {
+            favorites.removeFavorite(this._app.get_id());
+            this._pinMenuItem.actor.visible = true;
+            this._unpinMenuItem.actor.visible = false;
+        }));
+
+        if (favorites.isFavorite(this._app.get_id()))
+            this._pinMenuItem.actor.visible = false;
+        else
+            this._unpinMenuItem.actor.visible = false;
+
         this._quitMenuItem = this._rightClickMenu.addAction(_("Quit %s").format(this._app.get_name()), Lang.bind(this, function() {
             this._app.request_quit();
         }));
