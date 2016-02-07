@@ -616,7 +616,7 @@ const ScrolledIconList = new Lang.Class({
         this._container.connect('style-changed', Lang.bind(this, this._updateStyleConstants));
 
         let appSys = Shell.AppSystem.get_default();
-        this._runningApps = new Hash.Map();
+        this._taskbarApps = new Hash.Map();
 
         this._numExcludedApps = 0;
         // Exclusions are added to the base list
@@ -655,14 +655,14 @@ const ScrolledIconList = new Lang.Class({
     },
 
     setActiveApp: function(app) {
-        this._runningApps.items().forEach(Lang.bind(this,
+        this._taskbarApps.items().forEach(Lang.bind(this,
             function(item) {
-                let [runningApp, appButton] = item;
+                let [taskbarApp, appButton] = item;
                 if (!appButton) {
                     return;
                 }
 
-                if (app == runningApp) {
+                if (app == taskbarApp) {
                     appButton.actor.add_style_pseudo_class('highlighted');
                 } else {
                     appButton.actor.remove_style_pseudo_class('highlighted');
@@ -680,7 +680,7 @@ const ScrolledIconList = new Lang.Class({
 
     getNaturalWidth: function() {
         let iconArea = 0;
-        let nApps = this._runningApps.size();
+        let nApps = this._taskbarApps.size();
         if (nApps > 0) {
             let iconSpacing = this._iconSpacing * (nApps - 1);
             iconArea = this._iconSize * nApps + iconSpacing;
@@ -690,7 +690,7 @@ const ScrolledIconList = new Lang.Class({
 
     _updatePage: function() {
         // Clip the values of the iconOffset
-        let lastIconOffset = this._runningApps.size() - this._numExcludedApps - 1;
+        let lastIconOffset = this._taskbarApps.size() - this._numExcludedApps - 1;
         let movableIconsPerPage = this._appsPerPage - 1;
         this._iconOffset = Math.max(0, this._iconOffset);
         this._iconOffset = Math.min(lastIconOffset - movableIconsPerPage, this._iconOffset);
@@ -730,7 +730,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     isForwardAllowed: function() {
-        return this._iconOffset < this._runningApps.size() - this._appsPerPage - this._numExcludedApps;
+        return this._iconOffset < this._taskbarApps.size() - this._appsPerPage - this._numExcludedApps;
     },
 
     calculateNaturalSize: function(forWidth) {
@@ -749,7 +749,7 @@ const ScrolledIconList = new Lang.Class({
         let node = this._container.get_theme_node();
 
         this._iconSize = node.get_length("-icon-size");
-        this._runningApps.items().forEach(Lang.bind(this,
+        this._taskbarApps.items().forEach(Lang.bind(this,
             function(app) {
                 let appButton = app[1];
                 if (appButton != null) {
@@ -761,7 +761,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     _ensureIsVisible: function(app) {
-        let itemIndex = this._runningApps.keys().indexOf(app);
+        let itemIndex = this._taskbarApps.keys().indexOf(app);
         if (itemIndex != -1) {
             this._iconOffset = itemIndex - this._numExcludedApps;
         }
@@ -787,7 +787,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     _addButtonAnimated: function(app, index) {
-        if (this._runningApps.has(app)) {
+        if (this._taskbarApps.has(app)) {
             return;
         }
 
@@ -797,7 +797,7 @@ const ScrolledIconList = new Lang.Class({
 
         let newChild = new AppIconButton(app, this._iconSize, this._menuManager);
         newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
-        this._runningApps.set(app, newChild);
+        this._taskbarApps.set(app, newChild);
 
         if (index == -1) {
             this._container.add_actor(newChild.actor);
@@ -835,10 +835,10 @@ const ScrolledIconList = new Lang.Class({
                 break;
             }
 
-            let oldChild = this._runningApps.get(app);
+            let oldChild = this._taskbarApps.get(app);
             if (oldChild) {
                 oldChild.actor.destroy();
-                this._runningApps.delete(app);
+                this._taskbarApps.delete(app);
             }
             break;
         }
@@ -857,7 +857,7 @@ const ScrolledIconList = new Lang.Class({
         let iconsPerPage = Math.floor((forWidth + this._iconSpacing) / minimumIconWidth);
         iconsPerPage = Math.max(1, iconsPerPage);
 
-        let pages = Math.ceil((this._runningApps.items().length - this._numExcludedApps) / iconsPerPage);
+        let pages = Math.ceil((this._taskbarApps.items().length - this._numExcludedApps) / iconsPerPage);
 
         // If we only have one page, previous calculations will return 0 so
         // we clip the value here
@@ -867,7 +867,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     _getAppsOnPage: function(pageNum, appsPerPage){
-        let apps = this._runningApps.items();
+        let apps = this._taskbarApps.items();
 
         let startIndex = appsPerPage * pageNum + this._numExcludedApps;
         let endIndex = Math.min(startIndex + appsPerPage, apps.length);
