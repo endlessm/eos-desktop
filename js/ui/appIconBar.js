@@ -616,6 +616,11 @@ const ScrolledIconList = new Lang.Class({
             appsByPid.set(pid, app);
         }
 
+        let favorites = AppFavorites.getAppFavorites().getFavorites();
+        for (let i = 0; i < favorites.length; i++) {
+            this._addButtonAnimated(favorites[i], i + 1); // plus one for user menu
+        }
+
         // Sort numerically by PID
         // This preserves the original app order, until the maximum PID
         // value is reached and older PID values are recycled
@@ -623,7 +628,7 @@ const ScrolledIconList = new Lang.Class({
         for (let i = 0; i < sortedPids.length; i++) {
             let pid = sortedPids[i];
             let app = appsByPid.get(pid);
-            this._addButtonAnimated(app, i + 2); // offset for user menu and browser icon
+            this._addButtonAnimated(app, favorites.length + i + 2); // offset for user menu and browser icon
         }
 
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
