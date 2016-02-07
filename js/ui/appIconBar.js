@@ -12,6 +12,7 @@ const Gtk = imports.gi.Gtk;
 const Tweener = imports.ui.tweener;
 
 const AppActivation = imports.ui.appActivation;
+const AppFavorites = imports.ui.appFavorites;
 const BoxPointer = imports.ui.boxpointer;
 const Hash = imports.misc.hash;
 const Main = imports.ui.main;
@@ -744,24 +745,20 @@ const ScrolledIconList = new Lang.Class({
     },
 
     _isAppInteresting: function(app) {
-        let retval = false;
+        if (AppFavorites.getAppFavorites().isFavorite(app.get_id()))
+            return true;
 
-        switch (app.state) {
-        case Shell.AppState.STARTING:
-            retval = true;
-            break;
-        case Shell.AppState.RUNNING:
+        if (app.state == Shell.AppState.STARTING)
+            return true;
+
+        if (app.state == Shell.AppState.RUNNING) {
             let windows = app.get_windows();
-            retval = windows.some(function(metaWindow) {
+            return windows.some(function(metaWindow) {
                 return Shell.WindowTracker.is_window_interesting(metaWindow);
             });
-            break;
-        case Shell.AppState.STOPPED:
-        default:
-            break;
         }
 
-        return retval;
+        return false;
     },
 
     _addButtonAnimated: function(app, index) {
