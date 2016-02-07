@@ -831,9 +831,10 @@ const ScrolledIconList = new Lang.Class({
             break;
 
         case Shell.AppState.STOPPED:
-            if (app == this._browserApp) {
+            if (app == this._browserApp)
                 break;
-            }
+            if (AppFavorites.getAppFavorites().isFavorite(app.get_id()))
+                break;
 
             let oldChild = this._taskbarApps.get(app);
             if (oldChild) {
