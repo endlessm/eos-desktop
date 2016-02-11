@@ -534,6 +534,8 @@ const AllView = new Lang.Class({
         this._appSystem.connect('installed-changed', Lang.bind(this, function() {
             Main.queueDeferredWork(this._allAppsWorkId);
         }));
+        this._appSystem.connect('app-info-changed', Lang.bind(this, this._onAppInfoChanged));
+
         global.settings.connect('changed::app-folder-categories', Lang.bind(this, function() {
             Main.queueDeferredWork(this._allAppsWorkId);
         }));
@@ -588,6 +590,15 @@ const AllView = new Lang.Class({
                 time: ICON_ANIMATION_TIME,
                 delay: ICON_ANIMATION_DELAY
             });
+        }
+     },
+
+     _onAppInfoChanged: function(app_system, app) {
+        for (let icon of this._allIcons) {
+            if (icon.app && icon.app === app) {
+                icon.icon.reloadIcon();
+                break;
+            }
         }
      },
 

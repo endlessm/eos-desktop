@@ -37,6 +37,7 @@ static const char*const vendor_prefixes[] = { "gnome-",
 enum {
   APP_STATE_CHANGED,
   INSTALLED_CHANGED,
+  APP_INFO_CHANGED,
   LAST_SIGNAL
 };
 
@@ -74,6 +75,14 @@ static void shell_app_system_class_init(ShellAppSystemClass *klass)
           NULL, NULL, NULL,
 		  G_TYPE_NONE, 0);
 
+  signals[APP_INFO_CHANGED] = g_signal_new ("app-info-changed",
+                                             SHELL_TYPE_APP_SYSTEM,
+                                             G_SIGNAL_RUN_LAST,
+                                             0,
+                                             NULL, NULL, NULL,
+                                             G_TYPE_NONE, 1,
+                                             SHELL_TYPE_APP);
+
   g_type_class_add_private (gobject_class, sizeof (ShellAppSystemPrivate));
 }
 
@@ -108,15 +117,14 @@ scan_startup_wm_class_to_id (ShellAppSystem *self)
   g_list_free_full (apps, g_object_unref);
 }
 
-static gboolean
-app_is_stale (ShellApp *app)
+static GDesktopAppInfo *
+get_new_desktop_app_info_from_app (ShellApp *app)
 {
   GDesktopAppInfo *info;
   const char *id;
-  gboolean is_stale;
 
   if (shell_app_is_window_backed (app))
-    return FALSE;
+    return NULL;
 
   /* If g_app_info_delete() was called, such as when a custom desktop
    * icon is removed, the desktop ID of the underlying GDesktopAppInfo
@@ -126,23 +134,54 @@ app_is_stale (ShellApp *app)
    */
   id = shell_app_get_id (app);
   if (id == NULL)
-    return TRUE;
+    return NULL;
 
-  info = g_desktop_app_info_new (id);
-  is_stale = (info == NULL);
-
-  if (info)
-    g_object_unref (info);
-
-  return is_stale;
+  return g_desktop_app_info_new (id);
 }
 
 static gboolean
-stale_app_remove_func (gpointer key,
-                       gpointer value,
-                       gpointer user_data)
+app_info_changed (ShellApp *app, GDesktopAppInfo *info)
 {
-  return app_is_stale (value);
+  GIcon *app_icon;
+  GIcon *new_icon;
+  GAppInfo *app_info = G_APP_INFO (shell_app_get_app_info (app));
+  GAppInfo *new_info = G_APP_INFO (info);
+
+  if (!app_info)
+    return TRUE;
+
+  app_icon = g_app_info_get_icon (app_info);
+  new_icon = g_app_info_get_icon (new_info);
+
+  return !g_app_info_equal (app_info, new_info) || !g_icon_equal (app_icon, new_icon);
+}
+
+static void
+remove_or_update_app_from_info (ShellAppSystem *self)
+{
+  GHashTableIter iter;
+  ShellApp *app;
+
+  g_hash_table_iter_init (&iter, self->priv->id_to_app);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer) &app))
+    {
+      GDesktopAppInfo *app_info = get_new_desktop_app_info_from_app (app);
+
+      if (!app_info)
+        {
+          // App is stale, we remove it
+          g_hash_table_iter_remove (&iter);
+          continue;
+        }
+
+      if (app_info_changed (app, app_info))
+        {
+          _shell_app_set_app_info (app, app_info);
+          g_signal_emit (self, signals[APP_INFO_CHANGED], 0, app);
+        }
+
+      g_object_unref (app_info);
+    }
 }
 
 static void
@@ -153,7 +192,7 @@ installed_changed (GAppInfoMonitor *monitor,
 
   scan_startup_wm_class_to_id (self);
 
-  g_hash_table_foreach_remove (self->priv->id_to_app, stale_app_remove_func, NULL);
+  remove_or_update_app_from_info (self);
 
   g_signal_emit (self, signals[INSTALLED_CHANGED], 0, NULL);
 }
