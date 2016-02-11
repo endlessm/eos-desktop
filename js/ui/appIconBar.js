@@ -305,6 +305,7 @@ const AppIconButton = new Lang.Class({
             favorites.removeFavorite(this._app.get_id());
             this._pinMenuItem.actor.visible = true;
             this._unpinMenuItem.actor.visible = false;
+            this.emit('app-icon-unpinned');
         }));
 
         if (favorites.isFavorite(this._app.get_id()))
@@ -797,6 +798,13 @@ const ScrolledIconList = new Lang.Class({
 
         let newChild = new AppIconButton(app, this._iconSize, this._menuManager);
         newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
+        newChild.connect('app-icon-unpinned', Lang.bind(this, function() {
+            if (app.state == Shell.AppState.STOPPED) {
+                newChild.actor.destroy();
+                this._taskbarApps.delete(app);
+                this._updatePage();
+            }
+        }));
         this._taskbarApps.set(app, newChild);
 
         if (index == -1) {
