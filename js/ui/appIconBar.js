@@ -293,22 +293,19 @@ const AppIconButton = new Lang.Class({
         this._rightClickMenu = new PopupMenu.PopupMenu(this.actor, 0.0, St.Side.TOP, 0);
         this._rightClickMenu.blockSourceEvents = true;
 
-        let favorites = AppFavorites.getAppFavorites();
-
         this._pinMenuItem = this._rightClickMenu.addAction(_("Pin to Taskbar"), Lang.bind(this, function() {
-            favorites.addFavorite(this._app.get_id());
             this._pinMenuItem.actor.visible = false;
             this._unpinMenuItem.actor.visible = true;
+            this.emit('app-icon-pinned');
         }));
 
         this._unpinMenuItem = this._rightClickMenu.addAction(_("Unpin from Taskbar"), Lang.bind(this, function() {
-            favorites.removeFavorite(this._app.get_id());
             this._pinMenuItem.actor.visible = true;
             this._unpinMenuItem.actor.visible = false;
             this.emit('app-icon-unpinned');
         }));
 
-        if (favorites.isFavorite(this._app.get_id()))
+        if (AppFavorites.getAppFavorites().isFavorite(this._app.get_id()))
             this._pinMenuItem.actor.visible = false;
         else
             this._unpinMenuItem.actor.visible = false;
@@ -796,9 +793,16 @@ const ScrolledIconList = new Lang.Class({
             return;
         }
 
+        let favorites = AppFavorites.getAppFavorites();
         let newChild = new AppIconButton(app, this._iconSize, this._menuManager);
-        newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
+        newChild.connect('app-icon-pressed', Lang.bind(this, function() {
+            this.emit('app-icon-pressed');
+        }));
+        newChild.connect('app-icon-pinned', Lang.bind(this, function() {
+            favorites.addFavorite(app.get_id());
+        }));
         newChild.connect('app-icon-unpinned', Lang.bind(this, function() {
+            favorites.removeFavorite(app.get_id());
             if (app.state == Shell.AppState.STOPPED) {
                 newChild.actor.destroy();
                 this._taskbarApps.delete(app);
