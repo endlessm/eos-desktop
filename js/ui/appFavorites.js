@@ -9,9 +9,10 @@ const Main = imports.ui.main;
 const AppFavorites = new Lang.Class({
     Name: 'AppFavorites',
 
-    _init: function(settingsKey) {
+    _init: function(settingsKey, showNotifications) {
         this._favorites = {};
         this._settingsKey = settingsKey;
+        this._showNotifications = showNotifications;
         global.settings.connect('changed::' + settingsKey, Lang.bind(this, this._onFavsChanged));
         Shell.AppSystem.get_default().connect('installed-changed', Lang.bind(this, this._onFavsChanged));
         this._reload();
@@ -90,6 +91,9 @@ const AppFavorites = new Lang.Class({
         if (!this._addFavorite(appId, pos))
             return;
 
+        if (!this._showNotifications)
+            return;
+
         let app = Shell.AppSystem.get_default().lookup_app(appId);
 
         Main.overview.setMessage(_("%s has been added to your favorites.").format(app.get_name()),
@@ -126,6 +130,9 @@ const AppFavorites = new Lang.Class({
         if (!app || !this._removeFavorite(appId))
             return;
 
+        if (!this._showNotifications)
+            return;
+
         Main.overview.setMessage(_("%s has been removed from your favorites.").format(app.get_name()),
                                  { forFeedback: true,
                                    undoCallback: Lang.bind(this, function () {
@@ -139,13 +146,13 @@ Signals.addSignalMethods(AppFavorites.prototype);
 var dashFavoritesInstance = null;
 function getAppFavorites() {
     if (dashFavoritesInstance == null)
-        dashFavoritesInstance = new AppFavorites('favorite-apps');
+        dashFavoritesInstance = new AppFavorites('favorite-apps', true);
     return dashFavoritesInstance;
 }
 
 var taskbarFavoritesInstance = null;
 function getTaskbarFavorites() {
     if (taskbarFavoritesInstance == null)
-        taskbarFavoritesInstance = new AppFavorites('taskbar-pins');
+        taskbarFavoritesInstance = new AppFavorites('taskbar-pins', false);
     return taskbarFavoritesInstance;
 }
