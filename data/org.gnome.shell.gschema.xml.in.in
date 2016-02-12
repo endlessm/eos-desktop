@@ -132,6 +132,14 @@
         will be displayed in the favorites area.
       </_description>
     </key>
+    <key name="taskbar-pins" type="as">
+      <default>[ 'chromium-browser.desktop' ]</default>
+      <_summary>List of desktop file IDs for applications pinned to taskbar</_summary>
+      <_description>
+        The applications corresponding to these identifiers will be displayed in
+        the taskbar at the bottom of the Endless desktop.
+      </_description>
+    </key>
     <key name="app-folder-categories" type="as">
       <default>[ 'Utilities', 'Sundry' ]</default>
       <_summary>List of categories that should be displayed as folders</_summary>

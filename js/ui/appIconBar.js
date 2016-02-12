@@ -305,7 +305,7 @@ const AppIconButton = new Lang.Class({
             this.emit('app-icon-unpinned');
         }));
 
-        if (AppFavorites.getAppFavorites().isFavorite(this._app.get_id()))
+        if (AppFavorites.getTaskbarFavorites().isFavorite(this._app.get_id()))
             this._pinMenuItem.actor.visible = false;
         else
             this._unpinMenuItem.actor.visible = false;
@@ -532,7 +532,7 @@ const AppIconButton = new Lang.Class({
     },
 
     isPinned: function() {
-        return AppFavorites.getAppFavorites().isFavorite(this._app.get_id());
+        return AppFavorites.getTaskbarFavorites().isFavorite(this._app.get_id());
     }
 });
 Signals.addSignalMethods(AppIconButton.prototype);
@@ -638,7 +638,7 @@ const ScrolledIconList = new Lang.Class({
             appsByPid.set(pid, app);
         }
 
-        let favorites = AppFavorites.getAppFavorites().getFavorites();
+        let favorites = AppFavorites.getTaskbarFavorites().getFavorites();
         for (let i = 0; i < favorites.length; i++) {
             this._addButtonAnimated(favorites[i], i + 1); // plus one for user menu
         }
@@ -772,7 +772,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     _isAppInteresting: function(app) {
-        if (AppFavorites.getAppFavorites().isFavorite(app.get_id()))
+        if (AppFavorites.getTaskbarFavorites().isFavorite(app.get_id()))
             return true;
 
         if (app.state == Shell.AppState.STARTING)
@@ -818,7 +818,7 @@ const ScrolledIconList = new Lang.Class({
             return;
         }
 
-        let favorites = AppFavorites.getAppFavorites();
+        let favorites = AppFavorites.getTaskbarFavorites();
         let newChild = new AppIconButton(app, this._iconSize, this._menuManager);
         newChild.connect('app-icon-pressed', Lang.bind(this, function() {
             this.emit('app-icon-pressed');
@@ -870,7 +870,7 @@ const ScrolledIconList = new Lang.Class({
         case Shell.AppState.STOPPED:
             if (app == this._browserApp)
                 break;
-            if (AppFavorites.getAppFavorites().isFavorite(app.get_id()))
+            if (AppFavorites.getTaskbarFavorites().isFavorite(app.get_id()))
                 break;
 
             let oldChild = this._taskbarApps.get(app);
