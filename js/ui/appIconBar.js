@@ -529,6 +529,10 @@ const AppIconButton = new Lang.Class({
 
     _updateStyle: function(actor, forHeight, alloc) {
         this._labelOffsetY = this._label.get_theme_node().get_length('-label-offset-y');
+    },
+
+    isPinned: function() {
+        return AppFavorites.getAppFavorites().isFavorite(this._app.get_id());
     }
 });
 Signals.addSignalMethods(AppIconButton.prototype);
