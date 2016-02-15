@@ -107,11 +107,11 @@ const WorkspaceMonitor = new Lang.Class({
     },
 
     _onAppStateChange: function(appSystem, app) {
-        if (app.get_state() == Shell.AppState.RUNNING) {
-            this._trackApp(app);
-        } else if (app.get_state() == Shell.AppState.STOPPED) {
+        if (app.get_state() == Shell.AppState.STOPPED) {
             this._setAppVisible(app, false);
             this._untrackApp(app);
+        } else {
+            this._trackApp(app);
         }
     },
 
