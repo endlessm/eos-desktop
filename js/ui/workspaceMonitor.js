@@ -83,7 +83,13 @@ const WorkspaceMonitor = new Lang.Class({
 
     _updateOverview: function() {
         if (this.visibleApps == 0) {
-            Main.overview.showApps();
+            // Even if no apps are visible, if there is an app starting up, we
+            // do not show the overview as it's likely that a window will be
+            // shown. This avoids problems of windows being mapped while the
+            // overview is being shown.
+            if (!this._hasStartingApps()) {
+                Main.overview.showApps();
+            }
         } else if (this._inFullscreen) {
             // Hide in fullscreen mode
             Main.overview.hide();
@@ -135,6 +141,16 @@ const WorkspaceMonitor = new Lang.Class({
 
     _appIsTracked: function(app) {
         return this._trackedApps.has(app);
+
+    },
+
+    _hasStartingApps: function() {
+        for (let app of this._trackedApps) {
+            if (app.get_state() == Shell.AppState.STARTING) {
+                return true;
+            }
+        }
+        return false;
     },
 
     get visibleApps() {
