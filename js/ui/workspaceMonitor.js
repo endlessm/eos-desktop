@@ -12,6 +12,7 @@ const WorkspaceMonitor = new Lang.Class({
     _init: function() {
         this._trackedApps = new Set();
         this._visibleApps = new Set();
+        this._startingApps = new Set();
 
         this._windowTracker = Shell.WindowTracker.get_default();
 
@@ -115,13 +116,25 @@ const WorkspaceMonitor = new Lang.Class({
         }
     },
 
+    _setAppStarting: function(app, starting) {
+        if (starting) {
+            this._startingApps.add(app);
+        } else {
+            this._startingApps.delete(app);
+        }
+    },
+
     _onAppStateChange: function(appSystem, app) {
-        if (app.get_state() == Shell.AppState.STOPPED) {
+        let app_state = app.get_state();
+
+        if (app_state == Shell.AppState.STOPPED) {
             this._setAppVisible(app, false);
             this._untrackApp(app);
         } else {
             this._trackApp(app);
         }
+
+        this._setAppStarting(app, app_state == Shell.AppState.STARTING);
     },
 
     _appHasVisibleWindows: function(app, excludeWindow) {
@@ -148,12 +161,7 @@ const WorkspaceMonitor = new Lang.Class({
     },
 
     _hasStartingApps: function() {
-        for (let app of this._trackedApps) {
-            if (app.get_state() == Shell.AppState.STARTING) {
-                return true;
-            }
-        }
-        return false;
+        return this._startingApps.size > 0;
     },
 
     get visibleApps() {
