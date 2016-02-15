@@ -55,7 +55,10 @@ const WorkspaceMonitor = new Lang.Class({
         let app = this._windowTracker.get_window_app(actor.meta_window);
 
         if (this._appIsTracked(app)) {
-            this._setAppVisible(app, this._appHasVisibleWindows(app));
+            // We exclude the current window when checking for the visible ones because when
+            // this callback is called on 'destroy', the current window is counted as visible
+            this._setAppVisible(app, this._appHasVisibleWindows(app, actor.meta_window));
+
             if (this.visibleApps == 0) {
                 Main.layoutManager.prepareForOverview();
             }
@@ -121,13 +124,13 @@ const WorkspaceMonitor = new Lang.Class({
         }
     },
 
-    _appHasVisibleWindows: function(app) {
+    _appHasVisibleWindows: function(app, excludeWindow) {
         let windows = app.get_windows();
         for (let window of windows) {
             // We do not count transient windows because of an issue with Audacity
             // where a transient window was always being counted as visible even
             // though it was minimized
-            if (window.get_transient_for()) {
+            if (window.get_transient_for() || excludeWindow == window) {
                 continue;
             }
 
