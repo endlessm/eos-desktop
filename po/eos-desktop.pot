@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-09 02:27+0000\n"
+"POT-Creation-Date: 2016-02-16 02:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -488,32 +488,32 @@ msgstr ""
 msgid "Execution of '%s' failed:"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1138
+#: ../js/ui/appDisplay.js:1149
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1621
+#: ../js/ui/appDisplay.js:1632
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1627
+#: ../js/ui/appDisplay.js:1638
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1633
+#: ../js/ui/appDisplay.js:1644
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1639 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1650 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1891
+#: ../js/ui/appDisplay.js:1902
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1900
+#: ../js/ui/appDisplay.js:1911
 msgid "Delete"
 msgstr ""
 

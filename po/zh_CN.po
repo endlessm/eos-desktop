@@ -16,15 +16,16 @@
 # tanyuanxing <tanyuanxingendless@126.com>, 2016
 # YunQiang Su <wzssyqa@gmail.com>, 2010-2012
 # zhang ping <zhangping159@gmail.com>, 2010
+# zhifeng peng <jnufeng@126.com>, 2016
 # David Young <dhyang555@gmail.com>, 2010
 # 李炜 <lw124124@gmail.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-02 02:28+0000\n"
-"PO-Revision-Date: 2016-01-06 04:17+0000\n"
-"Last-Translator: chenzibing <chenzibing_endless@126.com>\n"
+"POT-Creation-Date: 2016-02-09 02:27+0000\n"
+"PO-Revision-Date: 2016-02-16 02:07+0000\n"
+"Last-Translator: zhifeng peng <jnufeng@126.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -94,7 +95,7 @@ msgid ""
 "By default, use a single exit button to power off or log out (with the log "
 "out option on the power off confirmation dialog). Set true for separate "
 "buttons on the user menu."
-msgstr "使用退出键关机或注销（注销选项设置在关闭电源确认框中）。将用户菜单各键的属性设为true。"
+msgstr "默认使用退出键关机或注销（注销选项设置在关闭电源确认框中）。将用户菜单各键的属性设为true。"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:5
 msgid "Enables the hot corner for the window picker"
@@ -505,32 +506,32 @@ msgstr "不能解析命令："
 msgid "Execution of '%s' failed:"
 msgstr "运行“%s”失败："
 
-#: ../js/ui/appDisplay.js:1148
+#: ../js/ui/appDisplay.js:1138
 msgid "Remove from desktop"
 msgstr "从桌面删除"
 
-#: ../js/ui/appDisplay.js:1631
+#: ../js/ui/appDisplay.js:1621
 msgid "Warning"
 msgstr "警告"
 
-#: ../js/ui/appDisplay.js:1637
+#: ../js/ui/appDisplay.js:1627
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "删除文件夹前请先删除文件夹内所有文件。"
 
-#: ../js/ui/appDisplay.js:1643
+#: ../js/ui/appDisplay.js:1633
 msgid "We are just trying to keep you safe."
 msgstr "保障用户安全"
 
-#: ../js/ui/appDisplay.js:1649 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1639 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "确定"
 
-#: ../js/ui/appDisplay.js:1901
+#: ../js/ui/appDisplay.js:1891
 msgid "More Apps"
 msgstr "更多的Apps"
 
-#: ../js/ui/appDisplay.js:1910
+#: ../js/ui/appDisplay.js:1900
 msgid "Delete"
 msgstr "删除"
 

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-02 02:28+0000\n"
+"POT-Creation-Date: 2016-02-09 02:27+0000\n"
 "PO-Revision-Date: 2016-01-05 02:28+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
@@ -496,32 +496,32 @@ msgstr "تعذّر تحليل الأمر:"
 msgid "Execution of '%s' failed:"
 msgstr "فشل تنفيذ '%s':‏"
 
-#: ../js/ui/appDisplay.js:1148
+#: ../js/ui/appDisplay.js:1138
 msgid "Remove from desktop"
 msgstr "إزالة من سطح المكتب"
 
-#: ../js/ui/appDisplay.js:1631
+#: ../js/ui/appDisplay.js:1621
 msgid "Warning"
 msgstr "تحذير"
 
-#: ../js/ui/appDisplay.js:1637
+#: ../js/ui/appDisplay.js:1627
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "لحذف مجلد عليك إزالة كافة العناصر داخله أولاً."
 
-#: ../js/ui/appDisplay.js:1643
+#: ../js/ui/appDisplay.js:1633
 msgid "We are just trying to keep you safe."
 msgstr "نحاول فقط المحافظة على أمنك."
 
-#: ../js/ui/appDisplay.js:1649 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1639 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "حسنا"
 
-#: ../js/ui/appDisplay.js:1901
+#: ../js/ui/appDisplay.js:1891
 msgid "More Apps"
 msgstr "المزيد من التطبيقات"
 
-#: ../js/ui/appDisplay.js:1910
+#: ../js/ui/appDisplay.js:1900
 msgid "Delete"
 msgstr "حذف"
 
