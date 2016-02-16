@@ -125,16 +125,16 @@ const WorkspaceMonitor = new Lang.Class({
     },
 
     _onAppStateChange: function(appSystem, app) {
-        let app_state = app.get_state();
+        let state = app.get_state();
 
-        if (app_state == Shell.AppState.STOPPED) {
+        if (state == Shell.AppState.STOPPED) {
             this._setAppVisible(app, false);
             this._untrackApp(app);
         } else {
             this._trackApp(app);
         }
 
-        this._setAppStarting(app, app_state == Shell.AppState.STARTING);
+        this._setAppStarting(app, state == Shell.AppState.STARTING);
     },
 
     _appHasVisibleWindows: function(app, excludeWindow) {
