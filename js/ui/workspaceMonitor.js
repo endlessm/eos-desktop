@@ -10,7 +10,6 @@ const WorkspaceMonitor = new Lang.Class({
     Name: 'WorkspaceMonitor',
 
     _init: function() {
-        this._trackedApps = new Set();
         this._visibleApps = new Set();
 
         this._windowTracker = Shell.WindowTracker.get_default();
@@ -45,23 +44,18 @@ const WorkspaceMonitor = new Lang.Class({
 
     _mapWindow: function(shellwm, actor) {
         let app = this._windowTracker.get_window_app(actor.meta_window);
-
-        if (this._appIsTracked(app)) {
-            this._setAppVisible(app, true);
-        }
+        this._setAppVisible(app, true);
     },
 
     _windowDisappearing: function(shellwm, actor) {
         let app = this._windowTracker.get_window_app(actor.meta_window);
 
-        if (this._appIsTracked(app)) {
-            // We exclude the current window when checking for the visible ones because when
-            // this callback is called on 'destroy', the current window is counted as visible
-            this._setAppVisible(app, this._appHasVisibleWindows(app, actor.meta_window));
+        // We exclude the current window when checking for the visible ones because when
+        // this callback is called on 'destroy', the current window is counted as visible
+        this._setAppVisible(app, this._appHasVisibleWindows(app, actor.meta_window));
 
-            if (this.visibleApps == 0) {
-                Main.layoutManager.prepareForOverview();
-            }
+        if (this.visibleApps == 0) {
+            Main.layoutManager.prepareForOverview();
         }
     },
 
@@ -74,10 +68,7 @@ const WorkspaceMonitor = new Lang.Class({
 
     _unminimizeWindow: function(shellwm, actor) {
         let app = this._windowTracker.get_window_app(actor.meta_window);
-
-        if (this._appIsTracked(app)) {
-            this._setAppVisible(app, this._appHasVisibleWindows(app));
-        }
+        this._setAppVisible(app, this._appHasVisibleWindows(app));
     },
 
     _destroyCompleted: function(shellwm, actor) {
@@ -99,14 +90,6 @@ const WorkspaceMonitor = new Lang.Class({
         }
     },
 
-    _trackApp: function(app) {
-        this._trackedApps.add(app);
-    },
-
-    _untrackApp: function(app) {
-        this._trackedApps.delete(app);
-    },
-
     _setAppVisible: function(app, visible) {
         if (visible) {
             this._visibleApps.add(app);
@@ -120,9 +103,6 @@ const WorkspaceMonitor = new Lang.Class({
 
         if (state == Shell.AppState.STOPPED) {
             this._setAppVisible(app, false);
-            this._untrackApp(app);
-        } else {
-            this._trackApp(app);
         }
     },
 
@@ -142,11 +122,6 @@ const WorkspaceMonitor = new Lang.Class({
         }
 
         return false;
-    },
-
-    _appIsTracked: function(app) {
-        return this._trackedApps.has(app);
-
     },
 
     get visibleApps() {
