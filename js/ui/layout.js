@@ -27,6 +27,9 @@ const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
 // Gsettings key to enable the message tray pressure barrier.
 const ENABLE_MESSAGE_TRAY_BARRIER_KEY = 'enable-message-tray-barrier'
 
+// GSettings key to track the text scaling factor
+const KEY_TEXT_SCALING_FACTOR = 'text-scaling-factor';
+
 // The message tray takes this much pressure
 // in the pressure barrier at once to release it.
 const MESSAGE_TRAY_PRESSURE_THRESHOLD = 250; // pixels
@@ -421,6 +424,22 @@ const LayoutManager = new Lang.Class({
                                 Lang.bind(this, this._updateHotCorners));
 
         this._monitorsChanged();
+
+        /*
+         * When we're not in the Overview and the text scaling factor changes, the
+         * Overview icons don't update to match the new font size. To fix that, and
+         * some random font rendering issues in apps, toggle the Overview.
+         */
+        Main.interfaceSettings.connect('changed::' + KEY_TEXT_SCALING_FACTOR, Lang.bind(this, function() {
+            if (!this._inOverview) {
+                Main.layoutManager.showOverview();
+
+                GLib.idle_add(GLib.PRIORITY_DEFAULT, Lang.bind(this, function() {
+                                  this.hideOverview();
+                                  return false;
+                              }));
+            }
+        }));
     },
 
     // This is called by Main after everything else is constructed
