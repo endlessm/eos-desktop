@@ -737,7 +737,7 @@ const Overview = new Lang.Class({
             return;
         }
 
-        if (Main.workspaceMonitor.visibleWindows === 0) {
+        if (!Main.workspaceMonitor.hasVisibleWindows) {
             this._viewSelector.blinkSearch();
             return;
         }
@@ -760,7 +760,7 @@ const Overview = new Lang.Class({
             return;
         }
 
-        if (Main.workspaceMonitor.visibleWindows === 0) {
+        if (!Main.workspaceMonitor.hasVisibleWindows) {
             this.showApps();
             return;
         }
