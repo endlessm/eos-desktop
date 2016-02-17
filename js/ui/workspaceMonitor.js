@@ -12,7 +12,6 @@ const WorkspaceMonitor = new Lang.Class({
     _init: function() {
         this._trackedApps = new Set();
         this._visibleApps = new Set();
-        this._startingApps = new Set();
 
         this._windowTracker = Shell.WindowTracker.get_default();
 
@@ -91,7 +90,7 @@ const WorkspaceMonitor = new Lang.Class({
             // do not show the overview as it's likely that a window will be
             // shown. This avoids problems of windows being mapped while the
             // overview is being shown.
-            if (!this._hasStartingApps()) {
+            if (!this._appSystem.has_starting_apps()) {
                 Main.overview.showApps();
             }
         } else if (this._inFullscreen) {
@@ -116,14 +115,6 @@ const WorkspaceMonitor = new Lang.Class({
         }
     },
 
-    _setAppStarting: function(app, starting) {
-        if (starting) {
-            this._startingApps.add(app);
-        } else {
-            this._startingApps.delete(app);
-        }
-    },
-
     _onAppStateChange: function(appSystem, app) {
         let state = app.get_state();
 
@@ -133,8 +124,6 @@ const WorkspaceMonitor = new Lang.Class({
         } else {
             this._trackApp(app);
         }
-
-        this._setAppStarting(app, state == Shell.AppState.STARTING);
     },
 
     _appHasVisibleWindows: function(app, excludeWindow) {
@@ -158,10 +147,6 @@ const WorkspaceMonitor = new Lang.Class({
     _appIsTracked: function(app) {
         return this._trackedApps.has(app);
 
-    },
-
-    _hasStartingApps: function() {
-        return this._startingApps.size > 0;
     },
 
     get visibleApps() {
