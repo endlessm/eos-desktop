@@ -935,12 +935,14 @@ shell_app_sync_running_state (ShellApp *app)
 {
   g_return_if_fail (app->running_state != NULL);
 
-  if (app->state != SHELL_APP_STATE_STARTING)
+  if (app->running_state->interesting_windows == 0)
     {
-      if (app->running_state->interesting_windows == 0)
+      if (app->state != SHELL_APP_STATE_STARTING)
         shell_app_state_transition (app, SHELL_APP_STATE_STOPPED);
-      else
-        shell_app_state_transition (app, SHELL_APP_STATE_RUNNING);
+    }
+  else
+    {
+      shell_app_state_transition (app, SHELL_APP_STATE_RUNNING);
     }
 }
 
@@ -1291,6 +1293,9 @@ shell_app_launch (ShellApp     *app,
       meta_window_activate (window, timestamp);
       return TRUE;
     }
+
+  if (app->state == SHELL_APP_STATE_STOPPED)
+    shell_app_state_transition (app, SHELL_APP_STATE_STARTING);
 
   global = shell_global_get ();
   screen = shell_global_get_screen (global);

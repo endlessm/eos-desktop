@@ -49,5 +49,6 @@ ShellApp       *shell_app_system_lookup_desktop_wmclass       (ShellAppSystem *s
                                                                const char     *wmclass);
 
 GSList         *shell_app_system_get_running               (ShellAppSystem  *self);
+gboolean        shell_app_system_has_starting_apps         (ShellAppSystem  *self);
 
 #endif /* __SHELL_APP_SYSTEM_H__ */

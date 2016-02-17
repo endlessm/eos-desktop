@@ -487,3 +487,9 @@ shell_app_system_get_running (ShellAppSystem *self)
 
   return ret;
 }
+
+gboolean
+shell_app_system_has_starting_apps (ShellAppSystem *self)
+{
+  return g_hash_table_size (self->priv->starting_apps) > 0;
+}
