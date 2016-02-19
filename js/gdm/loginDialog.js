@@ -1179,6 +1179,7 @@ const LoginDialog = new Lang.Class({
                              this._promptEntry.reactive = false;
                              return this._beginVerificationForUser(userName);
                          }
+                         return undefined;
                      }];
 
         let batch = new Batch.ConsecutiveBatch(this, tasks);
