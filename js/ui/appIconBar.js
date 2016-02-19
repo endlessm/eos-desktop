@@ -294,14 +294,10 @@ const AppIconButton = new Lang.Class({
         this._rightClickMenu.blockSourceEvents = true;
 
         this._pinMenuItem = this._rightClickMenu.addAction(_("Pin to Taskbar"), Lang.bind(this, function() {
-            this._pinMenuItem.actor.visible = false;
-            this._unpinMenuItem.actor.visible = true;
             this.emit('app-icon-pinned');
         }));
 
         this._unpinMenuItem = this._rightClickMenu.addAction(_("Unpin from Taskbar"), Lang.bind(this, function() {
-            this._pinMenuItem.actor.visible = true;
-            this._unpinMenuItem.actor.visible = false;
             this.emit('app-icon-unpinned');
         }));
 
@@ -309,6 +305,12 @@ const AppIconButton = new Lang.Class({
             this._pinMenuItem.actor.visible = false;
         else
             this._unpinMenuItem.actor.visible = false;
+
+        this._rightClickMenu.connect('close-animation-completed', Lang.bind(this, function() {
+            let isPinned = AppFavorites.getTaskbarFavorites().isFavorite(this._app.get_id());
+            this._pinMenuItem.actor.visible = !isPinned;
+            this._unpinMenuItem.actor.visible = isPinned;
+        }));
 
         this._quitMenuItem = this._rightClickMenu.addAction(_("Quit %s").format(this._app.get_name()), Lang.bind(this, function() {
             this._app.request_quit();
