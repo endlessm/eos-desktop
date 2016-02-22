@@ -257,7 +257,7 @@ Signals.addSignalMethods(AppIconMenu.prototype);
 const AppIconButton = new Lang.Class({
     Name: 'AppIconButton',
 
-    _init: function(app, iconSize, menuManager) {
+    _init: function(app, iconSize, menuManager, allowsPinning) {
         this._app = app;
 
         this._iconSize = iconSize;
@@ -293,24 +293,26 @@ const AppIconButton = new Lang.Class({
         this._rightClickMenu = new PopupMenu.PopupMenu(this.actor, 0.0, St.Side.TOP, 0);
         this._rightClickMenu.blockSourceEvents = true;
 
-        this._pinMenuItem = this._rightClickMenu.addAction(_("Pin to Taskbar"), Lang.bind(this, function() {
-            this.emit('app-icon-pinned');
-        }));
+        if (allowsPinning) {
+            this._pinMenuItem = this._rightClickMenu.addAction(_("Pin to Taskbar"), Lang.bind(this, function() {
+                this.emit('app-icon-pinned');
+            }));
 
-        this._unpinMenuItem = this._rightClickMenu.addAction(_("Unpin from Taskbar"), Lang.bind(this, function() {
-            this.emit('app-icon-unpinned');
-        }));
+            this._unpinMenuItem = this._rightClickMenu.addAction(_("Unpin from Taskbar"), Lang.bind(this, function() {
+                this.emit('app-icon-unpinned');
+            }));
 
-        if (AppFavorites.getTaskbarFavorites().isFavorite(this._app.get_id()))
-            this._pinMenuItem.actor.visible = false;
-        else
-            this._unpinMenuItem.actor.visible = false;
+            if (AppFavorites.getTaskbarFavorites().isFavorite(this._app.get_id()))
+                this._pinMenuItem.actor.visible = false;
+            else
+                this._unpinMenuItem.actor.visible = false;
 
-        this._rightClickMenu.connect('close-animation-completed', Lang.bind(this, function() {
-            let isPinned = AppFavorites.getTaskbarFavorites().isFavorite(this._app.get_id());
-            this._pinMenuItem.actor.visible = !isPinned;
-            this._unpinMenuItem.actor.visible = isPinned;
-        }));
+            this._rightClickMenu.connect('close-animation-completed', Lang.bind(this, function() {
+                let isPinned = AppFavorites.getTaskbarFavorites().isFavorite(this._app.get_id());
+                this._pinMenuItem.actor.visible = !isPinned;
+                this._unpinMenuItem.actor.visible = isPinned;
+            }));
+        }
 
         this._quitMenuItem = this._rightClickMenu.addAction(_("Quit %s").format(this._app.get_name()), Lang.bind(this, function() {
             this._app.request_quit();
@@ -625,7 +627,7 @@ const ScrolledIconList = new Lang.Class({
         this._numExcludedApps = 0;
         // Exclusions are added to the base list
         for (let appIndex in excludedApps) {
-            this._runningApps.set(excludedApps[appIndex], null);
+            this._taskbarApps.set(excludedApps[appIndex], null);
             this._numExcludedApps += 1;
         }
 
@@ -642,7 +644,7 @@ const ScrolledIconList = new Lang.Class({
 
         let favorites = AppFavorites.getTaskbarFavorites().getFavorites();
         for (let i = 0; i < favorites.length; i++) {
-            this._addButtonAnimated(favorites[i], i + 1); // plus one for user menu
+            this._addButtonAnimated(favorites[i], i + 1 + 1); // plus one for user menu and browser icon
         }
 
         // Sort numerically by PID
@@ -792,7 +794,7 @@ const ScrolledIconList = new Lang.Class({
 
     _getIconButtonForActor: function(actor) {
         for (let appIconButton of this._taskbarApps.values()) {
-            if (appIconButton.actor == actor)
+            if (appIconButton != null && appIconButton.actor == actor)
                 return appIconButton;
         }
         return null;
@@ -821,7 +823,7 @@ const ScrolledIconList = new Lang.Class({
         }
 
         let favorites = AppFavorites.getTaskbarFavorites();
-        let newChild = new AppIconButton(app, this._iconSize, this._menuManager);
+        let newChild = new AppIconButton(app, this._iconSize, this._menuManager, true);
         newChild.connect('app-icon-pressed', Lang.bind(this, function() {
             this.emit('app-icon-pressed');
         }));
@@ -924,7 +926,7 @@ const BrowserButton = new Lang.Class({
     Extends: AppIconButton,
 
     _init: function(app, iconSize, menuManager) {
-        this.parent(app, iconSize, menuManager);
+        this.parent(app, iconSize, menuManager, false);
         this.actor.add_style_class_name('browser-icon');
     },
 
