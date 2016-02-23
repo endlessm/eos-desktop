@@ -12,6 +12,7 @@ const Gtk = imports.gi.Gtk;
 const Tweener = imports.ui.tweener;
 
 const AppActivation = imports.ui.appActivation;
+const AppFavorites = imports.ui.appFavorites;
 const BoxPointer = imports.ui.boxpointer;
 const Hash = imports.misc.hash;
 const Main = imports.ui.main;
@@ -256,7 +257,7 @@ Signals.addSignalMethods(AppIconMenu.prototype);
 const AppIconButton = new Lang.Class({
     Name: 'AppIconButton',
 
-    _init: function(app, iconSize, menuManager) {
+    _init: function(app, iconSize, menuManager, allowsPinning) {
         this._app = app;
 
         this._iconSize = iconSize;
@@ -291,6 +292,28 @@ const AppIconButton = new Lang.Class({
 
         this._rightClickMenu = new PopupMenu.PopupMenu(this.actor, 0.0, St.Side.TOP, 0);
         this._rightClickMenu.blockSourceEvents = true;
+
+        if (allowsPinning) {
+            this._pinMenuItem = this._rightClickMenu.addAction(_("Pin to Taskbar"), Lang.bind(this, function() {
+                this.emit('app-icon-pinned');
+            }));
+
+            this._unpinMenuItem = this._rightClickMenu.addAction(_("Unpin from Taskbar"), Lang.bind(this, function() {
+                this.emit('app-icon-unpinned');
+            }));
+
+            if (AppFavorites.getTaskbarFavorites().isFavorite(this._app.get_id()))
+                this._pinMenuItem.actor.visible = false;
+            else
+                this._unpinMenuItem.actor.visible = false;
+
+            this._rightClickMenu.connect('close-animation-completed', Lang.bind(this, function() {
+                let isPinned = AppFavorites.getTaskbarFavorites().isFavorite(this._app.get_id());
+                this._pinMenuItem.actor.visible = !isPinned;
+                this._unpinMenuItem.actor.visible = isPinned;
+            }));
+        }
+
         this._quitMenuItem = this._rightClickMenu.addAction(_("Quit %s").format(this._app.get_name()), Lang.bind(this, function() {
             this._app.request_quit();
         }));
@@ -510,6 +533,10 @@ const AppIconButton = new Lang.Class({
 
     _updateStyle: function(actor, forHeight, alloc) {
         this._labelOffsetY = this._label.get_theme_node().get_length('-label-offset-y');
+    },
+
+    isPinned: function() {
+        return AppFavorites.getTaskbarFavorites().isFavorite(this._app.get_id());
     }
 });
 Signals.addSignalMethods(AppIconButton.prototype);
@@ -595,12 +622,12 @@ const ScrolledIconList = new Lang.Class({
         this._container.connect('style-changed', Lang.bind(this, this._updateStyleConstants));
 
         let appSys = Shell.AppSystem.get_default();
-        this._runningApps = new Hash.Map();
+        this._taskbarApps = new Hash.Map();
 
         this._numExcludedApps = 0;
         // Exclusions are added to the base list
         for (let appIndex in excludedApps) {
-            this._runningApps.set(excludedApps[appIndex], null);
+            this._taskbarApps.set(excludedApps[appIndex], null);
             this._numExcludedApps += 1;
         }
 
@@ -615,6 +642,11 @@ const ScrolledIconList = new Lang.Class({
             appsByPid.set(pid, app);
         }
 
+        let favorites = AppFavorites.getTaskbarFavorites().getFavorites();
+        for (let i = 0; i < favorites.length; i++) {
+            this._addButtonAnimated(favorites[i], i + 1 + 1); // plus one for user menu and browser icon
+        }
+
         // Sort numerically by PID
         // This preserves the original app order, until the maximum PID
         // value is reached and older PID values are recycled
@@ -622,21 +654,21 @@ const ScrolledIconList = new Lang.Class({
         for (let i = 0; i < sortedPids.length; i++) {
             let pid = sortedPids[i];
             let app = appsByPid.get(pid);
-            this._addButtonAnimated(app, i + 2); // offset for user menu and browser icon
+            this._addButtonAnimated(app, favorites.length + i + 2); // offset for user menu and browser icon
         }
 
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
     },
 
     setActiveApp: function(app) {
-        this._runningApps.items().forEach(Lang.bind(this,
+        this._taskbarApps.items().forEach(Lang.bind(this,
             function(item) {
-                let [runningApp, appButton] = item;
+                let [taskbarApp, appButton] = item;
                 if (!appButton) {
                     return;
                 }
 
-                if (app == runningApp) {
+                if (app == taskbarApp) {
                     appButton.actor.add_style_pseudo_class('highlighted');
                 } else {
                     appButton.actor.remove_style_pseudo_class('highlighted');
@@ -654,7 +686,7 @@ const ScrolledIconList = new Lang.Class({
 
     getNaturalWidth: function() {
         let iconArea = 0;
-        let nApps = this._runningApps.size();
+        let nApps = this._taskbarApps.size();
         if (nApps > 0) {
             let iconSpacing = this._iconSpacing * (nApps - 1);
             iconArea = this._iconSize * nApps + iconSpacing;
@@ -664,7 +696,7 @@ const ScrolledIconList = new Lang.Class({
 
     _updatePage: function() {
         // Clip the values of the iconOffset
-        let lastIconOffset = this._runningApps.size() - this._numExcludedApps - 1;
+        let lastIconOffset = this._taskbarApps.size() - this._numExcludedApps - 1;
         let movableIconsPerPage = this._appsPerPage - 1;
         this._iconOffset = Math.max(0, this._iconOffset);
         this._iconOffset = Math.min(lastIconOffset - movableIconsPerPage, this._iconOffset);
@@ -704,7 +736,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     isForwardAllowed: function() {
-        return this._iconOffset < this._runningApps.size() - this._appsPerPage - this._numExcludedApps;
+        return this._iconOffset < this._taskbarApps.size() - this._appsPerPage - this._numExcludedApps;
     },
 
     calculateNaturalSize: function(forWidth) {
@@ -723,7 +755,7 @@ const ScrolledIconList = new Lang.Class({
         let node = this._container.get_theme_node();
 
         this._iconSize = node.get_length("-icon-size");
-        this._runningApps.items().forEach(Lang.bind(this,
+        this._taskbarApps.items().forEach(Lang.bind(this,
             function(app) {
                 let appButton = app[1];
                 if (appButton != null) {
@@ -735,7 +767,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     _ensureIsVisible: function(app) {
-        let itemIndex = this._runningApps.keys().indexOf(app);
+        let itemIndex = this._taskbarApps.keys().indexOf(app);
         if (itemIndex != -1) {
             this._iconOffset = itemIndex - this._numExcludedApps;
         }
@@ -744,28 +776,45 @@ const ScrolledIconList = new Lang.Class({
     },
 
     _isAppInteresting: function(app) {
-        let retval = false;
+        if (AppFavorites.getTaskbarFavorites().isFavorite(app.get_id()))
+            return true;
 
-        switch (app.state) {
-        case Shell.AppState.STARTING:
-            retval = true;
-            break;
-        case Shell.AppState.RUNNING:
+        if (app.state == Shell.AppState.STARTING)
+            return true;
+
+        if (app.state == Shell.AppState.RUNNING) {
             let windows = app.get_windows();
-            retval = windows.some(function(metaWindow) {
+            return windows.some(function(metaWindow) {
                 return Shell.WindowTracker.is_window_interesting(metaWindow);
             });
-            break;
-        case Shell.AppState.STOPPED:
-        default:
-            break;
         }
 
-        return retval;
+        return false;
+    },
+
+    _getIconButtonForActor: function(actor) {
+        for (let appIconButton of this._taskbarApps.values()) {
+            if (appIconButton != null && appIconButton.actor == actor)
+                return appIconButton;
+        }
+        return null;
+    },
+
+    _countPinnedAppsAheadOf: function(button) {
+        let count = 0;
+        let actors = this._container.get_children();
+        for (let i = 0; i < actors.length; i++) {
+            let otherButton = this._getIconButtonForActor(actors[i]);
+            if (otherButton == button)
+                return count;
+            if (otherButton != null && otherButton.isPinned())
+                count++;
+        }
+        return -1;
     },
 
     _addButtonAnimated: function(app, index) {
-        if (this._runningApps.has(app)) {
+        if (this._taskbarApps.has(app)) {
             return;
         }
 
@@ -773,9 +822,23 @@ const ScrolledIconList = new Lang.Class({
             return;
         }
 
-        let newChild = new AppIconButton(app, this._iconSize, this._menuManager);
-        newChild.connect('app-icon-pressed', Lang.bind(this, function() { this.emit('app-icon-pressed'); }));
-        this._runningApps.set(app, newChild);
+        let favorites = AppFavorites.getTaskbarFavorites();
+        let newChild = new AppIconButton(app, this._iconSize, this._menuManager, true);
+        newChild.connect('app-icon-pressed', Lang.bind(this, function() {
+            this.emit('app-icon-pressed');
+        }));
+        newChild.connect('app-icon-pinned', Lang.bind(this, function() {
+            favorites.addFavoriteAtPos(app.get_id(), this._countPinnedAppsAheadOf(newChild));
+        }));
+        newChild.connect('app-icon-unpinned', Lang.bind(this, function() {
+            favorites.removeFavorite(app.get_id());
+            if (app.state == Shell.AppState.STOPPED) {
+                newChild.actor.destroy();
+                this._taskbarApps.delete(app);
+                this._updatePage();
+            }
+        }));
+        this._taskbarApps.set(app, newChild);
 
         if (index == -1) {
             this._container.add_actor(newChild.actor);
@@ -809,14 +872,15 @@ const ScrolledIconList = new Lang.Class({
             break;
 
         case Shell.AppState.STOPPED:
-            if (app == this._browserApp) {
+            if (app == this._browserApp)
                 break;
-            }
+            if (AppFavorites.getTaskbarFavorites().isFavorite(app.get_id()))
+                break;
 
-            let oldChild = this._runningApps.get(app);
+            let oldChild = this._taskbarApps.get(app);
             if (oldChild) {
                 oldChild.actor.destroy();
-                this._runningApps.delete(app);
+                this._taskbarApps.delete(app);
             }
             break;
         }
@@ -835,7 +899,7 @@ const ScrolledIconList = new Lang.Class({
         let iconsPerPage = Math.floor((forWidth + this._iconSpacing) / minimumIconWidth);
         iconsPerPage = Math.max(1, iconsPerPage);
 
-        let pages = Math.ceil((this._runningApps.items().length - this._numExcludedApps) / iconsPerPage);
+        let pages = Math.ceil((this._taskbarApps.items().length - this._numExcludedApps) / iconsPerPage);
 
         // If we only have one page, previous calculations will return 0 so
         // we clip the value here
@@ -845,7 +909,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     _getAppsOnPage: function(pageNum, appsPerPage){
-        let apps = this._runningApps.items();
+        let apps = this._taskbarApps.items();
 
         let startIndex = appsPerPage * pageNum + this._numExcludedApps;
         let endIndex = Math.min(startIndex + appsPerPage, apps.length);
@@ -862,7 +926,7 @@ const BrowserButton = new Lang.Class({
     Extends: AppIconButton,
 
     _init: function(app, iconSize, menuManager) {
-        this.parent(app, iconSize, menuManager);
+        this.parent(app, iconSize, menuManager, false);
         this.actor.add_style_class_name('browser-icon');
     },
 

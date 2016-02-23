@@ -9,11 +9,11 @@ const Main = imports.ui.main;
 const AppFavorites = new Lang.Class({
     Name: 'AppFavorites',
 
-    FAVORITE_APPS_KEY: 'favorite-apps',
-
-    _init: function() {
+    _init: function(settingsKey, showNotifications) {
         this._favorites = {};
-        global.settings.connect('changed::' + this.FAVORITE_APPS_KEY, Lang.bind(this, this._onFavsChanged));
+        this._settingsKey = settingsKey;
+        this._showNotifications = showNotifications;
+        global.settings.connect('changed::' + settingsKey, Lang.bind(this, this._onFavsChanged));
         Shell.AppSystem.get_default().connect('installed-changed', Lang.bind(this, this._onFavsChanged));
         this._reload();
     },
@@ -24,7 +24,7 @@ const AppFavorites = new Lang.Class({
     },
 
     _reload: function() {
-        let ids = global.settings.get_strv(this.FAVORITE_APPS_KEY);
+        let ids = global.settings.get_strv(this._settingsKey);
         let appSys = Shell.AppSystem.get_default();
         let apps = ids.map(function (id) {
                 // Some older versions of eos-theme incorrectly added
@@ -82,13 +82,16 @@ const AppFavorites = new Lang.Class({
             ids.push(appId);
         else
             ids.splice(pos, 0, appId);
-        global.settings.set_strv(this.FAVORITE_APPS_KEY, ids);
+        global.settings.set_strv(this._settingsKey, ids);
         this._favorites[appId] = app;
         return true;
     },
 
     addFavoriteAtPos: function(appId, pos) {
         if (!this._addFavorite(appId, pos))
+            return;
+
+        if (!this._showNotifications)
             return;
 
         let app = Shell.AppSystem.get_default().lookup_app(appId);
@@ -115,7 +118,7 @@ const AppFavorites = new Lang.Class({
             return false;
 
         let ids = this._getIds().filter(function (id) { return id != appId; });
-        global.settings.set_strv(this.FAVORITE_APPS_KEY, ids);
+        global.settings.set_strv(this._settingsKey, ids);
         return true;
     },
 
@@ -125,6 +128,9 @@ const AppFavorites = new Lang.Class({
 
         let app = this._favorites[appId];
         if (!app || !this._removeFavorite(appId))
+            return;
+
+        if (!this._showNotifications)
             return;
 
         Main.overview.setMessage(_("%s has been removed from your favorites.").format(app.get_name()),
@@ -137,9 +143,16 @@ const AppFavorites = new Lang.Class({
 });
 Signals.addSignalMethods(AppFavorites.prototype);
 
-var appFavoritesInstance = null;
+var dashFavoritesInstance = null;
 function getAppFavorites() {
-    if (appFavoritesInstance == null)
-        appFavoritesInstance = new AppFavorites();
-    return appFavoritesInstance;
+    if (dashFavoritesInstance == null)
+        dashFavoritesInstance = new AppFavorites('favorite-apps', true);
+    return dashFavoritesInstance;
+}
+
+var taskbarFavoritesInstance = null;
+function getTaskbarFavorites() {
+    if (taskbarFavoritesInstance == null)
+        taskbarFavoritesInstance = new AppFavorites('taskbar-pins', false);
+    return taskbarFavoritesInstance;
 }

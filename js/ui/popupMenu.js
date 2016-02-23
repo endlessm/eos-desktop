@@ -1235,8 +1235,11 @@ const PopupMenu = new Lang.Class({
             childMenu.close();
         });
 
-        if (this._boxPointer.actor.visible)
-            this._boxPointer.hide(animate);
+        if (this._boxPointer.actor.visible) {
+            this._boxPointer.hide(animate, Lang.bind(this, function() {
+                this.emit('close-animation-completed');
+            }));
+        }
 
         // We might have changed the dimensions of the popup to something different
         // than the preferred ones if needed to force scrollbars, so we need to reset
