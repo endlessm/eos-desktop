@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-09 02:27+0000\n"
-"PO-Revision-Date: 2016-02-16 02:07+0000\n"
+"POT-Creation-Date: 2016-02-16 02:30+0000\n"
+"PO-Revision-Date: 2016-02-18 05:17+0000\n"
 "Last-Translator: zhifeng peng <jnufeng@126.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -120,7 +120,7 @@ msgstr "热区默认置于右边角落。将属性设为false以移动热区至�
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:9
 msgid "Set the top/bottom position of the hot corner for the window picker"
-msgstr "将热区置顶/底为窗口选择器"
+msgstr "将热区置顶/底设置为窗口选择器"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:10
 msgid ""
@@ -141,7 +141,7 @@ msgstr "热区中方形目标的单位像素数量。该热区默认值为单像
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:13
 msgid "Set the left/right position of the dash on the overview"
-msgstr "在概述页面设置dash的左右角落"
+msgstr "在概述页面设置dash的左右位置"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:14
 msgid ""
@@ -152,14 +152,14 @@ msgstr "dash默认置于屏幕边缘（右侧边缘为LTR文本方向）。和�
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:15
 msgid "Prevent apps from being automatically maximized on launch"
-msgstr "阻止应用程序自动最大化启动。"
+msgstr "在启动过程中阻止应用程序自动最大化。"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:16
 msgid ""
 "Makes window management more like standard Gnome. Hides application splash "
 "screens, prevents applications from being forced to open maximized, and does"
 " not automatically switch to the app selector when a window is minimized."
-msgstr "使窗口管理接近标准Gnome。隐藏应用程序的启动界面，阻止程序被强制最小化打开，应用程序在窗口最小化时不能跳转到应用选择器。\t"
+msgstr "使窗口管理接近标准Gnome。隐藏应用程序的启动界面，阻止程序被强制最大化打开，应用程序在窗口最小化时不能自动跳转到应用选择器。\t"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:17
 msgid "Whether the app store is displayed"
@@ -191,7 +191,7 @@ msgid ""
 " used ones (e.g. in launchers). While this data will be kept private, you "
 "may want to disable this for privacy reasons. Please note that doing so "
 "won't remove already saved data."
-msgstr "该使用界面一般将监测活动应用程序，以便呈现最常用的(例如，在启动器中)。同时，此数据将保持私密，您可能因为隐私原因想要禁用此项。请注意，这么做，并不会移除已经保存的数据。"
+msgstr "该使用界面一般将监测活动的应用程序，以便呈现最常用的（例如，在启动器中）。同时，此数据将保持私密，您可能因为隐私原因想要禁用此项。请注意，这么做，并不会移除已经保存的数据。"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:23
 msgid "List of desktop file IDs for favorite applications"
@@ -215,17 +215,17 @@ msgstr "此列表中各类别名称在应用程序视图中以文件夹形式显
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "History for command (Alt-F2) dialog"
-msgstr "命令对话框(Alt-F2)的历史记录"
+msgstr "命令对话框（Alt-F2）的历史记录"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:28
 msgid "History for the looking glass dialog"
-msgstr "Looking Glass 控制台历史"
+msgstr "Looking Glass对话框历史"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:29
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
-msgstr "用于内部保存用户自主设置的即时通信程序上次的在线状态。这里的值取自 TpConnectionPresenceType 枚举变量。"
+msgstr "用于内部保存用户自主设置的即时通信程序上次的在线状态。这里的值取自TpConnectionPresenceType的枚举变量。"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:30
 msgid ""
@@ -254,7 +254,7 @@ msgid ""
 "filesystem is mounted. If the password can be saved for future use a "
 "'Remember Password' checkbox will be present. This key sets the default "
 "state of the checkbox."
-msgstr "安装加密设备或远程文件系统时，该使用界面需要密码\t。如果密码能保存，当前复选框将显示“记住密码”。此键设置复选框的默认状态。"
+msgstr "安装加密设备或远程文件系统时，该使用界面需要密码。如果密码能保存，当前复选框将显示“记住密码”。此键设置复选框的默认状态。"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid "Layout of application launcher icons in the grid"
@@ -313,11 +313,11 @@ msgstr "用来切换消息托盘是否可见的按键组合。"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "Keybinding to focus the active notification"
-msgstr "用来聚焦“活动通知”的按键组合"
+msgstr "用来聚焦活动通知的按键组合"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Keybinding to focus the active notification."
-msgstr "用来聚焦“活动通知”的按键组合"
+msgstr "用来聚焦活动通知的按键组合"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "Keybinding that shows the force app exit dialog"
@@ -388,7 +388,7 @@ msgstr "使用上面的下拉框选择一个要配置的扩展。"
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
-msgstr "会话………"
+msgstr "会话……"
 
 #: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
@@ -445,7 +445,7 @@ msgstr "下一步"
 
 #: ../js/gdm/loginDialog.js:1116
 msgid "Your unlock code was incorrect. Please try again."
-msgstr "输入密码有误，请重输入。"
+msgstr "输入密码有误，请重新输入。"
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
@@ -484,7 +484,7 @@ msgstr "认证出错"
 #. to indicate the user can swipe their finger instead
 #: ../js/gdm/util.js:381
 msgid "(or swipe finger)"
-msgstr "(或滑动手指)"
+msgstr "（或滑动手指）"
 
 #: ../js/gdm/util.js:406
 #, javascript-format
@@ -506,32 +506,32 @@ msgstr "不能解析命令："
 msgid "Execution of '%s' failed:"
 msgstr "运行“%s”失败："
 
-#: ../js/ui/appDisplay.js:1138
+#: ../js/ui/appDisplay.js:1149
 msgid "Remove from desktop"
 msgstr "从桌面删除"
 
-#: ../js/ui/appDisplay.js:1621
+#: ../js/ui/appDisplay.js:1632
 msgid "Warning"
 msgstr "警告"
 
-#: ../js/ui/appDisplay.js:1627
+#: ../js/ui/appDisplay.js:1638
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "删除文件夹前请先删除文件夹内所有文件。"
 
-#: ../js/ui/appDisplay.js:1633
+#: ../js/ui/appDisplay.js:1644
 msgid "We are just trying to keep you safe."
 msgstr "保障用户安全"
 
-#: ../js/ui/appDisplay.js:1639 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1650 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "确定"
 
-#: ../js/ui/appDisplay.js:1891
+#: ../js/ui/appDisplay.js:1902
 msgid "More Apps"
 msgstr "更多的Apps"
 
-#: ../js/ui/appDisplay.js:1900
+#: ../js/ui/appDisplay.js:1911
 msgid "Delete"
 msgstr "删除"
 
@@ -543,7 +543,7 @@ msgstr "%s 已经添加到了您的收藏夹。"
 #: ../js/ui/appFavorites.js:130
 #, javascript-format
 msgid "%s has been removed from your favorites."
-msgstr "%s 已经从您的收藏夹移除。"
+msgstr "%s 已经从您的收藏夹中移除。"
 
 #: ../js/ui/appIconBar.js:212
 msgid "Other workspaces"
@@ -560,7 +560,7 @@ msgstr "退出%s"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
-msgstr "更改背景"
+msgstr "更改背景……"
 
 #: ../js/ui/backgroundMenu.js:25
 msgid "Add App"
@@ -689,12 +689,12 @@ msgstr "星期六"
 
 #: ../js/ui/calendar.js:391
 msgid "calendar:MY"
-msgstr "日历：月/年"
+msgstr "日历：月年"
 
 #. Translators: Text to show if there are no events
 #: ../js/ui/calendar.js:722
 msgid "Nothing Scheduled"
-msgstr "无计划"
+msgstr "没有计划"
 
 #. Translators: Shown on calendar heading when selected day occurs on current
 #. year
@@ -728,7 +728,7 @@ msgstr "下周"
 
 #: ../js/ui/components/automountManager.js:90
 msgid "External drive connected"
-msgstr "外置驱动器链接"
+msgstr "外置驱动器连接"
 
 #: ../js/ui/components/automountManager.js:101
 msgid "External drive disconnected"
@@ -741,7 +741,7 @@ msgstr "可移动设备"
 #: ../js/ui/components/autorunManager.js:601
 #, javascript-format
 msgid "Open with %s"
-msgstr "使用 %s 打开"
+msgstr "使用%s打开"
 
 #: ../js/ui/components/autorunManager.js:627
 msgid "Eject"
@@ -798,7 +798,7 @@ msgstr "访问无线网络“%s”需要密码或密钥。"
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
-msgstr "有线 802.1X 认证"
+msgstr "有线802.1X认证"
 
 #: ../js/ui/components/networkAgent.js:316
 msgid "Network name: "
@@ -806,11 +806,11 @@ msgstr "网络名称："
 
 #: ../js/ui/components/networkAgent.js:321
 msgid "DSL authentication"
-msgstr "DSL 认证"
+msgstr "DSL认证"
 
 #: ../js/ui/components/networkAgent.js:328
 msgid "PIN code required"
-msgstr "需要 PIN 码"
+msgstr "需要PIN码"
 
 #: ../js/ui/components/networkAgent.js:329
 msgid "PIN code is needed for the mobile broadband device"
@@ -871,7 +871,7 @@ msgstr "更新已就绪"
 
 #: ../js/ui/components/updaterManager.js:220
 msgid "Software updates are ready to be installed on your system"
-msgstr "软件更新研究准备好安装到您的系统"
+msgstr "软件更新已经准备好安装到您的系统"
 
 #: ../js/ui/components/updaterManager.js:221
 msgid "Install now"
@@ -953,19 +953,19 @@ msgstr "注销"
 
 #: ../js/ui/endSessionDialog.js:80
 msgid "Click Log Out to quit these applications and log out of the system."
-msgstr "点击“注销“以退出这些应用程序及系统。"
+msgstr "点击“注销“以退出这些应用程序及注销系统。"
 
 #: ../js/ui/endSessionDialog.js:83
 #, javascript-format
 msgid "%s will be logged out automatically in %d second."
 msgid_plural "%s will be logged out automatically in %d seconds."
-msgstr[0] "%s 将在 %d 秒后自动注销。"
+msgstr[0] "%s将在%d秒后自动注销。"
 
 #: ../js/ui/endSessionDialog.js:88
 #, javascript-format
 msgid "You will be logged out automatically in %d second."
 msgid_plural "You will be logged out automatically in %d seconds."
-msgstr[0] "您将在 %d 秒后自动注销。"
+msgstr[0] "您将在%d秒后自动注销。"
 
 #: ../js/ui/endSessionDialog.js:93
 msgid "Logging out of the system."
@@ -989,7 +989,7 @@ msgstr "点击关机以退出应用程序并关闭系统。"
 #, javascript-format
 msgid "The system will power off automatically in %d second."
 msgid_plural "The system will power off automatically in %d seconds."
-msgstr[0] "系统将在 %d 秒后自动关机。"
+msgstr[0] "系统将在%d秒后自动关机。"
 
 #: ../js/ui/endSessionDialog.js:111
 msgid "Powering off the system."
@@ -1032,21 +1032,21 @@ msgstr "安装"
 #: ../js/ui/extensionDownloader.js:204
 #, javascript-format
 msgid "Download and install '%s' from extensions.gnome.org?"
-msgstr "从 extensions.gnome.org 下载并安装 %s？"
+msgstr "从extensions.gnome.org下载并安装%s？"
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr "退出应用程序"
+msgstr "退出应用程序……"
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr "如果应用程序长时间无法响应，选择程序名并点击退出应用程序"
+msgstr "如果应用程序长时间无法响应，选择程序名并点击退出应用程序。"
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
-msgstr "系统监控器"
+msgstr "系统监视器"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
@@ -1202,7 +1202,7 @@ msgstr "锁定命令被某个应用程序阻止"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
-msgstr "搜索"
+msgstr "搜索……"
 
 #: ../js/ui/search.js:783
 msgid "No results."
@@ -1226,7 +1226,7 @@ msgstr "隐藏文本"
 
 #: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
-msgstr "输入以便搜索"
+msgstr "输入以便搜索……"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1301,11 +1301,11 @@ msgstr "可见性"
 
 #: ../js/ui/status/bluetooth.js:59
 msgid "Send Files to Device…"
-msgstr "发送文件至设备…"
+msgstr "发送文件至设备……"
 
 #: ../js/ui/status/bluetooth.js:60
 msgid "Set Up a New Device…"
-msgstr "设置一个新的设备…"
+msgstr "设置一个新的设备……"
 
 #: ../js/ui/status/bluetooth.js:86
 msgid "Bluetooth Settings"
@@ -1314,7 +1314,7 @@ msgstr "蓝牙设置"
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
 #: ../js/ui/status/bluetooth.js:106 ../js/ui/status/network.js:181
 msgid "hardware disabled"
-msgstr "硬件禁用"
+msgstr "硬件已禁用"
 
 #: ../js/ui/status/bluetooth.js:199
 msgid "Connection"
@@ -1322,16 +1322,16 @@ msgstr "连接"
 
 #: ../js/ui/status/bluetooth.js:210 ../js/ui/status/network.js:463
 msgid "disconnecting..."
-msgstr "正在断开..."
+msgstr "正在断开……"
 
 #: ../js/ui/status/bluetooth.js:223 ../js/ui/status/network.js:469
 #: ../js/ui/status/network.js:1551
 msgid "connecting..."
-msgstr "正在连接..."
+msgstr "正在连接……"
 
 #: ../js/ui/status/bluetooth.js:241
 msgid "Send Files…"
-msgstr "发送文件…"
+msgstr "发送文件……"
 
 #: ../js/ui/status/bluetooth.js:248
 msgid "Keyboard Settings"
@@ -1348,7 +1348,7 @@ msgstr "声音设置"
 #: ../js/ui/status/bluetooth.js:324
 #, javascript-format
 msgid "Authorization request from %s"
-msgstr "来自 %s 的认证请求"
+msgstr "来自%s的认证请求"
 
 #: ../js/ui/status/bluetooth.js:330
 #, javascript-format
@@ -1371,7 +1371,7 @@ msgstr "拒绝"
 #: ../js/ui/status/bluetooth.js:361
 #, javascript-format
 msgid "Pairing confirmation for %s"
-msgstr "%s 的配对确认"
+msgstr "%s的配对确认"
 
 #: ../js/ui/status/bluetooth.js:367 ../js/ui/status/bluetooth.js:398
 #, javascript-format
@@ -1386,20 +1386,20 @@ msgstr "请确认要配对的设备上的 PIN 码是否也是“%06d”。"
 #. Translators: this is the verb, not the noun
 #: ../js/ui/status/bluetooth.js:371
 msgid "Matches"
-msgstr "适配"
+msgstr "匹配"
 
 #: ../js/ui/status/bluetooth.js:372
 msgid "Does not match"
-msgstr "不适配"
+msgstr "不匹配"
 
 #: ../js/ui/status/bluetooth.js:391
 #, javascript-format
 msgid "Pairing request for %s"
-msgstr "%s 的配对请求"
+msgstr "%s的配对请求"
 
 #: ../js/ui/status/bluetooth.js:399
 msgid "Please enter the PIN mentioned on the device."
-msgstr "请输入设备上的 PIN 码。"
+msgstr "请输入设备上的PIN 码。"
 
 #: ../js/ui/status/keyboard.js:368
 msgid "Show Keyboard Layout"
@@ -1411,7 +1411,7 @@ msgstr "区域与语言设置"
 
 #: ../js/ui/status/lockScreenMenu.js:43
 msgid "Volume, network, battery"
-msgstr "音量,网络,电源"
+msgstr "音量，网络，电源"
 
 #: ../js/ui/status/network.js:104
 msgid "<unknown>"
@@ -1428,7 +1428,7 @@ msgstr "已禁用"
 #. under NetworkManager's control (and thus cannot be used in the menu)
 #: ../js/ui/status/network.js:461
 msgid "unmanaged"
-msgstr "设备未托管"
+msgstr "未托管"
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
@@ -1441,7 +1441,7 @@ msgstr "需要认证"
 #. module, which is missing
 #: ../js/ui/status/network.js:482
 msgid "firmware missing"
-msgstr "固件缺失"
+msgstr "固件丢失"
 
 #. Translators: this is for wired network devices that are physically
 #. disconnected
@@ -1463,14 +1463,14 @@ msgstr "连接失败"
 #: ../js/ui/status/network.js:555 ../js/ui/status/network.js:1440
 #: ../js/ui/status/network.js:1632
 msgid "More…"
-msgstr "更多…"
+msgstr "更多……"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
 #: ../js/ui/status/network.js:591 ../js/ui/status/network.js:1368
 msgid "Connected (private)"
-msgstr "已连接(私有网络)"
+msgstr "已连接（私有网络）"
 
 #: ../js/ui/status/network.js:670
 msgid "Wired"
@@ -1478,7 +1478,7 @@ msgstr "有线"
 
 #: ../js/ui/status/network.js:671
 msgid "Auto Ethernet"
-msgstr "自动以太网"
+msgstr "以太网自动配置"
 
 #: ../js/ui/status/network.js:698
 msgid "Mobile broadband"
@@ -1489,7 +1489,7 @@ msgstr "移动宽带"
 #: ../js/ui/status/network.js:864 ../js/ui/status/network.js:1385
 #, javascript-format
 msgid "Auto %s"
-msgstr "自动 %s"
+msgstr "自动%s"
 
 #: ../js/ui/status/network.js:866
 msgid "Auto bluetooth"
@@ -1545,19 +1545,19 @@ msgstr "充电已完成"
 
 #: ../js/ui/status/power.js:110
 msgid "Estimating…"
-msgstr "估算中…"
+msgstr "估算中……"
 
 #: ../js/ui/status/power.js:117
 #, javascript-format
 msgid "%d hour remaining"
 msgid_plural "%d hours remaining"
-msgstr[0] "剩余 %d 小时"
+msgstr[0] "剩余%d小时"
 
 #. TRANSLATORS: this is a time string, as in "%d hours %d minutes remaining"
 #: ../js/ui/status/power.js:120
 #, javascript-format
 msgid "%d %s %d %s remaining"
-msgstr "剩余 %d %s %d %s"
+msgstr "剩余%d %s %d %s"
 
 #: ../js/ui/status/power.js:122
 msgid "hour"
@@ -1573,7 +1573,7 @@ msgstr[0] "分钟"
 #, javascript-format
 msgid "%d minute remaining"
 msgid_plural "%d minutes remaining"
-msgstr[0] "剩余 %d 分钟"
+msgstr[0] "剩余%d分钟"
 
 #: ../js/ui/status/power.js:128 ../js/ui/status/power.js:202
 #, javascript-format
@@ -1722,7 +1722,7 @@ msgstr[0] "设置更改将在%d秒后恢复"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
-msgstr "Evolution 日历"
+msgstr "日历进展"
 
 #. translators:
 #. * The number of sound outputs on a particular device
@@ -1730,7 +1730,7 @@ msgstr "Evolution 日历"
 #, c-format
 msgid "%u Output"
 msgid_plural "%u Outputs"
-msgstr[0] "%u 个输出"
+msgstr[0] "%u个输出"
 
 #. translators:
 #. * The number of sound inputs on a particular device
@@ -1738,7 +1738,7 @@ msgstr[0] "%u 个输出"
 #, c-format
 msgid "%u Input"
 msgid_plural "%u Inputs"
-msgstr[0] "%u 个输入"
+msgstr[0] "%u个输入"
 
 #: ../src/gvc/gvc-mixer-control.c:2373
 msgid "System Sounds"
@@ -1763,7 +1763,7 @@ msgstr "列出可用的模式"
 #: ../src/shell-app.c:653
 #, c-format
 msgid "Failed to launch '%s'"
-msgstr "启动 %s 失败"
+msgstr "启动%s失败"
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
