@@ -662,6 +662,8 @@ clutter_text_button_press_event (ClutterActor       *actor,
                                  ClutterButtonEvent *event,
                                  gpointer            user_data)
 {
+  StEntry *entry = ST_ENTRY (user_data);
+  StEntryPrivate *priv = entry->priv;
   GtkSettings *settings = gtk_settings_get_default ();
   gboolean primary_paste_enabled;
 
@@ -669,7 +671,8 @@ clutter_text_button_press_event (ClutterActor       *actor,
                 "gtk-enable-primary-paste", &primary_paste_enabled,
                 NULL);
 
-  if (primary_paste_enabled && event->button == 2)
+  if (primary_paste_enabled && event->button == 2
+      && clutter_text_get_editable (CLUTTER_TEXT (priv->entry)))
     {
       StClipboard *clipboard;
 
@@ -683,7 +686,7 @@ clutter_text_button_press_event (ClutterActor       *actor,
       st_clipboard_get_text (clipboard,
                              ST_CLIPBOARD_TYPE_PRIMARY,
                              st_entry_clipboard_callback,
-                             user_data);
+                             entry);
     }
 
   return FALSE;
