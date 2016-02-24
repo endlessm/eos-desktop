@@ -484,8 +484,6 @@ const LayoutManager = new Lang.Class({
     },
 
     _updateHotCorners: function() {
-        this._cornerEnabled = global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
-
         let cornerRightSetting = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
         let textDirection = Clutter.get_default_text_direction();
         this._cornerOnRight = (cornerRightSetting && textDirection == Clutter.TextDirection.LTR) ||
@@ -515,9 +513,7 @@ const LayoutManager = new Lang.Class({
 
             let haveHotCorner = true;
 
-            if (!this._cornerEnabled) {
-                haveHotCorner = false;
-            } else if (i != this.primaryIndex) {
+            if (i != this.primaryIndex) {
                 // Check if we have the specified corner.
                 // I.e. if there is no monitor directly above/below
                 // or beside (to the left/right)
@@ -1409,8 +1405,6 @@ const HotCorner = new Lang.Class({
         this._x = x;
         this._y = y;
 
-        this._cornerEnabled = global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
-
         let cornerRightSetting = global.settings.get_boolean(HOT_CORNER_ON_RIGHT_KEY);
         let textDirection = Clutter.get_default_text_direction();
         this._cornerOnRight = (cornerRightSetting && textDirection == Clutter.TextDirection.LTR) ||
@@ -1424,7 +1418,11 @@ const HotCorner = new Lang.Class({
                                                     HOT_CORNER_PRESSURE_TIMEOUT,
                                                     Shell.KeyBindingMode.NORMAL |
                                                     Shell.KeyBindingMode.OVERVIEW);
-        this._pressureBarrier.connect('trigger', Lang.bind(this, this._toggleOverview));
+        this._pressureBarrier.connect('trigger', Lang.bind(this, function() {
+            if (this.isEnabled()) {
+                this._toggleOverview();
+            }
+        }));
 
         // Cache the three ripples instead of dynamically creating and destroying them.
         this._ripple1 = new St.BoxLayout({ style_class: 'ripple-box', opacity: 0, visible: false });
@@ -1470,6 +1468,10 @@ const HotCorner = new Lang.Class({
         layoutManager.uiGroup.add_actor(this._ripple1);
         layoutManager.uiGroup.add_actor(this._ripple2);
         layoutManager.uiGroup.add_actor(this._ripple3);
+    },
+
+    isEnabled: function() {
+        return global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
     },
 
     setBarrierSize: function(size) {
@@ -1660,7 +1662,9 @@ const HotCorner = new Lang.Class({
         if (source != Main.xdndHandler)
             return DND.DragMotionResult.CONTINUE;
 
-        this._toggleOverview();
+        if (this.isEnabled()) {
+            this._toggleOverview();
+        }
 
         return DND.DragMotionResult.CONTINUE;
     },
@@ -1682,7 +1686,9 @@ const HotCorner = new Lang.Class({
     _onCornerEntered : function() {
         if (!this._entered) {
             this._setEntered(true);
-            this._toggleOverview();
+            if (this.isEnabled()) {
+                this._toggleOverview();
+            }
         }
         return false;
     },

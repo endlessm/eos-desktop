@@ -1,12 +1,15 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gdk = imports.gi.Gdk;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 const St = imports.gi.St;
 
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
+
+const HOT_CORNER_ENABLED_KEY = 'hot-corner-enabled';
 
 const HotCornerIndicator = new Lang.Class({
     Name: 'HotCornerIndicator',
@@ -30,19 +33,38 @@ const HotCornerIndicator = new Lang.Class({
         this.container.set_fill(false, false);
         this.container.set_alignment(St.Align.END, St.Align.END);
 
-        // Remove menu entirely to prevent clicks here to close other menus
-        this.setMenu(null);
-
         this._hotCorner = Main.layoutManager.hotCorners[Main.layoutManager.primaryIndex];
         this._hotCorner.connect('hover-changed', Lang.bind(this, this._syncHover));
         this._syncHover();
+
+        this._enableMenuItem = this.menu.addAction(_("Enable Hot Corner"), Lang.bind(this, function() {
+            global.settings.set_boolean(HOT_CORNER_ENABLED_KEY, true);
+        }));
+
+        this._disableMenuItem = this.menu.addAction(_("Disable Hot Corner"), Lang.bind(this, function() {
+            global.settings.set_boolean(HOT_CORNER_ENABLED_KEY, false);
+        }));
+
+        if (global.settings.get_boolean(HOT_CORNER_ENABLED_KEY))
+            this._enableMenuItem.actor.visible = false;
+        else
+            this._disableMenuItem.actor.visible = false;
+
+        this.menu.connect('close-animation-completed', Lang.bind(this, function() {
+            let isEnabled = global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
+            this._enableMenuItem.actor.visible = !isEnabled;
+            this._disableMenuItem.actor.visible = isEnabled;
+        }));
     },
 
     // overrides default implementation from PanelMenu.Button
     _onButtonPress: function(actor, event) {
-	if (Main.overview.shouldToggleByCornerOrButton()) {
-	    Main.overview.toggleWindows();
-	}
+        let button = event.get_button();
+        if (button == Gdk.BUTTON_PRIMARY && Main.overview.shouldToggleByCornerOrButton()) {
+            Main.overview.toggleWindows();
+        } else if (button == Gdk.BUTTON_SECONDARY) {
+            this.menu.toggle();
+        }
     },
 
     _syncHover: function() {

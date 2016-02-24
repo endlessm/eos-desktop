@@ -28,7 +28,7 @@
       </_description>
     </key>
     <key name="hot-corner-enabled" type="b">
-      <default>true</default>
+      <default>false</default>
       <_summary>
         Enables the hot corner for the window picker
       </_summary>
