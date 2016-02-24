@@ -1285,6 +1285,10 @@ const ViewIcon = new Lang.Class({
             }
             return true;
         }
+        if (event.get_key_symbol() == Clutter.Escape) {
+            this.parentView.closePopup();
+            return true;
+        }
         return false;
     },
 
