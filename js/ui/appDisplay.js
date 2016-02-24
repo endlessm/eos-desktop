@@ -516,7 +516,7 @@ const AllView = new Lang.Class({
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
 
         this._clickAction = new Clutter.ClickAction();
-        this._clickAction.connect('clicked', Lang.bind(this, this._closePopup));
+        this._clickAction.connect('clicked', Lang.bind(this, this.closePopup));
         Main.overview.addAction(this._clickAction, false);
         this._eventBlocker.bind_property('reactive', this._clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
 
@@ -602,7 +602,7 @@ const AllView = new Lang.Class({
         }
      },
 
-    _closePopup: function() {
+    closePopup: function() {
         if (!this._currentPopup) {
             return;
         }
