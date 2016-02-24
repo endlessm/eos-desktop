@@ -1221,6 +1221,7 @@ const ViewIcon = new Lang.Class({
 
         this.actor._delegate = this;
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+        this.actor.connect('key-press-event', Lang.bind(this, this._onKeyPress));
 
         this._menu = null;
         this._menuManager = new PopupMenu.PopupMenuManager(this);
@@ -1273,6 +1274,18 @@ const ViewIcon = new Lang.Class({
 
         this.iconButton._delegate = null;
         this.actor._delegate = null;
+    },
+
+    _onKeyPress: function(actor, event) {
+        if (event.get_key_symbol() == Clutter.Return) {
+            if (this.parentView.hasPopup()) {
+                this.parentView.closePopup();
+            } else {
+                this._activate();
+            }
+            return true;
+        }
+        return false;
     },
 
     _activate: function() {
