@@ -1275,6 +1275,10 @@ const ViewIcon = new Lang.Class({
         this.actor._delegate = null;
     },
 
+    _activate: function() {
+        logError('activate not implemented');
+    },
+
     _onClicked: function(actor, button) {
         logError('onClicked not implemented');
     },
@@ -1493,15 +1497,19 @@ const FolderIcon = new Lang.Class({
             }));
     },
 
+    _activate: function() {
+        if (this._createPopup()) {
+            this._popup.toggle();
+        }
+    },
+
     _onClicked: function(actor, button) {
         if (button != Gdk.BUTTON_PRIMARY) {
             actor.checked = false;
             return;
         }
 
-        if (this._createPopup()) {
-            this._popup.toggle();
-        }
+        this._activate();
     },
 
     _onLabelUpdate: function(label, newText) {
@@ -1822,6 +1830,10 @@ const AppIcon = new Lang.Class({
         }
     },
 
+    _activate: function() {
+        this._onActivate(Clutter.get_current_event());
+    },
+
     _onClicked: function(actor, button) {
         let event = Clutter.get_current_event();
         if (event.get_click_count() > 1) {
@@ -1829,7 +1841,7 @@ const AppIcon = new Lang.Class({
         }
 
         if (button == Gdk.BUTTON_PRIMARY) {
-            this._onActivate(Clutter.get_current_event());
+            this._activate();
         } else if (button == Gdk.BUTTON_MIDDLE) {
             // Last workspace is always empty
             let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
@@ -1911,12 +1923,16 @@ const AppStoreIcon = new Lang.Class({
         return new St.Icon({ icon_size: iconSize });
     },
 
+    _activate: function() {
+        Main.appStore.show(global.get_current_time(), true);
+    },
+
     _onClicked: function(actor, button) {
         if (button != Gdk.BUTTON_PRIMARY) {
             return;
         }
 
-        Main.appStore.show(global.get_current_time(), true);
+        this._activate();
     },
 
     getName: function() {
