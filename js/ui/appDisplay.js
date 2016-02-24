@@ -406,6 +406,10 @@ const EndlessApplicationView = new Lang.Class({
         }
     },
 
+    closePopup: function() {
+        throw new Error('Not implemented');
+    },
+
     get gridActor() {
         return this._grid.actor;
     }
@@ -415,9 +419,10 @@ const FolderView = new Lang.Class({
     Name: 'FolderView',
     Extends: EndlessApplicationView,
 
-    _init: function(folderIcon) {
+    _init: function(folderIcon, parentView) {
         this.parent();
         this._folderIcon = folderIcon;
+        this._parentView = parentView;
         this.actor = this._grid.actor;
 
         this.addIcons();
@@ -429,6 +434,10 @@ const FolderView = new Lang.Class({
 
     getViewId: function() {
         return this._folderIcon.getId();
+    },
+
+    closePopup: function() {
+        this._parentView.closePopup();
     }
 });
 
@@ -1517,7 +1526,7 @@ const FolderIcon = new Lang.Class({
         let spaceBottom = this.parentView.stack.height - (relY + this.actor.height);
         let side = spaceTop > spaceBottom ? St.Side.BOTTOM : St.Side.TOP;
 
-        this._popup = new AppFolderPopup(this, side);
+        this._popup = new AppFolderPopup(this, side, this.parentView);
         this.parentView.addFolderPopup(this._popup, this);
         this._reposition(side);
 
@@ -1664,7 +1673,7 @@ const FolderIcon = new Lang.Class({
 const AppFolderPopup = new Lang.Class({
     Name: 'AppFolderPopup',
 
-    _init: function(source, side) {
+    _init: function(source, side, parentView) {
         this._source = source;
         this._arrowSide = side;
 
@@ -1684,7 +1693,7 @@ const AppFolderPopup = new Lang.Class({
                                      y_expand: true,
                                      x_align: Clutter.ActorAlign.CENTER,
                                      y_align: Clutter.ActorAlign.START });
-        this._view = new FolderView(source);
+        this._view = new FolderView(source, parentView);
         this._boxPointer = new BoxPointer.BoxPointer(this._arrowSide,
                                                      { style_class: 'app-folder-popup-bin',
                                                        x_fill: true,
