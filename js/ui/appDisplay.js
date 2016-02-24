@@ -403,6 +403,10 @@ const EndlessApplicationView = new Lang.Class({
         }
     },
 
+    hasPopup: function() {
+        throw new Error('Not implemented');
+    },
+
     closePopup: function() {
         throw new Error('Not implemented');
     },
@@ -431,6 +435,10 @@ const FolderView = new Lang.Class({
 
     getViewId: function() {
         return this._folderIcon.getId();
+    },
+
+    hasPopup: function() {
+        return true;
     },
 
     closePopup: function() {
@@ -610,6 +618,10 @@ const AllView = new Lang.Class({
             }
         }
      },
+
+    hasPopup: function() {
+        return this._currentPopup != null;
+    },
 
     closePopup: function() {
         if (!this._currentPopup) {
