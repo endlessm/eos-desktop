@@ -1069,6 +1069,10 @@ const AllView = new Lang.Class({
             }));
     },
 
+    focusFolderPopup: function() {
+        this._currentPopup.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
+    },
+
     _resetGrid: function() {
         this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
         this._grid.actor.y = 0;
@@ -1282,6 +1286,10 @@ const ViewIcon = new Lang.Class({
                 this.parentView.closePopup();
             } else {
                 this._activate();
+                if (this.parentView.hasPopup()) {
+                    // The popup wasn't there before, so we just opened it.
+                    this.parentView.focusFolderPopup();
+                }
             }
             return true;
         }
@@ -1745,6 +1753,8 @@ const AppFolderPopup = new Lang.Class({
         this._boxPointer.actor.bind_property('opacity', this.closeButton, 'opacity',
                                              GObject.BindingFlags.SYNC_CREATE);
         this._boxPointer.bin.connect('realize', Lang.bind(this, this._adjustCloseButton));
+
+        global.focus_manager.add_group(this.actor);
     },
 
     toggle: function() {
