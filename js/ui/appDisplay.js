@@ -292,7 +292,7 @@ const EndlessApplicationView = new Lang.Class({
     },
 
     _ensureIconVisible: function(icon) {
-        return ActorVisibility.ensureActorVisibleInScrollView(this.actor, icon);
+        ActorVisibility.ensureActorVisibleInScrollView(this.actor, icon);
     },
 
     iconsNeedRedraw: function() {
