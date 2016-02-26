@@ -1066,9 +1066,15 @@ shell_app_ensure_busy_watch (ShellApp *app)
 }
 
 static gboolean
+shell_app_is_speedwagon_window (MetaWindow *window)
+{
+  return g_strcmp0 (meta_window_get_role (window), "eos-speedwagon") == 0;
+}
+
+static gboolean
 shell_app_is_interesting_window (MetaWindow *window)
 {
-  if (g_strcmp0 (meta_window_get_role (window), "eos-speedwagon") == 0)
+  if (shell_app_is_speedwagon_window (window))
     return FALSE;
 
   return shell_window_tracker_is_window_interesting (window);
