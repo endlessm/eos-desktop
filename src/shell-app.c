@@ -45,6 +45,7 @@ typedef struct {
   GSList *windows;
 
   guint interesting_windows;
+  guint speedwagon_windows;
 
   /* Whether or not we need to resort the windows; this is done on demand */
   gboolean window_sort_stale : 1;
@@ -938,7 +939,12 @@ shell_app_sync_running_state (ShellApp *app)
   if (app->running_state->interesting_windows == 0)
     {
       if (app->state != SHELL_APP_STATE_STARTING)
-        shell_app_state_transition (app, SHELL_APP_STATE_STOPPED);
+        {
+          if (app->running_state->speedwagon_windows > 0)
+            shell_app_state_transition (app, SHELL_APP_STATE_STARTING);
+          else
+            shell_app_state_transition (app, SHELL_APP_STATE_STOPPED);
+        }
     }
   else
     {
@@ -1066,9 +1072,15 @@ shell_app_ensure_busy_watch (ShellApp *app)
 }
 
 static gboolean
+shell_app_is_speedwagon_window (MetaWindow *window)
+{
+  return g_strcmp0 (meta_window_get_role (window), "eos-speedwagon") == 0;
+}
+
+static gboolean
 shell_app_is_interesting_window (MetaWindow *window)
 {
-  if (g_strcmp0 (meta_window_get_role (window), "eos-speedwagon") == 0)
+  if (shell_app_is_speedwagon_window (window))
     return FALSE;
 
   return shell_window_tracker_is_window_interesting (window);
@@ -1097,6 +1109,9 @@ _shell_app_add_window (ShellApp        *app,
 
   if (shell_app_is_interesting_window (window))
     app->running_state->interesting_windows++;
+  else if (shell_app_is_speedwagon_window (window))
+    app->running_state->speedwagon_windows++;
+
   shell_app_sync_running_state (app);
 
   g_object_thaw_notify (G_OBJECT (app));
@@ -1121,17 +1136,16 @@ _shell_app_remove_window (ShellApp   *app,
 
   if (shell_app_is_interesting_window (window))
     app->running_state->interesting_windows--;
+  else if (shell_app_is_speedwagon_window (window))
+    app->running_state->speedwagon_windows--;
 
   if (app->running_state->windows == NULL)
     g_clear_pointer (&app->running_state, unref_running_state);
 
-  if (app->state != SHELL_APP_STATE_STARTING)
-    {
-      if (app->running_state == NULL)
-        shell_app_state_transition (app, SHELL_APP_STATE_STOPPED);
-      else
-        shell_app_sync_running_state (app);
-    }
+  if (app->running_state == NULL)
+    shell_app_state_transition (app, SHELL_APP_STATE_STOPPED);
+  else
+    shell_app_sync_running_state (app);
 
   g_signal_emit (app, shell_app_signals[WINDOWS_CHANGED], 0);
 }
@@ -1293,9 +1307,6 @@ shell_app_launch (ShellApp     *app,
       meta_window_activate (window, timestamp);
       return TRUE;
     }
-
-  if (app->state == SHELL_APP_STATE_STOPPED)
-    shell_app_state_transition (app, SHELL_APP_STATE_STARTING);
 
   global = shell_global_get ();
   screen = shell_global_get_screen (global);
