@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-16 02:30+0000\n"
+"POT-Creation-Date: 2016-02-23 02:28+0000\n"
 "PO-Revision-Date: 2016-01-24 21:25+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/id/)\n"
@@ -442,7 +442,7 @@ msgstr "Kode pembuka kunci Anda tidak tepat. Harap mencoba lagi."
 msgid "Username: "
 msgstr "Nama pengguna: "
 
-#: ../js/gdm/loginDialog.js:1428
+#: ../js/gdm/loginDialog.js:1429
 msgid "Login Window"
 msgstr "Jendela Log Masuk"
 
