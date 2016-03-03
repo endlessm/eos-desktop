@@ -41,6 +41,8 @@ const AppActivationContext = new Lang.Class({
         this._timeoutId = 0;
 
         this._appActivationTime = 0;
+
+        this._hiddenWindows = [];
     },
 
     _doActivate: function(showSplash, timestamp) {
@@ -97,6 +99,12 @@ const AppActivationContext = new Lang.Class({
             return;
         }
 
+        // Prevent windows from being shown when the overview is hidden so it does
+        // not affect the speedwagon's animation
+        if (Main.overview.visible) {
+            this._hideWindows();
+        }
+
         this._cancelled = false;
         this._splash = new SpeedwagonSplash(this._app);
         this._splash.connect('close-clicked', Lang.bind(this, function() {
@@ -130,6 +138,8 @@ const AppActivationContext = new Lang.Class({
     },
 
     _clearSplash: function() {
+        this._resetWindowsVisibility();
+
         if (this._splash) {
             this._splash.rampOut();
             this._splash = null;
@@ -148,6 +158,27 @@ const AppActivationContext = new Lang.Class({
         this._maybeClearSplash();
 
         return false;
+    },
+
+    _resetWindowsVisibility: function() {
+        for (let actor of this._hiddenWindows) {
+            actor.visible = true;
+        }
+
+        this._hiddenWindows = [];
+    },
+
+    _hideWindows: function() {
+        let windows = global.get_window_actors();
+
+        for (let actor of windows) {
+            if (!actor.visible) {
+                continue;
+            }
+
+            this._hiddenWindows.push(actor);
+            actor.visible = false;
+        }
     },
 
     _recordLaunchTime: function() {
