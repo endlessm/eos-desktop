@@ -35,7 +35,7 @@ const AppFavorites = new Lang.Class({
                 else
                     return id;
             }).map(function (id) {
-                return appSys.lookup_app(id);
+                return appSys.lookup_alias(id);
             }).filter(function (app) {
                 return app != null;
             });
@@ -72,18 +72,27 @@ const AppFavorites = new Lang.Class({
         if (appId in this._favorites)
             return false;
 
-        let app = Shell.AppSystem.get_default().lookup_app(appId);
-
+        let app = Shell.AppSystem.get_default().lookup_alias(appId);
         if (!app)
             return false;
 
         let ids = this._getIds();
-        if (pos == -1)
-            ids.push(appId);
-        else
-            ids.splice(pos, 0, appId);
+        if (pos == -1) {
+            ids.push(app.get_id());
+        }
+        else {
+            // If the appId is an alias, replace it with the actual
+            // app id
+            if (appId != app.get_id()) {
+                ids.splice(pos, 0, appId);
+            }
+            else {
+                ids.splice(pos, 0, app.get_id());
+            }
+        }
+
         global.settings.set_strv(this._settingsKey, ids);
-        this._favorites[appId] = app;
+        this._favorites[app.get_id()] = app;
         return true;
     },
 
@@ -94,12 +103,12 @@ const AppFavorites = new Lang.Class({
         if (!this._showNotifications)
             return;
 
-        let app = Shell.AppSystem.get_default().lookup_app(appId);
+        let app = Shell.AppSystem.get_default().lookup_alias(appId);
 
         Main.overview.setMessage(_("%s has been added to your favorites.").format(app.get_name()),
                                  { forFeedback: true,
                                    undoCallback: Lang.bind(this, function () {
-                                                               this._removeFavorite(appId);
+                                                               this._removeFavorite(app.get_id());
                                                            })
                                  });
     },
