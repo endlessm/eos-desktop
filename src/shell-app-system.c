@@ -105,7 +105,8 @@ scan_alias_to_id (ShellAppSystem *self)
   for (l = apps; l != NULL; l = l->next)
     {
       GAppInfo *info = l->data;
-      const char *alias, *id, *desktop_alias;
+      const char *alias, *id;
+      char *desktop_alias;
 
       id = g_app_info_get_id (info);
       alias = g_desktop_app_info_get_string (G_DESKTOP_APP_INFO (info), X_ENDLESS_ALIAS_KEY);
@@ -304,6 +305,7 @@ shell_app_system_lookup_app (ShellAppSystem   *self,
   ShellAppSystemPrivate *priv = self->priv;
   ShellApp *app;
   GDesktopAppInfo *info;
+  char *alias;
 
   app = g_hash_table_lookup (priv->id_to_app, id);
   if (app)
@@ -327,6 +329,8 @@ shell_app_system_lookup_app (ShellAppSystem   *self,
     }
 
   g_object_unref (info);
+  g_free (alias);
+
   return app;
 }
 
@@ -388,7 +392,7 @@ shell_app_system_lookup_alias (ShellAppSystem *system,
   if (result != NULL)
     return result;
 
-  id = g_hash_table_lookup (priv->alias_to_id, alias);
+  id = g_hash_table_lookup (system->priv->alias_to_id, alias);
   if (id == NULL)
     return NULL;
 
