@@ -362,6 +362,14 @@ const AppIconButton = new Lang.Class({
         }
     },
 
+    _getInterestingWindows: function() {
+        let windows = this._app.get_windows();
+        windows = windows.filter(function(metaWindow) {
+            return Shell.WindowTracker.is_window_interesting(metaWindow);
+        });
+        return windows;
+    },
+
     _handleButtonPressEvent: function(actor, event) {
         let button = event.get_button();
         let clickCount = event.get_click_count();
@@ -371,11 +379,7 @@ const AppIconButton = new Lang.Class({
             this._hideHoverState();
             this.emit('app-icon-pressed');
 
-            let windows = this._app.get_windows();
-            windows = windows.filter(function(metaWindow) {
-                return Shell.WindowTracker.is_window_interesting(metaWindow);
-            });
-
+            let windows = this._getInterestingWindows();
             if (windows.length > 1) {
                 let hasOtherMenu = this._hasOtherMenuOpen();
                 let animation = BoxPointer.PopupAnimation.FULL;
@@ -419,12 +423,8 @@ const AppIconButton = new Lang.Class({
         this._closeOtherMenus(BoxPointer.PopupAnimation.FULL);
         this._animateBounce();
 
+        let windows = this._getInterestingWindows();
         // The multiple windows case is handled in button-press-event
-        let windows = this._app.get_windows();
-        windows = windows.filter(function(metaWindow) {
-            return Shell.WindowTracker.is_window_interesting(metaWindow);
-        });
-
         if (windows.length == 0) {
             let activationContext = new AppActivation.AppActivationContext(this._app);
             activationContext.activate();
