@@ -37,6 +37,8 @@ const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
 
 const PANEL_WINDOW_MENU_THUMBNAIL_SIZE = 128;
 
+const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
+
 function _compareByStableSequence(winA, winB) {
     let seqA = winA.get_stable_sequence();
     let seqB = winB.get_stable_sequence();
@@ -441,6 +443,18 @@ const AppIconButton = new Lang.Class({
         }
     },
 
+    activateFirstWindow: function() {
+        this._animateBounce();
+        this._closeOtherMenus(BoxPointer.PopupAnimation.FULL);
+        let windows = this._getInterestingWindows();
+        if (windows.length > 0) {
+            Main.activateWindow(windows[0]);
+        } else {
+            let activationContext = new AppActivation.AppActivationContext(this._app);
+            activationContext.activate();
+        }
+    },
+
     _hideHoverState: function() {
         this.actor.fake_release();
         if (this._label.get_parent() != null) {
@@ -674,6 +688,17 @@ const ScrolledIconList = new Lang.Class({
                     appButton.actor.remove_style_pseudo_class('highlighted');
                 }
             }));
+    },
+
+    activateNthApp: function(index) {
+        let buttons = this._taskbarApps.values().filter(function(value) {
+            // Excluded apps have a null button
+            return value != null;
+        });
+        let appButton = buttons[index];
+        if (appButton == undefined)
+            return;
+        appButton.activateFirstWindow();
     },
 
     getIconSize: function() {
@@ -1004,11 +1029,31 @@ const AppIconBar = new Lang.Class({
         Main.overview.connect('showing', Lang.bind(this, this._updateActiveApp));
         Main.overview.connect('hidden', Lang.bind(this, this._updateActiveApp));
 
+
+        let keybindingSettings = new Gio.Settings({ schema: SHELL_KEYBINDINGS_SCHEMA });
+        for (let index = 0; index < 8; index++) {
+            let fullName = 'activate-icon-' + (index + 1);
+            Main.wm.addKeybinding(fullName,
+                                  keybindingSettings,
+                                  Meta.KeyBindingFlags.NONE,
+                                  Shell.KeyBindingMode.NORMAL |
+                                  Shell.KeyBindingMode.OVERVIEW,
+                                  this._activateNthApp.bind(this, index));
+        }
+
         this._updateActiveApp();
     },
 
     _onAppIconPressed: function() {
         this._panel.closeActiveMenu();
+    },
+
+    _activateNthApp: function(index) {
+        if (index == 0) {
+            this._browserButton.activateFirstWindow();
+            return;
+        }
+        this._scrolledIconList.activateNthApp(index - 1);
     },
 
     _updateActiveApp: function() {
