@@ -690,12 +690,19 @@ const ScrolledIconList = new Lang.Class({
             }));
     },
 
-    activateNthApp: function(index) {
-        let buttons = this._taskbarApps.values().filter(function(value) {
+    _getAppButtons: function() {
+        return this._taskbarApps.values().filter(function(value) {
             // Excluded apps have a null button
             return value != null;
         });
-        let appButton = buttons[index];
+    },
+
+    getNumAppButtons: function() {
+        return this._getAppButtons().length;
+    },
+
+    activateNthApp: function(index) {
+        let appButton = this._getAppButtons()[index];
         if (appButton == undefined)
             return;
         appButton.activateFirstWindow();
@@ -1040,6 +1047,12 @@ const AppIconBar = new Lang.Class({
                                   Shell.KeyBindingMode.OVERVIEW,
                                   this._activateNthApp.bind(this, index));
         }
+        Main.wm.addKeybinding('activate-last-icon',
+                              keybindingSettings,
+                              Meta.KeyBindingFlags.NONE,
+                              Shell.KeyBindingMode.NORMAL |
+                              Shell.KeyBindingMode.OVERVIEW,
+                              Lang.bind(this, this._activateLastApp));
 
         this._updateActiveApp();
     },
@@ -1054,6 +1067,12 @@ const AppIconBar = new Lang.Class({
             return;
         }
         this._scrolledIconList.activateNthApp(index - 1);
+    },
+
+    _activateLastApp: function() {
+        // Activate the index of the last button in the scrolled list + 1, to
+        // include the browser button
+        this._activateNthApp(this._scrolledIconList.getNumAppButtons());
     },
 
     _updateActiveApp: function() {
