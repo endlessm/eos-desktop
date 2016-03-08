@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-23 02:28+0000\n"
-"PO-Revision-Date: 2016-02-18 05:17+0000\n"
-"Last-Translator: zhifeng peng <jnufeng@126.com>\n"
+"POT-Creation-Date: 2016-03-01 02:27+0000\n"
+"PO-Revision-Date: 2016-03-01 02:28+0000\n"
+"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -204,51 +204,61 @@ msgid ""
 msgstr "符合这些标识的应用程序将显示在收藏区中。"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
+msgid "List of desktop file IDs for applications pinned to taskbar"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
+msgid ""
+"The applications corresponding to these identifiers will be displayed in the"
+" taskbar at the bottom of the Endless desktop."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "List of categories that should be displayed as folders"
 msgstr "分类目录以文件夹形式显示。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
 msgstr "此列表中各类别名称在应用程序视图中以文件夹形式显示\t，而不是以内联形式出现在主视图。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
 msgid "History for command (Alt-F2) dialog"
 msgstr "命令对话框（Alt-F2）的历史记录"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
 msgid "History for the looking glass dialog"
 msgstr "Looking Glass对话框历史"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
 msgstr "用于内部保存用户自主设置的即时通信程序上次的在线状态。这里的值取自TpConnectionPresenceType的枚举变量。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
 msgid ""
 "Internally used to store the last session presence status for the user. The "
 "value here is from the GsmPresenceStatus enumeration."
 msgstr "用于内部保存上次会话中用户的在线状态。这里的值取自 GsmPresenceStatus枚举变量。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid "Always show the 'Log out' menuitem in the user menu."
 msgstr "总在用户菜单中显示“注销”。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
 msgid ""
 "This key overrides the automatic hiding of the 'Log out' menuitem in single-"
 "user, single-session situations."
 msgstr "此键撤销单用户与单会话模式下“注销”菜单项的自动隐藏。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid ""
 "Whether to remember password for mounting encrypted or remote filesystems"
 msgstr "是否记住安装加密或远程文件系统的密码"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
 msgid ""
 "The shell will request a password when an encrypted device or a remote "
 "filesystem is mounted. If the password can be saved for future use a "
@@ -256,120 +266,120 @@ msgid ""
 "state of the checkbox."
 msgstr "安装加密设备或远程文件系统时，该使用界面需要密码。如果密码能保存，当前复选框将显示“记住密码”。此键设置复选框的默认状态。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Layout of application launcher icons in the grid"
 msgstr "应用程序启动图标的网格布局\t"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
 msgid ""
 "This key specifies the exact order of the icons shown in the applications "
 "launcher view."
 msgstr "此键设定应用程序视图显示的图标顺序。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Enables the pressure barrier for the message tray"
 msgstr "启用消息托盘的压力屏障"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
 msgid ""
 "By default, the message tray is only shown on key press. Set true to show "
 "the message tray when exerting downward pressure with the cursor on the "
 "bottom of the taskbar."
 msgstr "消息托盘只有在按键后默认弹出。光标下移至任务栏底部，属性设置为true，消息托盘弹出。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
 msgid "Show the week date in the calendar"
 msgstr "在日历中显示星期和时间"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid "If true, display the ISO week date in the calendar."
 msgstr "如果为真，在日历中显示 ISO星期和日期。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
 msgid "Keybinding to open the application menu"
 msgstr "用于打开应用程序菜单的按键组合"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
 msgid "Keybinding to open the application menu."
 msgstr "用于打开应用程序菜单的按键组合。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
 msgid "Keybinding to open the \"Show Applications\" view"
 msgstr "用于打开显示应用视图的按键组合"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
 msgid ""
 "Keybinding to open the \"Show Applications\" view of the Activities "
 "Overview."
 msgstr "用于在活动视图中打开显示应用视图的按键组合。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "Keybinding to toggle the visibility of the message tray"
 msgstr "用来切换消息托盘是否可见的按键组合"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Keybinding to toggle the visibility of the message tray."
 msgstr "用来切换消息托盘是否可见的按键组合。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "Keybinding to focus the active notification"
 msgstr "用来聚焦活动通知的按键组合"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "Keybinding to focus the active notification."
 msgstr "用来聚焦活动通知的按键组合"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid "Keybinding that shows the force app exit dialog"
 msgstr "用来强制应用程序退出对话框的按键组合"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "Which keyboard to use"
 msgstr "使用哪个键盘"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid "The type of keyboard to use."
 msgstr "要使用的键盘类型。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "The application icon mode."
 msgstr "应用程序图标模式。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
 "(shows only the application icon) or 'both'."
 msgstr "配置窗口如何在切换器中显示。仅“thumbnail-only”(限时窗口的缩略图)，或者“app-icon-only”（只显示应用程序图标），或二者同时出现时有效。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Attach modal dialog to the parent window"
 msgstr "在父窗口添加模态对话框"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr "运行GNOME使用界面时，此密钥会覆盖org.gnome.mutter的密钥。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Arrangement of buttons on the titlebar"
 msgstr "管理标题栏上的按钮"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
 msgstr "运行GNOME使用界面时，此密钥会覆盖org.gnome. desktop.wm.preferences的密钥。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr "在屏幕边缘删除窗口时启用边缘对接。"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:61
 msgid "Workspaces are managed dynamically"
 msgstr "动态管理工作区"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:62
 msgid "Workspaces only on primary monitor"
 msgstr "仅在主显示器上显示工作区"
 
@@ -506,54 +516,62 @@ msgstr "不能解析命令："
 msgid "Execution of '%s' failed:"
 msgstr "运行“%s”失败："
 
-#: ../js/ui/appDisplay.js:1149
+#: ../js/ui/appDisplay.js:1151
 msgid "Remove from desktop"
 msgstr "从桌面删除"
 
-#: ../js/ui/appDisplay.js:1632
+#: ../js/ui/appDisplay.js:1634
 msgid "Warning"
 msgstr "警告"
 
-#: ../js/ui/appDisplay.js:1638
+#: ../js/ui/appDisplay.js:1640
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "删除文件夹前请先删除文件夹内所有文件。"
 
-#: ../js/ui/appDisplay.js:1644
+#: ../js/ui/appDisplay.js:1646
 msgid "We are just trying to keep you safe."
 msgstr "保障用户安全"
 
-#: ../js/ui/appDisplay.js:1650 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1652 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "确定"
 
-#: ../js/ui/appDisplay.js:1902
+#: ../js/ui/appDisplay.js:1904
 msgid "More Apps"
 msgstr "更多的Apps"
 
-#: ../js/ui/appDisplay.js:1911
+#: ../js/ui/appDisplay.js:1913
 msgid "Delete"
 msgstr "删除"
 
-#: ../js/ui/appFavorites.js:96
+#: ../js/ui/appFavorites.js:99
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s 已经添加到了您的收藏夹。"
 
-#: ../js/ui/appFavorites.js:130
+#: ../js/ui/appFavorites.js:136
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s 已经从您的收藏夹中移除。"
 
-#: ../js/ui/appIconBar.js:212
+#: ../js/ui/appIconBar.js:213
 msgid "Other workspaces"
 msgstr "其它工作区"
 
-#: ../js/ui/appIconBar.js:221
+#: ../js/ui/appIconBar.js:222
 msgid "Current workspace"
 msgstr "当前工作区"
 
-#: ../js/ui/appIconBar.js:294
+#: ../js/ui/appIconBar.js:297
+msgid "Pin to Taskbar"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:301
+msgid "Unpin from Taskbar"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:317
 #, javascript-format
 msgid "Quit %s"
 msgstr "退出%s"
@@ -1148,7 +1166,7 @@ msgstr "消息托盘"
 msgid "System Information"
 msgstr "系统信息"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:397
+#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
 msgctxt "program"
 msgid "Unknown"
 msgstr "未知"
@@ -1760,7 +1778,7 @@ msgstr "使用指定模式，如登录界面用“gdm”模式"
 msgid "List possible modes"
 msgstr "列出可用的模式"
 
-#: ../src/shell-app.c:653
+#: ../src/shell-app.c:654
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "启动%s失败"

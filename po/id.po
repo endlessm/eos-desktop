@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-23 02:28+0000\n"
-"PO-Revision-Date: 2016-01-24 21:25+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2016-03-01 02:27+0000\n"
+"PO-Revision-Date: 2016-03-01 02:28+0000\n"
+"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -191,51 +191,61 @@ msgid ""
 msgstr "Aplikasi yang terkait dengan identifier-identifier ini akan ditampilkan pada area favorit."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
+msgid "List of desktop file IDs for applications pinned to taskbar"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
+msgid ""
+"The applications corresponding to these identifiers will be displayed in the"
+" taskbar at the bottom of the Endless desktop."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "List of categories that should be displayed as folders"
 msgstr "Daftar kategori yang mesti ditampilkan sebagai folder"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
 msgstr "Setiap nama kategori dalam daftar ini akan diwakili oleh folder dalam tilikan aplikasi, bukan ditampilkan dalam tilikan utama."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
 msgid "History for command (Alt-F2) dialog"
 msgstr "Riwayat dialog perintah (Alt-F2)"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
 msgid "History for the looking glass dialog"
 msgstr "Riwayat untuk dialog yang berpenampilan gelas kaca"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
 msgstr "Secara internal dipakai untuk menyimpan kehadiran PI terakhir yang ditentukan oleh pengguna. Nilainya berasal dari enumerasi TpConnectionPresemceType."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
 msgid ""
 "Internally used to store the last session presence status for the user. The "
 "value here is from the GsmPresenceStatus enumeration."
 msgstr "Secara internal dipakai untuk menyimpan status sesi terakhir bagi pengguna. Nilainya berasal dari enumerasi GsmPresenceStatus."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid "Always show the 'Log out' menuitem in the user menu."
 msgstr "Selalku tampilkan butir menu 'Log keluar' dalam menu pengguna."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
 msgid ""
 "This key overrides the automatic hiding of the 'Log out' menuitem in single-"
 "user, single-session situations."
 msgstr "Kunci ini menimpa penyembunyian otomatis dari butir menu 'Log keluar' dalam situasi pengguna tunggal, sesi tunggal."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid ""
 "Whether to remember password for mounting encrypted or remote filesystems"
 msgstr "Apakah mengingat sandi untuk mengait sistem berkas terenkripsi atau jarak jauh"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
 msgid ""
 "The shell will request a password when an encrypted device or a remote "
 "filesystem is mounted. If the password can be saved for future use a "
@@ -243,120 +253,120 @@ msgid ""
 "state of the checkbox."
 msgstr "Shell akan meminta suatu sandi ketika suatu perangkat terenkripsi atau sistem berkas jarak jauh dikaitkan. Bila sandi dapat disimpan untuk dipakai dimasa depan, suatu kotak contreng 'Ingat Sandi' akan tampil. Kunci ini menata keadaan baku dari kontak contreng."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Layout of application launcher icons in the grid"
 msgstr "Tata letak ikon peluncur aplikasi pada kotak-kotak"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
 msgid ""
 "This key specifies the exact order of the icons shown in the applications "
 "launcher view."
 msgstr "Tombol ini menentukan urutan ikon yang ditampilkan pada tampilan peluncur aplikasi."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Enables the pressure barrier for the message tray"
 msgstr "Aktifkan pressure barrier untuk message tray"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
 msgid ""
 "By default, the message tray is only shown on key press. Set true to show "
 "the message tray when exerting downward pressure with the cursor on the "
 "bottom of the taskbar."
 msgstr "Dalam pengaturan awal, baki pesan hanya diperlihatkan setelah tombol ditekan. Atur menjadi aktif untuk memunculkan baki pesan pada saat memberikan tekanan ke bawah menggunakan kursor pada bagian bawah bilah tugas."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
 msgid "Show the week date in the calendar"
 msgstr "Menampilkan tanggal pada kalender"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid "If true, display the ISO week date in the calendar."
 msgstr "Jika \"true\", menampilkan tanggal berformat ISO pada kalender."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
 msgid "Keybinding to open the application menu"
 msgstr "Kombinasi tombol untuk membuka menu aplikasi"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
 msgid "Keybinding to open the application menu."
 msgstr "Kombinasi tombol untuk membuka menu aplikasi."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
 msgid "Keybinding to open the \"Show Applications\" view"
 msgstr "Kombinasi tombol untuk membuka tilikan \"Tampilkan Aplikasi\""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
 msgid ""
 "Keybinding to open the \"Show Applications\" view of the Activities "
 "Overview."
 msgstr "Kombinasi tombol untuk membuka tilikan Ringkasan Aktivitas \"Tampilkan Aplikasi\"."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "Keybinding to toggle the visibility of the message tray"
 msgstr "Kombinasi tombol untuk kenampakan baki pesan"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Keybinding to toggle the visibility of the message tray."
 msgstr "Kombinasi tombol untuk kenampakan baki pesan."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "Keybinding to focus the active notification"
 msgstr "Kombinasi tombol untuk fokus pada pemberitahuan yang aktif"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "Keybinding to focus the active notification."
 msgstr "Kombinasi tombol untuk fokus pada pemberitahuan yang aktif."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid "Keybinding that shows the force app exit dialog"
 msgstr "Kombinasi tombol yang akan menampilkan dialog keluar tutup paksa aplikasi"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "Which keyboard to use"
 msgstr "Papan tik mana yang akan dipakai"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid "The type of keyboard to use."
 msgstr "Jenis papan tik yang akan dipakai."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "The application icon mode."
 msgstr "Mode ikon aplikasi."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
 "(shows only the application icon) or 'both'."
 msgstr "Mengatur bagaimana jendela ditampilkan dalam penukar. Kemungkinan yang valid adalah 'thumbnail-only' (menampilkan gambar mini dari jendela), 'app-icon-only' (hanya menampilkan ikon aplikasi), atau 'both' (keduanya)."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Attach modal dialog to the parent window"
 msgstr "Mencantolkan dialog modal ke jendela induk"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr "Kunci ini menimpa kunci dalam org.gnome.mutter ketika menjalankan GNOME Shell."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Arrangement of buttons on the titlebar"
 msgstr "Pengaturan tombol pada bilah judul"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
 msgstr "Kunci ini menimpa kunci dalam org.gnome.desktop.wm.preferences ketika menjalankan GNOME Shell."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr "Memfungsikan pengubinan tepi ketika menjatuhkan jendela pada tepi layar"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:61
 msgid "Workspaces are managed dynamically"
 msgstr "Ruang kerja dikelola secara dinamis"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:62
 msgid "Workspaces only on primary monitor"
 msgstr "Ruang kerja hanya pada monitor primer"
 
@@ -493,54 +503,62 @@ msgstr "Tidak dapat mengurai perintah:"
 msgid "Execution of '%s' failed:"
 msgstr "Eksekusi '%s' gagal:"
 
-#: ../js/ui/appDisplay.js:1149
+#: ../js/ui/appDisplay.js:1151
 msgid "Remove from desktop"
 msgstr "Hapus dari desktop"
 
-#: ../js/ui/appDisplay.js:1632
+#: ../js/ui/appDisplay.js:1634
 msgid "Warning"
 msgstr "Peringatan"
 
-#: ../js/ui/appDisplay.js:1638
+#: ../js/ui/appDisplay.js:1640
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Untuk menghapus sebuah folder Anda harus menghapus semua item di dalamnya terlebih dahulu."
 
-#: ../js/ui/appDisplay.js:1644
+#: ../js/ui/appDisplay.js:1646
 msgid "We are just trying to keep you safe."
 msgstr "Kami hanya mencoba menjaga Anda agar tetap aman."
 
-#: ../js/ui/appDisplay.js:1650 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1652 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "Oke"
 
-#: ../js/ui/appDisplay.js:1902
+#: ../js/ui/appDisplay.js:1904
 msgid "More Apps"
 msgstr "Aplikasi Lainnya"
 
-#: ../js/ui/appDisplay.js:1911
+#: ../js/ui/appDisplay.js:1913
 msgid "Delete"
 msgstr "Hapus"
 
-#: ../js/ui/appFavorites.js:96
+#: ../js/ui/appFavorites.js:99
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s telah ditambahkan ke favorit Anda."
 
-#: ../js/ui/appFavorites.js:130
+#: ../js/ui/appFavorites.js:136
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s telah dihapus dari favorit Anda."
 
-#: ../js/ui/appIconBar.js:212
+#: ../js/ui/appIconBar.js:213
 msgid "Other workspaces"
 msgstr "Ruang kerja lainnya"
 
-#: ../js/ui/appIconBar.js:221
+#: ../js/ui/appIconBar.js:222
 msgid "Current workspace"
 msgstr "Ruang kerja saat ini"
 
-#: ../js/ui/appIconBar.js:294
+#: ../js/ui/appIconBar.js:297
+msgid "Pin to Taskbar"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:301
+msgid "Unpin from Taskbar"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:317
 #, javascript-format
 msgid "Quit %s"
 msgstr "Keluar %s"
@@ -1135,7 +1153,7 @@ msgstr "Baki Pesan"
 msgid "System Information"
 msgstr "Informasi Sistem"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:397
+#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
 msgctxt "program"
 msgid "Unknown"
 msgstr "Tak dikenal"
@@ -1747,7 +1765,7 @@ msgstr "Menggunakan mode tertentu, mis. \"gdm\" untuk layar masuk"
 msgid "List possible modes"
 msgstr "Menampilkan mode yang mungkin"
 
-#: ../src/shell-app.c:653
+#: ../src/shell-app.c:654
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "Gagal meluncurkan '%s'"

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-23 02:28+0000\n"
-"PO-Revision-Date: 2016-01-05 02:28+0000\n"
+"POT-Creation-Date: 2016-03-01 02:27+0000\n"
+"PO-Revision-Date: 2016-03-01 02:28+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -194,51 +194,61 @@ msgid ""
 msgstr "سيتم عرض التطبيقات المقابلة لهذه المعرفات في منطقة المفضلات."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
+msgid "List of desktop file IDs for applications pinned to taskbar"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
+msgid ""
+"The applications corresponding to these identifiers will be displayed in the"
+" taskbar at the bottom of the Endless desktop."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "List of categories that should be displayed as folders"
 msgstr "قائمة الفئات التي يجب أن يتم عرضها كمجلدات"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
 msgstr "سيتم تمثيل كل اسم فئة في هذه القائمة كمجلد في معرض التطبيق، بدلاً من عرضها متضمنةً في العرض الرئيسي."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
 msgid "History for command (Alt-F2) dialog"
 msgstr "التأريخ لنافذة حوار الأمر (Alt-F2)"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
 msgid "History for the looking glass dialog"
 msgstr "تاريخ حوار المرآة السحرية"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
 msgstr "يستخدم داخلياً لتخزين آخر وجود للرسائل الفورية والذي تم تعيينه بشكلٍ صريحٍ من قبل المستخدم. القيمة هنا هي من التعداد TpConnectionPresenceType."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
 msgid ""
 "Internally used to store the last session presence status for the user. The "
 "value here is from the GsmPresenceStatus enumeration."
 msgstr "تستخدم داخلياً لتخزين آخر حالة تواجد في جلسة للمستخدم. القيمة هنا هي من التعداد GsmPresenceStatus."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid "Always show the 'Log out' menuitem in the user menu."
 msgstr "أظهر دائماً عنصر قائمة ’تسجيل الخروج Log out’  في قائمة المستخدم."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
 msgid ""
 "This key overrides the automatic hiding of the 'Log out' menuitem in single-"
 "user, single-session situations."
 msgstr "هذا المفتاح يتجاوز الاخفاء التلقائي ل'Log out' في MENUITEM ، أثناء حالات الجلسة الواحدة للمستخدم الواحد."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid ""
 "Whether to remember password for mounting encrypted or remote filesystems"
 msgstr "سواءً لتذكر كلمة المرور لتحميل أنظمة الملفات عن بعد أو المشفرة"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
 msgid ""
 "The shell will request a password when an encrypted device or a remote "
 "filesystem is mounted. If the password can be saved for future use a "
@@ -246,120 +256,120 @@ msgid ""
 "state of the checkbox."
 msgstr "ستطلب الصَدَفة كلمة مرور عندما يتم تحميل جهاز مشفر أو نظام ملفات عن بعد. إذا كان يمكن حفظ كلمة المرور لاستخدامها في المستقبل ستكون خانة الاختيار ’تذكر كلمة المرور Remember Password’ موجودة. هذا المفتاح يحدد الحالة الافتراضية لخانة الاختيار."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Layout of application launcher icons in the grid"
 msgstr "تصميم أيقونات مشغل التطبيق في الشبكة"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
 msgid ""
 "This key specifies the exact order of the icons shown in the applications "
 "launcher view."
 msgstr "يحدد هذا المفتاح الترتيب الدقيق للأيقونات الظاهرة في معرض مشغل التطبيقات."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Enables the pressure barrier for the message tray"
 msgstr "يُمَكِّنْ عائق الضغط لعلبة الرسائل"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
 msgid ""
 "By default, the message tray is only shown on key press. Set true to show "
 "the message tray when exerting downward pressure with the cursor on the "
 "bottom of the taskbar."
 msgstr "تُعرض علبة الرسائل فقط مع ضغط المفتاح، هذا هو الوضع الافتراضي. اضبط على قيمة: صحيح، لعرض علبة الرسائل عند إحداث ضغظ لأسفل بالمؤشر بأسفل شريط المهام."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
 msgid "Show the week date in the calendar"
 msgstr "اعرض تاريخ الأسبوع في التقويم"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid "If true, display the ISO week date in the calendar."
 msgstr "إذا كان هذا صحيحاً، اعرض تقويم أسبوع ايزو في التقويم."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
 msgid "Keybinding to open the application menu"
 msgstr "رابط المفتاح لفتح قائمة التطبيقات"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
 msgid "Keybinding to open the application menu."
 msgstr "رابط المفتاح لفتح قائمة التطبيقات."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
 msgid "Keybinding to open the \"Show Applications\" view"
 msgstr "رابط المفتاح لفتح  معرض \"إظهار التطبيقات Show Applications\""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
 msgid ""
 "Keybinding to open the \"Show Applications\" view of the Activities "
 "Overview."
 msgstr "رابط المفتاح لفتح معرض لمحة الأنشطة في ’إظهار التطبيقات Show Applications’."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "Keybinding to toggle the visibility of the message tray"
 msgstr "رابط المفتاح لتبديل رؤية علبة الرسائل"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Keybinding to toggle the visibility of the message tray."
 msgstr "رابط المفتاح لتبديل رؤية علبة الرسائل."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "Keybinding to focus the active notification"
 msgstr "رابط المفتاح لتركيز الإخطار النشط"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "Keybinding to focus the active notification."
 msgstr "رابط المفتاح لتركيز الإخطار النشط."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid "Keybinding that shows the force app exit dialog"
 msgstr "رابط المفتاح الذي يُظهر المربع الحواري للخروج الإجباري من التطبيق"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "Which keyboard to use"
 msgstr "أي لوحة مفاتيح ترغب باستخدامها"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid "The type of keyboard to use."
 msgstr "نوع لوحة المفاتيح التي ترغب باستخدامها."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "The application icon mode."
 msgstr "نمط أيقونة البرنامج."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
 "(shows only the application icon) or 'both'."
 msgstr "يقوم بتكوين كيفية عرض النوافذ في وحدات التحويل. الاحتمالات الصالحة هي ’مصغرات فقط’ (يُظهر صورة مصغرة للنافذة)، ’أيقونة تطبيق-فقط '(يُظهر فقط أيقونة التطبيق) أو’ كلاهما ’."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Attach modal dialog to the parent window"
 msgstr "إرفاق مربع حوار مشروط إلى النافذة الأصلية"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr "هذا المفتاح يتجاوز المفتاح في org.gnome.mutter عند تشغيل صَدفة جنوم."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Arrangement of buttons on the titlebar"
 msgstr "ترتيب الأزرار على شريط العناوين"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
 msgstr "هذا المفتاح يتجاوز المفتاح في org.gnome.desktop.wm.preferences عند تشغيل صدفة جنوم."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr "تمكين امالة الحافة عند اسقاط النوافذ على حواف الشاشة"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:61
 msgid "Workspaces are managed dynamically"
 msgstr "تدار مساحات العمل بشكل ديناميكي"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:62
 msgid "Workspaces only on primary monitor"
 msgstr "مساحات عمل على جهاز العرض الأساسي فقط"
 
@@ -496,54 +506,62 @@ msgstr "تعذّر تحليل الأمر:"
 msgid "Execution of '%s' failed:"
 msgstr "فشل تنفيذ '%s':‏"
 
-#: ../js/ui/appDisplay.js:1149
+#: ../js/ui/appDisplay.js:1151
 msgid "Remove from desktop"
 msgstr "إزالة من سطح المكتب"
 
-#: ../js/ui/appDisplay.js:1632
+#: ../js/ui/appDisplay.js:1634
 msgid "Warning"
 msgstr "تحذير"
 
-#: ../js/ui/appDisplay.js:1638
+#: ../js/ui/appDisplay.js:1640
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "لحذف مجلد عليك إزالة كافة العناصر داخله أولاً."
 
-#: ../js/ui/appDisplay.js:1644
+#: ../js/ui/appDisplay.js:1646
 msgid "We are just trying to keep you safe."
 msgstr "نحاول فقط المحافظة على أمنك."
 
-#: ../js/ui/appDisplay.js:1650 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1652 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "حسنا"
 
-#: ../js/ui/appDisplay.js:1902
+#: ../js/ui/appDisplay.js:1904
 msgid "More Apps"
 msgstr "المزيد من التطبيقات"
 
-#: ../js/ui/appDisplay.js:1911
+#: ../js/ui/appDisplay.js:1913
 msgid "Delete"
 msgstr "حذف"
 
-#: ../js/ui/appFavorites.js:96
+#: ../js/ui/appFavorites.js:99
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "أُضيف %s إلى مفضلتك."
 
-#: ../js/ui/appFavorites.js:130
+#: ../js/ui/appFavorites.js:136
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "أُزيل %s من مفضّلتك."
 
-#: ../js/ui/appIconBar.js:212
+#: ../js/ui/appIconBar.js:213
 msgid "Other workspaces"
 msgstr "مساحات عمل أخرى"
 
-#: ../js/ui/appIconBar.js:221
+#: ../js/ui/appIconBar.js:222
 msgid "Current workspace"
 msgstr "مساحة العمل الحالية "
 
-#: ../js/ui/appIconBar.js:294
+#: ../js/ui/appIconBar.js:297
+msgid "Pin to Taskbar"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:301
+msgid "Unpin from Taskbar"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:317
 #, javascript-format
 msgid "Quit %s"
 msgstr "إغلاق %s"
@@ -1158,7 +1176,7 @@ msgstr "لوحة الرسائل"
 msgid "System Information"
 msgstr "معلومات النظام"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:397
+#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
 msgctxt "program"
 msgid "Unknown"
 msgstr "غير معروف"
@@ -1805,7 +1823,7 @@ msgstr "استخدم طورا معينا، مثلا: \"gdm\" لشاشة الول
 msgid "List possible modes"
 msgstr "اسرد كل الأطوار الممكنة"
 
-#: ../src/shell-app.c:653
+#: ../src/shell-app.c:654
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "فشل تشغيل '%s'"
