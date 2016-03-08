@@ -44,6 +44,7 @@ const IconGridLayout = new Lang.Class({
 
     _getIconTreeFromVariant: function(allIcons) {
         let iconTree = {};
+        let appSys = Shell.AppSystem.get_default();
 
         for (let i = 0; i < allIcons.n_children(); i++) {
             let context = allIcons.get_child_value(i);
@@ -56,8 +57,14 @@ const IconGridLayout = new Lang.Class({
                 // icon layout.
                 if (appId.startsWith('eos-app-'))
                     return appId.slice('eos-app-'.length);
-                else
-                    return appId;
+
+                // Some apps have their name superceded, for instance gedit -> org.gnome.gedit.
+                // We want the new name, not the old one.
+                let app = appSys.lookup_alias(appId);
+                if (app)
+                    return app.get_id();
+
+                return appId;
             });
         }
 
@@ -192,7 +199,7 @@ const IconGridLayout = new Lang.Class({
             info = Shell.DesktopDirInfo.new(id);
         } else {
             let appSystem = Shell.AppSystem.get_default();
-            let app = appSystem.lookup_app(id);
+            let app = appSystem.lookup_alias(id);
             if (app) {
                 info = app.get_app_info();
             }
