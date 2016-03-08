@@ -37,6 +37,8 @@ const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
 
 const PANEL_WINDOW_MENU_THUMBNAIL_SIZE = 128;
 
+const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
+
 function _compareByStableSequence(winA, winB) {
     let seqA = winA.get_stable_sequence();
     let seqB = winB.get_stable_sequence();
@@ -362,6 +364,14 @@ const AppIconButton = new Lang.Class({
         }
     },
 
+    _getInterestingWindows: function() {
+        let windows = this._app.get_windows();
+        windows = windows.filter(function(metaWindow) {
+            return Shell.WindowTracker.is_window_interesting(metaWindow);
+        });
+        return windows;
+    },
+
     _handleButtonPressEvent: function(actor, event) {
         let button = event.get_button();
         let clickCount = event.get_click_count();
@@ -371,11 +381,7 @@ const AppIconButton = new Lang.Class({
             this._hideHoverState();
             this.emit('app-icon-pressed');
 
-            let windows = this._app.get_windows();
-            windows = windows.filter(function(metaWindow) {
-                return Shell.WindowTracker.is_window_interesting(metaWindow);
-            });
-
+            let windows = this._getInterestingWindows();
             if (windows.length > 1) {
                 let hasOtherMenu = this._hasOtherMenuOpen();
                 let animation = BoxPointer.PopupAnimation.FULL;
@@ -419,12 +425,8 @@ const AppIconButton = new Lang.Class({
         this._closeOtherMenus(BoxPointer.PopupAnimation.FULL);
         this._animateBounce();
 
+        let windows = this._getInterestingWindows();
         // The multiple windows case is handled in button-press-event
-        let windows = this._app.get_windows();
-        windows = windows.filter(function(metaWindow) {
-            return Shell.WindowTracker.is_window_interesting(metaWindow);
-        });
-
         if (windows.length == 0) {
             let activationContext = new AppActivation.AppActivationContext(this._app);
             activationContext.activate();
@@ -438,6 +440,18 @@ const AppIconButton = new Lang.Class({
                 // Activate window normally
                 Main.activateWindow(win);
             }
+        }
+    },
+
+    activateFirstWindow: function() {
+        this._animateBounce();
+        this._closeOtherMenus(BoxPointer.PopupAnimation.FULL);
+        let windows = this._getInterestingWindows();
+        if (windows.length > 0) {
+            Main.activateWindow(windows[0]);
+        } else {
+            let activationContext = new AppActivation.AppActivationContext(this._app);
+            activationContext.activate();
         }
     },
 
@@ -674,6 +688,24 @@ const ScrolledIconList = new Lang.Class({
                     appButton.actor.remove_style_pseudo_class('highlighted');
                 }
             }));
+    },
+
+    _getAppButtons: function() {
+        return this._taskbarApps.values().filter(function(value) {
+            // Excluded apps have a null button
+            return value != null;
+        });
+    },
+
+    getNumAppButtons: function() {
+        return this._getAppButtons().length;
+    },
+
+    activateNthApp: function(index) {
+        let appButton = this._getAppButtons()[index];
+        if (appButton == undefined)
+            return;
+        appButton.activateFirstWindow();
     },
 
     getIconSize: function() {
@@ -1004,11 +1036,43 @@ const AppIconBar = new Lang.Class({
         Main.overview.connect('showing', Lang.bind(this, this._updateActiveApp));
         Main.overview.connect('hidden', Lang.bind(this, this._updateActiveApp));
 
+
+        let keybindingSettings = new Gio.Settings({ schema: SHELL_KEYBINDINGS_SCHEMA });
+        for (let index = 0; index < 8; index++) {
+            let fullName = 'activate-icon-' + (index + 1);
+            Main.wm.addKeybinding(fullName,
+                                  keybindingSettings,
+                                  Meta.KeyBindingFlags.NONE,
+                                  Shell.KeyBindingMode.NORMAL |
+                                  Shell.KeyBindingMode.OVERVIEW,
+                                  this._activateNthApp.bind(this, index));
+        }
+        Main.wm.addKeybinding('activate-last-icon',
+                              keybindingSettings,
+                              Meta.KeyBindingFlags.NONE,
+                              Shell.KeyBindingMode.NORMAL |
+                              Shell.KeyBindingMode.OVERVIEW,
+                              Lang.bind(this, this._activateLastApp));
+
         this._updateActiveApp();
     },
 
     _onAppIconPressed: function() {
         this._panel.closeActiveMenu();
+    },
+
+    _activateNthApp: function(index) {
+        if (index == 0) {
+            this._browserButton.activateFirstWindow();
+            return;
+        }
+        this._scrolledIconList.activateNthApp(index - 1);
+    },
+
+    _activateLastApp: function() {
+        // Activate the index of the last button in the scrolled list + 1, to
+        // include the browser button
+        this._activateNthApp(this._scrolledIconList.getNumAppButtons());
     },
 
     _updateActiveApp: function() {
