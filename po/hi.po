@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-23 02:28+0000\n"
-"PO-Revision-Date: 2016-01-05 02:28+0000\n"
+"POT-Creation-Date: 2016-03-01 02:27+0000\n"
+"PO-Revision-Date: 2016-03-01 02:28+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
 "MIME-Version: 1.0\n"
@@ -191,51 +191,61 @@ msgid ""
 msgstr "इन पहचानकर्ता के लिए अनुप्रयोगों को पसंदीदा क्षेत्र में प्रदर्शित किया जाएगा."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
+msgid "List of desktop file IDs for applications pinned to taskbar"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
+msgid ""
+"The applications corresponding to these identifiers will be displayed in the"
+" taskbar at the bottom of the Endless desktop."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "List of categories that should be displayed as folders"
 msgstr "श्रेणियों की सूची जिसे बतौर फ़ोल्ड़र दिखाया जाना चाहिए"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
 msgid ""
 "Each category name in this list will be represented as folder in the "
 "application view, rather than being displayed inline in the main view."
 msgstr "अनुप्रयोग दृश्य में हर श्रेणी नाम को बतौर फ़ोल्डर प्रदर्शित किया जाएगा, मुख्य दृश्य में अंदर ही दिखाए गए रूप के बजाय."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
 msgid "History for command (Alt-F2) dialog"
 msgstr "कमांड (Alt-F2) के लिए इतिहास संवाद "
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
 msgid "History for the looking glass dialog"
 msgstr "ग्लास खोज संवाद के लिए इतिहास"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
 msgid ""
 "Internally used to store the last IM presence explicitly set by the user. "
 "The value here is from the TpConnectionPresenceType enumeration."
 msgstr "स्पष्ट रूप से उपयोगकर्ता द्वारा निर्धारित की गई आंतरिक रूप से पिछले आईएम उपस्थिति का इस्तेमाल किया किया जाता हैं. यह TpConnectionPresenceType  गणन से मान लिया गया हैं "
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
 msgid ""
 "Internally used to store the last session presence status for the user. The "
 "value here is from the GsmPresenceStatus enumeration."
 msgstr "आंतरिक रूप से उपयोगकर्ता के लिए पिछले सत्र उपस्थिति स्थिति को संग्रहीत करने के लिए उपयोग किया जाता हैं. यह GsmPresenceStatus गणन से मान लिया गया हैं "
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
 msgid "Always show the 'Log out' menuitem in the user menu."
 msgstr "हमेशा 'लॉग आउट' मेन्यू मद को उपयोक्ता मेन्यू में दिखाएँ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
 msgid ""
 "This key overrides the automatic hiding of the 'Log out' menuitem in single-"
 "user, single-session situations."
 msgstr "यह कुँजी 'लॉग आउट' मेन्यू मद का एकल उपयोक्ता, एकल सत्र स्थिति में स्वचालित छिपाने को अधिरोहित करती है."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
 msgid ""
 "Whether to remember password for mounting encrypted or remote filesystems"
 msgstr "गोपित या दूरस्थ फ़ाइलतंत्र के लिए कूटशब्द क्या याद रखने हैं"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
 msgid ""
 "The shell will request a password when an encrypted device or a remote "
 "filesystem is mounted. If the password can be saved for future use a "
@@ -243,120 +253,120 @@ msgid ""
 "state of the checkbox."
 msgstr "यह शेल किसी कूटशब्द का निवेदन करेगा जब कोई गोपित युक्ति या दूरस्थ फ़ाइलतंत्र आरोहित किया जाता है. यदि कूटशब्द को भविष्य के उपयोग के लिए सहेजा जाता है तो 'कूटशब्द याद रखें' जाँचपेटी मौजूद रहेगा. यह कुँजी जाँचपेटी की तयशुदा स्थिति को सेट करता है."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
 msgid "Layout of application launcher icons in the grid"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
 msgid ""
 "This key specifies the exact order of the icons shown in the applications "
 "launcher view."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
 msgid "Enables the pressure barrier for the message tray"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
 msgid ""
 "By default, the message tray is only shown on key press. Set true to show "
 "the message tray when exerting downward pressure with the cursor on the "
 "bottom of the taskbar."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
 msgid "Show the week date in the calendar"
 msgstr "अगर सही है, पंचांग में सप्ताह संख्या दिखाएँ"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
 msgid "If true, display the ISO week date in the calendar."
 msgstr "अगर सही है, तो पंचांग में ISO सप्ताह तिथि दिखाएँ."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
 msgid "Keybinding to open the application menu"
 msgstr "अनुप्रयोग मेनू को खोलने के लिए कीबाइंडिंग"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
 msgid "Keybinding to open the application menu."
 msgstr "अनुप्रयोग मेनू को खोलने के लिए कीबाइंडिंग."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
 msgid "Keybinding to open the \"Show Applications\" view"
 msgstr "\"अनुप्रयोग दिखाएँ\" दृश्य खोलने के लिए खोलने के लिए कीबाइंडिंग"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
 msgid ""
 "Keybinding to open the \"Show Applications\" view of the Activities "
 "Overview."
 msgstr "गतिविधि परिदृश्य के \"अनुप्रयोग दिखाएँ\" दृश्य खोलने के लिए खोलने के लिए कीबाइंडिंग"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
 msgid "Keybinding to toggle the visibility of the message tray"
 msgstr "संदेश ट्रे की दृश्यता को टॉगल करने के लिए कीबाइंडिंग"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
 msgid "Keybinding to toggle the visibility of the message tray."
 msgstr "संदेश ट्रे की दृश्यता को टॉगल करने के लिए कीबाइंडिंग."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
 msgid "Keybinding to focus the active notification"
 msgstr "सक्रिय अधिसूचना फोकस करने के लिए कीबाइंडिंग"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
 msgid "Keybinding to focus the active notification."
 msgstr "सक्रिय अधिसूचना फोकस करने के लिए कीबाइंडिंग."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
 msgid "Keybinding that shows the force app exit dialog"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
 msgid "Which keyboard to use"
 msgstr "उपयोग करने के लिए कुंजीपटल"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
 msgid "The type of keyboard to use."
 msgstr "उपयोग करने के लिए कीबोर्ड के प्रकार"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
 msgid "The application icon mode."
 msgstr "अनुप्रयोग चिह्न अवस्था."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
 "(shows only the application icon) or 'both'."
 msgstr "विन्यस्त करें कि कैसे विंडोज स्विचर में दिखाए जाते हैं. मान्य संभावनाएँ हैं 'लघुचित्र केवल' (विंडो का लघुचित्र दिखाता है), 'app-icon-केवल' (केवल अनुप्रयोग चिह्न दिखाता है) या 'दोनों'."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
 msgid "Attach modal dialog to the parent window"
 msgstr "जनक विंडो में मोडल संवाद संलग्न करें"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr "यह कुँजी org.gnome.mutter में कुँजी को अधिरोहित करता है जब गनोम शेल को चला रहा हो."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
 msgid "Arrangement of buttons on the titlebar"
 msgstr "शीर्षक-पट्टी में बटनों का विन्यास"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
 msgstr "यह कुँजी org.gnome.desktop.wm.preferences में कुँजी को अधिरोहित करता है जब गनोम शेल को चला रहा हो."
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr "जब स्क्रीन किनारे पर विंडोज़ को छोड़ने बढ़त टाइलिंग सक्षम करें"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:61
 msgid "Workspaces are managed dynamically"
 msgstr "कार्यस्थान गतिशील रूप से प्रबंधित की जाती हैं"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:62
 msgid "Workspaces only on primary monitor"
 msgstr "केवल प्राथमिक मॉनिटर पर कार्यस्थान"
 
@@ -493,54 +503,62 @@ msgstr "कमांड का विश्लेषण नहीं कर स�
 msgid "Execution of '%s' failed:"
 msgstr "'%s' का निष्पादन विफल:"
 
-#: ../js/ui/appDisplay.js:1149
+#: ../js/ui/appDisplay.js:1151
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1632
+#: ../js/ui/appDisplay.js:1634
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1638
+#: ../js/ui/appDisplay.js:1640
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1644
+#: ../js/ui/appDisplay.js:1646
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1650 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1652 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "ठीक"
 
-#: ../js/ui/appDisplay.js:1902
+#: ../js/ui/appDisplay.js:1904
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1911
+#: ../js/ui/appDisplay.js:1913
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appFavorites.js:96
+#: ../js/ui/appFavorites.js:99
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s को आपकी पसंदीदा में जोड़ा गया है."
 
-#: ../js/ui/appFavorites.js:130
+#: ../js/ui/appFavorites.js:136
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s को आपकी पसंदीदा से हटाया गया है."
 
-#: ../js/ui/appIconBar.js:212
+#: ../js/ui/appIconBar.js:213
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:221
+#: ../js/ui/appIconBar.js:222
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:294
+#: ../js/ui/appIconBar.js:297
+msgid "Pin to Taskbar"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:301
+msgid "Unpin from Taskbar"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:317
 #, javascript-format
 msgid "Quit %s"
 msgstr ""
@@ -1139,7 +1157,7 @@ msgstr "संदेश तश्तरी"
 msgid "System Information"
 msgstr "तंत्र जानकारी"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:397
+#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
 msgctxt "program"
 msgid "Unknown"
 msgstr "अज्ञात"
@@ -1758,7 +1776,7 @@ msgstr "विशेष अवस्था का उपयोग करें, 
 msgid "List possible modes"
 msgstr "संभावित अवस्था सूचीबद्ध करें"
 
-#: ../src/shell-app.c:653
+#: ../src/shell-app.c:654
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "'%s' लॉन्च करने में विफल"
