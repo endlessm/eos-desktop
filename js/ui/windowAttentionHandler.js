@@ -33,7 +33,7 @@ const WindowAttentionHandler = new Lang.Class({
             return;
 
 	let focusWindow = global.display.focus_window;
-	if (focusWindow && focusWindow.get_role() == 'eos-speedwagon')
+	if (focusWindow && Shell.WindowTracker.is_speedwagon_window(focusWindow))
 	    return;
 
         let app = this._tracker.get_window_app(window);

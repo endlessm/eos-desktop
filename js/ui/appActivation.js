@@ -326,7 +326,7 @@ const DesktopAppClient = new Lang.Class({
 
     _windowCreated: function(metaDisplay, metaWindow) {
         // Ignore splash screens, which will already be maximized.
-        if (metaWindow.get_role() == 'eos-speedwagon') {
+        if (Shell.WindowTracker.is_speedwagon_window(metaWindow)) {
             return;
         }
 
