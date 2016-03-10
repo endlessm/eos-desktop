@@ -172,7 +172,8 @@ const AppIconMenu = new Lang.Class({
         let otherWindows = [];
 
         windows.forEach(function(w) {
-            if (!Shell.WindowTracker.is_window_interesting(w)) {
+            if (!Shell.WindowTracker.is_window_interesting(w) ||
+                Shell.WindowTracker.is_speedwagon_window(w)) {
                 return;
             }
 
