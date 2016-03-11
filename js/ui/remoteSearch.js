@@ -258,7 +258,7 @@ const RemoteSearchProvider = new Lang.Class({
     _getResultsFinished: function(results, error, callback) {
         if (error) {
             if (!error.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                log('Received error from DBus search provider %s: %s'.format(this.id, String(error)));
+                logError(error, 'Received error from DBus search provider %s'.format(this.id));
             callback([]);
             return;
         }
@@ -281,7 +281,7 @@ const RemoteSearchProvider = new Lang.Class({
     _getResultMetasFinished: function(results, error, callback) {
         if (error) {
             if (!error.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                log('Received error from DBus search provider %s during GetResultMetas: %s'.format(this.id, String(error)));
+                logError(error, 'Received error from DBus search provider %s during GetResultMetas'.format(this.id));
             callback([]);
             return;
         }
