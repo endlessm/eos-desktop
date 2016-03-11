@@ -174,7 +174,7 @@ const ListSearchResult = new Lang.Class({
                                y_align: St.Align.MIDDLE });
 
         let title = new St.Label({ style_class: 'list-search-result-title',
-                                   text: this.metaInfo['name'],
+                                   text: this.metaInfo['name'] || '',
                                    y_align: Clutter.ActorAlign.CENTER });
         details.add(title, { x_fill: false,
                              y_fill: true,
