@@ -441,7 +441,7 @@ const AppIconButton = new Lang.Class({
         if (windows.length == 0) {
             let activationContext = new AppActivation.AppActivationContext(this._app);
             activationContext.activate();
-        } else if (numRealWindows == 1) {
+        } else if (numRealWindows == 1 && !hasSpeedwagon) {
             let win = windows[0];
             if (win.has_focus() && !Main.overview.visible && !hasOtherMenu) {
                 // The overview is not visible, and this is the
