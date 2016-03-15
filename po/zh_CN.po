@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-01 02:27+0000\n"
+"POT-Creation-Date: 2016-03-08 02:28+0000\n"
 "PO-Revision-Date: 2016-03-01 02:28+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
@@ -545,12 +545,12 @@ msgstr "更多的Apps"
 msgid "Delete"
 msgstr "删除"
 
-#: ../js/ui/appFavorites.js:99
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s 已经添加到了您的收藏夹。"
 
-#: ../js/ui/appFavorites.js:136
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s 已经从您的收藏夹中移除。"
