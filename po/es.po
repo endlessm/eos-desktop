@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-01 02:27+0000\n"
+"POT-Creation-Date: 2016-03-08 02:28+0000\n"
 "PO-Revision-Date: 2016-03-01 02:28+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/es/)\n"
@@ -540,12 +540,12 @@ msgstr "Más programas"
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ../js/ui/appFavorites.js:99
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "Se ha añadido %s a tus favoritos."
 
-#: ../js/ui/appFavorites.js:136
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "Se ha quitado %s de tus favoritos."
