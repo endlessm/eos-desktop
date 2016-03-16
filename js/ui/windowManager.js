@@ -967,7 +967,7 @@ const WindowManager = new Lang.Class({
             actor._windowType = type;
         }));
 
-        let isSplashWindow = (window.get_role() == 'eos-speedwagon');
+        let isSplashWindow = Shell.WindowTracker.is_speedwagon_window(window);
 
         if (!isSplashWindow) {
             // If we have an active splash window for the app, don't animate it.
@@ -975,7 +975,7 @@ const WindowManager = new Lang.Class({
             let tracker = Shell.WindowTracker.get_default();
             let app = tracker.get_window_app(window);
             let hasSplashWindow = (app && app.get_windows().some(function(window) {
-                return (window.get_role() == 'eos-speedwagon')
+                return Shell.WindowTracker.is_speedwagon_window(window);
             }));
             if (hasSplashWindow) {
                 shellwm.completed_map(actor);

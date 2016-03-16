@@ -172,7 +172,8 @@ const AppIconMenu = new Lang.Class({
         let otherWindows = [];
 
         windows.forEach(function(w) {
-            if (!Shell.WindowTracker.is_window_interesting(w)) {
+            if (!Shell.WindowTracker.is_window_interesting(w) ||
+                Shell.WindowTracker.is_speedwagon_window(w)) {
                 return;
             }
 
@@ -366,10 +367,16 @@ const AppIconButton = new Lang.Class({
 
     _getInterestingWindows: function() {
         let windows = this._app.get_windows();
+        let hasSpeedwagon = false;
         windows = windows.filter(function(metaWindow) {
+            hasSpeedwagon = hasSpeedwagon || Shell.WindowTracker.is_speedwagon_window(metaWindow);
             return Shell.WindowTracker.is_window_interesting(metaWindow);
         });
-        return windows;
+        return [windows, hasSpeedwagon];
+    },
+
+    _getNumRealWindows: function(windows, hasSpeedwagon) {
+        return windows.length - (hasSpeedwagon ? 1 : 0);
     },
 
     _handleButtonPressEvent: function(actor, event) {
@@ -381,8 +388,10 @@ const AppIconButton = new Lang.Class({
             this._hideHoverState();
             this.emit('app-icon-pressed');
 
-            let windows = this._getInterestingWindows();
-            if (windows.length > 1) {
+            let [windows, hasSpeedwagon] = this._getInterestingWindows();
+            let numRealWindows = this._getNumRealWindows(windows, hasSpeedwagon);
+
+            if (numRealWindows > 1) {
                 let hasOtherMenu = this._hasOtherMenuOpen();
                 let animation = BoxPointer.PopupAnimation.FULL;
                 if (hasOtherMenu) {
@@ -425,12 +434,14 @@ const AppIconButton = new Lang.Class({
         this._closeOtherMenus(BoxPointer.PopupAnimation.FULL);
         this._animateBounce();
 
-        let windows = this._getInterestingWindows();
+        let [windows, hasSpeedwagon] = this._getInterestingWindows();
+        let numRealWindows = this._getNumRealWindows(windows, hasSpeedwagon);
+
         // The multiple windows case is handled in button-press-event
         if (windows.length == 0) {
             let activationContext = new AppActivation.AppActivationContext(this._app);
             activationContext.activate();
-        } else if (windows.length == 1) {
+        } else if (numRealWindows == 1 && !hasSpeedwagon) {
             let win = windows[0];
             if (win.has_focus() && !Main.overview.visible && !hasOtherMenu) {
                 // The overview is not visible, and this is the
@@ -446,7 +457,7 @@ const AppIconButton = new Lang.Class({
     activateFirstWindow: function() {
         this._animateBounce();
         this._closeOtherMenus(BoxPointer.PopupAnimation.FULL);
-        let windows = this._getInterestingWindows();
+        let windows = this._getInterestingWindows()[0];
         if (windows.length > 0) {
             Main.activateWindow(windows[0]);
         } else {

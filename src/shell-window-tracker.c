@@ -40,6 +40,7 @@
  */
 
 #define SIDE_COMPONENT_ROLE "eos-side-component"
+#define SPEEDWAGON_ROLE "eos-speedwagon"
 
 struct _ShellWindowTracker
 {
@@ -161,6 +162,18 @@ shell_window_tracker_is_window_interesting (MetaWindow *window)
     return FALSE;
 
   return TRUE;
+}
+
+/**
+ * shell_window_tracker_is_speedwagon_window:
+ *
+ * A speedwagon window is shown while an application is being launched.
+ *
+ * Returns: %TRUE if a window is a speedwagon
+ */
+gboolean shell_window_tracker_is_speedwagon_window (MetaWindow *window)
+{
+  return g_strcmp0 (meta_window_get_role (window), SPEEDWAGON_ROLE) == 0;
 }
 
 /*
