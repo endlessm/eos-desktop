@@ -408,7 +408,8 @@ const ScreenShield = new Lang.Class({
                 Main.sessionMode.pushMode('unlock-dialog');
         }
 
-        this._resetLockScreen(animate);
+        if (!this._isGreeter)
+            this._resetLockScreen(animate);
 
         // We used to set isActive and emit active-changed here,
         // but now we do that from lockScreenShown, which means
