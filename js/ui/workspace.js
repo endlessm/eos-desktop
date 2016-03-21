@@ -1022,6 +1022,9 @@ const Workspace = new Lang.Class({
     positionWindows: function(flags) {
         this._positionWindowsFlags |= flags;
 
+        if (!this.actor.mapped)
+            return;
+
         if (this._positionWindowsId > 0)
             return;
 
