@@ -7,7 +7,6 @@ data/eos-session.desktop.in.in
 data/eos-shell.desktop.in.in
 data/eos-shell-extension-prefs.desktop.in.in
 data/gdm-eos-shell.desktop.in.in
-data/org.gnome.shell.gschema.xml.in.in
 js/extensionPrefs/main.js
 js/gdm/loginDialog.js
 js/gdm/powerMenu.js

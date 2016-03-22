@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-08 02:28+0000\n"
-"PO-Revision-Date: 2016-03-01 02:28+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2016-03-21 21:07-0700\n"
+"PO-Revision-Date: 2016-03-22 04:08+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -75,313 +75,6 @@ msgstr "GNOME使用界面扩展首选项"
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure GNOME Shell Extensions"
 msgstr "配置GNOME使用界面扩展"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:1
-msgid "Enable internal tools useful for developers and testers from Alt-F2"
-msgstr "调用Alt-F2 以启用对开发者和测试者有用的内部工具"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:2
-msgid ""
-"Allows access to internal debugging and monitoring tools using the Alt-F2 "
-"dialog."
-msgstr "允许使用 Alt-F2 对话框访问内部调试和监视工具。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:3
-msgid "Separate the power off and log out buttons on the user menu"
-msgstr "在用户菜单中区分关机键与注销键"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:4
-msgid ""
-"By default, use a single exit button to power off or log out (with the log "
-"out option on the power off confirmation dialog). Set true for separate "
-"buttons on the user menu."
-msgstr "默认使用退出键关机或注销（注销选项设置在关闭电源确认框中）。将用户菜单各键的属性设为true。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:5
-msgid "Enables the hot corner for the window picker"
-msgstr "启用窗口选择器中的热区"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:6
-msgid ""
-"By default, the hot corner for the window picker is enabled. Set false to "
-"disable the hot corner."
-msgstr "窗口选择器中的热区默认开启。将属性设置为false会使热区失效。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:7
-msgid "Set the left/right position of the hot corner for the window picker"
-msgstr "将热区的左/右边角落设置为为窗口选择器"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:8
-msgid ""
-"Default position of the hot corner is in a right corner. Set false to move "
-"the hot corner to a left corner. The position is not affected by the RTL vs."
-" LTR text direction."
-msgstr "热区默认置于右边角落。将属性设为false以移动热区至左边角落。RTL和LTR文本方向不影响热区位置。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:9
-msgid "Set the top/bottom position of the hot corner for the window picker"
-msgstr "将热区置顶/底设置为窗口选择器"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:10
-msgid ""
-"Default position of the hot corner is in a bottom corner. Set false to move "
-"the hot corner to a top corner."
-msgstr "热区默认置于底部。将属性设为false以移动热区至顶部。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:11
-msgid "Set the size of the hot corner target"
-msgstr "设置热区目标大小"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:12
-msgid ""
-"Number of pixels in one dimension of the square target for the hot corner. "
-"Default is for a single pixel in the very corner. For some virtual machines,"
-" this value may need to be set larger than the default."
-msgstr "热区中方形目标的单位像素数量。该热区默认值为单像素。在一些虚拟机中，该值设置可能大于默认值。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:13
-msgid "Set the left/right position of the dash on the overview"
-msgstr "在概述页面设置dash的左右位置"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:14
-msgid ""
-"Default position of the dash is at the end of the screen (right edge for LTR"
-" text direction). Unlike the hot corners, the opposite side is used for RTL "
-"text direction."
-msgstr "dash默认置于屏幕边缘（右侧边缘为LTR文本方向）。和热区不同的是，其相反的一侧用于RTL文本方向。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:15
-msgid "Prevent apps from being automatically maximized on launch"
-msgstr "在启动过程中阻止应用程序自动最大化。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:16
-msgid ""
-"Makes window management more like standard Gnome. Hides application splash "
-"screens, prevents applications from being forced to open maximized, and does"
-" not automatically switch to the app selector when a window is minimized."
-msgstr "使窗口管理接近标准Gnome。隐藏应用程序的启动界面，阻止程序被强制最大化打开，应用程序在窗口最小化时不能自动跳转到应用选择器。\t"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:17
-msgid "Whether the app store is displayed"
-msgstr "是否显示应用程序商店"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:18
-msgid "Whether the application grid displays the app store icon."
-msgstr "应用网格是否显示应用商店图标\t"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:19
-msgid "Uuids of extensions to enable"
-msgstr "启用uuids的扩展部分"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:20
-msgid ""
-"GNOME Shell extensions have a uuid property; this key lists extensions which"
-" should be loaded. Any extension that wants to be loaded needs to be in this"
-" list. You can also manipulate this list with the EnableExtension and "
-"DisableExtension DBus methods on org.gnome.Shell."
-msgstr "GNOME使用界面扩展部分有一个 uuid 属性，此键列出了应该加载的扩展。任何需要加载的扩展都需出现在此列表中。您还可以通过 DBus 的方式对 org.gnome.Shell 里的 EnableExtension 和 DisableExtension 的值进行修改，以调整此列表。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:21
-msgid "Whether to collect stats about applications usage"
-msgstr "是否收集应用程序的使用情况"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:22
-msgid ""
-"The shell normally monitors active applications in order to present the most"
-" used ones (e.g. in launchers). While this data will be kept private, you "
-"may want to disable this for privacy reasons. Please note that doing so "
-"won't remove already saved data."
-msgstr "该使用界面一般将监测活动的应用程序，以便呈现最常用的（例如，在启动器中）。同时，此数据将保持私密，您可能因为隐私原因想要禁用此项。请注意，这么做，并不会移除已经保存的数据。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:23
-msgid "List of desktop file IDs for favorite applications"
-msgstr "收藏夹中应用程序的桌面文件ID的列表"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:24
-msgid ""
-"The applications corresponding to these identifiers will be displayed in the"
-" favorites area."
-msgstr "符合这些标识的应用程序将显示在收藏区中。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:25
-msgid "List of desktop file IDs for applications pinned to taskbar"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
-msgid ""
-"The applications corresponding to these identifiers will be displayed in the"
-" taskbar at the bottom of the Endless desktop."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
-msgid "List of categories that should be displayed as folders"
-msgstr "分类目录以文件夹形式显示。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
-msgid ""
-"Each category name in this list will be represented as folder in the "
-"application view, rather than being displayed inline in the main view."
-msgstr "此列表中各类别名称在应用程序视图中以文件夹形式显示\t，而不是以内联形式出现在主视图。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
-msgid "History for command (Alt-F2) dialog"
-msgstr "命令对话框（Alt-F2）的历史记录"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
-msgid "History for the looking glass dialog"
-msgstr "Looking Glass对话框历史"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
-msgid ""
-"Internally used to store the last IM presence explicitly set by the user. "
-"The value here is from the TpConnectionPresenceType enumeration."
-msgstr "用于内部保存用户自主设置的即时通信程序上次的在线状态。这里的值取自TpConnectionPresenceType的枚举变量。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
-msgid ""
-"Internally used to store the last session presence status for the user. The "
-"value here is from the GsmPresenceStatus enumeration."
-msgstr "用于内部保存上次会话中用户的在线状态。这里的值取自 GsmPresenceStatus枚举变量。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
-msgid "Always show the 'Log out' menuitem in the user menu."
-msgstr "总在用户菜单中显示“注销”。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
-msgid ""
-"This key overrides the automatic hiding of the 'Log out' menuitem in single-"
-"user, single-session situations."
-msgstr "此键撤销单用户与单会话模式下“注销”菜单项的自动隐藏。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
-msgid ""
-"Whether to remember password for mounting encrypted or remote filesystems"
-msgstr "是否记住安装加密或远程文件系统的密码"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
-msgid ""
-"The shell will request a password when an encrypted device or a remote "
-"filesystem is mounted. If the password can be saved for future use a "
-"'Remember Password' checkbox will be present. This key sets the default "
-"state of the checkbox."
-msgstr "安装加密设备或远程文件系统时，该使用界面需要密码。如果密码能保存，当前复选框将显示“记住密码”。此键设置复选框的默认状态。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
-msgid "Layout of application launcher icons in the grid"
-msgstr "应用程序启动图标的网格布局\t"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
-msgid ""
-"This key specifies the exact order of the icons shown in the applications "
-"launcher view."
-msgstr "此键设定应用程序视图显示的图标顺序。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
-msgid "Enables the pressure barrier for the message tray"
-msgstr "启用消息托盘的压力屏障"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
-msgid ""
-"By default, the message tray is only shown on key press. Set true to show "
-"the message tray when exerting downward pressure with the cursor on the "
-"bottom of the taskbar."
-msgstr "消息托盘只有在按键后默认弹出。光标下移至任务栏底部，属性设置为true，消息托盘弹出。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
-msgid "Show the week date in the calendar"
-msgstr "在日历中显示星期和时间"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
-msgid "If true, display the ISO week date in the calendar."
-msgstr "如果为真，在日历中显示 ISO星期和日期。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
-msgid "Keybinding to open the application menu"
-msgstr "用于打开应用程序菜单的按键组合"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
-msgid "Keybinding to open the application menu."
-msgstr "用于打开应用程序菜单的按键组合。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
-msgid "Keybinding to open the \"Show Applications\" view"
-msgstr "用于打开显示应用视图的按键组合"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
-msgid ""
-"Keybinding to open the \"Show Applications\" view of the Activities "
-"Overview."
-msgstr "用于在活动视图中打开显示应用视图的按键组合。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
-msgid "Keybinding to toggle the visibility of the message tray"
-msgstr "用来切换消息托盘是否可见的按键组合"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
-msgid "Keybinding to toggle the visibility of the message tray."
-msgstr "用来切换消息托盘是否可见的按键组合。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
-msgid "Keybinding to focus the active notification"
-msgstr "用来聚焦活动通知的按键组合"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
-msgid "Keybinding to focus the active notification."
-msgstr "用来聚焦活动通知的按键组合"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
-msgid "Keybinding that shows the force app exit dialog"
-msgstr "用来强制应用程序退出对话框的按键组合"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
-msgid "Which keyboard to use"
-msgstr "使用哪个键盘"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
-msgid "The type of keyboard to use."
-msgstr "要使用的键盘类型。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
-msgid "The application icon mode."
-msgstr "应用程序图标模式。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
-msgid ""
-"Configures how the windows are shown in the switcher. Valid possibilities "
-"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
-"(shows only the application icon) or 'both'."
-msgstr "配置窗口如何在切换器中显示。仅“thumbnail-only”(限时窗口的缩略图)，或者“app-icon-only”（只显示应用程序图标），或二者同时出现时有效。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
-msgid "Attach modal dialog to the parent window"
-msgstr "在父窗口添加模态对话框"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
-msgid ""
-"This key overrides the key in org.gnome.mutter when running GNOME Shell."
-msgstr "运行GNOME使用界面时，此密钥会覆盖org.gnome.mutter的密钥。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
-msgid "Arrangement of buttons on the titlebar"
-msgstr "管理标题栏上的按钮"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
-msgid ""
-"This key overrides the key in org.gnome.desktop.wm.preferences when running "
-"GNOME Shell."
-msgstr "运行GNOME使用界面时，此密钥会覆盖org.gnome. desktop.wm.preferences的密钥。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
-msgid "Enable edge tiling when dropping windows on screen edges"
-msgstr "在屏幕边缘删除窗口时启用边缘对接。"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:61
-msgid "Workspaces are managed dynamically"
-msgstr "动态管理工作区"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:62
-msgid "Workspaces only on primary monitor"
-msgstr "仅在主显示器上显示工作区"
 
 #: ../js/extensionPrefs/main.js:127
 #, javascript-format
@@ -555,23 +248,23 @@ msgstr "%s 已经添加到了您的收藏夹。"
 msgid "%s has been removed from your favorites."
 msgstr "%s 已经从您的收藏夹中移除。"
 
-#: ../js/ui/appIconBar.js:213
+#: ../js/ui/appIconBar.js:216
 msgid "Other workspaces"
 msgstr "其它工作区"
 
-#: ../js/ui/appIconBar.js:222
+#: ../js/ui/appIconBar.js:225
 msgid "Current workspace"
 msgstr "当前工作区"
 
-#: ../js/ui/appIconBar.js:297
+#: ../js/ui/appIconBar.js:300
 msgid "Pin to Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:301
+#: ../js/ui/appIconBar.js:304
 msgid "Unpin from Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:317
+#: ../js/ui/appIconBar.js:320
 #, javascript-format
 msgid "Quit %s"
 msgstr "退出%s"
@@ -1070,7 +763,7 @@ msgstr "系统监视器"
 msgid "Quit Application"
 msgstr "退出应用程序"
 
-#: ../js/ui/iconGridLayout.js:206
+#: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s已删除"
@@ -1210,11 +903,11 @@ msgstr "GNOME需要锁定屏幕"
 #. Just tell him to stop using this app
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:428
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
 msgid "Unable to lock"
 msgstr "无法锁定"
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
 msgid "Lock was blocked by an application"
 msgstr "锁定命令被某个应用程序阻止"
 
