@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-16 11:46-0700\n"
+"POT-Creation-Date: 2016-03-21 21:07-0700\n"
 "PO-Revision-Date: 2014-09-16 04:33+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/eos-shell/"
@@ -62,317 +62,6 @@ msgstr "Tuỳ thích phần mở rộng GNOME Shell"
 msgid "Configure GNOME Shell Extensions"
 msgstr "Cấu hình phần mở rộng GNOME Shell"
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:1
-msgid "Enable internal tools useful for developers and testers from Alt-F2"
-msgstr ""
-"Bật công cụ nội bộ, hữu dụng với người phát triển và kiểm thử, qua Alt-F2"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:2
-msgid ""
-"Allows access to internal debugging and monitoring tools using the Alt-F2 "
-"dialog."
-msgstr ""
-"Cho phép truy cập công cụ theo dõi và tìm lỗi nội bộ qua hộp thoại Alt-F2."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:3
-msgid "Separate the power off and log out buttons on the user menu"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:4
-msgid ""
-"By default, use a single exit button to power off or log out (with the log "
-"out option on the power off confirmation dialog). Set true for separate "
-"buttons on the user menu."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:5
-msgid "Enables the hot corner for the window picker"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:6
-msgid ""
-"By default, the hot corner for the window picker is enabled. Set false to "
-"disable the hot corner."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:7
-msgid "Set the left/right position of the hot corner for the window picker"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:8
-msgid ""
-"Default position of the hot corner is in a right corner. Set false to move "
-"the hot corner to a left corner. The position is not affected by the RTL vs. "
-"LTR text direction."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:9
-msgid "Set the top/bottom position of the hot corner for the window picker"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:10
-msgid ""
-"Default position of the hot corner is in a bottom corner. Set false to move "
-"the hot corner to a top corner."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:11
-msgid "Set the size of the hot corner target"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:12
-msgid ""
-"Number of pixels in one dimension of the square target for the hot corner. "
-"Default is for a single pixel in the very corner. For some virtual machines, "
-"this value may need to be set larger than the default."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:13
-msgid "Set the left/right position of the dash on the overview"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:14
-msgid ""
-"Default position of the dash is at the end of the screen (right edge for LTR "
-"text direction). Unlike the hot corners, the opposite side is used for RTL "
-"text direction."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:15
-msgid "Prevent apps from being automatically maximized on launch"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:16
-msgid ""
-"Makes window management more like standard Gnome. Hides application splash "
-"screens, prevents applications from being forced to open maximized, and does "
-"not automatically switch to the app selector when a window is minimized."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:17
-msgid "Whether the app store is displayed"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:18
-msgid "Whether the application grid displays the app store icon."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:19
-msgid "Uuids of extensions to enable"
-msgstr "UUID của phần mở rộng cần bật"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:20
-msgid ""
-"GNOME Shell extensions have a uuid property; this key lists extensions which "
-"should be loaded. Any extension that wants to be loaded needs to be in this "
-"list. You can also manipulate this list with the EnableExtension and "
-"DisableExtension DBus methods on org.gnome.Shell."
-msgstr ""
-"Phần mở rộng GNOME Shell có thuộc tính uuid. Khoá này liệt kê danh sách phần "
-"mở rộng nên nạp. Bất kỳ phần mở rộng nào muốn nạp phải nằm trong danh sách "
-"này. Bạn có thể thao tác trên danh sách này với phương thức DBus "
-"EnableExtension và DisableExtension trên org.gnome.Shell."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:21
-msgid "Whether to collect stats about applications usage"
-msgstr "Có thu thập thống kê sử dụng ứng dụng không"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:22
-msgid ""
-"The shell normally monitors active applications in order to present the most "
-"used ones (e.g. in launchers). While this data will be kept private, you may "
-"want to disable this for privacy reasons. Please note that doing so won't "
-"remove already saved data."
-msgstr ""
-"GNOME Shell bình thường sẽ theo dõi các ứng dụng tích cực để thể hiện phù "
-"hợp (ví dụ, bộ phóng). Mặc dù thông tin này là riêng tư, bạn vẫn có thể tắt "
-"vì lý do cá nhân. Chú ý là làm vậy sẽ không xoá bỏ những dữ liệu đã có."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:23
-msgid "List of desktop file IDs for favorite applications"
-msgstr "Danh sách ID tập tin desktop của ứng dụng yêu thích"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:24
-msgid ""
-"The applications corresponding to these identifiers will be displayed in the "
-"favorites area."
-msgstr ""
-"Ứng dụng tương ứng với những định danh này sẽ được hiển thị ở vùng ưa thích."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:25
-msgid "List of categories that should be displayed as folders"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
-msgid ""
-"Each category name in this list will be represented as folder in the "
-"application view, rather than being displayed inline in the main view."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
-msgid "History for command (Alt-F2) dialog"
-msgstr "Hộp thoại lịch sử lệnh (Alt-F2)"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
-msgid "History for the looking glass dialog"
-msgstr "Lịch sử hộp thoại looking glass"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
-msgid ""
-"Internally used to store the last IM presence explicitly set by the user. "
-"The value here is from the TpConnectionPresenceType enumeration."
-msgstr ""
-"Dùng để lưu nội bộ sự hiện diện IM lần cuối do người dùng đặt. Giá trị ở đây "
-"từ enumeration TpConnectionPresenceType."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
-msgid ""
-"Internally used to store the last session presence status for the user. The "
-"value here is from the GsmPresenceStatus enumeration."
-msgstr ""
-"Dùng để lưu nội bộ sự hiện diện IM lần cuối do người dùng đặt. Giá trị ở đây "
-"từ enumeration GsmPresenceStatus."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
-msgid "Always show the 'Log out' menuitem in the user menu."
-msgstr "Luôn hiện mục \"Đăng xuất\" trên trình đơn người dùng."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
-msgid ""
-"This key overrides the automatic hiding of the 'Log out' menuitem in single-"
-"user, single-session situations."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
-msgid ""
-"Whether to remember password for mounting encrypted or remote filesystems"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
-msgid ""
-"The shell will request a password when an encrypted device or a remote "
-"filesystem is mounted. If the password can be saved for future use a "
-"'Remember Password' checkbox will be present. This key sets the default "
-"state of the checkbox."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
-msgid "Layout of application launcher icons in the grid"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
-msgid ""
-"This key specifies the exact order of the icons shown in the applications "
-"launcher view."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
-msgid "Enables the pressure barrier for the message tray"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
-msgid ""
-"By default, the message tray is only shown on key press. Set true to show "
-"the message tray when exerting downward pressure with the cursor on the "
-"bottom of the taskbar."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
-msgid "Show the week date in the calendar"
-msgstr "Hiện tuần trên lịch"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
-msgid "If true, display the ISO week date in the calendar."
-msgstr "Nếu đúng (true), hiện tuần ISO trong lịch."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
-msgid "Keybinding to open the application menu"
-msgstr "Phím mở trình đơn ứng dụng"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
-msgid "Keybinding to open the application menu."
-msgstr "Phím mở trình đơn ứng dụng."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
-msgid "Keybinding to open the \"Show Applications\" view"
-msgstr "Phím hiện ứng dụng"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
-msgid ""
-"Keybinding to open the \"Show Applications\" view of the Activities Overview."
-msgstr "Phím hiện ứng dụng trong tổng quan hoạt động."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
-msgid "Keybinding to toggle the visibility of the message tray"
-msgstr "Phím bật/tắt hiện khay thông báo"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
-msgid "Keybinding to toggle the visibility of the message tray."
-msgstr "Phím bật/tắt hiện khay thông báo."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
-msgid "Keybinding to focus the active notification"
-msgstr "Phím tập trung vào thông báo hoạt động"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
-msgid "Keybinding to focus the active notification."
-msgstr "Phím tập trung vào thông báo hoạt động."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
-#, fuzzy
-msgid "Keybinding that shows the force app exit dialog"
-msgstr "Phím mở trình đơn ứng dụng"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
-msgid "Which keyboard to use"
-msgstr "Loại bàn phím cần dùng"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
-msgid "The type of keyboard to use."
-msgstr "Loại bàn phím cần dùng."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
-msgid "The application icon mode."
-msgstr "Chế độ biểu tượng ứng dụng."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
-msgid ""
-"Configures how the windows are shown in the switcher. Valid possibilities "
-"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
-"only' (shows only the application icon) or 'both'."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
-msgid "Attach modal dialog to the parent window"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
-msgid ""
-"This key overrides the key in org.gnome.mutter when running GNOME Shell."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
-msgid "Arrangement of buttons on the titlebar"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
-msgid ""
-"This key overrides the key in org.gnome.desktop.wm.preferences when running "
-"GNOME Shell."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
-msgid "Enable edge tiling when dropping windows on screen edges"
-msgstr "Bật xếp lớp ở cạnh khi thả cửa sổ vào cạnh màn hình"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
-msgid "Workspaces are managed dynamically"
-msgstr "Quản lý động vùng làm việc"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
-msgid "Workspaces only on primary monitor"
-msgstr "Vùng làm việc chỉ ở trên màn hình chính"
-
 #: ../js/extensionPrefs/main.js:127
 #, javascript-format
 msgid "There was an error loading the preferences dialog for %s:"
@@ -386,22 +75,46 @@ msgstr "Phần mở rộng"
 msgid "Select an extension to configure using the combobox above."
 msgstr "Chọn phần mở rộng để cấu hình dùng hộp chọn."
 
-#: ../js/gdm/loginDialog.js:405
+#: ../js/gdm/loginDialog.js:410
 msgid "Session…"
 msgstr "Phiên làm việc…"
 
-#: ../js/gdm/loginDialog.js:615
+#: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
+msgstr ""
+
+#: ../js/gdm/loginDialog.js:636
+msgid "Forgot password?"
 msgstr ""
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
 #. manually entering the username.
-#: ../js/gdm/loginDialog.js:657
+#: ../js/gdm/loginDialog.js:680
 msgid "Not listed?"
 msgstr "Không có trong danh sách?"
 
-#: ../js/gdm/loginDialog.js:825 ../js/ui/components/networkAgent.js:137
+#. Translators: During a password reset, prompt for the "secret code" provided by customer support.
+#: ../js/gdm/loginDialog.js:814
+msgid "Enter unlock code provided by customer support:"
+msgstr ""
+
+#. Translators: Password reset. The first %s is a verification code, the second is one or more phone numbers, and the third is an email.
+#: ../js/gdm/loginDialog.js:818
+#, javascript-format
+msgid ""
+"Please inform customer support of your verification code %s by calling %s or "
+"emailing %s. The code will remain valid until you click Cancel or turn off "
+"your computer."
+msgstr ""
+
+#. Translators: Button on login dialog, after clicking Forgot Password?
+#: ../js/gdm/loginDialog.js:824
+#, fuzzy
+msgid "Reset Password"
+msgstr "Nhớ mật khẩu"
+
+#: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
@@ -409,24 +122,29 @@ msgstr "Không có trong danh sách?"
 msgid "Cancel"
 msgstr "Thôi"
 
-#: ../js/gdm/loginDialog.js:841
+#: ../js/gdm/loginDialog.js:998
 msgctxt "button"
 msgid "Sign In"
 msgstr "Đăng nhập"
 
-#: ../js/gdm/loginDialog.js:841
+#: ../js/gdm/loginDialog.js:998
 msgid "Next"
 msgstr "Tới"
+
+#: ../js/gdm/loginDialog.js:1116
+#, fuzzy
+msgid "Your unlock code was incorrect. Please try again."
+msgstr "Rất tiếc, không được. Vui lòng thử lại."
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:957 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:1166 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "Tên người dùng: "
 
-#: ../js/gdm/loginDialog.js:1213
+#: ../js/gdm/loginDialog.js:1429
 msgid "Login Window"
 msgstr "Cửa sổ đặt nhập"
 
@@ -447,17 +165,17 @@ msgstr "Khởi động lại"
 msgid "Power Off"
 msgstr "Tắt máy"
 
-#: ../js/gdm/util.js:249
+#: ../js/gdm/util.js:264
 msgid "Authentication error"
 msgstr "Lỗi xác thực"
 
 #. Translators: this message is shown below the password entry field
 #. to indicate the user can swipe their finger instead
-#: ../js/gdm/util.js:366
+#: ../js/gdm/util.js:381
 msgid "(or swipe finger)"
 msgstr "(hoặc quẹt ngón tay)"
 
-#: ../js/gdm/util.js:391
+#: ../js/gdm/util.js:406
 #, javascript-format
 msgid "(e.g., user or %s)"
 msgstr "(ví dụ người dùng hoặc %s)"
@@ -477,55 +195,63 @@ msgstr "Không thể phân tích lệnh:"
 msgid "Execution of '%s' failed:"
 msgstr "Lỗi thực hiện '%s':"
 
-#: ../js/ui/appDisplay.js:1138
+#: ../js/ui/appDisplay.js:1151
 #, fuzzy
 msgid "Remove from desktop"
 msgstr "Bỏ đánh dấu ưa thích"
 
-#: ../js/ui/appDisplay.js:1621
+#: ../js/ui/appDisplay.js:1634
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1627
+#: ../js/ui/appDisplay.js:1640
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1633
+#: ../js/ui/appDisplay.js:1646
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1639 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1652 ../js/ui/status/bluetooth.js:416
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1881
+#: ../js/ui/appDisplay.js:1904
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1890
+#: ../js/ui/appDisplay.js:1913
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appFavorites.js:95
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "Đã được đánh dấu ưa thích cho %s."
 
-#: ../js/ui/appFavorites.js:129
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "Đã bỏ đánh dấu ưa thích cho %s"
 
-#: ../js/ui/appIconBar.js:212
+#: ../js/ui/appIconBar.js:216
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:221
+#: ../js/ui/appIconBar.js:225
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:294
+#: ../js/ui/appIconBar.js:300
+msgid "Pin to Taskbar"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:304
+msgid "Unpin from Taskbar"
+msgstr ""
+
+#: ../js/ui/appIconBar.js:320
 #, javascript-format
 msgid "Quit %s"
 msgstr ""
@@ -822,243 +548,6 @@ msgstr "Xác thực"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "Rất tiếc, không được. Vui lòng thử lại."
 
-#. FIXME: We don't have a 'chat room' icon (bgo #653737) use
-#. system-users for now as Empathy does.
-#: ../js/ui/components/telepathyClient.js:238
-msgid "Invitation"
-msgstr "Lời mời"
-
-#. We got the TpContact
-#: ../js/ui/components/telepathyClient.js:298
-msgid "Call"
-msgstr "Gọi"
-
-#. We got the TpContact
-#: ../js/ui/components/telepathyClient.js:314
-msgid "File Transfer"
-msgstr "Truyền tập tin"
-
-#: ../js/ui/components/telepathyClient.js:418
-msgid "Chat"
-msgstr "Tán gẫu"
-
-#: ../js/ui/components/telepathyClient.js:480
-msgid "Unmute"
-msgstr "Ngừng im lặng"
-
-#: ../js/ui/components/telepathyClient.js:480
-msgid "Mute"
-msgstr "Im lặng"
-
-#. Translators: this is the word "Yesterday" followed by a time string. i.e. "Yesterday, 14:30"
-#: ../js/ui/components/telepathyClient.js:942
-#, no-c-format
-msgid "<b>Yesterday</b>, <b>%H:%M</b>"
-msgstr "<b>Hôm qua</b>, <b>%H:%M</b>"
-
-#. Translators: this is the week day name followed by a time string. i.e. "Monday, 14:30
-#: ../js/ui/components/telepathyClient.js:948
-#, no-c-format
-msgid "<b>%A</b>, <b>%H:%M</b>"
-msgstr "<b>%A</b>, <b>%H:%M</b>"
-
-#. Translators: this is the month name and day number followed by a time string. i.e. "May 25, 14:30"
-#: ../js/ui/components/telepathyClient.js:953
-#, no-c-format
-msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
-msgstr "<b>%d</b> <b>%B</b>, <b>%H:%M</b>"
-
-#. Translators: this is the month name, day number, year number followed by a time string. i.e. "May 25 2012, 14:30"
-#: ../js/ui/components/telepathyClient.js:957
-#, no-c-format
-msgid "<b>%B</b> <b>%d</b> <b>%Y</b>, <b>%H:%M</b> "
-msgstr "<b>%H:%M</b>, <b>%d</b> <b>%B</b> <b>%Y</b> "
-
-#. Translators: this is the other person changing their old IM name to their new
-#. IM name.
-#: ../js/ui/components/telepathyClient.js:987
-#, javascript-format
-msgid "%s is now known as %s"
-msgstr "%s bây giờ đổi thành %s"
-
-#. translators: argument is a room name like
-#. * room@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1090
-#, javascript-format
-msgid "Invitation to %s"
-msgstr "Mời vào phòng %s"
-
-#. translators: first argument is the name of a contact and the second
-#. * one the name of a room. "Alice is inviting you to join room@jabber.org
-#. * for example.
-#: ../js/ui/components/telepathyClient.js:1098
-#, javascript-format
-msgid "%s is inviting you to join %s"
-msgstr "%s đang mời bạn vào phòng %s"
-
-#: ../js/ui/components/telepathyClient.js:1100
-#: ../js/ui/components/telepathyClient.js:1139
-#: ../js/ui/components/telepathyClient.js:1179
-#: ../js/ui/components/telepathyClient.js:1241
-msgid "Decline"
-msgstr "Từ chối"
-
-#: ../js/ui/components/telepathyClient.js:1101
-#: ../js/ui/components/telepathyClient.js:1180
-#: ../js/ui/components/telepathyClient.js:1242
-msgid "Accept"
-msgstr "Đồng ý"
-
-#. translators: argument is a contact name like Alice for example.
-#: ../js/ui/components/telepathyClient.js:1131
-#, javascript-format
-msgid "Video call from %s"
-msgstr "Cuộc gọi video từ %s"
-
-#. translators: argument is a contact name like Alice for example.
-#: ../js/ui/components/telepathyClient.js:1134
-#, javascript-format
-msgid "Call from %s"
-msgstr "Cuộc gọi từ %s"
-
-#. translators: this is a button label (verb), not a noun
-#: ../js/ui/components/telepathyClient.js:1141
-msgid "Answer"
-msgstr "Trả lời"
-
-#. To translators: The first parameter is
-#. * the contact's alias and the second one is the
-#. * file name. The string will be something
-#. * like: "Alice is sending you test.ogg"
-#.
-#: ../js/ui/components/telepathyClient.js:1173
-#, javascript-format
-msgid "%s is sending you %s"
-msgstr "%s đang gửi bạn %s"
-
-#. To translators: The parameter is the contact's alias
-#: ../js/ui/components/telepathyClient.js:1208
-#, javascript-format
-msgid "%s would like permission to see when you are online"
-msgstr "%s muốn được phép được thông báo khi bạn trực tuyến"
-
-#: ../js/ui/components/telepathyClient.js:1299
-msgid "Network error"
-msgstr "Lỗi mạng"
-
-#: ../js/ui/components/telepathyClient.js:1301
-msgid "Authentication failed"
-msgstr "Lỗi xác thực"
-
-#: ../js/ui/components/telepathyClient.js:1303
-msgid "Encryption error"
-msgstr "Lỗi mã hoá"
-
-#: ../js/ui/components/telepathyClient.js:1305
-msgid "Certificate not provided"
-msgstr "Chưa cung cấp chứng nhận"
-
-#: ../js/ui/components/telepathyClient.js:1307
-msgid "Certificate untrusted"
-msgstr "Chứng nhận không đáng tin"
-
-#: ../js/ui/components/telepathyClient.js:1309
-msgid "Certificate expired"
-msgstr "Chứng nhận hết hạn"
-
-#: ../js/ui/components/telepathyClient.js:1311
-msgid "Certificate not activated"
-msgstr "Chứng nhận chưa kích hoạt"
-
-#: ../js/ui/components/telepathyClient.js:1313
-msgid "Certificate hostname mismatch"
-msgstr "Tên máy của chứng nhận không khớp"
-
-#: ../js/ui/components/telepathyClient.js:1315
-msgid "Certificate fingerprint mismatch"
-msgstr "Dấu vân tay chứng nhận không khớp"
-
-#: ../js/ui/components/telepathyClient.js:1317
-msgid "Certificate self-signed"
-msgstr "Chứng nhận tự ký"
-
-#: ../js/ui/components/telepathyClient.js:1319
-msgid "Status is set to offline"
-msgstr "Đã đặt trạng thái là ngoại tuyến"
-
-#: ../js/ui/components/telepathyClient.js:1321
-msgid "Encryption is not available"
-msgstr "Không hỗ trợ mã hoá"
-
-#: ../js/ui/components/telepathyClient.js:1323
-msgid "Certificate is invalid"
-msgstr "Chứng nhận không hợp lệ"
-
-#: ../js/ui/components/telepathyClient.js:1325
-msgid "Connection has been refused"
-msgstr "Kết nối bị từ chối"
-
-#: ../js/ui/components/telepathyClient.js:1327
-msgid "Connection can't be established"
-msgstr "Không thể tạo kết nối"
-
-#: ../js/ui/components/telepathyClient.js:1329
-msgid "Connection has been lost"
-msgstr "Mất kết nối"
-
-#: ../js/ui/components/telepathyClient.js:1331
-msgid "This account is already connected to the server"
-msgstr "Tài khoản này đã kết nối đến máy chủ"
-
-#: ../js/ui/components/telepathyClient.js:1333
-msgid ""
-"Connection has been replaced by a new connection using the same resource"
-msgstr "Kết nối bị thay thế bằng một kết nối mới cùng tài nguyên"
-
-#: ../js/ui/components/telepathyClient.js:1335
-msgid "The account already exists on the server"
-msgstr "Tài khoản đã có trên máy chủ"
-
-#: ../js/ui/components/telepathyClient.js:1337
-msgid "Server is currently too busy to handle the connection"
-msgstr "Máy chủ đang bận không thể xử lý kết nối"
-
-#: ../js/ui/components/telepathyClient.js:1339
-msgid "Certificate has been revoked"
-msgstr "Chứng nhận bị thu hồi"
-
-#: ../js/ui/components/telepathyClient.js:1341
-msgid ""
-"Certificate uses an insecure cipher algorithm or is cryptographically weak"
-msgstr "Chứng nhận dùng thuật toán mật mã yếu hoặc không an toàn"
-
-#: ../js/ui/components/telepathyClient.js:1343
-msgid ""
-"The length of the server certificate, or the depth of the server certificate "
-"chain, exceed the limits imposed by the cryptography library"
-msgstr ""
-"Độ dài của chứng nhận máy chủ, hoặc độ sâu của chuỗi chứng nhận, vượt quá "
-"giới hạn của thư viện mật mã"
-
-#: ../js/ui/components/telepathyClient.js:1345
-msgid "Internal error"
-msgstr "Lỗi nội bộ"
-
-#. translators: argument is the account name, like
-#. * name@jabber.org for example.
-#: ../js/ui/components/telepathyClient.js:1355
-#, javascript-format
-msgid "Unable to connect to %s"
-msgstr "Không thể kết nối đến %s"
-
-#: ../js/ui/components/telepathyClient.js:1360
-msgid "View account"
-msgstr "Xem tài khoản"
-
-#: ../js/ui/components/telepathyClient.js:1399
-msgid "Unknown reason"
-msgstr "Lý do không biết"
-
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
 msgstr ""
@@ -1107,7 +596,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:463
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
 msgid "Windows"
 msgstr "Cửa sổ"
 
@@ -1125,22 +614,22 @@ msgstr "Bỏ đánh dấu ưa thích"
 msgid "Dash"
 msgstr "Neo ứng dụng"
 
-#: ../js/ui/dateMenu.js:91
+#: ../js/ui/dateMenu.js:90
 msgid "Open Calendar"
 msgstr "Mở lịch"
 
-#: ../js/ui/dateMenu.js:96
+#: ../js/ui/dateMenu.js:95
 msgid "Open Clocks"
 msgstr "Mở đồng hồ"
 
-#: ../js/ui/dateMenu.js:105
+#: ../js/ui/dateMenu.js:104
 msgid "Date & Time Settings"
 msgstr "Thiết lập ngày giờ"
 
 #. Translators: This is the date format to use when the calendar popup is
 #. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
 #.
-#: ../js/ui/dateMenu.js:215
+#: ../js/ui/dateMenu.js:214
 msgid "%A %B %e, %Y"
 msgstr "%A %e %B, %Y"
 
@@ -1266,71 +755,71 @@ msgstr "Màn hình"
 msgid "Quit Application"
 msgstr "Ứng dụng"
 
-#: ../js/ui/iconGridLayout.js:206
+#: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:60
+#: ../js/ui/internetSearch.js:69
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:63
+#: ../js/ui/internetSearch.js:72
 #, javascript-format
 msgid "Search Google for \"%s\""
 msgstr ""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
-#: ../js/ui/status/power.js:217
+#: ../js/ui/status/power.js:227
 msgid "Keyboard"
 msgstr "Bàn phím"
 
-#: ../js/ui/lookingGlass.js:644
+#: ../js/ui/lookingGlass.js:643
 msgid "No extensions installed"
 msgstr "Chưa cài phần mở rộng"
 
 #. Translators: argument is an extension UUID.
-#: ../js/ui/lookingGlass.js:698
+#: ../js/ui/lookingGlass.js:697
 #, javascript-format
 msgid "%s has not emitted any errors."
 msgstr "%s không tạo ra bất kỳ lỗi gì."
 
-#: ../js/ui/lookingGlass.js:704
+#: ../js/ui/lookingGlass.js:703
 msgid "Hide Errors"
 msgstr "Ẩn lỗi"
 
-#: ../js/ui/lookingGlass.js:708 ../js/ui/lookingGlass.js:768
+#: ../js/ui/lookingGlass.js:707 ../js/ui/lookingGlass.js:767
 msgid "Show Errors"
 msgstr "Hiện lỗi"
 
-#: ../js/ui/lookingGlass.js:717
+#: ../js/ui/lookingGlass.js:716
 msgid "Enabled"
 msgstr "Bật"
 
 #. translators:
 #. * The device has been disabled
-#: ../js/ui/lookingGlass.js:720 ../src/gvc/gvc-mixer-control.c:1830
+#: ../js/ui/lookingGlass.js:719 ../src/gvc/gvc-mixer-control.c:1830
 msgid "Disabled"
 msgstr "Tắt"
 
-#: ../js/ui/lookingGlass.js:722
+#: ../js/ui/lookingGlass.js:721
 msgid "Error"
 msgstr "Lỗi"
 
-#: ../js/ui/lookingGlass.js:724
+#: ../js/ui/lookingGlass.js:723
 msgid "Out of date"
 msgstr "Hết hạn"
 
-#: ../js/ui/lookingGlass.js:726
+#: ../js/ui/lookingGlass.js:725
 msgid "Downloading"
 msgstr "Đang tải về"
 
-#: ../js/ui/lookingGlass.js:750
+#: ../js/ui/lookingGlass.js:749
 msgid "View Source"
 msgstr "Xem mã nguồn"
 
-#: ../js/ui/lookingGlass.js:759
+#: ../js/ui/lookingGlass.js:758
 msgid "Web Page"
 msgstr "Trang Web"
 
@@ -1362,7 +851,7 @@ msgstr "Khay thông báo"
 msgid "System Information"
 msgstr "Thông tin hệ thống"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:397
+#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
 msgctxt "program"
 msgid "Unknown"
 msgstr "Không biết"
@@ -1407,19 +896,19 @@ msgstr "GNOME cần khoá màn hình"
 #.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:428
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
 msgid "Unable to lock"
 msgstr "Không thể khoá"
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
 msgid "Lock was blocked by an application"
 msgstr "Một ứng dụng đã ngăn cản khoá"
 
-#: ../js/ui/search.js:775
+#: ../js/ui/search.js:781
 msgid "Searching…"
 msgstr ""
 
-#: ../js/ui/search.js:777
+#: ../js/ui/search.js:783
 msgid "No results."
 msgstr ""
 
@@ -1506,7 +995,7 @@ msgstr "Chữ lớn"
 #: ../js/ui/status/bluetooth.js:28 ../js/ui/status/bluetooth.js:32
 #: ../js/ui/status/bluetooth.js:291 ../js/ui/status/bluetooth.js:323
 #: ../js/ui/status/bluetooth.js:359 ../js/ui/status/bluetooth.js:390
-#: ../js/ui/status/network.js:826
+#: ../js/ui/status/network.js:829
 msgid "Bluetooth"
 msgstr "Bluetooth"
 
@@ -1527,7 +1016,7 @@ msgid "Bluetooth Settings"
 msgstr "Thiết lập Bluetooth"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:106 ../js/ui/status/network.js:178
+#: ../js/ui/status/bluetooth.js:106 ../js/ui/status/network.js:181
 msgid "hardware disabled"
 msgstr "tắt bởi phần cứng"
 
@@ -1535,12 +1024,12 @@ msgstr "tắt bởi phần cứng"
 msgid "Connection"
 msgstr "Kết nối"
 
-#: ../js/ui/status/bluetooth.js:210 ../js/ui/status/network.js:460
+#: ../js/ui/status/bluetooth.js:210 ../js/ui/status/network.js:463
 msgid "disconnecting..."
 msgstr "đang ngắt kết nối..."
 
-#: ../js/ui/status/bluetooth.js:223 ../js/ui/status/network.js:466
-#: ../js/ui/status/network.js:1548
+#: ../js/ui/status/bluetooth.js:223 ../js/ui/status/network.js:469
+#: ../js/ui/status/network.js:1551
 msgid "connecting..."
 msgstr "đang kết nối..."
 
@@ -1633,109 +1122,109 @@ msgid "<unknown>"
 msgstr "<không rõ>"
 
 #. Translators: this indicates that wireless or wwan is disabled by hardware killswitch
-#: ../js/ui/status/network.js:200
+#: ../js/ui/status/network.js:203
 msgid "disabled"
 msgstr "tắt"
 
 #. Translators: this is for network devices that are physically present but are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:458
+#: ../js/ui/status/network.js:461
 msgid "unmanaged"
 msgstr "không được quản lý"
 
 #. Translators: this is for network connections that require some kind of key or password
-#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
+#: ../js/ui/status/network.js:472 ../js/ui/status/network.js:1554
 msgid "authentication required"
 msgstr "cần xác thực"
 
 #. Translators: this is for devices that require some kind of firmware or kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:479
+#: ../js/ui/status/network.js:482
 msgid "firmware missing"
 msgstr "thiếu firmware"
 
 #. Translators: this is for wired network devices that are physically disconnected
-#: ../js/ui/status/network.js:486
+#: ../js/ui/status/network.js:489
 msgid "cable unplugged"
 msgstr "cáp bị tháo"
 
 #. Translators: this is for a network device that cannot be activated (for example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:491
+#: ../js/ui/status/network.js:494
 msgid "unavailable"
 msgstr "không có mặt"
 
-#: ../js/ui/status/network.js:493 ../js/ui/status/network.js:1553
+#: ../js/ui/status/network.js:496 ../js/ui/status/network.js:1556
 msgid "connection failed"
 msgstr "lỗi kết nối"
 
-#: ../js/ui/status/network.js:552 ../js/ui/status/network.js:1437
-#: ../js/ui/status/network.js:1629
+#: ../js/ui/status/network.js:555 ../js/ui/status/network.js:1440
+#: ../js/ui/status/network.js:1632
 msgid "More…"
 msgstr "Nữa…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1365
+#: ../js/ui/status/network.js:591 ../js/ui/status/network.js:1368
 msgid "Connected (private)"
 msgstr "Đã kết nối (riêng)"
 
-#: ../js/ui/status/network.js:667
+#: ../js/ui/status/network.js:670
 msgid "Wired"
 msgstr "Mạng dây"
 
-#: ../js/ui/status/network.js:668
+#: ../js/ui/status/network.js:671
 msgid "Auto Ethernet"
 msgstr "Ethernet tự động"
 
-#: ../js/ui/status/network.js:695
+#: ../js/ui/status/network.js:698
 msgid "Mobile broadband"
 msgstr "Mạng băng thông rộng"
 
 #. TRANSLATORS: this the automatic wireless connection name (including the network name)
-#: ../js/ui/status/network.js:861 ../js/ui/status/network.js:1382
+#: ../js/ui/status/network.js:864 ../js/ui/status/network.js:1385
 #, javascript-format
 msgid "Auto %s"
 msgstr "%s tự động"
 
-#: ../js/ui/status/network.js:863
+#: ../js/ui/status/network.js:866
 msgid "Auto bluetooth"
 msgstr "Bluetooth tự động"
 
-#: ../js/ui/status/network.js:1384
+#: ../js/ui/status/network.js:1387
 msgid "Auto wireless"
 msgstr "Mạng không dây tự động"
 
-#: ../js/ui/status/network.js:1669
+#: ../js/ui/status/network.js:1672
 #, fuzzy
 msgid "Network"
 msgstr "Lỗi mạng"
 
-#: ../js/ui/status/network.js:1731
+#: ../js/ui/status/network.js:1734
 msgid "Enable networking"
 msgstr "Bật nối mạng"
 
-#: ../js/ui/status/network.js:1773
+#: ../js/ui/status/network.js:1776
 msgid "Wi-Fi"
 msgstr "Wi-Fi"
 
-#: ../js/ui/status/network.js:1792
+#: ../js/ui/status/network.js:1795
 msgid "Network Settings"
 msgstr "Thiết lập mạng"
 
-#: ../js/ui/status/network.js:1809
+#: ../js/ui/status/network.js:1812
 msgid "Network Manager"
 msgstr "Trình quản lý mạng"
 
-#: ../js/ui/status/network.js:1899
+#: ../js/ui/status/network.js:1902
 msgid "Connection failed"
 msgstr "Lỗi kết nối"
 
-#: ../js/ui/status/network.js:1900
+#: ../js/ui/status/network.js:1903
 msgid "Activation of network connection failed"
 msgstr "Lỗi kích hoạt kết nối mạng"
 
-#: ../js/ui/status/network.js:2284
+#: ../js/ui/status/network.js:2287
 msgid "Networking is disabled"
 msgstr "Mạng bị tắt"
 
@@ -1743,93 +1232,93 @@ msgstr "Mạng bị tắt"
 msgid "Battery"
 msgstr "Pin"
 
-#: ../js/ui/status/power.js:83
+#: ../js/ui/status/power.js:88
 msgid "Power Settings"
 msgstr "Thiết lập năng lượng"
 
-#: ../js/ui/status/power.js:103
+#: ../js/ui/status/power.js:108
 msgid "Fully Charged"
 msgstr ""
 
-#: ../js/ui/status/power.js:105
+#: ../js/ui/status/power.js:110
 msgid "Estimating…"
 msgstr "Ước lượng…"
 
-#: ../js/ui/status/power.js:112
+#: ../js/ui/status/power.js:117
 #, javascript-format
 msgid "%d hour remaining"
 msgid_plural "%d hours remaining"
 msgstr[0] "%d giờ còn lại"
 
 #. TRANSLATORS: this is a time string, as in "%d hours %d minutes remaining"
-#: ../js/ui/status/power.js:115
+#: ../js/ui/status/power.js:120
 #, javascript-format
 msgid "%d %s %d %s remaining"
 msgstr "%d %s %d %s còn lại"
 
-#: ../js/ui/status/power.js:117
+#: ../js/ui/status/power.js:122
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "giờ"
 
-#: ../js/ui/status/power.js:117
+#: ../js/ui/status/power.js:122
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "phút"
 
-#: ../js/ui/status/power.js:120
+#: ../js/ui/status/power.js:125
 #, javascript-format
 msgid "%d minute remaining"
 msgid_plural "%d minutes remaining"
 msgstr[0] "%d phút còn lại"
 
-#: ../js/ui/status/power.js:123 ../js/ui/status/power.js:197
+#: ../js/ui/status/power.js:128 ../js/ui/status/power.js:202
 #, javascript-format
 msgctxt "percent of battery remaining"
 msgid "%d%%"
 msgstr "%d%%"
 
-#: ../js/ui/status/power.js:207
+#: ../js/ui/status/power.js:217
 msgid "AC Adapter"
 msgstr "Nguồn AC"
 
-#: ../js/ui/status/power.js:209
+#: ../js/ui/status/power.js:219
 msgid "Laptop Battery"
 msgstr "Pin laptop"
 
-#: ../js/ui/status/power.js:211
+#: ../js/ui/status/power.js:221
 msgid "UPS"
 msgstr "UPS"
 
-#: ../js/ui/status/power.js:213
+#: ../js/ui/status/power.js:223
 msgid "Monitor"
 msgstr "Màn hình"
 
-#: ../js/ui/status/power.js:215
+#: ../js/ui/status/power.js:225
 msgid "Mouse"
 msgstr "Chuột"
 
-#: ../js/ui/status/power.js:219
+#: ../js/ui/status/power.js:229
 msgid "PDA"
 msgstr "PDA"
 
-#: ../js/ui/status/power.js:221
+#: ../js/ui/status/power.js:231
 msgid "Cell Phone"
 msgstr "Điện thoại di động"
 
-#: ../js/ui/status/power.js:223
+#: ../js/ui/status/power.js:233
 msgid "Media Player"
 msgstr "Máy nghe nhạc"
 
-#: ../js/ui/status/power.js:225
+#: ../js/ui/status/power.js:235
 msgid "Tablet"
 msgstr "Bảng"
 
-#: ../js/ui/status/power.js:227
+#: ../js/ui/status/power.js:237
 msgid "Computer"
 msgstr "Máy tính"
 
-#: ../js/ui/status/power.js:229
+#: ../js/ui/status/power.js:239
 msgctxt "device"
 msgid "Unknown"
 msgstr "Không biết"
@@ -1899,7 +1388,7 @@ msgstr "%s (ở xa)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:467
+#: ../js/ui/viewSelector.js:492
 msgid "Applications"
 msgstr "Ứng dụng"
 
@@ -1953,23 +1442,23 @@ msgstr[0] "%u đầu vào"
 msgid "System Sounds"
 msgstr "Âm thanh hệ thống"
 
-#: ../src/main.c:345
+#: ../src/main.c:325
 msgid "Print version"
 msgstr "In phiên bản"
 
-#: ../src/main.c:351
+#: ../src/main.c:331
 msgid "Mode used by GDM for login screen"
 msgstr "Chể độ dùng bởi GDM cho màn hình đăng nhập"
 
-#: ../src/main.c:357
+#: ../src/main.c:337
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Dùng chế độ đặc biệt, ví dụ \"gdm\" cho màn hình đăng nhập"
 
-#: ../src/main.c:363
+#: ../src/main.c:343
 msgid "List possible modes"
 msgstr "Danh sách chế độ"
 
-#: ../src/shell-app.c:653
+#: ../src/shell-app.c:654
 #, c-format
 msgid "Failed to launch '%s'"
 msgstr "Lỗi chạy '%s'"
@@ -1994,6 +1483,278 @@ msgstr "Mật khẩu không thể không có"
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
 msgstr "Hộp thoại xác thực bị người dùng bỏ qua"
+
+#~ msgid "Enable internal tools useful for developers and testers from Alt-F2"
+#~ msgstr ""
+#~ "Bật công cụ nội bộ, hữu dụng với người phát triển và kiểm thử, qua Alt-F2"
+
+#~ msgid ""
+#~ "Allows access to internal debugging and monitoring tools using the Alt-F2 "
+#~ "dialog."
+#~ msgstr ""
+#~ "Cho phép truy cập công cụ theo dõi và tìm lỗi nội bộ qua hộp thoại Alt-F2."
+
+#~ msgid "Uuids of extensions to enable"
+#~ msgstr "UUID của phần mở rộng cần bật"
+
+#~ msgid ""
+#~ "GNOME Shell extensions have a uuid property; this key lists extensions "
+#~ "which should be loaded. Any extension that wants to be loaded needs to be "
+#~ "in this list. You can also manipulate this list with the EnableExtension "
+#~ "and DisableExtension DBus methods on org.gnome.Shell."
+#~ msgstr ""
+#~ "Phần mở rộng GNOME Shell có thuộc tính uuid. Khoá này liệt kê danh sách "
+#~ "phần mở rộng nên nạp. Bất kỳ phần mở rộng nào muốn nạp phải nằm trong "
+#~ "danh sách này. Bạn có thể thao tác trên danh sách này với phương thức "
+#~ "DBus EnableExtension và DisableExtension trên org.gnome.Shell."
+
+#~ msgid "Whether to collect stats about applications usage"
+#~ msgstr "Có thu thập thống kê sử dụng ứng dụng không"
+
+#~ msgid ""
+#~ "The shell normally monitors active applications in order to present the "
+#~ "most used ones (e.g. in launchers). While this data will be kept private, "
+#~ "you may want to disable this for privacy reasons. Please note that doing "
+#~ "so won't remove already saved data."
+#~ msgstr ""
+#~ "GNOME Shell bình thường sẽ theo dõi các ứng dụng tích cực để thể hiện phù "
+#~ "hợp (ví dụ, bộ phóng). Mặc dù thông tin này là riêng tư, bạn vẫn có thể "
+#~ "tắt vì lý do cá nhân. Chú ý là làm vậy sẽ không xoá bỏ những dữ liệu đã "
+#~ "có."
+
+#~ msgid "List of desktop file IDs for favorite applications"
+#~ msgstr "Danh sách ID tập tin desktop của ứng dụng yêu thích"
+
+#~ msgid ""
+#~ "The applications corresponding to these identifiers will be displayed in "
+#~ "the favorites area."
+#~ msgstr ""
+#~ "Ứng dụng tương ứng với những định danh này sẽ được hiển thị ở vùng ưa "
+#~ "thích."
+
+#~ msgid "History for command (Alt-F2) dialog"
+#~ msgstr "Hộp thoại lịch sử lệnh (Alt-F2)"
+
+#~ msgid "History for the looking glass dialog"
+#~ msgstr "Lịch sử hộp thoại looking glass"
+
+#~ msgid ""
+#~ "Internally used to store the last IM presence explicitly set by the user. "
+#~ "The value here is from the TpConnectionPresenceType enumeration."
+#~ msgstr ""
+#~ "Dùng để lưu nội bộ sự hiện diện IM lần cuối do người dùng đặt. Giá trị ở "
+#~ "đây từ enumeration TpConnectionPresenceType."
+
+#~ msgid ""
+#~ "Internally used to store the last session presence status for the user. "
+#~ "The value here is from the GsmPresenceStatus enumeration."
+#~ msgstr ""
+#~ "Dùng để lưu nội bộ sự hiện diện IM lần cuối do người dùng đặt. Giá trị ở "
+#~ "đây từ enumeration GsmPresenceStatus."
+
+#~ msgid "Always show the 'Log out' menuitem in the user menu."
+#~ msgstr "Luôn hiện mục \"Đăng xuất\" trên trình đơn người dùng."
+
+#~ msgid "Show the week date in the calendar"
+#~ msgstr "Hiện tuần trên lịch"
+
+#~ msgid "If true, display the ISO week date in the calendar."
+#~ msgstr "Nếu đúng (true), hiện tuần ISO trong lịch."
+
+#~ msgid "Keybinding to open the application menu"
+#~ msgstr "Phím mở trình đơn ứng dụng"
+
+#~ msgid "Keybinding to open the application menu."
+#~ msgstr "Phím mở trình đơn ứng dụng."
+
+#~ msgid "Keybinding to open the \"Show Applications\" view"
+#~ msgstr "Phím hiện ứng dụng"
+
+#~ msgid ""
+#~ "Keybinding to open the \"Show Applications\" view of the Activities "
+#~ "Overview."
+#~ msgstr "Phím hiện ứng dụng trong tổng quan hoạt động."
+
+#~ msgid "Keybinding to toggle the visibility of the message tray"
+#~ msgstr "Phím bật/tắt hiện khay thông báo"
+
+#~ msgid "Keybinding to toggle the visibility of the message tray."
+#~ msgstr "Phím bật/tắt hiện khay thông báo."
+
+#~ msgid "Keybinding to focus the active notification"
+#~ msgstr "Phím tập trung vào thông báo hoạt động"
+
+#~ msgid "Keybinding to focus the active notification."
+#~ msgstr "Phím tập trung vào thông báo hoạt động."
+
+#, fuzzy
+#~ msgid "Keybinding that shows the force app exit dialog"
+#~ msgstr "Phím mở trình đơn ứng dụng"
+
+#~ msgid "Which keyboard to use"
+#~ msgstr "Loại bàn phím cần dùng"
+
+#~ msgid "The type of keyboard to use."
+#~ msgstr "Loại bàn phím cần dùng."
+
+#~ msgid "The application icon mode."
+#~ msgstr "Chế độ biểu tượng ứng dụng."
+
+#~ msgid "Enable edge tiling when dropping windows on screen edges"
+#~ msgstr "Bật xếp lớp ở cạnh khi thả cửa sổ vào cạnh màn hình"
+
+#~ msgid "Workspaces are managed dynamically"
+#~ msgstr "Quản lý động vùng làm việc"
+
+#~ msgid "Workspaces only on primary monitor"
+#~ msgstr "Vùng làm việc chỉ ở trên màn hình chính"
+
+#~ msgid "Invitation"
+#~ msgstr "Lời mời"
+
+#~ msgid "Call"
+#~ msgstr "Gọi"
+
+#~ msgid "File Transfer"
+#~ msgstr "Truyền tập tin"
+
+#~ msgid "Chat"
+#~ msgstr "Tán gẫu"
+
+#~ msgid "Unmute"
+#~ msgstr "Ngừng im lặng"
+
+#~ msgid "Mute"
+#~ msgstr "Im lặng"
+
+#~ msgid "<b>Yesterday</b>, <b>%H:%M</b>"
+#~ msgstr "<b>Hôm qua</b>, <b>%H:%M</b>"
+
+#~ msgid "<b>%A</b>, <b>%H:%M</b>"
+#~ msgstr "<b>%A</b>, <b>%H:%M</b>"
+
+#~ msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
+#~ msgstr "<b>%d</b> <b>%B</b>, <b>%H:%M</b>"
+
+#~ msgid "<b>%B</b> <b>%d</b> <b>%Y</b>, <b>%H:%M</b> "
+#~ msgstr "<b>%H:%M</b>, <b>%d</b> <b>%B</b> <b>%Y</b> "
+
+#~ msgid "%s is now known as %s"
+#~ msgstr "%s bây giờ đổi thành %s"
+
+#~ msgid "Invitation to %s"
+#~ msgstr "Mời vào phòng %s"
+
+#~ msgid "%s is inviting you to join %s"
+#~ msgstr "%s đang mời bạn vào phòng %s"
+
+#~ msgid "Decline"
+#~ msgstr "Từ chối"
+
+#~ msgid "Accept"
+#~ msgstr "Đồng ý"
+
+#~ msgid "Video call from %s"
+#~ msgstr "Cuộc gọi video từ %s"
+
+#~ msgid "Call from %s"
+#~ msgstr "Cuộc gọi từ %s"
+
+#~ msgid "Answer"
+#~ msgstr "Trả lời"
+
+#~ msgid "%s is sending you %s"
+#~ msgstr "%s đang gửi bạn %s"
+
+#~ msgid "%s would like permission to see when you are online"
+#~ msgstr "%s muốn được phép được thông báo khi bạn trực tuyến"
+
+#~ msgid "Network error"
+#~ msgstr "Lỗi mạng"
+
+#~ msgid "Authentication failed"
+#~ msgstr "Lỗi xác thực"
+
+#~ msgid "Encryption error"
+#~ msgstr "Lỗi mã hoá"
+
+#~ msgid "Certificate not provided"
+#~ msgstr "Chưa cung cấp chứng nhận"
+
+#~ msgid "Certificate untrusted"
+#~ msgstr "Chứng nhận không đáng tin"
+
+#~ msgid "Certificate expired"
+#~ msgstr "Chứng nhận hết hạn"
+
+#~ msgid "Certificate not activated"
+#~ msgstr "Chứng nhận chưa kích hoạt"
+
+#~ msgid "Certificate hostname mismatch"
+#~ msgstr "Tên máy của chứng nhận không khớp"
+
+#~ msgid "Certificate fingerprint mismatch"
+#~ msgstr "Dấu vân tay chứng nhận không khớp"
+
+#~ msgid "Certificate self-signed"
+#~ msgstr "Chứng nhận tự ký"
+
+#~ msgid "Status is set to offline"
+#~ msgstr "Đã đặt trạng thái là ngoại tuyến"
+
+#~ msgid "Encryption is not available"
+#~ msgstr "Không hỗ trợ mã hoá"
+
+#~ msgid "Certificate is invalid"
+#~ msgstr "Chứng nhận không hợp lệ"
+
+#~ msgid "Connection has been refused"
+#~ msgstr "Kết nối bị từ chối"
+
+#~ msgid "Connection can't be established"
+#~ msgstr "Không thể tạo kết nối"
+
+#~ msgid "Connection has been lost"
+#~ msgstr "Mất kết nối"
+
+#~ msgid "This account is already connected to the server"
+#~ msgstr "Tài khoản này đã kết nối đến máy chủ"
+
+#~ msgid ""
+#~ "Connection has been replaced by a new connection using the same resource"
+#~ msgstr "Kết nối bị thay thế bằng một kết nối mới cùng tài nguyên"
+
+#~ msgid "The account already exists on the server"
+#~ msgstr "Tài khoản đã có trên máy chủ"
+
+#~ msgid "Server is currently too busy to handle the connection"
+#~ msgstr "Máy chủ đang bận không thể xử lý kết nối"
+
+#~ msgid "Certificate has been revoked"
+#~ msgstr "Chứng nhận bị thu hồi"
+
+#~ msgid ""
+#~ "Certificate uses an insecure cipher algorithm or is cryptographically weak"
+#~ msgstr "Chứng nhận dùng thuật toán mật mã yếu hoặc không an toàn"
+
+#~ msgid ""
+#~ "The length of the server certificate, or the depth of the server "
+#~ "certificate chain, exceed the limits imposed by the cryptography library"
+#~ msgstr ""
+#~ "Độ dài của chứng nhận máy chủ, hoặc độ sâu của chuỗi chứng nhận, vượt quá "
+#~ "giới hạn của thư viện mật mã"
+
+#~ msgid "Internal error"
+#~ msgstr "Lỗi nội bộ"
+
+#~ msgid "Unable to connect to %s"
+#~ msgstr "Không thể kết nối đến %s"
+
+#~ msgid "View account"
+#~ msgstr "Xem tài khoản"
+
+#~ msgid "Unknown reason"
+#~ msgstr "Lý do không biết"
 
 #~ msgid "New Window"
 #~ msgstr "Cửa sổ mới"

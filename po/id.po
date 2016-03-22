@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-08 02:28+0000\n"
-"PO-Revision-Date: 2016-03-15 23:38+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2016-03-21 21:07-0700\n"
+"PO-Revision-Date: 2016-03-22 04:08+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -62,313 +62,6 @@ msgstr "Preferensi Ekstensi GNOME Shell"
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure GNOME Shell Extensions"
 msgstr "Konfigurasi Ekstensi GNOME Shell"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:1
-msgid "Enable internal tools useful for developers and testers from Alt-F2"
-msgstr "Mengaktifkan perkakas internal yang berguna bagi pengembang dan penguji dengan Alt-F2"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:2
-msgid ""
-"Allows access to internal debugging and monitoring tools using the Alt-F2 "
-"dialog."
-msgstr "Ijinkan askes ke perkakas pemantauan dan pengawakutuan internal memakai dialog Alt-F2."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:3
-msgid "Separate the power off and log out buttons on the user menu"
-msgstr "Pisahkan tombol untuk mematikan dan keluar pada menu pengguna"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:4
-msgid ""
-"By default, use a single exit button to power off or log out (with the log "
-"out option on the power off confirmation dialog). Set true for separate "
-"buttons on the user menu."
-msgstr "Gunakan tombol keluar untuk mematikan daya atau keluar (dengan opsi keluar dari dialog konfirmasi mematikan daya). Tetapkan benar untuk memisahkan tombol dari menu pengguna."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:5
-msgid "Enables the hot corner for the window picker"
-msgstr "Mengaktifkan hot corner untuk pemilih jendela"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:6
-msgid ""
-"By default, the hot corner for the window picker is enabled. Set false to "
-"disable the hot corner."
-msgstr "Secara default, hot corner untuk window picker diaktifkan. Atur ke nonaktif untuk menonaktifkan hot corner."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:7
-msgid "Set the left/right position of the hot corner for the window picker"
-msgstr "Tetapkan posisi kiri/kanan hot corner untuk pemilih jendela"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:8
-msgid ""
-"Default position of the hot corner is in a right corner. Set false to move "
-"the hot corner to a left corner. The position is not affected by the RTL vs."
-" LTR text direction."
-msgstr "Posisi awal dari sudut peka adalah di sudut kanan. Non-aktifkan untuk memindahkan sudut peka ke sudut kiri. Posisi ini tidak terpengaruh dengan arah tulisan Dari Kanan Ke Kiri atau Dari Kiri Ke Kanan."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:9
-msgid "Set the top/bottom position of the hot corner for the window picker"
-msgstr "Atur posisi atas/bawah dari sudut peka bagi pemilih jendela"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:10
-msgid ""
-"Default position of the hot corner is in a bottom corner. Set false to move "
-"the hot corner to a top corner."
-msgstr "Posisi baku hot corner adalah di sudut bawah. Tetapkan salah untuk memindahkan hot corner ke sudut atas."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:11
-msgid "Set the size of the hot corner target"
-msgstr "Tentukan ukuran target hot corner"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:12
-msgid ""
-"Number of pixels in one dimension of the square target for the hot corner. "
-"Default is for a single pixel in the very corner. For some virtual machines,"
-" this value may need to be set larger than the default."
-msgstr "Jumlah piksel dalam satu dimensi dari target persegi untuk hot corner. Pengaturan default adalah satu piksel di bagian sudut. Untuk sejumlah mesin virtual, nilai ini mungkin perlu diatur lebih besar dari default."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:13
-msgid "Set the left/right position of the dash on the overview"
-msgstr "Atur posisi kiri/kanan garis pada tinjauan"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:14
-msgid ""
-"Default position of the dash is at the end of the screen (right edge for LTR"
-" text direction). Unlike the hot corners, the opposite side is used for RTL "
-"text direction."
-msgstr "Posisi default tanda pisah adalah di ujung layar (tepi kanan arah teks LTR), tidak seperti hot corner, sisi yang berlawanan digunakan untuk arah teks RTL."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:15
-msgid "Prevent apps from being automatically maximized on launch"
-msgstr "Cegah aplikasi ditampilkan secara penuh saat diluncurkan"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:16
-msgid ""
-"Makes window management more like standard Gnome. Hides application splash "
-"screens, prevents applications from being forced to open maximized, and does"
-" not automatically switch to the app selector when a window is minimized."
-msgstr "Jadikan manajemen jendela seperti Gnome standar. Sembunyikan layar splash aplikasi, cegah aplikasi dipaksa membuka di layar penuh, dan tidak secara otomatis beralih ke pemilih aplikasi saat jendela dikecilkan."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:17
-msgid "Whether the app store is displayed"
-msgstr "Apakah toko aplikasi ditampilkan"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:18
-msgid "Whether the application grid displays the app store icon."
-msgstr "Apakah kisi-kisi aplikasi menampilkan ikon gudang aplikasi."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:19
-msgid "Uuids of extensions to enable"
-msgstr "Uuid ekstensi yang hendak diaktifkan"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:20
-msgid ""
-"GNOME Shell extensions have a uuid property; this key lists extensions which"
-" should be loaded. Any extension that wants to be loaded needs to be in this"
-" list. You can also manipulate this list with the EnableExtension and "
-"DisableExtension DBus methods on org.gnome.Shell."
-msgstr "Ekstensi GNOME Shell memiliki properti uuid; kunci ini berisikan ekstensi yang seharusnya dimuat. Ekstensi yang ingin dimuat harus berada di dalam daftar tersebut. Anda juga bisa memanipulasi daftar ini dengan metode DBus EnableExtension dan DisableExtension pada org.gnome.Shell."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:21
-msgid "Whether to collect stats about applications usage"
-msgstr "Apakah mengumpulkan statistik tentang penggunaan aplikasi"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:22
-msgid ""
-"The shell normally monitors active applications in order to present the most"
-" used ones (e.g. in launchers). While this data will be kept private, you "
-"may want to disable this for privacy reasons. Please note that doing so "
-"won't remove already saved data."
-msgstr "Shell secara normal memantau aplikasi aktif untuk menyajikan yang paling sering dipakai (mis. di peluncur). Walaupun data ini dijaga tetap privat, Anda mungkin ingin mematikan ini karena alasan privasi. Mohon dicatata bahwa hal itu tak akan menghapus data yang telah disimpan."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:23
-msgid "List of desktop file IDs for favorite applications"
-msgstr "Daftar ID berkas desktop untuk aplikasi favorit"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:24
-msgid ""
-"The applications corresponding to these identifiers will be displayed in the"
-" favorites area."
-msgstr "Aplikasi yang terkait dengan identifier-identifier ini akan ditampilkan pada area favorit."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:25
-msgid "List of desktop file IDs for applications pinned to taskbar"
-msgstr "Daftar ID berkas destop untuk aplikasi yang disematkan ke bilah tugas"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
-msgid ""
-"The applications corresponding to these identifiers will be displayed in the"
-" taskbar at the bottom of the Endless desktop."
-msgstr "Aplikasi yang sesuai dengan penanda tersebut akan ditampilkan pada bilah tugas yang terletak di bawah destop Endless."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
-msgid "List of categories that should be displayed as folders"
-msgstr "Daftar kategori yang mesti ditampilkan sebagai folder"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
-msgid ""
-"Each category name in this list will be represented as folder in the "
-"application view, rather than being displayed inline in the main view."
-msgstr "Setiap nama kategori dalam daftar ini akan diwakili oleh folder dalam tilikan aplikasi, bukan ditampilkan dalam tilikan utama."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
-msgid "History for command (Alt-F2) dialog"
-msgstr "Riwayat dialog perintah (Alt-F2)"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
-msgid "History for the looking glass dialog"
-msgstr "Riwayat untuk dialog yang berpenampilan gelas kaca"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
-msgid ""
-"Internally used to store the last IM presence explicitly set by the user. "
-"The value here is from the TpConnectionPresenceType enumeration."
-msgstr "Secara internal dipakai untuk menyimpan kehadiran PI terakhir yang ditentukan oleh pengguna. Nilainya berasal dari enumerasi TpConnectionPresemceType."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
-msgid ""
-"Internally used to store the last session presence status for the user. The "
-"value here is from the GsmPresenceStatus enumeration."
-msgstr "Secara internal dipakai untuk menyimpan status sesi terakhir bagi pengguna. Nilainya berasal dari enumerasi GsmPresenceStatus."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
-msgid "Always show the 'Log out' menuitem in the user menu."
-msgstr "Selalku tampilkan butir menu 'Log keluar' dalam menu pengguna."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
-msgid ""
-"This key overrides the automatic hiding of the 'Log out' menuitem in single-"
-"user, single-session situations."
-msgstr "Kunci ini menimpa penyembunyian otomatis dari butir menu 'Log keluar' dalam situasi pengguna tunggal, sesi tunggal."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
-msgid ""
-"Whether to remember password for mounting encrypted or remote filesystems"
-msgstr "Apakah mengingat sandi untuk mengait sistem berkas terenkripsi atau jarak jauh"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
-msgid ""
-"The shell will request a password when an encrypted device or a remote "
-"filesystem is mounted. If the password can be saved for future use a "
-"'Remember Password' checkbox will be present. This key sets the default "
-"state of the checkbox."
-msgstr "Shell akan meminta suatu sandi ketika suatu perangkat terenkripsi atau sistem berkas jarak jauh dikaitkan. Bila sandi dapat disimpan untuk dipakai dimasa depan, suatu kotak contreng 'Ingat Sandi' akan tampil. Kunci ini menata keadaan baku dari kontak contreng."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
-msgid "Layout of application launcher icons in the grid"
-msgstr "Tata letak ikon peluncur aplikasi pada kotak-kotak"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
-msgid ""
-"This key specifies the exact order of the icons shown in the applications "
-"launcher view."
-msgstr "Tombol ini menentukan urutan ikon yang ditampilkan pada tampilan peluncur aplikasi."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
-msgid "Enables the pressure barrier for the message tray"
-msgstr "Aktifkan pressure barrier untuk message tray"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
-msgid ""
-"By default, the message tray is only shown on key press. Set true to show "
-"the message tray when exerting downward pressure with the cursor on the "
-"bottom of the taskbar."
-msgstr "Dalam pengaturan awal, baki pesan hanya diperlihatkan setelah tombol ditekan. Atur menjadi aktif untuk memunculkan baki pesan pada saat memberikan tekanan ke bawah menggunakan kursor pada bagian bawah bilah tugas."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
-msgid "Show the week date in the calendar"
-msgstr "Menampilkan tanggal pada kalender"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
-msgid "If true, display the ISO week date in the calendar."
-msgstr "Jika \"true\", menampilkan tanggal berformat ISO pada kalender."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
-msgid "Keybinding to open the application menu"
-msgstr "Kombinasi tombol untuk membuka menu aplikasi"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
-msgid "Keybinding to open the application menu."
-msgstr "Kombinasi tombol untuk membuka menu aplikasi."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
-msgid "Keybinding to open the \"Show Applications\" view"
-msgstr "Kombinasi tombol untuk membuka tilikan \"Tampilkan Aplikasi\""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
-msgid ""
-"Keybinding to open the \"Show Applications\" view of the Activities "
-"Overview."
-msgstr "Kombinasi tombol untuk membuka tilikan Ringkasan Aktivitas \"Tampilkan Aplikasi\"."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
-msgid "Keybinding to toggle the visibility of the message tray"
-msgstr "Kombinasi tombol untuk kenampakan baki pesan"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
-msgid "Keybinding to toggle the visibility of the message tray."
-msgstr "Kombinasi tombol untuk kenampakan baki pesan."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
-msgid "Keybinding to focus the active notification"
-msgstr "Kombinasi tombol untuk fokus pada pemberitahuan yang aktif"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
-msgid "Keybinding to focus the active notification."
-msgstr "Kombinasi tombol untuk fokus pada pemberitahuan yang aktif."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
-msgid "Keybinding that shows the force app exit dialog"
-msgstr "Kombinasi tombol yang akan menampilkan dialog keluar tutup paksa aplikasi"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
-msgid "Which keyboard to use"
-msgstr "Papan tik mana yang akan dipakai"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
-msgid "The type of keyboard to use."
-msgstr "Jenis papan tik yang akan dipakai."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
-msgid "The application icon mode."
-msgstr "Mode ikon aplikasi."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
-msgid ""
-"Configures how the windows are shown in the switcher. Valid possibilities "
-"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
-"(shows only the application icon) or 'both'."
-msgstr "Mengatur bagaimana jendela ditampilkan dalam penukar. Kemungkinan yang valid adalah 'thumbnail-only' (menampilkan gambar mini dari jendela), 'app-icon-only' (hanya menampilkan ikon aplikasi), atau 'both' (keduanya)."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
-msgid "Attach modal dialog to the parent window"
-msgstr "Mencantolkan dialog modal ke jendela induk"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
-msgid ""
-"This key overrides the key in org.gnome.mutter when running GNOME Shell."
-msgstr "Kunci ini menimpa kunci dalam org.gnome.mutter ketika menjalankan GNOME Shell."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
-msgid "Arrangement of buttons on the titlebar"
-msgstr "Pengaturan tombol pada bilah judul"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
-msgid ""
-"This key overrides the key in org.gnome.desktop.wm.preferences when running "
-"GNOME Shell."
-msgstr "Kunci ini menimpa kunci dalam org.gnome.desktop.wm.preferences ketika menjalankan GNOME Shell."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
-msgid "Enable edge tiling when dropping windows on screen edges"
-msgstr "Memfungsikan pengubinan tepi ketika menjatuhkan jendela pada tepi layar"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:61
-msgid "Workspaces are managed dynamically"
-msgstr "Ruang kerja dikelola secara dinamis"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:62
-msgid "Workspaces only on primary monitor"
-msgstr "Ruang kerja hanya pada monitor primer"
 
 #: ../js/extensionPrefs/main.js:127
 #, javascript-format
@@ -542,23 +235,23 @@ msgstr "%s telah ditambahkan ke favorit Anda."
 msgid "%s has been removed from your favorites."
 msgstr "%s telah dihapus dari favorit Anda."
 
-#: ../js/ui/appIconBar.js:213
+#: ../js/ui/appIconBar.js:216
 msgid "Other workspaces"
 msgstr "Ruang kerja lainnya"
 
-#: ../js/ui/appIconBar.js:222
+#: ../js/ui/appIconBar.js:225
 msgid "Current workspace"
 msgstr "Ruang kerja saat ini"
 
-#: ../js/ui/appIconBar.js:297
+#: ../js/ui/appIconBar.js:300
 msgid "Pin to Taskbar"
 msgstr "Sematkan ke Bilah Tugas"
 
-#: ../js/ui/appIconBar.js:301
+#: ../js/ui/appIconBar.js:304
 msgid "Unpin from Taskbar"
 msgstr "Lepaskan semat dari Bilah Tugas"
 
-#: ../js/ui/appIconBar.js:317
+#: ../js/ui/appIconBar.js:320
 #, javascript-format
 msgid "Quit %s"
 msgstr "Keluar %s"
@@ -1057,7 +750,7 @@ msgstr "Monitor Sistem"
 msgid "Quit Application"
 msgstr "Tutup Aplikasi"
 
-#: ../js/ui/iconGridLayout.js:206
+#: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s telah dihapus"
@@ -1197,11 +890,11 @@ msgstr "GNOME perlu mengunci layar"
 #. Just tell him to stop using this app
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:428
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
 msgid "Unable to lock"
 msgstr "Tak bisa mengunci"
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
 msgid "Lock was blocked by an application"
 msgstr "Kunci diblokir oleh suatu aplikasi"
 

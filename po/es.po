@@ -18,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-08 02:28+0000\n"
-"PO-Revision-Date: 2016-03-22 00:27+0000\n"
-"Last-Translator: Nuritzi Sanchez <ns@endlessm.com>\n"
+"POT-Creation-Date: 2016-03-21 21:07-0700\n"
+"PO-Revision-Date: 2016-03-22 04:08+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,313 +70,6 @@ msgstr "Preferencias de las extensiones de GNOME Shell"
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure GNOME Shell Extensions"
 msgstr "Configurar las extensiones de GNOME Shell"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:1
-msgid "Enable internal tools useful for developers and testers from Alt-F2"
-msgstr "Activar las herramientas internas, útiles para desarrolladores y probadores, desde Alt+F2"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:2
-msgid ""
-"Allows access to internal debugging and monitoring tools using the Alt-F2 "
-"dialog."
-msgstr "Permitir acceder a las herramientas internas de depuración y monitorización usando el diálogo Alt+F2"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:3
-msgid "Separate the power off and log out buttons on the user menu"
-msgstr "Separar los botones para apagar y cerrar sesión en el menú de usuario"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:4
-msgid ""
-"By default, use a single exit button to power off or log out (with the log "
-"out option on the power off confirmation dialog). Set true for separate "
-"buttons on the user menu."
-msgstr "Como predeterminado, utiliza un solo botón de salida para apagar o cerrar la sesión (con la opción de cierre de sesión en el diálogo de confirmación de apagado). Establece botones separados en el menú de usuario."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:5
-msgid "Enables the hot corner for the window picker"
-msgstr "Permite la esquina activa para la selección de pantallas"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:6
-msgid ""
-"By default, the hot corner for the window picker is enabled. Set false to "
-"disable the hot corner."
-msgstr "Como predeterminado, la esquina activa para la selección de pantalla está activada. Selecciona falso para desactivar la esquina activa."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:7
-msgid "Set the left/right position of the hot corner for the window picker"
-msgstr "Activar la posición derecha/izquierda para la esquina activa para la selección de pantalla"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:8
-msgid ""
-"Default position of the hot corner is in a right corner. Set false to move "
-"the hot corner to a left corner. The position is not affected by the RTL vs."
-" LTR text direction."
-msgstr "La posición predeterminada de la esquina activa es en una esquina derecha. Selecciona falso para mover la esquina activa a una esquina izquierda. La posición no es afectada por la dirección del texto."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:9
-msgid "Set the top/bottom position of the hot corner for the window picker"
-msgstr "Activar la posición de arriba y abajo para la esquina activa para la selección de pantalla"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:10
-msgid ""
-"Default position of the hot corner is in a bottom corner. Set false to move "
-"the hot corner to a top corner."
-msgstr "La condición base para la esquina activa es en las esquinas inferiores. Selecciona falso para mover la esquina activa a las esquinas superiores."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:11
-msgid "Set the size of the hot corner target"
-msgstr "Establecer el tamaño del objetivo de la esquina activa"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:12
-msgid ""
-"Number of pixels in one dimension of the square target for the hot corner. "
-"Default is for a single pixel in the very corner. For some virtual machines,"
-" this value may need to be set larger than the default."
-msgstr "Número de píxeles en una dimensión del objetivo cuadrado de la esquina activa. Como predeterminado, aparece un único píxel en la misma esquina. En algunas máquinas virtuales, puede ser necesario establecer este valor de modo que sea superior al predeterminado. "
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:13
-msgid "Set the left/right position of the dash on the overview"
-msgstr "Ajusta la posición de la barra a la izquierda/derecha del tablero"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:14
-msgid ""
-"Default position of the dash is at the end of the screen (right edge for LTR"
-" text direction). Unlike the hot corners, the opposite side is used for RTL "
-"text direction."
-msgstr "La posición predeterminada de la barra es al borde de la pantalla (borde derecho para la dirección del texto desde la izquierda hacia la derecha). En contraste a las esquinas calientes, el lado opuesto se utiliza para la dirección del texto desde la derecha hacia la izquierda."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:15
-msgid "Prevent apps from being automatically maximized on launch"
-msgstr "Impide que los programas se maximicen automáticamente al iniciarse"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:16
-msgid ""
-"Makes window management more like standard Gnome. Hides application splash "
-"screens, prevents applications from being forced to open maximized, and does"
-" not automatically switch to the app selector when a window is minimized."
-msgstr "Hace que la gestión de las ventanas sea más como el estilo del Gnome estándar. Oculta pantallas de inicio de programas, impide que los programas automáticamente se abran maximizados y no cambia automáticamene al selector de programas cuando se minimiza una ventana."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:17
-msgid "Whether the app store is displayed"
-msgstr "Si el centro de programas se muestra o no"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:18
-msgid "Whether the application grid displays the app store icon."
-msgstr "Si el ícono del centro de programas aparece o no en la cuadrícula de programas."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:19
-msgid "Uuids of extensions to enable"
-msgstr "Uuid de las extensiones que activar"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:20
-msgid ""
-"GNOME Shell extensions have a uuid property; this key lists extensions which"
-" should be loaded. Any extension that wants to be loaded needs to be in this"
-" list. You can also manipulate this list with the EnableExtension and "
-"DisableExtension DBus methods on org.gnome.Shell."
-msgstr "Las extensiones de GNOME Shell tienen una propiedad uuid; esta clave lista las extensiones que se deben cargar. Cualquier extensión que se quiere cargar debe estar en esta lista. También puedes manipular esta lista con los métodos de DBus «EnableExtension» y «DisableExtension» en org.gnome.Shell."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:21
-msgid "Whether to collect stats about applications usage"
-msgstr "Indica si se deben recolectar estadísticas acerca del uso de los programas"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:22
-msgid ""
-"The shell normally monitors active applications in order to present the most"
-" used ones (e.g. in launchers). While this data will be kept private, you "
-"may want to disable this for privacy reasons. Please note that doing so "
-"won't remove already saved data."
-msgstr "El shell normalmente monitoriza todos los programas activos para presentar los más usados (ej. en los lanzadores). Aunque estos datos se mantienen de forma privada, puede ser que quieras desactivarlos por razones de privacidad. Nota que haciéndolo no eliminará los datos ya guardados."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:23
-msgid "List of desktop file IDs for favorite applications"
-msgstr "Lista de ID de archivos de escritorio para programas favoritos"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:24
-msgid ""
-"The applications corresponding to these identifiers will be displayed in the"
-" favorites area."
-msgstr "Los programas correspondientes con esos identificadores se mostrarán en el área de favoritos."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:25
-msgid "List of desktop file IDs for applications pinned to taskbar"
-msgstr "Lista de los DNI de archivos para programas clavados a la barra de tareas"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
-msgid ""
-"The applications corresponding to these identifiers will be displayed in the"
-" taskbar at the bottom of the Endless desktop."
-msgstr "Los programas con estos identificadores se mostrarán en la barra de tareas al fondo del escritorio."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
-msgid "List of categories that should be displayed as folders"
-msgstr "Lista de categorías que se deben mostrar como carpetas"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
-msgid ""
-"Each category name in this list will be represented as folder in the "
-"application view, rather than being displayed inline in the main view."
-msgstr "Cada nombre de categoría de esta lista se representará como una carpeta en la vista de programas, en lugar de mostrarse en línea en la vista principal."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
-msgid "History for command (Alt-F2) dialog"
-msgstr "Historial del diálogo de comandos (Alt+F2)"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
-msgid "History for the looking glass dialog"
-msgstr "Historial del diálogo de «looking glass»"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
-msgid ""
-"Internally used to store the last IM presence explicitly set by the user. "
-"The value here is from the TpConnectionPresenceType enumeration."
-msgstr "Usado internamente para guardar el último IM de presencia establecido explícitamente por el usuario. El valor aquí es de la enumeración TpConnectionPresenceType."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
-msgid ""
-"Internally used to store the last session presence status for the user. The "
-"value here is from the GsmPresenceStatus enumeration."
-msgstr "Usado internamente para guardar el último estado de presencia de la sesión del usuario. El valor aquí es de la GsmPresenceStatus."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
-msgid "Always show the 'Log out' menuitem in the user menu."
-msgstr "Mostrar siempre el elemento de menú «Cerrar sesión» en el menú del usuario."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
-msgid ""
-"This key overrides the automatic hiding of the 'Log out' menuitem in single-"
-"user, single-session situations."
-msgstr "Esta clave sobreescribe la ocultación automática del elemento de menú «Cerrar sesión» en situaciones de un único usuario o de una única sesión."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
-msgid ""
-"Whether to remember password for mounting encrypted or remote filesystems"
-msgstr "Indica si se debe recordar la contraseña para montar sistemas de archivos remotos o cifrados"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
-msgid ""
-"The shell will request a password when an encrypted device or a remote "
-"filesystem is mounted. If the password can be saved for future use a "
-"'Remember Password' checkbox will be present. This key sets the default "
-"state of the checkbox."
-msgstr "El shell solicitará una contraseña cuando se monte un dispositivo cifrado o un sistema de archivos remoto. Si la contraseña se puede guardar para usarla en el futuro, se mostrará la casilla «Recordar contraseña». Esta clave establece el valor predeterminado de la casilla."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
-msgid "Layout of application launcher icons in the grid"
-msgstr "Distribución de los iconos de inicio de programa en la cuadrícula"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
-msgid ""
-"This key specifies the exact order of the icons shown in the applications "
-"launcher view."
-msgstr "Esta clave especifica el orden exacto de los iconos mostrados en la vista de inicio de programa."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
-msgid "Enables the pressure barrier for the message tray"
-msgstr "Activa la barrera de presión para la bandeja de mensajes"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
-msgid ""
-"By default, the message tray is only shown on key press. Set true to show "
-"the message tray when exerting downward pressure with the cursor on the "
-"bottom of the taskbar."
-msgstr "Como predeterminado, la bandeja de mensajes sólo se muestra al pulsar la tecla. Establece cierto para mostrar la bandeja de mensajes cuando haya presión hacia abajo con el cursor en la parte inferior de la barra de tareas."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
-msgid "Show the week date in the calendar"
-msgstr "Mostrar la fecha de la semana en el calendario"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
-msgid "If true, display the ISO week date in the calendar."
-msgstr "Si es cierto, muestra la fecha de semana ISO en el calendario."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
-msgid "Keybinding to open the application menu"
-msgstr "Asociación de teclas para abrir el menú del programa"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
-msgid "Keybinding to open the application menu."
-msgstr "Asociación de teclas para abrir el menú del programa."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
-msgid "Keybinding to open the \"Show Applications\" view"
-msgstr "Asociación de teclas para la vista «Mostrar programas»"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
-msgid ""
-"Keybinding to open the \"Show Applications\" view of the Activities "
-"Overview."
-msgstr "Asociación de teclas para abrir la vista «Mostrar programas» de la vista de actividades."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
-msgid "Keybinding to toggle the visibility of the message tray"
-msgstr "Asociación de teclas cambiar la visibilidad de la bandeja de mensajes"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
-msgid "Keybinding to toggle the visibility of the message tray."
-msgstr "Asociación de teclas cambiar la visibilidad de la bandeja de mensajes."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
-msgid "Keybinding to focus the active notification"
-msgstr "Asociación de teclas para enfocarse en la notificación activa"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
-msgid "Keybinding to focus the active notification."
-msgstr "Asociación de teclas para enfocarse en la notificación activa."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
-msgid "Keybinding that shows the force app exit dialog"
-msgstr "Combinación de teclas que muestra el texto para cerrar programas"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
-msgid "Which keyboard to use"
-msgstr "Cuál teclado usar"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
-msgid "The type of keyboard to use."
-msgstr "El tipo de teclado que usar."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
-msgid "The application icon mode."
-msgstr "El modo de ícono del programa."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
-msgid ""
-"Configures how the windows are shown in the switcher. Valid possibilities "
-"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
-"(shows only the application icon) or 'both'."
-msgstr "Configura cómo se muestran las ventanas en el selector. Los valore posibles son «thumbnail-only» (muestra una imagen miniatura de la ventana), «app-icon-only» (sólo muestra el ícono del programa) o «both»."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
-msgid "Attach modal dialog to the parent window"
-msgstr "Acoplar un diálogo modal a la ventana padre"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
-msgid ""
-"This key overrides the key in org.gnome.mutter when running GNOME Shell."
-msgstr "Esta clave sobreescribe la clave en org.gnome.mutter al ejecutar GNOME Shell."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
-msgid "Arrangement of buttons on the titlebar"
-msgstr "Orden de los botones en la barra de título"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
-msgid ""
-"This key overrides the key in org.gnome.desktop.wm.preferences when running "
-"GNOME Shell."
-msgstr "Esta clave sobreescribe la clave en org.gnome.desktop.wm.preferences al ejecutar GNOME Shell."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
-msgid "Enable edge tiling when dropping windows on screen edges"
-msgstr "Activar el mosaico en los bordes al arrastrar ventanas a los bordes de la ventana"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:61
-msgid "Workspaces are managed dynamically"
-msgstr "Las áreas de trabajo se gestionan dinámicamente"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:62
-msgid "Workspaces only on primary monitor"
-msgstr "Áreas de trabajo solo en la pantalla principal"
 
 #: ../js/extensionPrefs/main.js:127
 #, javascript-format
@@ -550,23 +243,23 @@ msgstr "Se ha añadido %s a tus favoritos."
 msgid "%s has been removed from your favorites."
 msgstr "Se ha quitado %s de tus favoritos."
 
-#: ../js/ui/appIconBar.js:213
+#: ../js/ui/appIconBar.js:216
 msgid "Other workspaces"
 msgstr "Otros espacios de trabajo"
 
-#: ../js/ui/appIconBar.js:222
+#: ../js/ui/appIconBar.js:225
 msgid "Current workspace"
 msgstr "Espacio de trabajo actual"
 
-#: ../js/ui/appIconBar.js:297
+#: ../js/ui/appIconBar.js:300
 msgid "Pin to Taskbar"
 msgstr "Clavar en la barra de tareas"
 
-#: ../js/ui/appIconBar.js:301
+#: ../js/ui/appIconBar.js:304
 msgid "Unpin from Taskbar"
 msgstr "Eliminar de la barra de tareas."
 
-#: ../js/ui/appIconBar.js:317
+#: ../js/ui/appIconBar.js:320
 #, javascript-format
 msgid "Quit %s"
 msgstr "Cerrar %s"
@@ -1069,7 +762,7 @@ msgstr "Pantalla de administración"
 msgid "Quit Application"
 msgstr "Cerrar programa"
 
-#: ../js/ui/iconGridLayout.js:206
+#: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s ha sido borrado"
@@ -1209,11 +902,11 @@ msgstr "GNOME necesita bloquear la pantalla"
 #. Just tell him to stop using this app
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:428
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
 msgid "Unable to lock"
 msgstr "No se pudo bloquear"
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
 msgid "Lock was blocked by an application"
 msgstr "Un programa impidió el bloqueo"
 
