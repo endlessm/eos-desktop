@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-08 02:28+0000\n"
-"PO-Revision-Date: 2016-03-01 02:28+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2016-03-21 21:07-0700\n"
+"PO-Revision-Date: 2016-03-22 04:08+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -62,313 +62,6 @@ msgstr "गनोम शेल एक्सटेंशन वरीयताए
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure GNOME Shell Extensions"
 msgstr "गनोम शेल एक्सटेंशन विन्यस्त करें"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:1
-msgid "Enable internal tools useful for developers and testers from Alt-F2"
-msgstr "Alt-F2 से डेवलपर्स और परीक्षकों के लिए उपयोगी आंतरिक उपकरण को सक्षम करें"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:2
-msgid ""
-"Allows access to internal debugging and monitoring tools using the Alt-F2 "
-"dialog."
-msgstr "Alt-F2 संवाद का उपयोग करके आंतरिक डिबगिंग और निगरानी उपकरण तक पहुँच पायें."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:3
-msgid "Separate the power off and log out buttons on the user menu"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:4
-msgid ""
-"By default, use a single exit button to power off or log out (with the log "
-"out option on the power off confirmation dialog). Set true for separate "
-"buttons on the user menu."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:5
-msgid "Enables the hot corner for the window picker"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:6
-msgid ""
-"By default, the hot corner for the window picker is enabled. Set false to "
-"disable the hot corner."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:7
-msgid "Set the left/right position of the hot corner for the window picker"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:8
-msgid ""
-"Default position of the hot corner is in a right corner. Set false to move "
-"the hot corner to a left corner. The position is not affected by the RTL vs."
-" LTR text direction."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:9
-msgid "Set the top/bottom position of the hot corner for the window picker"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:10
-msgid ""
-"Default position of the hot corner is in a bottom corner. Set false to move "
-"the hot corner to a top corner."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:11
-msgid "Set the size of the hot corner target"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:12
-msgid ""
-"Number of pixels in one dimension of the square target for the hot corner. "
-"Default is for a single pixel in the very corner. For some virtual machines,"
-" this value may need to be set larger than the default."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:13
-msgid "Set the left/right position of the dash on the overview"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:14
-msgid ""
-"Default position of the dash is at the end of the screen (right edge for LTR"
-" text direction). Unlike the hot corners, the opposite side is used for RTL "
-"text direction."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:15
-msgid "Prevent apps from being automatically maximized on launch"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:16
-msgid ""
-"Makes window management more like standard Gnome. Hides application splash "
-"screens, prevents applications from being forced to open maximized, and does"
-" not automatically switch to the app selector when a window is minimized."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:17
-msgid "Whether the app store is displayed"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:18
-msgid "Whether the application grid displays the app store icon."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:19
-msgid "Uuids of extensions to enable"
-msgstr "एक्सटेंशन का Uuid सक्रिय किया जाना है"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:20
-msgid ""
-"GNOME Shell extensions have a uuid property; this key lists extensions which"
-" should be loaded. Any extension that wants to be loaded needs to be in this"
-" list. You can also manipulate this list with the EnableExtension and "
-"DisableExtension DBus methods on org.gnome.Shell."
-msgstr "गनोम शैल एक्सटेंशन का एक uuid गुण है, इस कुंजी एक्सटेंशन जो लोड किया जाना चाहिए की सूची दिखाता हैं. किसी भी विस्तारक जिसे लोड करने के लिए चाहता है को इस सूची में होने की जरूरत है. आप भी  इस सूची में EnableExtension और DisableExtension डिबस  तरीकों के साथ org.gnome.Shell पर हेरफेर कर सकते हैं."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:21
-msgid "Whether to collect stats about applications usage"
-msgstr "क्या अनुप्रयोगों के उपयोग के बारे में आँकड़े इकट्ठा करना हैं."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:22
-msgid ""
-"The shell normally monitors active applications in order to present the most"
-" used ones (e.g. in launchers). While this data will be kept private, you "
-"may want to disable this for privacy reasons. Please note that doing so "
-"won't remove already saved data."
-msgstr "सबसे अधिक इस्तेमाल किया जाने वाले  सक्रिय अनुप्रयोगों (जैसे लांचरों में ) पर शेल सामान्य रूप से नज़र रखता है. हालांकि इस डेटा को निजी रखा जाएगा, आप गोपनीयता कारणों के लिए इसे अक्षम कर सकते हैं. कृपया ध्यान दें कि ऐसा करने से पहले से सहेजे गए डेटा को हटाया नहीं जायेगा."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:23
-msgid "List of desktop file IDs for favorite applications"
-msgstr "पसंदीदा अनुप्रयोगों के लिए डेस्कटॉप फ़ाइल आईडी की सूची."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:24
-msgid ""
-"The applications corresponding to these identifiers will be displayed in the"
-" favorites area."
-msgstr "इन पहचानकर्ता के लिए अनुप्रयोगों को पसंदीदा क्षेत्र में प्रदर्शित किया जाएगा."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:25
-msgid "List of desktop file IDs for applications pinned to taskbar"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:26
-msgid ""
-"The applications corresponding to these identifiers will be displayed in the"
-" taskbar at the bottom of the Endless desktop."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:27
-msgid "List of categories that should be displayed as folders"
-msgstr "श्रेणियों की सूची जिसे बतौर फ़ोल्ड़र दिखाया जाना चाहिए"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:28
-msgid ""
-"Each category name in this list will be represented as folder in the "
-"application view, rather than being displayed inline in the main view."
-msgstr "अनुप्रयोग दृश्य में हर श्रेणी नाम को बतौर फ़ोल्डर प्रदर्शित किया जाएगा, मुख्य दृश्य में अंदर ही दिखाए गए रूप के बजाय."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:29
-msgid "History for command (Alt-F2) dialog"
-msgstr "कमांड (Alt-F2) के लिए इतिहास संवाद "
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:30
-msgid "History for the looking glass dialog"
-msgstr "ग्लास खोज संवाद के लिए इतिहास"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:31
-msgid ""
-"Internally used to store the last IM presence explicitly set by the user. "
-"The value here is from the TpConnectionPresenceType enumeration."
-msgstr "स्पष्ट रूप से उपयोगकर्ता द्वारा निर्धारित की गई आंतरिक रूप से पिछले आईएम उपस्थिति का इस्तेमाल किया किया जाता हैं. यह TpConnectionPresenceType  गणन से मान लिया गया हैं "
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:32
-msgid ""
-"Internally used to store the last session presence status for the user. The "
-"value here is from the GsmPresenceStatus enumeration."
-msgstr "आंतरिक रूप से उपयोगकर्ता के लिए पिछले सत्र उपस्थिति स्थिति को संग्रहीत करने के लिए उपयोग किया जाता हैं. यह GsmPresenceStatus गणन से मान लिया गया हैं "
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:33
-msgid "Always show the 'Log out' menuitem in the user menu."
-msgstr "हमेशा 'लॉग आउट' मेन्यू मद को उपयोक्ता मेन्यू में दिखाएँ."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:34
-msgid ""
-"This key overrides the automatic hiding of the 'Log out' menuitem in single-"
-"user, single-session situations."
-msgstr "यह कुँजी 'लॉग आउट' मेन्यू मद का एकल उपयोक्ता, एकल सत्र स्थिति में स्वचालित छिपाने को अधिरोहित करती है."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:35
-msgid ""
-"Whether to remember password for mounting encrypted or remote filesystems"
-msgstr "गोपित या दूरस्थ फ़ाइलतंत्र के लिए कूटशब्द क्या याद रखने हैं"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:36
-msgid ""
-"The shell will request a password when an encrypted device or a remote "
-"filesystem is mounted. If the password can be saved for future use a "
-"'Remember Password' checkbox will be present. This key sets the default "
-"state of the checkbox."
-msgstr "यह शेल किसी कूटशब्द का निवेदन करेगा जब कोई गोपित युक्ति या दूरस्थ फ़ाइलतंत्र आरोहित किया जाता है. यदि कूटशब्द को भविष्य के उपयोग के लिए सहेजा जाता है तो 'कूटशब्द याद रखें' जाँचपेटी मौजूद रहेगा. यह कुँजी जाँचपेटी की तयशुदा स्थिति को सेट करता है."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:37
-msgid "Layout of application launcher icons in the grid"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:38
-msgid ""
-"This key specifies the exact order of the icons shown in the applications "
-"launcher view."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:39
-msgid "Enables the pressure barrier for the message tray"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:40
-msgid ""
-"By default, the message tray is only shown on key press. Set true to show "
-"the message tray when exerting downward pressure with the cursor on the "
-"bottom of the taskbar."
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:41
-msgid "Show the week date in the calendar"
-msgstr "अगर सही है, पंचांग में सप्ताह संख्या दिखाएँ"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:42
-msgid "If true, display the ISO week date in the calendar."
-msgstr "अगर सही है, तो पंचांग में ISO सप्ताह तिथि दिखाएँ."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:43
-msgid "Keybinding to open the application menu"
-msgstr "अनुप्रयोग मेनू को खोलने के लिए कीबाइंडिंग"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:44
-msgid "Keybinding to open the application menu."
-msgstr "अनुप्रयोग मेनू को खोलने के लिए कीबाइंडिंग."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:45
-msgid "Keybinding to open the \"Show Applications\" view"
-msgstr "\"अनुप्रयोग दिखाएँ\" दृश्य खोलने के लिए खोलने के लिए कीबाइंडिंग"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:46
-msgid ""
-"Keybinding to open the \"Show Applications\" view of the Activities "
-"Overview."
-msgstr "गतिविधि परिदृश्य के \"अनुप्रयोग दिखाएँ\" दृश्य खोलने के लिए खोलने के लिए कीबाइंडिंग"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:47
-msgid "Keybinding to toggle the visibility of the message tray"
-msgstr "संदेश ट्रे की दृश्यता को टॉगल करने के लिए कीबाइंडिंग"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:48
-msgid "Keybinding to toggle the visibility of the message tray."
-msgstr "संदेश ट्रे की दृश्यता को टॉगल करने के लिए कीबाइंडिंग."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:49
-msgid "Keybinding to focus the active notification"
-msgstr "सक्रिय अधिसूचना फोकस करने के लिए कीबाइंडिंग"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:50
-msgid "Keybinding to focus the active notification."
-msgstr "सक्रिय अधिसूचना फोकस करने के लिए कीबाइंडिंग."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:51
-msgid "Keybinding that shows the force app exit dialog"
-msgstr ""
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:52
-msgid "Which keyboard to use"
-msgstr "उपयोग करने के लिए कुंजीपटल"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:53
-msgid "The type of keyboard to use."
-msgstr "उपयोग करने के लिए कीबोर्ड के प्रकार"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:54
-msgid "The application icon mode."
-msgstr "अनुप्रयोग चिह्न अवस्था."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:55
-msgid ""
-"Configures how the windows are shown in the switcher. Valid possibilities "
-"are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-only' "
-"(shows only the application icon) or 'both'."
-msgstr "विन्यस्त करें कि कैसे विंडोज स्विचर में दिखाए जाते हैं. मान्य संभावनाएँ हैं 'लघुचित्र केवल' (विंडो का लघुचित्र दिखाता है), 'app-icon-केवल' (केवल अनुप्रयोग चिह्न दिखाता है) या 'दोनों'."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
-msgid "Attach modal dialog to the parent window"
-msgstr "जनक विंडो में मोडल संवाद संलग्न करें"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
-msgid ""
-"This key overrides the key in org.gnome.mutter when running GNOME Shell."
-msgstr "यह कुँजी org.gnome.mutter में कुँजी को अधिरोहित करता है जब गनोम शेल को चला रहा हो."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
-msgid "Arrangement of buttons on the titlebar"
-msgstr "शीर्षक-पट्टी में बटनों का विन्यास"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
-msgid ""
-"This key overrides the key in org.gnome.desktop.wm.preferences when running "
-"GNOME Shell."
-msgstr "यह कुँजी org.gnome.desktop.wm.preferences में कुँजी को अधिरोहित करता है जब गनोम शेल को चला रहा हो."
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
-msgid "Enable edge tiling when dropping windows on screen edges"
-msgstr "जब स्क्रीन किनारे पर विंडोज़ को छोड़ने बढ़त टाइलिंग सक्षम करें"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:61
-msgid "Workspaces are managed dynamically"
-msgstr "कार्यस्थान गतिशील रूप से प्रबंधित की जाती हैं"
-
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:62
-msgid "Workspaces only on primary monitor"
-msgstr "केवल प्राथमिक मॉनिटर पर कार्यस्थान"
 
 #: ../js/extensionPrefs/main.js:127
 #, javascript-format
@@ -542,23 +235,23 @@ msgstr "%s को आपकी पसंदीदा में जोड़ा �
 msgid "%s has been removed from your favorites."
 msgstr "%s को आपकी पसंदीदा से हटाया गया है."
 
-#: ../js/ui/appIconBar.js:213
+#: ../js/ui/appIconBar.js:216
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:222
+#: ../js/ui/appIconBar.js:225
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:297
+#: ../js/ui/appIconBar.js:300
 msgid "Pin to Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:301
+#: ../js/ui/appIconBar.js:304
 msgid "Unpin from Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:317
+#: ../js/ui/appIconBar.js:320
 #, javascript-format
 msgid "Quit %s"
 msgstr ""
@@ -1061,7 +754,7 @@ msgstr ""
 msgid "Quit Application"
 msgstr ""
 
-#: ../js/ui/iconGridLayout.js:206
+#: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
@@ -1201,11 +894,11 @@ msgstr "गनोम को स्क्रीन को लॉक करने 
 #. Just tell him to stop using this app
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:428
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
 msgid "Unable to lock"
 msgstr "ताला खोलने में अक्षम"
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
 msgid "Lock was blocked by an application"
 msgstr "लॉक को किसी अनुप्रयोग द्वारा अवरोधित किया गया"
 
