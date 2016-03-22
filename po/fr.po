@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-08 02:28+0000\n"
-"PO-Revision-Date: 2016-03-01 02:28+0000\n"
+"PO-Revision-Date: 2016-03-16 00:45+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -197,13 +197,13 @@ msgstr "Les applications correspondant à ces identifiants sont affichées dans 
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
 msgid "List of desktop file IDs for applications pinned to taskbar"
-msgstr ""
+msgstr "Liste des identifiants des fichiers informatiques pour les applications épinglées à la barre des tâches"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:26
 msgid ""
 "The applications corresponding to these identifiers will be displayed in the"
 " taskbar at the bottom of the Endless desktop."
-msgstr ""
+msgstr "Les applications correspondant à ces identifiants seront affichées dans la barre des tâches située en bas du bureau Endless."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "List of categories that should be displayed as folders"
@@ -557,11 +557,11 @@ msgstr "L'espace de travail en cours"
 
 #: ../js/ui/appIconBar.js:297
 msgid "Pin to Taskbar"
-msgstr ""
+msgstr "Épingler à la barre des tâches"
 
 #: ../js/ui/appIconBar.js:301
 msgid "Unpin from Taskbar"
-msgstr ""
+msgstr "Détacher de la barre des tâches"
 
 #: ../js/ui/appIconBar.js:317
 #, javascript-format

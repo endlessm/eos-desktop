@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-08 02:28+0000\n"
+"POT-Creation-Date: 2016-03-22 01:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -318,52 +318,142 @@ msgid "Keybinding that shows the force app exit dialog"
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:52
-msgid "Which keyboard to use"
+msgid "Keybinding to activate the first app in the icon bar."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:53
-msgid "The type of keyboard to use."
+msgid ""
+"Keybinding to open the first app in the icon bar, or switch to the app if "
+"already open."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:54
-msgid "The application icon mode."
+msgid "Keybinding to activate the second app in the icon bar."
 msgstr ""
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:55
+msgid ""
+"Keybinding to open the second app in the icon bar, or switch to the app if "
+"already open."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+msgid "Keybinding to activate the third app in the icon bar."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+msgid ""
+"Keybinding to open the third app in the icon bar, or switch to the app if "
+"already open."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
+msgid "Keybinding to activate the fourth app in the icon bar."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
+msgid ""
+"Keybinding to open the fourth app in the icon bar, or switch to the app if "
+"already open."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
+msgid "Keybinding to activate the fifth app in the icon bar."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:61
+msgid ""
+"Keybinding to open the fifth app in the icon bar, or switch to the app if "
+"already open."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:62
+msgid "Keybinding to activate the sixth app in the icon bar."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:63
+msgid ""
+"Keybinding to open the sixth app in the icon bar, or switch to the app if "
+"already open."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:64
+msgid "Keybinding to activate the seventh app in the icon bar."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:65
+msgid ""
+"Keybinding to open the seventh app in the icon bar, or switch to the app if "
+"already open."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:66
+msgid "Keybinding to activate the eighth app in the icon bar."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:67
+msgid ""
+"Keybinding to open the eighth app in the icon bar, or switch to the app if "
+"already open."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:68
+msgid "Keybinding to activate the last app in the icon bar."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:69
+msgid ""
+"Keybinding to open the last app in the icon bar, or switch to the app if "
+"already open."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:70
+msgid "Which keyboard to use"
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:71
+msgid "The type of keyboard to use."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:72
+msgid "The application icon mode."
+msgstr ""
+
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:73
 msgid ""
 "Configures how the windows are shown in the switcher. Valid possibilities "
 "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
 "only' (shows only the application icon) or 'both'."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:56
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:74
 msgid "Attach modal dialog to the parent window"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:57
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:75
 msgid ""
 "This key overrides the key in org.gnome.mutter when running GNOME Shell."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:58
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:76
 msgid "Arrangement of buttons on the titlebar"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:59
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:77
 msgid ""
 "This key overrides the key in org.gnome.desktop.wm.preferences when running "
 "GNOME Shell."
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:60
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:78
 msgid "Enable edge tiling when dropping windows on screen edges"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:61
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:79
 msgid "Workspaces are managed dynamically"
 msgstr ""
 
-#: ../data/org.gnome.shell.gschema.xml.in.in.h:62
+#: ../data/org.gnome.shell.gschema.xml.in.in.h:80
 msgid "Workspaces only on primary monitor"
 msgstr ""
 
@@ -537,23 +627,23 @@ msgstr ""
 msgid "%s has been removed from your favorites."
 msgstr ""
 
-#: ../js/ui/appIconBar.js:213
+#: ../js/ui/appIconBar.js:216
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:222
+#: ../js/ui/appIconBar.js:225
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:297
+#: ../js/ui/appIconBar.js:300
 msgid "Pin to Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:301
+#: ../js/ui/appIconBar.js:304
 msgid "Unpin from Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:317
+#: ../js/ui/appIconBar.js:320
 #, javascript-format
 msgid "Quit %s"
 msgstr ""
@@ -1057,7 +1147,7 @@ msgstr ""
 msgid "Quit Application"
 msgstr ""
 
-#: ../js/ui/iconGridLayout.js:206
+#: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
@@ -1198,11 +1288,11 @@ msgstr ""
 #.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:428
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
 msgid "Unable to lock"
 msgstr ""
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
 msgid "Lock was blocked by an application"
 msgstr ""
 

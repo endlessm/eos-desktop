@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-08 02:28+0000\n"
-"PO-Revision-Date: 2016-03-01 02:28+0000\n"
+"PO-Revision-Date: 2016-03-15 23:38+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/id/)\n"
 "MIME-Version: 1.0\n"
@@ -192,13 +192,13 @@ msgstr "Aplikasi yang terkait dengan identifier-identifier ini akan ditampilkan 
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:25
 msgid "List of desktop file IDs for applications pinned to taskbar"
-msgstr ""
+msgstr "Daftar ID berkas destop untuk aplikasi yang disematkan ke bilah tugas"
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:26
 msgid ""
 "The applications corresponding to these identifiers will be displayed in the"
 " taskbar at the bottom of the Endless desktop."
-msgstr ""
+msgstr "Aplikasi yang sesuai dengan penanda tersebut akan ditampilkan pada bilah tugas yang terletak di bawah destop Endless."
 
 #: ../data/org.gnome.shell.gschema.xml.in.in.h:27
 msgid "List of categories that should be displayed as folders"
@@ -552,11 +552,11 @@ msgstr "Ruang kerja saat ini"
 
 #: ../js/ui/appIconBar.js:297
 msgid "Pin to Taskbar"
-msgstr ""
+msgstr "Sematkan ke Bilah Tugas"
 
 #: ../js/ui/appIconBar.js:301
 msgid "Unpin from Taskbar"
-msgstr ""
+msgstr "Lepaskan semat dari Bilah Tugas"
 
 #: ../js/ui/appIconBar.js:317
 #, javascript-format
