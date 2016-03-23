@@ -12,6 +12,7 @@
 # liuxuejiao <liuxuejiao_endless@126.com>, 2016
 # Marco Mai <marco@endlessm.com>, 2015
 # Ray Wang <raywang@gnome.org>, 2009,2011
+# Roddy Shuler <roddy@endlessm.com>, 2016
 # Star Brilliant <m13253@hotmail.com>, 2011
 # tanyuanxing <tanyuanxingendless@126.com>, 2016
 # YunQiang Su <wzssyqa@gmail.com>, 2010-2012
@@ -24,7 +25,7 @@ msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-21 21:07-0700\n"
-"PO-Revision-Date: 2016-03-22 04:08+0000\n"
+"PO-Revision-Date: 2016-03-22 04:28+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -258,11 +259,11 @@ msgstr "当前工作区"
 
 #: ../js/ui/appIconBar.js:300
 msgid "Pin to Taskbar"
-msgstr ""
+msgstr "锁定到任务栏"
 
 #: ../js/ui/appIconBar.js:304
 msgid "Unpin from Taskbar"
-msgstr ""
+msgstr "取消固定到任务栏"
 
 #: ../js/ui/appIconBar.js:320
 #, javascript-format
