@@ -1072,6 +1072,10 @@ const AllView = new Lang.Class({
             }));
     },
 
+    focusFolderPopup: function() {
+        this._currentPopup.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
+    },
+
     _resetGrid: function() {
         this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
         this._grid.actor.y = 0;
@@ -1224,6 +1228,7 @@ const ViewIcon = new Lang.Class({
 
         this.actor._delegate = this;
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+        this.actor.connect('key-press-event', Lang.bind(this, this._onKeyPress));
 
         this._menu = null;
         this._menuManager = new PopupMenu.PopupMenuManager(this);
@@ -1276,6 +1281,23 @@ const ViewIcon = new Lang.Class({
 
         this.iconButton._delegate = null;
         this.actor._delegate = null;
+    },
+
+    _onKeyPress: function(actor, event) {
+        if (event.get_key_symbol() == Clutter.Return || event.get_key_symbol() == Clutter.space) {
+            this._activate();
+
+            if (this.parentView.hasPopup()) {
+                // The popup wasn't there before, so we just opened it.
+                this.parentView.focusFolderPopup();
+            }
+            return true;
+        } else if (event.get_key_symbol() == Clutter.Escape) {
+            global.stage.set_key_focus(null);
+            this.parentView.closePopup();
+            return true;
+        }
+        return false;
     },
 
     _activate: function() {
@@ -1733,6 +1755,8 @@ const AppFolderPopup = new Lang.Class({
         this._boxPointer.bin.connect('realize', Lang.bind(this, this._adjustCloseButton));
 
         this._grabHelper = new GrabHelper.GrabHelper(this.actor);
+
+        global.focus_manager.add_group(this.actor);
     },
 
     toggle: function() {
