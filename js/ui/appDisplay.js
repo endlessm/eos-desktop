@@ -21,6 +21,7 @@ const BackgroundMenu = imports.ui.backgroundMenu;
 const BoxPointer = imports.ui.boxpointer;
 const CloseButton = imports.ui.closeButton;
 const DND = imports.ui.dnd;
+const GrabHelper = imports.ui.grabHelper;
 const IconGrid = imports.ui.iconGrid;
 const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
@@ -1701,6 +1702,8 @@ const AppFolderPopup = new Lang.Class({
         this._boxPointer.actor.bind_property('opacity', this.closeButton, 'opacity',
                                              GObject.BindingFlags.SYNC_CREATE);
         this._boxPointer.bin.connect('realize', Lang.bind(this, this._adjustCloseButton));
+
+        this._grabHelper = new GrabHelper.GrabHelper(this.actor);
     },
 
     toggle: function() {
@@ -1721,6 +1724,12 @@ const AppFolderPopup = new Lang.Class({
         if (this._isOpen)
             return;
 
+        this._isOpen = this._grabHelper.grab({ actor: this.actor,
+                                               onUngrab: Lang.bind(this, this.popdown) });
+
+        if (!this._isOpen)
+            return;
+
         this._adjustCloseButton();
 
         this.actor.show();
@@ -1729,13 +1738,14 @@ const AppFolderPopup = new Lang.Class({
         this._boxPointer.show(BoxPointer.PopupAnimation.FADE |
                               BoxPointer.PopupAnimation.SLIDE);
 
-        this._isOpen = true;
         this.emit('open-state-changed', true);
     },
 
     popdown: function() {
         if (!this._isOpen)
             return;
+
+        this._grabHelper.ungrab({ actor: this.actor });
 
         this._boxPointer.hide(BoxPointer.PopupAnimation.FADE |
                               BoxPointer.PopupAnimation.SLIDE,
