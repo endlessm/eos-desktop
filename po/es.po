@@ -9,7 +9,7 @@
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2010-2013
 # Eddy Alegria <eddy@endlessm.com>, 2014
 # goizueta <goizueta@endlessm.com>, 2014
-# Joel Gil <joel@endlessm.com>, 2013-2014
+# Joel Gil León <joel@endlessm.com>, 2013-2014
 # Jorge González <jorgegonz@svn.gnome.org>, 2009-2011
 # Nuritzi Sanchez <ns@endlessm.com>, 2013-2016
 # Philip Chimento <philip.chimento@gmail.com>, 2014
