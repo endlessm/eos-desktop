@@ -21,6 +21,7 @@ const BackgroundMenu = imports.ui.backgroundMenu;
 const BoxPointer = imports.ui.boxpointer;
 const CloseButton = imports.ui.closeButton;
 const DND = imports.ui.dnd;
+const GrabHelper = imports.ui.grabHelper;
 const IconGrid = imports.ui.iconGrid;
 const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
@@ -405,6 +406,14 @@ const EndlessApplicationView = new Lang.Class({
         }
     },
 
+    hasPopup: function() {
+        throw new Error('Not implemented');
+    },
+
+    closePopup: function() {
+        throw new Error('Not implemented');
+    },
+
     get gridActor() {
         return this._grid.actor;
     }
@@ -414,9 +423,10 @@ const FolderView = new Lang.Class({
     Name: 'FolderView',
     Extends: EndlessApplicationView,
 
-    _init: function(folderIcon) {
+    _init: function(folderIcon, parentView) {
         this.parent();
         this._folderIcon = folderIcon;
+        this._parentView = parentView;
         this.actor = this._grid.actor;
 
         this.addIcons();
@@ -428,6 +438,14 @@ const FolderView = new Lang.Class({
 
     getViewId: function() {
         return this._folderIcon.getId();
+    },
+
+    hasPopup: function() {
+        return false;
+    },
+
+    closePopup: function() {
+        this._parentView.closePopup();
     }
 });
 
@@ -518,7 +536,7 @@ const AllView = new Lang.Class({
         Main.overview.connect('item-drag-end', Lang.bind(this, this._onDragEnd));
 
         this._clickAction = new Clutter.ClickAction();
-        this._clickAction.connect('clicked', Lang.bind(this, this._closePopup));
+        this._clickAction.connect('clicked', Lang.bind(this, this.closePopup));
         Main.overview.addAction(this._clickAction, false);
         this._eventBlocker.bind_property('reactive', this._clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
 
@@ -604,7 +622,11 @@ const AllView = new Lang.Class({
         }
      },
 
-    _closePopup: function() {
+    hasPopup: function() {
+        return this._currentPopup != null;
+    },
+
+    closePopup: function() {
         if (!this._currentPopup) {
             return;
         }
@@ -1050,6 +1072,10 @@ const AllView = new Lang.Class({
             }));
     },
 
+    focusFolderPopup: function() {
+        this._currentPopup.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
+    },
+
     _resetGrid: function() {
         this._grid.actor.y_align = Clutter.ActorAlign.CENTER;
         this._grid.actor.y = 0;
@@ -1202,6 +1228,7 @@ const ViewIcon = new Lang.Class({
 
         this.actor._delegate = this;
         this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
+        this.actor.connect('key-press-event', Lang.bind(this, this._onKeyPress));
 
         this._menu = null;
         this._menuManager = new PopupMenu.PopupMenuManager(this);
@@ -1254,6 +1281,27 @@ const ViewIcon = new Lang.Class({
 
         this.iconButton._delegate = null;
         this.actor._delegate = null;
+    },
+
+    _onKeyPress: function(actor, event) {
+        if (event.get_key_symbol() == Clutter.Return || event.get_key_symbol() == Clutter.space) {
+            this._activate();
+
+            if (this.parentView.hasPopup()) {
+                // The popup wasn't there before, so we just opened it.
+                this.parentView.focusFolderPopup();
+            }
+            return true;
+        } else if (event.get_key_symbol() == Clutter.Escape) {
+            global.stage.set_key_focus(null);
+            this.parentView.closePopup();
+            return true;
+        }
+        return false;
+    },
+
+    _activate: function() {
+        logError('activate not implemented');
     },
 
     _onClicked: function(actor, button) {
@@ -1474,15 +1522,19 @@ const FolderIcon = new Lang.Class({
             }));
     },
 
+    _activate: function() {
+        if (this._createPopup()) {
+            this._popup.toggle();
+        }
+    },
+
     _onClicked: function(actor, button) {
         if (button != Gdk.BUTTON_PRIMARY) {
             actor.checked = false;
             return;
         }
 
-        if (this._createPopup()) {
-            this._popup.toggle();
-        }
+        this._activate();
     },
 
     _onLabelUpdate: function(label, newText) {
@@ -1516,7 +1568,7 @@ const FolderIcon = new Lang.Class({
         let spaceBottom = this.parentView.stack.height - (relY + this.actor.height);
         let side = spaceTop > spaceBottom ? St.Side.BOTTOM : St.Side.TOP;
 
-        this._popup = new AppFolderPopup(this, side);
+        this._popup = new AppFolderPopup(this, side, this.parentView);
         this.parentView.addFolderPopup(this._popup, this);
         this._reposition(side);
 
@@ -1663,7 +1715,7 @@ const FolderIcon = new Lang.Class({
 const AppFolderPopup = new Lang.Class({
     Name: 'AppFolderPopup',
 
-    _init: function(source, side) {
+    _init: function(source, side, parentView) {
         this._source = source;
         this._arrowSide = side;
 
@@ -1683,7 +1735,7 @@ const AppFolderPopup = new Lang.Class({
                                      y_expand: true,
                                      x_align: Clutter.ActorAlign.CENTER,
                                      y_align: Clutter.ActorAlign.START });
-        this._view = new FolderView(source);
+        this._view = new FolderView(source, parentView);
         this._boxPointer = new BoxPointer.BoxPointer(this._arrowSide,
                                                      { style_class: 'app-folder-popup-bin',
                                                        x_fill: true,
@@ -1701,6 +1753,10 @@ const AppFolderPopup = new Lang.Class({
         this._boxPointer.actor.bind_property('opacity', this.closeButton, 'opacity',
                                              GObject.BindingFlags.SYNC_CREATE);
         this._boxPointer.bin.connect('realize', Lang.bind(this, this._adjustCloseButton));
+
+        this._grabHelper = new GrabHelper.GrabHelper(this.actor);
+
+        global.focus_manager.add_group(this.actor);
     },
 
     toggle: function() {
@@ -1721,6 +1777,12 @@ const AppFolderPopup = new Lang.Class({
         if (this._isOpen)
             return;
 
+        this._isOpen = this._grabHelper.grab({ actor: this.actor,
+                                               onUngrab: Lang.bind(this, this.popdown) });
+
+        if (!this._isOpen)
+            return;
+
         this._adjustCloseButton();
 
         this.actor.show();
@@ -1729,13 +1791,14 @@ const AppFolderPopup = new Lang.Class({
         this._boxPointer.show(BoxPointer.PopupAnimation.FADE |
                               BoxPointer.PopupAnimation.SLIDE);
 
-        this._isOpen = true;
         this.emit('open-state-changed', true);
     },
 
     popdown: function() {
         if (!this._isOpen)
             return;
+
+        this._grabHelper.ungrab({ actor: this.actor });
 
         this._boxPointer.hide(BoxPointer.PopupAnimation.FADE |
                               BoxPointer.PopupAnimation.SLIDE,
@@ -1803,6 +1866,10 @@ const AppIcon = new Lang.Class({
         }
     },
 
+    _activate: function() {
+        this._onActivate(Clutter.get_current_event());
+    },
+
     _onClicked: function(actor, button) {
         let event = Clutter.get_current_event();
         if (event.get_click_count() > 1) {
@@ -1810,7 +1877,7 @@ const AppIcon = new Lang.Class({
         }
 
         if (button == Gdk.BUTTON_PRIMARY) {
-            this._onActivate(Clutter.get_current_event());
+            this._activate();
         } else if (button == Gdk.BUTTON_MIDDLE) {
             // Last workspace is always empty
             let launchWorkspace = global.screen.get_workspace_by_index(global.screen.n_workspaces - 1);
@@ -1892,12 +1959,16 @@ const AppStoreIcon = new Lang.Class({
         return new St.Icon({ icon_size: iconSize });
     },
 
+    _activate: function() {
+        Main.appStore.show(global.get_current_time(), true);
+    },
+
     _onClicked: function(actor, button) {
         if (button != Gdk.BUTTON_PRIMARY) {
             return;
         }
 
-        Main.appStore.show(global.get_current_time(), true);
+        this._activate();
     },
 
     getName: function() {
