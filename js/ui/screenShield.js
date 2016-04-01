@@ -314,12 +314,6 @@ const ScreenShield = new Lang.Class({
             this._lockDialogGroup.opacity = 255;
         }
 
-        let prevIsActive = this._isActive;
-        this._isActive = true;
-
-        if (prevIsActive != this._isActive)
-            this.emit('active-changed');
-
         if (this._aboutToSuspend)
             this._uninhibitSuspend();
 
