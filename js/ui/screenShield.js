@@ -206,36 +206,21 @@ const ScreenShield = new Lang.Class({
     },
 
     _onUserBecameActive: function() {
-        // This function gets called here when the user becomes active
+        // This function gets called here when the user becomes active again
         // after gnome-session changed the status to IDLE
-        // There are four possibilities here:
-        // - we're called when already locked; isActive and isLocked are true,
-        //   we just go back to the lock screen curtain
-        // - we're called before the lightbox is fully shown; at this point
-        //   isActive is false, so we just hide the lightbox, reset the activationTime
-        //   and go back to the unlocked desktop
-        // - we're called after showing the lightbox, but before the lock
-        //   delay; this is mostly like the case above, but isActive is true now
-        //   so we need to notify gnome-settings-daemon to go back to the normal
-        //   policies for blanking
-        //   (they're handled by the same code, and we emit one extra ActiveChanged
-        //   signal in the case above)
-        // - we're called after showing the lightbox and after lock-delay; the
-        //   session is effectivelly locked now, it's time to build and show
-        //   the lock screen
-
         this.idleMonitor.remove_watch(this._becameActiveId);
         this._becameActiveId = 0;
 
-        let lightboxWasShown = this._lightbox.shown;
         this._lightbox.hide();
-        this.actor.raise_top();
 
-        // Shortcircuit in case the mouse was moved before the fade completed
-        // or lock is disabled or user is logged automatically
-        if (!lightboxWasShown || !this._settings.get_boolean(LOCK_ENABLED_KEY) || this._user.get_automatic_login()) {
+        if (this._isLocked) {
+            // Go back to the lock screen
+            this.actor.raise_top();
+        } else {
+            // Return to the unlocked desktop. Calling deactivate ensures we
+            // reset activationTime and also the lock timeout, so the shell
+            // doesn't lock itself down the road.
             this.deactivate(false);
-            return;
         }
     },
 
