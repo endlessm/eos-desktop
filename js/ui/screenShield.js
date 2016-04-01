@@ -214,7 +214,7 @@ const ScreenShield = new Lang.Class({
         // - we're called when already locked; isActive and isLocked are true,
         //   we just go back to the lock screen curtain
         // - we're called before the lightbox is fully shown; at this point
-        //   isActive is false, so we just hide the ligthbox, reset the activationTime
+        //   isActive is false, so we just hide the lightbox, reset the activationTime
         //   and go back to the unlocked desktop
         // - we're called after showing the lightbox, but before the lock
         //   delay; this is mostly like the case above, but isActive is true now
