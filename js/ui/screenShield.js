@@ -97,7 +97,6 @@ const ScreenShield = new Lang.Class({
 
         this._isModal = false;
         this._isGreeter = false;
-        this._isActive = false;
         this._isLocked = false;
         this._inUnlockAnimation = false;
         this._activationTime = 0;
@@ -108,7 +107,6 @@ const ScreenShield = new Lang.Class({
                                                { inhibitEvents: true,
                                                  fadeInTime: STANDARD_FADE_TIME,
                                                  fadeFactor: 1 });
-        this._lightbox.connect('shown', Lang.bind(this, this._onLightboxShown));
 
         this.idleMonitor = Meta.IdleMonitor.get_core();
         this._cursorTracker = Meta.CursorTracker.get_for_screen(global.screen);
@@ -174,14 +172,14 @@ const ScreenShield = new Lang.Class({
         }
 
         if (this._lightbox.actor.visible ||
-            this._isActive) {
+            this._isLocked) {
             // We're either shown and active, or in the process of
             // showing.
             // The latter is a very unlikely condition (it requires
             // idle-delay < 20), but in any case we have nothing
-            // to do at this point: either isActive is true, or
+            // to do at this point: either isLocked is true, or
             // it will soon be.
-            // isActive can also be true if the lightbox is hidden,
+            // isLocked can also be true if the lightbox is hidden,
             // in case the shield is down and the user hasn't unlocked yet
             return;
         }
@@ -208,41 +206,22 @@ const ScreenShield = new Lang.Class({
     },
 
     _onUserBecameActive: function() {
-        // This function gets called here when the user becomes active
+        // This function gets called here when the user becomes active again
         // after gnome-session changed the status to IDLE
-        // There are four possibilities here:
-        // - we're called when already locked; isActive and isLocked are true,
-        //   we just go back to the lock screen curtain
-        // - we're called before the lightbox is fully shown; at this point
-        //   isActive is false, so we just hide the ligthbox, reset the activationTime
-        //   and go back to the unlocked desktop
-        // - we're called after showing the lightbox, but before the lock
-        //   delay; this is mostly like the case above, but isActive is true now
-        //   so we need to notify gnome-settings-daemon to go back to the normal
-        //   policies for blanking
-        //   (they're handled by the same code, and we emit one extra ActiveChanged
-        //   signal in the case above)
-        // - we're called after showing the lightbox and after lock-delay; the
-        //   session is effectivelly locked now, it's time to build and show
-        //   the lock screen
-
         this.idleMonitor.remove_watch(this._becameActiveId);
         this._becameActiveId = 0;
 
-        let lightboxWasShown = this._lightbox.shown;
         this._lightbox.hide();
-        this.actor.raise_top();
 
-        // Shortcircuit in case the mouse was moved before the fade completed
-        // or lock is disabled or user is logged automatically
-        if (!lightboxWasShown || !this._settings.get_boolean(LOCK_ENABLED_KEY) || this._user.get_automatic_login()) {
+        if (this._isLocked) {
+            // Go back to the lock screen
+            this.actor.raise_top();
+        } else {
+            // Return to the unlocked desktop. Calling deactivate ensures we
+            // reset activationTime and also the lock timeout, so the shell
+            // doesn't lock itself down the road.
             this.deactivate(false);
-            return;
         }
-    },
-
-    _onLightboxShown: function() {
-        this.activate(false);
     },
 
     showDialog: function() {
@@ -319,12 +298,6 @@ const ScreenShield = new Lang.Class({
             this._lockDialogGroup.opacity = 255;
         }
 
-        let prevIsActive = this._isActive;
-        this._isActive = true;
-
-        if (prevIsActive != this._isActive)
-            this.emit('active-changed');
-
         if (this._aboutToSuspend)
             this._uninhibitSuspend();
 
@@ -343,7 +316,8 @@ const ScreenShield = new Lang.Class({
     },
 
     get active() {
-        return this._isActive;
+        // See the comment on the activate method.
+        return this._isLocked;
     },
 
     get activationTime() {
@@ -390,16 +364,32 @@ const ScreenShield = new Lang.Class({
         }
 
         this._activationTime = 0;
-        this._isActive = false;
         this._isLocked = false;
         this.emit('active-changed');
         this.emit('locked-changed');
     },
 
     activate: function(animate) {
+        // In upstream GNOME, the screen shield may be activated but not locked,
+        // i.e. the shield may be lifted straight to the desktop, bypassing the
+        // lock screen. In Endless, we only have a lock screen, so the activated
+        // state is identical to the locked state. We keep both states simply to
+        // minimize our delta with upstream.
+        this.lock(animate);
+    },
+
+    lock: function(animate) {
+        // Warn the user if we can't become modal
+        if (!this._becomeModal()) {
+            Main.notifyError(_("Unable to lock"),
+                             _("Lock was blocked by an application"));
+            return;
+        }
+
         if (this._activationTime == 0)
             this._activationTime = GLib.get_monotonic_time();
 
+        this._isLocked = true;
         this.actor.show();
 
         if (Main.sessionMode.currentMode != 'unlock-dialog') {
@@ -411,6 +401,8 @@ const ScreenShield = new Lang.Class({
         if (!this._isGreeter)
             this._resetLockScreen(animate);
 
+        this.emit('locked-changed');
+
         // We used to set isActive and emit active-changed here,
         // but now we do that from lockScreenShown, which means
         // there is a 0.3 seconds window during which the lock
@@ -421,20 +413,6 @@ const ScreenShield = new Lang.Class({
         // blank during the animation.
         // This is not a problem for the idle fade case, because we
         // activate without animation in that case.
-    },
-
-    lock: function(animate) {
-        // Warn the user if we can't become modal
-        if (!this._becomeModal()) {
-            Main.notifyError(_("Unable to lock"),
-                             _("Lock was blocked by an application"));
-            return;
-        }
-
-        this._isLocked = true;
-        this.activate(animate);
-
-        this.emit('locked-changed');
     },
 });
 Signals.addSignalMethods(ScreenShield.prototype);
