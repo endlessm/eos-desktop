@@ -226,7 +226,7 @@ const ScreenShield = new Lang.Class({
     },
 
     _onLightboxShown: function() {
-        this.activate(false);
+        this.emit('active-changed');
     },
 
     showDialog: function() {
@@ -322,7 +322,7 @@ const ScreenShield = new Lang.Class({
 
     get active() {
         // See the comment on the activate method.
-        return this._isLocked;
+        return this._lightbox.shown || this._isLocked;
     },
 
     get activationTime() {
