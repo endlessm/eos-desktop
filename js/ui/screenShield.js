@@ -107,6 +107,7 @@ const ScreenShield = new Lang.Class({
                                                { inhibitEvents: true,
                                                  fadeInTime: STANDARD_FADE_TIME,
                                                  fadeFactor: 1 });
+        this._lightbox.connect('shown', Lang.bind(this, this._onLightboxShown));
 
         this.idleMonitor = Meta.IdleMonitor.get_core();
         this._cursorTracker = Meta.CursorTracker.get_for_screen(global.screen);
@@ -222,6 +223,10 @@ const ScreenShield = new Lang.Class({
             // doesn't lock itself down the road.
             this.deactivate(false);
         }
+    },
+
+    _onLightboxShown: function() {
+        this.activate(false);
     },
 
     showDialog: function() {
