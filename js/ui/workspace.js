@@ -1022,13 +1022,6 @@ const Workspace = new Lang.Class({
     positionWindows: function(flags) {
         this._positionWindowsFlags |= flags;
 
-        /* This might not be the best place for this check. It prevents the
-         * shell from crashing in _computeAllWindowSlots when launching the
-         * tutorial if the actor has not been added to the stage. See T3727.
-         */
-        if (!this.actor.mapped)
-            return;
-
         if (this._positionWindowsId > 0)
             return;
 
