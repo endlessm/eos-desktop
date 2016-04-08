@@ -1022,13 +1022,6 @@ const Workspace = new Lang.Class({
     positionWindows: function(flags) {
         this._positionWindowsFlags |= flags;
 
-        /* This might not be the best place for this check. It prevents the
-         * shell from crashing in _computeAllWindowSlots when launching the
-         * tutorial if the actor has not been added to the stage. See T3727.
-         */
-        if (!this.actor.mapped)
-            return;
-
         if (this._positionWindowsId > 0)
             return;
 
@@ -1317,6 +1310,7 @@ const Workspace = new Lang.Class({
             Mainloop.idle_add(Lang.bind(this,
                                         function () {
                                             if (this.actor &&
+                                                this.actor.mapped &&
                                                 metaWin.get_compositor_private() &&
                                                 metaWin.get_workspace() == this.metaWorkspace)
                                                 this._doAddWindow(metaWin);
