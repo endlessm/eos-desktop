@@ -107,6 +107,7 @@ const ScreenShield = new Lang.Class({
                                                { inhibitEvents: true,
                                                  fadeInTime: STANDARD_FADE_TIME,
                                                  fadeFactor: 1 });
+        this._lightbox.connect('shown', Lang.bind(this, this._onLightboxShown));
 
         this.idleMonitor = Meta.IdleMonitor.get_core();
         this._cursorTracker = Meta.CursorTracker.get_for_screen(global.screen);
@@ -224,6 +225,10 @@ const ScreenShield = new Lang.Class({
         }
     },
 
+    _onLightboxShown: function() {
+        this.emit('active-changed');
+    },
+
     showDialog: function() {
         // Ensure that the stage window is mapped, before taking a grab
         // otherwise X errors out
@@ -317,7 +322,7 @@ const ScreenShield = new Lang.Class({
 
     get active() {
         // See the comment on the activate method.
-        return this._isLocked;
+        return this._lightbox.shown || this._isLocked;
     },
 
     get activationTime() {
@@ -402,17 +407,7 @@ const ScreenShield = new Lang.Class({
             this._resetLockScreen(animate);
 
         this.emit('locked-changed');
-
-        // We used to set isActive and emit active-changed here,
-        // but now we do that from lockScreenShown, which means
-        // there is a 0.3 seconds window during which the lock
-        // screen is effectively visible and the screen is locked, but
-        // the DBus interface reports the screensaver is off.
-        // This is because when we emit ActiveChanged(true),
-        // gnome-settings-daemon blanks the screen, and we don't want
-        // blank during the animation.
-        // This is not a problem for the idle fade case, because we
-        // activate without animation in that case.
+        this.emit('active-changed');
     },
 });
 Signals.addSignalMethods(ScreenShield.prototype);
