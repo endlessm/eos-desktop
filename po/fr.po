@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-29 01:27+0000\n"
-"PO-Revision-Date: 2016-03-22 04:08+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2016-04-05 01:27+0000\n"
+"PO-Revision-Date: 2016-04-05 01:28+0000\n"
+"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -124,8 +124,8 @@ msgstr "Réinitialiser le mot de passe"
 #: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
-#: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
-#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:611
+#: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
+#: ../js/ui/userMenu.js:611
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -201,32 +201,32 @@ msgstr "Impossible d'analyser la commande :"
 msgid "Execution of '%s' failed:"
 msgstr "Exécution de « %s » impossible :"
 
-#: ../js/ui/appDisplay.js:1151
+#: ../js/ui/appDisplay.js:1177
 msgid "Remove from desktop"
 msgstr "Supprimer du bureau"
 
-#: ../js/ui/appDisplay.js:1634
+#: ../js/ui/appDisplay.js:1686
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../js/ui/appDisplay.js:1640
+#: ../js/ui/appDisplay.js:1692
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
-#: ../js/ui/appDisplay.js:1646
+#: ../js/ui/appDisplay.js:1698
 msgid "We are just trying to keep you safe."
 msgstr "Nous essayons simplement de vous garder en sécurité."
 
-#: ../js/ui/appDisplay.js:1652 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1704
 msgid "OK"
 msgstr "Valider"
 
-#: ../js/ui/appDisplay.js:1904
+#: ../js/ui/appDisplay.js:1975
 msgid "More Apps"
 msgstr "Plus d'Apps"
 
-#: ../js/ui/appDisplay.js:1913
+#: ../js/ui/appDisplay.js:1984
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -775,7 +775,6 @@ msgid "Search Google for \"%s\""
 msgstr "Chercher « %s » sur Google."
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
-#: ../js/ui/status/power.js:227
 msgid "Keyboard"
 msgstr "Clavier"
 
@@ -827,31 +826,31 @@ msgstr "Afficher la source"
 msgid "Web Page"
 msgstr "Page Web"
 
-#: ../js/ui/messageTray.js:1226
+#: ../js/ui/messageTray.js:1205
 msgid "Open"
 msgstr "Ouvrir"
 
-#: ../js/ui/messageTray.js:1233
+#: ../js/ui/messageTray.js:1212
 msgid "Remove"
 msgstr "Enlever"
 
-#: ../js/ui/messageTray.js:1545
+#: ../js/ui/messageTray.js:1524
 msgid "Clear Messages"
 msgstr "Effacer les messages"
 
-#: ../js/ui/messageTray.js:1572
+#: ../js/ui/messageTray.js:1551
 msgid "Notification Settings"
 msgstr "Paramètres de notifications"
 
-#: ../js/ui/messageTray.js:1762
+#: ../js/ui/messageTray.js:1741
 msgid "No Messages"
 msgstr "Aucun message"
 
-#: ../js/ui/messageTray.js:1836
+#: ../js/ui/messageTray.js:1815
 msgid "Message Tray"
 msgstr "Tiroir de messagerie"
 
-#: ../js/ui/messageTray.js:2857
+#: ../js/ui/messageTray.js:2836
 msgid "System Information"
 msgstr "Informations du système"
 
@@ -995,118 +994,19 @@ msgstr "Contraste élevé"
 msgid "Large Text"
 msgstr "Grand texte"
 
-#: ../js/ui/status/bluetooth.js:28 ../js/ui/status/bluetooth.js:32
-#: ../js/ui/status/bluetooth.js:291 ../js/ui/status/bluetooth.js:323
-#: ../js/ui/status/bluetooth.js:359 ../js/ui/status/bluetooth.js:390
+#: ../js/ui/status/bluetooth.js:33 ../js/ui/status/bluetooth.js:44
 #: ../js/ui/status/network.js:829
 msgid "Bluetooth"
 msgstr "Bluetooth"
 
-#: ../js/ui/status/bluetooth.js:45
-msgid "Visibility"
-msgstr "Visibilité"
-
-#: ../js/ui/status/bluetooth.js:59
-msgid "Send Files to Device…"
-msgstr "Envoyer les fichiers au périphérique…"
-
-#: ../js/ui/status/bluetooth.js:60
-msgid "Set Up a New Device…"
-msgstr "Configurer un nouveau périphérique…"
-
-#: ../js/ui/status/bluetooth.js:86
+#: ../js/ui/status/bluetooth.js:51
 msgid "Bluetooth Settings"
 msgstr "Paramètres Bluetooth"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:106 ../js/ui/status/network.js:181
+#: ../js/ui/status/bluetooth.js:82 ../js/ui/status/network.js:181
 msgid "hardware disabled"
 msgstr "équipement désactivé"
-
-#: ../js/ui/status/bluetooth.js:199
-msgid "Connection"
-msgstr "Connexion"
-
-#: ../js/ui/status/bluetooth.js:210 ../js/ui/status/network.js:463
-msgid "disconnecting..."
-msgstr "déconnexion..."
-
-#: ../js/ui/status/bluetooth.js:223 ../js/ui/status/network.js:469
-#: ../js/ui/status/network.js:1551
-msgid "connecting..."
-msgstr "connexion..."
-
-#: ../js/ui/status/bluetooth.js:241
-msgid "Send Files…"
-msgstr "Envoyer des fichiers…"
-
-#: ../js/ui/status/bluetooth.js:248
-msgid "Keyboard Settings"
-msgstr "Paramètres du clavier"
-
-#: ../js/ui/status/bluetooth.js:251
-msgid "Mouse Settings"
-msgstr "Paramètres de la souris"
-
-#: ../js/ui/status/bluetooth.js:256 ../js/ui/status/volume.js:310
-msgid "Sound Settings"
-msgstr "Paramètres du son"
-
-#: ../js/ui/status/bluetooth.js:324
-#, javascript-format
-msgid "Authorization request from %s"
-msgstr "Demande d'autorisation de « %s »"
-
-#: ../js/ui/status/bluetooth.js:330
-#, javascript-format
-msgid "Device %s wants access to the service '%s'"
-msgstr "Le périphérique %s souhaite accéder au service « %s »"
-
-#: ../js/ui/status/bluetooth.js:332
-msgid "Always grant access"
-msgstr "Toujours accorder l'accès"
-
-#: ../js/ui/status/bluetooth.js:333
-msgid "Grant this time only"
-msgstr "Accorder l'accès cette fois uniquement"
-
-#: ../js/ui/status/bluetooth.js:334
-msgid "Reject"
-msgstr "Refuser"
-
-#. Translators: argument is the device short name
-#: ../js/ui/status/bluetooth.js:361
-#, javascript-format
-msgid "Pairing confirmation for %s"
-msgstr "Confirmation de la demande de liaison pour « %s »"
-
-#: ../js/ui/status/bluetooth.js:367 ../js/ui/status/bluetooth.js:398
-#, javascript-format
-msgid "Device %s wants to pair with this computer"
-msgstr "Le périphérique « %s » souhaite se connecter à cet ordinateur"
-
-#: ../js/ui/status/bluetooth.js:368
-#, javascript-format
-msgid "Please confirm whether the PIN '%06d' matches the one on the device."
-msgstr "Veuillez confirmer que le numéro d'identification personnel (PIN) « %06d » correspond à celui du périphérique."
-
-#. Translators: this is the verb, not the noun
-#: ../js/ui/status/bluetooth.js:371
-msgid "Matches"
-msgstr "Correspond"
-
-#: ../js/ui/status/bluetooth.js:372
-msgid "Does not match"
-msgstr "Ne correspond pas"
-
-#: ../js/ui/status/bluetooth.js:391
-#, javascript-format
-msgid "Pairing request for %s"
-msgstr "Demande de liaison pour « %s »"
-
-#: ../js/ui/status/bluetooth.js:399
-msgid "Please enter the PIN mentioned on the device."
-msgstr "Veuillez saisir le numéro d'identification personnel (PIN) mentionné sur le périphérique."
 
 #: ../js/ui/status/keyboard.js:368
 msgid "Show Keyboard Layout"
@@ -1136,6 +1036,14 @@ msgstr "désactivé"
 #: ../js/ui/status/network.js:461
 msgid "unmanaged"
 msgstr "non géré"
+
+#: ../js/ui/status/network.js:463
+msgid "disconnecting..."
+msgstr "déconnexion..."
+
+#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
+msgid "connecting..."
+msgstr "connexion..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
@@ -1238,104 +1146,35 @@ msgstr "L'activation de la connexion réseau a échoué"
 msgid "Networking is disabled"
 msgstr "Le réseau est désactivé"
 
-#: ../js/ui/status/power.js:57
+#: ../js/ui/status/power.js:34
 msgid "Battery"
 msgstr "Batterie"
 
-#: ../js/ui/status/power.js:88
+#: ../js/ui/status/power.js:51
 msgid "Power Settings"
 msgstr "Paramètres de gestion de l'énergie"
 
-#: ../js/ui/status/power.js:108
+#: ../js/ui/status/power.js:58
 msgid "Fully Charged"
 msgstr "Charge complète"
 
-#: ../js/ui/status/power.js:110
+#. 0 is reported when UPower does not have enough data
+#. to estimate battery life
+#: ../js/ui/status/power.js:65 ../js/ui/status/power.js:71
 msgid "Estimating…"
 msgstr "Estimation en cours…"
 
-#: ../js/ui/status/power.js:117
+#. Translators: this is <hours>:<minutes> Remaining (<percentage>)
+#: ../js/ui/status/power.js:79
 #, javascript-format
-msgid "%d hour remaining"
-msgid_plural "%d hours remaining"
-msgstr[0] "%d heure restante"
-msgstr[1] "%d heures restantes"
+msgid "%d∶%02d Remaining (%d %%)"
+msgstr ""
 
-#. TRANSLATORS: this is a time string, as in "%d hours %d minutes remaining"
-#: ../js/ui/status/power.js:120
+#. Translators: this is <hours>:<minutes> Until Full (<percentage>)
+#: ../js/ui/status/power.js:84
 #, javascript-format
-msgid "%d %s %d %s remaining"
-msgstr "%d %s %d %s restantes"
-
-#: ../js/ui/status/power.js:122
-msgid "hour"
-msgid_plural "hours"
-msgstr[0] "heure"
-msgstr[1] "heures"
-
-#: ../js/ui/status/power.js:122
-msgid "minute"
-msgid_plural "minutes"
-msgstr[0] "minute"
-msgstr[1] "minutes"
-
-#: ../js/ui/status/power.js:125
-#, javascript-format
-msgid "%d minute remaining"
-msgid_plural "%d minutes remaining"
-msgstr[0] "%d minute restante"
-msgstr[1] "%d minutes restantes"
-
-#: ../js/ui/status/power.js:128 ../js/ui/status/power.js:202
-#, javascript-format
-msgctxt "percent of battery remaining"
-msgid "%d%%"
-msgstr "%d %%"
-
-#: ../js/ui/status/power.js:217
-msgid "AC Adapter"
-msgstr "Adaptateur secteur"
-
-#: ../js/ui/status/power.js:219
-msgid "Laptop Battery"
-msgstr "Batterie de l'ordinateur"
-
-#: ../js/ui/status/power.js:221
-msgid "UPS"
-msgstr "UPS"
-
-#: ../js/ui/status/power.js:223
-msgid "Monitor"
-msgstr "Écran"
-
-#: ../js/ui/status/power.js:225
-msgid "Mouse"
-msgstr "Souris"
-
-#: ../js/ui/status/power.js:229
-msgid "PDA"
-msgstr "Assistant personnel"
-
-#: ../js/ui/status/power.js:231
-msgid "Cell Phone"
-msgstr "Téléphone portable"
-
-#: ../js/ui/status/power.js:233
-msgid "Media Player"
-msgstr "Lecteur multimédia"
-
-#: ../js/ui/status/power.js:235
-msgid "Tablet"
-msgstr "Tablette"
-
-#: ../js/ui/status/power.js:237
-msgid "Computer"
-msgstr "Ordinateur"
-
-#: ../js/ui/status/power.js:239
-msgctxt "device"
-msgid "Unknown"
-msgstr "Inconnu"
+msgid "%d∶%02d Until Full (%d %%)"
+msgstr ""
 
 #: ../js/ui/status/volume.js:124
 msgid "Volume changed"
@@ -1349,6 +1188,10 @@ msgstr "Volume"
 #: ../js/ui/status/volume.js:258
 msgid "Microphone"
 msgstr "Microphone"
+
+#: ../js/ui/status/volume.js:310
+msgid "Sound Settings"
+msgstr "Paramètres du son"
 
 #: ../js/ui/unlockDialog.js:121
 msgid "Log in as another user"
@@ -1458,19 +1301,19 @@ msgstr[1] "%u entrées"
 msgid "System Sounds"
 msgstr "Sons système"
 
-#: ../src/main.c:325
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Affiche la version"
 
-#: ../src/main.c:331
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Mode utilisé par GDM pour l'écran de connexion"
 
-#: ../src/main.c:337
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Utiliser un mode particulier, par ex. « gdm » pour l'écran de connexion"
 
-#: ../src/main.c:343
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "Lister les modes possibles"
 

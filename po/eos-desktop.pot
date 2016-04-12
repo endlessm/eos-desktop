@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-05 01:27+0000\n"
+"POT-Creation-Date: 2016-04-12 01:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -880,7 +880,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: ../js/ui/screenShield.js:133
+#: ../js/ui/screenShield.js:132
 msgid "GNOME needs to lock the screen"
 msgstr ""
 
@@ -891,11 +891,11 @@ msgstr ""
 #.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
 msgid "Unable to lock"
 msgstr ""
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
 msgid "Lock was blocked by an application"
 msgstr ""
 
