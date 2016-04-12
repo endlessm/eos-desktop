@@ -42,6 +42,7 @@ const Util = imports.misc.util;
 
 const OVERRIDES_SCHEMA = 'org.gnome.shell.overrides';
 const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
+const DESKTOP_INTERFACE_SCHEMA = 'org.gnome.desktop.interface';
 const LOW_RESOLUTION_WIDTH = 800;
 const LOW_RESOLUTION_HEIGHT = 600;
 
@@ -74,6 +75,7 @@ let layoutManager = null;
 let workspaceMonitor = null;
 let desktopAppClient = null;
 let lowResolutionDisplay = false;
+let interfaceSettings = null;
 let _startDate;
 let _defaultCssStylesheet = null;
 let _cssStylesheet = null;
@@ -141,6 +143,9 @@ function _initializeUI() {
     resource._register();
 
     _loadDefaultStylesheet();
+
+    // Load a GSetting to track changes on text-scaling-factor
+    interfaceSettings = new Gio.Settings({ schema: DESKTOP_INTERFACE_SCHEMA });
 
     // Setup the stage hierarchy early
     layoutManager = new Layout.LayoutManager();
