@@ -391,6 +391,8 @@ const ViewsClone = new Lang.Class({
     Extends: St.Widget,
 
     _init: function(viewSelector, viewsDisplay, forOverview) {
+        let settings = Clutter.Settings.get_default();
+
         this._viewSelector = viewSelector;
         this._viewsDisplay = viewsDisplay;
         this._forOverview = forOverview;
@@ -444,6 +446,25 @@ const ViewsClone = new Lang.Class({
                                    time: OverviewControls.SIDE_CONTROLS_ANIMATION_TIME,
                                    transition: 'easeOutQuad' });
             }
+        }));
+
+        settings.connect('notify::font-dpi', Lang.bind(this, function() {
+            let overviewVisible = Main.layoutManager.overviewGroup.visible;
+            let saturationEnabled = this._saturation.enabled;
+
+            /* Maybe because of the already known issue with FBO and ClutterClones,
+             * simply redrawing the overview group without assuring it is visible
+             * won't work. Clutter was supposed to do that, but it doesn't. The
+             * FBO, in this case, is introduced through the saturation effect.
+             */
+            this._saturation.enabled = false;
+            Main.layoutManager.overviewGroup.visible = true;
+
+            Main.layoutManager.overviewGroup.queue_redraw();
+
+            /* Restore the previous states */
+            Main.layoutManager.overviewGroup.visible = overviewVisible;
+            this._saturation.enabled = saturationEnabled;
         }));
     },
 
