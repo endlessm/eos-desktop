@@ -2010,12 +2010,19 @@ StScrollBar StButton#vhandle:active {
     text-align: center;
     font-weight: bold;
     spacing: 1em;
+    margin: 32px;
+    min-width: 64px;
+    min-height: 64px;
 }
 
 .osd-window .level {
     height: 0.6em;
     border-radius: 0.3em;
     background-color: rgba(190,190,190,0.2);
+}
+
+.osd-monitor-label {
+    font-size: 3em;
 }
 
 /* App Switcher */
@@ -2154,6 +2161,27 @@ StScrollBar StButton#vhandle:active {
     border: 2px solid rgba(85,85,85,0.5);
     background: transparent;
     border-radius: 8px;
+}
+
+/* Tile previews */
+.tile-preview {
+    background-color: rgba(74, 144, 217, 0.35);
+    border: 1px solid #4a90d9; /* Adwaita selected bg color */
+}
+
+.tile-preview-left.on-primary {
+    /* keep in sync with -panel-corner-radius */
+    border-radius: 4px 0 0 0;
+}
+
+.tile-preview-right.on-primary {
+    /* keep in sync with -panel-corner-radius */
+    border-radius: 0 4px 0 0;
+}
+
+.tile-preview-left.tile-preview-right.on-primary {
+    /* keep in sync with -panel-corner-radius */
+    border-radius: 4px 4px 0 0;
 }
 
 /* Modal Dialogs */
@@ -2321,6 +2349,11 @@ StScrollBar StButton#vhandle:active {
 .end-session-dialog-app-list-item-description {
     font-size: 10pt;
     color: #444444;
+}
+
+/* Restart message */
+.restart-message {
+    font-size: 14pt;
 }
 
 /* ShellMountOperation Dialogs */

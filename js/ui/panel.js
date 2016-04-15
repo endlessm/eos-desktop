@@ -377,10 +377,12 @@ const Panel = new Lang.Class({
 
         Main.sessionMode.connect('updated', Lang.bind(this, this._updatePanel));
 
-        global.window_manager.connect('unmaximize', Lang.bind(this, this._updateBackground));
         global.window_manager.connect('map', Lang.bind(this, this._updateBackground));
-        global.window_manager.connect('maximize', Lang.bind(this, function() {
-            this.actor.remove_style_pseudo_class('unmaximized');
+        global.window_manager.connect('size-change', Lang.bind(this, function(wm, actor, whichChange) {
+            if (whichChange == Meta.SizeChange.MAXIMIZE)
+                this.actor.remove_style_pseudo_class('unmaximized');
+            else if (whichChange == Meta.SizeChange.UNMAXIMIZE)
+                this._updateBackground();
         }));
 
         let windowTracker = Shell.WindowTracker.get_default();

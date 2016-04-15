@@ -19,7 +19,9 @@ const ExtensionSystem = imports.ui.extensionSystem;
 const ExtensionDownloader = imports.ui.extensionDownloader;
 const Keyboard = imports.ui.keyboard;
 const MessageTray = imports.ui.messageTray;
+const ModalDialog = imports.ui.modalDialog;
 const OsdWindow = imports.ui.osdWindow;
+const OsdMonitorLabeler = imports.ui.osdMonitorLabeler;
 const Overview = imports.ui.overview;
 const Panel = imports.ui.panel;
 const Params = imports.misc.params;
@@ -41,7 +43,6 @@ const XdndHandler = imports.ui.xdndHandler;
 const Util = imports.misc.util;
 
 const OVERRIDES_SCHEMA = 'org.gnome.shell.overrides';
-const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
 const LOW_RESOLUTION_WIDTH = 800;
 const LOW_RESOLUTION_HEIGHT = 600;
 
@@ -58,6 +59,7 @@ let notificationDaemon = null;
 let windowAttentionHandler = null;
 let ctrlAltTabManager = null;
 let osdWindow = null;
+let osdMonitorLabeler = null;
 let sessionMode = null;
 let shellDBusService = null;
 let shellMountOpDBusService = null;
@@ -159,6 +161,7 @@ function _initializeUI() {
     xdndHandler = new XdndHandler.XdndHandler();
     ctrlAltTabManager = new CtrlAltTab.CtrlAltTabManager();
     osdWindow = new OsdWindow.OsdWindow();
+    osdMonitorLabeler = new OsdMonitorLabeler.OsdMonitorLabeler();
     overview = new Overview.Overview();
     wm = new WindowManager.WindowManager();
     magnifier = new Magnifier.Magnifier();
@@ -181,6 +184,16 @@ function _initializeUI() {
     global.screen.override_workspace_layout(Meta.ScreenCorner.TOPLEFT,
                                             false, -1, 1);
     global.display.connect('overlay-key', Lang.bind(overview, overview.toggleApps));
+
+    global.display.connect('show-restart-message', function(display, message) {
+        showRestartMessage(message);
+        return true;
+    });
+
+    global.display.connect('restart', function() {
+        global.reexec_self();
+        return true;
+    });
 
     // Provide the bus object for gnome-session to
     // initiate logouts.
@@ -810,4 +823,29 @@ function queueDeferredWork(workId) {
             return false;
         });
     }
+}
+
+const RestartMessage = new Lang.Class({
+    Name: 'RestartMessage',
+    Extends: ModalDialog.ModalDialog,
+
+    _init : function(message) {
+        this.parent({ shellReactive: true,
+                      styleClass: 'restart-message',
+                      shouldFadeIn: false,
+                      destroyOnClose: true });
+
+        let label = new St.Label({ text: message });
+
+        this.contentLayout.add(label, { x_fill: false,
+                                        y_fill: false,
+                                        x_align: St.Align.MIDDLE,
+                                        y_align: St.Align.MIDDLE });
+        this.buttonLayout.hide();
+    }
+});
+
+function showRestartMessage(message) {
+    let restartMessage = new RestartMessage(message);
+    restartMessage.open();
 }

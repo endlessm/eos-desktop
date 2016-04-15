@@ -66,7 +66,7 @@ const WindowClone = new Lang.Class({
         this.origX = realWindow.x + borderX;
         this.origY = realWindow.y + borderY;
 
-        let outerRect = realWindow.meta_window.get_outer_rect();
+        let outerRect = realWindow.meta_window.get_frame_rect();
 
         // The MetaShapedTexture that we clone has a size that includes
         // the invisible border; this is inconvenient; rather than trying
@@ -86,7 +86,7 @@ const WindowClone = new Lang.Class({
         this._dragSlot = [0, 0, 0, 0];
         this._stackAbove = null;
 
-        this._sizeChangedId = this.realWindow.connect('size-changed',
+        this._sizeChangedId = this.metaWindow.connect('size-changed',
             Lang.bind(this, this._onRealWindowSizeChanged));
         this._realWindowDestroyId = this.realWindow.connect('destroy',
             Lang.bind(this, this._disconnectRealWindowSignals));
@@ -158,7 +158,7 @@ const WindowClone = new Lang.Class({
 
     _disconnectRealWindowSignals: function() {
         if (this._sizeChangedId > 0)
-            this.realWindow.disconnect(this._sizeChangedId);
+            this.metaWindow.disconnect(this._sizeChangedId);
         this._sizeChangedId = 0;
 
         if (this._realWindowDestroyId > 0)
@@ -176,8 +176,8 @@ const WindowClone = new Lang.Class({
         // containing the positions of the visible frame. The input
         // rect contains everything, including the invisible border
         // padding.
-        let outerRect = this.metaWindow.get_outer_rect();
-        let inputRect = this.metaWindow.get_input_rect();
+        let outerRect = this.metaWindow.get_frame_rect();
+        let inputRect = this.metaWindow.get_buffer_rect();
         let [borderX, borderY] = [outerRect.x - inputRect.x,
                                   outerRect.y - inputRect.y];
 
@@ -186,7 +186,7 @@ const WindowClone = new Lang.Class({
 
     _onRealWindowSizeChanged: function() {
         let [borderX, borderY] = this._getInvisibleBorderPadding();
-        let outerRect = this.metaWindow.get_outer_rect();
+        let outerRect = this.metaWindow.get_frame_rect();
         this.actor.set_size(outerRect.width, outerRect.height);
         this._windowClone.set_position(-borderX, -borderY);
         this.emit('size-changed');

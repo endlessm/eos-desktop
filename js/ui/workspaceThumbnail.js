@@ -41,7 +41,7 @@ const WindowClone = new Lang.Class({
         this.realWindow = realWindow;
         this.metaWindow = realWindow.meta_window;
 
-        this._positionChangedId = this.realWindow.connect('position-changed',
+        this._positionChangedId = this.metaWindow.connect('position-changed',
                                                           Lang.bind(this, this._onPositionChanged));
         this._realWindowDestroyedId = this.realWindow.connect('destroy',
                                                               Lang.bind(this, this._disconnectRealWindowSignals));
@@ -98,13 +98,13 @@ const WindowClone = new Lang.Class({
     },
 
     _onPositionChanged: function() {
-        let rect = this.metaWindow.get_outer_rect();
+        let rect = this.metaWindow.get_frame_rect();
         this.actor.set_position(this.realWindow.x, this.realWindow.y);
     },
 
     _disconnectRealWindowSignals: function() {
         if (this._positionChangedId != 0) {
-            this.realWindow.disconnect(this._positionChangedId);
+            this.metaWindow.disconnect(this._positionChangedId);
             this._positionChangedId = 0;
         }
 
@@ -241,7 +241,7 @@ const WorkspaceThumbnail = new Lang.Class({
     _createBackground: function() {
         this._bgManager = new Background.BackgroundManager({ monitorIndex: Main.layoutManager.primaryIndex,
                                                              container: this._contents,
-                                                             effects: Meta.BackgroundEffects.NONE });
+                                                             vignette: false });
     },
 
     setPorthole: function(x, y, width, height) {
@@ -267,7 +267,7 @@ const WorkspaceThumbnail = new Lang.Class({
             let clone = this._windows[i];
             let metaWindow = clone.metaWindow;
             if (i == 0) {
-                clone.setStackAbove(this._bgManager.background.actor);
+                clone.setStackAbove(this._bgManager.backgroundActor);
             } else {
                 let previousClone = this._windows[i - 1];
                 clone.setStackAbove(previousClone.actor);
@@ -453,7 +453,7 @@ const WorkspaceThumbnail = new Lang.Class({
         this._contents.add_actor(clone.actor);
 
         if (this._windows.length == 0)
-            clone.setStackAbove(this._bgManager.background.actor);
+            clone.setStackAbove(this._bgManager.backgroundActor);
         else
             clone.setStackAbove(this._windows[this._windows.length - 1].actor);
 

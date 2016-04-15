@@ -432,6 +432,93 @@ const DesktopOverlay = new Lang.Class({
 });
 Signals.addSignalMethods(DesktopOverlay.prototype);
 
+const TilePreview = new Lang.Class({
+    Name: 'TilePreview',
+
+    _init: function() {
+        this.actor = new St.Widget();
+        global.window_group.add_actor(this.actor);
+
+        this._reset();
+        this._showing = false;
+    },
+
+    show: function(window, tileRect, monitorIndex) {
+        let windowActor = window.get_compositor_private();
+        if (!windowActor)
+            return;
+
+        global.window_group.set_child_below_sibling(this.actor, windowActor);
+
+        if (this._rect && this._rect.equal(tileRect))
+            return;
+
+        let changeMonitor = (this._monitorIndex == -1 ||
+                             this._monitorIndex != monitorIndex);
+
+        this._monitorIndex = monitorIndex;
+        this._rect = tileRect;
+
+        let monitor = Main.layoutManager.monitors[monitorIndex];
+
+        this._updateStyle(monitor);
+
+        if (!this._showing || changeMonitor) {
+            let monitorRect = new Meta.Rectangle({ x: monitor.x,
+                                                   y: monitor.y,
+                                                   width: monitor.width,
+                                                   height: monitor.height });
+            let [, rect] = window.get_frame_rect().intersect(monitorRect);
+            this.actor.set_size(rect.width, rect.height);
+            this.actor.set_position(rect.x, rect.y);
+            this.actor.opacity = 0;
+        }
+
+        this._showing = true;
+        this.actor.show();
+        Tweener.addTween(this.actor,
+                         { x: tileRect.x,
+                           y: tileRect.y,
+                           width: tileRect.width,
+                           height: tileRect.height,
+                           opacity: 255,
+                           time: WINDOW_ANIMATION_TIME,
+                           transition: 'easeOutQuad'
+                         });
+    },
+
+    hide: function() {
+        if (!this._showing)
+            return;
+
+        this._showing = false;
+        Tweener.addTween(this.actor,
+                         { opacity: 0,
+                           time: WINDOW_ANIMATION_TIME,
+                           transition: 'easeOutQuad',
+                           onComplete: Lang.bind(this, this._reset)
+                         });
+    },
+
+    _reset: function() {
+        this.actor.hide();
+        this._rect = null;
+        this._monitorIndex = -1;
+    },
+
+    _updateStyle: function(monitor) {
+        let styles = ['tile-preview'];
+        if (this._monitorIndex == Main.layoutManager.primaryIndex)
+            styles.push('on-primary');
+        if (this._rect.x == monitor.x)
+            styles.push('tile-preview-left');
+        if (this._rect.x + this._rect.width == monitor.x + monitor.width)
+            styles.push('tile-preview-right');
+
+        this.actor.style_class = styles.join(' ');
+    }
+});
+
 const WindowManager = new Lang.Class({
     Name: 'WindowManager',
 
@@ -440,8 +527,6 @@ const WindowManager = new Lang.Class({
 
         this._minimizing = [];
         this._unminimizing = [];
-        this._maximizing = [];
-        this._unmaximizing = [];
         this._mapping = [];
         this._destroying = [];
         this._movingWindow = null;
@@ -470,23 +555,24 @@ const WindowManager = new Lang.Class({
         this._shellwm.connect('kill-window-effects', Lang.bind(this, function (shellwm, actor) {
             this._minimizeWindowDone(shellwm, actor);
             this._unminimizeWindowDone(shellwm, actor);
-            this._maximizeWindowDone(shellwm, actor);
-            this._unmaximizeWindowDone(shellwm, actor);
             this._mapWindowDone(shellwm, actor);
             this._destroyWindowDone(shellwm, actor);
         }));
 
         this._shellwm.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
+        this._shellwm.connect('show-tile-preview', Lang.bind(this, this._showTilePreview));
+        this._shellwm.connect('hide-tile-preview', Lang.bind(this, this._hideTilePreview));
         this._shellwm.connect('minimize', Lang.bind(this, this._minimizeWindow));
         this._shellwm.connect('unminimize', Lang.bind(this, this._unminimizeWindow));
-        this._shellwm.connect('maximize', Lang.bind(this, this._maximizeWindow));
-        this._shellwm.connect('unmaximize', Lang.bind(this, this._unmaximizeWindow));
+        this._shellwm.connect('size-change', Lang.bind(this, this._sizeChangeWindow));
         this._shellwm.connect('map', Lang.bind(this, this._mapWindow));
         this._shellwm.connect_after('destroy', Lang.bind(this, this._destroyWindow));
         this._shellwm.connect('filter-keybinding', Lang.bind(this, this._filterKeybinding));
         this._shellwm.connect('confirm-display-change', Lang.bind(this, this._confirmDisplayChange));
 
         this._workspaceSwitcherPopup = null;
+        this._tilePreview = null;
+
         this.setCustomKeybindingHandler('switch-to-workspace-left',
                                         Shell.KeyBindingMode.NORMAL |
                                         Shell.KeyBindingMode.OVERVIEW,
@@ -782,21 +868,8 @@ const WindowManager = new Lang.Class({
         }
     },
 
-    _maximizeWindow : function(shellwm, actor, targetX, targetY, targetWidth, targetHeight) {
-        shellwm.completed_maximize(actor);
-    },
-
-    _maximizeWindowDone : function(shellwm, actor) {
-    },
-
-    _maximizeWindowOverwrite : function(shellwm, actor) {
-    },
-
-    _unmaximizeWindow : function(shellwm, actor, targetX, targetY, targetWidth, targetHeight) {
-        shellwm.completed_unmaximize(actor);
-    },
-
-    _unmaximizeWindowDone : function(shellwm, actor) {
+    _sizeChangeWindow : function(shellwm, actor, whichChange, oldFrameRect, oldBufferRect) {
+        shellwm.completed_size_change(actor);
     },
 
     _hasAttachedDialogs: function(window, ignoreWindow) {
@@ -1347,6 +1420,18 @@ const WindowManager = new Lang.Class({
         shellwm.completed_switch_workspace();
     },
 
+    _showTilePreview: function(shellwm, window, tileRect, monitorIndex) {
+        if (!this._tilePreview)
+            this._tilePreview = new TilePreview();
+        this._tilePreview.show(window, tileRect, monitorIndex);
+    },
+
+    _hideTilePreview: function(shellwm) {
+        if (!this._tilePreview)
+            return;
+        this._tilePreview.hide();
+    },
+
     _startAppSwitcher : function(display, screen, window, binding) {
         /* prevent a corner case where both popups show up at once */
         if (this._workspaceSwitcherPopup != null)
@@ -1354,9 +1439,7 @@ const WindowManager = new Lang.Class({
 
         let tabPopup = new AltTab.AppSwitcherPopup();
 
-        let modifiers = binding.get_modifiers();
-        let backwards = modifiers & Meta.VirtualModifier.SHIFT_MASK;
-        if (!tabPopup.show(backwards, binding.get_name(), binding.get_mask()))
+        if (!tabPopup.show(binding.is_reversed(), binding.get_name(), binding.get_mask()))
             tabPopup.destroy();
     },
 
@@ -1367,16 +1450,12 @@ const WindowManager = new Lang.Class({
 
         let tabPopup = new AltTab.WindowSwitcherPopup();
 
-        let modifiers = binding.get_modifiers();
-        let backwards = modifiers & Meta.VirtualModifier.SHIFT_MASK;
-        if (!tabPopup.show(backwards, binding.get_name(), binding.get_mask()))
+        if (!tabPopup.show(binding.is_reversed(), binding.get_name(), binding.get_mask()))
             tabPopup.destroy();
     },
 
     _startA11ySwitcher : function(display, screen, window, binding) {
-        let modifiers = binding.get_modifiers();
-        let backwards = modifiers & Meta.VirtualModifier.SHIFT_MASK;
-        Main.ctrlAltTabManager.popup(backwards, binding.get_name(), binding.get_mask());
+        Main.ctrlAltTabManager.popup(binding.is_reversed(), binding.get_name(), binding.get_mask());
     },
 
     _showForceAppExitDialog: function() {

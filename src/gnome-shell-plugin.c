@@ -45,18 +45,11 @@ static void gnome_shell_plugin_minimize         (MetaPlugin          *plugin,
                                                  MetaWindowActor     *actor);
 static void gnome_shell_plugin_unminimize       (MetaPlugin          *plugin,
                                                  MetaWindowActor     *actor);
-static void gnome_shell_plugin_maximize         (MetaPlugin          *plugin,
+static void gnome_shell_plugin_size_change      (MetaPlugin          *plugin,
                                                  MetaWindowActor     *actor,
-                                                 gint                 x,
-                                                 gint                 y,
-                                                 gint                 width,
-                                                 gint                 height);
-static void gnome_shell_plugin_unmaximize       (MetaPlugin          *plugin,
-                                                 MetaWindowActor     *actor,
-                                                 gint                 x,
-                                                 gint                 y,
-                                                 gint                 width,
-                                                 gint                 height);
+                                                 MetaSizeChange       which_change,
+                                                 MetaRectangle       *old_frame_rect,
+                                                 MetaRectangle       *old_buffer_rect);
 static void gnome_shell_plugin_map              (MetaPlugin          *plugin,
                                                  MetaWindowActor     *actor);
 static void gnome_shell_plugin_destroy          (MetaPlugin          *plugin,
@@ -70,6 +63,12 @@ static void gnome_shell_plugin_switch_workspace (MetaPlugin          *plugin,
 static void gnome_shell_plugin_kill_window_effects   (MetaPlugin      *plugin,
                                                       MetaWindowActor *actor);
 static void gnome_shell_plugin_kill_switch_workspace (MetaPlugin      *plugin);
+
+static void gnome_shell_plugin_show_tile_preview (MetaPlugin      *plugin,
+                                                  MetaWindow      *window,
+                                                  MetaRectangle   *tile_rect,
+                                                  int              tile_monitor);
+static void gnome_shell_plugin_hide_tile_preview (MetaPlugin *plugin);
 
 
 static gboolean              gnome_shell_plugin_xevent_filter (MetaPlugin *plugin,
@@ -127,14 +126,16 @@ gnome_shell_plugin_class_init (GnomeShellPluginClass *klass)
   plugin_class->map              = gnome_shell_plugin_map;
   plugin_class->minimize         = gnome_shell_plugin_minimize;
   plugin_class->unminimize       = gnome_shell_plugin_unminimize;
-  plugin_class->maximize         = gnome_shell_plugin_maximize;
-  plugin_class->unmaximize       = gnome_shell_plugin_unmaximize;
+  plugin_class->size_change      = gnome_shell_plugin_size_change;
   plugin_class->destroy          = gnome_shell_plugin_destroy;
 
   plugin_class->switch_workspace = gnome_shell_plugin_switch_workspace;
 
   plugin_class->kill_window_effects   = gnome_shell_plugin_kill_window_effects;
   plugin_class->kill_switch_workspace = gnome_shell_plugin_kill_switch_workspace;
+
+  plugin_class->show_tile_preview = gnome_shell_plugin_show_tile_preview;
+  plugin_class->hide_tile_preview = gnome_shell_plugin_hide_tile_preview;
 
   plugin_class->xevent_filter     = gnome_shell_plugin_xevent_filter;
   plugin_class->keybinding_filter = gnome_shell_plugin_keybinding_filter;
@@ -270,27 +271,13 @@ gnome_shell_plugin_unminimize (MetaPlugin         *plugin,
 }
 
 static void
-gnome_shell_plugin_maximize (MetaPlugin         *plugin,
-                             MetaWindowActor    *actor,
-                             gint                x,
-                             gint                y,
-                             gint                width,
-                             gint                height)
+gnome_shell_plugin_size_change (MetaPlugin         *plugin,
+                                MetaWindowActor    *actor,
+                                MetaSizeChange      which_change,
+                                MetaRectangle      *old_frame_rect,
+                                MetaRectangle      *old_buffer_rect)
 {
-  _shell_wm_maximize (get_shell_wm (),
-                      actor, x, y, width, height);
-}
-
-static void
-gnome_shell_plugin_unmaximize (MetaPlugin         *plugin,
-                               MetaWindowActor    *actor,
-                               gint                x,
-                               gint                y,
-                               gint                width,
-                               gint                height)
-{
-  _shell_wm_unmaximize (get_shell_wm (),
-                        actor, x, y, width, height);
+  _shell_wm_size_change (get_shell_wm (), actor, which_change, old_frame_rect, old_buffer_rect);
 }
 
 static void
@@ -329,6 +316,21 @@ static void
 gnome_shell_plugin_kill_switch_workspace (MetaPlugin         *plugin)
 {
   _shell_wm_kill_switch_workspace (get_shell_wm());
+}
+
+static void
+gnome_shell_plugin_show_tile_preview (MetaPlugin      *plugin,
+                                      MetaWindow      *window,
+                                      MetaRectangle   *tile_rect,
+                                      int              tile_monitor)
+{
+  _shell_wm_show_tile_preview (get_shell_wm (), window, tile_rect, tile_monitor);
+}
+
+static void
+gnome_shell_plugin_hide_tile_preview (MetaPlugin *plugin)
+{
+  _shell_wm_hide_tile_preview (get_shell_wm ());
 }
 
 static gboolean

@@ -16,7 +16,9 @@
     <file>misc/gnomeSession.js</file>
     <file>misc/hash.js</file>
     <file>misc/history.js</file>
+    <file>misc/ibusManager.js</file>
     <file>misc/jsParse.js</file>
+    <file>misc/keyboardManager.js</file>
     <file>misc/loginManager.js</file>
     <file>misc/modemManager.js</file>
     <file>misc/params.js</file>
@@ -66,6 +68,7 @@
     <file>ui/shellMountOperation.js</file>
     <file>ui/notificationDaemon.js</file>
     <file>ui/osdWindow.js</file>
+    <file>ui/osdMonitorLabeler.js</file>
     <file>ui/overview.js</file>
     <file>ui/overviewControls.js</file>
     <file>ui/panel.js</file>

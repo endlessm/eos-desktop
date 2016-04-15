@@ -38,13 +38,17 @@ const ModalDialog = new Lang.Class({
                                         styleClass: null,
                                         parentActor: Main.layoutManager.modalDialogGroup,
                                         keybindingMode: Shell.KeyBindingMode.SYSTEM_MODAL,
-                                        shouldFadeIn: true });
+                                        shouldFadeIn: true,
+                                        shouldFadeOut: true,
+                                        destroyOnClose: true });
 
         this.state = State.CLOSED;
         this._hasModal = false;
         this._keybindingMode = params.keybindingMode;
         this._shellReactive = params.shellReactive;
         this._shouldFadeIn = params.shouldFadeIn;
+        this._shouldFadeOut = params.shouldFadeOut;
+        this._destroyOnClose = params.destroyOnClose;
 
         this._group = new St.Widget({ visible: false,
                                       x: 0,
@@ -268,6 +272,15 @@ const ModalDialog = new Lang.Class({
         return true;
     },
 
+    _closeComplete: function() {
+        this.state = State.CLOSED;
+        this._group.hide();
+        this.emit('closed');
+
+        if (this._destroyOnClose)
+            this.destroy();
+    },
+
     close: function(timestamp) {
         if (this.state == State.CLOSED || this.state == State.CLOSING)
             return;
@@ -276,17 +289,16 @@ const ModalDialog = new Lang.Class({
         this.popModal(timestamp);
         this._savedKeyFocus = null;
 
-        Tweener.addTween(this._group,
-                         { opacity: 0,
-                           time: OPEN_AND_CLOSE_TIME,
-                           transition: 'easeOutQuad',
-                           onComplete: Lang.bind(this,
-                               function() {
-                                   this.state = State.CLOSED;
-                                   this._group.hide();
-                                   this.emit('closed');
-                               })
-                         });
+        if (this._shouldFadeOut)
+            Tweener.addTween(this._group,
+                             { opacity: 0,
+                               time: OPEN_AND_CLOSE_TIME,
+                               transition: 'easeOutQuad',
+                               onComplete: Lang.bind(this,
+                                                     this._closeComplete)
+                             })
+        else
+            this._closeComplete();
     },
 
     // Drop modal status without closing the dialog; this makes the

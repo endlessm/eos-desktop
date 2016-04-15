@@ -57,6 +57,14 @@ const AppSwitcherPopup = new Lang.Class({
         this._currentWindow = -1;
 
         this.thumbnailsVisible = false;
+
+        let apps = Shell.AppSystem.get_default().get_running ();
+
+        if (apps.length == 0)
+            return;
+
+        this._switcherList = new AppSwitcher(apps, this);
+        this._items = this._switcherList.icons;
     },
 
     _allocate: function (actor, box, flags) {
@@ -72,7 +80,6 @@ const AppSwitcherPopup = new Lang.Class({
             let leftPadding = this.actor.get_theme_node().get_padding(St.Side.LEFT);
             let rightPadding = this.actor.get_theme_node().get_padding(St.Side.RIGHT);
             let bottomPadding = this.actor.get_theme_node().get_padding(St.Side.BOTTOM);
-            let vPadding = this.actor.get_theme_node().get_vertical_padding();
             let hPadding = leftPadding + rightPadding;
 
             let icon = this._items[this._selectedIndex].actor;
@@ -96,18 +103,6 @@ const AppSwitcherPopup = new Lang.Class({
             childBox.y2 = childBox.y1 + childNaturalHeight;
             this._thumbnails.actor.allocate(childBox, flags);
         }
-    },
-
-    _createSwitcher: function() {
-        let apps = Shell.AppSystem.get_default().get_running ();
-
-        if (apps.length == 0)
-            return false;
-
-        this._switcherList = new AppSwitcher(apps, this);
-        this._items = this._switcherList.icons;
-
-        return true;
     },
 
     _initialSelection: function(backward, binding) {
@@ -148,13 +143,13 @@ const AppSwitcherPopup = new Lang.Class({
                                  this._items[this._selectedIndex].cachedWindows.length);
     },
 
-    _keyPressHandler: function(keysym, backwards, action) {
+    _keyPressHandler: function(keysym, action) {
         if (action == Meta.KeyBindingAction.SWITCH_GROUP) {
-            this._select(this._selectedIndex, backwards ? this._previousWindow() : this._nextWindow());
+            this._select(this._selectedIndex, this._nextWindow());
         } else if (action == Meta.KeyBindingAction.SWITCH_GROUP_BACKWARD) {
             this._select(this._selectedIndex, this._previousWindow());
         } else if (action == Meta.KeyBindingAction.SWITCH_APPLICATIONS) {
-            this._select(backwards ? this._previous() : this._next());
+            this._select(this._next());
         } else if (action == Meta.KeyBindingAction.SWITCH_APPLICATIONS_BACKWARD) {
             this._select(this._previous());
         } else if (this._thumbnailsFocused) {
@@ -164,6 +159,8 @@ const AppSwitcherPopup = new Lang.Class({
                 this._select(this._selectedIndex, this._nextWindow());
             else if (keysym == Clutter.Up)
                 this._select(this._selectedIndex, null, true);
+            else
+                return Clutter.EVENT_PROPAGATE;
         } else {
             if (keysym == Clutter.Left)
                 this._select(this._previous());
@@ -171,7 +168,11 @@ const AppSwitcherPopup = new Lang.Class({
                 this._select(this._next());
             else if (keysym == Clutter.Down)
                 this._select(this._selectedIndex, 0);
+            else
+                return Clutter.EVENT_PROPAGATE;
         }
+
+        return Clutter.EVENT_STOP;
     },
 
     _scrollHandler: function(direction) {
@@ -232,12 +233,14 @@ const AppSwitcherPopup = new Lang.Class({
     },
 
     _finish : function(timestamp) {
-        this.parent();
-
         let appIcon = this._items[this._selectedIndex];
-        let window = this._currentWindow > 0 ? this._currentWindow : 0;
-        appIcon.app.activate_window(appIcon.cachedWindows[window], timestamp);
+        if (this._currentWindow < 0)
+            appIcon.app.activate_window(appIcon.cachedWindows[0], timestamp);
+        else
+            Main.activateWindow(appIcon.cachedWindows[this._currentWindow], timestamp);
         Main.overview.hide();
+
+        this.parent();
     },
 
     _onDestroy : function() {
@@ -354,37 +357,28 @@ const WindowSwitcherPopup = new Lang.Class({
     Name: 'WindowSwitcherPopup',
     Extends: SwitcherPopup.SwitcherPopup,
 
-    _getWindowList: function() {
-        let settings = new Gio.Settings({ schema: 'org.gnome.shell.window-switcher' });
-        let workspace = settings.get_boolean('current-workspace-only') ? global.screen.get_active_workspace()
-                                                                       : null;
-        return global.display.get_tab_list(Meta.TabList.NORMAL, global.screen, workspace);
-    },
+    _init: function() {
+        this.parent();
+        this._settings = new Gio.Settings({ schema_id: 'org.gnome.shell.window-switcher' });
 
-    _createSwitcher: function() {
         let windows = this._getWindowList();
 
         if (windows.length == 0)
-            return false;
+            return;
 
-        this._switcherList = new WindowList(windows);
+        let mode = this._settings.get_enum('app-icon-mode');
+        this._switcherList = new WindowList(windows, mode);
         this._items = this._switcherList.icons;
-
-        return true;
     },
 
-    _initialSelection: function(backward, binding) {
-        if (binding == 'switch-windows-backward' || backward)
-            this._select(this._items.length - 1);
-        else if (this._items.length == 1)
-            this._select(0);
-        else
-            this._select(1);
+    _getWindowList: function() {
+        let workspace = this._settings.get_boolean('current-workspace-only') ? global.screen.get_active_workspace() : null;
+        return global.display.get_tab_list(Meta.TabList.NORMAL, workspace);
     },
 
-    _keyPressHandler: function(keysym, backwards, action) {
+    _keyPressHandler: function(keysym, action) {
         if (action == Meta.KeyBindingAction.SWITCH_WINDOWS) {
-            this._select(backwards ? this._previous() : this._next());
+            this._select(this._next());
         } else if (action == Meta.KeyBindingAction.SWITCH_WINDOWS_BACKWARD) {
             this._select(this._previous());
         } else {
@@ -392,13 +386,17 @@ const WindowSwitcherPopup = new Lang.Class({
                 this._select(this._previous());
             else if (keysym == Clutter.Right)
                 this._select(this._next());
+            else
+                return Clutter.EVENT_PROPAGATE;
         }
+
+        return Clutter.EVENT_STOP;
     },
 
     _finish: function() {
-        this.parent();
-
         Main.activateWindow(this._items[this._selectedIndex].window);
+
+        this.parent();
     }
 });
 
@@ -435,8 +433,10 @@ const AppSwitcher = new Lang.Class({
         this._arrows = [];
 
         let windowTracker = Shell.WindowTracker.get_default();
-        let allWindows = global.display.get_tab_list(Meta.TabList.NORMAL,
-                                                     global.screen, null);
+        let settings = new Gio.Settings({ schema: 'org.gnome.shell.app-switcher' });
+        let workspace = settings.get_boolean('current-workspace-only') ? global.screen.get_active_workspace()
+                                                                       : null;
+        let allWindows = global.display.get_tab_list(Meta.TabList.NORMAL, workspace);
 
         // Construct the AppIcons, add to the popup
         for (let i = 0; i < apps.length; i++) {
@@ -446,7 +446,8 @@ const AppSwitcher = new Lang.Class({
             appIcon.cachedWindows = allWindows.filter(function(w) {
                 return windowTracker.get_window_app (w) == appIcon.app;
             });
-            this._addIcon(appIcon);
+            if (appIcon.cachedWindows.length > 0)
+                this._addIcon(appIcon);
         }
 
         this._curApp = -1;
@@ -657,7 +658,7 @@ const ThumbnailList = new Lang.Class({
 const WindowIcon = new Lang.Class({
     Name: 'WindowIcon',
 
-    _init: function(window) {
+    _init: function(window, mode) {
         this.window = window;
 
         this.actor = new St.BoxLayout({ style_class: 'alt-tab-app',
@@ -675,8 +676,7 @@ const WindowIcon = new Lang.Class({
 
         this._icon.destroy_all_children();
 
-        let settings = new Gio.Settings({ schema: 'org.gnome.shell.window-switcher' });
-        switch (settings.get_enum('app-icon-mode')) {
+        switch (mode) {
             case AppIconMode.THUMBNAIL_ONLY:
                 size = WINDOW_PREVIEW_SIZE;
                 this._icon.add_actor(_createWindowClone(mutterWindow, WINDOW_PREVIEW_SIZE));
@@ -714,7 +714,7 @@ const WindowList = new Lang.Class({
     Name: 'WindowList',
     Extends: SwitcherPopup.SwitcherList,
 
-    _init : function(windows) {
+    _init : function(windows, mode) {
         this.parent(true);
 
         this._label = new St.Label({ x_align: Clutter.ActorAlign.CENTER,
@@ -726,7 +726,7 @@ const WindowList = new Lang.Class({
 
         for (let i = 0; i < windows.length; i++) {
             let win = windows[i];
-            let icon = new WindowIcon(win);
+            let icon = new WindowIcon(win, mode);
 
             this.addItem(icon.actor, icon.label);
             this.icons.push(icon);

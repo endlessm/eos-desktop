@@ -4,6 +4,7 @@
 
 #include <string.h>
 
+#include <meta/meta-enum-types.h>
 #include <meta/keybindings.h>
 
 #include "shell-wm-private.h"
@@ -21,14 +22,15 @@ enum
   MINIMIZE,
   MINIMIZE_COMPLETED,
   UNMINIMIZE,
-  MAXIMIZE,
-  UNMAXIMIZE,
+  SIZE_CHANGE,
   MAP,
   DESTROY,
   DESTROY_COMPLETED,
   SWITCH_WORKSPACE,
   KILL_SWITCH_WORKSPACE,
   KILL_WINDOW_EFFECTS,
+  SHOW_TILE_PREVIEW,
+  HIDE_TILE_PREVIEW,
   FILTER_KEYBINDING,
   CONFIRM_DISPLAY_CHANGE,
 
@@ -81,22 +83,14 @@ shell_wm_class_init (ShellWMClass *klass)
                     NULL, NULL, NULL,
                     G_TYPE_NONE, 1,
                     META_TYPE_WINDOW_ACTOR);
-  shell_wm_signals[MAXIMIZE] =
-    g_signal_new ("maximize",
+  shell_wm_signals[SIZE_CHANGE] =
+    g_signal_new ("size-change",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 5,
-                  META_TYPE_WINDOW_ACTOR, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT);
-  shell_wm_signals[UNMAXIMIZE] =
-    g_signal_new ("unmaximize",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE, 5,
-                  META_TYPE_WINDOW_ACTOR, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT);
+                  G_TYPE_NONE, 4,
+                  META_TYPE_WINDOW_ACTOR, META_TYPE_SIZE_CHANGE, META_TYPE_RECTANGLE, META_TYPE_RECTANGLE);
   shell_wm_signals[MAP] =
     g_signal_new ("map",
                   G_TYPE_FROM_CLASS (klass),
@@ -144,6 +138,22 @@ shell_wm_class_init (ShellWMClass *klass)
           NULL, NULL, NULL,
 		  G_TYPE_NONE, 1,
 		  META_TYPE_WINDOW_ACTOR);
+  shell_wm_signals[SHOW_TILE_PREVIEW] =
+    g_signal_new ("show-tile-preview",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 3,
+                  META_TYPE_WINDOW,
+                  META_TYPE_RECTANGLE,
+                  G_TYPE_INT);
+  shell_wm_signals[HIDE_TILE_PREVIEW] =
+    g_signal_new ("hide-tile-preview",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
   shell_wm_signals[FILTER_KEYBINDING] =
     g_signal_new ("filter-keybinding",
                   G_TYPE_FROM_CLASS (klass),
@@ -213,32 +223,11 @@ shell_wm_completed_unminimize (ShellWM         *wm,
   meta_plugin_unminimize_completed (wm->plugin, actor);
 }
 
-/**
- * shell_wm_completed_maximize:
- * @wm: the ShellWM
- * @actor: the MetaWindowActor actor
- *
- * The plugin must call this when it has completed a window maximize effect.
- **/
 void
-shell_wm_completed_maximize (ShellWM         *wm,
-                             MetaWindowActor *actor)
+shell_wm_completed_size_change (ShellWM         *wm,
+                                MetaWindowActor *actor)
 {
-  meta_plugin_maximize_completed (wm->plugin, actor);
-}
-
-/**
- * shell_wm_completed_unmaximize:
- * @wm: the ShellWM
- * @actor: the MetaWindowActor actor
- *
- * The plugin must call this when it has completed a window unmaximize effect.
- **/
-void
-shell_wm_completed_unmaximize (ShellWM         *wm,
-                               MetaWindowActor *actor)
-{
-  meta_plugin_unmaximize_completed (wm->plugin, actor);
+  meta_plugin_size_change_completed (wm->plugin, actor);
 }
 
 /**
@@ -297,6 +286,22 @@ _shell_wm_kill_window_effects (ShellWM         *wm,
   g_signal_emit (wm, shell_wm_signals[KILL_WINDOW_EFFECTS], 0, actor);
 }
 
+void
+_shell_wm_show_tile_preview (ShellWM       *wm,
+                             MetaWindow    *window,
+                             MetaRectangle *tile_rect,
+                             int            tile_monitor)
+{
+  g_signal_emit (wm, shell_wm_signals[SHOW_TILE_PREVIEW], 0,
+                 window, tile_rect, tile_monitor);
+}
+
+void
+_shell_wm_hide_tile_preview (ShellWM *wm)
+{
+  g_signal_emit (wm, shell_wm_signals[HIDE_TILE_PREVIEW], 0);
+}
+
 
 void
 _shell_wm_minimize (ShellWM         *wm,
@@ -313,25 +318,13 @@ _shell_wm_unminimize (ShellWM         *wm,
 }
 
 void
-_shell_wm_maximize (ShellWM         *wm,
-                    MetaWindowActor *actor,
-                    int              target_x,
-                    int              target_y,
-                    int              target_width,
-                    int              target_height)
+_shell_wm_size_change (ShellWM         *wm,
+                       MetaWindowActor *actor,
+                       MetaSizeChange   which_change,
+                       MetaRectangle   *old_frame_rect,
+                       MetaRectangle   *old_buffer_rect)
 {
-  g_signal_emit (wm, shell_wm_signals[MAXIMIZE], 0, actor, target_x, target_y, target_width, target_height);
-}
-
-void
-_shell_wm_unmaximize (ShellWM         *wm,
-                      MetaWindowActor *actor,
-                      int              target_x,
-                      int              target_y,
-                      int              target_width,
-                      int              target_height)
-{
-  g_signal_emit (wm, shell_wm_signals[UNMAXIMIZE], 0, actor, target_x, target_y, target_width, target_height);
+  g_signal_emit (wm, shell_wm_signals[SIZE_CHANGE], 0, actor, which_change, old_frame_rect, old_buffer_rect);
 }
 
 void

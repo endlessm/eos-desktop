@@ -35,7 +35,8 @@ const RunDialog = new Lang.Class({
     Extends: ModalDialog.ModalDialog,
 
     _init : function() {
-        this.parent({ styleClass: 'run-dialog' });
+        this.parent({ styleClass: 'run-dialog',
+                      destroyOnClose: false });
 
         this._lockdownSettings = new Gio.Settings({ schema: LOCKDOWN_SCHEMA });
         this._terminalSettings = new Gio.Settings({ schema: TERMINAL_SCHEMA });
@@ -49,14 +50,10 @@ const RunDialog = new Lang.Class({
                                        Main.createLookingGlass().open();
                                    }),
 
-                                   'r': Lang.bind(this, function() {
-                                       global.reexec_self();
-                                   }),
+                                   'r': Lang.bind(this, this._restart),
 
                                    // Developer brain backwards compatibility
-                                   'restart': Lang.bind(this, function() {
-                                       global.reexec_self();
-                                   }),
+                                   'restart': Lang.bind(this, this._restart),
 
                                    'debugexit': Lang.bind(this, function() {
                                        Meta.quit(Meta.ExitCode.ERROR);
@@ -271,6 +268,12 @@ const RunDialog = new Lang.Class({
                                                      })
                              });
         }
+    },
+
+    _restart: function() {
+        this._shouldFadeOut = false;
+        this.close();
+        Meta.restart('Restarting...');
     },
 
     open: function() {

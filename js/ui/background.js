@@ -1,5 +1,98 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
+// READ THIS FIRST
+// Background handling is a maze of objects, both objects in this file, and
+// also objects inside Mutter. They all have a role.
+//
+// BackgroundManager
+//   The only object that other parts of GNOME Shell deal with; a
+//   BackgroundManager creates background actors and adds them to
+//   the specified container. When the background is changed by the
+//   user it will fade out the old actor and fade in the new actor.
+//   (This is separate from the fading for an animated background,
+//   since using two actors is quite inefficient.)
+//
+// MetaBackgroundImage
+//   An object represented an image file that will be used for drawing
+//   the background. MetaBackgroundImage objects asynchronously load,
+//   so they are first created in an unloaded state, then later emit
+//   a ::loaded signal when the Cogl object becomes available.
+//
+// MetaBackgroundImageCache
+//   A cache from filename to MetaBackgroundImage.
+//
+// BackgroundSource
+//   An object that is created for each GSettings schema (separate
+//   settings schemas are used for the lock screen and main background),
+//   and holds a reference to shared Background objects.
+//
+// MetaBackground
+//   Holds the specification of a background - a background color
+//   or gradient and one or two images blended together.
+//
+// Background
+//   JS delegate object that Connects a MetaBackground to the GSettings
+//   schema for the background.
+//
+// Animation
+//   A helper object that handles loading a XML-based animation; it is a
+//   wrapper for GnomeDesktop.BGSlideShow
+//
+// MetaBackgroundActor
+//   An actor that draws the background for a single monitor
+//
+// BackgroundCache
+//   A cache of Settings schema => BackgroundSource and of a single Animation.
+//   Also used to share file monitors.
+//
+// A static image, background color or gradient is relatively straightforward. The
+// calling code creates a separate BackgroundManager for each monitor. Since they
+// are created for the same GSettings schema, they will use the same BackgroundSource
+// object, which provides a single Background and correspondingly a single
+// MetaBackground object.
+//
+// BackgroundManager               BackgroundManager
+//        |        \               /        |
+//        |         BackgroundSource        |        looked up in BackgroundCache
+//        |                |                |
+//        |            Background           |
+//        |                |                |
+//   MetaBackgroundActor   |    MetaBackgroundActor
+//         \               |               /
+//          `------- MetaBackground ------'
+//                         |
+//                MetaBackgroundImage            looked up in MetaBackgroundImageCache
+//
+// The animated case is tricker because the animation XML file can specify different
+// files for different monitor resolutions and aspect ratios. For this reason,
+// the BackgroundSource provides different Background share a single Animation object,
+// which tracks the animation, but use different MetaBackground objects. In the
+// common case, the different MetaBackground objects will be created for the
+// same filename and look up the *same* MetaBackgroundImage object, so there is
+// little wasted memory:
+//
+// BackgroundManager               BackgroundManager
+//        |        \               /        |
+//        |         BackgroundSource        |        looked up in BackgroundCache
+//        |             /      \            |
+//        |     Background   Background     |
+//        |       |     \      /   |        |
+//        |       |    Animation   |        |        looked up in BackgroundCache
+// MetaBackgroundA|tor           Me|aBackgroundActor
+//         \      |                |       /
+//      MetaBackground           MetaBackground
+//                 \                 /
+//                MetaBackgroundImage            looked up in MetaBackgroundImageCache
+//                MetaBackgroundImage
+//
+// But the case of different filenames and different background images
+// is possible as well:
+//                        ....
+//      MetaBackground              MetaBackground
+//             |                          |
+//     MetaBackgroundImage         MetaBackgroundImage
+//     MetaBackgroundImage         MetaBackgroundImage
+
 const Clutter = imports.gi.Clutter;
 const GDesktopEnums = imports.gi.GDesktopEnums;
 const Gio = imports.gi.Gio;
@@ -14,6 +107,8 @@ const Main = imports.ui.main;
 const Params = imports.misc.params;
 const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
+
+const DEFAULT_BACKGROUND_COLOR = Clutter.Color.from_pixel(0x2e3436ff);
 
 const BACKGROUND_SCHEMA = 'org.gnome.desktop.background';
 const PRIMARY_COLOR_KEY = 'primary-color';
@@ -50,62 +145,14 @@ const BackgroundCache = new Lang.Class({
     Name: 'BackgroundCache',
 
     _init: function() {
-       this._patterns = [];
-       this._images = [];
-       this._pendingFileLoads = [];
-       this._fileMonitors = {};
+        this._pendingFileLoads = [];
+        this._fileMonitors = {};
+        this._backgroundSources = {};
     },
 
-    getPatternContent: function(params) {
-        params = Params.parse(params, { monitorIndex: 0,
-                                        color: null,
-                                        secondColor: null,
-                                        shadingType: null,
-                                        effects: Meta.BackgroundEffects.NONE });
-
-        let content = null;
-
-        let candidateContent = null;
-        for (let i = 0; i < this._patterns.length; i++) {
-            if (this._patterns[i].get_shading() != params.shadingType)
-                continue;
-
-            if (!params.color.equal(this._patterns[i].get_color()))
-                continue;
-
-            if (params.shadingType != GDesktopEnums.BackgroundShading.SOLID &&
-                !params.secondColor.equal(this._patterns[i].get_second_color()))
-                continue;
-
-            candidateContent = this._patterns[i];
-
-            if (params.effects != this._patterns[i].effects)
-                continue;
-
-            break;
-        }
-
-        if (candidateContent) {
-            content = candidateContent.copy(params.monitorIndex, params.effects);
-        } else {
-            content = new Meta.Background({ meta_screen: global.screen,
-                                            monitor: params.monitorIndex,
-                                            effects: params.effects });
-
-            if (params.shadingType == GDesktopEnums.BackgroundShading.SOLID) {
-                content.load_color(params.color);
-            } else {
-                content.load_gradient(params.shadingType, params.color, params.secondColor);
-            }
-        }
-
-        this._patterns.push(content);
-        return content;
-    },
-
-    _monitorFile: function(file) {
+    monitorFile: function(file) {
         let key = file.hash();
-        if (this._fileMonitors[key])
+        if (this._fileMonitors[file])
             return;
 
         let monitor = file.monitor(Gio.FileMonitorFlags.NONE, null);
@@ -177,121 +224,6 @@ const BackgroundCache = new Lang.Class({
         }));
     },
 
-    _loadImageContent: function(params) {
-        params = Params.parse(params, { monitorIndex: 0,
-                                        style: null,
-                                        file: null,
-                                        effects: Meta.BackgroundEffects.NONE,
-                                        cancellable: null,
-                                        onFinished: null });
-
-        let caller = { monitorIndex: params.monitorIndex,
-                       effects: params.effects,
-                       cancellable: params.cancellable,
-                       onFinished: params.onFinished };
-
-        for (let i = 0; i < this._pendingFileLoads.length; i++) {
-            let fileLoad = this._pendingFileLoads[i];
-
-            if (_fileEqual0(fileLoad.file, params.file) &&
-                fileLoad.style == params.style) {
-                this._attachCallerToFileLoad(caller, fileLoad);
-                return;
-            }
-        }
-
-        let fileLoad = { file: params.file,
-                         style: params.style,
-                         cancellable: new Gio.Cancellable(),
-                         callers: [] };
-        this._attachCallerToFileLoad(caller, fileLoad);
-        this._pendingFileLoads.push(fileLoad);
-
-        let content = new Meta.Background({ meta_screen: global.screen });
-
-        content.load_file_async(params.file,
-                                params.style,
-                                params.cancellable,
-                                Lang.bind(this,
-                                          function(object, result) {
-                                              try {
-                                                  content.load_file_finish(result);
-
-                                                  this._monitorFile(params.file);
-                                              } catch(e) {
-                                                  content = null;
-                                              }
-
-                                              for (let i = 0; i < fileLoad.callers.length; i++) {
-                                                  let caller = fileLoad.callers[i];
-                                                  if (caller.onFinished) {
-                                                      let newContent;
-
-                                                      if (content) {
-                                                          newContent = content.copy(caller.monitorIndex, caller.effects);
-                                                          this._images.push(newContent);
-                                                      }
-
-                                                      caller.onFinished(newContent);
-                                                  }
-                                              }
-
-                                              let idx = this._pendingFileLoads.indexOf(fileLoad);
-                                              this._pendingFileLoads.splice(idx, 1);
-                                          }));
-    },
-
-    getImageContent: function(params) {
-        params = Params.parse(params, { monitorIndex: 0,
-                                        style: null,
-                                        file: null,
-                                        effects: Meta.BackgroundEffects.NONE,
-                                        cancellable: null,
-                                        onFinished: null });
-
-        let content = null;
-
-        let candidateContent = null;
-        for (let i = 0; i < this._images.length; i++) {
-            if (this._images[i].get_style() != params.style)
-                continue;
-
-            if (!_fileEqual0(this._images[i].get_file(), params.file))
-                continue;
-
-            if (params.style == GDesktopEnums.BackgroundStyle.SPANNED &&
-                this._images[i].monitor != params.monitorIndex)
-                continue;
-
-            candidateContent = this._images[i];
-
-            if (params.effects != this._images[i].effects)
-                continue;
-
-            break;
-        }
-
-        if (candidateContent) {
-            content = candidateContent.copy(params.monitorIndex, params.effects);
-
-            if (params.cancellable && params.cancellable.is_cancelled())
-                content = null;
-            else
-                this._images.push(content);
-
-            if (params.onFinished)
-                params.onFinished(content);
-        } else {
-            this._loadImageContent({ file: params.file,
-                                     style: params.style,
-                                     effects: params.effects,
-                                     monitorIndex: params.monitorIndex,
-                                     cancellable: params.cancellable,
-                                     onFinished: params.onFinished });
-
-        }
-    },
-
     getAnimation: function(params) {
         params = Params.parse(params, { file: null,
                                         onLoaded: null });
@@ -302,12 +234,12 @@ const BackgroundCache = new Lang.Class({
                     params.onLoaded(this._animation);
                 }));
             }
+            return;
         }
 
         let animation = new Animation({ file: params.file });
 
         animation.load(Lang.bind(this, function() {
-                           this._monitorFile(params.file);
                            this._animationFile = params.file;
                            this._animation = animation;
 
@@ -317,6 +249,31 @@ const BackgroundCache = new Lang.Class({
                                }));
                            }
                        }));
+    },
+
+    getBackgroundSource: function(layoutManager, settingsSchema) {
+        // The layoutManager is always the same one; we pass in it since
+        // Main.layoutManager may not be set yet
+
+        if (!(settingsSchema in this._backgroundSources)) {
+            this._backgroundSources[settingsSchema] = new BackgroundSource(layoutManager, settingsSchema);
+            this._backgroundSources[settingsSchema]._useCount = 1;
+        } else {
+            this._backgroundSources[settingsSchema]._useCount++;
+        }
+
+        return this._backgroundSources[settingsSchema];
+    },
+
+    releaseBackgroundSource: function(settingsSchema) {
+        if (settingsSchema in this._backgroundSources) {
+            let source = this._backgroundSources[settingsSchema];
+            source._useCount--;
+            if (source._useCount == 0) {
+                delete this._backgroundSources[settingsSchema];
+                source.destroy();
+            }
+        }
     }
 });
 Signals.addSignalMethods(BackgroundCache.prototype);
@@ -333,25 +290,19 @@ const Background = new Lang.Class({
     _init: function(params) {
         params = Params.parse(params, { monitorIndex: 0,
                                         layoutManager: Main.layoutManager,
-                                        effects: Meta.BackgroundEffects.NONE });
-        this.actor = new Meta.BackgroundGroup();
-        this.actor._delegate = this;
+                                        settings: null,
+                                        file: null,
+                                        style: null });
 
-        this._destroySignalId = this.actor.connect('destroy',
-                                                   Lang.bind(this, this._destroy));
+        this.background = new Meta.Background({ meta_screen: global.screen });
+        this.background._delegate = this;
 
-        this._settings = new Gio.Settings({ schema: BACKGROUND_SCHEMA });
+        this._settings = params.settings;
+        this._file = params.file;
+        this._style = params.style;
         this._monitorIndex = params.monitorIndex;
         this._layoutManager = params.layoutManager;
-        this._effects = params.effects;
         this._fileWatches = {};
-        this._pattern = null;
-        // contains a single image for static backgrounds and
-        // two images (from and to) for slide shows
-        this._images = {};
-
-        this._brightness = 1.0;
-        this._vignetteSharpness = 0.2;
         this._cancellable = new Gio.Cancellable();
         this.isLoaded = false;
 
@@ -362,13 +313,9 @@ const Background = new Lang.Class({
         this._load();
     },
 
-    _destroy: function() {
+    destroy: function() {
         this._cancellable.cancel();
-
-        if (this._updateAnimationTimeoutId) {
-            GLib.source_remove (this._updateAnimationTimeoutId);
-            this._updateAnimationTimeoutId = 0;
-        }
+        this._removeAnimationTimeout();
 
         let i;
         let keys = Object.keys(this._fileWatches);
@@ -377,31 +324,16 @@ const Background = new Lang.Class({
         }
         this._fileWatches = null;
 
-        if (this._pattern) {
-            if (this._pattern.content)
-                this._cache.removePatternContent(this._pattern.content);
-
-            this._pattern.destroy();
-            this._pattern = null;
-        }
-
-        keys = Object.keys(this._images);
-        for (i = 0; i < keys.length; i++) {
-            let actor = this._images[keys[i]];
-
-            if (actor.content)
-                this._cache.removeImageContent(actor.content);
-
-            actor.destroy();
-            this._images[keys[i]] = null;
-        }
-
-        this.actor.disconnect(this._destroySignalId);
-        this._destroySignalId = 0;
-
         if (this._settingsChangedSignalId != 0)
             this._settings.disconnect(this._settingsChangedSignalId);
         this._settingsChangedSignalId = 0;
+    },
+
+    updateResolution: function() {
+        if (this._animation) {
+            this._removeAnimationTimeout();
+            this._updateAnimation();
+        }
     },
 
     _setLoaded: function() {
@@ -426,92 +358,34 @@ const Background = new Lang.Class({
 
         let shadingType = this._settings.get_enum(COLOR_SHADING_TYPE_KEY);
 
-        let content = this._cache.getPatternContent({ monitorIndex: this._monitorIndex,
-                                                      effects: this._effects,
-                                                      color: color,
-                                                      secondColor: secondColor,
-                                                      shadingType: shadingType });
-
-        this._pattern = new Meta.BackgroundActor();
-        this.actor.add_child(this._pattern);
-
-        this._pattern.content = content;
+        if (shadingType == GDesktopEnums.BackgroundShading.SOLID)
+            this.background.set_color(color);
+        else
+            this.background.set_gradient(shadingType, color, secondColor);
     },
 
-    _invalidateCacheFile: function(file) {
-        let keys = Object.keys(this._images);
-        for (let i = 0; i < keys.length; i++) {
-            let actor = this._images[keys[i]];
-
-            if (actor.content && _fileEqual0(actor.content.get_file(), file)) {
-                actor.content = null;
-            }
-        }
-    },
-
-    _watchCacheFile: function(file) {
+    _watchFile: function(file) {
         let key = file.hash();
         if (this._fileWatches[key])
             return;
 
+        this._cache.monitorFile(file);
         let signalId = this._cache.connect('file-changed',
                                            Lang.bind(this, function(cache, changedFile) {
                                                if (changedFile.equal(file)) {
-                                                   this._invalidateCacheFile(file);
+                                                   let imageCache = Meta.BackgroundImageCache.get_default();
+                                                   imageCache.purge(changedFile);
                                                    this.emit('changed');
                                                }
                                            }));
         this._fileWatches[key] = signalId;
     },
 
-    _ensureImage: function(index) {
-        if (this._images[index])
-            return;
-
-        let actor = new Meta.BackgroundActor();
-
-        // The background pattern is the first actor in
-        // the group, and all images should be above that.
-        this.actor.insert_child_at_index(actor, index + 1);
-        this._images[index] = actor;
-    },
-
-    _updateImage: function(index, content, file) {
-        content.brightness = this._brightness;
-        content.vignette_sharpness = this._vignetteSharpness;
-
-        let image = this._images[index];
-        if (image.content)
-            this._cache.removeImageContent(image.content);
-        image.content = content;
-        this._watchCacheFile(file);
-
-        let needs_pattern = true;
-        let [monitorWidth, monitorHeight] = this.actor.get_size();
-        let keys = Object.keys(this._images);
-
-        for (let i = 0; i < keys.length; i++) {
-            let image = this._images[keys[i]];
-            let rect = image.content.get_texture_rect();
-            if (rect.get_width() >= monitorWidth  &&
-                rect.get_height() >= monitorHeight &&
-                !image.content.get_has_alpha()) {
-                needs_pattern = false;
-                break;
-            }
+    _removeAnimationTimeout: function() {
+        if (this._updateAnimationTimeoutId) {
+            GLib.source_remove(this._updateAnimationTimeoutId);
+            this._updateAnimationTimeoutId = 0;
         }
-
-        if (needs_pattern)
-            this._pattern.show();
-        else
-            this._pattern.hide();
-    },
-
-    _updateAnimationProgress: function() {
-        if (this._images[1])
-            this._images[1].opacity = this._animation.transitionProgress * 255;
-
-        this._queueUpdateAnimation();
     },
 
     _updateAnimation: function() {
@@ -520,46 +394,40 @@ const Background = new Lang.Class({
         this._animation.update(this._layoutManager.monitors[this._monitorIndex]);
         let files = this._animation.keyFrameFiles;
 
-        if (files.length == 0) {
+        let finish = Lang.bind(this, function() {
             this._setLoaded();
+            if (files.length > 1) {
+                this.background.set_blend(files[0], files[1],
+                                          this._animation.transitionProgress,
+                                          this._style);
+            } else if (files.length > 0) {
+                this.background.set_file(files[0], this._style);
+            } else {
+                this.background.set_file(null, this._style);
+            }
             this._queueUpdateAnimation();
-            return;
-        }
+        });
 
+        let cache = Meta.BackgroundImageCache.get_default();
         let numPendingImages = files.length;
+        let images = [];
         for (let i = 0; i < files.length; i++) {
-            if (this._images[i] && this._images[i].content &&
-                _fileEqual0(this._images[i].content.get_file(), files[i])) {
-
+            this._watchFile(files[i]);
+            let image = cache.load(files[i]);
+            images.push(image);
+            if (image.is_loaded()) {
                 numPendingImages--;
                 if (numPendingImages == 0)
-                    this._updateAnimationProgress();
-                continue;
+                    finish();
+            } else {
+                let id = image.connect('loaded',
+                                       Lang.bind(this, function() {
+                                           image.disconnect(id);
+                                           numPendingImages--;
+                                           if (numPendingImages == 0)
+                                               finish();
+                                       }));
             }
-            this._cache.getImageContent({ monitorIndex: this._monitorIndex,
-                                          effects: this._effects,
-                                          style: this._style,
-                                          file: files[i],
-                                          cancellable: this._cancellable,
-                                          onFinished: Lang.bind(this, function(content, i) {
-                                              numPendingImages--;
-
-                                              if (!content) {
-                                                  this._setLoaded();
-                                                  if (numPendingImages == 0)
-                                                      this._updateAnimationProgress();
-                                                  return;
-                                              }
-
-                                              this._ensureImage(i);
-                                              this._updateImage(i, content, files[i]);
-
-                                              if (numPendingImages == 0) {
-                                                  this._setLoaded();
-                                                  this._updateAnimationProgress();
-                                              }
-                                          }, i)
-                                        });
         }
     },
 
@@ -593,34 +461,35 @@ const Background = new Lang.Class({
 
     _loadAnimation: function(file) {
         this._cache.getAnimation({ file: file,
-                                   onLoaded: Lang.bind(this, function(animation) {
-                                       this._animation = animation;
+                                         onLoaded: Lang.bind(this, function(animation) {
+                                             this._animation = animation;
 
-                                       if (!this._animation || this._cancellable.is_cancelled()) {
-                                           this._setLoaded();
-                                           return;
-                                       }
+                                             if (!this._animation || this._cancellable.is_cancelled()) {
+                                                 this._setLoaded();
+                                                 return;
+                                             }
 
-                                       this._updateAnimation();
-                                       this._watchCacheFile(file);
-                                   })
+                                             this._updateAnimation();
+                                             this._watchFile(file);
+                                         })
                                  });
     },
 
     _loadImage: function(file) {
-        this._cache.getImageContent({ monitorIndex: this._monitorIndex,
-                                      effects: this._effects,
-                                      style: this._style,
-                                      file: file,
-                                      cancellable: this._cancellable,
-                                      onFinished: Lang.bind(this, function(content) {
-                                          if (content) {
-                                              this._ensureImage(0);
-                                              this._updateImage(0, content, file);
-                                          }
-                                          this._setLoaded();
-                                      })
-                                    });
+        this.background.set_file(file, this._style);
+        this._watchFile(file);
+
+        let cache = Meta.BackgroundImageCache.get_default();
+        let image = cache.load(file);
+        if (image.is_loaded())
+            this._setLoaded();
+        else {
+            let id = image.connect('loaded',
+                                   Lang.bind(this, function() {
+                                       this._setLoaded();
+                                       image.disconnect(id);
+                                   }));
+        }
     },
 
     _loadFile: function(file) {
@@ -628,6 +497,88 @@ const Background = new Lang.Class({
             this._loadAnimation(file);
         else
             this._loadImage(file);
+    },
+
+    _load: function() {
+        this._cache = getBackgroundCache();
+
+        this._loadPattern();
+
+        if (!this._file) {
+            this._setLoaded();
+            return;
+        }
+
+        this._loadFile(this._file);
+    },
+});
+Signals.addSignalMethods(Background.prototype);
+
+let _systemBackground;
+
+const SystemBackground = new Lang.Class({
+    Name: 'SystemBackground',
+
+    _init: function() {
+        let file = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/noise-texture.png');
+
+        if (_systemBackground == null) {
+            _systemBackground = new Meta.Background({ meta_screen: global.screen });
+            _systemBackground.set_color(DEFAULT_BACKGROUND_COLOR);
+            _systemBackground.set_file(file, GDesktopEnums.BackgroundStyle.WALLPAPER);
+        }
+
+        this.actor = new Meta.BackgroundActor({ meta_screen: global.screen,
+                                                monitor: 0,
+                                                background: _systemBackground });
+
+        let cache = Meta.BackgroundImageCache.get_default();
+        let image = cache.load(file);
+        if (image.is_loaded()) {
+            image = null;
+            let id = GLib.idle_add(GLib.PRIORITY_DEFAULT, Lang.bind(this, function() {
+                this.emit('loaded');
+                return GLib.SOURCE_REMOVE;
+            }));
+            GLib.Source.set_name_by_id(id, '[gnome-shell] SystemBackground.loaded');
+        } else {
+            let id = image.connect('loaded',
+                                   Lang.bind(this, function() {
+                                       this.emit('loaded');
+                                       image.disconnect(id);
+                                       image = null;
+                                   }));
+        }
+    },
+});
+Signals.addSignalMethods(SystemBackground.prototype);
+
+const BackgroundSource = new Lang.Class({
+    Name: 'BackgroundSource',
+
+    _init: function(layoutManager, settingsSchema) {
+        // Allow override the background image setting for performance testing
+        this._layoutManager = layoutManager;
+        this._overrideImage = GLib.getenv('SHELL_BACKGROUND_IMAGE');
+        this._settings = new Gio.Settings({ schema_id: settingsSchema });
+        this._backgrounds = [];
+
+        this._monitorsChangedId = global.screen.connect('monitors-changed',
+                                                        Lang.bind(this, this._onMonitorsChanged));
+    },
+
+    _onMonitorsChanged: function() {
+        for (let monitorIndex in this._backgrounds) {
+            let background = this._backgrounds[monitorIndex];
+
+            if (monitorIndex < this._layoutManager.monitors.length) {
+                background.updateResolution();
+            } else {
+                background.disconnect(background._changedId);
+                background.destroy();
+                delete this._backgrounds[monitorIndex];
+            }
+        }
     },
 
     _getDefaultBackgroundFile: function() {
@@ -639,104 +590,76 @@ const Background = new Lang.Class({
             let path = GLib.build_filenamev([DEFAULT_CONFIGS_DIR,
                 BACKGROUND_NAME_BASE + '-' + langNames[i] + '.jpg']);
 
-            if (GLib.file_test(path, GLib.FileTest.EXISTS)) {
+            if (GLib.file_test(path, GLib.FileTest.EXISTS))
                 return Gio.File.new_for_path(path);
-            }
         }
 
         log('No default background images found!');
         return null;
     },
 
-    _load: function () {
-        this._cache = getBackgroundCache();
+    getBackground: function(monitorIndex) {
+        let file = null;
+        let style;
 
-        this._loadPattern();
+        // We don't watch changes to settings here,
+        // instead we rely on Background to watch those
+        // and emit 'changed' at the right time
 
-        this._style = this._settings.get_enum(BACKGROUND_STYLE_KEY);
-        if (this._style == GDesktopEnums.BackgroundStyle.NONE) {
-            this._setLoaded();
-            return;
-        }
-
-        let uri = this._settings.get_string(PICTURE_URI_KEY);
-
-        let file;
-        // This URI indicates that the per-language default should be used
-        if (uri === 'eos:///default') {
-            file = this._getDefaultBackgroundFile();
+        if (this._overrideImage != null) {
+            file = Gio.File-new_for_path(this._overrideImage);
+            style = GDesktopEnums.BackgroundStyle.ZOOM; // Hardcode
         } else {
-            file = Gio.File.new_for_uri(uri);
+            style = this._settings.get_enum(BACKGROUND_STYLE_KEY);
+            if (style != GDesktopEnums.BackgroundStyle.NONE) {
+                let uri = this._settings.get_string(PICTURE_URI_KEY);
+                if (uri == 'eos:///default')
+                    file = this._getDefaultBackgroundFile();
+                else
+                    file = Gio.File.new_for_commandline_arg(uri);
+            }
         }
 
-        if (file) {
-            this._loadFile(file);
+        // Animated backgrounds are (potentially) per-monitor, since
+        // they can have variants that depend on the aspect ratio and
+        // size of the monitor; for other backgrounds we can use the
+        // same background object for all monitors.
+        if (file == null || !file.get_basename().endsWith('.xml'))
+            monitorIndex = 0;
+
+        if (!(monitorIndex in this._backgrounds)) {
+            let background = new Background({
+                monitorIndex: monitorIndex,
+                layoutManager: this._layoutManager,
+                settings: this._settings,
+                file: file,
+                style: style
+            });
+
+            background._changedId = background.connect('changed', Lang.bind(this, function() {
+                background.disconnect(background._changedId);
+                background.destroy();
+                delete this._backgrounds[monitorIndex];
+            }));
+
+            this._backgrounds[monitorIndex] = background;
         }
+
+        return this._backgrounds[monitorIndex];
     },
 
-    get brightness() {
-        return this._brightness;
-    },
+    destroy: function() {
+        global.screen.disconnect(this._monitorsChangedId);
 
-    set brightness(factor) {
-        this._brightness = factor;
-        if (this._pattern && this._pattern.content)
-            this._pattern.content.brightness = factor;
-
-        let keys = Object.keys(this._images);
-        for (let i = 0; i < keys.length; i++) {
-            let image = this._images[keys[i]];
-            if (image && image.content)
-                image.content.brightness = factor;
+        for (let monitorIndex in this._backgrounds) {
+            let background = this._backgrounds[monitorIndex];
+            background.disconnect(background._changedId);
+            background.destroy();
         }
-    },
 
-    get vignetteSharpness() {
-        return this._vignetteSharpness;
-    },
-
-    set vignetteSharpness(sharpness) {
-        this._vignetteSharpness = sharpness;
-        if (this._pattern && this._pattern.content)
-            this._pattern.content.vignette_sharpness = sharpness;
-
-        let keys = Object.keys(this._images);
-        for (let i = 0; i < keys.length; i++) {
-            let image = this._images[keys[i]];
-            if (image && image.content)
-                image.content.vignette_sharpness = sharpness;
-        }
+        this._backgrounds = null;
     }
 });
-Signals.addSignalMethods(Background.prototype);
-
-const SystemBackground = new Lang.Class({
-    Name: 'SystemBackground',
-
-    _init: function() {
-        this._cache = getBackgroundCache();
-        this.actor = new Meta.BackgroundActor();
-
-        this._cache.getImageContent({ style: GDesktopEnums.BackgroundStyle.WALLPAPER,
-                                      file: Gio.File.new_for_uri('resource:///org/gnome/shell/theme/noise-texture.png'),
-                                      effects: Meta.BackgroundEffects.NONE,
-                                      onFinished: Lang.bind(this, function(content) {
-                                          this.actor.content = content;
-                                          this.emit('loaded');
-                                      })
-                                    });
-
-        this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
-    },
-
-    _onDestroy: function() {
-        let content = this.actor.content;
-
-        if (content)
-            this._cache.removeImageContent(content);
-    },
-});
-Signals.addSignalMethods(SystemBackground.prototype);
 
 const Animation = new Lang.Class({
     Name: 'Animation',
@@ -793,94 +716,121 @@ const BackgroundManager = new Lang.Class({
         params = Params.parse(params, { container: null,
                                         layoutManager: Main.layoutManager,
                                         monitorIndex: null,
-                                        effects: Meta.BackgroundEffects.NONE,
-                                        controlPosition: true });
+                                        vignette: false,
+                                        controlPosition: true,
+                                        settingsSchema: BACKGROUND_SCHEMA });
+
+        let cache = getBackgroundCache();
+        this._settingsSchema = params.settingsSchema;
+        this._backgroundSource = cache.getBackgroundSource(params.layoutManager, params.settingsSchema);
 
         this._container = params.container;
         this._layoutManager = params.layoutManager;
-        this._effects = params.effects;
+        this._vignette = params.vignette;
         this._monitorIndex = params.monitorIndex;
         this._controlPosition = params.controlPosition;
 
-        this.background = this._createBackground();
+        this.backgroundActor = this._createBackgroundActor();
+        this._newBackgroundActor = null;
     },
 
     destroy: function() {
-        if (this.background) {
-            this.background.actor.destroy();
-            this.background = null;
+        let cache = getBackgroundCache();
+        cache.releaseBackgroundSource(this._settingsSchema);
+        this._backgroundSource = null;
+
+        if (this._newBackgroundActor) {
+            this._newBackgroundActor.destroy();
+            this._newBackgroundActor = null;
+        }
+
+        if (this.backgroundActor) {
+            this.backgroundActor.destroy();
+            this.backgroundActor = null;
         }
     },
 
-    _tweenOldBackground: function(oldBackground) {
-        Tweener.addTween(oldBackground.actor,
+    _swapBackgroundActor: function() {
+        let oldBackgroundActor = this.backgroundActor;
+        this.backgroundActor = this._newBackgroundActor;
+        this._newBackgroundActor = null;
+        this.emit('changed');
+
+        Tweener.addTween(oldBackgroundActor,
                          { opacity: 0,
                            time: FADE_ANIMATION_TIME,
                            transition: 'easeOutQuad',
-                           onComplete: Lang.bind(this, function() {
-                               oldBackground.actor.destroy();
-                               this.emit('changed');
-                           })
+                           onComplete: function() {
+                               oldBackgroundActor.destroy();
+                           }
                          });
     },
 
-    _updateBackground: function() {
-        let newBackground = this._createBackground();
-        newBackground.vignetteSharpness = this.background.vignetteSharpness;
-        newBackground.brightness = this.background.brightness;
-        newBackground.visible = this.background.visible;
-
-        let oldBackground = this.background;
-        this.background = newBackground;
-
-        if (newBackground.isLoaded) {
-            this._tweenOldBackground(oldBackground);
-            return;
+    _updateBackgroundActor: function() {
+        if (this._newBackgroundActor) {
+            /* Skip displaying existing background queued for load */
+            this._newBackgroundActor.destroy();
+            this._newBackgroundActor = null;
         }
 
-        newBackground.loadedSignalId = newBackground.connect('loaded',
-            Lang.bind(this, function() {
-                newBackground.disconnect(newBackground.loadedSignalId);
-                newBackground.loadedSignalId = 0;
+        let newBackgroundActor = this._createBackgroundActor();
+        newBackgroundActor.vignette_sharpness = this.backgroundActor.vignette_sharpness;
+        newBackgroundActor.brightness = this.backgroundActor.brightness;
+        newBackgroundActor.visible = this.backgroundActor.visible;
 
-                this._tweenOldBackground(oldBackground);
-        }));
+        this._newBackgroundActor = newBackgroundActor;
+
+        let background = newBackgroundActor.background._delegate;
+
+        if (background.isLoaded) {
+            this._swapBackgroundActor();
+        } else {
+            newBackgroundActor.loadedSignalId = background.connect('loaded',
+                Lang.bind(this, function() {
+                    background.disconnect(newBackgroundActor.loadedSignalId);
+                    newBackgroundActor.loadedSignalId = 0;
+
+                    this._swapBackgroundActor();
+
+                }));
+        }
     },
 
-    _createBackground: function() {
-        let background = new Background({ monitorIndex: this._monitorIndex,
-                                          layoutManager: this._layoutManager,
-                                          effects: this._effects });
-        this._container.add_child(background.actor);
+    _createBackgroundActor: function() {
+        let background = this._backgroundSource.getBackground(this._monitorIndex);
+        let backgroundActor = new Meta.BackgroundActor({ meta_screen: global.screen,
+                                                         monitor: this._monitorIndex,
+                                                         background: background.background,
+                                                         vignette: this._vignette,
+                                                         vignette_sharpness: 0.5,
+                                                         brightness: 0.5,
+                                                       });
+
+        this._container.add_child(backgroundActor);
 
         let monitor = this._layoutManager.monitors[this._monitorIndex];
 
-        if (monitor) {
-            background.actor.set_size(monitor.width, monitor.height);
-            if (this._controlPosition) {
-                background.actor.set_position(monitor.x, monitor.y);
-            }
-        }
-
+        backgroundActor.set_size(monitor.width, monitor.height);
         if (this._controlPosition) {
-            background.actor.lower_bottom();
+            backgroundActor.set_position(monitor.x, monitor.y);
+            backgroundActor.lower_bottom();
         }
 
-        background.changeSignalId = background.connect('changed', Lang.bind(this, function() {
-            background.disconnect(background.changeSignalId);
-            background.changeSignalId = 0;
-            this._updateBackground();
+        let changeSignalId = background.connect('changed', Lang.bind(this, function() {
+            background.disconnect(changeSignalId);
+            changeSignalId = null;
+            this._updateBackgroundActor();
         }));
 
-        background.actor.connect('destroy', Lang.bind(this, function() {
-            if (background.changeSignalId)
-                background.disconnect(background.changeSignalId);
+        backgroundActor.connect('destroy', Lang.bind(this, function() {
+            if (changeSignalId)
+                background.disconnect(changeSignalId);
 
-            if (background.loadedSignalId)
-                background.disconnect(background.loadedSignalId);
+            if (backgroundActor.loadedSignalId)
+                background.disconnect(backgroundActor.loadedSignalId);
         }));
 
-        return background;
+        return backgroundActor;
     },
 });
 Signals.addSignalMethods(BackgroundManager.prototype);
