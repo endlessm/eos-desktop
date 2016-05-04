@@ -48,6 +48,7 @@ js/ui/shellEntry.js
 js/ui/shellMountOperation.js
 js/ui/status/accessibility.js
 js/ui/status/bluetooth.js
+js/ui/status/hotCornerIndicator.js
 js/ui/status/keyboard.js
 js/ui/status/lockScreenMenu.js
 js/ui/status/network.js

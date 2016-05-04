@@ -1101,6 +1101,18 @@ msgstr ""
 msgid "Please enter the PIN mentioned on the device."
 msgstr ""
 
+#: ../js/ui/status/hotCornerIndicator.js:19
+msgid "Hot Corner Indicator"
+msgstr ""
+
+#: ../js/ui/status/hotCornerIndicator.js:40
+msgid "Enable Hot Corner"
+msgstr ""
+
+#: ../js/ui/status/hotCornerIndicator.js:44
+msgid "Disable Hot Corner"
+msgstr ""
+
 #: ../js/ui/status/keyboard.js:368
 msgid "Show Keyboard Layout"
 msgstr ""
