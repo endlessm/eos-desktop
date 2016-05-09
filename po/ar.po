@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-21 21:07-0700\n"
-"PO-Revision-Date: 2016-03-22 04:08+0000\n"
+"POT-Creation-Date: 2016-05-03 21:54-0700\n"
+"PO-Revision-Date: 2016-05-04 05:32+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -120,7 +120,7 @@ msgid "Reset Password"
 msgstr "إعادة تعيين كلمة المرور"
 
 #: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
 #: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:611
@@ -598,7 +598,7 @@ msgstr "فشل تحديث"
 msgid "We could not update your system"
 msgstr "لم نتمكن من تحديث نظامك"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:509
 msgid "Windows"
 msgstr "النوافذ"
 
@@ -891,19 +891,19 @@ msgstr "شريط المهام"
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:628
+#: ../js/ui/popupMenu.js:633
 msgid "toggle-switch-us"
 msgstr "toggle-switch-intl"
 
-#: ../js/ui/runDialog.js:73
+#: ../js/ui/runDialog.js:70
 msgid "Enter a Command"
 msgstr "اكتب أمرًا"
 
-#: ../js/ui/runDialog.js:109
+#: ../js/ui/runDialog.js:106
 msgid "Close"
 msgstr "أغلِق"
 
-#: ../js/ui/screenShield.js:133
+#: ../js/ui/screenShield.js:132
 msgid "GNOME needs to lock the screen"
 msgstr "يحتاج جنوم لقفل الشاشة"
 
@@ -913,11 +913,11 @@ msgstr "يحتاج جنوم لقفل الشاشة"
 #. Just tell him to stop using this app
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
 msgid "Unable to lock"
 msgstr "لا يمكن القفل"
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
 msgid "Lock was blocked by an application"
 msgstr "تم حجب القفل بواسطة تطبيق"
 
@@ -1122,11 +1122,23 @@ msgstr "طلب مزاوجة من %s"
 msgid "Please enter the PIN mentioned on the device."
 msgstr "من فضلك أدخل الرقم المذكور على الجهاز."
 
+#: ../js/ui/status/hotCornerIndicator.js:19
+msgid "Hot Corner Indicator"
+msgstr "مؤشر الزاوية الساخنة"
+
+#: ../js/ui/status/hotCornerIndicator.js:40
+msgid "Enable Hot Corner"
+msgstr "تمكين الزاوية الساخنة"
+
+#: ../js/ui/status/hotCornerIndicator.js:44
+msgid "Disable Hot Corner"
+msgstr "تعطيل الزاوية الساخنة"
+
 #: ../js/ui/status/keyboard.js:368
 msgid "Show Keyboard Layout"
 msgstr "أظهر تخطيط لوحة المفاتيح"
 
-#: ../js/ui/status/keyboard.js:373
+#: ../js/ui/status/keyboard.js:745
 msgid "Region & Language Settings"
 msgstr "إعدادات المنطقة واللغة"
 
@@ -1432,7 +1444,7 @@ msgstr "%s (عن بعد)"
 msgid "%s (console)"
 msgstr "%s (وحدة تحكم)"
 
-#: ../js/ui/viewSelector.js:492
+#: ../js/ui/viewSelector.js:513
 msgid "Applications"
 msgstr "التطبيقات"
 
