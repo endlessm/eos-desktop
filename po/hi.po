@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-05 01:27+0000\n"
-"PO-Revision-Date: 2016-04-05 01:28+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2016-05-03 21:54-0700\n"
+"PO-Revision-Date: 2016-05-04 04:55+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -117,7 +117,7 @@ msgid "Reset Password"
 msgstr ""
 
 #: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
 #: ../js/ui/userMenu.js:611
@@ -595,7 +595,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:509
 msgid "Windows"
 msgstr "विंडोज़"
 
@@ -769,7 +769,7 @@ msgstr ""
 msgid "Search Google for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
 msgid "Keyboard"
 msgstr "कुंजीपटल"
 
@@ -871,19 +871,19 @@ msgstr ""
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:628
+#: ../js/ui/popupMenu.js:633
 msgid "toggle-switch-us"
 msgstr "toggle-switch-us"
 
-#: ../js/ui/runDialog.js:73
+#: ../js/ui/runDialog.js:70
 msgid "Enter a Command"
 msgstr "कमांड दर्ज करें"
 
-#: ../js/ui/runDialog.js:109
+#: ../js/ui/runDialog.js:106
 msgid "Close"
 msgstr "बंद करें"
 
-#: ../js/ui/screenShield.js:133
+#: ../js/ui/screenShield.js:132
 msgid "GNOME needs to lock the screen"
 msgstr "गनोम को स्क्रीन को लॉक करने में जरूरत है"
 
@@ -893,11 +893,11 @@ msgstr "गनोम को स्क्रीन को लॉक करने 
 #. Just tell him to stop using this app
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
 msgid "Unable to lock"
 msgstr "ताला खोलने में अक्षम"
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
 msgid "Lock was blocked by an application"
 msgstr "लॉक को किसी अनुप्रयोग द्वारा अवरोधित किया गया"
 
@@ -1003,11 +1003,23 @@ msgstr "ब्लूटूथ सेटिंग्स"
 msgid "hardware disabled"
 msgstr "हार्डवेयर निष्क्रिय"
 
-#: ../js/ui/status/keyboard.js:368
+#: ../js/ui/status/hotCornerIndicator.js:19
+msgid "Hot Corner Indicator"
+msgstr ""
+
+#: ../js/ui/status/hotCornerIndicator.js:40
+msgid "Enable Hot Corner"
+msgstr ""
+
+#: ../js/ui/status/hotCornerIndicator.js:44
+msgid "Disable Hot Corner"
+msgstr ""
+
+#: ../js/ui/status/keyboard.js:740
 msgid "Show Keyboard Layout"
 msgstr "कुंजीपट लेआउट दिखाएँ"
 
-#: ../js/ui/status/keyboard.js:373
+#: ../js/ui/status/keyboard.js:745
 msgid "Region & Language Settings"
 msgstr "क्षेत्र और भाषा सेटिंग्स"
 
@@ -1240,7 +1252,7 @@ msgstr "%s (दूरस्थ)"
 msgid "%s (console)"
 msgstr "%s (कंसोल)"
 
-#: ../js/ui/viewSelector.js:492
+#: ../js/ui/viewSelector.js:513
 msgid "Applications"
 msgstr "अनुप्रयोग"
 

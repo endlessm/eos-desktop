@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# e2f_vn_c4 <leo.nguyen@expertrans.com>, 2016
 # Trung Ngô <ndtrung4419@gmail.com>, 2011
 # Trung Ngô <ndtrung4419@gmail.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-12 01:27+0000\n"
-"PO-Revision-Date: 2016-04-15 22:20+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2016-05-03 21:54-0700\n"
+"PO-Revision-Date: 2016-05-06 13:54+0000\n"
+"Last-Translator: e2f_vn_c4 <leo.nguyen@expertrans.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,12 +42,12 @@ msgstr "Mở trình đơn ứng dụng"
 
 #: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
+msgstr "Thông tin phản hồi"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
 msgid "EOS Shell"
-msgstr ""
+msgstr "EOS Shell"
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -81,11 +82,11 @@ msgstr "Phiên làm việc…"
 
 #: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
-msgstr ""
+msgstr "Hiển thị gợi ý mật khẩu"
 
 #: ../js/gdm/loginDialog.js:636
 msgid "Forgot password?"
-msgstr ""
+msgstr "Quên mật khẩu?"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -98,7 +99,7 @@ msgstr "Không có trong danh sách?"
 #. by customer support.
 #: ../js/gdm/loginDialog.js:814
 msgid "Enter unlock code provided by customer support:"
-msgstr ""
+msgstr "Nhập mã mở khóa do bộ phận hỗ trợ khách hàng cung cấp:"
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
@@ -108,15 +109,15 @@ msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
 " emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
-msgstr ""
+msgstr "Vui lòng thông báo cho bộ phận hô trợ khách hàng về mã xác nhận %s của bạn bằng cách gọi %s hoặc gửi thư điện tử %s. Mã vẫn hợp lệ cho đến khi bạn nhấn Hủy hoặc tắt máy vi tính."
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:824
 msgid "Reset Password"
-msgstr ""
+msgstr "Cài đặt lại Mật khẩu"
 
 #: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
 #: ../js/ui/userMenu.js:611
@@ -134,7 +135,7 @@ msgstr "Tới"
 
 #: ../js/gdm/loginDialog.js:1116
 msgid "Your unlock code was incorrect. Please try again."
-msgstr ""
+msgstr "Mã mở khóa của bạn không chính xác. Vui lòng thử lại."
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
@@ -197,20 +198,20 @@ msgstr "Lỗi thực hiện '%s':"
 
 #: ../js/ui/appDisplay.js:1177
 msgid "Remove from desktop"
-msgstr ""
+msgstr "Loại bỏ khỏi màn hình"
 
 #: ../js/ui/appDisplay.js:1686
 msgid "Warning"
-msgstr ""
+msgstr "Cảnh báo"
 
 #: ../js/ui/appDisplay.js:1692
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr ""
+msgstr "Để xóa một thư mục bạn phải loại bỏ tất cả các mục trong thư mục đó trước."
 
 #: ../js/ui/appDisplay.js:1698
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "Chúng tôi đang cố giữ cho bạn an toàn."
 
 #: ../js/ui/appDisplay.js:1704
 msgid "OK"
@@ -218,11 +219,11 @@ msgstr "OK"
 
 #: ../js/ui/appDisplay.js:1975
 msgid "More Apps"
-msgstr ""
+msgstr "Các Ứng dụng khác"
 
 #: ../js/ui/appDisplay.js:1984
 msgid "Delete"
-msgstr ""
+msgstr "Xóa"
 
 #: ../js/ui/appFavorites.js:108
 #, javascript-format
@@ -236,24 +237,24 @@ msgstr "Đã bỏ đánh dấu ưa thích cho %s"
 
 #: ../js/ui/appIconBar.js:216
 msgid "Other workspaces"
-msgstr ""
+msgstr "Các vùng làm việc khác"
 
 #: ../js/ui/appIconBar.js:225
 msgid "Current workspace"
-msgstr ""
+msgstr "Vùng làm việc hiện tại"
 
 #: ../js/ui/appIconBar.js:300
 msgid "Pin to Taskbar"
-msgstr ""
+msgstr "Ghim vào Thanh tác vụ"
 
 #: ../js/ui/appIconBar.js:304
 msgid "Unpin from Taskbar"
-msgstr ""
+msgstr "Gỡ khỏi Thanh tác vụ"
 
 #: ../js/ui/appIconBar.js:320
 #, javascript-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Thoát %s"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -261,15 +262,15 @@ msgstr "Thay đổi nền…"
 
 #: ../js/ui/backgroundMenu.js:25
 msgid "Add App"
-msgstr ""
+msgstr "Thêm Ứng dụng"
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website"
-msgstr ""
+msgstr "Thêm trang web"
 
 #: ../js/ui/backgroundMenu.js:33
 msgid "Add Folder"
-msgstr ""
+msgstr "Thêm Thư mục"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -283,7 +284,7 @@ msgstr "Cả ngày"
 #: ../js/ui/calendar.js:68
 msgctxt "event list time"
 msgid "%H∶%M"
-msgstr ""
+msgstr "%H∶%M"
 
 #. Transators: Shown in calendar event list, if 12h format,
 #. \u2236 is a ratio character, similar to : and \u2009 is
@@ -291,7 +292,7 @@ msgstr ""
 #: ../js/ui/calendar.js:77
 msgctxt "event list time"
 msgid "%l∶%M %p"
-msgstr ""
+msgstr "%l∶%M %p"
 
 #. Translators: Calendar grid abbreviation for Sunday.
 #. *
@@ -386,7 +387,7 @@ msgstr "T7"
 
 #: ../js/ui/calendar.js:391
 msgid "calendar:MY"
-msgstr ""
+msgstr "lịch:MY"
 
 #. Translators: Text to show if there are no events
 #: ../js/ui/calendar.js:722
@@ -548,53 +549,53 @@ msgstr "Rất tiếc, không được. Vui lòng thử lại."
 
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
-msgstr ""
+msgstr "Bản cập nhật phần mềm"
 
 #: ../js/ui/components/updaterManager.js:204
 msgid "Updates available"
-msgstr ""
+msgstr "Bản cập nhật có sẵn"
 
 #: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
-msgstr ""
+msgstr "Bản cập nhật phần mềm có sẵn cho hệ thống của bạn"
 
 #: ../js/ui/components/updaterManager.js:206
 msgid "Download now"
-msgstr ""
+msgstr "Tải xuống ngay bây giờ"
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
-msgstr ""
+msgstr "Bản cập nhật sẵn sàng"
 
 #: ../js/ui/components/updaterManager.js:220
 msgid "Software updates are ready to be installed on your system"
-msgstr ""
+msgstr "Bản cập nhật phần mềm đã sẵn sàng để cài đặt vào hệ thống"
 
 #: ../js/ui/components/updaterManager.js:221
 msgid "Install now"
-msgstr ""
+msgstr "Cài đặt ngay"
 
 #: ../js/ui/components/updaterManager.js:230
 msgid "Updates installed"
-msgstr ""
+msgstr "Đã cài đặt bản cập nhật"
 
 #: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
-msgstr ""
+msgstr "Bản cập nhật phần mềm đã được cài đặt vào hệ thống"
 
 #: ../js/ui/components/updaterManager.js:232
 msgid "Restart now"
-msgstr ""
+msgstr "Khởi động lại ngay"
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
-msgstr ""
+msgstr "Cập nhật không thành công"
 
 #: ../js/ui/components/updaterManager.js:256
 msgid "We could not update your system"
-msgstr ""
+msgstr "Chúng tôi không thể cập nhật hệ thống của bạn"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:509
 msgid "Windows"
 msgstr "Cửa sổ"
 
@@ -635,7 +636,7 @@ msgstr "%A %e %B, %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr ""
+msgstr "Hãy ghi nhớ các tài khoản chia sẻ không được bảo vệ bằng mật khẩu, vì vậy đảm bảo xóa bất kỳ tập tin nào bạn muốn giữ bí mật."
 
 #: ../js/ui/endSessionDialog.js:77
 #, javascript-format
@@ -733,38 +734,38 @@ msgstr "Tải và cài đặt '%s' từ extensions.gnome.org chứ?"
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr ""
+msgstr "Thoát ứng dụng..."
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr ""
+msgstr "Nếu ứng dụng không phản hồi trong một thời gian, chọn tên ứng dụng và nhấn Thoát Ứng dụng."
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
-msgstr ""
+msgstr "Màn hình hệ thống"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr ""
+msgstr "Thoát Ứng dụng"
 
 #: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
-msgstr ""
+msgstr "%s đã được xóa"
 
 #: ../js/ui/internetSearch.js:69
 #, javascript-format
 msgid "Open \"%s\" in browser"
-msgstr ""
+msgstr "Mở \"%s\" trong trình duyệt"
 
 #: ../js/ui/internetSearch.js:72
 #, javascript-format
 msgid "Search Google for \"%s\""
-msgstr ""
+msgstr "Tìm kiếm \"%s\" trên Google"
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
 msgid "Keyboard"
 msgstr "Bàn phím"
 
@@ -859,22 +860,22 @@ msgstr "Tổng quan"
 
 #: ../js/ui/panel.js:375
 msgid "Taskbar"
-msgstr ""
+msgstr "Thanh tác vụ"
 
 #. Translators: this MUST be either "toggle-switch-us"
 #. (for toggle switches containing the English words
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:628
+#: ../js/ui/popupMenu.js:633
 msgid "toggle-switch-us"
 msgstr "toggle-switch-intl"
 
-#: ../js/ui/runDialog.js:73
+#: ../js/ui/runDialog.js:70
 msgid "Enter a Command"
 msgstr "Nhập lệnh"
 
-#: ../js/ui/runDialog.js:109
+#: ../js/ui/runDialog.js:106
 msgid "Close"
 msgstr "Đóng"
 
@@ -898,11 +899,11 @@ msgstr "Một ứng dụng đã ngăn cản khoá"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
-msgstr ""
+msgstr "Đang tìm..."
 
 #: ../js/ui/search.js:783
 msgid "No results."
-msgstr ""
+msgstr "Không có kết quả."
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -922,7 +923,7 @@ msgstr "Ẩn chữ"
 
 #: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
-msgstr ""
+msgstr "Nhập để tìm kiếm..."
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -998,11 +999,23 @@ msgstr "Thiết lập Bluetooth"
 msgid "hardware disabled"
 msgstr "tắt bởi phần cứng"
 
-#: ../js/ui/status/keyboard.js:368
+#: ../js/ui/status/hotCornerIndicator.js:19
+msgid "Hot Corner Indicator"
+msgstr "Chỉ báo Hot Corner"
+
+#: ../js/ui/status/hotCornerIndicator.js:40
+msgid "Enable Hot Corner"
+msgstr "Kích hoạt Hot Corner"
+
+#: ../js/ui/status/hotCornerIndicator.js:44
+msgid "Disable Hot Corner"
+msgstr "Vô hiệu hóa Hot Corner"
+
+#: ../js/ui/status/keyboard.js:740
 msgid "Show Keyboard Layout"
 msgstr "Hiện bố trí bàn phím"
 
-#: ../js/ui/status/keyboard.js:373
+#: ../js/ui/status/keyboard.js:745
 msgid "Region & Language Settings"
 msgstr "Thiết lập Lãnh thổ và Ngôn ngữ"
 
@@ -1106,7 +1119,7 @@ msgstr "Mạng không dây tự động"
 
 #: ../js/ui/status/network.js:1672
 msgid "Network"
-msgstr ""
+msgstr "Mạng"
 
 #: ../js/ui/status/network.js:1734
 msgid "Enable networking"
@@ -1146,7 +1159,7 @@ msgstr "Thiết lập năng lượng"
 
 #: ../js/ui/status/power.js:58
 msgid "Fully Charged"
-msgstr ""
+msgstr "Sạc đầy"
 
 #. 0 is reported when UPower does not have enough data
 #. to estimate battery life
@@ -1158,13 +1171,13 @@ msgstr "Ước lượng…"
 #: ../js/ui/status/power.js:79
 #, javascript-format
 msgid "%d∶%02d Remaining (%d %%)"
-msgstr ""
+msgstr "%d∶%02d còn lại (%d %%)"
 
 #. Translators: this is <hours>:<minutes> Until Full (<percentage>)
 #: ../js/ui/status/power.js:84
 #, javascript-format
 msgid "%d∶%02d Until Full (%d %%)"
-msgstr ""
+msgstr "%d∶%02d đến khi đầy (%d %%)"
 
 #: ../js/ui/status/volume.js:124
 msgid "Volume changed"
@@ -1197,11 +1210,11 @@ msgstr "Khoá"
 
 #: ../js/ui/userMenu.js:37
 msgid "Exit"
-msgstr ""
+msgstr "Thoát"
 
 #: ../js/ui/userMenu.js:39
 msgid "Help"
-msgstr ""
+msgstr "Trợ giúp"
 
 #: ../js/ui/userMenu.js:40
 msgid "Settings"
@@ -1209,7 +1222,7 @@ msgstr "Thiết lập"
 
 #: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
-msgstr ""
+msgstr "Gửi thông tin phản hồi"
 
 #: ../js/ui/userMenu.js:490
 msgid "Switch User"
@@ -1235,7 +1248,7 @@ msgstr "%s (ở xa)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:492
+#: ../js/ui/viewSelector.js:513
 msgid "Applications"
 msgstr "Ứng dụng"
 
@@ -1246,23 +1259,23 @@ msgstr "'%s' đã sẵn sàng"
 
 #: ../js/ui/windowManager.js:67
 msgid "Do you want to keep these display settings?"
-msgstr ""
+msgstr "Bạn có muốn giữ các thiết lập hiển thị này không?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #: ../js/ui/windowManager.js:86
 msgid "Revert Settings"
-msgstr ""
+msgstr "Trở lại Thiết lập ban đầu"
 
 #: ../js/ui/windowManager.js:90
 msgid "Keep Changes"
-msgstr ""
+msgstr "Giữ nguyên Thay đổi"
 
 #: ../js/ui/windowManager.js:108
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] ""
+msgstr[0] "Các thay đổi về thiết lập sẽ trở lại ban đầu trong %d giây"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
@@ -1311,12 +1324,12 @@ msgstr "Lỗi chạy '%s'"
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
-msgstr ""
+msgstr "Chưa đặt tên"
 
 #: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
-msgstr ""
+msgstr "Xác định tùy chỉnh cho %s"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."

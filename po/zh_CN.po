@@ -24,9 +24,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-05 01:27+0000\n"
-"PO-Revision-Date: 2016-04-05 01:28+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2016-05-03 21:54-0700\n"
+"PO-Revision-Date: 2016-05-04 04:55+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -131,7 +131,7 @@ msgid "Reset Password"
 msgstr "重置密码"
 
 #: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
 #: ../js/ui/userMenu.js:611
@@ -609,7 +609,7 @@ msgstr "更新失败"
 msgid "We could not update your system"
 msgstr "我们未能升级您的系统"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:509
 msgid "Windows"
 msgstr "窗口"
 
@@ -779,7 +779,7 @@ msgstr "在浏览器中打开”%s”"
 msgid "Search Google for \"%s\""
 msgstr "在谷歌中搜索”%s”"
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
 msgid "Keyboard"
 msgstr "键盘"
 
@@ -881,19 +881,19 @@ msgstr "任务栏"
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:628
+#: ../js/ui/popupMenu.js:633
 msgid "toggle-switch-us"
 msgstr "toggle-switch-us"
 
-#: ../js/ui/runDialog.js:73
+#: ../js/ui/runDialog.js:70
 msgid "Enter a Command"
 msgstr "输入一个命令"
 
-#: ../js/ui/runDialog.js:109
+#: ../js/ui/runDialog.js:106
 msgid "Close"
 msgstr "关闭"
 
-#: ../js/ui/screenShield.js:133
+#: ../js/ui/screenShield.js:132
 msgid "GNOME needs to lock the screen"
 msgstr "GNOME需要锁定屏幕"
 
@@ -903,11 +903,11 @@ msgstr "GNOME需要锁定屏幕"
 #. Just tell him to stop using this app
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
 msgid "Unable to lock"
 msgstr "无法锁定"
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
 msgid "Lock was blocked by an application"
 msgstr "锁定命令被某个应用程序阻止"
 
@@ -1013,11 +1013,23 @@ msgstr "蓝牙设置"
 msgid "hardware disabled"
 msgstr "硬件已禁用"
 
-#: ../js/ui/status/keyboard.js:368
+#: ../js/ui/status/hotCornerIndicator.js:19
+msgid "Hot Corner Indicator"
+msgstr ""
+
+#: ../js/ui/status/hotCornerIndicator.js:40
+msgid "Enable Hot Corner"
+msgstr ""
+
+#: ../js/ui/status/hotCornerIndicator.js:44
+msgid "Disable Hot Corner"
+msgstr ""
+
+#: ../js/ui/status/keyboard.js:740
 msgid "Show Keyboard Layout"
 msgstr "显示键盘布局"
 
-#: ../js/ui/status/keyboard.js:373
+#: ../js/ui/status/keyboard.js:745
 msgid "Region & Language Settings"
 msgstr "区域与语言设置"
 
@@ -1250,7 +1262,7 @@ msgstr "%s（远程控制）"
 msgid "%s (console)"
 msgstr "%s （控制台）"
 
-#: ../js/ui/viewSelector.js:492
+#: ../js/ui/viewSelector.js:513
 msgid "Applications"
 msgstr "应用程序"
 

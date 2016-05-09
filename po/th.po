@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# e2f_th_c4 <e2f_th_c4@outlook.com>, 2016
 # Sira Nokyoongtong <gumaraa@gmail.com>, 2010-2011
 # Theppitak Karoonboonyanan <thep@linux.thai.net>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-12 01:27+0000\n"
-"PO-Revision-Date: 2016-04-15 22:19+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2016-05-03 21:54-0700\n"
+"PO-Revision-Date: 2016-05-09 03:50+0000\n"
+"Last-Translator: e2f_th_c4 <e2f_th_c4@outlook.com>\n"
 "Language-Team: Thai (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,24 +30,24 @@ msgstr "แสดงถาดข้อความ"
 
 #: ../data/50-gnome-shell-system.xml.in.h:3
 msgid "Focus the active notification"
-msgstr ""
+msgstr "มุ่งที่การแจ้งเตือนที่ทำงานอยู่"
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
 msgid "Show all applications"
-msgstr ""
+msgstr "แสดงแอปพลิเคชันทั้งหมด"
 
 #: ../data/50-gnome-shell-system.xml.in.h:5
 msgid "Open the application menu"
-msgstr ""
+msgstr "เปิดเมนูแอปพลิเคชัน"
 
 #: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
+msgstr "ผลตอบรับ"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
 msgid "EOS Shell"
-msgstr ""
+msgstr "EOS Shell"
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -77,15 +78,15 @@ msgstr "เลือกส่วนขยายที่จะตั้งค่
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
-msgstr ""
+msgstr "เซสชัน..."
 
 #: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
-msgstr ""
+msgstr "แสดงบอกนัยรหัสผ่าน"
 
 #: ../js/gdm/loginDialog.js:636
 msgid "Forgot password?"
-msgstr ""
+msgstr "ลืมรหัสผ่านใช่หรือไม่"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -98,7 +99,7 @@ msgstr "ไม่มีชื่อของคุณงั้นหรือ?"
 #. by customer support.
 #: ../js/gdm/loginDialog.js:814
 msgid "Enter unlock code provided by customer support:"
-msgstr ""
+msgstr "ใส่รหัสปลดล็อคที่ได้จากฝ่ายช่วยเหลือลูกค้า:"
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
@@ -108,15 +109,15 @@ msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
 " emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
-msgstr ""
+msgstr "กรุณาแจ้งรหัสในการยืนยันของคุณแก่ฝ่ายช่วยเหลือลูกค้า %s ทางโทรศัพท์ %s หรืออีเมล %s. รหัสจะยังคงใช้ได้จนกว่าคุณจะกดยกเลิกหรือปิดคอมพิวเตอร์"
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:824
 msgid "Reset Password"
-msgstr ""
+msgstr "ตั้งค่ารหัสผ่านใหม่"
 
 #: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
 #: ../js/ui/userMenu.js:611
@@ -130,11 +131,11 @@ msgstr "เข้าระบบ"
 
 #: ../js/gdm/loginDialog.js:998
 msgid "Next"
-msgstr ""
+msgstr "ถัดไป"
 
 #: ../js/gdm/loginDialog.js:1116
 msgid "Your unlock code was incorrect. Please try again."
-msgstr ""
+msgstr "รหัสปลดล็อคของคุณไม่ถูกต้อง กรุณาลองอีกครั้ง"
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
@@ -197,20 +198,20 @@ msgstr "คำสั่ง '%s' ทำงานล้มเหลว:"
 
 #: ../js/ui/appDisplay.js:1177
 msgid "Remove from desktop"
-msgstr ""
+msgstr "ลบออกจากเดสก์ท้อป"
 
 #: ../js/ui/appDisplay.js:1686
 msgid "Warning"
-msgstr ""
+msgstr "คำเตือน"
 
 #: ../js/ui/appDisplay.js:1692
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr ""
+msgstr "หากต้องการลบโฟลเดอร์หนึ่งคุณจะต้องเอารายการทั้งหมดภานในโฟลเดอร์ออกก่อน"
 
 #: ../js/ui/appDisplay.js:1698
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "เราพยายามที่จะทำให้ปลอดภัย"
 
 #: ../js/ui/appDisplay.js:1704
 msgid "OK"
@@ -218,11 +219,11 @@ msgstr "ตกลง"
 
 #: ../js/ui/appDisplay.js:1975
 msgid "More Apps"
-msgstr ""
+msgstr "แอพเพิ่มเติม"
 
 #: ../js/ui/appDisplay.js:1984
 msgid "Delete"
-msgstr ""
+msgstr "ลบ"
 
 #: ../js/ui/appFavorites.js:108
 #, javascript-format
@@ -236,40 +237,40 @@ msgstr "%s ถูกลบออกจากรายการโปรดขอ
 
 #: ../js/ui/appIconBar.js:216
 msgid "Other workspaces"
-msgstr ""
+msgstr "พื้นที่ทำงานอื่นๆ"
 
 #: ../js/ui/appIconBar.js:225
 msgid "Current workspace"
-msgstr ""
+msgstr "พื้นที่ทำงานปัจจุบัน"
 
 #: ../js/ui/appIconBar.js:300
 msgid "Pin to Taskbar"
-msgstr ""
+msgstr "ปักหมุดที่ทาสก์บาร์"
 
 #: ../js/ui/appIconBar.js:304
 msgid "Unpin from Taskbar"
-msgstr ""
+msgstr "ถอดหมุดจากทาสก์บาร์"
 
 #: ../js/ui/appIconBar.js:320
 #, javascript-format
 msgid "Quit %s"
-msgstr ""
+msgstr "จบการทำงาน %s "
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
-msgstr ""
+msgstr "เปลี่ยนพื้นหลัง…"
 
 #: ../js/ui/backgroundMenu.js:25
 msgid "Add App"
-msgstr ""
+msgstr "เพิ่มแอพ"
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website"
-msgstr ""
+msgstr "เพิ่มเว็บไซค์"
 
 #: ../js/ui/backgroundMenu.js:33
 msgid "Add Folder"
-msgstr ""
+msgstr "เพิ่มโฟลเดอร์"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -283,7 +284,7 @@ msgstr "ทั้งวัน"
 #: ../js/ui/calendar.js:68
 msgctxt "event list time"
 msgid "%H∶%M"
-msgstr ""
+msgstr "%H∶%M"
 
 #. Transators: Shown in calendar event list, if 12h format,
 #. \u2236 is a ratio character, similar to : and \u2009 is
@@ -291,7 +292,7 @@ msgstr ""
 #: ../js/ui/calendar.js:77
 msgctxt "event list time"
 msgid "%l∶%M %p"
-msgstr ""
+msgstr "%l∶%M %p"
 
 #. Translators: Calendar grid abbreviation for Sunday.
 #. *
@@ -386,7 +387,7 @@ msgstr "ส."
 
 #: ../js/ui/calendar.js:391
 msgid "calendar:MY"
-msgstr ""
+msgstr "ปฏิทิน:MY"
 
 #. Translators: Text to show if there are no events
 #: ../js/ui/calendar.js:722
@@ -425,11 +426,11 @@ msgstr "สัปดาห์หน้า"
 
 #: ../js/ui/components/automountManager.js:90
 msgid "External drive connected"
-msgstr ""
+msgstr "เชื่อมต่อไดรฟ์ภายนอกแล้ว"
 
 #: ../js/ui/components/automountManager.js:101
 msgid "External drive disconnected"
-msgstr ""
+msgstr "ขาดการเชื่อมต่อไดรฟ์ภายนอก"
 
 #: ../js/ui/components/autorunManager.js:301
 msgid "Removable Devices"
@@ -548,53 +549,53 @@ msgstr "ขออภัย ยังไม่ผ่าน โปรดลอง�
 
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
-msgstr ""
+msgstr "อัปเดตซอฟท์แวร์"
 
 #: ../js/ui/components/updaterManager.js:204
 msgid "Updates available"
-msgstr ""
+msgstr "สามารถทำการอัปเดต"
 
 #: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
-msgstr ""
+msgstr "ระบบของคุณสามารถอัปเดตซอฟท์แวร์ได้"
 
 #: ../js/ui/components/updaterManager.js:206
 msgid "Download now"
-msgstr ""
+msgstr "ดาวน์โหลดตอนนี้"
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
-msgstr ""
+msgstr "พร้อมอัปเดต"
 
 #: ../js/ui/components/updaterManager.js:220
 msgid "Software updates are ready to be installed on your system"
-msgstr ""
+msgstr "พร้อมที่จะติดตั้งอัปเดตซอฟท์แวร์ลงบนระบบของคุณ"
 
 #: ../js/ui/components/updaterManager.js:221
 msgid "Install now"
-msgstr ""
+msgstr "ติดตั้งตอนนี้"
 
 #: ../js/ui/components/updaterManager.js:230
 msgid "Updates installed"
-msgstr ""
+msgstr "ติดตั้งอัปเดตแล้ว"
 
 #: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
-msgstr ""
+msgstr "ติดตั้งอัปเดตซอฟท์แวร์บนระบบของคุณแล้ว"
 
 #: ../js/ui/components/updaterManager.js:232
 msgid "Restart now"
-msgstr ""
+msgstr "เริ่มระบบใหม่ตอนนี้"
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
-msgstr ""
+msgstr "อัปเดตล้มเหลว"
 
 #: ../js/ui/components/updaterManager.js:256
 msgid "We could not update your system"
-msgstr ""
+msgstr "เราไม่สามารถอัปเดตระบบของคุณ"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:509
 msgid "Windows"
 msgstr "หน้าต่าง"
 
@@ -618,11 +619,11 @@ msgstr "เปิดปฏิทิน"
 
 #: ../js/ui/dateMenu.js:95
 msgid "Open Clocks"
-msgstr ""
+msgstr "เปิดนาฬิกา"
 
 #: ../js/ui/dateMenu.js:104
 msgid "Date & Time Settings"
-msgstr ""
+msgstr "การตั้งค่าวันที่และเวลา"
 
 #. Translators: This is the date format to use when the calendar popup is
 #. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29
@@ -635,7 +636,7 @@ msgstr "%A %d %B %Ey"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr ""
+msgstr "โปรดจำไว้ว่าบัญชีที่ใช้ร่วมกันไม่ได้ป้องกันด้วยรหัสผ่าน ฉะนั้นตรวจสอบให้แน่ใจว่าจะลบไฟล์ใด ๆ ที่คุณต้องการให้เป็นส่วนตัว"
 
 #: ../js/ui/endSessionDialog.js:77
 #, javascript-format
@@ -733,38 +734,38 @@ msgstr "จะดาวน์โหลดและติดตั้ง '%s' จ
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr ""
+msgstr "ออกจากแอปพลิเคชัน…"
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr ""
+msgstr "หากแอปพลิเคชันไม่ตอบสนองสักระยะนึง ให้เลือกชื่อแอปพลิเคชันและคลิกออกจากแอปพลิเคชัน"
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
-msgstr ""
+msgstr "โปรแกรม System Monitor"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr ""
+msgstr "ออกจากแอปพลิเคชัน"
 
 #: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
-msgstr ""
+msgstr "%s ได้ถูกลบแล้ว"
 
 #: ../js/ui/internetSearch.js:69
 #, javascript-format
 msgid "Open \"%s\" in browser"
-msgstr ""
+msgstr "เปิด \"%s\" ในเบราว์เซอร์"
 
 #: ../js/ui/internetSearch.js:72
 #, javascript-format
 msgid "Search Google for \"%s\""
-msgstr ""
+msgstr "ค้นหา \"%s\" ใน Google "
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
 msgid "Keyboard"
 msgstr "แป้นพิมพ์"
 
@@ -826,15 +827,15 @@ msgstr "ลบ"
 
 #: ../js/ui/messageTray.js:1524
 msgid "Clear Messages"
-msgstr ""
+msgstr "ล้างข้อความ"
 
 #: ../js/ui/messageTray.js:1551
 msgid "Notification Settings"
-msgstr ""
+msgstr "การตั้งค่าการแจ้งเตือน"
 
 #: ../js/ui/messageTray.js:1741
 msgid "No Messages"
-msgstr ""
+msgstr "ไม่มีข้อความ"
 
 #: ../js/ui/messageTray.js:1815
 msgid "Message Tray"
@@ -859,28 +860,28 @@ msgstr "ภาพรวม"
 
 #: ../js/ui/panel.js:375
 msgid "Taskbar"
-msgstr ""
+msgstr "ทาสก์บาร์"
 
 #. Translators: this MUST be either "toggle-switch-us"
 #. (for toggle switches containing the English words
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:628
+#: ../js/ui/popupMenu.js:633
 msgid "toggle-switch-us"
 msgstr "toggle-switch-intl"
 
-#: ../js/ui/runDialog.js:73
+#: ../js/ui/runDialog.js:70
 msgid "Enter a Command"
-msgstr ""
+msgstr "ป้อนคำสั่ง"
 
-#: ../js/ui/runDialog.js:109
+#: ../js/ui/runDialog.js:106
 msgid "Close"
-msgstr ""
+msgstr "ปิด"
 
 #: ../js/ui/screenShield.js:132
 msgid "GNOME needs to lock the screen"
-msgstr ""
+msgstr "GNOME ต้องการการล็อคหน้าจอ"
 
 #. We could not become modal, so we can't activate the
 #. screenshield. The user is probably very upset at this
@@ -890,15 +891,15 @@ msgstr ""
 #. screen, where we're not affected by grabs
 #: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
 msgid "Unable to lock"
-msgstr ""
+msgstr "ไม่สามารถล็อค"
 
 #: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
 msgid "Lock was blocked by an application"
-msgstr ""
+msgstr "ล็อคได้ถูกบล็อคโดยแอปพลิเคชันนึง"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
-msgstr ""
+msgstr "กำลังค้นหา..."
 
 #: ../js/ui/search.js:783
 msgid "No results."
@@ -922,7 +923,7 @@ msgstr "ซ่อนข้อความ"
 
 #: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
-msgstr ""
+msgstr "พิมพ์เพื่อค้นหา..."
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -998,13 +999,25 @@ msgstr "ตั้งค่าบลูทูท"
 msgid "hardware disabled"
 msgstr "ฮาร์ดแวร์ปิดการใช้งานอยู่"
 
-#: ../js/ui/status/keyboard.js:368
+#: ../js/ui/status/hotCornerIndicator.js:19
+msgid "Hot Corner Indicator"
+msgstr "เครื่องชี้บ่ง Hot Corner"
+
+#: ../js/ui/status/hotCornerIndicator.js:40
+msgid "Enable Hot Corner"
+msgstr "เปิดใช้ Hot Corner"
+
+#: ../js/ui/status/hotCornerIndicator.js:44
+msgid "Disable Hot Corner"
+msgstr "ปิดการใช้ Hot Corner"
+
+#: ../js/ui/status/keyboard.js:740
 msgid "Show Keyboard Layout"
 msgstr "แสดงผังแป้นพิมพ์"
 
-#: ../js/ui/status/keyboard.js:373
+#: ../js/ui/status/keyboard.js:745
 msgid "Region & Language Settings"
-msgstr ""
+msgstr "การตั้งค่าภูมิภาคและภาษา"
 
 #: ../js/ui/status/lockScreenMenu.js:43
 msgid "Volume, network, battery"
@@ -1068,7 +1081,7 @@ msgstr "เชื่อมต่อไม่สำเร็จ"
 #: ../js/ui/status/network.js:555 ../js/ui/status/network.js:1440
 #: ../js/ui/status/network.js:1632
 msgid "More…"
-msgstr ""
+msgstr "เพิ่มเติม…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
@@ -1106,7 +1119,7 @@ msgstr "ไร้สายอัตโนมัติ"
 
 #: ../js/ui/status/network.js:1672
 msgid "Network"
-msgstr ""
+msgstr "เครือข่าย"
 
 #: ../js/ui/status/network.js:1734
 msgid "Enable networking"
@@ -1114,7 +1127,7 @@ msgstr "เปิดใช้งานเครือข่าย"
 
 #: ../js/ui/status/network.js:1776
 msgid "Wi-Fi"
-msgstr ""
+msgstr "Wi-Fi"
 
 #: ../js/ui/status/network.js:1795
 msgid "Network Settings"
@@ -1146,29 +1159,29 @@ msgstr "ตั้งค่าพลังงาน"
 
 #: ../js/ui/status/power.js:58
 msgid "Fully Charged"
-msgstr ""
+msgstr "ชาร์จเต็มแล้ว"
 
 #. 0 is reported when UPower does not have enough data
 #. to estimate battery life
 #: ../js/ui/status/power.js:65 ../js/ui/status/power.js:71
 msgid "Estimating…"
-msgstr ""
+msgstr "กำลังประเมิน..."
 
 #. Translators: this is <hours>:<minutes> Remaining (<percentage>)
 #: ../js/ui/status/power.js:79
 #, javascript-format
 msgid "%d∶%02d Remaining (%d %%)"
-msgstr ""
+msgstr "คงเหลือ %d∶%02d (%d %%)"
 
 #. Translators: this is <hours>:<minutes> Until Full (<percentage>)
 #: ../js/ui/status/power.js:84
 #, javascript-format
 msgid "%d∶%02d Until Full (%d %%)"
-msgstr ""
+msgstr "%d∶%02d จนกว่าจะเต็ม (%d %%)"
 
 #: ../js/ui/status/volume.js:124
 msgid "Volume changed"
-msgstr ""
+msgstr "เปลี่ยนระดับเสียงแล้ว"
 
 #. Translators: This is the label for audio volume
 #: ../js/ui/status/volume.js:249 ../js/ui/status/volume.js:297
@@ -1189,7 +1202,7 @@ msgstr "เข้าระบบในนามผู้ใช้อื่น"
 
 #: ../js/ui/unlockDialog.js:142
 msgid "Unlock Window"
-msgstr ""
+msgstr "ปลดล็อคหน้าต่าง"
 
 #: ../js/ui/userMenu.js:36
 msgid "Lock"
@@ -1197,19 +1210,19 @@ msgstr "ล็อค"
 
 #: ../js/ui/userMenu.js:37
 msgid "Exit"
-msgstr ""
+msgstr "ออก"
 
 #: ../js/ui/userMenu.js:39
 msgid "Help"
-msgstr ""
+msgstr "วิธีใช้"
 
 #: ../js/ui/userMenu.js:40
 msgid "Settings"
-msgstr ""
+msgstr "การตั้งค่า"
 
 #: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
-msgstr ""
+msgstr "แจ้งผลตอบรับแก่เรา"
 
 #: ../js/ui/userMenu.js:490
 msgid "Switch User"
@@ -1217,25 +1230,25 @@ msgstr "สลับผู้ใช้"
 
 #: ../js/ui/userMenu.js:561
 msgid "Other users are logged in."
-msgstr ""
+msgstr "ผู้ใช้รายอื่นได้เข้าระบบ"
 
 #: ../js/ui/userMenu.js:566
 msgid "Shutting down might cause them to lose unsaved work."
-msgstr ""
+msgstr "การปิดระบบอาจจะมีผลให้งานที่ไม่ได้บันทึกหายได้"
 
 #. Translators: Remote here refers to a remote session, like a ssh login
 #: ../js/ui/userMenu.js:594
 #, javascript-format
 msgid "%s (remote)"
-msgstr ""
+msgstr "%s (รีโมท)"
 
 #. Translators: Console here refers to a tty like a VT console
 #: ../js/ui/userMenu.js:597
 #, javascript-format
 msgid "%s (console)"
-msgstr ""
+msgstr "%s (คอนโซล)"
 
-#: ../js/ui/viewSelector.js:492
+#: ../js/ui/viewSelector.js:513
 msgid "Applications"
 msgstr "โปรแกรม"
 
@@ -1246,23 +1259,23 @@ msgstr "'%s' พร้อมแล้ว"
 
 #: ../js/ui/windowManager.js:67
 msgid "Do you want to keep these display settings?"
-msgstr ""
+msgstr "คุณต้องการที่จะเก็บการตั้งค่าการแสดงผลเหล่านี้หรือไม่"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #: ../js/ui/windowManager.js:86
 msgid "Revert Settings"
-msgstr ""
+msgstr "ย้อนกลับการตั้งค่า"
 
 #: ../js/ui/windowManager.js:90
 msgid "Keep Changes"
-msgstr ""
+msgstr "เก็บการเปลี่ยนแปลง"
 
 #: ../js/ui/windowManager.js:108
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] ""
+msgstr[0] "การเปลี่ยนการตั้งค่าจะย้อนกลับใน %d วินาที"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
@@ -1311,12 +1324,12 @@ msgstr "เรียก '%s' ไม่สำเร็จ"
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
-msgstr ""
+msgstr "ไม่มีชื่อ"
 
 #: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
-msgstr ""
+msgstr "คำนิยามที่กำหนดเองสำหรับ %s"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."
