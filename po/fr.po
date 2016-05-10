@@ -10,13 +10,13 @@
 # Mathieu Bridon <bochecha@fedoraproject.org>, 2009
 # Pablo Martin-Gomez <pablo.martin-gomez@laposte.net>, 2010
 # Pierre Henry <pierrehenry73@yahoo.fr>, 2012
-# Roddy Shuler <roddy@endlessm.com>, 2014-2015
+# Roddy Shuler <roddy@endlessm.com>, 2014-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-21 21:07-0700\n"
-"PO-Revision-Date: 2016-03-22 04:08+0000\n"
+"POT-Creation-Date: 2016-05-03 21:54-0700\n"
+"PO-Revision-Date: 2016-05-09 21:59+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -743,7 +743,7 @@ msgstr "Télécharger et installer « %s » à partir de extensions.gnome.org�
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr "Fermer les applications..."
+msgstr "Fermer les applications…"
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
@@ -909,7 +909,7 @@ msgstr "Le verrouillage a été bloqué par une application"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
-msgstr "Recherche en cours..."
+msgstr "Recherche en cours…"
 
 #: ../js/ui/search.js:783
 msgid "No results."

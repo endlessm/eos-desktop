@@ -6,12 +6,13 @@
 # Chandan kumar <chandankumar.093047@gmail.com>, 2012
 # rajesh <rajeshkajha@yahoo.com>, 2012-2013
 # Rajesh <rranjan>, 2011
+# Roddy Shuler <roddy@endlessm.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-03 21:54-0700\n"
-"PO-Revision-Date: 2016-05-04 04:55+0000\n"
+"PO-Revision-Date: 2016-05-09 21:59+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
 "MIME-Version: 1.0\n"
@@ -903,7 +904,7 @@ msgstr "लॉक को किसी अनुप्रयोग द्वा�
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
-msgstr "खोज रहा है..."
+msgstr "खोज रहा है…"
 
 #: ../js/ui/search.js:783
 msgid "No results."

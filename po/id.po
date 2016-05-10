@@ -5,13 +5,14 @@
 # Translators:
 # Andika Triwidada <andika@gmail.com>, 2010-2013
 # dirgita <dirgitadevina@yahoo.co.id>, 2011-2012
+# Roddy Shuler <roddy@endlessm.com>, 2016
 # Wibiharto <wibinem@yahoo.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-03 21:54-0700\n"
-"PO-Revision-Date: 2016-05-04 05:05+0000\n"
+"PO-Revision-Date: 2016-05-09 21:58+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/id/)\n"
 "MIME-Version: 1.0\n"
@@ -734,7 +735,7 @@ msgstr "Unduh dan pasang '%s' dari extensions.gnome.org?"
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr "Keluar aplikasi..."
+msgstr "Keluar aplikasi…"
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
@@ -924,7 +925,7 @@ msgstr "Sembunyikan Teks"
 
 #: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
-msgstr "Ketik untuk mencari..."
+msgstr "Ketik untuk mencari…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
