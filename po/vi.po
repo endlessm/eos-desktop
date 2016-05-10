@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-03 21:54-0700\n"
-"PO-Revision-Date: 2016-05-09 21:57+0000\n"
+"POT-Creation-Date: 2016-05-10 01:26+0000\n"
+"PO-Revision-Date: 2016-05-10 04:28+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -1172,13 +1172,13 @@ msgstr "Ước lượng…"
 #: ../js/ui/status/power.js:79
 #, javascript-format
 msgid "%d∶%02d Remaining (%d %%)"
-msgstr "%d∶%02d còn lại (%d %%)"
+msgstr "Còn %d∶%02d (%d %%)"
 
 #. Translators: this is <hours>:<minutes> Until Full (<percentage>)
 #: ../js/ui/status/power.js:84
 #, javascript-format
 msgid "%d∶%02d Until Full (%d %%)"
-msgstr "%d∶%02d đến khi đầy (%d %%)"
+msgstr "Cho đến lúc đầy cần %d∶%02d (%d %%)"
 
 #: ../js/ui/status/volume.js:124
 msgid "Volume changed"

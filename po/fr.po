@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-03 21:54-0700\n"
-"PO-Revision-Date: 2016-05-09 21:59+0000\n"
+"POT-Creation-Date: 2016-05-10 01:26+0000\n"
+"PO-Revision-Date: 2016-05-10 04:15+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -1180,13 +1180,13 @@ msgstr "Estimation en cours…"
 #: ../js/ui/status/power.js:79
 #, javascript-format
 msgid "%d∶%02d Remaining (%d %%)"
-msgstr ""
+msgstr "%d∶%02d restant (%d %%)"
 
 #. Translators: this is <hours>:<minutes> Until Full (<percentage>)
 #: ../js/ui/status/power.js:84
 #, javascript-format
 msgid "%d∶%02d Until Full (%d %%)"
-msgstr ""
+msgstr "%d∶%02d avant chargement complet (%d %%)"
 
 #: ../js/ui/status/volume.js:124
 msgid "Volume changed"

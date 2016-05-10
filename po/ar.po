@@ -4,6 +4,7 @@
 # 
 # Translators:
 # abderrahim <a.kitouni@gmail.com>, 2012
+# abderrahim <a.kitouni@gmail.com>, 2012
 # Ibrahim Saed <ibraheem5000@gmail.com>, 2012
 # Khaled Hosny <khaledhosny@eglug.org>, 2009-2012,2014
 # Muhammed Abd-ulaziz Abd-ullah <thenubianmuha_idrecy@yahoo.co.uk>, 2012
@@ -13,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-03 21:54-0700\n"
-"PO-Revision-Date: 2016-05-04 05:32+0000\n"
+"POT-Creation-Date: 2016-05-10 01:26+0000\n"
+"PO-Revision-Date: 2016-05-10 04:09+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -1194,13 +1195,13 @@ msgstr "حساب..."
 #: ../js/ui/status/power.js:79
 #, javascript-format
 msgid "%d∶%02d Remaining (%d %%)"
-msgstr ""
+msgstr "بقي %d∶%02d ‏(%d٪)"
 
 #. Translators: this is <hours>:<minutes> Until Full (<percentage>)
 #: ../js/ui/status/power.js:84
 #, javascript-format
 msgid "%d∶%02d Until Full (%d %%)"
-msgstr ""
+msgstr "بقي على الاكتمال %d∶%02d ‏(%d٪)"
 
 #: ../js/ui/status/volume.js:124
 msgid "Volume changed"
