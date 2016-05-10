@@ -120,16 +120,15 @@ const ViewsDisplayLayout = new Lang.Class({
         let availWidth = box.x2 - box.x1;
         let availHeight = box.y2 - box.y1;
 
+        // Entry height
         let entryHeight = this._entry.get_preferred_height(availWidth)[1];
         let themeNode = this._entry.get_theme_node();
         let entryMinPadding = themeNode.get_length('-minimum-vpadding');
         entryHeight += entryMinPadding * 2;
 
-        // We don't want the entry to move when expanding folders in the
-        // allView, so we call into _caclAllViewPlacement with just the grid
-        // actor's height, and use that to center the entry above
-        let iconGridHeight = this._allViewActor.gridActor.get_preferred_height(availWidth)[1];
-        let heightAboveGrid = this._calcAllViewPlacement(iconGridHeight, entryHeight, availHeight);
+        // AllView height
+        let allViewHeight = this._allViewActor.get_preferred_height(availWidth)[1];
+        let heightAboveGrid = this._calcAllViewPlacement(allViewHeight, entryHeight, availHeight);
         this._heightAboveEntry = this._centeredHeightAbove(entryHeight, heightAboveGrid);
 
         let entryBox = box.copy();
@@ -138,7 +137,6 @@ const ViewsDisplayLayout = new Lang.Class({
         this._entry.allocate(entryBox, flags);
 
         let allViewBox = box.copy();
-        let allViewHeight = this._allViewActor.get_preferred_height(availWidth)[1];
         allViewBox.y1 = this._calcAllViewPlacement(allViewHeight, entryHeight, availHeight);
         allViewBox.y2 = Math.min(allViewBox.y1 + allViewHeight, box.y2);
         this._allViewActor.allocate(allViewBox, flags);
