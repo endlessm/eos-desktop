@@ -5,14 +5,15 @@
 # Translators:
 # e2f_vn_c4 <leo.nguyen@expertrans.com>, 2016
 # Trung Ngô <ndtrung4419@gmail.com>, 2011
+# Roddy Shuler <roddy@endlessm.com>, 2016
 # Trung Ngô <ndtrung4419@gmail.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-03 21:54-0700\n"
-"PO-Revision-Date: 2016-05-06 13:54+0000\n"
-"Last-Translator: e2f_vn_c4 <leo.nguyen@expertrans.com>\n"
+"PO-Revision-Date: 2016-05-09 21:57+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -734,7 +735,7 @@ msgstr "Tải và cài đặt '%s' từ extensions.gnome.org chứ?"
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr "Thoát ứng dụng..."
+msgstr "Thoát ứng dụng…"
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
@@ -899,7 +900,7 @@ msgstr "Một ứng dụng đã ngăn cản khoá"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
-msgstr "Đang tìm..."
+msgstr "Đang tìm…"
 
 #: ../js/ui/search.js:783
 msgid "No results."
@@ -923,7 +924,7 @@ msgstr "Ẩn chữ"
 
 #: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
-msgstr "Nhập để tìm kiếm..."
+msgstr "Nhập để tìm kiếm…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
