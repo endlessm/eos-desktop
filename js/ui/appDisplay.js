@@ -59,7 +59,7 @@ const NEW_ICON_ANIMATION_TIME = 0.5;
 const NEW_ICON_ANIMATION_DELAY = 0.7;
 
 const ENABLE_APP_STORE_KEY = 'enable-app-store';
-const EOS_APP_STORE_ID = 'com.endlessm.AppStore';
+const GNOME_SOFTWARE_APP_ID = 'org.gnome.Software.desktop';
 
 const EOS_LINK_PREFIX = 'eos-link-';
 
@@ -235,7 +235,7 @@ const EndlessApplicationView = new Lang.Class({
         let appSystem = Shell.AppSystem.get_default();
         return items.filter(Lang.bind(this,
             function(itemId) {
-                return IconGridLayout.layout.iconIsFolder(itemId) || appSystem.lookup_app(itemId) || (itemId == EOS_APP_STORE_ID);
+                return IconGridLayout.layout.iconIsFolder(itemId) || appSystem.lookup_app(itemId) || (itemId == GNOME_SOFTWARE_APP_ID);
             }));
     },
 
@@ -986,7 +986,7 @@ const AllView = new Lang.Class({
     },
 
     _createItemForId: function(itemId) {
-        if (itemId == EOS_APP_STORE_ID) {
+        if (itemId == GNOME_SOFTWARE_APP_ID) {
             this._ensureAppStoreIcon();
             return this._appStoreItem;
         }
@@ -1007,7 +1007,7 @@ const AllView = new Lang.Class({
     getLayoutIds: function() {
         let ids = this.parent();
         if (global.settings.get_boolean(ENABLE_APP_STORE_KEY)) {
-            ids.push(EOS_APP_STORE_ID);
+            ids.push(GNOME_SOFTWARE_APP_ID);
         }
         return ids;
     },
@@ -1922,7 +1922,7 @@ const AppStoreIconState = {
 
 const AppStoreIcon = new Lang.Class({
     Name: 'AppStoreIcon',
-    Extends: ViewIcon,
+    Extends: AppIcon,
 
     _init : function(parentView) {
         let params = { isDraggable: false,
@@ -1932,7 +1932,10 @@ const AppStoreIcon = new Lang.Class({
                            editableLabel: false,
                            shadowAbove: false };
 
-        this.parent(params, null, iconParams);
+        let appSystem = Shell.AppSystem.get_default();
+        let app = appSystem.lookup_app(GNOME_SOFTWARE_APP_ID);
+
+        this.parent(app, iconParams, params);
 
         this.actor.add_style_class_name('app-store-icon');
 
@@ -1959,24 +1962,12 @@ const AppStoreIcon = new Lang.Class({
         return new St.Icon({ icon_size: iconSize });
     },
 
-    _activate: function() {
-        Main.appStore.show(global.get_current_time(), true);
-    },
-
-    _onClicked: function(actor, button) {
-        if (button != Gdk.BUTTON_PRIMARY) {
-            return;
-        }
-
-        this._activate();
-    },
-
     getName: function() {
         return _("More Apps");
     },
 
     getId: function() {
-        return EOS_APP_STORE_ID;
+        return GNOME_SOFTWARE_APP_ID;
     },
 
     handleViewDragBegin: function() {
