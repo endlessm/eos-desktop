@@ -7,6 +7,7 @@ const Lang = imports.lang;
 const St = imports.gi.St;
 const Shell = imports.gi.Shell;
 
+const AppActivation = imports.ui.appActivation;
 const BoxPointer = imports.ui.boxpointer;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
@@ -23,7 +24,9 @@ const BackgroundMenu = new Lang.Class({
         this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
         this.addAction(_("Add App"), Lang.bind(this, function() {
-            Main.appStore.showPage(global.get_current_time(), 'apps');
+            let app = Shell.AppSystem.get_default().lookup_app('org.gnome.Software.desktop');
+            let activationContext = new AppActivation.AppActivationContext(app);
+            activationContext.activate(Clutter.get_current_event());
         }));
 
         this.addAction(_("Add Website"), Lang.bind(this, function() {
