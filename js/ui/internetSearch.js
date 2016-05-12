@@ -19,7 +19,7 @@ function getURIForSearch(terms) {
     if (searchedUris.length == 1 && terms.length == 1) {
         let uri = searchedUris[0];
         // Ensure all uri has a scheme name
-        if(!GLib.uri_parse_scheme(uri)) {
+        if (!GLib.uri_parse_scheme(uri)) {
             uri = "http://" + uri;
         }
         return uri;
@@ -91,10 +91,11 @@ const InternetSearchProvider = new Lang.Class({
         if (this._networkMonitor.network_available) {
             let uri = getURIForSearch(terms);
             let query = terms.join(' ');
-            if (uri)
+            if (uri) {
                 results.push('uri:' + query);
-            else
+            } else {
                 results.push('search:' + query);
+            }
         }
 
         callback(results);
@@ -117,8 +118,9 @@ const InternetSearchProvider = new Lang.Class({
 
     launchSearch: function(terms) {
         this.getInitialResultSet(terms, Lang.bind(this, function(results) {
-            if (results)
+            if (results) {
                 this.activateResult(results[0]);
+            }
         }));
     },
 });
