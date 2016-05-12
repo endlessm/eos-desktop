@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Chandan kumar <chandankumar.093047@gmail.com>, 2012
+# e2f_in_c3 <e2f_in_c3@outlook.com>, 2016
 # rajesh <rajeshkajha@yahoo.com>, 2012-2013
 # Rajesh <rranjan>, 2011
 # Roddy Shuler <roddy@endlessm.com>, 2016
@@ -12,8 +13,8 @@ msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-10 01:26+0000\n"
-"PO-Revision-Date: 2016-05-10 04:24+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"PO-Revision-Date: 2016-05-11 07:28+0000\n"
+"Last-Translator: e2f_in_c3 <e2f_in_c3@outlook.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43,12 +44,12 @@ msgstr "अनुप्रयोग मेन्यू खोलें"
 
 #: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
+msgstr "सुझाव"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
 msgid "EOS Shell"
-msgstr ""
+msgstr "EOS शेल"
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -83,11 +84,11 @@ msgstr "सत्र…"
 
 #: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
-msgstr ""
+msgstr "पासवर्ड संकेत दिखाएं"
 
 #: ../js/gdm/loginDialog.js:636
 msgid "Forgot password?"
-msgstr ""
+msgstr "पासवर्ड भूल गए"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -100,7 +101,7 @@ msgstr "सूचीबद्ध नहीं?"
 #. by customer support.
 #: ../js/gdm/loginDialog.js:814
 msgid "Enter unlock code provided by customer support:"
-msgstr ""
+msgstr "कस्टमर सपोर्ट द्वारा प्रदान किए अनलॉक कोड एंटर करें: "
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
@@ -110,12 +111,12 @@ msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
 " emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
-msgstr ""
+msgstr "कृपया %s को कॉल कर या %s पर मेल कर कस्टमर सपोर्ट को अपने वेरिफिकेशन कोड %s सूचित करें। यह कोड तबतक वैध रहेगा जबतक कि आप कैंसल पर क्लिक नहीं करते हैंं, या अपने कम्प्यूटर को ऑफ नहीं कर देते हैंं।"
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:824
 msgid "Reset Password"
-msgstr ""
+msgstr "पासवर्ड रीसेट करें"
 
 #: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
@@ -136,7 +137,7 @@ msgstr "अगला"
 
 #: ../js/gdm/loginDialog.js:1116
 msgid "Your unlock code was incorrect. Please try again."
-msgstr ""
+msgstr "आपका अनलॉक कोड सही नहीं था। कृपया पुनः प्रयास करें।"
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
@@ -199,20 +200,20 @@ msgstr "'%s' का निष्पादन विफल:"
 
 #: ../js/ui/appDisplay.js:1177
 msgid "Remove from desktop"
-msgstr ""
+msgstr "डेस्कटॉप से हटाएं"
 
 #: ../js/ui/appDisplay.js:1686
 msgid "Warning"
-msgstr ""
+msgstr "चेतावनी"
 
 #: ../js/ui/appDisplay.js:1692
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr ""
+msgstr "फोल्डर डिलीट करने के लिए आपको सबसे पहले उसके भीतर के सभी आयटम को हटाना होगा।"
 
 #: ../js/ui/appDisplay.js:1698
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "हम आपको सुरक्षित रखने का प्रयास कर रहे हैं।"
 
 #: ../js/ui/appDisplay.js:1704
 msgid "OK"
@@ -220,11 +221,11 @@ msgstr "ठीक"
 
 #: ../js/ui/appDisplay.js:1975
 msgid "More Apps"
-msgstr ""
+msgstr "अधिक ऐप्स"
 
 #: ../js/ui/appDisplay.js:1984
 msgid "Delete"
-msgstr ""
+msgstr "डिलीट करें"
 
 #: ../js/ui/appFavorites.js:108
 #, javascript-format
@@ -238,24 +239,24 @@ msgstr "%s को आपकी पसंदीदा से हटाया ग�
 
 #: ../js/ui/appIconBar.js:216
 msgid "Other workspaces"
-msgstr ""
+msgstr "अन्य कार्यस्थल"
 
 #: ../js/ui/appIconBar.js:225
 msgid "Current workspace"
-msgstr ""
+msgstr "मौजूदा कार्यस्थल"
 
 #: ../js/ui/appIconBar.js:300
 msgid "Pin to Taskbar"
-msgstr ""
+msgstr "टास्कबार में पिन करें"
 
 #: ../js/ui/appIconBar.js:304
 msgid "Unpin from Taskbar"
-msgstr ""
+msgstr "टास्कबार से अनपिन करें"
 
 #: ../js/ui/appIconBar.js:320
 #, javascript-format
 msgid "Quit %s"
-msgstr ""
+msgstr "%s से बाहर निकलें"
 
 #: ../js/ui/backgroundMenu.js:21
 msgid "Change Background…"
@@ -263,15 +264,15 @@ msgstr "पृष्ठभूमि बदलें…"
 
 #: ../js/ui/backgroundMenu.js:25
 msgid "Add App"
-msgstr ""
+msgstr "ऐप शामिल करें"
 
 #: ../js/ui/backgroundMenu.js:29
 msgid "Add Website"
-msgstr ""
+msgstr "वेबसाइट शामिल करें"
 
 #: ../js/ui/backgroundMenu.js:33
 msgid "Add Folder"
-msgstr ""
+msgstr "फोल्डर शामिल करें"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -285,7 +286,7 @@ msgstr "पूरा दिन"
 #: ../js/ui/calendar.js:68
 msgctxt "event list time"
 msgid "%H∶%M"
-msgstr ""
+msgstr "%H∶%M"
 
 #. Transators: Shown in calendar event list, if 12h format,
 #. \u2236 is a ratio character, similar to : and \u2009 is
@@ -293,7 +294,7 @@ msgstr ""
 #: ../js/ui/calendar.js:77
 msgctxt "event list time"
 msgid "%l∶%M %p"
-msgstr ""
+msgstr "%l∶%M %p"
 
 #. Translators: Calendar grid abbreviation for Sunday.
 #. *
@@ -388,7 +389,7 @@ msgstr "श"
 
 #: ../js/ui/calendar.js:391
 msgid "calendar:MY"
-msgstr ""
+msgstr "कैलेंडर:MY"
 
 #. Translators: Text to show if there are no events
 #: ../js/ui/calendar.js:722
@@ -550,51 +551,51 @@ msgstr "माफ करें, वह काम नहीं करता ह�
 
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
-msgstr ""
+msgstr "सॉफ्टवेयर अपडेट"
 
 #: ../js/ui/components/updaterManager.js:204
 msgid "Updates available"
-msgstr ""
+msgstr "अपडेट्स उपलब्ध हैं"
 
 #: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
-msgstr ""
+msgstr "सॉफ्टवेयर अपडेट्स आपके सिस्टम के लिए उपलब्ध हैं"
 
 #: ../js/ui/components/updaterManager.js:206
 msgid "Download now"
-msgstr ""
+msgstr "अभी डाउनलोड करें"
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
-msgstr ""
+msgstr "अप्डेट्स तैयार हैंं"
 
 #: ../js/ui/components/updaterManager.js:220
 msgid "Software updates are ready to be installed on your system"
-msgstr ""
+msgstr "सॉफ्टवेयर अपडेट्स आपके सिस्टम पर इंंस्टॉल्ड किए जाने के लिए उपलब्ध हैं"
 
 #: ../js/ui/components/updaterManager.js:221
 msgid "Install now"
-msgstr ""
+msgstr "अभी इंस्टॉल करें"
 
 #: ../js/ui/components/updaterManager.js:230
 msgid "Updates installed"
-msgstr ""
+msgstr "अपडेट्स इंस्टॉल किए गए"
 
 #: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
-msgstr ""
+msgstr "सॉफ्टवेयर अपडेट्स आपके सिस्टम पर इंस्टॉल किए गए"
 
 #: ../js/ui/components/updaterManager.js:232
 msgid "Restart now"
-msgstr ""
+msgstr "अभी रीस्टार्ट करें"
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
-msgstr ""
+msgstr "अपडेट्स विफल हुए"
 
 #: ../js/ui/components/updaterManager.js:256
 msgid "We could not update your system"
-msgstr ""
+msgstr "हम आपके सिस्टम पर अपडेट्स नहीं कर सकते"
 
 #: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:509
 msgid "Windows"
@@ -637,7 +638,7 @@ msgstr "%A %B %e, %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr ""
+msgstr "याद रखें कि शेयर किए गए अकाउंट्स पासवर्ड द्वारा सुरक्षित नहीं हैं, इसलिए आप ऐसी किसी भी फाइल्स को डिलीट कर देंगे, जिन्हें आप निजी रखना चाहते हैं। "
 
 #: ../js/ui/endSessionDialog.js:77
 #, javascript-format
@@ -739,36 +740,36 @@ msgstr "'%s' को extensions.gnome.org से डाउनलोड कर स
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr ""
+msgstr "ऐप्लिकेशन से बाहर निकलें..."
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr ""
+msgstr "यदि कोई ऐप्लिकेशन थोड़े समय के लिए रेस्पॉन्ड न करें, तो उसका नाम चुनकर क्विट ऐपलिकेशन पर क्लिक करें।"
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
-msgstr ""
+msgstr "सिस्टम मॉनिटर"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr ""
+msgstr "ऐप्लिकेशन से बाहर निकलें"
 
 #: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
-msgstr ""
+msgstr "%s को डिलीट कर दिया गया है"
 
 #: ../js/ui/internetSearch.js:69
 #, javascript-format
 msgid "Open \"%s\" in browser"
-msgstr ""
+msgstr "ब्राउजर में \"%s\" ओपन करें"
 
 #: ../js/ui/internetSearch.js:72
 #, javascript-format
 msgid "Search Google for \"%s\""
-msgstr ""
+msgstr "\"%s\" के लिए गूगल में सर्च करें"
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
 msgid "Keyboard"
@@ -865,7 +866,7 @@ msgstr "सारांश"
 
 #: ../js/ui/panel.js:375
 msgid "Taskbar"
-msgstr ""
+msgstr "टास्कबार"
 
 #. Translators: this MUST be either "toggle-switch-us"
 #. (for toggle switches containing the English words
@@ -928,7 +929,7 @@ msgstr "पाठ छिपाएँ"
 
 #: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
-msgstr ""
+msgstr "सर्च करने के लिए टाइप करें..."
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1006,15 +1007,15 @@ msgstr "हार्डवेयर निष्क्रिय"
 
 #: ../js/ui/status/hotCornerIndicator.js:19
 msgid "Hot Corner Indicator"
-msgstr ""
+msgstr "हॉट कॉर्नर इंडिकेटर"
 
 #: ../js/ui/status/hotCornerIndicator.js:40
 msgid "Enable Hot Corner"
-msgstr ""
+msgstr "हॉट कॉर्नर को सक्रिय करें"
 
 #: ../js/ui/status/hotCornerIndicator.js:44
 msgid "Disable Hot Corner"
-msgstr ""
+msgstr "हॉट कॉर्नर को निष्क्रिय करें"
 
 #: ../js/ui/status/keyboard.js:740
 msgid "Show Keyboard Layout"
@@ -1124,7 +1125,7 @@ msgstr "स्वतः बेतार"
 
 #: ../js/ui/status/network.js:1672
 msgid "Network"
-msgstr ""
+msgstr "नेटवर्क"
 
 #: ../js/ui/status/network.js:1734
 msgid "Enable networking"
@@ -1164,7 +1165,7 @@ msgstr "बिजली सेटिंग्स"
 
 #: ../js/ui/status/power.js:58
 msgid "Fully Charged"
-msgstr ""
+msgstr "पूरी तरह से चार्ज"
 
 #. 0 is reported when UPower does not have enough data
 #. to estimate battery life
@@ -1215,11 +1216,11 @@ msgstr "तालाबंद"
 
 #: ../js/ui/userMenu.js:37
 msgid "Exit"
-msgstr ""
+msgstr "एक्जिट"
 
 #: ../js/ui/userMenu.js:39
 msgid "Help"
-msgstr ""
+msgstr "मदद"
 
 #: ../js/ui/userMenu.js:40
 msgid "Settings"
@@ -1227,7 +1228,7 @@ msgstr "सेटिंग"
 
 #: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
-msgstr ""
+msgstr "हमें सुझाव दें"
 
 #: ../js/ui/userMenu.js:490
 msgid "Switch User"
@@ -1264,24 +1265,24 @@ msgstr "'%s' तैयार है"
 
 #: ../js/ui/windowManager.js:67
 msgid "Do you want to keep these display settings?"
-msgstr ""
+msgstr "क्या आप इन डिस्प्ले सेटिंग्स को रखना चाहते हैं?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #: ../js/ui/windowManager.js:86
 msgid "Revert Settings"
-msgstr ""
+msgstr "सेटिंग्स को उल्टा करें"
 
 #: ../js/ui/windowManager.js:90
 msgid "Keep Changes"
-msgstr ""
+msgstr "बदलाव रखें"
 
 #: ../js/ui/windowManager.js:108
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "सेटिंग्स बदलाव %d सेकंड में रिवर्ट करेंंगे"
+msgstr[1] "सेटिंग्स बदलाव %d सेकंड्स में रिवर्ट करेंगे"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
@@ -1332,12 +1333,12 @@ msgstr "'%s' लॉन्च करने में विफल"
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
-msgstr ""
+msgstr "बेनाम"
 
 #: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
-msgstr ""
+msgstr "%s के लिए कस्टम परिभाषा"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."
