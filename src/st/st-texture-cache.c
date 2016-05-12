@@ -31,6 +31,8 @@
 #define CACHE_PREFIX_FILE "file:"
 #define CACHE_PREFIX_FILE_FOR_CAIRO "file-for-cairo:"
 
+#define IMAGE_MISSING_ICON_NAME "image-missing"
+
 struct _StTextureCachePrivate
 {
   GtkIconTheme *icon_theme;
@@ -876,7 +878,12 @@ load_gicon_with_colors (StTextureCache     *cache,
 
   info = gtk_icon_theme_lookup_by_gicon (theme, icon, size, GTK_ICON_LOOKUP_USE_BUILTIN);
   if (info == NULL)
-    return NULL;
+    {
+      /* Do not give up without even trying to pick the image-missing fallback icon. */
+      info = gtk_icon_theme_lookup_icon (theme, IMAGE_MISSING_ICON_NAME, size, GTK_ICON_LOOKUP_USE_BUILTIN);
+      if (info == NULL)
+        return NULL;
+    }
 
   gicon_string = g_icon_to_string (icon);
   /* A return value of NULL indicates that the icon can not be serialized,
