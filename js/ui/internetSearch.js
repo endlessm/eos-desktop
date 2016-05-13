@@ -69,7 +69,7 @@ const InternetSearchProvider = new Lang.Class({
                 name = _("Open \"%s\" in browser").format(uri);
             } else if (resultId.startsWith('search:')) {
                 let query = resultId.slice('search:'.length);
-                name = _("Search Google for \"%s\"").format(query);
+                name = _("Search the internet for \"%s\"").format(query);
             }
 
             return { id: resultId,
