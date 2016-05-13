@@ -7,9 +7,6 @@ const Lang = imports.lang;
 const Main = imports.ui.main;
 const Util = imports.misc.util;
 
-const BASE_SEARCH_URI = 'http://www.google.com/';
-const QUERY_URI_PATH = 'search?q=';
-
 // Returns a plain URI if the user types in
 // something like "facebook.com"
 function getURIForSearch(terms) {
@@ -26,19 +23,6 @@ function getURIForSearch(terms) {
     } else {
         return null;
     }
-}
-
-function activateURI(uri) {
-    try {
-        Gio.AppInfo.launch_default_for_uri(uri, null);
-    } catch (e) {
-        logError(e, 'error while launching the browser for uri: ' + uri);
-    }
-}
-
-function activateGoogleSearch(query) {
-    let uri = BASE_SEARCH_URI + QUERY_URI_PATH + encodeURI(query);
-    activateURI(uri);
 }
 
 function getInternetSearchProvider() {
@@ -59,6 +43,14 @@ const InternetSearchProvider = new Lang.Class({
         this.canLaunchSearch = true;
 
         this._networkMonitor = Gio.NetworkMonitor.get_default();
+    },
+
+    _launchURI: function(uri) {
+        try {
+            this.appInfo.launch_uris([uri], null);
+        } catch (e) {
+            logError(e, 'error while launching browser for uri: ' + uri);
+        }
     },
 
     getResultMetas: function(results, callback) {
@@ -109,10 +101,10 @@ const InternetSearchProvider = new Lang.Class({
         if (metaId.startsWith('uri:')) {
             let uri = metaId.slice('uri:'.length);
             uri = getURIForSearch([uri]);
-            activateURI(uri);
+            this._launchURI(uri);
         } else if (metaId.startsWith('search:')) {
             let query = metaId.slice('search:'.length);
-            activateGoogleSearch(query);
+            this._launchURI('? '.concat(query));
         }
     },
 
