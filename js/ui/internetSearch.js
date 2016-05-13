@@ -2,6 +2,7 @@
 
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
+const Json = imports.gi.Json;
 const Lang = imports.lang;
 
 const Main = imports.ui.main;
@@ -42,7 +43,44 @@ const InternetSearchProvider = new Lang.Class({
         this.appInfo = browserApp.get_app_info();
         this.canLaunchSearch = true;
 
+        this._engineNameParsed = false;
+        this._engineName = null;
+
         this._networkMonitor = Gio.NetworkMonitor.get_default();
+    },
+
+    _parseEngineName: function() {
+        let path = GLib.build_filenamev([GLib.get_user_config_dir(), 'chromium', 'Default', 'Preferences']);
+        let parser = new Json.Parser();
+
+        try {
+            parser.load_from_file(path);
+        } catch (e) {
+            logError(e, 'error while parsing Chromium preferences');
+            return null;
+        }
+
+        let root = parser.get_root().get_object();
+        let searchProviderData = root.get_object_member('default_search_provider_data');
+        if (!searchProviderData) {
+            return null;
+        }
+
+        let templateUrlData = searchProviderData.get_object_member('template_url_data');
+        if (!templateUrlData) {
+            return null;
+        }
+
+        return templateUrlData.get_string_member('short_name');
+    },
+
+    _getEngineName: function() {
+        if (!this._engineNameParsed) {
+            this._engineNameParsed = true;
+            this._engineName = this._parseEngineName();
+        }
+
+        return this._engineName;
     },
 
     _launchURI: function(uri) {
@@ -54,14 +92,23 @@ const InternetSearchProvider = new Lang.Class({
     },
 
     getResultMetas: function(results, callback) {
-        let metas = results.map(function(resultId) {
+        let metas = results.map(Lang.bind(this, function(resultId) {
             let name;
             if (resultId.startsWith('uri:')) {
                 let uri = resultId.slice('uri:'.length);
                 name = _("Open \"%s\" in browser").format(uri);
             } else if (resultId.startsWith('search:')) {
                 let query = resultId.slice('search:'.length);
-                name = _("Search the internet for \"%s\"").format(query);
+                let engineName = this._getEngineName();
+
+                if (engineName) {
+                    /* Translators: the first %s is the search engine name, and the second
+                     * is the search string. For instance, 'Search Google for "hello"'.
+                     */
+                    name = _("Search %s for \"%s\"").format(engineName, query);
+                } else {
+                    name = _("Search the internet for \"%s\"").format(query);
+                }
             }
 
             return { id: resultId,
@@ -69,7 +116,7 @@ const InternetSearchProvider = new Lang.Class({
                      // We will already have an app icon next to our result,
                      // so we don't need an individual result icon.
                      createIcon: function() { return null; } };
-        });
+        }));
         callback(metas);
     },
 
