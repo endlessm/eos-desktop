@@ -6,6 +6,8 @@ const Lang = imports.lang;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 
+const SETTINGS_ENABLE_SOCIAL_BAR_KEY = 'enable-social-bar';
+
 const SocialBarButton = new Lang.Class({
     Name: 'SocialBarButton',
     Extends: PanelMenu.SystemStatusButton,
@@ -33,6 +35,11 @@ const SocialBarButton = new Lang.Class({
 
         // Remove menu entirely to prevent social bar button from closing other menus
         this.setMenu(null);
+
+        this._updateVisibility();
+
+        global.settings.connect('changed::' + SETTINGS_ENABLE_SOCIAL_BAR_KEY,
+                                Lang.bind(this, this._updateVisibility));
     },
 
     // overrides default implementation from PanelMenu.Button
@@ -56,5 +63,9 @@ const SocialBarButton = new Lang.Class({
         } else {
             this.setGIcon(this._giconNormal);
         }
+    },
+
+    _updateVisibility: function() {
+        this.actor.visible = global.settings.get_boolean(SETTINGS_ENABLE_SOCIAL_BAR_KEY);
     }
 });
