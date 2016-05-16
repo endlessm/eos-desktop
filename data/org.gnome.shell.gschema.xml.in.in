@@ -202,6 +202,14 @@ value here is from the GsmPresenceStatus enumeration.</_summary>
         with the cursor on the bottom of the taskbar.
       </_description>
     </key>
+    <key name="enable-social-bar" type="b">
+      <default>true</default>
+      <_summary>Whether to show the social bar</_summary>
+      <_description>
+        This key sets whether the social bar is enabled. This means that setting
+	it to false will not display the social bar icon in the panel.
+      </_description>
+    </key>
     <child name="calendar" schema="org.gnome.shell.calendar"/>
     <child name="keybindings" schema="org.gnome.shell.keybindings"/>
     <child name="keyboard" schema="org.gnome.shell.keyboard"/>
