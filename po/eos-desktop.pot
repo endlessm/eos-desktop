@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-10 01:26+0000\n"
+"POT-Creation-Date: 2016-05-17 01:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,11 +213,11 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1966
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1984
+#: ../js/ui/appDisplay.js:1975
 msgid "Delete"
 msgstr ""
 
@@ -252,19 +252,19 @@ msgstr ""
 msgid "Quit %s"
 msgstr ""
 
-#: ../js/ui/backgroundMenu.js:21
+#: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
 msgstr ""
 
-#: ../js/ui/backgroundMenu.js:25
+#: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
 msgstr ""
 
-#: ../js/ui/backgroundMenu.js:29
+#: ../js/ui/backgroundMenu.js:32
 msgid "Add Website"
 msgstr ""
 
-#: ../js/ui/backgroundMenu.js:33
+#: ../js/ui/backgroundMenu.js:36
 msgid "Add Folder"
 msgstr ""
 
@@ -592,7 +592,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:509
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
 msgid "Windows"
 msgstr ""
 
@@ -756,14 +756,22 @@ msgstr ""
 msgid "%s has been deleted"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:69
+#: ../js/ui/internetSearch.js:99
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:72
+#. Translators: the first %s is the search engine name, and the second
+#. * is the search string. For instance, 'Search Google for "hello"'.
+#.
+#: ../js/ui/internetSearch.js:108
 #, javascript-format
-msgid "Search Google for \"%s\""
+msgid "Search %s for \"%s\""
+msgstr ""
+
+#: ../js/ui/internetSearch.js:110
+#, javascript-format
+msgid "Search the internet for \"%s\""
 msgstr ""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
@@ -1242,7 +1250,7 @@ msgstr ""
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:513
+#: ../js/ui/viewSelector.js:511
 msgid "Applications"
 msgstr ""
 
