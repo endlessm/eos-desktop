@@ -117,8 +117,6 @@ const COLOR_SHADING_TYPE_KEY = 'color-shading-type';
 const BACKGROUND_STYLE_KEY = 'picture-options';
 const PICTURE_OPACITY_KEY = 'picture-opacity';
 const PICTURE_URI_KEY = 'picture-uri';
-const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/eos-media';
-const BACKGROUND_NAME_BASE = 'desktop-background';
 
 const FADE_ANIMATION_TIME = 1.0;
 
@@ -581,23 +579,6 @@ const BackgroundSource = new Lang.Class({
         }
     },
 
-    _getDefaultBackgroundFile: function() {
-        let langNames = GLib.get_language_names().filter(function(name) {
-            return name.indexOf('.') == -1;
-        });
-
-        for (let i = 0; i < langNames.length; i++) {
-            let path = GLib.build_filenamev([DEFAULT_CONFIGS_DIR,
-                BACKGROUND_NAME_BASE + '-' + langNames[i] + '.jpg']);
-
-            if (GLib.file_test(path, GLib.FileTest.EXISTS))
-                return Gio.File.new_for_path(path);
-        }
-
-        log('No default background images found!');
-        return null;
-    },
-
     getBackground: function(monitorIndex) {
         let file = null;
         let style;
@@ -613,10 +594,7 @@ const BackgroundSource = new Lang.Class({
             style = this._settings.get_enum(BACKGROUND_STYLE_KEY);
             if (style != GDesktopEnums.BackgroundStyle.NONE) {
                 let uri = this._settings.get_string(PICTURE_URI_KEY);
-                if (uri == 'eos:///default')
-                    file = this._getDefaultBackgroundFile();
-                else
-                    file = Gio.File.new_for_commandline_arg(uri);
+                file = Gio.File.new_for_commandline_arg(uri);
             }
         }
 
