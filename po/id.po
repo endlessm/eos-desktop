@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-10 01:26+0000\n"
-"PO-Revision-Date: 2016-05-10 04:25+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2016-05-17 01:27+0000\n"
+"PO-Revision-Date: 2016-05-17 01:27+0000\n"
+"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -218,11 +218,11 @@ msgstr "Kami hanya mencoba menjaga Anda agar tetap aman."
 msgid "OK"
 msgstr "Oke"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1966
 msgid "More Apps"
 msgstr "Aplikasi Lainnya"
 
-#: ../js/ui/appDisplay.js:1984
+#: ../js/ui/appDisplay.js:1975
 msgid "Delete"
 msgstr "Hapus"
 
@@ -257,19 +257,19 @@ msgstr "Lepaskan semat dari Bilah Tugas"
 msgid "Quit %s"
 msgstr "Keluar %s"
 
-#: ../js/ui/backgroundMenu.js:21
+#: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
 msgstr "Ubah Latar…"
 
-#: ../js/ui/backgroundMenu.js:25
+#: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
 msgstr "Tambahkan Aplikasi"
 
-#: ../js/ui/backgroundMenu.js:29
+#: ../js/ui/backgroundMenu.js:32
 msgid "Add Website"
 msgstr "Tambahkan Situs Web"
 
-#: ../js/ui/backgroundMenu.js:33
+#: ../js/ui/backgroundMenu.js:36
 msgid "Add Folder"
 msgstr "Tambahkan Folder"
 
@@ -596,7 +596,7 @@ msgstr "Gagal memperbarui"
 msgid "We could not update your system"
 msgstr "Kami tidak dapat memperbarui sistem Anda"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:509
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
 msgid "Windows"
 msgstr "Jendela"
 
@@ -756,15 +756,22 @@ msgstr "Tutup Aplikasi"
 msgid "%s has been deleted"
 msgstr "%s telah dihapus"
 
-#: ../js/ui/internetSearch.js:69
+#: ../js/ui/internetSearch.js:99
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr "Buka \"%s\" di browser"
 
-#: ../js/ui/internetSearch.js:72
+#. Translators: the first %s is the search engine name, and the second
+#. * is the search string. For instance, 'Search Google for "hello"'.
+#: ../js/ui/internetSearch.js:108
 #, javascript-format
-msgid "Search Google for \"%s\""
-msgstr "Mencari \"%s\" melalui Google"
+msgid "Search %s for \"%s\""
+msgstr ""
+
+#: ../js/ui/internetSearch.js:110
+#, javascript-format
+msgid "Search the internet for \"%s\""
+msgstr ""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
 msgid "Keyboard"
@@ -1249,7 +1256,7 @@ msgstr "%s (jarak jauh)"
 msgid "%s (console)"
 msgstr "%s (konsol)"
 
-#: ../js/ui/viewSelector.js:513
+#: ../js/ui/viewSelector.js:511
 msgid "Applications"
 msgstr "Aplikasi"
 

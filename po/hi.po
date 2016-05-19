@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-10 01:26+0000\n"
-"PO-Revision-Date: 2016-05-11 07:28+0000\n"
-"Last-Translator: e2f_in_c3 <e2f_in_c3@outlook.com>\n"
+"POT-Creation-Date: 2016-05-17 01:27+0000\n"
+"PO-Revision-Date: 2016-05-17 01:27+0000\n"
+"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -219,11 +219,11 @@ msgstr "हम आपको सुरक्षित रखने का प्�
 msgid "OK"
 msgstr "ठीक"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1966
 msgid "More Apps"
 msgstr "अधिक ऐप्स"
 
-#: ../js/ui/appDisplay.js:1984
+#: ../js/ui/appDisplay.js:1975
 msgid "Delete"
 msgstr "डिलीट करें"
 
@@ -258,19 +258,19 @@ msgstr "टास्कबार से अनपिन करें"
 msgid "Quit %s"
 msgstr "%s से बाहर निकलें"
 
-#: ../js/ui/backgroundMenu.js:21
+#: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
 msgstr "पृष्ठभूमि बदलें…"
 
-#: ../js/ui/backgroundMenu.js:25
+#: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
 msgstr "ऐप शामिल करें"
 
-#: ../js/ui/backgroundMenu.js:29
+#: ../js/ui/backgroundMenu.js:32
 msgid "Add Website"
 msgstr "वेबसाइट शामिल करें"
 
-#: ../js/ui/backgroundMenu.js:33
+#: ../js/ui/backgroundMenu.js:36
 msgid "Add Folder"
 msgstr "फोल्डर शामिल करें"
 
@@ -597,7 +597,7 @@ msgstr "अपडेट्स विफल हुए"
 msgid "We could not update your system"
 msgstr "हम आपके सिस्टम पर अपडेट्स नहीं कर सकते"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:509
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
 msgid "Windows"
 msgstr "विंडोज़"
 
@@ -761,15 +761,22 @@ msgstr "ऐप्लिकेशन से बाहर निकलें"
 msgid "%s has been deleted"
 msgstr "%s को डिलीट कर दिया गया है"
 
-#: ../js/ui/internetSearch.js:69
+#: ../js/ui/internetSearch.js:99
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr "ब्राउजर में \"%s\" ओपन करें"
 
-#: ../js/ui/internetSearch.js:72
+#. Translators: the first %s is the search engine name, and the second
+#. * is the search string. For instance, 'Search Google for "hello"'.
+#: ../js/ui/internetSearch.js:108
 #, javascript-format
-msgid "Search Google for \"%s\""
-msgstr "\"%s\" के लिए गूगल में सर्च करें"
+msgid "Search %s for \"%s\""
+msgstr ""
+
+#: ../js/ui/internetSearch.js:110
+#, javascript-format
+msgid "Search the internet for \"%s\""
+msgstr ""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
 msgid "Keyboard"
@@ -1254,7 +1261,7 @@ msgstr "%s (दूरस्थ)"
 msgid "%s (console)"
 msgstr "%s (कंसोल)"
 
-#: ../js/ui/viewSelector.js:513
+#: ../js/ui/viewSelector.js:511
 msgid "Applications"
 msgstr "अनुप्रयोग"
 
