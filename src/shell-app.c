@@ -1348,11 +1348,12 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
                                             const char *label,
                                             GError **error)
 {
-  GDesktopAppInfo *appinfo;
+  g_autoptr(GDesktopAppInfo) appinfo = NULL;
   GError *internal_error;
   const char *filename;
-  char *new_path, *buf;
-  GKeyFile *keyfile;
+  g_autofree char *new_path = NULL;
+  g_autofree char *buf = NULL;
+  g_autoptr(GKeyFile) keyfile = NULL;
   gsize len;
   char **keys;
   gsize i;
@@ -1373,7 +1374,6 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   if (internal_error != NULL)
     {
       g_propagate_error (error, internal_error);
-      g_key_file_unref (keyfile);
 
       return FALSE;
     }
@@ -1405,12 +1405,9 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   if (internal_error != NULL)
     {
       g_propagate_error (error, internal_error);
-      g_key_file_unref (keyfile);
 
       return FALSE;
     }
-
-  g_key_file_unref (keyfile);
 
   new_path = g_build_filename (g_get_user_data_dir (), "applications", NULL);
 
@@ -1424,9 +1421,6 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
                    new_path,
                    g_strerror (saved_errno));
 
-      g_free (new_path);
-      g_free (buf);
-
       return FALSE;
     }
 
@@ -1438,8 +1432,6 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   if (internal_error != NULL)
     {
       g_propagate_error (error, internal_error);
-      g_free (new_path);
-      g_free (buf);
 
       return FALSE;
     }
@@ -1447,14 +1439,10 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   /* Update the app's information with the newly created file */
   appinfo = g_desktop_app_info_new_from_filename (new_path);
 
-  g_free (new_path);
-  g_free (buf);
-
   if (appinfo == NULL)
     return FALSE;
 
   _shell_app_set_app_info (app, appinfo);
-  g_object_unref (appinfo);
 
   return TRUE;
 }
