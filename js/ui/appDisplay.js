@@ -323,6 +323,11 @@ const EndlessApplicationView = new Lang.Class({
                 continue;
             }
 
+            // The App Center icon cannot be changed or renamed
+            if (item == this._appStoreItem) {
+                continue;
+            }
+
             let currentIcon = iconTable[itemId];
 
             if (!currentIcon) {
