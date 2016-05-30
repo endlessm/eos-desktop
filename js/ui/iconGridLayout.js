@@ -234,8 +234,10 @@ const IconGridLayout = new Lang.Class({
 
         let filename = info.get_filename();
         let userDir = GLib.get_user_data_dir();
-        if (filename && userDir && GLib.str_has_prefix(filename, userDir)) {
-            // only delete .desktop files in the user's local data folder
+        if (filename && userDir && GLib.str_has_prefix(filename, userDir) &&
+            info.get_string('X-Endless-CreatedBy') === 'eos-desktop') {
+            // only delete .desktop files if they are in the user's local data
+            // folder and they were created by eos-desktop
             info.delete();
         }
     },
