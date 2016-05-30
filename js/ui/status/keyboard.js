@@ -61,8 +61,8 @@ const InputSource = new Lang.Class({
         this.emit('changed');
     },
 
-    activate: function() {
-        this.emit('activate');
+    activate: function(interactive) {
+        this.emit('activate', !!interactive);
     },
 
     _getXkbId: function() {
@@ -109,7 +109,7 @@ const InputSourcePopup = new Lang.Class({
     _finish : function() {
         this.parent();
 
-        this._items[this._selectedIndex].activate();
+        this._items[this._selectedIndex].activate(true);
     },
 });
 
@@ -157,6 +157,14 @@ const InputSourceSettings = new Lang.Class({
 
     get inputSources() {
         return [];
+    },
+
+    get mruSources() {
+        return [];
+    },
+
+    set mruSources(sourcesList) {
+        // do nothing
     },
 
     get keyboardOptions() {
@@ -251,6 +259,7 @@ const InputSourceSessionSettings = new Lang.Class({
 
     _DESKTOP_INPUT_SOURCES_SCHEMA: 'org.gnome.desktop.input-sources',
     _KEY_INPUT_SOURCES: 'sources',
+    _KEY_MRU_SOURCES: 'mru-sources',
     _KEY_KEYBOARD_OPTIONS: 'xkb-options',
     _KEY_PER_WINDOW: 'per-window',
 
@@ -261,9 +270,9 @@ const InputSourceSessionSettings = new Lang.Class({
         this._settings.connect('changed::' + this._KEY_PER_WINDOW, Lang.bind(this, this._emitPerWindowChanged));
     },
 
-    get inputSources() {
+    _getSourcesList: function(key) {
         let sourcesList = [];
-        let sources = this._settings.get_value(this._KEY_INPUT_SOURCES);
+        let sources = this._settings.get_value(key);
         let nSources = sources.n_children();
 
         for (let i = 0; i < nSources; i++) {
@@ -271,6 +280,19 @@ const InputSourceSessionSettings = new Lang.Class({
             sourcesList.push({ type: type, id: id });
         }
         return sourcesList;
+    },
+
+    get inputSources() {
+        return this._getSourcesList(this._KEY_INPUT_SOURCES);
+    },
+
+    get mruSources() {
+        return this._getSourcesList(this._KEY_MRU_SOURCES);
+    },
+
+    set mruSources(sourcesList) {
+        let sources = GLib.Variant.new('a(ss)', sourcesList);
+        this._settings.set_value(this._KEY_MRU_SOURCES, sources);
     },
 
     get keyboardOptions() {
@@ -372,7 +394,7 @@ const InputSourceManager = new Lang.Class({
         while (!(is = this._inputSources[nextIndex]))
             nextIndex += 1;
 
-        is.activate();
+        is.activate(true);
         return true;
     },
 
@@ -401,6 +423,25 @@ const InputSourceManager = new Lang.Class({
         this._keyboardManager.reapply();
     },
 
+    _updateMruSettings: function() {
+        // If IBus is not ready we don't have a full picture of all
+        // the available sources, so don't update the setting
+        if (!this._ibusReady)
+            return;
+
+        // If IBus is temporarily disabled, don't update the setting
+        if (this._disableIBus)
+            return;
+
+        let sourcesList = [];
+        for (let i = 0; i < this._mruSources.length; ++i) {
+            let source = this._mruSources[i];
+            sourcesList.push([source.type, source.id]);
+        }
+
+        this._settings.mruSources = sourcesList;
+    },
+
     _currentInputSourceChanged: function(newSource) {
         let oldSource;
         [oldSource, this._currentSource] = [this._currentSource, newSource];
@@ -417,7 +458,7 @@ const InputSourceManager = new Lang.Class({
         this._changePerWindowSource();
     },
 
-    _activateInputSource: function(is) {
+    _activateInputSource: function(is, interactive) {
         KeyboardManager.holdKeyboard();
         this._keyboardManager.apply(is.xkbId);
 
@@ -435,6 +476,54 @@ const InputSourceManager = new Lang.Class({
 
         this._ibusManager.setEngine(engine, KeyboardManager.releaseKeyboard);
         this._currentInputSourceChanged(is);
+
+        if (interactive)
+            this._updateMruSettings();
+    },
+
+    _updateMruSources: function() {
+        let sourcesList = [];
+        for (let i in this._inputSources)
+            sourcesList.push(this._inputSources[i]);
+
+        this._keyboardManager.setUserLayouts(sourcesList.map(function(x) { return x.xkbId; }));
+
+        if (!this._disableIBus && this._mruSourcesBackup) {
+            this._mruSources = this._mruSourcesBackup;
+            this._mruSourcesBackup = null;
+        }
+
+        // Initialize from settings when we have no MRU sources list
+        if (this._mruSources.length == 0) {
+            let mruSettings = this._settings.mruSources;
+            for (let i = 0; i < mruSettings.length; i++) {
+                let mruSettingSource = mruSettings[i];
+                let mruSource = null;
+
+                for (let j = 0; j < sourcesList.length; j++) {
+                    let source = sourcesList[j];
+                    if (source.type == mruSettingSource.type &&
+                        source.id == mruSettingSource.id) {
+                        mruSource = source;
+                        break;
+                    }
+                }
+
+                if (mruSource)
+                    this._mruSources.push(mruSource);
+            }
+        }
+
+        let mruSources = [];
+        for (let i = 0; i < this._mruSources.length; i++) {
+            for (let j = 0; j < sourcesList.length; j++)
+                if (this._mruSources[i].type == sourcesList[j].type &&
+                    this._mruSources[i].id == sourcesList[j].id) {
+                    mruSources = mruSources.concat(sourcesList.splice(j, 1));
+                    break;
+                }
+        }
+        this._mruSources = mruSources.concat(sourcesList);
     },
 
     _inputSourcesChanged: function() {
@@ -511,30 +600,10 @@ const InputSourceManager = new Lang.Class({
 
         this.emit('sources-changed');
 
-        let sourcesList = [];
-        for (let i in this._inputSources)
-            sourcesList.push(this._inputSources[i]);
-
-        this._keyboardManager.setUserLayouts(sourcesList.map(function(x) { return x.xkbId; }));
-
-        if (!this._disableIBus && this._mruSourcesBackup) {
-            this._mruSources = this._mruSourcesBackup;
-            this._mruSourcesBackup = null;
-        }
-
-        let mruSources = [];
-        for (let i = 0; i < this._mruSources.length; i++) {
-            for (let j = 0; j < sourcesList.length; j++)
-                if (this._mruSources[i].type == sourcesList[j].type &&
-                    this._mruSources[i].id == sourcesList[j].id) {
-                    mruSources = mruSources.concat(sourcesList.splice(j, 1));
-                    break;
-                }
-        }
-        this._mruSources = mruSources.concat(sourcesList);
+        this._updateMruSources();
 
         if (this._mruSources.length > 0)
-            this._mruSources[0].activate();
+            this._mruSources[0].activate(false);
 
         // All ibus engines are preloaded here to reduce the launching time
         // when users switch the input sources.
@@ -643,7 +712,7 @@ const InputSourceManager = new Lang.Class({
         }
 
         if (window._currentSource)
-            window._currentSource.activate();
+            window._currentSource.activate(false);
     },
 
     _sourcesPerWindowChanged: function() {
@@ -769,7 +838,10 @@ const InputSourceIndicator = new Lang.Class({
             let is = this._inputSourceManager.inputSources[i];
 
             let menuItem = new LayoutMenuItem(is.displayName, is.shortName);
-            menuItem.connect('activate', Lang.bind(is, is.activate));
+            menuItem.connect('activate', function() {
+                is.activate(true);
+            });
+
             let indicatorLabel = new St.Label({ text: is.shortName,
                                                 visible: false });
 
