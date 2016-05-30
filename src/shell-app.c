@@ -1401,14 +1401,6 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
                          G_KEY_FILE_DESKTOP_KEY_NAME,
                          label);
 
-  buf = g_key_file_to_data (keyfile, &len, &internal_error);
-  if (internal_error != NULL)
-    {
-      g_propagate_error (error, internal_error);
-
-      return FALSE;
-    }
-
   new_path = g_build_filename (g_get_user_data_dir (), "applications", NULL);
 
   if (g_mkdir_with_parents (new_path, 0755) < 0)
@@ -1427,6 +1419,24 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   g_free (new_path);
 
   new_path = g_build_filename (g_get_user_data_dir (), "applications", shell_app_get_id (app), NULL);
+
+  if (!g_file_test (new_path, G_FILE_TEST_EXISTS))
+    {
+      /* Create a new 'X-Endless-CreatedBy' key to indicate the file was created
+       * by eos-desktop */
+      g_key_file_set_string (keyfile,
+                             G_KEY_FILE_DESKTOP_GROUP,
+                             "X-Endless-CreatedBy",
+                             "eos-desktop");
+    }
+
+  buf = g_key_file_to_data (keyfile, &len, &internal_error);
+  if (internal_error != NULL)
+    {
+      g_propagate_error (error, internal_error);
+
+      return FALSE;
+    }
 
   g_file_set_contents (new_path, buf, len, &internal_error);
   if (internal_error != NULL)
