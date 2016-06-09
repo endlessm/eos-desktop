@@ -1348,11 +1348,12 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
                                             const char *label,
                                             GError **error)
 {
-  GDesktopAppInfo *appinfo;
+  g_autoptr(GDesktopAppInfo) appinfo = NULL;
   GError *internal_error;
   const char *filename;
-  char *new_path, *buf;
-  GKeyFile *keyfile;
+  g_autofree char *new_path = NULL;
+  g_autofree char *buf = NULL;
+  g_autoptr(GKeyFile) keyfile = NULL;
   gsize len;
   char **keys;
   gsize i;
@@ -1373,7 +1374,6 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   if (internal_error != NULL)
     {
       g_propagate_error (error, internal_error);
-      g_key_file_unref (keyfile);
 
       return FALSE;
     }
@@ -1401,17 +1401,6 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
                          G_KEY_FILE_DESKTOP_KEY_NAME,
                          label);
 
-  buf = g_key_file_to_data (keyfile, &len, &internal_error);
-  if (internal_error != NULL)
-    {
-      g_propagate_error (error, internal_error);
-      g_key_file_unref (keyfile);
-
-      return FALSE;
-    }
-
-  g_key_file_unref (keyfile);
-
   new_path = g_build_filename (g_get_user_data_dir (), "applications", NULL);
 
   if (g_mkdir_with_parents (new_path, 0755) < 0)
@@ -1424,9 +1413,6 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
                    new_path,
                    g_strerror (saved_errno));
 
-      g_free (new_path);
-      g_free (buf);
-
       return FALSE;
     }
 
@@ -1434,12 +1420,28 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
 
   new_path = g_build_filename (g_get_user_data_dir (), "applications", shell_app_get_id (app), NULL);
 
+  if (!g_file_test (new_path, G_FILE_TEST_EXISTS))
+    {
+      /* Create a new 'X-Endless-CreatedBy' key to indicate the file was created
+       * by eos-desktop */
+      g_key_file_set_string (keyfile,
+                             G_KEY_FILE_DESKTOP_GROUP,
+                             "X-Endless-CreatedBy",
+                             "eos-desktop");
+    }
+
+  buf = g_key_file_to_data (keyfile, &len, &internal_error);
+  if (internal_error != NULL)
+    {
+      g_propagate_error (error, internal_error);
+
+      return FALSE;
+    }
+
   g_file_set_contents (new_path, buf, len, &internal_error);
   if (internal_error != NULL)
     {
       g_propagate_error (error, internal_error);
-      g_free (new_path);
-      g_free (buf);
 
       return FALSE;
     }
@@ -1447,14 +1449,10 @@ shell_app_create_custom_launcher_with_name (ShellApp *app,
   /* Update the app's information with the newly created file */
   appinfo = g_desktop_app_info_new_from_filename (new_path);
 
-  g_free (new_path);
-  g_free (buf);
-
   if (appinfo == NULL)
     return FALSE;
 
   _shell_app_set_app_info (app, appinfo);
-  g_object_unref (appinfo);
 
   return TRUE;
 }
