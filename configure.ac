@@ -116,7 +116,6 @@ PKG_CHECK_MODULES(EOS_SHELL_JS, gio-2.0 gjs-internals-1.0 >= $GJS_MIN_VERSION)
 PKG_CHECK_MODULES(ST, clutter-1.0 gtk+-3.0 libcroco-0.6 >= 0.6.8 x11)
 PKG_CHECK_MODULES(SHELL_PERF_HELPER, gtk+-3.0 gio-2.0)
 PKG_CHECK_MODULES(SHELL_HOTPLUG_SNIFFER, gio-2.0 gdk-pixbuf-2.0)
-PKG_CHECK_MODULES(BROWSER_PLUGIN, gio-2.0 >= $GIO_MIN_VERSION json-glib-1.0 >= 0.13.2)
 PKG_CHECK_MODULES(TRAY, gtk+-3.0)
 PKG_CHECK_MODULES(GVC, libpulse >= $PULSE_MIN_VERS libpulse-mainloop-glib gobject-2.0)
 PKG_CHECK_MODULES(DESKTOP_SCHEMAS, gsettings-desktop-schemas >= 3.7.4)
@@ -195,9 +194,6 @@ AC_ARG_ENABLE(jhbuild-wrapper-script,
   AS_HELP_STRING([--enable-jhbuild-wrapper-script],[Make "gnome-shell" script work for jhbuild]),,enable_jhbuild_wrapper_script=no)
 AM_CONDITIONAL(USE_JHBUILD_WRAPPER_SCRIPT, test "x$enable_jhbuild_wrapper_script" = xyes)
 
-BROWSER_PLUGIN_DIR="${BROWSER_PLUGIN_DIR:-"\${libdir}/mozilla/plugins"}"
-AC_ARG_VAR([BROWSER_PLUGIN_DIR],[Where to install the plugin to])
-
 # JASMINE_JUNIT_REPORTS_DIR: Where to put test reports
 AC_MSG_CHECKING([where to put test reports])
 AC_ARG_VAR([JASMINE_JUNIT_REPORTS_DIR], [Where to put test reports])
@@ -230,7 +226,6 @@ AC_CONFIG_FILES([
   src/calendar-server/evolution-calendar.desktop.in
   src/Makefile
   src/gvc/Makefile
-  browser-plugin/Makefile
   tests/Makefile
   po/Makefile.in
   man/Makefile
