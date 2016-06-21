@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 01:27+0000\n"
+"POT-Creation-Date: 2016-06-14 01:28+0000\n"
 "PO-Revision-Date: 2016-05-17 01:27+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
@@ -210,32 +210,32 @@ msgstr "不能解析命令："
 msgid "Execution of '%s' failed:"
 msgstr "运行“%s”失败："
 
-#: ../js/ui/appDisplay.js:1177
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
 msgstr "从桌面删除"
 
-#: ../js/ui/appDisplay.js:1686
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr "警告"
 
-#: ../js/ui/appDisplay.js:1692
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "删除文件夹前请先删除文件夹内所有文件。"
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr "保障用户安全"
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr "确定"
 
-#: ../js/ui/appDisplay.js:1966
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr "更多的Apps"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr "删除"
 
@@ -786,7 +786,7 @@ msgstr ""
 msgid "Search the internet for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr "键盘"
 
@@ -1032,11 +1032,11 @@ msgstr ""
 msgid "Disable Hot Corner"
 msgstr ""
 
-#: ../js/ui/status/keyboard.js:740
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr "显示键盘布局"
 
-#: ../js/ui/status/keyboard.js:745
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
 msgstr "区域与语言设置"
 

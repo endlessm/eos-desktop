@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 01:27+0000\n"
+"POT-Creation-Date: 2016-06-21 01:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,32 +192,32 @@ msgstr ""
 msgid "Execution of '%s' failed:"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1177
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1686
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1692
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1966
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr ""
 
@@ -774,7 +774,7 @@ msgstr ""
 msgid "Search the internet for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr ""
 
@@ -1021,11 +1021,11 @@ msgstr ""
 msgid "Disable Hot Corner"
 msgstr ""
 
-#: ../js/ui/status/keyboard.js:740
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr ""
 
-#: ../js/ui/status/keyboard.js:745
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
 msgstr ""
 

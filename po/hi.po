@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 01:27+0000\n"
+"POT-Creation-Date: 2016-06-14 01:28+0000\n"
 "PO-Revision-Date: 2016-05-17 01:27+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
@@ -198,32 +198,32 @@ msgstr "कमांड का विश्लेषण नहीं कर स�
 msgid "Execution of '%s' failed:"
 msgstr "'%s' का निष्पादन विफल:"
 
-#: ../js/ui/appDisplay.js:1177
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
 msgstr "डेस्कटॉप से हटाएं"
 
-#: ../js/ui/appDisplay.js:1686
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr "चेतावनी"
 
-#: ../js/ui/appDisplay.js:1692
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "फोल्डर डिलीट करने के लिए आपको सबसे पहले उसके भीतर के सभी आयटम को हटाना होगा।"
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr "हम आपको सुरक्षित रखने का प्रयास कर रहे हैं।"
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr "ठीक"
 
-#: ../js/ui/appDisplay.js:1966
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr "अधिक ऐप्स"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr "डिलीट करें"
 
@@ -778,7 +778,7 @@ msgstr ""
 msgid "Search the internet for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr "कुंजीपटल"
 
@@ -1024,11 +1024,11 @@ msgstr "हॉट कॉर्नर को सक्रिय करें"
 msgid "Disable Hot Corner"
 msgstr "हॉट कॉर्नर को निष्क्रिय करें"
 
-#: ../js/ui/status/keyboard.js:740
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr "कुंजीपट लेआउट दिखाएँ"
 
-#: ../js/ui/status/keyboard.js:745
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
 msgstr "क्षेत्र और भाषा सेटिंग्स"
 

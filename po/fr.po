@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 01:27+0000\n"
+"POT-Creation-Date: 2016-06-14 01:28+0000\n"
 "PO-Revision-Date: 2016-05-17 01:27+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
@@ -201,32 +201,32 @@ msgstr "Impossible d'analyser la commande :"
 msgid "Execution of '%s' failed:"
 msgstr "Exécution de « %s » impossible :"
 
-#: ../js/ui/appDisplay.js:1177
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
 msgstr "Supprimer du bureau"
 
-#: ../js/ui/appDisplay.js:1686
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../js/ui/appDisplay.js:1692
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr "Nous essayons simplement de vous garder en sécurité."
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr "Valider"
 
-#: ../js/ui/appDisplay.js:1966
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr "Plus d'Apps"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -781,7 +781,7 @@ msgstr ""
 msgid "Search the internet for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr "Clavier"
 
@@ -1027,11 +1027,11 @@ msgstr "Activer Coin actif"
 msgid "Disable Hot Corner"
 msgstr "Désactiver Coin actif"
 
-#: ../js/ui/status/keyboard.js:740
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr "Afficher la disposition du clavier"
 
-#: ../js/ui/status/keyboard.js:745
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
 msgstr "Paramètres de région et de langue"
 

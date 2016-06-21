@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Aditi Kabir <aditi.kabir@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 01:27+0000\n"
-"PO-Revision-Date: 2016-05-17 01:27+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2016-06-14 01:28+0000\n"
+"PO-Revision-Date: 2016-06-19 15:03+0000\n"
+"Last-Translator: Aditi Kabir <aditi.kabir@gmail.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,7 +20,7 @@ msgstr ""
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
 msgid "System"
-msgstr ""
+msgstr "প্রক্রিয়া"
 
 #: ../data/50-gnome-shell-system.xml.in.h:2
 msgid "Show the message tray"
@@ -193,32 +194,32 @@ msgstr "কমান্ড পার্স করা যায়নি:"
 msgid "Execution of '%s' failed:"
 msgstr "'%s' কার্যকর করা ব্যর্থ:"
 
-#: ../js/ui/appDisplay.js:1177
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1686
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1692
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr "ঠিক আছে"
 
-#: ../js/ui/appDisplay.js:1966
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr ""
 
@@ -773,7 +774,7 @@ msgstr ""
 msgid "Search the internet for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr "কীবোর্ড"
 
@@ -1019,11 +1020,11 @@ msgstr ""
 msgid "Disable Hot Corner"
 msgstr ""
 
-#: ../js/ui/status/keyboard.js:740
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr ""
 
-#: ../js/ui/status/keyboard.js:745
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
 msgstr ""
 

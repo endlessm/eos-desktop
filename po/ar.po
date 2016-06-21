@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 01:27+0000\n"
+"POT-Creation-Date: 2016-06-14 01:28+0000\n"
 "PO-Revision-Date: 2016-05-17 01:27+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
@@ -200,32 +200,32 @@ msgstr "تعذّر تحليل الأمر:"
 msgid "Execution of '%s' failed:"
 msgstr "فشل تنفيذ '%s':‏"
 
-#: ../js/ui/appDisplay.js:1177
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
 msgstr "إزالة من سطح المكتب"
 
-#: ../js/ui/appDisplay.js:1686
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr "تحذير"
 
-#: ../js/ui/appDisplay.js:1692
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "لحذف مجلد عليك إزالة كافة العناصر داخله أولاً."
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr "نحاول فقط المحافظة على أمنك."
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr "حسنا"
 
-#: ../js/ui/appDisplay.js:1966
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr "المزيد من التطبيقات"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr "حذف"
 
@@ -796,7 +796,7 @@ msgstr ""
 msgid "Search the internet for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr "لوحة المفاتيح"
 
@@ -1042,11 +1042,11 @@ msgstr "تمكين الزاوية الساخنة"
 msgid "Disable Hot Corner"
 msgstr "تعطيل الزاوية الساخنة"
 
-#: ../js/ui/status/keyboard.js:740
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr "أظهر تخطيط لوحة المفاتيح"
 
-#: ../js/ui/status/keyboard.js:745
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
 msgstr "إعدادات المنطقة واللغة"
 

@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 01:27+0000\n"
+"POT-Creation-Date: 2016-06-14 01:28+0000\n"
 "PO-Revision-Date: 2016-05-18 23:09+0000\n"
 "Last-Translator: Mariana Barbosa <mari@endlessm.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/pt_BR/)\n"
@@ -208,32 +208,32 @@ msgstr "Não foi possível analisar comando:"
 msgid "Execution of '%s' failed:"
 msgstr "A execução de \"%s\" falhou:"
 
-#: ../js/ui/appDisplay.js:1177
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
 msgstr "Remover da área de trabalho"
 
-#: ../js/ui/appDisplay.js:1686
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr "Aviso"
 
-#: ../js/ui/appDisplay.js:1692
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para excluir uma pasta você tem que remover todos os arquivos de dentro primeiro."
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr "Estamos apenas tentando manter a segurança dos seus dados."
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1966
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr "Mais Programas"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr "Excluir"
 
@@ -788,7 +788,7 @@ msgstr "Pesquisar %s por %s\""
 msgid "Search the internet for \"%s\""
 msgstr "Pesquisar por %s\" na internet"
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr "Teclado"
 
@@ -1034,11 +1034,11 @@ msgstr "Ative o Canto de Tela"
 msgid "Disable Hot Corner"
 msgstr "Desative o Canto de Tela"
 
-#: ../js/ui/status/keyboard.js:740
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr "Exibir layout de teclado"
 
-#: ../js/ui/status/keyboard.js:745
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
 msgstr "Configurações de região & idioma"
 

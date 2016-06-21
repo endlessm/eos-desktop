@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 01:27+0000\n"
+"POT-Creation-Date: 2016-06-14 01:28+0000\n"
 "PO-Revision-Date: 2016-05-19 05:15+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Thai (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/th/)\n"
@@ -197,32 +197,32 @@ msgstr "ไม่สามารถแจงคำสั่ง:"
 msgid "Execution of '%s' failed:"
 msgstr "คำสั่ง '%s' ทำงานล้มเหลว:"
 
-#: ../js/ui/appDisplay.js:1177
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
 msgstr "ลบออกจากเดสก์ท้อป"
 
-#: ../js/ui/appDisplay.js:1686
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr "คำเตือน"
 
-#: ../js/ui/appDisplay.js:1692
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "หากต้องการลบโฟลเดอร์หนึ่งคุณจะต้องเอารายการทั้งหมดภานในโฟลเดอร์ออกก่อน"
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr "เราพยายามที่จะทำให้ปลอดภัย"
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr "ตกลง"
 
-#: ../js/ui/appDisplay.js:1966
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr "แอพเพิ่มเติม"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr "ลบ"
 
@@ -773,7 +773,7 @@ msgstr ""
 msgid "Search the internet for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr "แป้นพิมพ์"
 
@@ -1019,11 +1019,11 @@ msgstr "เปิดใช้ Hot Corner"
 msgid "Disable Hot Corner"
 msgstr "ปิดการใช้ Hot Corner"
 
-#: ../js/ui/status/keyboard.js:740
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr "แสดงผังแป้นพิมพ์"
 
-#: ../js/ui/status/keyboard.js:745
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
 msgstr "การตั้งค่าภูมิภาคและภาษา"
 

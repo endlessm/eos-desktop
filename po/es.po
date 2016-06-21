@@ -6,7 +6,7 @@
 # Benjamín Valero Espinosa <benjavalero@gmail.com>, 2011
 # c.sanchez <cassandra@endlessm.com>, 2014-2015
 # c.sanchez <cassandra@endlessm.com>, 2014
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2010-2013
+# Daniel Mustieles <inactive+leo@transifex.com>, 2010-2013
 # Eddy Alegria <eddy@endlessm.com>, 2014
 # goizueta <goizueta@endlessm.com>, 2014
 # Joel Gil León <joel@endlessm.com>, 2013-2014
@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 01:27+0000\n"
+"POT-Creation-Date: 2016-06-14 01:28+0000\n"
 "PO-Revision-Date: 2016-05-18 17:42+0000\n"
 "Last-Translator: Nuritzi Sanchez <ns@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/es/)\n"
@@ -204,32 +204,32 @@ msgstr "No se pudo analizar el comando:"
 msgid "Execution of '%s' failed:"
 msgstr "Falló la ejecución de «%s»:"
 
-#: ../js/ui/appDisplay.js:1177
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
 msgstr "Quitar del escritorio"
 
-#: ../js/ui/appDisplay.js:1686
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr "Advertencia"
 
-#: ../js/ui/appDisplay.js:1692
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Para eliminar una carpeta tienes que remover primero todos los elementos contenidos dentro."
 
-#: ../js/ui/appDisplay.js:1698
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr "Estamos tratando de mantener la seguridad de tus datos."
 
-#: ../js/ui/appDisplay.js:1704
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr "Aceptar"
 
-#: ../js/ui/appDisplay.js:1966
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr "Más programas"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -784,7 +784,7 @@ msgstr "Buscar %s por \"%s\""
 msgid "Search the internet for \"%s\""
 msgstr "Buscar \"%s\" en internet"
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:714
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr "Teclado"
 
@@ -1030,11 +1030,11 @@ msgstr "Permitir la esquina activa"
 msgid "Disable Hot Corner"
 msgstr "Desactivar la esquina activa"
 
-#: ../js/ui/status/keyboard.js:740
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr "Mostrar la distribución del teclado"
 
-#: ../js/ui/status/keyboard.js:745
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
 msgstr "Configuración de región e idioma"
 
