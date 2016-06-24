@@ -568,6 +568,10 @@ StScrollBar StButton#vhandle:active {
     background-position: 2px 24px;
 }
 
+.chat-button {
+    background: none;
+}
+
 .social-button {
     background: none;
     -natural-hpadding: 4px;
