@@ -220,7 +220,7 @@ nodist_eos_shell_extension_prefs_SOURCES = \
 	$(top_builddir)/js/js-resources.h		\
 	$(NULL)
 eos_shell_extension_prefs_CPPFLAGS = $(eos_shell_cflags)
-eos_shell_extension_prefs_LDADD = libeos-shell-js.la $(EOS_SHELL_LIBS)
+eos_shell_extension_prefs_LDADD = libeos-shell-js.la $(EOS_SHELL_LIBS) -lm
 eos_shell_extension_prefs_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
 
 ########################################
