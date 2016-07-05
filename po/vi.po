@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-21 01:28+0000\n"
-"PO-Revision-Date: 2016-05-17 01:27+0000\n"
+"POT-Creation-Date: 2016-06-28 01:29+0000\n"
+"PO-Revision-Date: 2016-07-02 06:36+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -766,12 +766,12 @@ msgstr "Mở \"%s\" trong trình duyệt"
 #: ../js/ui/internetSearch.js:108
 #, javascript-format
 msgid "Search %s for \"%s\""
-msgstr ""
+msgstr "Tìm kiếm %s để có \"%s\""
 
 #: ../js/ui/internetSearch.js:110
 #, javascript-format
 msgid "Search the internet for \"%s\""
-msgstr ""
+msgstr "Tìm \"%s\" trên internet"
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
