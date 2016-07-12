@@ -118,6 +118,12 @@ const SideComponent = new Lang.Class({
     },
 
     _onPropertiesChanged: function(proxy, changedProps, invalidatedProps) {
+        // check if the side component connection died and reset 'visible'
+        if (!this.proxy.g_name_owner) {
+            this._visible = false;
+            return;
+        }
+
         let propsDict = changedProps.deep_unpack();
         if (propsDict.hasOwnProperty('Visible')) {
             this._onVisibilityChanged();

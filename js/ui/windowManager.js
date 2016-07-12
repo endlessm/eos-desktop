@@ -762,7 +762,12 @@ const WindowManager = new Lang.Class({
     },
 
     _slideSideComponentOut : function(shellwm, actor, onComplete, onOverwrite) {
-        let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+        let monitor = null;
+
+        if (actor.meta_window) {
+            monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
+        }
+
         if (!monitor) {
             onComplete.apply(this, [shellwm, actor]);
             return;
