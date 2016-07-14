@@ -2,6 +2,7 @@
 
 const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
+const Cogl = imports.gi.Cogl;
 const Gdk = imports.gi.Gdk;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
@@ -35,6 +36,20 @@ const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
 
 const DISPLAY_REVERT_TIMEOUT = 30; // in seconds - keep in sync with mutter
 const ONE_SECOND = 1000; // in ms
+
+const SylvesterServiceIface = '<node> \
+  <interface name="com.endlessm.Sylvester.Service"> \
+    <method name="DownloadSourcesForPID"> \
+      <arg name="pid" direction="in" type="i"/> \
+    </method> \
+    <signal name="RotateBetweenPidWindows"> \
+      <arg name="src" type="i"/> \
+      <arg name="dest" type="i"/> \
+    </signal> \
+  </interface> \
+</node>';
+
+const SylvesterService = Gio.DBusProxy.makeProxyWrapper(SylvesterServiceIface);
 
 const DisplayChangeDialog = new Lang.Class({
     Name: 'DisplayChangeDialog',
@@ -519,6 +534,20 @@ const TilePreview = new Lang.Class({
     }
 });
 
+const DisableBackfaceCullingEffect = new Lang.Class({
+    Name: 'DisableBackfaceCullingEffect',
+    Extends: Clutter.Effect,
+    _init : function(params) {
+        this.parent(params);
+    },
+    vfunc_pre_paint: function() {
+        Cogl.set_backface_culling_enabled(true);
+    },
+    vfunc_post_paint: function() {
+        Cogl.set_backface_culling_enabled(false);
+    }
+});
+
 const WindowManager = new Lang.Class({
     Name: 'WindowManager',
 
@@ -662,6 +691,103 @@ const WindowManager = new Lang.Class({
                 this._dimWindow(this._dimmedWindows[i]);
             }
         }));
+
+        this._sylvesterListener = new SylvesterService(Gio.DBus.session,
+                                                       'com.endlessm.Sylvester.Service',
+                                                       '/com/endlessm/Sylvester/Service');
+        this._sylvesterListener.connectSignal('RotateBetweenPidWindows',
+                                              Lang.bind(this, this._handleRotateBetweenPidWindows));
+        this._pendingRotateAnimations = [];
+        log("Connected to Sylvester");
+    },
+
+    _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {
+        this._rotateTransitionFrom = src;
+        this._rotateTransitionTo = dst;
+
+        const windowActorsFromPid = function(pid) {
+            return global.get_window_actors().filter(function(window_actor) {
+                return window_actor.get_meta_window().get_pid() == pid;
+            });
+        }
+
+        const windowActorsForFromPid = windowActorsFromPid(src);
+        const windowActorsForToPid = windowActorsFromPid(dst);
+
+        const actorForFromPid = windowActorsForFromPid.length ? windowActorsForFromPid[0].get_meta_window() : null;
+        const actorForToPid = windowActorsForToPid.length ? windowActorsForToPid[0].get_meta_window() : null;
+
+        this._pendingRotateAnimations.push({
+            src: {
+                actor: windowActorsForFromPid.length ? windowActorsForFromPid[0] : null,
+                rect: (windowActorsForFromPid.length ?
+                       windowActorsForFromPid[0].get_meta_window().get_frame_rect() : null),
+                pid: src,
+            },
+            dst: {
+                actor: windowActorsForToPid.length ? windowActorsForToPid[0] : null,
+                rect: (windowActorsForFromPid.length ?
+                       windowActorsForFromPid[0].get_meta_window().get_frame_rect() : null),
+                pid: dst
+            }
+        });
+        this._updateReadyRotateAnimationsWith(windowActorsForFromPid.length ? windowActorsForFromPid[0] : null);
+    },
+    
+    _updateReadyRotateAnimationsWith: function (window) {
+        /* A new window was added. Get its pid and look for any
+         * unsatisfied entries in _pendingRotateAnimations */
+        const pid = window ? window.get_meta_window().get_pid() : null;
+        const lastPendingRotateAnimationsLength = this._pendingRotateAnimations.length;
+        this._pendingRotateAnimations = this._pendingRotateAnimations.filter(function(animationSpec) {
+            let unsatisfiedPids = 0;
+            Object.keys(animationSpec).forEach(function(key) {
+                if (animationSpec[key].window == null) {
+                    if (animationSpec[key].pid == pid) {
+                        animationSpec[key].window = window;
+                    } else {
+                        unsatisfiedPids++;
+                    }
+                }
+            });
+            
+            if (unsatisfiedPids == 0) {
+                let dst_geometry = animationSpec.src.rect;
+                animationSpec.dst.window.rotation_angle_y = 120;
+                animationSpec.dst.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+                animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+                animationSpec.dst.window.get_meta_window().move_resize_frame(false,
+                                                                             dst_geometry.x,
+                                                                             dst_geometry.y,
+                                                                             dst_geometry.width,
+                                                                             dst_geometry.height);
+
+                animationSpec.src.window.add_effect_with_name('disable-culling',
+                                                              new DisableBackfaceCullingEffect());
+                animationSpec.dst.window.add_effect_with_name('disable-culling',
+                                                              new DisableBackfaceCullingEffect());
+                Tweener.addTween(animationSpec.src.window, {
+                    "rotation-angle-y": -120,
+                    time: WINDOW_ANIMATION_TIME,
+                    transition: 'easeOutQuad',
+                    onComplete: function() {
+                        Tweener.addTween(animationSpec.dst.window, {
+                            "rotation-angle-y": 0,
+                            time: WINDOW_ANIMATION_TIME,
+                            transition: 'easeOutQuad'
+                        });
+                        animationSpec.src.window.hide();
+                    },
+                    onCompleteScope: this,
+                    onCompleteParams: []
+                });
+                return false;
+            }
+            
+            return true;
+        });
+        
+        return this._pendingRotateAnimations.length != lastPendingRotateAnimationsLength;
     },
 
     setCustomKeybindingHandler: function(name, modes, handler) {
@@ -1041,6 +1167,11 @@ const WindowManager = new Lang.Class({
         }));
 
         let isSplashWindow = Shell.WindowTracker.is_speedwagon_window(window);
+        
+        if (this._updateReadyRotateAnimationsWith(actor)) {
+            shellwm.completed_map(actor);
+            return;
+        }
 
         if (!isSplashWindow) {
             // If we have an active splash window for the app, don't animate it.
