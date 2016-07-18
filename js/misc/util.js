@@ -1,14 +1,13 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const Config = imports.misc.config;
 const Tweener = imports.ui.tweener;
-
-const BROWSER_DESKTOP_ENTRY = 'chromium-browser.desktop';
 
 // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
 const _balancedParens = '\\((?:[^\\s()<>]+|(?:\\(?:[^\\s()<>]+\\)))*\\)';
@@ -239,8 +238,9 @@ function insertSorted(array, val, cmp) {
 }
 
 function getBrowserApp() {
+    let id = Gio.app_info_get_default_for_type('text/html', true).get_id();
     let appSystem = Shell.AppSystem.get_default();
-    let browserApp = appSystem.lookup_app(BROWSER_DESKTOP_ENTRY);
+    let browserApp = appSystem.lookup_app(id);
     return browserApp;
 }
 
