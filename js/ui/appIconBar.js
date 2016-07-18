@@ -349,6 +349,12 @@ const AppIconButton = new Lang.Class({
     _syncQuitMenuItemVisible: function() {
         let visible = (this._app.get_state() == Shell.AppState.RUNNING);
         this._quitMenuItem.actor.visible = visible;
+
+        if (this._app.state != Shell.AppState.STOPPED) {
+            this.actor.add_style_pseudo_class('running');
+        } else {
+            this.actor.remove_style_pseudo_class('running');
+        }
     },
 
     _createIcon: function() {

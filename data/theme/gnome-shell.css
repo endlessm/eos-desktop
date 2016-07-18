@@ -567,6 +567,12 @@ StScrollBar StButton#vhandle:active {
     background: none;
 }
 
+.app-icon-button:running {
+    background-image: url("panel-button-highlight-medium.svg");
+    background-position: 1px 8px;
+}
+
+.app-icon-button:highlighted,
 .app-icon-button:highlighted {
     background-image: url("mini-icon-active-indicator.png");
     background-position: 2px 24px;
