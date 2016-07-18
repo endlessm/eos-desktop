@@ -36,21 +36,22 @@ const WindowAttentionHandler = new Lang.Class({
 	if (focusWindow && Shell.WindowTracker.is_speedwagon_window(focusWindow))
 	    return;
 
-        let app = this._tracker.get_window_app(window);
-        let source = new Source(app, window);
-        Main.messageTray.add(source);
+        Main.activateWindow(window);
+        // let app = this._tracker.get_window_app(window);
+        // let source = new Source(app, window);
+        // Main.messageTray.add(source);
 
-        let [title, banner] = this._getTitleAndBanner(app, window);
+        // let [title, banner] = this._getTitleAndBanner(app, window);
 
-        let notification = new MessageTray.Notification(source, title, banner);
-        notification.setForFeedback(true);
+        // let notification = new MessageTray.Notification(source, title, banner);
+        // notification.setForFeedback(true);
 
-        source.notify(notification);
+        // source.notify(notification);
 
-        source.signalIDs.push(window.connect('notify::title', Lang.bind(this, function() {
-            let [title, banner] = this._getTitleAndBanner(app, window);
-            notification.update(title, banner);
-        })));
+        // source.signalIDs.push(window.connect('notify::title', Lang.bind(this, function() {
+        //     let [title, banner] = this._getTitleAndBanner(app, window);
+        //     notification.update(title, banner);
+        // })));
     }
 });
 
