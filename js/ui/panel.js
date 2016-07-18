@@ -318,6 +318,7 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'powerMenu': imports.gdm.powerMenu.PowerMenuButton,
     'userMenu': imports.ui.userMenu.UserMenuButton,
     'panelSeparator': imports.ui.panelSeparator.PanelSeparator,
+    'panelSeparator2': imports.ui.panelSeparator.PanelSeparator2,
 };
 
 if (Config.HAVE_BLUETOOTH)

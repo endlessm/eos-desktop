@@ -94,7 +94,7 @@ const _modes = {
                      'updaterManager', 'socialBar', 'appStore'],
         panel: {
             left: ['userMenu', 'panelSeparator', 'appIcons'],
-            right: ['a11y', 'keyboard', 'volume', 'bluetooth',
+            right: ['panelSeparator2', 'a11y', 'keyboard', 'volume', 'bluetooth',
                     'network', 'battery', 'socialBar', 'hotCornerIndicator', 'dateMenu']
         }
     }
