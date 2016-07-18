@@ -421,6 +421,7 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'system': imports.ui.status.system.Indicator,
     'socialBar': imports.ui.status.social.SocialBarButton,
     'panelSeparator': imports.ui.panelSeparator.PanelSeparator,
+    'panelSeparator2': imports.ui.panelSeparator.PanelSeparator2,
     'hotCornerIndicator': imports.ui.status.hotCornerIndicator.HotCornerIndicator,
     'codingGame': imports.ui.status.codingGame.CodingGameIndicator
 };

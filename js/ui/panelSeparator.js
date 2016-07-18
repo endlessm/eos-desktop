@@ -22,3 +22,22 @@ const PanelSeparator = new Lang.Class({
         this.add_actor(this._separator);
     }
 });
+
+const PanelSeparator2 = new Lang.Class({
+    Name: 'PanelSeparator2',
+    Extends: St.Bin,
+
+    _init: function() {
+        this.parent({ style_class: 'panel-separator' });
+
+        // Needed otherwise automatic adding of this button fails
+        this.container = this;
+
+        let iconFileSeparator = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/separator.png');
+        let giconSeparator = new Gio.FileIcon({ file: iconFileSeparator });
+        this._separator = new St.Icon({ gicon: giconSeparator ,
+                                        style_class: 'panel-separator-icon-2' });
+
+        this.add_actor(this._separator);
+    }
+});
