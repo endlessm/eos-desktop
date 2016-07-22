@@ -57,8 +57,12 @@ const EditableLabel = new Lang.Class({
         this.parent(params);
 
         this.clutter_text.editable = false;
+        this.clutter_text.selectable = false;
         this.clutter_text.x_align = Clutter.ActorAlign.CENTER;
         this.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+
+        this.clutter_text.bind_property('editable', this.clutter_text, 'selectable',
+            GObject.BindingFlags.BIDIRECTIONAL | GObject.BindingFlags.SYNC_CREATE);
 
         this._activateId = 0;
         this._keyFocusId = 0;
