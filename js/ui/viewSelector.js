@@ -129,7 +129,7 @@ const ViewsDisplayLayout = new Lang.Class({
         // AllView height
         let allViewHeight = this._allViewActor.get_preferred_height(availWidth)[1];
         let heightAboveGrid = this._calcAllViewPlacement(allViewHeight, entryHeight, availHeight);
-        this._heightAboveEntry = this._centeredHeightAbove(entryHeight, heightAboveGrid);
+        this._heightAboveEntry = Math.floor(Math.max((heightAboveGrid - entryHeight) / 3.0, 0));
 
         let entryBox = box.copy();
         entryBox.y1 = this._heightAboveEntry;
