@@ -15,6 +15,7 @@ const AppActivation = imports.ui.appActivation;
 const AppFavorites = imports.ui.appFavorites;
 const BoxPointer = imports.ui.boxpointer;
 const Hash = imports.misc.hash;
+const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
 const Panel = imports.ui.panel;
 const PanelMenu = imports.ui.panelMenu;
@@ -302,6 +303,10 @@ const AppIconButton = new Lang.Class({
 
             this._unpinMenuItem = this._rightClickMenu.addAction(_("Unpin from Taskbar"), Lang.bind(this, function() {
                 this.emit('app-icon-unpinned');
+            }));
+
+            this._addToDesktopItem = this._rightClickMenu.addAction(_("Add to Desktop"), Lang.bind(this, function() {
+                IconGridLayout.layout.appendIcon(this._app.get_id(), IconGridLayout.DESKTOP_GRID_ID);
             }));
 
             if (AppFavorites.getTaskbarFavorites().isFavorite(this._app.get_id()))
