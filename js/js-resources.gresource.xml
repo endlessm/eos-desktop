@@ -89,6 +89,7 @@
     <file>ui/status/network.js</file>
     <file>ui/status/power.js</file>
     <file>ui/status/volume.js</file>
+    <file>ui/status/missionGame.js</file>
     <file>ui/status/bluetooth.js</file>
     <file>ui/status/social.js</file>
     <file>ui/switcherPopup.js</file>
