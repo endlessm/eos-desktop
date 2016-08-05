@@ -57,13 +57,22 @@ const Indicator = new Lang.Class({
                         this._adventures.menu.addAction(lesson_spec[1],
                                                         launchLessonAction(lesson_spec[0]));
                     }));
+                } else {
+                    log("Warning: Call to showmehow get_unlocked_lessons failed");
+                }
+            }));
 
+            this._service.call_get_known_spells(null, Lang.bind(this, function(source, result) {
+                [success, lessons] = this._service.call_get_known_spells_finish(result);
+                lessons = lessons.deep_unpack();
+
+                if (success) {
                     lessons.forEach(Lang.bind(this, function(lesson_spec) {
                         this._spells.menu.addAction(lesson_spec[1],
                                                     launchLessonAction(lesson_spec[0]));
                     }));
                 } else {
-                    log("Warning: Call to showmehow get_unlocked_lessons failed");
+                    log("Warning: Call to showmehow get_known_spells failed");
                 }
             }));
         }));
