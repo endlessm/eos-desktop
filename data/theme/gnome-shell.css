@@ -1680,10 +1680,12 @@ StScrollBar StButton#vhandle:active {
 }
 
 .chatbox-user-text {
-    margin-top: 5px;
+    margin-top: 10px;
     margin-left: 40px;
-    margin-bottom: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
     text-align: right;
+    font-family: lato, sans-serif;
 }
 
 /* Trash popup dialog */
