@@ -262,7 +262,7 @@ const Indicator = new Lang.Class({
         Showmehow.ServiceProxy.new_for_bus(Gio.BusType.SESSION, 0, name, path, null,
                                            Lang.bind(this, function(source, result) {
             this._service = Showmehow.ServiceProxy.new_for_bus_finish(result);
-            this._service.call_get_unlocked_lessons(null, Lang.bind(this, function(source, result) {
+            this._service.call_get_unlocked_lessons("console", null, Lang.bind(this, function(source, result) {
                 [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
                 lessons = lessons.deep_unpack();
 
@@ -276,7 +276,7 @@ const Indicator = new Lang.Class({
                 }
             }));
 
-            this._service.call_get_known_spells(null, Lang.bind(this, function(source, result) {
+            this._service.call_get_known_spells("console", null, Lang.bind(this, function(source, result) {
                 [success, lessons] = this._service.call_get_known_spells_finish(result);
                 lessons = lessons.deep_unpack();
 
