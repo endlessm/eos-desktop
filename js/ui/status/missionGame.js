@@ -208,6 +208,8 @@ function _addLabelToChatboxArea(label, chatboxResultsArea) {
     });
 }
 
+const WRAP_CONSTANT = 42;
+
 const Indicator = new Lang.Class({
     Name: 'MissionGameIndicator',
     Extends: PanelMenu.SystemStatusButton,
@@ -215,6 +217,11 @@ const Indicator = new Lang.Class({
     _init: function() {
         this.parent('folder-drag-accept-symbolic', _("Mission"));
         this.setIcon('folder-drag-accept-symbolic');
+
+        this._openedForTheFirstTime = false;
+        this._chatboxLessonCounter = 0;
+        this._introLesson = null;
+        this._currentTaskText = null;
 
         this._adventures = createSubMenuMenuItemWithFauxParent(_("Adventures"), this.menu);
         this._spells = createSubMenuMenuItemWithFauxParent(_("Spells"), this.menu);
@@ -311,6 +318,26 @@ const Indicator = new Lang.Class({
                     log("Warning: Call to showmehow get_known_spells failed");
                 }
             }));
+
+            this._service.call_get_unlocked_lessons("shell", null, Lang.bind(this, function(source, result) {
+                [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
+
+                if (success) {
+                    /* There should be a single lesson here called introduction here. Save
+                     * it. */
+                    lessons = lessons.deep_unpack().filter(function(lesson) {
+                        return lesson[0] == "intro";
+                    });
+
+                    if (lessons.length !== 1) {
+                        log("Expected a single lesson for shell, cannot show intro lesson!");
+                    }
+
+                    this._introLesson = lessons[0];
+                } else {
+                    log("Warning: Call to showmehow get_unlocked_lessons failed for intro lesson");
+                }
+            }));
         }));
 
         this._chatboxEntry.clutter_text.connect('activate', Lang.bind(this, function(entry, event) {
@@ -323,19 +350,105 @@ const Indicator = new Lang.Class({
             entry.set_text('');
             return true;
         }));
+
+        this.menu.connect('open-state-changed', Lang.bind(this, function(menu, state) {
+            if (state && !this._openedForTheFirstTime && this._introLesson) {
+                this._openedForTheFirstTime = true;
+                this._showTaskDescriptionForLesson(this._chatboxLessonCounter);
+            }
+        }));
+    },
+    _showTaskDescriptionForLesson: function(lessonIndex) {
+        if (!this._introLesson) {
+            return;
+        }
+
+        const numLessons = this._introLesson[2];
+
+        if (lessonIndex >= numLessons) {
+            /* We have a currently active intro lesson. Display the
+             * "done" message, and then set everything back to null. */
+            const doneMessage = this._introLesson[3];
+            if (this._introLesson) {
+                wrapTextWith(doneMessage, WRAP_CONSTANT, '').forEach(Lang.bind(this, function(line) {
+                    this._pushLabelToChatboxResultsArea(new ScrollingLabel({
+                        text: line
+                    }));
+                }));
+                this._introLesson = null;
+                this._currentTaskText = null;
+                this._chatboxLessonCounter = 0;
+            }
+
+            return;
+        }
+
+        this._service.call_get_task_description("intro", lessonIndex, null,
+                                                Lang.bind(this, function(source, result) {
+            [success, returnValue] = this._service.call_get_task_description_finish(result);
+
+            if (success) {
+                const [desc, successText, failText] = returnValue.deep_unpack();
+                this._currentTaskText = {
+                    desc: desc,
+                    success: successText,
+                    fail: failText
+                };
+
+                wrapTextWith(desc, WRAP_CONSTANT, '').forEach(Lang.bind(this, function(line) {
+                    this._pushLabelToChatboxResultsArea(new ScrollingLabel({
+                        text: line
+                    }));
+                }));
+            } else {
+                log("Call to call_get_task_description_finish failed");
+            }
+        }));
     },
     _evaluate: function(text) {
         let wrappedText = text;
         wrappedText.replace('\n', ' ');
         wrappedText.replace(/^\s+/g, '').replace(/\s+$/g, '');
 
-        const wrapConstant = 42;
-
-        wrapTextWith(wrappedText, wrapConstant, '> ').forEach(Lang.bind(this, function(line) {
-            this._pushLabelToChatboxResultsArea(new ScrollingLabel({
+        wrapTextWith(wrappedText, WRAP_CONSTANT, '').forEach(Lang.bind(this, function(line) {
+            this._pushLabelToChatboxResultsArea(new UserResponseLabel({
                 text: line
             }));
         }));
+
+        /* If we're currently doing a lesson, submit this to the
+         * service and see what the response is */
+        const numLessons = this._introLesson ? this._introLesson[2] : 0;
+
+        if (this._introLesson &&
+            this._currentTaskText &&
+            this._chatboxLessonCounter < numLessons) {
+            this._service.call_attempt_lesson_remote("intro", this._chatboxLessonCounter, text, null,
+                                                     Lang.bind(this, function(source, result) {
+                [success, returnValue] = this._service.call_attempt_lesson_remote_finish(result);
+
+                if (success) {
+                    const [wait_message, printable_output, attemptResult] = returnValue.deep_unpack();
+
+                    /* Ignore the wait message, just print the success or fail message */
+                    const textToPrint = attemptResult ? this._currentTaskText.success : this._currentTaskText.fail;
+                    wrapTextWith(textToPrint, WRAP_CONSTANT, '').forEach(Lang.bind(this, function(line) {
+                        this._pushLabelToChatboxResultsArea(new ScrollingLabel({
+                            text: line
+                        }));
+                    }));
+
+                    /* If we were successful, increment the lesson counter and display
+                     * the next lesson, if applicable */
+                    if (attemptResult) {
+                        this._chatboxLessonCounter++;
+                        this._showTaskDescriptionForLesson(this._chatboxLessonCounter);
+                    }
+                } else {
+                    log("Failed to call call_attempt_lesson_remote");
+                }
+            }));
+        }
     },
     _pushLabelToChatboxResultsArea: function(label) {
         /* Push immediately if we're the first or if the last one
