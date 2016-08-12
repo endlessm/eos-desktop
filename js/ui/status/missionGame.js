@@ -8,6 +8,7 @@ const Pango = imports.gi.Pango;
 const St = imports.gi.St;
 const Showmehow = imports.gi.Showmehow;
 const Signals = imports.signals;
+const Tweener = imports.ui.tweener;
 
 const BoxPointer = imports.ui.boxpointer;
 const PanelMenu = imports.ui.panelMenu;
@@ -207,9 +208,21 @@ const UserResponseLabel = new Lang.Class({
         this.clutter_text.set_x_expand(true);
     },
     start: function(scrollView) {
-        this.complete = true;
         this.set_text(this._text);
-        this.emit('finished-scrolling');
+        this["translation-y"] = 5;
+        this["opacity"] = 0;
+
+        Tweener.addTween(this,
+                         { "translation-y": 0,
+                           time: 1.0,
+                           opacity: 255,
+                           onCompleteScope: this,
+                           onComplete: function() {
+                               this.emit('finished-scrolling');
+                               scrollView();
+                               this.complete = true;
+                           }
+                         });
         scrollView();
     },
     fastForward: function() {
