@@ -206,6 +206,7 @@ const UserResponseLabel = new Lang.Class({
 
         this.set_x_expand(true);
         this.clutter_text.set_x_expand(true);
+        this.clutter_text["line-wrap"] = true;
     },
     start: function(scrollView) {
         this.set_text(this._text);
