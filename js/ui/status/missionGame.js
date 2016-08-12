@@ -194,6 +194,12 @@ const UserResponseLabel = new Lang.Class({
         this.parent(parentParams);
         this._text = params.text;
         this.complete = false;
+
+        this['margin-top'] = 5;
+        this['margin-left'] = 40;
+        this['margin-bottom'] = 5;
+
+        this.clutter_text.set_line_alignment(Pango.Alignment.RIGHT);
     },
     start: function(scrollView) {
         this.complete = true;
