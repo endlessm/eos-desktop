@@ -132,6 +132,11 @@ const ScrollingLabel = new Lang.Class({
         this._scrollTimer = 0;
         this._waitCount = 0;
         this.complete = false;
+
+        this.style_class = 'chatbox-character-text';
+
+        this.set_x_expand(true);
+        this.clutter_text.set_x_expand(true);
     },
     start: function(scrollView) {
         /* Avoid double-start */
@@ -195,11 +200,10 @@ const UserResponseLabel = new Lang.Class({
         this._text = params.text;
         this.complete = false;
 
-        this['margin-top'] = 5;
-        this['margin-left'] = 40;
-        this['margin-bottom'] = 5;
+        this.style_class = 'chatbox-user-text';
 
-        this.clutter_text.set_line_alignment(Pango.Alignment.RIGHT);
+        this.set_x_expand(true);
+        this.clutter_text.set_x_expand(true);
     },
     start: function(scrollView) {
         this.complete = true;
@@ -276,6 +280,11 @@ const Indicator = new Lang.Class({
         const chatboxBox = new St.BoxLayout({ name: 'chatboxArea', vertical: true });
         hbox.add(chatboxBox);
 
+        chatboxBox["margin-top"] = 10;
+        chatboxBox["margin-bottom"] = 10;
+        chatboxBox["margin-left"] = 10;
+        chatboxBox["margin-right"] = 10;
+
         this._chatboxLabels = [];
         this._chatboxResultsScrollView = new St.ScrollView({ overlay_scrollbars: true });
         this._chatboxResultsArea = new St.BoxLayout({ name: 'chatboxResultsArea', vertical: true });
@@ -291,16 +300,8 @@ const Indicator = new Lang.Class({
         this._chatboxEntry = new St.Entry({ can_focus: true });
         chatboxEntryArea.add(this._chatboxEntry, { expand: true });
 
-        chatboxBox["margin-top"] = 10;
-        chatboxBox["margin-left"] = 10;
         chatboxBox.set_size(400, 450);
-
-        const fontName = InterfaceSettings.get_string('monospace-font-name');
-        const fontDesc = Pango.FontDescription.from_string(fontName);
-        chatboxBox.style =
-            'font-size: ' + fontDesc.get_size() / 1024. +
-            (fontDesc.get_size_is_absolute() ? 'px' : 'pt') + ';'
-            + 'font-family: "' + fontDesc.get_family() + '";';
+        chatboxBox.style_class = 'chatbox-text-container';
 
         let name = "com.endlessm.Showmehow.Service";
         let path = "/com/endlessm/Showmehow/Service";
