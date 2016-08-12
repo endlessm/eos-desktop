@@ -6,6 +6,56 @@
 
   <schema id="org.gnome.shell" path="/org/gnome/shell/"
           gettext-domain="@GETTEXT_PACKAGE@">
+    <key name="wobbly-effect" type="b">
+      <default>false</default>
+      <_summary>
+        Whether or not to enable the wobbly effect.
+      </_summary>
+      <_description>
+        WOBBLY!
+      </_description>
+    </key>
+    <key name="wobbly-spring-k" type="d">
+      <range min="1.0" max="10.0"/>
+      <default>8.0</default>
+      <_summary>
+        Wobbly effect Spring Constant
+      </_summary>
+      <_description>
+        Springiness of wobbly effect
+      </_description>
+    </key>
+    <key name="wobbly-spring-friction" type="d">
+      <range min="1.0" max="10.0"/>
+      <default>3.0</default>
+      <_summary>
+        Wobbly effect Friction
+      </_summary>
+      <_description>
+        Friction of wobbly effect
+      </_description>
+    </key>
+    <key name="wobbly-slowdown-factor" type="d">
+      <range min="1.0" max="5.0"/>
+      <default>1.0</default>
+      <_summary>
+        Wobbly effect slowdown factor
+      </_summary>
+      <_description>
+        Slowdown factor of wobbly effect (1.0 being normal speed)
+      </_description>
+    </key>
+    <key name="wobbly-object-movement-range" type="d">
+      <range min="1.0" max="500.0"/>
+      <default>1.0</default>
+      <_summary>
+        Wobbly effect object movement range
+      </_summary>
+      <_description>
+        How much objects are allowed to move in the mesh. A higher range
+        allows for a more pronounced effect.
+      </_description>
+    </key>
     <key name="development-tools" type="b">
       <default>true</default>
       <_summary>

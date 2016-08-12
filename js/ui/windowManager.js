@@ -5,6 +5,8 @@ const Clutter = imports.gi.Clutter;
 const Gdk = imports.gi.Gdk;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
+const GObject = imports.gi.GObject;
+const EndlessShellFX = imports.gi.EndlessShellFX;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
@@ -133,6 +135,76 @@ const DisplayChangeDialog = new Lang.Class({
         this._wm.complete_display_change(true);
         this.close();
     },
+});
+
+const EOSShellWobbly = new Lang.Class({
+    Name: 'EOSShellWobbly',
+    Extends: EndlessShellFX.Wobbly,
+    Properties: {
+        'settings' : GObject.ParamSpec.object('settings',
+                                              'Effect GSettings',
+                                              'Wobbly Effect GSettings',
+                                              GObject.ParamFlags.CONSTRUCT_ONLY |
+                                              GObject.ParamFlags.WRITABLE,
+                                              Gio.Settings)
+    },
+
+    _init: function(params) {
+        this.parent(params);
+        this._settings = null;
+    },
+
+    set settings (val)
+    {
+         if (val['schema-id'] !== 'org.gnome.shell')
+             throw Error('EOSShellWobbly: Injected schema must be of ' +
+                         'org.gnome.shell');
+
+         this._settings = val;
+
+         let binder = Lang.bind (this, function(key, prop) {
+             this._settings.bind (key, this, prop, Gio.SettingsBindFlags.GET);
+         });
+
+         /* Bind to effect properties */
+         binder('wobbly-spring-k', 'spring-k');
+         binder('wobbly-spring-friction', 'friction');
+         binder('wobbly-slowdown-factor', 'slowdown-factor');
+         binder('wobbly-object-movement-range', 'object-movement-range');
+    },
+
+    grabbedByMouse: function() {
+
+        if (!global.get_settings().get_boolean('wobbly-effect'))
+            return;
+
+        let position = global.get_pointer();
+        let actor = this.get_actor();
+        this.grab(position[0], position[1]);
+
+        this._lastPosition = actor.get_position();
+        this._positionChangedId =
+            actor.connect('allocation-changed', Lang.bind(this, function (actor) {
+                let position = actor.get_position();
+                let dx = position[0] - this._lastPosition[0];
+                let dy = position[1] - this._lastPosition[1];
+
+                this.move_by(dx, dy);
+                this._lastPosition = position;
+            }));
+    },
+
+    ungrabbedByMouse: function() {
+        // Only continue if we have an active grab and change notification
+        // on movement
+        if (this._positionChangedId !== undefined) {
+            let actor = this.get_actor();
+            this.ungrab();
+
+            actor.disconnect(this._positionChangedId);
+            this._positionChangedId = undefined;
+        }
+    }
 });
 
 const WindowDimmer = new Lang.Class({
@@ -662,6 +734,9 @@ const WindowManager = new Lang.Class({
                 this._dimWindow(this._dimmedWindows[i]);
             }
         }));
+
+        global.display.connect('grab-op-begin', Lang.bind(this, this._windowGrabbed));
+        global.display.connect('grab-op-end', Lang.bind(this, this._windowUngrabbed));
     },
 
     setCustomKeybindingHandler: function(name, modes, handler) {
@@ -1527,5 +1602,54 @@ const WindowManager = new Lang.Class({
     _confirmDisplayChange: function() {
         let dialog = new DisplayChangeDialog(this._shellwm);
         dialog.open();
+    },
+
+    _windowCanWobble: function(window, op) {
+
+        if (window.is_override_redirect() ||
+            op != Meta.GrabOp.MOVING)
+            return false;
+
+        return true;
+    },
+
+    _windowGrabbed: function(display, screen, window, op) {
+
+        // Occassionally, window can be null, in cases where grab-op-begin
+        // was emitted on a window from shell-toolkit. Ignore these grabs.
+        if (!window)
+            return;
+
+        if (!this._windowCanWobble(window, op))
+            return;
+
+        let actor = window.get_compositor_private();
+
+        let effect = actor.get_effect('endless-wobbly');
+        if (!effect) {
+            effect = new EOSShellWobbly({ settings: global.get_settings() });
+            actor.add_effect_with_name('endless-wobbly', effect);
+        }
+
+        effect.grabbedByMouse();
+    },
+
+    _windowUngrabbed: function(display, op, window) {
+
+        // Occassionally, window can be null, in cases where grab-op-end
+        // was emitted on a window from shell-toolkit. Ignore these grabs.
+        if (!window)
+            return;
+
+
+        let actor = window.get_compositor_private();
+        let effect = actor.get_effect('endless-wobbly');
+
+        // Lots of different grab ops can end here, so we just let
+        // EOSShellWobbly.ungrabbedByMouse figure out what to do based on its
+        // own state
+        if (effect) {
+            effect.ungrabbedByMouse();
+        }
     },
 });
