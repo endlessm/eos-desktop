@@ -130,6 +130,7 @@ const ScrollingLabel = new Lang.Class({
         this._text = params.text;
         this._textIndex = 0;
         this._scrollTimer = 0;
+        this._waitCount = 0;
         this.complete = false;
     },
     start: function(scrollView) {
@@ -146,8 +147,19 @@ const ScrollingLabel = new Lang.Class({
         /* Add a timeout to gradually display all this text */
         if (this._textIndex < this._text.length) {
             this._scrollTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 10, Lang.bind(this, function() {
+                if (this._waitCount > 0) {
+                    this._waitCount--;
+                    return true;
+                }
+
                 this._textIndex++;
                 this.set_text(this._text.slice(0, this._textIndex));
+
+                /* Stop on punctuation */
+                if ("!?.".indexOf(this._text[this._textIndex - 1]) !== -1) {
+                    this._waitCount = 100;
+                    return true;
+                }
 
                 const incomplete = this._textIndex < this._text.length;
                 if (!incomplete) {
