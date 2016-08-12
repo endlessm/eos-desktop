@@ -171,6 +171,28 @@ const ScrollingLabel = new Lang.Class({
 });
 Signals.addSignalMethods(ScrollingLabel.prototype);
 
+const UserResponseLabel = new Lang.Class({
+    Name: 'UserResponseLabel',
+    Extends: St.Label,
+
+    _init: function(params) {
+        let parentParams = copyObject(params);
+        parentParams.text = '';
+
+        this.parent(parentParams);
+        this._text = params.text;
+        this.complete = false;
+    },
+    start: function(scrollView) {
+        this.complete = true;
+        this.set_text(this._text);
+        this.emit('finished-scrolling');
+        scrollView();
+    },
+    fastForward: function() {
+    }
+});
+Signals.addSignalMethods(UserResponseLabel.prototype);
 
 /**
  * _addLabelToChatboxArea
