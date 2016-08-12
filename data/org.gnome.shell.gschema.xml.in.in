@@ -154,6 +154,17 @@
         Whether the application grid displays the app store icon.
       </_description>
     </key>
+    <key name="enable-mission-game" type="b">
+      <default>false</default>
+      <_summary>
+        Whether the "Mission" game is enabled
+      </_summary>
+      <_description>
+        Whether the "Mission" game is enabled. You will need to restart
+        the shell for this setting to take effect, as it is intended
+        for product developers.
+      </_description>
+    </key>
     <key name="enabled-extensions" type="as">
       <default>[]</default>
       <_summary>Uuids of extensions to enable</_summary>

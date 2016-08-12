@@ -40,6 +40,8 @@ const ICON_ENTER_ANIMATION_DELTA = PANEL_ICON_SIZE * 0.25;
 const ICON_ENTER_ANIMATION_SPEED = ICON_ENTER_ANIMATION_DELTA * 0.0012;
 const ICON_ENTER_ANIMATION_DELAY = ICON_ENTER_ANIMATION_SPEED * ICON_ENTER_ANIMATION_DELTA * 0.5 + PANEL_ANIMATION_TIME;
 
+const SHELL_SETTINGS = new Gio.Settings({ schema: 'org.gnome.shell' });
+
 function animateIconIn (icon, index) {
     if (!Main.layoutManager.startingUp) {
         return;
@@ -319,8 +321,7 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'userMenu': imports.ui.userMenu.UserMenuButton,
     'socialBar': imports.ui.status.social.SocialBarButton,
     'panelSeparator': imports.ui.panelSeparator.PanelSeparator,
-    'hotCornerIndicator': imports.ui.status.hotCornerIndicator.HotCornerIndicator,
-    'missionGame': imports.ui.status.missionGame.Indicator
+    'hotCornerIndicator': imports.ui.status.hotCornerIndicator.HotCornerIndicator
 };
 
 if (Config.HAVE_BLUETOOTH)
@@ -333,6 +334,12 @@ try {
 } catch(e) {
     log('NMApplet is not supported. It is possible that your NetworkManager version is too old');
 }
+
+if (SHELL_SETTINGS.get_boolean('enable-mission-game')) {
+    PANEL_ITEM_IMPLEMENTATIONS['missionGame'] = imports.ui.status.missionGame.Indicator;
+    log('Mission game enabled');
+}
+
 
 const Panel = new Lang.Class({
     Name: 'Panel',
