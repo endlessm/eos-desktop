@@ -273,6 +273,8 @@ const Indicator = new Lang.Class({
         this._chatboxEntry = new St.Entry({ can_focus: true });
         chatboxEntryArea.add(this._chatboxEntry, { expand: true });
 
+        chatboxBox["margin-top"] = 10;
+        chatboxBox["margin-left"] = 10;
         chatboxBox.set_size(400, 450);
 
         const fontName = InterfaceSettings.get_string('monospace-font-name');
