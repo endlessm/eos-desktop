@@ -137,6 +137,7 @@ const ScrollingLabel = new Lang.Class({
 
         this.set_x_expand(true);
         this.clutter_text.set_x_expand(true);
+        this.clutter_text["line-wrap"] = true;
     },
     start: function(scrollView) {
         /* Avoid double-start */
@@ -431,10 +432,8 @@ const Indicator = new Lang.Class({
         wrappedText.replace('\n', ' ');
         wrappedText.replace(/^\s+/g, '').replace(/\s+$/g, '');
 
-        wrapTextWith(wrappedText, WRAP_CONSTANT, '').forEach(Lang.bind(this, function(line) {
-            this._pushLabelToChatboxResultsArea(new UserResponseLabel({
-                text: line
-            }));
+        this._pushLabelToChatboxResultsArea(new UserResponseLabel({
+            text: wrappedText
         }));
 
         /* If we're currently doing a lesson, submit this to the
@@ -453,10 +452,8 @@ const Indicator = new Lang.Class({
 
                     /* Ignore the wait message, just print the success or fail message */
                     const textToPrint = attemptResult ? this._currentTaskText.success : this._currentTaskText.fail;
-                    wrapTextWith(textToPrint, WRAP_CONSTANT, '').forEach(Lang.bind(this, function(line) {
-                        this._pushLabelToChatboxResultsArea(new ScrollingLabel({
-                            text: line
-                        }));
+                    this._pushLabelToChatboxResultsArea(new ScrollingLabel({
+                        text: textToPrint
                     }));
 
                     /* If we were successful, increment the lesson counter and display
