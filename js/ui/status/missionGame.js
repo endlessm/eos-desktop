@@ -265,7 +265,7 @@ const MissionChatbox = new Lang.Class({
     Name: 'MissionChatbox',
     Extends: St.BoxLayout,
     _init: function(params, service) {
-        let parentParams = params;
+        let parentParams = copyObject(params);
         parentParams.name = parentParams.name || 'chatboxArea';
         parentParams.vertical = true;
 
@@ -374,7 +374,7 @@ const MissionToolbox = new Lang.Class({
     _init: function(params, parentMenu, service) {
         this._service = service;
 
-        let parentParams = params;
+        let parentParams = copyObject(params);
         parentParams.vertical = true;
         parentParams.name = 'missionToolbox';
 
