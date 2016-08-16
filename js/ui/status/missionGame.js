@@ -3,7 +3,6 @@
 const Clutter = imports.gi.Clutter;
 const Lang = imports.lang;
 const GLib = imports.gi.GLib;
-const Gio = imports.gi.Gio;
 const Pango = imports.gi.Pango;
 const St = imports.gi.St;
 const Signals = imports.signals;
@@ -14,8 +13,6 @@ const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
 const MissionGameService = imports.misc.missionGameService;
-
-const InterfaceSettings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
 
 function launchLessonAction(lesson) {
     return function(event) {
