@@ -688,7 +688,7 @@ function createSeparator() {
     return separator;
 }
 
-const Indicator = new Lang.Class({
+const MissionGameIndicator = new Lang.Class({
     Name: 'MissionGameIndicator',
     Extends: PanelMenu.SystemStatusButton,
 
