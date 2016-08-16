@@ -677,7 +677,7 @@ const Indicator = new Lang.Class({
         this._service = new MissionChatboxTextService();
 
         /* Create layout for indicator menu */
-        const hbox = new St.BoxLayout({name: 'switchesArea'});
+        const hbox = new St.BoxLayout({name: 'menuArea'});
 
         const separator = new St.DrawingArea({ style_class: 'calendar-vertical-separator',
                                                pseudo_class: 'highlighted' });
