@@ -427,6 +427,58 @@ function createSeparator() {
     return separator;
 }
 
+/* Separate indicators option */
+const MissionGameToolboxIndicator = new Lang.Class({
+    Name: 'MissionGameToolboxIndicator',
+    Extends: PanelMenu.SystemStatusButton,
+
+    _init: function() {
+        this.parent('starred-symbolic', _("Mission"));
+        this.setIcon('starred-symbolic');
+
+        this._service = new MissionGameService.MissionChatboxTextService();
+
+        /* Create layout for indicator menu */
+        const hbox = new St.BoxLayout({name: 'menuArea'});
+
+        /* Add toolbox, separator, chatbox */
+        hbox.add(new MissionToolbox({}, this.menu, this._service));
+
+        this.menu.addActor(hbox);
+    }
+});
+
+
+const MissionGameChatboxIndicator = new Lang.Class({
+    Name: 'MissionGameChatboxIndicator',
+    Extends: PanelMenu.SystemStatusButton,
+
+    _init: function() {
+        this.parent('folder-drag-accept-symbolic', _("Mission"));
+        this.setIcon('folder-drag-accept-symbolic');
+
+        this._service = new MissionGameService.MissionChatboxTextService();
+
+        /* Create layout for indicator menu */
+        const hbox = new St.BoxLayout({name: 'menuArea'});
+
+        /* Add toolbox, separator, chatbox */
+        hbox.add(new MissionChatbox({}, this._service));
+        this.menu.addActor(hbox);
+
+        /* Tell the service to commence the intro lesson, though this will only do
+         * so if the service is in a state where the intro lesson has not yet been
+         * commenced. */
+        this.menu.connect('open-state-changed', Lang.bind(this, function(menu, state) {
+            if (state) {
+                this._service.commenceIntroLesson();
+            }
+        }));
+    }
+});
+
+
+/* Combined indicator option */
 const MissionGameIndicator = new Lang.Class({
     Name: 'MissionGameIndicator',
     Extends: PanelMenu.SystemStatusButton,

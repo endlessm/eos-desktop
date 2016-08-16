@@ -95,7 +95,7 @@ const _modes = {
         panel: {
             left: ['userMenu', 'panelSeparator', 'appIcons'],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
-                    'network', 'battery', 'missionGame',
+                    'network', 'battery', 'missionGame', 'missionGameChatbox', 'missionGameToolbox',
                     'socialBar', 'hotCornerIndicator']
         }
     }
