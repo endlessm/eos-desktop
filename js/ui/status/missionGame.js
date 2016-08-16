@@ -182,6 +182,8 @@ const ScrollingLabel = new Lang.Class({
 
                 return incomplete;
             }));
+        } else {
+            this.complete = true;
         }
     },
     fastForward: function() {
