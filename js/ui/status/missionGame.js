@@ -406,10 +406,8 @@ const Indicator = new Lang.Class({
              * "done" message, and then set everything back to null. */
             const doneMessage = this._introLesson[3];
             if (this._introLesson) {
-                wrapTextWith(doneMessage, WRAP_CONSTANT, '').forEach(Lang.bind(this, function(line) {
-                    this._pushLabelToChatboxResultsArea(new ScrollingLabel({
-                        text: line
-                    }));
+                this._pushLabelToChatboxResultsArea(new ScrollingLabel({
+                    doneMessage: line
                 }));
                 this._introLesson = null;
                 this._currentTaskText = null;
@@ -431,10 +429,8 @@ const Indicator = new Lang.Class({
                     fail: failText
                 };
 
-                wrapTextWith(desc, WRAP_CONSTANT, '').forEach(Lang.bind(this, function(line) {
-                    this._pushLabelToChatboxResultsArea(new ScrollingLabel({
-                        text: line
-                    }));
+                this._pushLabelToChatboxResultsArea(new ScrollingLabel({
+                    text: desc
                 }));
             } else {
                 log("Call to call_get_task_description_finish failed");
