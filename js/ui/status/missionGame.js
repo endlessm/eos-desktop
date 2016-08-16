@@ -91,18 +91,26 @@ function wrapTextWith(text, constant, prefix) {
             /* Hit a space, see if we can append this
              * word, otherwise start a new line */
             let append = text.slice(lastSpace, textCounter);
-            if (lineCounter + append.length > constant ||
-                text[textCounter] == '\n') {
+            if (lineCounter + append.length > constant) {
                 lines.push(prefix);
                 lineIndex++;
                 lineCounter = prefix.length;
 
-                /* Strip leading whitespace in the case of
-                 * new lines */
-                append = append.replace(/^\s+/g, '');
-                lines[lineIndex] = lines[lineIndex] + append;
+                /* Strip leading and trailing whitespace and newlines
+                 * and remove any leading newlines as well. */
+                lines[lineIndex] = lines[lineIndex] + append.trim().replace(/\n/g, "");;
             } else {
-                lines[lineIndex] = lines[lineIndex] + append;
+                /* Just replace newlines, but don't touch whitespace. */
+                lines[lineIndex] = lines[lineIndex] + append.replace(/\n/g, "");;
+            }
+
+            /* If we encountered a '\n', we also need to
+             * break lines, though this will just
+             * involve inserting a new line. */
+            if (text[textCounter] === '\n') {
+                lines.push(prefix);
+                lineIndex++;
+                lineCounter = prefix.length;
             }
 
             lineCounter += append.length;
