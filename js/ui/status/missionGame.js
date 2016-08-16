@@ -407,7 +407,7 @@ const Indicator = new Lang.Class({
             const doneMessage = this._introLesson[3];
             if (this._introLesson) {
                 this._pushLabelToChatboxResultsArea(new ScrollingLabel({
-                    doneMessage: line
+                    doneMessage: doneMessage
                 }));
                 this._introLesson = null;
                 this._currentTaskText = null;
