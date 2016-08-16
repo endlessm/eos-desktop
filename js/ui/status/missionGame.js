@@ -69,6 +69,11 @@ function addSubMenuItemToBox(subMenuItem, packingBox, menu) {
  *
  * Naturally wrap lines at constant, appending prefix to each line,
  * returning an array with the wrapped lines.
+ *
+ * We need to do this instead of using the line-wrap property on
+ * ClutterText since that messes with the text's allocation
+ * and causes the text to be tightly packed, instead of
+ * overflowing like we want it to.
  */
 function wrapTextWith(text, constant, prefix) {
     let lines = [prefix];
@@ -146,7 +151,6 @@ const ScrollingLabel = new Lang.Class({
 
         this.set_x_expand(true);
         this.clutter_text.set_x_expand(true);
-        this.clutter_text["line-wrap"] = true;
     },
     start: function(scrollView) {
         /* Avoid double-start */
@@ -216,7 +220,6 @@ const UserResponseLabel = new Lang.Class({
 
         this.set_x_expand(true);
         this.clutter_text.set_x_expand(true);
-        this.clutter_text["line-wrap"] = true;
     },
     start: function(scrollView) {
         this.set_text(this._text);
@@ -411,7 +414,7 @@ const Indicator = new Lang.Class({
                             return w[0];
                         }).forEach(Lang.bind(this, function(w) {
                             const label = new ScrollingLabel({
-                                text: w
+                                text: wrapTextWith(w, WRAP_CONSTANT, "").join("\n")
                             });
                             label.fastForward();
                             this._pushLabelToChatboxResultsArea(label);
@@ -438,7 +441,7 @@ const Indicator = new Lang.Class({
             const doneMessage = this._introLesson[3];
             if (this._introLesson) {
                 this._pushLabelToChatboxResultsArea(new ScrollingLabel({
-                    doneMessage: doneMessage
+                    doneMessage: wrapTextWith(doneMessage, WRAP_CONSTANT, "").join("\n")
                 }));
                 this._introLesson = null;
                 this._currentTaskText = null;
@@ -474,7 +477,7 @@ const Indicator = new Lang.Class({
         wrappedText.replace(/^\s+/g, '').replace(/\s+$/g, '');
 
         this._pushLabelToChatboxResultsArea(new UserResponseLabel({
-            text: wrappedText
+            text: wrapTextWith(doneMessage, WRAP_CONSTANT, "").join("\n")
         }));
 
         /* If we're currently doing a lesson, submit this to the
@@ -494,7 +497,7 @@ const Indicator = new Lang.Class({
                     /* Ignore the wait message, just print the success or fail message */
                     const textToPrint = attemptResult ? this._currentTaskText.success : this._currentTaskText.fail;
                     this._pushLabelToChatboxResultsArea(new ScrollingLabel({
-                        text: textToPrint
+                        text: wrapTextWith(textToPrint, WRAP_CONSTANT, "").join("\n")
                     }));
 
                     /* If we were successful, increment the lesson counter and display
