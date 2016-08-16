@@ -519,6 +519,113 @@ const MissionChatboxTextService = new Lang.Class({
 });
 Signals.addSignalMethods(MissionChatboxTextService.prototype);
 
+const MissionChatbox = new Lang.Class({
+    Name: 'MissionChatbox',
+    Extends: St.BoxLayout,
+    _init: function(params, service) {
+        let parentParams = params;
+        parentParams.name = parentParams.name || 'chatboxArea';
+        parentParams.vertical = true;
+
+        this.parent(parentParams);
+
+        /* Retain service, which evaluates text entry */
+        this._service = service;
+
+        /* Setup layout and style */
+        const margin = 10;
+        ["top", "bottom", "left", "right"].forEach(Lang.bind(this, function(d) {
+            this["margin-" + d] = margin
+        }));
+
+        this.set_size(400, 450);
+        this.style_class = 'chatbox-text-container';
+
+        /* Start setting up chatbox labels and add a scroll view
+         * to contain all the messages */
+        this._chatboxLabels = [];
+        this._chatboxResultsScrollView = new St.ScrollView({ overlay_scrollbars: true });
+        this._chatboxResultsArea = new St.BoxLayout({ name: 'chatboxResultsArea', vertical: true });
+
+        this._chatboxResultsScrollView.add_actor(this._chatboxResultsArea);
+
+        /* Create entry area to allow the user to type some text */
+        const chatboxEntryArea = new St.BoxLayout({ name: 'chatboxEntryArea' });
+        chatboxEntryArea.add(new St.Label({ text: '> ' }));
+
+        this._chatboxEntry = new St.Entry({ can_focus: true });
+        chatboxEntryArea.add(this._chatboxEntry, { expand: true });
+
+        /* Add the entry and results view to the layout */
+        this.add(this._chatboxResultsScrollView, { expand: true });
+        this.add(chatboxEntryArea);
+
+        /* When the user enters some text, we should add it to the
+         * chatbox (wrapping as appropriate) and ask the service
+         * to evaluate the result */
+        this._chatboxEntry.clutter_text.connect('activate', Lang.bind(this, function(entry, event) {
+            const text = entry.get_text()
+            if (text === '') {
+                return true;
+            }
+
+            this._pushLabelToChatboxResultsArea(new UserResponseLabel({
+                text: wrapTextWith(text.replace('\n', ' ').trim(),
+                                   WRAP_CONSTANT,
+                                   "").join("\n")
+            }));
+
+            this._service.evaluate(text);
+            entry.set_text('');
+            return true;
+        }));
+
+        /* When the service sends us back a chat message, we should display
+         * it in a different style and add it to the chatbox */
+        this._service.connect("chat-message", Lang.bind(this, function(chat, message) {
+            const classes = {
+                "scrolling": ScrollingLabel,
+                "user": UserResponseLabel
+            };
+
+            try {
+                const labelCls = classes[message.kind];
+            } catch(e) {
+                log("Cannot display chat message, no such label type " + message.kind);
+            }
+
+            const label = new labelCls({
+                text: wrapTextWith(message.text, WRAP_CONSTANT, "").join("\n")
+            });
+
+            if (message.mode === "immediate") {
+                label.fastForward();
+            }
+
+            this._pushLabelToChatboxResultsArea(label);
+        }));
+    },
+    _pushLabelToChatboxResultsArea: function(label) {
+        /* Push immediately if we're the first or if the last one
+         * has finished scrolling */
+        const lastLabel = this._chatboxLabels.length === 0 ? null : this._chatboxLabels[this._chatboxLabels.length - 1];
+        const immediate = !lastLabel || lastLabel.complete;
+
+        /* Immediately put the label in this._chatboxLabels, however
+         * this does not mean it will be immediately added to the
+         * area. */
+        this._chatboxLabels.push(label);
+
+        if (immediate) {
+            _addLabelToChatboxArea(label, this._chatboxResultsArea);
+        } else {
+            lastLabel.connect('finished-scrolling', Lang.bind(this, function() {
+               _addLabelToChatboxArea(label, this._chatboxResultsArea);
+            }));
+        }
+    }
+});
+
 const Indicator = new Lang.Class({
     Name: 'MissionGameIndicator',
     Extends: PanelMenu.SystemStatusButton,
@@ -560,34 +667,9 @@ const Indicator = new Lang.Class({
             cr.$dispose();
         }));
         hbox.add(separator);
+        hbox.add(new MissionChatbox({}, this._service));
 
-        const chatboxBox = new St.BoxLayout({ name: 'chatboxArea', vertical: true });
-        hbox.add(chatboxBox);
-
-        chatboxBox["margin-top"] = 10;
-        chatboxBox["margin-bottom"] = 10;
-        chatboxBox["margin-left"] = 10;
-        chatboxBox["margin-right"] = 10;
-
-        this._chatboxLabels = [];
-        this._chatboxResultsScrollView = new St.ScrollView({ overlay_scrollbars: true });
-        this._chatboxResultsArea = new St.BoxLayout({ name: 'chatboxResultsArea', vertical: true });
-        const chatboxEntryArea = new St.BoxLayout({ name: 'chatboxEntryArea' });
-
-        this._chatboxResultsScrollView.add_actor(this._chatboxResultsArea);
-
-        chatboxBox.add(this._chatboxResultsScrollView, { expand: true });
-        chatboxBox.add(chatboxEntryArea);
-
-        chatboxEntryArea.add(new St.Label({ text: '> ' }));
-
-        this._chatboxEntry = new St.Entry({ can_focus: true });
-        chatboxEntryArea.add(this._chatboxEntry, { expand: true });
-
-        chatboxBox.set_size(400, 450);
-        chatboxBox.style_class = 'chatbox-text-container';
-
-        /* Null-initialise service for now, but we'll set it later */
+        /* When we get some new adventures or spells, add the menu items to the list again */
         this._service.connect("discover-new-adventures", Lang.bind(this, function(chat, adventures) {
             this._adventures.menu.removeAll();
             adventures.forEach(Lang.bind(this, function(adventure) {
@@ -600,69 +682,14 @@ const Indicator = new Lang.Class({
                 this._spells.menu.addAction(spell.desc, launchLessonAction(spell.name));
             }));
         }));
-        this._service.connect("chat-message", Lang.bind(this, function(chat, message) {
-            const classes = {
-                "scrolling": ScrollingLabel,
-                "user": UserResponseLabel
-            };
 
-            try {
-                const labelCls = classes[message.kind];
-            } catch(e) {
-                log("Cannot display chat message, no such label type " + message.kind);
-            }
-
-            const label = new labelCls({
-                text: wrapTextWith(message.text, WRAP_CONSTANT, "").join("\n")
-            });
-
-            if (message.mode === "immediate") {
-                label.fastForward();
-            }
-
-            this._pushLabelToChatboxResultsArea(label);
-        }));
-
-        this._chatboxEntry.clutter_text.connect('activate', Lang.bind(this, function(entry, event) {
-            const text = entry.get_text()
-            if (text === '') {
-                return true;
-            }
-
-            this._pushLabelToChatboxResultsArea(new UserResponseLabel({
-                text: wrapTextWith(text.replace('\n', ' ').trim(),
-                                   WRAP_CONSTANT,
-                                   "").join("\n")
-            }));
-
-            this._service.evaluate(text);
-            entry.set_text('');
-            return true;
-        }));
-
+        /* Tell the service to commence the intro lesson, though this will only do
+         * so if the service is in a state where the intro lesson has not yet been
+         * commenced. */
         this.menu.connect('open-state-changed', Lang.bind(this, function(menu, state) {
             if (state) {
                 this._service.commenceIntroLesson();
             }
         }));
-    },
-    _pushLabelToChatboxResultsArea: function(label) {
-        /* Push immediately if we're the first or if the last one
-         * has finished scrolling */
-        const lastLabel = this._chatboxLabels.length === 0 ? null : this._chatboxLabels[this._chatboxLabels.length - 1];
-        const immediate = !lastLabel || lastLabel.complete;
-
-        /* Immediately put the label in this._chatboxLabels, however
-         * this does not mean it will be immediately added to the
-         * area. */
-        this._chatboxLabels.push(label);
-
-        if (immediate) {
-            _addLabelToChatboxArea(label, this._chatboxResultsArea);
-        } else {
-            lastLabel.connect('finished-scrolling', Lang.bind(this, function() {
-               _addLabelToChatboxArea(label, this._chatboxResultsArea);
-            }));
-        }
     }
 });
