@@ -337,6 +337,8 @@ try {
 
 if (SHELL_SETTINGS.get_boolean('enable-mission-game')) {
     PANEL_ITEM_IMPLEMENTATIONS['missionGame'] = imports.ui.status.missionGame.MissionGameIndicator;
+    PANEL_ITEM_IMPLEMENTATIONS['missionGameToolbox'] = imports.ui.status.missionGame.MissionGameToolboxIndicator;
+    PANEL_ITEM_IMPLEMENTATIONS['missionGameChatbox'] = imports.ui.status.missionGame.MissionGameChatboxIndicator;
     log('Mission game enabled');
 }
 
