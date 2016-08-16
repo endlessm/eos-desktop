@@ -20,6 +20,7 @@
     <file>misc/jsParse.js</file>
     <file>misc/keyboardManager.js</file>
     <file>misc/loginManager.js</file>
+    <file>misc/missionGameService.js</file>
     <file>misc/modemManager.js</file>
     <file>misc/params.js</file>
     <file>misc/util.js</file>
