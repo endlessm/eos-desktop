@@ -387,6 +387,37 @@ const Indicator = new Lang.Class({
                     log("Warning: Call to showmehow get_unlocked_lessons failed for intro lesson");
                 }
             }));
+
+            this._service.connect("lessons-changed", Lang.bind(this, function(proxy) {
+                /* When the underlying lessons change, we need to reset the entire
+                 * state of this component and start from the beginning, including
+                 * showing any warnings.
+                 *
+                 * Get the intro lesson again then reset all the state back
+                 * to its initial point.
+                 */
+                this._service.call_get_unlocked_lessons("shell", null, Lang.bind(this, function(source, result) {
+                    [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
+
+                    if (success) {
+                        /* There should be a single lesson here called introduction here. Save
+                         * it. */
+                        lessons = lessons.deep_unpack().filter(function(lesson) {
+                            return lesson[0] == "intro";
+                        });
+
+                        if (lessons.length !== 1) {
+                            log("Expected a single lesson for shell, cannot show intro lesson!");
+                        }
+
+                        this._introLesson = lessons[0];
+                        this._openedForTheFirstTime = false;
+                        this._chatboxLessonCounter = 0;
+                    } else {
+                        log("Warning: Call to showmehow get_unlocked_lessons failed for intro lesson");
+                    }
+                }));
+            }));
         }));
 
         this._chatboxEntry.clutter_text.connect('activate', Lang.bind(this, function(entry, event) {
