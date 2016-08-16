@@ -626,6 +626,46 @@ const MissionChatbox = new Lang.Class({
     }
 });
 
+const MissionToolbox = new Lang.Class({
+    Name: 'MissionToolbox',
+    Extends: St.BoxLayout,
+    _init: function(params, parentMenu, service) {
+        this._service = service;
+
+        let parentParams = params;
+        parentParams.vertical = true;
+        parentParams.name = 'missionToolbox';
+
+        this.parent(parentParams);
+
+        /* Game mode switch */
+        const missionSwitch = new PopupMenu.PopupSwitchMenuItem(_("Mission"), false);
+
+        /* Adventures and spells toolbox */
+        this._adventures = createSubMenuMenuItemWithFauxParent(_("Adventures"), parentMenu);
+        this._spells = createSubMenuMenuItemWithFauxParent(_("Spells"), parentMenu);
+
+        /* Add switches and toolbox items to hbox */
+        this.add(missionSwitch.actor);
+        addSubMenuItemToBox(this._adventures, this, parentMenu);
+        addSubMenuItemToBox(this._spells, this, parentMenu);
+
+        /* When we get some new adventures or spells, add the menu items to the list again */
+        this._service.connect("discover-new-adventures", Lang.bind(this, function(chat, adventures) {
+            this._adventures.menu.removeAll();
+            adventures.forEach(Lang.bind(this, function(adventure) {
+                this._adventures.menu.addAction(adventure.desc, launchLessonAction(adventure.name));
+            }));
+        }));
+        this._service.connect("discover-new-spells", Lang.bind(this, function(chat, spells) {
+            this._spells.menu.removeAll();
+            spells.forEach(Lang.bind(this, function(spell) {
+                this._spells.menu.addAction(spell.desc, launchLessonAction(spell.name));
+            }));
+        }));
+    }
+});
+
 const Indicator = new Lang.Class({
     Name: 'MissionGameIndicator',
     Extends: PanelMenu.SystemStatusButton,
@@ -636,18 +676,8 @@ const Indicator = new Lang.Class({
 
         this._service = new MissionChatboxTextService();
 
-        this._adventures = createSubMenuMenuItemWithFauxParent(_("Adventures"), this.menu);
-        this._spells = createSubMenuMenuItemWithFauxParent(_("Spells"), this.menu);
-
-        const missionSwitch = new PopupMenu.PopupSwitchMenuItem(_("Mission"), false);
-        const switchesBox = new St.BoxLayout({vertical: true});
+        /* Create layout for indicator menu */
         const hbox = new St.BoxLayout({name: 'switchesArea'});
-
-        this.menu.addActor(hbox);
-        hbox.add(switchesBox);
-        switchesBox.add(missionSwitch.actor);
-        addSubMenuItemToBox(this._adventures, switchesBox, this.menu);
-        addSubMenuItemToBox(this._spells, switchesBox, this.menu);
 
         const separator = new St.DrawingArea({ style_class: 'calendar-vertical-separator',
                                                pseudo_class: 'highlighted' });
@@ -666,22 +696,13 @@ const Indicator = new Lang.Class({
             cr.stroke();
             cr.$dispose();
         }));
+
+        /* Add toolbox, separator, chatbox */
+        hbox.add(new MissionToolbox({}, this.menu, this._service));
         hbox.add(separator);
         hbox.add(new MissionChatbox({}, this._service));
 
-        /* When we get some new adventures or spells, add the menu items to the list again */
-        this._service.connect("discover-new-adventures", Lang.bind(this, function(chat, adventures) {
-            this._adventures.menu.removeAll();
-            adventures.forEach(Lang.bind(this, function(adventure) {
-                this._adventures.menu.addAction(adventure.desc, launchLessonAction(adventure.name));
-            }));
-        }));
-        this._service.connect("discover-new-spells", Lang.bind(this, function(chat, spells) {
-            this._spells.menu.removeAll();
-            spells.forEach(Lang.bind(this, function(spell) {
-                this._spells.menu.addAction(spell.desc, launchLessonAction(spell.name));
-            }));
-        }));
+        this.menu.addActor(hbox);
 
         /* Tell the service to commence the intro lesson, though this will only do
          * so if the service is in a state where the intro lesson has not yet been
