@@ -392,7 +392,28 @@ const Indicator = new Lang.Class({
         this.menu.connect('open-state-changed', Lang.bind(this, function(menu, state) {
             if (state && !this._openedForTheFirstTime && this._introLesson) {
                 this._openedForTheFirstTime = true;
-                this._showTaskDescriptionForLesson(this._chatboxLessonCounter);
+
+                /* Get warnings and show them first, then show the first
+                 * chatbox description */
+                this._service.call_get_warnings(null, Lang.bind(this, function(source, result) {
+                    [success, returnValue] = this._service.call_get_warnings_finish(result);
+                    if (success) {
+                        /* Immediately display all warnings in the chatbox */
+                        returnValue.deep_unpack().map(function(w) {
+                            return w[0];
+                        }).forEach(Lang.bind(this, function(w) {
+                            const label = new ScrollingLabel({
+                                text: w
+                            });
+                            label.fastForward();
+                            this._pushLabelToChatboxResultsArea(label);
+                        }));
+                    } else {
+                        log("Call to get_warnings_finish failed");
+                    }
+
+                    this._showTaskDescriptionForLesson(this._chatboxLessonCounter);
+                }));
             }
         }));
     },
