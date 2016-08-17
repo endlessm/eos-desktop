@@ -548,6 +548,30 @@ const DisableBackfaceCullingEffect = new Lang.Class({
     }
 });
 
+/**
+ * Determine all windows belonging to a certain process id
+ */
+function windowActorsFromPid(pid) {
+    return global.get_window_actors().filter(function(window_actor) {
+        return window_actor.get_meta_window().get_pid() == pid;
+    });
+}
+
+/**
+ * For a given process id, determine the corresponding window
+ * (if any) and its size.
+ */
+function pidToActorInfo(pid) {
+    const windowActors = windowActorsFromPid(pid);
+
+    return {
+        actor: windowActors.length ? windowActors[0] : null,
+        rect: (windowActors.length ?
+               windowActors[0].get_meta_window().get_frame_rect() : null),
+        pid: pid,
+    };
+}
+
 const WindowManager = new Lang.Class({
     Name: 'WindowManager',
 
@@ -702,36 +726,12 @@ const WindowManager = new Lang.Class({
     },
 
     _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {
-        this._rotateTransitionFrom = src;
-        this._rotateTransitionTo = dst;
-
-        const windowActorsFromPid = function(pid) {
-            return global.get_window_actors().filter(function(window_actor) {
-                return window_actor.get_meta_window().get_pid() == pid;
-            });
-        }
-
-        const windowActorsForFromPid = windowActorsFromPid(src);
-        const windowActorsForToPid = windowActorsFromPid(dst);
-
-        const actorForFromPid = windowActorsForFromPid.length ? windowActorsForFromPid[0].get_meta_window() : null;
-        const actorForToPid = windowActorsForToPid.length ? windowActorsForToPid[0].get_meta_window() : null;
-
+        const srcActorInfo = pidToActorInfo(src)
         this._pendingRotateAnimations.push({
-            src: {
-                actor: windowActorsForFromPid.length ? windowActorsForFromPid[0] : null,
-                rect: (windowActorsForFromPid.length ?
-                       windowActorsForFromPid[0].get_meta_window().get_frame_rect() : null),
-                pid: src,
-            },
-            dst: {
-                actor: windowActorsForToPid.length ? windowActorsForToPid[0] : null,
-                rect: (windowActorsForFromPid.length ?
-                       windowActorsForFromPid[0].get_meta_window().get_frame_rect() : null),
-                pid: dst
-            }
+            src: srcActorInfo,
+            dst: pidToActorInfo(dst)
         });
-        this._updateReadyRotateAnimationsWith(windowActorsForFromPid.length ? windowActorsForFromPid[0] : null);
+        this._updateReadyRotateAnimationsWith(srcActorInfo.actor);
     },
     
     _updateReadyRotateAnimationsWith: function (window) {
