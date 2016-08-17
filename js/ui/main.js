@@ -175,11 +175,15 @@ function _initializeUI() {
     windowAttentionHandler = new WindowAttentionHandler.WindowAttentionHandler();
     componentManager = new Components.ComponentManager();
 
-    workspaceMonitor = new WorkspaceMonitor.WorkspaceMonitor();
-    desktopAppClient = new AppActivation.DesktopAppClient();
-
+    /*
+     * Since workspaceMonitor expects layoutManager to be ready, initialize it
+     * before workspaceMonitor
+     */
     layoutManager.init();
     overview.init();
+
+    workspaceMonitor = new WorkspaceMonitor.WorkspaceMonitor();
+    desktopAppClient = new AppActivation.DesktopAppClient();
 
     global.screen.override_workspace_layout(Meta.ScreenCorner.TOPLEFT,
                                             false, -1, 1);
