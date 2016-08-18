@@ -586,8 +586,8 @@ const TilePreview = new Lang.Class({
     }
 });
 
-const DisableBackfaceCullingEffect = new Lang.Class({
-    Name: 'DisableBackfaceCullingEffect',
+const EnableBackfaceCullingEffect = new Lang.Class({
+    Name: 'EnableBackfaceCullingEffect',
     Extends: Clutter.Effect,
     _init : function(params) {
         this.parent(params);
@@ -817,10 +817,14 @@ const WindowManager = new Lang.Class({
                                                                              dst_geometry.width,
                                                                              dst_geometry.height);
 
-                animationSpec.src.window.add_effect_with_name('disable-culling',
-                                                              new DisableBackfaceCullingEffect());
-                animationSpec.dst.window.add_effect_with_name('disable-culling',
-                                                              new DisableBackfaceCullingEffect());
+                animationSpec.src.window.add_effect_with_name('enable-culling',
+                                                              new EnableBackfaceCullingEffect());
+                animationSpec.dst.window.add_effect_with_name('enable-culling',
+                                                              new EnableBackfaceCullingEffect());
+
+                /* Tween both windows in a rotation animation at the same time
+                 * with backface culling enabled on both. This will allow for
+                 * a smooth transition. */
                 Tweener.addTween(animationSpec.src.window, {
                     "rotation-angle-y": -120,
                     time: WINDOW_ANIMATION_TIME,
