@@ -613,10 +613,10 @@ const EnableBackfaceCullingEffect = new Lang.Class({
         this.parent(params);
     },
     vfunc_pre_paint: function() {
-        Cogl.set_backface_culling_enabled(true);
+        this.get_actor().set_cull_back_face(true);
     },
     vfunc_post_paint: function() {
-        Cogl.set_backface_culling_enabled(false);
+        this.get_actor().set_cull_back_face(true);
     }
 });
 
