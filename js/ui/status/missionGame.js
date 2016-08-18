@@ -383,11 +383,13 @@ const MissionToolbox = new Lang.Class({
         /* Adventures and spells toolbox */
         this._adventures = createSubMenuMenuItemWithFauxParent(_("Adventures"), parentMenu);
         this._spells = createSubMenuMenuItemWithFauxParent(_("Spells"), parentMenu);
+        this._inventory = createSubMenuMenuItemWithFauxParent(_("Inventory"), parentMenu);
 
         /* Add switches and toolbox items to hbox */
         this.add(missionSwitch.actor);
         addSubMenuItemToBox(this._adventures, this, parentMenu);
         addSubMenuItemToBox(this._spells, this, parentMenu);
+        addSubMenuItemToBox(this._inventory, this, parentMenu);
 
         /* When we get some new adventures or spells, add the menu items to the list again */
         this._service.connect("discover-new-adventures", Lang.bind(this, function(chat, adventures) {
@@ -400,6 +402,13 @@ const MissionToolbox = new Lang.Class({
             this._spells.menu.removeAll();
             spells.forEach(Lang.bind(this, function(spell) {
                 this._spells.menu.addAction(spell.desc, launchLessonAction(spell.name));
+            }));
+        }));
+        this._service.connect("discover-new-inventory-items", Lang.bind(this, function(chat, items) {
+            this._inventory.menu.removeAll();
+            items.forEach(Lang.bind(this, function(item) {
+                this._inventory.menu.addAction(item.name, function() {
+                });
             }));
         }));
     }
