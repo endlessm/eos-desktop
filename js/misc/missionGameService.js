@@ -156,6 +156,7 @@ const MissionChatboxTextService = new Lang.Class({
         var completion = {
             "adventures": false,
             "spells": false,
+            "inventory": false,
             "intro": false
         };
 
@@ -210,6 +211,23 @@ const MissionChatboxTextService = new Lang.Class({
 
                 this._introLesson = lessons[0];
                 callWhenComplete(completion, "intro", completedCallback);
+            } else {
+                log("Warning: Call to showmehow get_unlocked_lessons failed for intro lesson");
+            }
+        }));
+
+        this._service.call_get_clues("shell", null, Lang.bind(this, function(source, result) {
+            [success, clues] = this._service.call_get_clues_finish(result);
+
+            if (success) {
+                this.emit("discover-new-inventory-items", clues.deep_unpack().map(function(clue) {
+                    const [name, type] = clue;
+                    return {
+                        name: name,
+                        type: type
+                    };
+                }));
+                callWhenComplete(completion, "inventory", completedCallback);
             } else {
                 log("Warning: Call to showmehow get_unlocked_lessons failed for intro lesson");
             }
