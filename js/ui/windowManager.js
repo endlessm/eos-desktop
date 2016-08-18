@@ -1370,7 +1370,7 @@ const WindowManager = new Lang.Class({
             Tweener.addTween(actor,
                              { scale_x: 1,
                                scale_y: 1,
-                               time: WINDOW_ANIMATION_TIME * 20, // Entire animation takes twice the normal time,
+                               time: WINDOW_ANIMATION_TIME * 2, // Entire animation takes twice the normal time,
                                                                 // but it appears to take about the same duration
                                transition: function(t, b, c, d) {
                                    // Easing function similar to easeOutElastic, but less aggressive.
