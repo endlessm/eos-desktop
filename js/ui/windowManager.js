@@ -828,7 +828,7 @@ const WindowManager = new Lang.Class({
             
             if (unsatisfiedPids == 0) {
                 let dst_geometry = animationSpec.src.rect;
-                animationSpec.dst.window.rotation_angle_y = 120;
+                animationSpec.dst.window.rotation_angle_y = -180;
                 animationSpec.dst.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
                 animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
                 animationSpec.dst.window.get_meta_window().move_resize_frame(false,
@@ -846,19 +846,19 @@ const WindowManager = new Lang.Class({
                  * with backface culling enabled on both. This will allow for
                  * a smooth transition. */
                 Tweener.addTween(animationSpec.src.window, {
-                    "rotation-angle-y": -120,
-                    time: WINDOW_ANIMATION_TIME,
+                    "rotation-angle-y": 180,
+                    time: WINDOW_ANIMATION_TIME * 4,
                     transition: 'easeOutQuad',
                     onComplete: function() {
-                        Tweener.addTween(animationSpec.dst.window, {
-                            "rotation-angle-y": 0,
-                            time: WINDOW_ANIMATION_TIME,
-                            transition: 'easeOutQuad'
-                        });
                         animationSpec.src.window.hide();
                     },
                     onCompleteScope: this,
                     onCompleteParams: []
+                });
+                Tweener.addTween(animationSpec.dst.window, {
+                    "rotation-angle-y": 0,
+                    time: WINDOW_ANIMATION_TIME * 4,
+                    transition: 'easeOutQuad'
                 });
                 return false;
             }
