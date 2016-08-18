@@ -827,39 +827,60 @@ const WindowManager = new Lang.Class({
             });
             
             if (unsatisfiedPids == 0) {
-                let dst_geometry = animationSpec.src.rect;
+                /* Delaying the animation like this is not ideal, but it is necessary
+                 * to allow some time for the window to paint itself for the first time.
+                 *
+                 * Mutter doesn't seem to have any kind of notification for when we first
+                 * receive a damage event on the window - that will be the time when the bound
+                 * texture will be defined. Until that point, the contents are just empty and
+                 * so we can't just rely on map events to get to where we want. */
                 animationSpec.dst.window.rotation_angle_y = -180;
                 animationSpec.dst.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
                 animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+                animationSpec.src.window.add_effect_with_name('enable-culling',
+                                                              new EnableBackfaceCullingEffect());
+                animationSpec.dst.window.add_effect_with_name('enable-culling',
+                                                              new EnableBackfaceCullingEffect());
+                animationSpec.dst.window['opacity'] = 0;
+                let dst_geometry = animationSpec.src.rect;
                 animationSpec.dst.window.get_meta_window().move_resize_frame(false,
                                                                              dst_geometry.x,
                                                                              dst_geometry.y,
                                                                              dst_geometry.width,
                                                                              dst_geometry.height);
 
-                animationSpec.src.window.add_effect_with_name('enable-culling',
-                                                              new EnableBackfaceCullingEffect());
-                animationSpec.dst.window.add_effect_with_name('enable-culling',
-                                                              new EnableBackfaceCullingEffect());
+                GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, Lang.bind(this, function() {
+                    /* Tween both windows in a rotation animation at the same time
+                     * with backface culling enabled on both. This will allow for
+                     * a smooth transition. */
+                    Tweener.addTween(animationSpec.src.window, {
+                        "rotation-angle-y": 180,
+                        time: WINDOW_ANIMATION_TIME * 4,
+                        transition: 'easeOutQuad',
+                        onComplete: function() {
+                            animationSpec.src.window.hide();
+                        },
+                        onCompleteScope: this,
+                        onCompleteParams: []
+                    });
+                    Tweener.addTween(animationSpec.dst.window, {
+                        "rotation-angle-y": 0,
+                        time: WINDOW_ANIMATION_TIME * 4,
+                        transition: 'easeOutQuad'
+                    });
 
-                /* Tween both windows in a rotation animation at the same time
-                 * with backface culling enabled on both. This will allow for
-                 * a smooth transition. */
-                Tweener.addTween(animationSpec.src.window, {
-                    "rotation-angle-y": 180,
-                    time: WINDOW_ANIMATION_TIME * 4,
-                    transition: 'easeOutQuad',
-                    onComplete: function() {
-                        animationSpec.src.window.hide();
-                    },
-                    onCompleteScope: this,
-                    onCompleteParams: []
-                });
-                Tweener.addTween(animationSpec.dst.window, {
-                    "rotation-angle-y": 0,
-                    time: WINDOW_ANIMATION_TIME * 4,
-                    transition: 'easeOutQuad'
-                });
+                    /* Gently fade the window in, this will paper over
+                     * any artifacts from shadows and the like */
+                    Tweener.addTween(animationSpec.dst.window, {
+                        "opacity": 255,
+                        time: WINDOW_ANIMATION_TIME,
+                        transition: 'linear'
+                    });
+
+                    return false;
+                }));
+
+                /* This will remove us from pending rotations */
                 return false;
             }
             
@@ -1333,7 +1354,7 @@ const WindowManager = new Lang.Class({
             Tweener.addTween(actor,
                              { scale_x: 1,
                                scale_y: 1,
-                               time: WINDOW_ANIMATION_TIME * 2, // Entire animation takes twice the normal time,
+                               time: WINDOW_ANIMATION_TIME * 20, // Entire animation takes twice the normal time,
                                                                 // but it appears to take about the same duration
                                transition: function(t, b, c, d) {
                                    // Easing function similar to easeOutElastic, but less aggressive.
