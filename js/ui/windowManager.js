@@ -662,6 +662,20 @@ const WindowManager = new Lang.Class({
             this._unminimizeWindowDone(shellwm, actor);
             this._mapWindowDone(shellwm, actor);
             this._destroyWindowDone(shellwm, actor);
+            this._rotateInCompleted(actor);
+            this._rotateOutCompleted(actor);
+
+            let activeWaitForRotateTimeout = this._rotateInTimeouts.filter(function(timeout) {
+                return timeout == actor._waitingRotateTimeout;
+            });
+
+            if (activeWaitForRotateTimeout.length === 1) {
+                GLib.source_remove(activeWaitForRotateTimeout[0]);
+                this._rotateInTimeouts = this.rotateInTimeouts.filter(function(timeout) {
+                    return timeout !== activeWaitForRotateTimeout[0];
+                });
+                actor._waitingRotateTimeout = null;
+            }
         }));
 
         this._shellwm.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
@@ -777,6 +791,9 @@ const WindowManager = new Lang.Class({
         this._sylvesterListener.connectSignal('RotateBetweenPidWindows',
                                               Lang.bind(this, this._handleRotateBetweenPidWindows));
         this._pendingRotateAnimations = [];
+        this._rotateOutActors = [];
+        this._rotateInActors = [];
+        this._rotateInTimeouts = [];
         log("Connected to Sylvester");
     },
 
@@ -794,7 +811,7 @@ const WindowManager = new Lang.Class({
          * unsatisfied entries in _pendingRotateAnimations */
         const pid = window ? window.get_meta_window().get_pid() : null;
         const lastPendingRotateAnimationsLength = this._pendingRotateAnimations.length;
-        this._pendingRotateAnimations = this._pendingRotateAnimations.filter(function(animationSpec) {
+        this._pendingRotateAnimations = this._pendingRotateAnimations.filter(Lang.bind(this, function(animationSpec) {
             let unsatisfiedPids = 0;
             Object.keys(animationSpec).forEach(function(key) {
                 if (animationSpec[key].window == null) {
@@ -829,7 +846,10 @@ const WindowManager = new Lang.Class({
                                                                              dst_geometry.width,
                                                                              dst_geometry.height);
 
-                GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, Lang.bind(this, function() {
+                this._rotateInActors.push(animationSpec.dst.window);
+                this._rotateOutActors.push(animationSpec.src.window);
+
+                let waitingRotateTimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, Lang.bind(this, function() {
                     /* Tween both windows in a rotation animation at the same time
                      * with backface culling enabled on both. This will allow for
                      * a smooth transition. */
@@ -838,7 +858,7 @@ const WindowManager = new Lang.Class({
                         time: WINDOW_ANIMATION_TIME * 4,
                         transition: 'easeOutQuad',
                         onComplete: function() {
-                            animationSpec.src.window.hide();
+                            this._rotateOutCompleted(animationSpec.src.window);
                         },
                         onCompleteScope: this,
                         onCompleteParams: []
@@ -846,7 +866,12 @@ const WindowManager = new Lang.Class({
                     Tweener.addTween(animationSpec.dst.window, {
                         "rotation-angle-y": 0,
                         time: WINDOW_ANIMATION_TIME * 4,
-                        transition: 'easeOutQuad'
+                        transition: 'easeOutQuad',
+                        onComplete: function() {
+                            this._rotateInCompleted(animationSpec.dst.window);
+                        },
+                        onCompleteScope: this,
+                        onCompleteParams: []
                     });
 
                     /* Gently fade the window in, this will paper over
@@ -857,15 +882,26 @@ const WindowManager = new Lang.Class({
                         transition: 'linear'
                     });
 
+                    this._rotateInTimeouts = this._rotateInTimeouts.filter(function(timeout) {
+                        return timeout != animationSpec.dst.window._waitingRotateTimeout;
+                    });
+                    animationSpec.dst.window._waitingRotateTimeout = null;
+
                     return false;
                 }));
+
+                /* Save the timeout's id on the destination window and in a list too so we can
+                 * get rid of it on kill-window-effects later */
+                animationSpec.dst.window._waitingRotateTimeout = waitingRotateTimeout;
+                this._rotateInTimeouts.push(waitingRotateTimeout);
 
                 /* This will remove us from pending rotations */
                 return false;
             }
-            
+
+            /* There are still unsatisfied process ID's, keep this metadata around. */
             return true;
-        });
+        }));
         
         return this._pendingRotateAnimations.length != lastPendingRotateAnimationsLength;
     },
@@ -1364,6 +1400,22 @@ const WindowManager = new Lang.Class({
             actor.scale_x = 1;
             actor.scale_y = 1;
             shellwm.completed_map(actor);
+        }
+    },
+
+    _rotateInCompleted: function(actor) {
+        if (this._removeEffect(this._rotateInActors, actor)) {
+            Tweener.removeTweens(actor);
+            actor.opacity = 255;
+            actor.rotation_angle_x = 0;
+        }
+    },
+
+    _rotateOutCompleted: function(actor) {
+        if (this._removeEffect(this._rotateOutActors, actor)) {
+            Tweener.removeTweens(actor);
+            actor.hide();
+            actor.rotation_angle_x = 0;
         }
     },
 
