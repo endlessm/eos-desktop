@@ -969,7 +969,7 @@ const BrowserButton = new Lang.Class({
     Extends: AppIconButton,
 
     _init: function(app, iconSize, menuManager) {
-        this.parent(app, iconSize, menuManager, false);
+        this.parent(app, iconSize, menuManager, true);
         this.actor.add_style_class_name('browser-icon');
     },
 
