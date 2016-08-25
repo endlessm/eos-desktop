@@ -304,9 +304,10 @@ const DesktopAppClient = new Lang.Class({
     _onLaunched: function(connection, sender_name, object_path,
                           interface_name, signal_name,
                          parameters) {
-        let [desktopIdPath, display, pid, uris, extras] = parameters.deep_unpack();
+        let [desktopIdByteString, display, pid, uris, extras] = parameters.deep_unpack();
 
-        let desktopId = GLib.path_get_basename(desktopIdPath.toString());
+        let desktopIdPath = desktopIdByteString.toString();
+        let desktopId = GLib.path_get_basename(desktopIdPath);
         this._lastDesktopApp = Shell.AppSystem.get_default().lookup_app(desktopId);
 
         // Show the splash page if we didn't launch this ourselves, since in that case
