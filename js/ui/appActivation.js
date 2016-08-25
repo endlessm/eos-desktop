@@ -306,12 +306,12 @@ const DesktopAppClient = new Lang.Class({
                          parameters) {
         let [desktopIdPath, display, pid, uris, extras] = parameters.deep_unpack();
 
-        let launchedByShell = (sender_name == Gio.DBus.session.get_unique_name());
         let desktopId = GLib.path_get_basename(desktopIdPath.toString());
         this._lastDesktopApp = Shell.AppSystem.get_default().lookup_app(desktopId);
 
         // Show the splash page if we didn't launch this ourselves, since in that case
         // we already explicitly control when the splash screen should be used
+        let launchedByShell = (sender_name == Gio.DBus.session.get_unique_name());
         let showSplash =
             (this._lastDesktopApp != null) &&
             (this._lastDesktopApp.state != Shell.AppState.RUNNING) &&
