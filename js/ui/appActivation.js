@@ -307,7 +307,26 @@ const DesktopAppClient = new Lang.Class({
         let [desktopIdByteString, display, pid, uris, extras] = parameters.deep_unpack();
 
         let desktopIdPath = desktopIdByteString.toString();
+        let desktopIdFile = Gio.File.new_for_path(desktopIdPath);
+        let desktopDirs = GLib.get_system_data_dirs();
+        desktopDirs.push(GLib.get_user_data_dir());
+
         let desktopId = GLib.path_get_basename(desktopIdPath);
+
+        // Convert subdirectories to app ID prefixes like GIO does
+        desktopDirs.some(function(desktopDir) {
+            let path = GLib.build_filenamev([desktopDir, 'applications']);
+            let file = Gio.File.new_for_path(path);
+
+            if (desktopIdFile.has_prefix(file)) {
+                let relPath = file.get_relative_path(desktopIdFile);
+                desktopId = relPath.replace(/\//g, '-');
+                return true;
+            }
+
+            return false;
+        });
+
         this._lastDesktopApp = Shell.AppSystem.get_default().lookup_app(desktopId);
 
         // Show the splash page if we didn't launch this ourselves, since in that case
