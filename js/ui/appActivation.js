@@ -304,14 +304,34 @@ const DesktopAppClient = new Lang.Class({
     _onLaunched: function(connection, sender_name, object_path,
                           interface_name, signal_name,
                          parameters) {
-        let [desktopIdPath, display, pid, uris, extras] = parameters.deep_unpack();
+        let [desktopIdByteString, display, pid, uris, extras] = parameters.deep_unpack();
 
-        let launchedByShell = (sender_name == Gio.DBus.session.get_unique_name());
-        let desktopId = GLib.path_get_basename(desktopIdPath.toString());
+        let desktopIdPath = desktopIdByteString.toString();
+        let desktopIdFile = Gio.File.new_for_path(desktopIdPath);
+        let desktopDirs = GLib.get_system_data_dirs();
+        desktopDirs.push(GLib.get_user_data_dir());
+
+        let desktopId = GLib.path_get_basename(desktopIdPath);
+
+        // Convert subdirectories to app ID prefixes like GIO does
+        desktopDirs.some(function(desktopDir) {
+            let path = GLib.build_filenamev([desktopDir, 'applications']);
+            let file = Gio.File.new_for_path(path);
+
+            if (desktopIdFile.has_prefix(file)) {
+                let relPath = file.get_relative_path(desktopIdFile);
+                desktopId = relPath.replace(/\//g, '-');
+                return true;
+            }
+
+            return false;
+        });
+
         this._lastDesktopApp = Shell.AppSystem.get_default().lookup_app(desktopId);
 
         // Show the splash page if we didn't launch this ourselves, since in that case
         // we already explicitly control when the splash screen should be used
+        let launchedByShell = (sender_name == Gio.DBus.session.get_unique_name());
         let showSplash =
             (this._lastDesktopApp != null) &&
             (this._lastDesktopApp.state != Shell.AppState.RUNNING) &&
