@@ -2,9 +2,12 @@
 
 const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
+const Cogl = imports.gi.Cogl;
 const Gdk = imports.gi.Gdk;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
+const GObject = imports.gi.GObject;
+const EndlessShellFX = imports.gi.EndlessShellFX;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
@@ -35,6 +38,20 @@ const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
 
 const DISPLAY_REVERT_TIMEOUT = 30; // in seconds - keep in sync with mutter
 const ONE_SECOND = 1000; // in ms
+
+const SylvesterServiceIface = '<node> \
+  <interface name="com.endlessm.Sylvester.Service"> \
+    <method name="DownloadSourcesForPID"> \
+      <arg name="pid" direction="in" type="i"/> \
+    </method> \
+    <signal name="RotateBetweenPidWindows"> \
+      <arg name="src" type="i"/> \
+      <arg name="dest" type="i"/> \
+    </signal> \
+  </interface> \
+</node>';
+
+const SylvesterService = Gio.DBusProxy.makeProxyWrapper(SylvesterServiceIface);
 
 const DisplayChangeDialog = new Lang.Class({
     Name: 'DisplayChangeDialog',
@@ -133,6 +150,76 @@ const DisplayChangeDialog = new Lang.Class({
         this._wm.complete_display_change(true);
         this.close();
     },
+});
+
+const EOSShellWobbly = new Lang.Class({
+    Name: 'EOSShellWobbly',
+    Extends: EndlessShellFX.Wobbly,
+    Properties: {
+        'settings' : GObject.ParamSpec.object('settings',
+                                              'Effect GSettings',
+                                              'Wobbly Effect GSettings',
+                                              GObject.ParamFlags.CONSTRUCT_ONLY |
+                                              GObject.ParamFlags.WRITABLE,
+                                              Gio.Settings)
+    },
+
+    _init: function(params) {
+        this.parent(params);
+        this._settings = null;
+    },
+
+    set settings (val)
+    {
+         if (val['schema-id'] !== 'org.gnome.shell')
+             throw Error('EOSShellWobbly: Injected schema must be of ' +
+                         'org.gnome.shell');
+
+         this._settings = val;
+
+         let binder = Lang.bind (this, function(key, prop) {
+             this._settings.bind (key, this, prop, Gio.SettingsBindFlags.GET);
+         });
+
+         /* Bind to effect properties */
+         binder('wobbly-spring-k', 'spring-k');
+         binder('wobbly-spring-friction', 'friction');
+         binder('wobbly-slowdown-factor', 'slowdown-factor');
+         binder('wobbly-object-movement-range', 'object-movement-range');
+    },
+
+    grabbedByMouse: function() {
+
+        if (!global.get_settings().get_boolean('wobbly-effect'))
+            return;
+
+        let position = global.get_pointer();
+        let actor = this.get_actor();
+        this.grab(position[0], position[1]);
+
+        this._lastPosition = actor.get_position();
+        this._positionChangedId =
+            actor.connect('allocation-changed', Lang.bind(this, function (actor) {
+                let position = actor.get_position();
+                let dx = position[0] - this._lastPosition[0];
+                let dy = position[1] - this._lastPosition[1];
+
+                this.move_by(dx, dy);
+                this._lastPosition = position;
+            }));
+    },
+
+    ungrabbedByMouse: function() {
+        // Only continue if we have an active grab and change notification
+        // on movement
+        if (this._positionChangedId !== undefined) {
+            let actor = this.get_actor();
+            this.ungrab();
+
+            actor.disconnect(this._positionChangedId);
+            this._positionChangedId = undefined;
+        }
+    }
 });
 
 const WindowDimmer = new Lang.Class({
@@ -519,6 +606,44 @@ const TilePreview = new Lang.Class({
     }
 });
 
+const EnableBackfaceCullingEffect = new Lang.Class({
+    Name: 'EnableBackfaceCullingEffect',
+    Extends: Clutter.Effect,
+    _init : function(params) {
+        this.parent(params);
+    },
+    vfunc_pre_paint: function() {
+        this.get_actor().set_cull_back_face(true);
+    },
+    vfunc_post_paint: function() {
+        this.get_actor().set_cull_back_face(true);
+    }
+});
+
+/**
+ * Determine all windows belonging to a certain process id
+ */
+function windowActorsFromPid(pid) {
+    return global.get_window_actors().filter(function(window_actor) {
+        return window_actor.get_meta_window().get_pid() == pid;
+    });
+}
+
+/**
+ * For a given process id, determine the corresponding window
+ * (if any) and its size.
+ */
+function pidToActorInfo(pid) {
+    const windowActors = windowActorsFromPid(pid);
+
+    return {
+        actor: windowActors.length ? windowActors[0] : null,
+        rect: (windowActors.length ?
+               windowActors[0].get_meta_window().get_frame_rect() : null),
+        pid: pid,
+    };
+}
+
 const WindowManager = new Lang.Class({
     Name: 'WindowManager',
 
@@ -557,6 +682,20 @@ const WindowManager = new Lang.Class({
             this._unminimizeWindowDone(shellwm, actor);
             this._mapWindowDone(shellwm, actor);
             this._destroyWindowDone(shellwm, actor);
+            this._rotateInCompleted(actor);
+            this._rotateOutCompleted(actor);
+
+            let activeWaitForRotateTimeout = this._rotateInTimeouts.filter(function(timeout) {
+                return timeout == actor._waitingRotateTimeout;
+            });
+
+            if (activeWaitForRotateTimeout.length === 1) {
+                GLib.source_remove(activeWaitForRotateTimeout[0]);
+                this._rotateInTimeouts = this.rotateInTimeouts.filter(function(timeout) {
+                    return timeout !== activeWaitForRotateTimeout[0];
+                });
+                actor._waitingRotateTimeout = null;
+            }
         }));
 
         this._shellwm.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
@@ -662,6 +801,129 @@ const WindowManager = new Lang.Class({
                 this._dimWindow(this._dimmedWindows[i]);
             }
         }));
+
+        global.display.connect('grab-op-begin', Lang.bind(this, this._windowGrabbed));
+        global.display.connect('grab-op-end', Lang.bind(this, this._windowUngrabbed));
+
+        this._sylvesterListener = new SylvesterService(Gio.DBus.session,
+                                                       'com.endlessm.Sylvester.Service',
+                                                       '/com/endlessm/Sylvester/Service');
+        this._sylvesterListener.connectSignal('RotateBetweenPidWindows',
+                                              Lang.bind(this, this._handleRotateBetweenPidWindows));
+        this._pendingRotateAnimations = [];
+        this._rotateOutActors = [];
+        this._rotateInActors = [];
+        this._rotateInTimeouts = [];
+        log("Connected to Sylvester");
+    },
+
+    _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {
+        const srcActorInfo = pidToActorInfo(src)
+        this._pendingRotateAnimations.push({
+            src: srcActorInfo,
+            dst: pidToActorInfo(dst)
+        });
+        this._updateReadyRotateAnimationsWith(srcActorInfo.actor);
+    },
+    
+    _updateReadyRotateAnimationsWith: function (window) {
+        /* A new window was added. Get its pid and look for any
+         * unsatisfied entries in _pendingRotateAnimations */
+        const pid = window ? window.get_meta_window().get_pid() : null;
+        const lastPendingRotateAnimationsLength = this._pendingRotateAnimations.length;
+        this._pendingRotateAnimations = this._pendingRotateAnimations.filter(Lang.bind(this, function(animationSpec) {
+            let unsatisfiedPids = 0;
+            Object.keys(animationSpec).forEach(function(key) {
+                if (animationSpec[key].window == null) {
+                    if (animationSpec[key].pid == pid) {
+                        animationSpec[key].window = window;
+                    } else {
+                        unsatisfiedPids++;
+                    }
+                }
+            });
+            
+            if (unsatisfiedPids == 0) {
+                /* Delaying the animation like this is not ideal, but it is necessary
+                 * to allow some time for the window to paint itself for the first time.
+                 *
+                 * Mutter doesn't seem to have any kind of notification for when we first
+                 * receive a damage event on the window - that will be the time when the bound
+                 * texture will be defined. Until that point, the contents are just empty and
+                 * so we can't just rely on map events to get to where we want. */
+                animationSpec.dst.window.rotation_angle_y = -180;
+                animationSpec.dst.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+                animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+                animationSpec.src.window.add_effect_with_name('enable-culling',
+                                                              new EnableBackfaceCullingEffect());
+                animationSpec.dst.window.add_effect_with_name('enable-culling',
+                                                              new EnableBackfaceCullingEffect());
+                animationSpec.dst.window['opacity'] = 0;
+                let dst_geometry = animationSpec.src.rect;
+                animationSpec.dst.window.get_meta_window().move_resize_frame(false,
+                                                                             dst_geometry.x,
+                                                                             dst_geometry.y,
+                                                                             dst_geometry.width,
+                                                                             dst_geometry.height);
+
+                this._rotateInActors.push(animationSpec.dst.window);
+                this._rotateOutActors.push(animationSpec.src.window);
+
+                let waitingRotateTimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, Lang.bind(this, function() {
+                    /* Tween both windows in a rotation animation at the same time
+                     * with backface culling enabled on both. This will allow for
+                     * a smooth transition. */
+                    Tweener.addTween(animationSpec.src.window, {
+                        "rotation-angle-y": 180,
+                        time: WINDOW_ANIMATION_TIME * 4,
+                        transition: 'easeOutQuad',
+                        onComplete: function() {
+                            this._rotateOutCompleted(animationSpec.src.window);
+                        },
+                        onCompleteScope: this,
+                        onCompleteParams: []
+                    });
+                    Tweener.addTween(animationSpec.dst.window, {
+                        "rotation-angle-y": 0,
+                        time: WINDOW_ANIMATION_TIME * 4,
+                        transition: 'easeOutQuad',
+                        onComplete: function() {
+                            this._rotateInCompleted(animationSpec.dst.window);
+                        },
+                        onCompleteScope: this,
+                        onCompleteParams: []
+                    });
+
+                    /* Gently fade the window in, this will paper over
+                     * any artifacts from shadows and the like */
+                    Tweener.addTween(animationSpec.dst.window, {
+                        "opacity": 255,
+                        time: WINDOW_ANIMATION_TIME,
+                        transition: 'linear'
+                    });
+
+                    this._rotateInTimeouts = this._rotateInTimeouts.filter(function(timeout) {
+                        return timeout != animationSpec.dst.window._waitingRotateTimeout;
+                    });
+                    animationSpec.dst.window._waitingRotateTimeout = null;
+
+                    return false;
+                }));
+
+                /* Save the timeout's id on the destination window and in a list too so we can
+                 * get rid of it on kill-window-effects later */
+                animationSpec.dst.window._waitingRotateTimeout = waitingRotateTimeout;
+                this._rotateInTimeouts.push(waitingRotateTimeout);
+
+                /* This will remove us from pending rotations */
+                return false;
+            }
+
+            /* There are still unsatisfied process ID's, keep this metadata around. */
+            return true;
+        }));
+        
+        return this._pendingRotateAnimations.length != lastPendingRotateAnimationsLength;
     },
 
     setCustomKeybindingHandler: function(name, modes, handler) {
@@ -1041,6 +1303,11 @@ const WindowManager = new Lang.Class({
         }));
 
         let isSplashWindow = Shell.WindowTracker.is_speedwagon_window(window);
+        
+        if (this._updateReadyRotateAnimationsWith(actor)) {
+            shellwm.completed_map(actor);
+            return;
+        }
 
         if (!isSplashWindow) {
             // If we have an active splash window for the app, don't animate it.
@@ -1153,6 +1420,22 @@ const WindowManager = new Lang.Class({
             actor.scale_x = 1;
             actor.scale_y = 1;
             shellwm.completed_map(actor);
+        }
+    },
+
+    _rotateInCompleted: function(actor) {
+        if (this._removeEffect(this._rotateInActors, actor)) {
+            Tweener.removeTweens(actor);
+            actor.opacity = 255;
+            actor.rotation_angle_x = 0;
+        }
+    },
+
+    _rotateOutCompleted: function(actor) {
+        if (this._removeEffect(this._rotateOutActors, actor)) {
+            Tweener.removeTweens(actor);
+            actor.hide();
+            actor.rotation_angle_x = 0;
         }
     },
 
@@ -1527,5 +1810,54 @@ const WindowManager = new Lang.Class({
     _confirmDisplayChange: function() {
         let dialog = new DisplayChangeDialog(this._shellwm);
         dialog.open();
+    },
+
+    _windowCanWobble: function(window, op) {
+
+        if (window.is_override_redirect() ||
+            op != Meta.GrabOp.MOVING)
+            return false;
+
+        return true;
+    },
+
+    _windowGrabbed: function(display, screen, window, op) {
+
+        // Occassionally, window can be null, in cases where grab-op-begin
+        // was emitted on a window from shell-toolkit. Ignore these grabs.
+        if (!window)
+            return;
+
+        if (!this._windowCanWobble(window, op))
+            return;
+
+        let actor = window.get_compositor_private();
+
+        let effect = actor.get_effect('endless-wobbly');
+        if (!effect) {
+            effect = new EOSShellWobbly({ settings: global.get_settings() });
+            actor.add_effect_with_name('endless-wobbly', effect);
+        }
+
+        effect.grabbedByMouse();
+    },
+
+    _windowUngrabbed: function(display, op, window) {
+
+        // Occassionally, window can be null, in cases where grab-op-end
+        // was emitted on a window from shell-toolkit. Ignore these grabs.
+        if (!window)
+            return;
+
+
+        let actor = window.get_compositor_private();
+        let effect = actor.get_effect('endless-wobbly');
+
+        // Lots of different grab ops can end here, so we just let
+        // EOSShellWobbly.ungrabbedByMouse figure out what to do based on its
+        // own state
+        if (effect) {
+            effect.ungrabbedByMouse();
+        }
     },
 });

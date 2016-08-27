@@ -1670,6 +1670,27 @@ StScrollBar StButton#vhandle:active {
     link-color: #ccccff;
 }
 
+/* Mission text */
+.chatbox-text-container {
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 11pt;
+    font-family: 'monospace';
+}
+
+.chatbox-character-text {
+    text-align: left;
+}
+
+.chatbox-user-text {
+    margin-top: 10px;
+    margin-left: 40px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    text-align: right;
+    font-family: lato, sans-serif;
+}
+
 /* Trash popup dialog */
 .trash-popup {
     width: 92px;
