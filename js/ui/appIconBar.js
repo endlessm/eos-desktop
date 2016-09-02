@@ -1076,10 +1076,10 @@ const AppIconBar = new Lang.Class({
     },
 
     _getContentPreferredHeight: function(actor, forWidth, alloc) {
-        alloc.min_size = Math.max(this._scrolledIconList.getIconSize(), this._navButtonSize);
+        let [minHeight, natHeight] = this._scrolledIconList.actor.get_preferred_height(forWidth);
 
-        let scrolledListNaturalHeight = this._scrolledIconList.actor.get_preferred_height(forWidth)[0];
-        alloc.natural_size = Math.max(alloc.min_size, scrolledListNaturalHeight);
+        alloc.min_size = Math.max(this._navButtonSize, minHeight);
+        alloc.natural_size = Math.max(alloc.min_size, natHeight);
     },
 
     _updateStyleConstants: function() {
