@@ -19,7 +19,6 @@ const Main = imports.ui.main;
 const Panel = imports.ui.panel;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
-const Util = imports.misc.util;
 
 const MAX_OPACITY = 255;
 const MAX_ANGLE = 360;
@@ -612,7 +611,7 @@ const AppIconBarNavButton = Lang.Class({
 const ScrolledIconList = new Lang.Class({
     Name: 'ScrolledIconList',
 
-    _init: function(excludedApps, menuManager) {
+    _init: function(menuManager) {
         this.actor = new St.ScrollView({ hscrollbar_policy: Gtk.PolicyType.NEVER,
                                          style_class: 'scrolled-icon-list hfade',
                                          vscrollbar_policy: Gtk.PolicyType.NEVER,
@@ -649,13 +648,6 @@ const ScrolledIconList = new Lang.Class({
         let appSys = Shell.AppSystem.get_default();
         this._taskbarApps = new Hash.Map();
 
-        this._numExcludedApps = 0;
-        // Exclusions are added to the base list
-        for (let appIndex in excludedApps) {
-            this._taskbarApps.set(excludedApps[appIndex], null);
-            this._numExcludedApps += 1;
-        }
-
         // Update for any apps running before the system started
         // (after a crash or a restart)
         let currentlyRunning = appSys.get_running();
@@ -669,7 +661,7 @@ const ScrolledIconList = new Lang.Class({
 
         let favorites = AppFavorites.getTaskbarFavorites().getFavorites();
         for (let i = 0; i < favorites.length; i++) {
-            this._addButtonAnimated(favorites[i], i + 1 + 1); // plus one for user menu and browser icon
+            this._addButtonAnimated(favorites[i], i + 1); // plus one for user menu
         }
 
         // Sort numerically by PID
@@ -679,19 +671,15 @@ const ScrolledIconList = new Lang.Class({
         for (let i = 0; i < sortedPids.length; i++) {
             let pid = sortedPids[i];
             let app = appsByPid.get(pid);
-            this._addButtonAnimated(app, favorites.length + i + 2); // offset for user menu and browser icon
+            this._addButtonAnimated(app, favorites.length + i + 1); // offset for user menu
         }
 
         appSys.connect('app-state-changed', Lang.bind(this, this._onAppStateChanged));
     },
 
     setActiveApp: function(app) {
-        this._taskbarApps.items().forEach(Lang.bind(this,
-            function(item) {
+        this._taskbarApps.items().forEach(Lang.bind(this, function(item) {
                 let [taskbarApp, appButton] = item;
-                if (!appButton) {
-                    return;
-                }
 
                 if (app == taskbarApp) {
                     appButton.actor.add_style_pseudo_class('highlighted');
@@ -701,19 +689,12 @@ const ScrolledIconList = new Lang.Class({
             }));
     },
 
-    _getAppButtons: function() {
-        return this._taskbarApps.values().filter(function(value) {
-            // Excluded apps have a null button
-            return value != null;
-        });
-    },
-
     getNumAppButtons: function() {
-        return this._getAppButtons().length;
+        return this._taskbarApps.size();
     },
 
     activateNthApp: function(index) {
-        let appButton = this._getAppButtons()[index];
+        let appButton = this._taskbarApps.values()[index];
         if (appButton == undefined)
             return;
         appButton.activateFirstWindow();
@@ -739,7 +720,7 @@ const ScrolledIconList = new Lang.Class({
 
     _updatePage: function() {
         // Clip the values of the iconOffset
-        let lastIconOffset = this._taskbarApps.size() - this._numExcludedApps - 1;
+        let lastIconOffset = this._taskbarApps.size() - 1;
         let movableIconsPerPage = this._appsPerPage - 1;
         this._iconOffset = Math.max(0, this._iconOffset);
         this._iconOffset = Math.min(lastIconOffset - movableIconsPerPage, this._iconOffset);
@@ -779,7 +760,7 @@ const ScrolledIconList = new Lang.Class({
     },
 
     isForwardAllowed: function() {
-        return this._iconOffset < this._taskbarApps.size() - this._appsPerPage - this._numExcludedApps;
+        return this._iconOffset < this._taskbarApps.size() - this._appsPerPage;
     },
 
     calculateNaturalSize: function(forWidth) {
@@ -798,13 +779,10 @@ const ScrolledIconList = new Lang.Class({
         let node = this._container.get_theme_node();
 
         this._iconSize = node.get_length("-icon-size");
-        this._taskbarApps.items().forEach(Lang.bind(this,
-            function(app) {
-                let appButton = app[1];
-                if (appButton != null) {
-                    appButton.setIconSize(this._iconSize);
-                }
-            }));
+        this._taskbarApps.items().forEach(Lang.bind(this, function(app) {
+            let [, appButton] = app;
+            appButton.setIconSize(this._iconSize);
+        }));
 
         this._iconSpacing = node.get_length("spacing");
     },
@@ -812,7 +790,7 @@ const ScrolledIconList = new Lang.Class({
     _ensureIsVisible: function(app) {
         let itemIndex = this._taskbarApps.keys().indexOf(app);
         if (itemIndex != -1) {
-            this._iconOffset = itemIndex - this._numExcludedApps;
+            this._iconOffset = itemIndex;
         }
 
         this._updatePage();
@@ -915,8 +893,6 @@ const ScrolledIconList = new Lang.Class({
             break;
 
         case Shell.AppState.STOPPED:
-            if (app == this._browserApp)
-                break;
             if (AppFavorites.getTaskbarFavorites().isFavorite(app.get_id()))
                 break;
 
@@ -942,7 +918,7 @@ const ScrolledIconList = new Lang.Class({
         let iconsPerPage = Math.floor((forWidth + this._iconSpacing) / minimumIconWidth);
         iconsPerPage = Math.max(1, iconsPerPage);
 
-        let pages = Math.ceil((this._taskbarApps.items().length - this._numExcludedApps) / iconsPerPage);
+        let pages = Math.ceil((this._taskbarApps.items().length) / iconsPerPage);
 
         // If we only have one page, previous calculations will return 0 so
         // we clip the value here
@@ -954,7 +930,7 @@ const ScrolledIconList = new Lang.Class({
     _getAppsOnPage: function(pageNum, appsPerPage){
         let apps = this._taskbarApps.items();
 
-        let startIndex = appsPerPage * pageNum + this._numExcludedApps;
+        let startIndex = appsPerPage * pageNum;
         let endIndex = Math.min(startIndex + appsPerPage, apps.length);
 
         let appsOnPage = apps.slice(startIndex, endIndex);
@@ -963,28 +939,6 @@ const ScrolledIconList = new Lang.Class({
     }
 });
 Signals.addSignalMethods(ScrolledIconList.prototype);
-
-const BrowserButton = new Lang.Class({
-    Name: 'BrowserButton',
-    Extends: AppIconButton,
-
-    _init: function(app, iconSize, menuManager) {
-        this.parent(app, iconSize, menuManager, false);
-        this.actor.add_style_class_name('browser-icon');
-    },
-
-    _createIcon: function() {
-        let iconFileNormal = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/internet-normal.png');
-        let giconNormal = new Gio.FileIcon({ file: iconFileNormal });
-        return new St.Icon({ gicon: giconNormal,
-                             style_class: 'browser-icon' });
-    },
-
-    // overrides default implementation
-    setIconSize: function(iconSize) {
-        return
-    },
-});
 
 /** AppIconBar:
  *
@@ -1024,17 +978,7 @@ const AppIconBar = new Lang.Class({
 
         this._container.add_actor(this._backButton);
 
-        this._browserButton = null;
-        this._browserApp = Util.getBrowserApp();
-        if (this._browserApp) {
-            this._browserButton = new BrowserButton(this._browserApp, ICON_SIZE, this._menuManager);
-            this._browserButton.connect('app-icon-pressed', Lang.bind(this, this._onAppIconPressed));
-
-            Panel.animateIconIn(this._browserButton.actor, 1);
-            this._container.add_actor(this._browserButton.actor);
-        }
-
-        this._scrolledIconList = new ScrolledIconList([this._browserApp], this._menuManager);
+        this._scrolledIconList = new ScrolledIconList(this._menuManager);
         this._container.add_actor(this._scrolledIconList.actor);
 
         this._container.add_actor(this._forwardButton);
@@ -1073,17 +1017,12 @@ const AppIconBar = new Lang.Class({
     },
 
     _activateNthApp: function(index) {
-        if (index == 0) {
-            this._browserButton.activateFirstWindow();
-            return;
-        }
-        this._scrolledIconList.activateNthApp(index - 1);
+        this._scrolledIconList.activateNthApp(index);
     },
 
     _activateLastApp: function() {
-        // Activate the index of the last button in the scrolled list + 1, to
-        // include the browser button
-        this._activateNthApp(this._scrolledIconList.getNumAppButtons());
+        // Activate the index of the last button in the scrolled list
+        this._activateNthApp(this._scrolledIconList.getNumAppButtons() - 1);
     },
 
     _updateActiveApp: function() {
@@ -1100,14 +1039,6 @@ const AppIconBar = new Lang.Class({
     },
 
     _setActiveApp: function(app) {
-        if (this._browserButton != null) {
-            if (app == this._browserApp) {
-                this._browserButton.actor.add_style_pseudo_class('highlighted');
-            } else {
-                this._browserButton.actor.remove_style_pseudo_class('highlighted');
-            }
-        }
-
         this._scrolledIconList.setActiveApp(app);
     },
 
@@ -1180,12 +1111,6 @@ const AppIconBar = new Lang.Class({
                 childBox.x1 -= this._navButtonSpacing;
             }
 
-            if (this._browserButton) {
-                childBox.x2 = childBox.x1;
-                childBox.x1 = childBox.x2 - this._scrolledIconList.getIconSize();
-                this._browserButton.actor.allocate(childBox, flags);
-            }
-
             childBox.x2 = childBox.x1;
             childBox.x1 = childBox.x2 - this._scrolledIconList.calculateNaturalSize(maxIconSpace) - 2 * this._navButtonSpacing;
             this._scrolledIconList.actor.allocate(childBox, flags);
@@ -1202,12 +1127,6 @@ const AppIconBar = new Lang.Class({
                 this._backButton.allocate(childBox, flags);
 
                 childBox.x2 += this._navButtonSpacing;
-            }
-
-            if (this._browserButton) {
-                childBox.x1 = childBox.x2;
-                childBox.x2 = childBox.x1 + this._scrolledIconList.getIconSize();
-                this._browserButton.actor.allocate(childBox, flags);
             }
 
             childBox.x1 = childBox.x2;
