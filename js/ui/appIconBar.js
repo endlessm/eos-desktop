@@ -1067,19 +1067,27 @@ const AppIconBar = new Lang.Class({
     },
 
     _getContentPreferredWidth: function(actor, forHeight, alloc) {
-        alloc.min_size = 2 * this._navButtonSize + 3 * this._navButtonSpacing +
+        let [minBackWidth, natBackWidth] = this._backButton.get_preferred_width(forHeight);
+        let [minForwardWidth, natForwardWidth] = this._forwardButton.get_preferred_width(forHeight);
+
+        alloc.min_size = minBackWidth + minForwardWidth + 3 * this._navButtonSpacing +
                              this._scrolledIconList.getMinWidth() +
                              this._scrolledIconList.getIconSize();
-        alloc.natural_size = 2 * this._navButtonSize + 3 * this._navButtonSpacing +
+        alloc.natural_size = natBackWidth + natForwardWidth + 3 * this._navButtonSpacing +
                                  this._scrolledIconList.getNaturalWidth() +
                                  this._scrolledIconList.getIconSize();
     },
 
     _getContentPreferredHeight: function(actor, forWidth, alloc) {
-        let [minHeight, natHeight] = this._scrolledIconList.actor.get_preferred_height(forWidth);
+        let [minListHeight, natListHeight] = this._scrolledIconList.actor.get_preferred_height(forWidth);
+        let [minBackHeight, natBackHeight] = this._backButton.get_preferred_height(forWidth);
+        let [minForwardHeight, natForwardHeight] = this._forwardButton.get_preferred_height(forWidth);
 
-        alloc.min_size = Math.max(this._navButtonSize, minHeight);
-        alloc.natural_size = Math.max(alloc.min_size, natHeight);
+        let minButtonHeight = Math.max(minBackHeight, minForwardHeight);
+        let natButtonHeight = Math.max(natBackHeight, natForwardHeight);
+
+        alloc.min_size = Math.max(minButtonHeight, minListHeight);
+        alloc.natural_size = Math.max(natButtonHeight, natListHeight);
     },
 
     _updateStyleConstants: function() {
