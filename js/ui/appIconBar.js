@@ -592,12 +592,7 @@ const AppIconBarNavButton = Lang.Class({
     },
 
     _updateStyle: function(actor, forHeight, alloc) {
-        this._size = this._icon.get_theme_node().get_length('icon-size');
         this._spacing = this._icon.get_theme_node().get_length('spacing');
-    },
-
-    getSize: function() {
-        return this._size;
     },
 
     getSpacing: function() {
@@ -968,7 +963,6 @@ const AppIconBar = new Lang.Class({
         this._container.connect('get-preferred-height', Lang.bind(this, this._getContentPreferredHeight));
         this._container.connect('allocate', Lang.bind(this, this._contentAllocate));
 
-        this._navButtonSize = 0;
         this._navButtonSpacing = 0;
 
         this._backButton = new AppIconBarNavButton('/theme/app-bar-back-symbolic.svg');
@@ -1091,7 +1085,6 @@ const AppIconBar = new Lang.Class({
     },
 
     _updateStyleConstants: function() {
-        this._navButtonSize = this._backButton.getSize();
         this._navButtonSpacing = this._backButton.getSpacing();
     },
 
@@ -1099,7 +1092,9 @@ const AppIconBar = new Lang.Class({
         let allocWidth = box.x2 - box.x1;
         let allocHeight = box.y2 - box.y1;
 
-        let maxIconSpace = allocWidth - 2 * (this._navButtonSize + this._navButtonSpacing);
+        let minBackWidth = this._backButton.get_preferred_width(allocHeight)[0];
+        let minForwardWidth = this._forwardButton.get_preferred_width(allocHeight)[0];
+        let maxIconSpace = allocWidth - minBackWidth - minForwardWidth - 2 * this._navButtonSpacing;
 
         let childBox = new Clutter.ActorBox();
         childBox.y1 = 0;
@@ -1110,7 +1105,7 @@ const AppIconBar = new Lang.Class({
             childBox.x2 = allocWidth;
 
             if (this._scrolledIconList.isBackAllowed()) {
-                childBox.x1 = childBox.x2 - this._navButtonSize;
+                childBox.x1 = childBox.x2 - minBackWidth;
                 this._backButton.allocate(childBox, flags);
 
                 childBox.x1 -= this._navButtonSpacing;
@@ -1121,14 +1116,14 @@ const AppIconBar = new Lang.Class({
             this._scrolledIconList.actor.allocate(childBox, flags);
 
             childBox.x2 = childBox.x1;
-            childBox.x1 = childBox.x2 - this._navButtonSize;
+            childBox.x1 = childBox.x2 - minForwardWidth;
             this._forwardButton.allocate(childBox, flags);
         } else {
             childBox.x1 = 0;
             childBox.x2 = 0;
 
             if (this._scrolledIconList.isBackAllowed()) {
-                childBox.x2 = childBox.x1 + this._navButtonSize;
+                childBox.x2 = childBox.x1 + minBackWidth;
                 this._backButton.allocate(childBox, flags);
 
                 childBox.x2 += this._navButtonSpacing;
@@ -1139,7 +1134,7 @@ const AppIconBar = new Lang.Class({
             this._scrolledIconList.actor.allocate(childBox, flags);
 
             childBox.x1 = childBox.x2;
-            childBox.x2 = childBox.x1 + this._navButtonSize;
+            childBox.x2 = childBox.x1 + minForwardWidth;
             this._forwardButton.allocate(childBox, flags);
         }
 
