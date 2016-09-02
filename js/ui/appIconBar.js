@@ -1025,12 +1025,10 @@ const AppIconBar = new Lang.Class({
 
     _previousPageSelected: function() {
         this._scrolledIconList.pageBack();
-        this._updateNavButtonState();
     },
 
     _nextPageSelected: function() {
         this._scrolledIconList.pageForward();
-        this._updateNavButtonState();
     },
 
     _updateNavButtonState: function() {
