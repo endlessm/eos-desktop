@@ -573,7 +573,7 @@ const AppIconBarNavButton = Lang.Class({
     Name: 'AppIconBarNavButton',
     Extends: St.Button,
 
-    _init: function(imagePath, pressHandler) {
+    _init: function(imagePath) {
         let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell' + imagePath);
         let gicon = new Gio.FileIcon({ file: iconFile });
 
@@ -589,8 +589,6 @@ const AppIconBarNavButton = Lang.Class({
                       track_hover: true,
                       button_mask: St.ButtonMask.ONE
                     });
-
-        this.connect('clicked', pressHandler);
     },
 
     _updateStyle: function(actor, forHeight, alloc) {
@@ -973,14 +971,15 @@ const AppIconBar = new Lang.Class({
         this._navButtonSize = 0;
         this._navButtonSpacing = 0;
 
-        this._backButton = new AppIconBarNavButton('/theme/app-bar-back-symbolic.svg', Lang.bind(this, this._previousPageSelected));
-        this._forwardButton = new AppIconBarNavButton('/theme/app-bar-forward-symbolic.svg', Lang.bind(this, this._nextPageSelected));
-
+        this._backButton = new AppIconBarNavButton('/theme/app-bar-back-symbolic.svg');
+        this._backButton.connect('clicked', Lang.bind(this, this._previousPageSelected));
         this._container.add_actor(this._backButton);
 
         this._scrolledIconList = new ScrolledIconList(this._menuManager);
         this._container.add_actor(this._scrolledIconList.actor);
 
+        this._forwardButton = new AppIconBarNavButton('/theme/app-bar-forward-symbolic.svg');
+        this._forwardButton.connect('clicked', Lang.bind(this, this._nextPageSelected));
         this._container.add_actor(this._forwardButton);
 
         this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, this._updateNavButtonState));
