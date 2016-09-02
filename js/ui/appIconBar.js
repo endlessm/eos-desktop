@@ -1099,13 +1099,11 @@ const AppIconBar = new Lang.Class({
         let allocWidth = box.x2 - box.x1;
         let allocHeight = box.y2 - box.y1;
 
-        let [minWidth, minHeight, naturalWidth, naturalHeight] = this._container.get_preferred_size();
-        let yPadding = Math.floor(Math.max(0, allocHeight - naturalHeight) / 2);
         let maxIconSpace = allocWidth - 2 * (this._navButtonSize + this._navButtonSpacing);
 
         let childBox = new Clutter.ActorBox();
-        childBox.y1 = yPadding;
-        childBox.y2 = childBox.y1 + Math.min(naturalHeight, allocHeight);
+        childBox.y1 = 0;
+        childBox.y2 = allocHeight;
 
         if (actor.get_text_direction() == Clutter.TextDirection.RTL) {
             childBox.x1 = allocWidth;
