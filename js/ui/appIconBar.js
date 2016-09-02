@@ -771,13 +771,13 @@ const ScrolledIconList = new Lang.Class({
     _updateStyleConstants: function() {
         let node = this._container.get_theme_node();
 
-        this._iconSize = node.get_length("-icon-size");
+        this._iconSize = node.get_length('-icon-size');
         this._taskbarApps.items().forEach(Lang.bind(this, function(app) {
             let [, appButton] = app;
             appButton.setIconSize(this._iconSize);
         }));
 
-        this._iconSpacing = node.get_length("spacing");
+        this._iconSpacing = node.get_length('spacing');
     },
 
     _ensureIsVisible: function(app) {
