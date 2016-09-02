@@ -542,6 +542,10 @@ StScrollBar StButton#vhandle:active {
     padding-top: 0px;
 }
 
+#appIconBarContainer {
+    spacing: 10px;
+}
+
 .app-icon-bar.panel-button {
     -minimum-hpadding: 6px;
     -natural-hpadding: 6px;
@@ -629,7 +633,6 @@ StScrollBar StButton#vhandle:active {
 }
 
 .app-bar-nav-icon {
-    spacing: 10px;
     icon-size: 15px;
     color: #555;
     transition-duration: 100ms;

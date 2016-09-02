@@ -578,9 +578,7 @@ const AppIconBarNavButton = Lang.Class({
         let gicon = new Gio.FileIcon({ file: iconFile });
 
         this._icon = new St.Icon({ style_class: 'app-bar-nav-icon',
-                                   gicon: gicon
-                                 });
-        this._icon.connect('style-changed', Lang.bind(this, this._updateStyle));
+                                   gicon: gicon });
 
         this.parent({ style_class: 'app-bar-nav-button',
                       child: this._icon,
@@ -589,14 +587,6 @@ const AppIconBarNavButton = Lang.Class({
                       track_hover: true,
                       button_mask: St.ButtonMask.ONE
                     });
-    },
-
-    _updateStyle: function(actor, forHeight, alloc) {
-        this._spacing = this._icon.get_theme_node().get_length('spacing');
-    },
-
-    getSpacing: function() {
-        return this._spacing;
     }
 });
 
@@ -947,23 +937,21 @@ const AppIconBar = new Lang.Class({
         this.actor.add_style_class_name('app-icon-bar');
 
         this._panel = panel;
+        this._spacing = 0;
 
         this._menuManager = new PopupMenu.PopupMenuManager(this);
 
         let bin = new St.Bin({ name: 'appIconBar',
                                x_fill: true });
-        this.actor.connect('style-changed', Lang.bind(this, this._updateStyleConstants));
-
         this.actor.add_actor(bin);
 
-        this._container = new Shell.GenericContainer();
+        this._container = new Shell.GenericContainer({ name: 'appIconBarContainer' });
+        this._container.connect('style-changed', Lang.bind(this, this._updateStyleConstants));
 
         bin.set_child(this._container);
         this._container.connect('get-preferred-width', Lang.bind(this, this._getContentPreferredWidth));
         this._container.connect('get-preferred-height', Lang.bind(this, this._getContentPreferredHeight));
         this._container.connect('allocate', Lang.bind(this, this._contentAllocate));
-
-        this._navButtonSpacing = 0;
 
         this._backButton = new AppIconBarNavButton('/theme/app-bar-back-symbolic.svg');
         this._backButton.connect('clicked', Lang.bind(this, this._previousPageSelected));
@@ -1064,10 +1052,10 @@ const AppIconBar = new Lang.Class({
         let [minBackWidth, natBackWidth] = this._backButton.get_preferred_width(forHeight);
         let [minForwardWidth, natForwardWidth] = this._forwardButton.get_preferred_width(forHeight);
 
-        alloc.min_size = minBackWidth + minForwardWidth + 3 * this._navButtonSpacing +
+        alloc.min_size = minBackWidth + minForwardWidth + 3 * this._spacing +
                              this._scrolledIconList.getMinWidth() +
                              this._scrolledIconList.getIconSize();
-        alloc.natural_size = natBackWidth + natForwardWidth + 3 * this._navButtonSpacing +
+        alloc.natural_size = natBackWidth + natForwardWidth + 3 * this._spacing +
                                  this._scrolledIconList.getNaturalWidth() +
                                  this._scrolledIconList.getIconSize();
     },
@@ -1085,7 +1073,7 @@ const AppIconBar = new Lang.Class({
     },
 
     _updateStyleConstants: function() {
-        this._navButtonSpacing = this._backButton.getSpacing();
+        this._spacing = this._container.get_theme_node().get_length('spacing');
     },
 
     _contentAllocate: function(actor, box, flags) {
@@ -1094,7 +1082,7 @@ const AppIconBar = new Lang.Class({
 
         let minBackWidth = this._backButton.get_preferred_width(allocHeight)[0];
         let minForwardWidth = this._forwardButton.get_preferred_width(allocHeight)[0];
-        let maxIconSpace = allocWidth - minBackWidth - minForwardWidth - 2 * this._navButtonSpacing;
+        let maxIconSpace = allocWidth - minBackWidth - minForwardWidth - 2 * this._spacing;
 
         let childBox = new Clutter.ActorBox();
         childBox.y1 = 0;
@@ -1108,11 +1096,11 @@ const AppIconBar = new Lang.Class({
                 childBox.x1 = childBox.x2 - minBackWidth;
                 this._backButton.allocate(childBox, flags);
 
-                childBox.x1 -= this._navButtonSpacing;
+                childBox.x1 -= this._spacing;
             }
 
             childBox.x2 = childBox.x1;
-            childBox.x1 = childBox.x2 - this._scrolledIconList.calculateNaturalSize(maxIconSpace) - 2 * this._navButtonSpacing;
+            childBox.x1 = childBox.x2 - this._scrolledIconList.calculateNaturalSize(maxIconSpace) - 2 * this._spacing;
             this._scrolledIconList.actor.allocate(childBox, flags);
 
             childBox.x2 = childBox.x1;
@@ -1126,11 +1114,11 @@ const AppIconBar = new Lang.Class({
                 childBox.x2 = childBox.x1 + minBackWidth;
                 this._backButton.allocate(childBox, flags);
 
-                childBox.x2 += this._navButtonSpacing;
+                childBox.x2 += this._spacing;
             }
 
             childBox.x1 = childBox.x2;
-            childBox.x2 = childBox.x1 + this._scrolledIconList.calculateNaturalSize(maxIconSpace) + 2 * this._navButtonSpacing;
+            childBox.x2 = childBox.x1 + this._scrolledIconList.calculateNaturalSize(maxIconSpace) + 2 * this._spacing;
             this._scrolledIconList.actor.allocate(childBox, flags);
 
             childBox.x1 = childBox.x2;
