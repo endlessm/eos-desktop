@@ -1633,7 +1633,6 @@ const WindowManager = new Lang.Class({
     },
 
     _windowUngrabbed: function(display, op, window) {
-
         // Occassionally, window can be null, in cases where grab-op-end
         // was emitted on a window from shell-toolkit. Ignore these grabs.
         if (!window)
