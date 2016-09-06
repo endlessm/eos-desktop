@@ -155,7 +155,7 @@ const EOSShellWobbly = new Lang.Class({
     },
 
     set settings (val) {
-         if (val['schema-id'] !== 'org.gnome.shell')
+         if (val.schema_id !== 'org.gnome.shell')
              throw Error('EOSShellWobbly: Injected schema must be of ' +
                          'org.gnome.shell');
 
