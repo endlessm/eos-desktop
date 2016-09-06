@@ -162,39 +162,35 @@ const ScrolledLabel = new Lang.Class({
         this.set_text(this._text.slice(0, this._textIndex));
 
         /* Add a timeout to gradually display all this text */
-        if (this._textIndex < this._text.length) {
-            this._scrollTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 10, Lang.bind(this, function() {
-                if (this._waitCount > 0) {
-                    this._waitCount--;
-                    return true;
-                }
+        this._scrollTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 10, Lang.bind(this, function() {
+            if (this._waitCount > 0) {
+                this._waitCount--;
+                return true;
+            }
 
-                this._textIndex++;
-                this.set_text(this._text.slice(0, this._textIndex));
+            if (this._textIndex === this._text.length) {
+                this.complete = true;
+                this.emit('finished-scrolled');
+                return false;
+            }
 
-                /* Stop on punctuation */
-                if ("!?.".indexOf(this._text[this._textIndex - 1]) !== -1) {
-                    this._waitCount = 100;
-                    return true;
-                }
+            this._textIndex++;
+            this.set_text(this._text.slice(0, this._textIndex));
 
-                const incomplete = this._textIndex < this._text.length;
-                if (!incomplete) {
-                    this.complete = true;
-                    this.emit('finished-scrolling');
-                }
+            /* Stop on punctuation */
+            if ("!?.".indexOf(this._text[this._textIndex - 1]) !== -1) {
+                this._waitCount = 100;
+                return true;
+            }
 
-                /* Running this on a timer every time is not
-                 * ideal, but I haven't found a better way
-                 * ensure the view is reliably always
-                 * scrolled */
-                scrollView();
+            /* Running this on a timer every time is not
+             * ideal, but I haven't found a better way
+             * ensure the view is reliably always
+             * scrolled */
+            scrollView();
 
-                return incomplete;
-            }));
-        } else {
-            this.complete = true;
-        }
+            return true;
+        }));
     },
     fastForward: function() {
         this._textIndex = this._text.length - 1;
