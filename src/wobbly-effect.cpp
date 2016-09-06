@@ -73,10 +73,10 @@ endless_shell_fx_wobbly_get_paint_volume (ClutterEffect      *effect,
         reinterpret_cast <EndlessShellFXWobblyPrivate *> (endless_shell_fx_wobbly_get_instance_private (wobbly_effect));
 
 
+    /* We assume that the parent's get_paint_volume method always returns
+     * TRUE here. */
     CLUTTER_EFFECT_CLASS (endless_shell_fx_wobbly_parent_class)->get_paint_volume (effect,
                                                                                    volume);
-
-    g_return_val_if_fail (volume, FALSE);
 
     if (priv->model)
     {
