@@ -1605,7 +1605,6 @@ const WindowManager = new Lang.Class({
     },
 
     _windowCanWobble: function(window, op) {
-
         if (window.is_override_redirect() ||
             op != Meta.GrabOp.MOVING)
             return false;
