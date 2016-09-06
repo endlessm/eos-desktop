@@ -574,7 +574,5 @@ ClutterEffect *
 endless_shell_fx_wobbly_new ()
 {
     return reinterpret_cast <ClutterEffect *> (g_object_new (ENDLESS_SHELL_FX_TYPE_WOBBLY,
-                                                             "x-tiles", 32,
-                                                             "y-tiles", 32,
                                                              nullptr));
 }
