@@ -173,7 +173,6 @@ const EOSShellWobbly = new Lang.Class({
     },
 
     grabbedByMouse: function() {
-
         if (!global.get_settings().get_boolean('wobbly-effect'))
             return;
 
