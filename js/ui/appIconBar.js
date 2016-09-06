@@ -908,17 +908,6 @@ const ScrolledIconList = new Lang.Class({
         pages = Math.max(1, pages);
 
         return [pages, iconsPerPage];
-    },
-
-    _getAppsOnPage: function(pageNum, appsPerPage){
-        let apps = this._taskbarApps.items();
-
-        let startIndex = appsPerPage * pageNum;
-        let endIndex = Math.min(startIndex + appsPerPage, apps.length);
-
-        let appsOnPage = apps.slice(startIndex, endIndex);
-
-        return [appsOnPage, apps];
     }
 });
 Signals.addSignalMethods(ScrolledIconList.prototype);
