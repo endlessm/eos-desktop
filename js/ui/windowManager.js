@@ -151,29 +151,20 @@ const EOSShellWobbly = new Lang.Class({
 
     _init: function(params) {
         this.parent(params);
-        this._settings = null;
-    },
 
-    set settings (val) {
-         if (val.schema_id !== 'org.gnome.shell')
-             throw Error('EOSShellWobbly: Injected schema must be of ' +
-                         'org.gnome.shell');
+        const binder = Lang.bind(this, function(key, prop) {
+            global.settings.bind(key, this, prop, Gio.SettingsBindFlags.GET);
+        });
 
-         this._settings = val;
-
-         let binder = Lang.bind(this, function(key, prop) {
-             this._settings.bind(key, this, prop, Gio.SettingsBindFlags.GET);
-         });
-
-         /* Bind to effect properties */
-         binder('wobbly-spring-k', 'spring-k');
-         binder('wobbly-spring-friction', 'friction');
-         binder('wobbly-slowdown-factor', 'slowdown-factor');
-         binder('wobbly-object-movement-range', 'object-movement-range');
+        /* Bind to effect properties */
+        binder('wobbly-spring-k', 'spring-k');
+        binder('wobbly-spring-friction', 'friction');
+        binder('wobbly-slowdown-factor', 'slowdown-factor');
+        binder('wobbly-object-movement-range', 'object-movement-range');
     },
 
     grabbedByMouse: function() {
-        if (!global.get_settings().get_boolean('wobbly-effect'))
+        if (!global.settings.get_boolean('wobbly-effect'))
             return;
 
         let position = global.get_pointer();
@@ -1626,7 +1617,7 @@ const WindowManager = new Lang.Class({
 
         let effect = actor.get_effect('endless-wobbly');
         if (!effect) {
-            effect = new EOSShellWobbly({ settings: global.get_settings() });
+            effect = new EOSShellWobbly();
             actor.add_effect_with_name('endless-wobbly', effect);
         }
 
