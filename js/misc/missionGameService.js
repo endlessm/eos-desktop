@@ -52,10 +52,9 @@ const MissionChatboxTextService = new Lang.Class({
          * it reaches the end, at which point it displays a message
          * and sets itself to a "done" state.
          */
-        this._introLesson = null;
         this._openedForTheFirstTime = false;
-        this._currentTaskText = null;
-        this._chatboxLessonCounter = 0;
+        this._introLesson = null;
+        this._currentTask = null;
 
         const name = "com.endlessm.Showmehow.Service";
         const path = "/com/endlessm/Showmehow/Service";
@@ -73,9 +72,8 @@ const MissionChatboxTextService = new Lang.Class({
                  * to its initial point.
                  */
                 this._refreshContent(function() {
-                    this._introLesson = lessons[0];
                     this._openedForTheFirstTime = false;
-                    this._chatboxLessonCounter = 0;
+                    this._currentTask = null;
                 });
             }));
             this._refreshContent();
@@ -88,12 +86,11 @@ const MissionChatboxTextService = new Lang.Class({
          * time and the content being loaded. */
         if (!this._openedForTheFirstTime && this._introLesson) {
             this._openedForTheFirstTime = true;
-            this._chatboxLessonCounter = 0;
 
             /* Get warnings and show them first, then show the first
              * chatbox description */
             this._service.call_get_warnings(null, Lang.bind(this, function(source, result) {
-                [success, returnValue] = this._service.call_get_warnings_finish(result);
+                const [success, returnValue] = this._service.call_get_warnings_finish(result);
                 if (success) {
                     /* Immediately display all warnings in the chatbox */
                     returnValue.deep_unpack().map(function(w) {
@@ -109,38 +106,37 @@ const MissionChatboxTextService = new Lang.Class({
                     log("Call to get_warnings_finish failed");
                 }
 
-                this._showTaskDescriptionForLesson(this._chatboxLessonCounter);
+                this._showTaskDescriptionForLesson(this._introLesson.entry);
             }));
         }
     },
     evaluate: function(text) {
-        /* If we're currently doing a lesson, submit this to the
-         * service and see what the response is */
-        const numLessons = this._introLesson ? this._introLesson[2] : 0;
-
-        if (this._introLesson &&
-            this._currentTaskText &&
-            this._chatboxLessonCounter < numLessons) {
-            this._service.call_attempt_lesson_remote("intro", this._chatboxLessonCounter, text, null,
+        if (this._introLesson && this._currentTask) {
+            this._service.call_attempt_lesson_remote("intro", this._currentTask.name, text, null,
                                                      Lang.bind(this, function(source, result) {
-                [success, returnValue] = this._service.call_attempt_lesson_remote_finish(result);
+                const [success, returnValue] = this._service.call_attempt_lesson_remote_finish(result);
 
                 if (success) {
-                    const [wait_message, printable_output, attemptResult] = returnValue.deep_unpack();
+                    const [responsesJSON, moveTo] = returnValue.deep_unpack();
+                    const responses = JSON.parse(responsesJSON);
 
-                    /* Ignore the wait message, just print the success or fail message */
-                    const textToPrint = attemptResult ? this._currentTaskText.success : this._currentTaskText.fail;
-                    this.emit("chat-message", {
-                        kind: "scrolling",
-                        mode: "animated",
-                        text: textToPrint
-                    });
+                    responses.forEach(Lang.bind(this, function(response) {
+                        this.emit("chat-message", {
+                            kind: response.type,
+                            text: response.value
+                        });
+                    }));
 
-                    /* If we were successful, increment the lesson counter and display
-                     * the next lesson, if applicable */
-                    if (attemptResult) {
-                        this._chatboxLessonCounter++;
-                        this._showTaskDescriptionForLesson(this._chatboxLessonCounter);
+                    /* Move to the next specified task. If this is an empty
+                     * string, then it means there are no more tasks to
+                     * complete and we should respond accordingly. */
+                    if (moveTo.length === 0) {
+                        this._introLesson = null;
+                        this._currentTask = null;
+                    }
+
+                    if (moveTo !== this._currentTask.name) {
+                        this._showTaskDescriptionForLesson(moveTo);
                     }
                 } else {
                     log("Failed to call call_attempt_lesson_remote");
@@ -209,7 +205,13 @@ const MissionChatboxTextService = new Lang.Class({
                     return;
                 }
 
-                this._introLesson = lessons[0];
+                const [name, desc, entry] = lessons[0];
+                this._introLesson = {
+                    name: name,
+                    desc: desc,
+                    entry: entry
+                };
+
                 callWhenComplete(completion, "intro", completedCallback);
             } else {
                 log("Warning: Call to showmehow get_unlocked_lessons failed for intro lesson");
@@ -233,41 +235,22 @@ const MissionChatboxTextService = new Lang.Class({
             }
         }));
     },
-    _showTaskDescriptionForLesson: function(lessonIndex) {
+    _showTaskDescriptionForLesson: function(taskName) {
         if (!this._introLesson) {
             return;
         }
 
-        const numLessons = this._introLesson[2];
-
-        if (lessonIndex >= numLessons) {
-            /* We have a currently active intro lesson. Display the
-             * "done" message, and then set everything back to null. */
-            const doneMessage = this._introLesson[3];
-            if (this._introLesson) {
-                this.emit("chat-message", {
-                    kind: "scrolling",
-                    mode: "animated",
-                    text: doneMessage
-                });
-                this._introLesson = null;
-                this._currentTaskText = null;
-                this._chatboxLessonCounter = 0;
-            }
-
-            return;
-        }
-
-        this._service.call_get_task_description("intro", lessonIndex, null,
+        this._service.call_get_task_description("intro", taskName, null,
                                                 Lang.bind(this, function(source, result) {
-            [success, returnValue] = this._service.call_get_task_description_finish(result);
+            const [success, returnValue] = this._service.call_get_task_description_finish(result);
 
             if (success) {
-                const [desc, successText, failText] = returnValue.deep_unpack();
-                this._currentTaskText = {
+                const [desc, inputSpecString] = returnValue.deep_unpack();
+                const inputSpec = JSON.parse(inputSpecString);
+                this._currentTask = {
                     desc: desc,
-                    success: successText,
-                    fail: failText
+                    input: inputSpec,
+                    name: taskName
                 };
 
                 this.emit("chat-message", {
