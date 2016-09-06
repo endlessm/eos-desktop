@@ -195,13 +195,15 @@ const EOSShellWobbly = new Lang.Class({
     ungrabbedByMouse: function() {
         // Only continue if we have an active grab and change notification
         // on movement
-        if (this._positionChangedId !== undefined) {
-            let actor = this.get_actor();
-            this.ungrab();
-
-            actor.disconnect(this._positionChangedId);
-            this._positionChangedId = undefined;
+        if (!this._positionChangedId) {
+            return;
         }
+
+        let actor = this.get_actor();
+        this.ungrab();
+
+        actor.disconnect(this._positionChangedId);
+        this._positionChangedId = undefined;
     }
 });
 
