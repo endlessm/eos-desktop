@@ -182,7 +182,7 @@ const EOSShellWobbly = new Lang.Class({
 
         this._lastPosition = actor.get_position();
         this._positionChangedId =
-            actor.connect('allocation-changed', Lang.bind(this, function (actor) {
+            actor.connect('notify::position', Lang.bind(this, function (actor) {
                 let position = actor.get_position();
                 let dx = position[0] - this._lastPosition[0];
                 let dy = position[1] - this._lastPosition[1];
