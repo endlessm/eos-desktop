@@ -200,7 +200,17 @@ const ScrolledLabel = new Lang.Class({
         this._textIndex = this._text.length - 1;
     }
 });
-Signals.addSignalMethods(ScrollingLabel.prototype);
+Signals.addSignalMethods(ScrolledLabel.prototype);
+
+WrappedLabel = new Lang.Class({
+    Name: 'WrappedLabel',
+    Extends: ScrolledLabel,
+    _init: function(params) {
+        this.parent(params);
+        this._text = wrapTextWith(this._text, WRAP_CONSTANT, "> ").join("\n");
+        this.fastForward();
+    }
+});
 
 const UserResponseLabel = new Lang.Class({
     Name: 'UserResponseLabel',
@@ -323,8 +333,10 @@ const MissionChatbox = new Lang.Class({
          * it in a different style and add it to the chatbox */
         this._service.connect("chat-message", Lang.bind(this, function(chat, message) {
             const classes = {
-                "scrolling": ScrollingLabel,
-                "user": UserResponseLabel
+                "scrolled": ScrolledLabel,
+                "scroll_wait": ScrolledLabel,
+                "user": UserResponseLabel,
+                "wrapped": WrappedLabel
             };
 
             try {
