@@ -893,20 +893,12 @@ const ScrolledIconList = new Lang.Class({
     _calculateNumberOfPages: function(forWidth){
         let minimumIconWidth = this._iconSize + this._iconSpacing;
 
-        // We need to clip the net width since initially may be 0
-        forWidth = Math.max(0, forWidth);
-
         // We need to add one icon space to net width here so that the division
         // takes into account the fact that the last icon does not use iconSpacing
         let iconsPerPage = Math.floor((forWidth + this._iconSpacing) / minimumIconWidth);
         iconsPerPage = Math.max(1, iconsPerPage);
 
-        let pages = Math.ceil((this._taskbarApps.items().length) / iconsPerPage);
-
-        // If we only have one page, previous calculations will return 0 so
-        // we clip the value here
-        pages = Math.max(1, pages);
-
+        let pages = Math.ceil(this._taskbarApps.size() / iconsPerPage);
         return [pages, iconsPerPage];
     }
 });
@@ -1069,7 +1061,7 @@ const AppIconBar = new Lang.Class({
 
         let minBackWidth = this._backButton.get_preferred_width(allocHeight)[0];
         let minForwardWidth = this._forwardButton.get_preferred_width(allocHeight)[0];
-        let maxIconSpace = allocWidth - minBackWidth - minForwardWidth - 2 * this._spacing;
+        let maxIconSpace = Math.max(allocWidth - minBackWidth - minForwardWidth - 2 * this._spacing, 0);
 
         let childBox = new Clutter.ActorBox();
         childBox.y1 = 0;
