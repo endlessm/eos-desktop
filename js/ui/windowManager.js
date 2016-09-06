@@ -1629,7 +1629,6 @@ const WindowManager = new Lang.Class({
         if (!window)
             return;
 
-
         let actor = window.get_compositor_private();
         let effect = actor.get_effect('endless-wobbly');
 
