@@ -611,14 +611,14 @@ const ScrolledIconList = new Lang.Class({
         let scrollChild = new St.BoxLayout();
         this.actor.add_actor(scrollChild);
 
-        let spacerBin = new St.Widget({ style_class: 'scrolled-icon-spacer',
-                                        layout_manager: new Clutter.BinLayout() });
-        scrollChild.add_actor(spacerBin);
+        this._spacerBin = new St.Widget({ style_class: 'scrolled-icon-spacer',
+                                          layout_manager: new Clutter.BinLayout() });
+        scrollChild.add_actor(this._spacerBin);
 
         this._container = new St.BoxLayout({ style_class: 'scrolled-icon-container',
                                              x_expand: true,
                                              y_expand: true });
-        spacerBin.add_actor(this._container);
+        this._spacerBin.add_actor(this._container);
 
         this._iconSize = ICON_SIZE;
         this._iconSpacing = 0;
@@ -687,18 +687,12 @@ const ScrolledIconList = new Lang.Class({
         return this._iconSize;
     },
 
-    getMinWidth: function() {
-        return this._iconSize;
-    },
-
-    getNaturalWidth: function() {
-        let iconArea = 0;
-        let nApps = this._taskbarApps.size();
-        if (nApps > 0) {
-            let iconSpacing = this._iconSpacing * (nApps - 1);
-            iconArea = this._iconSize * nApps + iconSpacing;
-        }
-        return iconArea;
+    getMinContentWidth: function(forHeight) {
+        // We always want to show one icon, plus we want to keep the padding
+        // added by the spacer actor
+        let [minSpacerWidth, ] = this._spacerBin.get_preferred_width(forHeight);
+        let [minContainerWidth, ] = this._container.get_preferred_width(forHeight);
+        return this._iconSize + (minSpacerWidth - minContainerWidth);
     },
 
     _updatePage: function() {
@@ -1022,11 +1016,18 @@ const AppIconBar = new Lang.Class({
         let [minBackWidth, natBackWidth] = this._backButton.get_preferred_width(forHeight);
         let [minForwardWidth, natForwardWidth] = this._forwardButton.get_preferred_width(forHeight);
 
-        alloc.min_size = minBackWidth + minForwardWidth + 3 * this._spacing +
-                             this._scrolledIconList.getMinWidth() +
+        // The scrolled icon list actor is a scrolled view with
+        // hscrollbar-policy=NONE, so it will take the same width requisition as
+        // its child. While we can use the natural one to measure the content,
+        // we need a special method to measure the minimum width
+        let minContentWidth = this._scrolledIconList.getMinContentWidth(forHeight);
+        let [, natContentWidth] = this._scrolledIconList.actor.get_preferred_width(forHeight);
+
+        alloc.min_size = minBackWidth + minForwardWidth + 2 * this._spacing +
+                             minContentWidth +
                              this._scrolledIconList.getIconSize();
-        alloc.natural_size = natBackWidth + natForwardWidth + 3 * this._spacing +
-                                 this._scrolledIconList.getNaturalWidth() +
+        alloc.natural_size = natBackWidth + natForwardWidth + 2 * this._spacing +
+                                 natContentWidth +
                                  this._scrolledIconList.getIconSize();
     },
 
