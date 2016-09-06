@@ -161,8 +161,8 @@ const EOSShellWobbly = new Lang.Class({
 
          this._settings = val;
 
-         let binder = Lang.bind (this, function(key, prop) {
-             this._settings.bind (key, this, prop, Gio.SettingsBindFlags.GET);
+         let binder = Lang.bind(this, function(key, prop) {
+             this._settings.bind(key, this, prop, Gio.SettingsBindFlags.GET);
          });
 
          /* Bind to effect properties */
