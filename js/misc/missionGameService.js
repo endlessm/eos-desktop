@@ -29,7 +29,7 @@ function callWhenComplete(completion, key, callback) {
     });
 
     if (complete && callback) {
-        callback(key);
+        callback(key. arguments);
     }
 }
 
