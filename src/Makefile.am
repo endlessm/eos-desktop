@@ -250,7 +250,7 @@ libeos_shell_js_la_CPPFLAGS =		\
 eos_shell_fxincludedir = $(includedir)
 eos_shell_fxinclude_HEADERS = wobbly-effect.h
 
-eos_shell_fx_cppflags = $(AM_CPPFLAGS) $(EOS_SHELL_FX_CFLAGS) -std=c++11 -Werror -Wall -Wextra -Wno-error=unused-parameter -Wno-error=deprecated-declarations
+eos_shell_fx_cppflags = $(AM_CPPFLAGS) $(EOS_SHELL_FX_CFLAGS) -std=c++11
 eos_shell_fx_sources = \
     wobbly-effect.cpp \
     $(eos_shell_fxinclude_HEADERS)
