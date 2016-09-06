@@ -130,8 +130,8 @@ function copyObject(src) {
     return dst;
 }
 
-const ScrollingLabel = new Lang.Class({
-    Name: 'ScrollingLabel',
+const ScrolledLabel = new Lang.Class({
+    Name: 'ScrolledLabel',
     Extends: St.Label,
 
     _init: function(params) {
@@ -230,7 +230,7 @@ const UserResponseLabel = new Lang.Class({
                            opacity: 255,
                            onCompleteScope: this,
                            onComplete: function() {
-                               this.emit('finished-scrolling');
+                               this.emit('finished-scrolled');
                                scrollView();
                                this.complete = true;
                            }
@@ -358,7 +358,7 @@ const MissionChatbox = new Lang.Class({
         if (immediate) {
             _addLabelToChatboxArea(label, this._chatboxResultsArea);
         } else {
-            lastLabel.connect('finished-scrolling', Lang.bind(this, function() {
+            lastLabel.connect('finished-scrolled', Lang.bind(this, function() {
                _addLabelToChatboxArea(label, this._chatboxResultsArea);
             }));
         }
