@@ -509,16 +509,8 @@ endless_shell_fx_wobbly_init (EndlessShellFXWobbly *effect)
     EndlessShellFXWobblyPrivate *priv =
         reinterpret_cast <EndlessShellFXWobblyPrivate *> (endless_shell_fx_wobbly_get_instance_private (effect));
 
-    priv->actor = nullptr;
-    priv->model = nullptr;
-    priv->timeout_id = 0;
-
-    priv->width_changed_signal = 0;
-    priv->height_changed_signal = 0;
-
+    /* Everything else is zero-initialised. */
     priv->model_settings = wobbly::Model::DefaultSettings;
-
-    priv->ungrab_pending = false;
 }
 
 static void
