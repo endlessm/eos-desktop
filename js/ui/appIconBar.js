@@ -861,16 +861,7 @@ const ScrolledIconList = new Lang.Class({
         let state = app.state;
         switch(state) {
         case Shell.AppState.STARTING:
-            this._addButton(app);
-            this._ensureIsVisible(app);
-            break;
-
         case Shell.AppState.RUNNING:
-            // The normal sequence of events appears to be
-            // STARTING -> STOPPED -> RUNNING -> STOPPED
-            // but sometimes it can go STARTING -> RUNNING -> STOPPED
-            // So we only want to add an app here if we don't already
-            // have an icon for @app
             this._addButton(app);
             this._ensureIsVisible(app);
             break;
