@@ -157,7 +157,7 @@ const MissionChatboxTextService = new Lang.Class({
         };
 
         this._service.call_get_unlocked_lessons("console", null, Lang.bind(this, function(source, result) {
-            [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
+            let [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
             lessons = lessons.deep_unpack();
 
             if (success) {
@@ -174,7 +174,7 @@ const MissionChatboxTextService = new Lang.Class({
         }));
 
         this._service.call_get_known_spells("console", null, Lang.bind(this, function(source, result) {
-            [success, lessons] = this._service.call_get_known_spells_finish(result);
+            let [success, lessons] = this._service.call_get_known_spells_finish(result);
             lessons = lessons.deep_unpack();
 
             if (success) {
@@ -191,7 +191,7 @@ const MissionChatboxTextService = new Lang.Class({
         }));
 
         this._service.call_get_unlocked_lessons("shell", null, Lang.bind(this, function(source, result) {
-            [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
+            let [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
 
             if (success) {
                 /* There should be a single lesson here called introduction here. Save
@@ -219,7 +219,7 @@ const MissionChatboxTextService = new Lang.Class({
         }));
 
         this._service.call_get_clues("shell", null, Lang.bind(this, function(source, result) {
-            [success, clues] = this._service.call_get_clues_finish(result);
+            const [success, clues] = this._service.call_get_clues_finish(result);
 
             if (success) {
                 this.emit("discover-new-inventory-items", clues.deep_unpack().map(function(clue) {
