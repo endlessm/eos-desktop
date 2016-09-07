@@ -199,7 +199,7 @@ const ScrolledLabel = new Lang.Class({
 });
 Signals.addSignalMethods(ScrolledLabel.prototype);
 
-WrappedLabel = new Lang.Class({
+const WrappedLabel = new Lang.Class({
     Name: 'WrappedLabel',
     Extends: ScrolledLabel,
     _init: function(params) {
