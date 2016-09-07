@@ -336,12 +336,13 @@ const MissionChatbox = new Lang.Class({
                 "wrapped": WrappedLabel
             };
 
-            try {
-                const labelCls = classes[message.kind];
-            } catch(e) {
-                log("Cannot display chat message, no such label type " + message.kind);
+            if (Object.keys(classes).indexOf(message.kind) === -1) {
+                log("Cannot display chat message, no such label type " +
+                    message.kind);
+                return;
             }
 
+            const labelCls = classes[message.kind];
             const label = new labelCls({
                 text: wrapTextWith(message.text, WRAP_CONSTANT, "").join("\n")
             });
