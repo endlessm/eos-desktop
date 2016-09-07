@@ -600,7 +600,7 @@ function windowActorsFromPid(pid) {
  * (if any) and its size.
  */
 function pidToActorInfo(pid) {
-    const windowActors = windowActorsFromPid(pid);
+    let windowActors = windowActorsFromPid(pid);
 
     return {
         actor: windowActors.length ? windowActors[0] : null,
@@ -780,7 +780,7 @@ const WindowManager = new Lang.Class({
     },
 
     _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {
-        const srcActorInfo = pidToActorInfo(src);
+        let srcActorInfo = pidToActorInfo(src);
         this._pendingRotateAnimations.push({
             src: srcActorInfo,
             dst: pidToActorInfo(dst)
@@ -791,8 +791,8 @@ const WindowManager = new Lang.Class({
     _updateReadyRotateAnimationsWith: function(window) {
         /* A new window was added. Get its pid and look for any
          * unsatisfied entries in _pendingRotateAnimations */
-        const pid = window ? window.get_meta_window().get_pid() : null;
-        const lastPendingRotateAnimationsLength = this._pendingRotateAnimations.length;
+        let pid = window ? window.get_meta_window().get_pid() : null;
+        let lastPendingRotateAnimationsLength = this._pendingRotateAnimations.length;
         this._pendingRotateAnimations = this._pendingRotateAnimations.filter(Lang.bind(this, function(animationSpec) {
             let unsatisfiedPids = 0;
             Object.keys(animationSpec).forEach(function(key) {
