@@ -856,17 +856,17 @@ const WindowManager = new Lang.Class({
                     rotation_angle_y: 180,
                     time: WINDOW_ANIMATION_TIME * 4,
                     transition: 'easeOutQuad',
-                    onComplete: function() {
+                    onComplete: Lang.bind(this, function() {
                         this._rotateOutCompleted(animationSpec.src.window);
-                    }
+                    })
                 });
                 Tweener.addTween(animationSpec.dst.window, {
                     rotation_angle_y: 0,
                     time: WINDOW_ANIMATION_TIME * 4,
                     transition: 'easeOutQuad',
-                    onComplete: function() {
+                    onComplete: Lang.bind(this, function() {
                         this._rotateInCompleted(animationSpec.dst.window);
-                    }
+                    })
                 });
 
                 /* Gently fade the window in, this will paper over
