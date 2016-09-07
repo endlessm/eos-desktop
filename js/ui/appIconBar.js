@@ -683,10 +683,6 @@ const ScrolledIconList = new Lang.Class({
         appButton.activateFirstWindow();
     },
 
-    getIconSize: function() {
-        return this._iconSize;
-    },
-
     getMinContentWidth: function(forHeight) {
         // We always want to show one icon, plus we want to keep the padding
         // added by the spacer actor
@@ -699,8 +695,14 @@ const ScrolledIconList = new Lang.Class({
         // Clip the values of the iconOffset
         let lastIconOffset = this._taskbarApps.size() - 1;
         let movableIconsPerPage = this._appsPerPage - 1;
-        this._iconOffset = Math.max(0, this._iconOffset);
-        this._iconOffset = Math.min(lastIconOffset - movableIconsPerPage, this._iconOffset);
+        let iconOffset = Math.max(0, this._iconOffset);
+        iconOffset = Math.min(lastIconOffset - movableIconsPerPage, iconOffset);
+
+        if (this._iconOffset == iconOffset) {
+            return;
+        }
+
+        this._iconOffset = iconOffset;
 
         let relativeAnimationTime = ICON_SCROLL_ANIMATION_TIME;
 
@@ -743,10 +745,12 @@ const ScrolledIconList = new Lang.Class({
     calculateNaturalSize: function(forWidth) {
         let [numOfPages, appsPerPage] = this._calculateNumberOfPages(forWidth);
 
-        this._appsPerPage = appsPerPage;
-        this._numberOfPages = numOfPages;
+        if (this._appsPerPage != appsPerPage || this._numberOfPages != numOfPages) {
+            this._appsPerPage = appsPerPage;
+            this._numberOfPages = numOfPages;
 
-        this._updatePage();
+            this._updatePage();
+        }
 
         let iconFullSize = this._iconSize + this._iconSpacing;
         return this._appsPerPage * iconFullSize - this._iconSpacing;
@@ -931,7 +935,9 @@ const AppIconBar = new Lang.Class({
         this._forwardButton.connect('clicked', Lang.bind(this, this._nextPageSelected));
         this._container.add_actor(this._forwardButton);
 
-        this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, this._updateNavButtonState));
+        this._scrolledIconList.connect('icons-scrolled', Lang.bind(this, function() {
+            this._container.queue_relayout();
+        }));
         this._scrolledIconList.connect('app-icon-pressed', Lang.bind(this, this._onAppIconPressed));
 
         this._windowTracker = Shell.WindowTracker.get_default();
@@ -1024,12 +1030,8 @@ const AppIconBar = new Lang.Class({
         let minContentWidth = this._scrolledIconList.getMinContentWidth(forHeight);
         let [, natContentWidth] = this._scrolledIconList.actor.get_preferred_width(forHeight);
 
-        alloc.min_size = minBackWidth + minForwardWidth + 2 * this._spacing +
-                             minContentWidth +
-                             this._scrolledIconList.getIconSize();
-        alloc.natural_size = natBackWidth + natForwardWidth + 2 * this._spacing +
-                                 natContentWidth +
-                                 this._scrolledIconList.getIconSize();
+        alloc.min_size = minBackWidth + minForwardWidth + 2 * this._spacing +  minContentWidth;
+        alloc.natural_size = natBackWidth + natForwardWidth + 2 * this._spacing + natContentWidth;
     },
 
     _getContentPreferredHeight: function(actor, forWidth, alloc) {
