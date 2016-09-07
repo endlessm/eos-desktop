@@ -36,7 +36,6 @@ typedef struct _EndlessShellFXWobblyPrivate
 {
     float          slowdown_factor;
 
-    ClutterActor   *actor;
     wobbly::Model  *model;
     wobbly::Anchor *anchor;
     gint64         last_msecs;
@@ -265,6 +264,7 @@ endless_shell_fx_wobbly_grab (EndlessShellFXWobbly *effect,
                               double              x,
                               double              y)
 {
+    ClutterActor *actor = clutter_actor_meta_get_actor (CLUTTER_ACTOR_META (effect));
     EndlessShellFXWobblyPrivate *priv =
         reinterpret_cast <EndlessShellFXWobblyPrivate *> (endless_shell_fx_wobbly_get_instance_private (effect));
 
@@ -282,7 +282,7 @@ endless_shell_fx_wobbly_grab (EndlessShellFXWobbly *effect,
         endless_shell_fx_wobbly_ensure_timeline (effect);
 
         float actor_x, actor_y;
-        clutter_actor_get_position (priv->actor, &actor_x, &actor_y);
+        clutter_actor_get_position (actor, &actor_x, &actor_y);
 
         priv->anchor = new wobbly::Anchor (priv->model->GrabAnchor (wobbly::Point (x - actor_x,
                                                                                    y - actor_y)));
@@ -395,6 +395,8 @@ static void
 endless_shell_fx_wobbly_set_actor (ClutterActorMeta *actor_meta,
                                    ClutterActor     *actor)
 {
+    ClutterActor *prev_actor = clutter_actor_meta_get_actor (actor_meta);
+
     CLUTTER_ACTOR_META_CLASS (endless_shell_fx_wobbly_parent_class)->set_actor (actor_meta,
                                                                                  actor);
 
@@ -423,22 +425,20 @@ endless_shell_fx_wobbly_set_actor (ClutterActorMeta *actor_meta,
         priv->timeout_id = 0;
     }
 
-    if (priv->actor)
+    if (prev_actor)
     {
-        g_signal_handler_disconnect (priv->actor, priv->width_changed_signal);
+        g_signal_handler_disconnect (prev_actor, priv->width_changed_signal);
         priv->width_changed_signal = 0;
 
-        g_signal_handler_disconnect (priv->actor, priv->height_changed_signal);
+        g_signal_handler_disconnect (prev_actor, priv->height_changed_signal);
         priv->height_changed_signal = 0;
     }
 
-    priv->actor = actor;
-
-    if (priv->actor)
+    if (actor)
     {
         float actor_width, actor_height;
         endless_shell_fx_get_actor_only_paint_box_size (wobbly_effect,
-                                                        priv->actor,
+                                                        actor,
                                                         &actor_width,
                                                         &actor_height);
 
@@ -448,18 +448,17 @@ endless_shell_fx_wobbly_set_actor (ClutterActorMeta *actor_meta,
                                          priv->model_settings);
 
         priv->width_changed_signal =
-            g_signal_connect_object (priv->actor,
+            g_signal_connect_object (actor,
                                      "notify::width",
                                      G_CALLBACK (endless_shell_fx_wobbly_size_changed),
                                      wobbly_effect,
                                      static_cast <GConnectFlags> (G_CONNECT_AFTER));
         priv->height_changed_signal =
-            g_signal_connect_object (priv->actor,
+            g_signal_connect_object (actor,
                                      "notify::height",
                                      G_CALLBACK (endless_shell_fx_wobbly_size_changed),
                                      wobbly_effect,
                                      static_cast <GConnectFlags> (G_CONNECT_AFTER));
-
     }
 
     /* Whatever the actor, ensure that the effect is disabled at this point */
