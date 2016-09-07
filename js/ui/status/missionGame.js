@@ -281,7 +281,7 @@ const MissionChatbox = new Lang.Class({
         /* Setup layout and style */
         const margin = 10;
         ["top", "bottom", "left", "right"].forEach(Lang.bind(this, function(d) {
-            this["margin-" + d] = margin
+            this["margin-" + d] = margin;
         }));
 
         this.set_size(400, 450);
@@ -310,7 +310,7 @@ const MissionChatbox = new Lang.Class({
          * chatbox (wrapping as appropriate) and ask the service
          * to evaluate the result */
         this._chatboxEntry.clutter_text.connect('activate', Lang.bind(this, function(entry, event) {
-            const text = entry.get_text()
+            const text = entry.get_text();
             if (text === '') {
                 return true;
             }
