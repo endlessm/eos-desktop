@@ -330,7 +330,7 @@ const MissionChatbox = new Lang.Class({
          * it in a different style and add it to the chatbox */
         this._service.connect("chat-message", Lang.bind(this, function(chat, message) {
             const classes = {
-                "scrolled": ScrolledLabel,
+                "scrolling": ScrolledLabel,
                 "scroll_wait": ScrolledLabel,
                 "user": UserResponseLabel,
                 "wrapped": WrappedLabel
