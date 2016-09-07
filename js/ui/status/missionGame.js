@@ -14,7 +14,7 @@ const PopupMenu = imports.ui.popupMenu;
 const MissionGameService = imports.misc.missionGameService;
 
 function launchLessonAction(lesson) {
-    return function(event) {
+    return function() {
         /* XXX: This needs to spawn a wrapper script that goes through each lesson
          * individually as opposed to just running showmehow. */
         const argv = ["/usr/bin/gnome-terminal", "-e", "showmehow " + lesson];
