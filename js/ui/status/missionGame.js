@@ -309,7 +309,7 @@ const MissionChatbox = new Lang.Class({
         /* When the user enters some text, we should add it to the
          * chatbox (wrapping as appropriate) and ask the service
          * to evaluate the result */
-        this._chatboxEntry.clutter_text.connect('activate', Lang.bind(this, function(entry, event) {
+        this._chatboxEntry.clutter_text.connect('activate', Lang.bind(this, function(entry) {
             const text = entry.get_text();
             if (text === '') {
                 return true;
