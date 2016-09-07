@@ -603,7 +603,7 @@ function pidToActorInfo(pid) {
     let windowActors = windowActorsFromPid(pid);
 
     return {
-        actor: windowActors.length ? windowActors[0] : null,
+        window: windowActors.length ? windowActors[0] : null,
         rect: (windowActors.length ?
                windowActors[0].get_meta_window().get_frame_rect() : null),
         pid: pid,
@@ -785,7 +785,7 @@ const WindowManager = new Lang.Class({
             src: srcActorInfo,
             dst: pidToActorInfo(dst)
         });
-        this._updateReadyRotateAnimationsWith(srcActorInfo.actor);
+        this._updateReadyRotateAnimationsWith(srcActorInfo.window);
     },
 
     _updateReadyRotateAnimationsWith: function(window) {
