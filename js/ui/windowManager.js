@@ -140,14 +140,6 @@ const DisplayChangeDialog = new Lang.Class({
 const EOSShellWobbly = new Lang.Class({
     Name: 'EOSShellWobbly',
     Extends: EndlessShellFX.Wobbly,
-    Properties: {
-        'settings' : GObject.ParamSpec.object('settings',
-                                              'Effect GSettings',
-                                              'Wobbly Effect GSettings',
-                                              GObject.ParamFlags.CONSTRUCT_ONLY |
-                                              GObject.ParamFlags.WRITABLE,
-                                              Gio.Settings)
-    },
 
     _init: function(params) {
         this.parent(params);
