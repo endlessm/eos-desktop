@@ -813,6 +813,22 @@ const WindowManager = new Lang.Class({
             animationSpec.dst.window.rotation_angle_y = -180;
             animationSpec.dst.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
             animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+
+            /* We set backface culling to be enabled here so that we can
+             * smootly animate between the two windows. Without expensive
+             * vector projections, there's no way to determine whether a
+             * window's front-face is completely invisible to the user
+             * (this cannot be done just by looking at the angle of the
+             * window because the same angle may show a different visible
+             * face depending on its position in the view frustum).
+             *
+             * What we do here is enable backface culling and rotate both
+             * windows by 180degrees. The effect of this is that the front
+             * and back window will be at opposite rotations at each point
+             * in time and so the exact point at which the first window
+             * becomes invisible is the same point at which the second
+             * window becomes visible. Because no back faces are drawn
+             * there are no visible artifacts in the animation */
             animationSpec.src.window.set_cull_back_face(true);
             animationSpec.dst.window.set_cull_back_face(true);
             animationSpec.dst.window.opacity = 0;
