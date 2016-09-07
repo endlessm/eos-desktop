@@ -102,10 +102,10 @@ function wrapTextWith(text, constant, prefix) {
 
                 /* Strip leading and trailing whitespace and newlines
                  * and remove any leading newlines as well. */
-                lines[lineIndex] = lines[lineIndex] + append.trim().replace(/\n/g, "");;
+                lines[lineIndex] = lines[lineIndex] + append.trim().replace(/\n/g, "");
             } else {
                 /* Just replace newlines, but don't touch whitespace. */
-                lines[lineIndex] = lines[lineIndex] + append.replace(/\n/g, "");;
+                lines[lineIndex] = lines[lineIndex] + append.replace(/\n/g, "");
             }
 
             /* If we encountered a '\n', we also need to
