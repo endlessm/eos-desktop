@@ -586,20 +586,6 @@ const TilePreview = new Lang.Class({
     }
 });
 
-const EnableBackfaceCullingEffect = new Lang.Class({
-    Name: 'EnableBackfaceCullingEffect',
-    Extends: Clutter.Effect,
-    _init : function(params) {
-        this.parent(params);
-    },
-    vfunc_pre_paint: function() {
-        this.get_actor().set_cull_back_face(true);
-    },
-    vfunc_post_paint: function() {
-        this.get_actor().set_cull_back_face(true);
-    }
-});
-
 /**
  * Determine all windows belonging to a certain process id
  */
@@ -833,10 +819,8 @@ const WindowManager = new Lang.Class({
                 animationSpec.dst.window.rotation_angle_y = -180;
                 animationSpec.dst.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
                 animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-                animationSpec.src.window.add_effect_with_name('enable-culling',
-                                                              new EnableBackfaceCullingEffect());
-                animationSpec.dst.window.add_effect_with_name('enable-culling',
-                                                              new EnableBackfaceCullingEffect());
+                animationSpec.src.window.set_cull_back_face(true);
+                animationSpec.dst.window.set_cull_back_face(true);
                 animationSpec.dst.window['opacity'] = 0;
                 let dst_geometry = animationSpec.src.rect;
                 animationSpec.dst.window.get_meta_window().move_resize_frame(false,
@@ -1407,6 +1391,7 @@ const WindowManager = new Lang.Class({
             Tweener.removeTweens(actor);
             actor.opacity = 255;
             actor.rotation_angle_x = 0;
+            actor.set_cull_back_face(false);
         }
     },
 
@@ -1415,6 +1400,7 @@ const WindowManager = new Lang.Class({
             Tweener.removeTweens(actor);
             actor.hide();
             actor.rotation_angle_x = 0;
+            actor.set_cull_back_face(false);
         }
     },
 
