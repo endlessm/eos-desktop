@@ -24,6 +24,8 @@ function launchLessonAction(lesson) {
         if (!ok) {
             log("Warning: Failed to call " + argv.join(" "));
         }
+
+        return pid;
     }
 }
 
