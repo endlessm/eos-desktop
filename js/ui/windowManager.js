@@ -821,7 +821,7 @@ const WindowManager = new Lang.Class({
                 animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
                 animationSpec.src.window.set_cull_back_face(true);
                 animationSpec.dst.window.set_cull_back_face(true);
-                animationSpec.dst.window['opacity'] = 0;
+                animationSpec.dst.window.opacity = 0;
                 let dst_geometry = animationSpec.src.rect;
                 animationSpec.dst.window.get_meta_window().move_resize_frame(false,
                                                                              dst_geometry.x,
