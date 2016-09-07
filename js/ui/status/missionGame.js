@@ -26,7 +26,7 @@ function launchLessonAction(lesson) {
         }
 
         return pid;
-    }
+    };
 }
 
 /**
