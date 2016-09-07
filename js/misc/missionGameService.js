@@ -265,3 +265,11 @@ const MissionChatboxTextService = new Lang.Class({
     }
 });
 Signals.addSignalMethods(MissionChatboxTextService.prototype);
+
+function getService() {
+    if (!global._missionChatboxTextService) {
+        global._missionChatboxTextService = new MissionChatboxTextService();
+    }
+
+    return global._missionChatboxTextService;
+}

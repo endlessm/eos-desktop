@@ -455,7 +455,7 @@ const MissionGameToolboxIndicator = new Lang.Class({
         this.parent('starred-symbolic', _("Mission"));
         this.setIcon('starred-symbolic');
 
-        this._service = new MissionGameService.MissionChatboxTextService();
+        this._service = MissionGameService.getService();
 
         /* Create layout for indicator menu */
         const hbox = new St.BoxLayout({name: 'menuArea'});
@@ -476,7 +476,7 @@ const MissionGameChatboxIndicator = new Lang.Class({
         this.parent('folder-drag-accept-symbolic', _("Mission"));
         this.setIcon('folder-drag-accept-symbolic');
 
-        this._service = new MissionGameService.MissionChatboxTextService();
+        this._service = MissionGameService.getService();
 
         /* Create layout for indicator menu */
         const hbox = new St.BoxLayout({name: 'menuArea'});
@@ -506,7 +506,7 @@ const MissionGameIndicator = new Lang.Class({
         this.parent('folder-drag-accept-symbolic', _("Mission"));
         this.setIcon('folder-drag-accept-symbolic');
 
-        this._service = new MissionGameService.MissionChatboxTextService();
+        this._service = MissionGameService.getService();
 
         /* Create layout for indicator menu */
         const hbox = new St.BoxLayout({name: 'menuArea'});
