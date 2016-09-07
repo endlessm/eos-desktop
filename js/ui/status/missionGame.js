@@ -3,7 +3,6 @@
 const Clutter = imports.gi.Clutter;
 const Lang = imports.lang;
 const GLib = imports.gi.GLib;
-const Pango = imports.gi.Pango;
 const St = imports.gi.St;
 const Signals = imports.signals;
 const Tweener = imports.ui.tweener;
