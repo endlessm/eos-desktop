@@ -652,8 +652,8 @@ const WindowManager = new Lang.Class({
 
             if (actor._firstFrameConnection) {
                 actor.disconnect(actor._firstFrameConnection);
-                this._firstFrameConnections = this._firstFrameConnections.filter(function(timeout) {
-                    return timeout !== actor._firstFrameConnection;
+                this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
+                    return conn !== actor._firstFrameConnection;
                 });
             }
 
@@ -876,8 +876,8 @@ const WindowManager = new Lang.Class({
                     transition: 'linear'
                 });
 
-                this._firstFrameConnections = this._firstFrameConnections.filter(function(timeout) {
-                    return timeout != animationSpec.dst.window._firstFrameConnection;
+                this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
+                    return conn != animationSpec.dst.window._firstFrameConnection;
                 });
                 animationSpec.dst.window.disconnect(animationSpec.dst.window._firstFrameConnection);
                 animationSpec.dst.window._firstFrameConnection = null;
@@ -885,7 +885,7 @@ const WindowManager = new Lang.Class({
                 return false;
             }));
 
-            /* Save the timeout's id on the destination window and in a list too so we can
+            /* Save the connection's id on the destination window and in a list too so we can
              * get rid of it on kill-window-effects later */
             animationSpec.dst.window._firstFrameConnection = firstFrameConnection;
             this._firstFrameConnections.push(firstFrameConnection);
