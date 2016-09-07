@@ -805,78 +805,78 @@ const WindowManager = new Lang.Class({
                 }
             });
 
-            if (unsatisfiedPids == 0) {
-                /* Delaying the animation like this is not ideal, but it is necessary
-                 * to allow some time for the window to paint itself for the first time.
-                 *
-                 * Mutter doesn't seem to have any kind of notification for when we first
-                 * receive a damage event on the window - that will be the time when the bound
-                 * texture will be defined. Until that point, the contents are just empty and
-                 * so we can't just rely on map events to get to where we want. */
-                animationSpec.dst.window.rotation_angle_y = -180;
-                animationSpec.dst.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-                animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-                animationSpec.src.window.set_cull_back_face(true);
-                animationSpec.dst.window.set_cull_back_face(true);
-                animationSpec.dst.window.opacity = 0;
-                let dst_geometry = animationSpec.src.rect;
-                animationSpec.dst.window.get_meta_window().move_resize_frame(false,
-                                                                             dst_geometry.x,
-                                                                             dst_geometry.y,
-                                                                             dst_geometry.width,
-                                                                             dst_geometry.height);
-
-                this._rotateInActors.push(animationSpec.dst.window);
-                this._rotateOutActors.push(animationSpec.src.window);
-
-                let waitingRotateTimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, Lang.bind(this, function() {
-                    /* Tween both windows in a rotation animation at the same time
-                     * with backface culling enabled on both. This will allow for
-                     * a smooth transition. */
-                    Tweener.addTween(animationSpec.src.window, {
-                        rotation_angle_y: 180,
-                        time: WINDOW_ANIMATION_TIME * 4,
-                        transition: 'easeOutQuad',
-                        onComplete: function() {
-                            this._rotateOutCompleted(animationSpec.src.window);
-                        }
-                    });
-                    Tweener.addTween(animationSpec.dst.window, {
-                        rotation_angle_y: 0,
-                        time: WINDOW_ANIMATION_TIME * 4,
-                        transition: 'easeOutQuad',
-                        onComplete: function() {
-                            this._rotateInCompleted(animationSpec.dst.window);
-                        }
-                    });
-
-                    /* Gently fade the window in, this will paper over
-                     * any artifacts from shadows and the like */
-                    Tweener.addTween(animationSpec.dst.window, {
-                        opacity: 255,
-                        time: WINDOW_ANIMATION_TIME,
-                        transition: 'linear'
-                    });
-
-                    this._rotateInTimeouts = this._rotateInTimeouts.filter(function(timeout) {
-                        return timeout != animationSpec.dst.window._waitingRotateTimeout;
-                    });
-                    animationSpec.dst.window._waitingRotateTimeout = null;
-
-                    return false;
-                }));
-
-                /* Save the timeout's id on the destination window and in a list too so we can
-                 * get rid of it on kill-window-effects later */
-                animationSpec.dst.window._waitingRotateTimeout = waitingRotateTimeout;
-                this._rotateInTimeouts.push(waitingRotateTimeout);
-
-                /* This will remove us from pending rotations */
-                return false;
+            if (unsatisfiedPids != 0) {
+                /* There are still unsatisfied process ID's, keep this metadata around. */
+                return true;
             }
 
-            /* There are still unsatisfied process ID's, keep this metadata around. */
-            return true;
+            animationSpec.dst.window.rotation_angle_y = -180;
+            animationSpec.dst.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+            animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+            animationSpec.src.window.set_cull_back_face(true);
+            animationSpec.dst.window.set_cull_back_face(true);
+            animationSpec.dst.window.opacity = 0;
+            let dst_geometry = animationSpec.src.rect;
+            animationSpec.dst.window.get_meta_window().move_resize_frame(false,
+                                                                         dst_geometry.x,
+                                                                         dst_geometry.y,
+                                                                         dst_geometry.width,
+                                                                         dst_geometry.height);
+
+            this._rotateInActors.push(animationSpec.dst.window);
+            this._rotateOutActors.push(animationSpec.src.window);
+
+            /* Delaying the animation like this is not ideal, but it is necessary
+             * to allow some time for the window to paint itself for the first time.
+             *
+             * Mutter doesn't seem to have any kind of notification for when we first
+             * receive a damage event on the window - that will be the time when the bound
+             * texture will be defined. Until that point, the contents are just empty and
+             * so we can't just rely on map events to get to where we want. */
+            let waitingRotateTimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, Lang.bind(this, function() {
+                /* Tween both windows in a rotation animation at the same time
+                 * with backface culling enabled on both. This will allow for
+                 * a smooth transition. */
+                Tweener.addTween(animationSpec.src.window, {
+                    rotation_angle_y: 180,
+                    time: WINDOW_ANIMATION_TIME * 4,
+                    transition: 'easeOutQuad',
+                    onComplete: function() {
+                        this._rotateOutCompleted(animationSpec.src.window);
+                    }
+                });
+                Tweener.addTween(animationSpec.dst.window, {
+                    rotation_angle_y: 0,
+                    time: WINDOW_ANIMATION_TIME * 4,
+                    transition: 'easeOutQuad',
+                    onComplete: function() {
+                        this._rotateInCompleted(animationSpec.dst.window);
+                    }
+                });
+
+                /* Gently fade the window in, this will paper over
+                 * any artifacts from shadows and the like */
+                Tweener.addTween(animationSpec.dst.window, {
+                    opacity: 255,
+                    time: WINDOW_ANIMATION_TIME,
+                    transition: 'linear'
+                });
+
+                this._rotateInTimeouts = this._rotateInTimeouts.filter(function(timeout) {
+                    return timeout != animationSpec.dst.window._waitingRotateTimeout;
+                });
+                animationSpec.dst.window._waitingRotateTimeout = null;
+
+                return false;
+            }));
+
+            /* Save the timeout's id on the destination window and in a list too so we can
+             * get rid of it on kill-window-effects later */
+            animationSpec.dst.window._waitingRotateTimeout = waitingRotateTimeout;
+            this._rotateInTimeouts.push(waitingRotateTimeout);
+
+            /* This will remove us from pending rotations */
+            return false;
         }));
 
         return this._pendingRotateAnimations.length != lastPendingRotateAnimationsLength;
