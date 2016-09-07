@@ -651,17 +651,14 @@ const WindowManager = new Lang.Class({
             this._rotateInCompleted(actor);
             this._rotateOutCompleted(actor);
 
-            let activeWaitForRotateTimeout = this._rotateInTimeouts.filter(function(timeout) {
-                return timeout == actor._waitingRotateTimeout;
-            });
-
-            if (activeWaitForRotateTimeout.length === 1) {
-                GLib.source_remove(activeWaitForRotateTimeout[0]);
-                this._rotateInTimeouts = this.rotateInTimeouts.filter(function(timeout) {
-                    return timeout !== activeWaitForRotateTimeout[0];
+            if (actor._waitingRotateTimeout) {
+                GLib.source_remove(actor._waitingRotateTimeout);
+                this._rotateInTimeouts = this._rotateInTimeouts.filter(function(timeout) {
+                    return timeout !== actor._waitingRotateTimeout;
                 });
-                actor._waitingRotateTimeout = null;
             }
+
+            actor._waitingRotateTimeout = null;
         }));
 
         this._shellwm.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
