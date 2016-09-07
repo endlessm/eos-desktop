@@ -783,7 +783,7 @@ const WindowManager = new Lang.Class({
     },
 
     _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {
-        const srcActorInfo = pidToActorInfo(src)
+        const srcActorInfo = pidToActorInfo(src);
         this._pendingRotateAnimations.push({
             src: srcActorInfo,
             dst: pidToActorInfo(dst)
