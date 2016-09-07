@@ -791,7 +791,7 @@ const WindowManager = new Lang.Class({
         this._updateReadyRotateAnimationsWith(srcActorInfo.actor);
     },
 
-    _updateReadyRotateAnimationsWith: function (window) {
+    _updateReadyRotateAnimationsWith: function(window) {
         /* A new window was added. Get its pid and look for any
          * unsatisfied entries in _pendingRotateAnimations */
         const pid = window ? window.get_meta_window().get_pid() : null;
