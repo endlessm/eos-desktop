@@ -794,7 +794,6 @@ const WindowManager = new Lang.Class({
         this._rotateOutActors = [];
         this._rotateInActors = [];
         this._rotateInTimeouts = [];
-        log("Connected to Sylvester");
     },
 
     _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {
@@ -805,7 +804,7 @@ const WindowManager = new Lang.Class({
         });
         this._updateReadyRotateAnimationsWith(srcActorInfo.actor);
     },
-    
+
     _updateReadyRotateAnimationsWith: function (window) {
         /* A new window was added. Get its pid and look for any
          * unsatisfied entries in _pendingRotateAnimations */
@@ -822,7 +821,7 @@ const WindowManager = new Lang.Class({
                     }
                 }
             });
-            
+
             if (unsatisfiedPids == 0) {
                 /* Delaying the animation like this is not ideal, but it is necessary
                  * to allow some time for the window to paint itself for the first time.
@@ -902,7 +901,7 @@ const WindowManager = new Lang.Class({
             /* There are still unsatisfied process ID's, keep this metadata around. */
             return true;
         }));
-        
+
         return this._pendingRotateAnimations.length != lastPendingRotateAnimationsLength;
     },
 
@@ -1283,7 +1282,7 @@ const WindowManager = new Lang.Class({
         }));
 
         let isSplashWindow = Shell.WindowTracker.is_speedwagon_window(window);
-        
+
         if (this._updateReadyRotateAnimationsWith(actor)) {
             shellwm.completed_map(actor);
             return;
