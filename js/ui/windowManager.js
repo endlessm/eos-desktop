@@ -834,7 +834,7 @@ const WindowManager = new Lang.Class({
                      * with backface culling enabled on both. This will allow for
                      * a smooth transition. */
                     Tweener.addTween(animationSpec.src.window, {
-                        "rotation-angle-y": 180,
+                        rotation_angle_y: 180,
                         time: WINDOW_ANIMATION_TIME * 4,
                         transition: 'easeOutQuad',
                         onComplete: function() {
@@ -844,7 +844,7 @@ const WindowManager = new Lang.Class({
                         onCompleteParams: []
                     });
                     Tweener.addTween(animationSpec.dst.window, {
-                        "rotation-angle-y": 0,
+                        rotation_angle_y: 0,
                         time: WINDOW_ANIMATION_TIME * 4,
                         transition: 'easeOutQuad',
                         onComplete: function() {
@@ -857,7 +857,7 @@ const WindowManager = new Lang.Class({
                     /* Gently fade the window in, this will paper over
                      * any artifacts from shadows and the like */
                     Tweener.addTween(animationSpec.dst.window, {
-                        "opacity": 255,
+                        opacity: 255,
                         time: WINDOW_ANIMATION_TIME,
                         transition: 'linear'
                     });
