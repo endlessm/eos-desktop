@@ -63,7 +63,7 @@ const MissionChatboxTextService = new Lang.Class({
         Showmehow.ServiceProxy.new_for_bus(Gio.BusType.SESSION, 0, name, path, null,
                                            Lang.bind(this, function(source, result) {
             this._service = Showmehow.ServiceProxy.new_for_bus_finish(result);
-            this._service.connect("lessons-changed", Lang.bind(this, function(proxy) {
+            this._service.connect("lessons-changed", Lang.bind(this, function() {
                 /* When the underlying lessons change, we need to reset the entire
                  * state of this component and start from the beginning, including
                  * showing any warnings.
