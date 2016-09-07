@@ -542,6 +542,10 @@ StScrollBar StButton#vhandle:active {
     padding-top: 0px;
 }
 
+#appIconBarContainer {
+    spacing: 10px;
+}
+
 .app-icon-bar.panel-button {
     -minimum-hpadding: 6px;
     -natural-hpadding: 6px;
@@ -574,15 +578,6 @@ StScrollBar StButton#vhandle:active {
     -minimum-hpadding: 4px;
 }
 
-.browser-icon {
-    padding-bottom: 1px;
-    icon-size: 28px;
-}
-
-.browser-icon:highlighted { 
-    background-position: 3px 24px;
-}
-
 .scrolled-icon-container {
     -icon-size: 24px;
     height: 30px;
@@ -607,8 +602,11 @@ StScrollBar StButton#vhandle:active {
 }
 
 .scrolled-icon-spacer {
-    padding-left: 10px;
     padding-right: 10px;
+}
+
+.scrolled-icon-spacer:rtl {
+    padding-left: 10px;
 }
 
 .scrolled-icon-list.hfade {
@@ -635,7 +633,6 @@ StScrollBar StButton#vhandle:active {
 }
 
 .app-bar-nav-icon {
-    spacing: 10px;
     icon-size: 15px;
     color: #555;
     transition-duration: 100ms;
