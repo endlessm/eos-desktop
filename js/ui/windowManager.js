@@ -1260,11 +1260,6 @@ const WindowManager = new Lang.Class({
 
         let isSplashWindow = Shell.WindowTracker.is_speedwagon_window(window);
 
-        if (this._updateReadyRotateAnimationsWith(actor)) {
-            shellwm.completed_map(actor);
-            return;
-        }
-
         if (!isSplashWindow) {
             // If we have an active splash window for the app, don't animate it.
             // The _showingSplash state here is a bit dirty -- it's set by appActivation.js
@@ -1277,6 +1272,11 @@ const WindowManager = new Lang.Class({
                 shellwm.completed_map(actor);
                 return;
             }
+        }
+
+        if (this._updateReadyRotateAnimationsWith(actor)) {
+            shellwm.completed_map(actor);
+            return;
         }
 
         // for side components, we will hide the overview and then animate
