@@ -29,7 +29,7 @@ function callWhenComplete(completion, key, callback) {
     });
 
     if (complete && callback) {
-        callback(key. arguments);
+        callback.apply(this, [key].concat(Array.from(arguments)));
     }
 }
 
