@@ -651,14 +651,14 @@ const WindowManager = new Lang.Class({
             this._rotateInCompleted(actor);
             this._rotateOutCompleted(actor);
 
-            if (actor._waitingRotateTimeout) {
-                GLib.source_remove(actor._waitingRotateTimeout);
-                this._rotateInTimeouts = this._rotateInTimeouts.filter(function(timeout) {
-                    return timeout !== actor._waitingRotateTimeout;
+            if (actor._firstFrameConnection) {
+                actor.disconnect(actor._firstFrameConnection);
+                this._firstFrameConnections = this._firstFrameConnections.filter(function(timeout) {
+                    return timeout !== actor._firstFrameConnection;
                 });
             }
 
-            actor._waitingRotateTimeout = null;
+            actor._firstFrameConnection = null;
         }));
 
         this._shellwm.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
@@ -776,7 +776,7 @@ const WindowManager = new Lang.Class({
         this._pendingRotateAnimations = [];
         this._rotateOutActors = [];
         this._rotateInActors = [];
-        this._rotateInTimeouts = [];
+        this._firstFrameConnections = [];
     },
 
     _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {
@@ -842,14 +842,13 @@ const WindowManager = new Lang.Class({
             this._rotateInActors.push(animationSpec.dst.window);
             this._rotateOutActors.push(animationSpec.src.window);
 
-            /* Delaying the animation like this is not ideal, but it is necessary
-             * to allow some time for the window to paint itself for the first time.
+            /* We wait until the first frame of the window has been drawn
+             * and damage updated in the compositor before we start rotating.
              *
-             * Mutter doesn't seem to have any kind of notification for when we first
-             * receive a damage event on the window - that will be the time when the bound
-             * texture will be defined. Until that point, the contents are just empty and
-             * so we can't just rely on map events to get to where we want. */
-            let waitingRotateTimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, Lang.bind(this, function() {
+             * This way we don't get ugly artifacts when rotating if
+             * a window is slow to draw.
+             */
+            let firstFrameConnection = animationSpec.dst.window.connect('first-frame', Lang.bind(this, function() {
                 /* Tween both windows in a rotation animation at the same time
                  * with backface culling enabled on both. This will allow for
                  * a smooth transition. */
@@ -878,18 +877,19 @@ const WindowManager = new Lang.Class({
                     transition: 'linear'
                 });
 
-                this._rotateInTimeouts = this._rotateInTimeouts.filter(function(timeout) {
-                    return timeout != animationSpec.dst.window._waitingRotateTimeout;
+                this._firstFrameConnections = this._firstFrameConnections.filter(function(timeout) {
+                    return timeout != animationSpec.dst.window._firstFrameConnection;
                 });
-                animationSpec.dst.window._waitingRotateTimeout = null;
+                animationSpec.dst.window.disconnect(animationSpec.dst.window._firstFrameConnection);
+                animationSpec.dst.window._firstFrameConnection = null;
 
                 return false;
             }));
 
             /* Save the timeout's id on the destination window and in a list too so we can
              * get rid of it on kill-window-effects later */
-            animationSpec.dst.window._waitingRotateTimeout = waitingRotateTimeout;
-            this._rotateInTimeouts.push(waitingRotateTimeout);
+            animationSpec.dst.window._firstFrameConnection = firstFrameConnection;
+            this._firstFrameConnections.push(firstFrameConnection);
 
             /* This will remove us from pending rotations */
             return false;
