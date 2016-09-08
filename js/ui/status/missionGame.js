@@ -125,12 +125,6 @@ function wrapTextWith(text, constant, prefix) {
     return lines;
 }
 
-function copyObject(src) {
-    let dst = {};
-    Lang.copyProperties(src, dst);
-    return dst;
-}
-
 const ScrolledLabel = new Lang.Class({
     Name: 'ScrolledLabel',
     Extends: St.Label,
@@ -347,11 +341,9 @@ const MissionChatbox = new Lang.Class({
     Name: 'MissionChatbox',
     Extends: St.BoxLayout,
     _init: function(params, service) {
-        let parentParams = copyObject(params);
-        parentParams.name = parentParams.name || 'chatboxArea';
-        parentParams.vertical = true;
-
-        this.parent(parentParams);
+        params.name = params.name || 'chatboxArea';
+        params.vertical = true;
+        this.parent(params);
 
         /* Retain service, which evaluates text entry */
         this._service = service;
@@ -393,7 +385,7 @@ const MissionChatbox = new Lang.Class({
             }
 
             const labelCls = classes[message.kind];
-            const label = new labelCls({
+            const label = new labelCls({}, {
                 text: wrapTextWith(message.text, WRAP_CONSTANT, "").join("\n")
             });
 
@@ -455,11 +447,10 @@ const MissionToolbox = new Lang.Class({
     _init: function(params, parentMenu, service) {
         this._service = service;
 
-        let parentParams = copyObject(params);
-        parentParams.vertical = true;
-        parentParams.name = 'missionToolbox';
+        params.vertical = true;
+        params.name = 'missionToolbox';
 
-        this.parent(parentParams);
+        this.parent(params);
 
         /* Game mode switch */
         const missionSwitch = new PopupMenu.PopupSwitchMenuItem(_("Mission"), false);
