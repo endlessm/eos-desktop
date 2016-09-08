@@ -490,7 +490,7 @@ const MissionGameChatboxIndicator = new Lang.Class({
          * commenced. */
         this.menu.connect('open-state-changed', Lang.bind(this, function(menu, state) {
             if (state) {
-                this._service.commenceIntroLesson();
+                this._service.ready();
             }
         }));
     }
@@ -523,7 +523,7 @@ const MissionGameIndicator = new Lang.Class({
          * commenced. */
         this.menu.connect('open-state-changed', Lang.bind(this, function(menu, state) {
             if (state) {
-                this._service.commenceIntroLesson();
+                this._service.ready();
             }
         }));
     }

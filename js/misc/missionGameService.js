@@ -55,6 +55,7 @@ const MissionChatboxTextService = new Lang.Class({
         this._openedForTheFirstTime = false;
         this._introLesson = null;
         this._currentTask = null;
+        this._reattemptCurrentLesson = false;
 
         const name = "com.endlessm.Showmehow.Service";
         const path = "/com/endlessm/Showmehow/Service";
@@ -74,15 +75,63 @@ const MissionChatboxTextService = new Lang.Class({
                 this._refreshContent(function() {
                     this._openedForTheFirstTime = false;
                     this._currentTask = null;
+                    this._reattemptCurrentLesson = false;
                 });
             }));
             this._service.connect("listening-for-lesson-events", Lang.bind(this, function(proxy, interestingEvents) {
                 this.emit("listening-for-events", interestingEvents.deep_unpack());
             }));
+            this._service.connect('lesson-events-satisfied',
+                                 Lang.bind(this, this._handleLessonEventsSatisfied));
             this._refreshContent();
         }));
     },
     commenceIntroLesson: function() {
+
+    },
+    _handleLessonResponse: function(source, result) {
+        const [success, returnValue] = this._service.call_attempt_lesson_remote_finish(result);
+
+        if (success) {
+            const [responsesJSON, moveTo] = returnValue.deep_unpack();
+            const responses = JSON.parse(responsesJSON);
+
+            responses.forEach(Lang.bind(this, function(response) {
+                this.emit("chat-message", {
+                    kind: response.type,
+                    text: response.value
+                });
+            }));
+
+            /* Move to the next specified task. If this is an empty
+             * string, then it means there are no more tasks to
+             * complete and we should respond accordingly. */
+            if (moveTo.length === 0) {
+                this._introLesson = null;
+                this._currentTask = null;
+            }
+
+            this._reattemptCurrentLesson = false;
+
+            if (this._currentTask && moveTo !== this._currentTask.name) {
+                this._showTaskDescriptionForLesson(moveTo);
+            }
+        } else {
+            log("Failed to call call_attempt_lesson_remote");
+        }
+    },
+    _handleLessonEventsSatisfied: function(service, lesson, task) {
+        if (this._introLesson &&
+            this._introLesson.name == lesson &&
+            this._currentTask &&
+            this._currentTask.name == task) {
+            this._reattemptCurrentLesson = true;
+            /* Service indicated that we are ready to re-attempt task.
+             * move to the ready state and run call_attempt_lesson_remote
+             * when the chat-box is re-opened */
+        }
+    },
+    ready: function() {
         /* If possible in the current state, commence the intro lesson.
          *
          * That depends on us having not been opened for the first
@@ -111,40 +160,21 @@ const MissionChatboxTextService = new Lang.Class({
 
                 this._showTaskDescriptionForLesson(this._introLesson.entry);
             }));
+
+            return;
+        }
+
+        /* If we need to re-attempt the current lesson, do so */
+        if (this._reattemptCurrentLesson && this._currentTask && this._introLesson) {
+            this.emit('lesson-events-satisfied-input-fired');
+            this.evaluate('');
+            return;
         }
     },
     evaluate: function(text) {
         if (this._introLesson && this._currentTask) {
             this._service.call_attempt_lesson_remote("intro", this._currentTask.name, text, null,
-                                                     Lang.bind(this, function(source, result) {
-                const [success, returnValue] = this._service.call_attempt_lesson_remote_finish(result);
-
-                if (success) {
-                    const [responsesJSON, moveTo] = returnValue.deep_unpack();
-                    const responses = JSON.parse(responsesJSON);
-
-                    responses.forEach(Lang.bind(this, function(response) {
-                        this.emit("chat-message", {
-                            kind: response.type,
-                            text: response.value
-                        });
-                    }));
-
-                    /* Move to the next specified task. If this is an empty
-                     * string, then it means there are no more tasks to
-                     * complete and we should respond accordingly. */
-                    if (moveTo.length === 0) {
-                        this._introLesson = null;
-                        this._currentTask = null;
-                    }
-
-                    if (moveTo !== this._currentTask.name) {
-                        this._showTaskDescriptionForLesson(moveTo);
-                    }
-                } else {
-                    log("Failed to call call_attempt_lesson_remote");
-                }
-            }));
+                                                     Lang.bind(this, this._handleLessonResponse));
         }
     },
     _refreshContent: function(completedCallback) {
