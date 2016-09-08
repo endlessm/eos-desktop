@@ -211,7 +211,7 @@ const WrappedLabel = new Lang.Class({
 
 const TextResponseAreaBase = new Lang.Class({
     Name: 'TextResponseAreaBase',
-    Extends: St.Bin,
+    Extends: St.BoxLayout,
     _init: function(params, prefix) {
         this.parent(params);
         this._entry = new St.Entry({ can_focus: true });
@@ -220,6 +220,7 @@ const TextResponseAreaBase = new Lang.Class({
         this._hbox.add_actor(this._prefixLabel);
         this._hbox.add_actor(this._entry, { expand: true });
         this.add_actor(this._hbox, { expand: true });
+        this.set_x_expand(true);
         this._entry.clutter_text.connect('activate', Lang.bind(this, function() {
             let text = this._entry.get_text();
 
