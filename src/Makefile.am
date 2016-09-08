@@ -106,7 +106,7 @@ eos_shell_cflags =				\
 	-DMUTTER_TYPELIB_DIR=\"$(MUTTER_TYPELIB_DIR)\"
 
 privlibdir = $(pkglibdir)
-privlib_LTLIBRARIES = libeos-shell.la libeos-shell-js.la
+privlib_LTLIBRARIES = libeos-shell.la libeos-shell-js.la libeos-shell-fx.la
 
 shell_built_sources = \
 	org-gtk-application.h \
@@ -246,6 +246,22 @@ libeos_shell_js_la_CPPFLAGS =		\
 
 ########################################
 
+# Set up headers for libeos-shell-fx
+eos_shell_fxincludedir = $(includedir)
+eos_shell_fxinclude_HEADERS = wobbly-effect.h
+
+eos_shell_fx_cppflags = $(AM_CPPFLAGS) $(EOS_SHELL_FX_CFLAGS) -std=c++11
+eos_shell_fx_sources = \
+    wobbly-effect.cpp \
+    $(eos_shell_fxinclude_HEADERS)
+
+# Set up the libeos-shell-fx target
+libeos_shell_fx_la_SOURCES = $(eos_shell_fx_sources)
+libeos_shell_fx_la_LIBADD = $(EOS_SHELL_FX_LIBS)
+libeos_shell_fx_la_CPPFLAGS = $(eos_shell_fx_cppflags)
+
+########################################
+
 shell_recorder_sources =        \
 	shell-recorder.c	\
 	shell-recorder.h
@@ -354,3 +370,12 @@ St_1_0_gir_FILES = $(filter-out %-private.h $(st_non_gir_sources), $(addprefix $
 	$(addprefix $(srcdir)/,$(st_source_c))
 INTROSPECTION_GIRS += St-1.0.gir
 CLEANFILES += St-1.0.gir
+
+EndlessShellFX-1.0.gir: libst-1.0.la
+EndlessShellFX_1_0_gir_INCLUDES = Clutter-1.0
+EndlessShellFX_1_0_gir_CFLAGS = $(eos_shell_fx_cflags)
+EndlessShellFX_1_0_gir_LIBS = libeos-shell-fx.la
+EndlessShellFX_1_0_gir_FILES = $(eos_shell_fx_sources)
+EndlessShellFX_1_0_gir_SCANNERFLAGS = --warn-all
+INTROSPECTION_GIRS += EndlessShellFX-1.0.gir
+CLEANFILES += EndlessShellFX-1.0.gir
