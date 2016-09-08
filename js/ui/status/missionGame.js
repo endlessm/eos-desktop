@@ -369,7 +369,7 @@ const MissionChatbox = new Lang.Class({
             _addLabelToChatboxArea(label, this._chatboxResultsArea);
         } else {
             lastLabel.connect('finished-scrolled', Lang.bind(this, function() {
-               _addLabelToChatboxArea(label, this._chatboxResultsArea);
+                _addLabelToChatboxArea(label, this._chatboxResultsArea);
             }));
         }
     }
