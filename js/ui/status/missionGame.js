@@ -127,23 +127,22 @@ function wrapTextWith(text, constant, prefix) {
 
 const ScrolledLabel = new Lang.Class({
     Name: 'ScrolledLabel',
-    Extends: St.Label,
+    Extends: St.BoxLayout,
 
-    _init: function(params) {
-        let parentParams = copyObject(params);
-        parentParams.text = '';
-
-        this.parent(parentParams);
-        this._text = params.text;
+    _init: function(params, settings) {
+        this.parent(params);
+        this._label = new St.Label({});
+        this._text = settings.text;
         this._textIndex = 0;
         this._scrollTimer = 0;
         this._waitCount = 0;
         this.complete = false;
 
-        this.style_class = 'chatbox-character-text';
+        this._label.style_class = 'chatbox-character-text';
 
-        this.set_x_expand(true);
-        this.clutter_text.set_x_expand(true);
+        this._label.set_x_expand(true);
+        this._label.clutter_text.set_x_expand(true);
+        this.add_actor(this._label, { expand: true });
     },
     start: function(scrollView) {
         /* Avoid double-start */
@@ -154,7 +153,7 @@ const ScrolledLabel = new Lang.Class({
         /* Immediately display the first character so that
          * scrolling to the bottom will work */
         this._textIndex++;
-        this.set_text(this._text.slice(0, this._textIndex));
+        this._label.set_text(this._text.slice(0, this._textIndex));
 
         /* Add a timeout to gradually display all this text */
         this._scrollTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 10, Lang.bind(this, function() {
@@ -170,7 +169,7 @@ const ScrolledLabel = new Lang.Class({
             }
 
             this._textIndex++;
-            this.set_text(this._text.slice(0, this._textIndex));
+            this._label.set_text(this._text.slice(0, this._textIndex));
 
             /* Stop on punctuation */
             if ("!?.".indexOf(this._text[this._textIndex - 1]) !== -1) {
