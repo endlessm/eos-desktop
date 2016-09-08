@@ -281,46 +281,6 @@ const ExternalEventsResponseArea = new Lang.Class({
 });
 Signals.addSignalMethods(ExternalEventsResponseArea.prototype);
 
-const UserResponseLabel = new Lang.Class({
-    Name: 'UserResponseLabel',
-    Extends: St.Label,
-
-    _init: function(params) {
-        let parentParams = copyObject(params);
-        parentParams.text = '';
-
-        this.parent(parentParams);
-        this._text = params.text;
-        this.complete = false;
-
-        this.style_class = 'chatbox-user-text';
-
-        this.set_x_expand(true);
-        this.clutter_text.set_x_expand(true);
-    },
-    start: function(scrollView) {
-        this.set_text(this._text);
-        this["translation-y"] = 5;
-        this["opacity"] = 0;
-
-        Tweener.addTween(this,
-                         { "translation-y": 0,
-                           time: 1.0,
-                           opacity: 255,
-                           onCompleteScope: this,
-                           onComplete: function() {
-                               this.emit('finished-scrolled');
-                               scrollView();
-                               this.complete = true;
-                           }
-                         });
-        scrollView();
-    },
-    fastForward: function() {
-    }
-});
-Signals.addSignalMethods(UserResponseLabel.prototype);
-
 /**
  * _addLabelToChatboxArea
  *
@@ -374,7 +334,6 @@ const MissionChatbox = new Lang.Class({
             const classes = {
                 "scrolled": ScrolledLabel,
                 "scroll_wait": ScrolledLabel,
-                "user": UserResponseLabel,
                 "wrapped": WrappedLabel
             };
 
