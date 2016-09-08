@@ -9,7 +9,7 @@
     <key name="wobbly-effect" type="b">
       <default>false</default>
       <_summary>
-        Whether or not to enable the wobbly effect.
+        Whether or not to enable the wobbly effect
       </_summary>
       <_description>
         WOBBLY!

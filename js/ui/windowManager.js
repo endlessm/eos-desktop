@@ -148,7 +148,7 @@ const EOSShellWobbly = new Lang.Class({
             global.settings.bind(key, this, prop, Gio.SettingsBindFlags.GET);
         });
 
-        /* Bind to effect properties */
+        // Bind to effect properties
         binder('wobbly-spring-k', 'spring-k');
         binder('wobbly-spring-friction', 'friction');
         binder('wobbly-slowdown-factor', 'slowdown-factor');
