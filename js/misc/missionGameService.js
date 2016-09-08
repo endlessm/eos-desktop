@@ -55,7 +55,6 @@ const MissionChatboxTextService = new Lang.Class({
         this._openedForTheFirstTime = false;
         this._introLesson = null;
         this._currentTask = null;
-        this._reattemptCurrentLesson = false;
 
         const name = "com.endlessm.Showmehow.Service";
         const path = "/com/endlessm/Showmehow/Service";
@@ -75,14 +74,11 @@ const MissionChatboxTextService = new Lang.Class({
                 this._refreshContent(function() {
                     this._openedForTheFirstTime = false;
                     this._currentTask = null;
-                    this._reattemptCurrentLesson = false;
                 });
             }));
             this._service.connect("listening-for-lesson-events", Lang.bind(this, function(proxy, interestingEvents) {
                 this.emit("listening-for-events", interestingEvents.deep_unpack());
             }));
-            this._service.connect('lesson-events-satisfied',
-                                 Lang.bind(this, this._handleLessonEventsSatisfied));
             this._refreshContent();
         }));
     },
@@ -111,8 +107,6 @@ const MissionChatboxTextService = new Lang.Class({
                 this._currentTask = null;
             }
 
-            this._reattemptCurrentLesson = false;
-
             if (this._currentTask) {
                 if (moveTo !== this._currentTask.name) {
                     this._showTaskDescriptionForLesson(moveTo);
@@ -122,17 +116,6 @@ const MissionChatboxTextService = new Lang.Class({
             }
         } else {
             log("Failed to call call_attempt_lesson_remote");
-        }
-    },
-    _handleLessonEventsSatisfied: function(service, lesson, task) {
-        if (this._introLesson &&
-            this._introLesson.name == lesson &&
-            this._currentTask &&
-            this._currentTask.name == task) {
-            this._reattemptCurrentLesson = true;
-            /* Service indicated that we are ready to re-attempt task.
-             * move to the ready state and run call_attempt_lesson_remote
-             * when the chat-box is re-opened */
         }
     },
     ready: function() {
@@ -169,7 +152,7 @@ const MissionChatboxTextService = new Lang.Class({
         }
 
         /* If we need to re-attempt the current lesson, do so */
-        if (this._reattemptCurrentLesson && this._currentTask && this._introLesson) {
+        if (this._currentTask && this._introLesson) {
             this.emit('lesson-events-satisfied-input-fired');
             this.evaluate('');
             return;
