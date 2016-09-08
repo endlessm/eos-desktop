@@ -127,10 +127,11 @@ function wrapTextWith(text, constant, prefix) {
 
 const ScrolledLabel = new Lang.Class({
     Name: 'ScrolledLabel',
-    Extends: St.BoxLayout,
+    Extends: GLib.Object,
 
     _init: function(params, settings) {
         this.parent(params);
+        this.view = new St.BoxLayout();
         this._label = new St.Label({});
         this._text = settings.text;
         this._textIndex = 0;
@@ -138,11 +139,13 @@ const ScrolledLabel = new Lang.Class({
         this._waitCount = 0;
         this.complete = false;
 
+        this.view.style_class ='chatbox-character-text-container';
+
         this._label.style_class = 'chatbox-character-text';
 
         this._label.set_x_expand(true);
         this._label.clutter_text.set_x_expand(true);
-        this.add_actor(this._label, { expand: true });
+        this.view.add_actor(this._label, { expand: true });
     },
     start: function(scrollView) {
         /* Avoid double-start */
@@ -204,7 +207,7 @@ const WrappedLabel = new Lang.Class({
 
 const TextResponseAreaBase = new Lang.Class({
     Name: 'TextResponseAreaBase',
-    Extends: St.BoxLayout,
+    Extends: GLib.Object,
     _init: function(params, prefix) {
         this.parent(params);
         this._entry = new St.Entry({ can_focus: true });
@@ -212,8 +215,9 @@ const TextResponseAreaBase = new Lang.Class({
         this._hbox = new St.BoxLayout({ name: 'textResponseHbox' });
         this._hbox.add_actor(this._prefixLabel);
         this._hbox.add_actor(this._entry, { expand: true });
-        this.add_actor(this._hbox, { expand: true });
-        this.set_x_expand(true);
+        this.view = new St.BoxLayout();
+        this.view.add_actor(this._hbox, { expand: true });
+        this.view.set_x_expand(true);
         this._entry.clutter_text.connect('activate', Lang.bind(this, function() {
             let text = this._entry.get_text();
 
@@ -263,7 +267,7 @@ Signals.addSignalMethods(ChoiceResponseArea.prototype);
 
 const ExternalEventsResponseArea = new Lang.Class({
     Name: 'ExternalEventsResponseArea',
-    Extends: St.Bin,
+    Extends: GLib.Object,
     _init: function(params, settings, service, lesson, task) {
         this.parent(params);
         this._connection = service.connect('lesson-events-satisfied-input-fired', Lang.bind(this, function(satisfiedLesson, satisfiedTask) {
@@ -286,7 +290,9 @@ Signals.addSignalMethods(ExternalEventsResponseArea.prototype);
  * Helper function to add a ScrollableLabel to a chatbox results area.
  */
 function _addLabelToChatboxArea(label, chatboxResultsArea) {
-    chatboxResultsArea.add(label);
+    if (label.view) {
+        chatboxResultsArea.add(label.view);
+    }
 
     /* Start scrolling the label */
     label.start(function() {
