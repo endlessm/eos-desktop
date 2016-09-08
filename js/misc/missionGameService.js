@@ -82,9 +82,6 @@ const MissionChatboxTextService = new Lang.Class({
             this._refreshContent();
         }));
     },
-    commenceIntroLesson: function() {
-
-    },
     _handleLessonResponse: function(source, result) {
         const [success, returnValue] = this._service.call_attempt_lesson_remote_finish(result);
 
