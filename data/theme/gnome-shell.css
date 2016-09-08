@@ -1675,6 +1675,28 @@ StScrollBar StButton#vhandle:active {
     font-family: 'monospace';
 }
 
+.chatbox-bubble-text-container {
+    padding: 10px;
+    padding-left: 10px;
+}
+
+.chatbox-bordered-bubble-container {
+    border: 2px solid yellow;
+    border-radius: 5px;
+}
+
+.chatbox-character-bubble-offset {
+    padding-left: 0px;
+    padding-right: 50px;
+    padding-top: 10px;
+}
+
+.chatbox-user-bubble-offset {
+    padding-left: 60px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
 .chatbox-character-text {
     text-align: left;
 }

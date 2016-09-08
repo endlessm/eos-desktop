@@ -131,21 +131,21 @@ const ScrolledLabel = new Lang.Class({
 
     _init: function(params, settings) {
         this.parent(params);
-        this.view = new St.BoxLayout();
-        this._label = new St.Label({});
+        this.view = new St.BoxLayout({ x_expand: true });
+        this.bubble = new St.BoxLayout({ x_expand: true });
+        this._label = new St.Label({ x_expand: true });
         this._text = settings.text;
         this._textIndex = 0;
         this._scrollTimer = 0;
         this._waitCount = 0;
         this.complete = false;
 
-        this.view.style_class ='chatbox-character-text-container';
-
+        this.bubble.style_class = 'chatbox-bubble-text-container chatbox-bordered-bubble-container';
+        this.view.style_class = 'chatbox-character-bubble-offset';
         this._label.style_class = 'chatbox-character-text';
-
-        this._label.set_x_expand(true);
         this._label.clutter_text.set_x_expand(true);
-        this.view.add_actor(this._label, { expand: true });
+        this.bubble.add(this._label, { x_fill: true, expand: true });
+        this.view.add(this.bubble, { x_fill: true, expand: true });
     },
     start: function(scrollView) {
         /* Avoid double-start */
@@ -213,11 +213,16 @@ const TextResponseAreaBase = new Lang.Class({
         this._entry = new St.Entry({ can_focus: true });
         this._prefixLabel = new St.Label({ text: prefix });
         this._hbox = new St.BoxLayout({ name: 'textResponseHbox' });
-        this._hbox.add_actor(this._prefixLabel);
-        this._hbox.add_actor(this._entry, { expand: true });
+        this._hbox.add(this._prefixLabel);
+        this._hbox.add(this._entry, { expand: true });
+        this.bubble = new St.BoxLayout();
         this.view = new St.BoxLayout();
-        this.view.add_actor(this._hbox, { expand: true });
-        this.view.set_x_expand(true);
+
+        this.bubble.style_class = 'chatbox-bubble-text-container chatbox-bordered-bubble-container';
+        this.view.style_class = 'chatbox-user-bubble-offset';
+
+        this.bubble.add(this._hbox, { expand: true, x_fill: true});
+        this.view.add(this.bubble, { expand: true, x_fill: true });
         this._entry.clutter_text.connect('activate', Lang.bind(this, function() {
             let text = this._entry.get_text();
 
@@ -327,6 +332,7 @@ const MissionChatbox = new Lang.Class({
         this._chatboxLabels = [];
         this._chatboxResultsScrollView = new St.ScrollView({ overlay_scrollbars: true });
         this._chatboxResultsArea = new St.BoxLayout({ name: 'chatboxResultsArea', vertical: true });
+        this._chatboxResultsArea.style_class = 'chatbox-bubble-container-area';
 
         this._chatboxResultsScrollView.add_actor(this._chatboxResultsArea);
 
