@@ -371,36 +371,8 @@ const MissionChatbox = new Lang.Class({
 
         this._chatboxResultsScrollView.add_actor(this._chatboxResultsArea);
 
-        /* Create entry area to allow the user to type some text */
-        const chatboxEntryArea = new St.BoxLayout({ name: 'chatboxEntryArea' });
-        chatboxEntryArea.add(new St.Label({ text: '> ' }));
-
-        this._chatboxEntry = new St.Entry({ can_focus: true });
-        chatboxEntryArea.add(this._chatboxEntry, { expand: true });
-
-        /* Add the entry and results view to the layout */
+        /* Add the results view to the layout */
         this.add(this._chatboxResultsScrollView, { expand: true });
-        this.add(chatboxEntryArea);
-
-        /* When the user enters some text, we should add it to the
-         * chatbox (wrapping as appropriate) and ask the service
-         * to evaluate the result */
-        this._chatboxEntry.clutter_text.connect('activate', Lang.bind(this, function(entry) {
-            const text = entry.get_text();
-            if (text === '') {
-                return true;
-            }
-
-            this._pushLabelToChatboxResultsArea(new UserResponseLabel({
-                text: wrapTextWith(text.replace('\n', ' ').trim(),
-                                   WRAP_CONSTANT,
-                                   "").join("\n")
-            }));
-
-            this._service.evaluate(text);
-            entry.set_text('');
-            return true;
-        }));*/
 
         /* When the service sends us back a chat message, we should display
          * it in a different style and add it to the chatbox */
