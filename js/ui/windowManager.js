@@ -15,6 +15,8 @@ const Shell = imports.gi.Shell;
 const Signals = imports.signals;
 const St = imports.gi.St;
 
+const MissionGameService = imports.misc.missionGameService;
+
 const AltTab = imports.ui.altTab;
 const ForceAppExitDialog = imports.ui.forceAppExitDialog;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
@@ -752,6 +754,26 @@ const WindowManager = new Lang.Class({
         this._rotateOutActors = [];
         this._rotateInActors = [];
         this._firstFrameConnections = [];
+
+        this._missionGameService = MissionGameService.getService();
+
+        /* For mission we add another event handler for grab-op-begin
+         * to see when a window has moved or is moving.
+         *
+         * This is expensive, so we only do it if we are interested
+         * in window-move events */
+        this._missionGameService.connect('listening-for-events', Lang.bind(this, function(service, events) {
+            if (events.indexOf('window-moved')) {
+                this._missionGrabOpBeginHandler = global.display.connect('grab-op-begin',
+                                                                         Lang.bind(this, function(display, screen, window, op) {
+                    if (window && op == Meta.GrabOp.MOVING) {
+                        this._missionGameService.noteEventOccurrence('window-moved');
+                        global.display.disconnect(this._missionGrabOpBeginHandler);
+                        this._missionGrabOpBeginHandler = null;
+                    }
+                }));
+            }
+        }));
     },
 
     _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {

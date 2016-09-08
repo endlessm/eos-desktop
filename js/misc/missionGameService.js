@@ -76,6 +76,9 @@ const MissionChatboxTextService = new Lang.Class({
                     this._currentTask = null;
                 });
             }));
+            this._service.connect("listening-for-lesson-events", Lang.bind(this, function(proxy, interestingEvents) {
+                this.emit("listening-for-events", interestingEvents.deep_unpack());
+            }));
             this._refreshContent();
         }));
     },
@@ -262,6 +265,9 @@ const MissionChatboxTextService = new Lang.Class({
                 log("Call to call_get_task_description_finish failed");
             }
         }));
+    },
+    noteEventOccurrence: function(event) {
+        this._service.call_lesson_event(event, null, null);
     }
 });
 Signals.addSignalMethods(MissionChatboxTextService.prototype);
