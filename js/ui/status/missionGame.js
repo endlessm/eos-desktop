@@ -236,6 +236,7 @@ const TextResponseAreaBase = new Lang.Class({
     fastForward: function() {
     },
     start: function() {
+        this._entry.grab_key_focus();
     }
 });
 Signals.addSignalMethods(TextResponseAreaBase.prototype);
