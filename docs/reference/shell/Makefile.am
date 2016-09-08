@@ -112,7 +112,7 @@ expand_content_files=
 # e.g. GTKDOC_CFLAGS=-I$(top_srcdir) -I$(top_builddir) $(GTK_DEBUG_FLAGS)
 # e.g. GTKDOC_LIBS=$(top_builddir)/gtk/$(gtktargetlib)
 GTKDOC_CFLAGS=$(EOS_SHELL_CFLAGS)
-GTKDOC_LIBS=$(EOS_SHELL_LIBS) $(EOS_SHELL_FX_LIBS) $(top_builddir)/src/libeos-shell.la
+GTKDOC_LIBS=$(EOS_SHELL_LIBS) $(EOS_SHELL_FX_LIBS) $(top_builddir)/src/libeos-shell.la $(top_builddir)/src/libeos-shell-fx.la
 
 # This includes the standard gtk-doc make rules, copied by gtkdocize.
 include $(top_srcdir)/gtk-doc.make

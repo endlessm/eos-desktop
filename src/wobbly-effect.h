@@ -43,6 +43,7 @@ GType endless_shell_fx_wobbly_get_type (void);
 
 /**
  * endless_shell_fx_wobbly_grab:
+ * @effect: An #EndlessShellFXWobbly
  * @x: The x-coordinate on the mesh to grab, specified relative to the
  * upper-left corner of the mesh
  * @y: The y-coordinate on the mesh to grab, specified relative to the
@@ -62,6 +63,7 @@ void endless_shell_fx_wobbly_grab (EndlessShellFXWobbly *effect,
 
 /**
  * endless_shell_fx_wobbly_ungrab:
+ * @effect: An #EndlessShellFXWobbly
  * Removes the current grab. When the actor is moved, the mesh will
  * move uniformly.
  *
@@ -72,6 +74,7 @@ void endless_shell_fx_wobbly_ungrab (EndlessShellFXWobbly *effect);
 
 /**
  * endless_shell_fx_wobbly_move_by:
+ * @effect: An #EndlessShellFXWobbly
  * @dx: A delta-x coordinate to move the mesh by
  * @dy: A delta-y coordinate to move the mesh by
  *
