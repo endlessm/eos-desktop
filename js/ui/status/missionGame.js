@@ -324,13 +324,13 @@ const MissionChatbox = new Lang.Class({
             this._service.evaluate(text);
             entry.set_text('');
             return true;
-        }));
+        }));*/
 
         /* When the service sends us back a chat message, we should display
          * it in a different style and add it to the chatbox */
         this._service.connect("chat-message", Lang.bind(this, function(chat, message) {
             const classes = {
-                "scrolling": ScrolledLabel,
+                "scrolled": ScrolledLabel,
                 "scroll_wait": ScrolledLabel,
                 "user": UserResponseLabel,
                 "wrapped": WrappedLabel

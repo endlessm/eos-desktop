@@ -100,7 +100,7 @@ const MissionChatboxTextService = new Lang.Class({
                         return w[0];
                     }).forEach(Lang.bind(this, function(w) {
                         this.emit("chat-message", {
-                            kind: "scrolling",
+                            kind: "scrolled",
                             mode: "immediate",
                             text: w
                         });
@@ -257,7 +257,7 @@ const MissionChatboxTextService = new Lang.Class({
                 };
 
                 this.emit("chat-message", {
-                    kind: "scrolling",
+                    kind: "scrolled",
                     mode: "animated",
                     text: desc
                 });
