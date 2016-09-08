@@ -156,9 +156,6 @@ const EOSShellWobbly = new Lang.Class({
     },
 
     grabbedByMouse: function() {
-        if (!global.settings.get_boolean('wobbly-effect'))
-            return;
-
         let position = global.get_pointer();
         let actor = this.get_actor();
         this.grab(position[0], position[1]);
@@ -1589,7 +1586,8 @@ const WindowManager = new Lang.Class({
 
     _windowCanWobble: function(window, op) {
         if (window.is_override_redirect() ||
-            op != Meta.GrabOp.MOVING)
+            op != Meta.GrabOp.MOVING ||
+            !global.settings.get_boolean('wobbly-effect'))
             return false;
 
         return true;
