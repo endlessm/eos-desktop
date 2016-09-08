@@ -291,6 +291,8 @@ const MissionChatboxTextService = new Lang.Class({
                     mode: "animated",
                     text: desc
                 });
+
+                this.emit("user-input-bubble", inputSpec);
             } else {
                 log("Call to call_get_task_description_finish failed");
             }

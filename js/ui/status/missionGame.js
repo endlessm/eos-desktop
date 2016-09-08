@@ -209,6 +209,82 @@ const WrappedLabel = new Lang.Class({
     }
 });
 
+const TextResponseAreaBase = new Lang.Class({
+    Name: 'TextResponseAreaBase',
+    Extends: St.Bin,
+    _init: function(params, prefix) {
+        this.parent(params);
+        this._entry = new St.Entry({ can_focus: true });
+        this._prefixLabel = new St.Label({ text: prefix });
+        this._hbox = new St.BoxLayout({ name: 'textResponseHbox' });
+        this._hbox.add_actor(this._prefixLabel);
+        this._hbox.add_actor(this._entry, { expand: true });
+        this.add_actor(this._hbox, { expand: true });
+        this._entry.clutter_text.connect('activate', Lang.bind(this, function() {
+            let text = this._entry.get_text();
+
+            if (text !== '') {
+                this._entry.set_can_focus(false);
+                this.emit('response', this._entry.get_text());
+                this._hbox.remove_actor(this._prefixLabel);
+                this.emit('finished-scrolled');
+                this.complete = true;
+            }
+        }));
+    },
+    fastForward: function() {
+    },
+    start: function() {
+    }
+});
+Signals.addSignalMethods(TextResponseAreaBase.prototype);
+
+const TextResponseArea = new Lang.Class({
+    Name: 'TextResponseArea',
+    Extends: TextResponseAreaBase,
+    _init: function(params) {
+        this.parent(params, '> ');
+    }
+});
+Signals.addSignalMethods(TextResponseArea.prototype);
+
+const ConsoleResponseArea = new Lang.Class({
+    Name: 'ConsoleResponseArea',
+    Extends: TextResponseAreaBase,
+    _init: function(params) {
+        this.parent(params, '$ ');
+    }
+});
+Signals.addSignalMethods(ConsoleResponseArea.prototype);
+
+const ChoiceResponseArea = new Lang.Class({
+    Name: 'ChoiceResponseArea',
+    Extends: TextResponseAreaBase,
+    _init: function(params) {
+        this.parent(params, 'Choice: ');
+    }
+});
+Signals.addSignalMethods(ChoiceResponseArea.prototype);
+
+const ExternalEventsResponseArea = new Lang.Class({
+    Name: 'ExternalEventsResponseArea',
+    Extends: St.Bin,
+    _init: function(params, settings, service, lesson, task) {
+        this.parent(params);
+        this._connection = service.connect('lesson-events-satisfied-input-fired', Lang.bind(this, function(satisfiedLesson, satisfiedTask) {
+            log('Received lesson-events-satisfied-input-fired');
+            this.emit('finished-scrolling');
+            this.complete = true;
+            service.disconnect(this._connection);
+        }));
+    },
+    fastForward: function() {
+    },
+    start: function() {
+    }
+});
+Signals.addSignalMethods(ExternalEventsResponseArea.prototype);
+
 const UserResponseLabel = new Lang.Class({
     Name: 'UserResponseLabel',
     Extends: St.Label,
@@ -352,6 +428,30 @@ const MissionChatbox = new Lang.Class({
             }
 
             this._pushLabelToChatboxResultsArea(label);
+        }));
+        this._service.connect("user-input-bubble", Lang.bind(this, function(service, bubbleConfig, lesson, task) {
+            let classes = {
+                "text": TextResponseArea,
+                "console": ConsoleResponseArea,
+                "choice": ChoiceResponseArea,
+                "external_events": ExternalEventsResponseArea
+            };
+
+            log(JSON.stringify(bubbleConfig, null, 2));
+
+            if (Object.keys(classes).indexOf(bubbleConfig.type) === -1) {
+                log("Cannot display user input, no such bubble type " + bubbleConfig.type);
+                return;
+            }
+
+            let bubbleCls = classes[bubbleConfig.type];
+            let bubble = new bubbleCls({}, bubbleConfig.settings, service, lesson, task);
+
+            bubble.connect('response', Lang.bind(this, function(bubble, response) {
+                this._service.evaluate(response);
+            }));
+
+            this._pushLabelToChatboxResultsArea(bubble);
         }));
     },
     _pushLabelToChatboxResultsArea: function(label) {
