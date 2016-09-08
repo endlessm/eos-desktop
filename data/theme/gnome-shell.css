@@ -1669,8 +1669,6 @@ StScrollBar StButton#vhandle:active {
 
 /* Mission text */
 .chatbox-text-container {
-    margin-top: 10px;
-    margin-left: 10px;
     font-size: 11pt;
     font-family: 'monospace';
 }
@@ -1702,10 +1700,6 @@ StScrollBar StButton#vhandle:active {
 }
 
 .chatbox-user-text {
-    margin-top: 10px;
-    margin-left: 40px;
-    margin-right: 10px;
-    margin-bottom: 10px;
     text-align: right;
     font-family: lato, sans-serif;
 }
