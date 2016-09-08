@@ -133,7 +133,7 @@
       </_description>
     </key>
     <key name="taskbar-pins" type="as">
-      <default>[ 'chromium-browser.desktop' ]</default>
+      <default>[ 'org.gnome.Software.desktop', 'chromium-browser.desktop', 'org.gnome.Nautilus.desktop' ]</default>
       <_summary>List of desktop file IDs for applications pinned to taskbar</_summary>
       <_description>
         The applications corresponding to these identifiers will be displayed in
