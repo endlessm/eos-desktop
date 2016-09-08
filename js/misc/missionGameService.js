@@ -113,8 +113,12 @@ const MissionChatboxTextService = new Lang.Class({
 
             this._reattemptCurrentLesson = false;
 
-            if (this._currentTask && moveTo !== this._currentTask.name) {
-                this._showTaskDescriptionForLesson(moveTo);
+            if (this._currentTask) {
+                if (moveTo !== this._currentTask.name) {
+                    this._showTaskDescriptionForLesson(moveTo);
+                } else {
+                    this.emit('user-input-bubble', this._currentTask.input);
+                }
             }
         } else {
             log("Failed to call call_attempt_lesson_remote");
