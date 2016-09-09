@@ -512,12 +512,12 @@ const MissionToolbox = new Lang.Class({
         this.parent(params);
 
         /* Game mode switch */
-        let missionSwitch = new PopupMenu.PopupSwitchMenuItem(_('Mission'), false);
+        let missionSwitch = new PopupMenu.PopupSwitchMenuItem(_("Mission"), false);
 
         /* Adventures and spells toolbox */
-        this._adventures = createSubMenuMenuItemWithFauxParent(_('Adventures'), parentMenu);
-        this._spells = createSubMenuMenuItemWithFauxParent(_('Spells'), parentMenu);
-        this._inventory = createSubMenuMenuItemWithFauxParent(_('Inventory'), parentMenu);
+        this._adventures = createSubMenuMenuItemWithFauxParent(_("Adventures"), parentMenu);
+        this._spells = createSubMenuMenuItemWithFauxParent(_("Spells"), parentMenu);
+        this._inventory = createSubMenuMenuItemWithFauxParent(_("Inventory"), parentMenu);
 
         /* Add switches and toolbox items to hbox */
         this.add(missionSwitch.actor);
