@@ -79,6 +79,7 @@ const MissionChatboxTextService = new Lang.Class({
             this._refreshContent();
         }));
     },
+
     _handleLessonResponse: function(source, result) {
         let success, returnValue;
 
@@ -121,6 +122,7 @@ const MissionChatboxTextService = new Lang.Class({
             this.emit('user-input-bubble', this._currentTask.input);
         }
     },
+
     ready: function() {
         /* If we don't have any content, then we can't do anything */
         if (!this._introLesson) {
@@ -170,12 +172,14 @@ const MissionChatboxTextService = new Lang.Class({
             return;
         }
     },
+
     evaluate: function(text) {
         if (this._introLesson && this._currentTask) {
             this._service.call_attempt_lesson_remote('intro', this._currentTask.name, text, null,
                                                      Lang.bind(this, this._handleLessonResponse));
         }
     },
+
     _refreshContent: function(completedCallback) {
         if (!this._service) {
             log('Attempted to refresh content without a service!');
@@ -301,6 +305,7 @@ const MissionChatboxTextService = new Lang.Class({
          * that its reference count drops back to the request count */
         hold.release();
     },
+
     _showTaskDescriptionForLesson: function(taskName) {
         if (!this._introLesson) {
             return;
@@ -339,6 +344,7 @@ const MissionChatboxTextService = new Lang.Class({
             this.emit('user-input-bubble', inputSpec);
         }));
     },
+
     noteEventOccurrence: function(event) {
         this._service.call_lesson_event(event, null, null);
     }
