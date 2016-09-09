@@ -11,6 +11,7 @@ const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
 const MissionGameService = imports.misc.missionGameService;
+const Params = imports.misc.params;
 
 function launchLessonAction(lesson) {
     return function() {
@@ -378,12 +379,15 @@ const MissionChatbox = new Lang.Class({
         let margin = 10;
 
         /* Layout and size */
-        params.name = params.name || 'chatboxArea';
-        params.vertical = true;
-        params.style_class = 'chatbox-text-container';
-        ['top', "bottom", "left", "right"].forEach(function(d) {
-            params['margin-' + d] = margin;
-        });
+        params = Params.parse(params, {
+            name: 'chatboxArea',
+            vertical: true,
+            style_class: 'chatbox-text-container',
+            margin_top: margin,
+            margin_bottom: margin,
+            margin_left: margin,
+            margin_right: margin
+        }, true);
         this.parent(params);
         this.set_size(400, 450);
 
@@ -500,8 +504,10 @@ const MissionToolbox = new Lang.Class({
     _init: function(params, parentMenu, service) {
         this._service = service;
 
-        params.vertical = true;
-        params.name = 'missionToolbox';
+        params = Params.parse(params, {
+            vertical: true,
+            name: 'missionToolbox'
+        }, true);
 
         this.parent(params);
 
