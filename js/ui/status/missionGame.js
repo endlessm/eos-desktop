@@ -623,7 +623,6 @@ const MissionGameIndicator = new Lang.Class({
 
     _init: function() {
         this.parent('folder-drag-accept-symbolic', _('Mission'));
-        this.setIcon('folder-drag-accept-symbolic');
 
         this._service = MissionGameService.getService();
 
