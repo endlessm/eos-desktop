@@ -133,11 +133,13 @@ const MissionChatboxTextService = new Lang.Class({
         }
     },
     ready: function() {
-        /* If possible in the current state, commence the intro lesson.
-         *
-         * That depends on us having not been opened for the first
-         * time and the content being loaded. */
-        if (!this._openedForTheFirstTime && this._introLesson) {
+        /* If we don't have any content, then we can't do anything */
+        if (!this._introLesson) {
+            return;
+        }
+
+        /* If possible in the current state, commence the intro lesson. */
+        if (!this._openedForTheFirstTime) {
             this._openedForTheFirstTime = true;
 
             /* Get warnings and show them first, then show the first
@@ -173,7 +175,7 @@ const MissionChatboxTextService = new Lang.Class({
         }
 
         /* If we need to re-attempt the current lesson, do so */
-        if (this._currentTask && this._introLesson) {
+        if (this._currentTask) {
             this.emit('lesson-events-satisfied-input-fired');
             this.evaluate('');
             return;
