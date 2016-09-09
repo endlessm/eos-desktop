@@ -44,7 +44,6 @@ function createSubMenuMenuItemWithFauxParent(name, parent) {
     return item;
 }
 
-
 /**
  * addSubMenuItemToBox
  *
