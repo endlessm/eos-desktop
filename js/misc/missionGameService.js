@@ -80,8 +80,12 @@ const MissionChatboxTextService = new Lang.Class({
                     this._currentTask = null;
                 }));
             }));
+            /* It doesn't seem possible to return an array of strings here, looks like it has to be an array
+             * of tuples (which contain strings). */
             this._service.connect('listening-for-lesson-events', Lang.bind(this, function(proxy, interestingEvents) {
-                this.emit('listening-for-events', interestingEvents.deep_unpack());
+                this.emit('listening-for-events', interestingEvents.deep_unpack().map(function(i) {
+                    return i[0];
+                }));
             }));
             this._refreshContent();
         }));
