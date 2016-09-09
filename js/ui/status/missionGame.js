@@ -289,9 +289,39 @@ Signals.addSignalMethods(ConsoleResponseArea.prototype);
 
 const ChoiceResponseArea = new Lang.Class({
     Name: 'ChoiceResponseArea',
-    Extends: TextResponseAreaBase,
-    _init: function(params) {
-        this.parent(params, 'Choice: ');
+    Extends: GLib.Object,
+    _init: function(params, settings) {
+        this.parent(params);
+        this.bubble = new St.BoxLayout({ vertical: true });
+        this.view = new St.BoxLayout();
+
+        this.view.style_class = 'chatbox-user-bubble-offset';
+
+        Object.keys(settings).forEach(Lang.bind(this, function(key) {
+            let buttonContainer = new St.BoxLayout();
+            buttonContainer.style_class = 'chatbox-button-container';
+            let button = new St.Button({
+                label: settings[key].text
+            });
+            button.style_class = 'chatbox-button';
+            button.connect('clicked', Lang.bind(this, function() {
+                this.emit('response', key);
+                this.emit('finished-scrolling');
+                this.complete = true;
+            }));
+            buttonContainer.add(button, { expand: true, x_fill: true });
+            this.bubble.add(buttonContainer, { x_fill: true });
+        }));
+
+        this.view.add(this.bubble, { expand: true, x_fill: true });
+    },
+    fastForward: function() {
+    },
+    start: function(scrollView) {
+        scrollView();
+    },
+    acceptAdditionalContent: function() {
+        return false;
     }
 });
 Signals.addSignalMethods(ChoiceResponseArea.prototype);
