@@ -63,7 +63,7 @@ const MissionChatboxTextService = new Lang.Class({
             try {
                 this._service = Showmehow.ServiceProxy.new_for_bus_finish(result);
             } catch (e) {
-                log('Error occurred in creating ShowmehowServiceProxy ' + String(e));
+                logError(e, "Error occurred in creating ShowmehowServiceProxy");
                 return;
             }
 
@@ -92,7 +92,7 @@ const MissionChatboxTextService = new Lang.Class({
         try {
             [success, returnValue] = this._service.call_attempt_lesson_remote_finish(result);
         } catch (e) {
-            log('Error occurred in attempting lesson ' + String(e));
+            logError(e, 'Error occurred in attempting lesson');
             return;
         }
 
@@ -190,7 +190,7 @@ const MissionChatboxTextService = new Lang.Class({
             try {
                 [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
             } catch (e) {
-                log('Error occurred in getting unlocked lessons ' + String(e));
+                logError(e, 'Error occurred in getting unlocked lessons');
                 return;
             }
 
@@ -215,7 +215,12 @@ const MissionChatboxTextService = new Lang.Class({
             try {
                 [success, lessons] = this._service.call_get_known_spells_finish(result);
             } catch (e) {
-                log('Error occurred in getting known spells ' + String(e));
+                logError(e, 'Error occurred in getting known spells');
+                return;
+            }
+
+            if (!success) {
+                log('Warning: call to showmhow get_known_spells failed');
                 return;
             }
 
@@ -240,7 +245,7 @@ const MissionChatboxTextService = new Lang.Class({
             try {
                 [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
             } catch (e) {
-                log('Error occurred in getting unlocked lessons for shell ' + String(e));
+                logError(e, 'Error occurred in getting unlocked lessons for shell');
                 return;
             }
 
@@ -275,7 +280,7 @@ const MissionChatboxTextService = new Lang.Class({
             try {
                 [success, clues] = this._service.call_get_clues_finish(result);
             } catch (e) {
-                log('Error occurred in getting clues ' + String(e));
+                logError(e, 'Error occurred in getting clues');
                 return;
             }
 
@@ -305,8 +310,7 @@ const MissionChatboxTextService = new Lang.Class({
             try {
                 [success, returnValue] = this._service.call_get_task_description_finish(result);
             } catch (e) {
-                log(['Error occurred in getting task description for ',
-                     taskName, ' ', String(e)]);
+                logError(e, 'Error occurred in getting task description for ' + taskName);
                 return;
             }
 
