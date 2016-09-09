@@ -376,21 +376,20 @@ const MissionChatbox = new Lang.Class({
     Name: 'MissionChatbox',
     Extends: St.BoxLayout,
     _init: function(params, service) {
+        let margin = 10;
+
+        /* Layout and size */
         params.name = params.name || 'chatboxArea';
         params.vertical = true;
         params.style_class = 'chatbox-text-container';
+        ['top', "bottom", "left", "right"].forEach(function(d) {
+            params['margin-' + d] = margin;
+        });
         this.parent(params);
+        this.set_size(400, 450);
 
         /* Retain service, which evaluates text entry */
         this._service = service;
-
-        /* Setup layout and style */
-        let margin = 10;
-        ['top', "bottom", "left", "right"].forEach(Lang.bind(this, function(d) {
-            this['margin-' + d] = margin;
-        }));
-
-        this.set_size(400, 450);
 
         /* Start setting up chatbox labels and add a scroll view
          * to contain all the messages */
