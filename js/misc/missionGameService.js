@@ -1,8 +1,8 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
-const Lang = imports.lang;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
+const Lang = imports.lang;
 const Showmehow = imports.gi.Showmehow;
 const Signals = imports.signals;
 
