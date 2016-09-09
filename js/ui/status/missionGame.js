@@ -419,9 +419,9 @@ const MissionChatbox = new Lang.Class({
 
             /* Create a new bubble */
             let classes = {
-                'scrolled': ScrolledLabel,
-                'scroll_wait': ScrolledLabel,
-                'wrapped': WrappedLabel
+                scrolled: ScrolledLabel,
+                scroll_wait: ScrolledLabel,
+                wrapped: WrappedLabel
             };
 
             if (Object.keys(classes).indexOf(message.kind) === -1) {
@@ -443,10 +443,10 @@ const MissionChatbox = new Lang.Class({
         }));
         this._service.connect('user-input-bubble', Lang.bind(this, function(service, bubbleConfig, lesson, task) {
             let classes = {
-                'text': TextResponseArea,
-                'console': ConsoleResponseArea,
-                'choice': ChoiceResponseArea,
-                'external_events': ExternalEventsResponseArea
+                text: TextResponseArea,
+                console: ConsoleResponseArea,
+                choice: ChoiceResponseArea,
+                external_events: ExternalEventsResponseArea
             };
 
             if (Object.keys(classes).indexOf(bubbleConfig.type) === -1) {
