@@ -148,49 +148,65 @@ const ScrolledLabel = new Lang.Class({
         this.view.add(this.bubble, { x_fill: true, expand: true });
     },
     start: function(scrollView) {
-        /* Avoid double-start */
-        if (this._scrollTimer) {
-            return;
-        }
-
         /* Immediately display the first character so that
          * scrolling to the bottom will work */
+        this._textIndex = 0;
         this._textIndex++;
         this._label.set_text(this._text.slice(0, this._textIndex));
 
         /* Add a timeout to gradually display all this text */
-        this._scrollTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 10, Lang.bind(this, function() {
-            if (this._waitCount > 0) {
-                this._waitCount--;
+        this._startScrollAnimation(scrollView);
+    },
+    _startScrollAnimation: function(done) {
+        if (!this._scrollTimer) {
+            this._waitCount = 0;
+            this._scrollTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 10, Lang.bind(this, function() {
+                if (this._waitCount > 0) {
+                    this._waitCount--;
+                    return true;
+                }
+
+                if (this._textIndex === this._text.length) {
+                    this.complete = true;
+                    this.emit('finished-scrolled');
+                    this._scrollTimer = 0;
+                    return false;
+                }
+
+                this._textIndex++;
+                this._label.set_text(this._text.slice(0, this._textIndex));
+
+                /* Stop on punctuation */
+                if ("!?.".indexOf(this._text[this._textIndex - 1]) !== -1) {
+                    this._waitCount = 100;
+                    return true;
+                }
+
+                /* Running this on a timer every time is not
+                 * ideal, but I haven't found a better way
+                 * ensure the view is reliably always
+                 * scrolled */
+                if (done) {
+                    done();
+                }
+
                 return true;
-            }
+            }));
+        }
 
-            if (this._textIndex === this._text.length) {
-                this.complete = true;
-                this.emit('finished-scrolled');
-                return false;
-            }
-
-            this._textIndex++;
-            this._label.set_text(this._text.slice(0, this._textIndex));
-
-            /* Stop on punctuation */
-            if ("!?.".indexOf(this._text[this._textIndex - 1]) !== -1) {
-                this._waitCount = 100;
-                return true;
-            }
-
-            /* Running this on a timer every time is not
-             * ideal, but I haven't found a better way
-             * ensure the view is reliably always
-             * scrolled */
-            scrollView();
-
-            return true;
-        }));
+        return this._scrollTimer;
     },
     fastForward: function() {
         this._textIndex = this._text.length - 1;
+    },
+    acceptAdditionalContent: function(content) {
+        if (content.text && content.text.length && content.type === 'scrolled') {
+            this._text = wrapTextWith(this._text + '\n' + content.text, WRAP_CONSTANT, '').join('\n');
+            this._startScrollAnimation();
+            return true;
+        }
+
+        return false;
     }
 });
 Signals.addSignalMethods(ScrolledLabel.prototype);
@@ -202,6 +218,12 @@ const WrappedLabel = new Lang.Class({
         this.parent(params);
         this._text = wrapTextWith(this._text, WRAP_CONSTANT, "> ").join("\n");
         this.fastForward();
+    },
+    acceptAdditionalContent: function(content) {
+        if (content.text && content.text.length && content.type === 'wrapped') {
+            this._text = wrapTextWith(this._text + content.text, WRAP_CONSTANT, "> ").join("\n");
+            this._label.set_text(this.text);
+        }
     }
 });
 
@@ -237,8 +259,12 @@ const TextResponseAreaBase = new Lang.Class({
     },
     fastForward: function() {
     },
-    start: function() {
+    start: function(scrollView) {
         this._entry.grab_key_focus();
+        scrollView();
+    },
+    acceptAdditionalContent: function() {
+        return false;
     }
 });
 Signals.addSignalMethods(TextResponseAreaBase.prototype);
@@ -285,6 +311,9 @@ const ExternalEventsResponseArea = new Lang.Class({
     fastForward: function() {
     },
     start: function() {
+    },
+    acceptAdditionalContent: function() {
+        return false;
     }
 });
 Signals.addSignalMethods(ExternalEventsResponseArea.prototype);
@@ -342,6 +371,12 @@ const MissionChatbox = new Lang.Class({
         /* When the service sends us back a chat message, we should display
          * it in a different style and add it to the chatbox */
         this._service.connect("chat-message", Lang.bind(this, function(chat, message) {
+            /* First try and append it to the last label. If so, no work to do */
+            if (this._appendToLastLabelInChatboxResultsArea(message)) {
+                return;
+            }
+
+            /* Create a new bubble */
             const classes = {
                 "scrolled": ScrolledLabel,
                 "scroll_wait": ScrolledLabel,
@@ -389,6 +424,19 @@ const MissionChatbox = new Lang.Class({
 
             this._pushLabelToChatboxResultsArea(bubble);
         }));
+    },
+    _appendToLastLabelInChatboxResultsArea: function(content) {
+        /* See if the last label in the chatbox results area will
+         * accept some additional content, and if so, add this
+         * content to it, returning true.
+         *
+         * Otherwise return false. */
+        let lastLabel = this._chatboxLabels.length === 0 ? null : this._chatboxLabels[this._chatboxLabels.length - 1];
+        if (lastLabel && lastLabel.acceptAdditionalContent({ type: content.kind, text: content.text })) {
+            return true;
+        }
+
+        return false;
     },
     _pushLabelToChatboxResultsArea: function(label) {
         /* Push immediately if we're the first or if the last one
