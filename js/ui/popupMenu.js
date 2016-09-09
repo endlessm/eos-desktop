@@ -783,6 +783,34 @@ const PopupUserMenuItem = new Lang.Class({
     },
 });
 
+const PopupMenuSeparator = new Lang.Class({
+    Name: 'PoppupMenuSeparator',
+    Extends: St.DrawingArea,
+
+    _init: function(params) {
+        this.parent(Params.parse(params, {
+            style_class: 'calendar-vertical-separator',
+            pseudo_class: 'highlighted'
+        }));
+
+        this.connect('repaint', Lang.bind(this, function(area) {
+            let cr = area.get_context();
+            let themeNode = area.get_theme_node();
+            let [width, height] = area.get_surface_size();
+            let stippleColor = themeNode.get_color('-stipple-color');
+            let stippleWidth = themeNode.get_length('-stipple-width');
+            let x = Math.floor(width/2) + 0.5;
+            cr.moveTo(x, 0);
+            cr.lineTo(x, height);
+            Clutter.cairo_set_source_color(cr, stippleColor);
+            cr.setDash([1, 3], 1); // Hard-code for now
+            cr.setLineWidth(stippleWidth);
+            cr.stroke();
+            cr.$dispose();
+        }));
+    }
+});
+
 const PopupMenuBase = new Lang.Class({
     Name: 'PopupMenuBase',
     Abstract: true,
