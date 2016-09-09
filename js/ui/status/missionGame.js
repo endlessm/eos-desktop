@@ -305,7 +305,7 @@ const ChoiceResponseArea = new Lang.Class({
             button.style_class = 'chatbox-button';
             button.connect('clicked', Lang.bind(this, function() {
                 this.emit('response', key);
-                this.emit('finished-scrolling');
+                this.emit('can-display-next-bubble');
                 this.complete = true;
             }));
             buttonContainer.add(button, { expand: true, x_fill: true });
@@ -331,7 +331,7 @@ const ExternalEventsResponseArea = new Lang.Class({
     _init: function(params, settings, service) {
         this.parent(params);
         this._connection = service.connect('lesson-events-satisfied-input-fired', Lang.bind(this, function() {
-            this.emit('finished-scrolling');
+            this.emit('can-display-next-bubble');
             this.complete = true;
             service.disconnect(this._connection);
         }));
@@ -478,7 +478,7 @@ const MissionChatbox = new Lang.Class({
         if (immediate) {
             _addLabelToChatboxArea(label, this._chatboxResultsArea);
         } else {
-            lastLabel.connect('finished-scrolled', Lang.bind(this, function() {
+            lastLabel.connect('can-display-next-bubble', Lang.bind(this, function() {
                 _addLabelToChatboxArea(label, this._chatboxResultsArea);
             }));
         }
