@@ -40,8 +40,6 @@ const ICON_ENTER_ANIMATION_DELTA = PANEL_ICON_SIZE * 0.25;
 const ICON_ENTER_ANIMATION_SPEED = ICON_ENTER_ANIMATION_DELTA * 0.0012;
 const ICON_ENTER_ANIMATION_DELAY = ICON_ENTER_ANIMATION_SPEED * ICON_ENTER_ANIMATION_DELTA * 0.5 + PANEL_ANIMATION_TIME;
 
-const SHELL_SETTINGS = new Gio.Settings({ schema: 'org.gnome.shell' });
-
 function animateIconIn (icon, index) {
     if (!Main.layoutManager.startingUp) {
         return;
@@ -335,7 +333,7 @@ try {
     log('NMApplet is not supported. It is possible that your NetworkManager version is too old');
 }
 
-if (SHELL_SETTINGS.get_boolean('enable-mission-game')) {
+if (global.settings.get_boolean('enable-mission-game')) {
     PANEL_ITEM_IMPLEMENTATIONS['missionGame'] = imports.ui.status.missionGame.MissionGameIndicator;
     PANEL_ITEM_IMPLEMENTATIONS['missionGameToolbox'] = imports.ui.status.missionGame.MissionGameToolboxIndicator;
     PANEL_ITEM_IMPLEMENTATIONS['missionGameChatbox'] = imports.ui.status.missionGame.MissionGameChatboxIndicator;
