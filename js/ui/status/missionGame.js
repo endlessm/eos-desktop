@@ -204,7 +204,7 @@ const ScrolledLabel = new Lang.Class({
         this._textIndex = this._text.length - 1;
     },
     acceptAdditionalContent: function(content) {
-        if (content.text && content.text.length && content.type === 'scrolled') {
+        if (content.text && content.type === 'scrolled') {
             this._text = wrapTextWith(this._text + '\n' + content.text, WRAP_CONSTANT, '').join('\n');
             this._startScrollAnimation();
             return true;
