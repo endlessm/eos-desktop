@@ -584,7 +584,7 @@ const MissionGameToolboxIndicator = new Lang.Class({
         /* Create layout for indicator menu */
         let hbox = new St.BoxLayout({name: 'menuArea'});
 
-        /* Add toolbox, separator, chatbox */
+        /* Add toolbox */
         hbox.add(new MissionToolbox({}, this.menu, this._service));
 
         this.menu.addActor(hbox);
@@ -605,7 +605,7 @@ const MissionGameChatboxIndicator = new Lang.Class({
         /* Create layout for indicator menu */
         let hbox = new St.BoxLayout({name: 'menuArea'});
 
-        /* Add toolbox, separator, chatbox */
+        /* Add chatbox */
         hbox.add(new MissionChatbox({}, this._service));
         this.menu.addActor(hbox);
 
