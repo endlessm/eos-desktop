@@ -96,34 +96,36 @@ const MissionChatboxTextService = new Lang.Class({
             return;
         }
 
-        if (success) {
-            let [responsesJSON, moveTo] = returnValue.deep_unpack();
-            let responses = JSON.parse(responsesJSON);
+        /* XXX: Does !sucess here imply that an exception was thrown
+         * earlier? IF so, this block can be removed. */
+        if (!success) {
+            log('Couldn\'t attempt lesson successfully');
+            return;
+        }
 
-            responses.forEach(Lang.bind(this, function(response) {
-                this.emit('chat-message', {
-                    kind: response.type,
-                    text: response.value
-                });
-            }));
+        let [responsesJSON, moveTo] = returnValue.deep_unpack();
+        let responses = JSON.parse(responsesJSON);
 
-            /* Move to the next specified task. If this is an empty
-             * string, then it means there are no more tasks to
-             * complete and we should respond accordingly. */
-            if (moveTo.length === 0) {
-                this._introLesson = null;
-                this._currentTask = null;
-            }
+        responses.forEach(Lang.bind(this, function(response) {
+            this.emit('chat-message', {
+                kind: response.type,
+                text: response.value
+            });
+        }));
 
-            if (this._currentTask) {
-                if (moveTo !== this._currentTask.name) {
-                    this._showTaskDescriptionForLesson(moveTo);
-                } else {
-                    this.emit('user-input-bubble', this._currentTask.input);
-                }
-            }
+        /* Move to the next specified task. If this is an empty
+         * string, then it means there are no more tasks to
+         * complete and we should respond accordingly. */
+        if (moveTo.length === 0) {
+            this._introLesson = null;
+            this._currentTask = null;
+            return;
+        }
+
+        if (moveTo !== this._currentTask.name) {
+            this._showTaskDescriptionForLesson(moveTo);
         } else {
-            log('Failed to call call_attempt_lesson_remote');
+            this.emit('user-input-bubble', this._currentTask.input);
         }
     },
     ready: function() {
@@ -138,20 +140,21 @@ const MissionChatboxTextService = new Lang.Class({
              * chatbox description */
             this._service.call_get_warnings(null, Lang.bind(this, function(source, result) {
                 let [success, returnValue] = this._service.call_get_warnings_finish(result);
-                if (success) {
-                    /* Immediately display all warnings in the chatbox */
-                    returnValue.deep_unpack().map(function(w) {
-                        return w[0];
-                    }).forEach(Lang.bind(this, function(w) {
-                        this.emit('chat-message', {
-                            kind: 'scrolled',
-                            mode: 'immediate',
-                            text: w
-                        });
-                    }));
-                } else {
+                if (!success) {
                     log('Call to get_warnings_finish failed');
+                    return;
                 }
+
+                /* Immediately display all warnings in the chatbox */
+                returnValue.deep_unpack().map(function(w) {
+                    return w[0];
+                }).forEach(Lang.bind(this, function(w) {
+                    this.emit('chat-message', {
+                        kind: 'scrolled',
+                        mode: 'immediate',
+                        text: w
+                    });
+                }));
 
                 this._showTaskDescriptionForLesson(this._introLesson.entry);
             }));
@@ -194,19 +197,20 @@ const MissionChatboxTextService = new Lang.Class({
                 return;
             }
 
+            if (!success) {
+                log('Warning: Call to showmehow get_unlocked_lessons failed');
+                return;
+            }
+
             lessons = lessons.deep_unpack();
 
-            if (success) {
-                this.emit('discover-new-adventures', lessons.map(function(lesson_spec) {
-                    return {
-                        name: lesson_spec[0],
-                        desc: lesson_spec[1]
-                    };
-                }));
-                callWhenComplete(completion, 'adventures', completedCallback);
-            } else {
-                log('Warning: Call to showmehow get_unlocked_lessons failed');
-            }
+            this.emit('discover-new-adventures', lessons.map(function(lesson_spec) {
+                return {
+                    name: lesson_spec[0],
+                    desc: lesson_spec[1]
+                };
+            }));
+            callWhenComplete(completion, 'adventures', completedCallback);
         }));
 
         this._service.call_get_known_spells('console', null, Lang.bind(this, function(source, result) {
@@ -226,17 +230,13 @@ const MissionChatboxTextService = new Lang.Class({
 
             lessons = lessons.deep_unpack();
 
-            if (success) {
-                this.emit('discover-new-spells', lessons.map(function(lesson_spec) {
-                    return {
-                        name: lesson_spec[0],
-                        desc: lesson_spec[1]
-                    };
-                }));
-                callWhenComplete(completion, 'spells', completedCallback);
-            } else {
-                log('Warning: Call to showmehow get_known_spells failed');
-            }
+            this.emit('discover-new-spells', lessons.map(function(lesson_spec) {
+                return {
+                    name: lesson_spec[0],
+                    desc: lesson_spec[1]
+                };
+            }));
+            callWhenComplete(completion, 'spells', completedCallback);
         }));
 
         this._service.call_get_unlocked_lessons('shell', null, Lang.bind(this, function(source, result) {
@@ -249,29 +249,30 @@ const MissionChatboxTextService = new Lang.Class({
                 return;
             }
 
-            if (success) {
-                /* There should be a single lesson here called introduction here. Save
-                 * it. */
-                lessons = lessons.deep_unpack().filter(function(lesson) {
-                    return lesson[0] == 'intro';
-                });
-
-                if (lessons.length !== 1) {
-                    log('Expected a single lesson for shell, cannot show intro lesson!');
-                    return;
-                }
-
-                let [name, desc, entry] = lessons[0];
-                this._introLesson = {
-                    name: name,
-                    desc: desc,
-                    entry: entry
-                };
-
-                callWhenComplete(completion, 'intro', completedCallback);
-            } else {
-                log('Warning: Call to showmehow get_unlocked_lessons failed for intro lesson');
+            if (!success) {
+                log('Warning: Call to showmehow get_unlocked_lessons failed, cannot show intro lesson');
+                return;
             }
+
+            /* There should be a single lesson here called introduction here. Save
+             * it. */
+            lessons = lessons.deep_unpack().filter(function(lesson) {
+                return lesson[0] == 'intro';
+            });
+
+            if (lessons.length !== 1) {
+                log('Expected a single lesson for shell, cannot show intro lesson!');
+                return;
+            }
+
+            let [name, desc, entry] = lessons[0];
+            this._introLesson = {
+                name: name,
+                desc: desc,
+                entry: entry
+            };
+
+            callWhenComplete(completion, 'intro', completedCallback);
         }));
 
         this._service.call_get_clues('shell', null, Lang.bind(this, function(source, result) {
@@ -284,18 +285,19 @@ const MissionChatboxTextService = new Lang.Class({
                 return;
             }
 
-            if (success) {
-                this.emit('discover-new-inventory-items', clues.deep_unpack().map(function(clue) {
-                    let [name, type] = clue;
-                    return {
-                        name: name,
-                        type: type
-                    };
-                }));
-                callWhenComplete(completion, 'inventory', completedCallback);
-            } else {
-                log('Warning: Call to showmehow get_unlocked_lessons failed for intro lesson');
+            if (!success) {
+                log('Warning: Call to showmehow get_clues failed');
+                return;
             }
+
+            this.emit('discover-new-inventory-items', clues.deep_unpack().map(function(clue) {
+                let [name, type] = clue;
+                return {
+                    name: name,
+                    type: type
+                };
+            }));
+            callWhenComplete(completion, 'inventory', completedCallback);
         }));
     },
     _showTaskDescriptionForLesson: function(taskName) {
@@ -314,25 +316,26 @@ const MissionChatboxTextService = new Lang.Class({
                 return;
             }
 
-            if (success) {
-                let [desc, inputSpecString] = returnValue.deep_unpack();
-                let inputSpec = JSON.parse(inputSpecString);
-                this._currentTask = {
-                    desc: desc,
-                    input: inputSpec,
-                    name: taskName
-                };
-
-                this.emit('chat-message', {
-                    kind: 'scrolled',
-                    mode: 'animated',
-                    text: desc
-                });
-
-                this.emit('user-input-bubble', inputSpec);
-            } else {
-                log('Call to call_get_task_description_finish failed');
+            if (!success) {
+                log('Call to get_task_description failed, cannot show this task.');
+                return;
             }
+
+            let [desc, inputSpecString] = returnValue.deep_unpack();
+            let inputSpec = JSON.parse(inputSpecString);
+            this._currentTask = {
+                desc: desc,
+                input: inputSpec,
+                name: taskName
+            };
+
+            this.emit('chat-message', {
+                kind: 'scrolled',
+                mode: 'animated',
+                text: desc
+            });
+
+            this.emit('user-input-bubble', inputSpec);
         }));
     },
     noteEventOccurrence: function(event) {
