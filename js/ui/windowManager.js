@@ -748,6 +748,8 @@ const WindowManager = new Lang.Class({
                                                        '/com/endlessm/Sylvester/Service');
         this._sylvesterListener.connectSignal('RotateBetweenPidWindows',
                                               Lang.bind(this, this._handleRotateBetweenPidWindows));
+        this._sylvesterListener.connectSignal('RevertXidRotation',
+                                              Lang.bind(this, this._handleRevertXidRotation));
         this._pendingRotateAnimations = [];
         this._rotateOutActors = [];
         this._rotateInActors = [];
@@ -778,6 +780,9 @@ const WindowManager = new Lang.Class({
             dst: pidToActorInfo(dst)
         });
         this._updateReadyRotateAnimationsWith(srcActorInfo.window);
+    },
+
+    _handleRevertXidRotation: function(proxy, sender, [xid]) {
     },
 
     _updateReadyRotateAnimationsWith: function(window) {
