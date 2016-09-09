@@ -192,7 +192,7 @@ const MissionChatboxTextService = new Lang.Class({
             log('Attempted to refresh content without a service!');
         }
 
-        var completion = {
+        let completion = {
             adventures: false,
             spells: false,
             inventory: false,
