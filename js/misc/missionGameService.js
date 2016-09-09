@@ -5,30 +5,21 @@ const Lang = imports.lang;
 const Showmehow = imports.gi.Showmehow;
 const Signals = imports.signals;
 
+const Batch = imports.gdm.batch;
+
 /**
- * callWhenComplete
+ * acquireHoldUntil
  *
- * Takes an object with keys mapping to bool values, a callback
- * and a key name. Flips the key name to true and checks if
- * they are all true, and if so, calls the callback.
- *
- * This is used by MissionChatboxTextService to ensure that
- * all asynchronous tasks are completed before calling
- * the completion callback. The callback is called with
- * the key that triggered the callback.
+ * Acquire the hold until the function returned by this function
+ * is called (which will then call @callback and then release
+ * @
  */
-function callWhenComplete(completion, key, callback) {
-    completion[key] = true;
-
-    /* This is a shorthand way of implementing Array.all
-     * using De Morgan's laws and Array.some */
-    let complete = !Object.keys(completion).some(function(key) {
-        return !completion[key];
-    });
-
-    if (complete && callback) {
-        callback.apply(this, [key].concat(Array.from(arguments)));
-    }
+function acquireHoldUntil(hold, callback) {
+    hold.acquire();
+    return function() {
+        callback.apply(this, arguments);
+        hold.release();
+    };
 }
 
 const MissionChatboxTextService = new Lang.Class({
@@ -190,14 +181,15 @@ const MissionChatboxTextService = new Lang.Class({
             log('Attempted to refresh content without a service!');
         }
 
-        let completion = {
-            adventures: false,
-            spells: false,
-            inventory: false,
-            intro: false
-        };
+        let hold = new Batch.Hold();
+        let connection = hold.connect('release', function() {
+            hold.disconnect(connection);
+            if (completedCallback) {
+                completedCallback();
+            }
+        });
 
-        this._service.call_get_unlocked_lessons('console', null, Lang.bind(this, function(source, result) {
+        this._service.call_get_unlocked_lessons('console', null, acquireHoldUntil(hold, Lang.bind(this, function(source, result) {
             let success, lessons;
 
             try {
@@ -220,10 +212,9 @@ const MissionChatboxTextService = new Lang.Class({
                     desc: lesson_spec[1]
                 };
             }));
-            callWhenComplete(completion, 'adventures', completedCallback);
-        }));
+        })));
 
-        this._service.call_get_known_spells('console', null, Lang.bind(this, function(source, result) {
+        this._service.call_get_known_spells('console', null, acquireHoldUntil(hold, Lang.bind(this, function(source, result) {
             let success, lessons;
 
             try {
@@ -246,10 +237,9 @@ const MissionChatboxTextService = new Lang.Class({
                     desc: lesson_spec[1]
                 };
             }));
-            callWhenComplete(completion, 'spells', completedCallback);
-        }));
+        })));
 
-        this._service.call_get_unlocked_lessons('shell', null, Lang.bind(this, function(source, result) {
+        this._service.call_get_unlocked_lessons('shell', null, acquireHoldUntil(hold, Lang.bind(this, function(source, result) {
             let success, lessons;
 
             try {
@@ -281,11 +271,9 @@ const MissionChatboxTextService = new Lang.Class({
                 desc: desc,
                 entry: entry
             };
+        })));
 
-            callWhenComplete(completion, 'intro', completedCallback);
-        }));
-
-        this._service.call_get_clues('shell', null, Lang.bind(this, function(source, result) {
+        this._service.call_get_clues('shell', null, acquireHoldUntil(hold, Lang.bind(this, function(source, result) {
             let success, clues;
 
             try {
@@ -307,8 +295,11 @@ const MissionChatboxTextService = new Lang.Class({
                     type: type
                 };
             }));
-            callWhenComplete(completion, 'inventory', completedCallback);
-        }));
+        })));
+
+        /* Now that we've made all these requests, release the hold so
+         * that its reference count drops back to the request count */
+        hold.release();
     },
     _showTaskDescriptionForLesson: function(taskName) {
         if (!this._introLesson) {
