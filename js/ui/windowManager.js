@@ -585,6 +585,99 @@ const TilePreview = new Lang.Class({
     }
 });
 
+/**
+ * The direction a window should rotate in
+ */
+const RotationDirection = {
+    LEFT: 0,
+    RIGHT: 1
+};
+
+/**
+ * prepareWindowsForRotation
+ *
+ * This sets up the initial properties for two windows to be rotated between
+ * each other. It returns a function, which when called, will add tweens
+ * to actually commence the rotation process.
+ *
+ * Pass a @src and @dst window to rotate between, a @direction (either
+ * RotationDirection.LEFT or RotationDirection.RIGHT).
+ *
+ * The returned function takes parameters  @srcDone and @dstDone which
+ * are callbacks to call when the rotation animation for each window
+ * completes.
+ */
+function prepareWindowsForRotation(src, dst, direction) {
+    dst.rotation_angle_y = direction == RotationDirection.RIGHT ? -180 : 180;
+    src.rotation_angle_y = direction == 0;
+    dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+    src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+
+    /* We set backface culling to be enabled here so that we can
+     * smootly animate between the two windows. Without expensive
+     * vector projections, there's no way to determine whether a
+     * window's front-face is completely invisible to the user
+     * (this cannot be done just by looking at the angle of the
+     * window because the same angle may show a different visible
+     * face depending on its position in the view frustum).
+     *
+     * What we do here is enable backface culling and rotate both
+     * windows by 180degrees. The effect of this is that the front
+     * and back window will be at opposite rotations at each point
+     * in time and so the exact point at which the first window
+     * becomes invisible is the same point at which the second
+     * window becomes visible. Because no back faces are drawn
+     * there are no visible artifacts in the animation */
+    src.set_cull_back_face(true);
+    dst.set_cull_back_face(true);
+    dst.opacity = 0;
+    let dst_geometry = src.get_meta_window().get_frame_rect();
+    dst.get_meta_window().move_resize_frame(false,
+                                            dst_geometry.x,
+                                            dst_geometry.y,
+                                            dst_geometry.width,
+                                            dst_geometry.height);
+
+
+    return function(srcDone, dstDone) {
+        /* Tween both windows in a rotation animation at the same time
+         * with backface culling enabled on both. This will allow for
+         * a smooth transition. */
+        Tweener.addTween(src, {
+            rotation_angle_y: direction == RotationDirection.RIGHT ? 180 : -180,
+            time: WINDOW_ANIMATION_TIME * 4,
+            transition: 'easeOutQuad',
+            onComplete: function() {
+                if (srcDone) {
+                    return srcDone(src);
+                }
+                
+                return null;
+            }
+        });
+        Tweener.addTween(dst, {
+            rotation_angle_y: 0,
+            time: WINDOW_ANIMATION_TIME * 4,
+            transition: 'easeOutQuad',
+            onComplete: function() {
+                if (dstDone) {
+                    return dstDone(dst);
+                }
+
+                return null;
+            }
+        });
+
+        /* Gently fade the window in, this will paper over
+         * any artifacts from shadows and the like */
+        Tweener.addTween(dst, {
+            opacity: 255,
+            time: WINDOW_ANIMATION_TIME,
+            transition: 'linear'
+        });
+    };
+}
+
 const WindowManager = new Lang.Class({
     Name: 'WindowManager',
 
@@ -807,37 +900,10 @@ const WindowManager = new Lang.Class({
                 return true;
             }
 
-            animationSpec.dst.window.rotation_angle_y = -180;
-            animationSpec.dst.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-            animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+            let commenceAnimation = prepareWindowsForRotation(animationSpec.src.window,
+                                                              animationSpec.dst.window,
+                                                              RotationDirection.RIGHT);
 
-            /* We set backface culling to be enabled here so that we can
-             * smootly animate between the two windows. Without expensive
-             * vector projections, there's no way to determine whether a
-             * window's front-face is completely invisible to the user
-             * (this cannot be done just by looking at the angle of the
-             * window because the same angle may show a different visible
-             * face depending on its position in the view frustum).
-             *
-             * What we do here is enable backface culling and rotate both
-             * windows by 180degrees. The effect of this is that the front
-             * and back window will be at opposite rotations at each point
-             * in time and so the exact point at which the first window
-             * becomes invisible is the same point at which the second
-             * window becomes visible. Because no back faces are drawn
-             * there are no visible artifacts in the animation */
-            animationSpec.src.window.set_cull_back_face(true);
-            animationSpec.dst.window.set_cull_back_face(true);
-            animationSpec.dst.window.opacity = 0;
-            let dst_geometry = animationSpec.src.rect;
-            animationSpec.dst.window.get_meta_window().move_resize_frame(false,
-                                                                         dst_geometry.x,
-                                                                         dst_geometry.y,
-                                                                         dst_geometry.width,
-                                                                         dst_geometry.height);
-
-            this._rotateInActors.push(animationSpec.dst.window);
-            this._rotateOutActors.push(animationSpec.src.window);
 
             /* We wait until the first frame of the window has been drawn
              * and damage updated in the compositor before we start rotating.
@@ -846,33 +912,12 @@ const WindowManager = new Lang.Class({
              * a window is slow to draw.
              */
             let firstFrameConnection = animationSpec.dst.window.connect('first-frame', Lang.bind(this, function() {
-                /* Tween both windows in a rotation animation at the same time
-                 * with backface culling enabled on both. This will allow for
-                 * a smooth transition. */
-                Tweener.addTween(animationSpec.src.window, {
-                    rotation_angle_y: 180,
-                    time: WINDOW_ANIMATION_TIME * 4,
-                    transition: 'easeOutQuad',
-                    onComplete: Lang.bind(this, function() {
-                        this._rotateOutCompleted(animationSpec.src.window);
-                    })
-                });
-                Tweener.addTween(animationSpec.dst.window, {
-                    rotation_angle_y: 0,
-                    time: WINDOW_ANIMATION_TIME * 4,
-                    transition: 'easeOutQuad',
-                    onComplete: Lang.bind(this, function() {
-                        this._rotateInCompleted(animationSpec.dst.window);
-                    })
-                });
-
-                /* Gently fade the window in, this will paper over
-                 * any artifacts from shadows and the like */
-                Tweener.addTween(animationSpec.dst.window, {
-                    opacity: 255,
-                    time: WINDOW_ANIMATION_TIME,
-                    transition: 'linear'
-                });
+                /* Add windows to the rotation list */
+                this._rotateInActors.push(animationSpec.src.window);
+                this._rotateOutActors.push(animationSpec.dst.window);
+                
+                commenceAnimation(Lang.bind(this, this._rotateOutCompleted),
+                                  Lang.bind(this, this._rotateInCompleted));
 
                 this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
                     return conn != animationSpec.dst.window._firstFrameConnection;
