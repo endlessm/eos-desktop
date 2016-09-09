@@ -6,7 +6,6 @@ const Lang = imports.lang;
 const Showmehow = imports.gi.Showmehow;
 const Signals = imports.signals;
 
-
 /**
  * callWhenComplete
  *
