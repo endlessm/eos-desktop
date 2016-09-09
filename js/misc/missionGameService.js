@@ -1,6 +1,5 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
-const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 const Showmehow = imports.gi.Showmehow;
@@ -34,10 +33,9 @@ function callWhenComplete(completion, key, callback) {
 
 const MissionChatboxTextService = new Lang.Class({
     Name: 'MissionChatboxTextService',
-    Extends: GLib.GObject,
 
-    _init: function(props) {
-        this.parent(props);
+    _init: function() {
+        this.parent();
 
         /* Null-initialise service for now, but we'll set it later */
         this._service = null;
