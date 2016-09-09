@@ -130,18 +130,24 @@ const ScrolledLabel = new Lang.Class({
 
     _init: function(params, settings) {
         this.parent(params);
-        this.view = new St.BoxLayout({ x_expand: true });
-        this.bubble = new St.BoxLayout({ x_expand: true });
-        this._label = new St.Label({ x_expand: true });
+        this.view = new St.BoxLayout({
+            x_expand: true,
+            style_class: 'chatbox-character-bubble-offset'
+        });
+        this.bubble = new St.BoxLayout({
+            x_expand: true,
+            style_class: 'chatbox-bubble-text-container chatbox-bordered-bubble-container'
+        });
+        this._label = new St.Label({
+            x_expand: true,
+            style_class: 'chatbox-character-text'
+        });
         this._text = wrapTextWith(settings.text, WRAP_CONSTANT, '').join('\n');
         this._textIndex = 0;
         this._scrollTimer = 0;
         this._waitCount = 0;
         this.complete = false;
 
-        this.bubble.style_class = 'chatbox-bubble-text-container chatbox-bordered-bubble-container';
-        this.view.style_class = 'chatbox-character-bubble-offset';
-        this._label.style_class = 'chatbox-character-text';
         this._label.clutter_text.x_expand = true;
         this.bubble.add(this._label, { x_fill: true, expand: true });
         this.view.add(this.bubble, { x_fill: true, expand: true });
@@ -236,11 +242,12 @@ const TextResponseAreaBase = new Lang.Class({
         this._hbox = new St.BoxLayout({ name: 'textResponseHbox' });
         this._hbox.add(this._prefixLabel);
         this._hbox.add(this._entry, { expand: true });
-        this.bubble = new St.BoxLayout();
-        this.view = new St.BoxLayout();
-
-        this.bubble.style_class = 'chatbox-bubble-text-container chatbox-bordered-bubble-container';
-        this.view.style_class = 'chatbox-user-bubble-offset';
+        this.bubble = new St.BoxLayout({
+            style_class: 'chatbox-bubble-text-container chatbox-bordered-bubble-container'
+        });
+        this.view = new St.BoxLayout({
+            style_class: 'chatbox-user-bubble-offset'
+        });
 
         this.bubble.add(this._hbox, { expand: true, x_fill: true});
         this.view.add(this.bubble, { expand: true, x_fill: true });
@@ -292,17 +299,18 @@ const ChoiceResponseArea = new Lang.Class({
     _init: function(params, settings) {
         this.parent(params);
         this.bubble = new St.BoxLayout({ vertical: true });
-        this.view = new St.BoxLayout();
-
-        this.view.style_class = 'chatbox-user-bubble-offset';
+        this.view = new St.BoxLayout({
+            style_class: 'chatbox-user-bubble-offset'
+        });
 
         Object.keys(settings).forEach(Lang.bind(this, function(key) {
-            let buttonContainer = new St.BoxLayout();
-            buttonContainer.style_class = 'chatbox-button-container';
-            let button = new St.Button({
-                label: settings[key].text
+            let buttonContainer = new St.BoxLayout({
+                style_class: 'chatbox-button-container'
             });
-            button.style_class = 'chatbox-button';
+            let button = new St.Button({
+                label: settings[key].text,
+                style_class: 'chatbox-button'
+            });
             button.connect('clicked', Lang.bind(this, function() {
                 this.emit('response', key);
                 this.emit('can-display-next-bubble');
@@ -370,6 +378,7 @@ const MissionChatbox = new Lang.Class({
     _init: function(params, service) {
         params.name = params.name || 'chatboxArea';
         params.vertical = true;
+        params.style_class = 'chatbox-text-container';
         this.parent(params);
 
         /* Retain service, which evaluates text entry */
@@ -382,14 +391,16 @@ const MissionChatbox = new Lang.Class({
         }));
 
         this.set_size(400, 450);
-        this.style_class = 'chatbox-text-container';
 
         /* Start setting up chatbox labels and add a scroll view
          * to contain all the messages */
         this._chatboxLabels = [];
         this._chatboxResultsScrollView = new St.ScrollView({ overlay_scrollbars: true });
-        this._chatboxResultsArea = new St.BoxLayout({ name: 'chatboxResultsArea', vertical: true });
-        this._chatboxResultsArea.style_class = 'chatbox-bubble-container-area';
+        this._chatboxResultsArea = new St.BoxLayout({
+            name: 'chatboxResultsArea',
+            vertical: true,
+            style_class: 'chatbox-bubble-container-area'
+        });
 
         this._chatboxResultsScrollView.add_actor(this._chatboxResultsArea);
 
