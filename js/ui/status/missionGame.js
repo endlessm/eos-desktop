@@ -438,8 +438,6 @@ const MissionChatbox = new Lang.Class({
                 "external_events": ExternalEventsResponseArea
             };
 
-            log(JSON.stringify(bubbleConfig, null, 2));
-
             if (Object.keys(classes).indexOf(bubbleConfig.type) === -1) {
                 log("Cannot display user input, no such bubble type " + bubbleConfig.type);
                 return;
