@@ -209,7 +209,7 @@ libeos_shell_la_gir_sources = \
 eos_shell_real_SOURCES =		\
 	main.c
 eos_shell_real_CPPFLAGS = $(eos_shell_cflags)
-eos_shell_real_LDADD = libeos-shell.la libeos-shell-js.la $(libeos_shell_la_LIBADD)
+eos_shell_real_LDADD = libeos-shell.la libeos-shell-js.la libeos-shell-fx.la $(libeos_shell_la_LIBADD)
 eos_shell_real_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
 eos_shell_real_DEPENDENCIES = libeos-shell.la
 
@@ -248,14 +248,17 @@ libeos_shell_js_la_CPPFLAGS =		\
 ########################################
 
 # Set up the libeos-shell-fx target
-libeos_shell_fx_la_SOURCES =		\
-	wobbly-effect.cpp		\
-	wobbly-effect.h			\
-	$(eos_shell_fxinclude_HEADERS)	\
+libeos_shell_fx_la_SOURCES =	\
+	wobbly-effect.cpp	\
+	wobbly-effect.h		\
 	$(NULL)
 
 libeos_shell_fx_la_LIBADD =	\
 	$(EOS_SHELL_FX_LIBS)	\
+	$(NULL)
+
+libeos_shell_fx_la_LDFLAGS =	\
+	-avoid-version		\
 	$(NULL)
 
 libeos_shell_fx_la_CPPFLAGS =	\
