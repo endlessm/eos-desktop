@@ -332,7 +332,6 @@ const ExternalEventsResponseArea = new Lang.Class({
     _init: function(params, settings, service) {
         this.parent(params);
         this._connection = service.connect('lesson-events-satisfied-input-fired', Lang.bind(this, function() {
-            log('Received lesson-events-satisfied-input-fired');
             this.emit('finished-scrolling');
             this.complete = true;
             service.disconnect(this._connection);
