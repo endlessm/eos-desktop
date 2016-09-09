@@ -1,6 +1,5 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
-const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Signals = imports.signals;
@@ -547,33 +546,6 @@ const MissionToolbox = new Lang.Class({
     }
 });
 
-const PanelMenuSeparator = new Lang.Class({
-    Name: 'PanelMenuSeparator',
-    Extends: St.DrawingArea,
-
-    _init: function(params) {
-        this.parent(Params.parse(params, {
-            style_class: 'calendar-vertical-separator',
-            pseudo_class: 'highlighted'
-        }));
-
-        this.connect('repaint', Lang.bind(this, function(area) {
-            let cr = area.get_context();
-            let themeNode = area.get_theme_node();
-            let [width, height] = area.get_surface_size();
-            let stippleColor = themeNode.get_color('-stipple-color');
-            let stippleWidth = themeNode.get_length('-stipple-width');
-            let x = Math.floor(width/2) + 0.5;
-            cr.moveTo(x, 0);
-            cr.lineTo(x, height);
-            Clutter.cairo_set_source_color(cr, stippleColor);
-            cr.setDash([1, 3], 1); // Hard-code for now
-            cr.setLineWidth(stippleWidth);
-            cr.stroke();
-            cr.$dispose();
-        }));
-    }
-});
 
 /* Separate indicators option */
 const MissionGameToolboxIndicator = new Lang.Class({
@@ -641,7 +613,7 @@ const MissionGameIndicator = new Lang.Class({
 
         /* Add toolbox, separator, chatbox */
         hbox.add(new MissionToolbox({}, this.menu, this._service));
-        hbox.add(new PanelMenuSeparator());
+        hbox.add(new PopupMenu.PopupMenuSeparator());
         hbox.add(new MissionChatbox({}, this._service));
 
         this.menu.addActor(hbox);
