@@ -142,7 +142,7 @@ const ScrolledLabel = new Lang.Class({
         this.bubble.style_class = 'chatbox-bubble-text-container chatbox-bordered-bubble-container';
         this.view.style_class = 'chatbox-character-bubble-offset';
         this._label.style_class = 'chatbox-character-text';
-        this._label.clutter_text.set_x_expand(true);
+        this._label.clutter_text.x_expand = true;
         this.bubble.add(this._label, { x_fill: true, expand: true });
         this.view.add(this.bubble, { x_fill: true, expand: true });
     },
