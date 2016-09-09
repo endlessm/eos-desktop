@@ -24,7 +24,7 @@ function callWhenComplete(completion, key, callback) {
 
     /* This is a shorthand way of implementing Array.all
      * using De Morgan's laws and Array.some */
-    const complete = !Object.keys(completion).some(function(key) {
+    let complete = !Object.keys(completion).some(function(key) {
         return !completion[key];
     });
 
@@ -56,8 +56,8 @@ const MissionChatboxTextService = new Lang.Class({
         this._introLesson = null;
         this._currentTask = null;
 
-        const name = "com.endlessm.Showmehow.Service";
-        const path = "/com/endlessm/Showmehow/Service";
+        let name = "com.endlessm.Showmehow.Service";
+        let path = "/com/endlessm/Showmehow/Service";
 
         /* Connect to the service and refresh the content once we have a connection */
         Showmehow.ServiceProxy.new_for_bus(Gio.BusType.SESSION, 0, name, path, null,
@@ -83,11 +83,11 @@ const MissionChatboxTextService = new Lang.Class({
         }));
     },
     _handleLessonResponse: function(source, result) {
-        const [success, returnValue] = this._service.call_attempt_lesson_remote_finish(result);
+        let [success, returnValue] = this._service.call_attempt_lesson_remote_finish(result);
 
         if (success) {
-            const [responsesJSON, moveTo] = returnValue.deep_unpack();
-            const responses = JSON.parse(responsesJSON);
+            let [responsesJSON, moveTo] = returnValue.deep_unpack();
+            let responses = JSON.parse(responsesJSON);
 
             responses.forEach(Lang.bind(this, function(response) {
                 this.emit("chat-message", {
@@ -126,7 +126,7 @@ const MissionChatboxTextService = new Lang.Class({
             /* Get warnings and show them first, then show the first
              * chatbox description */
             this._service.call_get_warnings(null, Lang.bind(this, function(source, result) {
-                const [success, returnValue] = this._service.call_get_warnings_finish(result);
+                let [success, returnValue] = this._service.call_get_warnings_finish(result);
                 if (success) {
                     /* Immediately display all warnings in the chatbox */
                     returnValue.deep_unpack().map(function(w) {
@@ -222,7 +222,7 @@ const MissionChatboxTextService = new Lang.Class({
                     return;
                 }
 
-                const [name, desc, entry] = lessons[0];
+                let [name, desc, entry] = lessons[0];
                 this._introLesson = {
                     name: name,
                     desc: desc,
@@ -236,11 +236,11 @@ const MissionChatboxTextService = new Lang.Class({
         }));
 
         this._service.call_get_clues("shell", null, Lang.bind(this, function(source, result) {
-            const [success, clues] = this._service.call_get_clues_finish(result);
+            let [success, clues] = this._service.call_get_clues_finish(result);
 
             if (success) {
                 this.emit("discover-new-inventory-items", clues.deep_unpack().map(function(clue) {
-                    const [name, type] = clue;
+                    let [name, type] = clue;
                     return {
                         name: name,
                         type: type
@@ -259,11 +259,11 @@ const MissionChatboxTextService = new Lang.Class({
 
         this._service.call_get_task_description("intro", taskName, null,
                                                 Lang.bind(this, function(source, result) {
-            const [success, returnValue] = this._service.call_get_task_description_finish(result);
+            let [success, returnValue] = this._service.call_get_task_description_finish(result);
 
             if (success) {
-                const [desc, inputSpecString] = returnValue.deep_unpack();
-                const inputSpec = JSON.parse(inputSpecString);
+                let [desc, inputSpecString] = returnValue.deep_unpack();
+                let inputSpec = JSON.parse(inputSpecString);
                 this._currentTask = {
                     desc: desc,
                     input: inputSpec,

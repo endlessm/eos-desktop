@@ -16,9 +16,9 @@ function launchLessonAction(lesson) {
     return function() {
         /* XXX: This needs to spawn a wrapper script that goes through each lesson
          * individually as opposed to just running showmehow. */
-        const argv = ["/usr/bin/gnome-terminal", "-e", "showmehow " + lesson];
-        const flags = GLib.SpawnFlags.DO_NOT_REAP_CHILD;
-        const [ok, pid] = GLib.spawn_async(null, argv, null, flags, null);
+        let argv = ["/usr/bin/gnome-terminal", "-e", "showmehow " + lesson];
+        let flags = GLib.SpawnFlags.DO_NOT_REAP_CHILD;
+        let [ok, pid] = GLib.spawn_async(null, argv, null, flags, null);
 
         if (!ok) {
             log("Warning: Failed to call " + argv.join(" "));
@@ -86,10 +86,10 @@ function wrapTextWith(text, constant, prefix) {
         /* Break a line when we either hit a space,
          * hit a newline, when the line (without spaces)
          * is too long or when we're at the end of the text */
-        const breakCondition = (text[textCounter] == ' ' ||
-                                text[textCounter] == '\n' ||
-                                textCounter == text.length ||
-                                textCounter - lastSpace >= constant);
+        let breakCondition = (text[textCounter] == ' ' ||
+                              text[textCounter] == '\n' ||
+                              textCounter == text.length ||
+                              textCounter - lastSpace >= constant);
         if (breakCondition) {
             /* Hit a space, see if we can append this
              * word, otherwise start a new line */
@@ -376,7 +376,7 @@ const MissionChatbox = new Lang.Class({
         this._service = service;
 
         /* Setup layout and style */
-        const margin = 10;
+        let margin = 10;
         ["top", "bottom", "left", "right"].forEach(Lang.bind(this, function(d) {
             this["margin-" + d] = margin;
         }));
@@ -405,7 +405,7 @@ const MissionChatbox = new Lang.Class({
             }
 
             /* Create a new bubble */
-            const classes = {
+            let classes = {
                 "scrolled": ScrolledLabel,
                 "scroll_wait": ScrolledLabel,
                 "wrapped": WrappedLabel
@@ -417,8 +417,8 @@ const MissionChatbox = new Lang.Class({
                 return;
             }
 
-            const labelCls = classes[message.kind];
-            const label = new labelCls({}, {
+            let labelCls = classes[message.kind];
+            let label = new labelCls({}, {
                 text: message.text
             });
 
@@ -467,8 +467,8 @@ const MissionChatbox = new Lang.Class({
     _pushLabelToChatboxResultsArea: function(label) {
         /* Push immediately if we're the first or if the last one
          * has finished scrolling */
-        const lastLabel = this._chatboxLabels.length === 0 ? null : this._chatboxLabels[this._chatboxLabels.length - 1];
-        const immediate = !lastLabel || lastLabel.complete;
+        let lastLabel = this._chatboxLabels.length === 0 ? null : this._chatboxLabels[this._chatboxLabels.length - 1];
+        let immediate = !lastLabel || lastLabel.complete;
 
         /* Immediately put the label in this._chatboxLabels, however
          * this does not mean it will be immediately added to the
@@ -497,7 +497,7 @@ const MissionToolbox = new Lang.Class({
         this.parent(params);
 
         /* Game mode switch */
-        const missionSwitch = new PopupMenu.PopupSwitchMenuItem(_("Mission"), false);
+        let missionSwitch = new PopupMenu.PopupSwitchMenuItem(_("Mission"), false);
 
         /* Adventures and spells toolbox */
         this._adventures = createSubMenuMenuItemWithFauxParent(_("Adventures"), parentMenu);
@@ -534,7 +534,7 @@ const MissionToolbox = new Lang.Class({
 });
 
 function createSeparator() {
-    const separator = new St.DrawingArea({ style_class: 'calendar-vertical-separator',
+    let separator = new St.DrawingArea({ style_class: 'calendar-vertical-separator',
                                            pseudo_class: 'highlighted' });
     separator.connect('repaint', Lang.bind(this, function(area) {
         let cr = area.get_context();
@@ -567,7 +567,7 @@ const MissionGameToolboxIndicator = new Lang.Class({
         this._service = MissionGameService.getService();
 
         /* Create layout for indicator menu */
-        const hbox = new St.BoxLayout({name: 'menuArea'});
+        let hbox = new St.BoxLayout({name: 'menuArea'});
 
         /* Add toolbox, separator, chatbox */
         hbox.add(new MissionToolbox({}, this.menu, this._service));
@@ -588,7 +588,7 @@ const MissionGameChatboxIndicator = new Lang.Class({
         this._service = MissionGameService.getService();
 
         /* Create layout for indicator menu */
-        const hbox = new St.BoxLayout({name: 'menuArea'});
+        let hbox = new St.BoxLayout({name: 'menuArea'});
 
         /* Add toolbox, separator, chatbox */
         hbox.add(new MissionChatbox({}, this._service));
@@ -618,7 +618,7 @@ const MissionGameIndicator = new Lang.Class({
         this._service = MissionGameService.getService();
 
         /* Create layout for indicator menu */
-        const hbox = new St.BoxLayout({name: 'menuArea'});
+        let hbox = new St.BoxLayout({name: 'menuArea'});
 
         /* Add toolbox, separator, chatbox */
         hbox.add(new MissionToolbox({}, this.menu, this._service));
