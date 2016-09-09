@@ -134,7 +134,7 @@ const ScrolledLabel = new Lang.Class({
         this.view = new St.BoxLayout({ x_expand: true });
         this.bubble = new St.BoxLayout({ x_expand: true });
         this._label = new St.Label({ x_expand: true });
-        this._text = settings.text;
+        this._text = wrapTextWith(settings.text, WRAP_CONSTANT, '').join('\n');
         this._textIndex = 0;
         this._scrollTimer = 0;
         this._waitCount = 0;
@@ -356,7 +356,7 @@ const MissionChatbox = new Lang.Class({
 
             const labelCls = classes[message.kind];
             const label = new labelCls({}, {
-                text: wrapTextWith(message.text, WRAP_CONSTANT, "").join("\n")
+                text: message.text
             });
 
             if (message.mode === "immediate") {
