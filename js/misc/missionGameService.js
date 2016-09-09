@@ -187,10 +187,10 @@ const MissionChatboxTextService = new Lang.Class({
         }
 
         var completion = {
-            'adventures': false,
-            'spells': false,
-            'inventory': false,
-            'intro': false
+            adventures: false,
+            spells: false,
+            inventory: false,
+            intro: false
         };
 
         this._service.call_get_unlocked_lessons('console', null, Lang.bind(this, function(source, result) {
