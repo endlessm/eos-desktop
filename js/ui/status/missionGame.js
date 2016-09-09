@@ -126,7 +126,6 @@ function wrapTextWith(text, constant, prefix) {
 
 const ScrolledLabel = new Lang.Class({
     Name: 'ScrolledLabel',
-    Extends: GLib.Object,
 
     _init: function(params, settings) {
         this.parent(params);
@@ -234,7 +233,7 @@ const WrappedLabel = new Lang.Class({
 
 const TextResponseAreaBase = new Lang.Class({
     Name: 'TextResponseAreaBase',
-    Extends: GLib.Object,
+
     _init: function(params, prefix) {
         this.parent(params);
         this._entry = new St.Entry({ can_focus: true });
@@ -295,7 +294,7 @@ Signals.addSignalMethods(ConsoleResponseArea.prototype);
 
 const ChoiceResponseArea = new Lang.Class({
     Name: 'ChoiceResponseArea',
-    Extends: GLib.Object,
+
     _init: function(params, settings) {
         this.parent(params);
         this.bubble = new St.BoxLayout({ vertical: true });
@@ -335,7 +334,7 @@ Signals.addSignalMethods(ChoiceResponseArea.prototype);
 
 const ExternalEventsResponseArea = new Lang.Class({
     Name: 'ExternalEventsResponseArea',
-    Extends: GLib.Object,
+
     _init: function(params, settings, service) {
         this.parent(params);
         this._connection = service.connect('lesson-events-satisfied-input-fired', Lang.bind(this, function() {
