@@ -5,7 +5,6 @@ const Lang = imports.lang;
 const GLib = imports.gi.GLib;
 const St = imports.gi.St;
 const Signals = imports.signals;
-const Tweener = imports.ui.tweener;
 
 const BoxPointer = imports.ui.boxpointer;
 const PanelMenu = imports.ui.panelMenu;
