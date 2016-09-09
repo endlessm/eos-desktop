@@ -339,7 +339,6 @@ if (global.settings.get_boolean('enable-mission-game')) {
     PANEL_ITEM_IMPLEMENTATIONS['missionGameChatbox'] = imports.ui.status.missionGame.MissionGameChatboxIndicator;
 }
 
-
 const Panel = new Lang.Class({
     Name: 'Panel',
 
