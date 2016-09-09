@@ -43,9 +43,9 @@ const MissionChatboxTextService = new Lang.Class({
         /* Null-initialise service for now, but we'll set it later */
         this._service = null;
 
-        /* These properties make up the lesson's content. _lessonInfo refers
+        /* These properties make up the lesson's content. _introLesson refers
          * to all of the text we need to display about the broader 'lesson'
-         * and _taskInfo is all the text that we need to display about the
+         * and _currenTask is all the text that we need to display about the
          * currently active task.
          *
          * The state of this service moves through each each task until
