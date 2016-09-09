@@ -44,26 +44,26 @@ const MissionChatboxTextService = new Lang.Class({
         this._service = null;
 
         /* These properties make up the lesson's content. _lessonInfo refers
-         * to all of the text we need to display about the broader "lesson"
+         * to all of the text we need to display about the broader 'lesson'
          * and _taskInfo is all the text that we need to display about the
          * currently active task.
          *
          * The state of this service moves through each each task until
          * it reaches the end, at which point it displays a message
-         * and sets itself to a "done" state.
+         * and sets itself to a 'done' state.
          */
         this._openedForTheFirstTime = false;
         this._introLesson = null;
         this._currentTask = null;
 
-        let name = "com.endlessm.Showmehow.Service";
-        let path = "/com/endlessm/Showmehow/Service";
+        let name = 'com.endlessm.Showmehow.Service';
+        let path = '/com/endlessm/Showmehow/Service';
 
         /* Connect to the service and refresh the content once we have a connection */
         Showmehow.ServiceProxy.new_for_bus(Gio.BusType.SESSION, 0, name, path, null,
                                            Lang.bind(this, function(source, result) {
             this._service = Showmehow.ServiceProxy.new_for_bus_finish(result);
-            this._service.connect("lessons-changed", Lang.bind(this, function() {
+            this._service.connect('lessons-changed', Lang.bind(this, function() {
                 /* When the underlying lessons change, we need to reset the entire
                  * state of this component and start from the beginning, including
                  * showing any warnings.
@@ -76,8 +76,8 @@ const MissionChatboxTextService = new Lang.Class({
                     this._currentTask = null;
                 });
             }));
-            this._service.connect("listening-for-lesson-events", Lang.bind(this, function(proxy, interestingEvents) {
-                this.emit("listening-for-events", interestingEvents.deep_unpack());
+            this._service.connect('listening-for-lesson-events', Lang.bind(this, function(proxy, interestingEvents) {
+                this.emit('listening-for-events', interestingEvents.deep_unpack());
             }));
             this._refreshContent();
         }));
@@ -90,7 +90,7 @@ const MissionChatboxTextService = new Lang.Class({
             let responses = JSON.parse(responsesJSON);
 
             responses.forEach(Lang.bind(this, function(response) {
-                this.emit("chat-message", {
+                this.emit('chat-message', {
                     kind: response.type,
                     text: response.value
                 });
@@ -112,7 +112,7 @@ const MissionChatboxTextService = new Lang.Class({
                 }
             }
         } else {
-            log("Failed to call call_attempt_lesson_remote");
+            log('Failed to call call_attempt_lesson_remote');
         }
     },
     ready: function() {
@@ -132,14 +132,14 @@ const MissionChatboxTextService = new Lang.Class({
                     returnValue.deep_unpack().map(function(w) {
                         return w[0];
                     }).forEach(Lang.bind(this, function(w) {
-                        this.emit("chat-message", {
-                            kind: "scrolled",
-                            mode: "immediate",
+                        this.emit('chat-message', {
+                            kind: 'scrolled',
+                            mode: 'immediate',
                             text: w
                         });
                     }));
                 } else {
-                    log("Call to get_warnings_finish failed");
+                    log('Call to get_warnings_finish failed');
                 }
 
                 this._showTaskDescriptionForLesson(this._introLesson.entry);
@@ -157,68 +157,68 @@ const MissionChatboxTextService = new Lang.Class({
     },
     evaluate: function(text) {
         if (this._introLesson && this._currentTask) {
-            this._service.call_attempt_lesson_remote("intro", this._currentTask.name, text, null,
+            this._service.call_attempt_lesson_remote('intro', this._currentTask.name, text, null,
                                                      Lang.bind(this, this._handleLessonResponse));
         }
     },
     _refreshContent: function(completedCallback) {
         if (!this._service) {
-            log("Attempted to refresh content without a service!");
+            log('Attempted to refresh content without a service!');
         }
 
         var completion = {
-            "adventures": false,
-            "spells": false,
-            "inventory": false,
-            "intro": false
+            'adventures': false,
+            'spells': false,
+            'inventory': false,
+            'intro': false
         };
 
-        this._service.call_get_unlocked_lessons("console", null, Lang.bind(this, function(source, result) {
+        this._service.call_get_unlocked_lessons('console', null, Lang.bind(this, function(source, result) {
             let [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
             lessons = lessons.deep_unpack();
 
             if (success) {
-                this.emit("discover-new-adventures", lessons.map(function(lesson_spec) {
+                this.emit('discover-new-adventures', lessons.map(function(lesson_spec) {
                     return {
                         name: lesson_spec[0],
                         desc: lesson_spec[1]
                     };
                 }));
-                callWhenComplete(completion, "adventures", completedCallback);
+                callWhenComplete(completion, 'adventures', completedCallback);
             } else {
-                log("Warning: Call to showmehow get_unlocked_lessons failed");
+                log('Warning: Call to showmehow get_unlocked_lessons failed');
             }
         }));
 
-        this._service.call_get_known_spells("console", null, Lang.bind(this, function(source, result) {
+        this._service.call_get_known_spells('console', null, Lang.bind(this, function(source, result) {
             let [success, lessons] = this._service.call_get_known_spells_finish(result);
             lessons = lessons.deep_unpack();
 
             if (success) {
-                this.emit("discover-new-spells", lessons.map(function(lesson_spec) {
+                this.emit('discover-new-spells', lessons.map(function(lesson_spec) {
                     return {
                         name: lesson_spec[0],
                         desc: lesson_spec[1]
                     };
                 }));
-                callWhenComplete(completion, "spells", completedCallback);
+                callWhenComplete(completion, 'spells', completedCallback);
             } else {
-                log("Warning: Call to showmehow get_known_spells failed");
+                log('Warning: Call to showmehow get_known_spells failed');
             }
         }));
 
-        this._service.call_get_unlocked_lessons("shell", null, Lang.bind(this, function(source, result) {
+        this._service.call_get_unlocked_lessons('shell', null, Lang.bind(this, function(source, result) {
             let [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
 
             if (success) {
                 /* There should be a single lesson here called introduction here. Save
                  * it. */
                 lessons = lessons.deep_unpack().filter(function(lesson) {
-                    return lesson[0] == "intro";
+                    return lesson[0] == 'intro';
                 });
 
                 if (lessons.length !== 1) {
-                    log("Expected a single lesson for shell, cannot show intro lesson!");
+                    log('Expected a single lesson for shell, cannot show intro lesson!');
                     return;
                 }
 
@@ -229,26 +229,26 @@ const MissionChatboxTextService = new Lang.Class({
                     entry: entry
                 };
 
-                callWhenComplete(completion, "intro", completedCallback);
+                callWhenComplete(completion, 'intro', completedCallback);
             } else {
-                log("Warning: Call to showmehow get_unlocked_lessons failed for intro lesson");
+                log('Warning: Call to showmehow get_unlocked_lessons failed for intro lesson');
             }
         }));
 
-        this._service.call_get_clues("shell", null, Lang.bind(this, function(source, result) {
+        this._service.call_get_clues('shell', null, Lang.bind(this, function(source, result) {
             let [success, clues] = this._service.call_get_clues_finish(result);
 
             if (success) {
-                this.emit("discover-new-inventory-items", clues.deep_unpack().map(function(clue) {
+                this.emit('discover-new-inventory-items', clues.deep_unpack().map(function(clue) {
                     let [name, type] = clue;
                     return {
                         name: name,
                         type: type
                     };
                 }));
-                callWhenComplete(completion, "inventory", completedCallback);
+                callWhenComplete(completion, 'inventory', completedCallback);
             } else {
-                log("Warning: Call to showmehow get_unlocked_lessons failed for intro lesson");
+                log('Warning: Call to showmehow get_unlocked_lessons failed for intro lesson');
             }
         }));
     },
@@ -257,7 +257,7 @@ const MissionChatboxTextService = new Lang.Class({
             return;
         }
 
-        this._service.call_get_task_description("intro", taskName, null,
+        this._service.call_get_task_description('intro', taskName, null,
                                                 Lang.bind(this, function(source, result) {
             let [success, returnValue] = this._service.call_get_task_description_finish(result);
 
@@ -270,15 +270,15 @@ const MissionChatboxTextService = new Lang.Class({
                     name: taskName
                 };
 
-                this.emit("chat-message", {
-                    kind: "scrolled",
-                    mode: "animated",
+                this.emit('chat-message', {
+                    kind: 'scrolled',
+                    mode: 'animated',
                     text: desc
                 });
 
-                this.emit("user-input-bubble", inputSpec);
+                this.emit('user-input-bubble', inputSpec);
             } else {
-                log("Call to call_get_task_description_finish failed");
+                log('Call to call_get_task_description_finish failed');
             }
         }));
     },

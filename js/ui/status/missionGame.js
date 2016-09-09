@@ -16,12 +16,12 @@ function launchLessonAction(lesson) {
     return function() {
         /* XXX: This needs to spawn a wrapper script that goes through each lesson
          * individually as opposed to just running showmehow. */
-        let argv = ["/usr/bin/gnome-terminal", "-e", "showmehow " + lesson];
+        let argv = ['/usr/bin/gnome-terminal', "-e", "showmehow " + lesson];
         let flags = GLib.SpawnFlags.DO_NOT_REAP_CHILD;
         let [ok, pid] = GLib.spawn_async(null, argv, null, flags, null);
 
         if (!ok) {
-            log("Warning: Failed to call " + argv.join(" "));
+            log('Warning: Failed to call ' + argv.join(" "));
         }
 
         return pid;
@@ -101,10 +101,10 @@ function wrapTextWith(text, constant, prefix) {
 
                 /* Strip leading and trailing whitespace and newlines
                  * and remove any leading newlines as well. */
-                lines[lineIndex] = lines[lineIndex] + append.trim().replace(/\n/g, "");
+                lines[lineIndex] = lines[lineIndex] + append.trim().replace(/\n/g, '');
             } else {
                 /* Just replace newlines, but don't touch whitespace. */
-                lines[lineIndex] = lines[lineIndex] + append.replace(/\n/g, "");
+                lines[lineIndex] = lines[lineIndex] + append.replace(/\n/g, '');
             }
 
             /* If we encountered a '\n', we also need to
@@ -176,7 +176,7 @@ const ScrolledLabel = new Lang.Class({
                 this._label.set_text(this._text.slice(0, this._textIndex));
 
                 /* Stop on punctuation */
-                if ("!?.".indexOf(this._text[this._textIndex - 1]) !== -1) {
+                if ('!?.'.indexOf(this._text[this._textIndex - 1]) !== -1) {
                     this._waitCount = 100;
                     return true;
                 }
@@ -215,12 +215,12 @@ const WrappedLabel = new Lang.Class({
     Extends: ScrolledLabel,
     _init: function(params) {
         this.parent(params);
-        this._text = wrapTextWith(this._text, WRAP_CONSTANT, "> ").join("\n");
+        this._text = wrapTextWith(this._text, WRAP_CONSTANT, '> ').join("\n");
         this.fastForward();
     },
     acceptAdditionalContent: function(content) {
         if (content.text && content.text.length && content.type === 'wrapped') {
-            this._text = wrapTextWith(this._text + content.text, WRAP_CONSTANT, "> ").join("\n");
+            this._text = wrapTextWith(this._text + content.text, WRAP_CONSTANT, '> ').join("\n");
             this._label.set_text(this.text);
         }
     }
@@ -377,8 +377,8 @@ const MissionChatbox = new Lang.Class({
 
         /* Setup layout and style */
         let margin = 10;
-        ["top", "bottom", "left", "right"].forEach(Lang.bind(this, function(d) {
-            this["margin-" + d] = margin;
+        ['top', "bottom", "left", "right"].forEach(Lang.bind(this, function(d) {
+            this['margin-' + d] = margin;
         }));
 
         this.set_size(400, 450);
@@ -398,7 +398,7 @@ const MissionChatbox = new Lang.Class({
 
         /* When the service sends us back a chat message, we should display
          * it in a different style and add it to the chatbox */
-        this._service.connect("chat-message", Lang.bind(this, function(chat, message) {
+        this._service.connect('chat-message', Lang.bind(this, function(chat, message) {
             /* First try and append it to the last label. If so, no work to do */
             if (this._appendToLastLabelInChatboxResultsArea(message)) {
                 return;
@@ -406,13 +406,13 @@ const MissionChatbox = new Lang.Class({
 
             /* Create a new bubble */
             let classes = {
-                "scrolled": ScrolledLabel,
-                "scroll_wait": ScrolledLabel,
-                "wrapped": WrappedLabel
+                'scrolled': ScrolledLabel,
+                'scroll_wait': ScrolledLabel,
+                'wrapped': WrappedLabel
             };
 
             if (Object.keys(classes).indexOf(message.kind) === -1) {
-                log("Cannot display chat message, no such label type " +
+                log('Cannot display chat message, no such label type ' +
                     message.kind);
                 return;
             }
@@ -422,22 +422,22 @@ const MissionChatbox = new Lang.Class({
                 text: message.text
             });
 
-            if (message.mode === "immediate") {
+            if (message.mode === 'immediate') {
                 label.fastForward();
             }
 
             this._pushLabelToChatboxResultsArea(label);
         }));
-        this._service.connect("user-input-bubble", Lang.bind(this, function(service, bubbleConfig, lesson, task) {
+        this._service.connect('user-input-bubble', Lang.bind(this, function(service, bubbleConfig, lesson, task) {
             let classes = {
-                "text": TextResponseArea,
-                "console": ConsoleResponseArea,
-                "choice": ChoiceResponseArea,
-                "external_events": ExternalEventsResponseArea
+                'text': TextResponseArea,
+                'console': ConsoleResponseArea,
+                'choice': ChoiceResponseArea,
+                'external_events': ExternalEventsResponseArea
             };
 
             if (Object.keys(classes).indexOf(bubbleConfig.type) === -1) {
-                log("Cannot display user input, no such bubble type " + bubbleConfig.type);
+                log('Cannot display user input, no such bubble type ' + bubbleConfig.type);
                 return;
             }
 
@@ -497,12 +497,12 @@ const MissionToolbox = new Lang.Class({
         this.parent(params);
 
         /* Game mode switch */
-        let missionSwitch = new PopupMenu.PopupSwitchMenuItem(_("Mission"), false);
+        let missionSwitch = new PopupMenu.PopupSwitchMenuItem(_('Mission'), false);
 
         /* Adventures and spells toolbox */
-        this._adventures = createSubMenuMenuItemWithFauxParent(_("Adventures"), parentMenu);
-        this._spells = createSubMenuMenuItemWithFauxParent(_("Spells"), parentMenu);
-        this._inventory = createSubMenuMenuItemWithFauxParent(_("Inventory"), parentMenu);
+        this._adventures = createSubMenuMenuItemWithFauxParent(_('Adventures'), parentMenu);
+        this._spells = createSubMenuMenuItemWithFauxParent(_('Spells'), parentMenu);
+        this._inventory = createSubMenuMenuItemWithFauxParent(_('Inventory'), parentMenu);
 
         /* Add switches and toolbox items to hbox */
         this.add(missionSwitch.actor);
@@ -511,19 +511,19 @@ const MissionToolbox = new Lang.Class({
         addSubMenuItemToBox(this._inventory, this, parentMenu);
 
         /* When we get some new adventures or spells, add the menu items to the list again */
-        this._service.connect("discover-new-adventures", Lang.bind(this, function(chat, adventures) {
+        this._service.connect('discover-new-adventures', Lang.bind(this, function(chat, adventures) {
             this._adventures.menu.removeAll();
             adventures.forEach(Lang.bind(this, function(adventure) {
                 this._adventures.menu.addAction(adventure.desc, launchLessonAction(adventure.name));
             }));
         }));
-        this._service.connect("discover-new-spells", Lang.bind(this, function(chat, spells) {
+        this._service.connect('discover-new-spells', Lang.bind(this, function(chat, spells) {
             this._spells.menu.removeAll();
             spells.forEach(Lang.bind(this, function(spell) {
                 this._spells.menu.addAction(spell.desc, launchLessonAction(spell.name));
             }));
         }));
-        this._service.connect("discover-new-inventory-items", Lang.bind(this, function(chat, items) {
+        this._service.connect('discover-new-inventory-items', Lang.bind(this, function(chat, items) {
             this._inventory.menu.removeAll();
             items.forEach(Lang.bind(this, function(item) {
                 this._inventory.menu.addAction(item.name, function() {
@@ -561,7 +561,7 @@ const MissionGameToolboxIndicator = new Lang.Class({
     Extends: PanelMenu.SystemStatusButton,
 
     _init: function() {
-        this.parent('starred-symbolic', _("Mission"));
+        this.parent('starred-symbolic', _('Mission'));
         this.setIcon('starred-symbolic');
 
         this._service = MissionGameService.getService();
@@ -582,7 +582,7 @@ const MissionGameChatboxIndicator = new Lang.Class({
     Extends: PanelMenu.SystemStatusButton,
 
     _init: function() {
-        this.parent('folder-drag-accept-symbolic', _("Mission"));
+        this.parent('folder-drag-accept-symbolic', _('Mission'));
         this.setIcon('folder-drag-accept-symbolic');
 
         this._service = MissionGameService.getService();
@@ -612,7 +612,7 @@ const MissionGameIndicator = new Lang.Class({
     Extends: PanelMenu.SystemStatusButton,
 
     _init: function() {
-        this.parent('folder-drag-accept-symbolic', _("Mission"));
+        this.parent('folder-drag-accept-symbolic', _('Mission'));
         this.setIcon('folder-drag-accept-symbolic');
 
         this._service = MissionGameService.getService();
