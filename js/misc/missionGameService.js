@@ -139,7 +139,13 @@ const MissionChatboxTextService = new Lang.Class({
             /* Get warnings and show them first, then show the first
              * chatbox description */
             this._service.call_get_warnings(null, Lang.bind(this, function(source, result) {
-                let [success, returnValue] = this._service.call_get_warnings_finish(result);
+                let success, returnValue;
+                try {
+                    [success, returnValue] = this._service.call_get_warnings_finish(result);
+                } catch (e) {
+                    logError(e, 'Error occurred in calling get_warnings');
+                }
+
                 if (!success) {
                     log('Call to get_warnings_finish failed');
                     return;
