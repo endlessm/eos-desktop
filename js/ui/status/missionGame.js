@@ -219,9 +219,9 @@ Signals.addSignalMethods(ScrolledLabel.prototype);
 const WrappedLabel = new Lang.Class({
     Name: 'WrappedLabel',
     Extends: ScrolledLabel,
-    _init: function(params) {
-        this.parent(params);
-        this._text = wrapTextWith(this._text, WRAP_CONSTANT, '> ').join("\n");
+    _init: function(params, settings) {
+        this.parent(params, settings);
+        this._text = wrapTextWith(settings.text, WRAP_CONSTANT, '> ').join("\n");
         this.fastForward();
     },
     acceptAdditionalContent: function(content) {
