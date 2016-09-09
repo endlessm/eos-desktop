@@ -365,7 +365,7 @@ function _addLabelToChatboxArea(label, chatboxResultsArea) {
 
     /* Start scrolling the label */
     label.start(function() {
-        chatboxResultsArea.vadjustment.set_value(Number.MAX_VALUE);
+        chatboxResultsArea.vadjustment.set_value(chatboxResultsArea.vadjustment.upper);
     });
 }
 
