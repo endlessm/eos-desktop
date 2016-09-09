@@ -364,7 +364,7 @@ function _addLabelToChatboxArea(label, chatboxResultsArea) {
     });
 }
 
-const WRAP_CONSTANT = 42;
+const WRAP_CONSTANT = 38;
 
 const MissionChatbox = new Lang.Class({
     Name: 'MissionChatbox',
