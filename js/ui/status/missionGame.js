@@ -1,5 +1,4 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
-
 const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Signals = imports.signals;
@@ -150,6 +149,7 @@ const ScrolledLabel = new Lang.Class({
         this.bubble.add(this._label, { x_fill: true, expand: true });
         this.view.add(this.bubble, { x_fill: true, expand: true });
     },
+
     start: function(scrollView) {
         /* Immediately display the first character so that
          * scrolling to the bottom will work */
@@ -160,6 +160,7 @@ const ScrolledLabel = new Lang.Class({
         /* Add a timeout to gradually display all this text */
         this._startScrollAnimation(scrollView);
     },
+
     _startScrollAnimation: function(done) {
         if (!this._scrollTimer) {
             this._waitCount = 0;
@@ -199,9 +200,11 @@ const ScrolledLabel = new Lang.Class({
 
         return this._scrollTimer;
     },
+
     fastForward: function() {
         this._textIndex = this._text.length - 1;
     },
+
     acceptAdditionalContent: function(content) {
         if (content.text && content.type === 'scrolled') {
             this._text = wrapTextWith(this._text + '\n' + content.text, WRAP_CONSTANT, '').join('\n');
@@ -217,11 +220,13 @@ Signals.addSignalMethods(ScrolledLabel.prototype);
 const WrappedLabel = new Lang.Class({
     Name: 'WrappedLabel',
     Extends: ScrolledLabel,
+
     _init: function(params, settings) {
         this.parent(params, settings);
         this._text = wrapTextWith(settings.text, WRAP_CONSTANT, '> ').join("\n");
         this.fastForward();
     },
+
     acceptAdditionalContent: function(content) {
         if (content.text && content.text.length && content.type === 'wrapped') {
             this._text = wrapTextWith(this._text + content.text, WRAP_CONSTANT, '> ').join("\n");
@@ -261,12 +266,15 @@ const TextResponseAreaBase = new Lang.Class({
             }
         }));
     },
+
     fastForward: function() {
     },
+
     start: function(scrollView) {
         this._entry.grab_key_focus();
         scrollView();
     },
+
     acceptAdditionalContent: function() {
         return false;
     }
@@ -276,6 +284,7 @@ Signals.addSignalMethods(TextResponseAreaBase.prototype);
 const TextResponseArea = new Lang.Class({
     Name: 'TextResponseArea',
     Extends: TextResponseAreaBase,
+
     _init: function(params) {
         this.parent(params, '> ');
     }
@@ -285,6 +294,7 @@ Signals.addSignalMethods(TextResponseArea.prototype);
 const ConsoleResponseArea = new Lang.Class({
     Name: 'ConsoleResponseArea',
     Extends: TextResponseAreaBase,
+
     _init: function(params) {
         this.parent(params, '$ ');
     }
@@ -320,11 +330,14 @@ const ChoiceResponseArea = new Lang.Class({
 
         this.view.add(this.bubble, { expand: true, x_fill: true });
     },
+
     fastForward: function() {
     },
+
     start: function(scrollView) {
         scrollView();
     },
+
     acceptAdditionalContent: function() {
         return false;
     }
@@ -342,10 +355,13 @@ const ExternalEventsResponseArea = new Lang.Class({
             service.disconnect(this._connection);
         }));
     },
+
     fastForward: function() {
     },
+
     start: function() {
     },
+
     acceptAdditionalContent: function() {
         return false;
     }
@@ -373,6 +389,7 @@ const WRAP_CONSTANT = 38;
 const MissionChatbox = new Lang.Class({
     Name: 'MissionChatbox',
     Extends: St.BoxLayout,
+
     _init: function(params, service) {
         let margin = 10;
 
@@ -462,6 +479,7 @@ const MissionChatbox = new Lang.Class({
             this._pushLabelToChatboxResultsArea(bubble);
         }));
     },
+
     _appendToLastLabelInChatboxResultsArea: function(content) {
         /* See if the last label in the chatbox results area will
          * accept some additional content, and if so, add this
@@ -475,6 +493,7 @@ const MissionChatbox = new Lang.Class({
 
         return false;
     },
+
     _pushLabelToChatboxResultsArea: function(label) {
         /* Push immediately if we're the first or if the last one
          * has finished scrolling */
@@ -499,6 +518,7 @@ const MissionChatbox = new Lang.Class({
 const MissionToolbox = new Lang.Class({
     Name: 'MissionToolbox',
     Extends: St.BoxLayout,
+
     _init: function(params, parentMenu, service) {
         this._service = service;
 
