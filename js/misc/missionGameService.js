@@ -49,8 +49,7 @@ const MissionChatboxTextService = new Lang.Class({
          * currently active task.
          *
          * The state of this service moves through each each task until
-         * it reaches the end, at which point it displays a message
-         * and sets itself to a 'done' state.
+         * it reaches the end, at which point these are set back to null.
          */
         this._openedForTheFirstTime = false;
         this._introLesson = null;
@@ -62,7 +61,13 @@ const MissionChatboxTextService = new Lang.Class({
         /* Connect to the service and refresh the content once we have a connection */
         Showmehow.ServiceProxy.new_for_bus(Gio.BusType.SESSION, 0, name, path, null,
                                            Lang.bind(this, function(source, result) {
-            this._service = Showmehow.ServiceProxy.new_for_bus_finish(result);
+            try {
+                this._service = Showmehow.ServiceProxy.new_for_bus_finish(result);
+            } catch (e) {
+                log('Error occurred in creating ShowmehowServiceProxy ' + String(e));
+                return;
+            }
+
             this._service.connect('lessons-changed', Lang.bind(this, function() {
                 /* When the underlying lessons change, we need to reset the entire
                  * state of this component and start from the beginning, including
@@ -71,10 +76,10 @@ const MissionChatboxTextService = new Lang.Class({
                  * Get the intro lesson again then reset all the state back
                  * to its initial point.
                  */
-                this._refreshContent(function() {
+                this._refreshContent(Lang.bind(this, function() {
                     this._openedForTheFirstTime = false;
                     this._currentTask = null;
-                });
+                }));
             }));
             this._service.connect('listening-for-lesson-events', Lang.bind(this, function(proxy, interestingEvents) {
                 this.emit('listening-for-events', interestingEvents.deep_unpack());
@@ -83,7 +88,14 @@ const MissionChatboxTextService = new Lang.Class({
         }));
     },
     _handleLessonResponse: function(source, result) {
-        let [success, returnValue] = this._service.call_attempt_lesson_remote_finish(result);
+        let success, returnValue;
+
+        try {
+            [success, returnValue] = this._service.call_attempt_lesson_remote_finish(result);
+        } catch (e) {
+            log('Error occurred in attempting lesson ' + String(e));
+            return;
+        }
 
         if (success) {
             let [responsesJSON, moveTo] = returnValue.deep_unpack();
@@ -174,7 +186,15 @@ const MissionChatboxTextService = new Lang.Class({
         };
 
         this._service.call_get_unlocked_lessons('console', null, Lang.bind(this, function(source, result) {
-            let [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
+            let success, lessons;
+
+            try {
+                [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
+            } catch (e) {
+                log('Error occurred in getting unlocked lessons ' + String(e));
+                return;
+            }
+
             lessons = lessons.deep_unpack();
 
             if (success) {
@@ -191,7 +211,15 @@ const MissionChatboxTextService = new Lang.Class({
         }));
 
         this._service.call_get_known_spells('console', null, Lang.bind(this, function(source, result) {
-            let [success, lessons] = this._service.call_get_known_spells_finish(result);
+            let success, lessons;
+
+            try {
+                [success, lessons] = this._service.call_get_known_spells_finish(result);
+            } catch (e) {
+                log('Error occurred in getting known spells ' + String(e));
+                return;
+            }
+
             lessons = lessons.deep_unpack();
 
             if (success) {
@@ -208,7 +236,14 @@ const MissionChatboxTextService = new Lang.Class({
         }));
 
         this._service.call_get_unlocked_lessons('shell', null, Lang.bind(this, function(source, result) {
-            let [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
+            let success, lessons;
+
+            try {
+                [success, lessons] = this._service.call_get_unlocked_lessons_finish(result);
+            } catch (e) {
+                log('Error occurred in getting unlocked lessons for shell ' + String(e));
+                return;
+            }
 
             if (success) {
                 /* There should be a single lesson here called introduction here. Save
@@ -236,7 +271,14 @@ const MissionChatboxTextService = new Lang.Class({
         }));
 
         this._service.call_get_clues('shell', null, Lang.bind(this, function(source, result) {
-            let [success, clues] = this._service.call_get_clues_finish(result);
+            let success, clues;
+
+            try {
+                [success, clues] = this._service.call_get_clues_finish(result);
+            } catch (e) {
+                log('Error occurred in getting clues ' + String(e));
+                return;
+            }
 
             if (success) {
                 this.emit('discover-new-inventory-items', clues.deep_unpack().map(function(clue) {
@@ -259,7 +301,15 @@ const MissionChatboxTextService = new Lang.Class({
 
         this._service.call_get_task_description('intro', taskName, null,
                                                 Lang.bind(this, function(source, result) {
-            let [success, returnValue] = this._service.call_get_task_description_finish(result);
+            let success, returnValue;
+
+            try {
+                [success, returnValue] = this._service.call_get_task_description_finish(result);
+            } catch (e) {
+                log(['Error occurred in getting task description for ',
+                     taskName, ' ', String(e)]);
+                return;
+            }
 
             if (success) {
                 let [desc, inputSpecString] = returnValue.deep_unpack();
