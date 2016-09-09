@@ -173,7 +173,7 @@ const ScrolledLabel = new Lang.Class({
 
                 if (this._textIndex === this._text.length) {
                     this.complete = true;
-                    this.emit('finished-scrolled');
+                    this.emit('can-display-next-bubble');
                     this._scrollTimer = 0;
                     return false;
                 }
@@ -258,7 +258,7 @@ const TextResponseAreaBase = new Lang.Class({
                 this._entry.set_can_focus(false);
                 this.emit('response', this._entry.get_text());
                 this._hbox.remove_actor(this._prefixLabel);
-                this.emit('finished-scrolled');
+                this.emit('can-display-next-bubble');
                 this.complete = true;
             }
         }));
