@@ -3,8 +3,8 @@
 const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
 const Lang = imports.lang;
-const St = imports.gi.St;
 const Signals = imports.signals;
+const St = imports.gi.St;
 
 const BoxPointer = imports.ui.boxpointer;
 const PanelMenu = imports.ui.panelMenu;
