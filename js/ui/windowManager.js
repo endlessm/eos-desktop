@@ -630,6 +630,8 @@ function prepareWindowsForRotation(src, dst, direction) {
      * there are no visible artifacts in the animation */
     src.set_cull_back_face(true);
     dst.set_cull_back_face(true);
+    src.show();
+    dst.show()
     dst.opacity = 0;
     let dst_geometry = src.get_meta_window().get_frame_rect();
     dst.get_meta_window().move_resize_frame(false,
