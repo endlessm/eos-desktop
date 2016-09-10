@@ -871,9 +871,11 @@ const WindowManager = new Lang.Class({
         }
 
         let srcActorInfo = pidToActorInfo(src);
+        let dstActorInfo = pidToActorInfo(dst);
+
         this._pendingRotateAnimations.push({
             src: srcActorInfo,
-            dst: pidToActorInfo(dst)
+            dst: dstActorInfo
         });
         this._updateReadyRotateAnimationsWith(srcActorInfo.window);
     },
@@ -1595,10 +1597,18 @@ const WindowManager = new Lang.Class({
 
         this._destroying.push(actor);
 
-        /* Since we are destroying, remove any pairs */
+        /* Since we are destroying, remove any pairs if this was a
+         * src window */
         this._pairedWindows = this._pairedWindows.filter(function(pair) {
-            return !pair.some(function(w) { return w === window; });
+            return pair[0] !== actor;
         });
+        let sourceWindowPairIndex = -1;
+        for (let i = 0; i < this._pairedWindows.length; ++i) {
+            if (this._pairedWindows[i][1] === actor) {
+                sourceWindowPairIndex = i;
+                break;
+            }
+        }
 
         if (window.is_attached_dialog()) {
             let parent = window.get_transient_for();
@@ -1640,6 +1650,26 @@ const WindowManager = new Lang.Class({
             } else if (this._showDesktopOnDestroyDone) {
                 Main.layoutManager.prepareForOverview();
             }
+        } else if (sourceWindowPairIndex !== -1) {
+            /* This is a destination window for a window pair. Flip back to the
+             * source window and remove the pairing */
+            let [src, dst] = this._pairedWindows[sourceWindowPairIndex];
+            this._rotateInActors.push(src);
+            this._rotateOutActors.push(dst);
+            let onComplete = function(callback) {
+                return function(w) {
+                    callback(w);
+                    shellwm.completed_destroy(w);
+                };
+            };
+
+            /* We only want to wrap onCompleteOut, since otherwise the reference count
+             * of the window will go to -1 */
+            let onCompleteOut = onComplete(Lang.bind(this, this._rotateOutCompleted));
+            let onCompleteIn = Lang.bind(this, this._rotateInCompleted);
+            prepareWindowsForRotation(dst, src, RotationDirection.LEFT)(onCompleteOut,
+                                                                        onCompleteIn);
+            this._pairedWindows.splice(sourceWindowPairIndex, 1);
         } else {
             Tweener.addTween(actor,
                              { opacity: 0,
