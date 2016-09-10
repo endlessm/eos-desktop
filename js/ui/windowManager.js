@@ -922,17 +922,45 @@ const WindowManager = new Lang.Class({
          * We use a naive loop here since we're detecting where this
          * is the case and then breaking out after adding then new
          * entry. */
+        let amendedPair = false;
         for (let i = 0; i < this._pairedWindows.length; ++i) {
             let [pairSrc, pairDst] = this._pairedWindows[i];
             if (pairDst == src) {
                 this._pairedWindows.splice(i, 1);
-                log("Spliced and inserted cross-cutting pair");
                 this._pairedWindows.push([pairSrc, dst]);
-                return;
+                amendedPair = true;
             }
         }
 
-        this._pairedWindows.push([src, dst]);
+        if (!amendedPair) {
+            this._pairedWindows.push([src, dst]);
+        }
+
+        /* The way this works is not ideal at the moment since it
+         * always flips left (can't know what direction to flip in */
+        let flipOnFocusFn = Lang.bind(this, function(window) {
+            let actor = window.get_compositor_private();
+
+            /* If we are a src window in the current window
+             * pairings then initiate a flip animation */
+            for (let i = 0; i < this._pairedWindows.length; ++i) {
+                let [pairSrc, pairDst] = this._pairedWindows[i];
+                if (pairSrc === actor) {
+                    this._rotateInActors.push(pairSrc);
+                    this._rotateOutActors.push(pairDst);
+                    prepareWindowsForRotation(pairDst, pairSrc, RotationDirection.LEFT)(Lang.bind(this, this._rotateOutCompleted),
+                                                                                        Lang.bind(this, this._rotateInCompleted));
+                    this._pairedWindows[i] = [pairDst, pairSrc];
+                }
+            }
+        });
+
+        /* If we've amended a pair, then a signal handler will already be defined */
+        if (!amendedPair) {
+            src.get_meta_window().connect('focus', flipOnFocusFn);
+        }
+
+        dst.get_meta_window().connect('focus', flipOnFocusFn);
     },
 
     _updateReadyRotateAnimationsWith: function(window) {
