@@ -644,10 +644,8 @@ function prepareWindowsForRotation(src, dst, direction) {
             transition: 'easeOutQuad',
             onComplete: function() {
                 if (srcDone) {
-                    return srcDone(src);
+                    srcDone(src);
                 }
-                
-                return null;
             }
         });
         Tweener.addTween(dst, {
@@ -656,10 +654,8 @@ function prepareWindowsForRotation(src, dst, direction) {
             transition: 'easeOutQuad',
             onComplete: function() {
                 if (dstDone) {
-                    return dstDone(dst);
+                    dstDone(dst);
                 }
-
-                return null;
             }
         });
 
