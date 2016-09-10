@@ -1689,3 +1689,11 @@ shell_global_get_session_mode (ShellGlobal *global)
 
   return global->session_mode;
 }
+
+gboolean
+shell_global_window_matches_xid (ShellGlobal *global,
+                                 MetaWindow  *window,
+                                 guint32      xid)
+{
+    return meta_window_get_xwindow (window) == xid;
+}
