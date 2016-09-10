@@ -1565,6 +1565,11 @@ const WindowManager = new Lang.Class({
 
         this._destroying.push(actor);
 
+        /* Since we are destroying, remove any pairs */
+        this._pairedWindows = this._pairedWindows.filter(function(pair) {
+            return !pair.some(function(w) { return w === window; });
+        });
+
         if (window.is_attached_dialog()) {
             let parent = window.get_transient_for();
             this._checkDimming(parent, window);
