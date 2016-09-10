@@ -848,7 +848,7 @@ const WindowManager = new Lang.Class({
         this._pendingRotateAnimations = [];
         this._rotateOutActors = [];
         this._rotateInActors = [];
-        this._pairedWindows = [];
+        this._pairedActors = [];
         this._firstFrameConnections = [];
     },
 
@@ -881,7 +881,7 @@ const WindowManager = new Lang.Class({
     },
 
     _handleRevertXidRotation: function(proxy, sender, [xid]) {
-        /* Look in this._pairedWindows to see if there is a
+        /* Look in this._pairedActors to see if there is a
          * dst window that has an xwindow id the same as
          * xid. Then rotate the window back to where
          * it was.
@@ -891,8 +891,8 @@ const WindowManager = new Lang.Class({
          * and then do the rotate animation. We also swap src
          * and dst in the pairings as that is a kind of implicit
          * state as to which window "should" be active. */
-        for (let i = 0; i < this._pairedWindows.length; ++i) {
-            let [src, dst] = this._pairedWindows[i];
+        for (let i = 0; i < this._pairedActors.length; ++i) {
+            let [src, dst] = this._pairedActors[i];
 
             /* This should never be true if we've been maintaining
              * the list properly, but warn about it for now */
@@ -909,7 +909,7 @@ const WindowManager = new Lang.Class({
                 this._rotateOutActors.push(dst);
                 prepareWindowsForRotation(dst, src, RotationDirection.LEFT)(Lang.bind(this, this._rotateOutCompleted),
                                                                             Lang.bind(this, this._rotateInCompleted));
-                this._pairedWindows[i] = [dst, src];
+                this._pairedActors[i] = [dst, src];
                 break;
             }
         }
@@ -925,17 +925,17 @@ const WindowManager = new Lang.Class({
          * is the case and then breaking out after adding then new
          * entry. */
         let amendedPair = false;
-        for (let i = 0; i < this._pairedWindows.length; ++i) {
-            let [pairSrc, pairDst] = this._pairedWindows[i];
+        for (let i = 0; i < this._pairedActors.length; ++i) {
+            let [pairSrc, pairDst] = this._pairedActors[i];
             if (pairDst == src) {
-                this._pairedWindows.splice(i, 1);
-                this._pairedWindows.push([pairSrc, dst]);
+                this._pairedActors.splice(i, 1);
+                this._pairedActors.push([pairSrc, dst]);
                 amendedPair = true;
             }
         }
 
         if (!amendedPair) {
-            this._pairedWindows.push([src, dst]);
+            this._pairedActors.push([src, dst]);
         }
 
         /* The way this works is not ideal at the moment since it
@@ -945,14 +945,14 @@ const WindowManager = new Lang.Class({
 
             /* If we are a src window in the current window
              * pairings then initiate a flip animation */
-            for (let i = 0; i < this._pairedWindows.length; ++i) {
-                let [pairSrc, pairDst] = this._pairedWindows[i];
+            for (let i = 0; i < this._pairedActors.length; ++i) {
+                let [pairSrc, pairDst] = this._pairedActors[i];
                 if (pairSrc === actor) {
                     this._rotateInActors.push(pairSrc);
                     this._rotateOutActors.push(pairDst);
                     prepareWindowsForRotation(pairDst, pairSrc, RotationDirection.LEFT)(Lang.bind(this, this._rotateOutCompleted),
                                                                                         Lang.bind(this, this._rotateInCompleted));
-                    this._pairedWindows[i] = [pairDst, pairSrc];
+                    this._pairedActors[i] = [pairDst, pairSrc];
                 }
             }
         });
@@ -1599,12 +1599,12 @@ const WindowManager = new Lang.Class({
 
         /* Since we are destroying, remove any pairs if this was a
          * src window */
-        this._pairedWindows = this._pairedWindows.filter(function(pair) {
+        this._pairedActors = this._pairedWindows.filter(function(pair) {
             return pair[0] !== actor;
         });
         let sourceWindowPairIndex = -1;
-        for (let i = 0; i < this._pairedWindows.length; ++i) {
-            if (this._pairedWindows[i][1] === actor) {
+        for (let i = 0; i < this._pairedActors.length; ++i) {
+            if (this._pairedActors[i][1] === actor) {
                 sourceWindowPairIndex = i;
                 break;
             }
@@ -1653,7 +1653,7 @@ const WindowManager = new Lang.Class({
         } else if (sourceWindowPairIndex !== -1) {
             /* This is a destination window for a window pair. Flip back to the
              * source window and remove the pairing */
-            let [src, dst] = this._pairedWindows[sourceWindowPairIndex];
+            let [src, dst] = this._pairedActors[sourceWindowPairIndex];
             this._rotateInActors.push(src);
             this._rotateOutActors.push(dst);
             let onComplete = function(callback) {
@@ -1669,7 +1669,7 @@ const WindowManager = new Lang.Class({
             let onCompleteIn = Lang.bind(this, this._rotateInCompleted);
             prepareWindowsForRotation(dst, src, RotationDirection.LEFT)(onCompleteOut,
                                                                         onCompleteIn);
-            this._pairedWindows.splice(sourceWindowPairIndex, 1);
+            this._pairedActors.splice(sourceWindowPairIndex, 1);
         } else {
             Tweener.addTween(actor,
                              { opacity: 0,
