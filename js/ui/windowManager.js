@@ -846,6 +846,7 @@ const WindowManager = new Lang.Class({
         this._pendingRotateAnimations = [];
         this._rotateOutActors = [];
         this._rotateInActors = [];
+        this._pairedWindows = [];
         this._firstFrameConnections = [];
     },
 
@@ -876,6 +877,60 @@ const WindowManager = new Lang.Class({
     },
 
     _handleRevertXidRotation: function(proxy, sender, [xid]) {
+        /* Look in this._pairedWindows to see if there is a
+         * dst window that has an xwindow id the same as
+         * xid. Then rotate the window back to where
+         * it was.
+         *
+         * Use a naive loop here, since we want to find a case
+         * where the passed xid is the dst window for a window pair
+         * and then do the rotate animation. We also swap src
+         * and dst in the pairings as that is a kind of implicit
+         * state as to which window "should" be active. */
+        for (let i = 0; i < this._pairedWindows.length; ++i) {
+            let [src, dst] = this._pairedWindows[i];
+
+            /* This should never be true if we've been maintaining
+             * the list properly, but warn about it for now */
+            if (dst.get_meta_window() === null ||
+                src.get_meta_window() === null) {
+                log("Destroyed window found in pair, this is a bug");
+                continue;
+            }
+
+            /* We found a match - commence the animation and swap
+             * the pair around */
+            if (global.window_matches_xid(dst.get_meta_window(), xid)) {
+                this._rotateInActors.push(src);
+                this._rotateOutActors.push(dst);
+                prepareWindowsForRotation(dst, src, RotationDirection.LEFT)(Lang.bind(this, this._rotateOutCompleted),
+                                                                            Lang.bind(this, this._rotateInCompleted));
+                this._pairedWindows[i] = [dst, src];
+                break;
+            }
+        }
+    },
+
+    _pairWindowsForRotation: function(src, dst) {
+        /* Add these two windows as a "pair". If a pair already exists
+         * between the destination window and another window, then remove
+         * that pairing and pair the original source window with this
+         * destination window.
+         *
+         * We use a naive loop here since we're detecting where this
+         * is the case and then breaking out after adding then new
+         * entry. */
+        for (let i = 0; i < this._pairedWindows.length; ++i) {
+            let [pairSrc, pairDst] = this._pairedWindows[i];
+            if (pairDst == src) {
+                this._pairedWindows.splice(i, 1);
+                log("Spliced and inserted cross-cutting pair");
+                this._pairedWindows.push([pairSrc, dst]);
+                return;
+            }
+        }
+
+        this._pairedWindows.push([src, dst]);
     },
 
     _updateReadyRotateAnimationsWith: function(window) {
@@ -915,6 +970,7 @@ const WindowManager = new Lang.Class({
                 /* Add windows to the rotation list */
                 this._rotateInActors.push(animationSpec.src.window);
                 this._rotateOutActors.push(animationSpec.dst.window);
+                this._pairWindowsForRotation(animationSpec.src.window, animationSpec.dst.window);
                 
                 commenceAnimation(Lang.bind(this, this._rotateOutCompleted),
                                   Lang.bind(this, this._rotateInCompleted));
