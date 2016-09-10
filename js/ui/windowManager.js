@@ -976,9 +976,9 @@ const WindowManager = new Lang.Class({
                 return true;
             }
 
-            let commenceAnimation = prepareWindowsForRotation(animationSpec.src.window,
-                                                              animationSpec.dst.window,
-                                                              Gtk.DirectionType.RIGHT);
+            let beginAnimation = prepareWindowsForRotation(animationSpec.src.window,
+                                                           animationSpec.dst.window,
+                                                           Gtk.DirectionType.RIGHT);
 
 
             /* We wait until the first frame of the window has been drawn
@@ -993,8 +993,8 @@ const WindowManager = new Lang.Class({
                 this._rotateOutActors.push(animationSpec.dst.window);
                 this._pairWindowsForRotation(animationSpec.src.window, animationSpec.dst.window);
                 
-                commenceAnimation(Lang.bind(this, this._rotateOutCompleted),
-                                  Lang.bind(this, this._rotateInCompleted));
+                beginAnimation(Lang.bind(this, this._rotateOutCompleted),
+                               Lang.bind(this, this._rotateInCompleted));
 
                 this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
                     return conn != animationSpec.dst.window._firstFrameConnection;
