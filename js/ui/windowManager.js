@@ -3,6 +3,7 @@
 const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
 const Gdk = imports.gi.Gdk;
+const Gtk = imports.gi.Gtk;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const GObject = imports.gi.GObject;
@@ -586,14 +587,6 @@ const TilePreview = new Lang.Class({
 });
 
 /**
- * The direction a window should rotate in
- */
-const RotationDirection = {
-    LEFT: 0,
-    RIGHT: 1
-};
-
-/**
  * prepareWindowsForRotation
  *
  * This sets up the initial properties for two windows to be rotated between
@@ -601,14 +594,14 @@ const RotationDirection = {
  * to actually commence the rotation process.
  *
  * Pass a @src and @dst window to rotate between, a @direction (either
- * RotationDirection.LEFT or RotationDirection.RIGHT).
+ * Gtk.DirectionType.LEFT or RotationDirection.RIGHT).
  *
  * The returned function takes parameters  @srcDone and @dstDone which
  * are callbacks to call when the rotation animation for each window
  * completes.
  */
 function prepareWindowsForRotation(src, dst, direction) {
-    dst.rotation_angle_y = direction == RotationDirection.RIGHT ? -180 : 180;
+    dst.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
     src.rotation_angle_y = direction == 0;
     dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
     src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
@@ -646,7 +639,7 @@ function prepareWindowsForRotation(src, dst, direction) {
          * with backface culling enabled on both. This will allow for
          * a smooth transition. */
         Tweener.addTween(src, {
-            rotation_angle_y: direction == RotationDirection.RIGHT ? 180 : -180,
+            rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
             time: WINDOW_ANIMATION_TIME * 4,
             transition: 'easeOutQuad',
             onComplete: function() {
@@ -907,7 +900,7 @@ const WindowManager = new Lang.Class({
             if (global.window_matches_xid(dst.get_meta_window(), xid)) {
                 this._rotateInActors.push(src);
                 this._rotateOutActors.push(dst);
-                prepareWindowsForRotation(dst, src, RotationDirection.LEFT)(Lang.bind(this, this._rotateOutCompleted),
+                prepareWindowsForRotation(dst, src, Gtk.DirectionType.LEFT)(Lang.bind(this, this._rotateOutCompleted),
                                                                             Lang.bind(this, this._rotateInCompleted));
                 this._pairedActors[i] = [dst, src];
                 break;
@@ -950,7 +943,7 @@ const WindowManager = new Lang.Class({
                 if (pairSrc === actor) {
                     this._rotateInActors.push(pairSrc);
                     this._rotateOutActors.push(pairDst);
-                    prepareWindowsForRotation(pairDst, pairSrc, RotationDirection.LEFT)(Lang.bind(this, this._rotateOutCompleted),
+                    prepareWindowsForRotation(pairDst, pairSrc, Gtk.DirectionType.LEFT)(Lang.bind(this, this._rotateOutCompleted),
                                                                                         Lang.bind(this, this._rotateInCompleted));
                     this._pairedActors[i] = [pairDst, pairSrc];
                 }
@@ -989,7 +982,7 @@ const WindowManager = new Lang.Class({
 
             let commenceAnimation = prepareWindowsForRotation(animationSpec.src.window,
                                                               animationSpec.dst.window,
-                                                              RotationDirection.RIGHT);
+                                                              Gtk.DirectionType.RIGHT);
 
 
             /* We wait until the first frame of the window has been drawn
@@ -1667,7 +1660,7 @@ const WindowManager = new Lang.Class({
              * of the window will go to -1 */
             let onCompleteOut = onComplete(Lang.bind(this, this._rotateOutCompleted));
             let onCompleteIn = Lang.bind(this, this._rotateInCompleted);
-            prepareWindowsForRotation(dst, src, RotationDirection.LEFT)(onCompleteOut,
+            prepareWindowsForRotation(dst, src, Gtk.DirectionType.LEFT)(onCompleteOut,
                                                                         onCompleteIn);
             this._pairedActors.splice(sourceWindowPairIndex, 1);
         } else {
