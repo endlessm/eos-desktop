@@ -932,7 +932,7 @@ const WindowManager = new Lang.Class({
         }
 
         /* The way this works is not ideal at the moment since it
-         * always flips left (can't know what direction to flip in */
+         * always flips left (can't know what direction to flip in) */
         let flipOnFocusFn = Lang.bind(this, function(window) {
             let actor = window.get_compositor_private();
 
