@@ -265,6 +265,7 @@ StScrollBar StButton#vhandle:active {
     width: 1px;
     height: 40px;
     icon-size: 40px;
+    padding-left: 7px;
     padding-right: 10px;
 }
 
@@ -558,11 +559,6 @@ StScrollBar StButton#vhandle:active {
     -natural-hpadding: 0px;
 }
 
-.user-menu-icon.panel-button {
-    -minimum-hpadding: 4px;
-    -natural-hpadding: 4px;
-}
-
 .hot-corner-indicator.panel-button {
     -minimum-hpadding: 0px;
     -natural-hpadding: 0px;
@@ -695,9 +691,15 @@ StScrollBar StButton#vhandle:active {
 
 /* User Menu */
 
+.user-menu-icon.panel-button {
+    -natural-hpadding: 4px;
+    -minimum-hpadding: 4px;
+    background-position: -11px 0px;
+}
+
 #panelUserMenu {
-    padding-left: 6px;
-    width: 44px;
+    padding-left: 8px;
+    width: 40px;
 }
 
 .status-chooser {
