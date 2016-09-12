@@ -254,8 +254,8 @@ const SystemStatusButton = new Lang.Class({
     Name: 'SystemStatusButton',
     Extends: Button,
 
-    _init: function(iconName, nameText) {
-        this.parent(0.0, nameText);
+    _init: function(iconName, nameText, dontCreateMenu=false) {
+        this.parent(0.0, nameText, dontCreateMenu);
         this.actor.add_style_class_name('panel-status-button');
 
         this._box = new St.BoxLayout({ style_class: 'panel-status-button-box' });
@@ -290,5 +290,73 @@ const SystemStatusButton = new Lang.Class({
             this.mainIcon.gicon = gicon;
         else
             this.mainIcon = this.addIcon(gicon);
+    }
+});
+
+const ShowAppsButton = new Lang.Class({
+    Name: 'ShowAppsButton',
+    Extends: SystemStatusButton,
+
+    _init: function(panel) {
+        this.parent('', _("Show Desktop"), true);
+
+        this._panel = panel;
+
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/show-apps-symbolic.svg');
+        this.setGIcon(new Gio.FileIcon({ file: iconFile }));
+
+        this.actor.add_style_class_name('show-apps-button');
+
+        this.actor.connect('button-release-event', Lang.bind(this, this._onButtonRelease));
+        this.actor.connect('key-press-event', Lang.bind(this, this._onKeyPress));
+    },
+
+    _onButtonRelease: function(actor, event) {
+        Main.overview.toggleApps();
+        this._panel.closeActiveMenu();
+    },
+
+    _onKeyPress: function(actor, event) {
+        let symbol = event.get_key_symbol();
+        if (symbol == Clutter.KEY_space || symbol == Clutter.KEY_Return) {
+            this._panel.closeActiveMenu();
+            Main.overview.toggleApps();
+            return true;
+        } else
+            return false;
+    }
+});
+
+const ShowWindowsButton = new Lang.Class({
+    Name: 'ShowWindowsButton',
+    Extends: SystemStatusButton,
+
+    _init: function(panel) {
+        this.parent('', _("Show Windows"), true);
+
+        this._panel = panel;
+
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/show-windows-symbolic.svg');
+        this.setGIcon(new Gio.FileIcon({ file: iconFile }));
+
+        this.actor.add_style_class_name('show-windows-button');
+
+        this.actor.connect('button-release-event', Lang.bind(this, this._onButtonRelease));
+        this.actor.connect('key-press-event', Lang.bind(this, this._onKeyPress));
+    },
+
+    _onButtonRelease: function(actor, event) {
+        this._panel.closeActiveMenu();
+        Main.overview.toggleWindows();
+    },
+
+    _onKeyPress: function(actor, event) {
+        let symbol = event.get_key_symbol();
+        if (symbol == Clutter.KEY_space || symbol == Clutter.KEY_Return) {
+            this._panel.closeActiveMenu();
+            Main.overview.toggleWindows();
+            return true;
+        } else
+            return false;
     }
 });

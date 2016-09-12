@@ -317,6 +317,8 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'keyboard': imports.ui.status.keyboard.InputSourceIndicator,
     'powerMenu': imports.gdm.powerMenu.PowerMenuButton,
     'userMenu': imports.ui.userMenu.UserMenuButton,
+    'showApps': imports.ui.panelMenu.ShowAppsButton,
+    'showWindows': imports.ui.panelMenu.ShowWindowsButton,
     'panelSeparator': imports.ui.panelSeparator.PanelSeparator,
     'panelSeparator2': imports.ui.panelSeparator.PanelSeparator2,
 };

@@ -93,7 +93,7 @@ const _modes = {
                      'keyring', 'autorunManager', 'automountManager',
                      'updaterManager', 'socialBar', 'appStore'],
         panel: {
-            left: ['userMenu', 'panelSeparator', 'appIcons'],
+            left: ['userMenu', 'showApps', 'showWindows', 'panelSeparator', 'appIcons'],
             right: ['panelSeparator2', 'a11y', 'keyboard', 'volume', 'bluetooth',
                     'network', 'battery', 'socialBar', 'hotCornerIndicator', 'dateMenu']
         }
