@@ -418,6 +418,7 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'keyboard': imports.ui.status.keyboard.InputSourceIndicator,
     'powerMenu': imports.gdm.powerMenu.PowerMenuButton,
     'showApps': imports.ui.panelMenu.ShowAppsButton,
+    'showWindows': imports.ui.panelMenu.ShowWindowsButton,
     'system': imports.ui.status.system.Indicator,
     'socialBar': imports.ui.status.social.SocialBarButton,
     'panelSeparator': imports.ui.panelSeparator.PanelSeparator,

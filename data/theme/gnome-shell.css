@@ -344,7 +344,6 @@ StScrollBar StButton#vhandle:active {
     width: 1px;
     height: 40px;
     icon-size: 40px;
-    padding-right: 10px;
 }
 
 .panel-separator-icon-2 {
@@ -618,6 +617,12 @@ StScrollBar StButton#vhandle:active {
     font-weight: 600;
     color: #ccc;
     transition-duration: 100ms;
+}
+
+.show-windows-button {
+    -natural-hpadding: 2px;
+    -minimum-hpadding: 2px;
+    padding-right: 4px;
 }
 
 #appIconBar {
