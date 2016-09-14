@@ -9,8 +9,6 @@ const MissionChatboxTextService = new Lang.Class({
     Name: 'MissionChatboxTextService',
 
     _init: function() {
-        this.parent();
-
         /* Null-initialise service for now, but we'll set it later */
         this._service = null;
 
