@@ -40,11 +40,11 @@ const MissionChatbox = new Lang.Class({
         Main.missionChatbox = null;
     },
 
-    show: function(timestamp) {
+    callShow: function(timestamp) {
         this.proxy.showRemote(timestamp);
     },
 
-    hide: function(timestamp) {
+    callHide: function(timestamp) {
         this.proxy.hideRemote(timestamp);
     }
 });
