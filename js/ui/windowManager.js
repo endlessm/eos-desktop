@@ -1021,27 +1021,31 @@ const WindowManager = new Lang.Class({
             return;
         }
 
-        let endX;
-        if (actor.x <= monitor.x) {
-            endX = monitor.x - actor.width;
+        let tweenProps = {
+            time: WINDOW_ANIMATION_TIME,
+            transition: "easeOutQuad",
+            onComplete: onComplete,
+            onCompleteScope: this,
+            onCompleteParams: [shellwm, actor],
+            onOverwrite: onOverwrite,
+            onOverwriteScope: this,
+            onOverwriteParams: [shellwm, actor]
+        };
+
+        if (actor.get_meta_window().get_wm_class() === 'Com.endlessm.Mission.Chatbox') {
+            tweenProps.y = monitor.height;
         } else {
-            endX = monitor.x + monitor.width;
+            if (actor.x <= monitor.x) {
+                tweenProps.x = monitor.x - actor.width;
+            } else {
+                tweenProps.x = monitor.x + monitor.width;
+            }
         }
 
         actor.opacity = 255;
         actor.show();
 
-        Tweener.addTween(actor,
-                         { x: endX,
-                           time: WINDOW_ANIMATION_TIME,
-                           transition: "easeOutQuad",
-                           onComplete: onComplete,
-                           onCompleteScope: this,
-                           onCompleteParams: [shellwm, actor],
-                           onOverwrite: onOverwrite,
-                           onOverwriteScope: this,
-                           onOverwriteParams: [shellwm, actor]
-                         });
+        Tweener.addTween(actor, tweenProps);
     },
 
     _minimizeWindow : function(shellwm, actor) {
@@ -1246,29 +1250,36 @@ const WindowManager = new Lang.Class({
             return;
         }
 
-        let origX = actor.x;
-        if (origX == monitor.x) {
-            // the side bar will appear from the left side
-            actor.set_position(monitor.x - actor.width, actor.y);
+        let tweenProps = {
+            time: WINDOW_ANIMATION_TIME,
+            transition: "easeOutQuad",
+            onComplete: this._mapWindowDone,
+            onCompleteScope: this,
+            onCompleteParams: [shellwm, actor],
+            onOverwrite: this._mapWindowOverwrite,
+            onOverwriteScope: this,
+            onOverwriteParams: [shellwm, actor]
+        };
+
+        if (actor.meta_window.get_wm_class() === 'Com.endlessm.Mission.Chatbox') {
+            tweenProps.y = actor.y;
+            actor.set_position(actor.x, monitor.height);
         } else {
-            // ... from the right side
-            actor.set_position(monitor.x + monitor.width, actor.y);
+            let origX = actor.x;
+            if (origX == monitor.x) {
+                // the side bar will appear from the left side
+                actor.set_position(monitor.x - actor.width, actor.y);
+            } else {
+                // ... from the right side
+                actor.set_position(monitor.x + monitor.width, actor.y);
+            }
+            tweenProps.x = origX;
         }
 
         actor.opacity = 255;
         actor.show();
 
-        Tweener.addTween(actor,
-                         { x: origX,
-                           time: WINDOW_ANIMATION_TIME,
-                           transition: "easeOutQuad",
-                           onComplete: this._mapWindowDone,
-                           onCompleteScope: this,
-                           onCompleteParams: [shellwm, actor],
-                           onOverwrite: this._mapWindowOverwrite,
-                           onOverwriteScope: this,
-                           onOverwriteParams: [shellwm, actor]
-                         });
+        Tweener.addTween(actor, tweenProps);
 
         if (SideComponent.shouldHideOtherWindows(actor.meta_window)) {
             this._hideOtherWindows(actor, animateFade);
