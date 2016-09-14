@@ -18,21 +18,18 @@ const MissionChatboxTextService = new Lang.Class({
         let path = '/com/endlessm/Showmehow/Service';
 
         /* Connect to the service and refresh the content once we have a connection */
-        Showmehow.ServiceProxy.new_for_bus(Gio.BusType.SESSION, 0, name, path, null,
-                                           Lang.bind(this, function(source, result) {
-            try {
-                this._service = Showmehow.ServiceProxy.new_for_bus_finish(result);
-            } catch (e) {
-                logError(e, "Error occurred in creating ShowmehowServiceProxy");
-                return;
-            }
+        try {
+            this._service = Showmehow.ServiceProxy.new_for_bus_sync(Gio.BusType.SESSION,
+                                                                    0, name, path, null);
+        } catch (e) {
+            logError(e, "Error occurred in creating ShowmehowServiceProxy");
+        }
 
-            /* It doesn't seem possible to return an array of strings here, looks like it has to be an array
-             * of tuples (which contain strings). */
-            this._service.connect('listening-for-lesson-events', Lang.bind(this, function(proxy, interestingEvents) {
-                this.emit('listening-for-events', interestingEvents.deep_unpack().map(function(i) {
-                    return i[0];
-                }));
+        /* It doesn't seem possible to return an array of strings here, looks like it has to be an array
+         * of tuples (which contain strings). */
+        this._service.connect('listening-for-lesson-events', Lang.bind(this, function(proxy, interestingEvents) {
+            this.emit('listening-for-events', interestingEvents.deep_unpack().map(function(i) {
+                return i[0];
             }));
         }));
     },
