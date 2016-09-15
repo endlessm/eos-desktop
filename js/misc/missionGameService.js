@@ -17,7 +17,8 @@ const MissionChatboxTextService = new Lang.Class({
             this._service = Showmehow.ServiceProxy.new_for_bus_sync(Gio.BusType.SESSION,
                                                                     0, name, path, null);
         } catch (e) {
-            logError(e, "Error occurred in creating ShowmehowServiceProxy");
+            logError(e, 'Error occurred in creating ShowmehowServiceProxy');
+            return;
         }
 
         /* It doesn't seem possible to return an array of strings here, looks like it has to be an array
