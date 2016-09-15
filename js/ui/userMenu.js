@@ -305,14 +305,10 @@ const UserMenuButton = new Lang.Class({
         Panel.animateIconIn(this._icon, 0);
         box.add(this._icon);
 
-        let iconFileNormal = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/settings-normal.png');
-        this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
-
-        let iconFileHover = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/settings-hover.png');
-        this._giconHover = new Gio.FileIcon({ file: iconFileHover });
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/endless-symbolic.svg');
+        this._giconNormal = new Gio.FileIcon({ file: iconFile });
 
         this._icon.gicon = this._giconNormal;
-        this.actor.connect('notify::hover', Lang.bind(this, this._onHoverChanged));
 
         this._createSubMenu();
 
@@ -679,13 +675,5 @@ const UserMenuButton = new Lang.Class({
                 else
                     this._session.ShutdownRemote();
             }));
-    },
-
-    _onHoverChanged: function() {
-        if (this.actor.get_hover()) {
-            this._icon.gicon = this._giconHover;
-        } else {
-            this._icon.gicon = this._giconNormal;
-        }
     }
 });
