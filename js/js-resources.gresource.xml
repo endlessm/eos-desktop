@@ -118,6 +118,6 @@
     <file>ui/components/polkitAgent.js</file>
     <file>ui/components/socialBar.js</file>
     <file>ui/components/updaterManager.js</file>
-    <file>ui/components/missionChatbox.js</file>
+    <file>ui/components/missionManager.js</file>
   </gresource>
 </gresources>

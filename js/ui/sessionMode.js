@@ -114,7 +114,7 @@ const _modes = {
         unlockDialog: imports.ui.unlockDialog.UnlockDialog,
         components: ['networkAgent', 'polkitAgent',
                      'keyring', 'autorunManager', 'automountManager',
-                     'updaterManager', 'socialBar', 'appStore', 'missionChatbox', 'missionGameService'],
+                     'updaterManager', 'socialBar', 'appStore', 'missionManager', 'missionGameService'],
         panel: {
             left: ['userMenu', 'panelSeparator', 'appIcons'],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',

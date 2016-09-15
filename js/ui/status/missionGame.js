@@ -15,9 +15,9 @@ const MissionGameIndicator = new Lang.Class({
     _onButtonPress: function(actor, event) {
         // pressing the button when the overview is being shown always displays the side bar
         if (Main.overview.visible) {
-            Main.missionChatbox.show(event.get_time());
+            Main.missionManager.show(event.get_time());
         } else {
-            Main.missionChatbox.toggle(event.get_time());
+            Main.missionManager.toggle(event.get_time());
         }
     },
 });
