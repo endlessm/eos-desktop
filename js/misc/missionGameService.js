@@ -31,7 +31,13 @@ const MissionChatboxTextService = new Lang.Class({
     },
 
     noteEventOccurrence: function(event) {
-        this._service.call_lesson_event(event, null, null);
+        if (this._service) {
+            this._service.call_lesson_event(event, null, null);
+        } else {
+            log('Cannot note occurrence of event ' + JSON.stringify(event) +
+                ' because there is no game service connection');
+        }
+
     }
 });
 Signals.addSignalMethods(MissionChatboxTextService.prototype);
