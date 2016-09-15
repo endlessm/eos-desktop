@@ -998,31 +998,27 @@ const WindowManager = new Lang.Class({
             return;
         }
 
-        let tweenProps = {
-            time: WINDOW_ANIMATION_TIME,
-            transition: "easeOutQuad",
-            onComplete: onComplete,
-            onCompleteScope: this,
-            onCompleteParams: [shellwm, actor],
-            onOverwrite: onOverwrite,
-            onOverwriteScope: this,
-            onOverwriteParams: [shellwm, actor]
-        };
-
-        if (SideComponent.isChatboxWindow(actor.meta_window)) {
-            tweenProps.y = monitor.height;
+        let endX;
+        if (actor.x <= monitor.x) {
+            endX = monitor.x - actor.width;
         } else {
-            if (actor.x <= monitor.x) {
-                tweenProps.x = monitor.x - actor.width;
-            } else {
-                tweenProps.x = monitor.x + monitor.width;
-            }
+            endX = monitor.x + monitor.width;
         }
 
         actor.opacity = 255;
         actor.show();
 
-        Tweener.addTween(actor, tweenProps);
+        Tweener.addTween(actor,
+                         { x: endX,
+                           time: WINDOW_ANIMATION_TIME,
+                           transition: "easeOutQuad",
+                           onComplete: onComplete,
+                           onCompleteScope: this,
+                           onCompleteParams: [shellwm, actor],
+                           onOverwrite: onOverwrite,
+                           onOverwriteScope: this,
+                           onOverwriteParams: [shellwm, actor]
+                         });
     },
 
     _minimizeWindow : function(shellwm, actor) {
@@ -1227,36 +1223,29 @@ const WindowManager = new Lang.Class({
             return;
         }
 
-        let tweenProps = {
-            time: WINDOW_ANIMATION_TIME,
-            transition: "easeOutQuad",
-            onComplete: this._mapWindowDone,
-            onCompleteScope: this,
-            onCompleteParams: [shellwm, actor],
-            onOverwrite: this._mapWindowOverwrite,
-            onOverwriteScope: this,
-            onOverwriteParams: [shellwm, actor]
-        };
-
-        if (SideComponent.isChatboxWindow(actor.meta_window)) {
-            tweenProps.y = actor.y;
-            actor.set_position(actor.x, monitor.height);
+        let origX = actor.x;
+        if (origX == monitor.x) {
+            // the side bar will appear from the left side
+            actor.set_position(monitor.x - actor.width, actor.y);
         } else {
-            let origX = actor.x;
-            if (origX == monitor.x) {
-                // the side bar will appear from the left side
-                actor.set_position(monitor.x - actor.width, actor.y);
-            } else {
-                // ... from the right side
-                actor.set_position(monitor.x + monitor.width, actor.y);
-            }
-            tweenProps.x = origX;
+            // ... from the right side
+            actor.set_position(monitor.x + monitor.width, actor.y);
         }
 
         actor.opacity = 255;
         actor.show();
 
-        Tweener.addTween(actor, tweenProps);
+        Tweener.addTween(actor,
+                         { x: origX,
+                           time: WINDOW_ANIMATION_TIME,
+                           transition: "easeOutQuad",
+                           onComplete: this._mapWindowDone,
+                           onCompleteScope: this,
+                           onCompleteParams: [shellwm, actor],
+                           onOverwrite: this._mapWindowOverwrite,
+                           onOverwriteScope: this,
+                           onOverwriteParams: [shellwm, actor]
+                         });
 
         if (SideComponent.shouldHideOtherWindows(actor.meta_window)) {
             this._hideOtherWindows(actor, animateFade);
