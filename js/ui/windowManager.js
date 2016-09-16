@@ -585,30 +585,6 @@ const TilePreview = new Lang.Class({
     }
 });
 
-/**
- * Determine all windows belonging to a certain process id
- */
-function windowActorsFromPid(pid) {
-    return global.get_window_actors().filter(function(window_actor) {
-        return window_actor.get_meta_window().get_pid() == pid;
-    });
-}
-
-/**
- * For a given process id, determine the corresponding window
- * (if any) and its size.
- */
-function pidToActorInfo(pid) {
-    let windowActors = windowActorsFromPid(pid);
-
-    return {
-        window: windowActors.length ? windowActors[0] : null,
-        rect: (windowActors.length ?
-               windowActors[0].get_meta_window().get_frame_rect() : null),
-        pid: pid,
-    };
-}
-
 const WindowManager = new Lang.Class({
     Name: 'WindowManager',
 
@@ -779,6 +755,23 @@ const WindowManager = new Lang.Class({
     },
 
     _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {
+        /**
+         * For a given process id, determine the corresponding window
+         * (if any) and its size.
+         */
+        function pidToActorInfo(pid) {
+            let windowActors = global.get_window_actors().filter(function(windowActor) {
+                return windowActor.get_meta_window().get_pid() == pid;
+            });
+
+            return {
+                window: windowActors.length ? windowActors[0] : null,
+                rect: (windowActors.length ?
+                       windowActors[0].get_meta_window().get_frame_rect() : null),
+                pid: pid,
+            };
+        }
+
         let srcActorInfo = pidToActorInfo(src);
         this._pendingRotateAnimations.push({
             src: srcActorInfo,
