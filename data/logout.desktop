@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Logout
+Terminal=false
+Type=Application
+Exec=gnome-session-quit
+Icon=logout.png

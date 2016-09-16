@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Shutdown
+Terminal=false
+Type=Application
+Exec=shutdown -h now
+Icon=shutdown.png

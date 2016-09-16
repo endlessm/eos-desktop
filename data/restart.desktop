@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Restart
+Terminal=false
+Type=Application
+Exec=reboot
+Icon=restart.png

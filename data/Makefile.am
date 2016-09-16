@@ -1,7 +1,10 @@
 dist_pkgdata_DATA = vendor-customer-support.ini
 
 desktopdir=$(datadir)/applications
-desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop eos-link-feedback.desktop eos-launch.desktop
+desktop_DATA = eos-shell.desktop eos-shell-extension-prefs.desktop eos-link-feedback.desktop eos-launch.desktop restart.desktop logout.desktop shutdown.desktop
+
+icondir=$(datadir)/icons/hicolor/48x48/apps
+icon_DATA = logout.png shutdown.png restart.png
 
 sessionsdir=$(datadir)/xsessions
 sessions_DATA = eos-session.desktop
@@ -97,6 +100,12 @@ EXTRA_DIST =					\
 	99-gdm-eos-shell-settings		\
 	gdm-eos-shell.desktop.in.in		\
 	gdm-eos-shell.session			\
+	logout.png			\
+	shutdown.png			\
+	restart.png			\
+	logout.desktop			\
+	shutdown.desktop			\
+	restart.desktop			\
 	eos-shell.desktop.in.in			\
 	eos-session.desktop.in.in		\
 	eos-shell.session.in.in			\
