@@ -807,7 +807,7 @@ const PopupMenuBase = new Lang.Class({
 
         this._activeMenuItem = null;
         this._settingsActions = { };
-        this.shouldSwitchToOnHover = true;
+        this.shouldSwitchToOnHover = false;
 
         this._sessionUpdatedId = Main.sessionMode.connect('updated', Lang.bind(this, this._sessionUpdated));
     },
@@ -1617,6 +1617,10 @@ const PopupMenuManager = new Lang.Class({
 
     _onMenuOpenState: function(menu, open) {
         if (open) {
+            this._menus.forEach((otherMenu) => {
+                if (otherMenu.menu !== menu)
+                    otherMenu.menu.close();
+            });
             this._grabHelper.grab({ actor: menu.actor, focus: menu.sourceActor,
                                     onUngrab: Lang.bind(this, this._closeMenu, menu) });
         } else {
