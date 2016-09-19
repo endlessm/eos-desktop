@@ -279,7 +279,7 @@ const UserMenuButton = new Lang.Class({
     Extends: PanelMenu.Button,
 
     _init: function() {
-        this.parent(0.0);
+        this.parent(0.0, 'User Menu');
 
         this.actor.add_style_class_name('user-menu-icon');
 

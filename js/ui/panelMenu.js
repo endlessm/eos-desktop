@@ -102,7 +102,7 @@ const Button = new Lang.Class({
     Name: 'PanelMenuButton',
     Extends: ButtonBox,
 
-    _init: function(menuAlignment, nameText, dontCreateMenu) {
+    _init: function(menuAlignment, nameText='', dontCreateMenu=false) {
         this.parent({ reactive: true,
                       can_focus: true,
                       track_hover: true,
@@ -116,29 +116,49 @@ const Button = new Lang.Class({
         else
             this.setMenu(new PopupMenu.PopupMenu(this.actor, menuAlignment, St.Side.BOTTOM));
 
-        this.setName(nameText);
+        this.label = new St.Label({ text: nameText,
+                                    style_class: 'app-icon-hover-label' });
+        this._labelOffsetY = 0;
+        this.label.connect('style-changed', Lang.bind(this, this._updateStyle));
+        this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
+        this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
+    },
+
+    _updateStyle: function(actor, forHeight, alloc) {
+        this._labelOffsetY = this.label.get_theme_node().get_length('-label-offset-y');
+    },
+
+    _hideHoverState: function() {
+        if (this.label.get_parent() != null) {
+            Main.uiGroup.remove_actor(this.label);
+        }
+    },
+
+    _showHoverState: function() {
+        // Show label only if it's not already visible
+        if (this.label.get_parent())
+            return;
+        if (this.label.text.length == 0)
+            return;
+        if (this.menu.isOpen)
+            return;
+
+        Main.uiGroup.add_actor(this.label);
+        this.label.raise_top();
+
+        let iconMidpoint = this.actor.get_transformed_position()[0] + this.actor.width / 2;
+        this.label.translation_x = Math.floor(iconMidpoint - this.label.width / 2);
+        this.label.translation_y = Math.floor(this.actor.get_transformed_position()[1] - this._labelOffsetY);
+
+        // Clip left edge to be the left edge of the screen
+        this.label.translation_x = Math.max(this.label.translation_x, 0);
+        this.label.translation_x = Math.min(this.label.translation_x, global.stage.width - this.label.width);
     },
 
     setSensitive: function(sensitive) {
         this.actor.reactive = sensitive;
         this.actor.can_focus = sensitive;
         this.actor.track_hover = sensitive;
-    },
-
-    setName: function(text) {
-        if (text != null) {
-            // This is the easiest way to provide a accessible name to
-            // this widget. The label could be also used for other
-            // purposes in the future.
-            if (!this.label) {
-                this.label = new St.Label({ text: text });
-                this.actor.label_actor = this.label;
-            } else
-                this.label.text = text;
-        } else {
-            this.label = null;
-            this.actor.label_actor = null;
-        }
     },
 
     setMenu: function(menu) {
@@ -160,6 +180,7 @@ const Button = new Lang.Class({
         if (!this.menu)
             return;
 
+        this._hideHoverState();
         this.menu.toggle();
     },
 
@@ -169,12 +190,14 @@ const Button = new Lang.Class({
 
         let symbol = event.get_key_symbol();
         if (symbol == Clutter.KEY_space || symbol == Clutter.KEY_Return) {
+            this._hideHoverState();
             this.menu.toggle();
             return true;
         } else if (symbol == Clutter.KEY_Escape && this.menu.isOpen) {
             this.menu.close();
             return true;
         } else if (symbol == Clutter.KEY_Down) {
+            this._hideHoverState();
             if (!this.menu.isOpen)
                 this.menu.toggle();
             this.menu.actor.navigate_focus(this.actor, Gtk.DirectionType.DOWN, false);

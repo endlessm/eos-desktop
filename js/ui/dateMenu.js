@@ -47,7 +47,7 @@ const DateMenuButton = new Lang.Class({
         let menuAlignment = 0.25;
         if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
             menuAlignment = 1.0 - menuAlignment;
-        this.parent(menuAlignment);
+        this.parent(menuAlignment, 'Date & Time');
 
         this.actor.add_style_class_name('datemenu-button');
 
