@@ -1187,7 +1187,7 @@ const PopupMenuManager = new Lang.Class({
         if (source) {
             if (!menu.blockSourceEvents)
                 this._grabHelper.addActor(source);
-            menudata.enterId = source.connect('enter-event', Lang.bind(this, function() { return this._onMenuSourceEnter(menu); }));
+            // menudata.enterId = source.connect('enter-event', Lang.bind(this, function() { return this._onMenuSourceEnter(menu); }));
             menudata.focusInId = source.connect('key-focus-in', Lang.bind(this, function() { this._onMenuSourceEnter(menu); }));
         }
 
@@ -1233,8 +1233,10 @@ const PopupMenuManager = new Lang.Class({
 
     _onMenuOpenState: function(menu, open) {
         if (open) {
-            if (this.activeMenu)
-                this.activeMenu.close(BoxPointer.PopupAnimation.FADE);
+            this._menus.forEach((otherMenu) => {
+                if (otherMenu.menu !== menu)
+                    otherMenu.menu.close();
+            });
             this._grabHelper.grab({ actor: menu.actor, focus: menu.sourceActor,
                                     onUngrab: Lang.bind(this, this._closeMenu, menu) });
         } else {
