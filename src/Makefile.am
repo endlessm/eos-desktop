@@ -211,7 +211,6 @@ eos_shell_real_SOURCES =		\
 eos_shell_real_CPPFLAGS = $(eos_shell_cflags)
 eos_shell_real_LDADD = libeos-shell.la libeos-shell-js.la libeos-shell-fx.la $(libeos_shell_la_LIBADD)
 eos_shell_real_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
-eos_shell_real_DEPENDENCIES = libeos-shell.la libeos-shell-fx.la
 
 eos_shell_extension_prefs_SOURCES = 	\
 	gnome-shell-extension-prefs.c 	\
