@@ -1,30 +1,31 @@
-# Esperanto translation for gnome-shell.
-# Copyright (C) 2011 Free Software Foundation, Inc.
-# This file is distributed under the same license as the gnome-shell package.
-# Tiffany Antopolski <tiffany.antopolski@gmail.com>, 2011, 2012.
-# Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>, 2011, 2012.
-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Daniel PUENTES <blatberk@openmailbox.org>, 2015
+# kristjan <kristjan.schmidt@googlemail.com>, 2011-2012,2015-2016
+# Nicolas MAIA < >, 2015
+# Ryan LORTIE <desrt@desrt.ca>, 2013
+# Tiffany Antopolski <tiffany.antopolski@gmail.com>, 2011-2012
+# Tiffany ANTOPOLSKI <tiffany.antopolski@gmail.com>, 2011-2012
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-shell master\n"
+"Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-21 21:07-0700\n"
-"PO-Revision-Date: 2012-03-09 22:04+0100\n"
-"Last-Translator: Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>\n"
-"Language-Team: Esperanto <gnome-l10n-eo@lists.launchpad.net>\n"
-"Language: eo\n"
+"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"PO-Revision-Date: 2016-10-04 17:42+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"Language-Team: Esperanto (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/eo/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Virtaal 0.7.1\n"
-"X-DamnedLies-Scope: partial\n"
-"X-Project-Style: gnome\n"
+"Language: eo\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
-#, fuzzy
 msgid "System"
-msgstr "Dosiersistemo"
+msgstr "Sistemo"
 
 #: ../data/50-gnome-shell-system.xml.in.h:2
 msgid "Show the message tray"
@@ -32,16 +33,15 @@ msgstr ""
 
 #: ../data/50-gnome-shell-system.xml.in.h:3
 msgid "Focus the active notification"
-msgstr ""
+msgstr "Enfokusigi la aktivan sciigon"
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
-#, fuzzy
 msgid "Show all applications"
-msgstr "Aplikaĵoj"
+msgstr "Montri ĉiujn de la aplikaĵoj"
 
 #: ../data/50-gnome-shell-system.xml.in.h:5
 msgid "Open the application menu"
-msgstr ""
+msgstr "Malfermi la aplikaĵo-menuon"
 
 #: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
@@ -49,9 +49,8 @@ msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
-#, fuzzy
 msgid "EOS Shell"
-msgstr "GNOME-ŝelo"
+msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -70,26 +69,23 @@ msgstr "Agordi kromprogramojn de GNOME-ŝelo"
 #: ../js/extensionPrefs/main.js:127
 #, javascript-format
 msgid "There was an error loading the preferences dialog for %s:"
-msgstr "La eraro okazas dum la ŝarĝado de la prefera dialogo de %s:"
+msgstr "Eraro okazis dum ŝarĝado de la agorda dialogo de %s:"
 
 #: ../js/extensionPrefs/main.js:167
-#, fuzzy
 msgid "Extension"
-msgstr "<b>Kromprogramo</b>"
+msgstr ""
 
 #: ../js/extensionPrefs/main.js:191
 msgid "Select an extension to configure using the combobox above."
 msgstr "Elekti kromprogramon por agordi uzanta la redaktebla falmenuo supre."
 
 #: ../js/gdm/loginDialog.js:410
-#, fuzzy
 msgid "Session…"
-msgstr "Seanco..."
+msgstr ""
 
 #: ../js/gdm/loginDialog.js:620
-#, fuzzy
 msgid "Show password hint"
-msgstr "Montri pasvorton"
+msgstr ""
 
 #: ../js/gdm/loginDialog.js:636
 msgid "Forgot password?"
@@ -102,31 +98,32 @@ msgstr ""
 msgid "Not listed?"
 msgstr "Ĉu ne en listo?"
 
-#. Translators: During a password reset, prompt for the "secret code" provided by customer support.
+#. Translators: During a password reset, prompt for the "secret code" provided
+#. by customer support.
 #: ../js/gdm/loginDialog.js:814
 msgid "Enter unlock code provided by customer support:"
 msgstr ""
 
-#. Translators: Password reset. The first %s is a verification code, the second is one or more phone numbers, and the third is an email.
+#. Translators: Password reset. The first %s is a verification code, the
+#. second is one or more phone numbers, and the third is an email.
 #: ../js/gdm/loginDialog.js:818
 #, javascript-format
 msgid ""
-"Please inform customer support of your verification code %s by calling %s or "
-"emailing %s. The code will remain valid until you click Cancel or turn off "
+"Please inform customer support of your verification code %s by calling %s or"
+" emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
 msgstr ""
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:824
-#, fuzzy
 msgid "Reset Password"
-msgstr "Pasvorto:"
+msgstr ""
 
 #: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
-#: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
-#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:611
+#: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
+#: ../js/ui/userMenu.js:611
 msgid "Cancel"
 msgstr "Nuligi"
 
@@ -136,14 +133,12 @@ msgid "Sign In"
 msgstr "Ensaluti"
 
 #: ../js/gdm/loginDialog.js:998
-#, fuzzy
 msgid "Next"
-msgstr "Sekva semajno"
+msgstr "Sekva"
 
 #: ../js/gdm/loginDialog.js:1116
-#, fuzzy
 msgid "Your unlock code was incorrect. Please try again."
-msgstr "Pardonu, tio ne funkcis. Bonvole provu denove."
+msgstr ""
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
@@ -151,7 +146,7 @@ msgstr "Pardonu, tio ne funkcis. Bonvole provu denove."
 #: ../js/gdm/loginDialog.js:1166 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
-msgstr "Uzantnomo: "
+msgstr "Uzantonomo: "
 
 #: ../js/gdm/loginDialog.js:1429
 msgid "Login Window"
@@ -159,9 +154,8 @@ msgstr "Ensalutfenestro"
 
 #. Translators: accessible name of the power menu in the login screen
 #: ../js/gdm/powerMenu.js:36
-#, fuzzy
 msgid "Power"
-msgstr "Elŝalti"
+msgstr ""
 
 #: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
 msgid "Suspend"
@@ -176,9 +170,8 @@ msgid "Power Off"
 msgstr "Elŝalti"
 
 #: ../js/gdm/util.js:264
-#, fuzzy
 msgid "Authentication error"
-msgstr "Aŭtentigo bezonita"
+msgstr "Aŭtentigo-eraro"
 
 #. Translators: this message is shown below the password entry field
 #. to indicate the user can swipe their finger instead
@@ -189,7 +182,7 @@ msgstr "(aŭ pasu fingron)"
 #: ../js/gdm/util.js:406
 #, javascript-format
 msgid "(e.g., user or %s)"
-msgstr ""
+msgstr "(ekzemple, uzanto aŭ %s)"
 
 #: ../js/misc/util.js:121
 msgid "Command not found"
@@ -206,33 +199,32 @@ msgstr "Ne eblis analizi komandon:"
 msgid "Execution of '%s' failed:"
 msgstr "Plenumo de \"%s\" malsukcesis:"
 
-#: ../js/ui/appDisplay.js:1151
-#, fuzzy
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
-msgstr "Forigi de la preferataj aplikaĵoj"
+msgstr ""
 
-#: ../js/ui/appDisplay.js:1634
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1640
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1646
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1652 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr "Akcepti"
 
-#: ../js/ui/appDisplay.js:1904
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1913
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr ""
 
@@ -246,48 +238,45 @@ msgstr "%s estas aldonita de via preferataj aplikaĵoj."
 msgid "%s has been removed from your favorites."
 msgstr "%s estas forigita de via preferataj aplikaĵoj."
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:300
+#: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:304
+#: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:320
-#, fuzzy, javascript-format
+#: ../js/ui/appIconBar.js:319
+#, javascript-format
 msgid "Quit %s"
-msgstr "Ĉesi"
-
-#: ../js/ui/backgroundMenu.js:21
-msgid "Change Background…"
 msgstr ""
 
-#: ../js/ui/backgroundMenu.js:25
-#, fuzzy
-msgid "Add App"
-msgstr "Aplikaĵoj"
+#: ../js/ui/backgroundMenu.js:22
+msgid "Change Background…"
+msgstr "Ŝanĝi ekranfonon…"
 
-#: ../js/ui/backgroundMenu.js:29
+#: ../js/ui/backgroundMenu.js:26
+msgid "Add App"
+msgstr ""
+
+#: ../js/ui/backgroundMenu.js:32
 msgid "Add Website"
 msgstr ""
 
-#: ../js/ui/backgroundMenu.js:33
-#, fuzzy
+#: ../js/ui/backgroundMenu.js:36
 msgid "Add Folder"
-msgstr "Hejma dosierujo"
+msgstr ""
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
-#.
 #: ../js/ui/calendar.js:62
 msgctxt "event list time"
 msgid "All Day"
@@ -312,7 +301,6 @@ msgstr ""
 #. *
 #. * NOTE: These grid abbreviations are always shown together
 #. * and in order, e.g. "S M T W T F S".
-#.
 #: ../js/ui/calendar.js:108
 msgctxt "grid sunday"
 msgid "S"
@@ -359,7 +347,6 @@ msgstr "s"
 #. * NOTE: These list abbreviations are normally not shown together
 #. * so they need to be unique (e.g. Tuesday and Thursday cannot
 #. * both be 'T').
-#.
 #: ../js/ui/calendar.js:133
 msgctxt "list sunday"
 msgid "Su"
@@ -410,13 +397,15 @@ msgstr ""
 msgid "Nothing Scheduled"
 msgstr "Nenio estas planita"
 
-#. Translators: Shown on calendar heading when selected day occurs on current year
+#. Translators: Shown on calendar heading when selected day occurs on current
+#. year
 #: ../js/ui/calendar.js:738
 msgctxt "calendar heading"
 msgid "%A, %B %d"
 msgstr "%A, %d. %B"
 
-#. Translators: Shown on calendar heading when selected day occurs on different year
+#. Translators: Shown on calendar heading when selected day occurs on
+#. different year
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
@@ -440,11 +429,11 @@ msgstr "Sekva semajno"
 
 #: ../js/ui/components/automountManager.js:90
 msgid "External drive connected"
-msgstr ""
+msgstr "Ekstera disko konektitas"
 
 #: ../js/ui/components/automountManager.js:101
 msgid "External drive disconnected"
-msgstr ""
+msgstr "Ekstera disko malkonektitas"
 
 #: ../js/ui/components/autorunManager.js:301
 msgid "Removable Devices"
@@ -487,28 +476,26 @@ msgstr "Ŝlosilo: "
 
 #: ../js/ui/components/networkAgent.js:266
 msgid "Identity: "
-msgstr "Idento:"
+msgstr "Idento: "
 
 #: ../js/ui/components/networkAgent.js:268
 msgid "Private key password: "
-msgstr "Pasvorto por privata ŝlosilo:"
+msgstr "Pasvorto por privata ŝlosilo: "
 
 #: ../js/ui/components/networkAgent.js:280
 msgid "Service: "
-msgstr "Servo:"
+msgstr "Servo: "
 
 #: ../js/ui/components/networkAgent.js:309
 msgid "Authentication required by wireless network"
-msgstr "Aŭtentokontrolo bezonitas de sendrata reto"
+msgstr "Aŭtentokontrolo estas bezonata de sendrata reto"
 
 #: ../js/ui/components/networkAgent.js:310
 #, javascript-format
 msgid ""
 "Passwords or encryption keys are required to access the wireless network "
 "'%s'."
-msgstr ""
-"Pasvortoj aŭ ĉifrado-ŝlosiloj estas necesaĵoj por aliro al sendrata reto "
-"'%s'."
+msgstr "Pasvortoj aŭ ĉifrado-ŝlosiloj estas necesaĵoj por aliro al sendrata reto '%s'."
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
@@ -524,11 +511,11 @@ msgstr "DSL-a aŭtentokontrolo"
 
 #: ../js/ui/components/networkAgent.js:328
 msgid "PIN code required"
-msgstr "PIN-kodo bezonita"
+msgstr "PIN-kodo bezonata"
 
 #: ../js/ui/components/networkAgent.js:329
 msgid "PIN code is needed for the mobile broadband device"
-msgstr "PIN-kodo estas bezonita por la portebla larĝkapacita aparato"
+msgstr "PIN-kodo estas bezonata por la portebla larĝkapacita aparato"
 
 #: ../js/ui/components/networkAgent.js:330
 msgid "PIN: "
@@ -545,7 +532,7 @@ msgstr "Pasvorto estas bezonita por konekti al '%s'."
 
 #: ../js/ui/components/polkitAgent.js:55
 msgid "Authentication Required"
-msgstr "Aŭtentigo bezonita"
+msgstr "Aŭtentigo bezonata"
 
 #: ../js/ui/components/polkitAgent.js:93
 msgid "Administrator"
@@ -561,25 +548,23 @@ msgstr "Aŭtentigi"
 #. * for instance.
 #: ../js/ui/components/polkitAgent.js:256 ../js/ui/shellMountOperation.js:383
 msgid "Sorry, that didn't work. Please try again."
-msgstr "Pardonu, tio ne funkcis. Bonvole provu denove."
+msgstr "Pardonu, tio ne funkciis. Bonvole provu denove."
 
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:204
-#, fuzzy
 msgid "Updates available"
-msgstr "Nedisponebla"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:206
-#, fuzzy
 msgid "Download now"
-msgstr "Elŝutanta"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
@@ -590,23 +575,20 @@ msgid "Software updates are ready to be installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:221
-#, fuzzy
 msgid "Install now"
-msgstr "Instali"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:230
-#, fuzzy
 msgid "Updates installed"
-msgstr "Neniu kromprogramo instalita"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:232
-#, fuzzy
 msgid "Restart now"
-msgstr "Restartigi"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
@@ -616,20 +598,18 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
 msgid "Windows"
 msgstr "Fenestroj"
 
 #: ../js/ui/dash.js:262 ../js/ui/dash.js:300
-#, fuzzy
 msgid "Show Applications"
-msgstr "Aplikaĵoj"
+msgstr "Montri aplikaĵojn"
 
 #: ../js/ui/dash.js:298
 msgid "Remove from Favorites"
 msgstr "Forigi de la preferataj aplikaĵoj"
 
-# Würde ich so übernehmen, oder evtl. »Dock«.
 #. Translators: this is the name of the dock/favorites area on
 #. the left of the overview
 #: ../js/ui/dash.js:456
@@ -645,13 +625,12 @@ msgid "Open Clocks"
 msgstr ""
 
 #: ../js/ui/dateMenu.js:104
-#, fuzzy
 msgid "Date & Time Settings"
-msgstr "Agordaro de horo kaj dato"
+msgstr ""
 
 #. Translators: This is the date format to use when the calendar popup is
-#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
-#.
+#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29
+#. AM").
 #: ../js/ui/dateMenu.js:214
 msgid "%A %B %e, %Y"
 msgstr "%A, %e. %B %Y"
@@ -675,8 +654,7 @@ msgstr "Elsaluti"
 
 #: ../js/ui/endSessionDialog.js:80
 msgid "Click Log Out to quit these applications and log out of the system."
-msgstr ""
-"Alklaku \"Elsaluti\" por ĉesi tiujn aplikaĵojn kaj elsaluti de la sistemo."
+msgstr "Alklaku \"Elsaluti\" por ĉesi tiujn aplikaĵojn kaj elsaluti de la sistemo."
 
 #: ../js/ui/endSessionDialog.js:83
 #, javascript-format
@@ -739,8 +717,7 @@ msgstr "Restartigi"
 
 #: ../js/ui/endSessionDialog.js:137
 msgid "Click Restart to quit these applications and restart the system."
-msgstr ""
-"Alklaku \"Restartigi\" por ĉesi tiujn aplikaĵojn kaj restartigi la sistemon."
+msgstr "Alklaku \"Restartigi\" por ĉesi tiujn aplikaĵojn kaj restartigi la sistemon."
 
 #: ../js/ui/endSessionDialog.js:140
 #, javascript-format
@@ -763,9 +740,8 @@ msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Elŝuti kaj instali '%s' de extensions.gnome.org?"
 
 #: ../js/ui/forceAppExitDialog.js:55
-#, fuzzy
 msgid "Quit applications…"
-msgstr "Aplikaĵoj"
+msgstr ""
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
@@ -774,32 +750,36 @@ msgid ""
 msgstr ""
 
 #: ../js/ui/forceAppExitDialog.js:84
-#, fuzzy
 msgid "System Monitor"
-msgstr "Ekrano"
+msgstr ""
 
 #: ../js/ui/forceAppExitDialog.js:89
-#, fuzzy
 msgid "Quit Application"
-msgstr "Aplikaĵoj"
+msgstr ""
 
 #: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:69
+#: ../js/ui/internetSearch.js:99
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:72
+#. Translators: the first %s is the search engine name, and the second
+#. * is the search string. For instance, 'Search Google for "hello"'.
+#: ../js/ui/internetSearch.js:108
 #, javascript-format
-msgid "Search Google for \"%s\""
+msgid "Search %s for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
-#: ../js/ui/status/power.js:227
+#: ../js/ui/internetSearch.js:110
+#, javascript-format
+msgid "Search the internet for \"%s\""
+msgstr ""
+
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr "Klavaro"
 
@@ -841,7 +821,7 @@ msgstr "Neaktuala"
 
 #: ../js/ui/lookingGlass.js:725
 msgid "Downloading"
-msgstr "Elŝutanta"
+msgstr "Elŝutante"
 
 #: ../js/ui/lookingGlass.js:749
 msgid "View Source"
@@ -851,40 +831,38 @@ msgstr "Montri fonton"
 msgid "Web Page"
 msgstr "Retpaĝo"
 
-#: ../js/ui/messageTray.js:1226
+#: ../js/ui/messageTray.js:1205
 msgid "Open"
 msgstr "Malfermi"
 
-#: ../js/ui/messageTray.js:1233
+#: ../js/ui/messageTray.js:1212
 msgid "Remove"
 msgstr "Forigi"
 
-#: ../js/ui/messageTray.js:1545
+#: ../js/ui/messageTray.js:1524
 msgid "Clear Messages"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1572
-#, fuzzy
+#: ../js/ui/messageTray.js:1551
 msgid "Notification Settings"
-msgstr "Avizoj"
+msgstr ""
 
-#: ../js/ui/messageTray.js:1762
+#: ../js/ui/messageTray.js:1741
 msgid "No Messages"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1836
+#: ../js/ui/messageTray.js:1815
 msgid "Message Tray"
 msgstr ""
 
-#: ../js/ui/messageTray.js:2857
+#: ../js/ui/messageTray.js:2836
 msgid "System Information"
 msgstr "Sisteminformoj"
 
 #: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
-#, fuzzy
 msgctxt "program"
 msgid "Unknown"
-msgstr "Nekonata"
+msgstr "Nekonate"
 
 #: ../js/ui/overview.js:118
 msgid "Undo"
@@ -892,7 +870,7 @@ msgstr "Malfari"
 
 #: ../js/ui/overview.js:166
 msgid "Overview"
-msgstr ""
+msgstr "Superrigardo"
 
 #: ../js/ui/panel.js:375
 msgid "Taskbar"
@@ -903,47 +881,43 @@ msgstr ""
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:628
+#: ../js/ui/popupMenu.js:633
 msgid "toggle-switch-us"
 msgstr "toggle-switch-intl"
 
-#: ../js/ui/runDialog.js:73
-#, fuzzy
+#: ../js/ui/runDialog.js:70
 msgid "Enter a Command"
-msgstr "Bonvole enigu komandon:"
+msgstr "Enigu komandon"
 
-#: ../js/ui/runDialog.js:109
+#: ../js/ui/runDialog.js:106
 msgid "Close"
-msgstr ""
+msgstr "Fermi"
 
-#: ../js/ui/screenShield.js:133
+#: ../js/ui/screenShield.js:132
 msgid "GNOME needs to lock the screen"
-msgstr ""
+msgstr "GNOME bezonas ŝlosi la ekranon"
 
 #. We could not become modal, so we can't activate the
 #. screenshield. The user is probably very upset at this
 #. point, but any application using global grabs is broken
 #. Just tell him to stop using this app
-#.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
 msgid "Unable to lock"
-msgstr ""
+msgstr "Ne eblas ŝlosi"
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
 msgid "Lock was blocked by an application"
-msgstr ""
+msgstr "Ŝloso estis blokita de aplikaĵo"
 
 #: ../js/ui/search.js:781
-#, fuzzy
 msgid "Searching…"
-msgstr "Serĉanta..."
+msgstr "Serĉante…"
 
 #: ../js/ui/search.js:783
-#, fuzzy
 msgid "No results."
-msgstr "Neniuj rezultoj kongruas."
+msgstr "Neniuj rezultoj."
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -962,23 +936,20 @@ msgid "Hide Text"
 msgstr "Kaŝi tekston"
 
 #: ../js/ui/shellEntry.js:180
-#, fuzzy
 msgid "Type to search…"
-msgstr "Tajpi por serĉi..."
+msgstr "Tajpi por serĉi…"
 
 #: ../js/ui/shellMountOperation.js:370
-#, fuzzy
 msgid "Password"
-msgstr "Pasvorto:"
+msgstr "Pasvorto"
 
 #: ../js/ui/shellMountOperation.js:391
-#, fuzzy
 msgid "Remember Password"
-msgstr "Pasvorto:"
+msgstr "Memorigi pasvorton"
 
 #: ../js/ui/shellMountOperation.js:403 ../js/ui/unlockDialog.js:110
 msgid "Unlock"
-msgstr ""
+msgstr "Malŝlosi"
 
 #: ../js/ui/status/accessibility.js:39
 msgid "Accessibility"
@@ -989,9 +960,8 @@ msgid "Zoom"
 msgstr "Zomi"
 
 #: ../js/ui/status/accessibility.js:54
-#, fuzzy
 msgid "Screen Reader"
-msgstr "Ekrana klavaro"
+msgstr "Ekrana legilo"
 
 #: ../js/ui/status/accessibility.js:58
 msgid "Screen Keyboard"
@@ -1029,131 +999,39 @@ msgstr "Alta kontrasto"
 msgid "Large Text"
 msgstr "Granda teksto"
 
-#: ../js/ui/status/bluetooth.js:28 ../js/ui/status/bluetooth.js:32
-#: ../js/ui/status/bluetooth.js:291 ../js/ui/status/bluetooth.js:323
-#: ../js/ui/status/bluetooth.js:359 ../js/ui/status/bluetooth.js:390
+#: ../js/ui/status/bluetooth.js:33 ../js/ui/status/bluetooth.js:44
 #: ../js/ui/status/network.js:829
 msgid "Bluetooth"
 msgstr "Bludento"
 
-#: ../js/ui/status/bluetooth.js:45
-msgid "Visibility"
-msgstr "Videbleco"
-
-#: ../js/ui/status/bluetooth.js:59
-#, fuzzy
-msgid "Send Files to Device…"
-msgstr "Sendi dosierojn al aparato..."
-
-#: ../js/ui/status/bluetooth.js:60
-#, fuzzy
-msgid "Set Up a New Device…"
-msgstr "Agordi novan aparaton..."
-
-#: ../js/ui/status/bluetooth.js:86
+#: ../js/ui/status/bluetooth.js:51
 msgid "Bluetooth Settings"
 msgstr "Bludento-agordoj"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:106 ../js/ui/status/network.js:181
+#: ../js/ui/status/bluetooth.js:82 ../js/ui/status/network.js:181
 msgid "hardware disabled"
 msgstr "aparato elŝaltita"
 
-#: ../js/ui/status/bluetooth.js:199
-msgid "Connection"
-msgstr "Konekto"
-
-#: ../js/ui/status/bluetooth.js:210 ../js/ui/status/network.js:463
-msgid "disconnecting..."
-msgstr "Malkonektanta..."
-
-#: ../js/ui/status/bluetooth.js:223 ../js/ui/status/network.js:469
-#: ../js/ui/status/network.js:1551
-msgid "connecting..."
-msgstr "konektanta..."
-
-#: ../js/ui/status/bluetooth.js:241
-#, fuzzy
-msgid "Send Files…"
-msgstr "Sendi doierojn..."
-
-#: ../js/ui/status/bluetooth.js:248
-msgid "Keyboard Settings"
-msgstr "Klavaragordoj"
-
-#: ../js/ui/status/bluetooth.js:251
-msgid "Mouse Settings"
-msgstr "Musagordoj"
-
-#: ../js/ui/status/bluetooth.js:256 ../js/ui/status/volume.js:310
-msgid "Sound Settings"
-msgstr "Sonagordoj"
-
-#: ../js/ui/status/bluetooth.js:324
-#, javascript-format
-msgid "Authorization request from %s"
-msgstr "Rajtigpeto de %s"
-
-#: ../js/ui/status/bluetooth.js:330
-#, javascript-format
-msgid "Device %s wants access to the service '%s'"
-msgstr "Aparato '%s' volas aliron al servo '%s'"
-
-#: ../js/ui/status/bluetooth.js:332
-msgid "Always grant access"
-msgstr "Ĉiam konsenti aliron"
-
-#: ../js/ui/status/bluetooth.js:333
-msgid "Grant this time only"
-msgstr "Konsenti nur ĉi tiun fojon"
-
-#: ../js/ui/status/bluetooth.js:334
-msgid "Reject"
-msgstr "Rifuzi"
-
-#. Translators: argument is the device short name
-#: ../js/ui/status/bluetooth.js:361
-#, javascript-format
-msgid "Pairing confirmation for %s"
-msgstr "Pariĝ-konfirmo por %s"
-
-#: ../js/ui/status/bluetooth.js:367 ../js/ui/status/bluetooth.js:398
-#, javascript-format
-msgid "Device %s wants to pair with this computer"
-msgstr "Aparato %s volas pariĝi kun tiu ĉi komputilo"
-
-#: ../js/ui/status/bluetooth.js:368
-#, fuzzy, javascript-format
-msgid "Please confirm whether the PIN '%06d' matches the one on the device."
+#: ../js/ui/status/hotCornerIndicator.js:19
+msgid "Hot Corner Indicator"
 msgstr ""
-"Bonvole konfirmu ĉu la PIN-kodo \"%s\" kongruas kun tiu sur la aparato."
 
-#. Translators: this is the verb, not the noun
-#: ../js/ui/status/bluetooth.js:371
-msgid "Matches"
-msgstr "Kongruas"
+#: ../js/ui/status/hotCornerIndicator.js:40
+msgid "Enable Hot Corner"
+msgstr ""
 
-#: ../js/ui/status/bluetooth.js:372
-msgid "Does not match"
-msgstr "Ne kongruas"
+#: ../js/ui/status/hotCornerIndicator.js:44
+msgid "Disable Hot Corner"
+msgstr ""
 
-#: ../js/ui/status/bluetooth.js:391
-#, javascript-format
-msgid "Pairing request for %s"
-msgstr "Pariĝ-peto por '%s'"
-
-#: ../js/ui/status/bluetooth.js:399
-msgid "Please enter the PIN mentioned on the device."
-msgstr "Bonvole enigu la PIN-kodon montranta de la aparato."
-
-#: ../js/ui/status/keyboard.js:368
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr "Montri klavararanĝon"
 
-#: ../js/ui/status/keyboard.js:373
-#, fuzzy
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
-msgstr "Regiona kaj lingva agordoj"
+msgstr ""
 
 #: ../js/ui/status/lockScreenMenu.js:43
 msgid "Volume, network, battery"
@@ -1163,34 +1041,48 @@ msgstr ""
 msgid "<unknown>"
 msgstr "<nekonata>"
 
-#. Translators: this indicates that wireless or wwan is disabled by hardware killswitch
+#. Translators: this indicates that wireless or wwan is disabled by hardware
+#. killswitch
 #: ../js/ui/status/network.js:203
 msgid "disabled"
 msgstr "elŝaltita"
 
-#. Translators: this is for network devices that are physically present but are not
+#. Translators: this is for network devices that are physically present but
+#. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
 #: ../js/ui/status/network.js:461
 msgid "unmanaged"
 msgstr "neadministrata"
 
-#. Translators: this is for network connections that require some kind of key or password
+#: ../js/ui/status/network.js:463
+msgid "disconnecting..."
+msgstr "Malkonektanta..."
+
+#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
+msgid "connecting..."
+msgstr "konektante..."
+
+#. Translators: this is for network connections that require some kind of key
+#. or password
 #: ../js/ui/status/network.js:472 ../js/ui/status/network.js:1554
 msgid "authentication required"
 msgstr "aŭtentokontrolo bezonita"
 
-#. Translators: this is for devices that require some kind of firmware or kernel
+#. Translators: this is for devices that require some kind of firmware or
+#. kernel
 #. module, which is missing
 #: ../js/ui/status/network.js:482
 msgid "firmware missing"
 msgstr "mikroprogramo mankas"
 
-#. Translators: this is for wired network devices that are physically disconnected
+#. Translators: this is for wired network devices that are physically
+#. disconnected
 #: ../js/ui/status/network.js:489
 msgid "cable unplugged"
 msgstr "kablo ne konektita"
 
-#. Translators: this is for a network device that cannot be activated (for example it
+#. Translators: this is for a network device that cannot be activated (for
+#. example it
 #. is disabled by rfkill, or it has no coverage
 #: ../js/ui/status/network.js:494
 msgid "unavailable"
@@ -1205,7 +1097,8 @@ msgstr "konekto malsukcesis"
 msgid "More…"
 msgstr ""
 
-#. TRANSLATORS: this is the indication that a connection for another logged in user is active,
+#. TRANSLATORS: this is the indication that a connection for another logged in
+#. user is active,
 #. and we cannot access its settings (including the name)
 #: ../js/ui/status/network.js:591 ../js/ui/status/network.js:1368
 msgid "Connected (private)"
@@ -1223,7 +1116,8 @@ msgstr "Aŭtoeterreto"
 msgid "Mobile broadband"
 msgstr "Portebla larĝkapacita konekto"
 
-#. TRANSLATORS: this the automatic wireless connection name (including the network name)
+#. TRANSLATORS: this the automatic wireless connection name (including the
+#. network name)
 #: ../js/ui/status/network.js:864 ../js/ui/status/network.js:1385
 #, javascript-format
 msgid "Auto %s"
@@ -1259,7 +1153,7 @@ msgstr "Retadministrilo"
 
 #: ../js/ui/status/network.js:1902
 msgid "Connection failed"
-msgstr "konekto malsukcesis"
+msgstr "Konekto malsukcesis"
 
 #: ../js/ui/status/network.js:1903
 msgid "Activation of network connection failed"
@@ -1269,115 +1163,39 @@ msgstr "Aktivigo de reto-konekto malsukcesis"
 msgid "Networking is disabled"
 msgstr "Reto estas elŝaltita"
 
-#: ../js/ui/status/power.js:57
+#: ../js/ui/status/power.js:34
 msgid "Battery"
 msgstr "Baterio"
 
-#: ../js/ui/status/power.js:88
+#: ../js/ui/status/power.js:51
 msgid "Power Settings"
 msgstr "Energiagordoj"
 
-#: ../js/ui/status/power.js:108
+#: ../js/ui/status/power.js:58
 msgid "Fully Charged"
+msgstr "Plene ŝargita"
+
+#. 0 is reported when UPower does not have enough data
+#. to estimate battery life
+#: ../js/ui/status/power.js:65 ../js/ui/status/power.js:71
+msgid "Estimating…"
+msgstr "Taksante…"
+
+#. Translators: this is <hours>:<minutes> Remaining (<percentage>)
+#: ../js/ui/status/power.js:79
+#, javascript-format
+msgid "%d∶%02d Remaining (%d %%)"
 msgstr ""
 
-#: ../js/ui/status/power.js:110
-#, fuzzy
-msgid "Estimating…"
-msgstr "Taksado..."
-
-#: ../js/ui/status/power.js:117
+#. Translators: this is <hours>:<minutes> Until Full (<percentage>)
+#: ../js/ui/status/power.js:84
 #, javascript-format
-msgid "%d hour remaining"
-msgid_plural "%d hours remaining"
-msgstr[0] "%d horo restas"
-msgstr[1] "%d horoj restas"
-
-#. TRANSLATORS: this is a time string, as in "%d hours %d minutes remaining"
-#: ../js/ui/status/power.js:120
-#, javascript-format
-msgid "%d %s %d %s remaining"
-msgstr "%d %s %d %s restas"
-
-#: ../js/ui/status/power.js:122
-msgid "hour"
-msgid_plural "hours"
-msgstr[0] "horo"
-msgstr[1] "horoj"
-
-#: ../js/ui/status/power.js:122
-msgid "minute"
-msgid_plural "minutes"
-msgstr[0] "minuto"
-msgstr[1] "minutoj"
-
-#: ../js/ui/status/power.js:125
-#, javascript-format
-msgid "%d minute remaining"
-msgid_plural "%d minutes remaining"
-msgstr[0] "%d minuto restas"
-msgstr[1] "%d minutoj restas"
-
-#: ../js/ui/status/power.js:128 ../js/ui/status/power.js:202
-#, javascript-format
-msgctxt "percent of battery remaining"
-msgid "%d%%"
-msgstr "%d%%"
-
-#: ../js/ui/status/power.js:217
-#, fuzzy
-msgid "AC Adapter"
-msgstr "AK-adaptilo"
-
-#: ../js/ui/status/power.js:219
-#, fuzzy
-msgid "Laptop Battery"
-msgstr "Tekkomputila akumulatoro"
-
-#: ../js/ui/status/power.js:221
-msgid "UPS"
-msgstr "vicnutrilo"
-
-#: ../js/ui/status/power.js:223
-msgid "Monitor"
-msgstr "Ekrano"
-
-#: ../js/ui/status/power.js:225
-msgid "Mouse"
-msgstr "Muso"
-
-#: ../js/ui/status/power.js:229
-msgid "PDA"
-msgstr "Poŝkomputilo"
-
-#: ../js/ui/status/power.js:231
-#, fuzzy
-msgid "Cell Phone"
-msgstr "Poŝtelefono"
-
-#: ../js/ui/status/power.js:233
-#, fuzzy
-msgid "Media Player"
-msgstr "Spektilo"
-
-#: ../js/ui/status/power.js:235
-msgid "Tablet"
-msgstr "Tabuleta komputilo"
-
-#: ../js/ui/status/power.js:237
-msgid "Computer"
-msgstr "Komputilo"
-
-#: ../js/ui/status/power.js:239
-#, fuzzy
-msgctxt "device"
-msgid "Unknown"
-msgstr "Nekonata"
+msgid "%d∶%02d Until Full (%d %%)"
+msgstr "%d:%02d ĝis plena (%d%%)"
 
 #: ../js/ui/status/volume.js:124
-#, fuzzy
 msgid "Volume changed"
-msgstr "Laŭteco"
+msgstr "Laŭteco ŝanĝita"
 
 #. Translators: This is the label for audio volume
 #: ../js/ui/status/volume.js:249 ../js/ui/status/volume.js:297
@@ -1388,18 +1206,21 @@ msgstr "Laŭteco"
 msgid "Microphone"
 msgstr "Mikrofono"
 
+#: ../js/ui/status/volume.js:310
+msgid "Sound Settings"
+msgstr "Sonagordoj"
+
 #: ../js/ui/unlockDialog.js:121
 msgid "Log in as another user"
-msgstr ""
+msgstr "Ensaluti kiel alia uzanto"
 
 #: ../js/ui/unlockDialog.js:142
-#, fuzzy
 msgid "Unlock Window"
-msgstr "Ensalutfenestro"
+msgstr "Malŝlosi fenestron"
 
 #: ../js/ui/userMenu.js:36
 msgid "Lock"
-msgstr ""
+msgstr "Ŝlosi"
 
 #: ../js/ui/userMenu.js:37
 msgid "Exit"
@@ -1410,9 +1231,8 @@ msgid "Help"
 msgstr ""
 
 #: ../js/ui/userMenu.js:40
-#, fuzzy
 msgid "Settings"
-msgstr "Musagordoj"
+msgstr "Agordoj"
 
 #: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
@@ -1424,7 +1244,7 @@ msgstr "Ŝanĝi uzanton"
 
 #: ../js/ui/userMenu.js:561
 msgid "Other users are logged in."
-msgstr ""
+msgstr "Aliaj uzantoj ensalutitas."
 
 #: ../js/ui/userMenu.js:566
 msgid "Shutting down might cause them to lose unsaved work."
@@ -1434,15 +1254,15 @@ msgstr ""
 #: ../js/ui/userMenu.js:594
 #, javascript-format
 msgid "%s (remote)"
-msgstr ""
+msgstr "%s (fora)"
 
 #. Translators: Console here refers to a tty like a VT console
 #: ../js/ui/userMenu.js:597
 #, javascript-format
 msgid "%s (console)"
-msgstr ""
+msgstr "%s (konzolo)"
 
-#: ../js/ui/viewSelector.js:492
+#: ../js/ui/viewSelector.js:511
 msgid "Applications"
 msgstr "Aplikaĵoj"
 
@@ -1451,33 +1271,30 @@ msgstr "Aplikaĵoj"
 msgid "'%s' is ready"
 msgstr "'%s' prestas"
 
-#: ../js/ui/windowManager.js:67
+#: ../js/ui/windowManager.js:83
 msgid "Do you want to keep these display settings?"
-msgstr ""
+msgstr "Ĉu vi volas konservi ĉi tiujn ekranajn agordojn?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#.
-#: ../js/ui/windowManager.js:86
-#, fuzzy
+#: ../js/ui/windowManager.js:102
 msgid "Revert Settings"
-msgstr "Energiagordoj"
+msgstr "Malfari ŝanĝojn"
 
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:106
 msgid "Keep Changes"
-msgstr ""
+msgstr "Konservi ŝanĝojn"
 
-#: ../js/ui/windowManager.js:108
+#: ../js/ui/windowManager.js:124
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Agordaj ŝanĝoj malfaritos post %d sekundo"
+msgstr[1] "Agordaj ŝanĝoj malfaritos post %d sekundoj"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
-#, fuzzy
 msgid "Evolution Calendar"
-msgstr "Malfermi kalendaron"
+msgstr "Evolution kalendaro"
 
 #. translators:
 #. * The number of sound outputs on a particular device
@@ -1501,21 +1318,21 @@ msgstr[1] "%u enigoj"
 msgid "System Sounds"
 msgstr "Sistemsonoj"
 
-#: ../src/main.c:325
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Presi version"
 
-#: ../src/main.c:331
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Reĝimo uzata de GDM por la ensalutekrano"
 
-#: ../src/main.c:337
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
-msgstr ""
+msgstr "Uzi specifan reĝimon, ekz. \"gdm\" por la ensaluta ekrano"
 
-#: ../src/main.c:343
+#: ../src/main.c:339
 msgid "List possible modes"
-msgstr ""
+msgstr "Listigi eblajn reĝimojn"
 
 #: ../src/shell-app.c:654
 #, c-format
@@ -1541,458 +1358,4 @@ msgstr "Pasvorto ne povas esti malplena"
 
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
-msgstr "La dialogo de la aŭtentokontrolo malakceptis de la uzanto"
-
-#~ msgid "Enable internal tools useful for developers and testers from Alt-F2"
-#~ msgstr "Enŝalti internaj iloj por programistoj kaj testantoj per \"Alt+F2\""
-
-#~ msgid ""
-#~ "Allows access to internal debugging and monitoring tools using the Alt-F2 "
-#~ "dialog."
-#~ msgstr ""
-#~ "Permesas aliron al interna sencimigaj kaj kontroladaj iloj uzante la "
-#~ "dialogon de \"Alt+F2\"."
-
-#~ msgid "Uuids of extensions to enable"
-#~ msgstr "UUID-oj de la kromprogramoj por enŝalti"
-
-#~ msgid "Whether to collect stats about applications usage"
-#~ msgstr "Ĉu kolekti statistikojn pri uzo de aplikaĵoj?"
-
-#~ msgid ""
-#~ "The shell normally monitors active applications in order to present the "
-#~ "most used ones (e.g. in launchers). While this data will be kept private, "
-#~ "you may want to disable this for privacy reasons. Please note that doing "
-#~ "so won't remove already saved data."
-#~ msgstr ""
-#~ "La ŝelo kutime kontrolas la ruliĝajn aplikaĵojn por montri la plej "
-#~ "uzitajn aplikaĵojn (ekz. en lanĉiloj). Kvankam ĉi tiu datumoj estos "
-#~ "tenata privata, vi eble volas elŝalti ĉi tion pro privateca kialo. "
-#~ "Bonvole atentu ke faranta ĉi tion ne forigos jam konservitajn datumojn."
-
-#~ msgid "List of desktop file IDs for favorite applications"
-#~ msgstr ""
-#~ "Listo de la identiloj de la labortablaj dosieroj por preferataj aplikaĵoj"
-
-#~ msgid ""
-#~ "The applications corresponding to these identifiers will be displayed in "
-#~ "the favorites area."
-#~ msgstr ""
-#~ "La aplikaĵoj kiuj korespondas al tiuj identigiloj estos montrita en la "
-#~ "areo de la preferataj aplikaĵoj."
-
-#~ msgid "History for command (Alt-F2) dialog"
-#~ msgstr "Historio de la komando-dialogo (Alt+F2)"
-
-#~ msgid "History for the looking glass dialog"
-#~ msgstr "Historio de la dialogo de 'looking glass'"
-
-#~ msgid "Show the week date in the calendar"
-#~ msgstr "Montri la semajnajntagon en la kalendaro"
-
-#~ msgid "If true, display the ISO week date in the calendar."
-#~ msgstr "Montri la semajnajndaton laŭ ISO en la kalendaro."
-
-#~ msgid "Which keyboard to use"
-#~ msgstr "Uzi kiun klavaron"
-
-#~ msgid "The type of keyboard to use."
-#~ msgstr "La uzenda klavartipo."
-
-#~ msgid "Invitation"
-#~ msgstr "Invito"
-
-#~ msgid "Call"
-#~ msgstr "Voki"
-
-#~ msgid "File Transfer"
-#~ msgstr "Dosiertransigo"
-
-#~ msgid "Unmute"
-#~ msgstr "Malsilentigi"
-
-#~ msgid "Mute"
-#~ msgstr "Silentigi"
-
-#, fuzzy
-#~ msgid "<b>%A</b>, <b>%H:%M</b>"
-#~ msgstr "Sendita je <b>%A</b>, <b>%B %d</b>"
-
-#, fuzzy
-#~ msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
-#~ msgstr "Sendita je <b>%A</b>, <b>%B %d</b>"
-
-#~ msgid "%s is now known as %s"
-#~ msgstr "%s estas konata kiel %s"
-
-#~ msgid "Invitation to %s"
-#~ msgstr "Invito al %s"
-
-#~ msgid "%s is inviting you to join %s"
-#~ msgstr "%s invitas vin aliĝi al %s"
-
-#~ msgid "Decline"
-#~ msgstr "Refuzi"
-
-#~ msgid "Accept"
-#~ msgstr "Akcepti"
-
-#~ msgid "Video call from %s"
-#~ msgstr "Videa voko de %s"
-
-#~ msgid "Call from %s"
-#~ msgstr "Voko de %s"
-
-#~ msgid "Answer"
-#~ msgstr "Repondo"
-
-#~ msgid "%s is sending you %s"
-#~ msgstr "%s sendas %s al vi"
-
-#~ msgid "%s would like permission to see when you are online"
-#~ msgstr "%s volus permiso por vidi kiam vi estas konektita"
-
-#~ msgid "Network error"
-#~ msgstr "Reta eraro"
-
-#~ msgid "Authentication failed"
-#~ msgstr "Aŭtentigo malsukcesis"
-
-#~ msgid "Encryption error"
-#~ msgstr "Ĉifrado-eraro"
-
-#~ msgid "Certificate not provided"
-#~ msgstr "Atestilo ne donita"
-
-#~ msgid "Certificate untrusted"
-#~ msgstr "Malfidita atestilo"
-
-#~ msgid "Certificate expired"
-#~ msgstr "Posttempa atestilo"
-
-#~ msgid "Certificate not activated"
-#~ msgstr "Atestilo ne aktivigita"
-
-#~ msgid "Certificate hostname mismatch"
-#~ msgstr "Atestilo-nomo de gastiga komputilo miskongruas"
-
-#~ msgid "Certificate fingerprint mismatch"
-#~ msgstr "Atestilo-fingropremo miskongruas"
-
-#~ msgid "Certificate self-signed"
-#~ msgstr "Memsubskribita atestilo"
-
-#~ msgid "Status is set to offline"
-#~ msgstr "Stato agordas kiam nekonektita."
-
-#~ msgid "Encryption is not available"
-#~ msgstr "Ĉifrado nehavebla"
-
-#~ msgid "Certificate is invalid"
-#~ msgstr "Nevalida atestilo"
-
-#~ msgid "Connection has been refused"
-#~ msgstr "Refuzinta konekto"
-
-#~ msgid "Connection can't be established"
-#~ msgstr "Ne povas establi konekton"
-
-#~ msgid "Connection has been lost"
-#~ msgstr "Konekto perdiĝis"
-
-#~ msgid "This account is already connected to the server"
-#~ msgstr "Ĉi tio konto estas jam konektata al servilo"
-
-#~ msgid ""
-#~ "Connection has been replaced by a new connection using the same resource"
-#~ msgstr "Konekto anstataŭigis per nova konekto uzanta la saman risurcon"
-
-#~ msgid "The account already exists on the server"
-#~ msgstr "La konto jam ekzistas sur la servilo"
-
-#~ msgid "Server is currently too busy to handle the connection"
-#~ msgstr "Servilo estas nun tro okupata por akcepti la konekton"
-
-#~ msgid "Certificate has been revoked"
-#~ msgstr "Atestilo senvalidigita"
-
-#~ msgid ""
-#~ "Certificate uses an insecure cipher algorithm or is cryptographically weak"
-#~ msgstr ""
-#~ "Atestilo uzas malsekuran ĉifrigan algoritmon aŭ estas kriptografie "
-#~ "malforta."
-
-#~ msgid ""
-#~ "The length of the server certificate, or the depth of the server "
-#~ "certificate chain, exceed the limits imposed by the cryptography library"
-#~ msgstr ""
-#~ "La longeco de la servilo-atestilo, aŭ la profundeco de la servilo-"
-#~ "atestilo ĉeno, transpasita la maksimumo altrudis per la biblioteko de "
-#~ "kriptografia."
-
-#~ msgid "Internal error"
-#~ msgstr "Interna eraro"
-
-#, fuzzy
-#~ msgid "View account"
-#~ msgstr "Redakti konton"
-
-#~ msgid "Unknown reason"
-#~ msgstr "Nekonata kialo"
-
-#~ msgid "New Window"
-#~ msgstr "Nova fenestro"
-
-#~ msgid "Add to Favorites"
-#~ msgstr "Aldoni al la preferataj aplikaĵoj"
-
-#~ msgid "Top Bar"
-#~ msgstr "Supra breto"
-
-#~ msgid "Auto broadband"
-#~ msgstr "Aŭtolarĝkapacita"
-
-#~ msgid "Auto dial-up"
-#~ msgstr "Aŭtopertelefonlineo"
-
-#, fuzzy
-#~ msgid "Log Out"
-#~ msgstr "Elsaluti"
-
-#, fuzzy
-#~ msgid "My Computer"
-#~ msgstr "Komputilo"
-
-#, fuzzy
-#~ msgid "My computer"
-#~ msgstr "Komputilo"
-
-#~ msgid "Framerate used for recording screencasts."
-#~ msgstr "Bildrapido uzata por ekranregistraĵoj."
-
-#~ msgid "The gstreamer pipeline used to encode the screencast"
-#~ msgstr "La ĉenstablo de Gstreamer uzata por kodi la ekranregistraĵon"
-
-#~ msgid "File extension used for storing the screencast"
-#~ msgstr "La dosiersufikso uzata por konservi la ekranregistraĵon"
-
-#~ msgid "Screencast from %d %t"
-#~ msgstr "Ekranregistraĵo de %d %t"
-
-#, fuzzy
-#~ msgid "Type to search your computer"
-#~ msgstr "Tajpi por serĉi..."
-
-#~ msgid "disabled OpenSearch providers"
-#~ msgstr "elŝaltitaj OpenSearch-provizantoj"
-
-#~ msgid "Show time with seconds"
-#~ msgstr "Montri horon kun sekundoj"
-
-#~ msgid "If true, display seconds in time."
-#~ msgstr "Se vera, montri sekundojn en horo."
-
-#~ msgid "Show date in clock"
-#~ msgstr "Montri daton en horloĝo"
-
-#~ msgid "If true, display date in the clock, in addition to time."
-#~ msgstr "Se vera, montri daton en la horloĝo, krom la horo."
-
-#~ msgctxt "title"
-#~ msgid "Sign In"
-#~ msgstr "Ensaluti"
-
-#~ msgid "All"
-#~ msgstr "Ĉiuj"
-
-#~ msgid "APPLICATIONS"
-#~ msgstr "APLIKAĴOJ"
-
-#~ msgid "SETTINGS"
-#~ msgstr "AGORDOJ"
-
-#~ msgctxt "event list time"
-#~ msgid "%H:%M"
-#~ msgstr "%H:%M"
-
-#
-# Da wir keine AM/PM-Suffixe haben, die Zeit von Terminen aber eindeutig
-# angezeigt werden soll, wird im Kalender stets das 24h-Format verwendet.
-#
-#~ msgctxt "event list time"
-#~ msgid "%l:%M %p"
-#~ msgstr "%H:%M"
-
-#~ msgid "Available"
-#~ msgstr "Disponebla"
-
-#~ msgid "Away"
-#~ msgstr "Fora"
-
-#~ msgid "Busy"
-#~ msgstr "Okupita"
-
-#~ msgid "Offline"
-#~ msgstr "Nekonektite"
-
-#~ msgid "CONTACTS"
-#~ msgstr "KONTAKTOJ"
-
-#~ msgid "%a %b %e, %R:%S"
-#~ msgstr "%a, %e. %b, %R:%S"
-
-#~ msgid "%a %b %e, %R"
-#~ msgstr "%a, %e. %b, %R"
-
-#~ msgid "%a %R:%S"
-#~ msgstr "%a %R:%S"
-
-#~ msgid "%a %R"
-#~ msgstr "%a %R"
-
-#~ msgid "%a %b %e, %l:%M:%S %p"
-#~ msgstr "%a, %e. %b, %l:%M:%S"
-
-#~ msgid "%a %b %e, %l:%M %p"
-#~ msgstr "%a, %e. %b, %l:%M"
-
-#~ msgid "%a %l:%M:%S %p"
-#~ msgstr "%a %l:%M:%S"
-
-#~ msgid "%a %l:%M %p"
-#~ msgstr "%a %l:%M"
-
-#~ msgid "tray"
-#~ msgstr "pleto"
-
-#~ msgid "Activities"
-#~ msgstr "Aktivecoj"
-
-#~ msgid "Failed to unmount '%s'"
-#~ msgstr "Malsukcesis demeti '%s'"
-
-#~ msgid "Retry"
-#~ msgstr "Reprovi"
-
-#~ msgid "Connect to..."
-#~ msgstr "Konekti al..."
-
-#~ msgid "PLACES & DEVICES"
-#~ msgstr "EJOJ kaj APARATOJ"
-
-#~ msgid "Wrong password, please try again"
-#~ msgstr "Erara pasvorto, bonvole provu denove"
-
-#~ msgid "Browse Files..."
-#~ msgstr "Foliumi dosierojn..."
-
-#~ msgid "Error browsing device"
-#~ msgstr "Eraro dum foliumado de aparato"
-
-#~ msgid "The requested device cannot be browsed, error is '%s'"
-#~ msgstr "Ne povas foliumi la petata aparato, eraro estas '%s'"
-
-#~ msgid "More..."
-#~ msgstr "Pli..."
-
-#~ msgid "Wireless"
-#~ msgstr "Sendrata"
-
-#~ msgid "VPN Connections"
-#~ msgstr "VPN-konektoj"
-
-#~ msgid "Subscription request"
-#~ msgstr "Abonopeto"
-
-#~ msgid "Connection error"
-#~ msgstr "Konekta eraro"
-
-#~ msgid "%s is online."
-#~ msgstr "%s estas konektita."
-
-#~ msgid "%s is offline."
-#~ msgstr "%s estas nekonektita."
-
-#~ msgid "%s is away."
-#~ msgstr "%s estas fora."
-
-#~ msgid "%s is busy."
-#~ msgstr "%s estas okupata."
-
-#~ msgid "Sent at <b>%X</b> on <b>%A</b>"
-#~ msgstr "Sendita je <b>%X</b> je <b>A</b>"
-
-#~ msgid "Sent on <b>%A</b>, <b>%B %d</b>, %Y"
-#~ msgstr "Sendita je <b>%A</b>, </b>%B %d</b>, %Y"
-
-#~ msgid "Connection to %s failed"
-#~ msgstr "Malsukcesis konekton al %s"
-
-#~ msgid "Reconnect"
-#~ msgstr "Rekonekti"
-
-#~ msgid "Hidden"
-#~ msgstr "Kaŝita"
-
-#~ msgid "Idle"
-#~ msgstr "Neokupita"
-
-#~ msgid "Power Off..."
-#~ msgstr "Elŝalti..."
-
-#~ msgid "Online Accounts"
-#~ msgstr "Retaj kontoj"
-
-#~ msgid "System Settings"
-#~ msgstr "Sistem-agordoj"
-
-#~ msgid "Lock Screen"
-#~ msgstr "Ŝlosi ekranon"
-
-#~ msgid "Log Out..."
-#~ msgstr "Elsaluti..."
-
-#~ msgid "Your chat status will be set to busy"
-#~ msgstr "Vi babila stato agordos okupita"
-
-#~ msgid ""
-#~ "Notifications are now disabled, including chat messages. Your online "
-#~ "status has been adjusted to let others know that you might not see their "
-#~ "messages."
-#~ msgstr ""
-#~ "Avizoj nun estas elŝaltitaj, inklusivintaj babilaj mesaĝoj. Via reta "
-#~ "stato estis ŝanĝita por avizigi aliaj ke vi eble ne vidas iliajn mesaĝojn."
-
-#~ msgid "Search"
-#~ msgstr "Serĉi"
-
-#~ msgid ""
-#~ "Sorry, no wisdom for you today:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Pardonu, neniu saĝo por vi hodiaŭ:\n"
-#~ "%s"
-
-#~ msgid "%s the Oracle says"
-#~ msgstr "%s la Orakolo diras"
-
-#~ msgid "Your favorite Easter Egg"
-#~ msgstr "Via favorata virtuala Paska Ovo "
-
-#~ msgid "United Kingdom"
-#~ msgstr "Unuiĝinta Reĝlando"
-
-#~ msgid "Default"
-#~ msgstr "Defaŭlto"
-
-#~ msgid "Home"
-#~ msgstr "Hejmo"
-
-#~ msgid "%1$s: %2$s"
-#~ msgstr "%1$s: %2$s"
-
-#~ msgid "RECENT ITEMS"
-#~ msgstr "LASTATEMPAJ ELEMENTOJ"
-
-#~ msgid "%s has finished starting"
-#~ msgstr "Starto de %s finiĝis"
+msgstr "La uzanto malakceptis la aŭtentokontrolan dialogon"

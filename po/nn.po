@@ -1,32 +1,30 @@
-# Norwegian Nynorsk translation for gnome-shell.
-# Copyright (C) 2010 gnome-shell's COPYRIGHT HOLDER
-# This file is distributed under the same license as the gnome-shell package.
-# Torstein Adolf Winterseth <kvikende@fsfe.org>, 2010.
-# Torstein Winterseth <kvikende@fsfe.org>, 2010.
-# Andreas N. <gedemiti@gmail.com>, 2011.
-# Åsmund Skjæveland <aasmunds@ulrik.uio.no>, 2011.
-# Kjartan Maraas <kmaraas@gnome.org>, 2012.
-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Andreas N. <gedemiti@gmail.com>, 2011
+# Åsmund Skjæveland <aasmunds@ulrik.uio.no>, 2011
+# Kjartan Maraas <kmaraas@gnome.org>, 2012
+# Torstein Adolf Winterseth <kvikende@fsfe.org>, 2010
+# Torstein Adolf Winterseth <kvikende@fsfe.org>, 2010
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-shell master\n"
+"Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-21 21:07-0700\n"
-"PO-Revision-Date: 2012-07-10 15:21+0200\n"
-"Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
-"Language-Team: Norsk (nynorsk) <i18n-nn@lister.ping.uio.no>\n"
-"Language: nn\n"
+"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"PO-Revision-Date: 2016-10-04 17:29+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"Language-Team: Norwegian Nynorsk (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/nn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Poedit-Language: Norwegian Nynorsk\n"
-"X-Poedit-Country: NORWAY\n"
+"Language: nn\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
-#, fuzzy
 msgid "System"
-msgstr "Filsystem"
+msgstr ""
 
 #: ../data/50-gnome-shell-system.xml.in.h:2
 msgid "Show the message tray"
@@ -37,9 +35,8 @@ msgid "Focus the active notification"
 msgstr ""
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
-#, fuzzy
 msgid "Show all applications"
-msgstr "Program"
+msgstr ""
 
 #: ../data/50-gnome-shell-system.xml.in.h:5
 msgid "Open the application menu"
@@ -51,9 +48,8 @@ msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
-#, fuzzy
 msgid "EOS Shell"
-msgstr "GNOME Shell"
+msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -83,9 +79,8 @@ msgid "Select an extension to configure using the combobox above."
 msgstr ""
 
 #: ../js/gdm/loginDialog.js:410
-#, fuzzy
 msgid "Session…"
-msgstr "Økt …"
+msgstr ""
 
 #: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
@@ -102,31 +97,32 @@ msgstr ""
 msgid "Not listed?"
 msgstr "Ikkje oppført?"
 
-#. Translators: During a password reset, prompt for the "secret code" provided by customer support.
+#. Translators: During a password reset, prompt for the "secret code" provided
+#. by customer support.
 #: ../js/gdm/loginDialog.js:814
 msgid "Enter unlock code provided by customer support:"
 msgstr ""
 
-#. Translators: Password reset. The first %s is a verification code, the second is one or more phone numbers, and the third is an email.
+#. Translators: Password reset. The first %s is a verification code, the
+#. second is one or more phone numbers, and the third is an email.
 #: ../js/gdm/loginDialog.js:818
 #, javascript-format
 msgid ""
-"Please inform customer support of your verification code %s by calling %s or "
-"emailing %s. The code will remain valid until you click Cancel or turn off "
+"Please inform customer support of your verification code %s by calling %s or"
+" emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
 msgstr ""
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:824
-#, fuzzy
 msgid "Reset Password"
-msgstr "Passord:"
+msgstr ""
 
 #: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
-#: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
-#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:611
+#: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
+#: ../js/ui/userMenu.js:611
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -136,14 +132,12 @@ msgid "Sign In"
 msgstr "Logg inn"
 
 #: ../js/gdm/loginDialog.js:998
-#, fuzzy
 msgid "Next"
-msgstr "Neste veke"
+msgstr ""
 
 #: ../js/gdm/loginDialog.js:1116
-#, fuzzy
 msgid "Your unlock code was incorrect. Please try again."
-msgstr "Det verka ikkje. Prøv på nytt."
+msgstr ""
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
@@ -159,9 +153,8 @@ msgstr "Innloggingsvindauge"
 
 #. Translators: accessible name of the power menu in the login screen
 #: ../js/gdm/powerMenu.js:36
-#, fuzzy
 msgid "Power"
-msgstr "Slå av"
+msgstr ""
 
 #: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
 msgid "Suspend"
@@ -176,9 +169,8 @@ msgid "Power Off"
 msgstr "Slå av"
 
 #: ../js/gdm/util.js:264
-#, fuzzy
 msgid "Authentication error"
-msgstr "Autentisering påkravd"
+msgstr ""
 
 #. Translators: this message is shown below the password entry field
 #. to indicate the user can swipe their finger instead
@@ -206,33 +198,32 @@ msgstr "Klarte ikkje lesa kommando:"
 msgid "Execution of '%s' failed:"
 msgstr "Klarte ikkje køyra «%s»:"
 
-#: ../js/ui/appDisplay.js:1151
-#, fuzzy
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
-msgstr "Fjern frå favorittar"
+msgstr ""
 
-#: ../js/ui/appDisplay.js:1634
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1640
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1646
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1652 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:1904
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1913
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr ""
 
@@ -246,47 +237,45 @@ msgstr "%s har vorte lagt til i dine favorittar."
 msgid "%s has been removed from your favorites."
 msgstr "%s har vorte fjerna frå dine favorittar."
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:300
+#: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:304
+#: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:320
-#, fuzzy, javascript-format
+#: ../js/ui/appIconBar.js:319
+#, javascript-format
 msgid "Quit %s"
-msgstr "Avslutt"
+msgstr ""
 
-#: ../js/ui/backgroundMenu.js:21
+#: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
 msgstr ""
 
-#: ../js/ui/backgroundMenu.js:25
-#, fuzzy
+#: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
-msgstr "Program"
+msgstr ""
 
-#: ../js/ui/backgroundMenu.js:29
+#: ../js/ui/backgroundMenu.js:32
 msgid "Add Website"
 msgstr ""
 
-#: ../js/ui/backgroundMenu.js:33
+#: ../js/ui/backgroundMenu.js:36
 msgid "Add Folder"
 msgstr ""
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
-#.
 #: ../js/ui/calendar.js:62
 msgctxt "event list time"
 msgid "All Day"
@@ -311,7 +300,6 @@ msgstr ""
 #. *
 #. * NOTE: These grid abbreviations are always shown together
 #. * and in order, e.g. "S M T W T F S".
-#.
 #: ../js/ui/calendar.js:108
 msgctxt "grid sunday"
 msgid "S"
@@ -358,7 +346,6 @@ msgstr "L"
 #. * NOTE: These list abbreviations are normally not shown together
 #. * so they need to be unique (e.g. Tuesday and Thursday cannot
 #. * both be 'T').
-#.
 #: ../js/ui/calendar.js:133
 msgctxt "list sunday"
 msgid "Su"
@@ -409,13 +396,15 @@ msgstr ""
 msgid "Nothing Scheduled"
 msgstr "Ingenting er planlagt"
 
-#. Translators: Shown on calendar heading when selected day occurs on current year
+#. Translators: Shown on calendar heading when selected day occurs on current
+#. year
 #: ../js/ui/calendar.js:738
 msgctxt "calendar heading"
 msgid "%A, %B %d"
 msgstr "%A %d. %B"
 
-#. Translators: Shown on calendar heading when selected day occurs on different year
+#. Translators: Shown on calendar heading when selected day occurs on
+#. different year
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
@@ -505,9 +494,7 @@ msgstr "Trådlaust nettverk krev autentisering"
 msgid ""
 "Passwords or encryption keys are required to access the wireless network "
 "'%s'."
-msgstr ""
-"Passord eller krypteringsnøklar er nødvendig for å kopla til det trådlause "
-"nettverket «%s»."
+msgstr "Passord eller krypteringsnøklar er nødvendig for å kopla til det trådlause nettverket «%s»."
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
@@ -567,18 +554,16 @@ msgid "Software Update"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:204
-#, fuzzy
 msgid "Updates available"
-msgstr "Utilgjengeleg"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:206
-#, fuzzy
 msgid "Download now"
-msgstr "Lastar ned"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
@@ -589,23 +574,20 @@ msgid "Software updates are ready to be installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:221
-#, fuzzy
 msgid "Install now"
-msgstr "Installer"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:230
-#, fuzzy
 msgid "Updates installed"
-msgstr "Ingen utvidingar er installerte"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:232
-#, fuzzy
 msgid "Restart now"
-msgstr "Start på nytt"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
@@ -615,14 +597,13 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
 msgid "Windows"
 msgstr "Vindauge"
 
 #: ../js/ui/dash.js:262 ../js/ui/dash.js:300
-#, fuzzy
 msgid "Show Applications"
-msgstr "Program"
+msgstr ""
 
 #: ../js/ui/dash.js:298
 msgid "Remove from Favorites"
@@ -643,13 +624,12 @@ msgid "Open Clocks"
 msgstr ""
 
 #: ../js/ui/dateMenu.js:104
-#, fuzzy
 msgid "Date & Time Settings"
-msgstr "Innstillingar for dato og tid"
+msgstr ""
 
 #. Translators: This is the date format to use when the calendar popup is
-#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
-#.
+#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29
+#. AM").
 #: ../js/ui/dateMenu.js:214
 msgid "%A %B %e, %Y"
 msgstr "%a %e. %B %Y"
@@ -736,9 +716,7 @@ msgstr "Start på nytt"
 
 #: ../js/ui/endSessionDialog.js:137
 msgid "Click Restart to quit these applications and restart the system."
-msgstr ""
-"Vel «Start på nytt» for å avslutta desse programma og starta systemet på "
-"nytt."
+msgstr "Vel «Start på nytt» for å avslutta desse programma og starta systemet på nytt."
 
 #: ../js/ui/endSessionDialog.js:140
 #, javascript-format
@@ -761,9 +739,8 @@ msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Lasta ned og installera «%s» frå extensions.gnome.org?"
 
 #: ../js/ui/forceAppExitDialog.js:55
-#, fuzzy
 msgid "Quit applications…"
-msgstr "Program"
+msgstr ""
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
@@ -772,32 +749,36 @@ msgid ""
 msgstr ""
 
 #: ../js/ui/forceAppExitDialog.js:84
-#, fuzzy
 msgid "System Monitor"
-msgstr "Skjerm"
+msgstr ""
 
 #: ../js/ui/forceAppExitDialog.js:89
-#, fuzzy
 msgid "Quit Application"
-msgstr "Program"
+msgstr ""
 
 #: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:69
+#: ../js/ui/internetSearch.js:99
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:72
+#. Translators: the first %s is the search engine name, and the second
+#. * is the search string. For instance, 'Search Google for "hello"'.
+#: ../js/ui/internetSearch.js:108
 #, javascript-format
-msgid "Search Google for \"%s\""
+msgid "Search %s for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
-#: ../js/ui/status/power.js:227
+#: ../js/ui/internetSearch.js:110
+#, javascript-format
+msgid "Search the internet for \"%s\""
+msgstr ""
+
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr "Tastatur"
 
@@ -849,32 +830,31 @@ msgstr "Vis kjeldekode"
 msgid "Web Page"
 msgstr "Nettside"
 
-#: ../js/ui/messageTray.js:1226
+#: ../js/ui/messageTray.js:1205
 msgid "Open"
 msgstr "Opna"
 
-#: ../js/ui/messageTray.js:1233
+#: ../js/ui/messageTray.js:1212
 msgid "Remove"
 msgstr "Fjern"
 
-#: ../js/ui/messageTray.js:1545
+#: ../js/ui/messageTray.js:1524
 msgid "Clear Messages"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1572
-#, fuzzy
+#: ../js/ui/messageTray.js:1551
 msgid "Notification Settings"
-msgstr "Varslingar"
+msgstr ""
 
-#: ../js/ui/messageTray.js:1762
+#: ../js/ui/messageTray.js:1741
 msgid "No Messages"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1836
+#: ../js/ui/messageTray.js:1815
 msgid "Message Tray"
 msgstr ""
 
-#: ../js/ui/messageTray.js:2857
+#: ../js/ui/messageTray.js:2836
 msgid "System Information"
 msgstr "Systeminformasjon"
 
@@ -900,20 +880,19 @@ msgstr ""
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:628
+#: ../js/ui/popupMenu.js:633
 msgid "toggle-switch-us"
 msgstr "toggle-switch-intl"
 
-#: ../js/ui/runDialog.js:73
-#, fuzzy
+#: ../js/ui/runDialog.js:70
 msgid "Enter a Command"
-msgstr "Skriv inn kommando:"
+msgstr ""
 
-#: ../js/ui/runDialog.js:109
+#: ../js/ui/runDialog.js:106
 msgid "Close"
 msgstr ""
 
-#: ../js/ui/screenShield.js:133
+#: ../js/ui/screenShield.js:132
 msgid "GNOME needs to lock the screen"
 msgstr ""
 
@@ -921,27 +900,23 @@ msgstr ""
 #. screenshield. The user is probably very upset at this
 #. point, but any application using global grabs is broken
 #. Just tell him to stop using this app
-#.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
-#, fuzzy
+#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
 msgid "Unable to lock"
-msgstr "Klokke"
+msgstr ""
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
 msgid "Lock was blocked by an application"
 msgstr ""
 
 #: ../js/ui/search.js:781
-#, fuzzy
 msgid "Searching…"
-msgstr "Søker …"
+msgstr ""
 
 #: ../js/ui/search.js:783
-#, fuzzy
 msgid "No results."
-msgstr "Ingen treff."
+msgstr ""
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -960,24 +935,20 @@ msgid "Hide Text"
 msgstr "Gøym tekst"
 
 #: ../js/ui/shellEntry.js:180
-#, fuzzy
 msgid "Type to search…"
-msgstr "Skriv for å søkja …"
+msgstr ""
 
 #: ../js/ui/shellMountOperation.js:370
-#, fuzzy
 msgid "Password"
-msgstr "Passord:"
+msgstr ""
 
 #: ../js/ui/shellMountOperation.js:391
-#, fuzzy
 msgid "Remember Password"
-msgstr "Passord:"
+msgstr ""
 
 #: ../js/ui/shellMountOperation.js:403 ../js/ui/unlockDialog.js:110
-#, fuzzy
 msgid "Unlock"
-msgstr "Klokke"
+msgstr ""
 
 #: ../js/ui/status/accessibility.js:39
 msgid "Accessibility"
@@ -1027,130 +998,39 @@ msgstr "Høg kontrast"
 msgid "Large Text"
 msgstr "Stor tekst"
 
-#: ../js/ui/status/bluetooth.js:28 ../js/ui/status/bluetooth.js:32
-#: ../js/ui/status/bluetooth.js:291 ../js/ui/status/bluetooth.js:323
-#: ../js/ui/status/bluetooth.js:359 ../js/ui/status/bluetooth.js:390
+#: ../js/ui/status/bluetooth.js:33 ../js/ui/status/bluetooth.js:44
 #: ../js/ui/status/network.js:829
 msgid "Bluetooth"
 msgstr "Blåtann"
 
-#: ../js/ui/status/bluetooth.js:45
-msgid "Visibility"
-msgstr "Synleg"
-
-#: ../js/ui/status/bluetooth.js:59
-#, fuzzy
-msgid "Send Files to Device…"
-msgstr "Send filer til eining …"
-
-#: ../js/ui/status/bluetooth.js:60
-#, fuzzy
-msgid "Set Up a New Device…"
-msgstr "Set opp ei ny eining …"
-
-#: ../js/ui/status/bluetooth.js:86
+#: ../js/ui/status/bluetooth.js:51
 msgid "Bluetooth Settings"
 msgstr "Innstillingar for blåtann"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:106 ../js/ui/status/network.js:181
+#: ../js/ui/status/bluetooth.js:82 ../js/ui/status/network.js:181
 msgid "hardware disabled"
 msgstr "eining slått av"
 
-#: ../js/ui/status/bluetooth.js:199
-msgid "Connection"
-msgstr "Tilkopling"
+#: ../js/ui/status/hotCornerIndicator.js:19
+msgid "Hot Corner Indicator"
+msgstr ""
 
-#: ../js/ui/status/bluetooth.js:210 ../js/ui/status/network.js:463
-msgid "disconnecting..."
-msgstr "koplar frå …"
+#: ../js/ui/status/hotCornerIndicator.js:40
+msgid "Enable Hot Corner"
+msgstr ""
 
-#: ../js/ui/status/bluetooth.js:223 ../js/ui/status/network.js:469
-#: ../js/ui/status/network.js:1551
-msgid "connecting..."
-msgstr "koplar til …"
+#: ../js/ui/status/hotCornerIndicator.js:44
+msgid "Disable Hot Corner"
+msgstr ""
 
-#: ../js/ui/status/bluetooth.js:241
-#, fuzzy
-msgid "Send Files…"
-msgstr "Send filer …"
-
-#: ../js/ui/status/bluetooth.js:248
-msgid "Keyboard Settings"
-msgstr "Innstillingar for tastatur"
-
-#: ../js/ui/status/bluetooth.js:251
-msgid "Mouse Settings"
-msgstr "Innstillingar for mus"
-
-#: ../js/ui/status/bluetooth.js:256 ../js/ui/status/volume.js:310
-msgid "Sound Settings"
-msgstr "Innstillingar for lyd"
-
-#: ../js/ui/status/bluetooth.js:324
-#, javascript-format
-msgid "Authorization request from %s"
-msgstr "Førespurnad om autorisering frå %s"
-
-#: ../js/ui/status/bluetooth.js:330
-#, javascript-format
-msgid "Device %s wants access to the service '%s'"
-msgstr "Eininga %s vil ha tilgang til tenesta «%s»"
-
-#: ../js/ui/status/bluetooth.js:332
-msgid "Always grant access"
-msgstr "Gje tilgang alltid"
-
-#: ../js/ui/status/bluetooth.js:333
-msgid "Grant this time only"
-msgstr "Gje tilgang berre denne gongen"
-
-#: ../js/ui/status/bluetooth.js:334
-msgid "Reject"
-msgstr "Avvis"
-
-#. Translators: argument is the device short name
-#: ../js/ui/status/bluetooth.js:361
-#, javascript-format
-msgid "Pairing confirmation for %s"
-msgstr "Tilkopling for %s stadfesta"
-
-#: ../js/ui/status/bluetooth.js:367 ../js/ui/status/bluetooth.js:398
-#, javascript-format
-msgid "Device %s wants to pair with this computer"
-msgstr "Eininga %s vil kopla seg saman med denne datamaskina"
-
-#: ../js/ui/status/bluetooth.js:368
-#, javascript-format
-msgid "Please confirm whether the PIN '%06d' matches the one on the device."
-msgstr "Kontroller at PIN-koden «%06d» samsvarer med koden på eininga."
-
-#. Translators: this is the verb, not the noun
-#: ../js/ui/status/bluetooth.js:371
-msgid "Matches"
-msgstr "Samsvarer"
-
-#: ../js/ui/status/bluetooth.js:372
-msgid "Does not match"
-msgstr "Samsvarer ikkje"
-
-#: ../js/ui/status/bluetooth.js:391
-#, javascript-format
-msgid "Pairing request for %s"
-msgstr "Førespurnad om tilkopling for %s"
-
-#: ../js/ui/status/bluetooth.js:399
-msgid "Please enter the PIN mentioned on the device."
-msgstr "Skriv inn PIN-koden oppgjeve på eininga."
-
-#: ../js/ui/status/keyboard.js:368
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr "Vis tastaturutforming"
 
-#: ../js/ui/status/keyboard.js:373
-#, fuzzy
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
-msgstr "Innstillingar for region og språk"
+msgstr ""
 
 #: ../js/ui/status/lockScreenMenu.js:43
 msgid "Volume, network, battery"
@@ -1160,34 +1040,48 @@ msgstr ""
 msgid "<unknown>"
 msgstr "<ukjend>"
 
-#. Translators: this indicates that wireless or wwan is disabled by hardware killswitch
+#. Translators: this indicates that wireless or wwan is disabled by hardware
+#. killswitch
 #: ../js/ui/status/network.js:203
 msgid "disabled"
 msgstr "slått av"
 
-#. Translators: this is for network devices that are physically present but are not
+#. Translators: this is for network devices that are physically present but
+#. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
 #: ../js/ui/status/network.js:461
 msgid "unmanaged"
 msgstr "ikkje handsama"
 
-#. Translators: this is for network connections that require some kind of key or password
+#: ../js/ui/status/network.js:463
+msgid "disconnecting..."
+msgstr "koplar frå …"
+
+#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
+msgid "connecting..."
+msgstr "koplar til …"
+
+#. Translators: this is for network connections that require some kind of key
+#. or password
 #: ../js/ui/status/network.js:472 ../js/ui/status/network.js:1554
 msgid "authentication required"
 msgstr "autentisering påkravd"
 
-#. Translators: this is for devices that require some kind of firmware or kernel
+#. Translators: this is for devices that require some kind of firmware or
+#. kernel
 #. module, which is missing
 #: ../js/ui/status/network.js:482
 msgid "firmware missing"
 msgstr "fastvare manglar"
 
-#. Translators: this is for wired network devices that are physically disconnected
+#. Translators: this is for wired network devices that are physically
+#. disconnected
 #: ../js/ui/status/network.js:489
 msgid "cable unplugged"
 msgstr "kabel kopla frå"
 
-#. Translators: this is for a network device that cannot be activated (for example it
+#. Translators: this is for a network device that cannot be activated (for
+#. example it
 #. is disabled by rfkill, or it has no coverage
 #: ../js/ui/status/network.js:494
 msgid "unavailable"
@@ -1202,7 +1096,8 @@ msgstr "klarte ikkje kopla til"
 msgid "More…"
 msgstr ""
 
-#. TRANSLATORS: this is the indication that a connection for another logged in user is active,
+#. TRANSLATORS: this is the indication that a connection for another logged in
+#. user is active,
 #. and we cannot access its settings (including the name)
 #: ../js/ui/status/network.js:591 ../js/ui/status/network.js:1368
 msgid "Connected (private)"
@@ -1220,7 +1115,8 @@ msgstr "Automatisk Ethernet"
 msgid "Mobile broadband"
 msgstr "Mobilt breiband"
 
-#. TRANSLATORS: this the automatic wireless connection name (including the network name)
+#. TRANSLATORS: this the automatic wireless connection name (including the
+#. network name)
 #: ../js/ui/status/network.js:864 ../js/ui/status/network.js:1385
 #, javascript-format
 msgid "Auto %s"
@@ -1235,9 +1131,8 @@ msgid "Auto wireless"
 msgstr "Automatisk trådlaus"
 
 #: ../js/ui/status/network.js:1672
-#, fuzzy
 msgid "Network"
-msgstr "Nettverksfeil"
+msgstr ""
 
 #: ../js/ui/status/network.js:1734
 msgid "Enable networking"
@@ -1267,114 +1162,39 @@ msgstr "Klarte ikkje slå på nettverkstilkopling"
 msgid "Networking is disabled"
 msgstr "Nettverk er slått av"
 
-#: ../js/ui/status/power.js:57
+#: ../js/ui/status/power.js:34
 msgid "Battery"
 msgstr "Batteri"
 
-#: ../js/ui/status/power.js:88
+#: ../js/ui/status/power.js:51
 msgid "Power Settings"
 msgstr "Innstillingar for straum"
 
-#: ../js/ui/status/power.js:108
+#: ../js/ui/status/power.js:58
 msgid "Fully Charged"
 msgstr ""
 
-#: ../js/ui/status/power.js:110
-#, fuzzy
+#. 0 is reported when UPower does not have enough data
+#. to estimate battery life
+#: ../js/ui/status/power.js:65 ../js/ui/status/power.js:71
 msgid "Estimating…"
-msgstr "Reknar ut …"
+msgstr ""
 
-#: ../js/ui/status/power.js:117
+#. Translators: this is <hours>:<minutes> Remaining (<percentage>)
+#: ../js/ui/status/power.js:79
 #, javascript-format
-msgid "%d hour remaining"
-msgid_plural "%d hours remaining"
-msgstr[0] "%d time står att"
-msgstr[1] "%d timar står att"
+msgid "%d∶%02d Remaining (%d %%)"
+msgstr ""
 
-#. TRANSLATORS: this is a time string, as in "%d hours %d minutes remaining"
-#: ../js/ui/status/power.js:120
+#. Translators: this is <hours>:<minutes> Until Full (<percentage>)
+#: ../js/ui/status/power.js:84
 #, javascript-format
-msgid "%d %s %d %s remaining"
-msgstr "%d %s %d %s står att"
-
-#: ../js/ui/status/power.js:122
-msgid "hour"
-msgid_plural "hours"
-msgstr[0] "time"
-msgstr[1] "timar"
-
-#: ../js/ui/status/power.js:122
-msgid "minute"
-msgid_plural "minutes"
-msgstr[0] "minutt"
-msgstr[1] "minutt"
-
-#: ../js/ui/status/power.js:125
-#, javascript-format
-msgid "%d minute remaining"
-msgid_plural "%d minutes remaining"
-msgstr[0] "%d minutt står att"
-msgstr[1] "%d minutt står att"
-
-#: ../js/ui/status/power.js:128 ../js/ui/status/power.js:202
-#, javascript-format
-msgctxt "percent of battery remaining"
-msgid "%d%%"
-msgstr "%d %%"
-
-#: ../js/ui/status/power.js:217
-#, fuzzy
-msgid "AC Adapter"
-msgstr "Straumadapter"
-
-#: ../js/ui/status/power.js:219
-#, fuzzy
-msgid "Laptop Battery"
-msgstr "Batteri"
-
-#: ../js/ui/status/power.js:221
-msgid "UPS"
-msgstr "UPS"
-
-#: ../js/ui/status/power.js:223
-msgid "Monitor"
-msgstr "Skjerm"
-
-#: ../js/ui/status/power.js:225
-msgid "Mouse"
-msgstr "Mus"
-
-#: ../js/ui/status/power.js:229
-msgid "PDA"
-msgstr "PDA"
-
-#: ../js/ui/status/power.js:231
-#, fuzzy
-msgid "Cell Phone"
-msgstr "Mobiltelefon"
-
-#: ../js/ui/status/power.js:233
-#, fuzzy
-msgid "Media Player"
-msgstr "Mediaspelar"
-
-#: ../js/ui/status/power.js:235
-msgid "Tablet"
-msgstr "Nettbrett"
-
-#: ../js/ui/status/power.js:237
-msgid "Computer"
-msgstr "Datamaskin"
-
-#: ../js/ui/status/power.js:239
-msgctxt "device"
-msgid "Unknown"
-msgstr "Ukjend"
+msgid "%d∶%02d Until Full (%d %%)"
+msgstr ""
 
 #: ../js/ui/status/volume.js:124
-#, fuzzy
 msgid "Volume changed"
-msgstr "Lydstyrke"
+msgstr ""
 
 #. Translators: This is the label for audio volume
 #: ../js/ui/status/volume.js:249 ../js/ui/status/volume.js:297
@@ -1385,14 +1205,17 @@ msgstr "Lydstyrke"
 msgid "Microphone"
 msgstr "Mikrofon"
 
+#: ../js/ui/status/volume.js:310
+msgid "Sound Settings"
+msgstr "Innstillingar for lyd"
+
 #: ../js/ui/unlockDialog.js:121
 msgid "Log in as another user"
 msgstr ""
 
 #: ../js/ui/unlockDialog.js:142
-#, fuzzy
 msgid "Unlock Window"
-msgstr "Innloggingsvindauge"
+msgstr ""
 
 #: ../js/ui/userMenu.js:36
 msgid "Lock"
@@ -1407,9 +1230,8 @@ msgid "Help"
 msgstr ""
 
 #: ../js/ui/userMenu.js:40
-#, fuzzy
 msgid "Settings"
-msgstr "Innstillingar for mus"
+msgstr ""
 
 #: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
@@ -1439,7 +1261,7 @@ msgstr ""
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:492
+#: ../js/ui/viewSelector.js:511
 msgid "Applications"
 msgstr "Program"
 
@@ -1448,23 +1270,21 @@ msgstr "Program"
 msgid "'%s' is ready"
 msgstr "«%s» er klar"
 
-#: ../js/ui/windowManager.js:67
+#: ../js/ui/windowManager.js:83
 msgid "Do you want to keep these display settings?"
 msgstr ""
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#.
-#: ../js/ui/windowManager.js:86
-#, fuzzy
+#: ../js/ui/windowManager.js:102
 msgid "Revert Settings"
-msgstr "Innstillingar for straum"
+msgstr ""
 
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:106
 msgid "Keep Changes"
 msgstr ""
 
-#: ../js/ui/windowManager.js:108
+#: ../js/ui/windowManager.js:124
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
@@ -1497,19 +1317,19 @@ msgstr[1] "%u inngangar"
 msgid "System Sounds"
 msgstr "Systemlydar"
 
-#: ../src/main.c:325
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Skriv ut versjon"
 
-#: ../src/main.c:331
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Modus brukt av GDM for innloggingskjermen"
 
-#: ../src/main.c:337
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr ""
 
-#: ../src/main.c:343
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr ""
 
@@ -1538,389 +1358,3 @@ msgstr ""
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
 msgstr "Autentiseringsvindauget vart lata att av brukaren"
-
-#~ msgid "Enable internal tools useful for developers and testers from Alt-F2"
-#~ msgstr "Slå på interne verktøy for utviklarar og testarar frå Alt + F2"
-
-#~ msgid ""
-#~ "Allows access to internal debugging and monitoring tools using the Alt-F2 "
-#~ "dialog."
-#~ msgstr ""
-#~ "Tillèt tilgang til interne feilfiksings- og overvakingsverktøy gjennom "
-#~ "«Alt + F2»-dialogvindauget."
-
-#~ msgid "Uuids of extensions to enable"
-#~ msgstr "Uuid-ar til utvidingar som skal slåast på"
-
-#, fuzzy
-#~ msgid ""
-#~ "GNOME Shell extensions have a uuid property; this key lists extensions "
-#~ "which should be loaded. Any extension that wants to be loaded needs to be "
-#~ "in this list. You can also manipulate this list with the EnableExtension "
-#~ "and DisableExtension DBus methods on org.gnome.Shell."
-#~ msgstr ""
-#~ "GNOME Shell-utvidingar har ein uuid-eigenskap. Denne nøkkelen viser ei "
-#~ "liste over utvidingane som skal lastast. disabled-extensions overstyrer "
-#~ "denne innstillinga for utvidingar som finst i begge listene."
-
-#~ msgid "Whether to collect stats about applications usage"
-#~ msgstr "Om statistikk om programbruk skal innsamlast"
-
-#~ msgid ""
-#~ "The shell normally monitors active applications in order to present the "
-#~ "most used ones (e.g. in launchers). While this data will be kept private, "
-#~ "you may want to disable this for privacy reasons. Please note that doing "
-#~ "so won't remove already saved data."
-#~ msgstr ""
-#~ "Shell overvakar aktive program for å visa dei mest brukte (t.d. i "
-#~ "oppstartaren). Sjølv om desse data vil haldast private, så kan det henda "
-#~ "at du ønskjer å slå dette av med omsyn til personvern. Legg merke til at "
-#~ "det vil ikkje fjerna data som alt er lagra."
-
-#~ msgid "List of desktop file IDs for favorite applications"
-#~ msgstr "Liste over skrivebordsfil-ID-ar for favorittprogram"
-
-#~ msgid ""
-#~ "The applications corresponding to these identifiers will be displayed in "
-#~ "the favorites area."
-#~ msgstr ""
-#~ "Programma som korresponderer til desse identifikatorane vil verta viste i "
-#~ "favorittområdet."
-
-#~ msgid "History for command (Alt-F2) dialog"
-#~ msgstr "Historikk for kommandovindauget (Alt + F2)"
-
-#~ msgid "History for the looking glass dialog"
-#~ msgstr "Historikk for forstørringsglasvindauget"
-
-#~ msgid "Show the week date in the calendar"
-#~ msgstr "Vis vekedag i kalenderen"
-
-#~ msgid "If true, display the ISO week date in the calendar."
-#~ msgstr "Viss sann, vis ISO-vekedag i kalenderen."
-
-#~ msgid "Which keyboard to use"
-#~ msgstr "Tastatur som skal brukast"
-
-#~ msgid "The type of keyboard to use."
-#~ msgstr "Type tastatur som skal brukast."
-
-#~ msgid "Invitation"
-#~ msgstr "Invitasjon"
-
-#~ msgid "Call"
-#~ msgstr "Ring"
-
-#~ msgid "File Transfer"
-#~ msgstr "Filoverføring"
-
-#~ msgid "Unmute"
-#~ msgstr "Fjern demping"
-
-#~ msgid "Mute"
-#~ msgstr "Demp"
-
-#, fuzzy
-#~ msgid "<b>%A</b>, <b>%H:%M</b>"
-#~ msgstr "Sendt <b>%A</b> <b>%d. %B</b>"
-
-#, fuzzy
-#~ msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
-#~ msgstr "Sendt <b>%A</b> <b>%d. %B</b>"
-
-#~ msgid "%s is now known as %s"
-#~ msgstr "%s er no kjend som %s"
-
-#~ msgid "Invitation to %s"
-#~ msgstr "Invitasjon til %s"
-
-#~ msgid "%s is inviting you to join %s"
-#~ msgstr "%s inviterer deg til å vera med i %s"
-
-#~ msgid "Decline"
-#~ msgstr "Avslå"
-
-#~ msgid "Accept"
-#~ msgstr "Godta"
-
-#~ msgid "Video call from %s"
-#~ msgstr "Videooppringing frå %s"
-
-#~ msgid "Call from %s"
-#~ msgstr "Oppringing frå %s"
-
-#~ msgid "Answer"
-#~ msgstr "Svar"
-
-#~ msgid "%s is sending you %s"
-#~ msgstr "%s sender deg %s"
-
-#~ msgid "%s would like permission to see when you are online"
-#~ msgstr "%s ønskjer å sjå når du er tilkopla"
-
-#~ msgid "Network error"
-#~ msgstr "Nettverksfeil"
-
-#~ msgid "Authentication failed"
-#~ msgstr "Feil under autentisering"
-
-#~ msgid "Encryption error"
-#~ msgstr "Krypteringsfeil"
-
-#~ msgid "Certificate not provided"
-#~ msgstr "Sertifikat ikkje oppgjeve"
-
-#~ msgid "Certificate untrusted"
-#~ msgstr "Sertifikatet er upåliteleg"
-
-#~ msgid "Certificate expired"
-#~ msgstr "Sertifikatet er utgått"
-
-#~ msgid "Certificate not activated"
-#~ msgstr "Sertifikatet er ikkje slått på"
-
-#~ msgid "Certificate hostname mismatch"
-#~ msgstr "Feil vertsnamn for sertifikatet"
-
-#~ msgid "Certificate fingerprint mismatch"
-#~ msgstr "Fingeravtrykket til sertifikatet er feil"
-
-#~ msgid "Certificate self-signed"
-#~ msgstr "Sertifikatet er sjølvsignert"
-
-#~ msgid "Status is set to offline"
-#~ msgstr "Status er sett til fråkopla"
-
-#~ msgid "Encryption is not available"
-#~ msgstr "Kryptering er ikkje tilgjengeleg"
-
-#~ msgid "Certificate is invalid"
-#~ msgstr "Sertifikatet er ugyldig"
-
-#~ msgid "Connection has been refused"
-#~ msgstr "Tilkopling nekta"
-
-#~ msgid "Connection can't be established"
-#~ msgstr "Kan ikkje kopla til"
-
-#~ msgid "Connection has been lost"
-#~ msgstr "Mista tilkoplinga"
-
-#~ msgid "This account is already connected to the server"
-#~ msgstr "Denne kontoen er allereie kopla til tenaren"
-
-#~ msgid ""
-#~ "Connection has been replaced by a new connection using the same resource"
-#~ msgstr "Tilkoplinga er bytt ut med ei ny tilkopling som bruker same ressurs"
-
-#~ msgid "The account already exists on the server"
-#~ msgstr "Kontoen finst allereie på tenaren"
-
-#~ msgid "Server is currently too busy to handle the connection"
-#~ msgstr "Tenaren er for oppteken til å ta i mot tilkoplinga"
-
-#~ msgid "Certificate has been revoked"
-#~ msgstr "Sertifikatet er trekt tilbake"
-
-#~ msgid ""
-#~ "Certificate uses an insecure cipher algorithm or is cryptographically weak"
-#~ msgstr ""
-#~ "Sertifikatet brukar ei usikker sifferalgoritme eller er kryptografisk "
-#~ "svakt"
-
-#~ msgid ""
-#~ "The length of the server certificate, or the depth of the server "
-#~ "certificate chain, exceed the limits imposed by the cryptography library"
-#~ msgstr ""
-#~ "Lengda på tenarsertifikatet eller djupna på sertifikatkjeda oversteig "
-#~ "grensa som er sett i kryptografibiblioteket"
-
-#~ msgid "Internal error"
-#~ msgstr "Intern feil"
-
-#, fuzzy
-#~ msgid "View account"
-#~ msgstr "Endra konto"
-
-#~ msgid "Unknown reason"
-#~ msgstr "Ukjend årsak"
-
-#~ msgid "New Window"
-#~ msgstr "Nytt vindauge"
-
-#~ msgid "Add to Favorites"
-#~ msgstr "Legg til i favorittar"
-
-#~ msgid "Top Bar"
-#~ msgstr "Toppanel"
-
-#~ msgid "Auto broadband"
-#~ msgstr "Automatisk breiband"
-
-#~ msgid "Auto dial-up"
-#~ msgstr "Automatisk oppringd"
-
-#~ msgid "Log Out"
-#~ msgstr "Logg ut"
-
-#, fuzzy
-#~ msgid "My Computer"
-#~ msgstr "Datamaskin"
-
-#, fuzzy
-#~ msgid "My computer"
-#~ msgstr "Datamaskin"
-
-#~ msgid "Framerate used for recording screencasts."
-#~ msgstr "Biletrate brukt for filming av skjermvideo."
-
-#~ msgid ""
-#~ "The framerate of the resulting screencast recordered by GNOME Shell's "
-#~ "screencast recorder in frames-per-second."
-#~ msgstr ""
-#~ "Biletfrekvensen til den ferdige skjermvideoen, teken opp med "
-#~ "skjermvideoopptakaren i GNOME Shell, i bilete per sekund."
-
-#~ msgid "The gstreamer pipeline used to encode the screencast"
-#~ msgstr "GStreamer-kanalen brukt til å koda skjermvideoen"
-
-#~ msgid "File extension used for storing the screencast"
-#~ msgstr "Filtype brukt for å lagra skjermvideoen"
-
-#~ msgid ""
-#~ "The filename for recorded screencasts will be a unique filename based on "
-#~ "the current date, and use this extension. It should be changed when "
-#~ "recording to a different container format."
-#~ msgstr ""
-#~ "Filnamnet for skjermvideoopptak vil vera eit unikt filnamn basert på "
-#~ "gjeldande dato, og vil bruka dette filetternamnet. Det bør endrast når du "
-#~ "gjer opptak til eit anna oppbevaringsformat."
-
-#, fuzzy
-#~ msgid "Type to search your computer"
-#~ msgstr "Skriv for å søkja …"
-
-#~ msgid "disabled OpenSearch providers"
-#~ msgstr "OpenSearch-tilbydarar slått av"
-
-#~ msgctxt "title"
-#~ msgid "Sign In"
-#~ msgstr "Logg inn"
-
-#~ msgid "All"
-#~ msgstr "Alle"
-
-#~ msgid "APPLICATIONS"
-#~ msgstr "PROGRAM"
-
-#~ msgid "SETTINGS"
-#~ msgstr "INNSTILLINGAR"
-
-#~ msgctxt "event list time"
-#~ msgid "%H:%M"
-#~ msgstr "%H.%M"
-
-#~ msgctxt "event list time"
-#~ msgid "%l:%M %p"
-#~ msgstr "%l.%M %p"
-
-#~ msgid "tray"
-#~ msgstr "varslingsområde"
-
-#~ msgid "Activities"
-#~ msgstr "Aktivitetar"
-
-#~ msgid "Failed to unmount '%s'"
-#~ msgstr "Klarte ikkje avmontera «%s»"
-
-#~ msgid "Retry"
-#~ msgstr "Prøv på nytt"
-
-#~ msgid "Connect to..."
-#~ msgstr "Kopla til …"
-
-#~ msgid "PLACES & DEVICES"
-#~ msgstr "PLASSERING OG EININGAR"
-
-#~ msgid "Browse Files..."
-#~ msgstr "Bla gjennom filer …"
-
-#~ msgid "Error browsing device"
-#~ msgstr "Klarte ikkje lesa eining"
-
-#~ msgid "The requested device cannot be browsed, error is '%s'"
-#~ msgstr "Kan ikkje bla gjennom eininga. Feilen er «%s»"
-
-#~ msgid "More..."
-#~ msgstr "Meir …"
-
-#~ msgid "Wireless"
-#~ msgstr "Trådlaus"
-
-#~ msgid "VPN Connections"
-#~ msgstr "VPN-tilkoplingar"
-
-#~ msgid "Subscription request"
-#~ msgstr "Førespurnad om abonnering"
-
-#~ msgid "Connection error"
-#~ msgstr "Tilkoplingsfeil"
-
-#~ msgid "Sent at <b>%X</b> on <b>%A</b>"
-#~ msgstr "Sendt <b>%A</b> <b>%X</b>"
-
-#~ msgid "Sent on <b>%A</b>, <b>%B %d</b>, %Y"
-#~ msgstr "Sendt <b>%A</b> <b>%d. %B</b> %Y"
-
-#~ msgid "Connection to %s failed"
-#~ msgstr "Klarte ikkje kopla til %s"
-
-#~ msgid "Reconnect"
-#~ msgstr "Kopla til på nytt"
-
-#~ msgid "Available"
-#~ msgstr "Tilgjengeleg"
-
-#~ msgid "Busy"
-#~ msgstr "Oppteken"
-
-#~ msgid "Invisible"
-#~ msgstr "Usynleg"
-
-#~ msgid "Away"
-#~ msgstr "Vekke"
-
-#~ msgid "Idle"
-#~ msgstr "Uverksam"
-
-#~ msgid "Switch Session"
-#~ msgstr "Byt økt"
-
-#~ msgid "System Settings"
-#~ msgstr "Systeminnstillingar"
-
-#~ msgid "Your chat status will be set to busy"
-#~ msgstr "Nettpratstatusen din vil verta sett til oppteken"
-
-#~ msgid ""
-#~ "Notifications are now disabled, including chat messages. Your online "
-#~ "status has been adjusted to let others know that you might not see their "
-#~ "messages."
-#~ msgstr ""
-#~ "Varslingar er no slått av, òg for nettpratmeldingar. Nettstatusen din er "
-#~ "endra, slik at andre får vite at du kanskje ikkje ser meldingane deira."
-
-#~ msgid "Search"
-#~ msgstr "Søk"
-
-#~ msgid "United Kingdom"
-#~ msgstr "Storbritannia"
-
-#~ msgid "Default"
-#~ msgstr "Standard"
-
-#~ msgid "Home"
-#~ msgstr "Heim"
-
-#~ msgid "%1$s: %2$s"
-#~ msgstr "%1$s: %2$s"

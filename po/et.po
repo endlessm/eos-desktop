@@ -1,28 +1,23 @@
-# GNOME kesta eesti keele tõlge.
-# Estonian translation for gnome-shell.
-#
-# Copyright (C) 2010, 2011 The Gnome Project
-#
-# This file is distributed under the same license as the gnome-shell package.
-#
-# Ivar Smolin <okul linux ee>, 2011.
-# Mattias Põldaru <mahfiaz@gmail.com>, 2010, 2011, 2012.
-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Ivar Smolin <okul linux ee>, 2011
+# Mattias Põldaru <mahfiaz@gmail.com>, 2010-2013
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-shell MASTER\n"
+"Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-21 21:07-0700\n"
-"PO-Revision-Date: 2013-03-12 16:28+0300\n"
-"Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
-"Language-Team: Estonian <>\n"
-"Language: et\n"
+"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"PO-Revision-Date: 2016-10-04 17:42+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"Language-Team: Estonian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Poedit-Language: Estonian\n"
-"X-Poedit-Country: Estonia\n"
+"Language: et\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
 msgid "System"
@@ -50,9 +45,8 @@ msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
-#, fuzzy
 msgid "EOS Shell"
-msgstr "GNOME Shell"
+msgstr ""
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -100,31 +94,32 @@ msgstr ""
 msgid "Not listed?"
 msgstr "Pole loendis?"
 
-#. Translators: During a password reset, prompt for the "secret code" provided by customer support.
+#. Translators: During a password reset, prompt for the "secret code" provided
+#. by customer support.
 #: ../js/gdm/loginDialog.js:814
 msgid "Enter unlock code provided by customer support:"
 msgstr ""
 
-#. Translators: Password reset. The first %s is a verification code, the second is one or more phone numbers, and the third is an email.
+#. Translators: Password reset. The first %s is a verification code, the
+#. second is one or more phone numbers, and the third is an email.
 #: ../js/gdm/loginDialog.js:818
 #, javascript-format
 msgid ""
-"Please inform customer support of your verification code %s by calling %s or "
-"emailing %s. The code will remain valid until you click Cancel or turn off "
+"Please inform customer support of your verification code %s by calling %s or"
+" emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
 msgstr ""
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:824
-#, fuzzy
 msgid "Reset Password"
-msgstr "Parooli meelespidamine"
+msgstr ""
 
 #: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
-#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:423
+#: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
-#: ../js/ui/shellMountOperation.js:399 ../js/ui/status/bluetooth.js:417
-#: ../js/ui/unlockDialog.js:97 ../js/ui/userMenu.js:611
+#: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
+#: ../js/ui/userMenu.js:611
 msgid "Cancel"
 msgstr "Katkesta"
 
@@ -138,9 +133,8 @@ msgid "Next"
 msgstr "Järgmine"
 
 #: ../js/gdm/loginDialog.js:1116
-#, fuzzy
 msgid "Your unlock code was incorrect. Please try again."
-msgstr "Kahjuks see ei sobinud. Palun proovi uuesti."
+msgstr ""
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
@@ -201,33 +195,32 @@ msgstr "Käsku pole võimalik analüüsida:"
 msgid "Execution of '%s' failed:"
 msgstr "'%s' käivitamine nurjus:"
 
-#: ../js/ui/appDisplay.js:1151
-#, fuzzy
+#: ../js/ui/appDisplay.js:1182
 msgid "Remove from desktop"
-msgstr "Eemalda lemmikutest"
+msgstr ""
 
-#: ../js/ui/appDisplay.js:1634
+#: ../js/ui/appDisplay.js:1691
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1640
+#: ../js/ui/appDisplay.js:1697
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1646
+#: ../js/ui/appDisplay.js:1703
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1652 ../js/ui/status/bluetooth.js:416
+#: ../js/ui/appDisplay.js:1709
 msgid "OK"
 msgstr "Olgu"
 
-#: ../js/ui/appDisplay.js:1904
+#: ../js/ui/appDisplay.js:1971
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1913
+#: ../js/ui/appDisplay.js:1980
 msgid "Delete"
 msgstr ""
 
@@ -241,47 +234,45 @@ msgstr "%s lisati lemmikutesse."
 msgid "%s has been removed from your favorites."
 msgstr "%s eemaldati lemmikutest."
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:300
+#: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:304
+#: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:320
-#, fuzzy, javascript-format
+#: ../js/ui/appIconBar.js:319
+#, javascript-format
 msgid "Quit %s"
-msgstr "Sulge"
+msgstr ""
 
-#: ../js/ui/backgroundMenu.js:21
+#: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
 msgstr "Muuda tausta…"
 
-#: ../js/ui/backgroundMenu.js:25
-#, fuzzy
+#: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
-msgstr "Rakendused"
+msgstr ""
 
-#: ../js/ui/backgroundMenu.js:29
+#: ../js/ui/backgroundMenu.js:32
 msgid "Add Website"
 msgstr ""
 
-#: ../js/ui/backgroundMenu.js:33
+#: ../js/ui/backgroundMenu.js:36
 msgid "Add Folder"
 msgstr ""
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
-#.
 #: ../js/ui/calendar.js:62
 msgctxt "event list time"
 msgid "All Day"
@@ -292,7 +283,7 @@ msgstr "Kogu päev"
 #: ../js/ui/calendar.js:68
 msgctxt "event list time"
 msgid "%H∶%M"
-msgstr ""
+msgstr "%H∶%M"
 
 #. Transators: Shown in calendar event list, if 12h format,
 #. \u2236 is a ratio character, similar to : and \u2009 is
@@ -300,13 +291,12 @@ msgstr ""
 #: ../js/ui/calendar.js:77
 msgctxt "event list time"
 msgid "%l∶%M %p"
-msgstr ""
+msgstr "%l∶%M %p"
 
 #. Translators: Calendar grid abbreviation for Sunday.
 #. *
 #. * NOTE: These grid abbreviations are always shown together
 #. * and in order, e.g. "S M T W T F S".
-#.
 #: ../js/ui/calendar.js:108
 msgctxt "grid sunday"
 msgid "S"
@@ -353,7 +343,6 @@ msgstr "L"
 #. * NOTE: These list abbreviations are normally not shown together
 #. * so they need to be unique (e.g. Tuesday and Thursday cannot
 #. * both be 'T').
-#.
 #: ../js/ui/calendar.js:133
 msgctxt "list sunday"
 msgid "Su"
@@ -397,20 +386,22 @@ msgstr "L"
 
 #: ../js/ui/calendar.js:391
 msgid "calendar:MY"
-msgstr ""
+msgstr "Minu"
 
 #. Translators: Text to show if there are no events
 #: ../js/ui/calendar.js:722
 msgid "Nothing Scheduled"
 msgstr "Ühtegi sündmust pole plaanitud"
 
-#. Translators: Shown on calendar heading when selected day occurs on current year
+#. Translators: Shown on calendar heading when selected day occurs on current
+#. year
 #: ../js/ui/calendar.js:738
 msgctxt "calendar heading"
 msgid "%A, %B %d"
 msgstr "%A, %d. %B"
 
-#. Translators: Shown on calendar heading when selected day occurs on different year
+#. Translators: Shown on calendar heading when selected day occurs on
+#. different year
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
@@ -500,8 +491,7 @@ msgstr "Juhtmeta võrgu jaoks on vajalik autentimine"
 msgid ""
 "Passwords or encryption keys are required to access the wireless network "
 "'%s'."
-msgstr ""
-"Juhtmeta võrguga '%s' ühendumiseks on vajalik parool või krüptimisvõti."
+msgstr "Juhtmeta võrguga '%s' ühendumiseks on vajalik parool või krüptimisvõti."
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
@@ -561,18 +551,16 @@ msgid "Software Update"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:204
-#, fuzzy
 msgid "Updates available"
-msgstr "pole saadaval"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:206
-#, fuzzy
 msgid "Download now"
-msgstr "Allalaadimine"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
@@ -583,23 +571,20 @@ msgid "Software updates are ready to be installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:221
-#, fuzzy
 msgid "Install now"
-msgstr "Paigalda"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:230
-#, fuzzy
 msgid "Updates installed"
-msgstr "Ühtegi laiendust pole paigaldatud"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:232
-#, fuzzy
 msgid "Restart now"
-msgstr "Taaskäivita"
+msgstr ""
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
@@ -609,7 +594,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:488
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
 msgid "Windows"
 msgstr "Aknad"
 
@@ -640,8 +625,8 @@ msgid "Date & Time Settings"
 msgstr "Kuupäeva ja kella sätted"
 
 #. Translators: This is the date format to use when the calendar popup is
-#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
-#.
+#. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29
+#. AM").
 #: ../js/ui/dateMenu.js:214
 msgid "%A %B %e, %Y"
 msgstr "%A, %d. %B %Y"
@@ -665,9 +650,7 @@ msgstr "Väljalogimine"
 
 #: ../js/ui/endSessionDialog.js:80
 msgid "Click Log Out to quit these applications and log out of the system."
-msgstr ""
-"Nende rakenduste sulgemiseks ja süsteemist väljalogimiseks klõpsa nupule "
-"Logi välja."
+msgstr "Nende rakenduste sulgemiseks ja süsteemist väljalogimiseks klõpsa nupule Logi välja."
 
 #: ../js/ui/endSessionDialog.js:83
 #, javascript-format
@@ -699,9 +682,7 @@ msgstr "Väljalülitamine"
 
 #: ../js/ui/endSessionDialog.js:103
 msgid "Click Power Off to quit these applications and power off the system."
-msgstr ""
-"Nende rakenduste sulgemiseks ja süsteemi väljalülitamiseks klõpsa nupule "
-"Lülita välja."
+msgstr "Nende rakenduste sulgemiseks ja süsteemi väljalülitamiseks klõpsa nupule Lülita välja."
 
 #: ../js/ui/endSessionDialog.js:106
 #, javascript-format
@@ -732,9 +713,7 @@ msgstr "Taaskäivitamine"
 
 #: ../js/ui/endSessionDialog.js:137
 msgid "Click Restart to quit these applications and restart the system."
-msgstr ""
-"Nende rakenduste sulgemiseks ja süsteemi taaskäivitamiseks klõpsa "
-"\"Taaskäivita\"."
+msgstr "Nende rakenduste sulgemiseks ja süsteemi taaskäivitamiseks klõpsa \"Taaskäivita\"."
 
 #: ../js/ui/endSessionDialog.js:140
 #, javascript-format
@@ -757,9 +736,8 @@ msgid "Download and install '%s' from extensions.gnome.org?"
 msgstr "Kas laadida alla ja paigaldada '%s' aadressilt extensions.gnome.org?"
 
 #: ../js/ui/forceAppExitDialog.js:55
-#, fuzzy
 msgid "Quit applications…"
-msgstr "Rakendused"
+msgstr ""
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
@@ -768,32 +746,36 @@ msgid ""
 msgstr ""
 
 #: ../js/ui/forceAppExitDialog.js:84
-#, fuzzy
 msgid "System Monitor"
-msgstr "Monitor"
+msgstr ""
 
 #: ../js/ui/forceAppExitDialog.js:89
-#, fuzzy
 msgid "Quit Application"
-msgstr "Rakendused"
+msgstr ""
 
 #: ../js/ui/iconGridLayout.js:213
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:69
+#: ../js/ui/internetSearch.js:99
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:72
+#. Translators: the first %s is the search engine name, and the second
+#. * is the search string. For instance, 'Search Google for "hello"'.
+#: ../js/ui/internetSearch.js:108
 #, javascript-format
-msgid "Search Google for \"%s\""
+msgid "Search %s for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:314
-#: ../js/ui/status/power.js:227
+#: ../js/ui/internetSearch.js:110
+#, javascript-format
+msgid "Search the internet for \"%s\""
+msgstr ""
+
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
 msgstr "Klaviatuur"
 
@@ -845,31 +827,31 @@ msgstr "Kuva lähtekoodi"
 msgid "Web Page"
 msgstr "Veebileht"
 
-#: ../js/ui/messageTray.js:1226
+#: ../js/ui/messageTray.js:1205
 msgid "Open"
 msgstr "Ava"
 
-#: ../js/ui/messageTray.js:1233
+#: ../js/ui/messageTray.js:1212
 msgid "Remove"
 msgstr "Eemalda"
 
-#: ../js/ui/messageTray.js:1545
+#: ../js/ui/messageTray.js:1524
 msgid "Clear Messages"
 msgstr "Kustuta teated"
 
-#: ../js/ui/messageTray.js:1572
+#: ../js/ui/messageTray.js:1551
 msgid "Notification Settings"
 msgstr "Märguannete sätted"
 
-#: ../js/ui/messageTray.js:1762
+#: ../js/ui/messageTray.js:1741
 msgid "No Messages"
 msgstr "Teateid pole"
 
-#: ../js/ui/messageTray.js:1836
+#: ../js/ui/messageTray.js:1815
 msgid "Message Tray"
 msgstr "Teateala"
 
-#: ../js/ui/messageTray.js:2857
+#: ../js/ui/messageTray.js:2836
 msgid "System Information"
 msgstr "Süsteemi andmed"
 
@@ -895,19 +877,19 @@ msgstr ""
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:628
+#: ../js/ui/popupMenu.js:633
 msgid "toggle-switch-us"
 msgstr "toggle-switch-intl"
 
-#: ../js/ui/runDialog.js:73
+#: ../js/ui/runDialog.js:70
 msgid "Enter a Command"
 msgstr "Palun sisesta käsk"
 
-#: ../js/ui/runDialog.js:109
+#: ../js/ui/runDialog.js:106
 msgid "Close"
 msgstr "Sulge"
 
-#: ../js/ui/screenShield.js:133
+#: ../js/ui/screenShield.js:132
 msgid "GNOME needs to lock the screen"
 msgstr "GNOME peab ekraani lukustama"
 
@@ -915,14 +897,13 @@ msgstr "GNOME peab ekraani lukustama"
 #. screenshield. The user is probably very upset at this
 #. point, but any application using global grabs is broken
 #. Just tell him to stop using this app
-#.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:429
+#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
 msgid "Unable to lock"
 msgstr "Pole võimalik lukustada"
 
-#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:430
+#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
 msgid "Lock was blocked by an application"
 msgstr "Rakendus blokeeris lukustamise"
 
@@ -951,7 +932,6 @@ msgid "Hide Text"
 msgstr "Tekst on peidetud"
 
 #: ../js/ui/shellEntry.js:180
-#, fuzzy
 msgid "Type to search…"
 msgstr "Otsing…"
 
@@ -1015,124 +995,37 @@ msgstr "Kõrgkontrastne"
 msgid "Large Text"
 msgstr "Suur tekst"
 
-#: ../js/ui/status/bluetooth.js:28 ../js/ui/status/bluetooth.js:32
-#: ../js/ui/status/bluetooth.js:291 ../js/ui/status/bluetooth.js:323
-#: ../js/ui/status/bluetooth.js:359 ../js/ui/status/bluetooth.js:390
+#: ../js/ui/status/bluetooth.js:33 ../js/ui/status/bluetooth.js:44
 #: ../js/ui/status/network.js:829
 msgid "Bluetooth"
 msgstr "Bluetooth"
 
-#: ../js/ui/status/bluetooth.js:45
-msgid "Visibility"
-msgstr "Nähtavus"
-
-#: ../js/ui/status/bluetooth.js:59
-msgid "Send Files to Device…"
-msgstr "Failide saatmine seadmesse…"
-
-#: ../js/ui/status/bluetooth.js:60
-msgid "Set Up a New Device…"
-msgstr "Uue seadme häälestamine…"
-
-#: ../js/ui/status/bluetooth.js:86
+#: ../js/ui/status/bluetooth.js:51
 msgid "Bluetooth Settings"
 msgstr "Bluetoothi sätted"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:106 ../js/ui/status/network.js:181
+#: ../js/ui/status/bluetooth.js:82 ../js/ui/status/network.js:181
 msgid "hardware disabled"
 msgstr "riistvara on keelatud"
 
-#: ../js/ui/status/bluetooth.js:199
-msgid "Connection"
-msgstr "Ühendus"
+#: ../js/ui/status/hotCornerIndicator.js:19
+msgid "Hot Corner Indicator"
+msgstr ""
 
-#: ../js/ui/status/bluetooth.js:210 ../js/ui/status/network.js:463
-msgid "disconnecting..."
-msgstr "ühenduse katkestamine..."
+#: ../js/ui/status/hotCornerIndicator.js:40
+msgid "Enable Hot Corner"
+msgstr ""
 
-#: ../js/ui/status/bluetooth.js:223 ../js/ui/status/network.js:469
-#: ../js/ui/status/network.js:1551
-msgid "connecting..."
-msgstr "ühendumine..."
+#: ../js/ui/status/hotCornerIndicator.js:44
+msgid "Disable Hot Corner"
+msgstr ""
 
-#: ../js/ui/status/bluetooth.js:241
-msgid "Send Files…"
-msgstr "Failide saatmine…"
-
-#: ../js/ui/status/bluetooth.js:248
-msgid "Keyboard Settings"
-msgstr "Klaviatuurisätted"
-
-#: ../js/ui/status/bluetooth.js:251
-msgid "Mouse Settings"
-msgstr "Hiiresätted"
-
-#: ../js/ui/status/bluetooth.js:256 ../js/ui/status/volume.js:310
-msgid "Sound Settings"
-msgstr "Helisätted"
-
-#: ../js/ui/status/bluetooth.js:324
-#, javascript-format
-msgid "Authorization request from %s"
-msgstr "Autoriseerimise päring seadmelt %s"
-
-#: ../js/ui/status/bluetooth.js:330
-#, javascript-format
-msgid "Device %s wants access to the service '%s'"
-msgstr "Seade %s soovib ligipääsu teenusele '%s'"
-
-#: ../js/ui/status/bluetooth.js:332
-msgid "Always grant access"
-msgstr "Luba alati"
-
-#: ../js/ui/status/bluetooth.js:333
-msgid "Grant this time only"
-msgstr "Luba ainult seekord"
-
-#: ../js/ui/status/bluetooth.js:334
-msgid "Reject"
-msgstr "Lükka tagasi"
-
-#. Translators: argument is the device short name
-#: ../js/ui/status/bluetooth.js:361
-#, javascript-format
-msgid "Pairing confirmation for %s"
-msgstr "Paardumise kinnitus seadmele %s"
-
-#: ../js/ui/status/bluetooth.js:367 ../js/ui/status/bluetooth.js:398
-#, javascript-format
-msgid "Device %s wants to pair with this computer"
-msgstr "Seade '%s' tahab selle arvutiga paarduda"
-
-#: ../js/ui/status/bluetooth.js:368
-#, javascript-format
-msgid "Please confirm whether the PIN '%06d' matches the one on the device."
-msgstr "Palun kontrolli, kas PIN-kood '%06d' kattub seadme parooliga."
-
-#. Translators: this is the verb, not the noun
-#: ../js/ui/status/bluetooth.js:371
-msgid "Matches"
-msgstr "Kattub"
-
-#: ../js/ui/status/bluetooth.js:372
-msgid "Does not match"
-msgstr "Ei kattu"
-
-#: ../js/ui/status/bluetooth.js:391
-#, javascript-format
-msgid "Pairing request for %s"
-msgstr "Seadmega %s paardumise päring"
-
-#: ../js/ui/status/bluetooth.js:399
-msgid "Please enter the PIN mentioned on the device."
-msgstr "Palun sisesta seadme poolt öeldav PIN-kood."
-
-#: ../js/ui/status/keyboard.js:368
+#: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
 msgstr "Klaviatuuripaigutuse kuvamine"
 
-#: ../js/ui/status/keyboard.js:373
+#: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
 msgstr "Asukoha ja keele sätted"
 
@@ -1144,34 +1037,48 @@ msgstr "Helivaljus, võrk, aku"
 msgid "<unknown>"
 msgstr "<tundmatu>"
 
-#. Translators: this indicates that wireless or wwan is disabled by hardware killswitch
+#. Translators: this indicates that wireless or wwan is disabled by hardware
+#. killswitch
 #: ../js/ui/status/network.js:203
 msgid "disabled"
 msgstr "keelatud"
 
-#. Translators: this is for network devices that are physically present but are not
+#. Translators: this is for network devices that are physically present but
+#. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
 #: ../js/ui/status/network.js:461
 msgid "unmanaged"
 msgstr "pole hallatud"
 
-#. Translators: this is for network connections that require some kind of key or password
+#: ../js/ui/status/network.js:463
+msgid "disconnecting..."
+msgstr "ühenduse katkestamine..."
+
+#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
+msgid "connecting..."
+msgstr "ühendumine..."
+
+#. Translators: this is for network connections that require some kind of key
+#. or password
 #: ../js/ui/status/network.js:472 ../js/ui/status/network.js:1554
 msgid "authentication required"
 msgstr "vajalik on autentimine"
 
-#. Translators: this is for devices that require some kind of firmware or kernel
+#. Translators: this is for devices that require some kind of firmware or
+#. kernel
 #. module, which is missing
 #: ../js/ui/status/network.js:482
 msgid "firmware missing"
 msgstr "püsivara puudub"
 
-#. Translators: this is for wired network devices that are physically disconnected
+#. Translators: this is for wired network devices that are physically
+#. disconnected
 #: ../js/ui/status/network.js:489
 msgid "cable unplugged"
 msgstr "juhe eemaldatud"
 
-#. Translators: this is for a network device that cannot be activated (for example it
+#. Translators: this is for a network device that cannot be activated (for
+#. example it
 #. is disabled by rfkill, or it has no coverage
 #: ../js/ui/status/network.js:494
 msgid "unavailable"
@@ -1186,7 +1093,8 @@ msgstr "ühendumine nurjus"
 msgid "More…"
 msgstr "Veel…"
 
-#. TRANSLATORS: this is the indication that a connection for another logged in user is active,
+#. TRANSLATORS: this is the indication that a connection for another logged in
+#. user is active,
 #. and we cannot access its settings (including the name)
 #: ../js/ui/status/network.js:591 ../js/ui/status/network.js:1368
 msgid "Connected (private)"
@@ -1204,7 +1112,8 @@ msgstr "Automaatne ethernet"
 msgid "Mobile broadband"
 msgstr "Mobiiliühendus"
 
-#. TRANSLATORS: this the automatic wireless connection name (including the network name)
+#. TRANSLATORS: this the automatic wireless connection name (including the
+#. network name)
 #: ../js/ui/status/network.js:864 ../js/ui/status/network.js:1385
 #, javascript-format
 msgid "Auto %s"
@@ -1250,104 +1159,35 @@ msgstr "Võrguühenduse aktiveerimine nurjus"
 msgid "Networking is disabled"
 msgstr "Võrguühendused on keelatud"
 
-#: ../js/ui/status/power.js:57
+#: ../js/ui/status/power.js:34
 msgid "Battery"
 msgstr "Aku"
 
-#: ../js/ui/status/power.js:88
+#: ../js/ui/status/power.js:51
 msgid "Power Settings"
 msgstr "Toitesätted..."
 
-#: ../js/ui/status/power.js:108
+#: ../js/ui/status/power.js:58
 msgid "Fully Charged"
-msgstr ""
+msgstr "Täiesti täis"
 
-#: ../js/ui/status/power.js:110
+#. 0 is reported when UPower does not have enough data
+#. to estimate battery life
+#: ../js/ui/status/power.js:65 ../js/ui/status/power.js:71
 msgid "Estimating…"
 msgstr "Andmete kogumine…"
 
-#: ../js/ui/status/power.js:117
+#. Translators: this is <hours>:<minutes> Remaining (<percentage>)
+#: ../js/ui/status/power.js:79
 #, javascript-format
-msgid "%d hour remaining"
-msgid_plural "%d hours remaining"
-msgstr[0] "jäänud %d tund"
-msgstr[1] "jäänud %d tundi"
+msgid "%d∶%02d Remaining (%d %%)"
+msgstr ""
 
-#. TRANSLATORS: this is a time string, as in "%d hours %d minutes remaining"
-#: ../js/ui/status/power.js:120
+#. Translators: this is <hours>:<minutes> Until Full (<percentage>)
+#: ../js/ui/status/power.js:84
 #, javascript-format
-msgid "%d %s %d %s remaining"
-msgstr "jäänud %d %s ja %d %s"
-
-#: ../js/ui/status/power.js:122
-msgid "hour"
-msgid_plural "hours"
-msgstr[0] "tund"
-msgstr[1] "tundi"
-
-#: ../js/ui/status/power.js:122
-msgid "minute"
-msgid_plural "minutes"
-msgstr[0] "minut"
-msgstr[1] "minutit"
-
-#: ../js/ui/status/power.js:125
-#, javascript-format
-msgid "%d minute remaining"
-msgid_plural "%d minutes remaining"
-msgstr[0] "jäänud %d minut"
-msgstr[1] "jäänud %d minutit"
-
-#: ../js/ui/status/power.js:128 ../js/ui/status/power.js:202
-#, javascript-format
-msgctxt "percent of battery remaining"
-msgid "%d%%"
-msgstr "%d%%"
-
-#: ../js/ui/status/power.js:217
-msgid "AC Adapter"
-msgstr "Laadija"
-
-#: ../js/ui/status/power.js:219
-msgid "Laptop Battery"
-msgstr "Sülearvuti aku"
-
-#: ../js/ui/status/power.js:221
-msgid "UPS"
-msgstr "UPS"
-
-#: ../js/ui/status/power.js:223
-msgid "Monitor"
-msgstr "Monitor"
-
-#: ../js/ui/status/power.js:225
-msgid "Mouse"
-msgstr "Hiir"
-
-#: ../js/ui/status/power.js:229
-msgid "PDA"
-msgstr "Elektronmärkmik"
-
-#: ../js/ui/status/power.js:231
-msgid "Cell Phone"
-msgstr "Mobiiltelefon"
-
-#: ../js/ui/status/power.js:233
-msgid "Media Player"
-msgstr "Meediaesitaja"
-
-#: ../js/ui/status/power.js:235
-msgid "Tablet"
-msgstr "Graafikalaud"
-
-#: ../js/ui/status/power.js:237
-msgid "Computer"
-msgstr "Arvuti"
-
-#: ../js/ui/status/power.js:239
-msgctxt "device"
-msgid "Unknown"
-msgstr "Tundmatu"
+msgid "%d∶%02d Until Full (%d %%)"
+msgstr ""
 
 #: ../js/ui/status/volume.js:124
 msgid "Volume changed"
@@ -1361,6 +1201,10 @@ msgstr "Helivaljus"
 #: ../js/ui/status/volume.js:258
 msgid "Microphone"
 msgstr "Mikrofon"
+
+#: ../js/ui/status/volume.js:310
+msgid "Sound Settings"
+msgstr "Helisätted"
 
 #: ../js/ui/unlockDialog.js:121
 msgid "Log in as another user"
@@ -1414,7 +1258,7 @@ msgstr "%s (kaugühendus)"
 msgid "%s (console)"
 msgstr "%s (konsool)"
 
-#: ../js/ui/viewSelector.js:492
+#: ../js/ui/viewSelector.js:511
 msgid "Applications"
 msgstr "Rakendused"
 
@@ -1423,28 +1267,26 @@ msgstr "Rakendused"
 msgid "'%s' is ready"
 msgstr "'%s' on valmis"
 
-#: ../js/ui/windowManager.js:67
+#: ../js/ui/windowManager.js:83
 msgid "Do you want to keep these display settings?"
-msgstr ""
+msgstr "Kas tahad säilitada need kuvasätted?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#.
-#: ../js/ui/windowManager.js:86
-#, fuzzy
+#: ../js/ui/windowManager.js:102
 msgid "Revert Settings"
-msgstr "Toitesätted..."
+msgstr "Taasta sätted"
 
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:106
 msgid "Keep Changes"
-msgstr ""
+msgstr "Säilita muudatused"
 
-#: ../js/ui/windowManager.js:108
+#: ../js/ui/windowManager.js:124
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sätete muudatused ennistatakse %d sekundi pärast"
+msgstr[1] "Sätete muudatused ennistatakse %d sekundi pärast"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
@@ -1472,19 +1314,19 @@ msgstr[1] "%u sisendit"
 msgid "System Sounds"
 msgstr "Süsteemi helid"
 
-#: ../src/main.c:325
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Printimise versioon"
 
-#: ../src/main.c:331
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Sisselogimise kuval kasutatav GDM-i režiim"
 
-#: ../src/main.c:337
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Erirežiimi kasutamine, nt sisselogimisakna jaoks \"gdm\""
 
-#: ../src/main.c:343
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "Võimalike režiimide loetelu"
 
@@ -1513,660 +1355,3 @@ msgstr "Parool ei saa olla tühi"
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
 msgstr "Kasutaja katkestas autentimisdialoogi"
-
-#~ msgid "Enable internal tools useful for developers and testers from Alt-F2"
-#~ msgstr ""
-#~ "Arendajate ja testijate jaoks sisemiste tööriistade lubamine Alt-F2 alt"
-
-#~ msgid ""
-#~ "Allows access to internal debugging and monitoring tools using the Alt-F2 "
-#~ "dialog."
-#~ msgstr ""
-#~ "Lubab ligipääsu sisemistele silumise ja monitoorimise tööriistadele Alt-"
-#~ "F2 dialoogi kaudu."
-
-#~ msgid "Uuids of extensions to enable"
-#~ msgstr "Lubatavate laienduste UUID-d"
-
-#~ msgid ""
-#~ "GNOME Shell extensions have a uuid property; this key lists extensions "
-#~ "which should be loaded. Any extension that wants to be loaded needs to be "
-#~ "in this list. You can also manipulate this list with the EnableExtension "
-#~ "and DisableExtension DBus methods on org.gnome.Shell."
-#~ msgstr ""
-#~ "GNOME Shelli laiendustel on UUID omadus; selles võtmes loetletud "
-#~ "laiendused tuleks laadida. Seda loendit saab muuta kasutades "
-#~ "EnableExtension ja DisableExtension DBus-i meetodit kohas org.gnome.Shell."
-
-#~ msgid "Whether to collect stats about applications usage"
-#~ msgstr "Kas rakenduste kasutuse kohta kogutakse andmeid"
-
-#~ msgid ""
-#~ "The shell normally monitors active applications in order to present the "
-#~ "most used ones (e.g. in launchers). While this data will be kept private, "
-#~ "you may want to disable this for privacy reasons. Please note that doing "
-#~ "so won't remove already saved data."
-#~ msgstr ""
-#~ "Shell tavaliselt seirab aktiivseid rakendusi, et näidata enamkasutatavaid "
-#~ "(näiteks käivitajaid). Kuigi neid andmeid hoitakse privaatselt, võid "
-#~ "privaatsuse suurendamiseks selle keelata. Selle keelamine siiski ei "
-#~ "eemalda juba salvestatud andmeid."
-
-#~ msgid "List of desktop file IDs for favorite applications"
-#~ msgstr "Lemmikrakenduste töölauafailide ID-de loend"
-
-#~ msgid ""
-#~ "The applications corresponding to these identifiers will be displayed in "
-#~ "the favorites area."
-#~ msgstr "Nendele tunnustele vastavaid rakendusi kuvatakse lemmikutes."
-
-#~ msgid "List of categories that should be displayed as folders"
-#~ msgstr "Kategooriad, mida tuleb kuvada kaustadena"
-
-#~ msgid ""
-#~ "Each category name in this list will be represented as folder in the "
-#~ "application view, rather than being displayed inline in the main view."
-#~ msgstr ""
-#~ "Kõiki selles loetelus olevaid kategooriaid kuvatakse rakenduste vaates "
-#~ "kaustadena, mitte peavaates teistega koos."
-
-#~ msgid "History for command (Alt-F2) dialog"
-#~ msgstr "Käsudialoogi (Alt-F2) ajalugu"
-
-# suurendusklaasidialoog? miks ka mitte :)
-#~ msgid "History for the looking glass dialog"
-#~ msgstr "Otsingudialoogi ajalugu"
-
-#~ msgid ""
-#~ "Internally used to store the last IM presence explicitly set by the user. "
-#~ "The value here is from the TpConnectionPresenceType enumeration."
-#~ msgstr ""
-#~ "Kasutatakse kasutaja poolt viimati vahetult määratud kiirsuhtluse oleku "
-#~ "salvestamiseks. See väärtus pärineb TpConnectionPresenceType nummerdusest."
-
-#~ msgid ""
-#~ "Internally used to store the last session presence status for the user. "
-#~ "The value here is from the GsmPresenceStatus enumeration."
-#~ msgstr ""
-#~ "Kasutatakse kasutaja poolt viimati vahetult määratud kiirsuhtluse oleku "
-#~ "salvestamiseks. See väärtus pärineb GsmPresenceStatus nummerdusest."
-
-#~ msgid "Always show the 'Log out' menuitem in the user menu."
-#~ msgstr "Kasutajamenüüs näidatakse alati 'Logi välja' menüükirjet."
-
-#~ msgid ""
-#~ "This key overrides the automatic hiding of the 'Log out' menuitem in "
-#~ "single-user, single-session situations."
-#~ msgstr ""
-#~ "See võti keelab automaatse 'Logi välja' menüükirje peitmise, kui arvutis "
-#~ "on üks kasutaja ning avatud üks seanss."
-
-#~ msgid ""
-#~ "Whether to remember password for mounting encrypted or remote filesystems"
-#~ msgstr ""
-#~ "Kas pidada meeles krüpteeritud või kaugfailisüsteemide haakimise paroole."
-
-#~ msgid ""
-#~ "The shell will request a password when an encrypted device or a remote "
-#~ "filesystem is mounted. If the password can be saved for future use a "
-#~ "'Remember Password' checkbox will be present. This key sets the default "
-#~ "state of the checkbox."
-#~ msgstr ""
-#~ "Shell küsib parooli, kui haagitakse krüpteeritud seade või "
-#~ "kaugfailisüsteem. Kui parooli on võimalik salvestada edaspidiseks "
-#~ "kasutuseks, näidatakse 'Salvesta parool' märkeruutu. See võti määrab "
-#~ "selle märkeruudu vaikimisi oleku."
-
-#~ msgid "Show the week date in the calendar"
-#~ msgstr "Kalendris näidatakse kuupäeva nädalavormingus"
-
-#~ msgid "If true, display the ISO week date in the calendar."
-#~ msgstr "Kui määratud, kuvatakse kalendris kuupäeva ISO nädalavormingus."
-
-#~ msgid "Keybinding to open the application menu"
-#~ msgstr "Rakenduste menüü avamise kiirklahv"
-
-#~ msgid "Keybinding to open the application menu."
-#~ msgstr "Kiirklahv  rakenduste menüü avamiseks."
-
-#~ msgid "Keybinding to open the \"Show Applications\" view"
-#~ msgstr "\"Rakenduste vaate\" avamise kiirklahv"
-
-#~ msgid ""
-#~ "Keybinding to open the \"Show Applications\" view of the Activities "
-#~ "Overview."
-#~ msgstr "\"Rakenduste vaate\" avamise kiirklahv tegevuste ülevaates."
-
-#~ msgid "Keybinding to toggle the visibility of the message tray"
-#~ msgstr "Teateala nähtavuse muutmise kiirklahv"
-
-#~ msgid "Keybinding to toggle the visibility of the message tray."
-#~ msgstr "Kiirklahv teateala nähtavuse muutmiseks."
-
-#~ msgid "Keybinding to focus the active notification"
-#~ msgstr "Aktiivse teate fokuseerimise kiirklahv"
-
-#~ msgid "Keybinding to focus the active notification."
-#~ msgstr "Aktiivse teate fokuseerimise kiirklahv."
-
-#, fuzzy
-#~ msgid "Keybinding that shows the force app exit dialog"
-#~ msgstr "Rakenduste menüü avamise kiirklahv"
-
-#~ msgid "Which keyboard to use"
-#~ msgstr "Millist klaviatuuri kasutada"
-
-#~ msgid "The type of keyboard to use."
-#~ msgstr "Kasutatava klaviatuuri liik."
-
-#~ msgid "The application icon mode."
-#~ msgstr "Rakenduste ikooni režiim."
-
-#~ msgid ""
-#~ "Configures how the windows are shown in the switcher. Valid possibilities "
-#~ "are 'thumbnail-only' (shows a thumbnail of the window), 'app-icon-"
-#~ "only' (shows only the application icon) or 'both'."
-#~ msgstr ""
-#~ "Seadistab, kuidas aknaid aknavahetajas kuvatakse. Sobivad väärtused on "
-#~ "'thumbnail-only' (näidatakse ainult pisipilti aknast), 'app-icon-"
-#~ "only' (näidatakse ainult akna ikooni) või 'both' (mõlemad)."
-
-#~ msgid "Attach modal dialog to the parent window"
-#~ msgstr "Modaaldialoog kuulub vanemakna juurde"
-
-#~ msgid ""
-#~ "This key overrides the key in org.gnome.mutter when running GNOME Shell."
-#~ msgstr ""
-#~ "See võti on ülimuslik võtme org.gnome.mutter suhtes, kui kasutatakse "
-#~ "GNOME Shelli."
-
-#~ msgid "Arrangement of buttons on the titlebar"
-#~ msgstr "Nuppude järjekord tiitliribal"
-
-#~ msgid ""
-#~ "This key overrides the key in org.gnome.desktop.wm.preferences when "
-#~ "running GNOME Shell."
-#~ msgstr ""
-#~ "See võti on ülimuslik võtme org.gnome.desktop.wm.preferences suhtes, kui "
-#~ "kasutatakse GNOME Shelli."
-
-#~ msgid "Enable edge tiling when dropping windows on screen edges"
-#~ msgstr "Akende lohistamisel ekraani serva lubatakse serva paigutamine"
-
-#~ msgid "Workspaces are managed dynamically"
-#~ msgstr "Tööalasid hallatakse dünaamiliselt"
-
-#~ msgid "Workspaces only on primary monitor"
-#~ msgstr "Tööalad peamisel monitoril"
-
-#~ msgid "Invitation"
-#~ msgstr "Kutse"
-
-#~ msgid "Call"
-#~ msgstr "Helista"
-
-#~ msgid "File Transfer"
-#~ msgstr "Failiülekanne"
-
-#~ msgid "Chat"
-#~ msgstr "Vestlus"
-
-#~ msgid "Unmute"
-#~ msgstr "Heli peale"
-
-#~ msgid "Mute"
-#~ msgstr "Heli maha"
-
-#~ msgid "<b>Yesterday</b>, <b>%H:%M</b>"
-#~ msgstr "<b>Eile</b> <b>%H:%M</b>"
-
-#~ msgid "<b>%A</b>, <b>%H:%M</b>"
-#~ msgstr "<b>%A</b>, <b>%H:%M</b>"
-
-#~ msgid "<b>%B</b> <b>%d</b>, <b>%H:%M</b>"
-#~ msgstr "<b>%d. %B</b>, <b>%H:%M</b>"
-
-#~ msgid "<b>%B</b> <b>%d</b> <b>%Y</b>, <b>%H:%M</b> "
-#~ msgstr "<b>%d. %B %Y</b>, <b>%H:%M</b>"
-
-#~ msgid "%s is now known as %s"
-#~ msgstr "%s nimi on nüüd %s"
-
-#~ msgid "Invitation to %s"
-#~ msgstr "Kutse: %s"
-
-#~ msgid "%s is inviting you to join %s"
-#~ msgstr "%s kutsub sind liituma: %s"
-
-#~ msgid "Decline"
-#~ msgstr "Keeldu"
-
-#~ msgid "Accept"
-#~ msgstr "Nõustu"
-
-#~ msgid "Video call from %s"
-#~ msgstr "%s tahab alustada videokõnet"
-
-#~ msgid "Call from %s"
-#~ msgstr "%s helistab"
-
-#~ msgid "Answer"
-#~ msgstr "Vasta"
-
-#~ msgid "%s is sending you %s"
-#~ msgstr "%s saadab sulle %s"
-
-#~ msgid "%s would like permission to see when you are online"
-#~ msgstr "%s palub sinu luba, et näha, kui sa oled võrgus"
-
-#~ msgid "Network error"
-#~ msgstr "Võrgu viga"
-
-#~ msgid "Authentication failed"
-#~ msgstr "Autentimine nurjus"
-
-#~ msgid "Encryption error"
-#~ msgstr "Krüptimise viga"
-
-#~ msgid "Certificate not provided"
-#~ msgstr "Sertifikaati pole"
-
-#~ msgid "Certificate untrusted"
-#~ msgstr "Sertifikaat pole usaldusväärne"
-
-#~ msgid "Certificate expired"
-#~ msgstr "Sertifikaat on aegunud"
-
-#~ msgid "Certificate not activated"
-#~ msgstr "Sertifikaat pole aktiivne"
-
-#~ msgid "Certificate hostname mismatch"
-#~ msgstr "Sertifikaadi hostinimi ei klapi"
-
-#~ msgid "Certificate fingerprint mismatch"
-#~ msgstr "Sertifikaadi sõrmejälg ei klapi"
-
-#~ msgid "Certificate self-signed"
-#~ msgstr "Sertifikaat on ise-allkirjastatud"
-
-#~ msgid "Status is set to offline"
-#~ msgstr "Oled nüüd ühenduseta olekus"
-
-#~ msgid "Encryption is not available"
-#~ msgstr "Krüpteering pole saadaval"
-
-#~ msgid "Certificate is invalid"
-#~ msgstr "Sertifikaat on vigane"
-
-#~ msgid "Connection has been refused"
-#~ msgstr "Ühendusest keelduti"
-
-#~ msgid "Connection can't be established"
-#~ msgstr "Ühendust pole võimalik luua"
-
-#~ msgid "Connection has been lost"
-#~ msgstr "Ühendus katkes"
-
-#~ msgid "This account is already connected to the server"
-#~ msgstr "Selle kontoga on juba serverisse ühendutud"
-
-#~ msgid ""
-#~ "Connection has been replaced by a new connection using the same resource"
-#~ msgstr "Ühendus on asendatud sama kontot kasutades uue ühendusega"
-
-#~ msgid "The account already exists on the server"
-#~ msgstr "See konto on serveris juba olemas"
-
-#~ msgid "Server is currently too busy to handle the connection"
-#~ msgstr "Server on praegu ühendusega toimetulekuks liiga hõivatud"
-
-#~ msgid "Certificate has been revoked"
-#~ msgstr "Sertifikaat on tühistatud"
-
-#~ msgid ""
-#~ "Certificate uses an insecure cipher algorithm or is cryptographically weak"
-#~ msgstr ""
-#~ "Sertifikaat kasutab ebaturvalist šifrialgoritmini ning on nõrgalt "
-#~ "krüptitud"
-
-#~ msgid ""
-#~ "The length of the server certificate, or the depth of the server "
-#~ "certificate chain, exceed the limits imposed by the cryptography library"
-#~ msgstr ""
-#~ "Serveri sertifikaadi pikkus ehk sertifikaatide keti sügavus ületab "
-#~ "krüptograafiateegi määratud piiri"
-
-#~ msgid "Internal error"
-#~ msgstr "Sisemine viga"
-
-#~ msgid "Unable to connect to %s"
-#~ msgstr "Pole võimalik ühenduda võrguga %s"
-
-#~ msgid "View account"
-#~ msgstr "Konto kuvamine"
-
-#~ msgid "Unknown reason"
-#~ msgstr "Põhjus teadmata"
-
-#~ msgid "New Window"
-#~ msgstr "Uus aken"
-
-#~ msgid "Add to Favorites"
-#~ msgstr "Lisa lemmikutesse"
-
-#~ msgctxt "event list time"
-#~ msgid "%H\\u2236%M"
-#~ msgstr "%H\\u2236%M"
-
-#~ msgctxt "event list time"
-#~ msgid "%l\\u2236%M\\u2009%p"
-#~ msgstr "%l\\u2236%M\\u2009%p"
-
-#~ msgid "Top Bar"
-#~ msgstr "Ülemine riba"
-
-#~ msgid "Auto broadband"
-#~ msgstr "Automaatne lairibaühendus"
-
-#~ msgid "Auto dial-up"
-#~ msgstr "Automaatne sissehelistamine"
-
-#~ msgid "Log Out"
-#~ msgstr "Logi välja"
-
-#, fuzzy
-#~ msgid "My Computer"
-#~ msgstr "Arvuti"
-
-#, fuzzy
-#~ msgid "My computer"
-#~ msgstr "Arvuti"
-
-#~ msgid "Screenshots"
-#~ msgstr "Ekraanipildid"
-
-#~ msgid "Record a screencast"
-#~ msgstr "Ekraanivideo salvestamine"
-
-#~ msgid "Keybinding to toggle the screen recorder"
-#~ msgstr "Erkaanilindistaja lülitamise kiirklahv"
-
-#~ msgid "Keybinding to start/stop the builtin screen recorder."
-#~ msgstr "Kiirklahv erkaanilindistaja käivitamiseks/peatamiseks."
-
-#~ msgid "Framerate used for recording screencasts."
-#~ msgstr "Ekraanivideo lindistamisel kasutatav kaadrikiirus."
-
-#~ msgid ""
-#~ "The framerate of the resulting screencast recordered by GNOME Shell's "
-#~ "screencast recorder in frames-per-second."
-#~ msgstr ""
-#~ "GNOME Shelli lindistatava ekraanivideo kaadrisagedus (kaadrit sekundis)."
-
-#~ msgid "The gstreamer pipeline used to encode the screencast"
-#~ msgstr "GStreameri toru, mida ekraanivideo kodeerimiseks kasutatakse"
-
-#~ msgid ""
-#~ "Sets the GStreamer pipeline used to encode recordings. It follows the "
-#~ "syntax used for gst-launch. The pipeline should have an unconnected sink "
-#~ "pad where the recorded video is recorded. It will normally have a "
-#~ "unconnected source pad; output from that pad will be written into the "
-#~ "output file. However the pipeline can also take care of its own output - "
-#~ "this might be used to send the output to an icecast server via shout2send "
-#~ "or similar. When unset or set to an empty value, the default pipeline "
-#~ "will be used. This is currently 'vp8enc min_quantizer=13 max_quantizer=13 "
-#~ "cpu-used=5 deadline=1000000 threads=%T ! queue ! webmmux' and records to "
-#~ "WEBM using the VP8 codec. %T is used as a placeholder for a guess at the "
-#~ "optimal thread count on the system."
-#~ msgstr ""
-#~ "Määrab GStreameri toru, mida kasutatakse lindistuste kodeerimiseks. See "
-#~ "peab vastama gst-launch'i süntaksile. Torul peaks olema vaba plokk (sink "
-#~ "pad), kuhu lindistatav video salvestatakse. Tavaliselt on vaba plokk "
-#~ "olemas; selle ploki väljund kirjutatakse väljundfaili. Toru võib "
-#~ "hoolitseda ka enda väljundi eest - seda võib kasutada väljundi saatmiseks "
-#~ "icecast serverisse shout2send või sarnase tehnoloogia abil. Kui see on "
-#~ "määramata või väärtus on tühi, kasutatakse vaikimisi toru. See on praegu "
-#~ "'vp8enc min_quantizer=13 max_quantizer=13 cpu-used=5 deadline=1000000 "
-#~ "threads=%T ! queue ! webmmux' ning lindistab WEBM vormingusse VP8 "
-#~ "koodekiga. %T asendatakse süsteemi oletatava optimaalseima lõimede "
-#~ "(thread) arvuga."
-
-#~ msgid "File extension used for storing the screencast"
-#~ msgstr "Ekraanivideo salvestamisel kasutatav faililaiend"
-
-#~ msgid ""
-#~ "The filename for recorded screencasts will be a unique filename based on "
-#~ "the current date, and use this extension. It should be changed when "
-#~ "recording to a different container format."
-#~ msgstr ""
-#~ "Ekraanivideo jaoks kasutatav failinimi on unikaalne, see sisaldab "
-#~ "salvestamise kuupäeva ja ka käesoleva võtmega määratud laiendit. Mõnda "
-#~ "teise konteinervormingusse salvestades tuleks ka sellele vormingule "
-#~ "vastav laiend määrata."
-
-#~ msgid "Screencast from %d %t"
-#~ msgstr "Ekraanivideo %d %t"
-
-#, fuzzy
-#~ msgid "Type to search your computer"
-#~ msgstr "Otsing…"
-
-#~ msgid "Frequent"
-#~ msgstr "Sage"
-
-#~ msgid "All"
-#~ msgstr "Kõik"
-
-#~ msgid "%d new message"
-#~ msgid_plural "%d new messages"
-#~ msgstr[0] "%d uus sõnum"
-#~ msgstr[1] "%d uut sõnumit"
-
-#~ msgid "Activities"
-#~ msgstr "Tegevused"
-
-#~ msgid "%A, %B %d"
-#~ msgstr "%A, %d. %B"
-
-#~ msgid "%d new notification"
-#~ msgid_plural "%d new notifications"
-#~ msgstr[0] "%d uus märguanne"
-#~ msgstr[1] "%d uut märguannet"
-
-#~ msgid "Available"
-#~ msgstr "Saadaval"
-
-#~ msgid "Busy"
-#~ msgstr "Hõivatud"
-
-#~ msgid "Invisible"
-#~ msgstr "Nähtamatu"
-
-#~ msgid "Away"
-#~ msgstr "Eemal"
-
-#~ msgid "Idle"
-#~ msgstr "Jõude"
-
-#~ msgid "Offline"
-#~ msgstr "Ühendamata"
-
-#~ msgid "Notifications"
-#~ msgstr "Märguanded"
-
-#~ msgid "Install Updates & Restart"
-#~ msgstr "Paigalda uuendused ja taaskäivita"
-
-#~ msgid "Your chat status will be set to busy"
-#~ msgstr "Sinu vestluse olekuks määratakse hõivatud"
-
-#~ msgid ""
-#~ "Notifications are now disabled, including chat messages. Your online "
-#~ "status has been adjusted to let others know that you might not see their "
-#~ "messages."
-#~ msgstr ""
-#~ "Märguanded on nüüd keelatud, sealhulgas vestlusteated. Sinu netiolekut "
-#~ "muudeti, et teised teaksid, et sa ei pruugi nende teateid näha."
-
-#~ msgid "Search"
-#~ msgstr "Otsing"
-
-#~ msgid ""
-#~ "Sorry, no wisdom for you today:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Vabandust, tänaseks tarkuseteri pole:\n"
-#~ "%s"
-
-#~ msgid "%s the Oracle says"
-#~ msgstr "Oraakel %s ütleb"
-
-#~ msgid "Show full name in the user menu"
-#~ msgstr "Kasutajamenüüs näidatakse kasutaja tervet nime"
-
-#~ msgid "Whether the users full name is shown in the user menu or not."
-#~ msgstr "Kas kasutajamenüüs näidatakse kasutaja kogu nime või mitte."
-
-#~ msgctxt "title"
-#~ msgid "Sign In"
-#~ msgstr "Sisselogimine"
-
-#~ msgid "APPLICATIONS"
-#~ msgstr "RAKENDUSED"
-
-#~ msgid "SETTINGS"
-#~ msgstr "SEADED"
-
-#~ msgctxt "event list time"
-#~ msgid "%H:%M"
-#~ msgstr "%H:%M"
-
-#~ msgctxt "event list time"
-#~ msgid "%l:%M %p"
-#~ msgstr "%l:%M %p"
-
-#~ msgid "tray"
-#~ msgstr "salv"
-
-#~ msgid "More..."
-#~ msgstr "Veel..."
-
-#~ msgid "Your favorite Easter Egg"
-#~ msgstr "Sinu lemmiküllatusmuna"
-
-#~ msgid "United Kingdom"
-#~ msgstr "Suurbritannia"
-
-#~ msgid "Default"
-#~ msgstr "Vaikimisi"
-
-#~ msgid "Subscription request"
-#~ msgstr "Tellimuse päring"
-
-#~ msgid "Connection error"
-#~ msgstr "Ühenduse viga"
-
-#~ msgid "<b>%H:%M</b> on Yesterday"
-#~ msgstr "Eile <b>%H:%M</b>"
-
-#~ msgid "<b>%H:%M</b> on <b>%A</b>, <b>%B</b> <b>%d</b>, %Y"
-#~ msgstr "<b>%H:%M</b>, <b>%A</b>, <b>%d. %B</b> %Y"
-
-#~ msgid "Connection to %s failed"
-#~ msgstr "Ühendus %s nurjus"
-
-#~ msgid "Reconnect"
-#~ msgstr "Ühendu uuesti"
-
-#~ msgid "Wireless"
-#~ msgstr "Juhtmeta"
-
-#~ msgid "disabled OpenSearch providers"
-#~ msgstr "keelatud OpenSearch pakkujad"
-
-#~ msgid "Show time with seconds"
-#~ msgstr "Kellaaega näidatakse sekunditega"
-
-#~ msgid "If true, display seconds in time."
-#~ msgstr "Kui määratud, siis kuvatakse aja juures ka sekundeid."
-
-#~ msgid "Show date in clock"
-#~ msgstr "Kell näitab kuupäeva"
-
-#~ msgid "If true, display date in the clock, in addition to time."
-#~ msgstr "Kui määratud, siis kuvatakse kellaaja kõrval ka kuupäeva."
-
-#~ msgid "CONTACTS"
-#~ msgstr "KONTAKTID"
-
-#~ msgid "%a %b %e, %R:%S"
-#~ msgstr "%a, %e. %b, %R:%S"
-
-#~ msgid "%a %b %e, %R"
-#~ msgstr "%a, %e. %b, %R"
-
-#~ msgid "%a %R:%S"
-#~ msgstr "%A %R:%S"
-
-#~ msgid "%a %R"
-#~ msgstr "%A %R"
-
-#~ msgid "%a %b %e, %l:%M:%S %p"
-#~ msgstr "%a, %e. %b, %l:%M:%S %p"
-
-#~ msgid "%a %b %e, %l:%M %p"
-#~ msgstr "%a, %e. %b, %l:%M %p"
-
-#~ msgid "%a %l:%M:%S %p"
-#~ msgstr "%A, %l:%M:%S %p"
-
-#~ msgid "%a %l:%M %p"
-#~ msgstr "%a, %l:%M %p"
-
-#~ msgid "Failed to unmount '%s'"
-#~ msgstr "'%s' lahtihaakimine nurjus"
-
-#~ msgid "Retry"
-#~ msgstr "Proovi uuesti"
-
-#~ msgid "Connect to..."
-#~ msgstr "Ühendumine..."
-
-#~ msgid "PLACES & DEVICES"
-#~ msgstr "ASUKOHAD JA SEADMED"
-
-#~ msgid "Wrong password, please try again"
-#~ msgstr "Vale parool, palun proovi uuesti"
-
-#~ msgid "%s is online."
-#~ msgstr "%s on ühendatud."
-
-#~ msgid "%s is offline."
-#~ msgstr "%s on ühendamata."
-
-#~ msgid "%s is away."
-#~ msgstr "%s on eemal."
-
-#~ msgid "%s is busy."
-#~ msgstr "%s on hõivatud."
-
-#~ msgid "Hidden"
-#~ msgstr "Nähtamatu"
-
-#~ msgid "Power Off..."
-#~ msgstr "Lülita välja..."
-
-#~ msgid "Online Accounts"
-#~ msgstr "Netikontod"
-
-#~ msgid "Lock Screen"
-#~ msgstr "Lukusta ekraan"
-
-#~ msgid "Log Out..."
-#~ msgstr "Logi välja..."
-
-#~ msgid "Home"
-#~ msgstr "Kodukataloog"
-
-#~ msgid "%1$s: %2$s"
-#~ msgstr "%1$s: %2$s"

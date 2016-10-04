@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 01:26+0000\n"
-"PO-Revision-Date: 2016-07-02 08:25+0000\n"
+"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"PO-Revision-Date: 2016-10-04 17:45+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Thai (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -236,23 +236,23 @@ msgstr "%s ถูกเพิ่มเข้าในรายการโปร
 msgid "%s has been removed from your favorites."
 msgstr "%s ถูกลบออกจากรายการโปรดของคุณแล้ว"
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
 msgstr "พื้นที่ทำงานอื่นๆ"
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
 msgstr "พื้นที่ทำงานปัจจุบัน"
 
-#: ../js/ui/appIconBar.js:300
+#: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
 msgstr "ปักหมุดที่ทาสก์บาร์"
 
-#: ../js/ui/appIconBar.js:304
+#: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
 msgstr "ถอดหมุดจากทาสก์บาร์"
 
-#: ../js/ui/appIconBar.js:320
+#: ../js/ui/appIconBar.js:319
 #, javascript-format
 msgid "Quit %s"
 msgstr "จบการทำงาน %s "
@@ -407,7 +407,7 @@ msgstr "%A %d %B"
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
-msgstr "%A %d %B %Y"
+msgstr "%A %d %B %Ey"
 
 #: ../js/ui/calendar.js:751
 msgid "Today"
@@ -631,7 +631,7 @@ msgstr "การตั้งค่าวันที่และเวลา"
 #. AM").
 #: ../js/ui/dateMenu.js:214
 msgid "%A %B %e, %Y"
-msgstr "%A %e %B %Y"
+msgstr "%A %d %B %Ey"
 
 #: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
@@ -1265,21 +1265,21 @@ msgstr "โปรแกรม"
 msgid "'%s' is ready"
 msgstr "'%s' พร้อมแล้ว"
 
-#: ../js/ui/windowManager.js:67
+#: ../js/ui/windowManager.js:83
 msgid "Do you want to keep these display settings?"
 msgstr "คุณต้องการที่จะเก็บการตั้งค่าการแสดงผลเหล่านี้หรือไม่"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:86
+#: ../js/ui/windowManager.js:102
 msgid "Revert Settings"
 msgstr "ย้อนกลับการตั้งค่า"
 
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:106
 msgid "Keep Changes"
 msgstr "เก็บการเปลี่ยนแปลง"
 
-#: ../js/ui/windowManager.js:108
+#: ../js/ui/windowManager.js:124
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"

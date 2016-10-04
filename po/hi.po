@@ -6,16 +6,16 @@
 # Chandan kumar <chandankumar.093047@gmail.com>, 2012
 # e2f_in_c3 <e2f_in_c3@outlook.com>, 2016
 # e2f_in c7 <e2f_in_c7@outlook.com>, 2016
-# rajesh <rajeshkajha@yahoo.com>, 2012-2013
+# rajesh <rajeshkajha@yahoo.com>, 2012-2014
 # Rajesh <rranjan>, 2011
 # Roddy Shuler <roddy@endlessm.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 01:26+0000\n"
-"PO-Revision-Date: 2016-07-07 06:48+0000\n"
-"Last-Translator: e2f_in c7 <e2f_in_c7@outlook.com>\n"
+"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"PO-Revision-Date: 2016-10-04 17:43+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -238,23 +238,23 @@ msgstr "%s को आपकी पसंदीदा में जोड़ा �
 msgid "%s has been removed from your favorites."
 msgstr "%s को आपकी पसंदीदा से हटाया गया है."
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
 msgstr "अन्य कार्यस्थल"
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
 msgstr "मौजूदा कार्यस्थल"
 
-#: ../js/ui/appIconBar.js:300
+#: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
 msgstr "टास्कबार में पिन करें"
 
-#: ../js/ui/appIconBar.js:304
+#: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
 msgstr "टास्कबार से अनपिन करें"
 
-#: ../js/ui/appIconBar.js:320
+#: ../js/ui/appIconBar.js:319
 #, javascript-format
 msgid "Quit %s"
 msgstr "%s से बाहर निकलें"
@@ -913,7 +913,7 @@ msgstr "लॉक को किसी अनुप्रयोग द्वा�
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
-msgstr "खोज रहा है…"
+msgstr "खोज रहा है..."
 
 #: ../js/ui/search.js:783
 msgid "No results."
@@ -937,7 +937,7 @@ msgstr "पाठ छिपाएँ"
 
 #: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
-msgstr "सर्च करने के लिए टाइप करें..."
+msgstr "खोजने के लिए टाइप करें…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1173,7 +1173,7 @@ msgstr "बिजली सेटिंग्स"
 
 #: ../js/ui/status/power.js:58
 msgid "Fully Charged"
-msgstr "पूरी तरह से चार्ज"
+msgstr "पूरी तरह चार्ज्ड"
 
 #. 0 is reported when UPower does not have enough data
 #. to estimate battery life
@@ -1271,26 +1271,26 @@ msgstr "अनुप्रयोग"
 msgid "'%s' is ready"
 msgstr "'%s' तैयार है"
 
-#: ../js/ui/windowManager.js:67
+#: ../js/ui/windowManager.js:83
 msgid "Do you want to keep these display settings?"
-msgstr "क्या आप इन डिस्प्ले सेटिंग्स को रखना चाहते हैं?"
+msgstr "क्या आप इस प्रदर्शन जमावट को रखना चाहते हैं?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:86
+#: ../js/ui/windowManager.js:102
 msgid "Revert Settings"
-msgstr "सेटिंग्स को उल्टा करें"
+msgstr "सेटिंग्स में वापस जाएँ"
 
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:106
 msgid "Keep Changes"
-msgstr "बदलाव रखें"
+msgstr "परिवर्तन बनाए रखें"
 
-#: ../js/ui/windowManager.js:108
+#: ../js/ui/windowManager.js:124
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] "सेटिंग्स बदलाव %d सेकंड में रिवर्ट करेंंगे"
-msgstr[1] "सेटिंग्स बदलाव %d सेकंड्स में रिवर्ट करेंगे"
+msgstr[0] "सेटिंग बदलाव %d सेकेंड में वापस होगा"
+msgstr[1] "सेटिंग बदलाव %d सेकेंड में वापस होगा"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
