@@ -6,14 +6,15 @@
 # e2f_vn_c4 <leo.nguyen@expertrans.com>, 2016
 # Trung Ngô <ndtrung4419@gmail.com>, 2011
 # Roddy Shuler <roddy@endlessm.com>, 2016
+# Trần Ngọc Quân <vnwildman@gmail.com>, 2015-2016
 # Trung Ngô <ndtrung4419@gmail.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 01:26+0000\n"
-"PO-Revision-Date: 2016-07-02 06:36+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"PO-Revision-Date: 2016-10-04 17:46+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -58,16 +59,16 @@ msgstr "Quản lý cửa sổ và chạy ứng dụng"
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 #: ../js/extensionPrefs/main.js:155
 msgid "GNOME Shell Extension Preferences"
-msgstr "Tuỳ thích phần mở rộng GNOME Shell"
+msgstr "Cá nhân hóa phần mở rộng hệ vỏ GNOME"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure GNOME Shell Extensions"
-msgstr "Cấu hình phần mở rộng GNOME Shell"
+msgstr "Cấu hình phần mở rộng Hệ vỏ GNOME"
 
 #: ../js/extensionPrefs/main.js:127
 #, javascript-format
 msgid "There was an error loading the preferences dialog for %s:"
-msgstr "Lỗi nạp hộp thoại tuỳ thích cho %s:"
+msgstr "Có lỗi khi đang tải hộp thoại tùy thích cho %s:"
 
 #: ../js/extensionPrefs/main.js:167
 msgid "Extension"
@@ -132,7 +133,7 @@ msgstr "Đăng nhập"
 
 #: ../js/gdm/loginDialog.js:998
 msgid "Next"
-msgstr "Tới"
+msgstr "Kế tiếp"
 
 #: ../js/gdm/loginDialog.js:1116
 msgid "Your unlock code was incorrect. Please try again."
@@ -144,11 +145,11 @@ msgstr "Mã mở khóa của bạn không chính xác. Vui lòng thử lại."
 #: ../js/gdm/loginDialog.js:1166 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
-msgstr "Tên người dùng: "
+msgstr "Tài khoản: "
 
 #: ../js/gdm/loginDialog.js:1429
 msgid "Login Window"
-msgstr "Cửa sổ đặt nhập"
+msgstr "Cửa sổ đăng nhập"
 
 #. Translators: accessible name of the power menu in the login screen
 #: ../js/gdm/powerMenu.js:36
@@ -157,7 +158,7 @@ msgstr "Nguồn"
 
 #: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
 msgid "Suspend"
-msgstr "Ngưng"
+msgstr "Tạm dừng"
 
 #: ../js/gdm/powerMenu.js:98
 msgid "Restart"
@@ -180,7 +181,7 @@ msgstr "(hoặc quẹt ngón tay)"
 #: ../js/gdm/util.js:406
 #, javascript-format
 msgid "(e.g., user or %s)"
-msgstr "(ví dụ người dùng hoặc %s)"
+msgstr "(ví dụ: tài khoản hoặc %s)"
 
 #: ../js/misc/util.js:121
 msgid "Command not found"
@@ -229,37 +230,37 @@ msgstr "Xóa"
 #: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
-msgstr "Đã được đánh dấu ưa thích cho %s."
+msgstr "Đã đánh dấu ưa thích cho %s."
 
 #: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
-msgstr "Đã bỏ đánh dấu ưa thích cho %s"
+msgstr "%s đã bị xóa khỏi danh sách ưa thích."
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
 msgstr "Các vùng làm việc khác"
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
 msgstr "Vùng làm việc hiện tại"
 
-#: ../js/ui/appIconBar.js:300
+#: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
 msgstr "Ghim vào Thanh tác vụ"
 
-#: ../js/ui/appIconBar.js:304
+#: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
 msgstr "Bỏ ghim khỏi Thanh tác vụ"
 
-#: ../js/ui/appIconBar.js:320
+#: ../js/ui/appIconBar.js:319
 #, javascript-format
 msgid "Quit %s"
 msgstr "Thoát %s"
 
 #: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
-msgstr "Thay đổi nền…"
+msgstr "Đổi ảnh nền…"
 
 #: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
@@ -407,7 +408,7 @@ msgstr "%A, %d %B"
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
-msgstr "%A, %d %B %Y"
+msgstr "%A, %d %B, %Y"
 
 #: ../js/ui/calendar.js:751
 msgid "Today"
@@ -470,7 +471,7 @@ msgstr "Mật khẩu: "
 #. static WEP
 #: ../js/ui/components/networkAgent.js:228
 msgid "Key: "
-msgstr "Khoá: "
+msgstr "Khóa: "
 
 #: ../js/ui/components/networkAgent.js:266
 msgid "Identity: "
@@ -478,7 +479,7 @@ msgstr "Định danh: "
 
 #: ../js/ui/components/networkAgent.js:268
 msgid "Private key password: "
-msgstr "Mật khẩu khoá riêng: "
+msgstr "Mật khẩu khóa riêng: "
 
 #: ../js/ui/components/networkAgent.js:280
 msgid "Service: "
@@ -606,7 +607,7 @@ msgstr "Hiện ứng dụng"
 
 #: ../js/ui/dash.js:298
 msgid "Remove from Favorites"
-msgstr "Bỏ đánh dấu ưa thích"
+msgstr "Bỏ khỏi danh sách ưa thích"
 
 #. Translators: this is the name of the dock/favorites area on
 #. the left of the overview
@@ -708,7 +709,7 @@ msgstr "Tắt máy"
 #: ../js/ui/endSessionDialog.js:135
 msgctxt "title"
 msgid "Restart"
-msgstr "Khởi động lại"
+msgstr "Khởi động lại máy tính"
 
 #: ../js/ui/endSessionDialog.js:137
 msgid "Click Restart to quit these applications and restart the system."
@@ -811,7 +812,7 @@ msgstr "Lỗi"
 
 #: ../js/ui/lookingGlass.js:723
 msgid "Out of date"
-msgstr "Hết hạn"
+msgstr "Đã quá cũ"
 
 #: ../js/ui/lookingGlass.js:725
 msgid "Downloading"
@@ -823,7 +824,7 @@ msgstr "Xem mã nguồn"
 
 #: ../js/ui/lookingGlass.js:758
 msgid "Web Page"
-msgstr "Trang Web"
+msgstr "Trang thông tin điện tử"
 
 #: ../js/ui/messageTray.js:1205
 msgid "Open"
@@ -856,7 +857,7 @@ msgstr "Thông tin hệ thống"
 #: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
 msgctxt "program"
 msgid "Unknown"
-msgstr "Không biết"
+msgstr "Chưa biết"
 
 #: ../js/ui/overview.js:118
 msgid "Undo"
@@ -889,7 +890,7 @@ msgstr "Đóng"
 
 #: ../js/ui/screenShield.js:132
 msgid "GNOME needs to lock the screen"
-msgstr "GNOME cần khoá màn hình"
+msgstr "GNOME cần khóa màn hình"
 
 #. We could not become modal, so we can't activate the
 #. screenshield. The user is probably very upset at this
@@ -899,11 +900,11 @@ msgstr "GNOME cần khoá màn hình"
 #. screen, where we're not affected by grabs
 #: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
 msgid "Unable to lock"
-msgstr "Không thể khoá"
+msgstr "Không thể khóa"
 
 #: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
 msgid "Lock was blocked by an application"
-msgstr "Một ứng dụng đã ngăn cản khoá"
+msgstr "Việc khóa bị ngăn cản bởi một ứng dụng"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
@@ -911,7 +912,7 @@ msgstr "Đang tìm…"
 
 #: ../js/ui/search.js:783
 msgid "No results."
-msgstr "Không có kết quả."
+msgstr "Không tìm thấy kết quả nào."
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -931,7 +932,7 @@ msgstr "Ẩn chữ"
 
 #: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
-msgstr "Nhập để tìm kiếm…"
+msgstr "Gõ từ muốn tìm…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -943,7 +944,7 @@ msgstr "Nhớ mật khẩu"
 
 #: ../js/ui/shellMountOperation.js:403 ../js/ui/unlockDialog.js:110
 msgid "Unlock"
-msgstr "Bỏ khoá"
+msgstr "Mở khóa"
 
 #: ../js/ui/status/accessibility.js:39
 msgid "Accessibility"
@@ -1000,7 +1001,7 @@ msgstr "Bluetooth"
 
 #: ../js/ui/status/bluetooth.js:51
 msgid "Bluetooth Settings"
-msgstr "Thiết lập Bluetooth"
+msgstr "Cài đặt Bluetooth"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
 #: ../js/ui/status/bluetooth.js:82 ../js/ui/status/network.js:181
@@ -1021,7 +1022,7 @@ msgstr "Vô hiệu hóa Hot Corner"
 
 #: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
-msgstr "Hiện bố trí bàn phím"
+msgstr "Hiện bố cục của bàn phím"
 
 #: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
@@ -1054,7 +1055,7 @@ msgstr "đang ngắt kết nối..."
 
 #: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
 msgid "connecting..."
-msgstr "đang kết nối..."
+msgstr "đang kết nối…"
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
@@ -1084,7 +1085,7 @@ msgstr "không có mặt"
 
 #: ../js/ui/status/network.js:496 ../js/ui/status/network.js:1556
 msgid "connection failed"
-msgstr "lỗi kết nối"
+msgstr "gặp lỗi khi kết nối"
 
 #: ../js/ui/status/network.js:555 ../js/ui/status/network.js:1440
 #: ../js/ui/status/network.js:1632
@@ -1139,7 +1140,7 @@ msgstr "Wi-Fi"
 
 #: ../js/ui/status/network.js:1795
 msgid "Network Settings"
-msgstr "Thiết lập mạng"
+msgstr "Cài đặt mạng"
 
 #: ../js/ui/status/network.js:1812
 msgid "Network Manager"
@@ -1163,17 +1164,17 @@ msgstr "Pin"
 
 #: ../js/ui/status/power.js:51
 msgid "Power Settings"
-msgstr "Thiết lập năng lượng"
+msgstr "Cài đặt nguồn điện"
 
 #: ../js/ui/status/power.js:58
 msgid "Fully Charged"
-msgstr "Đã Sạc đầy"
+msgstr "Đã sạc đầy"
 
 #. 0 is reported when UPower does not have enough data
 #. to estimate battery life
 #: ../js/ui/status/power.js:65 ../js/ui/status/power.js:71
 msgid "Estimating…"
-msgstr "Ước lượng…"
+msgstr "Ước tính…"
 
 #. Translators: this is <hours>:<minutes> Remaining (<percentage>)
 #: ../js/ui/status/power.js:79
@@ -1202,7 +1203,7 @@ msgstr "Micrô"
 
 #: ../js/ui/status/volume.js:310
 msgid "Sound Settings"
-msgstr "Thiết lập âm thanh"
+msgstr "Cài đặt âm thanh"
 
 #: ../js/ui/unlockDialog.js:121
 msgid "Log in as another user"
@@ -1210,11 +1211,11 @@ msgstr "Đăng nhập người dùng khác"
 
 #: ../js/ui/unlockDialog.js:142
 msgid "Unlock Window"
-msgstr "Bỏ khoá cửa sổ"
+msgstr "Bỏ khóa cửa sổ"
 
 #: ../js/ui/userMenu.js:36
 msgid "Lock"
-msgstr "Khoá"
+msgstr "Khóa"
 
 #: ../js/ui/userMenu.js:37
 msgid "Exit"
@@ -1226,7 +1227,7 @@ msgstr "Trợ giúp"
 
 #: ../js/ui/userMenu.js:40
 msgid "Settings"
-msgstr "Thiết lập"
+msgstr "Cài đặt"
 
 #: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
@@ -1248,13 +1249,13 @@ msgstr "Tắt sẽ làm mất những kết quả chưa được lưu."
 #: ../js/ui/userMenu.js:594
 #, javascript-format
 msgid "%s (remote)"
-msgstr "%s (ở xa)"
+msgstr "%s (máy chủ)"
 
 #. Translators: Console here refers to a tty like a VT console
 #: ../js/ui/userMenu.js:597
 #, javascript-format
 msgid "%s (console)"
-msgstr "%s (console)"
+msgstr "%s (bàn điều khiển)"
 
 #: ../js/ui/viewSelector.js:511
 msgid "Applications"
@@ -1265,25 +1266,25 @@ msgstr "Ứng dụng"
 msgid "'%s' is ready"
 msgstr "'%s' đã sẵn sàng"
 
-#: ../js/ui/windowManager.js:67
+#: ../js/ui/windowManager.js:83
 msgid "Do you want to keep these display settings?"
-msgstr "Bạn có muốn giữ các thiết lập hiển thị này không?"
+msgstr "Bạn có muốn giữ những cài đặt màn hình hiển thị này không?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:86
+#: ../js/ui/windowManager.js:102
 msgid "Revert Settings"
-msgstr "Trở lại Thiết lập ban đầu"
+msgstr "Phục hồi lại các cài đặt"
 
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:106
 msgid "Keep Changes"
-msgstr "Giữ Thay đổi"
+msgstr "Giữ các thay đổi"
 
-#: ../js/ui/windowManager.js:108
+#: ../js/ui/windowManager.js:124
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] "Các thay đổi về thiết lập sẽ trở lại ban đầu trong %d giây"
+msgstr[0] "Các thay đổi có thể được hoàn lại trong vòng %d giây nữa"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
@@ -1311,19 +1312,19 @@ msgstr "Âm thanh hệ thống"
 
 #: ../src/main.c:321
 msgid "Print version"
-msgstr "In phiên bản"
+msgstr "Hiển thị phiên bản"
 
 #: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
-msgstr "Chể độ dùng bởi GDM cho màn hình đăng nhập"
+msgstr "Chế độ được dùng bởi GDM cho màn hình đăng nhập"
 
 #: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
-msgstr "Dùng chế độ đặc biệt, ví dụ \"gdm\" cho màn hình đăng nhập"
+msgstr "Dùng chế độ đặc biệt, ví dụ “gdm” cho màn hình đăng nhập"
 
 #: ../src/main.c:339
 msgid "List possible modes"
-msgstr "Danh sách chế độ"
+msgstr "Danh sách chế độ có thể"
 
 #: ../src/shell-app.c:654
 #, c-format
@@ -1341,11 +1342,11 @@ msgstr "Xác định tùy chỉnh cho %s"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."
-msgstr "Mật khẩu không khớp"
+msgstr "Mật khẩu không đúng."
 
 #: ../src/shell-keyring-prompt.c:716
 msgid "Password cannot be blank"
-msgstr "Mật khẩu không thể không có"
+msgstr "Mật khẩu không thể để trống"
 
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"

@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 01:26+0000\n"
-"PO-Revision-Date: 2016-06-23 09:06+0000\n"
-"Last-Translator: Shimon Sharmin <oparthib@gmail.com>\n"
+"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"PO-Revision-Date: 2016-08-31 21:39+0000\n"
+"Last-Translator: Philip Chimento <philip.chimento@gmail.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -234,23 +234,23 @@ msgstr "আপনার পছন্দে %s যোগ করা হয়েছ�
 msgid "%s has been removed from your favorites."
 msgstr "আপনার পছন্দ থেকে  %s বাদ হয়েছে।"
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
 msgstr "অন্য কাজের ক্ষেত্র"
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
 msgstr "বর্তমান কাজের ক্ষেত্র"
 
-#: ../js/ui/appIconBar.js:300
+#: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
 msgstr "টাস্কবারে গেঁথে রাখুন "
 
-#: ../js/ui/appIconBar.js:304
+#: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
 msgstr "টাস্কবার থেকে সরিয়ে নিন "
 
-#: ../js/ui/appIconBar.js:320
+#: ../js/ui/appIconBar.js:319
 #, javascript-format
 msgid "Quit %s"
 msgstr "%s বন্ধ"
@@ -1267,21 +1267,21 @@ msgstr "অ্যাপ্লিকেশন"
 msgid "'%s' is ready"
 msgstr "'%s' প্রস্তুত"
 
-#: ../js/ui/windowManager.js:67
+#: ../js/ui/windowManager.js:83
 msgid "Do you want to keep these display settings?"
 msgstr "আপনি কি এই ডিসপ্লে সেটিংটি রাখতে চান? "
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:86
+#: ../js/ui/windowManager.js:102
 msgid "Revert Settings"
 msgstr "সেটিং পূর্বাবস্থায় নিন "
 
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:106
 msgid "Keep Changes"
 msgstr "পরিবর্তন রাখুন "
 
-#: ../js/ui/windowManager.js:108
+#: ../js/ui/windowManager.js:124
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"

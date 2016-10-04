@@ -3,11 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alexandre Franke <alexandre.franke@gmail.com>, 2012
+# AlainLojewski <allomervan@gmail.com>, 2014
+# Alexandre Franke <alexandre.franke@gmail.com>, 2012,2015
 # Cyril Arnaud <cyril dot arnaud at gmail dot com>, 2011
+# Erwan Georget <egeorget@opmbx.org>, 2016
 # Luc Guillemin <luc.guillemin@gmail.com>, 2011
 # Luc Pionchon <pionchon.luc@gmail.com>, 2011
 # Mathieu Bridon <bochecha@fedoraproject.org>, 2009
+# Mathieu Stumpf <psychoslave@culture-libre.org>, 2013
 # Pablo Martin-Gomez <pablo.martin-gomez@laposte.net>, 2010
 # Pierre Henry <pierrehenry73@yahoo.fr>, 2012
 # Roddy Shuler <roddy@endlessm.com>, 2014-2016
@@ -15,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 01:26+0000\n"
-"PO-Revision-Date: 2016-07-01 23:06+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"PO-Revision-Date: 2016-10-04 17:42+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,7 +42,7 @@ msgstr "Donner le focus à la notification active"
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
 msgid "Show all applications"
-msgstr "Montrer toutes les applications"
+msgstr "Afficher toutes les applications"
 
 #: ../data/50-gnome-shell-system.xml.in.h:5
 msgid "Open the application menu"
@@ -240,23 +243,23 @@ msgstr "%s a été ajouté à vos favoris."
 msgid "%s has been removed from your favorites."
 msgstr "%s a été supprimé de vos favoris."
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
 msgstr "Les autres espaces de travail"
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
 msgstr "L'espace de travail en cours"
 
-#: ../js/ui/appIconBar.js:300
+#: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
 msgstr "Épingler à la barre des tâches"
 
-#: ../js/ui/appIconBar.js:304
+#: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
 msgstr "Détacher de la barre des tâches"
 
-#: ../js/ui/appIconBar.js:320
+#: ../js/ui/appIconBar.js:319
 #, javascript-format
 msgid "Quit %s"
 msgstr "Arrêter « %s »"
@@ -517,7 +520,7 @@ msgstr "Code PIN requis"
 
 #: ../js/ui/components/networkAgent.js:329
 msgid "PIN code is needed for the mobile broadband device"
-msgstr "Un code PIN est nécessaire pour les téléphones mobiles à large bande"
+msgstr "Un code PIN est nécessaire pour les connexions mobiles"
 
 #: ../js/ui/components/networkAgent.js:330
 msgid "PIN: "
@@ -525,7 +528,7 @@ msgstr "PIN : "
 
 #: ../js/ui/components/networkAgent.js:336
 msgid "Mobile broadband network password"
-msgstr "Mot de passe du téléphone mobile à large bande"
+msgstr "Mot de passe de la connexion mobile"
 
 #: ../js/ui/components/networkAgent.js:337
 #, javascript-format
@@ -606,7 +609,7 @@ msgstr "Fenêtres"
 
 #: ../js/ui/dash.js:262 ../js/ui/dash.js:300
 msgid "Show Applications"
-msgstr "Montrer les applications"
+msgstr "Afficher les applications"
 
 #: ../js/ui/dash.js:298
 msgid "Remove from Favorites"
@@ -919,7 +922,7 @@ msgstr "Recherche en cours…"
 
 #: ../js/ui/search.js:783
 msgid "No results."
-msgstr "Pas de résultats."
+msgstr "Aucun résultat."
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -983,7 +986,7 @@ msgstr "Touches lentes"
 
 #: ../js/ui/status/accessibility.js:71
 msgid "Bounce Keys"
-msgstr "Rebonds de touches"
+msgstr "Touches rebond"
 
 #: ../js/ui/status/accessibility.js:74
 msgid "Mouse Keys"
@@ -1210,11 +1213,11 @@ msgstr "Microphone"
 
 #: ../js/ui/status/volume.js:310
 msgid "Sound Settings"
-msgstr "Paramètres du son"
+msgstr "Paramètres de son"
 
 #: ../js/ui/unlockDialog.js:121
 msgid "Log in as another user"
-msgstr "Se connecter en tant qu'un autre utilisateur"
+msgstr "Se connecter en tant qu'autre utilisateur"
 
 #: ../js/ui/unlockDialog.js:142
 msgid "Unlock Window"
@@ -1273,26 +1276,26 @@ msgstr "Applications"
 msgid "'%s' is ready"
 msgstr "« %s » est prêt"
 
-#: ../js/ui/windowManager.js:67
+#: ../js/ui/windowManager.js:83
 msgid "Do you want to keep these display settings?"
-msgstr "Voulez-vous conserver ces paramètres d'affichage ?"
+msgstr "Voulez-vous conserver ces paramètres d'affichage ?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:86
+#: ../js/ui/windowManager.js:102
 msgid "Revert Settings"
-msgstr "Rétablir les paramètres"
+msgstr "Restaurer les paramètres"
 
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:106
 msgid "Keep Changes"
 msgstr "Conserver les modifications"
 
-#: ../js/ui/windowManager.js:108
+#: ../js/ui/windowManager.js:124
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] "Les changements de paramètres seront réinitialisés dans %d secondes"
-msgstr[1] "Les changements de paramètres seront réinitialisés dans %d secondes"
+msgstr[0] "Les paramètres seront restaurés dans %d seconde"
+msgstr[1] "Les paramètres seront restaurés dans %d secondes"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"

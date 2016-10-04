@@ -4,19 +4,19 @@
 # 
 # Translators:
 # abderrahim <a.kitouni@gmail.com>, 2012
-# abderrahim <a.kitouni@gmail.com>, 2012
+# abderrahim <a.kitouni@gmail.com>, 2012,2014
 # Ibrahim Saed <ibraheem5000@gmail.com>, 2012
-# Khaled Hosny <khaledhosny@eglug.org>, 2009-2012,2014
-# Muhammed Abd-ulaziz Abd-ullah <thenubianmuha_idrecy@yahoo.co.uk>, 2012
+# Khaled Hosny <khaledhosny@eglug.org>, 2009-2016
+# Muhammed Abdulaziz <thenubianmuha_idrecy@yahoo.co.uk>, 2012
 # Roddy Shuler <roddy@endlessm.com>, 2014-2015
 # Yasmin Diab <yasmin.diab.lopez@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 01:26+0000\n"
-"PO-Revision-Date: 2016-07-02 10:34+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"PO-Revision-Date: 2016-10-04 17:41+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -239,30 +239,30 @@ msgstr "أُضيف %s إلى مفضلتك."
 msgid "%s has been removed from your favorites."
 msgstr "أُزيل %s من مفضّلتك."
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
 msgstr "مساحات عمل أخرى"
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
 msgstr "مساحة العمل الحالية "
 
-#: ../js/ui/appIconBar.js:300
+#: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
 msgstr "قُم بالتثبيت إلى شريط المهام"
 
-#: ../js/ui/appIconBar.js:304
+#: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
 msgstr "إلغاء التثبيت من شريط المهام"
 
-#: ../js/ui/appIconBar.js:320
+#: ../js/ui/appIconBar.js:319
 #, javascript-format
 msgid "Quit %s"
 msgstr "إغلاق %s"
 
 #: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
-msgstr "خلفية التغيير..."
+msgstr "غيّر الخلفية…"
 
 #: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
@@ -430,11 +430,11 @@ msgstr "الأسبوع القادم"
 
 #: ../js/ui/components/automountManager.js:90
 msgid "External drive connected"
-msgstr "تم توصيل محرك أقراص خارجي"
+msgstr "وُصّل قرص خارجي"
 
 #: ../js/ui/components/automountManager.js:101
 msgid "External drive disconnected"
-msgstr "تم فصل محرك الأقراص الخارجي"
+msgstr "فُصل القرص الخارجي"
 
 #: ../js/ui/components/autorunManager.js:301
 msgid "Removable Devices"
@@ -912,7 +912,7 @@ msgstr "أغلِق"
 
 #: ../js/ui/screenShield.js:132
 msgid "GNOME needs to lock the screen"
-msgstr "يحتاج جنوم لقفل الشاشة"
+msgstr "تحتاج جنوم إلى إيصاد الشاشة"
 
 #. We could not become modal, so we can't activate the
 #. screenshield. The user is probably very upset at this
@@ -922,19 +922,19 @@ msgstr "يحتاج جنوم لقفل الشاشة"
 #. screen, where we're not affected by grabs
 #: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
 msgid "Unable to lock"
-msgstr "لا يمكن القفل"
+msgstr "تعذّر الإيصاد"
 
 #: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
 msgid "Lock was blocked by an application"
-msgstr "تم حجب القفل بواسطة تطبيق"
+msgstr "منع تطبيق الإيصاد"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
-msgstr "جاري البحث..."
+msgstr "يبحث…"
 
 #: ../js/ui/search.js:783
 msgid "No results."
-msgstr "لا توجد نتائج. "
+msgstr "لا نتائج."
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -1196,7 +1196,7 @@ msgstr "مشحونة بالكامل"
 #. to estimate battery life
 #: ../js/ui/status/power.js:65 ../js/ui/status/power.js:71
 msgid "Estimating…"
-msgstr "حساب..."
+msgstr "يَحسِب…"
 
 #. Translators: this is <hours>:<minutes> Remaining (<percentage>)
 #: ../js/ui/status/power.js:79
@@ -1212,7 +1212,7 @@ msgstr "بقي على الاكتمال %d∶%02d ‏(%d٪)"
 
 #: ../js/ui/status/volume.js:124
 msgid "Volume changed"
-msgstr "شدة الصوت"
+msgstr "تغيّرت شدة الصوت"
 
 #. Translators: This is the label for audio volume
 #: ../js/ui/status/volume.js:249 ../js/ui/status/volume.js:297
@@ -1261,7 +1261,7 @@ msgstr "بدّل المستخدم"
 
 #: ../js/ui/userMenu.js:561
 msgid "Other users are logged in."
-msgstr "تم تسجيل دخول مستخدمين آخرين."
+msgstr "مستخدمون آخرون والِجون"
 
 #: ../js/ui/userMenu.js:566
 msgid "Shutting down might cause them to lose unsaved work."
@@ -1277,7 +1277,7 @@ msgstr "%s (عن بعد)"
 #: ../js/ui/userMenu.js:597
 #, javascript-format
 msgid "%s (console)"
-msgstr "%s (وحدة تحكم)"
+msgstr "%s (طرفية)"
 
 #: ../js/ui/viewSelector.js:511
 msgid "Applications"
@@ -1288,30 +1288,30 @@ msgstr "التطبيقات"
 msgid "'%s' is ready"
 msgstr "‏'%s' جاهز"
 
-#: ../js/ui/windowManager.js:67
+#: ../js/ui/windowManager.js:83
 msgid "Do you want to keep these display settings?"
-msgstr "هل ترغب في الاحتفاظ بإعدادات العرض هذه؟"
+msgstr "أتريد الإبقاء على هذه الإعدادات؟"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:86
+#: ../js/ui/windowManager.js:102
 msgid "Revert Settings"
-msgstr "تعود إعدادات"
+msgstr "تراجع عن الإعدادات"
 
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:106
 msgid "Keep Changes"
-msgstr "إبقاء التغييرات"
+msgstr "أبق على التغييرات"
 
-#: ../js/ui/windowManager.js:108
+#: ../js/ui/windowManager.js:124
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] "سوف يتم ابطال تغييرات الإعدادات في %d ثانية"
-msgstr[1] "سوف يتم إبطال تغييرات الإعدادات في %d ثانية"
-msgstr[2] "سوف يتم ابطال تغييرات الإعدادات في %d ثانية"
-msgstr[3] "سوف يتم ابطال تغييرات الإعدادات في %d ثانية"
-msgstr[4] "سوف يتم ابطال تغييرات الإعدادات في %d ثانية"
-msgstr[5] "سوف يتم ابطال تغييرات الإعدادات في %d ثانية"
+msgstr[0] "سيُتراجع عن التغييرات الآن"
+msgstr[1] "سيُتراجع عن التغييرات بعد ثانية"
+msgstr[2] "سيُتراجع عن التغييرات بعد ثانيتين"
+msgstr[3] "سيُتراجع عن التغييرات بعد %d ثوان"
+msgstr[4] "سيُتراجع عن التغييرات بعد %d ثانية"
+msgstr[5] "سيُتراجع عن التغييرات بعد %d ثانية"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
