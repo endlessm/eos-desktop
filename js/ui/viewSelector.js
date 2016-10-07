@@ -124,6 +124,7 @@ const ViewsDisplayLayout = new Lang.Class({
         let entryHeight = this._entry.get_preferred_height(availWidth)[1];
         let themeNode = this._entry.get_theme_node();
         let entryMinPadding = themeNode.get_length('-minimum-vpadding');
+        let entryTopMargin = themeNode.get_length('margin-top');
         entryHeight += entryMinPadding * 2;
 
         // AllView height
@@ -132,7 +133,7 @@ const ViewsDisplayLayout = new Lang.Class({
         this._heightAboveEntry = this._centeredHeightAbove(entryHeight, heightAboveGrid);
 
         let entryBox = box.copy();
-        entryBox.y1 = this._heightAboveEntry;
+        entryBox.y1 = this._heightAboveEntry + entryTopMargin;
         entryBox.y2 = entryBox.y1 + entryHeight;
         this._entry.allocate(entryBox, flags);
 
