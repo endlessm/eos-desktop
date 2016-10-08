@@ -4,6 +4,12 @@
     <value nick="end" value="1"/>
   </enum>
 
+  <enum id="org.gnome.shell.PasswordResetPolicy">
+     <value nick="by-image-type" value="-1"/>
+     <value nick="disable" value="0"/>
+     <value nick="enable" value="1"/>
+  </enum>
+
   <schema id="org.gnome.shell" path="/org/gnome/shell/"
           gettext-domain="@GETTEXT_PACKAGE@">
     <key name="wobbly-effect" type="b">
@@ -258,6 +264,20 @@ value here is from the GsmPresenceStatus enumeration.</_summary>
       <_description>
         This key sets whether the social bar is enabled. This means that setting
 	it to false will not display the social bar icon in the panel.
+      </_description>
+    </key>
+    <key name="password-reset-allowed" enum="org.gnome.shell.PasswordResetPolicy">
+      <default>'by-image-type'</default>
+      <_summary>Whether password reset is allowed</_summary>
+      <_description>
+        This key controls whether to show the "Forgot Password?" button
+        on the login screen. 'by-image-type' tells GNOME Shell to check
+        the eos-image-version xattr of /sysroot and enable the password
+        reset button if and only if the value of the xattr begins with
+        "eosnonfree-". 'enable' and 'disable' can be used to explicitly
+        enable or disable the reset button, respectively. Note that it
+        only makes sense to set this key for the gdm user; changing it
+        for your own user account will have no effect.
       </_description>
     </key>
     <child name="calendar" schema="org.gnome.shell.calendar"/>
