@@ -122,7 +122,9 @@ const IconGridLayout = new Lang.Class({
         if (iconTree === null || iconTree.n_children() == 0) {
             log('No icon grid defaults found!');
             // At the minimum, put in something that avoids exceptions later
-            iconTree = GLib.Variant.new('a{sas}', { DESKTOP_GRID_ID: [] });
+            let fallback = {};
+            fallback[DESKTOP_GRID_ID] = [];
+            iconTree = GLib.Variant.new('a{sas}', fallback);
         }
 
         return iconTree;
