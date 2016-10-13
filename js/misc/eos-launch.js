@@ -28,10 +28,10 @@ function getLocalizedAppNames(appName) {
         // discard variants with an encoding
         return (variant.indexOf('.') == -1)
     }).forEach(function(variant) {
-        appNames.push(appName + '-' + variant);
+        appNames.push(appName + '.' + variant);
     });
 
-    appNames.push(appName + '-en');
+    appNames.push(appName + '.en');
     return appNames;
 }
 
