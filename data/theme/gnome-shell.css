@@ -906,6 +906,7 @@ StScrollBar StButton#vhandle:active {
     width: 300px;
     padding-left: 8px;
     padding-right: 4px;
+    margin-top: 8px;
 
     font-family: lato, sans-serif;
     font-size: 11.5pt;
