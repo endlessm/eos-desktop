@@ -35,6 +35,15 @@ void _shell_wm_show_tile_preview     (ShellWM             *wm,
                                       MetaRectangle       *tile_rect,
                                       int                  tile_monitor);
 void _shell_wm_hide_tile_preview     (ShellWM             *wm);
+void _shell_wm_show_window_menu      (ShellWM             *wm,
+                                      MetaWindow          *window,
+                                      MetaWindowMenuType   menu,
+                                      int                  x,
+                                      int                  y);
+void _shell_wm_show_window_menu_for_rect (ShellWM             *wm,
+                                          MetaWindow          *window,
+                                          MetaWindowMenuType   menu,
+                                          MetaRectangle       *rect);
 
 gboolean _shell_wm_filter_keybinding (ShellWM             *wm,
                                       MetaKeyBinding      *binding);

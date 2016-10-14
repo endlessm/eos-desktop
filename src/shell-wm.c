@@ -31,6 +31,7 @@ enum
   KILL_WINDOW_EFFECTS,
   SHOW_TILE_PREVIEW,
   HIDE_TILE_PREVIEW,
+  SHOW_WINDOW_MENU,
   FILTER_KEYBINDING,
   CONFIRM_DISPLAY_CHANGE,
 
@@ -154,6 +155,13 @@ shell_wm_class_init (ShellWMClass *klass)
                   0,
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
+  shell_wm_signals[SHOW_WINDOW_MENU] =
+    g_signal_new ("show-window-menu",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 3,
+                  META_TYPE_WINDOW, G_TYPE_INT, META_TYPE_RECTANGLE);
   shell_wm_signals[FILTER_KEYBINDING] =
     g_signal_new ("filter-keybinding",
                   G_TYPE_FROM_CLASS (klass),
@@ -302,6 +310,30 @@ _shell_wm_hide_tile_preview (ShellWM *wm)
   g_signal_emit (wm, shell_wm_signals[HIDE_TILE_PREVIEW], 0);
 }
 
+void
+_shell_wm_show_window_menu (ShellWM            *wm,
+                            MetaWindow         *window,
+                            MetaWindowMenuType  menu,
+                            int                 x,
+                            int                 y)
+{
+  MetaRectangle rect;
+
+  rect.x = x;
+  rect.y = y;
+  rect.width = rect.height = 0;
+
+  _shell_wm_show_window_menu_for_rect (wm, window, menu, &rect);
+}
+
+void
+_shell_wm_show_window_menu_for_rect (ShellWM            *wm,
+                                     MetaWindow         *window,
+                                     MetaWindowMenuType  menu,
+                                     MetaRectangle      *rect)
+{
+  g_signal_emit (wm, shell_wm_signals[SHOW_WINDOW_MENU], 0, window, menu, rect);
+}
 
 void
 _shell_wm_minimize (ShellWM         *wm,

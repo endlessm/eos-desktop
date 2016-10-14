@@ -16,8 +16,8 @@ const BackgroundMenu = new Lang.Class({
     Name: 'BackgroundMenu',
     Extends: PopupMenu.PopupMenu,
 
-    _init: function(source, layoutManager) {
-        this.parent(source, 0, St.Side.TOP);
+    _init: function(layoutManager) {
+        this.parent(layoutManager.dummyCursor, 0, St.Side.TOP);
 
         this.addSettingsAction(_("Change Background…"), 'gnome-background-panel.desktop');
 
@@ -49,27 +49,22 @@ function addBackgroundMenu(clickAction, layoutManager) {
         return;
     }
 
-    let cursor = new St.Bin({ opacity: 0 });
-    layoutManager.uiGroup.add_actor(cursor);
-
     let actor = clickAction.get_actor();
 
     actor.reactive = true;
-    actor._backgroundMenu = new BackgroundMenu(cursor, layoutManager);
+    actor._backgroundMenu = new BackgroundMenu(layoutManager);
     actor._backgroundManager = new PopupMenu.PopupMenuManager({ actor: actor });
     actor._backgroundManager.addMenu(actor._backgroundMenu);
 
     actor.connect('destroy', function() {
-                      actor._backgroundMenu.destroy();
-                      actor._backgroundMenu = null;
-                      actor._backgroundManager = null;
-
-                      cursor.destroy();
-                  });
+        actor._backgroundMenu.destroy();
+        actor._backgroundMenu = null;
+        actor._backgroundManager = null;
+    });
 
     function openMenu() {
         let [x, y] = global.get_pointer();
-        cursor.set_position(x, y);
+        Main.layoutManager.setDummyCursorGeometry(x, y, 0, 0);
         actor._backgroundMenu.open(BoxPointer.PopupAnimation.NONE);
     }
 

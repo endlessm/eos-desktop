@@ -25,6 +25,7 @@ const BackgroundMenu = imports.ui.backgroundMenu;
 const ModalDialog = imports.ui.modalDialog;
 const Tweener = imports.ui.tweener;
 const ViewSelector = imports.ui.viewSelector;
+const WindowMenu = imports.ui.windowMenu;
 
 const SHELL_KEYBINDINGS_SCHEMA = 'org.gnome.shell.keybindings';
 const KEYBINDING_FORCE_APP_EXIT = 'show-force-app-exit-dialog';
@@ -639,6 +640,7 @@ const WindowManager = new Lang.Class({
         this._shellwm.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
         this._shellwm.connect('show-tile-preview', Lang.bind(this, this._showTilePreview));
         this._shellwm.connect('hide-tile-preview', Lang.bind(this, this._hideTilePreview));
+        this._shellwm.connect('show-window-menu', Lang.bind(this, this._showWindowMenu));
         this._shellwm.connect('minimize', Lang.bind(this, this._minimizeWindow));
         this._shellwm.connect('unminimize', Lang.bind(this, this._unminimizeWindow));
         this._shellwm.connect('size-change', Lang.bind(this, this._sizeChangeWindow));
@@ -742,6 +744,8 @@ const WindowManager = new Lang.Class({
 
         global.display.connect('grab-op-begin', Lang.bind(this, this._windowGrabbed));
         global.display.connect('grab-op-end', Lang.bind(this, this._windowUngrabbed));
+
+        this._windowMenuManager = new WindowMenu.WindowMenuManager();
 
         this._sylvesterListener = new SylvesterService(Gio.DBus.session,
                                                        'com.endlessm.Sylvester.Service',
@@ -1679,6 +1683,10 @@ const WindowManager = new Lang.Class({
         if (!this._tilePreview)
             return;
         this._tilePreview.hide();
+    },
+
+    _showWindowMenu: function(shellwm, window, menu, rect) {
+        this._windowMenuManager.showWindowMenuForWindow(window, menu, rect);
     },
 
     _startAppSwitcher : function(display, screen, window, binding) {
