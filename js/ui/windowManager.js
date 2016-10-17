@@ -24,6 +24,7 @@ const SideComponent = imports.ui.sideComponent;
 const BackgroundMenu = imports.ui.backgroundMenu;
 const ModalDialog = imports.ui.modalDialog;
 const Tweener = imports.ui.tweener;
+const Util = imports.misc.util;
 const ViewSelector = imports.ui.viewSelector;
 const WindowMenu = imports.ui.windowMenu;
 
@@ -756,6 +757,8 @@ const WindowManager = new Lang.Class({
         this._rotateOutActors = [];
         this._rotateInActors = [];
         this._firstFrameConnections = [];
+
+        this._currentEndlessCodingSessions = [];
     },
 
     _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {
@@ -1379,6 +1382,67 @@ const WindowManager = new Lang.Class({
                                onOverwriteParams: [shellwm, actor]
                              });
         }
+        this._endlessCodingAddLauncher(actor);
+    },
+
+    _endlessCodingAddLauncher : function(actor) {
+        let window = actor.meta_window;
+        if (window.get_flatpak_id() !== 'org.gnome.gedit')
+            return;
+
+        let button = new St.Button({ style_class: 'view-source' });
+        let rect = window.get_frame_rect();
+        button.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
+        Main.layoutManager.addChrome(button);
+        let positionChangedId = window.connect('position-changed', Lang.bind(this, function(window) {
+            let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
+                return session.windowApp === window;
+            });
+            if (currentSession.length === 0)
+                return;
+            let rect = currentSession[0].windowApp.get_frame_rect();
+            currentSession[0].button.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
+        }));
+        let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._endlessCodingWindowsRestacked, window));
+        button.connect ('clicked', Lang.bind(this, function(actor, event) {
+            Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder']);
+        }));
+        this._currentEndlessCodingSessions.push({button: button, windowApp: window,
+            positionChangedId: positionChangedId, windowsRestackedId: windowsRestackedId});
+    },
+
+    _endlessCodingWindowsRestacked : function(overview, stackIndices, window) {
+        let focusedWindow = global.display.get_focus_window();
+        if (!focusedWindow)
+            return;
+        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
+            return session.windowApp === window;
+        });
+        if (currentSession.length === 0)
+            return;
+        if (focusedWindow.get_stable_sequence() === currentSession[0].windowApp.get_stable_sequence())
+            currentSession[0].button.show();
+        else
+            currentSession[0].button.hide();
+    },
+
+    _endlessCodingRemoveLauncher : function(window) {
+        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
+                return session.windowApp === window;
+        });
+        if (currentSession.length === 0)
+            return;
+
+        if (currentSession[0].positionChangedId != 0) {
+            currentSession[0].windowApp.disconnect(currentSession[0].positionChangedId);
+            currentSession[0].positionChangedId = 0;
+        }
+        if (currentSession[0].windowsRestackedId != 0) {
+            Main.overview.disconnect(currentSession[0].windowsRestackedId);
+            currentSession[0].windowsRestackedId = 0;
+        }
+        currentSession[0].button.destroy();
+        this._currentEndlessCodingSessions.splice(this._currentEndlessCodingSessions.indexOf(currentSession[0]), 1);
     },
 
     _mapWindowDone : function(shellwm, actor) {
@@ -1441,6 +1505,8 @@ const WindowManager = new Lang.Class({
                     Lang.bind(this, this._killAppIfNoWindow, app, pid));
             }
         }
+
+        this._endlessCodingRemoveLauncher(window);
 
         if (actor._notifyWindowTypeSignalId) {
             window.disconnect(actor._notifyWindowTypeSignalId);
