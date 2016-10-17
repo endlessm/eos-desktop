@@ -3157,3 +3157,12 @@ StScrollBar StButton#vhandle:active {
 .force-app-exit-dialog-item:selected {
     background-color: #333;
 }
+
+/*Endless Coding view source*/
+
+.view-source {
+    background-image: url("close-window.svg");
+    background-size: 32px;
+    height: 32px;
+    width: 32px;
+}
