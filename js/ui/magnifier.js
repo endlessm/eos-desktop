@@ -10,6 +10,7 @@ const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
 const Signals = imports.signals;
 
+const Background = imports.ui.background;
 const Main = imports.ui.main;
 const MagnifierDBus = imports.ui.magnifierDBus;
 const Params = imports.misc.params;
