@@ -98,7 +98,7 @@ PKG_CHECK_MODULES(EOS_SHELL, gio-unix-2.0 >= $GIO_MIN_VERSION
                                gtk+-3.0 >= $GTK_MIN_VERSION
                                atk-bridge-2.0
                                libmutter >= $MUTTER_MIN_VERSION
-                               gjs-internals-1.0 >= $GJS_MIN_VERSION
+                               gjs-1.0 >= $GJS_MIN_VERSION
                                $recorder_modules
                                gdk-x11-3.0 libsoup-2.4
 			       clutter-x11-1.0 >= $CLUTTER_MIN_VERSION
@@ -112,7 +112,7 @@ PKG_CHECK_MODULES(EOS_SHELL, gio-unix-2.0 >= $GIO_MIN_VERSION
                                libsecret-unstable gcr-3 >= $GCR_MIN_VERSION
                                eosmetrics-0)
 
-PKG_CHECK_MODULES(EOS_SHELL_JS, gio-2.0 gjs-internals-1.0 >= $GJS_MIN_VERSION)
+PKG_CHECK_MODULES(EOS_SHELL_JS, gio-2.0 gjs-1.0 >= $GJS_MIN_VERSION)
 PKG_CHECK_MODULES(ST, clutter-1.0 gtk+-3.0 libcroco-0.6 >= 0.6.8 x11)
 PKG_CHECK_MODULES(EOS_SHELL_FX, clutter-1.0 >= 1.16 glib-2.0 >= 2.38 libwindowfx_wobbly)
 PKG_CHECK_MODULES(SHELL_PERF_HELPER, gtk+-3.0 gio-2.0)

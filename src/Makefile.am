@@ -107,7 +107,7 @@ eos_shell_cflags =				\
 	-DMUTTER_TYPELIB_DIR=\"$(MUTTER_TYPELIB_DIR)\"
 
 privlibdir = $(pkglibdir)
-privlib_LTLIBRARIES = libeos-shell.la libeos-shell-js.la libeos-shell-fx.la
+privlib_LTLIBRARIES = libeos-shell.la libeos-shell-fx.la
 
 shell_built_sources = \
 	org-gtk-application.h \
@@ -216,7 +216,7 @@ libeos_shell_la_gir_sources = \
 eos_shell_real_SOURCES =		\
 	main.c
 eos_shell_real_CPPFLAGS = $(eos_shell_cflags)
-eos_shell_real_LDADD = libeos-shell.la libeos-shell-js.la libeos-shell-fx.la $(libeos_shell_la_LIBADD)
+eos_shell_real_LDADD = libeos-shell.la libeos-shell-fx.la $(libeos_shell_la_LIBADD)
 eos_shell_real_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
 
 eos_shell_extension_prefs_SOURCES = 	\
@@ -227,29 +227,8 @@ nodist_eos_shell_extension_prefs_SOURCES = \
 	$(top_builddir)/js/js-resources.h		\
 	$(NULL)
 eos_shell_extension_prefs_CPPFLAGS = $(eos_shell_cflags)
-eos_shell_extension_prefs_LDADD = libeos-shell-js.la $(EOS_SHELL_LIBS) -lm
+eos_shell_extension_prefs_LDADD = $(EOS_SHELL_LIBS) -lm
 eos_shell_extension_prefs_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
-
-########################################
-
-libeos_shell_js_la_SOURCES =		\
-	shell-js.h			\
-	shell-js.cpp			\
-	$(NULL)
-
-libeos_shell_js_la_LIBADD =		\
-	$(EOS_SHELL_JS_LIBS)		\
-	$(NULL)
-
-libeos_shell_js_la_LDFLAGS =		\
-	-avoid-version			\
-	@EOS_C_COVERAGE_LDFLAGS@	\
-	$(NULL)
-
-libeos_shell_js_la_CPPFLAGS =		\
-	$(EOS_SHELL_JS_CFLAGS)		\
-	@EOS_C_COVERAGE_CFLAGS@		\
-	$(NULL)
 
 ########################################
 
@@ -388,13 +367,6 @@ Shell_0_1_gir_SCANNERFLAGS =	\
 	--add-include-path=$(MUTTER_GIR_DIR)
 INTROSPECTION_GIRS += Shell-0.1.gir
 CLEANFILES += Shell-0.1.gir
-
-ShellJS-0.1.gir: libeos-shell-js.la
-ShellJS_0_1_gir_CFLAGS = $(libeos_shell_la_CPPFLAGS) -I $(srcdir)
-ShellJS_0_1_gir_LIBS = libeos-shell-js.la
-ShellJS_0_1_gir_FILES = $(libeos_shell_js_la_SOURCES)
-INTROSPECTION_GIRS += ShellJS-0.1.gir
-CLEANFILES += ShellJS-0.1.gir
 
 St-1.0.gir: libst-1.0.la
 St_1_0_gir_INCLUDES = Clutter-1.0 Gtk-3.0
