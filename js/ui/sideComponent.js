@@ -20,6 +20,11 @@ function isSideComponentWindow (metaWindow) {
     return metaWindow && (metaWindow.get_role() == SIDE_COMPONENT_ROLE);
 };
 
+function isChatboxWindow (metaWindow) {
+    return isSideComponentWindow(metaWindow) &&
+               (metaWindow().get_wm_class() == 'Com.endlessm.Mission.Chatbox');
+}
+
 /**
  * shouldHideOtherWindows:
  * @metaWindow: an instance of #Meta.Window
