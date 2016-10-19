@@ -65,6 +65,7 @@ let shellDBusService = null;
 let shellMountOpDBusService = null;
 let screenSaverDBus = null;
 let socialBar = null;
+let missionChatbox = null;
 let modalCount = 0;
 let keybindingMode = Shell.KeyBindingMode.NONE;
 let modalActorFocusStack = [];

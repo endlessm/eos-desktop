@@ -333,6 +333,10 @@ try {
     log('NMApplet is not supported. It is possible that your NetworkManager version is too old');
 }
 
+if (global.settings.get_boolean('enable-mission-game')) {
+    PANEL_ITEM_IMPLEMENTATIONS['missionGame'] = imports.ui.status.missionGame.MissionGameIndicator;
+}
+
 const Panel = new Lang.Class({
     Name: 'Panel',
 

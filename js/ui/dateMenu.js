@@ -18,23 +18,6 @@ const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Calendar = imports.ui.calendar;
 
-function _onVertSepRepaint (area)
-{
-    let cr = area.get_context();
-    let themeNode = area.get_theme_node();
-    let [width, height] = area.get_surface_size();
-    let stippleColor = themeNode.get_color('-stipple-color');
-    let stippleWidth = themeNode.get_length('-stipple-width');
-    let x = Math.floor(width/2) + 0.5;
-    cr.moveTo(x, 0);
-    cr.lineTo(x, height);
-    Clutter.cairo_set_source_color(cr, stippleColor);
-    cr.setDash([1, 3], 1); // Hard-code for now
-    cr.setLineWidth(stippleWidth);
-    cr.stroke();
-    cr.$dispose();
-};
-
 const DateMenuButton = new Lang.Class({
     Name: 'DateMenuButton',
     Extends: PanelMenu.Button,
@@ -109,9 +92,7 @@ const DateMenuButton = new Lang.Class({
             this._dateAndTimeSeparator = separator;
         }
 
-        this._separator = new St.DrawingArea({ style_class: 'calendar-vertical-separator',
-                                               pseudo_class: 'highlighted' });
-        this._separator.connect('repaint', Lang.bind(this, _onVertSepRepaint));
+        this._separator = new PopupMenu.PopupMenuSeparator();
         hbox.add(this._separator);
 
         // Fill up the second column
