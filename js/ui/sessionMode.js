@@ -97,6 +97,30 @@ const _modes = {
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
                     'network', 'battery', 'socialBar', 'hotCornerIndicator']
         }
+    },
+
+    'user-mission': {
+        hasOverview: true,
+        showCalendarEvents: true,
+        allowSettings: true,
+        allowExtensions: true,
+        allowScreencast: true,
+        hasRunDialog: true,
+        hasWorkspaces: true,
+        hasWindows: true,
+        hasNotifications: true,
+        isLocked: false,
+        isPrimary: true,
+        unlockDialog: imports.ui.unlockDialog.UnlockDialog,
+        components: ['networkAgent', 'polkitAgent',
+                     'keyring', 'autorunManager', 'automountManager',
+                     'updaterManager', 'socialBar', 'appStore', 'missionChatbox'],
+        panel: {
+            left: ['userMenu', 'panelSeparator', 'appIcons'],
+            right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
+                    'network', 'battery', 'missionGame',
+                    'socialBar', 'hotCornerIndicator']
+        }
     }
 };
 
@@ -153,6 +177,11 @@ const SessionMode = new Lang.Class({
             let primary = modes[global.session_mode] &&
                           modes[global.session_mode].isPrimary;
             let mode = primary ? global.session_mode : 'user';
+
+            if (mode == 'user' &&
+                global.settings.get_boolean('enable-mission-game'))
+                mode = 'user-mission';
+
             this._modeStack = [mode];
             this._sync();
 
