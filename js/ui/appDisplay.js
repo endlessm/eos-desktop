@@ -1355,7 +1355,7 @@ const ViewIcon = new Lang.Class({
 
         this._menuManager.addMenu(this._menu);
 
-        this.actor.set_hover(true);
+        this.iconButton.set_hover(true);
         this._menu.popup();
         this._menuManager.ignoreRelease();
 
@@ -1363,7 +1363,7 @@ const ViewIcon = new Lang.Class({
     },
 
     _onMenuPoppedDown: function() {
-        this.actor.sync_hover();
+        this.iconButton.sync_hover();
     },
 
     _createPopupMenu: function() {
@@ -1380,7 +1380,7 @@ const ViewIcon = new Lang.Class({
     },
 
     _onLabelCancel: function() {
-        this.actor.sync_hover();
+        this.iconButton.sync_hover();
     },
 
     _scaleIn: function() {
@@ -1463,7 +1463,7 @@ const ViewIcon = new Lang.Class({
     },
 
     setDragHoverState: function(state) {
-        this.actor.set_hover(state);
+        this.iconButton.set_hover(state);
     },
 
     handleIconDrop: function(source) {
@@ -1986,8 +1986,6 @@ const AppStoreIcon = new Lang.Class({
     },
 
     setDragHoverState: function(state) {
-        this.parent(state);
-
         let appStoreIconState = state ?
             AppStoreIconState.FULL_TRASH : AppStoreIconState.EMPTY_TRASH;
         this.iconState = appStoreIconState;
