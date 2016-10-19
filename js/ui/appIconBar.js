@@ -634,12 +634,13 @@ const ScrolledIconList = new Lang.Class({
         // Update for any apps running before the system started
         // (after a crash or a restart)
         let currentlyRunning = appSys.get_running();
-        let appsByPid = new Hash.Map();
+        let appsByPid = [];
         for (let i = 0; i < currentlyRunning.length; i++) {
             let app = currentlyRunning[i];
             // Most apps have a single PID; ignore all but the first
             let pid = app.get_pids()[0];
-            appsByPid.set(pid, app);
+            appsByPid.push({ pid: pid,
+                             app: app });
         }
 
         let favorites = AppFavorites.getTaskbarFavorites().getFavorites();
@@ -650,10 +651,9 @@ const ScrolledIconList = new Lang.Class({
         // Sort numerically by PID
         // This preserves the original app order, until the maximum PID
         // value is reached and older PID values are recycled
-        let sortedPids = appsByPid.keys().sort(function(a, b) {return a - b;});
+        let sortedPids = appsByPid.sort(function(a, b) { return a.pid - b.pid; });
         for (let i = 0; i < sortedPids.length; i++) {
-            let pid = sortedPids[i];
-            let app = appsByPid.get(pid);
+            let app = sortedPids[i].app;
             this._addButtonAnimated(app, favorites.length + i + 1); // offset for user menu
         }
 
