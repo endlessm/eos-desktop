@@ -1986,8 +1986,6 @@ const AppStoreIcon = new Lang.Class({
     },
 
     setDragHoverState: function(state) {
-        this.parent(state);
-
         let appStoreIconState = state ?
             AppStoreIconState.FULL_TRASH : AppStoreIconState.EMPTY_TRASH;
         this.iconState = appStoreIconState;
