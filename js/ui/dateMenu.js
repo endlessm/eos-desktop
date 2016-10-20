@@ -58,7 +58,7 @@ const DateMenuButton = new Lang.Class({
         this.actor.add_actor(this._clockDisplay);
 
         hbox = new St.BoxLayout({name: 'calendarArea' });
-        this.menu.addActor(hbox);
+        this.menu.actor.add_child(hbox);
 
         // Fill up the first column
 

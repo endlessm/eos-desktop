@@ -1166,8 +1166,6 @@ const PopupMenuManager = new Lang.Class({
     Name: 'PopupMenuManager',
 
     _init: function(owner, grabParams) {
-        grabParams = Params.parse(grabParams,
-                                  { actionMode: Shell.ActionMode.POPUP });
         this._owner = owner;
         this._grabHelper = new GrabHelper.GrabHelper(owner.actor, grabParams);
         this._menus = [];
