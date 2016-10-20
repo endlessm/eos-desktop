@@ -661,10 +661,6 @@ const AllView = new Lang.Class({
     _resetDragViewState: function() {
         this._resetNudgeState();
 
-        if (this._onIconIdx > -1) {
-            this._setDragHoverState(false);
-        }
-
         this._insertIdx = -1;
         this._onIconIdx = -1;
         this._lastCursorLocation = -1;
@@ -752,6 +748,10 @@ const AllView = new Lang.Class({
         }
 
         if (dragView != this._dragView) {
+            if (this._dragView && this._onIconIdx > -1) {
+                this._setDragHoverState(false);
+            }
+
             this._resetDragViewState();
             this._dragView = dragView;
         }
