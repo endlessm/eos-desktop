@@ -1,8 +1,9 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Gio = imports.gi.Gio;
-const Lang = imports.lang;
+const Clutter = imports.gi.Clutter;
 const St = imports.gi.St;
+const Lang = imports.lang;
 const UPower = imports.gi.UPowerGlib;
 
 const Main = imports.ui.main;
@@ -26,12 +27,24 @@ const DisplayDeviceInterface = '<node> \
 
 const PowerManagerProxy = Gio.DBusProxy.makeProxyWrapper(DisplayDeviceInterface);
 
+const SHOW_BATTERY_PERCENTAGE       = 'show-battery-percentage';
+
 const Indicator = new Lang.Class({
     Name: 'PowerIndicator',
-    Extends: PanelMenu.SystemStatusButton,
+    Extends: PanelMenu.SystemIndicator,
 
     _init: function() {
-        this.parent('battery-missing-symbolic', _("Battery"));
+        this.parent();
+
+        this._desktopSettings = new Gio.Settings({ schema_id: 'org.gnome.desktop.interface' });
+        this._desktopSettings.connect('changed::' + SHOW_BATTERY_PERCENTAGE,
+                                      Lang.bind(this, this._sync));
+
+        this._indicator = this._addIndicator();
+        this._percentageLabel = new St.Label({ y_expand: true,
+                                               y_align: Clutter.ActorAlign.CENTER });
+        this.indicators.add(this._percentageLabel, { expand: true, y_fill: true });
+        this.indicators.add_style_class_name('power-status');
 
         this._proxy = new PowerManagerProxy(Gio.DBus.system, BUS_NAME, OBJECT_PATH,
                                             Lang.bind(this, function(proxy, error) {
@@ -44,11 +57,17 @@ const Indicator = new Lang.Class({
                                                 this._sync();
                                             }));
 
-        this._item = new PopupMenu.PopupMenuItem('', { reactive: false });
+        this._item = new PopupMenu.PopupSubMenuMenuItem("", true);
+        this._item.menu.addSettingsAction(_("Power Settings"), 'gnome-power-panel.desktop');
         this.menu.addMenuItem(this._item);
 
-        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        this.menu.addSettingsAction(_("Power Settings"), 'gnome-power-panel.desktop');
+        Main.sessionMode.connect('updated', Lang.bind(this, this._sessionUpdated));
+        this._sessionUpdated();
+    },
+
+    _sessionUpdated: function() {
+        let sensitive = !Main.sessionMode.isLocked && !Main.sessionMode.isGreeter;
+        this.menu.setSensitive(sensitive);
     },
 
     _getStatus: function() {
@@ -90,21 +109,29 @@ const Indicator = new Lang.Class({
     _sync: function() {
         // Do we have batteries or a UPS?
         let visible = this._proxy.IsPresent;
-
-        this.mainIcon.visible = visible;
-        this.actor.visible = visible;
-
         if (visible) {
             this._item.actor.show();
+            this._percentageLabel.visible = this._desktopSettings.get_boolean(SHOW_BATTERY_PERCENTAGE);
         } else {
+            // If there's no battery, then we use the power icon.
             this._item.actor.hide();
+            this._indicator.icon_name = 'system-shutdown-symbolic';
+            this._percentageLabel.hide();
             return;
         }
 
         // The icons
         let icon = this._proxy.IconName;
-        let gicon = new Gio.ThemedIcon({ name: icon });
-        this.setGIcon(gicon);
+        this._indicator.icon_name = icon;
+        this._item.icon.icon_name = icon;
+
+        // The icon label
+        let label
+        if (this._proxy.State == UPower.DeviceState.FULLY_CHARGED)
+          label = _("%d\u2009%%").format(100);
+        else
+          label = _("%d\u2009%%").format(this._proxy.Percentage);
+        this._percentageLabel.clutter_text.set_markup('<span size="smaller">' + label + '</span>');
 
         // The status label
         this._item.label.text = this._getStatus();

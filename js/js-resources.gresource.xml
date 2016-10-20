@@ -25,6 +25,7 @@
     <file>misc/util.js</file>
     <file>perf/core.js</file>
     <file>ui/altTab.js</file>
+    <file>ui/animation.js</file>
     <file>ui/appActivation.js</file>
     <file>ui/appDisplay.js</file>
     <file>ui/appFavorites.js</file>
@@ -77,6 +78,7 @@
     <file>ui/pointerWatcher.js</file>
     <file>ui/popupMenu.js</file>
     <file>ui/runDialog.js</file>
+    <file>ui/slider.js</file>
     <file>ui/screencast.js</file>
     <file>ui/screenshot.js</file>
     <file>ui/screenShield.js</file>
@@ -84,19 +86,23 @@
     <file>ui/shellDBus.js</file>
     <file>ui/sideComponent.js</file>
     <file>ui/status/accessibility.js</file>
+    <file>ui/status/brightness.js</file>
     <file>ui/status/hotCornerIndicator.js</file>
     <file>ui/status/keyboard.js</file>
+    <file>ui/status/location.js</file>
     <file>ui/status/lockScreenMenu.js</file>
     <file>ui/status/network.js</file>
     <file>ui/status/power.js</file>
+    <file>ui/status/rfkill.js</file>
     <file>ui/status/volume.js</file>
     <file>ui/status/codingGame.js</file>
     <file>ui/status/bluetooth.js</file>
+    <file>ui/status/screencast.js</file>
     <file>ui/status/social.js</file>
+    <file>ui/status/system.js</file>
     <file>ui/switcherPopup.js</file>
     <file>ui/tweener.js</file>
     <file>ui/unlockDialog.js</file>
-    <file>ui/userMenu.js</file>
     <file>ui/userWidget.js</file>
     <file>ui/viewSelector.js</file>
     <file>ui/windowAttentionHandler.js</file>

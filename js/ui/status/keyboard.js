@@ -31,8 +31,8 @@ const LayoutMenuItem = new Lang.Class({
 
         this.label = new St.Label({ text: displayName });
         this.indicator = new St.Label({ text: shortName });
-        this.addActor(this.label);
-        this.addActor(this.indicator);
+        this.actor.add(this.label, { expand: true });
+        this.actor.add(this.indicator);
         this.actor.label_actor = this.label;
     }
 });
@@ -324,15 +324,15 @@ const InputSourceManager = new Lang.Class({
         this._mruSourcesBackup = null;
         this._keybindingAction =
             Main.wm.addKeybinding('switch-input-source',
-                                  new Gio.Settings({ schema: "org.gnome.desktop.wm.keybindings" }),
+                                  new Gio.Settings({ schema_id: "org.gnome.desktop.wm.keybindings" }),
                                   Meta.KeyBindingFlags.NONE,
-                                  Shell.KeyBindingMode.ALL,
+                                  Shell.ActionMode.ALL,
                                   Lang.bind(this, this._switchInputSource));
         this._keybindingActionBackward =
             Main.wm.addKeybinding('switch-input-source-backward',
-                                  new Gio.Settings({ schema: "org.gnome.desktop.wm.keybindings" }),
+                                  new Gio.Settings({ schema_id: "org.gnome.desktop.wm.keybindings" }),
                                   Meta.KeyBindingFlags.IS_REVERSED,
-                                  Shell.KeyBindingMode.ALL,
+                                  Shell.ActionMode.ALL,
                                   Lang.bind(this, this._switchInputSource));
         if (Main.sessionMode.isGreeter)
             this._settings = new InputSourceSystemSettings();
@@ -407,8 +407,7 @@ const InputSourceManager = new Lang.Class({
         // effect without considerable work to consolidate the usage
         // of pushModal/popModal and grabHelper. See
         // https://bugzilla.gnome.org/show_bug.cgi?id=695143 .
-        if (Main.keybindingMode == Shell.KeyBindingMode.MESSAGE_TRAY ||
-            Main.keybindingMode == Shell.KeyBindingMode.TOPBAR_POPUP) {
+        if (Main.actionMode == Shell.ActionMode.POPUP) {
             this._modifiersSwitcher();
             return;
         }
@@ -792,12 +791,9 @@ const InputSourceIndicator = new Lang.Class({
 
         this._hbox = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
         this._hbox.add_child(this._container);
-        this._hbox.add_child(new St.Label({ text: '\u25BE',
-                                            y_expand: true,
-                                            y_align: Clutter.ActorAlign.CENTER }));
+        this._hbox.add_child(PopupMenu.arrowIcon(St.Side.BOTTOM));
 
         this.actor.add_child(this._hbox);
-        this.actor.add_style_class_name('panel-status-button');
 
         this._propSeparator = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(this._propSeparator);
@@ -810,8 +806,6 @@ const InputSourceIndicator = new Lang.Class({
 
         Main.sessionMode.connect('updated', Lang.bind(this, this._sessionUpdated));
         this._sessionUpdated();
-
-        this.menu.addSettingsAction(_("Region & Language Settings"), 'gnome-region-panel.desktop');
 
         this._inputSourceManager = getInputSourceManager();
         this._inputSourceManager.connect('sources-changed', Lang.bind(this, this._sourcesChanged));

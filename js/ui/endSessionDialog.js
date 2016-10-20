@@ -35,7 +35,7 @@ const GnomeSession = imports.misc.gnomeSession;
 const Main = imports.ui.main;
 const ModalDialog = imports.ui.modalDialog;
 const Tweener = imports.ui.tweener;
-const UserMenu = imports.ui.userMenu;
+const UserWidget = imports.ui.userWidget;
 
 let _endSessionDialog = null;
 
@@ -408,7 +408,7 @@ const EndSessionDialog = new Lang.Class({
                                                 icon_size: _DIALOG_ICON_SIZE,
                                                 style_class: dialogContent.iconStyleClass });
         } else {
-            let avatarWidget = new UserMenu.UserAvatarWidget(this._user,
+            let avatarWidget = new UserWidget.Avatar(this._user,
                                                              { iconSize: _DIALOG_ICON_SIZE,
                                                                styleClass: dialogContent.iconStyleClass });
             this._iconBin.child = avatarWidget.actor;
