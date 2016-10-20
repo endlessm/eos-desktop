@@ -90,6 +90,7 @@
     <file>ui/status/network.js</file>
     <file>ui/status/power.js</file>
     <file>ui/status/volume.js</file>
+    <file>ui/status/missionGame.js</file>
     <file>ui/status/bluetooth.js</file>
     <file>ui/status/social.js</file>
     <file>ui/switcherPopup.js</file>
@@ -112,9 +113,11 @@
     <file>ui/components/autorunManager.js</file>
     <file>ui/components/automountManager.js</file>
     <file>ui/components/keyring.js</file>
+    <file>ui/components/missionGameService.js</file>
     <file>ui/components/networkAgent.js</file>
     <file>ui/components/polkitAgent.js</file>
     <file>ui/components/socialBar.js</file>
     <file>ui/components/updaterManager.js</file>
+    <file>ui/components/missionChatbox.js</file>
   </gresource>
 </gresources>
