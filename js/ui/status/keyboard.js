@@ -326,13 +326,15 @@ const InputSourceManager = new Lang.Class({
             Main.wm.addKeybinding('switch-input-source',
                                   new Gio.Settings({ schema_id: "org.gnome.desktop.wm.keybindings" }),
                                   Meta.KeyBindingFlags.NONE,
-                                  Shell.ActionMode.ALL,
+                                  Shell.KeyBindingMode.NORMAL |
+                                  Shell.KeyBindingMode.OVERVIEW,
                                   Lang.bind(this, this._switchInputSource));
         this._keybindingActionBackward =
             Main.wm.addKeybinding('switch-input-source-backward',
                                   new Gio.Settings({ schema_id: "org.gnome.desktop.wm.keybindings" }),
                                   Meta.KeyBindingFlags.IS_REVERSED,
-                                  Shell.ActionMode.ALL,
+                                  Shell.KeyBindingMode.NORMAL |
+                                  Shell.KeyBindingMode.OVERVIEW,
                                   Lang.bind(this, this._switchInputSource));
         if (Main.sessionMode.isGreeter)
             this._settings = new InputSourceSystemSettings();
@@ -401,16 +403,6 @@ const InputSourceManager = new Lang.Class({
     _switchInputSource: function(display, screen, window, binding) {
         if (this._mruSources.length < 2)
             return;
-
-        // HACK: Fall back on simple input source switching since we
-        // can't show a popup switcher while a GrabHelper grab is in
-        // effect without considerable work to consolidate the usage
-        // of pushModal/popModal and grabHelper. See
-        // https://bugzilla.gnome.org/show_bug.cgi?id=695143 .
-        if (Main.actionMode == Shell.ActionMode.POPUP) {
-            this._modifiersSwitcher();
-            return;
-        }
 
         let popup = new InputSourcePopup(this._mruSources, this._keybindingAction, this._keybindingActionBackward);
         if (!popup.show(binding.is_reversed(), binding.get_name(), binding.get_mask()))

@@ -31,16 +31,16 @@ const Slider = new Lang.Class({
         this._releaseId = this._motionId = 0;
         this._dragging = false;
 
-        this._customAccessible = St.GenericAccessible.new_for_actor(this.actor);
-        this.actor.set_accessible(this._customAccessible);
+        // this._customAccessible = St.GenericAccessible.new_for_actor(this.actor);
+        // this.actor.set_accessible(this._customAccessible);
 
-        this._customAccessible.connect('get-current-value', Lang.bind(this, this._getCurrentValue));
-        this._customAccessible.connect('get-minimum-value', Lang.bind(this, this._getMinimumValue));
-        this._customAccessible.connect('get-maximum-value', Lang.bind(this, this._getMaximumValue));
-        this._customAccessible.connect('get-minimum-increment', Lang.bind(this, this._getMinimumIncrement));
-        this._customAccessible.connect('set-current-value', Lang.bind(this, this._setCurrentValue));
+        // this._customAccessible.connect('get-current-value', Lang.bind(this, this._getCurrentValue));
+        // this._customAccessible.connect('get-minimum-value', Lang.bind(this, this._getMinimumValue));
+        // this._customAccessible.connect('get-maximum-value', Lang.bind(this, this._getMaximumValue));
+        // this._customAccessible.connect('get-minimum-increment', Lang.bind(this, this._getMinimumIncrement));
+        // this._customAccessible.connect('set-current-value', Lang.bind(this, this._setCurrentValue));
 
-        this.connect('value-changed', Lang.bind(this, this._valueChanged));
+        // this.connect('value-changed', Lang.bind(this, this._valueChanged));
     },
 
     setValue: function(value) {
