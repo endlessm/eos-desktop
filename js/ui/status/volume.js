@@ -9,8 +9,7 @@ const Signals = imports.signals;
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
-
-const VOLUME_ADJUSTMENT_STEP = 0.05; /* Volume adjustment step in % */
+const Slider = imports.ui.slider;
 
 const VOLUME_NOTIFY_ID = 1;
 
@@ -30,21 +29,26 @@ function getMixerControl() {
 const StreamSlider = new Lang.Class({
     Name: 'StreamSlider',
 
-    _init: function(control, title) {
+    _init: function(control) {
         this._control = control;
 
-        this.item = new PopupMenu.PopupMenuSection();
+        this.item = new PopupMenu.PopupBaseMenuItem({ activate: false });
 
-        this._title = new PopupMenu.PopupMenuItem(title, { reactive: false });
-        this._slider = new PopupMenu.PopupSliderMenuItem(0);
+        this._slider = new Slider.Slider(0);
         this._slider.connect('value-changed', Lang.bind(this, this._sliderChanged));
         this._slider.connect('drag-end', Lang.bind(this, this._notifyVolumeChange));
 
-        this.item.addMenuItem(this._title);
-        this.item.addMenuItem(this._slider);
+        this._icon = new St.Icon({ style_class: 'popup-menu-icon' });
+        this.item.actor.add(this._icon);
+        this.item.actor.add(this._slider.actor, { expand: true });
+        this.item.actor.connect('button-press-event', Lang.bind(this, function(actor, event) {
+            return this._slider.startDragging(event);
+        }));
+        this.item.actor.connect('key-press-event', Lang.bind(this, function(actor, event) {
+            return this._slider.onKeyPressEvent(actor, event);
+        }));
 
         this._stream = null;
-        this._shouldShow = true;
     },
 
     get stream() {
@@ -86,12 +90,11 @@ const StreamSlider = new Lang.Class({
 
     _updateVisibility: function() {
         let visible = this._shouldBeVisible();
-        this._title.actor.visible = visible;
-        this._slider.actor.visible = visible;
+        this.item.actor.visible = visible;
     },
 
     scroll: function(event) {
-        this._slider.scroll(event);
+        return this._slider.scroll(event);
     },
 
     setValue: function(value) {
@@ -154,6 +157,11 @@ const OutputStreamSlider = new Lang.Class({
     Name: 'OutputStreamSlider',
     Extends: StreamSlider,
 
+    _init: function(control) {
+        this.parent(control);
+        this._slider.actor.accessible_name = _("Volume");
+    },
+
     _connectStream: function(stream) {
         this.parent(stream);
         this._portChangedId = stream.connect('notify::port', Lang.bind(this, this._portChanged));
@@ -181,11 +189,17 @@ const OutputStreamSlider = new Lang.Class({
         this._portChangedId = 0;
     },
 
+    _updateSliderIcon: function() {
+        this._icon.icon_name = (this._hasHeadphones ?
+                                'audio-headphones-symbolic' :
+                                'audio-speakers-symbolic');
+    },
+
     _portChanged: function() {
         let hasHeadphones = this._findHeadphones(this._stream);
         if (hasHeadphones != this._hasHeadphones) {
             this._hasHeadphones = hasHeadphones;
-            this.emit('headphones-changed', this._hasHeadphones);
+            this._updateSliderIcon();
         }
     }
 });
@@ -194,10 +208,12 @@ const InputStreamSlider = new Lang.Class({
     Name: 'InputStreamSlider',
     Extends: StreamSlider,
 
-    _init: function(control, title) {
-        this.parent(control, title);
+    _init: function(control) {
+        this.parent(control);
+        this._slider.actor.accessible_name = _("Microphone");
         this._control.connect('stream-added', Lang.bind(this, this._maybeShowInput));
         this._control.connect('stream-removed', Lang.bind(this, this._maybeShowInput));
+        this._icon.icon_name = 'audio-input-microphone-symbolic';
     },
 
     _connectStream: function(stream) {
@@ -245,17 +261,13 @@ const VolumeMenu = new Lang.Class({
         this._control.connect('default-sink-changed', Lang.bind(this, this._readOutput));
         this._control.connect('default-source-changed', Lang.bind(this, this._readInput));
 
-        /* Translators: This is the label for audio volume */
-        this._output = new OutputStreamSlider(this._control, _("Volume"));
+        this._output = new OutputStreamSlider(this._control);
         this._output.connect('stream-updated', Lang.bind(this, function() {
             this.emit('icon-changed');
         }));
-        this._output.connect('headphones-changed', Lang.bind(this, function(stream, value) {
-            this.emit('headphones-changed', value);
-        }));
         this.addMenuItem(this._output.item);
 
-        this._input = new InputStreamSlider(this._control, _("Microphone"));
+        this._input = new InputStreamSlider(this._control);
         this.addMenuItem(this._input.item);
 
         this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
@@ -264,7 +276,7 @@ const VolumeMenu = new Lang.Class({
     },
 
     scroll: function(event) {
-        this._output.scroll(event);
+        return this._output.scroll(event);
     },
 
     _onControlStateChanged: function() {
@@ -291,28 +303,32 @@ const VolumeMenu = new Lang.Class({
 
 const Indicator = new Lang.Class({
     Name: 'VolumeIndicator',
-    Extends: PanelMenu.SystemStatusButton,
+    Extends: PanelMenu.SystemIndicator,
 
     _init: function() {
-        this.parent('audio-volume-muted-symbolic', _("Volume"));
+        this.parent();
+
+        this._primaryIndicator = this._addIndicator();
 
         this._control = getMixerControl();
         this._volumeMenu = new VolumeMenu(this._control);
         this._volumeMenu.connect('icon-changed', Lang.bind(this, function(menu) {
             let icon = this._volumeMenu.getIcon();
-            this.actor.visible = (icon != null);
-            this.setIcon(icon);
+
+            if (icon != null) {
+                this.indicators.show();
+                this._primaryIndicator.icon_name = icon;
+            } else {
+                this.indicators.hide();
+            }
         }));
 
         this.menu.addMenuItem(this._volumeMenu);
 
-        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        this.menu.addSettingsAction(_("Sound Settings"), 'gnome-sound-panel.desktop');
-
-        this.actor.connect('scroll-event', Lang.bind(this, this._onScrollEvent));
+        this.indicators.connect('scroll-event', Lang.bind(this, this._onScrollEvent));
     },
 
     _onScrollEvent: function(actor, event) {
-        this._volumeMenu.scroll(event);
+        return this._volumeMenu.scroll(event);
     }
 });

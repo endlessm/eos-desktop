@@ -316,7 +316,7 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'logo': imports.gdm.loginDialog.LogoMenuButton,
     'keyboard': imports.ui.status.keyboard.InputSourceIndicator,
     'powerMenu': imports.gdm.powerMenu.PowerMenuButton,
-    'userMenu': imports.ui.userMenu.UserMenuButton,
+    'system': imports.ui.status.system.Indicator,
     'socialBar': imports.ui.status.social.SocialBarButton,
     'panelSeparator': imports.ui.panelSeparator.PanelSeparator,
     'hotCornerIndicator': imports.ui.status.hotCornerIndicator.HotCornerIndicator,

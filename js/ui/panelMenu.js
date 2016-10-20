@@ -41,8 +41,7 @@ const ButtonBox = new Lang.Class({
     },
 
     _getPreferredWidth: function(actor, forHeight, alloc) {
-        let children = actor.get_children();
-        let child = children.length > 0 ? children[0] : null;
+        let child = actor.get_first_child();
 
         if (child) {
             [alloc.min_size, alloc.natural_size] = child.get_preferred_width(-1);
@@ -55,8 +54,7 @@ const ButtonBox = new Lang.Class({
     },
 
     _getPreferredHeight: function(actor, forWidth, alloc) {
-        let children = actor.get_children();
-        let child = children.length > 0 ? children[0] : null;
+        let child = actor.get_first_child();
 
         if (child) {
             [alloc.min_size, alloc.natural_size] = child.get_preferred_height(-1);
@@ -66,13 +64,11 @@ const ButtonBox = new Lang.Class({
     },
 
     _allocate: function(actor, box, flags) {
-        let children = actor.get_children();
-        if (children.length == 0)
+        let child = actor.get_first_child();
+        if (!child)
             return;
 
-        let child = children[0];
         let [minWidth, natWidth] = child.get_preferred_width(-1);
-        let [minHeight, natHeight] = child.get_preferred_height(-1);
 
         let availWidth = box.x2 - box.x1;
         let availHeight = box.y2 - box.y1;
@@ -86,13 +82,8 @@ const ButtonBox = new Lang.Class({
             childBox.x2 = availWidth - this._minHPadding;
         }
 
-        if (natHeight <= availHeight) {
-            childBox.y1 = Math.floor((availHeight - natHeight) / 2);
-            childBox.y2 = childBox.y1 + natHeight;
-        } else {
-            childBox.y1 = 0;
-            childBox.y2 = availHeight;
-        }
+        childBox.y1 = 0;
+        childBox.y2 = availHeight;
 
         child.allocate(childBox, flags);
     },
@@ -106,39 +97,22 @@ const Button = new Lang.Class({
         this.parent({ reactive: true,
                       can_focus: true,
                       track_hover: true,
+                      accessible_name: nameText ? nameText : "",
                       accessible_role: Atk.Role.MENU });
 
-        this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));
-        this.actor.connect('key-press-event', Lang.bind(this, this._onSourceKeyPress));
+        this.actor.connect('event', Lang.bind(this, this._onEvent));
+        this.actor.connect('notify::visible', Lang.bind(this, this._onVisibilityChanged));
 
         if (dontCreateMenu)
             this.menu = new PopupMenu.PopupDummyMenu(this.actor);
         else
-            this.setMenu(new PopupMenu.PopupMenu(this.actor, menuAlignment, St.Side.BOTTOM));
-
-        this.setName(nameText);
+            this.setMenu(new PopupMenu.PopupMenu(this.actor, menuAlignment, St.Side.TOP, 0));
     },
 
     setSensitive: function(sensitive) {
         this.actor.reactive = sensitive;
         this.actor.can_focus = sensitive;
         this.actor.track_hover = sensitive;
-    },
-
-    setName: function(text) {
-        if (text != null) {
-            // This is the easiest way to provide a accessible name to
-            // this widget. The label could be also used for other
-            // purposes in the future.
-            if (!this.label) {
-                this.label = new St.Label({ text: text });
-                this.actor.label_actor = this.label;
-            } else
-                this.label.text = text;
-        } else {
-            this.label = null;
-            this.actor.label_actor = null;
-        }
     },
 
     setMenu: function(menu) {
@@ -154,46 +128,40 @@ const Button = new Lang.Class({
             Main.uiGroup.add_actor(this.menu.actor);
             this.menu.actor.hide();
         }
+        this.emit('menu-set');
     },
 
-    _onButtonPress: function(actor, event) {
+    _onEvent: function(actor, event) {
+        if (this.menu &&
+            (event.type() == Clutter.EventType.TOUCH_BEGIN ||
+             event.type() == Clutter.EventType.BUTTON_PRESS))
+            this.menu.toggle();
+
+        return Clutter.EVENT_PROPAGATE;
+    },
+
+    _onVisibilityChanged: function() {
         if (!this.menu)
             return;
 
-        this.menu.toggle();
-    },
-
-    _onSourceKeyPress: function(actor, event) {
-        if (!this.menu)
-            return false;
-
-        let symbol = event.get_key_symbol();
-        if (symbol == Clutter.KEY_space || symbol == Clutter.KEY_Return) {
-            this.menu.toggle();
-            return true;
-        } else if (symbol == Clutter.KEY_Escape && this.menu.isOpen) {
+        if (!this.actor.visible)
             this.menu.close();
-            return true;
-        } else if (symbol == Clutter.KEY_Down) {
-            if (!this.menu.isOpen)
-                this.menu.toggle();
-            this.menu.actor.navigate_focus(this.actor, Gtk.DirectionType.DOWN, false);
-            return true;
-        } else
-            return false;
     },
 
     _onMenuKeyPress: function(actor, event) {
+        if (global.focus_manager.navigate_from_event(event))
+            return Clutter.EVENT_STOP;
+
         let symbol = event.get_key_symbol();
         if (symbol == Clutter.KEY_Left || symbol == Clutter.KEY_Right) {
             let group = global.focus_manager.get_group(this.actor);
             if (group) {
                 let direction = (symbol == Clutter.KEY_Left) ? Gtk.DirectionType.LEFT : Gtk.DirectionType.RIGHT;
                 group.navigate_focus(this.actor, direction, false);
-                return true;
+                return Clutter.EVENT_STOP;
             }
         }
-        return false;
+        return Clutter.EVENT_PROPAGATE;
     },
 
     _onOpenStateChanged: function(menu, open) {
@@ -206,7 +174,8 @@ const Button = new Lang.Class({
         // menu is higher then the screen; it's useful if part of the menu is
         // scrollable so the minimum height is smaller than the natural height
         let workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
-        this.menu.actor.style = ('max-height: ' + Math.round(workArea.height) + 'px;');
+        let verticalMargins = this.menu.actor.margin_top + this.menu.actor.margin_bottom;
+        this.menu.actor.style = ('max-height: ' + Math.round(workArea.height - verticalMargins) + 'px;');
     },
 
     destroy: function() {
@@ -221,51 +190,35 @@ const Button = new Lang.Class({
 });
 Signals.addSignalMethods(Button.prototype);
 
-/* SystemStatusButton:
+/* SystemIndicator:
  *
- * This class manages one System Status indicator (network, keyboard,
- * volume, bluetooth...), which is just a PanelMenuButton with an
- * icon.
+ * This class manages one system indicator, which are the icons
+ * that you see at the top right. A system indicator is composed
+ * of an icon and a menu section, which will be composed into the
+ * aggregate menu.
  */
-const SystemStatusButton = new Lang.Class({
-    Name: 'SystemStatusButton',
-    Extends: Button,
+const SystemIndicator = new Lang.Class({
+    Name: 'SystemIndicator',
 
-    _init: function(iconName, nameText) {
-        this.parent(0.0, nameText);
-        this.actor.add_style_class_name('panel-status-button');
-
-        this._box = new St.BoxLayout({ style_class: 'panel-status-button-box' });
-        this.actor.add_actor(this._box);
-
-        if (iconName)
-            this.setIcon(iconName);
+    _init: function() {
+        this.indicators = new St.BoxLayout({ style_class: 'panel-status-indicators-box',
+                                             reactive: true });
+        this.indicators.hide();
+        this.menu = new PopupMenu.PopupMenuSection();
     },
 
-    get icons() {
-        return this._box.get_children();
+    _syncIndicatorsVisible: function() {
+        this.indicators.visible = this.indicators.get_children().some(function(actor) {
+            return actor.visible;
+        });
     },
 
-    addIcon: function(gicon) {
-        let icon = new St.Icon({ gicon: gicon,
-                                 style_class: 'system-status-icon' });
-        this._box.add_actor(icon);
-
-        this.emit('icons-changed');
-
+    _addIndicator: function() {
+        let icon = new St.Icon({ style_class: 'system-status-icon' });
+        this.indicators.add_actor(icon);
+        icon.connect('notify::visible', Lang.bind(this, this._syncIndicatorsVisible));
+        this._syncIndicatorsVisible();
         return icon;
-    },
-
-    setIcon: function(iconName) {
-        if (!this.mainIcon)
-            this.mainIcon = this.addIcon(null);
-        this.mainIcon.icon_name = iconName;
-    },
-
-    setGIcon: function(gicon) {
-        if (this.mainIcon)
-            this.mainIcon.gicon = gicon;
-        else
-            this.mainIcon = this.addIcon(gicon);
     }
 });
+Signals.addSignalMethods(SystemIndicator.prototype);

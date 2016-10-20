@@ -143,7 +143,7 @@ const AppIconMenu = new Lang.Class({
 
         this.actor.add_style_class_name('app-icon-menu');
 
-        this._submenuItem = new ScrollMenuItem();
+        this._submenuItem = new PopupMenu.PopupSubMenuMenuItem();
         this.addMenuItem(this._submenuItem);
         this._submenuItem.menu.connect('activate', Lang.bind(this, this._onActivate));
 
