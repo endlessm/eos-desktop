@@ -1455,9 +1455,18 @@ const WindowManager = new Lang.Class({
     },
 
     _endlessCodingLaunched : function(actor, event, window) {
-        let tracker = Shell.WindowTracker.get_default();
-        tracker.track_coding_app_window(window);
-        Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
+        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
+            return session.windowApp === window;
+        });
+        if (currentSession.length === 0)
+            return;
+        if (currentSession[0].windowBuilder === undefined) {
+            let tracker = Shell.WindowTracker.get_default();
+            tracker.track_coding_app_window(window);
+            Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
+        }
+        else
+            currentSession[0].windowBuilder.activate(global.get_current_time());
     },
 
     _endlessCodingRemoveLauncher : function(window) {
