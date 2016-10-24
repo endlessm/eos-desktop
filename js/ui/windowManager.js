@@ -1289,6 +1289,11 @@ const WindowManager = new Lang.Class({
             }
         }
 
+        if (this._endlessCodingDetermineBuilder(actor)) {
+            shellwm.completed_map(actor);
+            return;
+        }
+
         if (this._updateReadyRotateAnimationsWith(actor)) {
             shellwm.completed_map(actor);
             return;
@@ -1385,6 +1390,31 @@ const WindowManager = new Lang.Class({
         this._endlessCodingAddLauncher(actor);
     },
 
+    _endlessCodingDetermineBuilder : function(actor) {
+        let window = actor.meta_window;
+        if (window.get_flatpak_id() === 'org.gnome.Builder') {
+            let tracker = Shell.WindowTracker.get_default();
+            if (tracker.is_coding_builder_window(window)) {
+                let app = tracker.get_app_from_builder(window);
+                let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
+                        return session.windowApp === app;
+                });
+                if (currentSession.length === 0)
+                    return false;
+                currentSession[0].windowBuilder = window;
+                return true;
+            }
+        }
+        return false;
+    },
+
+    _endlessCodingRemoveBuilder : function(window) {
+        if (window.get_flatpak_id() === 'org.gnome.Builder') {
+            let tracker = Shell.WindowTracker.get_default();
+            tracker.untrack_coding_app_window(window);
+        }
+    },
+
     _endlessCodingAddLauncher : function(actor) {
         let window = actor.meta_window;
         if (window.get_flatpak_id() !== 'org.gnome.gedit')
@@ -1401,13 +1431,11 @@ const WindowManager = new Lang.Class({
             if (currentSession.length === 0)
                 return;
             let rect = currentSession[0].windowApp.get_frame_rect();
-            currentSession[0].button.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
+            currentSession[0].buttonApp.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
         }));
         let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._endlessCodingWindowsRestacked, window));
-        button.connect ('clicked', Lang.bind(this, function(actor, event) {
-            Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder']);
-        }));
-        this._currentEndlessCodingSessions.push({button: button, windowApp: window,
+        button.connect('clicked', Lang.bind(this, this._endlessCodingLaunched, window));
+        this._currentEndlessCodingSessions.push({buttonApp: button, windowApp: window,
             positionChangedId: positionChangedId, windowsRestackedId: windowsRestackedId});
     },
 
@@ -1421,9 +1449,15 @@ const WindowManager = new Lang.Class({
         if (currentSession.length === 0)
             return;
         if (focusedWindow.get_stable_sequence() === currentSession[0].windowApp.get_stable_sequence())
-            currentSession[0].button.show();
+            currentSession[0].buttonApp.show();
         else
-            currentSession[0].button.hide();
+            currentSession[0].buttonApp.hide();
+    },
+
+    _endlessCodingLaunched : function(actor, event, window) {
+        let tracker = Shell.WindowTracker.get_default();
+        tracker.track_coding_app_window(window);
+        Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
     },
 
     _endlessCodingRemoveLauncher : function(window) {
@@ -1441,7 +1475,7 @@ const WindowManager = new Lang.Class({
             Main.overview.disconnect(currentSession[0].windowsRestackedId);
             currentSession[0].windowsRestackedId = 0;
         }
-        currentSession[0].button.destroy();
+        currentSession[0].buttonApp.destroy();
         this._currentEndlessCodingSessions.splice(this._currentEndlessCodingSessions.indexOf(currentSession[0]), 1);
     },
 
@@ -1507,6 +1541,7 @@ const WindowManager = new Lang.Class({
         }
 
         this._endlessCodingRemoveLauncher(window);
+        this._endlessCodingRemoveBuilder(window);
 
         if (actor._notifyWindowTypeSignalId) {
             window.disconnect(actor._notifyWindowTypeSignalId);
