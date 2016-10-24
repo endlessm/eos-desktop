@@ -5,8 +5,8 @@ const Lang = imports.lang;
 const Main = imports.ui.main;
 const SideComponent = imports.ui.sideComponent;
 
-const MissionChatboxBarIface = '<node> \
-<interface name="com.endlessm.Mission.Chatbox"> \
+const MissionManagerIface = '<node> \
+<interface name="com.endlessm.Mission.Manager"> \
 <method name="show"> \
   <arg type="u" direction="in" name="timestamp"/> \
 </method> \
@@ -17,25 +17,25 @@ const MissionChatboxBarIface = '<node> \
 </interface> \
 </node>';
 
-const MISSION_CHATBOX_NAME = 'com.endlessm.Mission.Chatbox';
-const MISSION_CHATBOX_PATH = '/com/endlessm/Mission/Chatbox';
+const MISSION_MANAGER_NAME = 'com.endlessm.Mission.Manager';
+const MISSION_MANAGER_PATH = '/com/endlessm/Mission/Manager';
 
-const MissionChatbox = new Lang.Class({
-    Name: 'MissionChatbox',
+const MissionManager = new Lang.Class({
+    Name: 'MissionManager',
     Extends: SideComponent.SideComponent,
 
     _init: function() {
-        this.parent(MissionChatboxBarIface, MISSION_CHATBOX_NAME, MISSION_CHATBOX_PATH);
+        this.parent(MissionManagerIface, MISSION_MANAGER_NAME, MISSION_MANAGER_PATH);
     },
 
     enable: function() {
         this.parent();
-        Main.missionChatbox = this;
+        Main.missionManager = this;
     },
 
     disable: function() {
         this.parent();
-        Main.missionChatbox = null;
+        Main.missionManager = null;
     },
 
     callShow: function(timestamp) {
@@ -46,4 +46,4 @@ const MissionChatbox = new Lang.Class({
         this.proxy.hideRemote(timestamp);
     }
 });
-const Component = MissionChatbox;
+const Component = MissionManager;
