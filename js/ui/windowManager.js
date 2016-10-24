@@ -1423,6 +1423,13 @@ const WindowManager = new Lang.Class({
                         return;
                     let rect = currentSession[0].windowBuilder.get_frame_rect();
                     currentSession[0].buttonBuilder.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
+                    if (currentSession[0].windowApp === undefined)
+                        return;
+                    currentSession[0].windowApp.move_resize_frame(false,
+                                                                  rect.x,
+                                                                  rect.y,
+                                                                  rect.width,
+                                                                  rect.height);
                 }));
                 let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._endlessCodingBuilderWindowsRestacked, window));
                 button.connect('clicked', Lang.bind(this, this._endlessCodingBuilderClicked, window));
@@ -1458,6 +1465,13 @@ const WindowManager = new Lang.Class({
                 return;
             let rect = currentSession[0].windowApp.get_frame_rect();
             currentSession[0].buttonApp.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
+            if (currentSession[0].windowBuilder === undefined)
+                return;
+            currentSession[0].windowBuilder.move_resize_frame(false,
+                                                              rect.x,
+                                                              rect.y,
+                                                              rect.width,
+                                                              rect.height);
         }));
         let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._endlessCodingWindowsRestacked, window));
         button.connect('clicked', Lang.bind(this, this._endlessCodingLaunched, window));
