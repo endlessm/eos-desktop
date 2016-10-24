@@ -42,6 +42,9 @@
 #define SIDE_COMPONENT_ROLE "eos-side-component"
 #define SPEEDWAGON_ROLE "eos-speedwagon"
 
+#define BUILDER_WINDOW "org.gnome.Builder"
+#define WATCHDOG_TIMEOUT 30
+
 struct _ShellWindowTracker
 {
   GObject parent;
@@ -53,6 +56,11 @@ struct _ShellWindowTracker
 
   /* <int, ShellApp *app> */
   GHashTable *launched_pid_to_app;
+
+  /* <MetaWindow *app_win, MetaWindow *builder_win> */
+  GHashTable *builder_to_app;
+  MetaWindow *coding_app;
+  guint watchdog_id;
 };
 
 G_DEFINE_TYPE (ShellWindowTracker, shell_window_tracker, G_TYPE_OBJECT);
@@ -174,6 +182,77 @@ shell_window_tracker_is_window_interesting (MetaWindow *window)
 gboolean shell_window_tracker_is_speedwagon_window (MetaWindow *window)
 {
   return g_strcmp0 (meta_window_get_role (window), SPEEDWAGON_ROLE) == 0;
+}
+
+static gboolean
+watchdog_timeout_reached_cb (gpointer user_data)
+{
+  ShellWindowTracker *self = user_data;
+
+  self->watchdog_id = 0;
+  if (self->coding_app)
+    self->coding_app = NULL;
+  return FALSE;
+}
+
+/**
+ * shell_window_tracker_track_coding_app_window:
+ *
+ * Track a coding app.
+ *
+ */
+void shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker, MetaWindow *window)
+{
+  tracker->coding_app = window;
+  tracker->watchdog_id =
+    g_timeout_add_seconds (WATCHDOG_TIMEOUT,
+                   watchdog_timeout_reached_cb, tracker);
+}
+
+/**
+ * shell_window_tracker_untrack_coding_app_window:
+ *
+ * Untrack a coding app.
+ *
+ */
+void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker, MetaWindow *window)
+{
+  MetaWindow *coding_app;
+  coding_app = g_hash_table_lookup (tracker->builder_to_app, window);
+  if (coding_app) {
+    g_hash_table_remove (tracker->builder_to_app, window);
+  }
+}
+
+/**
+ * shell_window_tracker_is_coding_builder_window:
+ *
+ * A builder window associated with a coding app is shown.
+ *
+ * Returns: %TRUE if a window is a builder window
+ */
+gboolean shell_window_tracker_is_coding_builder_window (ShellWindowTracker *tracker, MetaWindow *window)
+{
+  return g_hash_table_lookup (tracker->builder_to_app, window) ? TRUE : FALSE;
+}
+
+/**
+ * shell_window_tracker_get_app_from_builder:
+ * @tracker: An app monitor instance
+ * @builder: A #MetaWindow
+ *
+ * Returns: (transfer full): Applocation associated with Builder window
+ */
+
+MetaWindow *shell_window_tracker_get_app_from_builder (ShellWindowTracker *tracker, MetaWindow *builder)
+{
+  MetaWindow *app;
+
+  app = g_hash_table_lookup (tracker->builder_to_app, builder);
+  if (app)
+    g_object_ref (app);
+
+  return app;
 }
 
 /*
@@ -434,6 +513,16 @@ get_app_for_window (ShellWindowTracker    *tracker,
   /* Side components don't have an associated app */
   if (g_strcmp0 (meta_window_get_role (window), SIDE_COMPONENT_ROLE) == 0)
     return NULL;
+  if (g_strcmp0 (meta_window_get_flatpak_id (window), BUILDER_WINDOW) == 0)
+  {
+    if (tracker->coding_app) {
+      g_hash_table_insert (tracker->builder_to_app, window, tracker->coding_app);
+      tracker->coding_app = NULL;
+      g_source_remove (tracker->watchdog_id);
+      tracker->watchdog_id = 0;
+      return NULL;
+    }
+  }
 
   transient_for = meta_window_get_transient_for (window);
   if (transient_for != NULL)
@@ -739,6 +828,10 @@ shell_window_tracker_init (ShellWindowTracker *self)
 
   self->launched_pid_to_app = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_object_unref);
 
+  self->builder_to_app = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_object_unref);
+  self->watchdog_id = 0;
+  self->coding_app = NULL;
+
   screen = shell_global_get_screen (shell_global_get ());
 
   g_signal_connect (G_OBJECT (screen), "startup-sequence-changed",
@@ -755,6 +848,7 @@ shell_window_tracker_finalize (GObject *object)
 
   g_hash_table_destroy (self->window_to_app);
   g_hash_table_destroy (self->launched_pid_to_app);
+  g_hash_table_destroy (self->builder_to_app);
 
   G_OBJECT_CLASS (shell_window_tracker_parent_class)->finalize(object);
 }
