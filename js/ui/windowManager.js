@@ -1434,6 +1434,8 @@ const WindowManager = new Lang.Class({
                 let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._endlessCodingBuilderWindowsRestacked, window));
                 button.connect('clicked', Lang.bind(this, this._endlessCodingBuilderClicked, window));
                 currentSession[0].buttonBuilder = button;
+                currentSession[0].positionChangedIdBuilder = positionChangedId;
+                currentSession[0].windowsRestackedIdBuilder = windowsRestackedId;
 
                 return true;
             }
@@ -1445,7 +1447,27 @@ const WindowManager = new Lang.Class({
         if (window.get_flatpak_id() === 'org.gnome.Builder') {
             let tracker = Shell.WindowTracker.get_default();
             tracker.untrack_coding_app_window(window);
+            this._endlessCodingBuilderRemoveLauncher(window);
         }
+    },
+
+    _endlessCodingBuilderRemoveLauncher : function(window) {
+        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
+                return session.windowBuilder === window;
+        });
+        if (currentSession.length === 0)
+            return;
+
+        if (currentSession[0].positionChangedIdBuilder != 0) {
+            currentSession[0].windowApp.disconnect(currentSession[0].positionChangedIdBuilder);
+            currentSession[0].positionChangedIdBuilder = 0;
+        }
+        if (currentSession[0].windowsRestackedIdBuilder != 0) {
+            Main.overview.disconnect(currentSession[0].windowsRestackedIdBuilder);
+            currentSession[0].windowsRestackedIdBuilder = 0;
+        }
+        currentSession[0].buttonBuilder.destroy();
+        currentSession[0].windowBuilder = null;
     },
 
     _endlessCodingAddLauncher : function(actor) {
@@ -1465,7 +1487,7 @@ const WindowManager = new Lang.Class({
                 return;
             let rect = currentSession[0].windowApp.get_frame_rect();
             currentSession[0].buttonApp.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
-            if (currentSession[0].windowBuilder === undefined)
+            if (!currentSession[0].windowBuilder)
                 return;
             currentSession[0].windowBuilder.move_resize_frame(false,
                                                               rect.x,
@@ -1515,7 +1537,7 @@ const WindowManager = new Lang.Class({
         });
         if (currentSession.length === 0)
             return;
-        if (currentSession[0].windowBuilder === undefined) {
+        if (!currentSession[0].windowBuilder) {
             let tracker = Shell.WindowTracker.get_default();
             tracker.track_coding_app_window(window);
             Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
