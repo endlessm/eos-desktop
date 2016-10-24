@@ -1404,6 +1404,13 @@ const WindowManager = new Lang.Class({
 
                 currentSession[0].windowBuilder = window;
 
+                let appRect = currentSession[0].windowApp.get_frame_rect();
+                currentSession[0].windowBuilder.move_resize_frame(false,
+                                                                  appRect.x,
+                                                                  appRect.y,
+                                                                  appRect.width,
+                                                                  appRect.height);
+
                 let button = new St.Button({ style_class: 'view-source' });
                 let rect = window.get_frame_rect();
                 button.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
