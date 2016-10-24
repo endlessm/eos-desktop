@@ -1401,7 +1401,26 @@ const WindowManager = new Lang.Class({
                 });
                 if (currentSession.length === 0)
                     return false;
+
                 currentSession[0].windowBuilder = window;
+
+                let button = new St.Button({ style_class: 'view-source' });
+                let rect = window.get_frame_rect();
+                button.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
+                Main.layoutManager.addChrome(button);
+                let positionChangedId = window.connect('position-changed', Lang.bind(this, function(window) {
+                    let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
+                        return session.windowBuilder === window;
+                    });
+                    if (currentSession.length === 0)
+                        return;
+                    let rect = currentSession[0].windowBuilder.get_frame_rect();
+                    currentSession[0].buttonBuilder.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
+                }));
+                let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._endlessCodingBuilderWindowsRestacked, window));
+                button.connect('clicked', Lang.bind(this, this._endlessCodingBuilderClicked, window));
+                currentSession[0].buttonBuilder = button;
+
                 return true;
             }
         }
@@ -1454,6 +1473,21 @@ const WindowManager = new Lang.Class({
             currentSession[0].buttonApp.hide();
     },
 
+    _endlessCodingBuilderWindowsRestacked : function(overview, stackIndices, window) {
+        let focusedWindow = global.display.get_focus_window();
+        if (!focusedWindow)
+            return;
+        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
+            return session.windowBuilder === window;
+        });
+        if (currentSession.length === 0)
+            return;
+        if (focusedWindow.get_stable_sequence() === currentSession[0].windowBuilder.get_stable_sequence())
+            currentSession[0].buttonBuilder.show();
+        else
+            currentSession[0].buttonBuilder.hide();
+    },
+
     _endlessCodingLaunched : function(actor, event, window) {
         let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
             return session.windowApp === window;
@@ -1467,6 +1501,17 @@ const WindowManager = new Lang.Class({
         }
         else
             currentSession[0].windowBuilder.activate(global.get_current_time());
+    },
+
+    _endlessCodingBuilderClicked : function(actor, event, window) {
+        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
+            return session.windowBuilder === window;
+        });
+        if (currentSession.length === 0)
+            return;
+        if (currentSession[0].windowApp === undefined)
+            return;
+        currentSession[0].windowApp.activate(global.get_current_time());
     },
 
     _endlessCodingRemoveLauncher : function(window) {
