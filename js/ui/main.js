@@ -47,6 +47,7 @@ const LOW_RESOLUTION_WIDTH = 800;
 const LOW_RESOLUTION_HEIGHT = 600;
 
 let appStore = null;
+let codingManager = null;
 let componentManager = null;
 let panel = null;
 let overview = null;
@@ -65,7 +66,6 @@ let shellDBusService = null;
 let shellMountOpDBusService = null;
 let screenSaverDBus = null;
 let socialBar = null;
-let missionManager = null;
 let modalCount = 0;
 let keybindingMode = Shell.KeyBindingMode.NONE;
 let modalActorFocusStack = [];
