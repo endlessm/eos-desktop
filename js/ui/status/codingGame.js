@@ -3,21 +3,21 @@ const Lang = imports.lang;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 
-const MissionGameIndicator = new Lang.Class({
-    Name: 'MissionGameIndicator',
+const CodingGameIndicator = new Lang.Class({
+    Name: 'CodingGameIndicator',
     Extends: PanelMenu.SystemStatusButton,
 
     _init: function() {
-        this.parent('folder-drag-accept-symbolic', _('Mission'));
+        this.parent('folder-drag-accept-symbolic', _('Coding'));
     },
 
     // overrides default implementation from PanelMenu.Button
     _onButtonPress: function(actor, event) {
         // pressing the button when the overview is being shown always displays the side bar
         if (Main.overview.visible) {
-            Main.missionManager.show(event.get_time());
+            Main.codingManager.show(event.get_time());
         } else {
-            Main.missionManager.toggle(event.get_time());
+            Main.codingManager.toggle(event.get_time());
         }
     },
 });

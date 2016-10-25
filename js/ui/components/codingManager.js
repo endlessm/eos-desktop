@@ -5,8 +5,8 @@ const Lang = imports.lang;
 const Main = imports.ui.main;
 const SideComponent = imports.ui.sideComponent;
 
-const MissionManagerIface = '<node> \
-<interface name="com.endlessm.Mission.Manager"> \
+const CodingManagerIface = '<node> \
+<interface name="com.endlessm.Coding.Manager"> \
 <method name="show"> \
   <arg type="u" direction="in" name="timestamp"/> \
 </method> \
@@ -17,25 +17,25 @@ const MissionManagerIface = '<node> \
 </interface> \
 </node>';
 
-const MISSION_MANAGER_NAME = 'com.endlessm.Mission.Manager';
-const MISSION_MANAGER_PATH = '/com/endlessm/Mission/Manager';
+const CODING_MANAGER_NAME = 'com.endlessm.Coding.Manager';
+const CODING_MANAGER_PATH = '/com/endlessm/Coding/Manager';
 
-const MissionManager = new Lang.Class({
-    Name: 'MissionManager',
+const CodingManager = new Lang.Class({
+    Name: 'CodingManager',
     Extends: SideComponent.SideComponent,
 
     _init: function() {
-        this.parent(MissionManagerIface, MISSION_MANAGER_NAME, MISSION_MANAGER_PATH);
+        this.parent(CodingManagerIface, CODING_MANAGER_NAME, CODING_MANAGER_PATH);
     },
 
     enable: function() {
         this.parent();
-        Main.missionManager = this;
+        Main.codingManager = this;
     },
 
     disable: function() {
         this.parent();
-        Main.missionManager = null;
+        Main.codingManager = null;
     },
 
     callShow: function(timestamp) {
@@ -46,4 +46,4 @@ const MissionManager = new Lang.Class({
         this.proxy.hideRemote(timestamp);
     }
 });
-const Component = MissionManager;
+const Component = CodingManager;

@@ -320,7 +320,7 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'socialBar': imports.ui.status.social.SocialBarButton,
     'panelSeparator': imports.ui.panelSeparator.PanelSeparator,
     'hotCornerIndicator': imports.ui.status.hotCornerIndicator.HotCornerIndicator,
-    'missionGame': imports.ui.status.missionGame.MissionGameIndicator
+    'codingGame': imports.ui.status.codingGame.CodingGameIndicator
 };
 
 if (Config.HAVE_BLUETOOTH)

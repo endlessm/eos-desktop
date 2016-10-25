@@ -99,7 +99,7 @@ const _modes = {
         }
     },
 
-    'user-mission': {
+    'user-coding': {
         hasOverview: true,
         showCalendarEvents: true,
         allowSettings: true,
@@ -114,11 +114,11 @@ const _modes = {
         unlockDialog: imports.ui.unlockDialog.UnlockDialog,
         components: ['networkAgent', 'polkitAgent',
                      'keyring', 'autorunManager', 'automountManager',
-                     'updaterManager', 'socialBar', 'appStore', 'missionManager', 'missionGameService'],
+                     'updaterManager', 'socialBar', 'appStore', 'codingManager', 'codingGameService'],
         panel: {
             left: ['userMenu', 'panelSeparator', 'appIcons'],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
-                    'network', 'battery', 'missionGame',
+                    'network', 'battery', 'codingGame',
                     'socialBar', 'hotCornerIndicator']
         }
     }
@@ -179,8 +179,8 @@ const SessionMode = new Lang.Class({
             let mode = primary ? global.session_mode : 'user';
 
             if (mode == 'user' &&
-                global.settings.get_boolean('enable-mission-game'))
-                mode = 'user-mission';
+                global.settings.get_boolean('enable-coding-game'))
+                mode = 'user-coding';
 
             this._modeStack = [mode];
             this._sync();

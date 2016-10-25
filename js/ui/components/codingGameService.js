@@ -5,8 +5,8 @@ const Lang = imports.lang;
 const Meta = imports.gi.Meta;
 const Showmehow = imports.gi.Showmehow;
 
-const MissionChatboxTextService = new Lang.Class({
-    Name: 'MissionChatboxTextService',
+const CodingChatboxTextService = new Lang.Class({
+    Name: 'CodingChatboxTextService',
 
     enable: function() {
         // Connect to the service
@@ -49,4 +49,4 @@ const MissionChatboxTextService = new Lang.Class({
         });
     }
 });
-const Component = MissionChatboxTextService;
+const Component = CodingChatboxTextService;
