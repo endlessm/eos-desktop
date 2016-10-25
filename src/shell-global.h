@@ -123,6 +123,10 @@ void     shell_global_reexec_self               (ShellGlobal  *global);
 
 const char *     shell_global_get_session_mode  (ShellGlobal  *global);
 
+gboolean shell_global_window_matches_xid (ShellGlobal *global,
+                                          MetaWindow  *window,
+                                          guint32     xid);
+
 G_END_DECLS
 
 #endif /* __SHELL_GLOBAL_H__ */

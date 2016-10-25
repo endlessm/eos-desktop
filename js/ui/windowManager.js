@@ -3,6 +3,7 @@
 const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
 const Gdk = imports.gi.Gdk;
+const Gtk = imports.gi.Gtk;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const GObject = imports.gi.GObject;
@@ -586,6 +587,89 @@ const TilePreview = new Lang.Class({
     }
 });
 
+/**
+ * prepareWindowsForRotation
+ *
+ * This sets up the initial properties for two windows to be rotated between
+ * each other. It returns a function, which when called, will add tweens
+ * to actually commence the rotation process.
+ *
+ * Pass a @src and @dst window to rotate between, a @direction (either
+ * Gtk.DirectionType.LEFT or RotationDirection.RIGHT).
+ *
+ * The returned function takes parameters  @srcDone and @dstDone which
+ * are callbacks to call when the rotation animation for each window
+ * completes.
+ */
+function prepareWindowsForRotation(src, dst, direction) {
+    dst.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
+    src.rotation_angle_y = direction == 0;
+    dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+    src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+
+    /* We set backface culling to be enabled here so that we can
+     * smootly animate between the two windows. Without expensive
+     * vector projections, there's no way to determine whether a
+     * window's front-face is completely invisible to the user
+     * (this cannot be done just by looking at the angle of the
+     * window because the same angle may show a different visible
+     * face depending on its position in the view frustum).
+     *
+     * What we do here is enable backface culling and rotate both
+     * windows by 180degrees. The effect of this is that the front
+     * and back window will be at opposite rotations at each point
+     * in time and so the exact point at which the first window
+     * becomes invisible is the same point at which the second
+     * window becomes visible. Because no back faces are drawn
+     * there are no visible artifacts in the animation */
+    src.set_cull_back_face(true);
+    dst.set_cull_back_face(true);
+    src.show();
+    dst.show()
+    dst.opacity = 0;
+    let dst_geometry = src.get_meta_window().get_frame_rect();
+    dst.get_meta_window().move_resize_frame(false,
+                                            dst_geometry.x,
+                                            dst_geometry.y,
+                                            dst_geometry.width,
+                                            dst_geometry.height);
+
+
+    return function(srcDone, dstDone) {
+        /* Tween both windows in a rotation animation at the same time
+         * with backface culling enabled on both. This will allow for
+         * a smooth transition. */
+        Tweener.addTween(src, {
+            rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
+            time: WINDOW_ANIMATION_TIME * 4,
+            transition: 'easeOutQuad',
+            onComplete: function() {
+                if (srcDone) {
+                    srcDone(src);
+                }
+            }
+        });
+        Tweener.addTween(dst, {
+            rotation_angle_y: 0,
+            time: WINDOW_ANIMATION_TIME * 4,
+            transition: 'easeOutQuad',
+            onComplete: function() {
+                if (dstDone) {
+                    dstDone(dst);
+                }
+            }
+        });
+
+        /* Gently fade the window in, this will paper over
+         * any artifacts from shadows and the like */
+        Tweener.addTween(dst, {
+            opacity: 255,
+            time: WINDOW_ANIMATION_TIME,
+            transition: 'linear'
+        });
+    };
+}
+
 const WindowManager = new Lang.Class({
     Name: 'WindowManager',
 
@@ -752,9 +836,12 @@ const WindowManager = new Lang.Class({
                                                        '/com/endlessm/Sylvester/Service');
         this._sylvesterListener.connectSignal('RotateBetweenPidWindows',
                                               Lang.bind(this, this._handleRotateBetweenPidWindows));
+        this._sylvesterListener.connectSignal('RevertXidRotation',
+                                              Lang.bind(this, this._handleRevertXidRotation));
         this._pendingRotateAnimations = [];
         this._rotateOutActors = [];
         this._rotateInActors = [];
+        this._pairedActors = [];
         this._firstFrameConnections = [];
     },
 
@@ -777,11 +864,98 @@ const WindowManager = new Lang.Class({
         }
 
         let srcActorInfo = pidToActorInfo(src);
+        let dstActorInfo = pidToActorInfo(dst);
+
         this._pendingRotateAnimations.push({
             src: srcActorInfo,
-            dst: pidToActorInfo(dst)
+            dst: dstActorInfo
         });
         this._updateReadyRotateAnimationsWith(srcActorInfo.window);
+    },
+
+    _handleRevertXidRotation: function(proxy, sender, [xid]) {
+        /* Look in this._pairedActors to see if there is a
+         * dst window that has an xwindow id the same as
+         * xid. Then rotate the window back to where
+         * it was.
+         *
+         * Use a naive loop here, since we want to find a case
+         * where the passed xid is the dst window for a window pair
+         * and then do the rotate animation. We also swap src
+         * and dst in the pairings as that is a kind of implicit
+         * state as to which window "should" be active. */
+        for (let i = 0; i < this._pairedActors.length; ++i) {
+            let [src, dst] = this._pairedActors[i];
+
+            /* This should never be true if we've been maintaining
+             * the list properly, but warn about it for now */
+            if (dst.get_meta_window() === null ||
+                src.get_meta_window() === null) {
+                log("Destroyed window found in pair, this is a bug");
+                continue;
+            }
+
+            /* We found a match - commence the animation and swap
+             * the pair around */
+            if (global.window_matches_xid(dst.get_meta_window(), xid)) {
+                this._rotateInActors.push(src);
+                this._rotateOutActors.push(dst);
+                prepareWindowsForRotation(dst, src, Gtk.DirectionType.LEFT)(Lang.bind(this, this._rotateOutCompleted),
+                                                                            Lang.bind(this, this._rotateInCompleted));
+                this._pairedActors[i] = [dst, src];
+                break;
+            }
+        }
+    },
+
+    _pairWindowsForRotation: function(src, dst) {
+        /* Add these two windows as a "pair". If a pair already exists
+         * between the destination window and another window, then remove
+         * that pairing and pair the original source window with this
+         * destination window.
+         *
+         * We use a naive loop here since we're detecting where this
+         * is the case and then breaking out after adding then new
+         * entry. */
+        let amendedPair = false;
+        for (let i = 0; i < this._pairedActors.length; ++i) {
+            let [pairSrc, pairDst] = this._pairedActors[i];
+            if (pairDst == src) {
+                this._pairedActors.splice(i, 1);
+                this._pairedActors.push([pairSrc, dst]);
+                amendedPair = true;
+            }
+        }
+
+        if (!amendedPair) {
+            this._pairedActors.push([src, dst]);
+        }
+
+        /* The way this works is not ideal at the moment since it
+         * always flips left (can't know what direction to flip in) */
+        let flipOnFocusFn = Lang.bind(this, function(window) {
+            let actor = window.get_compositor_private();
+
+            /* If we are a src window in the current window
+             * pairings then initiate a flip animation */
+            for (let i = 0; i < this._pairedActors.length; ++i) {
+                let [pairSrc, pairDst] = this._pairedActors[i];
+                if (pairSrc === actor) {
+                    this._rotateInActors.push(pairSrc);
+                    this._rotateOutActors.push(pairDst);
+                    prepareWindowsForRotation(pairDst, pairSrc, Gtk.DirectionType.LEFT)(Lang.bind(this, this._rotateOutCompleted),
+                                                                                        Lang.bind(this, this._rotateInCompleted));
+                    this._pairedActors[i] = [pairDst, pairSrc];
+                }
+            }
+        });
+
+        /* If we've amended a pair, then a signal handler will already be defined */
+        if (!amendedPair) {
+            src.get_meta_window().connect('focus', flipOnFocusFn);
+        }
+
+        dst.get_meta_window().connect('focus', flipOnFocusFn);
     },
 
     _updateReadyRotateAnimationsWith: function(window) {
@@ -806,37 +980,10 @@ const WindowManager = new Lang.Class({
                 return true;
             }
 
-            animationSpec.dst.window.rotation_angle_y = -180;
-            animationSpec.dst.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-            animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+            let beginAnimation = prepareWindowsForRotation(animationSpec.src.window,
+                                                           animationSpec.dst.window,
+                                                           Gtk.DirectionType.RIGHT);
 
-            /* We set backface culling to be enabled here so that we can
-             * smootly animate between the two windows. Without expensive
-             * vector projections, there's no way to determine whether a
-             * window's front-face is completely invisible to the user
-             * (this cannot be done just by looking at the angle of the
-             * window because the same angle may show a different visible
-             * face depending on its position in the view frustum).
-             *
-             * What we do here is enable backface culling and rotate both
-             * windows by 180degrees. The effect of this is that the front
-             * and back window will be at opposite rotations at each point
-             * in time and so the exact point at which the first window
-             * becomes invisible is the same point at which the second
-             * window becomes visible. Because no back faces are drawn
-             * there are no visible artifacts in the animation */
-            animationSpec.src.window.set_cull_back_face(true);
-            animationSpec.dst.window.set_cull_back_face(true);
-            animationSpec.dst.window.opacity = 0;
-            let dst_geometry = animationSpec.src.rect;
-            animationSpec.dst.window.get_meta_window().move_resize_frame(false,
-                                                                         dst_geometry.x,
-                                                                         dst_geometry.y,
-                                                                         dst_geometry.width,
-                                                                         dst_geometry.height);
-
-            this._rotateInActors.push(animationSpec.dst.window);
-            this._rotateOutActors.push(animationSpec.src.window);
 
             /* We wait until the first frame of the window has been drawn
              * and damage updated in the compositor before we start rotating.
@@ -845,33 +992,13 @@ const WindowManager = new Lang.Class({
              * a window is slow to draw.
              */
             let firstFrameConnection = animationSpec.dst.window.connect('first-frame', Lang.bind(this, function() {
-                /* Tween both windows in a rotation animation at the same time
-                 * with backface culling enabled on both. This will allow for
-                 * a smooth transition. */
-                Tweener.addTween(animationSpec.src.window, {
-                    rotation_angle_y: 180,
-                    time: WINDOW_ANIMATION_TIME * 4,
-                    transition: 'easeOutQuad',
-                    onComplete: Lang.bind(this, function() {
-                        this._rotateOutCompleted(animationSpec.src.window);
-                    })
-                });
-                Tweener.addTween(animationSpec.dst.window, {
-                    rotation_angle_y: 0,
-                    time: WINDOW_ANIMATION_TIME * 4,
-                    transition: 'easeOutQuad',
-                    onComplete: Lang.bind(this, function() {
-                        this._rotateInCompleted(animationSpec.dst.window);
-                    })
-                });
-
-                /* Gently fade the window in, this will paper over
-                 * any artifacts from shadows and the like */
-                Tweener.addTween(animationSpec.dst.window, {
-                    opacity: 255,
-                    time: WINDOW_ANIMATION_TIME,
-                    transition: 'linear'
-                });
+                /* Add windows to the rotation list */
+                this._rotateInActors.push(animationSpec.src.window);
+                this._rotateOutActors.push(animationSpec.dst.window);
+                this._pairWindowsForRotation(animationSpec.src.window, animationSpec.dst.window);
+                
+                beginAnimation(Lang.bind(this, this._rotateOutCompleted),
+                               Lang.bind(this, this._rotateInCompleted));
 
                 this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
                     return conn != animationSpec.dst.window._firstFrameConnection;
@@ -1463,6 +1590,19 @@ const WindowManager = new Lang.Class({
 
         this._destroying.push(actor);
 
+        /* Since we are destroying, remove any pairs if this was a
+         * src window */
+        this._pairedActors = this._pairedWindows.filter(function(pair) {
+            return pair[0] !== actor;
+        });
+        let sourceWindowPairIndex = -1;
+        for (let i = 0; i < this._pairedActors.length; ++i) {
+            if (this._pairedActors[i][1] === actor) {
+                sourceWindowPairIndex = i;
+                break;
+            }
+        }
+
         if (window.is_attached_dialog()) {
             let parent = window.get_transient_for();
             this._checkDimming(parent, window);
@@ -1503,6 +1643,26 @@ const WindowManager = new Lang.Class({
             } else if (this._showDesktopOnDestroyDone) {
                 Main.layoutManager.prepareForOverview();
             }
+        } else if (sourceWindowPairIndex !== -1) {
+            /* This is a destination window for a window pair. Flip back to the
+             * source window and remove the pairing */
+            let [src, dst] = this._pairedActors[sourceWindowPairIndex];
+            this._rotateInActors.push(src);
+            this._rotateOutActors.push(dst);
+            let onComplete = function(callback) {
+                return function(w) {
+                    callback(w);
+                    shellwm.completed_destroy(w);
+                };
+            };
+
+            /* We only want to wrap onCompleteOut, since otherwise the reference count
+             * of the window will go to -1 */
+            let onCompleteOut = onComplete(Lang.bind(this, this._rotateOutCompleted));
+            let onCompleteIn = Lang.bind(this, this._rotateInCompleted);
+            prepareWindowsForRotation(dst, src, Gtk.DirectionType.LEFT)(onCompleteOut,
+                                                                        onCompleteIn);
+            this._pairedActors.splice(sourceWindowPairIndex, 1);
         } else {
             Tweener.addTween(actor,
                              { opacity: 0,
