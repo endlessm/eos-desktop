@@ -1390,6 +1390,92 @@ const WindowManager = new Lang.Class({
         this._endlessCodingAddLauncher(actor);
     },
 
+    _endlessCodingAnimation : function(src, dst) {
+        dst.rotation_angle_y = -180;
+        dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+        src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+
+        /* We set backface culling to be enabled here so that we can
+        * smootly animate between the two windows. Without expensive
+        * vector projections, there's no way to determine whether a
+        * window's front-face is completely invisible to the user
+        * (this cannot be done just by looking at the angle of the
+        * window because the same angle may show a different visible
+        * face depending on its position in the view frustum).
+        *
+        * What we do here is enable backface culling and rotate both
+        * windows by 180degrees. The effect of this is that the front
+        * and back window will be at opposite rotations at each point
+        * in time and so the exact point at which the first window
+        * becomes invisible is the same point at which the second
+        * window becomes visible. Because no back faces are drawn
+        * there are no visible artifacts in the animation */
+        src.set_cull_back_face(true);
+        dst.set_cull_back_face(true);
+
+        src.show();
+        dst.show();
+        dst.opacity = 0;
+
+        let dst_geometry = src.get_meta_window().get_frame_rect();
+        dst.get_meta_window().move_resize_frame(false,
+                                                dst_geometry.x,
+                                                dst_geometry.y,
+                                                dst_geometry.width,
+                                                dst_geometry.height);
+
+        this._rotateInActors.push(dst);
+        this._rotateOutActors.push(src);
+
+        /* We wait until the first frame of the window has been drawn
+         * and damage updated in the compositor before we start rotating.
+         *
+         * This way we don't get ugly artifacts when rotating if
+         * a window is slow to draw. */
+        let firstFrameConnection = dst.connect('first-frame', Lang.bind(this, function() {
+            /* Tween both windows in a rotation animation at the same time
+            * with backface culling enabled on both. This will allow for
+            * a smooth transition. */
+            Tweener.addTween(src, {
+                        rotation_angle_y: 180,
+                        time: WINDOW_ANIMATION_TIME * 4,
+                        transition: 'easeOutQuad',
+                        onComplete: Lang.bind(this, function() {
+                            this._rotateOutCompleted(src);
+                        })
+            });
+            Tweener.addTween(dst, {
+                        rotation_angle_y: 0,
+                        time: WINDOW_ANIMATION_TIME * 4,
+                        transition: 'easeOutQuad',
+                        onComplete: Lang.bind(this, function() {
+                            this._rotateInCompleted(dst);
+                        })
+            });
+
+            /* Gently fade the window in, this will paper over
+             * any artifacts from shadows and the like */
+            Tweener.addTween(dst, {
+                    opacity: 0,
+                    time: WINDOW_ANIMATION_TIME,
+                    transition: 'linear'
+            });
+
+            this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
+                    return conn != dst._firstFrameConnection;
+            });
+            dst.disconnect(dst._firstFrameConnection);
+            dst._firstFrameConnection = null;
+
+            return false;
+        }));
+
+        /* Save the connection's id on the destination window and in a list too so we can
+         * get rid of it on kill-window-effects later */
+        dst._firstFrameConnection = firstFrameConnection;
+        this._firstFrameConnections.push(firstFrameConnection);
+    },
+
     _endlessCodingDetermineBuilder : function(actor) {
         let window = actor.meta_window;
         if (window.get_flatpak_id() === 'org.gnome.Builder') {
@@ -1397,19 +1483,13 @@ const WindowManager = new Lang.Class({
             if (tracker.is_coding_builder_window(window)) {
                 let app = tracker.get_app_from_builder(window);
                 let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-                        return session.windowApp === app;
+                        return session.windowApp.get_meta_window() === app;
                 });
                 if (currentSession.length === 0)
                     return false;
 
-                currentSession[0].windowBuilder = window;
-
-                let appRect = currentSession[0].windowApp.get_frame_rect();
-                currentSession[0].windowBuilder.move_resize_frame(false,
-                                                                  appRect.x,
-                                                                  appRect.y,
-                                                                  appRect.width,
-                                                                  appRect.height);
+                currentSession[0].windowBuilder = actor;
+                this._endlessCodingAnimation(currentSession[0].windowApp, currentSession[0].windowBuilder);
 
                 let button = new St.Button({ style_class: 'view-source' });
                 let rect = window.get_frame_rect();
@@ -1417,26 +1497,25 @@ const WindowManager = new Lang.Class({
                 Main.layoutManager.addChrome(button);
                 let positionChangedId = window.connect('position-changed', Lang.bind(this, function(window) {
                     let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-                        return session.windowBuilder === window;
+                        return session.windowBuilder.get_meta_window() === window;
                     });
                     if (currentSession.length === 0)
                         return;
-                    let rect = currentSession[0].windowBuilder.get_frame_rect();
+                    let rect = currentSession[0].windowBuilder.get_meta_window().get_frame_rect();
                     currentSession[0].buttonBuilder.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
-                    if (currentSession[0].windowApp === undefined)
+                    if (!currentSession[0].windowApp)
                         return;
-                    currentSession[0].windowApp.move_resize_frame(false,
-                                                                  rect.x,
-                                                                  rect.y,
-                                                                  rect.width,
-                                                                  rect.height);
+                    currentSession[0].windowApp.get_meta_window().move_resize_frame(false,
+                                                                                    rect.x,
+                                                                                    rect.y,
+                                                                                    rect.width,
+                                                                                    rect.height);
                 }));
                 let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._endlessCodingBuilderWindowsRestacked, window));
                 button.connect('clicked', Lang.bind(this, this._endlessCodingBuilderClicked, window));
                 currentSession[0].buttonBuilder = button;
                 currentSession[0].positionChangedIdBuilder = positionChangedId;
                 currentSession[0].windowsRestackedIdBuilder = windowsRestackedId;
-
                 return true;
             }
         }
@@ -1453,13 +1532,13 @@ const WindowManager = new Lang.Class({
 
     _endlessCodingBuilderRemoveLauncher : function(window) {
         let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-                return session.windowBuilder === window;
+                return session.windowBuilder.get_meta_window() === window;
         });
         if (currentSession.length === 0)
             return;
 
         if (currentSession[0].positionChangedIdBuilder != 0) {
-            currentSession[0].windowApp.disconnect(currentSession[0].positionChangedIdBuilder);
+            currentSession[0].windowBuilder.get_meta_window().disconnect(currentSession[0].positionChangedIdBuilder);
             currentSession[0].positionChangedIdBuilder = 0;
         }
         if (currentSession[0].windowsRestackedIdBuilder != 0) {
@@ -1481,23 +1560,23 @@ const WindowManager = new Lang.Class({
         Main.layoutManager.addChrome(button);
         let positionChangedId = window.connect('position-changed', Lang.bind(this, function(window) {
             let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-                return session.windowApp === window;
+                return session.windowApp.get_meta_window() === window;
             });
             if (currentSession.length === 0)
                 return;
-            let rect = currentSession[0].windowApp.get_frame_rect();
+            let rect = currentSession[0].windowApp.get_meta_window().get_frame_rect();
             currentSession[0].buttonApp.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
             if (!currentSession[0].windowBuilder)
                 return;
-            currentSession[0].windowBuilder.move_resize_frame(false,
-                                                              rect.x,
-                                                              rect.y,
-                                                              rect.width,
-                                                              rect.height);
+            currentSession[0].windowBuilder.get_meta_window().move_resize_frame(false,
+                                                                                rect.x,
+                                                                                rect.y,
+                                                                                rect.width,
+                                                                                rect.height);
         }));
         let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._endlessCodingWindowsRestacked, window));
         button.connect('clicked', Lang.bind(this, this._endlessCodingLaunched, window));
-        this._currentEndlessCodingSessions.push({buttonApp: button, windowApp: window,
+        this._currentEndlessCodingSessions.push({buttonApp: button, windowApp: actor,
             positionChangedId: positionChangedId, windowsRestackedId: windowsRestackedId});
     },
 
@@ -1506,11 +1585,11 @@ const WindowManager = new Lang.Class({
         if (!focusedWindow)
             return;
         let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-            return session.windowApp === window;
+            return session.windowApp.get_meta_window() === window;
         });
         if (currentSession.length === 0)
             return;
-        if (focusedWindow.get_stable_sequence() === currentSession[0].windowApp.get_stable_sequence())
+        if (focusedWindow.get_stable_sequence() === currentSession[0].windowApp.get_meta_window().get_stable_sequence())
             currentSession[0].buttonApp.show();
         else
             currentSession[0].buttonApp.hide();
@@ -1521,11 +1600,11 @@ const WindowManager = new Lang.Class({
         if (!focusedWindow)
             return;
         let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-            return session.windowBuilder === window;
+            return session.windowBuilder.get_meta_window() === window;
         });
         if (currentSession.length === 0)
             return;
-        if (focusedWindow.get_stable_sequence() === currentSession[0].windowBuilder.get_stable_sequence())
+        if (focusedWindow.get_stable_sequence() === currentSession[0].windowBuilder.get_meta_window().get_stable_sequence())
             currentSession[0].buttonBuilder.show();
         else
             currentSession[0].buttonBuilder.hide();
@@ -1533,7 +1612,7 @@ const WindowManager = new Lang.Class({
 
     _endlessCodingLaunched : function(actor, event, window) {
         let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-            return session.windowApp === window;
+            return session.windowApp.get_meta_window() === window;
         });
         if (currentSession.length === 0)
             return;
@@ -1543,29 +1622,29 @@ const WindowManager = new Lang.Class({
             Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
         }
         else
-            currentSession[0].windowBuilder.activate(global.get_current_time());
+            currentSession[0].windowBuilder.get_meta_window().activate(global.get_current_time());
     },
 
     _endlessCodingBuilderClicked : function(actor, event, window) {
         let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-            return session.windowBuilder === window;
+            return session.windowBuilder.get_meta_window() === window;
         });
         if (currentSession.length === 0)
             return;
-        if (currentSession[0].windowApp === undefined)
+        if (!currentSession[0].windowApp)
             return;
-        currentSession[0].windowApp.activate(global.get_current_time());
+        currentSession[0].windowApp.get_meta_window().activate(global.get_current_time());
     },
 
     _endlessCodingRemoveLauncher : function(window) {
         let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-                return session.windowApp === window;
+                return session.windowApp.get_meta_window() === window;
         });
         if (currentSession.length === 0)
             return;
 
         if (currentSession[0].positionChangedId != 0) {
-            currentSession[0].windowApp.disconnect(currentSession[0].positionChangedId);
+            currentSession[0].windowApp.get_meta_window().disconnect(currentSession[0].positionChangedId);
             currentSession[0].positionChangedId = 0;
         }
         if (currentSession[0].windowsRestackedId != 0) {
@@ -1590,7 +1669,7 @@ const WindowManager = new Lang.Class({
         if (this._removeEffect(this._rotateInActors, actor)) {
             Tweener.removeTweens(actor);
             actor.opacity = 255;
-            actor.rotation_angle_x = 0;
+            actor.rotation_angle_y = 0;
             actor.set_cull_back_face(false);
         }
     },
@@ -1598,8 +1677,7 @@ const WindowManager = new Lang.Class({
     _rotateOutCompleted: function(actor) {
         if (this._removeEffect(this._rotateOutActors, actor)) {
             Tweener.removeTweens(actor);
-            actor.hide();
-            actor.rotation_angle_x = 0;
+            actor.rotation_angle_y = 0;
             actor.set_cull_back_face(false);
         }
     },
