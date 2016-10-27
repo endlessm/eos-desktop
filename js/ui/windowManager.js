@@ -1552,6 +1552,12 @@ const WindowManager = new Lang.Class({
         }
         currentSession[0].buttonBuilder.destroy();
         currentSession[0].windowBuilder = null;
+
+        if (currentSession[0].windowApp) {
+            currentSession[0].windowApp.get_meta_window().activate(global.get_current_time());
+            currentSession[0].windowApp.show();
+            currentSession[0].buttonApp.show();
+        }
     },
 
     _endlessCodingAddLauncher : function(actor) {
@@ -1634,7 +1640,6 @@ const WindowManager = new Lang.Class({
                                          currentSession[0].windowBuilder,
                                          Gtk.DirectionType.LEFT);
             }
-        currentSession[0].buttonBuilder.show();
         currentSession[0].buttonApp.hide();
     },
 
