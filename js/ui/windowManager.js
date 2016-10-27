@@ -6,6 +6,7 @@ const Gdk = imports.gi.Gdk;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const GObject = imports.gi.GObject;
+const Gtk = imports.gi.Gtk;
 const EndlessShellFX = imports.gi.EndlessShellFX;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
@@ -1390,8 +1391,9 @@ const WindowManager = new Lang.Class({
         this._endlessCodingAddLauncher(actor);
     },
 
-    _endlessCodingAnimation : function(src, dst) {
-        dst.rotation_angle_y = -180;
+    _endlessCodingAnimation : function(src, dst, direction) {
+        dst.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
+        src.rotation_angle_y = direction == 0;
         dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
         src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
 
@@ -1424,56 +1426,34 @@ const WindowManager = new Lang.Class({
                                                 dst_geometry.width,
                                                 dst_geometry.height);
 
-        this._rotateInActors.push(dst);
-        this._rotateOutActors.push(src);
 
-        /* We wait until the first frame of the window has been drawn
-         * and damage updated in the compositor before we start rotating.
-         *
-         * This way we don't get ugly artifacts when rotating if
-         * a window is slow to draw. */
-        let firstFrameConnection = dst.connect('first-frame', Lang.bind(this, function() {
-            /* Tween both windows in a rotation animation at the same time
-            * with backface culling enabled on both. This will allow for
-            * a smooth transition. */
-            Tweener.addTween(src, {
-                        rotation_angle_y: 180,
+        /* Tween both windows in a rotation animation at the same time
+        * with backface culling enabled on both. This will allow for
+        * a smooth transition. */
+        Tweener.addTween(src, {
+                        rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
                         time: WINDOW_ANIMATION_TIME * 4,
                         transition: 'easeOutQuad',
                         onComplete: Lang.bind(this, function() {
                             this._rotateOutCompleted(src);
                         })
-            });
-            Tweener.addTween(dst, {
+        });
+        Tweener.addTween(dst, {
                         rotation_angle_y: 0,
                         time: WINDOW_ANIMATION_TIME * 4,
                         transition: 'easeOutQuad',
                         onComplete: Lang.bind(this, function() {
                             this._rotateInCompleted(dst);
                         })
-            });
+        });
 
-            /* Gently fade the window in, this will paper over
-             * any artifacts from shadows and the like */
-            Tweener.addTween(dst, {
-                    opacity: 0,
+        /* Gently fade the window in, this will paper over
+         * any artifacts from shadows and the like */
+        Tweener.addTween(dst, {
+                    opacity: 255,
                     time: WINDOW_ANIMATION_TIME,
                     transition: 'linear'
-            });
-
-            this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
-                    return conn != dst._firstFrameConnection;
-            });
-            dst.disconnect(dst._firstFrameConnection);
-            dst._firstFrameConnection = null;
-
-            return false;
-        }));
-
-        /* Save the connection's id on the destination window and in a list too so we can
-         * get rid of it on kill-window-effects later */
-        dst._firstFrameConnection = firstFrameConnection;
-        this._firstFrameConnections.push(firstFrameConnection);
+        });
     },
 
     _endlessCodingDetermineBuilder : function(actor) {
@@ -1489,7 +1469,32 @@ const WindowManager = new Lang.Class({
                     return false;
 
                 currentSession[0].windowBuilder = actor;
-                this._endlessCodingAnimation(currentSession[0].windowApp, currentSession[0].windowBuilder);
+
+                /* We wait until the first frame of the window has been drawn
+                 * and damage updated in the compositor before we start rotating.
+                 *
+                 * This way we don't get ugly artifacts when rotating if
+                 * a window is slow to draw. */
+                let firstFrameConnection = currentSession[0].windowBuilder.connect('first-frame', Lang.bind(this, function() {
+                    this._rotateInActors.push(currentSession[0].windowBuilder);
+                    this._rotateOutActors.push(currentSession[0].windowApp);
+                    this._endlessCodingAnimation(currentSession[0].windowApp,
+                                                 currentSession[0].windowBuilder,
+                                                 Gtk.DirectionType.LEFT);
+                    this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
+                        return conn != currentSession[0].windowBuilder._firstFrameConnection;
+                    });
+                    currentSession[0].windowBuilder.disconnect(currentSession[0].windowBuilder._firstFrameConnection);
+                    currentSession[0].windowBuilder._firstFrameConnection = null;
+                    currentSession[0].buttonBuilder.show();
+                    currentSession[0].buttonApp.hide();
+                    return false;
+                }));
+
+                /* Save the connection's id on the destination window and in a list too so we can
+                 * get rid of it on kill-window-effects later */
+                currentSession[0].windowBuilder._firstFrameConnection = firstFrameConnection;
+                this._firstFrameConnections.push(firstFrameConnection);
 
                 let button = new St.Button({ style_class: 'view-source' });
                 let rect = window.get_frame_rect();
@@ -1621,8 +1626,16 @@ const WindowManager = new Lang.Class({
             tracker.track_coding_app_window(window);
             Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
         }
-        else
+        else {
             currentSession[0].windowBuilder.get_meta_window().activate(global.get_current_time());
+            this._rotateInActors.push(currentSession[0].windowBuilder);
+            this._rotateOutActors.push(currentSession[0].windowApp);
+            this._endlessCodingAnimation(currentSession[0].windowApp,
+                                         currentSession[0].windowBuilder,
+                                         Gtk.DirectionType.LEFT);
+            }
+        currentSession[0].buttonBuilder.show();
+        currentSession[0].buttonApp.hide();
     },
 
     _endlessCodingBuilderClicked : function(actor, event, window) {
@@ -1634,6 +1647,13 @@ const WindowManager = new Lang.Class({
         if (!currentSession[0].windowApp)
             return;
         currentSession[0].windowApp.get_meta_window().activate(global.get_current_time());
+        this._rotateInActors.push(currentSession[0].windowApp);
+        this._rotateOutActors.push(currentSession[0].windowBuilder);
+        this._endlessCodingAnimation(currentSession[0].windowBuilder,
+                                     currentSession[0].windowApp,
+                                     Gtk.DirectionType.RIGHT);
+        currentSession[0].buttonBuilder.hide();
+        currentSession[0].buttonApp.show();
     },
 
     _endlessCodingRemoveLauncher : function(window) {
@@ -1677,6 +1697,7 @@ const WindowManager = new Lang.Class({
     _rotateOutCompleted: function(actor) {
         if (this._removeEffect(this._rotateOutActors, actor)) {
             Tweener.removeTweens(actor);
+            actor.hide();
             actor.rotation_angle_y = 0;
             actor.set_cull_back_face(false);
         }
