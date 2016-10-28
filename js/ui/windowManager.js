@@ -37,9 +37,39 @@ const DIM_BRIGHTNESS = -0.3;
 const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
 const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
+const ICON_BOUNCE_MAX_SCALE = 0.4;
+const ICON_BOUNCE_ANIMATION_TIME = 1.0;
+const ICON_BOUNCE_ANIMATION_TYPE_1 = 'easeOutSine';
+const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
 
 const DISPLAY_REVERT_TIMEOUT = 30; // in seconds - keep in sync with mutter
 const ONE_SECOND = 1000; // in ms
+
+function animateBounce(actor)
+{
+        Tweener.removeTweens(actor);
+        if (!Tweener.isTweening(actor)) {
+            Tweener.addTween(actor, {
+                scale_y: 1 + ICON_BOUNCE_MAX_SCALE,
+                scale_x: 1 + ICON_BOUNCE_MAX_SCALE,
+                translation_y: actor.height * ICON_BOUNCE_MAX_SCALE,
+                translation_x: actor.width * ICON_BOUNCE_MAX_SCALE / 2,
+                time: ICON_BOUNCE_ANIMATION_TIME * 0.25,
+                delay: 0.3,
+                transition: ICON_BOUNCE_ANIMATION_TYPE_1
+            });
+            Tweener.addTween(actor, {
+                scale_y: 1,
+                scale_x: 1,
+                translation_y: 0,
+                translation_x: 0,
+                time: ICON_BOUNCE_ANIMATION_TIME * 0.75,
+                transition: ICON_BOUNCE_ANIMATION_TYPE_2,
+                delay: ICON_BOUNCE_ANIMATION_TIME * 0.25 + 0.3,
+                onComplete: function() {animateBounce(actor);}
+            });
+        }
+}
 
 const SylvesterServiceIface = '<node> \
   <interface name="com.endlessm.Sylvester.Service"> \
@@ -1393,7 +1423,7 @@ const WindowManager = new Lang.Class({
 
     _endlessCodingAnimation : function(src, dst, direction) {
         dst.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
-        src.rotation_angle_y = direction == 0;
+        src.rotation_angle_y = 0;
         dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
         src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
 
@@ -1451,7 +1481,7 @@ const WindowManager = new Lang.Class({
          * any artifacts from shadows and the like */
         Tweener.addTween(dst, {
                     opacity: 255,
-                    time: WINDOW_ANIMATION_TIME,
+                    time: WINDOW_ANIMATION_TIME * 4,
                     transition: 'linear'
         });
     },
@@ -1476,6 +1506,7 @@ const WindowManager = new Lang.Class({
                  * This way we don't get ugly artifacts when rotating if
                  * a window is slow to draw. */
                 let firstFrameConnection = currentSession[0].windowBuilder.connect('first-frame', Lang.bind(this, function() {
+                    Tweener.removeTweens(currentSession[0].buttonApp);
                     this._rotateInActors.push(currentSession[0].windowBuilder);
                     this._rotateOutActors.push(currentSession[0].windowApp);
                     this._endlessCodingAnimation(currentSession[0].windowApp,
@@ -1631,6 +1662,7 @@ const WindowManager = new Lang.Class({
             let tracker = Shell.WindowTracker.get_default();
             tracker.track_coding_app_window(window);
             Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
+            animateBounce(currentSession[0].buttonApp);
         }
         else {
             currentSession[0].windowBuilder.get_meta_window().activate(global.get_current_time());
