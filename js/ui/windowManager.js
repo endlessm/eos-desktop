@@ -2137,7 +2137,7 @@ const CodingManager = new Lang.Class({
             session.buttonBuilder.hide();
 
         if (focusedWindow.get_stable_sequence() === session.windowApp.get_meta_window().get_stable_sequence()){
-            if (!session.state) {
+            if (session.state === SessionState.APP) {
                 session.buttonApp.show();
                 return;
             }
