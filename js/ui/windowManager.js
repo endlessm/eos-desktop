@@ -2198,20 +2198,20 @@ const CodingManager = new Lang.Class({
         src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
 
         /* We set backface culling to be enabled here so that we can
-        * smootly animate between the two windows. Without expensive
-        * vector projections, there's no way to determine whether a
-        * window's front-face is completely invisible to the user
-        * (this cannot be done just by looking at the angle of the
-        * window because the same angle may show a different visible
-        * face depending on its position in the view frustum).
-        *
-        * What we do here is enable backface culling and rotate both
-        * windows by 180degrees. The effect of this is that the front
-        * and back window will be at opposite rotations at each point
-        * in time and so the exact point at which the first window
-        * becomes invisible is the same point at which the second
-        * window becomes visible. Because no back faces are drawn
-        * there are no visible artifacts in the animation */
+         * smootly animate between the two windows. Without expensive
+         * vector projections, there's no way to determine whether a
+         * window's front-face is completely invisible to the user
+         * (this cannot be done just by looking at the angle of the
+         * window because the same angle may show a different visible
+         * face depending on its position in the view frustum).
+         *
+         * What we do here is enable backface culling and rotate both
+         * windows by 180degrees. The effect of this is that the front
+         * and back window will be at opposite rotations at each point
+         * in time and so the exact point at which the first window
+         * becomes invisible is the same point at which the second
+         * window becomes visible. Because no back faces are drawn
+         * there are no visible artifacts in the animation */
         src.set_cull_back_face(true);
         dst.set_cull_back_face(true);
 
@@ -2228,8 +2228,8 @@ const CodingManager = new Lang.Class({
 
 
         /* Tween both windows in a rotation animation at the same time
-        * with backface culling enabled on both. This will allow for
-        * a smooth transition. */
+         * with backface culling enabled on both. This will allow for
+         * a smooth transition. */
         Tweener.addTween(src, {
                         rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
                         time: WINDOW_ANIMATION_TIME * 4,
