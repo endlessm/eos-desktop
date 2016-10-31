@@ -3161,7 +3161,7 @@ StScrollBar StButton#vhandle:active {
 /*Endless Coding view source*/
 
 .view-source {
-    background-image: url("close-window.svg");
+    background-image: url("rotate.svg");
     background-size: 32px;
     height: 32px;
     width: 32px;

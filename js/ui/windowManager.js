@@ -37,39 +37,9 @@ const DIM_BRIGHTNESS = -0.3;
 const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
 const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
-const ICON_BOUNCE_MAX_SCALE = 0.4;
-const ICON_BOUNCE_ANIMATION_TIME = 1.0;
-const ICON_BOUNCE_ANIMATION_TYPE_1 = 'easeOutSine';
-const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
 
 const DISPLAY_REVERT_TIMEOUT = 30; // in seconds - keep in sync with mutter
 const ONE_SECOND = 1000; // in ms
-
-function animateBounce(actor)
-{
-        Tweener.removeTweens(actor);
-        if (!Tweener.isTweening(actor)) {
-            Tweener.addTween(actor, {
-                scale_y: 1 + ICON_BOUNCE_MAX_SCALE,
-                scale_x: 1 + ICON_BOUNCE_MAX_SCALE,
-                translation_y: actor.height * ICON_BOUNCE_MAX_SCALE,
-                translation_x: actor.width * ICON_BOUNCE_MAX_SCALE / 2,
-                time: ICON_BOUNCE_ANIMATION_TIME * 0.25,
-                delay: 0.3,
-                transition: ICON_BOUNCE_ANIMATION_TYPE_1
-            });
-            Tweener.addTween(actor, {
-                scale_y: 1,
-                scale_x: 1,
-                translation_y: 0,
-                translation_x: 0,
-                time: ICON_BOUNCE_ANIMATION_TIME * 0.75,
-                transition: ICON_BOUNCE_ANIMATION_TYPE_2,
-                delay: ICON_BOUNCE_ANIMATION_TIME * 0.25 + 0.3,
-                onComplete: function() {animateBounce(actor);}
-            });
-        }
-}
 
 const SylvesterServiceIface = '<node> \
   <interface name="com.endlessm.Sylvester.Service"> \
@@ -649,6 +619,8 @@ const WindowManager = new Lang.Class({
                                         function () { Main.layoutManager.emit('background-clicked'); });
         }));
 
+        this._codingManager = new CodingManager();
+
         this._switchData = null;
         this._shellwm.connect('kill-switch-workspace', Lang.bind(this, this._switchWorkspaceDone));
         this._shellwm.connect('kill-window-effects', Lang.bind(this, function (shellwm, actor) {
@@ -658,6 +630,8 @@ const WindowManager = new Lang.Class({
             this._destroyWindowDone(shellwm, actor);
             this._rotateInCompleted(actor);
             this._rotateOutCompleted(actor);
+            this._codingManager.rotateInCompleted(actor);
+            this._codingManager.rotateOutCompleted(actor);
 
             if (actor._firstFrameConnection) {
                 actor.disconnect(actor._firstFrameConnection);
@@ -788,8 +762,6 @@ const WindowManager = new Lang.Class({
         this._rotateOutActors = [];
         this._rotateInActors = [];
         this._firstFrameConnections = [];
-
-        this._currentEndlessCodingSessions = [];
     },
 
     _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {
@@ -1320,7 +1292,7 @@ const WindowManager = new Lang.Class({
             }
         }
 
-        if (this._endlessCodingDetermineBuilder(actor)) {
+        if (this._codingAddBuilderWindow(actor)) {
             shellwm.completed_map(actor);
             return;
         }
@@ -1418,298 +1390,48 @@ const WindowManager = new Lang.Class({
                                onOverwriteParams: [shellwm, actor]
                              });
         }
-        this._endlessCodingAddLauncher(actor);
+
+        this._codingAddAppWindow(actor);
     },
 
-    _endlessCodingAnimation : function(src, dst, direction) {
-        dst.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
-        src.rotation_angle_y = 0;
-        dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-        src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-
-        /* We set backface culling to be enabled here so that we can
-        * smootly animate between the two windows. Without expensive
-        * vector projections, there's no way to determine whether a
-        * window's front-face is completely invisible to the user
-        * (this cannot be done just by looking at the angle of the
-        * window because the same angle may show a different visible
-        * face depending on its position in the view frustum).
-        *
-        * What we do here is enable backface culling and rotate both
-        * windows by 180degrees. The effect of this is that the front
-        * and back window will be at opposite rotations at each point
-        * in time and so the exact point at which the first window
-        * becomes invisible is the same point at which the second
-        * window becomes visible. Because no back faces are drawn
-        * there are no visible artifacts in the animation */
-        src.set_cull_back_face(true);
-        dst.set_cull_back_face(true);
-
-        src.show();
-        dst.show();
-        dst.opacity = 0;
-
-        let dst_geometry = src.get_meta_window().get_frame_rect();
-        dst.get_meta_window().move_resize_frame(false,
-                                                dst_geometry.x,
-                                                dst_geometry.y,
-                                                dst_geometry.width,
-                                                dst_geometry.height);
-
-
-        /* Tween both windows in a rotation animation at the same time
-        * with backface culling enabled on both. This will allow for
-        * a smooth transition. */
-        Tweener.addTween(src, {
-                        rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
-                        time: WINDOW_ANIMATION_TIME * 4,
-                        transition: 'easeOutQuad',
-                        onComplete: Lang.bind(this, function() {
-                            this._rotateOutCompleted(src);
-                        })
-        });
-        Tweener.addTween(dst, {
-                        rotation_angle_y: 0,
-                        time: WINDOW_ANIMATION_TIME * 4,
-                        transition: 'easeOutQuad',
-                        onComplete: Lang.bind(this, function() {
-                            this._rotateInCompleted(dst);
-                        })
-        });
-
-        /* Gently fade the window in, this will paper over
-         * any artifacts from shadows and the like */
-        Tweener.addTween(dst, {
-                    opacity: 255,
-                    time: WINDOW_ANIMATION_TIME * 4,
-                    transition: 'linear'
-        });
-    },
-
-    _endlessCodingDetermineBuilder : function(actor) {
-        let window = actor.meta_window;
-        if (window.get_flatpak_id() === 'org.gnome.Builder') {
-            let tracker = Shell.WindowTracker.get_default();
-            if (tracker.is_coding_builder_window(window)) {
-                let app = tracker.get_app_from_builder(window);
-                let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-                        return session.windowApp.get_meta_window() === app;
-                });
-                if (currentSession.length === 0)
-                    return false;
-
-                currentSession[0].windowBuilder = actor;
-
-                /* We wait until the first frame of the window has been drawn
-                 * and damage updated in the compositor before we start rotating.
-                 *
-                 * This way we don't get ugly artifacts when rotating if
-                 * a window is slow to draw. */
-                let firstFrameConnection = currentSession[0].windowBuilder.connect('first-frame', Lang.bind(this, function() {
-                    Tweener.removeTweens(currentSession[0].buttonApp);
-                    this._rotateInActors.push(currentSession[0].windowBuilder);
-                    this._rotateOutActors.push(currentSession[0].windowApp);
-                    this._endlessCodingAnimation(currentSession[0].windowApp,
-                                                 currentSession[0].windowBuilder,
-                                                 Gtk.DirectionType.LEFT);
-                    this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
-                        return conn != currentSession[0].windowBuilder._firstFrameConnection;
-                    });
-                    currentSession[0].windowBuilder.disconnect(currentSession[0].windowBuilder._firstFrameConnection);
-                    currentSession[0].windowBuilder._firstFrameConnection = null;
-                    currentSession[0].buttonBuilder.show();
-                    currentSession[0].buttonApp.hide();
-                    return false;
-                }));
-
-                /* Save the connection's id on the destination window and in a list too so we can
-                 * get rid of it on kill-window-effects later */
-                currentSession[0].windowBuilder._firstFrameConnection = firstFrameConnection;
-                this._firstFrameConnections.push(firstFrameConnection);
-
-                let button = new St.Button({ style_class: 'view-source' });
-                let rect = window.get_frame_rect();
-                button.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
-                Main.layoutManager.addChrome(button);
-                let positionChangedId = window.connect('position-changed', Lang.bind(this, function(window) {
-                    let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-                        return session.windowBuilder.get_meta_window() === window;
-                    });
-                    if (currentSession.length === 0)
-                        return;
-                    let rect = currentSession[0].windowBuilder.get_meta_window().get_frame_rect();
-                    currentSession[0].buttonBuilder.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
-                    if (!currentSession[0].windowApp)
-                        return;
-                    currentSession[0].windowApp.get_meta_window().move_resize_frame(false,
-                                                                                    rect.x,
-                                                                                    rect.y,
-                                                                                    rect.width,
-                                                                                    rect.height);
-                }));
-                let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._endlessCodingBuilderWindowsRestacked, window));
-                button.connect('clicked', Lang.bind(this, this._endlessCodingBuilderClicked, window));
-                currentSession[0].buttonBuilder = button;
-                currentSession[0].positionChangedIdBuilder = positionChangedId;
-                currentSession[0].windowsRestackedIdBuilder = windowsRestackedId;
-                return true;
-            }
-        }
-        return false;
-    },
-
-    _endlessCodingRemoveBuilder : function(window) {
-        if (window.get_flatpak_id() === 'org.gnome.Builder') {
-            let tracker = Shell.WindowTracker.get_default();
-            tracker.untrack_coding_app_window(window);
-            this._endlessCodingBuilderRemoveLauncher(window);
-        }
-    },
-
-    _endlessCodingBuilderRemoveLauncher : function(window) {
-        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-                return session.windowBuilder.get_meta_window() === window;
-        });
-        if (currentSession.length === 0)
-            return;
-
-        if (currentSession[0].positionChangedIdBuilder != 0) {
-            currentSession[0].windowBuilder.get_meta_window().disconnect(currentSession[0].positionChangedIdBuilder);
-            currentSession[0].positionChangedIdBuilder = 0;
-        }
-        if (currentSession[0].windowsRestackedIdBuilder != 0) {
-            Main.overview.disconnect(currentSession[0].windowsRestackedIdBuilder);
-            currentSession[0].windowsRestackedIdBuilder = 0;
-        }
-        currentSession[0].buttonBuilder.destroy();
-        currentSession[0].windowBuilder = null;
-
-        if (currentSession[0].windowApp) {
-            currentSession[0].windowApp.get_meta_window().activate(global.get_current_time());
-            currentSession[0].windowApp.show();
-            currentSession[0].buttonApp.show();
-        }
-    },
-
-    _endlessCodingAddLauncher : function(actor) {
+    _codingAddAppWindow : function(actor) {
         let window = actor.meta_window;
         if (window.get_flatpak_id() !== 'org.gnome.gedit')
             return;
 
-        let button = new St.Button({ style_class: 'view-source' });
-        let rect = window.get_frame_rect();
-        button.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
-        Main.layoutManager.addChrome(button);
-        let positionChangedId = window.connect('position-changed', Lang.bind(this, function(window) {
-            let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-                return session.windowApp.get_meta_window() === window;
-            });
-            if (currentSession.length === 0)
-                return;
-            let rect = currentSession[0].windowApp.get_meta_window().get_frame_rect();
-            currentSession[0].buttonApp.set_position(rect.x + rect.width - 100, rect.y + rect.height - 100);
-            if (!currentSession[0].windowBuilder)
-                return;
-            currentSession[0].windowBuilder.get_meta_window().move_resize_frame(false,
-                                                                                rect.x,
-                                                                                rect.y,
-                                                                                rect.width,
-                                                                                rect.height);
-        }));
-        let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._endlessCodingWindowsRestacked, window));
-        button.connect('clicked', Lang.bind(this, this._endlessCodingLaunched, window));
-        this._currentEndlessCodingSessions.push({buttonApp: button, windowApp: actor,
-            positionChangedId: positionChangedId, windowsRestackedId: windowsRestackedId});
+        this._codingManager.addSwitcherToBuilder(actor);
     },
 
-    _endlessCodingWindowsRestacked : function(overview, stackIndices, window) {
-        let focusedWindow = global.display.get_focus_window();
-        if (!focusedWindow)
-            return;
-        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-            return session.windowApp.get_meta_window() === window;
-        });
-        if (currentSession.length === 0)
-            return;
-        if (focusedWindow.get_stable_sequence() === currentSession[0].windowApp.get_meta_window().get_stable_sequence())
-            currentSession[0].buttonApp.show();
-        else
-            currentSession[0].buttonApp.hide();
-    },
+    _codingAddBuilderWindow : function(actor) {
+        let window = actor.meta_window;
+        if (window.get_flatpak_id() !== 'org.gnome.Builder')
+            return false;
 
-    _endlessCodingBuilderWindowsRestacked : function(overview, stackIndices, window) {
-        let focusedWindow = global.display.get_focus_window();
-        if (!focusedWindow)
-            return;
-        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-            return session.windowBuilder.get_meta_window() === window;
-        });
-        if (currentSession.length === 0)
-            return;
-        if (focusedWindow.get_stable_sequence() === currentSession[0].windowBuilder.get_meta_window().get_stable_sequence())
-            currentSession[0].buttonBuilder.show();
-        else
-            currentSession[0].buttonBuilder.hide();
-    },
-
-    _endlessCodingLaunched : function(actor, event, window) {
-        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-            return session.windowApp.get_meta_window() === window;
-        });
-        if (currentSession.length === 0)
-            return;
-        if (!currentSession[0].windowBuilder) {
-            let tracker = Shell.WindowTracker.get_default();
-            tracker.track_coding_app_window(window);
-            Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
-            animateBounce(currentSession[0].buttonApp);
+        let tracker = Shell.WindowTracker.get_default();
+        if (tracker.is_coding_builder_window(window)) {
+            let windowApp = tracker.get_app_from_builder(window);
+            this._codingManager.addSwitcherToApp(actor, windowApp);
+            return true;
         }
-        else {
-            currentSession[0].windowBuilder.get_meta_window().activate(global.get_current_time());
-            this._rotateInActors.push(currentSession[0].windowBuilder);
-            this._rotateOutActors.push(currentSession[0].windowApp);
-            this._endlessCodingAnimation(currentSession[0].windowApp,
-                                         currentSession[0].windowBuilder,
-                                         Gtk.DirectionType.LEFT);
-            }
-        currentSession[0].buttonApp.hide();
+        return false;
     },
 
-    _endlessCodingBuilderClicked : function(actor, event, window) {
-        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-            return session.windowBuilder.get_meta_window() === window;
-        });
-        if (currentSession.length === 0)
+    _codingRemoveAppWindow : function(actor) {
+        let window = actor.meta_window;
+        if (window.get_flatpak_id() !== 'org.gnome.gedit')
             return;
-        if (!currentSession[0].windowApp)
-            return;
-        currentSession[0].windowApp.get_meta_window().activate(global.get_current_time());
-        this._rotateInActors.push(currentSession[0].windowApp);
-        this._rotateOutActors.push(currentSession[0].windowBuilder);
-        this._endlessCodingAnimation(currentSession[0].windowBuilder,
-                                     currentSession[0].windowApp,
-                                     Gtk.DirectionType.RIGHT);
-        currentSession[0].buttonBuilder.hide();
-        currentSession[0].buttonApp.show();
+        // TODO: cleanup in Shell.WindowTracker
+        this._codingManager.removeSwitcherToBuilder(actor);
     },
 
-    _endlessCodingRemoveLauncher : function(window) {
-        let currentSession = this._currentEndlessCodingSessions.filter(function(session) {
-                return session.windowApp.get_meta_window() === window;
-        });
-        if (currentSession.length === 0)
+    _codingRemoveBuilderWindow : function(actor) {
+        let window = actor.meta_window;
+        if (window.get_flatpak_id() !== 'org.gnome.Builder')
             return;
 
-        if (currentSession[0].positionChangedId != 0) {
-            currentSession[0].windowApp.get_meta_window().disconnect(currentSession[0].positionChangedId);
-            currentSession[0].positionChangedId = 0;
-        }
-        if (currentSession[0].windowsRestackedId != 0) {
-            Main.overview.disconnect(currentSession[0].windowsRestackedId);
-            currentSession[0].windowsRestackedId = 0;
-        }
-        currentSession[0].buttonApp.destroy();
-        this._currentEndlessCodingSessions.splice(this._currentEndlessCodingSessions.indexOf(currentSession[0]), 1);
+        let tracker = Shell.WindowTracker.get_default();
+        tracker.untrack_coding_app_window(window);
+        this._codingManager.removeSwitcherToApp(actor);
     },
 
     _mapWindowDone : function(shellwm, actor) {
@@ -1773,8 +1495,8 @@ const WindowManager = new Lang.Class({
             }
         }
 
-        this._endlessCodingRemoveLauncher(window);
-        this._endlessCodingRemoveBuilder(window);
+        this._codingRemoveAppWindow(actor);
+        this._codingRemoveBuilderWindow(actor);
 
         if (actor._notifyWindowTypeSignalId) {
             window.disconnect(actor._notifyWindowTypeSignalId);
@@ -2165,4 +1887,369 @@ const WindowManager = new Lang.Class({
             effect.ungrabbedByMouse();
         }
     },
+});
+
+const ICON_BOUNCE_MAX_SCALE = 0.4;
+const ICON_BOUNCE_ANIMATION_TIME = 1.0;
+const ICON_BOUNCE_ANIMATION_TYPE_1 = 'easeOutSine';
+const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
+
+const BUTTON_OFFSET_X = 100;
+const BUTTON_OFFSET_Y = 100;
+
+const SessionState = {
+    APP: 0,
+    BUILDER: 1
+};
+
+function animateBounce(actor)
+{
+    Tweener.removeTweens(actor);
+    if (!Tweener.isTweening(actor)) {
+        Tweener.addTween(actor, {
+                scale_y: 1 + ICON_BOUNCE_MAX_SCALE,
+                scale_x: 1 + ICON_BOUNCE_MAX_SCALE,
+                translation_y: actor.height * ICON_BOUNCE_MAX_SCALE,
+                translation_x: actor.width * ICON_BOUNCE_MAX_SCALE / 2,
+                time: ICON_BOUNCE_ANIMATION_TIME * 0.25,
+                delay: 0.3,
+                transition: ICON_BOUNCE_ANIMATION_TYPE_1
+        });
+        Tweener.addTween(actor, {
+                scale_y: 1,
+                scale_x: 1,
+                translation_y: 0,
+                translation_x: 0,
+                time: ICON_BOUNCE_ANIMATION_TIME * 0.75,
+                transition: ICON_BOUNCE_ANIMATION_TYPE_2,
+                delay: ICON_BOUNCE_ANIMATION_TIME * 0.25 + 0.3,
+                onComplete: function() {animateBounce(actor);}
+        });
+    }
+}
+
+const CodingManager = new Lang.Class({
+    Name: 'CodingManager',
+
+    _init: function(actor) {
+        this._sessions = [];
+        this._rotateInActors = [];
+        this._rotateOutActors = [];
+        this._firstFrameConnections = [];
+    },
+
+    addSwitcherToBuilder: function(actorApp) {
+        let window = actorApp.get_meta_window();
+
+        let button = new St.Button({ style_class: 'view-source' });
+        let rect = window.get_frame_rect();
+        button.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
+        Main.layoutManager.addChrome(button);
+
+        this._sessions.push({buttonApp: button,
+                             windowApp: actorApp,
+                             state: SessionState.APP});
+
+        let session = this._getSession(actorApp);
+        button.connect('clicked', Lang.bind(this, this._switchToBuilder, session));
+        let positionChangedId = window.connect('position-changed', Lang.bind(this, this._windowAppPositionChanged, session));
+        let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowAppRestacked, session));
+        session.positionChangedIdApp = positionChangedId;
+        session.windowsRestackedIdApp = windowsRestackedId;
+    },
+
+    addSwitcherToApp: function(actorBuilder, windowApp) {
+        let currentSession = this._sessions.filter(function(session) {
+            return (session.windowApp.get_meta_window() === windowApp);
+        });
+        if (currentSession.length === 0)
+            return;
+
+        let session = currentSession[0];
+        session.windowBuilder = actorBuilder;
+
+        this._animateToBuilder(session);
+    },
+
+    removeSwitcherToBuilder : function(actorApp) {
+        let session = this._getSession(actorApp);
+
+        if (session.positionChangedIdApp != 0) {
+            session.windowApp.get_meta_window().disconnect(session.positionChangedIdApp);
+            session.positionChangedIdApp = 0;
+        }
+        if (session.windowsRestackedIdApp != 0) {
+            Main.overview.disconnect(session.windowsRestackedIdApp);
+            session.windowsRestackedIdApp = 0;
+        }
+        session.buttonApp.destroy();
+        if (!this._removeSession(session))
+            return false;
+        return true;
+    },
+
+    removeSwitcherToApp : function(actorBuilder) {
+        let session = this._getSession(actorBuilder);
+
+        if (session.positionChangedIdBuilder != 0) {
+            session.windowBuilder.get_meta_window().disconnect(session.positionChangedIdBuilder);
+            session.positionChangedIdBuilder = 0;
+        }
+        session.buttonBuilder.destroy();
+        session.windowBuilder = null;
+
+        if (session.windowApp) {
+            session.windowApp.get_meta_window().activate(global.get_current_time());
+            session.windowApp.show();
+            session.buttonApp.show();
+            session.state = SessionState.APP;
+        }
+    },
+
+    _getSession: function(actor) {
+        let currentSession = this._sessions.filter(function(session) {
+            return (session.windowApp === actor || session.windowBuilder === actor);
+        });
+        if (currentSession.length === 0)
+            return null;
+        return currentSession[0];
+    },
+
+    _addButton: function(session) {
+        let window = session.windowBuilder.get_meta_window();
+        let button = new St.Button({ style_class: 'view-source' });
+        let rect = window.get_frame_rect();
+        button.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
+        Main.layoutManager.addChrome(button);
+        button.connect('clicked', Lang.bind(this, this._switchToApp, session));
+
+        let positionChangedId = window.connect('position-changed', Lang.bind(this, this._windowBuilderPositionChanged, session));
+
+        session.buttonBuilder = button;
+        session.state = SessionState.BUILDER;
+        session.positionChangedIdBuilder = positionChangedId;
+    },
+
+    _animateToBuilder: function(session) {
+        /* We wait until the first frame of the window has been drawn
+         * and damage updated in the compositor before we start rotating.
+         *
+         * This way we don't get ugly artifacts when rotating if
+         * a window is slow to draw. */
+        let firstFrameConnection = session.windowBuilder.connect('first-frame', Lang.bind(this, function() {
+            Tweener.removeTweens(session.buttonApp);
+            session.buttonApp.scale_y = 1;
+            session.buttonApp.scale_x = 1;
+            session.buttonApp.translation_y = 0;
+            session.buttonApp.translation_x = 0;
+            this._rotateInActors.push(session.windowBuilder);
+            this._rotateOutActors.push(session.windowApp);
+            this._animate(session.windowApp, session.windowBuilder, Gtk.DirectionType.LEFT);
+            this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
+                return conn != session.windowBuilder._firstFrameConnection;
+            });
+            session.windowBuilder.disconnect(session.windowBuilder._firstFrameConnection);
+            session.windowBuilder._firstFrameConnection = null;
+            this._addButton(session);
+            session.buttonBuilder.show();
+            session.buttonApp.hide();
+            return false;
+        }));
+        /* Save the connection's id on the destination window and in a list too so we can
+         * get rid of it on kill-window-effects later */
+        session.windowBuilder._firstFrameConnection = firstFrameConnection;
+        this._firstFrameConnections.push(firstFrameConnection);
+    },
+
+    _windowAppPositionChanged: function(window, event, session) {
+        let rect = session.windowApp.get_meta_window().get_frame_rect();
+        session.buttonApp.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
+        if (!session.windowBuilder)
+                return;
+        session.windowBuilder.get_meta_window().move_resize_frame(false,
+                                                                  rect.x,
+                                                                  rect.y,
+                                                                  rect.width,
+                                                                  rect.height);
+    },
+
+    _windowBuilderPositionChanged: function(window, event, session) {
+        let rect = session.windowBuilder.get_meta_window().get_frame_rect();
+        session.buttonBuilder.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
+        if (!session.windowApp)
+            return;
+        session.windowApp.get_meta_window().move_resize_frame(false,
+                                                              rect.x,
+                                                              rect.y,
+                                                              rect.width,
+                                                              rect.height);
+    },
+
+    _windowAppRestacked : function(overview, stackIndices, session) {
+        let focusedWindow = global.display.get_focus_window();
+        if (!focusedWindow)
+            return;
+        if (!session.windowApp.get_meta_window())
+            return;
+
+        if (session.buttonApp)
+            session.buttonApp.hide();
+        if (session.buttonBuilder)
+            session.buttonBuilder.hide();
+
+        if (focusedWindow.get_stable_sequence() === session.windowApp.get_meta_window().get_stable_sequence()){
+            if (!session.state) {
+                session.buttonApp.show();
+                return;
+            }
+            if (!session.windowBuilder)
+                return;
+
+            session.windowBuilder.show();
+            session.buttonBuilder.show();
+            session.windowBuilder.get_meta_window().activate(global.get_current_time());
+            return;
+        }
+
+        if (!session.windowBuilder)
+            return;
+        if (focusedWindow.get_stable_sequence() === session.windowBuilder.get_meta_window().get_stable_sequence()){
+            if (session.buttonBuilder)
+                session.buttonBuilder.show();
+        }
+    },
+
+    _switchToBuilder : function(actor, event, session) {
+        if (!session.windowBuilder) {
+            let tracker = Shell.WindowTracker.get_default();
+            tracker.track_coding_app_window(session.windowApp.get_meta_window());
+            Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
+            animateBounce(session.buttonApp);
+        }
+        else {
+            session.windowBuilder.get_meta_window().activate(global.get_current_time());
+            this._rotateInActors.push(session.windowBuilder);
+            this._rotateOutActors.push(session.windowApp);
+            this._animate(session.windowApp,
+                          session.windowBuilder,
+                          Gtk.DirectionType.LEFT);
+            session.state = SessionState.BUILDER;
+        }
+        session.buttonApp.hide();
+    },
+
+    _switchToApp : function(actor, event, session) {
+        if (!session.windowApp)
+            return;
+        session.windowApp.get_meta_window().activate(global.get_current_time());
+        this._rotateInActors.push(session.windowApp);
+        this._rotateOutActors.push(session.windowBuilder);
+        this._animate(session.windowBuilder,
+                      session.windowApp,
+                      Gtk.DirectionType.RIGHT);
+        session.buttonBuilder.hide();
+        session.buttonApp.show();
+        session.state = SessionState.APP;
+    },
+
+    _animate : function(src, dst, direction) {
+        dst.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
+        src.rotation_angle_y = 0;
+        dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+        src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+
+        /* We set backface culling to be enabled here so that we can
+        * smootly animate between the two windows. Without expensive
+        * vector projections, there's no way to determine whether a
+        * window's front-face is completely invisible to the user
+        * (this cannot be done just by looking at the angle of the
+        * window because the same angle may show a different visible
+        * face depending on its position in the view frustum).
+        *
+        * What we do here is enable backface culling and rotate both
+        * windows by 180degrees. The effect of this is that the front
+        * and back window will be at opposite rotations at each point
+        * in time and so the exact point at which the first window
+        * becomes invisible is the same point at which the second
+        * window becomes visible. Because no back faces are drawn
+        * there are no visible artifacts in the animation */
+        src.set_cull_back_face(true);
+        dst.set_cull_back_face(true);
+
+        src.show();
+        dst.show();
+        dst.opacity = 0;
+
+        let dst_geometry = src.get_meta_window().get_frame_rect();
+        dst.get_meta_window().move_resize_frame(false,
+                                                dst_geometry.x,
+                                                dst_geometry.y,
+                                                dst_geometry.width,
+                                                dst_geometry.height);
+
+
+        /* Tween both windows in a rotation animation at the same time
+        * with backface culling enabled on both. This will allow for
+        * a smooth transition. */
+        Tweener.addTween(src, {
+                        rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
+                        time: WINDOW_ANIMATION_TIME * 4,
+                        transition: 'easeOutQuad',
+                        onComplete: Lang.bind(this, function() {
+                            this.rotateOutCompleted(src);
+                        })
+        });
+        Tweener.addTween(dst, {
+                        rotation_angle_y: 0,
+                        time: WINDOW_ANIMATION_TIME * 4,
+                        transition: 'easeOutQuad',
+                        onComplete: Lang.bind(this, function() {
+                            this.rotateInCompleted(dst);
+                        })
+        });
+
+        /* Gently fade the window in, this will paper over
+         * any artifacts from shadows and the like */
+        Tweener.addTween(dst, {
+                    opacity: 255,
+                    time: WINDOW_ANIMATION_TIME * 4,
+                    transition: 'linear'
+        });
+    },
+
+    _removeEffect : function(list, actor) {
+        let idx = list.indexOf(actor);
+        if (idx != -1) {
+            list.splice(idx, 1);
+            return true;
+        }
+        return false;
+    },
+
+    _removeSession : function(session) {
+        let idx = this._sessions.indexOf(session);
+        if (idx != -1) {
+            this._sessions.splice(idx, 1);
+            return true;
+        }
+        return false;
+    },
+
+    rotateInCompleted: function(actor) {
+        if (this._removeEffect(this._rotateInActors, actor)) {
+            Tweener.removeTweens(actor);
+            actor.opacity = 255;
+            actor.rotation_angle_y = 0;
+            actor.set_cull_back_face(false);
+        }
+    },
+
+    rotateOutCompleted: function(actor) {
+        if (this._removeEffect(this._rotateOutActors, actor)) {
+            Tweener.removeTweens(actor);
+            actor.hide();
+            actor.rotation_angle_y = 0;
+            actor.set_cull_back_face(false);
+        }
+    }
 });
