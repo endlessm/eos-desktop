@@ -2231,20 +2231,20 @@ const CodingManager = new Lang.Class({
          * with backface culling enabled on both. This will allow for
          * a smooth transition. */
         Tweener.addTween(src, {
-                        rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
-                        time: WINDOW_ANIMATION_TIME * 4,
-                        transition: 'easeOutQuad',
-                        onComplete: Lang.bind(this, function() {
-                            this.rotateOutCompleted(src);
-                        })
+            rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
+            time: WINDOW_ANIMATION_TIME * 4,
+            transition: 'easeOutQuad',
+            onComplete: Lang.bind(this, function() {
+                this.rotateOutCompleted(src);
+            })
         });
         Tweener.addTween(dst, {
-                        rotation_angle_y: 0,
-                        time: WINDOW_ANIMATION_TIME * 4,
-                        transition: 'easeOutQuad',
-                        onComplete: Lang.bind(this, function() {
-                            this.rotateInCompleted(dst);
-                        })
+            rotation_angle_y: 0,
+            time: WINDOW_ANIMATION_TIME * 4,
+            transition: 'easeOutQuad',
+            onComplete: Lang.bind(this, function() {
+                this.rotateInCompleted(dst);
+            })
         });
 
         /* Gently fade the window in, this will paper over
