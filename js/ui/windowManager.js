@@ -1902,27 +1902,28 @@ const SessionState = {
 
 function animateBounce(actor) {
     Tweener.removeTweens(actor);
-    if (!Tweener.isTweening(actor)) {
-        Tweener.addTween(actor, {
-                scale_y: 1 + ICON_BOUNCE_MAX_SCALE,
-                scale_x: 1 + ICON_BOUNCE_MAX_SCALE,
-                translation_y: actor.height * ICON_BOUNCE_MAX_SCALE,
-                translation_x: actor.width * ICON_BOUNCE_MAX_SCALE / 2,
-                time: ICON_BOUNCE_ANIMATION_TIME * 0.25,
-                delay: 0.3,
-                transition: ICON_BOUNCE_ANIMATION_TYPE_1
-        });
-        Tweener.addTween(actor, {
-                scale_y: 1,
-                scale_x: 1,
-                translation_y: 0,
-                translation_x: 0,
-                time: ICON_BOUNCE_ANIMATION_TIME * 0.75,
-                transition: ICON_BOUNCE_ANIMATION_TYPE_2,
-                delay: ICON_BOUNCE_ANIMATION_TIME * 0.25 + 0.3,
-                onComplete: function() {animateBounce(actor);}
-        });
-    }
+    if (Tweener.isTweening(actor))
+        return;
+
+    Tweener.addTween(actor, {
+        scale_y: 1 + ICON_BOUNCE_MAX_SCALE,
+        scale_x: 1 + ICON_BOUNCE_MAX_SCALE,
+        translation_y: actor.height * ICON_BOUNCE_MAX_SCALE,
+        translation_x: actor.width * ICON_BOUNCE_MAX_SCALE / 2,
+        time: ICON_BOUNCE_ANIMATION_TIME * 0.25,
+        delay: 0.3,
+        transition: ICON_BOUNCE_ANIMATION_TYPE_1
+    });
+    Tweener.addTween(actor, {
+        scale_y: 1,
+        scale_x: 1,
+        translation_y: 0,
+        translation_x: 0,
+        time: ICON_BOUNCE_ANIMATION_TIME * 0.35,
+        transition: ICON_BOUNCE_ANIMATION_TYPE_2,
+        delay: ICON_BOUNCE_ANIMATION_TIME * 0.25 + 0.3,
+        onComplete: function() {animateBounce(actor);}
+    });
 }
 
 const CodingManager = new Lang.Class({
