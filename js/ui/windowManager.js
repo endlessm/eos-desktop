@@ -1949,10 +1949,13 @@ const CodingManager = new Lang.Class({
                              state: SessionState.APP});
 
         let session = this._getSession(actorApp);
+
         button.connect('clicked', Lang.bind(this, this._switchToBuilder, session));
         let positionChangedId = window.connect('position-changed', Lang.bind(this, this._windowAppPositionChanged, session));
+        let sizeChangedId = window.connect('size-changed', Lang.bind(this, this._windowAppSizeChanged, session));
         let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowAppRestacked, session));
         session.positionChangedIdApp = positionChangedId;
+        session.sizeChangedIdApp = sizeChangedId;
         session.windowsRestackedIdApp = windowsRestackedId;
     },
 
@@ -1981,14 +1984,16 @@ const CodingManager = new Lang.Class({
             session.windowApp.get_meta_window().disconnect(session.positionChangedIdApp);
             session.positionChangedIdApp = 0;
         }
+        if (session.sizeChangedIdApp != 0) {
+            session.windowApp.get_meta_window().disconnect(session.sizeChangedIdApp);
+            session.sizeChangedIdApp = 0;
+        }
         if (session.windowsRestackedIdApp != 0) {
             Main.overview.disconnect(session.windowsRestackedIdApp);
             session.windowsRestackedIdApp = 0;
         }
         session.buttonApp.destroy();
-        if (!this._removeSession(session))
-            return false;
-        return true;
+        this._removeSession(session);
     },
 
     removeSwitcherToApp : function(actorBuilder) {
@@ -2032,10 +2037,12 @@ const CodingManager = new Lang.Class({
         button.connect('clicked', Lang.bind(this, this._switchToApp, session));
 
         let positionChangedId = window.connect('position-changed', Lang.bind(this, this._windowBuilderPositionChanged, session));
+        let sizeChangedId = window.connect('size-changed', Lang.bind(this, this._windowBuilderSizeChanged, session));
 
         session.buttonBuilder = button;
         session.state = SessionState.BUILDER;
         session.positionChangedIdBuilder = positionChangedId;
+        session.sizeChangedIdBuilder = sizeChangedId;
     },
 
     _animateToBuilder: function(session) {
@@ -2069,11 +2076,11 @@ const CodingManager = new Lang.Class({
         this._firstFrameConnections.push(firstFrameConnection);
     },
 
-    _windowAppPositionChanged: function(window, event, session) {
+    _windowAppPositionChanged: function(window, session) {
         let rect = session.windowApp.get_meta_window().get_frame_rect();
         session.buttonApp.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         if (!session.windowBuilder)
-                return;
+            return;
         session.windowBuilder.get_meta_window().move_resize_frame(false,
                                                                   rect.x,
                                                                   rect.y,
@@ -2081,7 +2088,31 @@ const CodingManager = new Lang.Class({
                                                                   rect.height);
     },
 
-    _windowBuilderPositionChanged: function(window, event, session) {
+    _windowAppSizeChanged: function(window, session) {
+        let rect = session.windowApp.get_meta_window().get_frame_rect();
+        session.buttonApp.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
+        if (!session.windowBuilder)
+            return;
+        session.windowBuilder.get_meta_window().move_resize_frame(false,
+                                                                  rect.x,
+                                                                  rect.y,
+                                                                  rect.width,
+                                                                  rect.height);
+    },
+
+    _windowBuilderPositionChanged: function(window, session) {
+        let rect = session.windowBuilder.get_meta_window().get_frame_rect();
+        session.buttonBuilder.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
+        if (!session.windowApp)
+            return;
+        session.windowApp.get_meta_window().move_resize_frame(false,
+                                                              rect.x,
+                                                              rect.y,
+                                                              rect.width,
+                                                              rect.height);
+    },
+
+    _windowBuilderSizeChanged: function(window, session) {
         let rect = session.windowBuilder.get_meta_window().get_frame_rect();
         session.buttonBuilder.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         if (!session.windowApp)
