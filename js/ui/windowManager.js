@@ -1420,7 +1420,7 @@ const WindowManager = new Lang.Class({
         let window = actor.meta_window;
         if (window.get_flatpak_id() !== 'org.gnome.gedit')
             return;
-        // TODO: cleanup in Shell.WindowTracker
+
         this._codingManager.removeSwitcherToBuilder(actor);
     },
 
@@ -1429,8 +1429,6 @@ const WindowManager = new Lang.Class({
         if (window.get_flatpak_id() !== 'org.gnome.Builder')
             return;
 
-        let tracker = Shell.WindowTracker.get_default();
-        tracker.untrack_coding_app_window(window);
         this._codingManager.removeSwitcherToApp(actor);
     },
 
@@ -1973,6 +1971,11 @@ const CodingManager = new Lang.Class({
 
     removeSwitcherToBuilder : function(actorApp) {
         let session = this._getSession(actorApp);
+        if (!session)
+            return;
+
+        // TODO Handle the case where we quit the app
+        // with an open Builder session
 
         if (session.positionChangedIdApp != 0) {
             session.windowApp.get_meta_window().disconnect(session.positionChangedIdApp);
@@ -1990,6 +1993,11 @@ const CodingManager = new Lang.Class({
 
     removeSwitcherToApp : function(actorBuilder) {
         let session = this._getSession(actorBuilder);
+        if (!session)
+            return;
+
+        let tracker = Shell.WindowTracker.get_default();
+        tracker.untrack_coding_app_window(session.windowBuilder.get_meta_window());
 
         if (session.positionChangedIdBuilder != 0) {
             session.windowBuilder.get_meta_window().disconnect(session.positionChangedIdBuilder);
