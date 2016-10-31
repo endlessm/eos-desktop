@@ -2234,17 +2234,13 @@ const CodingManager = new Lang.Class({
             rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
             time: WINDOW_ANIMATION_TIME * 4,
             transition: 'easeOutQuad',
-            onComplete: Lang.bind(this, function() {
-                this.rotateOutCompleted(src);
-            })
+            onComplete: Lang.bind(this, this.rotateOutCompleted, src)
         });
         Tweener.addTween(dst, {
             rotation_angle_y: 0,
             time: WINDOW_ANIMATION_TIME * 4,
             transition: 'easeOutQuad',
-            onComplete: Lang.bind(this, function() {
-                this.rotateInCompleted(dst);
-            })
+            onComplete: Lang.bind(this, this.rotateInCompleted, dst)
         });
 
         /* Gently fade the window in, this will paper over
