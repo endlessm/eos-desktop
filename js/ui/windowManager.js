@@ -1408,12 +1408,12 @@ const WindowManager = new Lang.Class({
             return false;
 
         let tracker = Shell.WindowTracker.get_default();
-        if (tracker.is_coding_builder_window(window)) {
-            let windowApp = tracker.get_app_from_builder(window);
-            this._codingManager.addSwitcherToApp(actor, windowApp);
-            return true;
-        }
-        return false;
+        let windowApp = tracker.get_app_from_builder(window);
+        if (!windowApp)
+            return false;
+
+        this._codingManager.addSwitcherToApp(actor, windowApp);
+        return true;
     },
 
     _codingRemoveAppWindow : function(actor) {

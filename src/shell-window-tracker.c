@@ -225,23 +225,11 @@ void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker
 }
 
 /**
- * shell_window_tracker_is_coding_builder_window:
- *
- * A builder window associated with a coding app is shown.
- *
- * Returns: %TRUE if a window is a builder window
- */
-gboolean shell_window_tracker_is_coding_builder_window (ShellWindowTracker *tracker, MetaWindow *window)
-{
-  return g_hash_table_lookup (tracker->builder_to_app, window) ? TRUE : FALSE;
-}
-
-/**
  * shell_window_tracker_get_app_from_builder:
  * @tracker: An app monitor instance
  * @builder: A #MetaWindow
  *
- * Returns: (transfer full): Applocation associated with Builder window
+ * Returns: (transfer full): Application associated with Builder window
  */
 
 MetaWindow *shell_window_tracker_get_app_from_builder (ShellWindowTracker *tracker, MetaWindow *builder)
@@ -249,8 +237,10 @@ MetaWindow *shell_window_tracker_get_app_from_builder (ShellWindowTracker *track
   MetaWindow *app;
 
   app = g_hash_table_lookup (tracker->builder_to_app, builder);
-  if (app)
-    g_object_ref (app);
+  if (!app)
+    return NULL;
+
+  g_object_ref (app);
 
   return app;
 }
