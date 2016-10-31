@@ -1900,8 +1900,7 @@ const SessionState = {
     BUILDER: 1
 };
 
-function animateBounce(actor)
-{
+function animateBounce(actor) {
     Tweener.removeTweens(actor);
     if (!Tweener.isTweening(actor)) {
         Tweener.addTween(actor, {
