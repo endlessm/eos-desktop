@@ -201,12 +201,13 @@ watchdog_timeout_reached_cb (gpointer user_data)
  * Track a coding app.
  *
  */
-void shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker, MetaWindow *window)
+void shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker,
+                                                   MetaWindow *window)
 {
   tracker->coding_app = window;
-  tracker->watchdog_id =
-    g_timeout_add_seconds (WATCHDOG_TIMEOUT,
-                   watchdog_timeout_reached_cb, tracker);
+  tracker->watchdog_id = g_timeout_add_seconds (WATCHDOG_TIMEOUT,
+                                                watchdog_timeout_reached_cb,
+                                                tracker);
 }
 
 /**
@@ -215,7 +216,8 @@ void shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker, 
  * Untrack a coding app.
  *
  */
-void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker, MetaWindow *window)
+void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker,
+                                                     MetaWindow *window)
 {
   MetaWindow *coding_app;
   coding_app = g_hash_table_lookup (tracker->builder_to_app, window);
@@ -232,7 +234,8 @@ void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker
  * Returns: (transfer full): Application associated with Builder window
  */
 
-MetaWindow *shell_window_tracker_get_app_from_builder (ShellWindowTracker *tracker, MetaWindow *builder)
+MetaWindow *shell_window_tracker_get_app_from_builder (ShellWindowTracker *tracker,
+                                                       MetaWindow *builder)
 {
   MetaWindow *app;
 
