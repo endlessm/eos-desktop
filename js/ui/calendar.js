@@ -87,7 +87,7 @@ function _getCalendarDayAbbreviation(dayNumber) {
         /* Translators: Calendar grid abbreviation for Saturday */
         NC_("grid saturday", "S")
     ];
-    return abbreviations[dayNumber];
+    return Shell.util_translate_time_string(abbreviations[dayNumber]);
 }
 
 // Abstraction for an appointment/event in a calendar
