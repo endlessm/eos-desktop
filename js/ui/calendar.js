@@ -3,36 +3,49 @@
 const Clutter = imports.gi.Clutter;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 const St = imports.gi.St;
 const Signals = imports.signals;
-const Pango = imports.gi.Pango;
 const Gettext_gtk30 = imports.gettext.domain('gtk30');
-const Mainloop = imports.mainloop;
 const Shell = imports.gi.Shell;
+
+const Main = imports.ui.main;
+const MessageList = imports.ui.messageList;
+const MessageTray = imports.ui.messageTray;
+const Mpris = imports.ui.mpris;
+const Util = imports.misc.util;
 
 const MSECS_IN_DAY = 24 * 60 * 60 * 1000;
 const SHOW_WEEKDATE_KEY = 'show-weekdate';
+const ELLIPSIS_CHAR = '\u2026';
 
-// in org.gnome.desktop.interface
-const CLOCK_FORMAT_KEY        = 'clock-format';
+const MESSAGE_ICON_SIZE = 32;
 
-function _sameDay(dateA, dateB) {
-    return (dateA.getDate() == dateB.getDate() &&
-            dateA.getMonth() == dateB.getMonth() &&
-            dateA.getYear() == dateB.getYear());
-}
+// alias to prevent xgettext from picking up strings translated in GTK+
+const gtk30_ = Gettext_gtk30.gettext;
+const NC_ = function(context, str) { return context + '\u0004' + str; };
 
-function _sameYear(dateA, dateB) {
+function sameYear(dateA, dateB) {
     return (dateA.getYear() == dateB.getYear());
 }
 
-/* TODO: maybe needs config - right now we assume that Saturday and
- * Sunday are non-work days (not true in e.g. Israel, it's Sunday and
- * Monday there)
- */
+function sameMonth(dateA, dateB) {
+    return sameYear(dateA, dateB) && (dateA.getMonth() == dateB.getMonth());
+}
+
+function sameDay(dateA, dateB) {
+    return sameMonth(dateA, dateB) && (dateA.getDate() == dateB.getDate());
+}
+
+function isToday(date) {
+    return sameDay(new Date(), date);
+}
+
 function _isWorkDay(date) {
-    return date.getDay() != 0 && date.getDay() != 6;
+    /* Translators: Enter 0-6 (Sunday-Saturday) for non-work days. Examples: "0" (Sunday) "6" (Saturday) "06" (Sunday and Saturday). */
+    let days = C_('calendar-no-work', "06");
+    return days.indexOf(date.getDay().toString()) == -1;
 }
 
 function _getBeginningOfDay(date) {
@@ -53,51 +66,6 @@ function _getEndOfDay(date) {
     return ret;
 }
 
-function _formatEventTime(event, clockFormat) {
-    let ret;
-    if (event.allDay) {
-        /* Translators: Shown in calendar event list for all day events
-         * Keep it short, best if you can use less then 10 characters
-         */
-        ret = C_("event list time", "All Day");
-    } else {
-        switch (clockFormat) {
-        case '24h':
-            /* Translators: Shown in calendar event list, if 24h format,
-               \u2236 is a ratio character, similar to : */
-            ret = event.date.toLocaleFormat(C_("event list time", "%H\u2236%M"));
-            break;
-
-        default:
-            /* explicit fall-through */
-        case '12h':
-            /* Transators: Shown in calendar event list, if 12h format,
-               \u2236 is a ratio character, similar to : and \u2009 is
-               a thin space */
-            ret = event.date.toLocaleFormat(C_("event list time", "%l\u2236%M\u2009%p"));
-            break;
-        }
-    }
-    return ret;
-}
-
-function _getCalendarWeekForDate(date) {
-    // Based on the algorithms found here:
-    // http://en.wikipedia.org/wiki/Talk:ISO_week_date
-    let midnightDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    // Need to get Monday to be 1 ... Sunday to be 7
-    let dayOfWeek = 1 + ((midnightDate.getDay() + 6) % 7);
-    let nearestThursday = new Date(midnightDate.getFullYear(), midnightDate.getMonth(),
-                                   midnightDate.getDate() + (4 - dayOfWeek));
-
-    let jan1st = new Date(nearestThursday.getFullYear(), 0, 1);
-    let diffDate = nearestThursday - jan1st;
-    let dayNumber = Math.floor(Math.abs(diffDate) / MSECS_IN_DAY);
-    let weekNumber = Math.floor(dayNumber / 7) + 1;
-
-    return weekNumber;
-}
-
 function _getCalendarDayAbbreviation(dayNumber) {
     let abbreviations = [
         /* Translators: Calendar grid abbreviation for Sunday.
@@ -105,44 +73,19 @@ function _getCalendarDayAbbreviation(dayNumber) {
          * NOTE: These grid abbreviations are always shown together
          * and in order, e.g. "S M T W T F S".
          */
-        C_("grid sunday", "S"),
+        NC_("grid sunday", "S"),
         /* Translators: Calendar grid abbreviation for Monday */
-        C_("grid monday", "M"),
+        NC_("grid monday", "M"),
         /* Translators: Calendar grid abbreviation for Tuesday */
-        C_("grid tuesday", "T"),
+        NC_("grid tuesday", "T"),
         /* Translators: Calendar grid abbreviation for Wednesday */
-        C_("grid wednesday", "W"),
+        NC_("grid wednesday", "W"),
         /* Translators: Calendar grid abbreviation for Thursday */
-        C_("grid thursday", "T"),
+        NC_("grid thursday", "T"),
         /* Translators: Calendar grid abbreviation for Friday */
-        C_("grid friday", "F"),
+        NC_("grid friday", "F"),
         /* Translators: Calendar grid abbreviation for Saturday */
-        C_("grid saturday", "S")
-    ];
-    return abbreviations[dayNumber];
-}
-
-function _getEventDayAbbreviation(dayNumber) {
-    let abbreviations = [
-        /* Translators: Event list abbreviation for Sunday.
-         *
-         * NOTE: These list abbreviations are normally not shown together
-         * so they need to be unique (e.g. Tuesday and Thursday cannot
-         * both be 'T').
-         */
-        C_("list sunday", "Su"),
-        /* Translators: Event list abbreviation for Monday */
-        C_("list monday", "M"),
-        /* Translators: Event list abbreviation for Tuesday */
-        C_("list tuesday", "T"),
-        /* Translators: Event list abbreviation for Wednesday */
-        C_("list wednesday", "W"),
-        /* Translators: Event list abbreviation for Thursday */
-        C_("list thursday", "Th"),
-        /* Translators: Event list abbreviation for Friday */
-        C_("list friday", "F"),
-        /* Translators: Event list abbreviation for Saturday */
-        C_("list saturday", "S")
+        NC_("grid saturday", "S")
     ];
     return abbreviations[dayNumber];
 }
@@ -152,7 +95,8 @@ function _getEventDayAbbreviation(dayNumber) {
 const CalendarEvent = new Lang.Class({
     Name: 'CalendarEvent',
 
-    _init: function(date, end, summary, allDay) {
+    _init: function(id, date, end, summary, allDay) {
+        this.id = id;
         this.date = date;
         this.end = end;
         this.summary = summary;
@@ -243,11 +187,24 @@ const DBusEventSource = new Lang.Class({
         this._initialized = false;
         this._dbusProxy = new CalendarServer();
         this._dbusProxy.init_async(GLib.PRIORITY_DEFAULT, null, Lang.bind(this, function(object, result) {
+            let loaded = false;
+
             try {
                 this._dbusProxy.init_finish(result);
+                loaded = true;
             } catch(e) {
-                log('Error loading calendars: ' + e.message);
-                return;
+                if (e.matches(Gio.DBusError, Gio.DBusError.TIMED_OUT)) {
+                    // Ignore timeouts and install signals as normal, because with high
+                    // probability the service will appear later on, and we will get a
+                    // NameOwnerChanged which will finish loading
+                    //
+                    // (But still _initialized to false, because the proxy does not know
+                    // about the HasCalendars property and would cause an exception trying
+                    // to read it)
+                } else {
+                    log('Error loading calendars: ' + e.message);
+                    return;
+                }
             }
 
             this._dbusProxy.connectSignal('Changed', Lang.bind(this, this._onChanged));
@@ -263,9 +220,11 @@ const DBusEventSource = new Lang.Class({
                 this.emit('notify::has-calendars');
             }));
 
-            this._initialized = true;
-            this.emit('notify::has-calendars');
-            this._onNameAppeared();
+            this._initialized = loaded;
+            if (loaded) {
+                this.emit('notify::has-calendars');
+                this._onNameAppeared();
+            }
         }));
     },
 
@@ -287,6 +246,7 @@ const DBusEventSource = new Lang.Class({
     },
 
     _onNameAppeared: function(owner) {
+        this._initialized = true;
         this._resetCache();
         this._loadEvents(true);
     },
@@ -308,9 +268,10 @@ const DBusEventSource = new Lang.Class({
                 let a = appointments[n];
                 let date = new Date(a[4] * 1000);
                 let end = new Date(a[5] * 1000);
+                let id = a[0];
                 let summary = a[1];
                 let allDay = a[3];
-                let event = new CalendarEvent(date, end, summary, allDay);
+                let event = new CalendarEvent(id, date, end, summary, allDay);
                 newEvents.push(event);
             }
             newEvents.sort(function(event1, event2) {
@@ -329,25 +290,22 @@ const DBusEventSource = new Lang.Class({
             return;
 
         if (this._curRequestBegin && this._curRequestEnd){
-            let callFlags = Gio.DBusCallFlags.NO_AUTO_START;
-            if (forceReload)
-                callFlags = Gio.DBusCallFlags.NONE;
             this._dbusProxy.GetEventsRemote(this._curRequestBegin.getTime() / 1000,
                                             this._curRequestEnd.getTime() / 1000,
                                             forceReload,
                                             Lang.bind(this, this._onEventsReceived),
-                                            callFlags);
+                                            Gio.DBusCallFlags.NONE);
         }
     },
 
-    requestRange: function(begin, end, forceReload) {
-        if (forceReload || !(_datesEqual(begin, this._lastRequestBegin) && _datesEqual(end, this._lastRequestEnd))) {
+    requestRange: function(begin, end) {
+        if (!(_datesEqual(begin, this._lastRequestBegin) && _datesEqual(end, this._lastRequestEnd))) {
             this.isLoading = true;
             this._lastRequestBegin = begin;
             this._lastRequestEnd = end;
             this._curRequestBegin = begin;
             this._curRequestEnd = end;
-            this._loadEvents(forceReload);
+            this._loadEvents(false);
         }
     },
 
@@ -359,6 +317,12 @@ const DBusEventSource = new Lang.Class({
                 result.push(event);
             }
         }
+        result.sort(function(event1, event2) {
+            // sort events by end time on ending day
+            let d1 = event1.date < begin && event1.end <= end ? event1.end : event1.date;
+            let d2 = event2.date < begin && event2.end <= end ? event2.end : event2.date;
+            return d1.getTime() - d2.getTime();
+        });
         return result;
     },
 
@@ -381,14 +345,14 @@ const Calendar = new Lang.Class({
 
     _init: function() {
         this._weekStart = Shell.util_get_week_start();
-        this._settings = new Gio.Settings({ schema: 'org.gnome.shell.calendar' });
+        this._settings = new Gio.Settings({ schema_id: 'org.gnome.shell.calendar' });
 
         this._settings.connect('changed::' + SHOW_WEEKDATE_KEY, Lang.bind(this, this._onSettingsChange));
         this._useWeekdate = this._settings.get_boolean(SHOW_WEEKDATE_KEY);
 
         // Find the ordering for month/year in the calendar heading
         this._headerFormatWithoutYear = '%B';
-        switch (Gettext_gtk30.gettext('calendar:MY')) {
+        switch (gtk30_('calendar:MY')) {
         case 'calendar:MY':
             this._headerFormat = '%B %Y';
             break;
@@ -404,9 +368,11 @@ const Calendar = new Lang.Class({
         // Start off with the current date
         this._selectedDate = new Date();
 
-        this.actor = new St.Table({ homogeneous: false,
-                                    style_class: 'calendar',
-                                    reactive: true });
+        this._shouldDateGrabFocus = false;
+
+        this.actor = new St.Widget({ style_class: 'calendar',
+                                     layout_manager: new Clutter.TableLayout(),
+                                     reactive: true });
 
         this.actor.connect('scroll-event',
                            Lang.bind(this, this._onScroll));
@@ -419,42 +385,48 @@ const Calendar = new Lang.Class({
     setEventSource: function(eventSource) {
         this._eventSource = eventSource;
         this._eventSource.connect('changed', Lang.bind(this, function() {
-            this._update(false);
+            this._rebuildCalendar();
+            this._update();
         }));
-        this._update(true);
+        this._rebuildCalendar();
+        this._update();
     },
 
     // Sets the calendar to show a specific date
-    setDate: function(date, forceReload) {
-        if (!_sameDay(date, this._selectedDate)) {
-            this._selectedDate = date;
-            this._update(forceReload);
-            this.emit('selected-date-changed', new Date(this._selectedDate));
-        } else {
-            if (forceReload)
-                this._update(forceReload);
-        }
+    setDate: function(date) {
+        if (sameDay(date, this._selectedDate))
+            return;
+
+        this._selectedDate = date;
+        this._update();
+        this.emit('selected-date-changed', new Date(this._selectedDate));
     },
 
     _buildHeader: function() {
+        let layout = this.actor.layout_manager;
         let offsetCols = this._useWeekdate ? 1 : 0;
         this.actor.destroy_all_children();
 
         // Top line of the calendar '<| September 2009 |>'
         this._topBox = new St.BoxLayout();
-        this.actor.add(this._topBox,
-                       { row: 0, col: 0, col_span: offsetCols + 7 });
+        layout.pack(this._topBox, 0, 0);
+        layout.set_span(this._topBox, offsetCols + 7, 1);
 
-        let back = new St.Button({ style_class: 'calendar-change-month-back' });
-        this._topBox.add(back);
-        back.connect('clicked', Lang.bind(this, this._onPrevMonthButtonClicked));
+        this._backButton = new St.Button({ style_class: 'calendar-change-month-back pager-button',
+                                           accessible_name: _("Previous month"),
+                                           can_focus: true });
+        this._topBox.add(this._backButton);
+        this._backButton.connect('clicked', Lang.bind(this, this._onPrevMonthButtonClicked));
 
-        this._monthLabel = new St.Label({style_class: 'calendar-month-label'});
+        this._monthLabel = new St.Label({style_class: 'calendar-month-label',
+                                         can_focus: true });
         this._topBox.add(this._monthLabel, { expand: true, x_fill: false, x_align: St.Align.MIDDLE });
 
-        let forward = new St.Button({ style_class: 'calendar-change-month-forward' });
-        this._topBox.add(forward);
-        forward.connect('clicked', Lang.bind(this, this._onNextMonthButtonClicked));
+        this._forwardButton = new St.Button({ style_class: 'calendar-change-month-forward pager-button',
+                                              accessible_name: _("Next month"),
+                                              can_focus: true });
+        this._topBox.add(this._forwardButton);
+        this._forwardButton.connect('clicked', Lang.bind(this, this._onNextMonthButtonClicked));
 
         // Add weekday labels...
         //
@@ -469,11 +441,15 @@ const Calendar = new Lang.Class({
             // and we want, ideally, a single character for e.g. S M T W T F S
             let customDayAbbrev = _getCalendarDayAbbreviation(iter.getDay());
             let label = new St.Label({ style_class: 'calendar-day-base calendar-day-heading',
-                                       text: customDayAbbrev });
-            this.actor.add(label,
-                           { row: 1,
-                             col: offsetCols + (7 + iter.getDay() - this._weekStart) % 7,
-                             x_fill: false, x_align: St.Align.MIDDLE });
+                                       text: customDayAbbrev,
+                                       can_focus: true });
+            label.accessible_name = iter.toLocaleFormat('%A');
+            let col;
+            if (this.actor.get_text_direction() == Clutter.TextDirection.RTL)
+                col = 6 - (7 + iter.getDay() - this._weekStart) % 7;
+            else
+                col = offsetCols + (7 + iter.getDay() - this._weekStart) % 7;
+            layout.pack(label, col, 1);
             iter.setTime(iter.getTime() + MSECS_IN_DAY);
         }
 
@@ -492,6 +468,7 @@ const Calendar = new Lang.Class({
             this._onNextMonthButtonClicked();
             break;
         }
+        return Clutter.EVENT_PROPAGATE;
     },
 
     _onPrevMonthButtonClicked: function() {
@@ -513,10 +490,12 @@ const Calendar = new Lang.Class({
             }
         }
 
-        this.setDate(newDate, false);
-   },
+        this._backButton.grab_key_focus();
 
-   _onNextMonthButtonClicked: function() {
+        this.setDate(newDate);
+    },
+
+    _onNextMonthButtonClicked: function() {
         let newDate = new Date(this._selectedDate);
         let oldMonth = newDate.getMonth();
         if (oldMonth == 11) {
@@ -535,27 +514,27 @@ const Calendar = new Lang.Class({
             }
         }
 
-       this.setDate(newDate, false);
+        this._forwardButton.grab_key_focus();
+
+        this.setDate(newDate);
     },
 
     _onSettingsChange: function() {
         this._useWeekdate = this._settings.get_boolean(SHOW_WEEKDATE_KEY);
         this._buildHeader();
-        this._update(false);
+        this._rebuildCalendar();
+        this._update();
     },
 
-    _update: function(forceReload) {
+    _rebuildCalendar: function() {
         let now = new Date();
-
-        if (_sameYear(this._selectedDate, now))
-            this._monthLabel.text = this._selectedDate.toLocaleFormat(this._headerFormatWithoutYear);
-        else
-            this._monthLabel.text = this._selectedDate.toLocaleFormat(this._headerFormat);
 
         // Remove everything but the topBox and the weekday labels
         let children = this.actor.get_children();
         for (let i = this._firstDayIndex; i < children.length; i++)
             children[i].destroy();
+
+        this._buttons = [];
 
         // Start at the beginning of the week before the start of the month
         //
@@ -574,11 +553,14 @@ const Calendar = new Lang.Class({
         // Actually computing the number of weeks is complex, but we know that the
         // problematic categories (2 and 4) always start on week start, and that
         // all months at the end have 6 weeks.
-
         let beginDate = new Date(this._selectedDate);
         beginDate.setDate(1);
         beginDate.setSeconds(0);
         beginDate.setHours(12);
+
+        this._calendarBegin = new Date(beginDate);
+        this._markedAsToday = now;
+
         let year = beginDate.getYear();
 
         let daysToWeekStart = (7 + beginDate.getDay() - this._weekStart) % 7;
@@ -587,30 +569,34 @@ const Calendar = new Lang.Class({
 
         beginDate.setTime(beginDate.getTime() - (weekPadding + daysToWeekStart) * MSECS_IN_DAY);
 
+        let layout = this.actor.layout_manager;
         let iter = new Date(beginDate);
         let row = 2;
         // nRows here means 6 weeks + one header + one navbar
         let nRows = 8;
         while (row < 8) {
-            let button = new St.Button({ label: iter.getDate().toString() });
+            // xgettext:no-javascript-format
+            let button = new St.Button({ label: iter.toLocaleFormat(C_("date day number format", "%d")),
+                                         can_focus: true });
             let rtl = button.get_text_direction() == Clutter.TextDirection.RTL;
 
             if (this._eventSource.isDummy)
                 button.reactive = false;
 
-            let iterStr = iter.toUTCString();
+            button._date = new Date(iter);
             button.connect('clicked', Lang.bind(this, function() {
-                let newlySelectedDate = new Date(iterStr);
-                this.setDate(newlySelectedDate, false);
+                this._shouldDateGrabFocus = true;
+                this.setDate(button._date);
+                this._shouldDateGrabFocus = false;
             }));
 
             let hasEvents = this._eventSource.hasEvents(iter);
             let styleClass = 'calendar-day-base calendar-day';
 
             if (_isWorkDay(iter))
-                styleClass += ' calendar-work-day'
+                styleClass += ' calendar-work-day';
             else
-                styleClass += ' calendar-nonwork-day'
+                styleClass += ' calendar-nonwork-day';
 
             // Hack used in lieu of border-collapse - see gnome-shell.css
             if (row == 2)
@@ -621,28 +607,33 @@ const Calendar = new Lang.Class({
             if (leftMost)
                 styleClass = 'calendar-day-left ' + styleClass;
 
-            if (_sameDay(now, iter))
+            if (sameDay(now, iter))
                 styleClass += ' calendar-today';
             else if (iter.getMonth() != this._selectedDate.getMonth())
                 styleClass += ' calendar-other-month-day';
 
-            if (_sameDay(this._selectedDate, iter))
-                button.add_style_pseudo_class('active');
-
             if (hasEvents)
-                styleClass += ' calendar-day-with-events'
+                styleClass += ' calendar-day-with-events';
 
             button.style_class = styleClass;
 
             let offsetCols = this._useWeekdate ? 1 : 0;
-            this.actor.add(button,
-                           { row: row, col: offsetCols + (7 + iter.getDay() - this._weekStart) % 7 });
+            let col;
+            if (rtl)
+                col = 6 - (7 + iter.getDay() - this._weekStart) % 7;
+            else
+                col = offsetCols + (7 + iter.getDay() - this._weekStart) % 7;
+            layout.pack(button, col, row);
+
+            this._buttons.push(button);
 
             if (this._useWeekdate && iter.getDay() == 4) {
-                let label = new St.Label({ text: _getCalendarWeekForDate(iter).toString(),
-                                           style_class: 'calendar-day-base calendar-week-number'});
-                this.actor.add(label,
-                               { row: row, col: 0, y_align: St.Align.MIDDLE });
+                let label = new St.Label({ text: iter.toLocaleFormat('%V'),
+                                           style_class: 'calendar-day-base calendar-week-number',
+                                           can_focus: true });
+                let weekFormat = Shell.util_translate_time_string(N_("Week %V"));
+                label.accessible_name = iter.toLocaleFormat(weekFormat);
+                layout.pack(label, rtl ? 7 : 0, row);
             }
 
             iter.setTime(iter.getTime() + MSECS_IN_DAY);
@@ -650,148 +641,538 @@ const Calendar = new Lang.Class({
             if (iter.getDay() == this._weekStart)
                 row++;
         }
+
         // Signal to the event source that we are interested in events
         // only from this date range
-        this._eventSource.requestRange(beginDate, iter, forceReload);
+        this._eventSource.requestRange(beginDate, iter);
+    },
+
+    _update: function() {
+        let now = new Date();
+
+        if (sameYear(this._selectedDate, now))
+            this._monthLabel.text = this._selectedDate.toLocaleFormat(this._headerFormatWithoutYear);
+        else
+            this._monthLabel.text = this._selectedDate.toLocaleFormat(this._headerFormat);
+
+        if (!this._calendarBegin || !sameMonth(this._selectedDate, this._calendarBegin) || !sameDay(now, this._markedAsToday))
+            this._rebuildCalendar();
+
+        this._buttons.forEach(Lang.bind(this, function(button) {
+            if (sameDay(button._date, this._selectedDate)) {
+                button.add_style_pseudo_class('active');
+                if (this._shouldDateGrabFocus)
+                    button.grab_key_focus();
+            }
+            else
+                button.remove_style_pseudo_class('active');
+        }));
+    }
+});
+Signals.addSignalMethods(Calendar.prototype);
+
+const EventMessage = new Lang.Class({
+    Name: 'EventMessage',
+    Extends: MessageList.Message,
+
+    _init: function(event, date) {
+        this._event = event;
+        this._date = date;
+
+        this.parent(this._formatEventTime(), event.summary);
+    },
+
+    _formatEventTime: function() {
+        let periodBegin = _getBeginningOfDay(this._date);
+        let periodEnd = _getEndOfDay(this._date);
+        let allDay = (this._event.allDay || (this._event.date <= periodBegin &&
+                                             this._event.end >= periodEnd));
+        let title;
+        if (allDay) {
+            /* Translators: Shown in calendar event list for all day events
+             * Keep it short, best if you can use less then 10 characters
+             */
+            title = C_("event list time", "All Day");
+        } else {
+            let date = this._event.date >= periodBegin ? this._event.date
+                                                       : this._event.end;
+            title = Util.formatTime(date, { timeOnly: true });
+        }
+
+        let rtl = Clutter.get_default_text_direction() == Clutter.TextDirection.RTL;
+        if (this._event.date < periodBegin && !this._event.allDay) {
+            if (rtl)
+                title = title + ELLIPSIS_CHAR;
+            else
+                title = ELLIPSIS_CHAR + title;
+        }
+        if (this._event.end > periodEnd && !this._event.allDay) {
+            if (rtl)
+                title = ELLIPSIS_CHAR + title;
+            else
+                title = title + ELLIPSIS_CHAR;
+        }
+        return title;
+    },
+
+    canClose: function() {
+        return isToday(this._date);
     }
 });
 
-Signals.addSignalMethods(Calendar.prototype);
+const NotificationMessage = new Lang.Class({
+    Name: 'NotificationMessage',
+    Extends: MessageList.Message,
 
-const EventsList = new Lang.Class({
-    Name: 'EventsList',
+    _init: function(notification) {
+        this.notification = notification;
+
+        this.setUseBodyMarkup(notification.bannerBodyMarkup);
+        this.parent(notification.title, notification.bannerBodyText);
+
+        this.setIcon(this._getIcon());
+
+        this.connect('close', Lang.bind(this,
+            function() {
+                this._closed = true;
+                this.notification.destroy(MessageTray.NotificationDestroyedReason.DISMISSED);
+            }));
+        this._destroyId = notification.connect('destroy', Lang.bind(this,
+            function() {
+                if (!this._closed)
+                    this.close();
+            }));
+        this._updatedId = notification.connect('updated',
+                                               Lang.bind(this, this._onUpdated));
+    },
+
+    _getIcon: function() {
+        if (this.notification.gicon)
+            return new St.Icon({ gicon: this.notification.gicon,
+                                 icon_size: MESSAGE_ICON_SIZE });
+        else
+            return this.notification.source.createIcon(MESSAGE_ICON_SIZE);
+    },
+
+    _onUpdated: function(n, clear) {
+        this.setIcon(this._getIcon());
+        this.setTitle(n.title);
+        this.setBody(n.bannerBodyText);
+        this.setUseBodyMarkup(n.bannerBodyMarkup);
+    },
+
+    _onClicked: function() {
+        this.notification.activate();
+    },
+
+    _onDestroy: function() {
+        if (this._updatedId)
+            this.notification.disconnect(this._updatedId);
+        this._updatedId = 0;
+
+        if (this._destroyId)
+            this.notification.disconnect(this._destroyId);
+        this._destroyId = 0;
+    }
+});
+
+const EventsSection = new Lang.Class({
+    Name: 'EventsSection',
+    Extends: MessageList.MessageListSection,
 
     _init: function() {
-        this.actor = new St.BoxLayout({ vertical: true, style_class: 'events-header-vbox'});
-        this._date = new Date();
-        this._desktopSettings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
-        this._desktopSettings.connect('changed', Lang.bind(this, this._update));
-        this._weekStart = Shell.util_get_week_start();
+        this._desktopSettings = new Gio.Settings({ schema_id: 'org.gnome.desktop.interface' });
+        this._desktopSettings.connect('changed', Lang.bind(this, this._reloadEvents));
+        this._eventSource = new EmptyEventSource();
+
+        this._ignoredEvents = new Map();
+
+        let savedState = global.get_persistent_state('as', 'ignored_events');
+        if (savedState)
+            savedState.deep_unpack().forEach(Lang.bind(this,
+                function(eventId) {
+                    this._ignoredEvents.set(eventId, true);
+                }));
+
+        this.parent('');
+
+        Shell.AppSystem.get_default().connect('installed-changed',
+                                              Lang.bind(this, this._appInstalledChanged));
+        this._appInstalledChanged();
+    },
+
+    _ignoreEvent: function(event) {
+        this._ignoredEvents.set(event.id, true);
+        let savedState = new GLib.Variant('as', [...this._ignoredEvents.keys()]);
+        global.set_persistent_state('ignored_events', savedState);
     },
 
     setEventSource: function(eventSource) {
         this._eventSource = eventSource;
-        this._eventSource.connect('changed', Lang.bind(this, this._update));
+        this._eventSource.connect('changed', Lang.bind(this, this._reloadEvents));
     },
 
-    _addEvent: function(dayNameBox, timeBox, eventTitleBox, includeDayName, day, time, desc) {
-        if (includeDayName) {
-            dayNameBox.add(new St.Label( { style_class: 'events-day-dayname',
-                                           text: day } ),
-                           { x_fill: true } );
-        }
-        timeBox.add(new St.Label( { style_class: 'events-day-time',
-                                    text: time} ),
-                    { x_fill: true } );
-        eventTitleBox.add(new St.Label( { style_class: 'events-day-task',
-                                          text: desc} ));
+    get allowed() {
+        return Main.sessionMode.showCalendarEvents;
     },
 
-    _addPeriod: function(header, begin, end, includeDayName, showNothingScheduled) {
-        let events = this._eventSource.getEvents(begin, end);
-
-        let clockFormat = this._desktopSettings.get_string(CLOCK_FORMAT_KEY);;
-
-        if (events.length == 0 && !showNothingScheduled)
+    _updateTitle: function() {
+        if (isToday(this._date)) {
+            this._title.label = _("Events");
             return;
-
-        let vbox = new St.BoxLayout( {vertical: true} );
-        this.actor.add(vbox);
-
-        vbox.add(new St.Label({ style_class: 'events-day-header', text: header }));
-        let box = new St.BoxLayout({style_class: 'events-header-hbox'});
-        let dayNameBox = new St.BoxLayout({ vertical: true, style_class: 'events-day-name-box' });
-        let timeBox = new St.BoxLayout({ vertical: true, style_class: 'events-time-box' });
-        let eventTitleBox = new St.BoxLayout({ vertical: true, style_class: 'events-event-box' });
-        box.add(dayNameBox, {x_fill: false});
-        box.add(timeBox, {x_fill: false});
-        box.add(eventTitleBox, {expand: true});
-        vbox.add(box);
-
-        for (let n = 0; n < events.length; n++) {
-            let event = events[n];
-            let dayString = _getEventDayAbbreviation(event.date.getDay());
-            let timeString = _formatEventTime(event, clockFormat);
-            let summaryString = event.summary;
-            this._addEvent(dayNameBox, timeBox, eventTitleBox, includeDayName, dayString, timeString, summaryString);
         }
 
-        if (events.length == 0 && showNothingScheduled) {
-            let now = new Date();
-            /* Translators: Text to show if there are no events */
-            let nothingEvent = new CalendarEvent(now, now, _("Nothing Scheduled"), true);
-            let timeString = _formatEventTime(nothingEvent, clockFormat);
-            this._addEvent(dayNameBox, timeBox, eventTitleBox, false, "", timeString, nothingEvent.summary);
-        }
-    },
-
-    _showOtherDay: function(day) {
-        this.actor.destroy_all_children();
-
-        let dayBegin = _getBeginningOfDay(day);
-        let dayEnd = _getEndOfDay(day);
-
-        let dayString;
+        let dayFormat;
         let now = new Date();
-        if (_sameYear(day, now))
+        if (sameYear(this._date, now))
             /* Translators: Shown on calendar heading when selected day occurs on current year */
-            dayString = day.toLocaleFormat(C_("calendar heading", "%A, %B %d"));
+            dayFormat = Shell.util_translate_time_string(NC_("calendar heading",
+                                                             "%A, %B %d"));
         else
             /* Translators: Shown on calendar heading when selected day occurs on different year */
-            dayString = day.toLocaleFormat(C_("calendar heading", "%A, %B %d, %Y"));
-        this._addPeriod(dayString, dayBegin, dayEnd, false, true);
+            dayFormat = Shell.util_translate_time_string(NC_("calendar heading",
+                                                             "%A, %B %d, %Y"));
+        this._title.label = this._date.toLocaleFormat(dayFormat);
     },
 
-    _showToday: function() {
-        this.actor.destroy_all_children();
-
-        let now = new Date();
-        let dayBegin = _getBeginningOfDay(now);
-        let dayEnd = _getEndOfDay(now);
-        this._addPeriod(_("Today"), dayBegin, dayEnd, false, true);
-
-        let tomorrowBegin = new Date(dayBegin.getTime() + 86400 * 1000);
-        let tomorrowEnd = new Date(dayEnd.getTime() + 86400 * 1000);
-        this._addPeriod(_("Tomorrow"), tomorrowBegin, tomorrowEnd, false, true);
-
-        let dayInWeek = (dayEnd.getDay() - this._weekStart + 7) % 7;
-
-        if (dayInWeek < 5) {
-            /* If now is within the first 5 days we show "This week" and
-             * include events up until and including Saturday/Sunday
-             * (depending on whether a week starts on Sunday/Monday).
-             */
-            let thisWeekBegin = new Date(dayBegin.getTime() + 2 * 86400 * 1000);
-            let thisWeekEnd = new Date(dayEnd.getTime() + (6 - dayInWeek) * 86400 * 1000);
-            this._addPeriod(_("This week"), thisWeekBegin, thisWeekEnd, true, false);
-        } else {
-            /* otherwise it's one of the two last days of the week ... show
-             * "Next week" and include events up until and including *next*
-             * Saturday/Sunday
-             */
-            let nextWeekBegin = new Date(dayBegin.getTime() + 2 * 86400 * 1000);
-            let nextWeekEnd = new Date(dayEnd.getTime() + (13 - dayInWeek) * 86400 * 1000);
-            this._addPeriod(_("Next week"), nextWeekBegin, nextWeekEnd, true, false);
-        }
-    },
-
-    // Sets the event list to show events from a specific date
-    setDate: function(date) {
-        if (!_sameDay(date, this._date)) {
-            this._date = date;
-            this._update();
-        }
-    },
-
-    _update: function() {
+    _reloadEvents: function() {
         if (this._eventSource.isLoading)
             return;
 
-        let today = new Date();
-        if (_sameDay (this._date, today)) {
-            this._showToday();
-        } else {
-            this._showOtherDay(this._date);
+        this._reloading = true;
+
+        this._list.destroy_all_children();
+
+        let periodBegin = _getBeginningOfDay(this._date);
+        let periodEnd = _getEndOfDay(this._date);
+        let events = this._eventSource.getEvents(periodBegin, periodEnd);
+
+        for (let i = 0; i < events.length; i++) {
+            let event = events[i];
+
+            if (this._ignoredEvents.has(event.id))
+                continue;
+
+            let message = new EventMessage(event, this._date);
+            message.connect('close', Lang.bind(this, function() {
+                this._ignoreEvent(event);
+            }));
+            this.addMessage(message, false);
         }
+
+        this._reloading = false;
+        this._sync();
+    },
+
+    _appInstalledChanged: function() {
+        this._calendarApp = undefined;
+        this._title.reactive = (this._getCalendarApp() != null);
+    },
+
+    _getCalendarApp: function() {
+        if (this._calendarApp !== undefined)
+            return this._calendarApp;
+
+        let apps = Gio.AppInfo.get_recommended_for_type('text/calendar');
+        if (apps && (apps.length > 0)) {
+            let app = Gio.AppInfo.get_default_for_type('text/calendar', false);
+            let defaultInRecommended = apps.some(function(a) { return a.equal(app); });
+            this._calendarApp = defaultInRecommended ? app : apps[0];
+        } else {
+            this._calendarApp = null;
+        }
+        return this._calendarApp;
+    },
+
+    _onTitleClicked: function() {
+        this.parent();
+
+        let app = this._getCalendarApp();
+        if (app.get_id() == 'evolution.desktop')
+            app = Gio.DesktopAppInfo.new('evolution-calendar.desktop');
+        app.launch([], global.create_app_launch_context(0, -1));
+    },
+
+    setDate: function(date) {
+        this.parent(date);
+        this._updateTitle();
+        this._reloadEvents();
+    },
+
+    _shouldShow: function() {
+        return !this.empty || !isToday(this._date);
+    },
+
+    _sync: function() {
+        if (this._reloading)
+            return;
+
+        this.parent();
+    }
+});
+
+const NotificationSection = new Lang.Class({
+    Name: 'NotificationSection',
+    Extends: MessageList.MessageListSection,
+
+    _init: function() {
+        this.parent(_("Notifications"));
+
+        this._sources = new Map();
+        this._nUrgent = 0;
+
+        Main.messageTray.connect('source-added', Lang.bind(this, this._sourceAdded));
+        Main.messageTray.getSources().forEach(Lang.bind(this, function(source) {
+            this._sourceAdded(Main.messageTray, source);
+        }));
+
+        this.actor.connect('notify::mapped', Lang.bind(this, this._onMapped));
+    },
+
+    get allowed() {
+        return Main.sessionMode.hasNotifications &&
+               !Main.sessionMode.isGreeter;
+    },
+
+    _createTimeLabel: function() {
+        let label = Util.createTimeLabel(new Date());
+        label.style_class = 'event-time',
+        label.x_align = Clutter.ActorAlign.END;
+        return label;
+    },
+
+    _sourceAdded: function(tray, source) {
+        let obj = {
+            destroyId: 0,
+            notificationAddedId: 0,
+        };
+
+        obj.destroyId = source.connect('destroy', Lang.bind(this, function(source) {
+            this._onSourceDestroy(source, obj);
+        }));
+        obj.notificationAddedId = source.connect('notification-added',
+                                                 Lang.bind(this, this._onNotificationAdded));
+
+        this._sources.set(source, obj);
+    },
+
+    _onNotificationAdded: function(source, notification) {
+        let message = new NotificationMessage(notification);
+        message.setSecondaryActor(this._createTimeLabel());
+
+        let isUrgent = notification.urgency == MessageTray.Urgency.CRITICAL;
+
+        let updatedId = notification.connect('updated', Lang.bind(this,
+            function() {
+                message.setSecondaryActor(this._createTimeLabel());
+                this.moveMessage(message, isUrgent ? 0 : this._nUrgent, this.actor.mapped);
+            }));
+        let destroyId = notification.connect('destroy', Lang.bind(this,
+            function() {
+                notification.disconnect(destroyId);
+                notification.disconnect(updatedId);
+                if (isUrgent)
+                    this._nUrgent--;
+            }));
+
+        if (isUrgent) {
+            // Keep track of urgent notifications to keep them on top
+            this._nUrgent++;
+        } else if (this.mapped) {
+            // Only acknowledge non-urgent notifications in case it
+            // has important actions that are inaccessible when not
+            // shown as banner
+            notification.acknowledged = true;
+        }
+
+        let index = isUrgent ? 0 : this._nUrgent;
+        this.addMessageAtIndex(message, index, this.actor.mapped);
+    },
+
+    _onSourceDestroy: function(source, obj) {
+        source.disconnect(obj.destroyId);
+        source.disconnect(obj.notificationAddedId);
+
+        this._sources.delete(source);
+    },
+
+    _onMapped: function() {
+        if (!this.actor.mapped)
+            return;
+
+        for (let message of this._messages.keys())
+            if (message.notification.urgency != MessageTray.Urgency.CRITICAL)
+                message.notification.acknowledged = true;
+    },
+
+    _onTitleClicked: function() {
+        this.parent();
+
+        let app = Shell.AppSystem.get_default().lookup_app('gnome-notifications-panel.desktop');
+
+        if (!app) {
+            log('Settings panel for desktop file ' + desktopFile + ' could not be loaded!');
+            return;
+        }
+
+        app.activate();
+    },
+
+    _shouldShow: function() {
+        return !this.empty && isToday(this._date);
+    },
+
+    _sync: function() {
+        this.parent();
+        this._title.reactive = Main.sessionMode.allowSettings;
+    }
+});
+
+const Placeholder = new Lang.Class({
+    Name: 'Placeholder',
+
+    _init: function() {
+        this.actor = new St.BoxLayout({ style_class: 'message-list-placeholder',
+                                        vertical: true });
+
+        this._date = new Date();
+
+        let todayFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/no-notifications.svg');
+        let otherFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/no-events.svg');
+        this._todayIcon = new Gio.FileIcon({ file: todayFile });
+        this._otherIcon = new Gio.FileIcon({ file: otherFile });
+
+        this._icon = new St.Icon();
+        this.actor.add_actor(this._icon);
+
+        this._label = new St.Label();
+        this.actor.add_actor(this._label);
+
+        this._sync();
+    },
+
+    setDate: function(date) {
+        if (sameDay(this._date, date))
+            return;
+        this._date = date;
+        this._sync();
+    },
+
+    _sync: function() {
+        let today = isToday(this._date);
+        if (today && this._icon.gicon == this._todayIcon)
+            return;
+        if (!today && this._icon.gicon == this._otherIcon)
+            return;
+
+        if (today) {
+            this._icon.gicon = this._todayIcon;
+            this._label.text = _("No Notifications");
+        } else {
+            this._icon.gicon = this._otherIcon;
+            this._label.text = _("No Events");
+        }
+    }
+});
+
+const CalendarMessageList = new Lang.Class({
+    Name: 'CalendarMessageList',
+
+    _init: function() {
+        this.actor = new St.Widget({ style_class: 'message-list',
+                                     layout_manager: new Clutter.BinLayout(),
+                                     x_expand: true, y_expand: true });
+
+        this._placeholder = new Placeholder();
+        this.actor.add_actor(this._placeholder.actor);
+
+        this._scrollView = new St.ScrollView({ style_class: 'vfade',
+                                               overlay_scrollbars: true,
+                                               x_expand: true, y_expand: true,
+                                               x_fill: true, y_fill: true });
+        this._scrollView.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        this.actor.add_actor(this._scrollView);
+
+        this._sectionList = new St.BoxLayout({ style_class: 'message-list-sections',
+                                               vertical: true,
+                                               y_expand: true,
+                                               y_align: Clutter.ActorAlign.START });
+        this._scrollView.add_actor(this._sectionList);
+        this._sections = new Map();
+
+        this._mediaSection = new Mpris.MediaSection();
+        this._addSection(this._mediaSection);
+
+        this._notificationSection = new NotificationSection();
+        this._addSection(this._notificationSection);
+
+        this._eventsSection = new EventsSection();
+        this._addSection(this._eventsSection);
+
+        Main.sessionMode.connect('updated', Lang.bind(this, this._sync));
+    },
+
+    _addSection: function(section) {
+        let obj = {
+            destroyId: 0,
+            visibleId:  0,
+            emptyChangedId: 0,
+            keyFocusId: 0
+        };
+        obj.destroyId = section.actor.connect('destroy', Lang.bind(this,
+            function() {
+                this._removeSection(section);
+            }));
+        obj.visibleId = section.actor.connect('notify::visible',
+                                              Lang.bind(this, this._sync));
+        obj.emptyChangedId = section.connect('empty-changed',
+                                             Lang.bind(this, this._sync));
+        obj.keyFocusId = section.connect('key-focus-in',
+                                         Lang.bind(this, this._onKeyFocusIn));
+
+        this._sections.set(section, obj);
+        this._sectionList.add_actor(section.actor);
+        this._sync();
+    },
+
+    _removeSection: function(section) {
+        let obj = this._sections.get(section);
+        section.actor.disconnect(obj.destroyId);
+        section.actor.disconnect(obj.visibleId);
+        section.disconnect(obj.emptyChangedId);
+        section.disconnect(obj.keyFocusId);
+
+        this._sections.delete(section);
+        this._sectionList.remove_actor(section.actor);
+        this._sync();
+    },
+
+    _onKeyFocusIn: function(section, actor) {
+        Util.ensureActorVisibleInScrollView(this._scrollView, actor);
+    },
+
+    _sync: function() {
+        let sections = [...this._sections.keys()];
+        let visible = sections.some(function(s) {
+            return s.allowed;
+        });
+        this.actor.visible = visible;
+        if (!visible)
+            return;
+
+        let showPlaceholder = sections.every(function(s) {
+            return s.empty || !s.actor.visible;
+        });
+        this._placeholder.actor.visible = showPlaceholder;
+    },
+
+    setEventSource: function(eventSource) {
+        this._eventsSection.setEventSource(eventSource);
+    },
+
+    setDate: function(date) {
+        for (let section of this._sections.keys())
+            section.setDate(date);
+        this._placeholder.setDate(date);
     }
 });
