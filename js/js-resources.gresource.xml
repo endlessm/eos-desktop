@@ -57,8 +57,10 @@
     <file>ui/magnifier.js</file>
     <file>ui/magnifierDBus.js</file>
     <file>ui/main.js</file>
+    <file>ui/messageList.js</file>
     <file>ui/messageTray.js</file>
     <file>ui/messageTrayMarkup.js</file>
+    <file>ui/mpris.js</file>
     <file>ui/modalDialog.js</file>
     <file>ui/panelSeparator.js</file>
     <file>ui/remoteMenu.js</file>
