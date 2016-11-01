@@ -69,6 +69,7 @@ function init() {
     // Add some bindings to the global JS namespace; (gjs keeps the web
     // browser convention of having that namespace be called 'window'.)
     window.global = Shell.Global.get();
+    window.N_ = function(s) { return s; };
 
     // Miscellaneous monkeypatching
     _patchContainerClass(St.BoxLayout);

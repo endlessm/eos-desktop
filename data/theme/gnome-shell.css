@@ -728,7 +728,6 @@ StScrollBar StButton#vhandle:active {
 .panel-button:active,
 .panel-button:overview,
 .panel-button:focus {
-    background-image: url("panel-button-highlight-wide.svg");
     color: white;
     text-shadow: black 0px 2px 2px;
 }
@@ -3177,7 +3176,8 @@ StScrollBar StButton#vhandle:active {
 
 /* Message list */
 .message-list {
-  width: 31.5em; }
+  width: 25em;
+  padding-right: 1em; }
 
 .message-list-sections {
   spacing: 1.5em; }

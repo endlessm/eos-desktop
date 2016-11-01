@@ -208,6 +208,34 @@ shell_util_get_week_start ()
 }
 
 /**
+ * shell_util_translate_time_string:
+ * @str: String to translate
+ *
+ * Translate @str according to the locale defined by LC_TIME; unlike
+ * dcgettext(), the translations is still taken from the LC_MESSAGES
+ * catalogue and not the LC_TIME one.
+ *
+ * Returns: the translated string
+ */
+const char *
+shell_util_translate_time_string (const char *str)
+{
+  const char *locale = g_getenv ("LC_TIME");
+  const char *res;
+  char *sep;
+
+  if (locale)
+    setlocale (LC_MESSAGES, locale);
+
+  sep = strchr (str, '\004');
+  res = g_dpgettext (NULL, str, sep ? sep - str + 1 : 0);
+
+  setlocale (LC_MESSAGES, "");
+
+  return res;
+}
+
+/**
  * shell_write_string_to_stream:
  * @stream: a #GOutputStream
  * @str: a UTF-8 string to write to @stream
