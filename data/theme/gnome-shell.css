@@ -1540,208 +1540,6 @@ StScrollBar StButton#vhandle:active {
     padding: 6px;
 }
 
-/* Calendar popup */
-
-#calendarEventsArea {
-    /* this is the width of the second column of the popup */
-    min-width: 320px;
-}
-
-.calendar-vertical-separator {
-    -stipple-width: 1px;
-    -stipple-color: #505050;
-    width: 0.3em;
-}
-
-#calendarPopup .calendar {
-    padding: 10px;
-}
-
-.calendar {
-    padding: .4em 1.75em .8em 1.75em;
-    spacing-rows: 0px;
-    spacing-columns: 0px;
-}
-
-.calendar-month-label {
-    color: #888a85;
-    font-size: 11.5pt;
-    font-weight: bold;
-    padding-bottom: 8px;
-    padding-top: 8px;
-}
-
-.calendar-change-month-back {
-    width: 18px;
-    height: 12px;
-    background-image: url("calendar-arrow-left.svg");
-    border-radius: 4px;
-}
-
-.calendar-change-month-back:rtl {
-    background-image: url("calendar-arrow-right.svg");
-}
-
-.calendar-change-month-back:hover {
-    background-color: #999999;
-}
-.calendar-change-month-back:active {
-    background-color: #aaaaaa;
-}
-
-.calendar-change-month-forward {
-    width: 18px;
-    height: 12px;
-    background-image: url("calendar-arrow-right.svg");
-    border-radius: 4px;
-}
-
-.calendar-change-month-forward:rtl {
-    background-image: url("calendar-arrow-left.svg");
-}
-
-.calendar-change-month-forward:hover {
-    background-color: #999999;
-}
-.calendar-change-month-forward:active {
-    background-color: #aaaaaa;
-}
-
-.datemenu-date-label {
-    padding: .4em 1.7em;
-    font-weight: bold;
-    text-align: center;
-    color: #eeeeec;
-}
-
-.calendar-day-base {
-    font-size: 11pt;
-    text-align: center;
-    width: 2.4em;
-    height: 2.4em;
-}
-
-.calendar-day-base:hover {
-    background-color: #777777;
-}
-
-.calendar-day-base:active {
-    font-size: 11pt;
-    background-color: #555555;
-    color: white;
-}
-
-.calendar-day-heading {
-    color: #888a85;
-    padding-top: .2em;
-    height: 1.7em;
-}
-
-.calendar-week-number {
-    color: #babdb6;
-    font-weight: bold;
-}
-
-/* Hack used in lieu of border-collapse - see calendar.js */
-.calendar-day {
-    border: 1px solid #505050;
-    color: #babdb6;
-    border-top-width: 0;
-    border-left-width: 0;
-}
-
-.calendar-day-top {
-    border-top-width: 1px;
-}
-
-.calendar-day-left {
-    border-left-width: 1px;
-}
-
-.calendar-work-day {
-}
-
-.calendar-nonwork-day {
-    background-color: rgba(128, 128, 128, .1);
-}
-
-.calendar-today {
-    background-image: url("calendar-today.svg");
-    text-shadow: black 0px 2px 2px;
-    font-weight: bold;
-}
-
-.calendar-day-with-events {
-    font-weight: bold;
-    color: white;
-}
-
-.calendar-other-month-day {
-    color: #333333;
-}
-
-.events-header-vbox {
-    spacing: 6pt;
-    padding-right: .5em;
-}
-
-.events-header-vbox:rtl {
-    padding-left: .5em;
-}
-
-.events-header-hbox {
-    padding: 0.3em 1.4em;
-}
-
-.events-day-header {
-    font-weight: bold;
-    color: #999999;
-    padding: 0.4em 1.4em 0em 1.4em;
-}
-
-.events-day-header:rtl {
-    padding: 0em 1.4em 0.4em 1.4em;
-}
-
-.events-day-dayname {
-    color: rgba(153, 153, 153, 1.0);
-    text-align: left;
-}
-
-.events-day-dayname:rtl {
-    text-align: right;
-}
-
-.events-day-time {
-    color: #fff;
-    text-align: right;
-}
-
-.events-day-time:rtl {
-    text-align: left;
-}
-
-.events-day-task {
-    color: rgba(153, 153, 153, 1.0);
-}
-
-.events-day-name-box {
-    min-width: 15pt;
-}
-
-.events-time-box {
-    min-width: 48pt;
-    padding-right: 12pt;
-}
-
-.events-time-box:rtl {
-    padding-right: 0px;
-    padding-left: 12pt;
-}
-
-.events-event-box {
-}
-
 .url-highlighter {
     link-color: #ccccff;
 }
@@ -3243,3 +3041,219 @@ StScrollBar StButton#vhandle:active {
 .popup-menu-ornament {
   text-align: right;
   width: 1.2em; }
+
+#calendarArea {
+  padding: 0.75em 1.0em; }
+
+.calendar {
+  margin-bottom: 1em; }
+
+.calendar,
+.datemenu-today-button,
+.datemenu-displays-box,
+.message-list-sections {
+  margin: 0 1.5em; }
+
+.datemenu-calendar-column {
+  spacing: 0.5em; }
+
+.datemenu-displays-section {
+  padding-bottom: 3em; }
+
+.datemenu-today-button,
+.world-clocks-button,
+.message-list-section-title {
+  border-radius: 4px;
+  padding: .4em; }
+
+.message-list-section-list:ltr {
+  padding-left: .4em; }
+
+.message-list-section-list:rtl {
+  padding-right: .4em; }
+
+.datemenu-today-button:hover, .datemenu-today-button:focus,
+.world-clocks-button:hover,
+.world-clocks-button:focus,
+.message-list-section-title:hover,
+.message-list-section-title:focus {
+  background-color: #454c4c; }
+.datemenu-today-button:active,
+.world-clocks-button:active,
+.message-list-section-title:active {
+  color: white;
+  background-color: #215d9c; }
+
+.datemenu-today-button .date-label {
+  font-size: 1.5em; }
+
+.world-clocks-header,
+.message-list-section-title {
+  color: #8e8e80;
+  font-weight: bold; }
+
+.world-clocks-grid {
+  spacing-rows: 0.4em; }
+
+.calendar-month-label {
+  color: #e2e2df;
+  font-weight: bold;
+  padding: 8px 0; }
+
+.pager-button {
+  color: white;
+  background-color: transparent;
+  width: 32px;
+  border-radius: 4px; }
+  .pager-button:hover, .pager-button:focus {
+    background-color: rgba(238, 238, 236, 0.05); }
+  .pager-button:active {
+    background-color: rgba(57, 63, 63, 0.05); }
+
+.calendar-change-month-back {
+  background-image: url("resource:///org/gnome/shell/theme/calendar-arrow-left.svg"); }
+  .calendar-change-month-back:rtl {
+    background-image: url("resource:///org/gnome/shell/theme/calendar-arrow-right.svg"); }
+
+.calendar-change-month-forward {
+  background-image: url("resource:///org/gnome/shell/theme/calendar-arrow-right.svg"); }
+  .calendar-change-month-forward:rtl {
+    background-image: url("resource:///org/gnome/shell/theme/calendar-arrow-left.svg"); }
+
+.calendar-day-base {
+  font-size: 80%;
+  text-align: center;
+  width: 2.4em;
+  height: 2.4em;
+  padding: 0.1em;
+  margin: 2px;
+  border-radius: 1.4em; }
+  .calendar-day-base:hover, .calendar-day-base:focus {
+    background-color: #454c4c; }
+  .calendar-day-base:active, .calendar-day-base:selected {
+    color: white;
+    background-color: #215d9c;
+    border-color: transparent; }
+  .calendar-day-base.calendar-day-heading {
+    color: #8e8e80;
+    margin-top: 1em;
+    font-size: 70%; }
+
+.calendar-day {
+  border-width: 0; }
+
+.calendar-day-top {
+  border-top-width: 1px; }
+
+.calendar-day-left {
+  border-left-width: 1px; }
+
+.calendar-nonwork-day {
+  color: #949796; }
+
+.calendar-today {
+  font-weight: bold;
+  border: 1px solid rgba(28, 31, 31, 0.5); }
+
+.calendar-day-with-events {
+  color: white;
+  font-weight: bold;
+  background-image: url("resource:///org/gnome/shell/theme/calendar-today.svg"); }
+
+.calendar-other-month-day {
+  color: rgba(238, 238, 236, 0.15);
+  opacity: 0.5; }
+
+.calendar-week-number {
+  font-size: 70%;
+  font-weight: bold;
+  width: 2.3em;
+  height: 1.8em;
+  border-radius: 2px;
+  padding: 0.5em 0 0;
+  margin: 6px;
+  background-color: rgba(238, 238, 236, 0.3);
+  color: #393f3f; }
+
+/* Message list */
+.message-list {
+  width: 31.5em; }
+
+.message-list-sections {
+  spacing: 1.5em; }
+
+.message-list-section,
+.message-list-section-list {
+  spacing: 0.7em; }
+
+.message-list-section-title-box {
+  spacing: 0.4em; }
+
+.message-list-section-close > StIcon {
+  icon-size: 16px;
+  border-radius: 8px;
+  color: #393f3f;
+  background-color: #59594f; }
+
+/* FIXME: how do you do this in sass? */
+.message-list-section-close:hover > StIcon,
+.message-list-section-close:focus > StIcon {
+  background-color: #8e8e80; }
+
+.message {
+  background-color: #454c4c;
+  border-radius: 3px; }
+  .message:hover, .message:focus {
+    background-color: #5d6767; }
+
+.message-icon-bin {
+  padding: 8px 0px 8px 8px; }
+  .message-icon-bin:rtl {
+    padding: 8px 8px 8px 0px; }
+
+.message-icon-bin > StIcon {
+  icon-size: 32px; }
+
+.message-secondary-bin:ltr {
+  padding-left: 8px; }
+.message-secondary-bin:rtl {
+  padding-right: 8px; }
+
+.message-secondary-bin {
+  color: #8e8e80; }
+
+.message-secondary-bin > StIcon {
+  icon-size: 16px; }
+
+.message-title {
+  font-weight: bold;
+  font-size: 1.1em; }
+
+.message-content {
+  padding: 8px;
+  font-size: .9em; }
+
+.message-media-control {
+  padding: 6px; }
+  .message-media-control:last-child:ltr {
+    padding-right: 18px; }
+  .message-media-control:last-child:rtl {
+    padding-left: 18px; }
+
+.media-message-cover-icon {
+  icon-size: 32px; }
+  .media-message-cover-icon.fallback {
+    color: #515a5a;
+    background-color: #393f3f;
+    border: 2px solid #393f3f;
+    border-radius: 2px;
+    icon-size: 16px;
+    padding: 8px; }
+
+.system-switch-user-submenu-icon.user-icon {
+  icon-size: 20px;
+  padding: 0 2px; }
+
+.system-switch-user-submenu-icon.default-icon {
+  icon-size: 16px;
+  padding: 0 4px; }
