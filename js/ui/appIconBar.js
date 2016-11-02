@@ -75,12 +75,12 @@ const WindowMenuItem = new Lang.Class({
 
         this.cloneBin = new St.Bin({ child: clone,
                                      style_class: 'panel-window-menu-item-clone' });
-        this.addActor(this.cloneBin, { align: St.Align.MIDDLE });
+        this.actor.add_child(this.cloneBin, { align: St.Align.MIDDLE });
 
         this.label = new St.Label({ text: window.title,
                                     style_class: 'panel-window-menu-item-label' });
 
-        this.addActor(this.label);
+        this.actor.add_child(this.label);
         this.actor.label_actor = this.label;
     },
 
