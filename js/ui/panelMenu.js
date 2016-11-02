@@ -222,3 +222,95 @@ const SystemIndicator = new Lang.Class({
     }
 });
 Signals.addSignalMethods(SystemIndicator.prototype);
+
+/* SystemStatusButton:
+ *
+ * This class manages one System Status indicator (network, keyboard,
+ * volume, bluetooth...), which is just a PanelMenuButton with an
+ * icon.
+ */
+const SystemStatusButton = new Lang.Class({
+    Name: 'SystemStatusButton',
+    Extends: Button,
+
+    _init: function(iconName, nameText, dontCreateMenu=false) {
+        this.parent(0.0, nameText, dontCreateMenu);
+        this.actor.add_style_class_name('panel-status-button');
+
+        this._box = new St.BoxLayout({ style_class: 'panel-status-button-box' });
+        this.actor.add_actor(this._box);
+
+        if (iconName)
+            this.setIcon(iconName);
+    },
+
+    get icons() {
+        return this._box.get_children();
+    },
+
+    addIcon: function(gicon) {
+        let icon = new St.Icon({ gicon: gicon,
+                                 style_class: 'system-status-icon' });
+        this._box.add_actor(icon);
+
+        this.emit('icons-changed');
+
+        return icon;
+    },
+
+    setIcon: function(iconName) {
+        if (!this.mainIcon)
+            this.mainIcon = this.addIcon(null);
+        this.mainIcon.icon_name = iconName;
+    },
+
+    setGIcon: function(gicon) {
+        if (this.mainIcon)
+            this.mainIcon.gicon = gicon;
+        else
+            this.mainIcon = this.addIcon(gicon);
+    }
+});
+
+const ShowAppsButton = new Lang.Class({
+    Name: 'ShowAppsButton',
+    Extends: Button,
+
+    _init: function(panel) {
+        this.parent('', _("Show Desktop"), true);
+
+        this.actor.add_style_class_name('user-menu-icon');
+
+        let box = new St.BoxLayout({ name: 'panelUserMenu' });
+        this.actor.add_actor(box);
+
+        this._panel = panel;
+
+        this._icon = new St.Icon({ style_class: 'settings-menu-icon' });
+
+        box.add(this._icon);
+
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/endless-symbolic.svg');
+        this._giconNormal = new Gio.FileIcon({ file: iconFile });
+
+        this._icon.gicon = this._giconNormal;
+
+        this.actor.connect('button-release-event', Lang.bind(this, this._onButtonRelease));
+        this.actor.connect('key-press-event', Lang.bind(this, this._onKeyPress));
+    },
+
+    _onButtonRelease: function(actor, event) {
+        Main.overview.toggleApps();
+        this._panel.closeActiveMenu();
+    },
+
+    _onKeyPress: function(actor, event) {
+        let symbol = event.get_key_symbol();
+        if (symbol == Clutter.KEY_space || symbol == Clutter.KEY_Return) {
+            this._panel.closeActiveMenu();
+            Main.overview.toggleApps();
+            return true;
+        } else
+            return false;
+    }
+});
