@@ -357,7 +357,7 @@ const AggregateMenu = new Lang.Class({
         } else {
             this._network = null;
         }
-        if (false) {
+        if (Config.HAVE_BLUETOOTH) {
             this._bluetooth = new imports.ui.status.bluetooth.Indicator();
         } else {
             this._bluetooth = null;
