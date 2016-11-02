@@ -2971,9 +2971,7 @@ StScrollBar StButton#vhandle:active {
   height: 16px; }
 
 #panel .panel-button {
-    -natural-hpadding: 12px;
-    -minimum-hpadding: 6px;
-    font-weight: bold;
+    /*font-weight: bold;*/
     color: #ccc;
     transition-duration: 100ms; }
     #panel .panel-button .app-menu-icon {
@@ -3257,3 +3255,14 @@ StScrollBar StButton#vhandle:active {
 .system-switch-user-submenu-icon.default-icon {
   icon-size: 16px;
   padding: 0 4px; }
+
+#panel .panel-separator {
+    padding: 0px 8px 0px 4px;
+}
+
+#panel .hot-corner-indicator .system-status-icon {
+    padding: 0;
+}
+
+#panel .hot-corner-indicator:active, #panel .hot-corner-indicator:overview, #panel .hot-corner-indicator:focus, #panel .hot-corner-indicator:checked {
+      box-shadow: none; }
