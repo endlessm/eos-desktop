@@ -417,6 +417,7 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'logo': imports.gdm.loginDialog.LogoMenuButton,
     'keyboard': imports.ui.status.keyboard.InputSourceIndicator,
     'powerMenu': imports.gdm.powerMenu.PowerMenuButton,
+    'showApps': imports.ui.panelMenu.ShowAppsButton,
     'system': imports.ui.status.system.Indicator,
     'socialBar': imports.ui.status.social.SocialBarButton,
     'panelSeparator': imports.ui.panelSeparator.PanelSeparator,
