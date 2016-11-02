@@ -31,7 +31,7 @@ const Indicator = new Lang.Class({
 
         this._indicator = this._addIndicator();
         this._indicator.icon_name = 'bluetooth-active-symbolic';
-        this._hadSetupDevices = global.settings.get_boolean(HAD_BLUETOOTH_DEVICES_SETUP);
+        this._hadSetupDevices = false;//global.settings.get_boolean(HAD_BLUETOOTH_DEVICES_SETUP);
 
         this._proxy = new RfkillManagerProxy(Gio.DBus.session, BUS_NAME, OBJECT_PATH,
                                              Lang.bind(this, function(proxy, error) {
