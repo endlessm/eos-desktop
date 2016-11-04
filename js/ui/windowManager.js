@@ -1396,7 +1396,7 @@ const WindowManager = new Lang.Class({
 
     _codingAddAppWindow : function(actor) {
         let window = actor.meta_window;
-        if (window.get_flatpak_id() !== 'org.gnome.gedit')
+        if (!this._codingManager.isCodingApp(window.get_flatpak_id()))
             return;
 
         this._codingManager.addSwitcherToBuilder(actor);
@@ -1418,7 +1418,7 @@ const WindowManager = new Lang.Class({
 
     _codingRemoveAppWindow : function(actor) {
         let window = actor.meta_window;
-        if (window.get_flatpak_id() !== 'org.gnome.gedit')
+        if (!this._codingManager.isCodingApp(window.get_flatpak_id()))
             return;
 
         this._codingManager.removeSwitcherToBuilder(actor);
@@ -1934,6 +1934,18 @@ const CodingManager = new Lang.Class({
         this._rotateInActors = [];
         this._rotateOutActors = [];
         this._firstFrameConnections = [];
+        this._codingApps = ['org.gnome.gedit', 'org.gnome.Weather'];
+    },
+
+    /**
+     * isCodingApp:
+     * @flatpakID: flatpak id of the app to verify
+     *
+     * Checks if the app is in the whitelist of applications
+     * for which the endless coding feature is enabled.
+     */
+    isCodingApp: function(flatpakID) {
+        return this._codingApps.indexOf(flatpakID) != -1;
     },
 
     addSwitcherToBuilder: function(actorApp) {
