@@ -2176,8 +2176,7 @@ const CodingManager = new Lang.Class({
             tracker.track_coding_app_window(session.windowApp.get_meta_window());
             Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
             animateBounce(session.buttonApp);
-        }
-        else {
+        } else {
             session.windowBuilder.get_meta_window().activate(global.get_current_time());
             this._rotateInActors.push(session.windowBuilder);
             this._rotateOutActors.push(session.windowApp);
