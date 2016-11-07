@@ -2192,18 +2192,15 @@ const CodingManager = new Lang.Class({
             session.buttonBuilder.hide();
 
         if (focusedWindow === session.windowApp.get_meta_window()) {
-            if (session.windowBuilder)
-            {
-                if (session.windowBuilder.get_meta_window() === previousFocused) {
-                    this._rotateInActors.push(session.windowApp);
-                    this._rotateOutActors.push(session.windowBuilder);
-                    this._animate(session.windowBuilder,
-                                  session.windowApp,
-                                  Gtk.DirectionType.RIGHT);
-                    session.buttonApp.show();
-                    session.state = SessionState.APP;
-                    return;
-                }
+            if (session.windowBuilder && session.windowBuilder.get_meta_window() === previousFocused) {
+                this._rotateInActors.push(session.windowApp);
+                this._rotateOutActors.push(session.windowBuilder);
+                this._animate(session.windowBuilder,
+                              session.windowApp,
+                              Gtk.DirectionType.RIGHT);
+                session.buttonApp.show();
+                session.state = SessionState.APP;
+                return;
             }
             session.windowApp.show();
             session.buttonApp.show();
@@ -2256,16 +2253,18 @@ const CodingManager = new Lang.Class({
         dst.show();
         dst.opacity = 0;
 
-        let src_geometry = src.meta_window.get_frame_rect();
-        let isMaximized = (dst.meta_window.maximized_horizontally &&
-                           dst.meta_window.maximized_vertically);
-        if (isMaximized)
+        let srcGeometry = src.meta_window.get_frame_rect();
+        let srcIsMaximized = (src.meta_window.maximized_horizontally &&
+                              src.meta_window.maximized_vertically);
+        let dstIsMaximized = (dst.meta_window.maximized_horizontally &&
+                              dst.meta_window.maximized_vertically);
+        if (!srcIsMaximized && dstIsMaximized)
             dst.meta_window.unmaximize(Meta.MaximizeFlags.BOTH);
         dst.meta_window.move_resize_frame(false,
-                                          src_geometry.x,
-                                          src_geometry.y,
-                                          src_geometry.width,
-                                          src_geometry.height);
+                                          srcGeometry.x,
+                                          srcGeometry.y,
+                                          srcGeometry.width,
+                                          srcGeometry.height);
 
         /* Tween both windows in a rotation animation at the same time
          * with backface culling enabled on both. This will allow for
