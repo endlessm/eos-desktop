@@ -1934,6 +1934,7 @@ const CodingManager = new Lang.Class({
         this._rotateInActors = [];
         this._rotateOutActors = [];
         this._firstFrameConnections = [];
+        this._previousFocusedWindow = null;
         this._codingApps = ['org.gnome.gedit', 'org.gnome.Weather'];
     },
 
@@ -2031,6 +2032,38 @@ const CodingManager = new Lang.Class({
         }
     },
 
+    _switchToBuilder : function(actor, event, session) {
+        if (!session.windowBuilder) {
+            let tracker = Shell.WindowTracker.get_default();
+            tracker.track_coding_app_window(session.windowApp.get_meta_window());
+            Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
+            animateBounce(session.buttonApp);
+        } else {
+            session.windowBuilder.get_meta_window().activate(global.get_current_time());
+            this._rotateInActors.push(session.windowBuilder);
+            this._rotateOutActors.push(session.windowApp);
+            this._animate(session.windowApp,
+                          session.windowBuilder,
+                          Gtk.DirectionType.LEFT);
+            session.state = SessionState.BUILDER;
+        }
+        session.buttonApp.hide();
+    },
+
+    _switchToApp : function(actor, event, session) {
+        if (!session.windowApp)
+            return;
+        session.windowApp.get_meta_window().activate(global.get_current_time());
+        this._rotateInActors.push(session.windowApp);
+        this._rotateOutActors.push(session.windowBuilder);
+        this._animate(session.windowBuilder,
+                      session.windowApp,
+                      Gtk.DirectionType.RIGHT);
+        session.buttonBuilder.hide();
+        session.buttonApp.show();
+        session.state = SessionState.APP;
+    },
+
     _getSession: function(actor) {
         let currentSession = this._sessions.filter(function(session) {
             return (session.windowApp === actor || session.windowBuilder === actor);
@@ -2064,27 +2097,33 @@ const CodingManager = new Lang.Class({
          * This way we don't get ugly artifacts when rotating if
          * a window is slow to draw. */
         let firstFrameConnection = session.windowBuilder.connect('first-frame', Lang.bind(this, function() {
+            // reset the bouncing animation that was showed while Builder was loading
             Tweener.removeTweens(session.buttonApp);
             session.buttonApp.scale_y = 1;
             session.buttonApp.scale_x = 1;
             session.buttonApp.translation_y = 0;
             session.buttonApp.translation_x = 0;
+
             this._rotateInActors.push(session.windowBuilder);
             this._rotateOutActors.push(session.windowApp);
+
             this._animate(session.windowApp, session.windowBuilder, Gtk.DirectionType.LEFT);
+
             this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
-                return conn != session.windowBuilder._firstFrameConnection;
+                return conn != session.firstFrameConnection;
             });
-            session.windowBuilder.disconnect(session.windowBuilder._firstFrameConnection);
-            session.windowBuilder._firstFrameConnection = null;
+            session.windowBuilder.disconnect(session.firstFrameConnection);
+            session.firstFrameConnection = null;
+
             this._addButton(session);
             session.buttonBuilder.show();
             session.buttonApp.hide();
+
             return false;
         }));
-        /* Save the connection's id on the destination window and in a list too so we can
+        /* Save the connection's id in the session and in a list too so we can
          * get rid of it on kill-window-effects later */
-        session.windowBuilder._firstFrameConnection = firstFrameConnection;
+        session.firstFrameConnection = firstFrameConnection;
         this._firstFrameConnections.push(firstFrameConnection);
     },
 
@@ -2140,66 +2179,51 @@ const CodingManager = new Lang.Class({
         let focusedWindow = global.display.get_focus_window();
         if (!focusedWindow)
             return;
-        if (!session.windowApp.get_meta_window())
-            return;
 
-        if (session.buttonApp)
-            session.buttonApp.hide();
-        if (session.buttonBuilder)
-            session.buttonBuilder.hide();
+        let previousFocused = this._previousFocusedWindow;
+        this._previousFocusedWindow = focusedWindow;
 
-        if (focusedWindow.get_stable_sequence() === session.windowApp.get_meta_window().get_stable_sequence()){
-            if (session.state === SessionState.APP) {
-                session.buttonApp.show();
-                return;
+        session.buttonApp.hide();
+        if (focusedWindow === session.windowApp.get_meta_window()) {
+            if (session.windowBuilder)
+            {
+                if (session.windowBuilder.get_meta_window() === previousFocused) {
+                    this._rotateInActors.push(session.windowApp);
+                    this._rotateOutActors.push(session.windowBuilder);
+                    this._animate(session.windowBuilder,
+                                  session.windowApp,
+                                  Gtk.DirectionType.RIGHT);
+                    session.buttonBuilder.hide();
+                    session.buttonApp.show();
+                    session.state = SessionState.APP;
+                    return;
+                }
             }
-            if (!session.windowBuilder)
-                return;
-
-            session.windowBuilder.show();
-            session.buttonBuilder.show();
-            session.windowBuilder.get_meta_window().activate(global.get_current_time());
+            session.windowApp.show();
+            session.buttonApp.show();
             return;
         }
 
         if (!session.windowBuilder)
             return;
-        if (focusedWindow.get_stable_sequence() === session.windowBuilder.get_meta_window().get_stable_sequence()){
-            if (session.buttonBuilder)
-                session.buttonBuilder.show();
+        if (session.buttonBuilder)
+            session.buttonBuilder.hide();
+        if (focusedWindow === session.windowBuilder.get_meta_window()) {
+            if (session.windowApp.get_meta_window() === previousFocused) {
+                this._rotateInActors.push(session.windowBuilder);
+                this._rotateOutActors.push(session.windowApp);
+                this._animate(session.windowApp,
+                              session.windowBuilder,
+                              Gtk.DirectionType.LEFT);
+                session.state = SessionState.BUILDER;
+            } else {
+                session.windowBuilder.show();
+                if (session.buttonBuilder)
+                    session.buttonBuilder.show();
+                    session.windowApp.hide();
+                    session.buttonApp.hide();
+            }
         }
-    },
-
-    _switchToBuilder : function(actor, event, session) {
-        if (!session.windowBuilder) {
-            let tracker = Shell.WindowTracker.get_default();
-            tracker.track_coding_app_window(session.windowApp.get_meta_window());
-            Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
-            animateBounce(session.buttonApp);
-        } else {
-            session.windowBuilder.get_meta_window().activate(global.get_current_time());
-            this._rotateInActors.push(session.windowBuilder);
-            this._rotateOutActors.push(session.windowApp);
-            this._animate(session.windowApp,
-                          session.windowBuilder,
-                          Gtk.DirectionType.LEFT);
-            session.state = SessionState.BUILDER;
-        }
-        session.buttonApp.hide();
-    },
-
-    _switchToApp : function(actor, event, session) {
-        if (!session.windowApp)
-            return;
-        session.windowApp.get_meta_window().activate(global.get_current_time());
-        this._rotateInActors.push(session.windowApp);
-        this._rotateOutActors.push(session.windowBuilder);
-        this._animate(session.windowBuilder,
-                      session.windowApp,
-                      Gtk.DirectionType.RIGHT);
-        session.buttonBuilder.hide();
-        session.buttonApp.show();
-        session.state = SessionState.APP;
     },
 
     _animate : function(src, dst, direction) {
@@ -2230,13 +2254,16 @@ const CodingManager = new Lang.Class({
         dst.show();
         dst.opacity = 0;
 
-        let dst_geometry = src.get_meta_window().get_frame_rect();
-        dst.get_meta_window().move_resize_frame(false,
-                                                dst_geometry.x,
-                                                dst_geometry.y,
-                                                dst_geometry.width,
-                                                dst_geometry.height);
-
+        let src_geometry = src.meta_window.get_frame_rect();
+        let isMaximized = (dst.meta_window.maximized_horizontally &&
+                           dst.meta_window.maximized_vertically);
+        if (isMaximized)
+            dst.meta_window.unmaximize(Meta.MaximizeFlags.BOTH);
+        dst.meta_window.move_resize_frame(false,
+                                          src_geometry.x,
+                                          src_geometry.y,
+                                          src_geometry.width,
+                                          src_geometry.height);
 
         /* Tween both windows in a rotation animation at the same time
          * with backface culling enabled on both. This will allow for
