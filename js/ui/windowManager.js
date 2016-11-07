@@ -2180,10 +2180,17 @@ const CodingManager = new Lang.Class({
         if (!focusedWindow)
             return;
 
+        // keep track of the previous focused window so
+        // that we can show the animation accordingly
         let previousFocused = this._previousFocusedWindow;
         this._previousFocusedWindow = focusedWindow;
 
+        // make sure we hide the button in any other case as on
+        // top of the App and Builder window
         session.buttonApp.hide();
+        if (session.buttonBuilder)
+            session.buttonBuilder.hide();
+
         if (focusedWindow === session.windowApp.get_meta_window()) {
             if (session.windowBuilder)
             {
@@ -2193,7 +2200,6 @@ const CodingManager = new Lang.Class({
                     this._animate(session.windowBuilder,
                                   session.windowApp,
                                   Gtk.DirectionType.RIGHT);
-                    session.buttonBuilder.hide();
                     session.buttonApp.show();
                     session.state = SessionState.APP;
                     return;
@@ -2206,8 +2212,6 @@ const CodingManager = new Lang.Class({
 
         if (!session.windowBuilder)
             return;
-        if (session.buttonBuilder)
-            session.buttonBuilder.hide();
         if (focusedWindow === session.windowBuilder.get_meta_window()) {
             if (session.windowApp.get_meta_window() === previousFocused) {
                 this._rotateInActors.push(session.windowBuilder);
@@ -2218,10 +2222,8 @@ const CodingManager = new Lang.Class({
                 session.state = SessionState.BUILDER;
             } else {
                 session.windowBuilder.show();
-                if (session.buttonBuilder)
-                    session.buttonBuilder.show();
-                    session.windowApp.hide();
-                    session.buttonApp.hide();
+                session.buttonBuilder.show();
+                session.windowApp.hide();
             }
         }
     },
