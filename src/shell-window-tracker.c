@@ -510,10 +510,16 @@ get_app_for_window (ShellWindowTracker    *tracker,
   {
     if (tracker->coding_app) {
       g_hash_table_insert (tracker->builder_to_app, window, tracker->coding_app);
+      result = g_hash_table_lookup (tracker->window_to_app, tracker->coding_app);
       tracker->coding_app = NULL;
       g_source_remove (tracker->watchdog_id);
       tracker->watchdog_id = 0;
-      return NULL;
+
+      if (result != NULL)
+      {
+        g_object_ref (result);
+        return result;
+      }
     }
   }
 
