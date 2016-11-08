@@ -93,7 +93,7 @@ const _modes = {
                      'updaterManager', 'socialBar', 'appStore'],
         panel: {
             left: ['showApps', 'panelSeparator', 'showWindows', 'appIcons'],
-            right: ['a11y', 'keyboard', 'aggregateMenu', 'panelSeparator2', 'dateMenu', 'hotCornerIndicator']
+            right: ['a11y', 'keyboard', 'aggregateMenu', 'panelSeparator2', 'dateMenu']
         }
     },
 

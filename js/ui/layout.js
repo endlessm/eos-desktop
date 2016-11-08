@@ -1484,7 +1484,7 @@ const HotCorner = new Lang.Class({
     },
 
     isEnabled: function() {
-        return global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
+        return false;//global.settings.get_boolean(HOT_CORNER_ENABLED_KEY);
     },
 
     setBarrierSize: function(size) {
