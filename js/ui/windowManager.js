@@ -2,6 +2,7 @@
 
 const Cairo = imports.cairo;
 const Clutter = imports.gi.Clutter;
+const Flatpak = imports.gi.Flatpak;
 const Gdk = imports.gi.Gdk;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
@@ -2036,6 +2037,8 @@ const CodingManager = new Lang.Class({
         if (!session.windowBuilder) {
             let tracker = Shell.WindowTracker.get_default();
             tracker.track_coding_app_window(session.windowApp.get_meta_window());
+            // Pass the manifest path to Builder
+            // this._getManifestPath(session.windowApp.meta_window.get_flatpak_id()));
             Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
             animateBounce(session.buttonApp);
         } else {
@@ -2325,5 +2328,68 @@ const CodingManager = new Lang.Class({
             actor.rotation_angle_y = 0;
             actor.set_cull_back_face(false);
         }
+    },
+
+    _getBuildManifestsAt: function(location) {
+        function generateArrayFromFunction(func) {
+	        let arr = [];
+	        let result;
+
+	        while ((result = func.apply(this, arguments)) !== null) {
+		        arr.push(result);
+	        }
+
+	        return arr;
+	    }
+
+        function listDirectory(directory) {
+	        let file = Gio.File.new_for_path(directory);
+	        let enumerator = file.enumerate_children('standard::name', 0, null);
+	        let directoryInfoList = generateArrayFromFunction(() => enumerator.next_file(null));
+	        return directoryInfoList.map(function(info) {
+	            return {
+	                name: info.get_name(),
+	                type: info.get_file_type()
+	            };
+	        });
+	    }
+
+        location = location + '/app/';
+        let manifests = [];
+        let apps = listDirectory(location);
+        return manifests = apps.map(function(app) {
+            return location + app.name + '/current/active/files/manifest.json';
+        });
+    },
+
+    /**
+     * _getManifestPath:
+     * @flatpakID: flatpak id of the app to get the manifest path for
+     *
+     * Looks for the manifest of the app in the user and
+     * system installation path for flatpaks.
+     */
+    _getManifestPath: function(flatpakID) {
+        function readFileContents(path) {
+            let cmdlineFile = Gio.File.new_for_path(path);
+            let [ok, contents, etag] = cmdlineFile.load_contents(null);
+            return contents;
+        }
+
+        let manifests = this._getBuildManifestsAt(Flatpak.Installation.new_user(null).get_path().get_path())
+            .concat(this._getBuildManifestsAt(Flatpak.Installation.new_system(null).get_path().get_path()));
+
+        for (let j = 0; j < manifests.length; j++) {
+            let manifest;
+            try {
+                manifest = JSON.parse(readFileContents(manifests[j]));
+            } catch(err) {
+                logError(err, ' No build manifest found at ' + manifests[j]);
+                continue;
+            }
+		    if (manifest.id == flatpakID)
+			    return manifests[j];
+        }
+        return null;
     }
 });
