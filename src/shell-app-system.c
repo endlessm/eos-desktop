@@ -177,12 +177,13 @@ get_new_desktop_app_info_from_app (ShellApp *app)
 }
 
 static gboolean
-app_info_changed (ShellApp *app, GDesktopAppInfo *info)
+app_info_changed (ShellApp *app, GDesktopAppInfo *desk_new_info)
 {
   GIcon *app_icon;
   GIcon *new_icon;
-  GAppInfo *app_info = G_APP_INFO (shell_app_get_app_info (app));
-  GAppInfo *new_info = G_APP_INFO (info);
+  GDesktopAppInfo *desk_app_info = shell_app_get_app_info (app);
+  GAppInfo *app_info = G_APP_INFO (desk_app_info);
+  GAppInfo *new_info = G_APP_INFO (desk_new_info);
 
   if (!app_info)
     return TRUE;
@@ -190,7 +191,21 @@ app_info_changed (ShellApp *app, GDesktopAppInfo *info)
   app_icon = g_app_info_get_icon (app_info);
   new_icon = g_app_info_get_icon (new_info);
 
-  return !g_app_info_equal (app_info, new_info) || !g_icon_equal (app_icon, new_icon);
+  return !(g_app_info_equal (app_info, new_info) &&
+           g_icon_equal (app_icon, new_icon) &&
+           g_app_info_should_show (app_info) == g_app_info_should_show (new_info) &&
+           strcmp (g_desktop_app_info_get_filename (desk_app_info),
+                   g_desktop_app_info_get_filename (desk_new_info)) == 0 &&
+           g_strcmp0 (g_app_info_get_executable (app_info),
+                      g_app_info_get_executable (new_info)) == 0 &&
+           g_strcmp0 (g_app_info_get_commandline (app_info),
+                      g_app_info_get_commandline (new_info)) == 0 &&
+           strcmp (g_app_info_get_name (app_info),
+                   g_app_info_get_name (new_info)) == 0 &&
+           strcmp (g_app_info_get_display_name (app_info),
+                   g_app_info_get_display_name (new_info)) == 0 &&
+           g_strcmp0 (g_app_info_get_description (app_info),
+                      g_app_info_get_description (new_info)) == 0);
 }
 
 static void
