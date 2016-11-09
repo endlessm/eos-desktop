@@ -103,10 +103,48 @@ const Button = new Lang.Class({
         this.actor.connect('event', Lang.bind(this, this._onEvent));
         this.actor.connect('notify::visible', Lang.bind(this, this._onVisibilityChanged));
 
+        this.label = new St.Label({ text: nameText,
+                                    style_class: 'app-icon-hover-label' });
+        this._labelOffsetY = 0;
+        this.label.connect('style-changed', Lang.bind(this, this._updateStyle));
+        this.actor.connect('enter-event', Lang.bind(this, this._showHoverState));
+        this.actor.connect('leave-event', Lang.bind(this, this._hideHoverState));
+
         if (dontCreateMenu)
             this.menu = new PopupMenu.PopupDummyMenu(this.actor);
         else
             this.setMenu(new PopupMenu.PopupMenu(this.actor, menuAlignment, St.Side.TOP, 0));
+    },
+
+    _updateStyle: function(actor, forHeight, alloc) {
+        this._labelOffsetY = this.label.get_theme_node().get_length('-label-offset-y');
+    },
+
+    _hideHoverState: function() {
+        if (this.label.get_parent() != null) {
+            Main.uiGroup.remove_actor(this.label);
+        }
+    },
+
+    _showHoverState: function() {
+        // Show label only if it's not already visible
+        if (this.label.get_parent())
+            return;
+        if (this.label.text.length == 0)
+            return;
+        if (this.menu.isOpen)
+            return;
+
+        Main.uiGroup.add_actor(this.label);
+        this.label.raise_top();
+
+        let iconMidpoint = this.actor.get_transformed_position()[0] + this.actor.width / 2;
+        this.label.translation_x = Math.floor(iconMidpoint - this.label.width / 2);
+        this.label.translation_y = Math.floor(this.actor.get_transformed_position()[1] - this._labelOffsetY);
+
+        // Clip left edge to be the left edge of the screen
+        this.label.translation_x = Math.max(this.label.translation_x, 0);
+        this.label.translation_x = Math.min(this.label.translation_x, global.stage.width - this.label.width);
     },
 
     setSensitive: function(sensitive) {
@@ -165,9 +203,10 @@ const Button = new Lang.Class({
     },
 
     _onOpenStateChanged: function(menu, open) {
-        if (open)
+        if (open) {
             this.actor.add_style_pseudo_class('active');
-        else
+            this._hideHoverState();
+        } else
             this.actor.remove_style_pseudo_class('active');
 
         // Setting the max-height won't do any good if the minimum height of the
