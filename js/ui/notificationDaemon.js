@@ -1,14 +1,15 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const GLib = imports.gi.GLib;
 const Gdk = imports.gi.Gdk;
 const GdkPixbuf = imports.gi.GdkPixbuf;
 const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
-const Shell = imports.gi.Shell;
 const Mainloop = imports.mainloop;
+const Shell = imports.gi.Shell;
+const Signals = imports.signals;
 const St = imports.gi.St;
 
 const Config = imports.misc.config;
@@ -927,6 +928,7 @@ const GtkNotificationDaemon = new Lang.Class({
         source.connect('count-updated', Lang.bind(this, this._saveNotifications));
         Main.messageTray.add(source);
         this._sources[appId] = source;
+        this.emit('new-gtk-notification-source', source);
         return source;
     },
 
@@ -993,7 +995,16 @@ const GtkNotificationDaemon = new Lang.Class({
 
         invocation.return_value(null);
     },
+
+    getSourceFor: function(appId) {
+        if (this._sources[appId]) {
+            return this._sources[appId];
+        }
+        return null;
+    },
+
 });
+Signals.addSignalMethods(GtkNotificationDaemon.prototype);
 
 const NotificationDaemon = new Lang.Class({
     Name: 'NotificationDaemon',
@@ -1002,4 +1013,13 @@ const NotificationDaemon = new Lang.Class({
         this._fdoNotificationDaemon = new FdoNotificationDaemon();
         this._gtkNotificationDaemon = new GtkNotificationDaemon();
     },
+
+    get fdo() {
+        return this._fdoNotificationDaemon;
+    },
+
+    get gtk() {
+        return this._gtkNotificationDaemon;
+    },
+
 });
