@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-16 01:28+0000\n"
+"POT-Creation-Date: 2016-11-09 15:20-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,32 +74,32 @@ msgstr ""
 msgid "Select an extension to configure using the combobox above."
 msgstr ""
 
-#: ../js/gdm/loginDialog.js:410
+#: ../js/gdm/loginDialog.js:409
 msgid "Session…"
 msgstr ""
 
-#: ../js/gdm/loginDialog.js:620
+#: ../js/gdm/loginDialog.js:619
 msgid "Show password hint"
 msgstr ""
 
-#: ../js/gdm/loginDialog.js:636
+#: ../js/gdm/loginDialog.js:635
 msgid "Forgot password?"
 msgstr ""
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
 #. manually entering the username.
-#: ../js/gdm/loginDialog.js:680
+#: ../js/gdm/loginDialog.js:679
 msgid "Not listed?"
 msgstr ""
 
 #. Translators: During a password reset, prompt for the "secret code" provided by customer support.
-#: ../js/gdm/loginDialog.js:814
+#: ../js/gdm/loginDialog.js:835
 msgid "Enter unlock code provided by customer support:"
 msgstr ""
 
 #. Translators: Password reset. The first %s is a verification code, the second is one or more phone numbers, and the third is an email.
-#: ../js/gdm/loginDialog.js:818
+#: ../js/gdm/loginDialog.js:839
 #, javascript-format
 msgid ""
 "Please inform customer support of your verification code %s by calling %s or "
@@ -108,40 +108,40 @@ msgid ""
 msgstr ""
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
-#: ../js/gdm/loginDialog.js:824
+#: ../js/gdm/loginDialog.js:845
 msgid "Reset Password"
 msgstr ""
 
-#: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
+#: ../js/gdm/loginDialog.js:1001 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
-#: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
-#: ../js/ui/userMenu.js:611
+#: ../js/ui/shellMountOperation.js:399 ../js/ui/status/network.js:916
+#: ../js/ui/unlockDialog.js:96
 msgid "Cancel"
 msgstr ""
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1019
 msgctxt "button"
 msgid "Sign In"
 msgstr ""
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1019
 msgid "Next"
 msgstr ""
 
-#: ../js/gdm/loginDialog.js:1116
+#: ../js/gdm/loginDialog.js:1137
 msgid "Your unlock code was incorrect. Please try again."
 msgstr ""
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:1166 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:1187 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr ""
 
-#: ../js/gdm/loginDialog.js:1429
+#: ../js/gdm/loginDialog.js:1450
 msgid "Login Window"
 msgstr ""
 
@@ -150,7 +150,7 @@ msgstr ""
 msgid "Power"
 msgstr ""
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
+#: ../js/gdm/powerMenu.js:93
 msgid "Suspend"
 msgstr ""
 
@@ -177,47 +177,117 @@ msgstr ""
 msgid "(e.g., user or %s)"
 msgstr ""
 
-#: ../js/misc/util.js:121
+#: ../js/misc/util.js:141
 msgid "Command not found"
 msgstr ""
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:154
+#: ../js/misc/util.js:174
 msgid "Could not parse command:"
 msgstr ""
 
-#: ../js/misc/util.js:162
+#: ../js/misc/util.js:182
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1182
+#. Translators: Time in 24h format
+#: ../js/misc/util.js:243
+msgid "%H∶%M"
+msgstr ""
+
+#. Translators: this is the word "Yesterday" followed by a
+#. time string in 24h format. i.e. "Yesterday, 14:30"
+#: ../js/misc/util.js:249
+#, no-c-format
+msgid "Yesterday, %H∶%M"
+msgstr ""
+
+#. Translators: this is the week day name followed by a time
+#. string in 24h format. i.e. "Monday, 14:30"
+#: ../js/misc/util.js:255
+#, no-c-format
+msgid "%A, %H∶%M"
+msgstr ""
+
+#. Translators: this is the month name and day number
+#. followed by a time string in 24h format.
+#. i.e. "May 25, 14:30"
+#: ../js/misc/util.js:261
+#, no-c-format
+msgid "%B %d, %H∶%M"
+msgstr ""
+
+#. Translators: this is the month name, day number, year
+#. number followed by a time string in 24h format.
+#. i.e. "May 25 2012, 14:30"
+#: ../js/misc/util.js:267
+#, no-c-format
+msgid "%B %d %Y, %H∶%M"
+msgstr ""
+
+#. Translators: Time in 12h format
+#: ../js/misc/util.js:272
+msgid "%l∶%M %p"
+msgstr ""
+
+#. Translators: this is the word "Yesterday" followed by a
+#. time string in 12h format. i.e. "Yesterday, 2:30 pm"
+#: ../js/misc/util.js:278
+#, no-c-format
+msgid "Yesterday, %l∶%M %p"
+msgstr ""
+
+#. Translators: this is the week day name followed by a time
+#. string in 12h format. i.e. "Monday, 2:30 pm"
+#: ../js/misc/util.js:284
+#, no-c-format
+msgid "%A, %l∶%M %p"
+msgstr ""
+
+#. Translators: this is the month name and day number
+#. followed by a time string in 12h format.
+#. i.e. "May 25, 2:30 pm"
+#: ../js/misc/util.js:290
+#, no-c-format
+msgid "%B %d, %l∶%M %p"
+msgstr ""
+
+#. Translators: this is the month name, day number, year
+#. number followed by a time string in 12h format.
+#. i.e. "May 25 2012, 2:30 pm"
+#: ../js/misc/util.js:296
+#, no-c-format
+msgid "%B %d %Y, %l∶%M %p"
+msgstr ""
+
+#: ../js/ui/appDisplay.js:1186
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1691
+#: ../js/ui/appDisplay.js:1695
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1697
+#: ../js/ui/appDisplay.js:1701
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1703
+#: ../js/ui/appDisplay.js:1707
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1709
+#: ../js/ui/appDisplay.js:1713
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1971
+#: ../js/ui/appDisplay.js:1975
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1980
+#: ../js/ui/appDisplay.js:1984
 msgid "Delete"
 msgstr ""
 
@@ -231,23 +301,23 @@ msgstr ""
 msgid "%s has been removed from your favorites."
 msgstr ""
 
-#: ../js/ui/appIconBar.js:216
+#: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:225
+#: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:300
+#: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:304
+#: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:320
+#: ../js/ui/appIconBar.js:319
 #, javascript-format
 msgid "Quit %s"
 msgstr ""
@@ -268,27 +338,10 @@ msgstr ""
 msgid "Add Folder"
 msgstr ""
 
-#. Translators: Shown in calendar event list for all day events
-#. * Keep it short, best if you can use less then 10 characters
-#.
-#: ../js/ui/calendar.js:62
-msgctxt "event list time"
-msgid "All Day"
-msgstr ""
-
-#. Translators: Shown in calendar event list, if 24h format,
-#. \u2236 is a ratio character, similar to :
-#: ../js/ui/calendar.js:68
-msgctxt "event list time"
-msgid "%H∶%M"
-msgstr ""
-
-#. Transators: Shown in calendar event list, if 12h format,
-#. \u2236 is a ratio character, similar to : and \u2009 is
-#. a thin space
-#: ../js/ui/calendar.js:77
-msgctxt "event list time"
-msgid "%l∶%M %p"
+#. Translators: Enter 0-6 (Sunday-Saturday) for non-work days. Examples: "0" (Sunday) "6" (Saturday) "06" (Sunday and Saturday).
+#: ../js/ui/calendar.js:47
+msgctxt "calendar-no-work"
+msgid "06"
 msgstr ""
 
 #. Translators: Calendar grid abbreviation for Sunday.
@@ -296,129 +349,97 @@ msgstr ""
 #. * NOTE: These grid abbreviations are always shown together
 #. * and in order, e.g. "S M T W T F S".
 #.
-#: ../js/ui/calendar.js:108
+#: ../js/ui/calendar.js:76
 msgctxt "grid sunday"
 msgid "S"
 msgstr ""
 
 #. Translators: Calendar grid abbreviation for Monday
-#: ../js/ui/calendar.js:110
+#: ../js/ui/calendar.js:78
 msgctxt "grid monday"
 msgid "M"
 msgstr ""
 
 #. Translators: Calendar grid abbreviation for Tuesday
-#: ../js/ui/calendar.js:112
+#: ../js/ui/calendar.js:80
 msgctxt "grid tuesday"
 msgid "T"
 msgstr ""
 
 #. Translators: Calendar grid abbreviation for Wednesday
-#: ../js/ui/calendar.js:114
+#: ../js/ui/calendar.js:82
 msgctxt "grid wednesday"
 msgid "W"
 msgstr ""
 
 #. Translators: Calendar grid abbreviation for Thursday
-#: ../js/ui/calendar.js:116
+#: ../js/ui/calendar.js:84
 msgctxt "grid thursday"
 msgid "T"
 msgstr ""
 
 #. Translators: Calendar grid abbreviation for Friday
-#: ../js/ui/calendar.js:118
+#: ../js/ui/calendar.js:86
 msgctxt "grid friday"
 msgid "F"
 msgstr ""
 
 #. Translators: Calendar grid abbreviation for Saturday
-#: ../js/ui/calendar.js:120
+#: ../js/ui/calendar.js:88
 msgctxt "grid saturday"
 msgid "S"
 msgstr ""
 
-#. Translators: Event list abbreviation for Sunday.
-#. *
-#. * NOTE: These list abbreviations are normally not shown together
-#. * so they need to be unique (e.g. Tuesday and Thursday cannot
-#. * both be 'T').
+#: ../js/ui/calendar.js:416
+msgid "Previous month"
+msgstr ""
+
+#: ../js/ui/calendar.js:426
+msgid "Next month"
+msgstr ""
+
+#: ../js/ui/calendar.js:579
+#, no-javascript-format
+msgctxt "date day number format"
+msgid "%d"
+msgstr ""
+
+#: ../js/ui/calendar.js:634
+msgid "Week %V"
+msgstr ""
+
+#. Translators: Shown in calendar event list for all day events
+#. * Keep it short, best if you can use less then 10 characters
 #.
-#: ../js/ui/calendar.js:133
-msgctxt "list sunday"
-msgid "Su"
+#: ../js/ui/calendar.js:695
+msgctxt "event list time"
+msgid "All Day"
 msgstr ""
 
-#. Translators: Event list abbreviation for Monday
-#: ../js/ui/calendar.js:135
-msgctxt "list monday"
-msgid "M"
+#: ../js/ui/calendar.js:821
+msgid "Events"
 msgstr ""
 
-#. Translators: Event list abbreviation for Tuesday
-#: ../js/ui/calendar.js:137
-msgctxt "list tuesday"
-msgid "T"
-msgstr ""
-
-#. Translators: Event list abbreviation for Wednesday
-#: ../js/ui/calendar.js:139
-msgctxt "list wednesday"
-msgid "W"
-msgstr ""
-
-#. Translators: Event list abbreviation for Thursday
-#: ../js/ui/calendar.js:141
-msgctxt "list thursday"
-msgid "Th"
-msgstr ""
-
-#. Translators: Event list abbreviation for Friday
-#: ../js/ui/calendar.js:143
-msgctxt "list friday"
-msgid "F"
-msgstr ""
-
-#. Translators: Event list abbreviation for Saturday
-#: ../js/ui/calendar.js:145
-msgctxt "list saturday"
-msgid "S"
-msgstr ""
-
-#: ../js/ui/calendar.js:391
-msgid "calendar:MY"
-msgstr ""
-
-#. Translators: Text to show if there are no events
-#: ../js/ui/calendar.js:722
-msgid "Nothing Scheduled"
-msgstr ""
-
-#. Translators: Shown on calendar heading when selected day occurs on current year
-#: ../js/ui/calendar.js:738
+#: ../js/ui/calendar.js:830
 msgctxt "calendar heading"
 msgid "%A, %B %d"
 msgstr ""
 
-#. Translators: Shown on calendar heading when selected day occurs on different year
-#: ../js/ui/calendar.js:741
+#: ../js/ui/calendar.js:834
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
 msgstr ""
 
-#: ../js/ui/calendar.js:751
-msgid "Today"
+#: ../js/ui/calendar.js:919
+msgid "Notifications"
 msgstr ""
 
-#: ../js/ui/calendar.js:755
-msgid "Tomorrow"
+#: ../js/ui/calendar.js:1070
+msgid "No Notifications"
 msgstr ""
 
-#: ../js/ui/calendar.js:766
-msgid "This week"
-msgstr ""
-
-#: ../js/ui/calendar.js:774
-msgid "Next week"
+#: ../js/ui/calendar.js:1073
+msgid "No Events"
 msgstr ""
 
 #: ../js/ui/components/automountManager.js:90
@@ -450,7 +471,8 @@ msgstr ""
 msgid "Type again:"
 msgstr ""
 
-#: ../js/ui/components/networkAgent.js:132
+#: ../js/ui/components/networkAgent.js:132 ../js/ui/status/network.js:269
+#: ../js/ui/status/network.js:352 ../js/ui/status/network.js:919
 msgid "Connect"
 msgstr ""
 
@@ -592,7 +614,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:505
 msgid "Windows"
 msgstr ""
 
@@ -610,23 +632,31 @@ msgstr ""
 msgid "Dash"
 msgstr ""
 
-#: ../js/ui/dateMenu.js:90
-msgid "Open Calendar"
-msgstr ""
-
-#: ../js/ui/dateMenu.js:95
-msgid "Open Clocks"
-msgstr ""
-
-#: ../js/ui/dateMenu.js:104
-msgid "Date & Time Settings"
-msgstr ""
-
 #. Translators: This is the date format to use when the calendar popup is
 #. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
 #.
-#: ../js/ui/dateMenu.js:214
-msgid "%A %B %e, %Y"
+#: ../js/ui/dateMenu.js:73
+msgid "%B %e %Y"
+msgstr ""
+
+#. Translators: This is the accessible name of the date button shown
+#. * below the time in the shell; it should combine the weekday and the
+#. * date, e.g. "Tuesday February 17 2015".
+#.
+#: ../js/ui/dateMenu.js:80
+msgid "%A %B %e %Y"
+msgstr ""
+
+#: ../js/ui/dateMenu.js:160
+msgid "Add world clocks…"
+msgstr ""
+
+#: ../js/ui/dateMenu.js:161
+msgid "World Clocks"
+msgstr ""
+
+#: ../js/ui/dateMenu.js:323
+msgid "Calendar"
 msgstr ""
 
 #: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
@@ -751,7 +781,7 @@ msgstr ""
 msgid "Quit Application"
 msgstr ""
 
-#: ../js/ui/iconGridLayout.js:213
+#: ../js/ui/iconGridLayout.js:215
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
@@ -774,7 +804,7 @@ msgstr ""
 msgid "Search the internet for \"%s\""
 msgstr ""
 
-#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
+#: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:774
 msgid "Keyboard"
 msgstr ""
 
@@ -826,48 +856,53 @@ msgstr ""
 msgid "Web Page"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1205
+#: ../js/ui/messageTray.js:1319
 msgid "Open"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1212
+#: ../js/ui/messageTray.js:1326
 msgid "Remove"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1524
+#: ../js/ui/messageTray.js:1637
 msgid "Clear Messages"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1551
+#: ../js/ui/messageTray.js:1664
 msgid "Notification Settings"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1741
+#: ../js/ui/messageTray.js:1854
 msgid "No Messages"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1815
+#: ../js/ui/messageTray.js:1928
 msgid "Message Tray"
 msgstr ""
 
-#: ../js/ui/messageTray.js:2836
+#: ../js/ui/messageTray.js:2949
 msgid "System Information"
 msgstr ""
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
+#: ../js/ui/notificationDaemon.js:540 ../src/shell-app.c:398
 msgctxt "program"
 msgid "Unknown"
 msgstr ""
 
-#: ../js/ui/overview.js:118
+#: ../js/ui/overview.js:116
 msgid "Undo"
 msgstr ""
 
-#: ../js/ui/overview.js:166
+#: ../js/ui/overview.js:163
 msgid "Overview"
 msgstr ""
 
-#: ../js/ui/panel.js:375
+#: ../js/ui/panel.js:346
+msgctxt "System menu in the top bar"
+msgid "System"
+msgstr ""
+
+#: ../js/ui/panel.js:480
 msgid "Taskbar"
 msgstr ""
 
@@ -876,7 +911,7 @@ msgstr ""
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:633
+#: ../js/ui/popupMenu.js:289
 msgid "toggle-switch-us"
 msgstr ""
 
@@ -888,7 +923,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: ../js/ui/screenShield.js:132
+#: ../js/ui/screenShield.js:134
 msgid "GNOME needs to lock the screen"
 msgstr ""
 
@@ -899,11 +934,11 @@ msgstr ""
 #.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:393
 msgid "Unable to lock"
 msgstr ""
 
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
+#: ../js/ui/screenShield.js:173 ../js/ui/screenShield.js:394
 msgid "Lock was blocked by an application"
 msgstr ""
 
@@ -943,70 +978,86 @@ msgstr ""
 msgid "Remember Password"
 msgstr ""
 
-#: ../js/ui/shellMountOperation.js:403 ../js/ui/unlockDialog.js:110
+#: ../js/ui/shellMountOperation.js:403 ../js/ui/unlockDialog.js:109
 msgid "Unlock"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:39
+#: ../js/ui/status/accessibility.js:42
 msgid "Accessibility"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:47
+#: ../js/ui/status/accessibility.js:57
 msgid "Zoom"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:54
+#: ../js/ui/status/accessibility.js:64
 msgid "Screen Reader"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:58
+#: ../js/ui/status/accessibility.js:68
 msgid "Screen Keyboard"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:62
+#: ../js/ui/status/accessibility.js:72
 msgid "Visual Alerts"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:65
+#: ../js/ui/status/accessibility.js:75
 msgid "Sticky Keys"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:68
+#: ../js/ui/status/accessibility.js:78
 msgid "Slow Keys"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:71
+#: ../js/ui/status/accessibility.js:81
 msgid "Bounce Keys"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:74
+#: ../js/ui/status/accessibility.js:84
 msgid "Mouse Keys"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:78
-msgid "Universal Access Settings"
-msgstr ""
-
-#: ../js/ui/status/accessibility.js:136
+#: ../js/ui/status/accessibility.js:167
 msgid "High Contrast"
 msgstr ""
 
-#: ../js/ui/status/accessibility.js:185
+#: ../js/ui/status/accessibility.js:202
 msgid "Large Text"
 msgstr ""
 
-#: ../js/ui/status/bluetooth.js:33 ../js/ui/status/bluetooth.js:44
-#: ../js/ui/status/network.js:829
+#: ../js/ui/status/bluetooth.js:47
 msgid "Bluetooth"
 msgstr ""
 
-#: ../js/ui/status/bluetooth.js:51
+#: ../js/ui/status/bluetooth.js:56 ../js/ui/status/network.js:624
 msgid "Bluetooth Settings"
 msgstr ""
 
-#. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:82 ../js/ui/status/network.js:181
-msgid "hardware disabled"
+#. Translators: this is the number of connected bluetooth devices
+#: ../js/ui/status/bluetooth.js:136
+#, javascript-format
+msgid "%d Connected"
+msgid_plural "%d Connected"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../js/ui/status/bluetooth.js:138
+msgid "Off"
+msgstr ""
+
+#: ../js/ui/status/bluetooth.js:140
+msgid "Not In Use"
+msgstr ""
+
+#: ../js/ui/status/bluetooth.js:142 ../js/ui/status/network.js:1279
+msgid "Turn On"
+msgstr ""
+
+#: ../js/ui/status/bluetooth.js:142 ../js/ui/status/network.js:178
+#: ../js/ui/status/network.js:353 ../js/ui/status/network.js:1279
+#: ../js/ui/status/network.js:1394
+msgid "Turn Off"
 msgstr ""
 
 #: ../js/ui/status/hotCornerIndicator.js:19
@@ -1021,236 +1072,254 @@ msgstr ""
 msgid "Disable Hot Corner"
 msgstr ""
 
-#: ../js/ui/status/keyboard.js:809
+#: ../js/ui/status/keyboard.js:797
 msgid "Show Keyboard Layout"
-msgstr ""
-
-#: ../js/ui/status/keyboard.js:814
-msgid "Region & Language Settings"
 msgstr ""
 
 #: ../js/ui/status/lockScreenMenu.js:43
 msgid "Volume, network, battery"
 msgstr ""
 
-#: ../js/ui/status/network.js:104
+#: ../js/ui/status/network.js:101
 msgid "<unknown>"
 msgstr ""
 
-#. Translators: this indicates that wireless or wwan is disabled by hardware killswitch
-#: ../js/ui/status/network.js:203
-msgid "disabled"
+#. Translators: %s is a network identifier
+#: ../js/ui/status/network.js:451 ../js/ui/status/network.js:1308
+#, javascript-format
+msgid "%s Off"
+msgstr ""
+
+#. Translators: %s is a network identifier
+#: ../js/ui/status/network.js:454
+#, javascript-format
+msgid "%s Connected"
 msgstr ""
 
 #. Translators: this is for network devices that are physically present but are not
-#. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:461
-msgid "unmanaged"
+#. under NetworkManager's control (and thus cannot be used in the menu);
+#. %s is a network identifier
+#: ../js/ui/status/network.js:459
+#, javascript-format
+msgid "%s Unmanaged"
 msgstr ""
 
-#: ../js/ui/status/network.js:463
-msgid "disconnecting..."
+#. Translators: %s is a network identifier
+#: ../js/ui/status/network.js:462
+#, javascript-format
+msgid "%s Disconnecting"
 msgstr ""
 
-#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
+#. Translators: %s is a network identifier
+#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1300
+#, javascript-format
+msgid "%s Connecting"
+msgstr ""
+
+#. Translators: this is for network connections that require some kind of key or password; %s is a network identifier
+#: ../js/ui/status/network.js:472
+#, javascript-format
+msgid "%s Requires Authentication"
+msgstr ""
+
+#. Translators: this is for devices that require some kind of firmware or kernel
+#. module, which is missing; %s is a network identifier
+#: ../js/ui/status/network.js:480
+#, javascript-format
+msgid "Firmware Missing For %s"
+msgstr ""
+
+#. Translators: this is for a network device that cannot be activated (for example it
+#. is disabled by rfkill, or it has no coverage; %s is a network identifier
+#: ../js/ui/status/network.js:484
+#, javascript-format
+msgid "%s Unavailable"
+msgstr ""
+
+#. Translators: %s is a network identifier
+#: ../js/ui/status/network.js:487
+#, javascript-format
+msgid "%s Connection Failed"
+msgstr ""
+
+#: ../js/ui/status/network.js:503
+msgid "Wired Settings"
+msgstr ""
+
+#: ../js/ui/status/network.js:545
+msgid "Mobile Broadband Settings"
+msgstr ""
+
+#. Translators: %s is a network identifier
+#: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1305
+#, javascript-format
+msgid "%s Hardware Disabled"
+msgstr ""
+
+#. Translators: this is for a network device that cannot be activated
+#. because it's disabled by rfkill (airplane mode); %s is a network identifier
+#: ../js/ui/status/network.js:592
+#, javascript-format
+msgid "%s Disabled"
+msgstr ""
+
+#: ../js/ui/status/network.js:632
+msgid "Connect to Internet"
+msgstr ""
+
+#: ../js/ui/status/network.js:813
+msgid "Airplane Mode is On"
+msgstr ""
+
+#: ../js/ui/status/network.js:814
+msgid "Wi-Fi is disabled when airplane mode is on."
+msgstr ""
+
+#: ../js/ui/status/network.js:815
+msgid "Turn Off Airplane Mode"
+msgstr ""
+
+#: ../js/ui/status/network.js:824
+msgid "Wi-Fi is Off"
+msgstr ""
+
+#: ../js/ui/status/network.js:825
+msgid "Wi-Fi needs to be turned on in order to connect to a network."
+msgstr ""
+
+#: ../js/ui/status/network.js:826
+msgid "Turn On Wi-Fi"
+msgstr ""
+
+#: ../js/ui/status/network.js:851
+msgid "Wi-Fi Networks"
+msgstr ""
+
+#: ../js/ui/status/network.js:853
+msgid "Select a network"
+msgstr ""
+
+#: ../js/ui/status/network.js:883
+msgid "No Networks"
+msgstr ""
+
+#: ../js/ui/status/network.js:904
+msgid "Use hardware switch to turn off"
+msgstr ""
+
+#: ../js/ui/status/network.js:1171
+msgid "Select Network"
+msgstr ""
+
+#: ../js/ui/status/network.js:1177
+msgid "Wi-Fi Settings"
+msgstr ""
+
+#. Translators: %s is a network identifier
+#: ../js/ui/status/network.js:1296
+#, javascript-format
+msgid "%s Hotspot Active"
+msgstr ""
+
+#. Translators: %s is a network identifier
+#: ../js/ui/status/network.js:1311
+#, javascript-format
+msgid "%s Not Connected"
+msgstr ""
+
+#: ../js/ui/status/network.js:1411
 msgid "connecting..."
 msgstr ""
 
 #. Translators: this is for network connections that require some kind of key or password
-#: ../js/ui/status/network.js:472 ../js/ui/status/network.js:1554
+#: ../js/ui/status/network.js:1414
 msgid "authentication required"
 msgstr ""
 
-#. Translators: this is for devices that require some kind of firmware or kernel
-#. module, which is missing
-#: ../js/ui/status/network.js:482
-msgid "firmware missing"
-msgstr ""
-
-#. Translators: this is for wired network devices that are physically disconnected
-#: ../js/ui/status/network.js:489
-msgid "cable unplugged"
-msgstr ""
-
-#. Translators: this is for a network device that cannot be activated (for example it
-#. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:494
-msgid "unavailable"
-msgstr ""
-
-#: ../js/ui/status/network.js:496 ../js/ui/status/network.js:1556
+#: ../js/ui/status/network.js:1416
 msgid "connection failed"
 msgstr ""
 
-#: ../js/ui/status/network.js:555 ../js/ui/status/network.js:1440
-#: ../js/ui/status/network.js:1632
-msgid "More…"
-msgstr ""
-
-#. TRANSLATORS: this is the indication that a connection for another logged in user is active,
-#. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:591 ../js/ui/status/network.js:1368
-msgid "Connected (private)"
-msgstr ""
-
-#: ../js/ui/status/network.js:670
-msgid "Wired"
-msgstr ""
-
-#: ../js/ui/status/network.js:671
-msgid "Auto Ethernet"
-msgstr ""
-
-#: ../js/ui/status/network.js:698
-msgid "Mobile broadband"
-msgstr ""
-
-#. TRANSLATORS: this the automatic wireless connection name (including the network name)
-#: ../js/ui/status/network.js:864 ../js/ui/status/network.js:1385
-#, javascript-format
-msgid "Auto %s"
-msgstr ""
-
-#: ../js/ui/status/network.js:866
-msgid "Auto bluetooth"
-msgstr ""
-
-#: ../js/ui/status/network.js:1387
-msgid "Auto wireless"
-msgstr ""
-
-#: ../js/ui/status/network.js:1672
-msgid "Network"
-msgstr ""
-
-#: ../js/ui/status/network.js:1734
-msgid "Enable networking"
-msgstr ""
-
-#: ../js/ui/status/network.js:1776
-msgid "Wi-Fi"
-msgstr ""
-
-#: ../js/ui/status/network.js:1795
+#: ../js/ui/status/network.js:1482
 msgid "Network Settings"
 msgstr ""
 
-#: ../js/ui/status/network.js:1812
+#: ../js/ui/status/network.js:1484
+msgid "VPN Settings"
+msgstr ""
+
+#: ../js/ui/status/network.js:1503
+msgid "VPN"
+msgstr ""
+
+#: ../js/ui/status/network.js:1513
+msgid "VPN Off"
+msgstr ""
+
+#: ../js/ui/status/network.js:1660
 msgid "Network Manager"
 msgstr ""
 
-#: ../js/ui/status/network.js:1902
+#: ../js/ui/status/network.js:1699
 msgid "Connection failed"
 msgstr ""
 
-#: ../js/ui/status/network.js:1903
+#: ../js/ui/status/network.js:1700
 msgid "Activation of network connection failed"
 msgstr ""
 
-#: ../js/ui/status/network.js:2287
-msgid "Networking is disabled"
-msgstr ""
-
-#: ../js/ui/status/power.js:34
-msgid "Battery"
-msgstr ""
-
-#: ../js/ui/status/power.js:51
+#: ../js/ui/status/power.js:61
 msgid "Power Settings"
 msgstr ""
 
-#: ../js/ui/status/power.js:58
+#: ../js/ui/status/power.js:77
 msgid "Fully Charged"
 msgstr ""
 
 #. 0 is reported when UPower does not have enough data
 #. to estimate battery life
-#: ../js/ui/status/power.js:65 ../js/ui/status/power.js:71
+#: ../js/ui/status/power.js:84 ../js/ui/status/power.js:90
 msgid "Estimating…"
 msgstr ""
 
 #. Translators: this is <hours>:<minutes> Remaining (<percentage>)
-#: ../js/ui/status/power.js:79
+#: ../js/ui/status/power.js:98
 #, javascript-format
 msgid "%d∶%02d Remaining (%d %%)"
 msgstr ""
 
 #. Translators: this is <hours>:<minutes> Until Full (<percentage>)
-#: ../js/ui/status/power.js:84
+#: ../js/ui/status/power.js:103
 #, javascript-format
 msgid "%d∶%02d Until Full (%d %%)"
 msgstr ""
 
-#: ../js/ui/status/volume.js:124
+#: ../js/ui/status/power.js:131 ../js/ui/status/power.js:133
+#, javascript-format
+msgid "%d %%"
+msgstr ""
+
+#: ../js/ui/status/volume.js:127
 msgid "Volume changed"
 msgstr ""
 
-#. Translators: This is the label for audio volume
-#: ../js/ui/status/volume.js:249 ../js/ui/status/volume.js:297
+#: ../js/ui/status/volume.js:162
 msgid "Volume"
 msgstr ""
 
-#: ../js/ui/status/volume.js:258
+#: ../js/ui/status/volume.js:213
 msgid "Microphone"
 msgstr ""
 
-#: ../js/ui/status/volume.js:310
-msgid "Sound Settings"
-msgstr ""
-
-#: ../js/ui/unlockDialog.js:121
+#: ../js/ui/unlockDialog.js:120
 msgid "Log in as another user"
 msgstr ""
 
-#: ../js/ui/unlockDialog.js:142
+#: ../js/ui/unlockDialog.js:141
 msgid "Unlock Window"
 msgstr ""
 
-#: ../js/ui/userMenu.js:36
-msgid "Lock"
-msgstr ""
-
-#: ../js/ui/userMenu.js:37
-msgid "Exit"
-msgstr ""
-
-#: ../js/ui/userMenu.js:39
-msgid "Help"
-msgstr ""
-
-#: ../js/ui/userMenu.js:40
-msgid "Settings"
-msgstr ""
-
-#: ../js/ui/userMenu.js:41
-msgid "Give Us Feedback"
-msgstr ""
-
-#: ../js/ui/userMenu.js:490
-msgid "Switch User"
-msgstr ""
-
-#: ../js/ui/userMenu.js:561
-msgid "Other users are logged in."
-msgstr ""
-
-#: ../js/ui/userMenu.js:566
-msgid "Shutting down might cause them to lose unsaved work."
-msgstr ""
-
-#. Translators: Remote here refers to a remote session, like a ssh login
-#: ../js/ui/userMenu.js:594
-#, javascript-format
-msgid "%s (remote)"
-msgstr ""
-
-#. Translators: Console here refers to a tty like a VT console
-#: ../js/ui/userMenu.js:597
-#, javascript-format
-msgid "%s (console)"
-msgstr ""
-
-#: ../js/ui/viewSelector.js:511
+#: ../js/ui/viewSelector.js:509
 msgid "Applications"
 msgstr ""
 
@@ -1259,22 +1328,22 @@ msgstr ""
 msgid "'%s' is ready"
 msgstr ""
 
-#: ../js/ui/windowManager.js:67
+#: ../js/ui/windowManager.js:84
 msgid "Do you want to keep these display settings?"
 msgstr ""
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #.
-#: ../js/ui/windowManager.js:86
+#: ../js/ui/windowManager.js:103
 msgid "Revert Settings"
 msgstr ""
 
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:107
 msgid "Keep Changes"
 msgstr ""
 
-#: ../js/ui/windowManager.js:108
+#: ../js/ui/windowManager.js:125
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
@@ -1307,19 +1376,19 @@ msgstr[1] ""
 msgid "System Sounds"
 msgstr ""
 
-#: ../src/main.c:321
+#: ../src/main.c:320
 msgid "Print version"
 msgstr ""
 
-#: ../src/main.c:327
+#: ../src/main.c:326
 msgid "Mode used by GDM for login screen"
 msgstr ""
 
-#: ../src/main.c:333
+#: ../src/main.c:332
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr ""
 
-#: ../src/main.c:339
+#: ../src/main.c:338
 msgid "List possible modes"
 msgstr ""
 
