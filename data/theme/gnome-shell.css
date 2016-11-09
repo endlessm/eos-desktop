@@ -622,7 +622,7 @@ StScrollBar StButton#vhandle:active {
 .show-windows-button {
     -natural-hpadding: 2px;
     -minimum-hpadding: 2px;
-    padding-right: 4px;
+    padding-right: 8px;
 }
 
 #appIconBar {
