@@ -340,6 +340,10 @@ StScrollBar StButton#vhandle:active {
     icon-size: 40px;
 }
 
+.show-windows-icon {
+    icon-size: 30px;
+}
+
 .panel-separator-icon {
     width: 1px;
     height: 40px;
@@ -619,12 +623,6 @@ StScrollBar StButton#vhandle:active {
     transition-duration: 100ms;
 }
 
-.show-windows-button {
-    -natural-hpadding: 2px;
-    -minimum-hpadding: 2px;
-    padding-right: 8px;
-}
-
 #appIconBar {
     padding-left: 0px;
     padding-right: 0px;
@@ -644,6 +642,12 @@ StScrollBar StButton#vhandle:active {
 .user-menu-icon.panel-button {
     -minimum-hpadding: 4px;
     -natural-hpadding: 4px;
+}
+
+.show-windows-button.panel-button {
+    -minimum-hpadding: 6px;
+    -natural-hpadding: 6px;
+    padding-right: 6px;
 }
 
 .hot-corner-indicator.panel-button {
