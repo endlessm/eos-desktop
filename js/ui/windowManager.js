@@ -1959,7 +1959,7 @@ const CodingManager = new Lang.Class({
         Main.layoutManager.addChrome(button);
 
         this._sessions.push({buttonApp: button,
-                             windowApp: actorApp,
+                             actorApp: actorApp,
                              state: SessionState.APP});
 
         let session = this._getSession(actorApp);
@@ -1975,13 +1975,13 @@ const CodingManager = new Lang.Class({
 
     addSwitcherToApp: function(actorBuilder, windowApp) {
         let currentSession = this._sessions.filter(function(session) {
-            return (session.windowApp.meta_window === windowApp);
+            return (session.actorApp.meta_window === windowApp);
         });
         if (currentSession.length === 0)
             return;
 
         let session = currentSession[0];
-        session.windowBuilder = actorBuilder;
+        session.actorBuilder = actorBuilder;
 
         this._animateToBuilder(session);
     },
@@ -1995,11 +1995,11 @@ const CodingManager = new Lang.Class({
         // with an open Builder session
 
         if (session.positionChangedIdApp != 0) {
-            session.windowApp.meta_window.disconnect(session.positionChangedIdApp);
+            session.actorApp.meta_window.disconnect(session.positionChangedIdApp);
             session.positionChangedIdApp = 0;
         }
         if (session.sizeChangedIdApp != 0) {
-            session.windowApp.meta_window.disconnect(session.sizeChangedIdApp);
+            session.actorApp.meta_window.disconnect(session.sizeChangedIdApp);
             session.sizeChangedIdApp = 0;
         }
         if (session.windowsRestackedIdApp != 0) {
@@ -2016,37 +2016,37 @@ const CodingManager = new Lang.Class({
             return;
 
         let tracker = Shell.WindowTracker.get_default();
-        tracker.untrack_coding_app_window(session.windowBuilder.meta_window);
+        tracker.untrack_coding_app_window(session.actorBuilder.meta_window);
 
         if (session.positionChangedIdBuilder != 0) {
-            session.windowBuilder.meta_window.disconnect(session.positionChangedIdBuilder);
+            session.actorBuilder.meta_window.disconnect(session.positionChangedIdBuilder);
             session.positionChangedIdBuilder = 0;
         }
         session.buttonBuilder.destroy();
-        session.windowBuilder = null;
+        session.actorBuilder = null;
 
-        if (session.windowApp) {
-            session.windowApp.meta_window.activate(global.get_current_time());
-            session.windowApp.show();
+        if (session.actorApp) {
+            session.actorApp.meta_window.activate(global.get_current_time());
+            session.actorApp.show();
             session.buttonApp.show();
             session.state = SessionState.APP;
         }
     },
 
     _switchToBuilder : function(actor, event, session) {
-        if (!session.windowBuilder) {
+        if (!session.actorBuilder) {
             let tracker = Shell.WindowTracker.get_default();
-            tracker.track_coding_app_window(session.windowApp.meta_window);
+            tracker.track_coding_app_window(session.actorApp.meta_window);
             // Pass the manifest path to Builder
-            // this._getManifestPath(session.windowApp.meta_window.get_flatpak_id()));
+            // this._getManifestPath(session.actorApp.meta_window.get_flatpak_id()));
             Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
             animateBounce(session.buttonApp);
         } else {
-            session.windowBuilder.meta_window.activate(global.get_current_time());
-            this._rotateInActors.push(session.windowBuilder);
-            this._rotateOutActors.push(session.windowApp);
-            this._animate(session.windowApp,
-                          session.windowBuilder,
+            session.actorBuilder.meta_window.activate(global.get_current_time());
+            this._rotateInActors.push(session.actorBuilder);
+            this._rotateOutActors.push(session.actorApp);
+            this._animate(session.actorApp,
+                          session.actorBuilder,
                           Gtk.DirectionType.LEFT);
             session.state = SessionState.BUILDER;
         }
@@ -2054,13 +2054,13 @@ const CodingManager = new Lang.Class({
     },
 
     _switchToApp : function(actor, event, session) {
-        if (!session.windowApp)
+        if (!session.actorApp)
             return;
-        session.windowApp.meta_window.activate(global.get_current_time());
-        this._rotateInActors.push(session.windowApp);
-        this._rotateOutActors.push(session.windowBuilder);
-        this._animate(session.windowBuilder,
-                      session.windowApp,
+        session.actorApp.meta_window.activate(global.get_current_time());
+        this._rotateInActors.push(session.actorApp);
+        this._rotateOutActors.push(session.actorBuilder);
+        this._animate(session.actorBuilder,
+                      session.actorApp,
                       Gtk.DirectionType.RIGHT);
         session.buttonBuilder.hide();
         session.buttonApp.show();
@@ -2069,7 +2069,7 @@ const CodingManager = new Lang.Class({
 
     _getSession: function(actor) {
         let currentSession = this._sessions.filter(function(session) {
-            return (session.windowApp === actor || session.windowBuilder === actor);
+            return (session.actorApp === actor || session.actorBuilder === actor);
         });
         if (currentSession.length === 0)
             return null;
@@ -2077,7 +2077,7 @@ const CodingManager = new Lang.Class({
     },
 
     _addButton: function(session) {
-        let window = session.windowBuilder.meta_window;
+        let window = session.actorBuilder.meta_window;
         let button = new St.Button({ style_class: 'view-source' });
         let rect = window.get_frame_rect();
         button.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
@@ -2099,7 +2099,7 @@ const CodingManager = new Lang.Class({
          *
          * This way we don't get ugly artifacts when rotating if
          * a window is slow to draw. */
-        let firstFrameConnection = session.windowBuilder.connect('first-frame', Lang.bind(this, function() {
+        let firstFrameConnection = session.actorBuilder.connect('first-frame', Lang.bind(this, function() {
             // reset the bouncing animation that was showed while Builder was loading
             Tweener.removeTweens(session.buttonApp);
             session.buttonApp.scale_y = 1;
@@ -2107,15 +2107,15 @@ const CodingManager = new Lang.Class({
             session.buttonApp.translation_y = 0;
             session.buttonApp.translation_x = 0;
 
-            this._rotateInActors.push(session.windowBuilder);
-            this._rotateOutActors.push(session.windowApp);
+            this._rotateInActors.push(session.actorBuilder);
+            this._rotateOutActors.push(session.actorApp);
 
-            this._animate(session.windowApp, session.windowBuilder, Gtk.DirectionType.LEFT);
+            this._animate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
 
             this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
                 return conn != session.firstFrameConnection;
             });
-            session.windowBuilder.disconnect(session.firstFrameConnection);
+            session.actorBuilder.disconnect(session.firstFrameConnection);
             session.firstFrameConnection = null;
 
             this._addButton(session);
@@ -2131,51 +2131,51 @@ const CodingManager = new Lang.Class({
     },
 
     _windowAppPositionChanged: function(window, session) {
-        let rect = session.windowApp.meta_window.get_frame_rect();
+        let rect = session.actorApp.meta_window.get_frame_rect();
         session.buttonApp.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
-        if (!session.windowBuilder)
+        if (!session.actorBuilder)
             return;
-        session.windowBuilder.meta_window.move_resize_frame(false,
-                                                            rect.x,
-                                                            rect.y,
-                                                            rect.width,
-                                                            rect.height);
+        session.actorBuilder.meta_window.move_resize_frame(false,
+                                                           rect.x,
+                                                           rect.y,
+                                                           rect.width,
+                                                           rect.height);
     },
 
     _windowAppSizeChanged: function(window, session) {
-        let rect = session.windowApp.meta_window.get_frame_rect();
+        let rect = session.actorApp.meta_window.get_frame_rect();
         session.buttonApp.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
-        if (!session.windowBuilder)
+        if (!session.actorBuilder)
             return;
-        session.windowBuilder.meta_window.move_resize_frame(false,
-                                                            rect.x,
-                                                            rect.y,
-                                                            rect.width,
-                                                            rect.height);
+        session.actorBuilder.meta_window.move_resize_frame(false,
+                                                           rect.x,
+                                                           rect.y,
+                                                           rect.width,
+                                                           rect.height);
     },
 
     _windowBuilderPositionChanged: function(window, session) {
-        let rect = session.windowBuilder.meta_window.get_frame_rect();
+        let rect = session.actorBuilder.meta_window.get_frame_rect();
         session.buttonBuilder.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
-        if (!session.windowApp)
+        if (!session.actorApp)
             return;
-        session.windowApp.meta_window.move_resize_frame(false,
-                                                        rect.x,
-                                                        rect.y,
-                                                        rect.width,
-                                                        rect.height);
+        session.actorApp.meta_window.move_resize_frame(false,
+                                                       rect.x,
+                                                       rect.y,
+                                                       rect.width,
+                                                       rect.height);
     },
 
     _windowBuilderSizeChanged: function(window, session) {
-        let rect = session.windowBuilder.meta_window.get_frame_rect();
+        let rect = session.actorBuilder.meta_window.get_frame_rect();
         session.buttonBuilder.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
-        if (!session.windowApp)
+        if (!session.actorApp)
             return;
-        session.windowApp.meta_window.move_resize_frame(false,
-                                                        rect.x,
-                                                        rect.y,
-                                                        rect.width,
-                                                        rect.height);
+        session.actorApp.meta_window.move_resize_frame(false,
+                                                       rect.x,
+                                                       rect.y,
+                                                       rect.width,
+                                                       rect.height);
     },
 
     _windowAppRestacked : function(overview, stackIndices, session) {
@@ -2194,36 +2194,36 @@ const CodingManager = new Lang.Class({
         if (session.buttonBuilder)
             session.buttonBuilder.hide();
 
-        if (focusedWindow === session.windowApp.meta_window) {
-            if (session.windowBuilder && session.windowBuilder.meta_window === previousFocused) {
-                this._rotateInActors.push(session.windowApp);
-                this._rotateOutActors.push(session.windowBuilder);
-                this._animate(session.windowBuilder,
-                              session.windowApp,
+        if (focusedWindow === session.actorApp.meta_window) {
+            if (session.actorBuilder && session.actorBuilder.meta_window === previousFocused) {
+                this._rotateInActors.push(session.actorApp);
+                this._rotateOutActors.push(session.actorBuilder);
+                this._animate(session.actorBuilder,
+                              session.actorApp,
                               Gtk.DirectionType.RIGHT);
                 session.buttonApp.show();
                 session.state = SessionState.APP;
                 return;
             }
-            session.windowApp.show();
+            session.actorApp.show();
             session.buttonApp.show();
             return;
         }
 
-        if (!session.windowBuilder)
+        if (!session.actorBuilder)
             return;
-        if (focusedWindow === session.windowBuilder.meta_window) {
-            if (session.windowApp.meta_window === previousFocused) {
-                this._rotateInActors.push(session.windowBuilder);
-                this._rotateOutActors.push(session.windowApp);
-                this._animate(session.windowApp,
-                              session.windowBuilder,
+        if (focusedWindow === session.actorBuilder.meta_window) {
+            if (session.actorApp.meta_window === previousFocused) {
+                this._rotateInActors.push(session.actorBuilder);
+                this._rotateOutActors.push(session.actorApp);
+                this._animate(session.actorApp,
+                              session.actorBuilder,
                               Gtk.DirectionType.LEFT);
                 session.state = SessionState.BUILDER;
             } else {
-                session.windowBuilder.show();
+                session.actorBuilder.show();
                 session.buttonBuilder.show();
-                session.windowApp.hide();
+                session.actorApp.hide();
             }
         }
     },
