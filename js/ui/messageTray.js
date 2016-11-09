@@ -1133,6 +1133,16 @@ const Notification = new Lang.Class({
             this.destroy();
     },
 
+    activate: function() {
+        this.emit('clicked');
+        // We hide all types of notifications once the user clicks on them because the common
+        // outcome of clicking should be the relevant window being brought forward and the user's
+        // attention switching to the window.
+        this.emit('done-displaying');
+        if (!this.resident)
+            this.destroy();
+    },
+
     _onDestroy: function() {
         if (this._destroyed)
             return;
