@@ -1951,7 +1951,7 @@ const CodingManager = new Lang.Class({
     },
 
     addSwitcherToBuilder: function(actorApp) {
-        let window = actorApp.get_meta_window();
+        let window = actorApp.meta_window;
 
         let button = new St.Button({ style_class: 'view-source' });
         let rect = window.get_frame_rect();
@@ -1975,7 +1975,7 @@ const CodingManager = new Lang.Class({
 
     addSwitcherToApp: function(actorBuilder, windowApp) {
         let currentSession = this._sessions.filter(function(session) {
-            return (session.windowApp.get_meta_window() === windowApp);
+            return (session.windowApp.meta_window === windowApp);
         });
         if (currentSession.length === 0)
             return;
@@ -1995,11 +1995,11 @@ const CodingManager = new Lang.Class({
         // with an open Builder session
 
         if (session.positionChangedIdApp != 0) {
-            session.windowApp.get_meta_window().disconnect(session.positionChangedIdApp);
+            session.windowApp.meta_window.disconnect(session.positionChangedIdApp);
             session.positionChangedIdApp = 0;
         }
         if (session.sizeChangedIdApp != 0) {
-            session.windowApp.get_meta_window().disconnect(session.sizeChangedIdApp);
+            session.windowApp.meta_window.disconnect(session.sizeChangedIdApp);
             session.sizeChangedIdApp = 0;
         }
         if (session.windowsRestackedIdApp != 0) {
@@ -2016,17 +2016,17 @@ const CodingManager = new Lang.Class({
             return;
 
         let tracker = Shell.WindowTracker.get_default();
-        tracker.untrack_coding_app_window(session.windowBuilder.get_meta_window());
+        tracker.untrack_coding_app_window(session.windowBuilder.meta_window);
 
         if (session.positionChangedIdBuilder != 0) {
-            session.windowBuilder.get_meta_window().disconnect(session.positionChangedIdBuilder);
+            session.windowBuilder.meta_window.disconnect(session.positionChangedIdBuilder);
             session.positionChangedIdBuilder = 0;
         }
         session.buttonBuilder.destroy();
         session.windowBuilder = null;
 
         if (session.windowApp) {
-            session.windowApp.get_meta_window().activate(global.get_current_time());
+            session.windowApp.meta_window.activate(global.get_current_time());
             session.windowApp.show();
             session.buttonApp.show();
             session.state = SessionState.APP;
@@ -2036,13 +2036,13 @@ const CodingManager = new Lang.Class({
     _switchToBuilder : function(actor, event, session) {
         if (!session.windowBuilder) {
             let tracker = Shell.WindowTracker.get_default();
-            tracker.track_coding_app_window(session.windowApp.get_meta_window());
+            tracker.track_coding_app_window(session.windowApp.meta_window);
             // Pass the manifest path to Builder
             // this._getManifestPath(session.windowApp.meta_window.get_flatpak_id()));
             Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
             animateBounce(session.buttonApp);
         } else {
-            session.windowBuilder.get_meta_window().activate(global.get_current_time());
+            session.windowBuilder.meta_window.activate(global.get_current_time());
             this._rotateInActors.push(session.windowBuilder);
             this._rotateOutActors.push(session.windowApp);
             this._animate(session.windowApp,
@@ -2056,7 +2056,7 @@ const CodingManager = new Lang.Class({
     _switchToApp : function(actor, event, session) {
         if (!session.windowApp)
             return;
-        session.windowApp.get_meta_window().activate(global.get_current_time());
+        session.windowApp.meta_window.activate(global.get_current_time());
         this._rotateInActors.push(session.windowApp);
         this._rotateOutActors.push(session.windowBuilder);
         this._animate(session.windowBuilder,
@@ -2077,7 +2077,7 @@ const CodingManager = new Lang.Class({
     },
 
     _addButton: function(session) {
-        let window = session.windowBuilder.get_meta_window();
+        let window = session.windowBuilder.meta_window;
         let button = new St.Button({ style_class: 'view-source' });
         let rect = window.get_frame_rect();
         button.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
@@ -2131,51 +2131,51 @@ const CodingManager = new Lang.Class({
     },
 
     _windowAppPositionChanged: function(window, session) {
-        let rect = session.windowApp.get_meta_window().get_frame_rect();
+        let rect = session.windowApp.meta_window.get_frame_rect();
         session.buttonApp.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         if (!session.windowBuilder)
             return;
-        session.windowBuilder.get_meta_window().move_resize_frame(false,
-                                                                  rect.x,
-                                                                  rect.y,
-                                                                  rect.width,
-                                                                  rect.height);
+        session.windowBuilder.meta_window.move_resize_frame(false,
+                                                            rect.x,
+                                                            rect.y,
+                                                            rect.width,
+                                                            rect.height);
     },
 
     _windowAppSizeChanged: function(window, session) {
-        let rect = session.windowApp.get_meta_window().get_frame_rect();
+        let rect = session.windowApp.meta_window.get_frame_rect();
         session.buttonApp.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         if (!session.windowBuilder)
             return;
-        session.windowBuilder.get_meta_window().move_resize_frame(false,
-                                                                  rect.x,
-                                                                  rect.y,
-                                                                  rect.width,
-                                                                  rect.height);
+        session.windowBuilder.meta_window.move_resize_frame(false,
+                                                            rect.x,
+                                                            rect.y,
+                                                            rect.width,
+                                                            rect.height);
     },
 
     _windowBuilderPositionChanged: function(window, session) {
-        let rect = session.windowBuilder.get_meta_window().get_frame_rect();
+        let rect = session.windowBuilder.meta_window.get_frame_rect();
         session.buttonBuilder.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         if (!session.windowApp)
             return;
-        session.windowApp.get_meta_window().move_resize_frame(false,
-                                                              rect.x,
-                                                              rect.y,
-                                                              rect.width,
-                                                              rect.height);
+        session.windowApp.meta_window.move_resize_frame(false,
+                                                        rect.x,
+                                                        rect.y,
+                                                        rect.width,
+                                                        rect.height);
     },
 
     _windowBuilderSizeChanged: function(window, session) {
-        let rect = session.windowBuilder.get_meta_window().get_frame_rect();
+        let rect = session.windowBuilder.meta_window.get_frame_rect();
         session.buttonBuilder.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         if (!session.windowApp)
             return;
-        session.windowApp.get_meta_window().move_resize_frame(false,
-                                                              rect.x,
-                                                              rect.y,
-                                                              rect.width,
-                                                              rect.height);
+        session.windowApp.meta_window.move_resize_frame(false,
+                                                        rect.x,
+                                                        rect.y,
+                                                        rect.width,
+                                                        rect.height);
     },
 
     _windowAppRestacked : function(overview, stackIndices, session) {
@@ -2194,8 +2194,8 @@ const CodingManager = new Lang.Class({
         if (session.buttonBuilder)
             session.buttonBuilder.hide();
 
-        if (focusedWindow === session.windowApp.get_meta_window()) {
-            if (session.windowBuilder && session.windowBuilder.get_meta_window() === previousFocused) {
+        if (focusedWindow === session.windowApp.meta_window) {
+            if (session.windowBuilder && session.windowBuilder.meta_window === previousFocused) {
                 this._rotateInActors.push(session.windowApp);
                 this._rotateOutActors.push(session.windowBuilder);
                 this._animate(session.windowBuilder,
@@ -2212,8 +2212,8 @@ const CodingManager = new Lang.Class({
 
         if (!session.windowBuilder)
             return;
-        if (focusedWindow === session.windowBuilder.get_meta_window()) {
-            if (session.windowApp.get_meta_window() === previousFocused) {
+        if (focusedWindow === session.windowBuilder.meta_window) {
+            if (session.windowApp.meta_window === previousFocused) {
                 this._rotateInActors.push(session.windowBuilder);
                 this._rotateOutActors.push(session.windowApp);
                 this._animate(session.windowApp,
