@@ -830,6 +830,7 @@ const GtkNotificationDaemonAppSource = new Lang.Class({
             throw new InvalidAppError();
 
         this._notifications = {};
+        this._notificationsDestroyIds = {};
 
         this.parent(this._app.get_name());
     },
@@ -857,12 +858,13 @@ const GtkNotificationDaemonAppSource = new Lang.Class({
     },
 
     addNotification: function(notificationId, notificationParams, showBanner) {
-        if (this._notifications[notificationId])
-            this._notifications[notificationId].destroy();
+        let oldNotification = this._notifications[notificationId];
+        let oldNotificationDestroyId = this._notificationsDestroyIds[notificationId]
 
         let notification = new GtkNotificationDaemonNotification(this, notificationParams);
-        notification.connect('destroy', Lang.bind(this, function() {
+        this._notificationsDestroyIds[notificationId] = notification.connect('destroy', Lang.bind(this, function() {
             delete this._notifications[notificationId];
+            delete this._notificationsDestroyIds[notificationId];
         }));
         this._notifications[notificationId] = notification;
 
@@ -870,6 +872,10 @@ const GtkNotificationDaemonAppSource = new Lang.Class({
             this.notify(notification);
         else
             this.pushNotification(notification);
+        if (oldNotification) {
+            oldNotification.disconnect(oldNotificationDestroyId);
+            oldNotification.destroy();
+        }
     },
 
     removeNotification: function(notificationId) {
