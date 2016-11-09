@@ -294,11 +294,11 @@ const BaseIcon = new Lang.Class({
                                             y_expand: true });
         this.iconButton.add_actor(this._layeredIcon);
 
-        let shadow = new St.Widget({ style_class: 'shadow-icon',
-                                     visible: true,
-                                     x_expand: true,
-                                     y_expand: true });
-        this._layeredIcon.add_actor(shadow);
+        this._shadowIcon = new St.Widget({ style_class: 'shadow-icon',
+                                           visible: true,
+                                           x_expand: true,
+                                           y_expand: true });
+        this._layeredIcon.add_actor(this._shadowIcon);
 
         if (params.showLabel) {
             if (params.editableLabel) {
@@ -317,7 +317,7 @@ const BaseIcon = new Lang.Class({
             this.createIcon = params.createIcon;
         this._setSizeManually = params.setSizeManually;
 
-        this.icon = null;
+        this.icons = [];
 
         let cache = St.TextureCache.get_default();
         this._iconThemeChangedId = cache.connect('icon-theme-changed', Lang.bind(this, this._onIconThemeChanged));
@@ -397,14 +397,19 @@ const BaseIcon = new Lang.Class({
     },
 
     _createIconTexture: function(size) {
-        if (this.icon)
-            this.icon.destroy();
+        this.icons.forEach(function (i) {i.destroy()});
         this.iconSize = size;
-        this.icon = this.createIcon(this.iconSize);
+        this.icons = this.createIcon(this.iconSize);
+        if (Object.prototype.toString.call(this.icons) !== '[object Array]' ) {
+            this.icons = [this.icons];
+        }
 
-        this._layeredIcon.add_actor(this.icon);
+        this.icons.forEach(Lang.bind(this, function (i) {
+            this._layeredIcon.add_actor(i);
+        }));
+
         if (this._shadowAbove) {
-            this._layeredIcon.set_child_below_sibling(this.icon, null);
+            this._layeredIcon.set_child_below_sibling(this.icons[0], this._shadowIcon);
         }
 
         // The icon returned by createIcon() might actually be smaller than
