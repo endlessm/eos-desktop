@@ -17,18 +17,6 @@ function resetEnvironment() {
     window._ = (str) => str;
     window.C_ = (ctx, str) => str;
 }
-resetEnvironment();  // Needed for following import
-
-let sessionModeImport = imports.js.ui.sessionMode;
 
 describe('The clock', function () {
-    beforeEach(resetEnvironment);
-
-    it('is on the right', function () {
-        let modes = sessionModeImport._modes;
-
-        let rightPanel = modes['gdm']['panel']['right'];
-
-        expect(rightPanel[0]).toEqual('dateMenu');
-    });
 });
