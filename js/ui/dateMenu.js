@@ -320,7 +320,7 @@ const DateMenuButton = new Lang.Class({
         let menuAlignment = 0.5;
         if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
             menuAlignment = 1.0 - menuAlignment;
-        this.parent(menuAlignment);
+        this.parent(menuAlignment, _('Calendar'));
 
         this._clockDisplay = new St.Label({ y_align: Clutter.ActorAlign.CENTER });
         this._indicator = new MessagesIndicator();
