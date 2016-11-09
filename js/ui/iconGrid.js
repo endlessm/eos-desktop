@@ -256,6 +256,7 @@ const BaseIcon = new Lang.Class({
 
     _init : function(label, params, buttonParams) {
         params = Params.parse(params, { createIcon: null,
+                                        createExtraIcons: null,
                                         setSizeManually: false,
                                         showLabel: true,
                                         editableLabel: false,
@@ -315,9 +316,12 @@ const BaseIcon = new Lang.Class({
 
         if (params.createIcon)
             this.createIcon = params.createIcon;
+        if (params.createExtraIcons)
+            this.createExtraIcons = params.createExtraIcons;
         this._setSizeManually = params.setSizeManually;
 
         this.icon = null;
+        this.extraIcons = [];
 
         let cache = St.TextureCache.get_default();
         this._iconThemeChangedId = cache.connect('icon-theme-changed', Lang.bind(this, this._onIconThemeChanged));
@@ -386,6 +390,12 @@ const BaseIcon = new Lang.Class({
         throw new Error('no implementation of createIcon in ' + this);
     },
 
+    // This can be overridden by a subclass, or by the createExtraIcons
+    // parameter to _init()
+    createExtraIcons: function(size) {
+        return [];
+    },
+
     setIconSize: function(size) {
         if (!this._setSizeManually)
             throw new Error('setSizeManually has to be set to use setIconsize');
@@ -399,13 +409,18 @@ const BaseIcon = new Lang.Class({
     _createIconTexture: function(size) {
         if (this.icon)
             this.icon.destroy();
+        this.extraIcons.forEach(function (i) {i.destroy()});
         this.iconSize = size;
         this.icon = this.createIcon(this.iconSize);
+        this.extraIcons = this.createExtraIcons(this.iconSize);
 
         this._layeredIcon.add_actor(this.icon);
         if (this._shadowAbove) {
             this._layeredIcon.set_child_below_sibling(this.icon, null);
         }
+        this.extraIcons.forEach(Lang.bind(this, function (i) {
+            this._layeredIcon.add_actor(i);
+        }));
 
         // The icon returned by createIcon() might actually be smaller than
         // the requested icon size (for instance StTextureCache does this
