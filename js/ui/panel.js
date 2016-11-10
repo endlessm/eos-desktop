@@ -343,7 +343,7 @@ const AggregateMenu = new Lang.Class({
     Extends: PanelMenu.Button,
 
     _init: function() {
-        this.parent(0.0, C_("System menu in the top bar", "System"), false);
+        this.parent(0.0, C_("System menu in the top bar", "System Menu"), false);
         this.menu.actor.add_style_class_name('aggregate-menu');
 
         let menuLayout = new AggregateLayout();
@@ -367,7 +367,7 @@ const AggregateMenu = new Lang.Class({
         this._rfkill = new imports.ui.status.rfkill.Indicator();
         this._volume = new imports.ui.status.volume.Indicator();
         this._brightness = new imports.ui.status.brightness.Indicator();
-        this._system = new imports.ui.status.system.Indicator();
+        // this._system = new imports.ui.status.system.Indicator();
         // this._screencast = new imports.ui.status.screencast.Indicator();
         // this._location = new imports.ui.status.location.Indicator();
 
@@ -396,14 +396,48 @@ const AggregateMenu = new Lang.Class({
         // this.menu.addMenuItem(this._location.menu);
         this.menu.addMenuItem(this._rfkill.menu);
         this.menu.addMenuItem(this._power.menu);
-        this.menu.addMenuItem(this._system.menu);
+        // this.menu.addMenuItem(this._system.menu);
 
         // menuLayout.addSizeChild(this._location.menu.actor);
         menuLayout.addSizeChild(this._rfkill.menu.actor);
         menuLayout.addSizeChild(this._power.menu.actor);
-        menuLayout.addSizeChild(this._system.menu.actor);
+        // menuLayout.addSizeChild(this._system.menu.actor);
     },
 });
+
+const ShowAppsButton = new Lang.Class({
+    Name: 'ShowAppsButton',
+    Extends: PanelMenu.Button,
+
+    _init: function(panel) {
+        this.parent('', _("User Menu"), false);
+        this.menu.actor.add_style_class_name('aggregate-menu');
+
+        let menuLayout = new AggregateLayout();
+        this.menu.box.set_layout_manager(menuLayout);
+
+        this.actor.add_style_class_name('user-menu-icon');
+
+        let box = new St.BoxLayout({ name: 'panelUserMenu' });
+        this.actor.add_actor(box);
+
+        this._panel = panel;
+
+        this._icon = new St.Icon({ style_class: 'settings-menu-icon' });
+
+        box.add(this._icon);
+
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/endless-symbolic.svg');
+        this._giconNormal = new Gio.FileIcon({ file: iconFile });
+
+        this._icon.gicon = this._giconNormal;
+
+        this._system = new imports.ui.status.system.Indicator();
+        this.menu.addMenuItem(this._system.menu);
+        menuLayout.addSizeChild(this._system.menu.actor);
+    }
+});
+
 
 const PANEL_ITEM_IMPLEMENTATIONS = {
     'appIcons': imports.ui.appIconBar.AppIconBar,
@@ -417,7 +451,7 @@ const PANEL_ITEM_IMPLEMENTATIONS = {
     'logo': imports.gdm.loginDialog.LogoMenuButton,
     'keyboard': imports.ui.status.keyboard.InputSourceIndicator,
     'powerMenu': imports.gdm.powerMenu.PowerMenuButton,
-    'showApps': imports.ui.panelMenu.ShowAppsButton,
+    'showApps': ShowAppsButton,
     'showWindows': imports.ui.panelMenu.ShowWindowsButton,
     'system': imports.ui.status.system.Indicator,
     'socialBar': imports.ui.status.social.SocialBarButton,

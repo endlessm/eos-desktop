@@ -311,49 +311,6 @@ const SystemStatusButton = new Lang.Class({
     }
 });
 
-const ShowAppsButton = new Lang.Class({
-    Name: 'ShowAppsButton',
-    Extends: Button,
-
-    _init: function(panel) {
-        this.parent('', _("Show Desktop"), true);
-
-        this.actor.add_style_class_name('user-menu-icon');
-
-        let box = new St.BoxLayout({ name: 'panelUserMenu' });
-        this.actor.add_actor(box);
-
-        this._panel = panel;
-
-        this._icon = new St.Icon({ style_class: 'settings-menu-icon' });
-
-        box.add(this._icon);
-
-        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/endless-symbolic.svg');
-        this._giconNormal = new Gio.FileIcon({ file: iconFile });
-
-        this._icon.gicon = this._giconNormal;
-
-        this.actor.connect('button-release-event', Lang.bind(this, this._onButtonRelease));
-        this.actor.connect('key-press-event', Lang.bind(this, this._onKeyPress));
-    },
-
-    _onButtonRelease: function(actor, event) {
-        Main.overview.toggleApps();
-        this._panel.closeActiveMenu();
-    },
-
-    _onKeyPress: function(actor, event) {
-        let symbol = event.get_key_symbol();
-        if (symbol == Clutter.KEY_space || symbol == Clutter.KEY_Return) {
-            this._panel.closeActiveMenu();
-            Main.overview.toggleApps();
-            return true;
-        } else
-            return false;
-    }
-});
-
 const ShowWindowsButton = new Lang.Class({
     Name: 'ShowWindowsButton',
     Extends: Button,
