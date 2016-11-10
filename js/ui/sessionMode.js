@@ -46,7 +46,7 @@ const _modes = {
         components: ['polkitAgent'],
         panel: {
             left: ['logo'],
-            right: ['a11yGreeter', 'keyboard', 'aggregateMenu']
+            right: ['a11yGreeter', 'keyboard', 'aggregateMenu', 'panelSeparator2', 'dateMenu']
         },
         panelStyle: 'login-screen'
     },
@@ -60,7 +60,7 @@ const _modes = {
         components: ['polkitAgent'],
         panel: {
             left: [],
-            right: ['aggregateMenu']
+            right: ['aggregateMenu', 'panelSeparator2', 'dateMenu']
         },
         panelStyle: 'unlock-screen'
     },
