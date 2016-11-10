@@ -215,7 +215,6 @@ msgstr "A execução de \"%s\" falhou:"
 
 #. Translators: Time in 24h format
 #: ../js/misc/util.js:243
-#, fuzzy
 msgid "%H∶%M"
 msgstr "%H∶%M"
 
@@ -224,22 +223,22 @@ msgstr "%H∶%M"
 #: ../js/misc/util.js:249
 #, no-c-format
 msgid "Yesterday, %H∶%M"
-msgstr ""
+msgstr "Ontem, %H∶%M"
 
 #. Translators: this is the week day name followed by a time
 #. string in 24h format. i.e. "Monday, 14:30"
 #: ../js/misc/util.js:255
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "%A, %H∶%M"
-msgstr "%H∶%M"
+msgstr "%A, %H∶%M"
 
 #. Translators: this is the month name and day number
 #. followed by a time string in 24h format.
 #. i.e. "May 25, 14:30"
 #: ../js/misc/util.js:261
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "%B %d, %H∶%M"
-msgstr "%H∶%M"
+msgstr "%d de %B, %H∶%M"
 
 #. Translators: this is the month name, day number, year
 #. number followed by a time string in 24h format.
@@ -247,11 +246,10 @@ msgstr "%H∶%M"
 #: ../js/misc/util.js:267
 #, no-c-format
 msgid "%B %d %Y, %H∶%M"
-msgstr ""
+msgstr "%d de %B de %Y, %H∶%M"
 
 #. Translators: Time in 12h format
 #: ../js/misc/util.js:272
-#, fuzzy
 msgid "%l∶%M %p"
 msgstr "%l∶%M %p"
 
@@ -260,22 +258,22 @@ msgstr "%l∶%M %p"
 #: ../js/misc/util.js:278
 #, no-c-format
 msgid "Yesterday, %l∶%M %p"
-msgstr ""
+msgstr "Ontem, %l∶%M %p"
 
 #. Translators: this is the week day name followed by a time
 #. string in 12h format. i.e. "Monday, 2:30 pm"
 #: ../js/misc/util.js:284
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "%A, %l∶%M %p"
-msgstr "%l∶%M %p"
+msgstr "%A, %l∶%M %p"
 
 #. Translators: this is the month name and day number
 #. followed by a time string in 12h format.
 #. i.e. "May 25, 2:30 pm"
 #: ../js/misc/util.js:290
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "%B %d, %l∶%M %p"
-msgstr "%l∶%M %p"
+msgstr "%d de %B, %l∶%M %p"
 
 #. Translators: this is the month name, day number, year
 #. number followed by a time string in 12h format.
@@ -283,7 +281,7 @@ msgstr "%l∶%M %p"
 #: ../js/misc/util.js:296
 #, no-c-format
 msgid "%B %d %Y, %l∶%M %p"
-msgstr ""
+msgstr "%d de %B de %Y, %l∶%M %p"
 
 #: ../js/ui/appDisplay.js:1186
 msgid "Remove from desktop"
@@ -367,7 +365,7 @@ msgstr "Adicionar nova pasta"
 #: ../js/ui/calendar.js:47
 msgctxt "calendar-no-work"
 msgid "06"
-msgstr ""
+msgstr "06"
 
 #. Translators: Calendar grid abbreviation for Sunday.
 #. *
@@ -417,21 +415,21 @@ msgstr "S"
 
 #: ../js/ui/calendar.js:416
 msgid "Previous month"
-msgstr ""
+msgstr "Mês anterior"
 
 #: ../js/ui/calendar.js:426
 msgid "Next month"
-msgstr ""
+msgstr "Próximo mês"
 
 #: ../js/ui/calendar.js:579
 #, no-javascript-format
 msgctxt "date day number format"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #: ../js/ui/calendar.js:634
 msgid "Week %V"
-msgstr ""
+msgstr "Semana %V"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -443,7 +441,7 @@ msgstr "Dia todo"
 
 #: ../js/ui/calendar.js:821
 msgid "Events"
-msgstr ""
+msgstr "Eventos"
 
 #: ../js/ui/calendar.js:830
 msgctxt "calendar heading"
@@ -456,18 +454,16 @@ msgid "%A, %B %d, %Y"
 msgstr "%A, %d de %B de %Y"
 
 #: ../js/ui/calendar.js:919
-#, fuzzy
 msgid "Notifications"
-msgstr "Configurações de Notificação"
+msgstr "Notificações"
 
 #: ../js/ui/calendar.js:1070
-#, fuzzy
 msgid "No Notifications"
-msgstr "Configurações de Notificação"
+msgstr "Nenhuma notificação"
 
 #: ../js/ui/calendar.js:1073
 msgid "No Events"
-msgstr ""
+msgstr "Nenhum evento"
 
 #: ../js/ui/components/automountManager.js:90
 msgid "External drive connected"
@@ -667,32 +663,28 @@ msgstr "Dash"
 #. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29 AM").
 #.
 #: ../js/ui/dateMenu.js:73
-#, fuzzy
 msgid "%B %e %Y"
-msgstr "%A, %e de %B de %Y"
+msgstr "%e de %B de %Y"
 
 #. Translators: This is the accessible name of the date button shown
 #. * below the time in the shell; it should combine the weekday and the
 #. * date, e.g. "Tuesday February 17 2015".
 #.
 #: ../js/ui/dateMenu.js:80
-#, fuzzy
 msgid "%A %B %e %Y"
 msgstr "%A, %e de %B de %Y"
 
 #: ../js/ui/dateMenu.js:160
 msgid "Add world clocks…"
-msgstr ""
+msgstr "Adicionar relógios mundiais…"
 
 #: ../js/ui/dateMenu.js:161
-#, fuzzy
 msgid "World Clocks"
-msgstr "Abrir relógios"
+msgstr "Relógios mundiais"
 
 #: ../js/ui/dateMenu.js:323
-#, fuzzy
 msgid "Calendar"
-msgstr "Abrir Calendário"
+msgstr "Calendário"
 
 #: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
@@ -939,7 +931,6 @@ msgid "Overview"
 msgstr "Visão geral"
 
 #: ../js/ui/panel.js:346
-#, fuzzy
 msgctxt "System menu in the top bar"
 msgid "System"
 msgstr "Sistema"
@@ -1070,7 +1061,7 @@ msgstr "Texto grande"
 
 #: ../js/ui/status/brightness.js:44
 msgid "Brightness"
-msgstr ""
+msgstr "Brilho"
 
 #: ../js/ui/status/bluetooth.js:47
 msgid "Bluetooth"
@@ -1082,30 +1073,29 @@ msgstr "Configurações de Bluetooth"
 
 #. Translators: this is the number of connected bluetooth devices
 #: ../js/ui/status/bluetooth.js:136
-#, fuzzy, javascript-format
 msgid "%d Connected"
 msgid_plural "%d Connected"
-msgstr[0] "Conectar"
-msgstr[1] "Conectar"
+msgstr[0] "%d conectado"
+msgstr[1] "%d conectados"
 
 #: ../js/ui/status/bluetooth.js:138
 msgid "Off"
-msgstr ""
+msgstr "Off"
 
 #: ../js/ui/status/bluetooth.js:140
 msgid "Not In Use"
-msgstr ""
+msgstr "Livre"
 
 #: ../js/ui/status/bluetooth.js:142 ../js/ui/status/network.js:1279
 msgid "Turn On"
-msgstr ""
+msgstr "Ligar"
 
 #: ../js/ui/status/bluetooth.js:142 ../js/ui/status/network.js:178
 #: ../js/ui/status/network.js:353 ../js/ui/status/network.js:1279
 #: ../js/ui/status/network.js:1394 ../js/ui/status/rfkill.js:90
 #: ../js/ui/status/rfkill.js:117
 msgid "Turn Off"
-msgstr ""
+msgstr "Desligar"
 
 #: ../js/ui/status/hotCornerIndicator.js:19
 msgid "Hot Corner Indicator"
@@ -1135,151 +1125,133 @@ msgstr "<desconhecido>"
 #: ../js/ui/status/network.js:451 ../js/ui/status/network.js:1308
 #, javascript-format
 msgid "%s Off"
-msgstr ""
+msgstr "%s desligado"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:454
-#, fuzzy, javascript-format
 msgid "%s Connected"
-msgstr "Conectar"
+msgstr "Conectado a %s"
 
 #. Translators: this is for network devices that are physically present but are not
 #. under NetworkManager's control (and thus cannot be used in the menu);
 #. %s is a network identifier
 #: ../js/ui/status/network.js:459
-#, fuzzy, javascript-format
 msgid "%s Unmanaged"
-msgstr "não gerenciado"
+msgstr "%s não é gerenciável"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:462
-#, fuzzy, javascript-format
 msgid "%s Disconnecting"
-msgstr "desconectando..."
+msgstr "Desconectando de %s"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1300
-#, fuzzy, javascript-format
 msgid "%s Connecting"
-msgstr "Conectar"
+msgstr "Conectando a %s"
 
 #. Translators: this is for network connections that require some kind of key or password; %s is a network identifier
 #: ../js/ui/status/network.js:472
-#, fuzzy, javascript-format
 msgid "%s Requires Authentication"
-msgstr "Autenticação 802.1X cabeada"
+msgstr "%s requer autenticação"
 
 #. Translators: this is for devices that require some kind of firmware or kernel
 #. module, which is missing; %s is a network identifier
 #: ../js/ui/status/network.js:480
-#, fuzzy, javascript-format
 msgid "Firmware Missing For %s"
-msgstr "firmware não está definido"
+msgstr "Firmware em falta para %s"
 
 #. Translators: this is for a network device that cannot be activated (for example it
 #. is disabled by rfkill, or it has no coverage; %s is a network identifier
 #: ../js/ui/status/network.js:484
-#, fuzzy, javascript-format
 msgid "%s Unavailable"
-msgstr "indisponível"
+msgstr "%s está indisponível"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:487
-#, fuzzy, javascript-format
 msgid "%s Connection Failed"
-msgstr "Falha de conexão"
+msgstr "Falha na conexão de %s"
 
 #: ../js/ui/status/network.js:503
-#, fuzzy
 msgid "Wired Settings"
-msgstr "Configurações"
+msgstr "Configurações da rede cabeada"
 
 #: ../js/ui/status/network.js:545
-#, fuzzy
 msgid "Mobile Broadband Settings"
-msgstr "Banda larga móvel"
+msgstr "Configurações de banda larga móvel"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1305
-#, fuzzy, javascript-format
 msgid "%s Hardware Disabled"
-msgstr "hardware desabilitado"
+msgstr "Hardware de %s desabilitado"
 
 #. Translators: this is for a network device that cannot be activated
 #. because it's disabled by rfkill (airplane mode); %s is a network identifier
 #: ../js/ui/status/network.js:592
-#, fuzzy, javascript-format
 msgid "%s Disabled"
-msgstr "Desabilitado"
+msgstr "%s está desabilitado"
 
 #: ../js/ui/status/network.js:632
 msgid "Connect to Internet"
-msgstr ""
+msgstr "Conectar al Internet"
 
 #: ../js/ui/status/network.js:813
 msgid "Airplane Mode is On"
-msgstr ""
+msgstr "Modo avião ligado"
 
 #: ../js/ui/status/network.js:814
 msgid "Wi-Fi is disabled when airplane mode is on."
-msgstr ""
+msgstr "O Wi-Fi é desabilitado quando o modo avião está ligado."
 
 #: ../js/ui/status/network.js:815
 msgid "Turn Off Airplane Mode"
-msgstr ""
+msgstr "Desligar modo avião"
 
 #: ../js/ui/status/network.js:824
 msgid "Wi-Fi is Off"
-msgstr ""
+msgstr "Wi-Fi desligado"
 
 #: ../js/ui/status/network.js:825
 msgid "Wi-Fi needs to be turned on in order to connect to a network."
-msgstr ""
+msgstr "O Wi-Fi precisa ser ligado a fim de conectar-se a uma rede."
 
 #: ../js/ui/status/network.js:826
 msgid "Turn On Wi-Fi"
-msgstr ""
+msgstr "Ligar Wi-Fi"
 
 #: ../js/ui/status/network.js:851
-#, fuzzy
 msgid "Wi-Fi Networks"
-msgstr "Rede"
+msgstr "Redes Wi-Fi"
 
 #: ../js/ui/status/network.js:853
-#, fuzzy
 msgid "Select a network"
-msgstr "Habilitar rede"
+msgstr "Selecione uma rede"
 
 #: ../js/ui/status/network.js:883
-#, fuzzy
 msgid "No Networks"
-msgstr "Rede"
+msgstr "Nenhuma rede"
 
 #: ../js/ui/status/network.js:904 ../js/ui/status/rfkill.js:115
 msgid "Use hardware switch to turn off"
-msgstr ""
+msgstr "Usar alternador de hardware para desligar"
 
 #: ../js/ui/status/network.js:1171
-#, fuzzy
 msgid "Select Network"
-msgstr "Rede"
+msgstr "Selecione a rede"
 
 #: ../js/ui/status/network.js:1177
-#, fuzzy
 msgid "Wi-Fi Settings"
-msgstr "Configurações"
+msgstr "Configurações de Wi-Fi"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:1296
 #, javascript-format
 msgid "%s Hotspot Active"
-msgstr ""
+msgstr "Ponto de acesso %s está ativo"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:1311
-#, fuzzy, javascript-format
 msgid "%s Not Connected"
-msgstr "Conectar"
+msgstr "%s não está conectado"
 
 #: ../js/ui/status/network.js:1411
 msgid "connecting..."
@@ -1299,18 +1271,16 @@ msgid "Network Settings"
 msgstr "Configurações de rede"
 
 #: ../js/ui/status/network.js:1484
-#, fuzzy
 msgid "VPN Settings"
-msgstr "Configurações"
+msgstr "Configurações de VPN"
 
 #: ../js/ui/status/network.js:1503
 msgid "VPN"
-msgstr ""
+msgstr "VPN"
 
 #: ../js/ui/status/network.js:1513
-#, fuzzy
 msgid "VPN Off"
-msgstr "Desligar"
+msgstr "VPN desligada"
 
 #: ../js/ui/status/network.js:1660
 msgid "Network Manager"
@@ -1353,28 +1323,26 @@ msgstr "%d:%02d até completamente carregada (%d %%)"
 #: ../js/ui/status/power.js:131 ../js/ui/status/power.js:133
 #, javascript-format
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #. The menu only appears when airplane mode is on, so just
 #. statically build it as if it was on, rather than dynamically
 #. changing the menu contents.
 #: ../js/ui/status/rfkill.js:88
 msgid "Airplane Mode On"
-msgstr ""
+msgstr "Modo avião ligado"
 
 #: ../js/ui/status/system.js:351
 msgid "Switch User"
 msgstr "Trocar usuário"
 
 #: ../js/ui/status/system.js:356
-#, fuzzy
 msgid "Log Out"
 msgstr "Encerrar sessão"
 
 #: ../js/ui/status/system.js:361
-#, fuzzy
 msgid "Account Settings"
-msgstr "Configurações de som"
+msgstr "Configurações de conta"
 
 #: ../js/ui/status/system.js:374
 msgid "Settings"
@@ -1382,7 +1350,7 @@ msgstr "Configurações"
 
 #: ../js/ui/status/system.js:378
 msgid "Orientation Lock"
-msgstr ""
+msgstr "Bloqueio da orientação"
 
 #: ../js/ui/status/system.js:382
 msgid "Lock"
