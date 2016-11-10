@@ -1954,7 +1954,8 @@ const CodingManager = new Lang.Class({
         Main.layoutManager.addChrome(button);
 
         this._sessions.push({buttonApp: button,
-                             actorApp: actorApp});
+                             actorApp: actorApp,
+                             previousFocusedWindow: null});
 
         let session = this._getSession(actorApp);
 
@@ -2181,8 +2182,8 @@ const CodingManager = new Lang.Class({
         }
         // keep track of the previous focused window so
         // that we can show the animation accordingly
-        let previousFocused = this._previousFocusedWindow;
-        this._previousFocusedWindow = focusedWindow;
+        let previousFocused = session.previousFocusedWindow;
+        session.previousFocusedWindow = focusedWindow;
 
         // make sure we hide the button in any other case as on
         // top of the App and Builder window
