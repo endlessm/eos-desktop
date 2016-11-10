@@ -278,13 +278,12 @@ StScrollBar StButton#vhandle:active {
 }
 
 .popup-separator-menu-item {
-    -gradient-height: 1px;
-    -gradient-start: rgba(255,255,255,0.0);
-    -gradient-end: rgba(255,255,255,0.3);
-    -margin-horizontal: 24px;
-    height: 1px;
-    padding: 8px 0px;
-}
+  height: 1px;
+  margin: 6px 64px;
+  background-color: transparent;
+  border-color: #343a3a;
+  border-bottom-width: 1px;
+  border-bottom-style: solid; }
 
 .popup-alternating-menu-item:alternate {
     font-weight: bold;
