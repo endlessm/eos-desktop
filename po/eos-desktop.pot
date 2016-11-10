@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-09 15:20-0800\n"
+"POT-Creation-Date: 2016-11-09 16:56-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,7 +150,7 @@ msgstr ""
 msgid "Power"
 msgstr ""
 
-#: ../js/gdm/powerMenu.js:93
+#: ../js/gdm/powerMenu.js:93 ../js/ui/status/system.js:386
 msgid "Suspend"
 msgstr ""
 
@@ -158,7 +158,7 @@ msgstr ""
 msgid "Restart"
 msgstr ""
 
-#: ../js/gdm/powerMenu.js:103
+#: ../js/gdm/powerMenu.js:103 ../js/ui/status/system.js:389
 msgid "Power Off"
 msgstr ""
 
@@ -1026,6 +1026,10 @@ msgstr ""
 msgid "Large Text"
 msgstr ""
 
+#: ../js/ui/status/brightness.js:44
+msgid "Brightness"
+msgstr ""
+
 #: ../js/ui/status/bluetooth.js:47
 msgid "Bluetooth"
 msgstr ""
@@ -1056,7 +1060,8 @@ msgstr ""
 
 #: ../js/ui/status/bluetooth.js:142 ../js/ui/status/network.js:178
 #: ../js/ui/status/network.js:353 ../js/ui/status/network.js:1279
-#: ../js/ui/status/network.js:1394
+#: ../js/ui/status/network.js:1394 ../js/ui/status/rfkill.js:90
+#: ../js/ui/status/rfkill.js:117
 msgid "Turn Off"
 msgstr ""
 
@@ -1203,7 +1208,7 @@ msgstr ""
 msgid "No Networks"
 msgstr ""
 
-#: ../js/ui/status/network.js:904
+#: ../js/ui/status/network.js:904 ../js/ui/status/rfkill.js:115
 msgid "Use hardware switch to turn off"
 msgstr ""
 
@@ -1240,7 +1245,7 @@ msgstr ""
 msgid "connection failed"
 msgstr ""
 
-#: ../js/ui/status/network.js:1482
+#: ../js/ui/status/network.js:1482 ../js/ui/status/rfkill.js:93
 msgid "Network Settings"
 msgstr ""
 
@@ -1297,6 +1302,37 @@ msgstr ""
 #: ../js/ui/status/power.js:131 ../js/ui/status/power.js:133
 #, javascript-format
 msgid "%d %%"
+msgstr ""
+
+#. The menu only appears when airplane mode is on, so just
+#. statically build it as if it was on, rather than dynamically
+#. changing the menu contents.
+#: ../js/ui/status/rfkill.js:88
+msgid "Airplane Mode On"
+msgstr ""
+
+#: ../js/ui/status/system.js:351
+msgid "Switch User"
+msgstr ""
+
+#: ../js/ui/status/system.js:356
+msgid "Log Out"
+msgstr ""
+
+#: ../js/ui/status/system.js:361
+msgid "Account Settings"
+msgstr ""
+
+#: ../js/ui/status/system.js:374
+msgid "Settings"
+msgstr ""
+
+#: ../js/ui/status/system.js:378
+msgid "Orientation Lock"
+msgstr ""
+
+#: ../js/ui/status/system.js:382
+msgid "Lock"
 msgstr ""
 
 #: ../js/ui/status/volume.js:127
