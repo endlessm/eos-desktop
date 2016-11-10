@@ -316,7 +316,7 @@ const ShowAppsButton = new Lang.Class({
     Extends: Button,
 
     _init: function(panel) {
-        this.parent('', _("Show Desktop"), true);
+        this.parent('', _("Toggle Desktop"), true);
 
         this.actor.add_style_class_name('user-menu-icon');
 
@@ -359,7 +359,7 @@ const ShowWindowsButton = new Lang.Class({
     Extends: Button,
 
     _init: function(panel) {
-        this.parent('', _("Show Windows"), true);
+        this.parent('', _("Toggle Windows"), true);
 
         this.actor.add_style_class_name('show-windows-button');
 
