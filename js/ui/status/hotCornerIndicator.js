@@ -16,7 +16,7 @@ const HotCornerIndicator = new Lang.Class({
     Extends: PanelMenu.SystemStatusButton,
 
     _init: function() {
-        this.parent(null, _("Hot Corner Indicator"));
+        this.parent(null, '');
         this.actor.add_style_class_name('hot-corner-indicator');
 
         let iconFileNormal;
