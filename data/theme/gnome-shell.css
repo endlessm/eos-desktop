@@ -348,6 +348,7 @@ StScrollBar StButton#vhandle:active {
     width: 1px;
     height: 40px;
     icon-size: 40px;
+    padding-right: 4px;
 }
 
 .panel-separator-icon-2 {
