@@ -2043,22 +2043,25 @@ const CodingManager = new Lang.Class({
             animateBounce(session.buttonApp);
         } else {
             session.actorBuilder.meta_window.activate(global.get_current_time());
-            this._rotateInActors.push(session.actorBuilder);
-            this._rotateOutActors.push(session.actorApp);
+            this._prepareAnimate(session.actorApp,
+                                 session.actorBuilder,
+                                 Gtk.DirectionType.LEFT);
             this._animate(session.actorApp,
                           session.actorBuilder,
                           Gtk.DirectionType.LEFT);
+            session.buttonApp.hide();
+            session.buttonBuilder.show();
             session.state = SessionState.BUILDER;
         }
-        session.buttonApp.hide();
     },
 
     _switchToApp : function(actor, event, session) {
         if (!session.actorApp)
             return;
         session.actorApp.meta_window.activate(global.get_current_time());
-        this._rotateInActors.push(session.actorApp);
-        this._rotateOutActors.push(session.actorBuilder);
+        this._prepareAnimate(session.actorBuilder,
+                             session.actorApp,
+                             Gtk.DirectionType.RIGHT);
         this._animate(session.actorBuilder,
                       session.actorApp,
                       Gtk.DirectionType.RIGHT);
@@ -2107,9 +2110,6 @@ const CodingManager = new Lang.Class({
             session.buttonApp.translation_y = 0;
             session.buttonApp.translation_x = 0;
 
-            this._rotateInActors.push(session.actorBuilder);
-            this._rotateOutActors.push(session.actorApp);
-
             this._animate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
 
             this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
@@ -2124,6 +2124,8 @@ const CodingManager = new Lang.Class({
 
             return false;
         }));
+
+        this._prepareAnimate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
         /* Save the connection's id in the session and in a list too so we can
          * get rid of it on kill-window-effects later */
         session.firstFrameConnection = firstFrameConnection;
@@ -2183,6 +2185,10 @@ const CodingManager = new Lang.Class({
         if (!focusedWindow)
             return;
 
+        // we get the signal for the same window switch twice
+        if (focusedWindow === this._previousFocusedWindow){
+            return;
+        }
         // keep track of the previous focused window so
         // that we can show the animation accordingly
         let previousFocused = this._previousFocusedWindow;
@@ -2196,8 +2202,14 @@ const CodingManager = new Lang.Class({
 
         if (focusedWindow === session.actorApp.meta_window) {
             if (session.actorBuilder && session.actorBuilder.meta_window === previousFocused) {
-                this._rotateInActors.push(session.actorApp);
-                this._rotateOutActors.push(session.actorBuilder);
+                // make sure we do not rotate when a rotation is running
+                if (this._rotateInActors.length || this._rotateOutActors.length) {
+                    session.buttonApp.show();
+                    return;
+                }
+                this._prepareAnimate(session.actorBuilder,
+                                     session.actorApp,
+                                     Gtk.DirectionType.RIGHT);
                 this._animate(session.actorBuilder,
                               session.actorApp,
                               Gtk.DirectionType.RIGHT);
@@ -2214,21 +2226,31 @@ const CodingManager = new Lang.Class({
             return;
         if (focusedWindow === session.actorBuilder.meta_window) {
             if (session.actorApp.meta_window === previousFocused) {
-                this._rotateInActors.push(session.actorBuilder);
-                this._rotateOutActors.push(session.actorApp);
+                // make sure we do not rotate when a rotation is running
+                if (this._rotateInActors.length || this._rotateOutActors.length) {
+                    if (session.buttonBuilder)
+                        session.buttonBuilder.show();
+                    return;
+                }
+                this._prepareAnimate(session.actorApp,
+                                     session.actorBuilder,
+                                     Gtk.DirectionType.LEFT);
                 this._animate(session.actorApp,
                               session.actorBuilder,
                               Gtk.DirectionType.LEFT);
+                session.buttonBuilder.show();
                 session.state = SessionState.BUILDER;
             } else {
                 session.actorBuilder.show();
                 session.buttonBuilder.show();
-                session.actorApp.hide();
             }
         }
     },
 
-    _animate : function(src, dst, direction) {
+    _prepareAnimate : function(src, dst, direction) {
+        this._rotateInActors.push(dst);
+        this._rotateOutActors.push(src);
+
         dst.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
         src.rotation_angle_y = 0;
         dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
@@ -2268,7 +2290,9 @@ const CodingManager = new Lang.Class({
                                           srcGeometry.y,
                                           srcGeometry.width,
                                           srcGeometry.height);
+    },
 
+    _animate : function(src, dst, direction) {
         /* Tween both windows in a rotation animation at the same time
          * with backface culling enabled on both. This will allow for
          * a smooth transition. */
