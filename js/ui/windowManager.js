@@ -1896,11 +1896,6 @@ const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
 const BUTTON_OFFSET_X = 100;
 const BUTTON_OFFSET_Y = 100;
 
-const SessionState = {
-    APP: 0,
-    BUILDER: 1
-};
-
 function animateBounce(actor) {
     Tweener.removeTweens(actor);
     if (Tweener.isTweening(actor))
@@ -1959,8 +1954,7 @@ const CodingManager = new Lang.Class({
         Main.layoutManager.addChrome(button);
 
         this._sessions.push({buttonApp: button,
-                             actorApp: actorApp,
-                             state: SessionState.APP});
+                             actorApp: actorApp});
 
         let session = this._getSession(actorApp);
 
@@ -2029,7 +2023,6 @@ const CodingManager = new Lang.Class({
             session.actorApp.meta_window.activate(global.get_current_time());
             session.actorApp.show();
             session.buttonApp.show();
-            session.state = SessionState.APP;
         }
     },
 
@@ -2051,7 +2044,6 @@ const CodingManager = new Lang.Class({
                           Gtk.DirectionType.LEFT);
             session.buttonApp.hide();
             session.buttonBuilder.show();
-            session.state = SessionState.BUILDER;
         }
     },
 
@@ -2067,7 +2059,6 @@ const CodingManager = new Lang.Class({
                       Gtk.DirectionType.RIGHT);
         session.buttonBuilder.hide();
         session.buttonApp.show();
-        session.state = SessionState.APP;
     },
 
     _getSession: function(actor) {
@@ -2091,7 +2082,6 @@ const CodingManager = new Lang.Class({
         let sizeChangedId = window.connect('size-changed', Lang.bind(this, this._windowBuilderSizeChanged, session));
 
         session.buttonBuilder = button;
-        session.state = SessionState.BUILDER;
         session.positionChangedIdBuilder = positionChangedId;
         session.sizeChangedIdBuilder = sizeChangedId;
     },
@@ -2214,7 +2204,6 @@ const CodingManager = new Lang.Class({
                               session.actorApp,
                               Gtk.DirectionType.RIGHT);
                 session.buttonApp.show();
-                session.state = SessionState.APP;
                 return;
             }
             session.actorApp.show();
@@ -2239,7 +2228,6 @@ const CodingManager = new Lang.Class({
                               session.actorBuilder,
                               Gtk.DirectionType.LEFT);
                 session.buttonBuilder.show();
-                session.state = SessionState.BUILDER;
             } else {
                 session.actorBuilder.show();
                 session.buttonBuilder.show();
