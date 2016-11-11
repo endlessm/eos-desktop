@@ -1969,13 +1969,10 @@ const CodingManager = new Lang.Class({
     },
 
     addSwitcherToApp: function(actorBuilder, windowApp) {
-        let currentSession = this._sessions.filter(function(session) {
-            return (session.actorApp.meta_window === windowApp);
-        });
-        if (currentSession.length === 0)
+        let session = this._getSession(windowApp.get_compositor_private());
+        if (!session)
             return;
 
-        let session = currentSession[0];
         session.actorBuilder = actorBuilder;
 
         this._animateToBuilder(session);
