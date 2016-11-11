@@ -9,13 +9,16 @@ const Lang = imports.lang;
 const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
+const Signals = imports.signals;
 
+const AppActivation = imports.ui.appActivation;
 const BoxPointer = imports.ui.boxpointer;
 const GnomeSession = imports.misc.gnomeSession;
 const LoginManager = imports.misc.loginManager;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
+const IconGrid = imports.ui.iconGrid;
 
 const LOCKDOWN_SCHEMA = 'org.gnome.desktop.lockdown';
 const LOGIN_SCREEN_SCHEMA = 'org.gnome.login-screen';
@@ -95,6 +98,65 @@ const AltSwitcher = new Lang.Class({
         }
 
         return Clutter.EVENT_PROPAGATE;
+    },
+});
+
+const PopupIcon = new Lang.Class({
+    Name: 'PopupIcon',
+
+    _init : function(app, menu) {
+        this._menu = menu;
+        this._app = app;
+        this._appInfo = app.get_app_info();
+
+        this.actor = new St.Button({ reactive: true,
+                                     can_focus: true,
+                                     track_hover: true,
+                                     x_align: St.Align.START,
+                                     y_fill: true });
+        this.actor.connect('clicked', Lang.bind(this, this._clicked));
+
+        this.icon = new IconGrid.BaseIcon(this._appInfo.get_name(),
+                                          { createIcon: Lang.bind(this, this._createIcon) },
+                                          { reactive: false });
+        this.actor.set_child(this.icon.actor);
+        this.actor.label_actor = this.icon.actor.label_actor;
+
+    },
+
+    _clicked: function() {
+        let activationContext = new AppActivation.AppActivationContext(this._app);
+        Main.overview.hide();
+        this._menu.itemActivated(BoxPointer.PopupAnimation.NONE);
+        activationContext.activate();
+    },
+
+    _createIcon: function(iconSize) {
+        return new St.Icon({ icon_size: iconSize,
+                             gicon: this._appInfo.get_icon() });
+    },
+});
+
+const SuggestedAppsItem = new Lang.Class({
+    Name: 'SuggestedAppsItem',
+    Extends: PopupMenu.PopupBaseMenuItem,
+
+    _init: function (menu) {
+        this.parent({ reactive: false,
+                      can_focus: false});
+
+        this.actor.add_style_class_name('search-section');
+        this._grid = new IconGrid.IconGrid({ rowLimit: 1,
+                                             xAlign: St.Align.MIDDLE });
+        this.actor.add(this._grid.actor, { expand: true });
+
+        let appSystem = Shell.AppSystem.get_default();
+        let appIds = ['eos-link-whatsapp.desktop', 'eos-link-facebook.desktop', 'org.gnome.Totem.desktop'];
+        for (var id of appIds) {
+            let app = appSystem.lookup_app(id);
+            let appIcon = new PopupIcon(app, menu);
+            this._grid.addItem(appIcon.actor);
+        }
     },
 });
 
@@ -366,6 +428,13 @@ const Indicator = new Lang.Class({
 
         this.menu.addMenuItem(this._switchUserSubMenu);
 
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        let labelItem = new PopupMenu.PopupBaseMenuItem({ can_focus: false, reactive: false });
+        let label = new St.Label({ text: _('Recommended Apps for You') });
+        labelItem.actor.add(label);
+        labelItem.actor.label_actor = label;
+        this.menu.addMenuItem(labelItem);
+        this.menu.addMenuItem(new SuggestedAppsItem(this.menu));
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
         item = new PopupMenu.PopupBaseMenuItem({ reactive: false,
