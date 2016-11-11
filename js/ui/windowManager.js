@@ -2268,17 +2268,26 @@ const CodingManager = new Lang.Class({
         dst.opacity = 0;
 
         let srcGeometry = src.meta_window.get_frame_rect();
+        let dstGeometry = dst.meta_window.get_frame_rect();
+
+        if (srcGeometry.equal(dstGeometry))
+            return;
+
         let srcIsMaximized = (src.meta_window.maximized_horizontally &&
                               src.meta_window.maximized_vertically);
         let dstIsMaximized = (dst.meta_window.maximized_horizontally &&
                               dst.meta_window.maximized_vertically);
+
         if (!srcIsMaximized && dstIsMaximized)
             dst.meta_window.unmaximize(Meta.MaximizeFlags.BOTH);
-        dst.meta_window.move_resize_frame(false,
-                                          srcGeometry.x,
-                                          srcGeometry.y,
-                                          srcGeometry.width,
-                                          srcGeometry.height);
+        if (srcIsMaximized && !dstIsMaximized)
+            dst.meta_window.maximize(Meta.MaximizeFlags.BOTH);
+        else
+            dst.meta_window.move_resize_frame(false,
+                                              srcGeometry.x,
+                                              srcGeometry.y,
+                                              srcGeometry.width,
+                                              srcGeometry.height);
     },
 
     _animate : function(src, dst, direction) {
