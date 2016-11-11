@@ -2206,6 +2206,9 @@ const CodingManager = new Lang.Class({
             }
             session.actorApp.show();
             session.buttonApp.show();
+            // hide the underlying window to prevent glitches when resizing
+            // the one on top, we do this for the animated switch case already
+            session.actorBuilder.hide();
             return;
         }
 
@@ -2229,6 +2232,9 @@ const CodingManager = new Lang.Class({
             } else {
                 session.actorBuilder.show();
                 session.buttonBuilder.show();
+                // hide the underlying window to prevent glitches when resizing
+                // the one on top, we do this for the animated switch case already
+                session.actorApp.hide();
             }
         }
     },
