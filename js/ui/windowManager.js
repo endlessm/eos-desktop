@@ -1893,8 +1893,8 @@ const ICON_BOUNCE_ANIMATION_TIME = 1.0;
 const ICON_BOUNCE_ANIMATION_TYPE_1 = 'easeOutSine';
 const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
 
-const BUTTON_OFFSET_X = 100;
-const BUTTON_OFFSET_Y = 100;
+const BUTTON_OFFSET_X = 50;
+const BUTTON_OFFSET_Y = 50;
 
 function animateBounce(actor) {
     Tweener.removeTweens(actor);
