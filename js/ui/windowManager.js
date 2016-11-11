@@ -1989,15 +1989,15 @@ const CodingManager = new Lang.Class({
         // TODO Handle the case where we quit the app
         // with an open Builder session
 
-        if (session.positionChangedIdApp != 0) {
+        if (session.positionChangedIdApp !== 0) {
             session.actorApp.meta_window.disconnect(session.positionChangedIdApp);
             session.positionChangedIdApp = 0;
         }
-        if (session.sizeChangedIdApp != 0) {
+        if (session.sizeChangedIdApp !== 0) {
             session.actorApp.meta_window.disconnect(session.sizeChangedIdApp);
             session.sizeChangedIdApp = 0;
         }
-        if (session.windowsRestackedIdApp != 0) {
+        if (session.windowsRestackedIdApp !== 0) {
             Main.overview.disconnect(session.windowsRestackedIdApp);
             session.windowsRestackedIdApp = 0;
         }
@@ -2013,7 +2013,7 @@ const CodingManager = new Lang.Class({
         let tracker = Shell.WindowTracker.get_default();
         tracker.untrack_coding_app_window(session.actorBuilder.meta_window);
 
-        if (session.positionChangedIdBuilder != 0) {
+        if (session.positionChangedIdBuilder !== 0) {
             session.actorBuilder.meta_window.disconnect(session.positionChangedIdBuilder);
             session.positionChangedIdBuilder = 0;
         }
@@ -2389,8 +2389,9 @@ const CodingManager = new Lang.Class({
             return contents;
         }
 
-        let manifests = this._getBuildManifestsAt(Flatpak.Installation.new_user(null).get_path().get_path())
-            .concat(this._getBuildManifestsAt(Flatpak.Installation.new_system(null).get_path().get_path()));
+        let flatpakUserPath = Flatpak.Installation.new_user(null).get_path().get_path();
+        let flatpakSystemPath = Flatpak.Installation.new_system(null).get_path().get_path();
+        let manifests = this._getBuildManifestsAt(flatpakUserPath).concat(this._getBuildManifestsAt(flatpakSystemPath));
 
         for (let j = 0; j < manifests.length; j++) {
             let manifest;
@@ -2400,8 +2401,8 @@ const CodingManager = new Lang.Class({
                 logError(err, ' No build manifest found at ' + manifests[j]);
                 continue;
             }
-		    if (manifest.id == flatpakID)
-			    return manifests[j];
+            if (manifest.id === flatpakID)
+                return manifests[j];
         }
         return null;
     }
