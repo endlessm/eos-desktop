@@ -1983,9 +1983,6 @@ const CodingManager = new Lang.Class({
         if (!session)
             return;
 
-        // TODO Handle the case where we quit the app
-        // with an open Builder session
-
         if (session.positionChangedIdApp !== 0) {
             session.actorApp.meta_window.disconnect(session.positionChangedIdApp);
             session.positionChangedIdApp = 0;
@@ -1999,14 +1996,20 @@ const CodingManager = new Lang.Class({
             session.windowsRestackedIdApp = 0;
         }
         session.buttonApp.destroy();
+
+        // Builder window still open, keep it open
+        // but remove the coding session specific parts
+        if (session.actorBuilder) {
+            this._clearBuilderSession(session);
+
+            session.actorBuilder.meta_window.activate(global.get_current_time());
+            session.actorBuilder.show();
+        }
+
         this._removeSession(session);
     },
 
-    removeSwitcherToApp : function(actorBuilder) {
-        let session = this._getSession(actorBuilder);
-        if (!session)
-            return;
-
+    _clearBuilderSession: function(session) {
         let tracker = Shell.WindowTracker.get_default();
         tracker.untrack_coding_app_window(session.actorBuilder.meta_window);
 
@@ -2014,7 +2017,19 @@ const CodingManager = new Lang.Class({
             session.actorBuilder.meta_window.disconnect(session.positionChangedIdBuilder);
             session.positionChangedIdBuilder = 0;
         }
+        if (session.sizeChangedIdBuilder !== 0) {
+            session.actorBuilder.meta_window.disconnect(session.sizeChangedIdBuilder);
+            session.sizeChangedIdBuilder = 0;
+        }
         session.buttonBuilder.destroy();
+    },
+
+    removeSwitcherToApp : function(actorBuilder) {
+        let session = this._getSession(actorBuilder);
+        if (!session)
+            return;
+
+        this._clearBuilderSession(session);
         session.actorBuilder = null;
 
         if (session.actorApp) {
@@ -2208,7 +2223,8 @@ const CodingManager = new Lang.Class({
             session.buttonApp.show();
             // hide the underlying window to prevent glitches when resizing
             // the one on top, we do this for the animated switch case already
-            session.actorBuilder.hide();
+            if (session.actorBuilder)
+                session.actorBuilder.hide();
             return;
         }
 
