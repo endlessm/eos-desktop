@@ -197,14 +197,15 @@ watchdog_timeout_reached_cb (gpointer user_data)
 
 /**
  * shell_window_tracker_track_coding_app_window:
- *
+ * @tracker: An app monitor instance
+ * @app_window: A #MetaWindow
  * Track a coding app.
  *
  */
 void shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker,
-                                                   MetaWindow *window)
+                                                   MetaWindow *app_window)
 {
-  tracker->coding_app = window;
+  tracker->coding_app = app_window;
   tracker->watchdog_id = g_timeout_add_seconds (WATCHDOG_TIMEOUT,
                                                 watchdog_timeout_reached_cb,
                                                 tracker);
@@ -212,40 +213,42 @@ void shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker,
 
 /**
  * shell_window_tracker_untrack_coding_app_window:
+ * @tracker: An app monitor instance
+ * @builder_window: A #MetaWindow
  *
  * Untrack a coding app.
  *
  */
 void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker,
-                                                     MetaWindow *window)
+                                                     MetaWindow *builder_window)
 {
-  MetaWindow *coding_app;
-  coding_app = g_hash_table_lookup (tracker->builder_to_app, window);
-  if (coding_app) {
-    g_hash_table_remove (tracker->builder_to_app, window);
+  MetaWindow *app_window;
+  app_window = g_hash_table_lookup (tracker->builder_to_app, builder_window);
+  if (app_window) {
+    g_hash_table_remove (tracker->builder_to_app, builder_window);
   }
 }
 
 /**
  * shell_window_tracker_get_app_from_builder:
  * @tracker: An app monitor instance
- * @builder: A #MetaWindow
+ * @builder_window: A #MetaWindow
  *
  * Returns: (transfer full): Application associated with Builder window
  */
 
 MetaWindow *shell_window_tracker_get_app_from_builder (ShellWindowTracker *tracker,
-                                                       MetaWindow *builder)
+                                                       MetaWindow *builder_window)
 {
-  MetaWindow *app;
+  MetaWindow *app_window;
 
-  app = g_hash_table_lookup (tracker->builder_to_app, builder);
-  if (!app)
+  app_window = g_hash_table_lookup (tracker->builder_to_app, builder_window);
+  if (!app_window)
     return NULL;
 
-  g_object_ref (app);
+  g_object_ref (app_window);
 
-  return app;
+  return app_window;
 }
 
 /*
