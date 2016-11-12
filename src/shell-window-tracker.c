@@ -234,7 +234,7 @@ void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker
  * @tracker: An app monitor instance
  * @builder_window: A #MetaWindow
  *
- * Returns: (transfer full): Application associated with Builder window
+ * Returns: (transfer none): Application associated with Builder window, or %NULL if none
  */
 
 MetaWindow *shell_window_tracker_get_app_from_builder (ShellWindowTracker *tracker,
@@ -245,8 +245,6 @@ MetaWindow *shell_window_tracker_get_app_from_builder (ShellWindowTracker *track
   app_window = g_hash_table_lookup (tracker->builder_to_app, builder_window);
   if (!app_window)
     return NULL;
-
-  g_object_ref (app_window);
 
   return app_window;
 }
