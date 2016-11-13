@@ -415,12 +415,12 @@ const Indicator = new Lang.Class({
 
         item = new PopupMenu.PopupMenuItem(_("Switch User"));
         item.connect('activate', Lang.bind(this, this._onLoginScreenActivate));
-        this._switchUserSubMenu.menu.addMenuItem(item);
+        // this._switchUserSubMenu.menu.addMenuItem(item);
         this._loginScreenItem = item;
 
         item = new PopupMenu.PopupMenuItem(_("Log Out"));
         item.connect('activate', Lang.bind(this, this._onQuitSessionActivate));
-        this._switchUserSubMenu.menu.addMenuItem(item);
+        // this._switchUserSubMenu.menu.addMenuItem(item);
         this._logoutItem = item;
 
         this._switchUserSubMenu.menu.addSettingsAction(_("Account Settings"),
