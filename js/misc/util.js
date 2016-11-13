@@ -10,6 +10,8 @@ const Config = imports.misc.config;
 const Tweener = imports.ui.tweener;
 const Params = imports.misc.params;
 
+const SCROLL_TIME = 0.1;
+
 const FALLBACK_BROWSER_ID = 'chromium-browser.desktop';
 
 // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
@@ -376,4 +378,40 @@ function blockClickEventsOnActor(actor) {
     actor.connect('button-release-event', function (actor, event) {
         return true;
     });
+}
+
+function ensureActorVisibleInScrollView(scrollView, actor) {
+    let adjustment = scrollView.vscroll.adjustment;
+    let [value, lower, upper, stepIncrement, pageIncrement, pageSize] = adjustment.get_values();
+
+    let offset = 0;
+    let vfade = scrollView.get_effect("fade");
+    if (vfade)
+        offset = vfade.vfade_offset;
+
+    let box = actor.get_allocation_box();
+    let y1 = box.y1, y2 = box.y2;
+
+    let parent = actor.get_parent();
+    while (parent != scrollView) {
+        if (!parent)
+            throw new Error("actor not in scroll view");
+
+        let box = parent.get_allocation_box();
+        y1 += box.y1;
+        y2 += box.y1;
+        parent = parent.get_parent();
+    }
+
+    if (y1 < value + offset)
+        value = Math.max(0, y1 - offset);
+    else if (y2 > value + pageSize - offset)
+        value = Math.min(upper, y2 + offset - pageSize);
+    else
+        return;
+
+    Tweener.addTween(adjustment,
+                     { value: value,
+                       time: SCROLL_TIME,
+                       transition: 'easeOutQuad' });
 }
