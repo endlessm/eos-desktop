@@ -151,7 +151,7 @@ const SuggestedAppsItem = new Lang.Class({
         this.actor.add(this._grid.actor, { expand: true });
 
         let appSystem = Shell.AppSystem.get_default();
-        let appIds = ['eos-link-whatsapp.desktop', 'eos-link-facebook.desktop', 'org.gnome.Totem.desktop'];
+        let appIds = ['eos-link-facebook.desktop', 'rhythmbox.desktop', 'net.sourceforge.Supertuxkart.desktop'];
         for (var id of appIds) {
             let app = appSystem.lookup_app(id);
             let appIcon = new PopupIcon(app, menu);
