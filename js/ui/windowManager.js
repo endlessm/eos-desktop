@@ -1965,7 +1965,7 @@ const CodingManager = new Lang.Class({
         let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowAppRestacked, session));
         session.positionChangedIdApp = positionChangedId;
         session.sizeChangedIdApp = sizeChangedId;
-        session.windowsRestackedIdApp = windowsRestackedId;
+        session.windowsRestackedId = windowsRestackedId;
     },
 
     addSwitcherToApp: function(actorBuilder, windowApp) {
@@ -1991,11 +1991,13 @@ const CodingManager = new Lang.Class({
             session.actorApp.meta_window.disconnect(session.sizeChangedIdApp);
             session.sizeChangedIdApp = 0;
         }
-        if (session.windowsRestackedIdApp !== 0) {
-            Main.overview.disconnect(session.windowsRestackedIdApp);
-            session.windowsRestackedIdApp = 0;
+        if (session.windowsRestackedId !== 0) {
+            Main.overview.disconnect(session.windowsRestackedId);
+            session.windowsRestackedId = 0;
         }
+        Main.layoutManager.removeChrome(session.buttonApp);
         session.buttonApp.destroy();
+        session.actorApp = null;
 
         // Builder window still open, keep it open
         // but remove the coding session specific parts
@@ -2004,9 +2006,8 @@ const CodingManager = new Lang.Class({
 
             session.actorBuilder.meta_window.activate(global.get_current_time());
             session.actorBuilder.show();
-        }
-
-        this._removeSession(session);
+        } else
+            this._removeSession(session);
     },
 
     _clearBuilderSession: function(session) {
@@ -2021,7 +2022,11 @@ const CodingManager = new Lang.Class({
             session.actorBuilder.meta_window.disconnect(session.sizeChangedIdBuilder);
             session.sizeChangedIdBuilder = 0;
         }
-        session.buttonBuilder.destroy();
+        if (session.buttonBuilder) {
+            Main.layoutManager.removeChrome(session.buttonBuilder);
+            session.buttonBuilder.destroy();
+            session.buttonBuilder = null;
+        }
     },
 
     removeSwitcherToApp : function(actorBuilder) {
@@ -2036,7 +2041,8 @@ const CodingManager = new Lang.Class({
             session.actorApp.meta_window.activate(global.get_current_time());
             session.actorApp.show();
             session.buttonApp.show();
-        }
+        } else
+            this._removeSession(session);
     },
 
     _switchToBuilder : function(actor, event, session) {
