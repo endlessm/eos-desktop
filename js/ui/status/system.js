@@ -399,6 +399,9 @@ const Indicator = new Lang.Class({
         let item;
 
         this._switchUserSubMenu = new PopupMenu.PopupSubMenuMenuItem('', true);
+        this._switchUserSubMenu.actor.vertical = true;
+        this._switchUserSubMenu.label.x_expand = true;
+        this._switchUserSubMenu.label.x_align = Clutter.ActorAlign.CENTER;
         this._switchUserSubMenu.icon.style_class = 'system-switch-user-submenu-icon';
 
         // Since the label of the switch user submenu depends on the width of
