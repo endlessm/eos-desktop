@@ -907,12 +907,27 @@ const PopupSubMenu = new Lang.Class({
         return this._sensitive && this.sourceActor._delegate.getSensitive();
     },
 
+    _getVisibleChildren: function () {
+        return this.box.get_children().filter((child) => child.visible === true);
+    },
+
+    addMenuItem: function(item, position) {
+        this.parent(item, position);
+        if (this._getVisibleChildren().length > 1)
+            this._arrow.get_parent().show();
+    },
+
     open: function(animate) {
         if (this.isOpen)
             return;
 
         if (this.isEmpty())
             return;
+
+        if (this._getVisibleChildren().length === 1) {
+            this.box.get_children()[0]._delegate.activate();
+            return;
+        }
 
         this.isOpen = true;
         this.emit('open-state-changed', true);
@@ -1066,6 +1081,7 @@ const PopupSubMenuMenuItem = new Lang.Class({
         this._triangleBin = new St.Widget({ y_expand: true,
                                             y_align: Clutter.ActorAlign.CENTER });
         this._triangleBin.add_child(this._triangle);
+        this._triangleBin.hide();
 
         this.actor.add_child(this._triangleBin);
         this.actor.add_accessible_state (Atk.StateType.EXPANDABLE);
