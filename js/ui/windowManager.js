@@ -2311,8 +2311,6 @@ const CodingManager = new Lang.Class({
         this._rotateInActors.push(dst);
         this._rotateOutActors.push(src);
 
-        dst.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
-        src.rotation_angle_y = 0;
         dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
         src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
 
@@ -2341,9 +2339,6 @@ const CodingManager = new Lang.Class({
         let srcGeometry = src.meta_window.get_frame_rect();
         let dstGeometry = dst.meta_window.get_frame_rect();
 
-        if (srcGeometry.equal(dstGeometry))
-            return;
-
         let srcIsMaximized = (src.meta_window.maximized_horizontally &&
                               src.meta_window.maximized_vertically);
         let dstIsMaximized = (dst.meta_window.maximized_horizontally &&
@@ -2351,14 +2346,22 @@ const CodingManager = new Lang.Class({
 
         if (!srcIsMaximized && dstIsMaximized)
             dst.meta_window.unmaximize(Meta.MaximizeFlags.BOTH);
+
         if (srcIsMaximized && !dstIsMaximized)
             dst.meta_window.maximize(Meta.MaximizeFlags.BOTH);
-        else
-            dst.meta_window.move_resize_frame(false,
-                                              srcGeometry.x,
-                                              srcGeometry.y,
-                                              srcGeometry.width,
-                                              srcGeometry.height);
+
+        // we have to set those after unmaximize/maximized otherwise they are lost
+        dst.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
+        src.rotation_angle_y = 0;
+
+         if (srcGeometry.equal(dstGeometry))
+            return;
+
+        dst.meta_window.move_resize_frame(false,
+                                          srcGeometry.x,
+                                          srcGeometry.y,
+                                          srcGeometry.width,
+                                          srcGeometry.height);
     },
 
     _animate : function(src, dst, direction) {
