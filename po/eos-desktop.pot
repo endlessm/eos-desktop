@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-09 16:56-0800\n"
+"POT-Creation-Date: 2016-11-14 01:25-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,7 +150,7 @@ msgstr ""
 msgid "Power"
 msgstr ""
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/status/system.js:386
+#: ../js/gdm/powerMenu.js:93 ../js/ui/status/system.js:541
 msgid "Suspend"
 msgstr ""
 
@@ -158,7 +158,7 @@ msgstr ""
 msgid "Restart"
 msgstr ""
 
-#: ../js/gdm/powerMenu.js:103 ../js/ui/status/system.js:389
+#: ../js/gdm/powerMenu.js:103 ../js/ui/status/system.js:544
 msgid "Power Off"
 msgstr ""
 
@@ -177,36 +177,36 @@ msgstr ""
 msgid "(e.g., user or %s)"
 msgstr ""
 
-#: ../js/misc/util.js:141
+#: ../js/misc/util.js:143
 msgid "Command not found"
 msgstr ""
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:174
+#: ../js/misc/util.js:176
 msgid "Could not parse command:"
 msgstr ""
 
-#: ../js/misc/util.js:182
+#: ../js/misc/util.js:184
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr ""
 
 #. Translators: Time in 24h format
-#: ../js/misc/util.js:243
+#: ../js/misc/util.js:245
 msgid "%H∶%M"
 msgstr ""
 
 #. Translators: this is the word "Yesterday" followed by a
 #. time string in 24h format. i.e. "Yesterday, 14:30"
-#: ../js/misc/util.js:249
+#: ../js/misc/util.js:251
 #, no-c-format
 msgid "Yesterday, %H∶%M"
 msgstr ""
 
 #. Translators: this is the week day name followed by a time
 #. string in 24h format. i.e. "Monday, 14:30"
-#: ../js/misc/util.js:255
+#: ../js/misc/util.js:257
 #, no-c-format
 msgid "%A, %H∶%M"
 msgstr ""
@@ -214,7 +214,7 @@ msgstr ""
 #. Translators: this is the month name and day number
 #. followed by a time string in 24h format.
 #. i.e. "May 25, 14:30"
-#: ../js/misc/util.js:261
+#: ../js/misc/util.js:263
 #, no-c-format
 msgid "%B %d, %H∶%M"
 msgstr ""
@@ -222,26 +222,26 @@ msgstr ""
 #. Translators: this is the month name, day number, year
 #. number followed by a time string in 24h format.
 #. i.e. "May 25 2012, 14:30"
-#: ../js/misc/util.js:267
+#: ../js/misc/util.js:269
 #, no-c-format
 msgid "%B %d %Y, %H∶%M"
 msgstr ""
 
 #. Translators: Time in 12h format
-#: ../js/misc/util.js:272
+#: ../js/misc/util.js:274
 msgid "%l∶%M %p"
 msgstr ""
 
 #. Translators: this is the word "Yesterday" followed by a
 #. time string in 12h format. i.e. "Yesterday, 2:30 pm"
-#: ../js/misc/util.js:278
+#: ../js/misc/util.js:280
 #, no-c-format
 msgid "Yesterday, %l∶%M %p"
 msgstr ""
 
 #. Translators: this is the week day name followed by a time
 #. string in 12h format. i.e. "Monday, 2:30 pm"
-#: ../js/misc/util.js:284
+#: ../js/misc/util.js:286
 #, no-c-format
 msgid "%A, %l∶%M %p"
 msgstr ""
@@ -249,7 +249,7 @@ msgstr ""
 #. Translators: this is the month name and day number
 #. followed by a time string in 12h format.
 #. i.e. "May 25, 2:30 pm"
-#: ../js/misc/util.js:290
+#: ../js/misc/util.js:292
 #, no-c-format
 msgid "%B %d, %l∶%M %p"
 msgstr ""
@@ -257,7 +257,7 @@ msgstr ""
 #. Translators: this is the month name, day number, year
 #. number followed by a time string in 12h format.
 #. i.e. "May 25 2012, 2:30 pm"
-#: ../js/misc/util.js:296
+#: ../js/misc/util.js:298
 #, no-c-format
 msgid "%B %d %Y, %l∶%M %p"
 msgstr ""
@@ -899,10 +899,14 @@ msgstr ""
 
 #: ../js/ui/panel.js:346
 msgctxt "System menu in the top bar"
-msgid "System"
+msgid "System Menu"
 msgstr ""
 
-#: ../js/ui/panel.js:480
+#: ../js/ui/panel.js:413
+msgid "User Menu"
+msgstr ""
+
+#: ../js/ui/panel.js:514
 msgid "Taskbar"
 msgstr ""
 
@@ -1063,10 +1067,6 @@ msgstr ""
 #: ../js/ui/status/network.js:1394 ../js/ui/status/rfkill.js:90
 #: ../js/ui/status/rfkill.js:117
 msgid "Turn Off"
-msgstr ""
-
-#: ../js/ui/status/hotCornerIndicator.js:19
-msgid "Hot Corner Indicator"
 msgstr ""
 
 #: ../js/ui/status/hotCornerIndicator.js:40
@@ -1311,27 +1311,35 @@ msgstr ""
 msgid "Airplane Mode On"
 msgstr ""
 
-#: ../js/ui/status/system.js:351
+#: ../js/ui/status/system.js:24
+msgid "Help"
+msgstr ""
+
+#: ../js/ui/status/system.js:471
 msgid "Switch User"
 msgstr ""
 
-#: ../js/ui/status/system.js:356
+#: ../js/ui/status/system.js:476
 msgid "Log Out"
 msgstr ""
 
-#: ../js/ui/status/system.js:361
+#: ../js/ui/status/system.js:481
 msgid "Account Settings"
 msgstr ""
 
-#: ../js/ui/status/system.js:374
+#: ../js/ui/status/system.js:513
+msgid "Recommended Apps for You"
+msgstr ""
+
+#: ../js/ui/status/system.js:529
 msgid "Settings"
 msgstr ""
 
-#: ../js/ui/status/system.js:378
+#: ../js/ui/status/system.js:533
 msgid "Orientation Lock"
 msgstr ""
 
-#: ../js/ui/status/system.js:382
+#: ../js/ui/status/system.js:537
 msgid "Lock"
 msgstr ""
 

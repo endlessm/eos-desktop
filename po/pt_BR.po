@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-09 16:56-0800\n"
+"POT-Creation-Date: 2016-11-14 01:25-0800\n"
 "PO-Revision-Date: 2016-08-31 21:39+0000\n"
 "Last-Translator: Philip Chimento <philip.chimento@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/endless-mobile-"
@@ -171,7 +171,7 @@ msgstr "Janela de início de sessão"
 msgid "Power"
 msgstr "Ligar"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/status/system.js:386
+#: ../js/gdm/powerMenu.js:93 ../js/ui/status/system.js:541
 msgid "Suspend"
 msgstr "Suspender"
 
@@ -179,7 +179,7 @@ msgstr "Suspender"
 msgid "Restart"
 msgstr "Reiniciar"
 
-#: ../js/gdm/powerMenu.js:103 ../js/ui/status/system.js:389
+#: ../js/gdm/powerMenu.js:103 ../js/ui/status/system.js:544
 msgid "Power Off"
 msgstr "Desligar"
 
@@ -198,36 +198,36 @@ msgstr "(ou deslize o dedo)"
 msgid "(e.g., user or %s)"
 msgstr "(ex.: usuário ou %s)"
 
-#: ../js/misc/util.js:141
+#: ../js/misc/util.js:143
 msgid "Command not found"
 msgstr "Comando não encontrado"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:174
+#: ../js/misc/util.js:176
 msgid "Could not parse command:"
 msgstr "Não foi possível analisar comando:"
 
-#: ../js/misc/util.js:182
+#: ../js/misc/util.js:184
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "A execução de \"%s\" falhou:"
 
 #. Translators: Time in 24h format
-#: ../js/misc/util.js:243
+#: ../js/misc/util.js:245
 msgid "%H∶%M"
 msgstr "%H∶%M"
 
 #. Translators: this is the word "Yesterday" followed by a
 #. time string in 24h format. i.e. "Yesterday, 14:30"
-#: ../js/misc/util.js:249
+#: ../js/misc/util.js:251
 #, no-c-format
 msgid "Yesterday, %H∶%M"
 msgstr "Ontem, %H∶%M"
 
 #. Translators: this is the week day name followed by a time
 #. string in 24h format. i.e. "Monday, 14:30"
-#: ../js/misc/util.js:255
+#: ../js/misc/util.js:257
 #, no-c-format
 msgid "%A, %H∶%M"
 msgstr "%A, %H∶%M"
@@ -235,7 +235,7 @@ msgstr "%A, %H∶%M"
 #. Translators: this is the month name and day number
 #. followed by a time string in 24h format.
 #. i.e. "May 25, 14:30"
-#: ../js/misc/util.js:261
+#: ../js/misc/util.js:263
 #, no-c-format
 msgid "%B %d, %H∶%M"
 msgstr "%d de %B, %H∶%M"
@@ -243,26 +243,26 @@ msgstr "%d de %B, %H∶%M"
 #. Translators: this is the month name, day number, year
 #. number followed by a time string in 24h format.
 #. i.e. "May 25 2012, 14:30"
-#: ../js/misc/util.js:267
+#: ../js/misc/util.js:269
 #, no-c-format
 msgid "%B %d %Y, %H∶%M"
 msgstr "%d de %B de %Y, %H∶%M"
 
 #. Translators: Time in 12h format
-#: ../js/misc/util.js:272
+#: ../js/misc/util.js:274
 msgid "%l∶%M %p"
 msgstr "%l∶%M %p"
 
 #. Translators: this is the word "Yesterday" followed by a
 #. time string in 12h format. i.e. "Yesterday, 2:30 pm"
-#: ../js/misc/util.js:278
+#: ../js/misc/util.js:280
 #, no-c-format
 msgid "Yesterday, %l∶%M %p"
 msgstr "Ontem, %l∶%M %p"
 
 #. Translators: this is the week day name followed by a time
 #. string in 12h format. i.e. "Monday, 2:30 pm"
-#: ../js/misc/util.js:284
+#: ../js/misc/util.js:286
 #, no-c-format
 msgid "%A, %l∶%M %p"
 msgstr "%A, %l∶%M %p"
@@ -270,7 +270,7 @@ msgstr "%A, %l∶%M %p"
 #. Translators: this is the month name and day number
 #. followed by a time string in 12h format.
 #. i.e. "May 25, 2:30 pm"
-#: ../js/misc/util.js:290
+#: ../js/misc/util.js:292
 #, no-c-format
 msgid "%B %d, %l∶%M %p"
 msgstr "%d de %B, %l∶%M %p"
@@ -278,7 +278,7 @@ msgstr "%d de %B, %l∶%M %p"
 #. Translators: this is the month name, day number, year
 #. number followed by a time string in 12h format.
 #. i.e. "May 25 2012, 2:30 pm"
-#: ../js/misc/util.js:296
+#: ../js/misc/util.js:298
 #, no-c-format
 msgid "%B %d %Y, %l∶%M %p"
 msgstr "%d de %B de %Y, %l∶%M %p"
@@ -931,11 +931,16 @@ msgid "Overview"
 msgstr "Visão geral"
 
 #: ../js/ui/panel.js:346
+#, fuzzy
 msgctxt "System menu in the top bar"
-msgid "System"
-msgstr "Sistema"
+msgid "System Menu"
+msgstr "Monitor do Sistema"
 
-#: ../js/ui/panel.js:480
+#: ../js/ui/panel.js:413
+msgid "User Menu"
+msgstr ""
+
+#: ../js/ui/panel.js:514
 msgid "Taskbar"
 msgstr "Barra de tarefas"
 
@@ -1073,6 +1078,7 @@ msgstr "Configurações de Bluetooth"
 
 #. Translators: this is the number of connected bluetooth devices
 #: ../js/ui/status/bluetooth.js:136
+#, javascript-format
 msgid "%d Connected"
 msgid_plural "%d Connected"
 msgstr[0] "%d conectado"
@@ -1096,10 +1102,6 @@ msgstr "Ligar"
 #: ../js/ui/status/rfkill.js:117
 msgid "Turn Off"
 msgstr "Desligar"
-
-#: ../js/ui/status/hotCornerIndicator.js:19
-msgid "Hot Corner Indicator"
-msgstr "Indicador de Canto de Tela"
 
 #: ../js/ui/status/hotCornerIndicator.js:40
 msgid "Enable Hot Corner"
@@ -1129,6 +1131,7 @@ msgstr "%s desligado"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:454
+#, javascript-format
 msgid "%s Connected"
 msgstr "Conectado a %s"
 
@@ -1136,38 +1139,45 @@ msgstr "Conectado a %s"
 #. under NetworkManager's control (and thus cannot be used in the menu);
 #. %s is a network identifier
 #: ../js/ui/status/network.js:459
+#, javascript-format
 msgid "%s Unmanaged"
 msgstr "%s não é gerenciável"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:462
+#, javascript-format
 msgid "%s Disconnecting"
 msgstr "Desconectando de %s"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1300
+#, javascript-format
 msgid "%s Connecting"
 msgstr "Conectando a %s"
 
 #. Translators: this is for network connections that require some kind of key or password; %s is a network identifier
 #: ../js/ui/status/network.js:472
+#, javascript-format
 msgid "%s Requires Authentication"
 msgstr "%s requer autenticação"
 
 #. Translators: this is for devices that require some kind of firmware or kernel
 #. module, which is missing; %s is a network identifier
 #: ../js/ui/status/network.js:480
+#, javascript-format
 msgid "Firmware Missing For %s"
 msgstr "Firmware em falta para %s"
 
 #. Translators: this is for a network device that cannot be activated (for example it
 #. is disabled by rfkill, or it has no coverage; %s is a network identifier
 #: ../js/ui/status/network.js:484
+#, javascript-format
 msgid "%s Unavailable"
 msgstr "%s está indisponível"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:487
+#, javascript-format
 msgid "%s Connection Failed"
 msgstr "Falha na conexão de %s"
 
@@ -1181,12 +1191,14 @@ msgstr "Configurações de banda larga móvel"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:588 ../js/ui/status/network.js:1305
+#, javascript-format
 msgid "%s Hardware Disabled"
 msgstr "Hardware de %s desabilitado"
 
 #. Translators: this is for a network device that cannot be activated
 #. because it's disabled by rfkill (airplane mode); %s is a network identifier
 #: ../js/ui/status/network.js:592
+#, javascript-format
 msgid "%s Disabled"
 msgstr "%s está desabilitado"
 
@@ -1250,6 +1262,7 @@ msgstr "Ponto de acesso %s está ativo"
 
 #. Translators: %s is a network identifier
 #: ../js/ui/status/network.js:1311
+#, javascript-format
 msgid "%s Not Connected"
 msgstr "%s não está conectado"
 
@@ -1332,27 +1345,35 @@ msgstr "%d %%"
 msgid "Airplane Mode On"
 msgstr "Modo avião ligado"
 
-#: ../js/ui/status/system.js:351
+#: ../js/ui/status/system.js:24
+msgid "Help"
+msgstr "Ajuda"
+
+#: ../js/ui/status/system.js:471
 msgid "Switch User"
 msgstr "Trocar usuário"
 
-#: ../js/ui/status/system.js:356
+#: ../js/ui/status/system.js:476
 msgid "Log Out"
 msgstr "Encerrar sessão"
 
-#: ../js/ui/status/system.js:361
+#: ../js/ui/status/system.js:481
 msgid "Account Settings"
 msgstr "Configurações de conta"
 
-#: ../js/ui/status/system.js:374
+#: ../js/ui/status/system.js:513
+msgid "Recommended Apps for You"
+msgstr "Programas recomendados para você"
+
+#: ../js/ui/status/system.js:529
 msgid "Settings"
 msgstr "Configurações"
 
-#: ../js/ui/status/system.js:378
+#: ../js/ui/status/system.js:533
 msgid "Orientation Lock"
 msgstr "Bloqueio da orientação"
 
-#: ../js/ui/status/system.js:382
+#: ../js/ui/status/system.js:537
 msgid "Lock"
 msgstr "Bloquear"
 
@@ -1475,6 +1496,13 @@ msgstr "A senha não pode estar em branco"
 msgid "Authentication dialog was dismissed by the user"
 msgstr "O diálogo de autenticação foi descartado pelo usuário"
 
+#~ msgctxt "System menu in the top bar"
+#~ msgid "System"
+#~ msgstr "Sistema"
+
+#~ msgid "Hot Corner Indicator"
+#~ msgstr "Indicador de Canto de Tela"
+
 #~ msgctxt "list sunday"
 #~ msgid "Su"
 #~ msgstr "Dom"
@@ -1568,9 +1596,6 @@ msgstr "O diálogo de autenticação foi descartado pelo usuário"
 
 #~ msgid "Exit"
 #~ msgstr "Sair"
-
-#~ msgid "Help"
-#~ msgstr "Ajuda"
 
 #~ msgid "Give Us Feedback"
 #~ msgstr "Nos dê a sua opinião"
