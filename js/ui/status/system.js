@@ -21,6 +21,9 @@ const PopupMenu = imports.ui.popupMenu;
 const IconGrid = imports.ui.iconGrid;
 const Params = imports.misc.params;
 
+const YELP_TEXT = _("Help");
+const YELP_LAUNCHER = "yelp.desktop";
+
 const LOCKDOWN_SCHEMA = 'org.gnome.desktop.lockdown';
 const LOGIN_SCREEN_SCHEMA = 'org.gnome.login-screen';
 const DISABLE_USER_SWITCH_KEY = 'disable-user-switching';
@@ -426,6 +429,20 @@ const Indicator = new Lang.Class({
         this._updateActionsVisibility();
     },
 
+
+    _createActionButtonForIconPath: function(accessibleName, iconPath) {
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell' + iconPath);
+        let gicon = new Gio.FileIcon({ file: iconFile });
+
+        let icon = new St.Button({ reactive: true,
+                                   can_focus: true,
+                                   track_hover: true,
+                                   accessible_name: accessibleName,
+                                   style_class: 'system-menu-action' });
+        icon.child = new St.Icon({ gicon: gicon });
+        return icon;
+    },
+
     _createActionButton: function(iconName, accessibleName) {
         let icon = new St.Button({ reactive: true,
                                    can_focus: true,
@@ -505,6 +522,10 @@ const Indicator = new Lang.Class({
         item = new PopupMenu.PopupBaseMenuItem({ reactive: false,
                                                  can_focus: false });
 
+        this._helpAction = this._createActionButtonForIconPath(YELP_TEXT, '/theme/help-symbolic.svg');
+        this._helpAction.connect('clicked', Lang.bind(this, this._onHelpClicked));
+        item.actor.add(this._helpAction, { expand: true, x_fill: false })
+
         this._settingsAction = this._createActionButton('preferences-system-symbolic', _("Settings"));
         this._settingsAction.connect('clicked', Lang.bind(this, this._onSettingsClicked));
         item.actor.add(this._settingsAction, { expand: true, x_fill: false });
@@ -528,6 +549,15 @@ const Indicator = new Lang.Class({
 
         this._actionsItem = item;
         this.menu.addMenuItem(item);
+    },
+
+    _onHelpClicked: function() {
+        this.menu.itemActivated();
+        Main.overview.hide();
+
+        let app = Shell.AppSystem.get_default().lookup_app(YELP_LAUNCHER);
+        let context = new AppActivation.AppActivationContext(app);
+        context.activate();
     },
 
     _onSettingsClicked: function() {
