@@ -2335,10 +2335,15 @@ const CodingManager = new Lang.Class({
         });
 
         /* Gently fade the window in, this will paper over
-         * any artifacts from shadows and the like */
+         * any artifacts from shadows and the like
+         *
+         * Note: The animation time is reduced here - this
+         * is intention. It is just to prevent initial
+         * "double shadows" when rotating between windows.
+         */
         Tweener.addTween(dst, {
             opacity: 255,
-            time: WINDOW_ANIMATION_TIME * 4,
+            time: WINDOW_ANIMATION_TIME,
             transition: 'linear'
         });
     },
