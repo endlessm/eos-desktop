@@ -2195,7 +2195,7 @@ const CodingManager = new Lang.Class({
             return;
 
         // we get the signal for the same window switch twice
-        if (focusedWindow === this._previousFocusedWindow){
+        if (focusedWindow === session.previousFocusedWindow){
             return;
         }
         // keep track of the previous focused window so
