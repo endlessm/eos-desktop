@@ -343,7 +343,7 @@ const AggregateMenu = new Lang.Class({
     Extends: PanelMenu.Button,
 
     _init: function() {
-        this.parent(0.0, C_("System menu in the top bar", "System Menu"), false);
+        this.parent(0.0, C_("System menu in the top bar", "System"), false);
         this.menu.actor.add_style_class_name('aggregate-menu');
 
         let menuLayout = new AggregateLayout();
@@ -410,7 +410,7 @@ const ShowAppsButton = new Lang.Class({
     Extends: PanelMenu.Button,
 
     _init: function(panel) {
-        this.parent('', _("User Menu"), false);
+        this.parent('', _("User"), false);
         this.menu.actor.add_style_class_name('aggregate-menu');
 
         let menuLayout = new AggregateLayout();

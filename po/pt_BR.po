@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-14 01:25-0800\n"
+"POT-Creation-Date: 2016-11-14 11:12-0800\n"
 "PO-Revision-Date: 2016-08-31 21:39+0000\n"
 "Last-Translator: Philip Chimento <philip.chimento@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/endless-mobile-"
@@ -931,14 +931,13 @@ msgid "Overview"
 msgstr "Visão geral"
 
 #: ../js/ui/panel.js:346
-#, fuzzy
 msgctxt "System menu in the top bar"
-msgid "System Menu"
-msgstr "Monitor do Sistema"
+msgid "System"
+msgstr "Sistema"
 
 #: ../js/ui/panel.js:413
-msgid "User Menu"
-msgstr ""
+msgid "User"
+msgstr "Sua Conta"
 
 #: ../js/ui/panel.js:514
 msgid "Taskbar"
@@ -1496,9 +1495,10 @@ msgstr "A senha não pode estar em branco"
 msgid "Authentication dialog was dismissed by the user"
 msgstr "O diálogo de autenticação foi descartado pelo usuário"
 
+#, fuzzy
 #~ msgctxt "System menu in the top bar"
-#~ msgid "System"
-#~ msgstr "Sistema"
+#~ msgid "System Menu"
+#~ msgstr "Monitor do Sistema"
 
 #~ msgid "Hot Corner Indicator"
 #~ msgstr "Indicador de Canto de Tela"
