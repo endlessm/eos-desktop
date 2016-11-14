@@ -2107,12 +2107,10 @@ const CodingManager = new Lang.Class({
         Main.layoutManager.addChrome(button);
         button.connect('clicked', Lang.bind(this, this._switchToApp, session));
 
-        let positionChangedId = window.connect('position-changed', Lang.bind(this, this._windowBuilderPositionChanged, session));
-        let sizeChangedId = window.connect('size-changed', Lang.bind(this, this._windowBuilderSizeChanged, session));
+        session.positionChangedIdBuilder = window.connect('position-changed', Lang.bind(this, this._windowBuilderPositionChanged, session));
+        session.sizeChangedIdBuilder = window.connect('size-changed', Lang.bind(this, this._windowBuilderSizeChanged, session));
 
         session.buttonBuilder = button;
-        session.positionChangedIdBuilder = positionChangedId;
-        session.sizeChangedIdBuilder = sizeChangedId;
     },
 
     _animateToBuilder: function(session) {
