@@ -2337,9 +2337,9 @@ const CodingManager = new Lang.Class({
         /* Gently fade the window in, this will paper over
          * any artifacts from shadows and the like */
         Tweener.addTween(dst, {
-                    opacity: 255,
-                    time: WINDOW_ANIMATION_TIME * 4,
-                    transition: 'linear'
+            opacity: 255,
+            time: WINDOW_ANIMATION_TIME * 4,
+            transition: 'linear'
         });
     },
 
