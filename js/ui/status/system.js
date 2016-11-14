@@ -19,6 +19,7 @@ const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const IconGrid = imports.ui.iconGrid;
+const Params = imports.misc.params;
 
 const LOCKDOWN_SCHEMA = 'org.gnome.desktop.lockdown';
 const LOGIN_SCREEN_SCHEMA = 'org.gnome.login-screen';
@@ -38,6 +39,42 @@ const SensorProxyInterface = '<node> \
 </node>';
 
 const SensorProxy = Gio.DBusProxy.makeProxyWrapper(SensorProxyInterface);
+
+const UserAvatarWidget = new Lang.Class({
+    Name: 'UserAvatarWidget',
+
+    _init: function(user, params) {
+        this._user = user;
+        params = Params.parse(params, { reactive: false,
+                                        iconSize: 64,
+                                        styleClass: 'status-chooser-user-icon' });
+        this._iconSize = params.iconSize;
+
+        this.actor = new St.Bin({ style_class: params.styleClass,
+                                  track_hover: params.reactive,
+                                  reactive: params.reactive });
+    },
+
+    setSensitive: function(sensitive) {
+        this.actor.can_focus = sensitive;
+        this.actor.reactive = sensitive;
+    },
+
+    update: function() {
+        let iconFile = this._user.get_icon_file();
+        if (iconFile && !GLib.file_test(iconFile, GLib.FileTest.EXISTS))
+            iconFile = null;
+
+        if (iconFile) {
+            let file = Gio.File.new_for_path(iconFile);
+            this.actor.child = null;
+            this.actor.style = 'background-image: url("%s");'.format(iconFile);
+        } else {
+            this.actor.style = null;
+            this.actor.child = new St.Icon({ icon_name: 'avatar-default-symbolic' });
+        }
+    }
+});
 
 const AltSwitcher = new Lang.Class({
     Name: 'AltSwitcher',
@@ -315,6 +352,8 @@ const Indicator = new Lang.Class({
         if (iconFile && !GLib.file_test(iconFile, GLib.FileTest.EXISTS))
             iconFile = null;
 
+        this._avatar_label.text = this._user.get_real_name();
+        this._avatar.update();
         if (iconFile) {
             let file = Gio.File.new_for_path(iconFile);
             let gicon = new Gio.FileIcon({ file: file });
@@ -401,12 +440,7 @@ const Indicator = new Lang.Class({
         let item;
 
         this._switchUserSubMenu = new PopupMenu.PopupSubMenuMenuItem('', true);
-        this._switchUserSubMenu.actor.vertical = true;
-        this._switchUserSubMenu.label.x_expand = true;
-        this._switchUserSubMenu.label.x_align = Clutter.ActorAlign.CENTER;
-        this._switchUserSubMenu.label.style_class = 'system-switch-user-submenu-label';
         this._switchUserSubMenu.icon.style_class = 'system-switch-user-submenu-icon';
-        this._switchUserSubMenu.actor.style_class = 'system-switch-user-submenu';
 
         // Since the label of the switch user submenu depends on the width of
         // the popup menu, and we can't easily connect on allocation-changed
@@ -419,27 +453,49 @@ const Indicator = new Lang.Class({
 
         item = new PopupMenu.PopupMenuItem(_("Switch User"));
         item.connect('activate', Lang.bind(this, this._onLoginScreenActivate));
-        // this._switchUserSubMenu.menu.addMenuItem(item);
+        this._switchUserSubMenu.menu.addMenuItem(item);
         this._loginScreenItem = item;
 
         item = new PopupMenu.PopupMenuItem(_("Log Out"));
         item.connect('activate', Lang.bind(this, this._onQuitSessionActivate));
-        // this._switchUserSubMenu.menu.addMenuItem(item);
+        this._switchUserSubMenu.menu.addMenuItem(item);
         this._logoutItem = item;
 
-        this._switchUserSubMenu.menu.addSettingsAction(_("Account Settings"),
+        let settingsItem = this._switchUserSubMenu.menu.addSettingsAction(_("Account Settings"),
                                                        'gnome-user-accounts-panel.desktop');
 
         this._user.connect('notify::is-loaded', Lang.bind(this, this._updateSwitchUserSubMenu));
         this._user.connect('changed', Lang.bind(this, this._updateSwitchUserSubMenu));
 
-        this.menu.addMenuItem(this._switchUserSubMenu);
+        // this.menu.addMenuItem(this._switchUserSubMenu);
+        let userItem = new PopupMenu.PopupBaseMenuItem({ can_focus: false, reactive: false });
+        this._avatar = new UserAvatarWidget(this._user, { reactive: true });
+        this._avatar.update();
+        let userButton = new St.Button({ child: this._avatar.actor });
+        userButton.connect('clicked', () => {
+            settingsItem.activate();
+            Main.overview.hide();
+            this.menu.itemActivated(BoxPointer.PopupAnimation.NONE);
+        });
+        userItem.actor.x_align = Clutter.ActorAlign.CENTER;
+        userItem.actor.add_child(userButton);
+        this.menu.addMenuItem(userItem);
+
+        let userName = new PopupMenu.PopupBaseMenuItem({ can_focus: false, reactive: false });
+        userName.actor.x_align = Clutter.ActorAlign.CENTER;
+        this._avatar_label = new St.Label({
+            style_class: 'avatar-label',
+        });
+        userName.actor.add_child(this._avatar_label);
+        this.menu.addMenuItem(userName);
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         let labelItem = new PopupMenu.PopupBaseMenuItem({ can_focus: false, reactive: false });
         labelItem.actor.x_align = Clutter.ActorAlign.CENTER;
-        let label = new St.Label({ text: _('Recommended Apps for You') });
-        label.style_class = 'recommended-apps-label';
+        let label = new St.Label({
+            text: _('Recommended Apps for You'),
+            style_class: 'recommended-apps-label',
+        });
         labelItem.actor.add_child(label);
         labelItem.actor.label_actor = label;
         this.menu.addMenuItem(labelItem);

@@ -791,7 +791,7 @@ StScrollBar StButton#vhandle:active {
 
 .status-chooser-user-icon {
     border: 2px solid #8b8b8b;
-    border-radius: 5px;
+    border-radius: 34px;
     width: 48pt;
     height: 48pt;
     background-size: contain;
@@ -2788,8 +2788,7 @@ StScrollBar StButton#vhandle:active {
 .user-widget-label {
     font-size: 18pt;
     font-weight: bold;
-    text-align: left;
-    padding-left: 15px;
+    text-align: center;
     text-shadow: black 0px 4px 3px 0px;
 }
 
@@ -3272,6 +3271,11 @@ StScrollBar StButton#vhandle:active {
 
 .system-switch-user-submenu-label {
     padding-top: 6px; }
+
+.avatar-label {
+    color: white;
+    text-align: center;
+}
 
 .recommended-apps-label {
     color: #888888;
