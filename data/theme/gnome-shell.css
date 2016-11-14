@@ -3283,11 +3283,11 @@ StScrollBar StButton#vhandle:active {
 }
 
 .suggested-apps .icon-grid {
-    spacing: 15px;
+    spacing: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
     padding-right: 20px;
-    -shell-grid-horizontal-item-size: 90px;
+    -shell-grid-horizontal-item-size: 80px;
     -shell-grid-vertical-item-size: 90px;
 }
 
