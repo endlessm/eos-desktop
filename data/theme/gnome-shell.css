@@ -3264,13 +3264,49 @@ StScrollBar StButton#vhandle:active {
     icon-size: 16px;
     padding: 8px; }
 
-.system-switch-user-submenu-icon.user-icon {
-  icon-size: 20px;
-  padding: 0 2px; }
+.system-switch-user-submenu:hover {
+  background-color: #5d5f5e; }
 
-.system-switch-user-submenu-icon.default-icon {
-  icon-size: 16px;
-  padding: 0 4px; }
+.system-switch-user-submenu-icon {
+  icon-size: 64px; }
+
+.system-switch-user-submenu-label {
+    padding-top: 6px; }
+
+.recommended-apps-label {
+    color: #888888;
+    font-size: .9em;
+}
+
+.suggested-apps .icon-grid {
+    spacing: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 20px;
+    -shell-grid-horizontal-item-size: 90px;
+    -shell-grid-vertical-item-size: 90px;
+}
+
+.suggested-apps .icon-button {
+    border-radius: 10px;
+}
+
+.suggested-apps .icon-button:hover {
+    background-color: #5d5f5e;
+}
+
+.suggested-apps .overview-icon {
+    icon-size: 64px;
+    spacing: 4px;
+    text-align: center;
+}
+
+.suggested-apps .overview-icon-label {
+    color: #eeeeee;
+    text-shadow: none;
+    font-size: 0.9em;
+    width: 100px;
+}
 
 #panel .panel-separator {
     padding: 0px 8px 0px 4px;

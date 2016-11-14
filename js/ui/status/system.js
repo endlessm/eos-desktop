@@ -113,6 +113,7 @@ const PopupIcon = new Lang.Class({
                                      can_focus: true,
                                      track_hover: true,
                                      x_align: St.Align.START,
+                                     style_class: 'icon-button',
                                      y_fill: true });
         this.actor.connect('clicked', Lang.bind(this, this._clicked));
 
@@ -149,6 +150,7 @@ const SuggestedAppsItem = new Lang.Class({
         this._grid = new IconGrid.IconGrid({ rowLimit: 1,
                                              xAlign: St.Align.MIDDLE });
         this.actor.add(this._grid.actor, { expand: true });
+        this.actor.style_class = 'suggested-apps';
 
         let appSystem = Shell.AppSystem.get_default();
         let appIds = ['eos-link-facebook.desktop', 'rhythmbox.desktop', 'net.sourceforge.Supertuxkart.desktop'];
@@ -402,7 +404,9 @@ const Indicator = new Lang.Class({
         this._switchUserSubMenu.actor.vertical = true;
         this._switchUserSubMenu.label.x_expand = true;
         this._switchUserSubMenu.label.x_align = Clutter.ActorAlign.CENTER;
+        this._switchUserSubMenu.label.style_class = 'system-switch-user-submenu-label';
         this._switchUserSubMenu.icon.style_class = 'system-switch-user-submenu-icon';
+        this._switchUserSubMenu.actor.style_class = 'system-switch-user-submenu';
 
         // Since the label of the switch user submenu depends on the width of
         // the popup menu, and we can't easily connect on allocation-changed
@@ -433,8 +437,10 @@ const Indicator = new Lang.Class({
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         let labelItem = new PopupMenu.PopupBaseMenuItem({ can_focus: false, reactive: false });
+        labelItem.actor.x_align = Clutter.ActorAlign.CENTER;
         let label = new St.Label({ text: _('Recommended Apps for You') });
-        labelItem.actor.add(label);
+        label.style_class = 'recommended-apps-label';
+        labelItem.actor.add_child(label);
         labelItem.actor.label_actor = label;
         this.menu.addMenuItem(labelItem);
         this.menu.addMenuItem(new SuggestedAppsItem(this.menu));
