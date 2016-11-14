@@ -1960,12 +1960,9 @@ const CodingManager = new Lang.Class({
         let session = this._getSession(actorApp);
 
         button.connect('clicked', Lang.bind(this, this._switchToBuilder, session));
-        let positionChangedId = window.connect('position-changed', Lang.bind(this, this._windowAppPositionChanged, session));
-        let sizeChangedId = window.connect('size-changed', Lang.bind(this, this._windowAppSizeChanged, session));
-        let windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowAppRestacked, session));
-        session.positionChangedIdApp = positionChangedId;
-        session.sizeChangedIdApp = sizeChangedId;
-        session.windowsRestackedId = windowsRestackedId;
+        session.positionChangedIdApp = window.connect('position-changed', Lang.bind(this, this._windowAppPositionChanged, session));
+        session.sizeChangedIdApp = window.connect('size-changed', Lang.bind(this, this._windowAppSizeChanged, session));
+        session.windowsRestackedIdApp = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowAppRestacked, session));
     },
 
     addSwitcherToApp: function(actorBuilder, windowApp) {
