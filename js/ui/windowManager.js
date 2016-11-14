@@ -2006,8 +2006,9 @@ const CodingManager = new Lang.Class({
 
             session.actorBuilder.meta_window.activate(global.get_current_time());
             session.actorBuilder.show();
-        } else
+        } else {
             this._removeSession(session);
+        }
     },
 
     _clearBuilderSession: function(session) {
@@ -2041,8 +2042,9 @@ const CodingManager = new Lang.Class({
             session.actorApp.meta_window.activate(global.get_current_time());
             session.actorApp.show();
             session.buttonApp.show();
-        } else
+        } else {
             this._removeSession(session);
+        }
     },
 
     _switchToBuilder : function(actor, event, session) {
