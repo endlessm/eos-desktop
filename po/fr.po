@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"POT-Creation-Date: 2016-11-08 02:27+0000\n"
 "PO-Revision-Date: 2016-10-04 17:42+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
@@ -105,13 +105,13 @@ msgstr "Absent de la liste ?"
 
 #. Translators: During a password reset, prompt for the "secret code" provided
 #. by customer support.
-#: ../js/gdm/loginDialog.js:814
+#: ../js/gdm/loginDialog.js:836
 msgid "Enter unlock code provided by customer support:"
 msgstr "Saisir le code de déverrouillage fourni par l’assistance client : "
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
-#: ../js/gdm/loginDialog.js:818
+#: ../js/gdm/loginDialog.js:840
 #, javascript-format
 msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
@@ -120,11 +120,11 @@ msgid ""
 msgstr "Veuillez informer l'assistance client de votre code de vérification %s en appelant %s ou en envoyant un e-mail à %s. Le code restera valide jusqu'à ce que vous cliquiez sur Annuler ou que vous éteigniez votre ordinateur."
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
-#: ../js/gdm/loginDialog.js:824
+#: ../js/gdm/loginDialog.js:846
 msgid "Reset Password"
 msgstr "Réinitialiser le mot de passe"
 
-#: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
+#: ../js/gdm/loginDialog.js:1002 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
@@ -132,28 +132,28 @@ msgstr "Réinitialiser le mot de passe"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1020
 msgctxt "button"
 msgid "Sign In"
 msgstr "Se connecter"
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1020
 msgid "Next"
 msgstr "Suivant"
 
-#: ../js/gdm/loginDialog.js:1116
+#: ../js/gdm/loginDialog.js:1138
 msgid "Your unlock code was incorrect. Please try again."
 msgstr "Votre code de déverrouillage était incorrecte. Veuillez réessayer."
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:1166 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:1188 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "Nom d'utilisateur : "
 
-#: ../js/gdm/loginDialog.js:1429
+#: ../js/gdm/loginDialog.js:1451
 msgid "Login Window"
 msgstr "Fenêtre de connexion"
 
@@ -189,47 +189,47 @@ msgstr "(ou faites glisser le doigt)"
 msgid "(e.g., user or %s)"
 msgstr "(par ex. utilisateur ou %s)"
 
-#: ../js/misc/util.js:121
+#: ../js/misc/util.js:122
 msgid "Command not found"
 msgstr "Commande non trouvée"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:154
+#: ../js/misc/util.js:155
 msgid "Could not parse command:"
 msgstr "Impossible d'analyser la commande :"
 
-#: ../js/misc/util.js:162
+#: ../js/misc/util.js:163
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "Exécution de « %s » impossible :"
 
-#: ../js/ui/appDisplay.js:1182
+#: ../js/ui/appDisplay.js:1186
 msgid "Remove from desktop"
 msgstr "Supprimer du bureau"
 
-#: ../js/ui/appDisplay.js:1691
+#: ../js/ui/appDisplay.js:1695
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../js/ui/appDisplay.js:1697
+#: ../js/ui/appDisplay.js:1701
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
-#: ../js/ui/appDisplay.js:1703
+#: ../js/ui/appDisplay.js:1707
 msgid "We are just trying to keep you safe."
 msgstr "Nous essayons simplement de vous garder en sécurité."
 
-#: ../js/ui/appDisplay.js:1709
+#: ../js/ui/appDisplay.js:1713
 msgid "OK"
 msgstr "Valider"
 
-#: ../js/ui/appDisplay.js:1971
+#: ../js/ui/appDisplay.js:1975
 msgid "More Apps"
 msgstr "Plus d'Apps"
 
-#: ../js/ui/appDisplay.js:1980
+#: ../js/ui/appDisplay.js:1984
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -603,7 +603,7 @@ msgstr "Echec d'une tentative de mise à jour"
 msgid "We could not update your system"
 msgstr "Nous n'avons pas pu mettre à jour votre système"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
 msgid "Windows"
 msgstr "Fenêtres"
 
@@ -762,7 +762,7 @@ msgstr "Moniteur du système"
 msgid "Quit Application"
 msgstr "Quitter l'application"
 
-#: ../js/ui/iconGridLayout.js:213
+#: ../js/ui/iconGridLayout.js:215
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s a été effacé"
@@ -877,7 +877,7 @@ msgstr "Annuler"
 msgid "Overview"
 msgstr "Vue d'ensemble"
 
-#: ../js/ui/panel.js:375
+#: ../js/ui/panel.js:376
 msgid "Taskbar"
 msgstr "Barre des tâches"
 
@@ -886,7 +886,7 @@ msgstr "Barre des tâches"
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:633
+#: ../js/ui/popupMenu.js:626
 msgid "toggle-switch-us"
 msgstr "toggle-switch-intl"
 
@@ -1267,7 +1267,7 @@ msgstr "%s (distant)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:511
+#: ../js/ui/viewSelector.js:512
 msgid "Applications"
 msgstr "Applications"
 
@@ -1276,21 +1276,21 @@ msgstr "Applications"
 msgid "'%s' is ready"
 msgstr "« %s » est prêt"
 
-#: ../js/ui/windowManager.js:83
+#: ../js/ui/windowManager.js:84
 msgid "Do you want to keep these display settings?"
 msgstr "Voulez-vous conserver ces paramètres d'affichage ?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:102
+#: ../js/ui/windowManager.js:103
 msgid "Revert Settings"
 msgstr "Restaurer les paramètres"
 
-#: ../js/ui/windowManager.js:106
+#: ../js/ui/windowManager.js:107
 msgid "Keep Changes"
 msgstr "Conserver les modifications"
 
-#: ../js/ui/windowManager.js:124
+#: ../js/ui/windowManager.js:125
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
@@ -1323,19 +1323,19 @@ msgstr[1] "%u entrées"
 msgid "System Sounds"
 msgstr "Sons système"
 
-#: ../src/main.c:321
+#: ../src/main.c:320
 msgid "Print version"
 msgstr "Affiche la version"
 
-#: ../src/main.c:327
+#: ../src/main.c:326
 msgid "Mode used by GDM for login screen"
 msgstr "Mode utilisé par GDM pour l'écran de connexion"
 
-#: ../src/main.c:333
+#: ../src/main.c:332
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Utiliser un mode particulier, par ex. « gdm » pour l'écran de connexion"
 
-#: ../src/main.c:339
+#: ../src/main.c:338
 msgid "List possible modes"
 msgstr "Lister les modes possibles"
 

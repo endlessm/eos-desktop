@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"POT-Creation-Date: 2016-11-08 02:27+0000\n"
 "PO-Revision-Date: 2016-10-04 17:45+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Thai (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/th/)\n"
@@ -98,13 +98,13 @@ msgstr "ไม่มีชื่อของคุณงั้นหรือ?"
 
 #. Translators: During a password reset, prompt for the "secret code" provided
 #. by customer support.
-#: ../js/gdm/loginDialog.js:814
+#: ../js/gdm/loginDialog.js:836
 msgid "Enter unlock code provided by customer support:"
 msgstr "ใส่รหัสปลดล็อคที่ได้จากฝ่ายช่วยเหลือลูกค้า:"
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
-#: ../js/gdm/loginDialog.js:818
+#: ../js/gdm/loginDialog.js:840
 #, javascript-format
 msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
@@ -113,11 +113,11 @@ msgid ""
 msgstr "กรุณาแจ้งรหัสในการยืนยันของคุณแก่ฝ่ายช่วยเหลือลูกค้า %s ทางโทรศัพท์ %s หรืออีเมล %s. รหัสจะยังคงใช้ได้จนกว่าคุณจะกดยกเลิกหรือปิดคอมพิวเตอร์"
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
-#: ../js/gdm/loginDialog.js:824
+#: ../js/gdm/loginDialog.js:846
 msgid "Reset Password"
 msgstr "ตั้งค่ารหัสผ่านใหม่"
 
-#: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
+#: ../js/gdm/loginDialog.js:1002 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
@@ -125,28 +125,28 @@ msgstr "ตั้งค่ารหัสผ่านใหม่"
 msgid "Cancel"
 msgstr "ยกเลิก"
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1020
 msgctxt "button"
 msgid "Sign In"
 msgstr "เข้าระบบ"
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1020
 msgid "Next"
 msgstr "ถัดไป"
 
-#: ../js/gdm/loginDialog.js:1116
+#: ../js/gdm/loginDialog.js:1138
 msgid "Your unlock code was incorrect. Please try again."
 msgstr "รหัสปลดล็อคของคุณไม่ถูกต้อง กรุณาลองอีกครั้ง"
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:1166 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:1188 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "ชื่อผู้ใช้: "
 
-#: ../js/gdm/loginDialog.js:1429
+#: ../js/gdm/loginDialog.js:1451
 msgid "Login Window"
 msgstr "หน้าต่างเข้าระบบ"
 
@@ -182,47 +182,47 @@ msgstr "(หรือลูบจอ)"
 msgid "(e.g., user or %s)"
 msgstr "(เช่น ผู้ใช้ หรือ %s)"
 
-#: ../js/misc/util.js:121
+#: ../js/misc/util.js:122
 msgid "Command not found"
 msgstr "ไม่พบคำสั่ง"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:154
+#: ../js/misc/util.js:155
 msgid "Could not parse command:"
 msgstr "ไม่สามารถแจงคำสั่ง:"
 
-#: ../js/misc/util.js:162
+#: ../js/misc/util.js:163
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "คำสั่ง '%s' ทำงานล้มเหลว:"
 
-#: ../js/ui/appDisplay.js:1182
+#: ../js/ui/appDisplay.js:1186
 msgid "Remove from desktop"
 msgstr "ลบออกจากเดสก์ท้อป"
 
-#: ../js/ui/appDisplay.js:1691
+#: ../js/ui/appDisplay.js:1695
 msgid "Warning"
 msgstr "คำเตือน"
 
-#: ../js/ui/appDisplay.js:1697
+#: ../js/ui/appDisplay.js:1701
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "หากต้องการลบโฟลเดอร์หนึ่งคุณจะต้องเอารายการทั้งหมดภานในโฟลเดอร์ออกก่อน"
 
-#: ../js/ui/appDisplay.js:1703
+#: ../js/ui/appDisplay.js:1707
 msgid "We are just trying to keep you safe."
 msgstr "เราพยายามที่จะทำให้ปลอดภัย"
 
-#: ../js/ui/appDisplay.js:1709
+#: ../js/ui/appDisplay.js:1713
 msgid "OK"
 msgstr "ตกลง"
 
-#: ../js/ui/appDisplay.js:1971
+#: ../js/ui/appDisplay.js:1975
 msgid "More Apps"
 msgstr "แอพเพิ่มเติม"
 
-#: ../js/ui/appDisplay.js:1980
+#: ../js/ui/appDisplay.js:1984
 msgid "Delete"
 msgstr "ลบ"
 
@@ -596,7 +596,7 @@ msgstr "อัปเดตล้มเหลว"
 msgid "We could not update your system"
 msgstr "เราไม่สามารถอัปเดตระบบของคุณ"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
 msgid "Windows"
 msgstr "หน้าต่าง"
 
@@ -751,7 +751,7 @@ msgstr "โปรแกรมตรวจสอบระบบ"
 msgid "Quit Application"
 msgstr "ออกจากแอพพลิเคชัน"
 
-#: ../js/ui/iconGridLayout.js:213
+#: ../js/ui/iconGridLayout.js:215
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s ได้ถูกลบแล้ว"
@@ -866,7 +866,7 @@ msgstr "เรียกคืน"
 msgid "Overview"
 msgstr "ภาพรวม"
 
-#: ../js/ui/panel.js:375
+#: ../js/ui/panel.js:376
 msgid "Taskbar"
 msgstr "ทาสก์บาร์"
 
@@ -875,7 +875,7 @@ msgstr "ทาสก์บาร์"
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:633
+#: ../js/ui/popupMenu.js:626
 msgid "toggle-switch-us"
 msgstr "toggle-switch-intl"
 
@@ -1256,7 +1256,7 @@ msgstr "%s (รีโมท)"
 msgid "%s (console)"
 msgstr "%s (คอนโซล)"
 
-#: ../js/ui/viewSelector.js:511
+#: ../js/ui/viewSelector.js:512
 msgid "Applications"
 msgstr "โปรแกรม"
 
@@ -1265,21 +1265,21 @@ msgstr "โปรแกรม"
 msgid "'%s' is ready"
 msgstr "'%s' พร้อมแล้ว"
 
-#: ../js/ui/windowManager.js:83
+#: ../js/ui/windowManager.js:84
 msgid "Do you want to keep these display settings?"
 msgstr "คุณต้องการที่จะเก็บการตั้งค่าการแสดงผลเหล่านี้หรือไม่"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:102
+#: ../js/ui/windowManager.js:103
 msgid "Revert Settings"
 msgstr "ย้อนกลับการตั้งค่า"
 
-#: ../js/ui/windowManager.js:106
+#: ../js/ui/windowManager.js:107
 msgid "Keep Changes"
 msgstr "เก็บการเปลี่ยนแปลง"
 
-#: ../js/ui/windowManager.js:124
+#: ../js/ui/windowManager.js:125
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
@@ -1309,19 +1309,19 @@ msgstr[0] "ช่องเสียงเข้า %u ช่อง"
 msgid "System Sounds"
 msgstr "เสียงของระบบ"
 
-#: ../src/main.c:321
+#: ../src/main.c:320
 msgid "Print version"
 msgstr "แสดงเลขรุ่น"
 
-#: ../src/main.c:327
+#: ../src/main.c:326
 msgid "Mode used by GDM for login screen"
 msgstr "โหมดสำหรับให้ GDM เรียกใช้ในหน้าจอเข้าระบบ"
 
-#: ../src/main.c:333
+#: ../src/main.c:332
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "ใช้โหมดเฉพาะ เช่น \"gdm\" สำหรับหน้าจอเข้าระบบ"
 
-#: ../src/main.c:339
+#: ../src/main.c:338
 msgid "List possible modes"
 msgstr "แสดงโหมดทั้งหมดที่เป็นไปได้"
 

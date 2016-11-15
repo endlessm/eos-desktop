@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Prasadh Baapaat <prasadhbaapaat@gmail.com>, 2016
 # sandeeps <sshedmak@redhat.com>, 2011-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-04 01:27+0000\n"
-"PO-Revision-Date: 2016-10-04 17:44+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2016-11-08 02:27+0000\n"
+"PO-Revision-Date: 2016-11-10 19:59+0000\n"
+"Last-Translator: Prasadh Baapaat <prasadhbaapaat@gmail.com>\n"
 "Language-Team: Marathi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/mr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +29,7 @@ msgstr "संदेश ट्रे दाखवा"
 
 #: ../data/50-gnome-shell-system.xml.in.h:3
 msgid "Focus the active notification"
-msgstr "सक्रीय सूचनावर फोकस करा"
+msgstr "सक्रीय सूचनेवर फोकस करा"
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
 msgid "Show all applications"
@@ -40,12 +41,12 @@ msgstr "ॲप्लिकेशन मेन्यु उघडा"
 
 #: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
+msgstr "अभिप्राय"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
 msgid "EOS Shell"
-msgstr ""
+msgstr "EOS शेल"
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -72,7 +73,7 @@ msgstr "एक्सटेंशन"
 
 #: ../js/extensionPrefs/main.js:191
 msgid "Select an extension to configure using the combobox above."
-msgstr "वरील कॉम्बोबॉक्सचा वापर करून संरचनाकरीता एक्सटेंशनचा वापर करा."
+msgstr "वरील कॉम्बोबॉक्सचा वापर करून संरचनेकरिता एक्सटेंशन निवडा."
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -80,11 +81,11 @@ msgstr "सत्र…"
 
 #: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
-msgstr ""
+msgstr "पासवर्ड सूचना दाखवा"
 
 #: ../js/gdm/loginDialog.js:636
 msgid "Forgot password?"
-msgstr ""
+msgstr "पासवर्ड विसरलात?"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -95,26 +96,26 @@ msgstr "सूचीत नाही?"
 
 #. Translators: During a password reset, prompt for the "secret code" provided
 #. by customer support.
-#: ../js/gdm/loginDialog.js:814
+#: ../js/gdm/loginDialog.js:836
 msgid "Enter unlock code provided by customer support:"
-msgstr ""
+msgstr "ग्राहक सेवेद्वारे दिला गेलेला अनलॉक कोड प्रविष्ट करा:"
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
-#: ../js/gdm/loginDialog.js:818
+#: ../js/gdm/loginDialog.js:840
 #, javascript-format
 msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
 " emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
-msgstr ""
+msgstr "ग्राहक सहाय्यता सेवेला आपला सत्यापन कोड %s %s ह्या नंबरवर अथवा %s ह्या इमेलवर कळवा. आपला सत्यापन कोड आपण कॅन्सल बटण दाबेपर्यंत किंवा आपण आपला संगणक बंद करेपर्यंत वैध राहील."
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
-#: ../js/gdm/loginDialog.js:824
+#: ../js/gdm/loginDialog.js:846
 msgid "Reset Password"
-msgstr ""
+msgstr "पासवर्ड रीसेट करा"
 
-#: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
+#: ../js/gdm/loginDialog.js:1002 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
@@ -122,28 +123,28 @@ msgstr ""
 msgid "Cancel"
 msgstr "रद्द करा"
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1020
 msgctxt "button"
 msgid "Sign In"
 msgstr "प्रवेश करा"
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1020
 msgid "Next"
 msgstr "पुढील"
 
-#: ../js/gdm/loginDialog.js:1116
+#: ../js/gdm/loginDialog.js:1138
 msgid "Your unlock code was incorrect. Please try again."
-msgstr ""
+msgstr "आपला अनलॉक कोड चुकीचा होता, परत प्रयत्न करा."
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:1166 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:1188 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "वापरकर्तानाव: "
 
-#: ../js/gdm/loginDialog.js:1429
+#: ../js/gdm/loginDialog.js:1451
 msgid "Login Window"
 msgstr "प्रवेश पटल"
 
@@ -177,51 +178,51 @@ msgstr "(किंवा बोट फिरवा)"
 #: ../js/gdm/util.js:406
 #, javascript-format
 msgid "(e.g., user or %s)"
-msgstr "(उ.दा., वापरकर्ता किंवा %s)"
+msgstr "(उदा., वापरकर्ता किंवा %s)"
 
-#: ../js/misc/util.js:121
+#: ../js/misc/util.js:122
 msgid "Command not found"
 msgstr "आदेश आढळले नाही"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:154
+#: ../js/misc/util.js:155
 msgid "Could not parse command:"
 msgstr "आदेश वाचणे अशक्य:"
 
-#: ../js/misc/util.js:162
+#: ../js/misc/util.js:163
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "'%s' चालवणे अपयशी:"
 
-#: ../js/ui/appDisplay.js:1182
+#: ../js/ui/appDisplay.js:1186
 msgid "Remove from desktop"
-msgstr ""
+msgstr "डेस्कटॉपवरून काढून टाका"
 
-#: ../js/ui/appDisplay.js:1691
+#: ../js/ui/appDisplay.js:1695
 msgid "Warning"
-msgstr ""
+msgstr "धोक्याचा इशारा"
 
-#: ../js/ui/appDisplay.js:1697
+#: ../js/ui/appDisplay.js:1701
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr ""
+msgstr "फोल्डर नष्ट करण्याकरिता प्रथम त्यातील सर्व आयटम काढा "
 
-#: ../js/ui/appDisplay.js:1703
+#: ../js/ui/appDisplay.js:1707
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "आम्ही आपल्याला फक्त सुरक्षित ठेवण्याचा प्रयत्न करत आहोत."
 
-#: ../js/ui/appDisplay.js:1709
+#: ../js/ui/appDisplay.js:1713
 msgid "OK"
 msgstr "ठीक आहे"
 
-#: ../js/ui/appDisplay.js:1971
+#: ../js/ui/appDisplay.js:1975
 msgid "More Apps"
-msgstr ""
+msgstr "अधिक ऍप्स"
 
-#: ../js/ui/appDisplay.js:1980
+#: ../js/ui/appDisplay.js:1984
 msgid "Delete"
-msgstr ""
+msgstr "नष्ट"
 
 #: ../js/ui/appFavorites.js:108
 #, javascript-format
@@ -235,24 +236,24 @@ msgstr "%s ला पसंतीतून काढून टाकले."
 
 #: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
-msgstr ""
+msgstr "इतर कार्यक्षेत्रे"
 
 #: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
-msgstr ""
+msgstr "चालू कार्यक्षेत्र"
 
 #: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
-msgstr ""
+msgstr "टास्कबारवर दाखवा"
 
 #: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
-msgstr ""
+msgstr "टास्कबारवरून काढा"
 
 #: ../js/ui/appIconBar.js:319
 #, javascript-format
 msgid "Quit %s"
-msgstr ""
+msgstr "%s मधुन बाहेर पडा"
 
 #: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
@@ -260,22 +261,22 @@ msgstr "पार्श्वभूमी बदला…"
 
 #: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
-msgstr ""
+msgstr "ऍप जोडा"
 
 #: ../js/ui/backgroundMenu.js:32
 msgid "Add Website"
-msgstr ""
+msgstr "वेबसाईट जोडा"
 
 #: ../js/ui/backgroundMenu.js:36
 msgid "Add Folder"
-msgstr ""
+msgstr "फोल्डर जोडा"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
 #: ../js/ui/calendar.js:62
 msgctxt "event list time"
 msgid "All Day"
-msgstr "सर्व दिवस"
+msgstr "पूर्ण दिवस"
 
 #. Translators: Shown in calendar event list, if 24h format,
 #. \u2236 is a ratio character, similar to :
@@ -385,7 +386,7 @@ msgstr "S"
 
 #: ../js/ui/calendar.js:391
 msgid "calendar:MY"
-msgstr ""
+msgstr "कॅलेंडर: माझ्या"
 
 #. Translators: Text to show if there are no events
 #: ../js/ui/calendar.js:722
@@ -471,11 +472,11 @@ msgstr "कि: "
 
 #: ../js/ui/components/networkAgent.js:266
 msgid "Identity: "
-msgstr "आइडेंटिटि: "
+msgstr "ओळख"
 
 #: ../js/ui/components/networkAgent.js:268
 msgid "Private key password: "
-msgstr "प्राइव्हेट कि पासवर्ड: "
+msgstr "खाजगी कि पासवर्ड: "
 
 #: ../js/ui/components/networkAgent.js:280
 msgid "Service: "
@@ -483,18 +484,18 @@ msgstr "सर्व्हिस: "
 
 #: ../js/ui/components/networkAgent.js:309
 msgid "Authentication required by wireless network"
-msgstr "वायरलेस नेटवर्कतर्फे आवश्यक ओळखपटवणे"
+msgstr "वायरलेस नेटवर्कतर्फे ओळख पटवणे आवश्यक"
 
 #: ../js/ui/components/networkAgent.js:310
 #, javascript-format
 msgid ""
 "Passwords or encryption keys are required to access the wireless network "
 "'%s'."
-msgstr "वायरलेस नेटवर्क '%s' करीता प्रवेशसाठी एंक्रिप्शन किज् आवश्यक आहे."
+msgstr "वायरलेस नेटवर्क '%s' वापरण्याकरीता एनक्रिप्शन किज् आवश्यक आहेत."
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
-msgstr "वायर्ड 802.1X ओळखपटवणे"
+msgstr "वायर्ड 802.1X ओळख पटवणे"
 
 #: ../js/ui/components/networkAgent.js:316
 msgid "Network name: "
@@ -506,15 +507,15 @@ msgstr "DSL ओळख पटवणे"
 
 #: ../js/ui/components/networkAgent.js:328
 msgid "PIN code required"
-msgstr "PIN कोड आवश्यक"
+msgstr "पिनकोड आवश्यक"
 
 #: ../js/ui/components/networkAgent.js:329
 msgid "PIN code is needed for the mobile broadband device"
-msgstr "मोबाइल ब्रॉडबँड साधनकरीता PIN कोड आवश्यक आहे"
+msgstr "मोबाइल ब्रॉडबँड साधनाकरीता पिनकोड आवश्यक आहे"
 
 #: ../js/ui/components/networkAgent.js:330
 msgid "PIN: "
-msgstr "PIN: "
+msgstr "पिन:"
 
 #: ../js/ui/components/networkAgent.js:336
 msgid "Mobile broadband network password"
@@ -547,53 +548,53 @@ msgstr "माफ करा, ते कार्य करू शकले न�
 
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
-msgstr ""
+msgstr "सॉफ्टवेअर अद्यतन"
 
 #: ../js/ui/components/updaterManager.js:204
 msgid "Updates available"
-msgstr ""
+msgstr "अद्यतने उपलब्ध"
 
 #: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
-msgstr ""
+msgstr "आपल्या प्रणालीकरिता अद्यतने उपलब्ध आहेत"
 
 #: ../js/ui/components/updaterManager.js:206
 msgid "Download now"
-msgstr ""
+msgstr "डाउनलोड करा"
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
-msgstr ""
+msgstr "अद्यतने तयार"
 
 #: ../js/ui/components/updaterManager.js:220
 msgid "Software updates are ready to be installed on your system"
-msgstr ""
+msgstr "सॉफ्टवेअर अद्यतने स्थापित करण्यासाठी तयार आहेत"
 
 #: ../js/ui/components/updaterManager.js:221
 msgid "Install now"
-msgstr ""
+msgstr "स्थापित करा"
 
 #: ../js/ui/components/updaterManager.js:230
 msgid "Updates installed"
-msgstr ""
+msgstr "अद्यतने स्थापित"
 
 #: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
-msgstr ""
+msgstr "आपल्या प्रणालीवर सॉफ्टवेअर अद्यतने स्थापित करण्यात आली आहेत"
 
 #: ../js/ui/components/updaterManager.js:232
 msgid "Restart now"
-msgstr ""
+msgstr "पुन्हा चालू करा"
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
-msgstr ""
+msgstr "अद्यतन अयशस्वी"
 
 #: ../js/ui/components/updaterManager.js:256
 msgid "We could not update your system"
-msgstr ""
+msgstr "आम्ही आपली प्रणाली अद्यतनित करू शकलो नाही"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
 msgid "Windows"
 msgstr "पटल"
 
@@ -634,7 +635,7 @@ msgstr "%A %B %e, %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr ""
+msgstr "सार्वजनिक खाती संकेतशब्द संरक्षित नाहीत त्यामुळे आपण  ज्या फाइल्स खासगी ठेवू इच्छिता त्या नष्ट करण्याचे लक्षात ठेवा"
 
 #: ../js/ui/endSessionDialog.js:77
 #, javascript-format
@@ -736,43 +737,43 @@ msgstr " extensions.gnome.org पासून '%s' डाऊनलोड व प
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr ""
+msgstr "ॲप्लिकेशनमधून बाहेर पडा"
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr ""
+msgstr "ॲप्लिकेशनने प्रतिसाद दिला नाही, तर त्याचे नाव निवडा आणि बंद करण्याचे बटण क्लिक करा."
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
-msgstr ""
+msgstr "प्रणाली निरीक्षक"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr ""
+msgstr "ॲप्लिकेशनमधून बाहेर पडा"
 
-#: ../js/ui/iconGridLayout.js:213
+#: ../js/ui/iconGridLayout.js:215
 #, javascript-format
 msgid "%s has been deleted"
-msgstr ""
+msgstr "%s नष्ट करण्यात आले आहे"
 
 #: ../js/ui/internetSearch.js:99
 #, javascript-format
 msgid "Open \"%s\" in browser"
-msgstr ""
+msgstr "\"%s\" ब्राउझरमध्ये उघडा"
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
 #: ../js/ui/internetSearch.js:108
 #, javascript-format
 msgid "Search %s for \"%s\""
-msgstr ""
+msgstr "%s \"%s\" करीता शोधा"
 
 #: ../js/ui/internetSearch.js:110
 #, javascript-format
 msgid "Search the internet for \"%s\""
-msgstr ""
+msgstr "\"%s\" इंटरनेटवर शोधा"
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
@@ -867,16 +868,16 @@ msgstr "पूर्ववत् करा"
 msgid "Overview"
 msgstr "पूर्वावलोकन"
 
-#: ../js/ui/panel.js:375
+#: ../js/ui/panel.js:376
 msgid "Taskbar"
-msgstr ""
+msgstr "टास्कबार"
 
 #. Translators: this MUST be either "toggle-switch-us"
 #. (for toggle switches containing the English words
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:633
+#: ../js/ui/popupMenu.js:626
 msgid "toggle-switch-us"
 msgstr "toggle-switch-us"
 
@@ -1010,15 +1011,15 @@ msgstr "हार्डवेअर बंद केले"
 
 #: ../js/ui/status/hotCornerIndicator.js:19
 msgid "Hot Corner Indicator"
-msgstr ""
+msgstr "संवेदनशील कोपरा निर्देशक"
 
 #: ../js/ui/status/hotCornerIndicator.js:40
 msgid "Enable Hot Corner"
-msgstr ""
+msgstr "संवेदनशील कोपरा सक्षम करा"
 
 #: ../js/ui/status/hotCornerIndicator.js:44
 msgid "Disable Hot Corner"
-msgstr ""
+msgstr "संवेदनशील कोपरा अक्षम करा"
 
 #: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
@@ -1128,7 +1129,7 @@ msgstr "स्वयं वायरलेस्"
 
 #: ../js/ui/status/network.js:1672
 msgid "Network"
-msgstr ""
+msgstr "नेटवर्क"
 
 #: ../js/ui/status/network.js:1734
 msgid "Enable networking"
@@ -1180,13 +1181,13 @@ msgstr "अंदाज घेत आहे…"
 #: ../js/ui/status/power.js:79
 #, javascript-format
 msgid "%d∶%02d Remaining (%d %%)"
-msgstr ""
+msgstr "%d∶%02d शिल्लक (%d %%)"
 
 #. Translators: this is <hours>:<minutes> Until Full (<percentage>)
 #: ../js/ui/status/power.js:84
 #, javascript-format
 msgid "%d∶%02d Until Full (%d %%)"
-msgstr ""
+msgstr "%d∶%02d पूर्ण होईपर्यंत (%d %%)"
 
 #: ../js/ui/status/volume.js:124
 msgid "Volume changed"
@@ -1219,11 +1220,11 @@ msgstr "कुलूपबंद"
 
 #: ../js/ui/userMenu.js:37
 msgid "Exit"
-msgstr ""
+msgstr "बाहेर पडा"
 
 #: ../js/ui/userMenu.js:39
 msgid "Help"
-msgstr ""
+msgstr "मदत"
 
 #: ../js/ui/userMenu.js:40
 msgid "Settings"
@@ -1231,7 +1232,7 @@ msgstr "सेटिंग्ज"
 
 #: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
-msgstr ""
+msgstr "आम्हाला अभिप्राय द्या"
 
 #: ../js/ui/userMenu.js:490
 msgid "Switch User"
@@ -1257,7 +1258,7 @@ msgstr "%s (रिमोट)"
 msgid "%s (console)"
 msgstr "%s (कंसोल)"
 
-#: ../js/ui/viewSelector.js:511
+#: ../js/ui/viewSelector.js:512
 msgid "Applications"
 msgstr "ॲप्लिकेशन्स्"
 
@@ -1266,21 +1267,21 @@ msgstr "ॲप्लिकेशन्स्"
 msgid "'%s' is ready"
 msgstr "'%s' सज्ज आहे"
 
-#: ../js/ui/windowManager.js:83
+#: ../js/ui/windowManager.js:84
 msgid "Do you want to keep these display settings?"
 msgstr "तुम्हाला या डिस्पले सेटिंग्ज जपवून ठेवायचे?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:102
+#: ../js/ui/windowManager.js:103
 msgid "Revert Settings"
 msgstr "सेटिंग्जना मूळस्थितीत आणा"
 
-#: ../js/ui/windowManager.js:106
+#: ../js/ui/windowManager.js:107
 msgid "Keep Changes"
 msgstr "बदल जपवून ठेवा"
 
-#: ../js/ui/windowManager.js:124
+#: ../js/ui/windowManager.js:125
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
@@ -1313,19 +1314,19 @@ msgstr[1] "%u इंपुट"
 msgid "System Sounds"
 msgstr "प्रणाली आवाज"
 
-#: ../src/main.c:321
+#: ../src/main.c:320
 msgid "Print version"
 msgstr "छपाई आवृत्ती"
 
-#: ../src/main.c:327
+#: ../src/main.c:326
 msgid "Mode used by GDM for login screen"
 msgstr "प्रवेश पडद्याकरीता GDM तर्फे वापरण्याजोगी मोड"
 
-#: ../src/main.c:333
+#: ../src/main.c:332
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "निर्देशीत मोडचा वापर करा, उ.दा. प्रवेश स्क्रीनकरीता \"gdm\""
 
-#: ../src/main.c:339
+#: ../src/main.c:338
 msgid "List possible modes"
 msgstr "संभाव्य मोड्स्ची सूची दाखवा"
 
@@ -1336,12 +1337,12 @@ msgstr "'%s' सुरू करण्यास अपयशी"
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
-msgstr ""
+msgstr "अनामिक"
 
 #: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
-msgstr ""
+msgstr "%s साठी सानुकूल व्याख्या"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."

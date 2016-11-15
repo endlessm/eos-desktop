@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-04 01:27+0000\n"
+"POT-Creation-Date: 2016-11-08 02:27+0000\n"
 "PO-Revision-Date: 2016-10-04 17:45+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Oriya (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/or/)\n"
@@ -95,13 +95,13 @@ msgstr "ତାଲିକାଭୁକ୍ତ ନୁହଁ କି?"
 
 #. Translators: During a password reset, prompt for the "secret code" provided
 #. by customer support.
-#: ../js/gdm/loginDialog.js:814
+#: ../js/gdm/loginDialog.js:836
 msgid "Enter unlock code provided by customer support:"
 msgstr ""
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
-#: ../js/gdm/loginDialog.js:818
+#: ../js/gdm/loginDialog.js:840
 #, javascript-format
 msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
@@ -110,11 +110,11 @@ msgid ""
 msgstr ""
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
-#: ../js/gdm/loginDialog.js:824
+#: ../js/gdm/loginDialog.js:846
 msgid "Reset Password"
 msgstr ""
 
-#: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
+#: ../js/gdm/loginDialog.js:1002 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
@@ -122,28 +122,28 @@ msgstr ""
 msgid "Cancel"
 msgstr "ବାତିଲ କରନ୍ତୁ"
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1020
 msgctxt "button"
 msgid "Sign In"
 msgstr "ସାଇନ ଇନ"
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1020
 msgid "Next"
 msgstr "ପରବର୍ତ୍ତୀ"
 
-#: ../js/gdm/loginDialog.js:1116
+#: ../js/gdm/loginDialog.js:1138
 msgid "Your unlock code was incorrect. Please try again."
 msgstr ""
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:1166 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:1188 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "ଚାଳକ ନାମ: "
 
-#: ../js/gdm/loginDialog.js:1429
+#: ../js/gdm/loginDialog.js:1451
 msgid "Login Window"
 msgstr "ଲଗଇନ ୱିଣ୍ଡୋ"
 
@@ -179,47 +179,47 @@ msgstr "(ଅଥବା ଅଙ୍ଗୁଳି ବୁଲାନ୍ତୁ)"
 msgid "(e.g., user or %s)"
 msgstr "(ଯେପରିକି, %s ପାଇଁ ଚାଳକ)"
 
-#: ../js/misc/util.js:121
+#: ../js/misc/util.js:122
 msgid "Command not found"
 msgstr "ନିର୍ଦ୍ଦେଶ ମିଳିଲା ନାହିଁ"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:154
+#: ../js/misc/util.js:155
 msgid "Could not parse command:"
 msgstr "ନିର୍ଦ୍ଦେଶ ବିଶ୍ଲେଷିତ କରିହେଲା ନାହିଁ:"
 
-#: ../js/misc/util.js:162
+#: ../js/misc/util.js:163
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "'%s' ର ନିଷ୍ପାଦନ ବିଫଳ ହୋଇଛି:"
 
-#: ../js/ui/appDisplay.js:1182
+#: ../js/ui/appDisplay.js:1186
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1691
+#: ../js/ui/appDisplay.js:1695
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1697
+#: ../js/ui/appDisplay.js:1701
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1703
+#: ../js/ui/appDisplay.js:1707
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1709
+#: ../js/ui/appDisplay.js:1713
 msgid "OK"
 msgstr "ଠିକ ଅଛି"
 
-#: ../js/ui/appDisplay.js:1971
+#: ../js/ui/appDisplay.js:1975
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1980
+#: ../js/ui/appDisplay.js:1984
 msgid "Delete"
 msgstr ""
 
@@ -593,7 +593,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
 msgid "Windows"
 msgstr "Windows"
 
@@ -752,7 +752,7 @@ msgstr ""
 msgid "Quit Application"
 msgstr ""
 
-#: ../js/ui/iconGridLayout.js:213
+#: ../js/ui/iconGridLayout.js:215
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
@@ -867,7 +867,7 @@ msgstr "ପଦକ୍ଷେପ ବାତିଲ କରନ୍ତୁ"
 msgid "Overview"
 msgstr "ସମୀକ୍ଷା"
 
-#: ../js/ui/panel.js:375
+#: ../js/ui/panel.js:376
 msgid "Taskbar"
 msgstr ""
 
@@ -876,7 +876,7 @@ msgstr ""
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:633
+#: ../js/ui/popupMenu.js:626
 msgid "toggle-switch-us"
 msgstr "toggle-switch-us"
 
@@ -1257,7 +1257,7 @@ msgstr "%s (ଦୂରବର୍ତ୍ତୀ)"
 msgid "%s (console)"
 msgstr "%s (କୋନସୋଲ)"
 
-#: ../js/ui/viewSelector.js:511
+#: ../js/ui/viewSelector.js:512
 msgid "Applications"
 msgstr "ପ୍ରୟୋଗଗୁଡ଼ିକ"
 
@@ -1266,21 +1266,21 @@ msgstr "ପ୍ରୟୋଗଗୁଡ଼ିକ"
 msgid "'%s' is ready"
 msgstr "'%s' ପ୍ରସ୍ତୁତ ଅଛି"
 
-#: ../js/ui/windowManager.js:83
+#: ../js/ui/windowManager.js:84
 msgid "Do you want to keep these display settings?"
 msgstr "ଆପଣ ଏହି ପ୍ରଦର୍ଶନୀ ସଂରଚନାକୁ ରଖିବାକୁ ଚାହୁଁଛନ୍ତି କି?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:102
+#: ../js/ui/windowManager.js:103
 msgid "Revert Settings"
 msgstr "ସଂରଚନାକୁ ପରିବର୍ତ୍ତନ କରନ୍ତୁ"
 
-#: ../js/ui/windowManager.js:106
+#: ../js/ui/windowManager.js:107
 msgid "Keep Changes"
 msgstr "ପରିବର୍ତ୍ତନଗୁଡ଼ିକୁ ରଖନ୍ତୁ"
 
-#: ../js/ui/windowManager.js:124
+#: ../js/ui/windowManager.js:125
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
@@ -1313,19 +1313,19 @@ msgstr[1] "%u ନିବେଶଗୁଡ଼ିକ"
 msgid "System Sounds"
 msgstr "ତନ୍ତ୍ର ଧ୍ୱନି"
 
-#: ../src/main.c:321
+#: ../src/main.c:320
 msgid "Print version"
 msgstr "ମୁଦ୍ରଣ ସଂସ୍କରଣ"
 
-#: ../src/main.c:327
+#: ../src/main.c:326
 msgid "Mode used by GDM for login screen"
 msgstr "ଲଗଇନ ପରଦା ପାଇଁ ବ୍ୟବହୃତ GDM"
 
-#: ../src/main.c:333
+#: ../src/main.c:332
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "ଏକ ନିର୍ଦ୍ଦିଷ୍ଟ ଧାରା ବ୍ୟବହାର କରନ୍ତୁ, ଯେପରିକି ଲଗଇନ ପରଦା ପାଇଁ \"gdm\""
 
-#: ../src/main.c:339
+#: ../src/main.c:338
 msgid "List possible modes"
 msgstr "ସମ୍ଭାବ୍ୟ ଧାରାଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ"
 

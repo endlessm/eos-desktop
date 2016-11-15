@@ -5,15 +5,16 @@
 # Translators:
 # Andika Triwidada <andika@gmail.com>, 2010-2014
 # dirgita <dirgitadevina@yahoo.co.id>, 2011-2012,2014
+# Hartono <hartono.s10@gmail.com>, 2016
 # Roddy Shuler <roddy@endlessm.com>, 2016
 # Wibiharto <wibinem@yahoo.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-04 01:27+0000\n"
-"PO-Revision-Date: 2016-10-04 17:44+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2016-11-08 02:27+0000\n"
+"PO-Revision-Date: 2016-11-14 07:38+0000\n"
+"Last-Translator: Hartono <hartono.s10@gmail.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -98,13 +99,13 @@ msgstr "Tak masuk daftar?"
 
 #. Translators: During a password reset, prompt for the "secret code" provided
 #. by customer support.
-#: ../js/gdm/loginDialog.js:814
+#: ../js/gdm/loginDialog.js:836
 msgid "Enter unlock code provided by customer support:"
 msgstr "Masukkan kode pembuka yang diberikan oleh dukungan pelanggan:"
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
-#: ../js/gdm/loginDialog.js:818
+#: ../js/gdm/loginDialog.js:840
 #, javascript-format
 msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
@@ -113,11 +114,11 @@ msgid ""
 msgstr "Mohon informasikan kode verifikasi Anda kepada dukungan pelanggan %s dengan menghubungi %s atau mengirimkan surel %s. Kode berlaku sampai Anda mengklik Batalkan atau mematikan komputer Anda."
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
-#: ../js/gdm/loginDialog.js:824
+#: ../js/gdm/loginDialog.js:846
 msgid "Reset Password"
 msgstr "Atur Ulang Kata Sandi"
 
-#: ../js/gdm/loginDialog.js:980 ../js/ui/components/networkAgent.js:137
+#: ../js/gdm/loginDialog.js:1002 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
 #: ../js/ui/extensionDownloader.js:195 ../js/ui/forceAppExitDialog.js:78
 #: ../js/ui/shellMountOperation.js:399 ../js/ui/unlockDialog.js:97
@@ -125,28 +126,28 @@ msgstr "Atur Ulang Kata Sandi"
 msgid "Cancel"
 msgstr "Batal"
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1020
 msgctxt "button"
 msgid "Sign In"
 msgstr "Masuk"
 
-#: ../js/gdm/loginDialog.js:998
+#: ../js/gdm/loginDialog.js:1020
 msgid "Next"
 msgstr "Selanjutnya"
 
-#: ../js/gdm/loginDialog.js:1116
+#: ../js/gdm/loginDialog.js:1138
 msgid "Your unlock code was incorrect. Please try again."
 msgstr "Kode pembuka kunci Anda tidak tepat. Harap mencoba lagi."
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
 #. (and don't even care of which one)
-#: ../js/gdm/loginDialog.js:1166 ../js/ui/components/networkAgent.js:260
+#: ../js/gdm/loginDialog.js:1188 ../js/ui/components/networkAgent.js:260
 #: ../js/ui/components/networkAgent.js:278
 msgid "Username: "
 msgstr "Nama pengguna: "
 
-#: ../js/gdm/loginDialog.js:1429
+#: ../js/gdm/loginDialog.js:1451
 msgid "Login Window"
 msgstr "Jendela Log Masuk"
 
@@ -157,7 +158,7 @@ msgstr "Daya"
 
 #: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
 msgid "Suspend"
-msgstr "Suspensi"
+msgstr "Tangguhkan"
 
 #: ../js/gdm/powerMenu.js:98
 msgid "Restart"
@@ -182,47 +183,47 @@ msgstr "(atau gesekkan jari)"
 msgid "(e.g., user or %s)"
 msgstr "(cth., pengguna dari %s)"
 
-#: ../js/misc/util.js:121
+#: ../js/misc/util.js:122
 msgid "Command not found"
 msgstr "Perintah tidak ditemukan"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:154
+#: ../js/misc/util.js:155
 msgid "Could not parse command:"
 msgstr "Tak dapat mengurai perintah:"
 
-#: ../js/misc/util.js:162
+#: ../js/misc/util.js:163
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "Eksekusi '%s' gagal:"
 
-#: ../js/ui/appDisplay.js:1182
+#: ../js/ui/appDisplay.js:1186
 msgid "Remove from desktop"
 msgstr "Hapus dari desktop"
 
-#: ../js/ui/appDisplay.js:1691
+#: ../js/ui/appDisplay.js:1695
 msgid "Warning"
 msgstr "Peringatan"
 
-#: ../js/ui/appDisplay.js:1697
+#: ../js/ui/appDisplay.js:1701
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Untuk menghapus sebuah folder Anda harus menghapus semua item di dalamnya terlebih dahulu."
 
-#: ../js/ui/appDisplay.js:1703
+#: ../js/ui/appDisplay.js:1707
 msgid "We are just trying to keep you safe."
 msgstr "Kami hanya mencoba menjaga Anda agar tetap aman."
 
-#: ../js/ui/appDisplay.js:1709
+#: ../js/ui/appDisplay.js:1713
 msgid "OK"
 msgstr "Oke"
 
-#: ../js/ui/appDisplay.js:1971
+#: ../js/ui/appDisplay.js:1975
 msgid "More Apps"
 msgstr "Aplikasi Lainnya"
 
-#: ../js/ui/appDisplay.js:1980
+#: ../js/ui/appDisplay.js:1984
 msgid "Delete"
 msgstr "Hapus"
 
@@ -238,11 +239,11 @@ msgstr "%s telah dihapus dari favorit Anda."
 
 #: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
-msgstr "Ruang kerja lainnya"
+msgstr "Area kerja lainnya"
 
 #: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
-msgstr "Ruang kerja saat ini"
+msgstr "Area kerja saat ini"
 
 #: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
@@ -586,7 +587,7 @@ msgstr "Pembaruan perangkat lunak sudah dipasang pada sistem Anda"
 
 #: ../js/ui/components/updaterManager.js:232
 msgid "Restart now"
-msgstr "Ulangi sekarang"
+msgstr "Mulai ulang sekarang"
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
@@ -596,7 +597,7 @@ msgstr "Gagal memperbarui"
 msgid "We could not update your system"
 msgstr "Kami tidak dapat memperbarui sistem Anda"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:507
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
 msgid "Windows"
 msgstr "Jendela"
 
@@ -637,7 +638,7 @@ msgstr "%A, %e %B %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr "Harap diingat bahwa membagikan akun tidak dilindungi oleh kata sandi, jadi pastikan untuk menghapus file yang ingin Anda pertahankan tetap pribadi."
+msgstr "Harap diingat bahwa akun yang dibagikan tidak dilindungi oleh kata sandi, jadi pastikan untuk menghapus file yang ingin Anda pertahankan tetap pribadi."
 
 #: ../js/ui/endSessionDialog.js:77
 #, javascript-format
@@ -698,7 +699,7 @@ msgstr "Mematikan sistem."
 #: ../js/ui/endSessionDialog.js:148
 msgctxt "button"
 msgid "Restart"
-msgstr "Nyalakan Ulang"
+msgstr "Mulai Ulang"
 
 #: ../js/ui/endSessionDialog.js:121 ../js/ui/endSessionDialog.js:128
 msgctxt "button"
@@ -708,11 +709,11 @@ msgstr "Matikan"
 #: ../js/ui/endSessionDialog.js:135
 msgctxt "title"
 msgid "Restart"
-msgstr "Nyalakan Ulang"
+msgstr "Mulai Ulang"
 
 #: ../js/ui/endSessionDialog.js:137
 msgid "Click Restart to quit these applications and restart the system."
-msgstr "Klik Nyalakan Ulang untuk menutup aplikasi ini serta menyalakan kembali sistem."
+msgstr "Klik Mulai Ulang untuk menutup aplikasi ini serta menyalakan kembali sistem."
 
 #: ../js/ui/endSessionDialog.js:140
 #, javascript-format
@@ -722,7 +723,7 @@ msgstr[0] "Sistem ini akan otomatis dimulai ulang dalam %d detik."
 
 #: ../js/ui/endSessionDialog.js:145
 msgid "Restarting the system."
-msgstr "Menyalan ulang sistem."
+msgstr "Memulai ulang sistem."
 
 #: ../js/ui/extensionDownloader.js:199
 msgid "Install"
@@ -751,7 +752,7 @@ msgstr "Monitor Sistem"
 msgid "Quit Application"
 msgstr "Tutup Aplikasi"
 
-#: ../js/ui/iconGridLayout.js:213
+#: ../js/ui/iconGridLayout.js:215
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s telah dihapus"
@@ -819,7 +820,7 @@ msgstr "Mengunduh"
 
 #: ../js/ui/lookingGlass.js:749
 msgid "View Source"
-msgstr "Tilik Sumber"
+msgstr "Lihat Sumber"
 
 #: ../js/ui/lookingGlass.js:758
 msgid "Web Page"
@@ -843,7 +844,7 @@ msgstr "Pengaturan Pemberitahuan"
 
 #: ../js/ui/messageTray.js:1741
 msgid "No Messages"
-msgstr "Tiada Pesan"
+msgstr "Tidak Ada Pesan"
 
 #: ../js/ui/messageTray.js:1815
 msgid "Message Tray"
@@ -866,7 +867,7 @@ msgstr "Batal"
 msgid "Overview"
 msgstr "Gambaran"
 
-#: ../js/ui/panel.js:375
+#: ../js/ui/panel.js:376
 msgid "Taskbar"
 msgstr "Bilah Tugas"
 
@@ -875,7 +876,7 @@ msgstr "Bilah Tugas"
 #. "ON" and "OFF") or "toggle-switch-intl" (for toggle
 #. switches containing "◯" and "|"). Other values will
 #. simply result in invisible toggle switches.
-#: ../js/ui/popupMenu.js:633
+#: ../js/ui/popupMenu.js:626
 msgid "toggle-switch-us"
 msgstr "toggle-switch-intl"
 
@@ -903,7 +904,7 @@ msgstr "Tak bisa mengunci"
 
 #: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
 msgid "Lock was blocked by an application"
-msgstr "Kunci diblokir oleh suatu aplikasi"
+msgstr "Kunci diblokir oleh sebuah aplikasi"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
@@ -911,7 +912,7 @@ msgstr "Mencari…"
 
 #: ../js/ui/search.js:783
 msgid "No results."
-msgstr "Tak ada yang cocok."
+msgstr "Tak ada hasil"
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -959,7 +960,7 @@ msgstr "Pembaca Layar"
 
 #: ../js/ui/status/accessibility.js:58
 msgid "Screen Keyboard"
-msgstr "Papan Tik di Layar"
+msgstr "Papan Ketik di Layar"
 
 #: ../js/ui/status/accessibility.js:62
 msgid "Visual Alerts"
@@ -1054,7 +1055,7 @@ msgstr "memutus..."
 
 #: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
 msgid "connecting..."
-msgstr "menghubungi..."
+msgstr "menyambung..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
@@ -1256,7 +1257,7 @@ msgstr "%s (jarak jauh)"
 msgid "%s (console)"
 msgstr "%s (konsol)"
 
-#: ../js/ui/viewSelector.js:511
+#: ../js/ui/viewSelector.js:512
 msgid "Applications"
 msgstr "Aplikasi"
 
@@ -1265,21 +1266,21 @@ msgstr "Aplikasi"
 msgid "'%s' is ready"
 msgstr "'%s' telah siap"
 
-#: ../js/ui/windowManager.js:83
+#: ../js/ui/windowManager.js:84
 msgid "Do you want to keep these display settings?"
 msgstr "Apakah Anda ingin mempertahankan pengaturan tampilan ini?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:102
+#: ../js/ui/windowManager.js:103
 msgid "Revert Settings"
 msgstr "Balikkan Tatanan"
 
-#: ../js/ui/windowManager.js:106
+#: ../js/ui/windowManager.js:107
 msgid "Keep Changes"
 msgstr "Simpan Perubahan"
 
-#: ../js/ui/windowManager.js:124
+#: ../js/ui/windowManager.js:125
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
@@ -1309,26 +1310,26 @@ msgstr[0] "%u Masukan"
 msgid "System Sounds"
 msgstr "Suara Sistem"
 
-#: ../src/main.c:321
+#: ../src/main.c:320
 msgid "Print version"
 msgstr "Versi Cetak"
 
-#: ../src/main.c:327
+#: ../src/main.c:326
 msgid "Mode used by GDM for login screen"
 msgstr "Mode yang dipakai oleh layar log masuk GDM"
 
-#: ../src/main.c:333
+#: ../src/main.c:332
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Menggunakan mode tertentu, mis. \"gdm\" untuk layar masuk"
 
-#: ../src/main.c:339
+#: ../src/main.c:338
 msgid "List possible modes"
 msgstr "Menampilkan mode yang mungkin"
 
 #: ../src/shell-app.c:654
 #, c-format
 msgid "Failed to launch '%s'"
-msgstr "Gagal meluncurkan '%s'"
+msgstr "Gagal memulai '%s'"
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
