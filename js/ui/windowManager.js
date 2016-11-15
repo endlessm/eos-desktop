@@ -2309,9 +2309,6 @@ const CodingManager = new Lang.Class({
         this._rotateInActors.push(dst);
         this._rotateOutActors.push(src);
 
-        dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-        src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-
         /* We set backface culling to be enabled here so that we can
          * smootly animate between the two windows. Without expensive
          * vector projections, there's no way to determine whether a
@@ -2351,6 +2348,8 @@ const CodingManager = new Lang.Class({
         // we have to set those after unmaximize/maximized otherwise they are lost
         dst.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
         src.rotation_angle_y = 0;
+        dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+        src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
 
          if (srcGeometry.equal(dstGeometry))
             return;
