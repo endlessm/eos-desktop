@@ -68,13 +68,21 @@ const CodingChatboxTextService = new Lang.Class({
         }));
     },
 
-    _disconnectHandlersFor: function(name) {
+    _popSignalHandlers: function(name) {
         name = name.replace(/\-/g, '_');
-        if (!this._signalHandlers[name]) {
-            return;
+        let retval = this._signalHandlers[name];
+        if (!retval) {
+            return [];
         }
 
-        this._signalHandlers[name].forEach(function(handler) {
+        delete this._signalHandlers[name];
+        return retval;
+    },
+
+    _disconnectHandlersFor: function(name) {
+        let handlers = this._popSignalHandlers(name);
+
+        handlers.forEach(function(handler) {
             if (handler.object) {
                 handler.object.disconnect(handler.connection);
             } else {
@@ -82,7 +90,6 @@ const CodingChatboxTextService = new Lang.Class({
                 GLib.source_remove(handler.connection);
             }
         });
-        this._signalHandlers[name] = [];
     },
 
     _waitForNextWindowMove: function() {
