@@ -78,7 +78,7 @@ const CodingChatboxTextService = new Lang.Class({
             if (handler.object) {
                 handler.object.disconnect(handler.connection);
             } else {
-                // Asumme this is a GSource
+                // Assume this is a GSource
                 GLib.source_remove(handler.connection);
             }
         });
