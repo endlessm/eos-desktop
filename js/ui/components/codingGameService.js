@@ -24,6 +24,33 @@ const CodingChatboxTextService = new Lang.Class({
         }
     },
 
+    _updateListeningForEvents: function() {
+        if (!this._service) {
+            return;
+        }
+
+        // In some cases, this can be null, just ignore it if so
+        if (!this._service.currently_listening_for_events) {
+            return;
+        }
+
+        let currentlyListeningFor = this._service.currently_listening_for_events.deep_unpack();
+
+        // Disconnect any handlers not in the list
+        Object.keys(this._signalHandlers).filter(function(name) {
+            return currentlyListeningFor.indexOf(name) === -1;
+        }).forEach(Lang.bind(this, function(name) {
+            this._disconnectHandlersFor(name);
+        }));
+
+        // Connect any handlers not in the list
+        currentlyListeningFor.filter(Lang.bind(this, function(name) {
+            return Object.keys(this._signalHandlers).indexOf(name) === -1;
+        })).forEach(Lang.bind(this, function(name) {
+            this._startListeningForEvent(name);
+        }));
+    },
+
     enable: function() {
         // Connect to the service
         try {
@@ -37,29 +64,9 @@ const CodingChatboxTextService = new Lang.Class({
         }
 
         this._signalHandlers = {};
-        this._listenForEventsId = this._service.connect('listen-for-event',
-                                                        Lang.bind(this, function(proxy, name) {
-            this._startListeningForEvent(name);
-        }));
-        this._stopListeningForEventsId =
-            this._service.connect('stop-listening-for', Lang.bind(this, function(proxy, name) {
-                // In this case, just disconnect any known event handlers, don't
-                // need any custom logic here
-                this._disconnectHandlersFor(name);
-            }));
-
-        this._service.call_currently_listening_for_events(null, Lang.bind(this, function(source, result) {
-            let success, returnValue;
-
-            try {
-                [success, returnValue] = this._service.call_currently_listening_for_events_finish(result);
-            } catch (e) {
-                logError(e);
-                return;
-            }
-
-            returnValue.deep_unpack().map(Lang.bind(this, this._startListeningForEvent));
-        }));
+        this._service.connect('notify::currently-listening-for-events',
+                              Lang.bind(this, this._updateListeningForEvents));
+        this._updateListeningForEvents();
     },
 
     disable: function() {
