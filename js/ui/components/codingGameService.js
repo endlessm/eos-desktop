@@ -1,13 +1,28 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
+const CodingGameService = imports.gi.CodingGameService;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Meta = imports.gi.Meta;
-const CodingGameService = imports.gi.CodingGameService;
 
 const CodingChatboxTextService = new Lang.Class({
     Name: 'CodingChatboxTextService',
+
+    _init: function() {
+        this.parent();
+        this._eventHandlers = {
+            'move-window': Lang.bind(this, this._waitForNextWindowMove),
+            'stop-moving-windows': Lang.bind(this, this._waitForNoWindowsToMove)
+        };
+    },
+
+    _startListeningForEvent: function(name) {
+        if (this._eventHandlers[name]) {
+            this._disconnectHandlersFor(name);
+            this._eventHandlers[name]();
+        }
+    },
 
     enable: function() {
         // Connect to the service
@@ -21,19 +36,11 @@ const CodingChatboxTextService = new Lang.Class({
             return;
         }
 
-        let eventHandlers = {
-            'move-window': Lang.bind(this, this._waitForNextWindowMove),
-            'stop-moving-windows': Lang.bind(this, this._waitForNoWindowsToMove)
-        };
-
         this._signalHandlers = {};
-        this._listenForEventsId =
-            this._service.connect('listen-for-event', Lang.bind(this, function(proxy, name) {
-                if (eventHandlers[name]) {
-                    this._disconnectHandlersFor(name);
-                    eventHandlers[name]();
-                }
-            }));
+        this._listenForEventsId = this._service.connect('listen-for-event',
+                                                        Lang.bind(this, function(proxy, name) {
+            this._startListeningForEvent(name);
+        }));
         this._stopListeningForEventsId =
             this._service.connect('stop-listening-for', Lang.bind(this, function(proxy, name) {
                 // In this case, just disconnect any known event handlers, don't
@@ -51,12 +58,7 @@ const CodingChatboxTextService = new Lang.Class({
                 return;
             }
 
-            returnValue.deep_unpack().map(Lang.bind(this, function(name) {
-                if (eventHandlers[name]) {
-                    this._disconnectHandlersFor(name);
-                    eventHandlers[name]();
-                }
-            }));
+            returnValue.deep_unpack().map(Lang.bind(this, this._startListeningForEvent));
         }));
     },
 
