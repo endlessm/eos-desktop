@@ -85,9 +85,9 @@ const CodingChatboxTextService = new Lang.Class({
         handlers.forEach(function(handler) {
             if (handler.object) {
                 handler.object.disconnect(handler.connection);
-            } else {
+            } else if (handler.source) {
                 // Assume this is a GSource
-                GLib.source_remove(handler.connection);
+                GLib.source_remove(handler.source);
             }
         });
     },
@@ -145,8 +145,7 @@ const CodingChatboxTextService = new Lang.Class({
                         connection: global.display.connect('grab-op-begin', grabOpBeginCb)
                     },
                     {
-                        object: null,
-                        connection: GLib.timeout_add(GLib.PRIORITY_DEFAULT, 5000, timeoutCb)
+                        source: GLib.timeout_add(GLib.PRIORITY_DEFAULT, 5000, timeoutCb)
                     }
                 ];
             }
