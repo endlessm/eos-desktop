@@ -807,7 +807,7 @@ const FdoApplicationIface = '<node> \
 const FdoApplicationProxy = Gio.DBusProxy.makeProxyWrapper(FdoApplicationIface);
 
 function objectPathFromAppId(appId) {
-    return '/' + appId.replace(/\./g, '/');
+    return '/' + appId.replace(/\./g, '/').replace(/-/g, '_');
 }
 
 function getPlatformData() {
@@ -824,6 +824,8 @@ const GtkNotificationDaemonAppSource = new Lang.Class({
     _init: function(appId) {
         this._appId = appId;
         this._objectPath = objectPathFromAppId(appId);
+        if (!GLib.Variant.is_object_path(this._objectPath))
+            throw new InvalidAppError();
 
         this._app = Shell.AppSystem.get_default().lookup_app(appId + '.desktop');
         if (!this._app)
