@@ -10,7 +10,6 @@ const CodingChatboxTextService = new Lang.Class({
     Name: 'CodingChatboxTextService',
 
     _init: function() {
-        this.parent();
         this._eventHandlers = {
             'move-window': Lang.bind(this, this._waitForNextWindowMove),
             'stop-moving-windows': Lang.bind(this, this._waitForNoWindowsToMove)
