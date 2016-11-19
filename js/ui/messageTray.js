@@ -1253,7 +1253,7 @@ const SourceActor = new Lang.Class({
         if (this._actorDestroyed)
             return;
 
-        this._counterBin.visible = this._source.countVisible;
+        this._counterBin.visible = this._shouldShowCount();
 
         let text;
         if (this._source.count < 100)
@@ -1262,6 +1262,10 @@ const SourceActor = new Lang.Class({
             text = String.fromCharCode(0x22EF); // midline horizontal ellipsis
 
         this._counterLabel.set_text(text);
+    },
+
+    _shouldShowCount: function() {
+        return this._source.count > 1;
     }
 });
 
@@ -1295,10 +1299,6 @@ const Source = new Lang.Class({
 
     get unseenCount() {
         return this.notifications.filter(function(n) { return !n.acknowledged; }).length;
-    },
-
-    get countVisible() {
-        return this.count > 1;
     },
 
     countUpdated: function() {
