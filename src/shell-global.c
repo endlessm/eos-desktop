@@ -77,6 +77,9 @@ struct _ShellGlobal {
   const char *datadir;
   const char *imagedir;
   const char *userdatadir;
+  GFile *userdatadir_path;
+  GFile *runtime_state_path;
+
   StFocusManager *focus_manager;
 
   guint work_count;
@@ -222,6 +225,7 @@ shell_global_init (ShellGlobal *global)
   const char *datadir = g_getenv ("GNOME_SHELL_DATADIR");
   const char *shell_js = g_getenv("GNOME_SHELL_JS");
   char *imagedir, **search_path, *path;
+  const char *byteorder_string;
 
   if (!datadir)
     datadir = GNOME_SHELL_DATADIR;
@@ -243,6 +247,7 @@ shell_global_init (ShellGlobal *global)
   /* Ensure config dir exists for later use */
   global->userdatadir = g_build_filename (g_get_user_data_dir (), "gnome-shell", NULL);
   g_mkdir_with_parents (global->userdatadir, 0700);
+  global->userdatadir_path = g_file_new_for_path (global->userdatadir);
 
   /* Ensure application and folder dirs exist on disk.
    * This is so that GMenu will always install file monitors there.
@@ -253,6 +258,21 @@ shell_global_init (ShellGlobal *global)
 
   path = g_build_filename (g_get_user_data_dir (), "desktop-directories", NULL);
   g_mkdir_with_parents (path, 0700);
+  g_free (path);
+
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+  byteorder_string = "LE";
+#else
+  byteorder_string = "BE";
+#endif
+
+  /* And the runtime state */
+  path = g_strdup_printf ("%s/gnome-shell/runtime-state-%s.%s",
+                          g_get_user_runtime_dir (),
+                          byteorder_string,
+                          XDisplayName (NULL));
+  (void) g_mkdir_with_parents (path, 0700);
+  global->runtime_state_path = g_file_new_for_path (path);
   g_free (path);
 
   global->settings = g_settings_new ("org.gnome.shell");
@@ -297,6 +317,9 @@ shell_global_finalize (GObject *object)
   g_object_unref (global->settings);
 
   the_object = NULL;
+
+  g_clear_object (&global->userdatadir_path);
+  g_clear_object (&global->runtime_state_path);
 
   G_OBJECT_CLASS(shell_global_parent_class)->finalize (object);
 }
@@ -1688,4 +1711,129 @@ shell_global_get_session_mode (ShellGlobal *global)
   g_return_val_if_fail (SHELL_IS_GLOBAL (global), "user");
 
   return global->session_mode;
+}
+
+static void
+save_variant (GFile      *dir,
+              const char *property_name,
+              GVariant   *variant)
+{
+  GFile *path = g_file_get_child (dir, property_name);
+
+  if (variant == NULL || g_variant_get_data (variant) == NULL)
+    (void) g_file_delete (path, NULL, NULL);
+  else
+    {
+      gsize size = g_variant_get_size (variant);
+      g_file_replace_contents (path, g_variant_get_data (variant), size,
+                               NULL, FALSE, G_FILE_CREATE_REPLACE_DESTINATION,
+                               NULL, NULL, NULL);
+    }
+
+  g_object_unref (path);
+}
+
+static GVariant *
+load_variant (GFile      *dir,
+              const char *property_type,
+              const char *property_name)
+{
+  GVariant *res = NULL;
+  GMappedFile *mfile;
+  GFile *path = g_file_get_child (dir, property_name);
+  char *pathstr;
+  GError *local_error = NULL;
+
+  pathstr = g_file_get_path (path);
+  mfile = g_mapped_file_new (pathstr, FALSE, &local_error);
+  if (!mfile)
+    {
+      if (!g_error_matches (local_error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+        {
+          g_warning ("Failed to open runtime state: %s", local_error->message);
+        }
+      g_clear_error (&local_error);
+    }
+  else
+    {
+      GBytes *bytes = g_mapped_file_get_bytes (mfile);
+      res = g_variant_new_from_bytes (G_VARIANT_TYPE (property_type), bytes, TRUE);
+      g_bytes_unref (bytes);
+      g_mapped_file_unref (mfile);
+    }
+
+  g_object_unref (path);
+  g_free (pathstr);
+
+  return res;
+}
+
+/**
+ * shell_global_set_runtime_state:
+ * @global: a #ShellGlobal
+ * @property_name: Name of the property
+ * @variant: (allow-none): A #GVariant, or %NULL to unset
+ *
+ * Change the value of serialized runtime state.
+ */
+void
+shell_global_set_runtime_state (ShellGlobal  *global,
+                                const char   *property_name,
+                                GVariant     *variant)
+{
+  save_variant (global->runtime_state_path, property_name, variant);
+}
+
+/**
+ * shell_global_get_runtime_state:
+ * @global: a #ShellGlobal
+ * @property_type: Expected data type
+ * @property_name: Name of the property
+ *
+ * The shell maintains "runtime" state which does not persist across
+ * logout or reboot.
+ *
+ * Returns: (transfer floating): The value of a serialized property, or %NULL if none stored
+ */
+GVariant *
+shell_global_get_runtime_state (ShellGlobal  *global,
+                                const char   *property_type,
+                                const char   *property_name)
+{
+  return load_variant (global->runtime_state_path, property_type, property_name);
+}
+
+/**
+ * shell_global_set_persistent_state:
+ * @global: a #ShellGlobal
+ * @property_name: Name of the property
+ * @variant: (allow-none): A #GVariant, or %NULL to unset
+ *
+ * Change the value of serialized persistent state.
+ */
+void
+shell_global_set_persistent_state (ShellGlobal *global,
+                                   const char  *property_name,
+                                   GVariant    *variant)
+{
+  save_variant (global->userdatadir_path, property_name, variant);
+}
+
+/**
+ * shell_global_get_persistent_state:
+ * @global: a #ShellGlobal
+ * @property_type: Expected data type
+ * @property_name: Name of the property
+ *
+ * The shell maintains "persistent" state which will persist after
+ * logout or reboot.
+ *
+ * Returns: (transfer none): The value of a serialized property, or %NULL if none stored
+ */
+GVariant *
+shell_global_get_persistent_state (ShellGlobal  *global,
+                                   const char   *property_type,
+                                   const char   *property_name)
+{
+  return load_variant (global->userdatadir_path, property_type, property_name);
 }

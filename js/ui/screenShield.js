@@ -25,6 +25,8 @@ const SCREENSAVER_SCHEMA = 'org.gnome.desktop.screensaver';
 const LOCK_ENABLED_KEY = 'lock-enabled';
 const LOCK_DELAY_KEY = 'lock-delay';
 
+const LOCKED_STATE_STR = 'screenShield.locked';
+
 // ScreenShield animation time
 // - STANDARD_FADE_TIME is used when the session goes idle
 // - MANUAL_FADE_TIME is used when cancelling the dialog
@@ -372,6 +374,7 @@ const ScreenShield = new Lang.Class({
         this._isLocked = false;
         this.emit('active-changed');
         this.emit('locked-changed');
+        global.set_runtime_state(LOCKED_STATE_STR, null);
     },
 
     activate: function(animate) {
@@ -381,6 +384,7 @@ const ScreenShield = new Lang.Class({
         // state is identical to the locked state. We keep both states simply to
         // minimize our delta with upstream.
         this.lock(animate);
+        global.set_runtime_state(LOCKED_STATE_STR, GLib.Variant.new('b', true));
     },
 
     lock: function(animate) {
@@ -409,5 +413,15 @@ const ScreenShield = new Lang.Class({
         this.emit('locked-changed');
         this.emit('active-changed');
     },
+
+    // If the previous shell crashed, and gnome-session restarted us, then re-lock
+    lockIfWasLocked: function() {
+        let wasLocked = global.get_runtime_state('b', LOCKED_STATE_STR);
+        if (wasLocked === null)
+            return;
+        Meta.later_add(Meta.LaterType.BEFORE_REDRAW, Lang.bind(this, function() {
+            this.lock(false);
+        }));
+    }
 });
 Signals.addSignalMethods(ScreenShield.prototype);

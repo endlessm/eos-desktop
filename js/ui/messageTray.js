@@ -266,10 +266,6 @@ const URLHighlighter = new Lang.Class({
     }
 });
 
-function strHasSuffix(string, suffix) {
-    return string.substr(-suffix.length) == suffix;
-}
-
 // NotificationPolicy:
 // An object that holds all bits of configurable policy related to a notification
 // source, such as whether to play sound or honour the critical bit.
@@ -296,6 +292,126 @@ const NotificationPolicy = new Lang.Class({
     destroy: function() { }
 });
 Signals.addSignalMethods(NotificationPolicy.prototype);
+
+const NotificationGenericPolicy = new Lang.Class({
+    Name: 'NotificationGenericPolicy',
+    Extends: NotificationPolicy,
+
+    _init: function() {
+        // Don't chain to parent, it would try setting
+        // our properties to the defaults
+
+        this.id = 'generic';
+
+        this._masterSettings = new Gio.Settings({ schema: 'org.gnome.desktop.notifications' });
+        this._masterSettings.connect('changed', Lang.bind(this, this._changed));
+    },
+
+    store: function() { },
+
+    destroy: function() {
+        this._masterSettings.run_dispose();
+    },
+
+    _changed: function(settings, key) {
+        this.emit('policy-changed', key);
+    },
+
+    get enable() {
+        return true;
+    },
+
+    get enableSound() {
+        return true;
+    },
+
+    get showBanners() {
+        return this._masterSettings.get_boolean('show-banners');
+    },
+
+    get forceExpanded() {
+        return false;
+    },
+
+    get showInLockScreen() {
+        return this._masterSettings.get_boolean('show-in-lock-screen');
+    },
+
+    get detailsInLockScreen() {
+        return false;
+    }
+});
+
+const NotificationApplicationPolicy = new Lang.Class({
+    Name: 'NotificationApplicationPolicy',
+    Extends: NotificationPolicy,
+
+    _init: function(id) {
+        // Don't chain to parent, it would try setting
+        // our properties to the defaults
+
+        this.id = id;
+        this._canonicalId = this._canonicalizeId(id);
+
+        this._masterSettings = new Gio.Settings({ schema: 'org.gnome.desktop.notifications' });
+        this._settings = new Gio.Settings({ schema: 'org.gnome.desktop.notifications.application',
+                                            path: '/org/gnome/desktop/notifications/application/' + this._canonicalId + '/' });
+
+        this._masterSettings.connect('changed', Lang.bind(this, this._changed));
+        this._settings.connect('changed', Lang.bind(this, this._changed));
+    },
+
+    store: function() {
+        this._settings.set_string('application-id', this.id + '.desktop');
+
+        let apps = this._masterSettings.get_strv('application-children');
+        if (apps.indexOf(this._canonicalId) < 0) {
+            apps.push(this._canonicalId);
+            this._masterSettings.set_strv('application-children', apps);
+        }
+    },
+
+    destroy: function() {
+        this._masterSettings.run_dispose();
+        this._settings.run_dispose();
+    },
+
+    _changed: function(settings, key) {
+        this.emit('policy-changed', key);
+    },
+
+    _canonicalizeId: function(id) {
+        // Keys are restricted to lowercase alphanumeric characters and dash,
+        // and two dashes cannot be in succession
+        return id.toLowerCase().replace(/[^a-z0-9\-]/g, '-').replace(/--+/g, '-');
+    },
+
+    get enable() {
+        return this._settings.get_boolean('enable');
+    },
+
+    get enableSound() {
+        return this._settings.get_boolean('enable-sound-alerts');
+    },
+
+    get showBanners() {
+        return this._masterSettings.get_boolean('show-banners') &&
+            this._settings.get_boolean('show-banners');
+    },
+
+    get forceExpanded() {
+        return this._settings.get_boolean('force-expanded');
+    },
+
+    get showInLockScreen() {
+        return this._masterSettings.get_boolean('show-in-lock-screen') &&
+            this._settings.get_boolean('show-in-lock-screen');
+    },
+
+    get detailsInLockScreen() {
+        return this._settings.get_boolean('details-in-lock-screen');
+    }
+});
 
 // Notification:
 // @source: the notification's Source
@@ -378,7 +494,6 @@ const Notification = new Lang.Class({
         this.focused = false;
         this.acknowledged = false;
         this._destroyed = false;
-        this._useActionIcons = false;
         this._customContent = false;
         this.bannerBodyText = null;
         this.bannerBodyMarkup = false;
@@ -718,17 +833,7 @@ const Notification = new Lang.Class({
         }
     },
 
-    // addButton:
-    // @id: the action ID
-    // @label: the label for the action's button
-    //
-    // Adds a button with the given @label to the notification. All
-    // action buttons will appear in a single row at the bottom of
-    // the notification.
-    //
-    // If the button is clicked, the notification will emit the
-    // %action-invoked signal with @id as a parameter
-    addButton: function(id, label) {
+    addButton: function(button, callback) {
         if (!this._buttonBox) {
 
             let box = new St.BoxLayout({ style_class: 'notification-actions' });
@@ -740,26 +845,41 @@ const Notification = new Lang.Class({
             this._buttonBox = box;
         }
 
-        let button = new St.Button({ can_focus: true });
-
-        let iconName = strHasSuffix(id, '-symbolic') ? id : id + '-symbolic';
-        if (this._useActionIcons && Gtk.IconTheme.get_default().has_icon(iconName)) {
-            button.add_style_class_name('notification-icon-button');
-            button.child = new St.Icon({ icon_name: iconName });
-        } else {
-            button.add_style_class_name('notification-button');
-            button.label = label;
-        }
-
         if (this._buttonBox.get_n_children() > 0)
             global.focus_manager.remove_group(this._buttonBox);
 
         this._buttonBox.add(button);
         global.focus_manager.add_group(this._buttonBox);
-        button.connect('clicked', Lang.bind(this, this._onActionInvoked, id));
+        button.connect('clicked', Lang.bind(this, function() {
+            callback();
+
+            if (!this.resident) {
+                // We don't hide a resident notification when the user invokes one of its actions,
+                // because it is common for such notifications to update themselves with new
+                // information based on the action. We'd like to display the updated information
+                // in place, rather than pop-up a new notification.
+                this.emit('done-displaying');
+                this.destroy();
+            }
+        }));
 
         this.updated();
         return button;
+    },
+
+    // addAction:
+    // @label: the label for the action's button
+    // @callback: the callback for the action
+    //
+    // Adds a button with the given @label to the notification. All
+    // action buttons will appear in a single row at the bottom of
+    // the notification.
+    addAction: function(label, callback) {
+        let button = new St.Button({ style_class: 'notification-button',
+                                     label: label,
+                                     can_focus: true });
+
+        return this.addButton(button, callback);
     },
 
     setUrgency: function(urgency) {
@@ -776,10 +896,6 @@ const Notification = new Lang.Class({
 
     setForFeedback: function(forFeedback) {
         this.forFeedback = forFeedback;
-    },
-
-    setUseActionIcons: function(useIcons) {
-        this._useActionIcons = useIcons;
     },
 
     _styleChanged: function() {
@@ -1007,18 +1123,6 @@ const Notification = new Lang.Class({
         this.emit('collapsed');
     },
 
-    _onActionInvoked: function(actor, mouseButtonClicked, id) {
-        this.emit('action-invoked', id);
-        if (!this.resident) {
-            // We don't hide a resident notification when the user invokes one of its actions,
-            // because it is common for such notifications to update themselves with new
-            // information based on the action. We'd like to display the updated information
-            // in place, rather than pop-up a new notification.
-            this.emit('done-displaying');
-            this.destroy();
-        }
-    },
-
     _onClicked: function() {
         this.emit('clicked');
         // We hide all types of notifications once the user clicks on them because the common
@@ -1098,6 +1202,10 @@ const SourceActor = new Lang.Class({
         this._iconSet = true;
     },
 
+    get source() {
+        return this._source;
+    },
+
     _getPreferredWidth: function (actor, forHeight, alloc) {
         let [min, nat] = this._iconBin.get_preferred_width(forHeight);
         alloc.min_size = min; alloc.nat_size = nat;
@@ -1145,7 +1253,7 @@ const SourceActor = new Lang.Class({
         if (this._actorDestroyed)
             return;
 
-        this._counterBin.visible = this._source.countVisible;
+        this._counterBin.visible = this._shouldShowCount();
 
         let text;
         if (this._source.count < 100)
@@ -1154,6 +1262,10 @@ const SourceActor = new Lang.Class({
             text = String.fromCharCode(0x22EF); // midline horizontal ellipsis
 
         this._counterLabel.set_text(text);
+    },
+
+    _shouldShowCount: function() {
+        return this._source.count > 1;
     }
 });
 
@@ -1187,10 +1299,6 @@ const Source = new Lang.Class({
 
     get unseenCount() {
         return this.notifications.filter(function(n) { return !n.acknowledged; }).length;
-    },
-
-    get countVisible() {
-        return this.count > 1;
     },
 
     countUpdated: function() {
@@ -1266,7 +1374,6 @@ const Source = new Lang.Class({
             this.emit('notification-added', notification);
         }
 
-        notification.connect('clicked', Lang.bind(this, this.open));
         notification.connect('destroy', Lang.bind(this,
             function () {
                 let index = this.notifications.indexOf(notification);
