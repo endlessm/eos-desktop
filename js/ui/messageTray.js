@@ -1202,6 +1202,10 @@ const SourceActor = new Lang.Class({
         this._iconSet = true;
     },
 
+    get source() {
+        return this._source;
+    },
+
     _getPreferredWidth: function (actor, forHeight, alloc) {
         let [min, nat] = this._iconBin.get_preferred_width(forHeight);
         alloc.min_size = min; alloc.nat_size = nat;
