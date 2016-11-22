@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-15 02:26+0000\n"
+"POT-Creation-Date: 2016-11-22 02:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,6 @@ msgid "Window management and application launching"
 msgstr ""
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
-#: ../js/extensionPrefs/main.js:155
 msgid "GNOME Shell Extension Preferences"
 msgstr ""
 
@@ -61,17 +60,13 @@ msgstr ""
 msgid "Configure GNOME Shell Extensions"
 msgstr ""
 
-#: ../js/extensionPrefs/main.js:127
+#: ../js/extensionPrefs/main.js:117
 #, javascript-format
 msgid "There was an error loading the preferences dialog for %s:"
 msgstr ""
 
-#: ../js/extensionPrefs/main.js:167
-msgid "Extension"
-msgstr ""
-
-#: ../js/extensionPrefs/main.js:191
-msgid "Select an extension to configure using the combobox above."
+#: ../js/extensionPrefs/main.js:149
+msgid "GNOME Shell Extensions"
 msgstr ""
 
 #: ../js/gdm/loginDialog.js:410
@@ -192,32 +187,32 @@ msgstr ""
 msgid "Execution of '%s' failed:"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1186
+#: ../js/ui/appDisplay.js:1187
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1695
+#: ../js/ui/appDisplay.js:1696
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1701
+#: ../js/ui/appDisplay.js:1702
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1707
+#: ../js/ui/appDisplay.js:1708
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1713
+#: ../js/ui/appDisplay.js:1714
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:2016
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1984
+#: ../js/ui/appDisplay.js:2025
 msgid "Delete"
 msgstr ""
 
@@ -826,35 +821,35 @@ msgstr ""
 msgid "Web Page"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1205
+#: ../js/ui/messageTray.js:1313
 msgid "Open"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1212
+#: ../js/ui/messageTray.js:1320
 msgid "Remove"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1524
+#: ../js/ui/messageTray.js:1631
 msgid "Clear Messages"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1551
+#: ../js/ui/messageTray.js:1658
 msgid "Notification Settings"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1741
+#: ../js/ui/messageTray.js:1848
 msgid "No Messages"
 msgstr ""
 
-#: ../js/ui/messageTray.js:1815
+#: ../js/ui/messageTray.js:1922
 msgid "Message Tray"
 msgstr ""
 
-#: ../js/ui/messageTray.js:2836
+#: ../js/ui/messageTray.js:2943
 msgid "System Information"
 msgstr ""
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
+#: ../js/ui/notificationDaemon.js:541 ../src/shell-app.c:398
 msgctxt "program"
 msgid "Unknown"
 msgstr ""
@@ -863,7 +858,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-#: ../js/ui/overview.js:166
+#: ../js/ui/overview.js:165
 msgid "Overview"
 msgstr ""
 
@@ -888,7 +883,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: ../js/ui/screenShield.js:132
+#: ../js/ui/screenShield.js:134
 msgid "GNOME needs to lock the screen"
 msgstr ""
 
@@ -899,11 +894,11 @@ msgstr ""
 #.
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:393
 msgid "Unable to lock"
 msgstr ""
 
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
+#: ../js/ui/screenShield.js:173 ../js/ui/screenShield.js:394
 msgid "Lock was blocked by an application"
 msgstr ""
 
@@ -995,17 +990,17 @@ msgstr ""
 msgid "Large Text"
 msgstr ""
 
-#: ../js/ui/status/bluetooth.js:33 ../js/ui/status/bluetooth.js:44
-#: ../js/ui/status/network.js:829
+#: ../js/ui/status/bluetooth.js:32 ../js/ui/status/bluetooth.js:43
+#: ../js/ui/status/network.js:828
 msgid "Bluetooth"
 msgstr ""
 
-#: ../js/ui/status/bluetooth.js:51
+#: ../js/ui/status/bluetooth.js:50
 msgid "Bluetooth Settings"
 msgstr ""
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:82 ../js/ui/status/network.js:181
+#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:180
 msgid "hardware disabled"
 msgstr ""
 
@@ -1033,121 +1028,121 @@ msgstr ""
 msgid "Volume, network, battery"
 msgstr ""
 
-#: ../js/ui/status/network.js:104
+#: ../js/ui/status/network.js:103
 msgid "<unknown>"
 msgstr ""
 
 #. Translators: this indicates that wireless or wwan is disabled by hardware killswitch
-#: ../js/ui/status/network.js:203
+#: ../js/ui/status/network.js:202
 msgid "disabled"
 msgstr ""
 
 #. Translators: this is for network devices that are physically present but are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:461
+#: ../js/ui/status/network.js:460
 msgid "unmanaged"
 msgstr ""
 
-#: ../js/ui/status/network.js:463
+#: ../js/ui/status/network.js:462
 msgid "disconnecting..."
 msgstr ""
 
-#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
+#: ../js/ui/status/network.js:468 ../js/ui/status/network.js:1550
 msgid "connecting..."
 msgstr ""
 
 #. Translators: this is for network connections that require some kind of key or password
-#: ../js/ui/status/network.js:472 ../js/ui/status/network.js:1554
+#: ../js/ui/status/network.js:471 ../js/ui/status/network.js:1553
 msgid "authentication required"
 msgstr ""
 
 #. Translators: this is for devices that require some kind of firmware or kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:482
+#: ../js/ui/status/network.js:481
 msgid "firmware missing"
 msgstr ""
 
 #. Translators: this is for wired network devices that are physically disconnected
-#: ../js/ui/status/network.js:489
+#: ../js/ui/status/network.js:488
 msgid "cable unplugged"
 msgstr ""
 
 #. Translators: this is for a network device that cannot be activated (for example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:494
+#: ../js/ui/status/network.js:493
 msgid "unavailable"
 msgstr ""
 
-#: ../js/ui/status/network.js:496 ../js/ui/status/network.js:1556
+#: ../js/ui/status/network.js:495 ../js/ui/status/network.js:1555
 msgid "connection failed"
 msgstr ""
 
-#: ../js/ui/status/network.js:555 ../js/ui/status/network.js:1440
-#: ../js/ui/status/network.js:1632
+#: ../js/ui/status/network.js:554 ../js/ui/status/network.js:1439
+#: ../js/ui/status/network.js:1631
 msgid "More…"
 msgstr ""
 
 #. TRANSLATORS: this is the indication that a connection for another logged in user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:591 ../js/ui/status/network.js:1368
+#: ../js/ui/status/network.js:590 ../js/ui/status/network.js:1367
 msgid "Connected (private)"
 msgstr ""
 
-#: ../js/ui/status/network.js:670
+#: ../js/ui/status/network.js:669
 msgid "Wired"
 msgstr ""
 
-#: ../js/ui/status/network.js:671
+#: ../js/ui/status/network.js:670
 msgid "Auto Ethernet"
 msgstr ""
 
-#: ../js/ui/status/network.js:698
+#: ../js/ui/status/network.js:697
 msgid "Mobile broadband"
 msgstr ""
 
 #. TRANSLATORS: this the automatic wireless connection name (including the network name)
-#: ../js/ui/status/network.js:864 ../js/ui/status/network.js:1385
+#: ../js/ui/status/network.js:863 ../js/ui/status/network.js:1384
 #, javascript-format
 msgid "Auto %s"
 msgstr ""
 
-#: ../js/ui/status/network.js:866
+#: ../js/ui/status/network.js:865
 msgid "Auto bluetooth"
 msgstr ""
 
-#: ../js/ui/status/network.js:1387
+#: ../js/ui/status/network.js:1386
 msgid "Auto wireless"
 msgstr ""
 
-#: ../js/ui/status/network.js:1672
+#: ../js/ui/status/network.js:1671
 msgid "Network"
 msgstr ""
 
-#: ../js/ui/status/network.js:1734
+#: ../js/ui/status/network.js:1733
 msgid "Enable networking"
 msgstr ""
 
-#: ../js/ui/status/network.js:1776
+#: ../js/ui/status/network.js:1775
 msgid "Wi-Fi"
 msgstr ""
 
-#: ../js/ui/status/network.js:1795
+#: ../js/ui/status/network.js:1794
 msgid "Network Settings"
 msgstr ""
 
-#: ../js/ui/status/network.js:1812
+#: ../js/ui/status/network.js:1811
 msgid "Network Manager"
 msgstr ""
 
-#: ../js/ui/status/network.js:1902
+#: ../js/ui/status/network.js:1901
 msgid "Connection failed"
 msgstr ""
 
-#: ../js/ui/status/network.js:1903
+#: ../js/ui/status/network.js:1902
 msgid "Activation of network connection failed"
 msgstr ""
 
-#: ../js/ui/status/network.js:2287
+#: ../js/ui/status/network.js:2286
 msgid "Networking is disabled"
 msgstr ""
 
