@@ -33,7 +33,7 @@ const CodingChatboxTextService = new Lang.Class({
             return;
         }
 
-        let currentlyListeningFor = this._service.currently_listening_for_events.deep_unpack();
+        let currentlyListeningFor = this._service.currently_listening_for_events;
 
         // Disconnect any handlers not in the list
         Object.keys(this._signalHandlers).filter(function(name) {
