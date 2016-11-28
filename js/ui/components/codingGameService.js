@@ -29,21 +29,19 @@ const CodingChatboxTextService = new Lang.Class({
         }
 
         // In some cases, this can be null, just ignore it if so
-        if (!this._service.currently_listening_for_events) {
+        if (this._service.currently_listening_for_events.length == 0) {
             return;
         }
 
-        let currentlyListeningFor = this._service.currently_listening_for_events.deep_unpack();
-
         // Disconnect any handlers not in the list
         Object.keys(this._signalHandlers).filter(function(name) {
-            return currentlyListeningFor.indexOf(name) === -1;
+            return this._service.currently_listening_for_events.indexOf(name) === -1;
         }).forEach(Lang.bind(this, function(name) {
             this._disconnectHandlersFor(name);
         }));
 
         // Connect any handlers not in the list
-        currentlyListeningFor.filter(Lang.bind(this, function(name) {
+        this._service.currently_listening_for_events.filter(Lang.bind(this, function(name) {
             return Object.keys(this._signalHandlers).indexOf(name) === -1;
         })).forEach(Lang.bind(this, function(name) {
             this._startListeningForEvent(name);
