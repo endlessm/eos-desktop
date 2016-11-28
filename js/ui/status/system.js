@@ -20,6 +20,7 @@ const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const IconGrid = imports.ui.iconGrid;
 const Params = imports.misc.params;
+const Util = imports.misc.util;
 
 const YELP_TEXT = _("Help");
 const YELP_LAUNCHER = "yelp.desktop";
@@ -517,6 +518,19 @@ const Indicator = new Lang.Class({
         labelItem.actor.label_actor = label;
         this.menu.addMenuItem(labelItem);
         this.menu.addMenuItem(new SuggestedAppsItem(this.menu));
+        let showAppsItem = new PopupMenu.PopupBaseMenuItem({ can_focus: false, reactive: false });
+        showAppsItem.actor.x_align = Clutter.ActorAlign.CENTER;
+        let button = new St.Button({
+            label: _('Show all apps'),
+            style_class: 'modal-dialog-button',
+        });
+        button.connect('clicked', Lang.bind(this, function () {
+            Main.overview.hide();
+            this.menu.itemActivated(BoxPointer.PopupAnimation.NONE);
+            Util.spawnApp(['gnome-software', '--mode=installed']);
+        }));
+        showAppsItem.actor.add_child(button);
+        this.menu.addMenuItem(showAppsItem);
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
         item = new PopupMenu.PopupBaseMenuItem({ reactive: false,
