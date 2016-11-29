@@ -111,11 +111,11 @@ const CodingManager = new Lang.Class({
         button.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         Main.layoutManager.addChrome(button);
 
-        this._sessions.push({buttonApp: button,
-                             actorApp: actorApp,
-                             previousFocusedWindow: null});
+        let idx = this._sessions.push({buttonApp: button,
+                                       actorApp: actorApp,
+                                       previousFocusedWindow: null});
 
-        let session = this._getSession(actorApp);
+        let session = this._sessions[idx-1];
 
         button.connect('clicked', Lang.bind(this, this._switchToBuilder, session));
         session.positionChangedIdApp = window.connect('position-changed', Lang.bind(this, this._windowAppPositionChanged, session));
