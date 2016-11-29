@@ -1857,8 +1857,10 @@ const AppIcon = new Lang.Class({
                                                           this._onStateChanged));
         this._onStateChanged();
 
-        Main.notificationDaemon.gtk.connect('new-gtk-notification-source',
-                                            Lang.bind(this, this._onNewGtkNotificationSource));
+        if (app.get_id() === 'com.endlessm.Coding.Chatbox.desktop') {
+            Main.notificationDaemon.gtk.connect('new-gtk-notification-source',
+                                                Lang.bind(this, this._onNewGtkNotificationSource));
+        }
     },
 
     _onDestroy: function() {
