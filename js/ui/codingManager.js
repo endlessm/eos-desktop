@@ -24,8 +24,6 @@ const BUTTON_OFFSET_Y = 50;
 
 function animateBounce(actor) {
     Tweener.removeTweens(actor);
-    if (Tweener.isTweening(actor))
-        return;
 
     Tweener.addTween(actor, {
         scale_y: 1 + ICON_BOUNCE_MAX_SCALE,
