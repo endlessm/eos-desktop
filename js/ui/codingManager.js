@@ -57,13 +57,6 @@ const CodingManager = new Lang.Class({
         this._codingApps = ['org.gnome.gedit', 'org.gnome.Weather'];
     },
 
-    /**
-     * isCodingApp:
-     * @flatpakID: flatpak id of the app to verify
-     *
-     * Checks if the app is in the whitelist of applications
-     * for which the endless coding feature is enabled.
-     */
     _isCodingApp: function(flatpakID) {
         return this._codingApps.indexOf(flatpakID) != -1;
     },
@@ -279,11 +272,11 @@ const CodingManager = new Lang.Class({
     },
 
     _animateToBuilder: function(session) {
-        /* We wait until the first frame of the window has been drawn
-         * and damage updated in the compositor before we start rotating.
-         *
-         * This way we don't get ugly artifacts when rotating if
-         * a window is slow to draw. */
+        // We wait until the first frame of the window has been drawn
+        // and damage updated in the compositor before we start rotating.
+        //
+        // This way we don't get ugly artifacts when rotating if
+        // a window is slow to draw.
         let firstFrameConnection = session.actorBuilder.connect('first-frame', Lang.bind(this, function() {
             // reset the bouncing animation that was showed while Builder was loading
             Tweener.removeTweens(session.buttonApp);
@@ -308,8 +301,8 @@ const CodingManager = new Lang.Class({
         }));
 
         this._prepareAnimate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
-        /* Save the connection's id in the session and in a list too so we can
-         * get rid of it on kill-window-effects later */
+        // Save the connection's id in the session and in a list too so we can
+        // get rid of it on kill-window-effects later */
         session.firstFrameConnection = firstFrameConnection;
         this._firstFrameConnections.push(firstFrameConnection);
     },
@@ -474,21 +467,21 @@ const CodingManager = new Lang.Class({
         this._rotateInActors.push(dst);
         this._rotateOutActors.push(src);
 
-        /* We set backface culling to be enabled here so that we can
-         * smootly animate between the two windows. Without expensive
-         * vector projections, there's no way to determine whether a
-         * window's front-face is completely invisible to the user
-         * (this cannot be done just by looking at the angle of the
-         * window because the same angle may show a different visible
-         * face depending on its position in the view frustum).
-         *
-         * What we do here is enable backface culling and rotate both
-         * windows by 180degrees. The effect of this is that the front
-         * and back window will be at opposite rotations at each point
-         * in time and so the exact point at which the first window
-         * becomes invisible is the same point at which the second
-         * window becomes visible. Because no back faces are drawn
-         * there are no visible artifacts in the animation */
+        // We set backface culling to be enabled here so that we can
+        // smootly animate between the two windows. Without expensive
+        // vector projections, there's no way to determine whether a
+        // window's front-face is completely invisible to the user
+        // (this cannot be done just by looking at the angle of the
+        // window because the same angle may show a different visible
+        // face depending on its position in the view frustum).
+        //
+        // What we do here is enable backface culling and rotate both
+        // windows by 180degrees. The effect of this is that the front
+        // and back window will be at opposite rotations at each point
+        // in time and so the exact point at which the first window
+        // becomes invisible is the same point at which the second
+        // window becomes visible. Because no back faces are drawn
+        // there are no visible artifacts in the animation */
         src.set_cull_back_face(true);
         dst.set_cull_back_face(true);
 
@@ -527,9 +520,9 @@ const CodingManager = new Lang.Class({
     },
 
     _animate: function(src, dst, direction) {
-        /* Tween both windows in a rotation animation at the same time
-         * with backface culling enabled on both. This will allow for
-         * a smooth transition. */
+        // Tween both windows in a rotation animation at the same time
+        // with backface culling enabled on both. This will allow for
+        // a smooth transition.
         Tweener.addTween(src, {
             rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
             time: WINDOW_ANIMATION_TIME * 4,
@@ -543,13 +536,12 @@ const CodingManager = new Lang.Class({
             onComplete: Lang.bind(this, this.rotateInCompleted, dst)
         });
 
-        /* Gently fade the window in, this will paper over
-         * any artifacts from shadows and the like
-         *
-         * Note: The animation time is reduced here - this
-         * is intention. It is just to prevent initial
-         * "double shadows" when rotating between windows.
-         */
+        // Gently fade the window in, this will paper over
+        // any artifacts from shadows and the like
+        //
+        // Note: The animation time is reduced here - this
+        // is intention. It is just to prevent initial
+        // "double shadows" when rotating between windows.
         Tweener.addTween(dst, {
             opacity: 255,
             time: WINDOW_ANIMATION_TIME,
@@ -625,14 +617,9 @@ const CodingManager = new Lang.Class({
         });
     },
 
-    /**
-     * _getManifestPath:
-     * @flatpakID: flatpak id of the app to get the manifest path for
-     *
-     * Looks for the manifest of the app in the user and
-     * system installation path for flatpaks.
-     */
     _getManifestPath: function(flatpakID) {
+        // Looks for the manifest of the app in the user and
+        // system installation path for flatpaks.
         function readFileContents(path) {
             let cmdlineFile = Gio.File.new_for_path(path);
             let [ok, contents, etag] = cmdlineFile.load_contents(null);
