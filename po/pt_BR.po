@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-14 11:12-0800\n"
+"POT-Creation-Date: 2016-11-28 16:06-0800\n"
 "PO-Revision-Date: 2016-08-31 21:39+0000\n"
 "Last-Translator: Philip Chimento <philip.chimento@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/endless-mobile-"
@@ -171,7 +171,7 @@ msgstr "Janela de início de sessão"
 msgid "Power"
 msgstr "Ligar"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/status/system.js:541
+#: ../js/gdm/powerMenu.js:93 ../js/ui/status/system.js:555
 msgid "Suspend"
 msgstr "Suspender"
 
@@ -179,7 +179,7 @@ msgstr "Suspender"
 msgid "Restart"
 msgstr "Reiniciar"
 
-#: ../js/gdm/powerMenu.js:103 ../js/ui/status/system.js:544
+#: ../js/gdm/powerMenu.js:103 ../js/ui/status/system.js:558
 msgid "Power Off"
 msgstr "Desligar"
 
@@ -1344,35 +1344,39 @@ msgstr "%d %%"
 msgid "Airplane Mode On"
 msgstr "Modo avião ligado"
 
-#: ../js/ui/status/system.js:24
+#: ../js/ui/status/system.js:25
 msgid "Help"
 msgstr "Ajuda"
 
-#: ../js/ui/status/system.js:471
+#: ../js/ui/status/system.js:472
 msgid "Switch User"
 msgstr "Trocar usuário"
 
-#: ../js/ui/status/system.js:476
+#: ../js/ui/status/system.js:477
 msgid "Log Out"
 msgstr "Encerrar sessão"
 
-#: ../js/ui/status/system.js:481
+#: ../js/ui/status/system.js:482
 msgid "Account Settings"
 msgstr "Configurações de conta"
 
-#: ../js/ui/status/system.js:513
+#: ../js/ui/status/system.js:514
 msgid "Recommended Apps for You"
 msgstr "Programas recomendados para você"
 
-#: ../js/ui/status/system.js:529
+#: ../js/ui/status/system.js:524
+msgid "Show all apps"
+msgstr "Mostrar todos os programas"
+
+#: ../js/ui/status/system.js:543
 msgid "Settings"
 msgstr "Configurações"
 
-#: ../js/ui/status/system.js:533
+#: ../js/ui/status/system.js:547
 msgid "Orientation Lock"
 msgstr "Bloqueio da orientação"
 
-#: ../js/ui/status/system.js:537
+#: ../js/ui/status/system.js:551
 msgid "Lock"
 msgstr "Bloquear"
 
