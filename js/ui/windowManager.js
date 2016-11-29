@@ -598,6 +598,7 @@ const WindowManager = new Lang.Class({
         this._mapping = [];
         this._destroying = [];
         this._movingWindow = null;
+        this._codingManager = null;
 
         this._dimmedWindows = [];
 
@@ -618,7 +619,8 @@ const WindowManager = new Lang.Class({
                                         function () { Main.layoutManager.emit('background-clicked'); });
         }));
 
-        this._codingManager = new CodingManager.CodingManager();
+        if (global.settings.get_boolean('enable-behind-the-screen'))
+            this._codingManager = new CodingManager.CodingManager();
 
         this._switchData = null;
         this._shellwm.connect('kill-switch-workspace', Lang.bind(this, this._switchWorkspaceDone));
@@ -629,9 +631,10 @@ const WindowManager = new Lang.Class({
             this._destroyWindowDone(shellwm, actor);
             this._rotateInCompleted(actor);
             this._rotateOutCompleted(actor);
-            this._codingManager.rotateInCompleted(actor);
-            this._codingManager.rotateOutCompleted(actor);
-
+            if (this._codingManager) {
+                this._codingManager.rotateInCompleted(actor);
+                this._codingManager.rotateOutCompleted(actor);
+            }
             if (actor._firstFrameConnection) {
                 actor.disconnect(actor._firstFrameConnection);
                 this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
@@ -1291,9 +1294,12 @@ const WindowManager = new Lang.Class({
             }
         }
 
-        if (this._codingAddBuilderWindow(actor)) {
-            shellwm.completed_map(actor);
-            return;
+        if (this._codingManager) {
+            if (this._codingManager.addBuilderWindow(actor)) {
+                shellwm.completed_map(actor);
+                return;
+            }
+            this._codingManager.addAppWindow(actor);
         }
 
         if (this._updateReadyRotateAnimationsWith(actor)) {
@@ -1389,46 +1395,6 @@ const WindowManager = new Lang.Class({
                                onOverwriteParams: [shellwm, actor]
                              });
         }
-
-        this._codingAddAppWindow(actor);
-    },
-
-    _codingAddAppWindow: function(actor) {
-        let window = actor.meta_window;
-        if (!this._codingManager.isCodingApp(window.get_flatpak_id()))
-            return;
-
-        this._codingManager.addSwitcherToBuilder(actor);
-    },
-
-    _codingAddBuilderWindow: function(actor) {
-        let window = actor.meta_window;
-        if (window.get_flatpak_id() !== 'org.gnome.Builder')
-            return false;
-
-        let tracker = Shell.WindowTracker.get_default();
-        let windowApp = tracker.get_app_from_builder(window);
-        if (!windowApp)
-            return false;
-
-        this._codingManager.addSwitcherToApp(actor, windowApp);
-        return true;
-    },
-
-    _codingRemoveAppWindow: function(actor) {
-        let window = actor.meta_window;
-        if (!this._codingManager.isCodingApp(window.get_flatpak_id()))
-            return;
-
-        this._codingManager.removeSwitcherToBuilder(actor);
-    },
-
-    _codingRemoveBuilderWindow: function(actor) {
-        let window = actor.meta_window;
-        if (window.get_flatpak_id() !== 'org.gnome.Builder')
-            return;
-
-        this._codingManager.removeSwitcherToApp(actor);
     },
 
     _mapWindowDone : function(shellwm, actor) {
@@ -1492,8 +1458,10 @@ const WindowManager = new Lang.Class({
             }
         }
 
-        this._codingRemoveAppWindow(actor);
-        this._codingRemoveBuilderWindow(actor);
+        if (this._codingManager) {
+            this._codingManager.removeAppWindow(actor);
+            this._codingManager.removeBuilderWindow(actor);
+        }
 
         if (actor._notifyWindowTypeSignalId) {
             window.disconnect(actor._notifyWindowTypeSignalId);

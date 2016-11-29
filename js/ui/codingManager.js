@@ -66,11 +66,53 @@ const CodingManager = new Lang.Class({
      * Checks if the app is in the whitelist of applications
      * for which the endless coding feature is enabled.
      */
-    isCodingApp: function(flatpakID) {
+    _isCodingApp: function(flatpakID) {
         return this._codingApps.indexOf(flatpakID) != -1;
     },
 
-    addSwitcherToBuilder: function(actorApp) {
+    _isBuilder: function(flatpakID) {
+        return flatpakID === 'org.gnome.Builder';
+    },
+
+    addAppWindow: function(actor) {
+        let window = actor.meta_window;
+        if (!this._isCodingApp(window.get_flatpak_id()))
+            return;
+
+        this._addSwitcherToBuilder(actor);
+    },
+
+    addBuilderWindow: function(actor) {
+        let window = actor.meta_window;
+        if (!this._isBuilder(window.get_flatpak_id()))
+            return false;
+
+        let tracker = Shell.WindowTracker.get_default();
+        let windowApp = tracker.get_app_from_builder(window);
+        if (!windowApp)
+            return false;
+
+        this._addSwitcherToApp(actor, windowApp);
+        return true;
+    },
+
+    removeAppWindow: function(actor) {
+        let window = actor.meta_window;
+        if (!this._isCodingApp(window.get_flatpak_id()))
+            return;
+
+        this._removeSwitcherToBuilder(actor);
+    },
+
+    removeBuilderWindow: function(actor) {
+        let window = actor.meta_window;
+        if (!this._isBuilder(window.get_flatpak_id()))
+            return;
+
+        this._removeSwitcherToApp(actor);
+    },
+
+    _addSwitcherToBuilder: function(actorApp) {
         let window = actorApp.meta_window;
 
         let button = new St.Button({ style_class: 'view-source' });
@@ -92,7 +134,7 @@ const CodingManager = new Lang.Class({
         session.windowUnminimizedId = global.window_manager.connect('unminimize', Lang.bind(this, this._windowUnminimized, session));
     },
 
-    addSwitcherToApp: function(actorBuilder, windowApp) {
+    _addSwitcherToApp: function(actorBuilder, windowApp) {
         let session = this._getSession(windowApp.get_compositor_private());
         if (!session)
             return;
@@ -102,7 +144,7 @@ const CodingManager = new Lang.Class({
         this._animateToBuilder(session);
     },
 
-    removeSwitcherToBuilder: function(actorApp) {
+    _removeSwitcherToBuilder: function(actorApp) {
         let session = this._getSession(actorApp);
         if (!session)
             return;
@@ -163,7 +205,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    removeSwitcherToApp: function(actorBuilder) {
+    _removeSwitcherToApp: function(actorBuilder) {
         let session = this._getSession(actorBuilder);
         if (!session)
             return;
