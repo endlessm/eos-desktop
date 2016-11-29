@@ -24,9 +24,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-15 02:26+0000\n"
-"PO-Revision-Date: 2016-08-31 21:39+0000\n"
-"Last-Translator: Philip Chimento <philip.chimento@gmail.com>\n"
+"POT-Creation-Date: 2016-11-22 02:26+0000\n"
+"PO-Revision-Date: 2016-11-22 02:27+0000\n"
+"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -69,7 +69,6 @@ msgid "Window management and application launching"
 msgstr "窗口管理和应用程序启动"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
-#: ../js/extensionPrefs/main.js:155
 msgid "GNOME Shell Extension Preferences"
 msgstr "GNOME使用界面扩展首选项"
 
@@ -77,18 +76,14 @@ msgstr "GNOME使用界面扩展首选项"
 msgid "Configure GNOME Shell Extensions"
 msgstr "配置GNOME使用界面扩展"
 
-#: ../js/extensionPrefs/main.js:127
+#: ../js/extensionPrefs/main.js:117
 #, javascript-format
 msgid "There was an error loading the preferences dialog for %s:"
 msgstr "载入%s的属性对话框出错："
 
-#: ../js/extensionPrefs/main.js:167
-msgid "Extension"
-msgstr "扩展部分"
-
-#: ../js/extensionPrefs/main.js:191
-msgid "Select an extension to configure using the combobox above."
-msgstr "使用上面的下拉框选择一个要配置的扩展。"
+#: ../js/extensionPrefs/main.js:149
+msgid "GNOME Shell Extensions"
+msgstr ""
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -210,32 +205,32 @@ msgstr "不能解析命令："
 msgid "Execution of '%s' failed:"
 msgstr "运行“%s”失败："
 
-#: ../js/ui/appDisplay.js:1186
+#: ../js/ui/appDisplay.js:1187
 msgid "Remove from desktop"
 msgstr "从桌面删除"
 
-#: ../js/ui/appDisplay.js:1695
+#: ../js/ui/appDisplay.js:1696
 msgid "Warning"
 msgstr "警告"
 
-#: ../js/ui/appDisplay.js:1701
+#: ../js/ui/appDisplay.js:1702
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "删除文件夹前请先删除文件夹内所有文件。"
 
-#: ../js/ui/appDisplay.js:1707
+#: ../js/ui/appDisplay.js:1708
 msgid "We are just trying to keep you safe."
 msgstr "保障用户安全"
 
-#: ../js/ui/appDisplay.js:1713
+#: ../js/ui/appDisplay.js:1714
 msgid "OK"
 msgstr "确定"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:2016
 msgid "More Apps"
 msgstr "更多的Apps"
 
-#: ../js/ui/appDisplay.js:1984
+#: ../js/ui/appDisplay.js:2025
 msgid "Delete"
 msgstr "删除"
 
@@ -838,35 +833,35 @@ msgstr "查看源文件（代码）"
 msgid "Web Page"
 msgstr "网页"
 
-#: ../js/ui/messageTray.js:1205
+#: ../js/ui/messageTray.js:1313
 msgid "Open"
 msgstr "打开"
 
-#: ../js/ui/messageTray.js:1212
+#: ../js/ui/messageTray.js:1320
 msgid "Remove"
 msgstr "移除"
 
-#: ../js/ui/messageTray.js:1524
+#: ../js/ui/messageTray.js:1631
 msgid "Clear Messages"
 msgstr "清除消息"
 
-#: ../js/ui/messageTray.js:1551
+#: ../js/ui/messageTray.js:1658
 msgid "Notification Settings"
 msgstr "通知设置"
 
-#: ../js/ui/messageTray.js:1741
+#: ../js/ui/messageTray.js:1848
 msgid "No Messages"
 msgstr "无消息"
 
-#: ../js/ui/messageTray.js:1815
+#: ../js/ui/messageTray.js:1922
 msgid "Message Tray"
 msgstr "消息托盘"
 
-#: ../js/ui/messageTray.js:2836
+#: ../js/ui/messageTray.js:2943
 msgid "System Information"
 msgstr "系统信息"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
+#: ../js/ui/notificationDaemon.js:541 ../src/shell-app.c:398
 msgctxt "program"
 msgid "Unknown"
 msgstr "未知"
@@ -875,7 +870,7 @@ msgstr "未知"
 msgid "Undo"
 msgstr "撤销"
 
-#: ../js/ui/overview.js:166
+#: ../js/ui/overview.js:165
 msgid "Overview"
 msgstr "概览"
 
@@ -900,7 +895,7 @@ msgstr "输入一个命令"
 msgid "Close"
 msgstr "关闭"
 
-#: ../js/ui/screenShield.js:132
+#: ../js/ui/screenShield.js:134
 msgid "GNOME needs to lock the screen"
 msgstr "GNOME需要锁定屏幕"
 
@@ -910,11 +905,11 @@ msgstr "GNOME需要锁定屏幕"
 #. Just tell him to stop using this app
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:393
 msgid "Unable to lock"
 msgstr "无法锁定"
 
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
+#: ../js/ui/screenShield.js:173 ../js/ui/screenShield.js:394
 msgid "Lock was blocked by an application"
 msgstr "锁定命令被某个应用程序阻止"
 
@@ -1006,17 +1001,17 @@ msgstr "高对比度"
 msgid "Large Text"
 msgstr "大号文本"
 
-#: ../js/ui/status/bluetooth.js:33 ../js/ui/status/bluetooth.js:44
-#: ../js/ui/status/network.js:829
+#: ../js/ui/status/bluetooth.js:32 ../js/ui/status/bluetooth.js:43
+#: ../js/ui/status/network.js:828
 msgid "Bluetooth"
 msgstr "蓝牙"
 
-#: ../js/ui/status/bluetooth.js:51
+#: ../js/ui/status/bluetooth.js:50
 msgid "Bluetooth Settings"
 msgstr "蓝牙设置"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:82 ../js/ui/status/network.js:181
+#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:180
 msgid "hardware disabled"
 msgstr "硬件已禁用"
 
@@ -1044,129 +1039,129 @@ msgstr "区域与语言设置"
 msgid "Volume, network, battery"
 msgstr "音量，网络，电源"
 
-#: ../js/ui/status/network.js:104
+#: ../js/ui/status/network.js:103
 msgid "<unknown>"
 msgstr "<未知>"
 
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
-#: ../js/ui/status/network.js:203
+#: ../js/ui/status/network.js:202
 msgid "disabled"
 msgstr "已禁用"
 
 #. Translators: this is for network devices that are physically present but
 #. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:461
+#: ../js/ui/status/network.js:460
 msgid "unmanaged"
 msgstr "未托管"
 
-#: ../js/ui/status/network.js:463
+#: ../js/ui/status/network.js:462
 msgid "disconnecting..."
 msgstr "正在断开……"
 
-#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
+#: ../js/ui/status/network.js:468 ../js/ui/status/network.js:1550
 msgid "connecting..."
 msgstr "正在连接……"
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:472 ../js/ui/status/network.js:1554
+#: ../js/ui/status/network.js:471 ../js/ui/status/network.js:1553
 msgid "authentication required"
 msgstr "需要认证"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:482
+#: ../js/ui/status/network.js:481
 msgid "firmware missing"
 msgstr "固件丢失"
 
 #. Translators: this is for wired network devices that are physically
 #. disconnected
-#: ../js/ui/status/network.js:489
+#: ../js/ui/status/network.js:488
 msgid "cable unplugged"
 msgstr "线缆被拔出"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:494
+#: ../js/ui/status/network.js:493
 msgid "unavailable"
 msgstr "不可用"
 
-#: ../js/ui/status/network.js:496 ../js/ui/status/network.js:1556
+#: ../js/ui/status/network.js:495 ../js/ui/status/network.js:1555
 msgid "connection failed"
 msgstr "连接失败"
 
-#: ../js/ui/status/network.js:555 ../js/ui/status/network.js:1440
-#: ../js/ui/status/network.js:1632
+#: ../js/ui/status/network.js:554 ../js/ui/status/network.js:1439
+#: ../js/ui/status/network.js:1631
 msgid "More…"
 msgstr "更多……"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:591 ../js/ui/status/network.js:1368
+#: ../js/ui/status/network.js:590 ../js/ui/status/network.js:1367
 msgid "Connected (private)"
 msgstr "已连接（私有网络）"
 
-#: ../js/ui/status/network.js:670
+#: ../js/ui/status/network.js:669
 msgid "Wired"
 msgstr "有线"
 
-#: ../js/ui/status/network.js:671
+#: ../js/ui/status/network.js:670
 msgid "Auto Ethernet"
 msgstr "以太网自动配置"
 
-#: ../js/ui/status/network.js:698
+#: ../js/ui/status/network.js:697
 msgid "Mobile broadband"
 msgstr "移动宽带"
 
 #. TRANSLATORS: this the automatic wireless connection name (including the
 #. network name)
-#: ../js/ui/status/network.js:864 ../js/ui/status/network.js:1385
+#: ../js/ui/status/network.js:863 ../js/ui/status/network.js:1384
 #, javascript-format
 msgid "Auto %s"
 msgstr "自动%s"
 
-#: ../js/ui/status/network.js:866
+#: ../js/ui/status/network.js:865
 msgid "Auto bluetooth"
 msgstr "蓝牙自动配置"
 
-#: ../js/ui/status/network.js:1387
+#: ../js/ui/status/network.js:1386
 msgid "Auto wireless"
 msgstr "无线自动配置"
 
-#: ../js/ui/status/network.js:1672
+#: ../js/ui/status/network.js:1671
 msgid "Network"
 msgstr "网络"
 
-#: ../js/ui/status/network.js:1734
+#: ../js/ui/status/network.js:1733
 msgid "Enable networking"
 msgstr "启用联网"
 
-#: ../js/ui/status/network.js:1776
+#: ../js/ui/status/network.js:1775
 msgid "Wi-Fi"
 msgstr "Wi-Fi"
 
-#: ../js/ui/status/network.js:1795
+#: ../js/ui/status/network.js:1794
 msgid "Network Settings"
 msgstr "网络设置"
 
-#: ../js/ui/status/network.js:1812
+#: ../js/ui/status/network.js:1811
 msgid "Network Manager"
 msgstr "网络管理器"
 
-#: ../js/ui/status/network.js:1902
+#: ../js/ui/status/network.js:1901
 msgid "Connection failed"
 msgstr "连接失败"
 
-#: ../js/ui/status/network.js:1903
+#: ../js/ui/status/network.js:1902
 msgid "Activation of network connection failed"
 msgstr "启用网络连接失败"
 
-#: ../js/ui/status/network.js:2287
+#: ../js/ui/status/network.js:2286
 msgid "Networking is disabled"
 msgstr "联网已禁用"
 

@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-15 02:26+0000\n"
-"PO-Revision-Date: 2016-10-04 17:45+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2016-11-22 02:26+0000\n"
+"PO-Revision-Date: 2016-11-22 02:27+0000\n"
+"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Tamil (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ta/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -54,7 +54,6 @@ msgid "Window management and application launching"
 msgstr "சாளர மேலாண்மை மற்றும் பயன்பாடு துவக்கம்"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
-#: ../js/extensionPrefs/main.js:155
 msgid "GNOME Shell Extension Preferences"
 msgstr "க்னோம் ஷெல் நீட்சி விருப்பங்கள்"
 
@@ -62,18 +61,14 @@ msgstr "க்னோம் ஷெல் நீட்சி விருப்ப
 msgid "Configure GNOME Shell Extensions"
 msgstr "க்னோம் ஷெல் நீட்சிகளை வடிவமை"
 
-#: ../js/extensionPrefs/main.js:127
+#: ../js/extensionPrefs/main.js:117
 #, javascript-format
 msgid "There was an error loading the preferences dialog for %s:"
 msgstr "%s க்கு விருப்பங்கள் உரையாடலை ஏற்றுகையில் பிழை நேர்ந்தது:"
 
-#: ../js/extensionPrefs/main.js:167
-msgid "Extension"
-msgstr "நீட்சி"
-
-#: ../js/extensionPrefs/main.js:191
-msgid "Select an extension to configure using the combobox above."
-msgstr "மேலுள்ள கூட்டுப்பெட்டியை பயன்படுத்தி வடிவமைக்க ஒரு நீட்சியை தேர்ந்தெடுக்கவும்"
+#: ../js/extensionPrefs/main.js:149
+msgid "GNOME Shell Extensions"
+msgstr ""
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -195,32 +190,32 @@ msgstr "கட்டளையை அலகிட முடியவில்ல�
 msgid "Execution of '%s' failed:"
 msgstr "'%s' ஐ நிறைவேற்றுதல் தோல்வி அடைந்தது:"
 
-#: ../js/ui/appDisplay.js:1186
+#: ../js/ui/appDisplay.js:1187
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1695
+#: ../js/ui/appDisplay.js:1696
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1701
+#: ../js/ui/appDisplay.js:1702
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1707
+#: ../js/ui/appDisplay.js:1708
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1713
+#: ../js/ui/appDisplay.js:1714
 msgid "OK"
 msgstr "சரி"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:2016
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1984
+#: ../js/ui/appDisplay.js:2025
 msgid "Delete"
 msgstr ""
 
@@ -827,35 +822,35 @@ msgstr "மூலத்தை பார்க்க"
 msgid "Web Page"
 msgstr "இணைய பக்கம்"
 
-#: ../js/ui/messageTray.js:1205
+#: ../js/ui/messageTray.js:1313
 msgid "Open"
 msgstr "திற"
 
-#: ../js/ui/messageTray.js:1212
+#: ../js/ui/messageTray.js:1320
 msgid "Remove"
 msgstr "நீக்கு"
 
-#: ../js/ui/messageTray.js:1524
+#: ../js/ui/messageTray.js:1631
 msgid "Clear Messages"
 msgstr "செய்திகளை அழி"
 
-#: ../js/ui/messageTray.js:1551
+#: ../js/ui/messageTray.js:1658
 msgid "Notification Settings"
 msgstr "அறிவிப்பு அமைப்புகள்"
 
-#: ../js/ui/messageTray.js:1741
+#: ../js/ui/messageTray.js:1848
 msgid "No Messages"
 msgstr "செய்திகள் இல்லை"
 
-#: ../js/ui/messageTray.js:1815
+#: ../js/ui/messageTray.js:1922
 msgid "Message Tray"
 msgstr "அறிவிப்பு பலகம்"
 
-#: ../js/ui/messageTray.js:2836
+#: ../js/ui/messageTray.js:2943
 msgid "System Information"
 msgstr "கணினி தகவல்கள்"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
+#: ../js/ui/notificationDaemon.js:541 ../src/shell-app.c:398
 msgctxt "program"
 msgid "Unknown"
 msgstr "தெரியாத"
@@ -864,7 +859,7 @@ msgstr "தெரியாத"
 msgid "Undo"
 msgstr "மறை"
 
-#: ../js/ui/overview.js:166
+#: ../js/ui/overview.js:165
 msgid "Overview"
 msgstr "மேலோட்டம்"
 
@@ -889,7 +884,7 @@ msgstr "ஒரு கட்டளையை உள்ளிடுக"
 msgid "Close"
 msgstr "மூடுக"
 
-#: ../js/ui/screenShield.js:132
+#: ../js/ui/screenShield.js:134
 msgid "GNOME needs to lock the screen"
 msgstr "GNOME திரையைப் பூட்ட வேண்டுகிறது"
 
@@ -899,11 +894,11 @@ msgstr "GNOME திரையைப் பூட்ட வேண்டுகி�
 #. Just tell him to stop using this app
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:393
 msgid "Unable to lock"
 msgstr "பூட்ட முடியவில்லை"
 
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
+#: ../js/ui/screenShield.js:173 ../js/ui/screenShield.js:394
 msgid "Lock was blocked by an application"
 msgstr "ஒரு பயன்பாடு பூட்டுதலை முடக்கியுள்ளது"
 
@@ -995,17 +990,17 @@ msgstr "அதிக முறண்"
 msgid "Large Text"
 msgstr "பெரிய உரை"
 
-#: ../js/ui/status/bluetooth.js:33 ../js/ui/status/bluetooth.js:44
-#: ../js/ui/status/network.js:829
+#: ../js/ui/status/bluetooth.js:32 ../js/ui/status/bluetooth.js:43
+#: ../js/ui/status/network.js:828
 msgid "Bluetooth"
 msgstr "ப்ளூடூத்"
 
-#: ../js/ui/status/bluetooth.js:51
+#: ../js/ui/status/bluetooth.js:50
 msgid "Bluetooth Settings"
 msgstr "ப்ளூடூத் அமைப்புகள்"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:82 ../js/ui/status/network.js:181
+#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:180
 msgid "hardware disabled"
 msgstr "வன்பொருள் செயல்நீக்கப்பட்டது"
 
@@ -1033,129 +1028,129 @@ msgstr "வட்டாரம் மற்றும் மொழி  அமை�
 msgid "Volume, network, battery"
 msgstr "தொகுதி, வலையமைப்பு, மின்கலம்"
 
-#: ../js/ui/status/network.js:104
+#: ../js/ui/status/network.js:103
 msgid "<unknown>"
 msgstr "<தெரியாத>"
 
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
-#: ../js/ui/status/network.js:203
+#: ../js/ui/status/network.js:202
 msgid "disabled"
 msgstr "செயல்நீக்கப்பட்டது"
 
 #. Translators: this is for network devices that are physically present but
 #. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:461
+#: ../js/ui/status/network.js:460
 msgid "unmanaged"
 msgstr "மேலாண்மை இல்லாத"
 
-#: ../js/ui/status/network.js:463
+#: ../js/ui/status/network.js:462
 msgid "disconnecting..."
 msgstr "துண்டிக்கப்படுகிறது......"
 
-#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
+#: ../js/ui/status/network.js:468 ../js/ui/status/network.js:1550
 msgid "connecting..."
 msgstr "இணைக்கிறது..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:472 ../js/ui/status/network.js:1554
+#: ../js/ui/status/network.js:471 ../js/ui/status/network.js:1553
 msgid "authentication required"
 msgstr "உறுதிப்படுத்துதல் தேவை"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:482
+#: ../js/ui/status/network.js:481
 msgid "firmware missing"
 msgstr "தள நிரல் காணவில்லை"
 
 #. Translators: this is for wired network devices that are physically
 #. disconnected
-#: ../js/ui/status/network.js:489
+#: ../js/ui/status/network.js:488
 msgid "cable unplugged"
 msgstr "கம்பி இணைப்பு நீக்கப்பட்டது"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:494
+#: ../js/ui/status/network.js:493
 msgid "unavailable"
 msgstr "செயலாக்க முடியாதவை"
 
-#: ../js/ui/status/network.js:496 ../js/ui/status/network.js:1556
+#: ../js/ui/status/network.js:495 ../js/ui/status/network.js:1555
 msgid "connection failed"
 msgstr "இணைப்பு தோல்வி அடைந்தது"
 
-#: ../js/ui/status/network.js:555 ../js/ui/status/network.js:1440
-#: ../js/ui/status/network.js:1632
+#: ../js/ui/status/network.js:554 ../js/ui/status/network.js:1439
+#: ../js/ui/status/network.js:1631
 msgid "More…"
 msgstr "மேலும்…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:591 ../js/ui/status/network.js:1368
+#: ../js/ui/status/network.js:590 ../js/ui/status/network.js:1367
 msgid "Connected (private)"
 msgstr "இணைக்கப்பட்டது (தனியார்)"
 
-#: ../js/ui/status/network.js:670
+#: ../js/ui/status/network.js:669
 msgid "Wired"
 msgstr "கம்பியுள்ள"
 
-#: ../js/ui/status/network.js:671
+#: ../js/ui/status/network.js:670
 msgid "Auto Ethernet"
 msgstr "தானியங்கி ஈதர்நெட்"
 
-#: ../js/ui/status/network.js:698
+#: ../js/ui/status/network.js:697
 msgid "Mobile broadband"
 msgstr "லை அகலப்பட்டை"
 
 #. TRANSLATORS: this the automatic wireless connection name (including the
 #. network name)
-#: ../js/ui/status/network.js:864 ../js/ui/status/network.js:1385
+#: ../js/ui/status/network.js:863 ../js/ui/status/network.js:1384
 #, javascript-format
 msgid "Auto %s"
 msgstr "தானியங்கி %s "
 
-#: ../js/ui/status/network.js:866
+#: ../js/ui/status/network.js:865
 msgid "Auto bluetooth"
 msgstr "தானியங்கி ப்ளூடூத்"
 
-#: ../js/ui/status/network.js:1387
+#: ../js/ui/status/network.js:1386
 msgid "Auto wireless"
 msgstr "தானியங்கி கம்பியில்லாத"
 
-#: ../js/ui/status/network.js:1672
+#: ../js/ui/status/network.js:1671
 msgid "Network"
 msgstr "வலையமைப்பு "
 
-#: ../js/ui/status/network.js:1734
+#: ../js/ui/status/network.js:1733
 msgid "Enable networking"
 msgstr "வலைபின்னலை செயலாக்கு"
 
-#: ../js/ui/status/network.js:1776
+#: ../js/ui/status/network.js:1775
 msgid "Wi-Fi"
 msgstr "வை-பை"
 
-#: ../js/ui/status/network.js:1795
+#: ../js/ui/status/network.js:1794
 msgid "Network Settings"
 msgstr "வலைப்பின்னல் அமைப்புகள்"
 
-#: ../js/ui/status/network.js:1812
+#: ../js/ui/status/network.js:1811
 msgid "Network Manager"
 msgstr "வலைப்பின்னல் மேலாளர்"
 
-#: ../js/ui/status/network.js:1902
+#: ../js/ui/status/network.js:1901
 msgid "Connection failed"
 msgstr "இணைப்பு தோல்வியுற்றது"
 
-#: ../js/ui/status/network.js:1903
+#: ../js/ui/status/network.js:1902
 msgid "Activation of network connection failed"
 msgstr "வலைப்பின்னல் இணைப்பு செயலாக்கம் தோல்வி அடைந்தது"
 
-#: ../js/ui/status/network.js:2287
+#: ../js/ui/status/network.js:2286
 msgid "Networking is disabled"
 msgstr "வலைப்பின்னல் செயல் நீக்கப்பட்டது"
 

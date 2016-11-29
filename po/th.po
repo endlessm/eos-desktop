@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-15 02:26+0000\n"
-"PO-Revision-Date: 2016-10-04 17:45+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2016-11-22 02:26+0000\n"
+"PO-Revision-Date: 2016-11-22 02:27+0000\n"
+"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Thai (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -56,7 +56,6 @@ msgid "Window management and application launching"
 msgstr "การจัดการหน้าต่างและการเรียกใช้โปรแกรม"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
-#: ../js/extensionPrefs/main.js:155
 msgid "GNOME Shell Extension Preferences"
 msgstr "ปรับแต่งส่วนขยายของเชลล์ GNOME"
 
@@ -64,18 +63,14 @@ msgstr "ปรับแต่งส่วนขยายของเชลล์
 msgid "Configure GNOME Shell Extensions"
 msgstr "ตั้งค่าส่วนขยายต่างๆ ของเชลล์ GNOME"
 
-#: ../js/extensionPrefs/main.js:127
+#: ../js/extensionPrefs/main.js:117
 #, javascript-format
 msgid "There was an error loading the preferences dialog for %s:"
 msgstr "เกิดข้อผิดพลาดขณะโหลดกล่องโต้ตอบปรับแต่งสำหรับ %s:"
 
-#: ../js/extensionPrefs/main.js:167
-msgid "Extension"
-msgstr "ส่วนขยาย"
-
-#: ../js/extensionPrefs/main.js:191
-msgid "Select an extension to configure using the combobox above."
-msgstr "เลือกส่วนขยายที่จะตั้งค่าโดยใช้กล่องคอมโบด้านบน"
+#: ../js/extensionPrefs/main.js:149
+msgid "GNOME Shell Extensions"
+msgstr ""
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -197,32 +192,32 @@ msgstr "ไม่สามารถแจงคำสั่ง:"
 msgid "Execution of '%s' failed:"
 msgstr "คำสั่ง '%s' ทำงานล้มเหลว:"
 
-#: ../js/ui/appDisplay.js:1186
+#: ../js/ui/appDisplay.js:1187
 msgid "Remove from desktop"
 msgstr "ลบออกจากเดสก์ท้อป"
 
-#: ../js/ui/appDisplay.js:1695
+#: ../js/ui/appDisplay.js:1696
 msgid "Warning"
 msgstr "คำเตือน"
 
-#: ../js/ui/appDisplay.js:1701
+#: ../js/ui/appDisplay.js:1702
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "หากต้องการลบโฟลเดอร์หนึ่งคุณจะต้องเอารายการทั้งหมดภานในโฟลเดอร์ออกก่อน"
 
-#: ../js/ui/appDisplay.js:1707
+#: ../js/ui/appDisplay.js:1708
 msgid "We are just trying to keep you safe."
 msgstr "เราพยายามที่จะทำให้ปลอดภัย"
 
-#: ../js/ui/appDisplay.js:1713
+#: ../js/ui/appDisplay.js:1714
 msgid "OK"
 msgstr "ตกลง"
 
-#: ../js/ui/appDisplay.js:1975
+#: ../js/ui/appDisplay.js:2016
 msgid "More Apps"
 msgstr "แอพเพิ่มเติม"
 
-#: ../js/ui/appDisplay.js:1984
+#: ../js/ui/appDisplay.js:2025
 msgid "Delete"
 msgstr "ลบ"
 
@@ -825,35 +820,35 @@ msgstr "ดูซอร์ส"
 msgid "Web Page"
 msgstr "หน้าเว็บ"
 
-#: ../js/ui/messageTray.js:1205
+#: ../js/ui/messageTray.js:1313
 msgid "Open"
 msgstr "เปิด"
 
-#: ../js/ui/messageTray.js:1212
+#: ../js/ui/messageTray.js:1320
 msgid "Remove"
 msgstr "ลบ"
 
-#: ../js/ui/messageTray.js:1524
+#: ../js/ui/messageTray.js:1631
 msgid "Clear Messages"
 msgstr "ล้างข้อความ"
 
-#: ../js/ui/messageTray.js:1551
+#: ../js/ui/messageTray.js:1658
 msgid "Notification Settings"
 msgstr "การตั้งค่าการแจ้งเตือน"
 
-#: ../js/ui/messageTray.js:1741
+#: ../js/ui/messageTray.js:1848
 msgid "No Messages"
 msgstr "ไม่มีข้อความ"
 
-#: ../js/ui/messageTray.js:1815
+#: ../js/ui/messageTray.js:1922
 msgid "Message Tray"
 msgstr "ถาดข้อความ"
 
-#: ../js/ui/messageTray.js:2836
+#: ../js/ui/messageTray.js:2943
 msgid "System Information"
 msgstr "ข้อมูลระบบ"
 
-#: ../js/ui/notificationDaemon.js:634 ../src/shell-app.c:398
+#: ../js/ui/notificationDaemon.js:541 ../src/shell-app.c:398
 msgctxt "program"
 msgid "Unknown"
 msgstr "ไม่ทราบชื่อ"
@@ -862,7 +857,7 @@ msgstr "ไม่ทราบชื่อ"
 msgid "Undo"
 msgstr "เรียกคืน"
 
-#: ../js/ui/overview.js:166
+#: ../js/ui/overview.js:165
 msgid "Overview"
 msgstr "ภาพรวม"
 
@@ -887,7 +882,7 @@ msgstr "ป้อนคำสั่ง"
 msgid "Close"
 msgstr "ปิด"
 
-#: ../js/ui/screenShield.js:132
+#: ../js/ui/screenShield.js:134
 msgid "GNOME needs to lock the screen"
 msgstr "GNOME ต้องการการล็อคหน้าจอ"
 
@@ -897,11 +892,11 @@ msgstr "GNOME ต้องการการล็อคหน้าจอ"
 #. Just tell him to stop using this app
 #. XXX: another option is to kick the user into the gdm login
 #. screen, where we're not affected by grabs
-#: ../js/ui/screenShield.js:170 ../js/ui/screenShield.js:389
+#: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:393
 msgid "Unable to lock"
 msgstr "ไม่สามารถล็อค"
 
-#: ../js/ui/screenShield.js:171 ../js/ui/screenShield.js:390
+#: ../js/ui/screenShield.js:173 ../js/ui/screenShield.js:394
 msgid "Lock was blocked by an application"
 msgstr "ล็อคได้ถูกบล็อคโดยแอปพลิเคชันนึง"
 
@@ -993,17 +988,17 @@ msgstr "สีตัดกัน"
 msgid "Large Text"
 msgstr "อักษรขนาดใหญ่"
 
-#: ../js/ui/status/bluetooth.js:33 ../js/ui/status/bluetooth.js:44
-#: ../js/ui/status/network.js:829
+#: ../js/ui/status/bluetooth.js:32 ../js/ui/status/bluetooth.js:43
+#: ../js/ui/status/network.js:828
 msgid "Bluetooth"
 msgstr "บลูทูท"
 
-#: ../js/ui/status/bluetooth.js:51
+#: ../js/ui/status/bluetooth.js:50
 msgid "Bluetooth Settings"
 msgstr "ตั้งค่าบลูทูท"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:82 ../js/ui/status/network.js:181
+#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:180
 msgid "hardware disabled"
 msgstr "ฮาร์ดแวร์ปิดการใช้งานอยู่"
 
@@ -1031,129 +1026,129 @@ msgstr "การตั้งค่าภูมิภาคและภาษา
 msgid "Volume, network, battery"
 msgstr "ความดังเสียง, เครือข่าย, แบตเตอรี่"
 
-#: ../js/ui/status/network.js:104
+#: ../js/ui/status/network.js:103
 msgid "<unknown>"
 msgstr "<ไม่ทราบ>"
 
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
-#: ../js/ui/status/network.js:203
+#: ../js/ui/status/network.js:202
 msgid "disabled"
 msgstr "ปิดใช้"
 
 #. Translators: this is for network devices that are physically present but
 #. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:461
+#: ../js/ui/status/network.js:460
 msgid "unmanaged"
 msgstr "ไม่ถูกจัดการ"
 
-#: ../js/ui/status/network.js:463
+#: ../js/ui/status/network.js:462
 msgid "disconnecting..."
 msgstr "กำลังตัดการเชื่อมต่อ..."
 
-#: ../js/ui/status/network.js:469 ../js/ui/status/network.js:1551
+#: ../js/ui/status/network.js:468 ../js/ui/status/network.js:1550
 msgid "connecting..."
 msgstr "กำลังเชื่อมต่อ..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:472 ../js/ui/status/network.js:1554
+#: ../js/ui/status/network.js:471 ../js/ui/status/network.js:1553
 msgid "authentication required"
 msgstr "ต้องยืนยันตัวบุคคล"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:482
+#: ../js/ui/status/network.js:481
 msgid "firmware missing"
 msgstr "ขาดเฟิร์มแวร์"
 
 #. Translators: this is for wired network devices that are physically
 #. disconnected
-#: ../js/ui/status/network.js:489
+#: ../js/ui/status/network.js:488
 msgid "cable unplugged"
 msgstr "ไม่ได้เสียบสายเคเบิล"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:494
+#: ../js/ui/status/network.js:493
 msgid "unavailable"
 msgstr "ไม่สามารถใช้งานได้"
 
-#: ../js/ui/status/network.js:496 ../js/ui/status/network.js:1556
+#: ../js/ui/status/network.js:495 ../js/ui/status/network.js:1555
 msgid "connection failed"
 msgstr "เชื่อมต่อไม่สำเร็จ"
 
-#: ../js/ui/status/network.js:555 ../js/ui/status/network.js:1440
-#: ../js/ui/status/network.js:1632
+#: ../js/ui/status/network.js:554 ../js/ui/status/network.js:1439
+#: ../js/ui/status/network.js:1631
 msgid "More…"
 msgstr "เพิ่มเติม…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:591 ../js/ui/status/network.js:1368
+#: ../js/ui/status/network.js:590 ../js/ui/status/network.js:1367
 msgid "Connected (private)"
 msgstr "เชื่อมต่อแล้ว (ส่วนตัว)"
 
-#: ../js/ui/status/network.js:670
+#: ../js/ui/status/network.js:669
 msgid "Wired"
 msgstr "ใช้สาย"
 
-#: ../js/ui/status/network.js:671
+#: ../js/ui/status/network.js:670
 msgid "Auto Ethernet"
 msgstr "อีเทอร์เน็ตอัตโนมัติ"
 
-#: ../js/ui/status/network.js:698
+#: ../js/ui/status/network.js:697
 msgid "Mobile broadband"
 msgstr "บรอดแบนด์มือถือ"
 
 #. TRANSLATORS: this the automatic wireless connection name (including the
 #. network name)
-#: ../js/ui/status/network.js:864 ../js/ui/status/network.js:1385
+#: ../js/ui/status/network.js:863 ../js/ui/status/network.js:1384
 #, javascript-format
 msgid "Auto %s"
 msgstr "%s อัตโนมัติ"
 
-#: ../js/ui/status/network.js:866
+#: ../js/ui/status/network.js:865
 msgid "Auto bluetooth"
 msgstr "บลูทูทอัตโนมัติ"
 
-#: ../js/ui/status/network.js:1387
+#: ../js/ui/status/network.js:1386
 msgid "Auto wireless"
 msgstr "ไร้สายอัตโนมัติ"
 
-#: ../js/ui/status/network.js:1672
+#: ../js/ui/status/network.js:1671
 msgid "Network"
 msgstr "เครือข่าย"
 
-#: ../js/ui/status/network.js:1734
+#: ../js/ui/status/network.js:1733
 msgid "Enable networking"
 msgstr "เปิดใช้งานเครือข่าย"
 
-#: ../js/ui/status/network.js:1776
+#: ../js/ui/status/network.js:1775
 msgid "Wi-Fi"
 msgstr "Wi-Fi"
 
-#: ../js/ui/status/network.js:1795
+#: ../js/ui/status/network.js:1794
 msgid "Network Settings"
 msgstr "ตั้งค่าเครือข่าย"
 
-#: ../js/ui/status/network.js:1812
+#: ../js/ui/status/network.js:1811
 msgid "Network Manager"
 msgstr "โปรแกรมจัดการเครือข่าย"
 
-#: ../js/ui/status/network.js:1902
+#: ../js/ui/status/network.js:1901
 msgid "Connection failed"
 msgstr "เชื่อมต่อไม่สำเร็จ"
 
-#: ../js/ui/status/network.js:1903
+#: ../js/ui/status/network.js:1902
 msgid "Activation of network connection failed"
 msgstr "เปิดใช้ช่องเชื่อมต่อไม่สำเร็จ"
 
-#: ../js/ui/status/network.js:2287
+#: ../js/ui/status/network.js:2286
 msgid "Networking is disabled"
 msgstr "การใช้เครือข่ายถูกปิด"
 
