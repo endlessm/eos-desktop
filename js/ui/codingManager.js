@@ -118,8 +118,8 @@ const CodingManager = new Lang.Class({
         let session = this._sessions[idx-1];
 
         button.connect('clicked', Lang.bind(this, this._switchToBuilder, session));
-        session.positionChangedIdApp = window.connect('position-changed', Lang.bind(this, this._windowAppPositionChanged, session));
-        session.sizeChangedIdApp = window.connect('size-changed', Lang.bind(this, this._windowAppSizeChanged, session));
+        session.positionChangedIdApp = window.connect('position-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
+        session.sizeChangedIdApp = window.connect('size-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
         session.windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowAppRestacked, session));
         session.windowMinimizedId = global.window_manager.connect('minimize', Lang.bind(this, this._windowMinimized, session));
         session.windowUnminimizedId = global.window_manager.connect('unminimize', Lang.bind(this, this._windowUnminimized, session));
@@ -265,8 +265,8 @@ const CodingManager = new Lang.Class({
         Main.layoutManager.addChrome(button);
         button.connect('clicked', Lang.bind(this, this._switchToApp, session));
 
-        session.positionChangedIdBuilder = window.connect('position-changed', Lang.bind(this, this._windowBuilderPositionChanged, session));
-        session.sizeChangedIdBuilder = window.connect('size-changed', Lang.bind(this, this._windowBuilderSizeChanged, session));
+        session.positionChangedIdBuilder = window.connect('position-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
+        session.sizeChangedIdBuilder = window.connect('size-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
 
         session.buttonBuilder = button;
     },
@@ -307,7 +307,7 @@ const CodingManager = new Lang.Class({
         this._firstFrameConnections.push(firstFrameConnection);
     },
 
-    _windowAppPositionChanged: function(window, session) {
+    _updateAppSizeAndPosition: function(window, session) {
         let rect = session.actorApp.meta_window.get_frame_rect();
         session.buttonApp.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         if (!session.actorBuilder)
@@ -319,31 +319,7 @@ const CodingManager = new Lang.Class({
                                                            rect.height);
     },
 
-    _windowAppSizeChanged: function(window, session) {
-        let rect = session.actorApp.meta_window.get_frame_rect();
-        session.buttonApp.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
-        if (!session.actorBuilder)
-            return;
-        session.actorBuilder.meta_window.move_resize_frame(false,
-                                                           rect.x,
-                                                           rect.y,
-                                                           rect.width,
-                                                           rect.height);
-    },
-
-    _windowBuilderPositionChanged: function(window, session) {
-        let rect = session.actorBuilder.meta_window.get_frame_rect();
-        session.buttonBuilder.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
-        if (!session.actorApp)
-            return;
-        session.actorApp.meta_window.move_resize_frame(false,
-                                                       rect.x,
-                                                       rect.y,
-                                                       rect.width,
-                                                       rect.height);
-    },
-
-    _windowBuilderSizeChanged: function(window, session) {
+    _updateBuilderSizeAndPosition: function(window, session) {
         let rect = session.actorBuilder.meta_window.get_frame_rect();
         session.buttonBuilder.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         if (!session.actorApp)
