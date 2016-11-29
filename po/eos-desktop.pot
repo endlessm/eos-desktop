@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-09 16:56-0800\n"
+"POT-Creation-Date: 2016-11-28 14:38-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -177,36 +177,36 @@ msgstr ""
 msgid "(e.g., user or %s)"
 msgstr ""
 
-#: ../js/misc/util.js:141
+#: ../js/misc/util.js:143
 msgid "Command not found"
 msgstr ""
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:174
+#: ../js/misc/util.js:176
 msgid "Could not parse command:"
 msgstr ""
 
-#: ../js/misc/util.js:182
+#: ../js/misc/util.js:184
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr ""
 
 #. Translators: Time in 24h format
-#: ../js/misc/util.js:243
+#: ../js/misc/util.js:245
 msgid "%H∶%M"
 msgstr ""
 
 #. Translators: this is the word "Yesterday" followed by a
 #. time string in 24h format. i.e. "Yesterday, 14:30"
-#: ../js/misc/util.js:249
+#: ../js/misc/util.js:251
 #, no-c-format
 msgid "Yesterday, %H∶%M"
 msgstr ""
 
 #. Translators: this is the week day name followed by a time
 #. string in 24h format. i.e. "Monday, 14:30"
-#: ../js/misc/util.js:255
+#: ../js/misc/util.js:257
 #, no-c-format
 msgid "%A, %H∶%M"
 msgstr ""
@@ -214,7 +214,7 @@ msgstr ""
 #. Translators: this is the month name and day number
 #. followed by a time string in 24h format.
 #. i.e. "May 25, 14:30"
-#: ../js/misc/util.js:261
+#: ../js/misc/util.js:263
 #, no-c-format
 msgid "%B %d, %H∶%M"
 msgstr ""
@@ -222,26 +222,26 @@ msgstr ""
 #. Translators: this is the month name, day number, year
 #. number followed by a time string in 24h format.
 #. i.e. "May 25 2012, 14:30"
-#: ../js/misc/util.js:267
+#: ../js/misc/util.js:269
 #, no-c-format
 msgid "%B %d %Y, %H∶%M"
 msgstr ""
 
 #. Translators: Time in 12h format
-#: ../js/misc/util.js:272
+#: ../js/misc/util.js:274
 msgid "%l∶%M %p"
 msgstr ""
 
 #. Translators: this is the word "Yesterday" followed by a
 #. time string in 12h format. i.e. "Yesterday, 2:30 pm"
-#: ../js/misc/util.js:278
+#: ../js/misc/util.js:280
 #, no-c-format
 msgid "Yesterday, %l∶%M %p"
 msgstr ""
 
 #. Translators: this is the week day name followed by a time
 #. string in 12h format. i.e. "Monday, 2:30 pm"
-#: ../js/misc/util.js:284
+#: ../js/misc/util.js:286
 #, no-c-format
 msgid "%A, %l∶%M %p"
 msgstr ""
@@ -249,7 +249,7 @@ msgstr ""
 #. Translators: this is the month name and day number
 #. followed by a time string in 12h format.
 #. i.e. "May 25, 2:30 pm"
-#: ../js/misc/util.js:290
+#: ../js/misc/util.js:292
 #, no-c-format
 msgid "%B %d, %l∶%M %p"
 msgstr ""
@@ -257,7 +257,7 @@ msgstr ""
 #. Translators: this is the month name, day number, year
 #. number followed by a time string in 12h format.
 #. i.e. "May 25 2012, 2:30 pm"
-#: ../js/misc/util.js:296
+#: ../js/misc/util.js:298
 #, no-c-format
 msgid "%B %d %Y, %l∶%M %p"
 msgstr ""
@@ -904,6 +904,14 @@ msgstr ""
 
 #: ../js/ui/panel.js:480
 msgid "Taskbar"
+msgstr ""
+
+#: ../js/ui/panelMenu.js:319
+msgid "Toggle Desktop"
+msgstr ""
+
+#: ../js/ui/panelMenu.js:362
+msgid "Toggle Windows"
 msgstr ""
 
 #. Translators: this MUST be either "toggle-switch-us"
