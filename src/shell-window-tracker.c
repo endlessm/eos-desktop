@@ -199,6 +199,7 @@ watchdog_timeout_reached_cb (gpointer user_data)
  * shell_window_tracker_track_coding_app_window:
  * @tracker: An app monitor instance
  * @app_window: A #MetaWindow
+ *
  * Track a coding app.
  *
  */
@@ -222,11 +223,7 @@ void shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker,
 void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker,
                                                      MetaWindow *builder_window)
 {
-  MetaWindow *app_window;
-  app_window = g_hash_table_lookup (tracker->builder_to_app, builder_window);
-  if (app_window) {
     g_hash_table_remove (tracker->builder_to_app, builder_window);
-  }
 }
 
 /**
@@ -236,15 +233,12 @@ void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker
  *
  * Returns: (transfer none): Application associated with Builder window, or %NULL if none
  */
-
 MetaWindow *shell_window_tracker_get_app_from_builder (ShellWindowTracker *tracker,
                                                        MetaWindow *builder_window)
 {
   MetaWindow *app_window;
 
   app_window = g_hash_table_lookup (tracker->builder_to_app, builder_window);
-  if (!app_window)
-    return NULL;
 
   return app_window;
 }
@@ -508,23 +502,25 @@ get_app_for_window (ShellWindowTracker    *tracker,
   if (g_strcmp0 (meta_window_get_role (window), SIDE_COMPONENT_ROLE) == 0)
     return NULL;
   if (g_strcmp0 (meta_window_get_flatpak_id (window), BUILDER_WINDOW) == 0)
-  {
-    if (tracker->coding_app) {
-      g_hash_table_insert (tracker->builder_to_app, window, tracker->coding_app);
-      result = g_hash_table_lookup (tracker->window_to_app, tracker->coding_app);
-      tracker->coding_app = NULL;
-      if (tracker->watchdog_id > 0) {
-        g_source_remove (tracker->watchdog_id);
-        tracker->watchdog_id = 0;
-      }
+    {
+      if (tracker->coding_app)
+        {
+          g_hash_table_insert (tracker->builder_to_app, window, tracker->coding_app);
+          result = g_hash_table_lookup (tracker->window_to_app, tracker->coding_app);
+          tracker->coding_app = NULL;
+          if (tracker->watchdog_id > 0)
+            {
+              g_source_remove (tracker->watchdog_id);
+              tracker->watchdog_id = 0;
+            }
 
-      if (result != NULL)
-      {
-        g_object_ref (result);
-        return result;
-      }
+          if (result != NULL)
+            {
+              g_object_ref (result);
+              return result;
+            }
+        }
     }
-  }
 
   transient_for = meta_window_get_transient_for (window);
   if (transient_for != NULL)
@@ -831,8 +827,6 @@ shell_window_tracker_init (ShellWindowTracker *self)
   self->launched_pid_to_app = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_object_unref);
 
   self->builder_to_app = g_hash_table_new_full (NULL, NULL, NULL, NULL);
-  self->watchdog_id = 0;
-  self->coding_app = NULL;
 
   screen = shell_global_get_screen (shell_global_get ());
 
