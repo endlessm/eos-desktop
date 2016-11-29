@@ -1395,7 +1395,7 @@ const WindowManager = new Lang.Class({
         this._codingAddAppWindow(actor);
     },
 
-    _codingAddAppWindow : function(actor) {
+    _codingAddAppWindow: function(actor) {
         let window = actor.meta_window;
         if (!this._codingManager.isCodingApp(window.get_flatpak_id()))
             return;
@@ -1403,7 +1403,7 @@ const WindowManager = new Lang.Class({
         this._codingManager.addSwitcherToBuilder(actor);
     },
 
-    _codingAddBuilderWindow : function(actor) {
+    _codingAddBuilderWindow: function(actor) {
         let window = actor.meta_window;
         if (window.get_flatpak_id() !== 'org.gnome.Builder')
             return false;
@@ -1417,7 +1417,7 @@ const WindowManager = new Lang.Class({
         return true;
     },
 
-    _codingRemoveAppWindow : function(actor) {
+    _codingRemoveAppWindow: function(actor) {
         let window = actor.meta_window;
         if (!this._codingManager.isCodingApp(window.get_flatpak_id()))
             return;
@@ -1425,7 +1425,7 @@ const WindowManager = new Lang.Class({
         this._codingManager.removeSwitcherToBuilder(actor);
     },
 
-    _codingRemoveBuilderWindow : function(actor) {
+    _codingRemoveBuilderWindow: function(actor) {
         let window = actor.meta_window;
         if (window.get_flatpak_id() !== 'org.gnome.Builder')
             return;
@@ -1925,12 +1925,11 @@ function animateBounce(actor) {
 const CodingManager = new Lang.Class({
     Name: 'CodingManager',
 
-    _init: function(actor) {
+    _init: function() {
         this._sessions = [];
         this._rotateInActors = [];
         this._rotateOutActors = [];
         this._firstFrameConnections = [];
-        this._previousFocusedWindow = null;
         this._codingApps = ['org.gnome.gedit', 'org.gnome.Weather'];
     },
 
@@ -1977,7 +1976,7 @@ const CodingManager = new Lang.Class({
         this._animateToBuilder(session);
     },
 
-    removeSwitcherToBuilder : function(actorApp) {
+    removeSwitcherToBuilder: function(actorApp) {
         let session = this._getSession(actorApp);
         if (!session)
             return;
@@ -2038,7 +2037,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    removeSwitcherToApp : function(actorBuilder) {
+    removeSwitcherToApp: function(actorBuilder) {
         let session = this._getSession(actorBuilder);
         if (!session)
             return;
@@ -2055,7 +2054,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _switchToBuilder : function(actor, event, session) {
+    _switchToBuilder: function(actor, event, session) {
         if (!session.actorBuilder) {
             let tracker = Shell.WindowTracker.get_default();
             tracker.track_coding_app_window(session.actorApp.meta_window);
@@ -2076,7 +2075,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _switchToApp : function(actor, event, session) {
+    _switchToApp: function(actor, event, session) {
         if (!session.actorApp)
             return;
         session.actorApp.meta_window.activate(global.get_current_time());
@@ -2233,7 +2232,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _windowAppRestacked : function(overview, stackIndices, session) {
+    _windowAppRestacked: function(overview, stackIndices, session) {
         let focusedWindow = global.display.get_focus_window();
         if (!focusedWindow)
             return;
@@ -2305,7 +2304,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _prepareAnimate : function(src, dst, direction) {
+    _prepareAnimate: function(src, dst, direction) {
         this._rotateInActors.push(dst);
         this._rotateOutActors.push(src);
 
@@ -2361,7 +2360,7 @@ const CodingManager = new Lang.Class({
                                           srcGeometry.height);
     },
 
-    _animate : function(src, dst, direction) {
+    _animate: function(src, dst, direction) {
         /* Tween both windows in a rotation animation at the same time
          * with backface culling enabled on both. This will allow for
          * a smooth transition. */
@@ -2392,7 +2391,7 @@ const CodingManager = new Lang.Class({
         });
     },
 
-    _removeEffect : function(list, actor) {
+    _removeEffect: function(list, actor) {
         let idx = list.indexOf(actor);
         if (idx != -1) {
             list.splice(idx, 1);
@@ -2401,7 +2400,7 @@ const CodingManager = new Lang.Class({
         return false;
     },
 
-    _removeSession : function(session) {
+    _removeSession: function(session) {
         let idx = this._sessions.indexOf(session);
         if (idx != -1) {
             this._sessions.splice(idx, 1);
