@@ -830,7 +830,7 @@ shell_window_tracker_init (ShellWindowTracker *self)
 
   self->launched_pid_to_app = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_object_unref);
 
-  self->builder_to_app = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_object_unref);
+  self->builder_to_app = g_hash_table_new_full (NULL, NULL, NULL, NULL);
   self->watchdog_id = 0;
   self->coding_app = NULL;
 
