@@ -56,7 +56,6 @@ const CodingManager = new Lang.Class({
         this._sessions = [];
         this._rotateInActors = [];
         this._rotateOutActors = [];
-        this._firstFrameConnections = [];
         this._watchdogId = 0;
         this._codingApps = ['org.gnome.gedit', 'org.gnome.Weather'];
     },
@@ -313,11 +312,7 @@ const CodingManager = new Lang.Class({
 
             this._animate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
 
-            this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
-                return conn != session.firstFrameConnection;
-            });
-            session.actorBuilder.disconnect(session.firstFrameConnection);
-            session.firstFrameConnection = null;
+            session.actorBuilder.disconnect(firstFrameConnection);
 
             this._addBuilderButton(session);
             session.buttonBuilder.show();
@@ -327,10 +322,6 @@ const CodingManager = new Lang.Class({
         }));
 
         this._prepareAnimate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
-        // Save the connection's id in the session and in a list too so we can
-        // get rid of it on kill-window-effects later */
-        session.firstFrameConnection = firstFrameConnection;
-        this._firstFrameConnections.push(firstFrameConnection);
     },
 
     _updateAppSizeAndPosition: function(window, session) {
