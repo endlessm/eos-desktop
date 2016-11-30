@@ -123,7 +123,8 @@ const CodingManager = new Lang.Class({
         button.connect('clicked', Lang.bind(this, this._switchToBuilder, session));
         session.positionChangedIdApp = window.connect('position-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
         session.sizeChangedIdApp = window.connect('size-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
-        session.windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowAppRestacked, session));
+
+        session.windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowRestacked, session));
         session.windowMinimizedId = global.window_manager.connect('minimize', Lang.bind(this, this._windowMinimized, session));
         session.windowUnminimizedId = global.window_manager.connect('unminimize', Lang.bind(this, this._windowUnminimized, session));
     },
@@ -357,7 +358,7 @@ const CodingManager = new Lang.Class({
     },
 
     _windowMinimized: function(shellwm, actor, session) {
-        // take the actor that we minimized and emit a minimized
+        // take the actor that was minimized and emit a minimized
         // signal for it, though setting a flag internally so that
         // we don't re-enter this signal handler.
         if (this._processingWindowMinimized === actor) {
@@ -375,7 +376,7 @@ const CodingManager = new Lang.Class({
     },
 
     _windowUnminimized: function(shellwm, actor, session) {
-        // take the actor that we minimized and emit a minimized
+        // take the actor that was unminimized and emit a minimized
         // signal for it, though setting a flag internally so that
         // we don't re-enter this signal handler.
         if (this._processingWindowUnminimized === actor) {
@@ -392,7 +393,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _windowAppRestacked: function(overview, stackIndices, session) {
+    _windowRestacked: function(overview, stackIndices, session) {
         let focusedWindow = global.display.get_focus_window();
         if (!focusedWindow)
             return;
