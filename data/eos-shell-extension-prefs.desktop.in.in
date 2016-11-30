@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 _Name=Extensions
-_Comment=Configure GNOME Shell Extensions
+_Comment=Configure Desktop Extensions
 Exec=@bindir@/eos-shell-extension-prefs %u
 X-GNOME-Bugzilla-Bugzilla=GNOME
 X-GNOME-Bugzilla-Product=eos-shell

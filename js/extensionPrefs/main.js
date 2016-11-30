@@ -146,7 +146,7 @@ const Application = new Lang.Class({
         this._window.set_size_request(800, 500);
 
         this._titlebar = new Gtk.HeaderBar({ show_close_button: true,
-                                             title: _("GNOME Shell Extensions") });
+                                             title: _("Desktop Extensions") });
         this._window.set_titlebar(this._titlebar);
 
         let scroll = new Gtk.ScrolledWindow({ hscrollbar_policy: Gtk.PolicyType.NEVER,
