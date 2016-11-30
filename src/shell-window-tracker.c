@@ -474,7 +474,7 @@ get_app_for_window (ShellWindowTracker    *tracker,
       if (tracker->coding_app)
         {
           result = g_hash_table_lookup (tracker->window_to_app, tracker->coding_app);
-          tracker->coding_app = NULL;
+          shell_window_tracker_untrack_coding_app_window (tracker);
 
           if (result != NULL)
             {
