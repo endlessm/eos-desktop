@@ -598,7 +598,6 @@ const WindowManager = new Lang.Class({
         this._mapping = [];
         this._destroying = [];
         this._movingWindow = null;
-        this._codingManager = null;
 
         this._dimmedWindows = [];
 
@@ -619,8 +618,7 @@ const WindowManager = new Lang.Class({
                                         function () { Main.layoutManager.emit('background-clicked'); });
         }));
 
-        if (global.settings.get_boolean('enable-behind-the-screen'))
-            this._codingManager = new CodingManager.CodingManager();
+        this._codingManager = new CodingManager.CodingManager();
 
         this._switchData = null;
         this._shellwm.connect('kill-switch-workspace', Lang.bind(this, this._switchWorkspaceDone));
@@ -631,7 +629,7 @@ const WindowManager = new Lang.Class({
             this._destroyWindowDone(shellwm, actor);
             this._rotateInCompleted(actor);
             this._rotateOutCompleted(actor);
-            if (this._codingManager) {
+            if (global.settings.get_boolean('enable-behind-the-screen')) {
                 this._codingManager.rotateInCompleted(actor);
                 this._codingManager.rotateOutCompleted(actor);
             }
@@ -1294,7 +1292,7 @@ const WindowManager = new Lang.Class({
             }
         }
 
-        if (this._codingManager) {
+        if (global.settings.get_boolean('enable-behind-the-screen')) {
             if (this._codingManager.addBuilderWindow(actor)) {
                 shellwm.completed_map(actor);
                 return;
@@ -1458,7 +1456,7 @@ const WindowManager = new Lang.Class({
             }
         }
 
-        if (this._codingManager) {
+        if (global.settings.get_boolean('enable-behind-the-screen')) {
             this._codingManager.removeAppWindow(actor);
             this._codingManager.removeBuilderWindow(actor);
         }
