@@ -9,3 +9,4 @@ X-GNOME-Bugzilla-Component=extensions
 X-GNOME-Bugzilla-Version=@VERSION@
 Categories=GNOME;GTK;
 OnlyShowIn=GNOME;
+Icon=preferences-desktop
