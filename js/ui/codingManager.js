@@ -414,10 +414,10 @@ const CodingManager = new Lang.Class({
             session.buttonBuilder.hide();
 
         if (focusedWindow === session.actorApp.meta_window) {
+            session.buttonApp.show();
             if (session.actorBuilder && session.actorBuilder.meta_window === previousFocused) {
                 // make sure we do not rotate when a rotation is running
                 if (this._rotateInActors.length || this._rotateOutActors.length) {
-                    session.buttonApp.show();
                     return;
                 }
                 this._prepareAnimate(session.actorBuilder,
@@ -426,11 +426,9 @@ const CodingManager = new Lang.Class({
                 this._animate(session.actorBuilder,
                               session.actorApp,
                               Gtk.DirectionType.RIGHT);
-                session.buttonApp.show();
                 return;
             }
             session.actorApp.show();
-            session.buttonApp.show();
             // hide the underlying window to prevent glitches when resizing
             // the one on top, we do this for the animated switch case already
             if (session.actorBuilder)
@@ -441,11 +439,11 @@ const CodingManager = new Lang.Class({
         if (!session.actorBuilder)
             return;
         if (focusedWindow === session.actorBuilder.meta_window) {
+            if (session.buttonBuilder)
+                session.buttonBuilder.show();
             if (session.actorApp.meta_window === previousFocused) {
                 // make sure we do not rotate when a rotation is running
                 if (this._rotateInActors.length || this._rotateOutActors.length) {
-                    if (session.buttonBuilder)
-                        session.buttonBuilder.show();
                     return;
                 }
                 this._prepareAnimate(session.actorApp,
@@ -457,7 +455,6 @@ const CodingManager = new Lang.Class({
                 session.buttonBuilder.show();
             } else {
                 session.actorBuilder.show();
-                session.buttonBuilder.show();
                 // hide the underlying window to prevent glitches when resizing
                 // the one on top, we do this for the animated switch case already
                 session.actorApp.hide();
