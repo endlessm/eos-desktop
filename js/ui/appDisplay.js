@@ -95,6 +95,11 @@ const AppSearchProvider = new Lang.Class({
         let groups = Gio.DesktopAppInfo.search(query);
         let usage = Shell.AppUsage.get_default();
         let results = [];
+        let codingEnabled = global.settings.get_boolean('enable-coding-game');
+        let codingApps = [
+            'com.endlessm.Coding.Chatbox.desktop',
+            'eos-shell-extension-prefs.desktop'
+        ];
         groups.forEach(function(group) {
             group = group.filter(function(appID) {
                 let app = Gio.DesktopAppInfo.new(appID);
@@ -102,7 +107,14 @@ const AppSearchProvider = new Lang.Class({
                 let isOnDesktop = IconGridLayout.layout.hasIcon(appID);
 
                 // exclude links that are not part of the desktop grid
-                return app && app.should_show() && !(isLink && !isOnDesktop);
+                if (!(app && app.should_show() && !(isLink && !isOnDesktop)))
+                    return false;
+
+                // exclude coding related apps if coding game is not enabled
+                if (!codingEnabled && codingApps.indexOf(appID) > -1)
+                    return false;
+
+                return true;
             });
             results = results.concat(group.sort(function(a, b) {
                 return usage.compare('', a, b);
