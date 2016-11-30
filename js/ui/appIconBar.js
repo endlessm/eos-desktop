@@ -295,7 +295,7 @@ const AppIconButton = new Lang.Class({
         this._rightClickMenu = new PopupMenu.PopupMenu(this.actor, 0.0, St.Side.TOP, 0);
         this._rightClickMenu.blockSourceEvents = true;
 
-        if (allowsPinning) {
+        if (false) {
             this._pinMenuItem = this._rightClickMenu.addAction(_("Pin to Taskbar"), Lang.bind(this, function() {
                 this.emit('app-icon-pinned');
             }));
