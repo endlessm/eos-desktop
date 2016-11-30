@@ -41,9 +41,7 @@ gboolean shell_window_tracker_is_speedwagon_window (MetaWindow *window);
 
 void shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker, MetaWindow *app_window);
 
-void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker, MetaWindow *builder_window);
-
-MetaWindow *shell_window_tracker_get_app_from_builder (ShellWindowTracker *tracker, MetaWindow *builder_window);
+void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker);
 
 const char *_shell_window_tracker_get_app_context (ShellWindowTracker *tracker, ShellApp *app);
 

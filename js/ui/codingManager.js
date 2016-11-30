@@ -5,6 +5,7 @@ const Flatpak = imports.gi.Flatpak;
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
+const Mainloop = imports.mainloop;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
@@ -13,6 +14,7 @@ const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
 
 const WINDOW_ANIMATION_TIME = 0.25;
+const WATCHDOG_TIME = 30000; // ms
 
 const ICON_BOUNCE_MAX_SCALE = 0.4;
 const ICON_BOUNCE_ANIMATION_TIME = 1.0;
@@ -54,6 +56,7 @@ const CodingManager = new Lang.Class({
         this._rotateInActors = [];
         this._rotateOutActors = [];
         this._firstFrameConnections = [];
+        this._watchdogId = 0;
         this._codingApps = ['org.gnome.gedit', 'org.gnome.Weather'];
     },
 
@@ -78,12 +81,15 @@ const CodingManager = new Lang.Class({
         if (!this._isBuilder(window.get_flatpak_id()))
             return false;
 
-        let tracker = Shell.WindowTracker.get_default();
-        let windowApp = tracker.get_app_from_builder(window);
-        if (!windowApp)
-            return false;
+        this._cancelWatchdog();
 
-        this._addSwitcherToApp(actor, windowApp);
+        let session = this._sessions[this._sessions.length-1];
+        if (session.actorBuilder)
+            return false;
+        let tracker = Shell.WindowTracker.get_default();
+        tracker.untrack_coding_app_window();
+
+        this._addSwitcherToApp(actor, session);
         return true;
     },
 
@@ -125,11 +131,7 @@ const CodingManager = new Lang.Class({
         session.windowUnminimizedId = global.window_manager.connect('unminimize', Lang.bind(this, this._windowUnminimized, session));
     },
 
-    _addSwitcherToApp: function(actorBuilder, windowApp) {
-        let session = this._getSession(windowApp.get_compositor_private());
-        if (!session)
-            return;
-
+    _addSwitcherToApp: function(actorBuilder, session) {
         session.actorBuilder = actorBuilder;
 
         this._animateToBuilder(session);
@@ -178,9 +180,6 @@ const CodingManager = new Lang.Class({
     },
 
     _clearBuilderSession: function(session) {
-        let tracker = Shell.WindowTracker.get_default();
-        tracker.untrack_coding_app_window(session.actorBuilder.meta_window);
-
         if (session.positionChangedIdBuilder !== 0) {
             session.actorBuilder.meta_window.disconnect(session.positionChangedIdBuilder);
             session.positionChangedIdBuilder = 0;
@@ -217,6 +216,8 @@ const CodingManager = new Lang.Class({
         if (!session.actorBuilder) {
             let tracker = Shell.WindowTracker.get_default();
             tracker.track_coding_app_window(session.actorApp.meta_window);
+            this._watchdogId = Mainloop.timeout_add(WATCHDOG_TIME,
+                                                    Lang.bind(this, this._watchdogTimeout));
             // Pass the manifest path to Builder
             // this._getManifestPath(session.actorApp.meta_window.get_flatpak_id()));
             Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
@@ -231,6 +232,21 @@ const CodingManager = new Lang.Class({
                           Gtk.DirectionType.LEFT);
             session.buttonApp.hide();
             session.buttonBuilder.show();
+        }
+    },
+
+    _watchdogTimeout: function() {
+        let tracker = Shell.WindowTracker.get_default();
+        tracker.untrack_coding_app_window();
+        this._watchdogId = 0;
+
+        return false;
+    },
+
+    _cancelWatchdog: function() {
+        if (this._watchdogId !== 0) {
+            Mainloop.source_remove(this._watchdogId);
+            this._watchdogId = 0;
         }
     },
 
