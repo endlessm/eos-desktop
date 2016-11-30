@@ -3,6 +3,7 @@
 const Clutter = imports.gi.Clutter;
 const Flatpak = imports.gi.Flatpak;
 const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
@@ -219,12 +220,19 @@ const CodingManager = new Lang.Class({
 
     _switchToBuilder: function(actor, event, session) {
         if (!session.actorBuilder) {
+            // get the manifest of the application
+            // return early before we setup anything
+            let appManifest = this._getAppManifest(session.actorApp.meta_window.get_flatpak_id());
+            if (!appManifest) {
+                log("Error, coding: No manifest could be found for the app: " + session.actorApp.meta_window.get_flatpak_id());
+                return;
+            }
+
             let tracker = Shell.WindowTracker.get_default();
             tracker.track_coding_app_window(session.actorApp.meta_window);
             this._watchdogId = Mainloop.timeout_add(WATCHDOG_TIME,
                                                     Lang.bind(this, this._watchdogTimeout));
-            // Pass the manifest path to Builder
-            // this._getManifestPath(session.actorApp.meta_window.get_flatpak_id()));
+
             Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
             animateBounce(session.buttonApp);
         } else {
@@ -579,62 +587,22 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _getBuildManifestsAt: function(location) {
-        function generateArrayFromFunction(func) {
-	        let arr = [];
-	        let result;
-
-	        while ((result = func.apply(this, arguments)) !== null) {
-		        arr.push(result);
-	        }
-
-	        return arr;
-	    }
-
-        function listDirectory(directory) {
-	        let file = Gio.File.new_for_path(directory);
-	        let enumerator = file.enumerate_children('standard::name', 0, null);
-	        let directoryInfoList = generateArrayFromFunction(() => enumerator.next_file(null));
-	        return directoryInfoList.map(function(info) {
-	            return {
-	                name: info.get_name(),
-	                type: info.get_file_type()
-	            };
-	        });
-	    }
-
-        location = location + '/app/';
-        let manifests = [];
-        let apps = listDirectory(location);
-        return manifests = apps.map(function(app) {
-            return location + app.name + '/current/active/files/manifest.json';
-        });
-    },
-
-    _getManifestPath: function(flatpakID) {
-        // Looks for the manifest of the app in the user and
-        // system installation path for flatpaks.
-        function readFileContents(path) {
-            let cmdlineFile = Gio.File.new_for_path(path);
-            let [ok, contents, etag] = cmdlineFile.load_contents(null);
-            return contents;
+    _getAppManifest: function(flatpakID) {
+        function getAppManifestAt(location, flatpakID) {
+            let manifestFile = Gio.File.new_for_path(GLib.build_filenamev([location, '/app/', flatpakID, '/current/active/files/manifest.json']));
+            if (!manifestFile.query_exists(null))
+                return null;
+            return manifestFile;
         }
 
-        let flatpakUserPath = Flatpak.Installation.new_user(null).get_path().get_path();
-        let flatpakSystemPath = Flatpak.Installation.new_system(null).get_path().get_path();
-        let manifests = this._getBuildManifestsAt(flatpakUserPath).concat(this._getBuildManifestsAt(flatpakSystemPath));
+        let manifestFile = getAppManifestAt(Flatpak.Installation.new_user(null).get_path().get_path(), flatpakID);
+        if (manifestFile)
+	        return manifestFile;
 
-        for (let j = 0; j < manifests.length; j++) {
-            let manifest;
-            try {
-                manifest = JSON.parse(readFileContents(manifests[j]));
-            } catch(err) {
-                logError(err, ' No build manifest found at ' + manifests[j]);
-                continue;
-            }
-            if (manifest.id === flatpakID)
-                return manifests[j];
-        }
+        manifestFile = getAppManifestAt(Flatpak.Installation.new_system(null).get_path().get_path(), flatpakID);
+        if (manifestFile)
+	        return manifestFile;
+
         return null;
     }
 });
