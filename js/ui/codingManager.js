@@ -358,39 +358,17 @@ const CodingManager = new Lang.Class({
     },
 
     _windowMinimized: function(shellwm, actor, session) {
-        // take the actor that was minimized and emit a minimized
-        // signal for it, though setting a flag internally so that
-        // we don't re-enter this signal handler.
-        if (this._processingWindowMinimized === actor) {
-            this._processingWindowMinimized = null;
-            return;
-        }
-
-        if (actor === session.actorApp && session.actorBuilder) {
-            this._processingWindowMinimized = session.actorBuilder;
+        if (actor === session.actorApp && session.actorBuilder)
             session.actorBuilder.meta_window.minimize();
-        } else if (actor === session.actorBuilder && session.actorApp) {
-            this._processingWindowMinimized = session.actorApp;
+        else if (actor === session.actorBuilder && session.actorApp)
             session.actorApp.meta_window.minimize();
-        }
     },
 
     _windowUnminimized: function(shellwm, actor, session) {
-        // take the actor that was unminimized and emit a minimized
-        // signal for it, though setting a flag internally so that
-        // we don't re-enter this signal handler.
-        if (this._processingWindowUnminimized === actor) {
-            this._processingWindowUnminimized = null;
-            return;
-        }
-
-        if (actor === session.actorApp && session.actorBuilder) {
-            this._processingWindowUnminimized = session.actorBuilder;
+        if (actor === session.actorApp && session.actorBuilder)
             session.actorBuilder.meta_window.unminimize();
-        } else if (actor === session.actorBuilder && session.actorApp) {
-            this._processingWindowUnminimized = session.actorApp;
+        else if (actor === session.actorBuilder && session.actorApp)
             session.actorApp.meta_window.unminimize();
-        }
     },
 
     _windowRestacked: function(overview, stackIndices, session) {
