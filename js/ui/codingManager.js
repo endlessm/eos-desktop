@@ -115,11 +115,10 @@ const CodingManager = new Lang.Class({
 
         let button = this._addButton(window);
 
-        let idx = this._sessions.push({buttonApp: button,
-                                       actorApp: actorApp,
-                                       previousFocusedWindow: null});
-
-        let session = this._sessions[idx-1];
+        let session = { buttonApp: button,
+                        actorApp: actorApp,
+                        previousFocusedWindow: null };
+        this._sessions.push(session);
 
         button.connect('clicked', Lang.bind(this, this._switchToBuilder, session));
         session.positionChangedIdApp = window.connect('position-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
@@ -508,7 +507,7 @@ const CodingManager = new Lang.Class({
         dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
         src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
 
-         if (srcGeometry.equal(dstGeometry))
+        if (srcGeometry.equal(dstGeometry))
             return;
 
         dst.meta_window.move_resize_frame(false,
