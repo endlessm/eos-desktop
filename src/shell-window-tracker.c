@@ -188,7 +188,8 @@ gboolean shell_window_tracker_is_speedwagon_window (MetaWindow *window)
  * Track a coding app to pair with an associated GNOME Builder window.
  *
  */
-void shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker,
+void
+shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker,
                                                    MetaWindow *app_window)
 {
   tracker->coding_app = app_window;
@@ -201,7 +202,8 @@ void shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker,
  * Untrack the coding app.
  *
  */
-void shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker)
+void
+shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker)
 {
   tracker->coding_app = NULL;
 }
