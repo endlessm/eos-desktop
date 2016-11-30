@@ -112,10 +112,7 @@ const CodingManager = new Lang.Class({
     _addSwitcherToBuilder: function(actorApp) {
         let window = actorApp.meta_window;
 
-        let button = new St.Button({ style_class: 'view-source' });
-        let rect = window.get_frame_rect();
-        button.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
-        Main.layoutManager.addChrome(button);
+        let button = this._addButton(window);
 
         let idx = this._sessions.push({buttonApp: button,
                                        actorApp: actorApp,
@@ -129,6 +126,14 @@ const CodingManager = new Lang.Class({
         session.windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowAppRestacked, session));
         session.windowMinimizedId = global.window_manager.connect('minimize', Lang.bind(this, this._windowMinimized, session));
         session.windowUnminimizedId = global.window_manager.connect('unminimize', Lang.bind(this, this._windowUnminimized, session));
+    },
+
+    _addButton: function(window) {
+        let button = new St.Button({ style_class: 'view-source' });
+        let rect = window.get_frame_rect();
+        button.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
+        Main.layoutManager.addChrome(button);
+        return button;
     },
 
     _addSwitcherToApp: function(actorBuilder, session) {
@@ -273,18 +278,15 @@ const CodingManager = new Lang.Class({
         return currentSession[0];
     },
 
-    _addButton: function(session) {
+    _addBuilderButton: function(session) {
         let window = session.actorBuilder.meta_window;
-        let button = new St.Button({ style_class: 'view-source' });
-        let rect = window.get_frame_rect();
-        button.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
-        Main.layoutManager.addChrome(button);
+
+        let button = this._addButton(window);
+        session.buttonBuilder = button;
         button.connect('clicked', Lang.bind(this, this._switchToApp, session));
 
         session.positionChangedIdBuilder = window.connect('position-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
         session.sizeChangedIdBuilder = window.connect('size-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
-
-        session.buttonBuilder = button;
     },
 
     _animateToBuilder: function(session) {
@@ -309,7 +311,7 @@ const CodingManager = new Lang.Class({
             session.actorBuilder.disconnect(session.firstFrameConnection);
             session.firstFrameConnection = null;
 
-            this._addButton(session);
+            this._addBuilderButton(session);
             session.buttonBuilder.show();
             session.buttonApp.hide();
 
