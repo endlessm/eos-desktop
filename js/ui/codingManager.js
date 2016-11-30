@@ -223,7 +223,7 @@ const CodingManager = new Lang.Class({
             // return early before we setup anything
             let appManifest = this._getAppManifest(session.actorApp.meta_window.get_flatpak_id());
             if (!appManifest) {
-                log("Error, coding: No manifest could be found for the app: " + session.actorApp.meta_window.get_flatpak_id());
+                log('Error, coding: No manifest could be found for the app: ' + session.actorApp.meta_window.get_flatpak_id());
                 return;
             }
 
@@ -555,7 +555,8 @@ const CodingManager = new Lang.Class({
 
     _getAppManifest: function(flatpakID) {
         function getAppManifestAt(location, flatpakID) {
-            let manifestFile = Gio.File.new_for_path(GLib.build_filenamev([location, '/app/', flatpakID, '/current/active/files/manifest.json']));
+            let manifestFile = Gio.File.new_for_path(GLib.build_filenamev([location, 'app', flatpakID, 'current',
+                                                                           'active', 'files', 'manifest.json']));
             if (!manifestFile.query_exists(null))
                 return null;
             return manifestFile;
