@@ -10,6 +10,8 @@ const CodingChatboxTextService = new Lang.Class({
     Name: 'CodingChatboxTextService',
 
     _init: function() {
+        this._signalHandlers = {};
+
         this._eventHandlers = {
             'move-window': Lang.bind(this, this._waitForNextWindowMove),
             'stop-moving-windows': Lang.bind(this, this._waitForNoWindowsToMove)
@@ -60,7 +62,6 @@ const CodingChatboxTextService = new Lang.Class({
             return;
         }
 
-        this._signalHandlers = {};
         this._service.connect('notify::currently-listening-for-events',
                               Lang.bind(this, this._updateListeningForEvents));
         this._updateListeningForEvents();
