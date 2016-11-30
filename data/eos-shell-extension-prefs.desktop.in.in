@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-_Name=GNOME Shell Extension Preferences
+_Name=Extensions
 _Comment=Configure GNOME Shell Extensions
 Exec=@bindir@/eos-shell-extension-prefs %u
 X-GNOME-Bugzilla-Bugzilla=GNOME
@@ -9,4 +9,3 @@ X-GNOME-Bugzilla-Component=extensions
 X-GNOME-Bugzilla-Version=@VERSION@
 Categories=GNOME;GTK;
 OnlyShowIn=GNOME;
-NoDisplay=true
