@@ -83,7 +83,7 @@ const CodingManager = new Lang.Class({
 
         this._cancelWatchdog();
 
-        let session = this._sessions[this._sessions.length-1];
+        let session = this._sessions[this._sessions.length - 1];
         if (session.actorBuilder)
             return false;
         let tracker = Shell.WindowTracker.get_default();
