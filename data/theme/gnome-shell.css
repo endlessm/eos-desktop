@@ -3287,7 +3287,7 @@ StScrollBar StButton#vhandle:active {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-right: 20px;
-    -shell-grid-horizontal-item-size: 80px;
+    -shell-grid-horizontal-item-size: 90px;
     -shell-grid-vertical-item-size: 90px;
 }
 
@@ -3376,3 +3376,13 @@ StScrollBar StButton#vhandle:active {
 
 .no-networks-box {
   spacing: 12px; }
+
+.popup-link {
+    padding: 10px 0px;
+    color: #888888;
+    text-decoration: underline;
+}
+
+.popup-link:hover {
+    color: #cccccc;
+}
