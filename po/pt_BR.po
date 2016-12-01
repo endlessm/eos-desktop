@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-28 16:06-0800\n"
+"POT-Creation-Date: 2016-12-01 12:50-0800\n"
 "PO-Revision-Date: 2016-08-31 21:39+0000\n"
 "Last-Translator: Philip Chimento <philip.chimento@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/endless-mobile-"
@@ -171,7 +171,7 @@ msgstr "Janela de início de sessão"
 msgid "Power"
 msgstr "Ligar"
 
-#: ../js/gdm/powerMenu.js:93 ../js/ui/status/system.js:555
+#: ../js/gdm/powerMenu.js:93 ../js/ui/status/system.js:407
 msgid "Suspend"
 msgstr "Suspender"
 
@@ -179,7 +179,7 @@ msgstr "Suspender"
 msgid "Restart"
 msgstr "Reiniciar"
 
-#: ../js/gdm/powerMenu.js:103 ../js/ui/status/system.js:558
+#: ../js/gdm/powerMenu.js:103 ../js/ui/status/system.js:410
 msgid "Power Off"
 msgstr "Desligar"
 
@@ -686,7 +686,7 @@ msgstr "Relógios mundiais"
 msgid "Calendar"
 msgstr "Calendário"
 
-#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
+#: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:42
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
@@ -930,16 +930,20 @@ msgstr "Desfazer"
 msgid "Overview"
 msgstr "Visão geral"
 
-#: ../js/ui/panel.js:346
+#: ../js/ui/panel.js:448
 msgctxt "System menu in the top bar"
 msgid "System"
 msgstr "Sistema"
 
-#: ../js/ui/panel.js:413
+#: ../js/ui/panel.js:548
+msgid "Show all installed apps"
+msgstr "Mostrar todos os programas instalados"
+
+#: ../js/ui/panel.js:574
 msgid "User"
 msgstr "Sua Conta"
 
-#: ../js/ui/panel.js:514
+#: ../js/ui/panel.js:675
 msgid "Taskbar"
 msgstr "Barra de tarefas"
 
@@ -1344,39 +1348,30 @@ msgstr "%d %%"
 msgid "Airplane Mode On"
 msgstr "Modo avião ligado"
 
-#: ../js/ui/status/system.js:25
+#: ../js/ui/status/system.js:22
 msgid "Help"
 msgstr "Ajuda"
 
-#: ../js/ui/status/system.js:472
+#: ../js/ui/status/system.js:373
 msgid "Switch User"
 msgstr "Trocar usuário"
 
-#: ../js/ui/status/system.js:477
+#: ../js/ui/status/system.js:378
 msgid "Log Out"
 msgstr "Encerrar sessão"
 
-#: ../js/ui/status/system.js:482
-msgid "Account Settings"
-msgstr "Configurações de conta"
-
-#: ../js/ui/status/system.js:514
-msgid "Recommended Apps for You"
-msgstr "Programas recomendados para você"
-
-#: ../js/ui/status/system.js:524
-msgid "Show all apps"
-msgstr "Mostrar todos os programas"
-
-#: ../js/ui/status/system.js:543
+#. this._helpAction = this._createActionButtonForIconPath(YELP_TEXT, '/theme/help-symbolic.svg');
+#. this._helpAction.connect('clicked', Lang.bind(this, this._onHelpClicked));
+#. item.actor.add(this._helpAction, { expand: true, x_fill: false })
+#: ../js/ui/status/system.js:395
 msgid "Settings"
 msgstr "Configurações"
 
-#: ../js/ui/status/system.js:547
+#: ../js/ui/status/system.js:399
 msgid "Orientation Lock"
 msgstr "Bloqueio da orientação"
 
-#: ../js/ui/status/system.js:551
+#: ../js/ui/status/system.js:403
 msgid "Lock"
 msgstr "Bloquear"
 
@@ -1498,6 +1493,12 @@ msgstr "A senha não pode estar em branco"
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
 msgstr "O diálogo de autenticação foi descartado pelo usuário"
+
+#~ msgid "Account Settings"
+#~ msgstr "Configurações de conta"
+
+#~ msgid "Recommended Apps for You"
+#~ msgstr "Programas recomendados para você"
 
 #, fuzzy
 #~ msgctxt "System menu in the top bar"
