@@ -58,14 +58,16 @@ const AppFavorites = new Lang.Class({
     },
 
     getFavorites: function() {
-        let ret = [];
-        for (let id in this._favorites)
-            ret.push(this._favorites[id]);
-        return ret;
+        // let ret = [];
+        // for (let id in this._favorites)
+        //     ret.push(this._favorites[id]);
+        // return ret;
+        return [];
     },
 
     isFavorite: function(appId) {
-        return appId in this._favorites;
+        // return appId in this._favorites;
+        return false;
     },
 
     _addFavorite: function(appId, pos) {
