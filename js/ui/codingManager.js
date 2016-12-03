@@ -350,10 +350,14 @@ const CodingManager = new Lang.Class({
     },
 
     _windowMinimized: function(shellwm, actor, session) {
-        if (actor === session.actorApp && session.actorBuilder)
+        if (actor === session.actorApp && session.actorBuilder){
             session.actorBuilder.meta_window.minimize();
-        else if (actor === session.actorBuilder && session.actorApp)
+            session.buttonBuilder.hide();
+        }
+        else if (actor === session.actorBuilder && session.actorApp){
             session.actorApp.meta_window.minimize();
+            session.buttonApp.hide();
+        }
     },
 
     _windowUnminimized: function(shellwm, actor, session) {
