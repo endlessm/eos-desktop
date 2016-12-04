@@ -243,8 +243,7 @@ const CodingManager = new Lang.Class({
             this._animate(session.actorApp,
                           session.actorBuilder,
                           Gtk.DirectionType.LEFT);
-            session.buttonApp.hide();
-            session.buttonBuilder.show();
+            this._animateButtons(session.buttonApp, session.buttonBuilder);
         }
     },
 
@@ -273,8 +272,7 @@ const CodingManager = new Lang.Class({
         this._animate(session.actorBuilder,
                       session.actorApp,
                       Gtk.DirectionType.RIGHT);
-        session.buttonBuilder.hide();
-        session.buttonApp.show();
+        this._animateButtons(session.buttonBuilder, session.buttonApp);
     },
 
     _getSession: function(actor) {
@@ -316,8 +314,7 @@ const CodingManager = new Lang.Class({
             session.actorBuilder.disconnect(firstFrameConnection);
 
             this._addBuilderButton(session);
-            session.buttonBuilder.show();
-            session.buttonApp.hide();
+            this._animateButtons(session.buttonApp, session.buttonBuilder);
 
             return false;
         }));
@@ -381,14 +378,7 @@ const CodingManager = new Lang.Class({
         let previousFocused = session.previousFocusedWindow;
         session.previousFocusedWindow = focusedWindow;
 
-        // make sure we hide the button in any other case as on
-        // top of the App and Builder window
-        session.buttonApp.hide();
-        if (session.buttonBuilder)
-            session.buttonBuilder.hide();
-
         if (focusedWindow === session.actorApp.meta_window) {
-            session.buttonApp.show();
             if (session.actorBuilder && session.actorBuilder.meta_window === previousFocused) {
                 // make sure we do not rotate when a rotation is running
                 if (this._rotateInActors.length || this._rotateOutActors.length) {
@@ -400,21 +390,25 @@ const CodingManager = new Lang.Class({
                 this._animate(session.actorBuilder,
                               session.actorApp,
                               Gtk.DirectionType.RIGHT);
+                this._animateButtons(session.buttonBuilder, session.buttonApp);
                 return;
             }
+            session.buttonApp.show();
             session.actorApp.show();
             // hide the underlying window to prevent glitches when resizing
             // the one on top, we do this for the animated switch case already
             if (session.actorBuilder)
                 session.actorBuilder.hide();
             return;
+        } else {
+            if (session.actorApp.meta_window === previousFocused)
+                session.buttonApp.hide();
         }
 
         if (!session.actorBuilder)
             return;
+
         if (focusedWindow === session.actorBuilder.meta_window) {
-            if (session.buttonBuilder)
-                session.buttonBuilder.show();
             if (session.actorApp.meta_window === previousFocused) {
                 // make sure we do not rotate when a rotation is running
                 if (this._rotateInActors.length || this._rotateOutActors.length) {
@@ -426,13 +420,18 @@ const CodingManager = new Lang.Class({
                 this._animate(session.actorApp,
                               session.actorBuilder,
                               Gtk.DirectionType.LEFT);
-                session.buttonBuilder.show();
+                this._animateButtons(session.buttonApp, session.buttonBuilder);
             } else {
+                if (session.buttonBuilder)
+                    session.buttonBuilder.show();
                 session.actorBuilder.show();
                 // hide the underlying window to prevent glitches when resizing
                 // the one on top, we do this for the animated switch case already
                 session.actorApp.hide();
             }
+        } else{
+            if (session.actorBuilder.meta_window === previousFocused)
+                session.buttonBuilder.hide();
         }
     },
 
@@ -518,6 +517,27 @@ const CodingManager = new Lang.Class({
         Tweener.addTween(dst, {
             opacity: 255,
             time: WINDOW_ANIMATION_TIME,
+            transition: 'linear'
+        });
+    },
+
+    _animateButtons: function(src, dst) {
+        src.show();
+        dst.show();
+        dst.opacity = 0;
+        Tweener.addTween(src, {
+            opacity: 0,
+            time: WINDOW_ANIMATION_TIME,
+            transition: 'linear',
+            onComplete: function(button) { button.hide();
+                                           button.opacity = 255; },
+            onCompleteParams: [src]
+        });
+
+        Tweener.addTween(dst, {
+            opacity: 255,
+            delay: WINDOW_ANIMATION_TIME * 4,
+            time: WINDOW_ANIMATION_TIME * 4,
             transition: 'linear'
         });
     },
