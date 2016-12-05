@@ -23,8 +23,8 @@ const ICON_BOUNCE_ANIMATION_TIME = 1.0;
 const ICON_BOUNCE_ANIMATION_TYPE_1 = 'easeOutSine';
 const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
 
-const BUTTON_OFFSET_X = 50;
-const BUTTON_OFFSET_Y = 50;
+const BUTTON_OFFSET_X = 33;
+const BUTTON_OFFSET_Y = 40;
 
 function animateBounce(actor) {
     Tweener.removeTweens(actor);
@@ -120,7 +120,7 @@ const CodingManager = new Lang.Class({
                         previousFocusedWindow: null };
         this._sessions.push(session);
 
-        button.connect('clicked', Lang.bind(this, this._switchToBuilder, session));
+        button.connect('button-press-event', Lang.bind(this, this._switchToBuilder, session));
         session.positionChangedIdApp = window.connect('position-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
         session.sizeChangedIdApp = window.connect('size-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
 
@@ -130,7 +130,17 @@ const CodingManager = new Lang.Class({
     },
 
     _addButton: function(window) {
-        let button = new St.Button({ style_class: 'view-source' });
+        let button = new St.Bin({ style_class: 'view-source',
+                                  reactive: true,
+                                  can_focus: true,
+                                  x_fill: true,
+                                  y_fill: false,
+                                  track_hover: true });
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/rotate.svg');
+        let gicon = new Gio.FileIcon({ file: iconFile });
+        let icon = new St.Icon({ style_class: 'view-source-icon',
+                                 gicon: gicon });
+        button.set_child(icon);
         let rect = window.get_frame_rect();
         button.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         Main.layoutManager.addChrome(button);
@@ -289,7 +299,7 @@ const CodingManager = new Lang.Class({
 
         let button = this._addButton(window);
         session.buttonBuilder = button;
-        button.connect('clicked', Lang.bind(this, this._switchToApp, session));
+        button.connect('button-press-event', Lang.bind(this, this._switchToApp, session));
 
         session.positionChangedIdBuilder = window.connect('position-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
         session.sizeChangedIdBuilder = window.connect('size-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
