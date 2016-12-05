@@ -381,16 +381,21 @@ const CodingManager = new Lang.Class({
             return;
 
         // we get the signal for the same window switch twice
-        if (focusedWindow === session.previousFocusedWindow)
+        let previousFocused = session.previousFocusedWindow;
+        if (focusedWindow === previousFocused)
             return;
 
         // keep track of the previous focused window so
         // that we can show the animation accordingly
-        let previousFocused = session.previousFocusedWindow;
         session.previousFocusedWindow = focusedWindow;
 
-        if (focusedWindow === session.actorApp.meta_window) {
-            if (session.actorBuilder && session.actorBuilder.meta_window === previousFocused) {
+        let appWindow = session.actorApp.meta_window;
+        let builderWindow = null;
+        if (session.actorBuilder)
+            builderWindow = session.actorBuilder.meta_window;
+
+        if (appWindow === focusedWindow) {
+            if (builderWindow && builderWindow === previousFocused) {
                 // make sure we do not rotate when a rotation is running
                 if (this._rotateInActors.length || this._rotateOutActors.length) {
                     return;
@@ -411,16 +416,15 @@ const CodingManager = new Lang.Class({
             if (session.actorBuilder)
                 session.actorBuilder.hide();
             return;
-        } else {
-            if (session.actorApp.meta_window === previousFocused)
-                session.buttonApp.hide();
+        } else if (appWindow === previousFocused) {
+            session.buttonApp.hide();
         }
 
         if (!session.actorBuilder)
             return;
 
-        if (focusedWindow === session.actorBuilder.meta_window) {
-            if (session.actorApp.meta_window === previousFocused) {
+        if (builderWindow === focusedWindow) {
+            if (appWindow === previousFocused) {
                 // make sure we do not rotate when a rotation is running
                 if (this._rotateInActors.length || this._rotateOutActors.length) {
                     return;
@@ -440,9 +444,8 @@ const CodingManager = new Lang.Class({
                 // the one on top, we do this for the animated switch case already
                 session.actorApp.hide();
             }
-        } else{
-            if (session.actorBuilder.meta_window === previousFocused)
-                session.buttonBuilder.hide();
+        } else if (builderWindow === previousFocused) {
+            session.buttonBuilder.hide();
         }
     },
 
