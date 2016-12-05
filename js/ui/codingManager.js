@@ -286,12 +286,13 @@ const CodingManager = new Lang.Class({
     },
 
     _getSession: function(actor) {
-        let currentSession = this._sessions.filter(function(session) {
-            return (session.actorApp === actor || session.actorBuilder === actor);
-        });
-        if (currentSession.length === 0)
-            return null;
-        return currentSession[0];
+        for (let i = 0; i < this._sessions.length; i++) {
+            let session = this._sessions[i];
+            if (session.actorApp === actor || session.actorBuilder === actor)
+                return session;
+        }
+
+        return null;
     },
 
     _addBuilderButton: function(session) {
