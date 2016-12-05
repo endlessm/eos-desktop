@@ -80,7 +80,7 @@ msgstr ""
 
 #: ../js/gdm/loginDialog.js:636
 msgid "Forgot password?"
-msgstr ""
+msgstr "忘記帳號密碼"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -196,7 +196,7 @@ msgstr ""
 
 #: ../js/ui/appDisplay.js:1696
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: ../js/ui/appDisplay.js:1702
 msgid ""
@@ -555,7 +555,7 @@ msgstr ""
 
 #: ../js/ui/components/updaterManager.js:206
 msgid "Download now"
-msgstr ""
+msgstr "下載"
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
