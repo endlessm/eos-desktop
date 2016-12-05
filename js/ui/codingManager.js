@@ -46,7 +46,7 @@ function animateBounce(actor) {
         time: ICON_BOUNCE_ANIMATION_TIME * 0.35,
         transition: ICON_BOUNCE_ANIMATION_TYPE_2,
         delay: ICON_BOUNCE_ANIMATION_TIME * 0.25 + 0.3,
-        onComplete: function() {animateBounce(actor);}
+        onComplete: function() { animateBounce(actor); }
     });
 }
 
@@ -361,8 +361,7 @@ const CodingManager = new Lang.Class({
         if (actor === session.actorApp && session.actorBuilder) {
             session.actorBuilder.meta_window.minimize();
             session.buttonBuilder.hide();
-        }
-        else if (actor === session.actorBuilder && session.actorApp) {
+        } else if (actor === session.actorBuilder && session.actorApp) {
             session.actorApp.meta_window.minimize();
             session.buttonApp.hide();
         }
@@ -397,9 +396,9 @@ const CodingManager = new Lang.Class({
         if (appWindow === focusedWindow) {
             if (builderWindow && builderWindow === previousFocused) {
                 // make sure we do not rotate when a rotation is running
-                if (this._rotateInActors.length || this._rotateOutActors.length) {
+                if (this._rotateInActors.length || this._rotateOutActors.length)
                     return;
-                }
+
                 this._prepareAnimate(session.actorBuilder,
                                      session.actorApp,
                                      Gtk.DirectionType.RIGHT);
@@ -426,9 +425,9 @@ const CodingManager = new Lang.Class({
         if (builderWindow === focusedWindow) {
             if (appWindow === previousFocused) {
                 // make sure we do not rotate when a rotation is running
-                if (this._rotateInActors.length || this._rotateOutActors.length) {
+                if (this._rotateInActors.length || this._rotateOutActors.length)
                     return;
-                }
+
                 this._prepareAnimate(session.actorApp,
                                      session.actorBuilder,
                                      Gtk.DirectionType.LEFT);
@@ -604,11 +603,11 @@ const CodingManager = new Lang.Class({
 
         let manifestFile = getAppManifestAt(Flatpak.Installation.new_user(null).get_path().get_path(), flatpakID);
         if (manifestFile)
-	        return manifestFile;
+	    return manifestFile;
 
         manifestFile = getAppManifestAt(Flatpak.Installation.new_system(null).get_path().get_path(), flatpakID);
         if (manifestFile)
-	        return manifestFile;
+	    return manifestFile;
 
         return null;
     }
