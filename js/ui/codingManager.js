@@ -535,6 +535,7 @@ const CodingManager = new Lang.Class({
         src.show();
         dst.show();
         dst.opacity = 0;
+        src.opacity = 255;
         Tweener.addTween(src, {
             opacity: 0,
             time: WINDOW_ANIMATION_TIME,
