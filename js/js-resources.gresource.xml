@@ -35,6 +35,7 @@
     <file>ui/calendar.js</file>
     <file>ui/checkBox.js</file>
     <file>ui/closeButton.js</file>
+    <file>ui/codingManager.js</file>
     <file>ui/ctrlAltTab.js</file>
     <file>ui/dash.js</file>
     <file>ui/dateMenu.js</file>

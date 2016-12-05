@@ -16,6 +16,7 @@ const Signals = imports.signals;
 const St = imports.gi.St;
 
 const AltTab = imports.ui.altTab;
+const CodingManager = imports.ui.codingManager;
 const ForceAppExitDialog = imports.ui.forceAppExitDialog;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Layout = imports.ui.layout;
@@ -38,20 +39,6 @@ const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
 
 const DISPLAY_REVERT_TIMEOUT = 30; // in seconds - keep in sync with mutter
 const ONE_SECOND = 1000; // in ms
-
-const SylvesterServiceIface = '<node> \
-  <interface name="com.endlessm.Sylvester.Service"> \
-    <method name="DownloadSourcesForPID"> \
-      <arg name="pid" direction="in" type="i"/> \
-    </method> \
-    <signal name="RotateBetweenPidWindows"> \
-      <arg name="src" type="i"/> \
-      <arg name="dest" type="i"/> \
-    </signal> \
-  </interface> \
-</node>';
-
-const SylvesterService = Gio.DBusProxy.makeProxyWrapper(SylvesterServiceIface);
 
 const DisplayChangeDialog = new Lang.Class({
     Name: 'DisplayChangeDialog',
@@ -617,6 +604,8 @@ const WindowManager = new Lang.Class({
                                         function () { Main.layoutManager.emit('background-clicked'); });
         }));
 
+        this._codingManager = new CodingManager.CodingManager();
+
         this._switchData = null;
         this._shellwm.connect('kill-switch-workspace', Lang.bind(this, this._switchWorkspaceDone));
         this._shellwm.connect('kill-window-effects', Lang.bind(this, function (shellwm, actor) {
@@ -624,17 +613,8 @@ const WindowManager = new Lang.Class({
             this._unminimizeWindowDone(shellwm, actor);
             this._mapWindowDone(shellwm, actor);
             this._destroyWindowDone(shellwm, actor);
-            this._rotateInCompleted(actor);
-            this._rotateOutCompleted(actor);
-
-            if (actor._firstFrameConnection) {
-                actor.disconnect(actor._firstFrameConnection);
-                this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
-                    return conn !== actor._firstFrameConnection;
-                });
-            }
-
-            actor._firstFrameConnection = null;
+            this._codingManager.rotateInCompleted(actor);
+            this._codingManager.rotateOutCompleted(actor);
         }));
 
         this._shellwm.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
@@ -746,152 +726,6 @@ const WindowManager = new Lang.Class({
         global.display.connect('grab-op-end', Lang.bind(this, this._windowUngrabbed));
 
         this._windowMenuManager = new WindowMenu.WindowMenuManager();
-
-        this._sylvesterListener = new SylvesterService(Gio.DBus.session,
-                                                       'com.endlessm.Sylvester.Service',
-                                                       '/com/endlessm/Sylvester/Service');
-        this._sylvesterListener.connectSignal('RotateBetweenPidWindows',
-                                              Lang.bind(this, this._handleRotateBetweenPidWindows));
-        this._pendingRotateAnimations = [];
-        this._rotateOutActors = [];
-        this._rotateInActors = [];
-        this._firstFrameConnections = [];
-    },
-
-    _handleRotateBetweenPidWindows: function(proxy, sender, [src, dst]) {
-        /**
-         * For a given process id, determine the corresponding window
-         * (if any) and its size.
-         */
-        function pidToActorInfo(pid) {
-            let windowActors = global.get_window_actors().filter(function(windowActor) {
-                return windowActor.get_meta_window().get_pid() == pid;
-            });
-
-            return {
-                window: windowActors.length ? windowActors[0] : null,
-                rect: (windowActors.length ?
-                       windowActors[0].get_meta_window().get_frame_rect() : null),
-                pid: pid,
-            };
-        }
-
-        let srcActorInfo = pidToActorInfo(src);
-        this._pendingRotateAnimations.push({
-            src: srcActorInfo,
-            dst: pidToActorInfo(dst)
-        });
-        this._updateReadyRotateAnimationsWith(srcActorInfo.window);
-    },
-
-    _updateReadyRotateAnimationsWith: function(window) {
-        /* A new window was added. Get its pid and look for any
-         * unsatisfied entries in _pendingRotateAnimations */
-        let pid = window ? window.get_meta_window().get_pid() : null;
-        let lastPendingRotateAnimationsLength = this._pendingRotateAnimations.length;
-        this._pendingRotateAnimations = this._pendingRotateAnimations.filter(Lang.bind(this, function(animationSpec) {
-            let unsatisfiedPids = 0;
-            Object.keys(animationSpec).forEach(function(key) {
-                if (animationSpec[key].window == null) {
-                    if (animationSpec[key].pid == pid) {
-                        animationSpec[key].window = window;
-                    } else {
-                        unsatisfiedPids++;
-                    }
-                }
-            });
-
-            if (unsatisfiedPids != 0) {
-                /* There are still unsatisfied process ID's, keep this metadata around. */
-                return true;
-            }
-
-            animationSpec.dst.window.rotation_angle_y = -180;
-            animationSpec.dst.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-            animationSpec.src.window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-
-            /* We set backface culling to be enabled here so that we can
-             * smootly animate between the two windows. Without expensive
-             * vector projections, there's no way to determine whether a
-             * window's front-face is completely invisible to the user
-             * (this cannot be done just by looking at the angle of the
-             * window because the same angle may show a different visible
-             * face depending on its position in the view frustum).
-             *
-             * What we do here is enable backface culling and rotate both
-             * windows by 180degrees. The effect of this is that the front
-             * and back window will be at opposite rotations at each point
-             * in time and so the exact point at which the first window
-             * becomes invisible is the same point at which the second
-             * window becomes visible. Because no back faces are drawn
-             * there are no visible artifacts in the animation */
-            animationSpec.src.window.set_cull_back_face(true);
-            animationSpec.dst.window.set_cull_back_face(true);
-            animationSpec.dst.window.opacity = 0;
-            let dst_geometry = animationSpec.src.rect;
-            animationSpec.dst.window.get_meta_window().move_resize_frame(false,
-                                                                         dst_geometry.x,
-                                                                         dst_geometry.y,
-                                                                         dst_geometry.width,
-                                                                         dst_geometry.height);
-
-            this._rotateInActors.push(animationSpec.dst.window);
-            this._rotateOutActors.push(animationSpec.src.window);
-
-            /* We wait until the first frame of the window has been drawn
-             * and damage updated in the compositor before we start rotating.
-             *
-             * This way we don't get ugly artifacts when rotating if
-             * a window is slow to draw.
-             */
-            let firstFrameConnection = animationSpec.dst.window.connect('first-frame', Lang.bind(this, function() {
-                /* Tween both windows in a rotation animation at the same time
-                 * with backface culling enabled on both. This will allow for
-                 * a smooth transition. */
-                Tweener.addTween(animationSpec.src.window, {
-                    rotation_angle_y: 180,
-                    time: WINDOW_ANIMATION_TIME * 4,
-                    transition: 'easeOutQuad',
-                    onComplete: Lang.bind(this, function() {
-                        this._rotateOutCompleted(animationSpec.src.window);
-                    })
-                });
-                Tweener.addTween(animationSpec.dst.window, {
-                    rotation_angle_y: 0,
-                    time: WINDOW_ANIMATION_TIME * 4,
-                    transition: 'easeOutQuad',
-                    onComplete: Lang.bind(this, function() {
-                        this._rotateInCompleted(animationSpec.dst.window);
-                    })
-                });
-
-                /* Gently fade the window in, this will paper over
-                 * any artifacts from shadows and the like */
-                Tweener.addTween(animationSpec.dst.window, {
-                    opacity: 255,
-                    time: WINDOW_ANIMATION_TIME,
-                    transition: 'linear'
-                });
-
-                this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
-                    return conn != animationSpec.dst.window._firstFrameConnection;
-                });
-                animationSpec.dst.window.disconnect(animationSpec.dst.window._firstFrameConnection);
-                animationSpec.dst.window._firstFrameConnection = null;
-
-                return false;
-            }));
-
-            /* Save the connection's id on the destination window and in a list too so we can
-             * get rid of it on kill-window-effects later */
-            animationSpec.dst.window._firstFrameConnection = firstFrameConnection;
-            this._firstFrameConnections.push(firstFrameConnection);
-
-            /* This will remove us from pending rotations */
-            return false;
-        }));
-
-        return this._pendingRotateAnimations.length != lastPendingRotateAnimationsLength;
     },
 
     setCustomKeybindingHandler: function(name, modes, handler) {
@@ -1286,10 +1120,11 @@ const WindowManager = new Lang.Class({
             }
         }
 
-        if (this._updateReadyRotateAnimationsWith(actor)) {
+        if (this._codingManager.addBuilderWindow(actor)) {
             shellwm.completed_map(actor);
             return;
         }
+        this._codingManager.addAppWindow(actor);
 
         // for side components, we will hide the overview and then animate
         if (!this._shouldAnimateActor(actor) && !(SideComponent.isSideComponentWindow(window) && Main.overview.visible)) {
@@ -1391,24 +1226,6 @@ const WindowManager = new Lang.Class({
         }
     },
 
-    _rotateInCompleted: function(actor) {
-        if (this._removeEffect(this._rotateInActors, actor)) {
-            Tweener.removeTweens(actor);
-            actor.opacity = 255;
-            actor.rotation_angle_x = 0;
-            actor.set_cull_back_face(false);
-        }
-    },
-
-    _rotateOutCompleted: function(actor) {
-        if (this._removeEffect(this._rotateOutActors, actor)) {
-            Tweener.removeTweens(actor);
-            actor.hide();
-            actor.rotation_angle_x = 0;
-            actor.set_cull_back_face(false);
-        }
-    },
-
     _mapWindowOverwrite : function(shellwm, actor) {
         if (this._removeEffect(this._mapping, actor)) {
             shellwm.completed_map(actor);
@@ -1441,6 +1258,9 @@ const WindowManager = new Lang.Class({
                     Lang.bind(this, this._killAppIfNoWindow, app, pid));
             }
         }
+
+        this._codingManager.removeAppWindow(actor);
+        this._codingManager.removeBuilderWindow(actor);
 
         if (actor._notifyWindowTypeSignalId) {
             window.disconnect(actor._notifyWindowTypeSignalId);
@@ -1832,3 +1652,4 @@ const WindowManager = new Lang.Class({
         }
     },
 });
+

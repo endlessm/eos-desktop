@@ -171,6 +171,16 @@
         for product developers.
       </_description>
     </key>
+    <key name="enable-behind-the-screen" type="b">
+      <default>false</default>
+      <_summary>
+        Whether the behind the screen feature is enabled
+      </_summary>
+      <_description>
+	This allows to modify and run a whitelist of applications
+	using GNOME Builder.
+      </_description>
+    </key>
     <key name="enabled-extensions" type="as">
       <default>[]</default>
       <_summary>Uuids of extensions to enable</_summary>

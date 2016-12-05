@@ -42,6 +42,8 @@
 #define SIDE_COMPONENT_ROLE "eos-side-component"
 #define SPEEDWAGON_ROLE "eos-speedwagon"
 
+#define BUILDER_WINDOW "org.gnome.Builder"
+
 struct _ShellWindowTracker
 {
   GObject parent;
@@ -53,6 +55,8 @@ struct _ShellWindowTracker
 
   /* <int, ShellApp *app> */
   GHashTable *launched_pid_to_app;
+
+  MetaWindow *coding_app;
 };
 
 G_DEFINE_TYPE (ShellWindowTracker, shell_window_tracker, G_TYPE_OBJECT);
@@ -174,6 +178,34 @@ shell_window_tracker_is_window_interesting (MetaWindow *window)
 gboolean shell_window_tracker_is_speedwagon_window (MetaWindow *window)
 {
   return g_strcmp0 (meta_window_get_role (window), SPEEDWAGON_ROLE) == 0;
+}
+
+/**
+ * shell_window_tracker_track_coding_app_window:
+ * @tracker: An app monitor instance
+ * @app_window: A #MetaWindow
+ *
+ * Track a coding app to pair with an associated GNOME Builder window.
+ *
+ */
+void
+shell_window_tracker_track_coding_app_window (ShellWindowTracker *tracker,
+                                                   MetaWindow *app_window)
+{
+  tracker->coding_app = app_window;
+}
+
+/**
+ * shell_window_tracker_untrack_coding_app_window:
+ * @tracker: An app monitor instance
+ *
+ * Untrack the coding app.
+ *
+ */
+void
+shell_window_tracker_untrack_coding_app_window (ShellWindowTracker *tracker)
+{
+  tracker->coding_app = NULL;
 }
 
 /*
@@ -434,6 +466,23 @@ get_app_for_window (ShellWindowTracker    *tracker,
   /* Side components don't have an associated app */
   if (g_strcmp0 (meta_window_get_role (window), SIDE_COMPONENT_ROLE) == 0)
     return NULL;
+
+  /* We do want to associate the GNOME Builder window with
+   * an open app of a coding session */
+  if (g_strcmp0 (meta_window_get_flatpak_id (window), BUILDER_WINDOW) == 0)
+    {
+      if (tracker->coding_app)
+        {
+          result = g_hash_table_lookup (tracker->window_to_app, tracker->coding_app);
+          shell_window_tracker_untrack_coding_app_window (tracker);
+
+          if (result != NULL)
+            {
+              g_object_ref (result);
+              return result;
+            }
+        }
+    }
 
   transient_for = meta_window_get_transient_for (window);
   if (transient_for != NULL)
