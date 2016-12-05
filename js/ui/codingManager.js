@@ -70,6 +70,9 @@ const CodingManager = new Lang.Class({
     },
 
     addAppWindow: function(actor) {
+        if (!global.settings.get_boolean('enable-behind-the-screen'))
+            return;
+
         let window = actor.meta_window;
         if (!this._isCodingApp(window.get_flatpak_id()))
             return;
@@ -78,6 +81,9 @@ const CodingManager = new Lang.Class({
     },
 
     addBuilderWindow: function(actor) {
+        if (!global.settings.get_boolean('enable-behind-the-screen'))
+            return false;
+
         let window = actor.meta_window;
         if (!this._isBuilder(window.get_flatpak_id()))
             return false;

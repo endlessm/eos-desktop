@@ -629,10 +629,8 @@ const WindowManager = new Lang.Class({
             this._destroyWindowDone(shellwm, actor);
             this._rotateInCompleted(actor);
             this._rotateOutCompleted(actor);
-            if (global.settings.get_boolean('enable-behind-the-screen')) {
-                this._codingManager.rotateInCompleted(actor);
-                this._codingManager.rotateOutCompleted(actor);
-            }
+            this._codingManager.rotateInCompleted(actor);
+            this._codingManager.rotateOutCompleted(actor);
             if (actor._firstFrameConnection) {
                 actor.disconnect(actor._firstFrameConnection);
                 this._firstFrameConnections = this._firstFrameConnections.filter(function(conn) {
@@ -1292,13 +1290,11 @@ const WindowManager = new Lang.Class({
             }
         }
 
-        if (global.settings.get_boolean('enable-behind-the-screen')) {
-            if (this._codingManager.addBuilderWindow(actor)) {
-                shellwm.completed_map(actor);
-                return;
-            }
-            this._codingManager.addAppWindow(actor);
+        if (this._codingManager.addBuilderWindow(actor)) {
+            shellwm.completed_map(actor);
+            return;
         }
+        this._codingManager.addAppWindow(actor);
 
         if (this._updateReadyRotateAnimationsWith(actor)) {
             shellwm.completed_map(actor);
@@ -1456,10 +1452,8 @@ const WindowManager = new Lang.Class({
             }
         }
 
-        if (global.settings.get_boolean('enable-behind-the-screen')) {
-            this._codingManager.removeAppWindow(actor);
-            this._codingManager.removeBuilderWindow(actor);
-        }
+        this._codingManager.removeAppWindow(actor);
+        this._codingManager.removeBuilderWindow(actor);
 
         if (actor._notifyWindowTypeSignalId) {
             window.disconnect(actor._notifyWindowTypeSignalId);
