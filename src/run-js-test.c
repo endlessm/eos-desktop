@@ -34,7 +34,6 @@
 #include <gdk/gdkx.h>
 #include <girepository.h>
 #include <gjs/gjs.h>
-#include <gjs/coverage.h>
 #include <gtk/gtk.h>
 
 #include "shell-global.h"
@@ -72,6 +71,7 @@ main(int argc, char **argv)
   ShellGlobal *global;
   GjsContext *js_context;
   GjsCoverage *coverage = NULL;
+  GFile *output;
   char *script;
   const char *filename;
   char *title;
@@ -136,13 +136,11 @@ main(int argc, char **argv)
     if (!coverage_output_path)
       g_error ("--coverage-output is required when taking coverage statistics");
 
-    char *path_to_cache_file = g_build_filename (coverage_output_path,
-                                                 ".internal-gjs-coverage-cache",
-                                                 NULL);
-    coverage = gjs_coverage_new_from_cache ((const gchar **) coverage_prefixes,
-                                            js_context,
-                                            path_to_cache_file);
-    g_free(path_to_cache_file);
+    output = g_file_new_for_commandline_arg (coverage_output_path);
+    coverage = gjs_coverage_new ((const char * const *) coverage_prefixes,
+                                 output,
+                                 js_context);
+    g_object_unref (output);
   }
 
   /* evaluate the script */
@@ -159,7 +157,7 @@ main(int argc, char **argv)
 
   /* Probably doesn't make sense to write statistics on failure */
   if (coverage && code == 0)
-    gjs_coverage_write_statistics (coverage, coverage_output_path);
+    gjs_coverage_write_statistics (coverage);
 
   g_object_unref (js_context);
   g_free (script);
