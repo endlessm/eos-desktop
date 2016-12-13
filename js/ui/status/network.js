@@ -811,6 +811,7 @@ const NMDeviceWireless = new Lang.Class({
         }
 
         this._activeAccessPoint = ap;
+        this._activeNetwork = null;
 
         if (this._activeAccessPoint) {
             this._strengthChangedId = this._activeAccessPoint.connect('notify::strength',
