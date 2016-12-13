@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-29 02:26+0000\n"
-"PO-Revision-Date: 2016-11-22 02:27+0000\n"
+"POT-Creation-Date: 2016-12-06 02:27+0000\n"
+"PO-Revision-Date: 2016-12-06 02:29+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
 "MIME-Version: 1.0\n"
@@ -58,12 +58,12 @@ msgid "Window management and application launching"
 msgstr "विंडो प्रबंधन और अनुप्रयोग लॉन्चिंग"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
-msgid "GNOME Shell Extension Preferences"
-msgstr "गनोम शेल एक्सटेंशन वरीयताएँ"
+msgid "Extensions"
+msgstr ""
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
-msgid "Configure GNOME Shell Extensions"
-msgstr "गनोम शेल एक्सटेंशन विन्यस्त करें"
+msgid "Configure Desktop Extensions"
+msgstr ""
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
@@ -71,7 +71,7 @@ msgid "There was an error loading the preferences dialog for %s:"
 msgstr "%s के लिए वरीयता संवाद लोड करने में एक त्रुटि थी:"
 
 #: ../js/extensionPrefs/main.js:149
-msgid "GNOME Shell Extensions"
+msgid "Desktop Extensions"
 msgstr ""
 
 #: ../js/gdm/loginDialog.js:410
@@ -194,32 +194,32 @@ msgstr "कमांड का विश्लेषण नहीं कर स�
 msgid "Execution of '%s' failed:"
 msgstr "'%s' का निष्पादन विफल:"
 
-#: ../js/ui/appDisplay.js:1187
+#: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
 msgstr "डेस्कटॉप से हटाएं"
 
-#: ../js/ui/appDisplay.js:1696
+#: ../js/ui/appDisplay.js:1708
 msgid "Warning"
 msgstr "चेतावनी"
 
-#: ../js/ui/appDisplay.js:1702
+#: ../js/ui/appDisplay.js:1714
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "फोल्डर डिलीट करने के लिए आपको सबसे पहले उसके भीतर के सभी आयटम को हटाना होगा।"
 
-#: ../js/ui/appDisplay.js:1708
+#: ../js/ui/appDisplay.js:1720
 msgid "We are just trying to keep you safe."
 msgstr "हम आपको सुरक्षित रखने का प्रयास कर रहे हैं।"
 
-#: ../js/ui/appDisplay.js:1714
+#: ../js/ui/appDisplay.js:1726
 msgid "OK"
 msgstr "ठीक"
 
-#: ../js/ui/appDisplay.js:2016
+#: ../js/ui/appDisplay.js:2030
 msgid "More Apps"
 msgstr "अधिक ऐप्स"
 
-#: ../js/ui/appDisplay.js:2025
+#: ../js/ui/appDisplay.js:2039
 msgid "Delete"
 msgstr "डिलीट करें"
 
@@ -995,7 +995,7 @@ msgid "Large Text"
 msgstr "बड़ा पाठ"
 
 #: ../js/ui/status/bluetooth.js:32 ../js/ui/status/bluetooth.js:43
-#: ../js/ui/status/network.js:828
+#: ../js/ui/status/network.js:703
 msgid "Bluetooth"
 msgstr "ब्लूटूथ"
 
@@ -1004,7 +1004,7 @@ msgid "Bluetooth Settings"
 msgstr "ब्लूटूथ सेटिंग्स"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:180
+#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:143
 msgid "hardware disabled"
 msgstr "हार्डवेयर निष्क्रिय"
 
@@ -1032,129 +1032,103 @@ msgstr "क्षेत्र और भाषा सेटिंग्स"
 msgid "Volume, network, battery"
 msgstr "आयतन, संजाल, बैटरी"
 
-#: ../js/ui/status/network.js:103
+#: ../js/ui/status/network.js:75
 msgid "<unknown>"
 msgstr "<अज्ञात>"
 
+#: ../js/ui/status/network.js:128
+msgid "Wi-Fi"
+msgstr "वाई-फाई"
+
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
-#: ../js/ui/status/network.js:202
+#: ../js/ui/status/network.js:165
 msgid "disabled"
 msgstr "अक्षम"
 
 #. Translators: this is for network devices that are physically present but
 #. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:460
+#: ../js/ui/status/network.js:388
 msgid "unmanaged"
 msgstr "अप्रबंधित"
 
-#: ../js/ui/status/network.js:462
+#: ../js/ui/status/network.js:390
 msgid "disconnecting..."
 msgstr "डिसकनेक्ट कर रहा है..."
 
-#: ../js/ui/status/network.js:468 ../js/ui/status/network.js:1550
+#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1342
 msgid "connecting..."
 msgstr "कनेक्ट कर रहा है..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:471 ../js/ui/status/network.js:1553
+#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1345
 msgid "authentication required"
 msgstr "सत्यापन जरूरी"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:481
+#: ../js/ui/status/network.js:407
 msgid "firmware missing"
 msgstr "फर्मवेयर अनुपस्थित"
-
-#. Translators: this is for wired network devices that are physically
-#. disconnected
-#: ../js/ui/status/network.js:488
-msgid "cable unplugged"
-msgstr "केबल प्लग अलग किया गया"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:493
+#: ../js/ui/status/network.js:411
 msgid "unavailable"
 msgstr "अनुपलब्ध"
 
-#: ../js/ui/status/network.js:495 ../js/ui/status/network.js:1555
+#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1347
 msgid "connection failed"
 msgstr "संबंधन विफल"
 
-#: ../js/ui/status/network.js:554 ../js/ui/status/network.js:1439
-#: ../js/ui/status/network.js:1631
+#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1200
 msgid "More…"
 msgstr "अधिक…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:590 ../js/ui/status/network.js:1367
+#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1150
 msgid "Connected (private)"
 msgstr "कनेक्टेड (निजी)"
 
-#: ../js/ui/status/network.js:669
+#: ../js/ui/status/network.js:560
 msgid "Wired"
 msgstr "तारसहित"
 
-#: ../js/ui/status/network.js:670
-msgid "Auto Ethernet"
-msgstr "स्वतः इथरनेट"
-
-#: ../js/ui/status/network.js:697
+#: ../js/ui/status/network.js:580
 msgid "Mobile broadband"
 msgstr "मोबाइल ब्रॉडबैंड"
 
-#. TRANSLATORS: this the automatic wireless connection name (including the
-#. network name)
-#: ../js/ui/status/network.js:863 ../js/ui/status/network.js:1384
-#, javascript-format
-msgid "Auto %s"
-msgstr "स्वतः %s"
-
-#: ../js/ui/status/network.js:865
-msgid "Auto bluetooth"
-msgstr "स्वतः ब्लूटूथ"
-
-#: ../js/ui/status/network.js:1386
-msgid "Auto wireless"
-msgstr "स्वतः बेतार"
-
-#: ../js/ui/status/network.js:1671
+#: ../js/ui/status/network.js:1469
 msgid "Network"
 msgstr "नेटवर्क"
 
-#: ../js/ui/status/network.js:1733
+#: ../js/ui/status/network.js:1526
 msgid "Enable networking"
 msgstr "संजालन सक्रिय"
 
-#: ../js/ui/status/network.js:1775
-msgid "Wi-Fi"
-msgstr "वाई-फाई"
-
-#: ../js/ui/status/network.js:1794
+#: ../js/ui/status/network.js:1584
 msgid "Network Settings"
 msgstr "नेटवर्क सेटिंग्स"
 
-#: ../js/ui/status/network.js:1811
+#: ../js/ui/status/network.js:1601
 msgid "Network Manager"
 msgstr "संजाल प्रबंधक"
 
-#: ../js/ui/status/network.js:1901
+#: ../js/ui/status/network.js:1691
 msgid "Connection failed"
 msgstr "कनेक्शन असफल"
 
-#: ../js/ui/status/network.js:1902
+#: ../js/ui/status/network.js:1692
 msgid "Activation of network connection failed"
 msgstr "संजाल कनेक्शन का सक्रियन असफल"
 
-#: ../js/ui/status/network.js:2286
+#: ../js/ui/status/network.js:2053
 msgid "Networking is disabled"
 msgstr "संजालन निष्क्रिय"
 
@@ -1266,21 +1240,21 @@ msgstr "अनुप्रयोग"
 msgid "'%s' is ready"
 msgstr "'%s' तैयार है"
 
-#: ../js/ui/windowManager.js:84
+#: ../js/ui/windowManager.js:71
 msgid "Do you want to keep these display settings?"
 msgstr "क्या आप इस प्रदर्शन जमावट को रखना चाहते हैं?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:103
+#: ../js/ui/windowManager.js:90
 msgid "Revert Settings"
 msgstr "सेटिंग्स में वापस जाएँ"
 
-#: ../js/ui/windowManager.js:107
+#: ../js/ui/windowManager.js:94
 msgid "Keep Changes"
 msgstr "परिवर्तन बनाए रखें"
 
-#: ../js/ui/windowManager.js:125
+#: ../js/ui/windowManager.js:112
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-29 02:26+0000\n"
-"PO-Revision-Date: 2016-11-22 02:27+0000\n"
+"POT-Creation-Date: 2016-12-06 02:27+0000\n"
+"PO-Revision-Date: 2016-12-06 02:29+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Kannada (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/kn/)\n"
 "MIME-Version: 1.0\n"
@@ -53,12 +53,12 @@ msgid "Window management and application launching"
 msgstr "ಕಿಟಕಿ ನಿರ್ವಹಣೆ ಹಾಗು ಅನ್ವಯವನ್ನು ಆರಂಭಿಸುವಿಕೆ"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
-msgid "GNOME Shell Extension Preferences"
-msgstr "GNOME ಶೆಲ್ ಎಕ್ಸ‍ಟೆನ್ಶನ್‍ ಆದ್ಯತೆಗಳು"
+msgid "Extensions"
+msgstr ""
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
-msgid "Configure GNOME Shell Extensions"
-msgstr "GNOME ಶೆಲ್ ಎಕ್ಸ‍ಟೆನ್ಶನ್ಸ್ ಅನ್ನು ಸಂರಚಿಸಿ"
+msgid "Configure Desktop Extensions"
+msgstr ""
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
@@ -66,7 +66,7 @@ msgid "There was an error loading the preferences dialog for %s:"
 msgstr "%s ಗಾಗಿ ಆದ್ಯತೆಗಳ ಸಂವಾದವನ್ನು ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ:"
 
 #: ../js/extensionPrefs/main.js:149
-msgid "GNOME Shell Extensions"
+msgid "Desktop Extensions"
 msgstr ""
 
 #: ../js/gdm/loginDialog.js:410
@@ -189,32 +189,32 @@ msgstr "ಆದೇಶವನ್ನು ಪಾರ್ಸ್ ಮಾಡಲಾಗಿಲ�
 msgid "Execution of '%s' failed:"
 msgstr "'%s' ಅನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸುವಲ್ಲಿ ವಿಫಲಗೊಂಡಿದೆ:"
 
-#: ../js/ui/appDisplay.js:1187
+#: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1696
+#: ../js/ui/appDisplay.js:1708
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1702
+#: ../js/ui/appDisplay.js:1714
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1708
+#: ../js/ui/appDisplay.js:1720
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1714
+#: ../js/ui/appDisplay.js:1726
 msgid "OK"
 msgstr "ಸರಿ"
 
-#: ../js/ui/appDisplay.js:2016
+#: ../js/ui/appDisplay.js:2030
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2025
+#: ../js/ui/appDisplay.js:2039
 msgid "Delete"
 msgstr ""
 
@@ -986,7 +986,7 @@ msgid "Large Text"
 msgstr "ದೊಡ್ಡ ಪಠ್ಯ"
 
 #: ../js/ui/status/bluetooth.js:32 ../js/ui/status/bluetooth.js:43
-#: ../js/ui/status/network.js:828
+#: ../js/ui/status/network.js:703
 msgid "Bluetooth"
 msgstr "ಬ್ಲೂಟೂತ್"
 
@@ -995,7 +995,7 @@ msgid "Bluetooth Settings"
 msgstr "ಬ್ಲೂಟೂತ್ ಸಿದ್ಧತೆಗಳು"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:180
+#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:143
 msgid "hardware disabled"
 msgstr "ಯಂತ್ರಾಂಶವನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ"
 
@@ -1023,129 +1023,103 @@ msgstr "ಪ್ರದೇಶ ಮತ್ತು ಭಾಷೆ ಸಿದ್ಧತೆಗ
 msgid "Volume, network, battery"
 msgstr "ಧ್ವನಿಪ್ರಮಾಣ, ಜಾಲಬಂಧ, ಬ್ಯಾಟರಿ"
 
-#: ../js/ui/status/network.js:103
+#: ../js/ui/status/network.js:75
 msgid "<unknown>"
 msgstr "<ಗೊತ್ತಿರದ>"
 
+#: ../js/ui/status/network.js:128
+msgid "Wi-Fi"
+msgstr "ವೈ-ಫೈ"
+
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
-#: ../js/ui/status/network.js:202
+#: ../js/ui/status/network.js:165
 msgid "disabled"
 msgstr "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ"
 
 #. Translators: this is for network devices that are physically present but
 #. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:460
+#: ../js/ui/status/network.js:388
 msgid "unmanaged"
 msgstr "ನೋಡಿಕೊಳ್ಳದಿರುವ"
 
-#: ../js/ui/status/network.js:462
+#: ../js/ui/status/network.js:390
 msgid "disconnecting..."
 msgstr "ಸಂಪರ್ಕ ಕಡಿದುಹಾಕಲಾಗುತ್ತಿದೆ..."
 
-#: ../js/ui/status/network.js:468 ../js/ui/status/network.js:1550
+#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1342
 msgid "connecting..."
 msgstr "ಸಂಪರ್ಕ ಹೊಂದಲಾಗುತ್ತಿದೆ..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:471 ../js/ui/status/network.js:1553
+#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1345
 msgid "authentication required"
 msgstr "ದೃಢೀಕರಣದ ಅಗತ್ಯವಿದೆ"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:481
+#: ../js/ui/status/network.js:407
 msgid "firmware missing"
 msgstr "ಫರ್ಮ್-ವೇರ್ ಕಾಣಿಸುತ್ತಿಲ್ಲ"
-
-#. Translators: this is for wired network devices that are physically
-#. disconnected
-#: ../js/ui/status/network.js:488
-msgid "cable unplugged"
-msgstr "ಕೇಬಲ್‌ ಅನ್ನು ತೆಗೆದುಹಾಕಲಾಗಿದೆ"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:493
+#: ../js/ui/status/network.js:411
 msgid "unavailable"
 msgstr "ಅಲಭ್ಯ"
 
-#: ../js/ui/status/network.js:495 ../js/ui/status/network.js:1555
+#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1347
 msgid "connection failed"
 msgstr "ಸಂಪರ್ಕ ವಿಫಲಗೊಂಡಿದೆ"
 
-#: ../js/ui/status/network.js:554 ../js/ui/status/network.js:1439
-#: ../js/ui/status/network.js:1631
+#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1200
 msgid "More…"
 msgstr "ಇನ್ನಷ್ಟು …"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:590 ../js/ui/status/network.js:1367
+#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1150
 msgid "Connected (private)"
 msgstr "ಸಂಪರ್ಕಿತಗೊಂಡಿದೆ (ಖಾಸಗಿ)"
 
-#: ../js/ui/status/network.js:669
+#: ../js/ui/status/network.js:560
 msgid "Wired"
 msgstr "ತಂತಿಯುಕ್ತ"
 
-#: ../js/ui/status/network.js:670
-msgid "Auto Ethernet"
-msgstr "ಸ್ವಯಂ-ಎತರ್ನೆಟ್"
-
-#: ../js/ui/status/network.js:697
+#: ../js/ui/status/network.js:580
 msgid "Mobile broadband"
 msgstr "ಮೊಬೈಲ್ ಬ್ರಾಡ್‌ಬ್ಯಾಂಡ್"
 
-#. TRANSLATORS: this the automatic wireless connection name (including the
-#. network name)
-#: ../js/ui/status/network.js:863 ../js/ui/status/network.js:1384
-#, javascript-format
-msgid "Auto %s"
-msgstr "ಸ್ವಯಂ %s"
-
-#: ../js/ui/status/network.js:865
-msgid "Auto bluetooth"
-msgstr "ಸ್ವಯಂ ಬ್ಲೂಟೂತ್"
-
-#: ../js/ui/status/network.js:1386
-msgid "Auto wireless"
-msgstr "ಸ್ವಯಂ ತಂತಿರಹಿತ"
-
-#: ../js/ui/status/network.js:1671
+#: ../js/ui/status/network.js:1469
 msgid "Network"
 msgstr "ಜಾಲಬಂಧ"
 
-#: ../js/ui/status/network.js:1733
+#: ../js/ui/status/network.js:1526
 msgid "Enable networking"
 msgstr "ಜಾಲಬಂಧವನ್ನು ಅನುಗೊಳಿಸು"
 
-#: ../js/ui/status/network.js:1775
-msgid "Wi-Fi"
-msgstr "ವೈ-ಫೈ"
-
-#: ../js/ui/status/network.js:1794
+#: ../js/ui/status/network.js:1584
 msgid "Network Settings"
 msgstr "ಜಾಲಬಂಧ ಸಿದ್ಧತೆಗಳು"
 
-#: ../js/ui/status/network.js:1811
+#: ../js/ui/status/network.js:1601
 msgid "Network Manager"
 msgstr "ನೆಟ್‌ವರ್ಕ್ ಮ್ಯಾನೇಜರ್"
 
-#: ../js/ui/status/network.js:1901
+#: ../js/ui/status/network.js:1691
 msgid "Connection failed"
 msgstr "ಸಂಪರ್ಕವು ವಿಫಲಗೊಂಡಿದೆ"
 
-#: ../js/ui/status/network.js:1902
+#: ../js/ui/status/network.js:1692
 msgid "Activation of network connection failed"
 msgstr "ಜಾಲಬಂಧ ಸಂಪರ್ಕವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸುವಲ್ಲಿ ವಿಫಲಗೊಂಡಿದೆ"
 
-#: ../js/ui/status/network.js:2286
+#: ../js/ui/status/network.js:2053
 msgid "Networking is disabled"
 msgstr "ಜಾಲಬಂಧವು ವಿಫಲಗೊಂಡಿದೆ"
 
@@ -1257,21 +1231,21 @@ msgstr "ಅನ್ವಯಗಳು"
 msgid "'%s' is ready"
 msgstr "'%s' ಸಿದ್ಧಗೊಂಡಿದೆ"
 
-#: ../js/ui/windowManager.js:84
+#: ../js/ui/windowManager.js:71
 msgid "Do you want to keep these display settings?"
 msgstr "ನೀವು ಈ ಸಿದ್ಧತೆಗಳನ್ನು ಉಳಿಸಿಕೊಳ್ಳಲು ಬಯಸುವಿರಾ?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:103
+#: ../js/ui/windowManager.js:90
 msgid "Revert Settings"
 msgstr "ಸಿದ್ಧತೆಗಳನ್ನು ಹಿಮ್ಮರಳಿಸು"
 
-#: ../js/ui/windowManager.js:107
+#: ../js/ui/windowManager.js:94
 msgid "Keep Changes"
 msgstr "ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸು"
 
-#: ../js/ui/windowManager.js:125
+#: ../js/ui/windowManager.js:112
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"

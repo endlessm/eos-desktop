@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-29 02:26+0000\n"
-"PO-Revision-Date: 2016-12-02 16:13+0000\n"
-"Last-Translator: Shimon Sharmin <oparthib@gmail.com>\n"
+"POT-Creation-Date: 2016-12-06 02:27+0000\n"
+"PO-Revision-Date: 2016-12-06 02:29+0000\n"
+"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -54,12 +54,12 @@ msgid "Window management and application launching"
 msgstr "উইন্ডো ব্যবস্থাপনা এবং অ্যাপ্লিকেশন চালু"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
-msgid "GNOME Shell Extension Preferences"
-msgstr "জিনোম শেলের বিস্তারের পছন্দ"
+msgid "Extensions"
+msgstr ""
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
-msgid "Configure GNOME Shell Extensions"
-msgstr "জিনোম শেলের বিস্তার কনফিগার"
+msgid "Configure Desktop Extensions"
+msgstr ""
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
@@ -67,8 +67,8 @@ msgid "There was an error loading the preferences dialog for %s:"
 msgstr "পছন্দসই ডায়ালগ %s: লোড হবার সময় ক্রটি দেখা দিয়েছে "
 
 #: ../js/extensionPrefs/main.js:149
-msgid "GNOME Shell Extensions"
-msgstr "GNOME শেল বিস্তারসমূহ"
+msgid "Desktop Extensions"
+msgstr ""
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -190,32 +190,32 @@ msgstr "কমান্ড পার্স করা যায়নি:"
 msgid "Execution of '%s' failed:"
 msgstr "'%s' কার্যকর করা ব্যর্থ:"
 
-#: ../js/ui/appDisplay.js:1187
+#: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
 msgstr "ডেস্কটপ সরান"
 
-#: ../js/ui/appDisplay.js:1696
+#: ../js/ui/appDisplay.js:1708
 msgid "Warning"
 msgstr "সতর্ক বার্তা"
 
-#: ../js/ui/appDisplay.js:1702
+#: ../js/ui/appDisplay.js:1714
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "কোন ফোল্ডার মুছতে হলে আপনাকে প্রথমে এর ভেতরের জিনিষগুলো মুছতে হবে।"
 
-#: ../js/ui/appDisplay.js:1708
+#: ../js/ui/appDisplay.js:1720
 msgid "We are just trying to keep you safe."
 msgstr "আমরা আপনাকে নিরাপত্তা দিতে চেষ্টা করছি"
 
-#: ../js/ui/appDisplay.js:1714
+#: ../js/ui/appDisplay.js:1726
 msgid "OK"
 msgstr "ঠিক আছে"
 
-#: ../js/ui/appDisplay.js:2016
+#: ../js/ui/appDisplay.js:2030
 msgid "More Apps"
 msgstr "আরও অ্যাপস"
 
-#: ../js/ui/appDisplay.js:2025
+#: ../js/ui/appDisplay.js:2039
 msgid "Delete"
 msgstr "মুছুন"
 
@@ -991,7 +991,7 @@ msgid "Large Text"
 msgstr "বড় টেক্সট"
 
 #: ../js/ui/status/bluetooth.js:32 ../js/ui/status/bluetooth.js:43
-#: ../js/ui/status/network.js:828
+#: ../js/ui/status/network.js:703
 msgid "Bluetooth"
 msgstr "ব্লুটুথ"
 
@@ -1000,7 +1000,7 @@ msgid "Bluetooth Settings"
 msgstr "ব্লুটুথ সেটিং"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:180
+#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:143
 msgid "hardware disabled"
 msgstr "হার্ডওয়্যার অচল "
 
@@ -1028,129 +1028,103 @@ msgstr "অঞ্চল ও ভাষা সেটিংস "
 msgid "Volume, network, battery"
 msgstr "স্বর মাত্রা, মেটওয়ার্ক, ব্যাটারি  "
 
-#: ../js/ui/status/network.js:103
+#: ../js/ui/status/network.js:75
 msgid "<unknown>"
 msgstr "<unknown>"
 
+#: ../js/ui/status/network.js:128
+msgid "Wi-Fi"
+msgstr "ওয়াই-ফাই "
+
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
-#: ../js/ui/status/network.js:202
+#: ../js/ui/status/network.js:165
 msgid "disabled"
 msgstr "নিস্ক্রিয়"
 
 #. Translators: this is for network devices that are physically present but
 #. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:460
+#: ../js/ui/status/network.js:388
 msgid "unmanaged"
 msgstr "ব্যবস্থাধীন নয় "
 
-#: ../js/ui/status/network.js:462
+#: ../js/ui/status/network.js:390
 msgid "disconnecting..."
 msgstr "বিচ্ছিন্ন হচ্ছে..."
 
-#: ../js/ui/status/network.js:468 ../js/ui/status/network.js:1550
+#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1342
 msgid "connecting..."
 msgstr "সংযুক্ত করা হচ্ছে..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:471 ../js/ui/status/network.js:1553
+#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1345
 msgid "authentication required"
 msgstr "প্রমাণীকরণ আবশ্যক"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:481
+#: ../js/ui/status/network.js:407
 msgid "firmware missing"
 msgstr "ফার্মওয়্যার হারিয়েছে "
-
-#. Translators: this is for wired network devices that are physically
-#. disconnected
-#: ../js/ui/status/network.js:488
-msgid "cable unplugged"
-msgstr "ক্যাবল আনপ্লাগকৃত"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:493
+#: ../js/ui/status/network.js:411
 msgid "unavailable"
 msgstr "বিদ্যমান নয়"
 
-#: ../js/ui/status/network.js:495 ../js/ui/status/network.js:1555
+#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1347
 msgid "connection failed"
 msgstr "সংযোগ ব্যর্থ"
 
-#: ../js/ui/status/network.js:554 ../js/ui/status/network.js:1439
-#: ../js/ui/status/network.js:1631
+#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1200
 msgid "More…"
 msgstr "আরও... "
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:590 ../js/ui/status/network.js:1367
+#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1150
 msgid "Connected (private)"
 msgstr "সংযুক্ত (ব্যক্তিগত)"
 
-#: ../js/ui/status/network.js:669
+#: ../js/ui/status/network.js:560
 msgid "Wired"
 msgstr "সংযুক্ত"
 
-#: ../js/ui/status/network.js:670
-msgid "Auto Ethernet"
-msgstr "স্বয়ংক্রিয় ইথারনেট"
-
-#: ../js/ui/status/network.js:697
+#: ../js/ui/status/network.js:580
 msgid "Mobile broadband"
 msgstr "মোবাইল ব্রডব্যান্ড"
 
-#. TRANSLATORS: this the automatic wireless connection name (including the
-#. network name)
-#: ../js/ui/status/network.js:863 ../js/ui/status/network.js:1384
-#, javascript-format
-msgid "Auto %s"
-msgstr "স্বয়ংক্রিয় %s"
-
-#: ../js/ui/status/network.js:865
-msgid "Auto bluetooth"
-msgstr "স্বয়ংক্রিয় ব্লুটুথ"
-
-#: ../js/ui/status/network.js:1386
-msgid "Auto wireless"
-msgstr "স্বয়ংক্রিয় ওয়ারলেস"
-
-#: ../js/ui/status/network.js:1671
+#: ../js/ui/status/network.js:1469
 msgid "Network"
 msgstr "নেটওয়ার্ক "
 
-#: ../js/ui/status/network.js:1733
+#: ../js/ui/status/network.js:1526
 msgid "Enable networking"
 msgstr "নেটওয়ার্কিং সক্রিয়"
 
-#: ../js/ui/status/network.js:1775
-msgid "Wi-Fi"
-msgstr "ওয়াই-ফাই "
-
-#: ../js/ui/status/network.js:1794
+#: ../js/ui/status/network.js:1584
 msgid "Network Settings"
 msgstr "নেটওয়ার্ক সেটিং"
 
-#: ../js/ui/status/network.js:1811
+#: ../js/ui/status/network.js:1601
 msgid "Network Manager"
 msgstr "নেটওয়ার্ক ব্যবস্থাপক"
 
-#: ../js/ui/status/network.js:1901
+#: ../js/ui/status/network.js:1691
 msgid "Connection failed"
 msgstr "সংযোগ ব্যর্থ "
 
-#: ../js/ui/status/network.js:1902
+#: ../js/ui/status/network.js:1692
 msgid "Activation of network connection failed"
 msgstr "নেটওয়ার্ক সংযোগ সক্রিয়করণ ব্যর্থ "
 
-#: ../js/ui/status/network.js:2286
+#: ../js/ui/status/network.js:2053
 msgid "Networking is disabled"
 msgstr "নেটওয়ার্কিং বিচ্ছিন্ন"
 
@@ -1262,21 +1236,21 @@ msgstr "অ্যাপ্লিকেশন"
 msgid "'%s' is ready"
 msgstr "'%s' প্রস্তুত"
 
-#: ../js/ui/windowManager.js:84
+#: ../js/ui/windowManager.js:71
 msgid "Do you want to keep these display settings?"
 msgstr "আপনি কি এই ডিসপ্লে সেটিংটি রাখতে চান? "
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:103
+#: ../js/ui/windowManager.js:90
 msgid "Revert Settings"
 msgstr "সেটিং পূর্বাবস্থায় নিন "
 
-#: ../js/ui/windowManager.js:107
+#: ../js/ui/windowManager.js:94
 msgid "Keep Changes"
 msgstr "পরিবর্তন রাখুন "
 
-#: ../js/ui/windowManager.js:125
+#: ../js/ui/windowManager.js:112
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
