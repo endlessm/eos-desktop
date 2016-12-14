@@ -1211,8 +1211,12 @@ const NMDeviceWireless = new Lang.Class({
             return;
 
         if (this._activeNetwork) {
-            this._createActiveConnectionItem();
-            this.section.addMenuItem(this._activeConnectionItem);
+            if (this._device.active_access_point) {
+                this._createActiveConnectionItem();
+                this.section.addMenuItem(this._activeConnectionItem);
+            } else if (this._device.mode != NM80211Mode.ADHOC) {
+                log('_createSection: An active wireless connection, in infrastructure mode, involves no access point?');
+            }
         }
 
         let activeOffset = this._activeConnectionItem ? 1 : 0;
@@ -1236,7 +1240,7 @@ const NMDeviceWireless = new Lang.Class({
         let ap = this._device.active_access_point;
         if (!ap) {
             if (this._device.mode != NM80211Mode.ADHOC)
-                log('An active wireless connection, in infrastructure mode, involves no access point?');
+                log('getIndicatorIcon: An active wireless connection, in infrastructure mode, involves no access point?');
 
             return 'network-wireless-connected-symbolic';
         }
