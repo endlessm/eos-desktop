@@ -235,6 +235,11 @@ const CodingManager = new Lang.Class({
     },
 
     _switchToBuilder: function(actor, event, session) {
+        function constructCommand(appManifest) {
+            // add an app_id_override to the manifest to load
+            return appManifest.get_path() + '+' + session.actorApp.meta_window.get_flatpak_id() + '.Coding';
+        }
+
         if (!session.actorBuilder) {
             // get the manifest of the application
             // return early before we setup anything
@@ -249,7 +254,7 @@ const CodingManager = new Lang.Class({
             this._watchdogId = Mainloop.timeout_add(WATCHDOG_TIME,
                                                     Lang.bind(this, this._watchdogTimeout));
 
-            Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s']);
+            Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s', '-m', constructCommand(appManifest)]);
             animateBounce(session.buttonApp);
         } else {
             session.actorBuilder.meta_window.activate(global.get_current_time());
