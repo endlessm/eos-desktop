@@ -11,15 +11,16 @@
 # Jakob Kramer <jakob.kramer@gmx.de>, 2010
 # Mario Klug <mario@klug.me>, 2010
 # Paul Seyfert <pseyfert@mathphys.fsk.uni-heidelberg.de>, 2010-2011
+# Stefan Schroeder <ondekoza@gmail.com>, 2016
 # Tobias Endrigkeit <tobiasendrigkeit@googlemail.com>, 2012-2013
 # Wolfgang Stöggl <c72578@yahoo.de>, 2012,2014
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-06 02:27+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2016-12-13 02:31+0000\n"
+"PO-Revision-Date: 2016-12-16 21:04+0000\n"
+"Last-Translator: Stefan Schroeder <ondekoza@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,12 +50,12 @@ msgstr "Das Anwendungsmenü öffnen"
 
 #: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
+msgstr "Feedback"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
 msgid "EOS Shell"
-msgstr ""
+msgstr "EOS-Eingabe"
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -63,20 +64,20 @@ msgstr "Fenster verwalten und Anwendungen starten"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
-msgstr ""
+msgstr "Erweiterungen"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure Desktop Extensions"
-msgstr ""
+msgstr "Desktop-Erweiterungen konfigurieren"
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
 msgid "There was an error loading the preferences dialog for %s:"
-msgstr "Beim Laden des Einstellungsdialogs für %s ist ein Fehler aufgetreten:"
+msgstr "Beim Laden des Einstellungsdialogs für »%s« ist ein Fehler aufgetreten:"
 
 #: ../js/extensionPrefs/main.js:149
 msgid "Desktop Extensions"
-msgstr ""
+msgstr "Desktop-Erweiterungen"
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -84,11 +85,11 @@ msgstr "Sitzung …"
 
 #: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
-msgstr ""
+msgstr "Passwort-Hinweis anzeigen"
 
 #: ../js/gdm/loginDialog.js:636
 msgid "Forgot password?"
-msgstr ""
+msgstr "Passwort vergessen?"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -101,7 +102,7 @@ msgstr "Nicht aufgeführt?"
 #. by customer support.
 #: ../js/gdm/loginDialog.js:836
 msgid "Enter unlock code provided by customer support:"
-msgstr ""
+msgstr "Entsicherungs-Code des Supports eingeben:"
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
@@ -111,12 +112,12 @@ msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
 " emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
-msgstr ""
+msgstr "Bitte informiere den Support über deine Bestätigungs-Code %s. Du kannstentweder die Nummer %s anrufen oder eine E-Mail an %s schicken. Der Codeist solange gültig, bis du »Abbrechen« drückst oder den Computer ausschaltest."
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:846
 msgid "Reset Password"
-msgstr ""
+msgstr "Passwort zrücksetzen"
 
 #: ../js/gdm/loginDialog.js:1002 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
@@ -137,7 +138,7 @@ msgstr "Weiter"
 
 #: ../js/gdm/loginDialog.js:1138
 msgid "Your unlock code was incorrect. Please try again."
-msgstr ""
+msgstr "Der Entsperrcode ist nicht richtig. Bitte versuche es erneut."
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
@@ -200,20 +201,20 @@ msgstr "Ausführung von »%s« ist gescheitert:"
 
 #: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
-msgstr ""
+msgstr "Von der Arbeitsfläche entfernen"
 
 #: ../js/ui/appDisplay.js:1708
 msgid "Warning"
-msgstr ""
+msgstr "Warnung"
 
 #: ../js/ui/appDisplay.js:1714
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr ""
+msgstr "Um einen Ordner zu löschen, muss zuerst der Inhalt entfernt werden."
 
 #: ../js/ui/appDisplay.js:1720
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "Wir versuchen vorsichtig zu sein."
 
 #: ../js/ui/appDisplay.js:1726
 msgid "OK"
@@ -221,11 +222,11 @@ msgstr "OK"
 
 #: ../js/ui/appDisplay.js:2030
 msgid "More Apps"
-msgstr ""
+msgstr "Weitere Programme"
 
 #: ../js/ui/appDisplay.js:2039
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #: ../js/ui/appFavorites.js:108
 #, javascript-format
@@ -239,24 +240,24 @@ msgstr "%s wurde aus Ihren Favoriten entfernt"
 
 #: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
-msgstr ""
+msgstr "Andere Arbeitsflächen"
 
 #: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
-msgstr ""
+msgstr "Aktuelle Arbeitsfläche"
 
 #: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
-msgstr ""
+msgstr "An Aufgabenleiste anpinnen."
 
 #: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
-msgstr ""
+msgstr "Von Aufgabenleiste entfernen"
 
 #: ../js/ui/appIconBar.js:319
 #, javascript-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Verlassen von %s"
 
 #: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
@@ -264,15 +265,15 @@ msgstr "Hintergrund ändern …"
 
 #: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
-msgstr ""
+msgstr "Programm hinzufügen"
 
 #: ../js/ui/backgroundMenu.js:32
 msgid "Add Website"
-msgstr ""
+msgstr "Website hinzfügen"
 
 #: ../js/ui/backgroundMenu.js:36
 msgid "Add Folder"
-msgstr ""
+msgstr "Ordner hinzufügen"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -286,7 +287,7 @@ msgstr "Ganztägig"
 #: ../js/ui/calendar.js:68
 msgctxt "event list time"
 msgid "%H∶%M"
-msgstr ""
+msgstr "%H∶%M"
 
 #. Transators: Shown in calendar event list, if 12h format,
 #. \u2236 is a ratio character, similar to : and \u2009 is
@@ -294,7 +295,7 @@ msgstr ""
 #: ../js/ui/calendar.js:77
 msgctxt "event list time"
 msgid "%l∶%M %p"
-msgstr ""
+msgstr "%l∶%M %p"
 
 #. Translators: Calendar grid abbreviation for Sunday.
 #. *
@@ -389,7 +390,7 @@ msgstr "Sa"
 
 #: ../js/ui/calendar.js:391
 msgid "calendar:MY"
-msgstr ""
+msgstr "Kalender:MY"
 
 #. Translators: Text to show if there are no events
 #: ../js/ui/calendar.js:722
@@ -551,51 +552,51 @@ msgstr "Entschuldigung, das hat nicht funktioniert. Bitte versuchen Sie es erneu
 
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
-msgstr ""
+msgstr "Software-Update"
 
 #: ../js/ui/components/updaterManager.js:204
 msgid "Updates available"
-msgstr ""
+msgstr "Updates verfügbar"
 
 #: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
-msgstr ""
+msgstr "Es sind Software-Updates verfügbar"
 
 #: ../js/ui/components/updaterManager.js:206
 msgid "Download now"
-msgstr ""
+msgstr "Jetzt herunterladen"
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
-msgstr ""
+msgstr "Updates stehen bereit"
 
 #: ../js/ui/components/updaterManager.js:220
 msgid "Software updates are ready to be installed on your system"
-msgstr ""
+msgstr "Software-Updates stehen zur Installation bereit"
 
 #: ../js/ui/components/updaterManager.js:221
 msgid "Install now"
-msgstr ""
+msgstr "Jetzt installieren"
 
 #: ../js/ui/components/updaterManager.js:230
 msgid "Updates installed"
-msgstr ""
+msgstr "Updates sind installiert"
 
 #: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
-msgstr ""
+msgstr "Software-Updates sind installiert"
 
 #: ../js/ui/components/updaterManager.js:232
 msgid "Restart now"
-msgstr ""
+msgstr "Jetzt Neustarten"
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
-msgstr ""
+msgstr "Update ist fehlgeschlagen"
 
 #: ../js/ui/components/updaterManager.js:256
 msgid "We could not update your system"
-msgstr ""
+msgstr "Wir konnten das Update nicht ausführen"
 
 #: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
 msgid "Windows"
@@ -638,7 +639,7 @@ msgstr "%A, %e. %B %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr ""
+msgstr "Bitte beachte, dass gemeinschaftliche Benutzerkonten nicht durch Passwörter geschützt sind. Lösche alle Dateien, die privat bleiben sollen."
 
 #: ../js/ui/endSessionDialog.js:77
 #, javascript-format
@@ -740,43 +741,43 @@ msgstr "»%s« von extensions.gnome.org herunterladen und installieren?"
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr ""
+msgstr "Anwendung beenden…"
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr ""
+msgstr "Wenn eine Anwendung eine Zeit lang nicht reagiert, klicke auf ihren Namen und dann »Anwendung beenden«."
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
-msgstr ""
+msgstr "System-Monitor"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr ""
+msgstr "Anwendung beenden"
 
 #: ../js/ui/iconGridLayout.js:215
 #, javascript-format
 msgid "%s has been deleted"
-msgstr ""
+msgstr "»%s« wurde gelöscht"
 
 #: ../js/ui/internetSearch.js:99
 #, javascript-format
 msgid "Open \"%s\" in browser"
-msgstr ""
+msgstr "Öffne »%s« im Browser"
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
 #: ../js/ui/internetSearch.js:108
 #, javascript-format
 msgid "Search %s for \"%s\""
-msgstr ""
+msgstr "Suche nach »%s« mittels »%s«"
 
 #: ../js/ui/internetSearch.js:110
 #, javascript-format
 msgid "Search the internet for \"%s\""
-msgstr ""
+msgstr "Suche im Internet nach »%s«"
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
@@ -873,7 +874,7 @@ msgstr "Übersicht"
 
 #: ../js/ui/panel.js:376
 msgid "Taskbar"
-msgstr ""
+msgstr "Aufgabenleiste"
 
 #. Translators: this MUST be either "toggle-switch-us"
 #. (for toggle switches containing the English words
@@ -1014,15 +1015,15 @@ msgstr "Hardware deaktiviert"
 
 #: ../js/ui/status/hotCornerIndicator.js:19
 msgid "Hot Corner Indicator"
-msgstr ""
+msgstr "Hot-Corner-Anzeige"
 
 #: ../js/ui/status/hotCornerIndicator.js:40
 msgid "Enable Hot Corner"
-msgstr ""
+msgstr "Hot-Corner einschalten"
 
 #: ../js/ui/status/hotCornerIndicator.js:44
 msgid "Disable Hot Corner"
-msgstr ""
+msgstr "Hot-Corner ausschalten"
 
 #: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
@@ -1110,7 +1111,7 @@ msgstr "Mobiles Breitband"
 
 #: ../js/ui/status/network.js:1469
 msgid "Network"
-msgstr ""
+msgstr "Netz"
 
 #: ../js/ui/status/network.js:1526
 msgid "Enable networking"
@@ -1197,11 +1198,11 @@ msgstr "Sperren"
 
 #: ../js/ui/userMenu.js:37
 msgid "Exit"
-msgstr ""
+msgstr "Verlassen"
 
 #: ../js/ui/userMenu.js:39
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: ../js/ui/userMenu.js:40
 msgid "Settings"
@@ -1209,7 +1210,7 @@ msgstr "Einstellungen"
 
 #: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
-msgstr ""
+msgstr "Gib uns Feedback"
 
 #: ../js/ui/userMenu.js:490
 msgid "Switch User"
@@ -1314,12 +1315,12 @@ msgstr "»%s« konnte nicht gestartet werden"
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
-msgstr ""
+msgstr "Unbenannt"
 
 #: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
-msgstr ""
+msgstr "Eigene Definition von »%s«"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."
