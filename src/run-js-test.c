@@ -138,8 +138,8 @@ main(int argc, char **argv)
 
     output = g_file_new_for_commandline_arg (coverage_output_path);
     coverage = gjs_coverage_new ((const char * const *) coverage_prefixes,
-                                 output,
-                                 js_context);
+                                 js_context,
+                                 output);
     g_object_unref (output);
   }
 
