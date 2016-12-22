@@ -94,30 +94,37 @@ const IconGridLayout = new Lang.Class({
         this._iconTree = iconTree;
     },
 
-    _getDefaultIcons: function() {
-        let iconTree = null;
+    _loadConfigJsonString: function(dir, base) {
+        let jsonString = null;
         let defaultFiles = GLib.get_language_names()
             .filter(function(name) {
                 return name.indexOf('.') == -1;
             })
             .map(function(name) {
-                let path = GLib.build_filenamev([DEFAULT_CONFIGS_DIR,
-                                                 DEFAULT_CONFIG_NAME_BASE + '-' + name + '.json']);
+                let path = GLib.build_filenamev([dir, base + '-' + name + '.json']);
                 return Gio.File.new_for_path(path);
             })
             .some(function(defaultsFile) {
                 try {
                     let [success, data] = defaultsFile.load_contents(null, null,
                                                                      null);
-                    iconTree = Json.gvariant_deserialize_data(data.toString(), -1,
-                                                              'a{sas}');
+                    jsonString = data.toString();
                     return true;
                 } catch (e) {
                     // Ignore errors, as we always have a fallback
                 }
-
                 return false;
             });
+        return jsonString;
+    },
+
+    _getDefaultIcons: function() {
+        let iconTree = null;
+        let defaultJson = null;
+
+        defaultJson = this._loadConfigJsonString(DEFAULT_CONFIGS_DIR,
+                                                  DEFAULT_CONFIG_NAME_BASE);
+        iconTree = Json.gvariant_deserialize_data(defaultJson, -1, 'a{sas}');
 
         if (iconTree === null || iconTree.n_children() == 0) {
             log('No icon grid defaults found!');
