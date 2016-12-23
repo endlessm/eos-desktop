@@ -22,6 +22,12 @@ const FOLDER_DIR_NAME = 'desktop-directories';
 const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/eos-shell-content/icon-grid-defaults';
 const DEFAULT_CONFIG_NAME_BASE = 'icon-grid';
 
+const PREPEND_CONFIGS_DIR = Config.LOCALSTATEDIR + '/eos-image-defaults/icon-grid';
+const PREPEND_CONFIG_NAME_BASE = 'icon-grid-prepend';
+
+const APPEND_CONFIGS_DIR = Config.LOCALSTATEDIR + '/eos-image-defaults/icon-grid';
+const APPEND_CONFIG_NAME_BASE = 'icon-grid-append';
+
 /* Occurs when an application is uninstalled, meaning removed from the desktop's
  * app grid. Applications can be uninstalled in the app store or via dragging
  * and dropping to the trash.
@@ -94,30 +100,58 @@ const IconGridLayout = new Lang.Class({
         this._iconTree = iconTree;
     },
 
-    _getDefaultIcons: function() {
-        let iconTree = null;
+    _loadConfigJsonString: function(dir, base) {
+        let jsonString = null;
         let defaultFiles = GLib.get_language_names()
             .filter(function(name) {
                 return name.indexOf('.') == -1;
             })
             .map(function(name) {
-                let path = GLib.build_filenamev([DEFAULT_CONFIGS_DIR,
-                                                 DEFAULT_CONFIG_NAME_BASE + '-' + name + '.json']);
+                let path = GLib.build_filenamev([dir, base + '-' + name + '.json']);
                 return Gio.File.new_for_path(path);
             })
             .some(function(defaultsFile) {
                 try {
                     let [success, data] = defaultsFile.load_contents(null, null,
                                                                      null);
-                    iconTree = Json.gvariant_deserialize_data(data.toString(), -1,
-                                                              'a{sas}');
+                    jsonString = data.toString();
                     return true;
                 } catch (e) {
                     // Ignore errors, as we always have a fallback
                 }
-
                 return false;
             });
+        return jsonString;
+    },
+
+    _mergeJsonStrings: function(base, prepend, append) {
+        let baseNode = JSON.parse(base)
+        let prependNode = null;
+        let appendNode = null;
+        if (prepend) {
+            prependNode = JSON.parse(prepend);
+        }
+        if (append) {
+            appendNode = JSON.parse(append);
+        }
+        for (let key in baseNode) {
+            if (prependNode && prependNode[key]) {
+                baseNode[key] = prependNode[key].concat(baseNode[key]);
+            }
+            if (appendNode && appendNode[key]) {
+                baseNode[key] = baseNode[key].concat(appendNode[key]);
+            }
+        }
+        return JSON.stringify(baseNode);
+    },
+
+    _getDefaultIcons: function() {
+        let mergedJson = this._mergeJsonStrings(
+            this._loadConfigJsonString(DEFAULT_CONFIGS_DIR, DEFAULT_CONFIG_NAME_BASE),
+            this._loadConfigJsonString(PREPEND_CONFIGS_DIR, PREPEND_CONFIG_NAME_BASE),
+            this._loadConfigJsonString(APPEND_CONFIGS_DIR ,APPEND_CONFIG_NAME_BASE)
+        );
+        let iconTree = Json.gvariant_deserialize_data(mergedJson, -1, 'a{sas}');
 
         if (iconTree === null || iconTree.n_children() == 0) {
             log('No icon grid defaults found!');
