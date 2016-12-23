@@ -14,5 +14,6 @@ const LOCALEDIR = '@datadir@/locale';
 const DATADIR = '@datadir@';
 const LIBEXECDIR = '@libexecdir@';
 const SYSCONFDIR = '@sysconfdir@';
+const LOCALSTATEDIR = '@localstatedir@';
 /* subdirectories under standard directories */
 const PKGDATADIR = '@pkgdatadir@';

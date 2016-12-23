@@ -22,6 +22,12 @@ const FOLDER_DIR_NAME = 'desktop-directories';
 const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/eos-shell-content/icon-grid-defaults';
 const DEFAULT_CONFIG_NAME_BASE = 'icon-grid';
 
+const PREPEND_CONFIGS_DIR = Config.LOCALSTATEDIR + '/eos-image-defaults/icon-grid';
+const PREPEND_CONFIG_NAME_BASE = 'icon-grid-prepend';
+
+const APPEND_CONFIGS_DIR = Config.LOCALSTATEDIR + '/eos-image-defaults/icon-grid';
+const APPEND_CONFIG_NAME_BASE = 'icon-grid-append';
+
 /* Occurs when an application is uninstalled, meaning removed from the desktop's
  * app grid. Applications can be uninstalled in the app store or via dragging
  * and dropping to the trash.
@@ -118,13 +124,31 @@ const IconGridLayout = new Lang.Class({
         return jsonString;
     },
 
+    _mergeJsonStrings: function(base, prepend, append) {
+        // Merging initially just the desktop item
+        let baseNode = JSON.parse(base)
+        if (prepend) {
+            let prependNode = JSON.parse(prepend)
+            baseNode['desktop'] = prependNode['desktop'].concat(baseNode['desktop']);
+	}
+        if (append) {
+            let appendNode = JSON.parse(append)
+            baseNode['desktop'] = baseNode['desktop'].concat(appendNode['desktop']);
+	}
+        return JSON.stringify(baseNode);
+    },
+
     _getDefaultIcons: function() {
         let iconTree = null;
-        let defaultJson = null;
+        let mergedJson = null;
 
-        defaultJson = this._loadConfigJsonString(DEFAULT_CONFIGS_DIR,
-                                                  DEFAULT_CONFIG_NAME_BASE);
-        iconTree = Json.gvariant_deserialize_data(defaultJson, -1, 'a{sas}');
+        mergedJson = this._mergeJsonStrings(
+            this._loadConfigJsonString(DEFAULT_CONFIGS_DIR, DEFAULT_CONFIG_NAME_BASE),
+            this._loadConfigJsonString(PREPEND_CONFIGS_DIR, PREPEND_CONFIG_NAME_BASE),
+            this._loadConfigJsonString(APPEND_CONFIGS_DIR ,APPEND_CONFIG_NAME_BASE)
+        );
+
+        iconTree = Json.gvariant_deserialize_data(mergedJson, -1, 'a{sas}');
 
         if (iconTree === null || iconTree.n_children() == 0) {
             log('No icon grid defaults found!');
