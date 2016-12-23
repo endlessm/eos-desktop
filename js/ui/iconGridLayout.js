@@ -125,30 +125,33 @@ const IconGridLayout = new Lang.Class({
     },
 
     _mergeJsonStrings: function(base, prepend, append) {
-        // Merging initially just the desktop item
         let baseNode = JSON.parse(base)
+        let prependNode = null;
+        let appendNode = null;
         if (prepend) {
-            let prependNode = JSON.parse(prepend)
-            baseNode['desktop'] = prependNode['desktop'].concat(baseNode['desktop']);
-	}
+            prependNode = JSON.parse(prepend);
+        }
         if (append) {
-            let appendNode = JSON.parse(append)
-            baseNode['desktop'] = baseNode['desktop'].concat(appendNode['desktop']);
-	}
+            appendNode = JSON.parse(append);
+        }
+        for (let key in baseNode) {
+            if (prependNode && prependNode[key]) {
+                baseNode[key] = prependNode[key].concat(baseNode[key]);
+            }
+            if (appendNode && appendNode[key]) {
+                baseNode[key] = baseNode[key].concat(appendNode[key]);
+            }
+        }
         return JSON.stringify(baseNode);
     },
 
     _getDefaultIcons: function() {
-        let iconTree = null;
-        let mergedJson = null;
-
-        mergedJson = this._mergeJsonStrings(
+        let mergedJson = this._mergeJsonStrings(
             this._loadConfigJsonString(DEFAULT_CONFIGS_DIR, DEFAULT_CONFIG_NAME_BASE),
             this._loadConfigJsonString(PREPEND_CONFIGS_DIR, PREPEND_CONFIG_NAME_BASE),
             this._loadConfigJsonString(APPEND_CONFIGS_DIR ,APPEND_CONFIG_NAME_BASE)
         );
-
-        iconTree = Json.gvariant_deserialize_data(mergedJson, -1, 'a{sas}');
+        let iconTree = Json.gvariant_deserialize_data(mergedJson, -1, 'a{sas}');
 
         if (iconTree === null || iconTree.n_children() == 0) {
             log('No icon grid defaults found!');
