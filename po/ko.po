@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-13 02:31+0000\n"
+"POT-Creation-Date: 2016-12-20 02:31+0000\n"
 "PO-Revision-Date: 2016-12-06 02:29+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Korean (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ko/)\n"
@@ -1049,13 +1049,13 @@ msgstr "관리되지 않음"
 msgid "disconnecting..."
 msgstr "연결 끊는 중..."
 
-#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1342
+#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1347
 msgid "connecting..."
 msgstr "연결하는 중..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1345
+#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1350
 msgid "authentication required"
 msgstr "인증 필요"
 
@@ -1073,18 +1073,18 @@ msgstr "펌웨어 없음"
 msgid "unavailable"
 msgstr "사용 불가"
 
-#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1347
+#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1352
 msgid "connection failed"
 msgstr "연결 실패"
 
-#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1200
+#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1201
 msgid "More…"
 msgstr "기타…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1150
+#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1151
 msgid "Connected (private)"
 msgstr "연결됨(개인)"
 
@@ -1096,31 +1096,31 @@ msgstr "유선"
 msgid "Mobile broadband"
 msgstr "휴대전화 네트워크"
 
-#: ../js/ui/status/network.js:1469
+#: ../js/ui/status/network.js:1474
 msgid "Network"
 msgstr ""
 
-#: ../js/ui/status/network.js:1526
+#: ../js/ui/status/network.js:1531
 msgid "Enable networking"
 msgstr "네트워크 사용"
 
-#: ../js/ui/status/network.js:1584
+#: ../js/ui/status/network.js:1589
 msgid "Network Settings"
 msgstr "네트워크 설정"
 
-#: ../js/ui/status/network.js:1601
+#: ../js/ui/status/network.js:1606
 msgid "Network Manager"
 msgstr "네트워크 관리"
 
-#: ../js/ui/status/network.js:1691
+#: ../js/ui/status/network.js:1696
 msgid "Connection failed"
 msgstr "연결이 실패했습니다"
 
-#: ../js/ui/status/network.js:1692
+#: ../js/ui/status/network.js:1697
 msgid "Activation of network connection failed"
 msgstr "네트워크 연결이 실패했습니다"
 
-#: ../js/ui/status/network.js:2053
+#: ../js/ui/status/network.js:2058
 msgid "Networking is disabled"
 msgstr "네트워크를 사용하지 않습니다"
 

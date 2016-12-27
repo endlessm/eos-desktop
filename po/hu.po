@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-13 02:31+0000\n"
+"POT-Creation-Date: 2016-12-20 02:31+0000\n"
 "PO-Revision-Date: 2016-12-06 02:29+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hu/)\n"
@@ -1055,13 +1055,13 @@ msgstr "felügyeletlen"
 msgid "disconnecting..."
 msgstr "bontás…"
 
-#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1342
+#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1347
 msgid "connecting..."
 msgstr "kapcsolódás…"
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1345
+#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1350
 msgid "authentication required"
 msgstr "hitelesítés szükséges"
 
@@ -1079,18 +1079,18 @@ msgstr "hiányzó firmware"
 msgid "unavailable"
 msgstr "nem érhető el"
 
-#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1347
+#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1352
 msgid "connection failed"
 msgstr "a kapcsolódás meghiúsult"
 
-#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1200
+#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1201
 msgid "More…"
 msgstr "Több…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1150
+#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1151
 msgid "Connected (private)"
 msgstr "Kapcsolódva (privát)"
 
@@ -1102,31 +1102,31 @@ msgstr "Vezetékes"
 msgid "Mobile broadband"
 msgstr "Mobil széles sáv"
 
-#: ../js/ui/status/network.js:1469
+#: ../js/ui/status/network.js:1474
 msgid "Network"
 msgstr ""
 
-#: ../js/ui/status/network.js:1526
+#: ../js/ui/status/network.js:1531
 msgid "Enable networking"
 msgstr "Hálózat engedélyezése"
 
-#: ../js/ui/status/network.js:1584
+#: ../js/ui/status/network.js:1589
 msgid "Network Settings"
 msgstr "Hálózati beállítások"
 
-#: ../js/ui/status/network.js:1601
+#: ../js/ui/status/network.js:1606
 msgid "Network Manager"
 msgstr "Hálózatkezelő"
 
-#: ../js/ui/status/network.js:1691
+#: ../js/ui/status/network.js:1696
 msgid "Connection failed"
 msgstr "Kapcsolódás meghiúsult"
 
-#: ../js/ui/status/network.js:1692
+#: ../js/ui/status/network.js:1697
 msgid "Activation of network connection failed"
 msgstr "A hálózati kapcsolat aktiválása meghiúsult"
 
-#: ../js/ui/status/network.js:2053
+#: ../js/ui/status/network.js:2058
 msgid "Networking is disabled"
 msgstr "Hálózat letiltva"
 

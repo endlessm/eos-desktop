@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-13 02:31+0000\n"
+"POT-Creation-Date: 2016-12-20 02:31+0000\n"
 "PO-Revision-Date: 2016-12-16 21:04+0000\n"
 "Last-Translator: Stefan Schroeder <ondekoza@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/de/)\n"
@@ -1062,13 +1062,13 @@ msgstr "nicht verwaltet"
 msgid "disconnecting..."
 msgstr "Verbindungsabbau …"
 
-#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1342
+#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1347
 msgid "connecting..."
 msgstr "Verbindungsaufbau …"
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1345
+#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1350
 msgid "authentication required"
 msgstr "Anmeldung erforderlich"
 
@@ -1086,18 +1086,18 @@ msgstr "Firmware fehlt"
 msgid "unavailable"
 msgstr "nicht verfügbar"
 
-#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1347
+#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1352
 msgid "connection failed"
 msgstr "Verbindung gescheitert"
 
-#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1200
+#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1201
 msgid "More…"
 msgstr "Mehr …"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1150
+#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1151
 msgid "Connected (private)"
 msgstr "Verbunden (privat)"
 
@@ -1109,31 +1109,31 @@ msgstr "Kabelgebunden"
 msgid "Mobile broadband"
 msgstr "Mobiles Breitband"
 
-#: ../js/ui/status/network.js:1469
+#: ../js/ui/status/network.js:1474
 msgid "Network"
 msgstr "Netz"
 
-#: ../js/ui/status/network.js:1526
+#: ../js/ui/status/network.js:1531
 msgid "Enable networking"
 msgstr "Netzwerk aktivieren"
 
-#: ../js/ui/status/network.js:1584
+#: ../js/ui/status/network.js:1589
 msgid "Network Settings"
 msgstr "Netzwerkeinstellungen"
 
-#: ../js/ui/status/network.js:1601
+#: ../js/ui/status/network.js:1606
 msgid "Network Manager"
 msgstr "Netzwerk-Verwaltung"
 
-#: ../js/ui/status/network.js:1691
+#: ../js/ui/status/network.js:1696
 msgid "Connection failed"
 msgstr "Verbindung gescheitert"
 
-#: ../js/ui/status/network.js:1692
+#: ../js/ui/status/network.js:1697
 msgid "Activation of network connection failed"
 msgstr "Aktivierung der Netzwerkverbindung ist gescheitert"
 
-#: ../js/ui/status/network.js:2053
+#: ../js/ui/status/network.js:2058
 msgid "Networking is disabled"
 msgstr "Netzwerk ist deaktiviert"
 

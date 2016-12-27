@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-13 02:31+0000\n"
+"POT-Creation-Date: 2016-12-20 02:31+0000\n"
 "PO-Revision-Date: 2016-12-06 02:29+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Friulian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fur/)\n"
@@ -1052,13 +1052,13 @@ msgstr "no ministrabile"
 msgid "disconnecting..."
 msgstr "Daur a disconeti..."
 
-#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1342
+#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1347
 msgid "connecting..."
 msgstr "Daûr a coneti..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1345
+#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1350
 msgid "authentication required"
 msgstr "autenticazion necessarie"
 
@@ -1076,18 +1076,18 @@ msgstr "al mancje il firmware"
 msgid "unavailable"
 msgstr "no disponibil"
 
-#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1347
+#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1352
 msgid "connection failed"
 msgstr "conession falide"
 
-#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1200
+#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1201
 msgid "More…"
 msgstr ""
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1150
+#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1151
 msgid "Connected (private)"
 msgstr "Conetude (privade)"
 
@@ -1099,31 +1099,31 @@ msgstr "Vie fîl"
 msgid "Mobile broadband"
 msgstr "Bande largje mobil"
 
-#: ../js/ui/status/network.js:1469
+#: ../js/ui/status/network.js:1474
 msgid "Network"
 msgstr ""
 
-#: ../js/ui/status/network.js:1526
+#: ../js/ui/status/network.js:1531
 msgid "Enable networking"
 msgstr "Abilite rêts"
 
-#: ../js/ui/status/network.js:1584
+#: ../js/ui/status/network.js:1589
 msgid "Network Settings"
 msgstr "Impostazions rêt"
 
-#: ../js/ui/status/network.js:1601
+#: ../js/ui/status/network.js:1606
 msgid "Network Manager"
 msgstr "Ministradôr di rêt"
 
-#: ../js/ui/status/network.js:1691
+#: ../js/ui/status/network.js:1696
 msgid "Connection failed"
 msgstr "Conession falide"
 
-#: ../js/ui/status/network.js:1692
+#: ../js/ui/status/network.js:1697
 msgid "Activation of network connection failed"
 msgstr "Ativazion de conession di rêt falide"
 
-#: ../js/ui/status/network.js:2053
+#: ../js/ui/status/network.js:2058
 msgid "Networking is disabled"
 msgstr "Lis rêts a son disabilitadis"
 

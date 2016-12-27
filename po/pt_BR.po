@@ -10,6 +10,7 @@
 # Gabriel F. Vilar <cogumm@gmail.com>, 2011
 # Ivan G. Gonçalves <i@endlessm.com>, 2015
 # Jonh Wendell <wendell@bani.com.br>, 2010
+# Mariana Barbosa <mariana@endlessm.com>, 2016
 # Mariana Barbosa <mari@endlessm.com>, 2015-2016
 # Og Maciel <ogmaciel@gnome.org>, 2009
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2013
@@ -22,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-13 02:31+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2016-12-20 02:31+0000\n"
+"PO-Revision-Date: 2016-12-22 09:34+0000\n"
+"Last-Translator: Mariana Barbosa <mariana@endlessm.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -68,11 +69,11 @@ msgstr "Gerenciamento de janelas e lançador de programas"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
-msgstr ""
+msgstr "Extensões"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure Desktop Extensions"
-msgstr ""
+msgstr "Configurar extensões da Área de Trabalho"
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
@@ -81,7 +82,7 @@ msgstr "Ocorreu um erro ao carregar o dialogo de preferências para %s:"
 
 #: ../js/extensionPrefs/main.js:149
 msgid "Desktop Extensions"
-msgstr ""
+msgstr "Extensões da área de trabalho"
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -1066,13 +1067,13 @@ msgstr "não gerenciado"
 msgid "disconnecting..."
 msgstr "desconectando..."
 
-#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1342
+#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1347
 msgid "connecting..."
 msgstr "conectando..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1345
+#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1350
 msgid "authentication required"
 msgstr "autenticação necessária"
 
@@ -1090,18 +1091,18 @@ msgstr "firmware não está definido"
 msgid "unavailable"
 msgstr "indisponível"
 
-#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1347
+#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1352
 msgid "connection failed"
 msgstr "falha na conexão "
 
-#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1200
+#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1201
 msgid "More…"
 msgstr "Mais…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1150
+#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1151
 msgid "Connected (private)"
 msgstr "Conectado (privado)"
 
@@ -1113,31 +1114,31 @@ msgstr "Cabeado"
 msgid "Mobile broadband"
 msgstr "Banda larga móvel"
 
-#: ../js/ui/status/network.js:1469
+#: ../js/ui/status/network.js:1474
 msgid "Network"
 msgstr "Rede"
 
-#: ../js/ui/status/network.js:1526
+#: ../js/ui/status/network.js:1531
 msgid "Enable networking"
 msgstr "Habilitar rede"
 
-#: ../js/ui/status/network.js:1584
+#: ../js/ui/status/network.js:1589
 msgid "Network Settings"
 msgstr "Configurações de rede"
 
-#: ../js/ui/status/network.js:1601
+#: ../js/ui/status/network.js:1606
 msgid "Network Manager"
 msgstr "Gerenciador de rede"
 
-#: ../js/ui/status/network.js:1691
+#: ../js/ui/status/network.js:1696
 msgid "Connection failed"
 msgstr "Falha de conexão"
 
-#: ../js/ui/status/network.js:1692
+#: ../js/ui/status/network.js:1697
 msgid "Activation of network connection failed"
 msgstr "Falha ao ativar a conexão da rede"
 
-#: ../js/ui/status/network.js:2053
+#: ../js/ui/status/network.js:2058
 msgid "Networking is disabled"
 msgstr "A rede está desabilitada"
 
