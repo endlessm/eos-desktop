@@ -36,9 +36,9 @@ const CodingChatboxTextService = new Lang.Class({
         }
 
         // Disconnect any handlers not in the list
-        Object.keys(this._signalHandlers).filter(function(name) {
+        Object.keys(this._signalHandlers).filter(Lang.bind(this, function(name) {
             return this._service.currently_listening_for_events.indexOf(name) === -1;
-        }).forEach(Lang.bind(this, function(name) {
+        })).forEach(Lang.bind(this, function(name) {
             this._disconnectHandlersFor(name);
         }));
 
