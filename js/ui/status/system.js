@@ -194,7 +194,7 @@ const SuggestedAppsItem = new Lang.Class({
         this.actor.style_class = 'suggested-apps';
 
         let appSystem = Shell.AppSystem.get_default();
-        let appIds = ['eos-link-facebook.desktop', 'rhythmbox.desktop', 'net.sourceforge.Supertuxkart.desktop', 'eos-link-whatsapp.desktop'];
+        let appIds = ['chromium-browser.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop'];
         for (var id of appIds) {
             let app = appSystem.lookup_app(id);
             let appIcon = new PopupIcon(app, menu);
@@ -507,11 +507,42 @@ const Indicator = new Lang.Class({
         userName.actor.add_child(this._avatar_label);
         this.menu.addMenuItem(userName);
 
+        item = new PopupMenu.PopupBaseMenuItem({ reactive: false,
+                                                 can_focus: false });
+
+        this._helpAction = this._createActionButtonForIconPath(YELP_TEXT, '/theme/help-symbolic.svg');
+        this._helpAction.connect('clicked', Lang.bind(this, this._onHelpClicked));
+        item.actor.add(this._helpAction, { expand: true, x_fill: false })
+
+        this._settingsAction = this._createActionButton('preferences-system-symbolic', _("Settings"));
+        this._settingsAction.connect('clicked', Lang.bind(this, this._onSettingsClicked));
+        // item.actor.add(this._settingsAction, { expand: true, x_fill: false });
+
+        this._orientationLockAction = this._createActionButton('', _("Orientation Lock"));
+        this._orientationLockAction.connect('clicked', Lang.bind(this, this._onOrientationLockClicked));
+        // item.actor.add(this._orientationLockAction, { expand: true, x_fill: false });
+
+        this._lockScreenAction = this._createActionButton('changes-prevent-symbolic', _("Lock"));
+        this._lockScreenAction.connect('clicked', Lang.bind(this, this._onLockScreenClicked));
+        item.actor.add(this._lockScreenAction, { expand: true, x_fill: false });
+
+        this._suspendAction = this._createActionButton('media-playback-pause-symbolic', _("Suspend"));
+        this._suspendAction.connect('clicked', Lang.bind(this, this._onSuspendClicked));
+
+        this._powerOffAction = this._createActionButton('system-shutdown-symbolic', _("Power Off"));
+        this._powerOffAction.connect('clicked', Lang.bind(this, this._onPowerOffClicked));
+
+        this._altSwitcher = new AltSwitcher(this._powerOffAction, this._suspendAction);
+        item.actor.add(this._altSwitcher.actor, { expand: true, x_fill: false });
+
+        this._actionsItem = item;
+        this.menu.addMenuItem(item);
+
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         let labelItem = new PopupMenu.PopupBaseMenuItem({ can_focus: false, reactive: false });
         labelItem.actor.x_align = Clutter.ActorAlign.CENTER;
         let label = new St.Label({
-            text: _('Recommended Apps for You'),
+            text: _('Recommended Apps'),
             style_class: 'recommended-apps-label',
         });
         labelItem.actor.add_child(label);
@@ -530,39 +561,7 @@ const Indicator = new Lang.Class({
             Util.spawnApp(['gnome-software', '--mode=installed']);
         }));
         showAppsItem.actor.add_child(button);
-        this.menu.addMenuItem(showAppsItem);
-        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-
-        item = new PopupMenu.PopupBaseMenuItem({ reactive: false,
-                                                 can_focus: false });
-
-        this._helpAction = this._createActionButtonForIconPath(YELP_TEXT, '/theme/help-symbolic.svg');
-        this._helpAction.connect('clicked', Lang.bind(this, this._onHelpClicked));
-        item.actor.add(this._helpAction, { expand: true, x_fill: false })
-
-        this._settingsAction = this._createActionButton('preferences-system-symbolic', _("Settings"));
-        this._settingsAction.connect('clicked', Lang.bind(this, this._onSettingsClicked));
-        item.actor.add(this._settingsAction, { expand: true, x_fill: false });
-
-        this._orientationLockAction = this._createActionButton('', _("Orientation Lock"));
-        this._orientationLockAction.connect('clicked', Lang.bind(this, this._onOrientationLockClicked));
-        item.actor.add(this._orientationLockAction, { expand: true, x_fill: false });
-
-        this._lockScreenAction = this._createActionButton('changes-prevent-symbolic', _("Lock"));
-        this._lockScreenAction.connect('clicked', Lang.bind(this, this._onLockScreenClicked));
-        item.actor.add(this._lockScreenAction, { expand: true, x_fill: false });
-
-        this._suspendAction = this._createActionButton('media-playback-pause-symbolic', _("Suspend"));
-        this._suspendAction.connect('clicked', Lang.bind(this, this._onSuspendClicked));
-
-        this._powerOffAction = this._createActionButton('system-shutdown-symbolic', _("Power Off"));
-        this._powerOffAction.connect('clicked', Lang.bind(this, this._onPowerOffClicked));
-
-        this._altSwitcher = new AltSwitcher(this._powerOffAction, this._suspendAction);
-        item.actor.add(this._altSwitcher.actor, { expand: true, x_fill: false });
-
-        this._actionsItem = item;
-        this.menu.addMenuItem(item);
+        // this.menu.addMenuItem(showAppsItem);
     },
 
     _onHelpClicked: function() {

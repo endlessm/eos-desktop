@@ -384,9 +384,6 @@ const AggregateMenu = new Lang.Class({
         this._indicators.add_child(this._power.indicators);
         this._indicators.add_child(PopupMenu.arrowIcon(St.Side.TOP));
 
-        this.menu.addMenuItem(this._volume.menu);
-        this.menu.addMenuItem(this._brightness.menu);
-        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         if (this._network) {
             this.menu.addMenuItem(this._network.menu);
         }
@@ -397,6 +394,9 @@ const AggregateMenu = new Lang.Class({
         this.menu.addMenuItem(this._rfkill.menu);
         this.menu.addMenuItem(this._power.menu);
         // this.menu.addMenuItem(this._system.menu);
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        this.menu.addMenuItem(this._volume.menu);
+        this.menu.addMenuItem(this._brightness.menu);
 
         // menuLayout.addSizeChild(this._location.menu.actor);
         menuLayout.addSizeChild(this._rfkill.menu.actor);
