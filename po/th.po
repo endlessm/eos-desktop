@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-20 02:31+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
+"POT-Creation-Date: 2017-01-03 02:38+0000\n"
+"PO-Revision-Date: 2017-01-07 10:06+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Thai (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -57,11 +57,11 @@ msgstr "การจัดการหน้าต่างและการเ
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
-msgstr ""
+msgstr "ส่วนเสริม"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure Desktop Extensions"
-msgstr ""
+msgstr "การปรับแต่งส่วนเสริมเดสก์ท็อป"
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
@@ -70,7 +70,7 @@ msgstr "เกิดข้อผิดพลาดขณะโหลดกล่
 
 #: ../js/extensionPrefs/main.js:149
 msgid "Desktop Extensions"
-msgstr ""
+msgstr "ส่วนเสริมเดสก์ท็อป"
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -746,7 +746,7 @@ msgstr "โปรแกรมตรวจสอบระบบ"
 msgid "Quit Application"
 msgstr "ออกจากแอพพลิเคชัน"
 
-#: ../js/ui/iconGridLayout.js:215
+#: ../js/ui/iconGridLayout.js:249
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s ได้ถูกลบแล้ว"

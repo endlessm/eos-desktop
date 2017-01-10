@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-20 02:31+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
+"POT-Creation-Date: 2017-01-03 02:38+0000\n"
+"PO-Revision-Date: 2017-01-07 12:11+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -60,11 +60,11 @@ msgstr "إدارة النوافذ وإطلاق التطبيقات"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
-msgstr ""
+msgstr "الامتدادات"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure Desktop Extensions"
-msgstr ""
+msgstr "تهيئة امتدادات سطح المكتب"
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
@@ -73,7 +73,7 @@ msgstr "حدث خطأ أثناء تشغيل حوار تفضيلات %s‏:"
 
 #: ../js/extensionPrefs/main.js:149
 msgid "Desktop Extensions"
-msgstr ""
+msgstr "امتدادات سطح المكتب"
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -769,7 +769,7 @@ msgstr "شاشة النظام"
 msgid "Quit Application"
 msgstr "الخروج من التطبيق"
 
-#: ../js/ui/iconGridLayout.js:215
+#: ../js/ui/iconGridLayout.js:249
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s تم حذفه"

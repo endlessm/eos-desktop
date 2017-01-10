@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-20 02:31+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
+"POT-Creation-Date: 2017-01-03 02:38+0000\n"
+"PO-Revision-Date: 2017-01-09 06:05+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
@@ -41,12 +41,12 @@ msgstr "開啟應用程式選單"
 
 #: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
+msgstr "意見反應"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
 msgid "EOS Shell"
-msgstr ""
+msgstr "EOS Shell"
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -55,11 +55,11 @@ msgstr "視窗管理與應用程式的執行"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
-msgstr ""
+msgstr "擴充功能"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure Desktop Extensions"
-msgstr ""
+msgstr "配置桌面延伸"
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
@@ -68,7 +68,7 @@ msgstr "載入 %s 的偏好設定對話盒時發生錯誤："
 
 #: ../js/extensionPrefs/main.js:149
 msgid "Desktop Extensions"
-msgstr ""
+msgstr "桌面擴充功能"
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -76,7 +76,7 @@ msgstr "作業階段…"
 
 #: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
-msgstr ""
+msgstr "顯示密碼提示"
 
 #: ../js/gdm/loginDialog.js:636
 msgid "Forgot password?"
@@ -93,7 +93,7 @@ msgstr "沒有列出來？"
 #. by customer support.
 #: ../js/gdm/loginDialog.js:836
 msgid "Enter unlock code provided by customer support:"
-msgstr ""
+msgstr "輸入客戶支援提供的授權代碼："
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
@@ -103,12 +103,12 @@ msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
 " emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
-msgstr ""
+msgstr "請將你的認證碼 %s 經由撥打至 %s 或傳送電子郵件至 %s 來通知客戶服務人員。直到你點擊取消或關閉你的電腦之前此認證碼皆會保持有效。"
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:846
 msgid "Reset Password"
-msgstr ""
+msgstr "重設密碼"
 
 #: ../js/gdm/loginDialog.js:1002 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
@@ -129,7 +129,7 @@ msgstr "下一個"
 
 #: ../js/gdm/loginDialog.js:1138
 msgid "Your unlock code was incorrect. Please try again."
-msgstr ""
+msgstr "您的解鎖碼不正確。請再試一次。"
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
@@ -192,7 +192,7 @@ msgstr "執行「%s」失敗："
 
 #: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
-msgstr ""
+msgstr "從桌面移除"
 
 #: ../js/ui/appDisplay.js:1708
 msgid "Warning"
@@ -201,11 +201,11 @@ msgstr "警告"
 #: ../js/ui/appDisplay.js:1714
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr ""
+msgstr "欲刪除資料夾你必須先清除資料夾裡面的所有物件。"
 
 #: ../js/ui/appDisplay.js:1720
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "我們正在試著保護您的安全。"
 
 #: ../js/ui/appDisplay.js:1726
 msgid "OK"
@@ -213,11 +213,11 @@ msgstr "確定"
 
 #: ../js/ui/appDisplay.js:2030
 msgid "More Apps"
-msgstr ""
+msgstr "更多應用程式"
 
 #: ../js/ui/appDisplay.js:2039
 msgid "Delete"
-msgstr ""
+msgstr "刪除"
 
 #: ../js/ui/appFavorites.js:108
 #, javascript-format
@@ -231,24 +231,24 @@ msgstr "%s 已經從您的喜好中移除。"
 
 #: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
-msgstr ""
+msgstr "其他的工作空間"
 
 #: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
-msgstr ""
+msgstr "目前的工作空間"
 
 #: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
-msgstr ""
+msgstr "釘選至工作列"
 
 #: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
-msgstr ""
+msgstr "從工作列取消釘選"
 
 #: ../js/ui/appIconBar.js:319
 #, javascript-format
 msgid "Quit %s"
-msgstr ""
+msgstr "退出 %s"
 
 #: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
@@ -256,15 +256,15 @@ msgstr "改變背景…"
 
 #: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
-msgstr ""
+msgstr "新增應用程式"
 
 #: ../js/ui/backgroundMenu.js:32
 msgid "Add Website"
-msgstr ""
+msgstr "新增網站"
 
 #: ../js/ui/backgroundMenu.js:36
 msgid "Add Folder"
-msgstr ""
+msgstr "新增資料夾"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -278,7 +278,7 @@ msgstr "整天"
 #: ../js/ui/calendar.js:68
 msgctxt "event list time"
 msgid "%H∶%M"
-msgstr ""
+msgstr "%H∶%M"
 
 #. Transators: Shown in calendar event list, if 12h format,
 #. \u2236 is a ratio character, similar to : and \u2009 is
@@ -286,7 +286,7 @@ msgstr ""
 #: ../js/ui/calendar.js:77
 msgctxt "event list time"
 msgid "%l∶%M %p"
-msgstr ""
+msgstr "%l∶%M %p"
 
 #. Translators: Calendar grid abbreviation for Sunday.
 #. *
@@ -381,7 +381,7 @@ msgstr "六"
 
 #: ../js/ui/calendar.js:391
 msgid "calendar:MY"
-msgstr ""
+msgstr "日曆：我的"
 
 #. Translators: Text to show if there are no events
 #: ../js/ui/calendar.js:722
@@ -543,15 +543,15 @@ msgstr "抱歉，那樣沒有作用。請再試一次。"
 
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
-msgstr ""
+msgstr "軟體更新"
 
 #: ../js/ui/components/updaterManager.js:204
 msgid "Updates available"
-msgstr ""
+msgstr "有可取得的更新"
 
 #: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
-msgstr ""
+msgstr "有軟體更新可供系統使用"
 
 #: ../js/ui/components/updaterManager.js:206
 msgid "Download now"
@@ -559,35 +559,35 @@ msgstr "下載"
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
-msgstr ""
+msgstr "更新準備完畢"
 
 #: ../js/ui/components/updaterManager.js:220
 msgid "Software updates are ready to be installed on your system"
-msgstr ""
+msgstr "軟體更新已經準備好要安裝在你的系統上"
 
 #: ../js/ui/components/updaterManager.js:221
 msgid "Install now"
-msgstr ""
+msgstr "現在安裝"
 
 #: ../js/ui/components/updaterManager.js:230
 msgid "Updates installed"
-msgstr ""
+msgstr "更新安裝完畢"
 
 #: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
-msgstr ""
+msgstr "軟體更新已安裝在你的系統中"
 
 #: ../js/ui/components/updaterManager.js:232
 msgid "Restart now"
-msgstr ""
+msgstr "立即重新開始"
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
-msgstr ""
+msgstr "更新失敗"
 
 #: ../js/ui/components/updaterManager.js:256
 msgid "We could not update your system"
-msgstr ""
+msgstr "我們無法更新您的系統"
 
 #: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
 msgid "Windows"
@@ -630,7 +630,7 @@ msgstr "%Y年%m月%e日%A"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr ""
+msgstr "請切記，共同帳號不受密碼保護，所以請確實刪除您希望保密的檔案。"
 
 #: ../js/ui/endSessionDialog.js:77
 #, javascript-format
@@ -728,43 +728,43 @@ msgstr "是否從 extensions.gnome.org 下載並安裝「%s」？"
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr ""
+msgstr "結束應用程式..."
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr ""
+msgstr "如果應用程式已有一段時間沒有回應，選取此應用程式的名稱並點擊離開應用程式。"
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
-msgstr ""
+msgstr "系統監控"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr ""
+msgstr "結束應用程式"
 
-#: ../js/ui/iconGridLayout.js:215
+#: ../js/ui/iconGridLayout.js:249
 #, javascript-format
 msgid "%s has been deleted"
-msgstr ""
+msgstr "已刪除 %s"
 
 #: ../js/ui/internetSearch.js:99
 #, javascript-format
 msgid "Open \"%s\" in browser"
-msgstr ""
+msgstr "在瀏覽器中開啟「%s」"
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
 #: ../js/ui/internetSearch.js:108
 #, javascript-format
 msgid "Search %s for \"%s\""
-msgstr ""
+msgstr "用 %s 搜索「%s」"
 
 #: ../js/ui/internetSearch.js:110
 #, javascript-format
 msgid "Search the internet for \"%s\""
-msgstr ""
+msgstr "在網際網路上搜索「%s」"
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
@@ -861,7 +861,7 @@ msgstr "概覽"
 
 #: ../js/ui/panel.js:376
 msgid "Taskbar"
-msgstr ""
+msgstr "工作列"
 
 #. Translators: this MUST be either "toggle-switch-us"
 #. (for toggle switches containing the English words
@@ -1002,15 +1002,15 @@ msgstr "硬體已停用"
 
 #: ../js/ui/status/hotCornerIndicator.js:19
 msgid "Hot Corner Indicator"
-msgstr ""
+msgstr "Hot Corner 指示器"
 
 #: ../js/ui/status/hotCornerIndicator.js:40
 msgid "Enable Hot Corner"
-msgstr ""
+msgstr "啟用熱角"
 
 #: ../js/ui/status/hotCornerIndicator.js:44
 msgid "Disable Hot Corner"
-msgstr ""
+msgstr "禁用 Hot Corner"
 
 #: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
@@ -1189,7 +1189,7 @@ msgstr "退出"
 
 #: ../js/ui/userMenu.js:39
 msgid "Help"
-msgstr ""
+msgstr "說明"
 
 #: ../js/ui/userMenu.js:40
 msgid "Settings"
@@ -1197,7 +1197,7 @@ msgstr "設定值"
 
 #: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
-msgstr ""
+msgstr "給我們回饋意見"
 
 #: ../js/ui/userMenu.js:490
 msgid "Switch User"
@@ -1299,12 +1299,12 @@ msgstr "無法啟動「%s」"
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
-msgstr ""
+msgstr "未命名"
 
 #: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
-msgstr ""
+msgstr "針對 %s 的自行定義"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."

@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-20 02:31+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
+"POT-Creation-Date: 2017-01-03 02:38+0000\n"
+"PO-Revision-Date: 2017-01-07 11:45+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -58,11 +58,11 @@ msgstr "Quản lý cửa sổ và chạy ứng dụng"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
-msgstr ""
+msgstr "Tiện ích bổ sung"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure Desktop Extensions"
-msgstr ""
+msgstr "Thiết lập Tiện ích mở rộng Desktop"
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
@@ -71,7 +71,7 @@ msgstr "Có lỗi khi đang tải hộp thoại tùy thích cho %s:"
 
 #: ../js/extensionPrefs/main.js:149
 msgid "Desktop Extensions"
-msgstr ""
+msgstr "Phần mở rộng Desktop"
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -747,7 +747,7 @@ msgstr "Màn hình Hệ thống"
 msgid "Quit Application"
 msgstr "Thoát Ứng dụng"
 
-#: ../js/ui/iconGridLayout.js:215
+#: ../js/ui/iconGridLayout.js:249
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s đã được xóa"
