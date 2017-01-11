@@ -21,6 +21,7 @@ const PopupMenu = imports.ui.popupMenu;
 const IconGrid = imports.ui.iconGrid;
 const Params = imports.misc.params;
 const Util = imports.misc.util;
+const ViewSelector = imports.ui.viewSelector;
 
 const YELP_TEXT = _("Help");
 const YELP_LAUNCHER = "yelp.desktop";
@@ -549,6 +550,7 @@ const Indicator = new Lang.Class({
         labelItem.actor.label_actor = label;
         this.menu.addMenuItem(labelItem);
         this.menu.addMenuItem(new SuggestedAppsItem(this.menu));
+
         let showAppsItem = new PopupMenu.PopupBaseMenuItem({ can_focus: false, reactive: false });
         showAppsItem.actor.x_align = Clutter.ActorAlign.CENTER;
         let button = new St.Button({
@@ -562,6 +564,30 @@ const Indicator = new Lang.Class({
         }));
         showAppsItem.actor.add_child(button);
         // this.menu.addMenuItem(showAppsItem);
+
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        let showDesktopItem = new PopupMenu.PopupBaseMenuItem({ can_focus: false, reactive: false });
+        showDesktopItem.actor.x_align = Clutter.ActorAlign.CENTER;
+        let showDesktopButton = new St.Button({
+            label: _('Show Desktop'),
+            style_class: 'modal-dialog-button',
+        });
+        showDesktopButton.connect('clicked', Lang.bind(this, function () {
+            this.menu.itemActivated(BoxPointer.PopupAnimation.NONE);
+            Main.overview.showApps();
+        }));
+        showDesktopItem.actor.add_child(showDesktopButton);
+        this.menu.addMenuItem(showDesktopItem);
+        let sync = Lang.bind(this, function() {
+            if (Main.overview.visible && Main.overview.getActivePage() == ViewSelector.ViewPage.APPS) {
+                showDesktopItem.actor.hide();
+            } else {
+                showDesktopItem.actor.show();
+            }
+        });
+        Main.overview.connect('page-changed', sync);
+        Main.overview.connect('shown', sync);
+        Main.overview.connect('hidden', sync);
     },
 
     _onHelpClicked: function() {
