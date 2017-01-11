@@ -1101,7 +1101,7 @@ const CalendarMessageList = new Lang.Class({
         this._sections = new Map();
 
         this._mediaSection = new Mpris.MediaSection();
-        this._addSection(this._mediaSection);
+        // this._addSection(this._mediaSection);
 
         this._notificationSection = new NotificationSection();
         this._addSection(this._notificationSection);
