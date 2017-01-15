@@ -134,6 +134,8 @@ const CodingManager = new Lang.Class({
         session.sizeChangedIdApp = window.connect('size-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
 
         session.windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowRestacked, session));
+        session.overviewHidingId = Main.overview.connect('hiding', Lang.bind(this, this._overviewHiding, session));
+        session.overviewShowingId = Main.overview.connect('showing', Lang.bind(this, this._overviewShowing, session));
         session.windowMinimizedId = global.window_manager.connect('minimize', Lang.bind(this, this._windowMinimized, session));
         session.windowUnminimizedId = global.window_manager.connect('unminimize', Lang.bind(this, this._windowUnminimized, session));
     },
@@ -178,6 +180,14 @@ const CodingManager = new Lang.Class({
         if (session.windowsRestackedId !== 0) {
             Main.overview.disconnect(session.windowsRestackedId);
             session.windowsRestackedId = 0;
+        }
+        if (session.overviewHidingId !== 0) {
+            Main.overview.disconnect(session.overviewHidingId);
+            session.overviewHidingId = 0;
+        }
+        if (session.overviewShowingId !== 0) {
+            Main.overview.disconnect(session.overviewShowingId);
+            session.overviewShowingId = 0;
         }
         if (session.windowMinimizedId !== 0) {
             global.window_manager.disconnect(session.windowMinimizedId);
@@ -460,6 +470,18 @@ const CodingManager = new Lang.Class({
         } else if (builderWindow === previousFocused) {
             session.buttonBuilder.hide();
         }
+    },
+
+    _overviewHiding: function(overview, session) {
+        session.buttonApp.show();
+        if (session.buttonBuilder)
+            session.buttonBuilder.show();
+    },
+
+    _overviewShowing: function(overview, session) {
+        session.buttonApp.hide();
+        if (session.buttonBuilder)
+            session.buttonBuilder.hide();
     },
 
     _prepareAnimate: function(src, dst, direction) {
