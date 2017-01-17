@@ -7,6 +7,7 @@
 # Bayram Güçlü <byrmgcl@yandex.com.tr>, 2014
 # ercin <ercin@linux.org.tr>, 2011
 # Gökhan Gurbetoğlu <ggurbet@gmail.com>, 2014
+# Koray KIRCAOĞLU <koraym@gmail.com>, 2017
 # Muhammet Kara <muhammet.k@gmail.com>, 2011-2012
 # Muhammet Kara <muhammetk@gmail.com>, 2011-2016
 # Osman Karagöz <osmank3@gmail.com>, 2013
@@ -15,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-03 02:38+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2017-01-10 02:31+0000\n"
+"PO-Revision-Date: 2017-01-14 23:37+0000\n"
+"Last-Translator: Koray KIRCAOĞLU <koraym@gmail.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,32 +28,32 @@ msgstr ""
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
 msgid "System"
-msgstr ""
+msgstr "Sistem"
 
 #: ../data/50-gnome-shell-system.xml.in.h:2
 msgid "Show the message tray"
-msgstr ""
+msgstr "Mesaj tepsisini göster"
 
 #: ../data/50-gnome-shell-system.xml.in.h:3
 msgid "Focus the active notification"
-msgstr ""
+msgstr "Aktif bildirimi göster"
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
 msgid "Show all applications"
-msgstr ""
+msgstr "Uygulamaları göster"
 
 #: ../data/50-gnome-shell-system.xml.in.h:5
 msgid "Open the application menu"
-msgstr ""
+msgstr "Uygulama menüsünü aç"
 
 #: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
+msgstr "Geri bildirim"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
 msgid "EOS Shell"
-msgstr ""
+msgstr "EOS Kabuk"
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -61,11 +62,11 @@ msgstr "Pencere yönetimi ve uygulama başlatma"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
-msgstr ""
+msgstr "Uzantılar"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure Desktop Extensions"
-msgstr ""
+msgstr "Masaüstü Uzantılarını Ayarla"
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
@@ -74,19 +75,19 @@ msgstr "%s için tercihler iletişim penceresi yüklenirken hata oluştu:"
 
 #: ../js/extensionPrefs/main.js:149
 msgid "Desktop Extensions"
-msgstr ""
+msgstr "Masaüstü Uzantıları"
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
-msgstr ""
+msgstr "Oturum..."
 
 #: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
-msgstr ""
+msgstr "Şifre ipucunu göster"
 
 #: ../js/gdm/loginDialog.js:636
 msgid "Forgot password?"
-msgstr ""
+msgstr "Şifrenizi unuttunuz mu?"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -99,7 +100,7 @@ msgstr "Listede yok mu?"
 #. by customer support.
 #: ../js/gdm/loginDialog.js:836
 msgid "Enter unlock code provided by customer support:"
-msgstr ""
+msgstr "Müşteri hizmetleri tarafından verilen kilit açma kodunu giriniz:"
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
@@ -109,12 +110,12 @@ msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
 " emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
-msgstr ""
+msgstr "Lütfen müşteri desteğini %s olan doğrulama kodunuz ile bilgilendirin.\n%s aranarak veya %s adresine mail aracılığıyla ulaşarak yapabilirsiniz. Bu kod siz İptal tuşuna basıncaya veya bilgisayarınızı kapatncaya kadar geçerli kalacaktır."
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:846
 msgid "Reset Password"
-msgstr ""
+msgstr "Şifre Sıfırla"
 
 #: ../js/gdm/loginDialog.js:1002 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
@@ -135,7 +136,7 @@ msgstr "Sonraki"
 
 #: ../js/gdm/loginDialog.js:1138
 msgid "Your unlock code was incorrect. Please try again."
-msgstr ""
+msgstr "Kilit açma kodunuz hatalı. Lütfen tekrar deneyin."
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
@@ -152,7 +153,7 @@ msgstr "Oturum Açma Penceresi"
 #. Translators: accessible name of the power menu in the login screen
 #: ../js/gdm/powerMenu.js:36
 msgid "Power"
-msgstr ""
+msgstr "Güç"
 
 #: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
 msgid "Suspend"
@@ -194,24 +195,24 @@ msgstr "Komut işlenemedi:"
 #: ../js/misc/util.js:163
 #, javascript-format
 msgid "Execution of '%s' failed:"
-msgstr "'%s' çalıştırılması başarısız:"
+msgstr "'%s' çalıştırılması başarısız oldu."
 
 #: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
-msgstr ""
+msgstr "Masaüstünden kaldır"
 
 #: ../js/ui/appDisplay.js:1708
 msgid "Warning"
-msgstr ""
+msgstr "Uyarı"
 
 #: ../js/ui/appDisplay.js:1714
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
-msgstr ""
+msgstr "Bir klasörü silebilmek için önce içindekileri silmeniz gerekli."
 
 #: ../js/ui/appDisplay.js:1720
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "Sadece sizi güvende tutmaya çalışıyoruz."
 
 #: ../js/ui/appDisplay.js:1726
 msgid "OK"
@@ -219,11 +220,11 @@ msgstr "TAMAM"
 
 #: ../js/ui/appDisplay.js:2030
 msgid "More Apps"
-msgstr ""
+msgstr "Daha Fazla Uygulama"
 
 #: ../js/ui/appDisplay.js:2039
 msgid "Delete"
-msgstr ""
+msgstr "Sil"
 
 #: ../js/ui/appFavorites.js:108
 #, javascript-format
@@ -237,24 +238,24 @@ msgstr "%s sık kullanılanlarınızdan çıkarıldı."
 
 #: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
-msgstr ""
+msgstr "Diğer çalışma alanları"
 
 #: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
-msgstr ""
+msgstr "Aktif çalışma alanı"
 
 #: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
-msgstr ""
+msgstr "Görev çubuğuna sabitle"
 
 #: ../js/ui/appIconBar.js:303
 msgid "Unpin from Taskbar"
-msgstr ""
+msgstr "Görev çubuğundan kaldır"
 
 #: ../js/ui/appIconBar.js:319
 #, javascript-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Kapat: %s"
 
 #: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
@@ -262,15 +263,15 @@ msgstr "Arkaplanı Değiştir…"
 
 #: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
-msgstr ""
+msgstr "Uygulama Ekle"
 
 #: ../js/ui/backgroundMenu.js:32
 msgid "Add Website"
-msgstr ""
+msgstr "Websitesi Ekle"
 
 #: ../js/ui/backgroundMenu.js:36
 msgid "Add Folder"
-msgstr ""
+msgstr "Klasör Ekle"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -284,7 +285,7 @@ msgstr "Tüm Gün"
 #: ../js/ui/calendar.js:68
 msgctxt "event list time"
 msgid "%H∶%M"
-msgstr ""
+msgstr "%H∶%M"
 
 #. Transators: Shown in calendar event list, if 12h format,
 #. \u2236 is a ratio character, similar to : and \u2009 is
@@ -292,7 +293,7 @@ msgstr ""
 #: ../js/ui/calendar.js:77
 msgctxt "event list time"
 msgid "%l∶%M %p"
-msgstr ""
+msgstr "%l∶%M %p"
 
 #. Translators: Calendar grid abbreviation for Sunday.
 #. *
@@ -301,7 +302,7 @@ msgstr ""
 #: ../js/ui/calendar.js:108
 msgctxt "grid sunday"
 msgid "S"
-msgstr "P"
+msgstr "Pz"
 
 #. Translators: Calendar grid abbreviation for Monday
 #: ../js/ui/calendar.js:110
@@ -325,19 +326,19 @@ msgstr "Ç"
 #: ../js/ui/calendar.js:116
 msgctxt "grid thursday"
 msgid "T"
-msgstr "P"
+msgstr "Pr"
 
 #. Translators: Calendar grid abbreviation for Friday
 #: ../js/ui/calendar.js:118
 msgctxt "grid friday"
 msgid "F"
-msgstr "C"
+msgstr "Cm"
 
 #. Translators: Calendar grid abbreviation for Saturday
 #: ../js/ui/calendar.js:120
 msgctxt "grid saturday"
 msgid "S"
-msgstr "C"
+msgstr "Ct"
 
 #. Translators: Event list abbreviation for Sunday.
 #. *
@@ -387,7 +388,7 @@ msgstr "Ct"
 
 #: ../js/ui/calendar.js:391
 msgid "calendar:MY"
-msgstr ""
+msgstr "takvim:MY"
 
 #. Translators: Text to show if there are no events
 #: ../js/ui/calendar.js:722
@@ -439,7 +440,7 @@ msgstr "Çıkarılabilir Aygıtlar"
 #: ../js/ui/components/autorunManager.js:601
 #, javascript-format
 msgid "Open with %s"
-msgstr "%s ile Aç"
+msgstr "%s ile aç"
 
 #: ../js/ui/components/autorunManager.js:627
 msgid "Eject"
@@ -549,51 +550,51 @@ msgstr "Üzgünüm ama işe yaramadı. Lütfen tekrar deneyin."
 
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
-msgstr ""
+msgstr "Yazılım Güncelleme"
 
 #: ../js/ui/components/updaterManager.js:204
 msgid "Updates available"
-msgstr ""
+msgstr "Güncellemeler mevcut"
 
 #: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
-msgstr ""
+msgstr "Sisteminiz için yazılım güncellemeleri mevcut"
 
 #: ../js/ui/components/updaterManager.js:206
 msgid "Download now"
-msgstr ""
+msgstr "İndir"
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
-msgstr ""
+msgstr "Güncellemeler hazır"
 
 #: ../js/ui/components/updaterManager.js:220
 msgid "Software updates are ready to be installed on your system"
-msgstr ""
+msgstr "Yazılım güncellemeleri kurulmak üzere hazır"
 
 #: ../js/ui/components/updaterManager.js:221
 msgid "Install now"
-msgstr ""
+msgstr "Şimd Kur"
 
 #: ../js/ui/components/updaterManager.js:230
 msgid "Updates installed"
-msgstr ""
+msgstr "Güncellemeler kuruldu"
 
 #: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
-msgstr ""
+msgstr "Sisteminize yazılım güncellemeleri kuruldu"
 
 #: ../js/ui/components/updaterManager.js:232
 msgid "Restart now"
-msgstr ""
+msgstr "Yeniden Başlat"
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
-msgstr ""
+msgstr "Güncelleme başarısız"
 
 #: ../js/ui/components/updaterManager.js:256
 msgid "We could not update your system"
-msgstr ""
+msgstr "Sisteminizi güncelleştiremedik"
 
 #: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
 msgid "Windows"
@@ -619,11 +620,11 @@ msgstr "Takvimi Aç"
 
 #: ../js/ui/dateMenu.js:95
 msgid "Open Clocks"
-msgstr ""
+msgstr "Saatleri Aç"
 
 #: ../js/ui/dateMenu.js:104
 msgid "Date & Time Settings"
-msgstr ""
+msgstr "Tarih ve Saat Ayarları"
 
 #. Translators: This is the date format to use when the calendar popup is
 #. * shown - it is shown just below the time in the shell (e.g. "Tue 9:29
@@ -636,7 +637,7 @@ msgstr "%A %B %e, %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr ""
+msgstr "Unutmayın, paylaşılan hesaplar şifre ile korunmamaktadır. Özel kalmasını istediğinz her dosyayı sildiğinizden emin olun."
 
 #: ../js/ui/endSessionDialog.js:77
 #, javascript-format
@@ -657,15 +658,15 @@ msgstr "Açık uygulamalardan ve sistemden çıkmak için Çıkış' a tıklayı
 #, javascript-format
 msgid "%s will be logged out automatically in %d second."
 msgid_plural "%s will be logged out automatically in %d seconds."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s hesabından %d saniye içerisinde çıkış yapılacaktır."
+msgstr[1] "%s hesabından %d saniye içerisinde çıkış yapılacaktır."
 
 #: ../js/ui/endSessionDialog.js:88
 #, javascript-format
 msgid "You will be logged out automatically in %d second."
 msgid_plural "You will be logged out automatically in %d seconds."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d saniye içerisinde çıkış yapmış olacaksınız."
+msgstr[1] "%d saniye içerisinde çıkış yapmış olacaksınız."
 
 #: ../js/ui/endSessionDialog.js:93
 msgid "Logging out of the system."
@@ -689,8 +690,8 @@ msgstr "Açık uygulamalardan ve sistemden çıkarak sistemi kapatmak için Kapa
 #, javascript-format
 msgid "The system will power off automatically in %d second."
 msgid_plural "The system will power off automatically in %d seconds."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sisteminiz %d saniye içerisinde kapatılacak."
+msgstr[1] "Sisteminiz %d saniye içerisinde kapatılacak."
 
 #: ../js/ui/endSessionDialog.js:111
 msgid "Powering off the system."
@@ -720,8 +721,8 @@ msgstr "Açık uygulamalardan çıkarak sistemi yeniden başlatmak için Yeniden
 #, javascript-format
 msgid "The system will restart automatically in %d second."
 msgid_plural "The system will restart automatically in %d seconds."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sisteminiz %d saniye içerisinde yeniden başlayacak."
+msgstr[1] "Sisteminiz %d saniye içerisinde yeniden başlayacak."
 
 #: ../js/ui/endSessionDialog.js:145
 msgid "Restarting the system."
@@ -738,43 +739,43 @@ msgstr "extensions.gnome.org adresinden '%s' indirilip kurulsun mu?"
 
 #: ../js/ui/forceAppExitDialog.js:55
 msgid "Quit applications…"
-msgstr ""
+msgstr "Uygulamalardan çık..."
 
 #: ../js/ui/forceAppExitDialog.js:61
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr ""
+msgstr "Eğer bir süredir yanıt vermeyen bir uygulama varsa adını seçip Uygulamadan Çık'a tıklayın."
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
-msgstr ""
+msgstr "Sistem Monitörü"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr ""
+msgstr "Uygulamadan Çık"
 
 #: ../js/ui/iconGridLayout.js:249
 #, javascript-format
 msgid "%s has been deleted"
-msgstr ""
+msgstr "%s silindi"
 
 #: ../js/ui/internetSearch.js:99
 #, javascript-format
 msgid "Open \"%s\" in browser"
-msgstr ""
+msgstr "Browser ile %s aç."
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
 #: ../js/ui/internetSearch.js:108
 #, javascript-format
 msgid "Search %s for \"%s\""
-msgstr ""
+msgstr "%s üzerinde %s ara."
 
 #: ../js/ui/internetSearch.js:110
 #, javascript-format
 msgid "Search the internet for \"%s\""
-msgstr ""
+msgstr "İnternette \"%s\" araması yap"
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
@@ -838,19 +839,19 @@ msgstr "Sil"
 
 #: ../js/ui/messageTray.js:1631
 msgid "Clear Messages"
-msgstr ""
+msgstr "Mesajları Temizle"
 
 #: ../js/ui/messageTray.js:1658
 msgid "Notification Settings"
-msgstr ""
+msgstr "Bildirim Ayarları"
 
 #: ../js/ui/messageTray.js:1848
 msgid "No Messages"
-msgstr ""
+msgstr "Mesaj Yok"
 
 #: ../js/ui/messageTray.js:1922
 msgid "Message Tray"
-msgstr ""
+msgstr "Mesaj Tepsisi"
 
 #: ../js/ui/messageTray.js:2943
 msgid "System Information"
@@ -871,7 +872,7 @@ msgstr "Genel Görünüm"
 
 #: ../js/ui/panel.js:376
 msgid "Taskbar"
-msgstr ""
+msgstr "Görev çubuğu"
 
 #. Translators: this MUST be either "toggle-switch-us"
 #. (for toggle switches containing the English words
@@ -1012,15 +1013,15 @@ msgstr "donanım devre dışı"
 
 #: ../js/ui/status/hotCornerIndicator.js:19
 msgid "Hot Corner Indicator"
-msgstr ""
+msgstr "Sihirli Köşe Belirteci"
 
 #: ../js/ui/status/hotCornerIndicator.js:40
 msgid "Enable Hot Corner"
-msgstr ""
+msgstr "Sihirli Köşeleri Etkinleştir"
 
 #: ../js/ui/status/hotCornerIndicator.js:44
 msgid "Disable Hot Corner"
-msgstr ""
+msgstr "Sihirli Köşeleri Kapat"
 
 #: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
@@ -1028,11 +1029,11 @@ msgstr "Klavye Düzenini Göster"
 
 #: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
-msgstr ""
+msgstr "Bölge ve Dil Ayarları"
 
 #: ../js/ui/status/lockScreenMenu.js:43
 msgid "Volume, network, battery"
-msgstr ""
+msgstr "Ses, ağ, pil"
 
 #: ../js/ui/status/network.js:75
 msgid "<unknown>"
@@ -1040,7 +1041,7 @@ msgstr "<bilinmeyen>"
 
 #: ../js/ui/status/network.js:128
 msgid "Wi-Fi"
-msgstr ""
+msgstr "Wi-Fi"
 
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
@@ -1089,7 +1090,7 @@ msgstr "bağlantı başarısız"
 
 #: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1201
 msgid "More…"
-msgstr ""
+msgstr "Daha..."
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
@@ -1108,7 +1109,7 @@ msgstr "Mobil geniş bant"
 
 #: ../js/ui/status/network.js:1474
 msgid "Network"
-msgstr ""
+msgstr "Ağ"
 
 #: ../js/ui/status/network.js:1531
 msgid "Enable networking"
@@ -1136,7 +1137,7 @@ msgstr "Ağ bağlantısı devre dışı"
 
 #: ../js/ui/status/power.js:34
 msgid "Battery"
-msgstr ""
+msgstr "Pil"
 
 #: ../js/ui/status/power.js:51
 msgid "Power Settings"
@@ -1195,11 +1196,11 @@ msgstr "Kilitle"
 
 #: ../js/ui/userMenu.js:37
 msgid "Exit"
-msgstr ""
+msgstr "Çıkış"
 
 #: ../js/ui/userMenu.js:39
 msgid "Help"
-msgstr ""
+msgstr "Yardım"
 
 #: ../js/ui/userMenu.js:40
 msgid "Settings"
@@ -1207,7 +1208,7 @@ msgstr "Ayarlar"
 
 #: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
-msgstr ""
+msgstr "Geri Bildirimde Bulunun"
 
 #: ../js/ui/userMenu.js:490
 msgid "Switch User"
@@ -1219,7 +1220,7 @@ msgstr "Diğer kullanıcılar oturum açmış"
 
 #: ../js/ui/userMenu.js:566
 msgid "Shutting down might cause them to lose unsaved work."
-msgstr ""
+msgstr "Sistemi kapatmak kayıt edilmemiş çalışmaların kaybolmasına sebep olabilir."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
 #: ../js/ui/userMenu.js:594
@@ -1260,8 +1261,8 @@ msgstr "Değişiklikleri Sakla"
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ayar değişiklikleri %d saniye içerisinde geri alınacak"
+msgstr[1] "Ayar değişiklikleri %d saniye içerisinde geri alınacak"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
@@ -1273,8 +1274,8 @@ msgstr "Evolution Takvim"
 #, c-format
 msgid "%u Output"
 msgid_plural "%u Outputs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u Çıktı"
+msgstr[1] "%u Çıktı"
 
 #. translators:
 #. * The number of sound inputs on a particular device
@@ -1282,8 +1283,8 @@ msgstr[1] ""
 #, c-format
 msgid "%u Input"
 msgid_plural "%u Inputs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u Girdi"
+msgstr[1] "%u Girdi"
 
 #: ../src/gvc/gvc-mixer-control.c:2373
 msgid "System Sounds"
@@ -1312,12 +1313,12 @@ msgstr "'%s' başlatılamadı"
 
 #: ../src/shell-desktop-dir-info.c:485
 msgid "Unnamed"
-msgstr ""
+msgstr "İsimsiz"
 
 #: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
-msgstr ""
+msgstr "%s için özel tanımlama"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."
