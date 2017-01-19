@@ -55,6 +55,9 @@ const InternetSearchProvider = new Lang.Class({
 
         try {
             parser.load_from_file(path);
+        } catch(e if e.matches(GLib.FileError, GLib.FileError.NOENT)) {
+            // User has not run Chromium yet.
+            return null;
         } catch (e) {
             logError(e, 'error while parsing Chromium preferences');
             return null;
