@@ -64,17 +64,33 @@ const InternetSearchProvider = new Lang.Class({
         }
 
         let root = parser.get_root().get_object();
-        let searchProviderData = root.get_object_member('default_search_provider_data');
+
+        let searchProviderDataNode = root.get_member('default_search_provider_data');
+        if (!searchProviderDataNode || searchProviderDataNode.get_node_type() != Json.NodeType.OBJECT) {
+            return null;
+        }
+
+        let searchProviderData = searchProviderDataNode.get_object();
         if (!searchProviderData) {
             return null;
         }
 
-        let templateUrlData = searchProviderData.get_object_member('template_url_data');
+        let templateUrlDataNode = searchProviderData.get_member('template_url_data');
+        if (!templateUrlDataNode || templateUrlDataNode.get_node_type() != Json.NodeType.OBJECT) {
+            return null;
+        }
+
+        let templateUrlData = templateUrlDataNode.get_object();
         if (!templateUrlData) {
             return null;
         }
 
-        return templateUrlData.get_string_member('short_name');
+        let shortNameNode = templateUrlData.get_member('short_name');
+        if (!shortNameNode || shortNameNode.get_node_type() != Json.NodeType.VALUE) {
+            return null;
+        }
+
+        return shortNameNode.get_string();
     },
 
     _getEngineName: function() {
