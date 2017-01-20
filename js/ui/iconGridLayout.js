@@ -38,6 +38,7 @@ const IconGridLayout = new Lang.Class({
     Name: 'IconGridLayout',
 
     _init: function(params) {
+        this._chrome_helper_settings = new Gio.Settings({ schema_id: 'com.endlessm.GoogleChromeInitialSetup' });
         this._updateIconTree();
 
         this._removeUndone = false;
@@ -95,6 +96,19 @@ const IconGridLayout = new Lang.Class({
             // Entirely empty indicates that we need to read in the defaults
             allIcons = this._getDefaultIcons();
             iconTree = this._getIconTreeFromVariant(allIcons);
+
+            // Replace the Chromium browser's icon by Chrome's if the latter is to be
+            // enabled
+            if (this._chrome_helper_settings.get_boolean('enabled')) {
+                for (let folderId in iconTree) {
+                    for (let iconId in iconTree[folderId]) {
+                        if (iconTree[folderId][iconId] == 'chromium-browser.desktop') {
+                            iconTree[folderId][iconId] = 'google-chrome.desktop';
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         this._iconTree = iconTree;
