@@ -34,11 +34,20 @@ const APPEND_CONFIG_NAME_BASE = 'icon-grid-append';
  */
 const SHELL_APP_REMOVED_EVENT = '683b40a7-cac0-4f9a-994c-4b274693a0a0';
 
+/* Optional dependency: this schema will be installed on certain configurations where,
+ * if the 'enabled' key is set, we'll want Chrome to replace Chromium in the desktop. */
+const GOOGLE_CHROME_INITIAL_SETUP_SCHEMA = 'com.endlessm.GoogleChromeInitialSetup';
+
 const IconGridLayout = new Lang.Class({
     Name: 'IconGridLayout',
 
     _init: function(params) {
-        this._chrome_helper_settings = new Gio.Settings({ schema_id: 'com.endlessm.GoogleChromeInitialSetup' });
+        let schema_source = Gio.SettingsSchemaSource.get_default();
+        this._chrome_helper_settings = null;
+        if (schema_source.lookup(GOOGLE_CHROME_INITIAL_SETUP_SCHEMA, true)) {
+            this._chrome_helper_settings = new Gio.Settings({ schema_id: GOOGLE_CHROME_INITIAL_SETUP_SCHEMA });
+        }
+
         this._updateIconTree();
 
         this._removeUndone = false;
@@ -99,7 +108,7 @@ const IconGridLayout = new Lang.Class({
 
             // Replace the Chromium browser's icon by Chrome's if the latter is to be
             // enabled
-            if (this._chrome_helper_settings.get_boolean('enabled')) {
+            if (this._chrome_helper_settings && this._chrome_helper_settings.get_boolean('enabled')) {
                 for (let folderId in iconTree) {
                     for (let iconId in iconTree[folderId]) {
                         if (iconTree[folderId][iconId] == 'chromium-browser.desktop') {
