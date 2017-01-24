@@ -473,9 +473,15 @@ const CodingManager = new Lang.Class({
     },
 
     _overviewHiding: function(overview, session) {
-        session.buttonApp.show();
-        if (session.buttonBuilder)
+        let focusedWindow = global.display.get_focus_window();
+        if (!focusedWindow)
+            return;
+
+        // we only need to verify a Builder window exist
+        if (session.actorBuilder && session.actorBuilder.meta_window === focusedWindow)
             session.buttonBuilder.show();
+        else if (session.actorApp.meta_window === focusedWindow)
+            session.buttonApp.show();
     },
 
     _overviewShowing: function(overview, session) {
