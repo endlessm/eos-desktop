@@ -7,14 +7,15 @@
 # Adam Matoušek <adydas95@gmail.com>, 2012-2013
 # Andre Klapper <ak-47@gmx.net>, 2009
 # Marek Černocký <marek@manet.cz>, 2012-2016
+# MICHAL D. <black23@gmail.com>, 2017
 # Petr Kovar <pknbe@volny.cz>, 2009-2012,2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-10 02:31+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2017-01-17 02:31+0000\n"
+"PO-Revision-Date: 2017-01-23 21:00+0000\n"
+"Last-Translator: MICHAL D. <black23@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,12 +45,12 @@ msgstr "Otevřít nabídku aplikací"
 
 #: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr ""
+msgstr "Zpětná vazba"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
 msgid "EOS Shell"
-msgstr ""
+msgstr "EOS Shell"
 
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
@@ -58,11 +59,11 @@ msgstr "Správa oken a spouštění aplikací"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
-msgstr ""
+msgstr "Rozšíření"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure Desktop Extensions"
-msgstr ""
+msgstr "Nastavení rozšíření plochy"
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
@@ -71,7 +72,7 @@ msgstr "Nastala chyba při načítání dialogového okna předvoleb pro rozší
 
 #: ../js/extensionPrefs/main.js:149
 msgid "Desktop Extensions"
-msgstr ""
+msgstr "Rozšíření plochy"
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
@@ -79,11 +80,11 @@ msgstr "Sezení…"
 
 #: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
-msgstr ""
+msgstr "Zobrazit nápovědu k heslu"
 
 #: ../js/gdm/loginDialog.js:636
 msgid "Forgot password?"
-msgstr ""
+msgstr "Zapomenuté heslo?"
 
 #. translators: this message is shown below the user list on the
 #. login screen. It can be activated to reveal an entry for
@@ -96,7 +97,7 @@ msgstr "Nejste na seznamu?"
 #. by customer support.
 #: ../js/gdm/loginDialog.js:836
 msgid "Enter unlock code provided by customer support:"
-msgstr ""
+msgstr "Vložte odblokovací kód, který jste obdrželi od zákaznické podpory:"
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
@@ -111,7 +112,7 @@ msgstr ""
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:846
 msgid "Reset Password"
-msgstr ""
+msgstr "Obnovit heslo"
 
 #: ../js/gdm/loginDialog.js:1002 ../js/ui/components/networkAgent.js:137
 #: ../js/ui/components/polkitAgent.js:162 ../js/ui/endSessionDialog.js:424
@@ -132,7 +133,7 @@ msgstr "Další"
 
 #: ../js/gdm/loginDialog.js:1138
 msgid "Your unlock code was incorrect. Please try again."
-msgstr ""
+msgstr "Váš odblokovací kód není správný. Zkuste to prosím znovu."
 
 #. TTLS and PEAP are actually much more complicated, but this complication
 #. is not visible here since we only care about phase2 authentication
@@ -195,11 +196,11 @@ msgstr "Vykonání „%s“ selhalo:"
 
 #: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
-msgstr ""
+msgstr "Odstranit z plochy"
 
 #: ../js/ui/appDisplay.js:1708
 msgid "Warning"
-msgstr ""
+msgstr "Varování"
 
 #: ../js/ui/appDisplay.js:1714
 msgid ""
@@ -208,7 +209,7 @@ msgstr ""
 
 #: ../js/ui/appDisplay.js:1720
 msgid "We are just trying to keep you safe."
-msgstr ""
+msgstr "Snažíme se chránit vaše bezpečí."
 
 #: ../js/ui/appDisplay.js:1726
 msgid "OK"
@@ -216,11 +217,11 @@ msgstr "Budiž"
 
 #: ../js/ui/appDisplay.js:2030
 msgid "More Apps"
-msgstr ""
+msgstr "Více aplikací"
 
 #: ../js/ui/appDisplay.js:2039
 msgid "Delete"
-msgstr ""
+msgstr "Odstranit"
 
 #: ../js/ui/appFavorites.js:108
 #, javascript-format
@@ -234,11 +235,11 @@ msgstr "%s byl odstraněn z oblíbených."
 
 #: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
-msgstr ""
+msgstr "Ostatní plochy"
 
 #: ../js/ui/appIconBar.js:224
 msgid "Current workspace"
-msgstr ""
+msgstr "Aktuální plocha"
 
 #: ../js/ui/appIconBar.js:299
 msgid "Pin to Taskbar"
@@ -259,15 +260,15 @@ msgstr "Změnit pozadí…"
 
 #: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
-msgstr ""
+msgstr "Přidat aplikaci"
 
 #: ../js/ui/backgroundMenu.js:32
 msgid "Add Website"
-msgstr ""
+msgstr "Přidat webovou stránku"
 
 #: ../js/ui/backgroundMenu.js:36
 msgid "Add Folder"
-msgstr ""
+msgstr "Přidat složku"
 
 #. Translators: Shown in calendar event list for all day events
 #. * Keep it short, best if you can use less then 10 characters
@@ -546,23 +547,23 @@ msgstr "Ověření bohužel nebylo úspěšné. Zkuste to prosím znovu."
 
 #: ../js/ui/components/updaterManager.js:188
 msgid "Software Update"
-msgstr ""
+msgstr "Aktualizace software"
 
 #: ../js/ui/components/updaterManager.js:204
 msgid "Updates available"
-msgstr ""
+msgstr "Dostupné aktualizace"
 
 #: ../js/ui/components/updaterManager.js:205
 msgid "Software updates are available for your system"
-msgstr ""
+msgstr "K dispozici jsou aktualizace software pro váš systém"
 
 #: ../js/ui/components/updaterManager.js:206
 msgid "Download now"
-msgstr ""
+msgstr "Stáhnout nyní"
 
 #: ../js/ui/components/updaterManager.js:219
 msgid "Updates ready"
-msgstr ""
+msgstr "Aktualizace připraveny"
 
 #: ../js/ui/components/updaterManager.js:220
 msgid "Software updates are ready to be installed on your system"
@@ -570,11 +571,11 @@ msgstr ""
 
 #: ../js/ui/components/updaterManager.js:221
 msgid "Install now"
-msgstr ""
+msgstr "Instalovat nyní"
 
 #: ../js/ui/components/updaterManager.js:230
 msgid "Updates installed"
-msgstr ""
+msgstr "Aktualizace nainstalovány"
 
 #: ../js/ui/components/updaterManager.js:231
 msgid "Software updates were installed on your system"
@@ -582,11 +583,11 @@ msgstr ""
 
 #: ../js/ui/components/updaterManager.js:232
 msgid "Restart now"
-msgstr ""
+msgstr "Restartovat nyní"
 
 #: ../js/ui/components/updaterManager.js:255
 msgid "Update failed"
-msgstr ""
+msgstr "Aktualizace selhala"
 
 #: ../js/ui/components/updaterManager.js:256
 msgid "We could not update your system"
@@ -749,11 +750,11 @@ msgstr ""
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
-msgstr ""
+msgstr "Monitorování systému"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr ""
+msgstr "Opustit aplikaci"
 
 #: ../js/ui/iconGridLayout.js:249
 #, javascript-format
@@ -1109,7 +1110,7 @@ msgstr "Mobilní širokopásmová"
 
 #: ../js/ui/status/network.js:1474
 msgid "Network"
-msgstr ""
+msgstr "Síť"
 
 #: ../js/ui/status/network.js:1531
 msgid "Enable networking"
@@ -1196,11 +1197,11 @@ msgstr "Uzamknout"
 
 #: ../js/ui/userMenu.js:37
 msgid "Exit"
-msgstr ""
+msgstr "Odejít"
 
 #: ../js/ui/userMenu.js:39
 msgid "Help"
-msgstr ""
+msgstr "Nápověda"
 
 #: ../js/ui/userMenu.js:40
 msgid "Settings"
@@ -1208,7 +1209,7 @@ msgstr "Nastavení"
 
 #: ../js/ui/userMenu.js:41
 msgid "Give Us Feedback"
-msgstr ""
+msgstr "Zašlete nám zpětnou vazbu"
 
 #: ../js/ui/userMenu.js:490
 msgid "Switch User"
