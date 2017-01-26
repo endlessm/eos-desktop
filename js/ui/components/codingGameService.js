@@ -11,7 +11,6 @@ const CodingChatboxTextService = new Lang.Class({
 
     _init: function() {
         this._signalHandlers = {};
-
         this._eventHandlers = {
             'move-window': Lang.bind(this, this._waitForNextWindowMove),
             'stop-moving-windows': Lang.bind(this, this._waitForNoWindowsToMove)
@@ -25,46 +24,19 @@ const CodingChatboxTextService = new Lang.Class({
         }
     },
 
-    _updateListeningForEvents: function() {
-        if (!this._service) {
-            return;
-        }
-
-        // In some cases, this can be null, just ignore it if so
-        if (this._service.currently_listening_for_events.length == 0) {
-            return;
-        }
-
-        // Disconnect any handlers not in the list
-        Object.keys(this._signalHandlers).filter(Lang.bind(this, function(name) {
-            return this._service.currently_listening_for_events.indexOf(name) === -1;
-        })).forEach(Lang.bind(this, function(name) {
-            this._disconnectHandlersFor(name);
-        }));
-
-        // Connect any handlers not in the list
-        this._service.currently_listening_for_events.filter(Lang.bind(this, function(name) {
-            return Object.keys(this._signalHandlers).indexOf(name) === -1;
-        })).forEach(Lang.bind(this, function(name) {
-            this._startListeningForEvent(name);
-        }));
-    },
-
     enable: function() {
         // Connect to the service
-        try {
-            this._service = CodingGameService.CodingGameServiceProxy.new_for_bus_sync(
-                Gio.BusType.SESSION, 0,
-                'com.endlessm.CodingGameService.Service',
-                '/com/endlessm/CodingGameService/Service', null);
-        } catch (e) {
-            logError(e, 'Error occurred in creating CodingGameServiceProxy');
-            return;
-        }
-
-        this._service.connect('notify::currently-listening-for-events',
-                              Lang.bind(this, this._updateListeningForEvents));
-        this._updateListeningForEvents();
+        this._controller = new CodingGameService.AppIntegrationController();
+        this._controller.service_event_with_listener('move-window', Lang.bind(this, function() {
+            this._startListeningForEvent('move-window');
+        }), Lang.bind(this, function() {
+            this._disconnectHandlersFor('move-window');
+        }));
+        this._controller.service_event_with_listener('stop-moving-windows', Lang.bind(this, function() {
+            this._startListeningForEvent('stop-moving-windows');
+        }), Lang.bind(this, function() {
+            this._disconnectHandlersFor('stop-moving-windows');
+        }));
     },
 
     disable: function() {
@@ -100,7 +72,7 @@ const CodingChatboxTextService = new Lang.Class({
     _waitForNextWindowMove: function() {
         let wmCallback = Lang.bind(this, function(display, screen, window, op) {
             if (window && op == Meta.GrabOp.MOVING) {
-                this._service.call_external_event('move-window', null, null);
+                this._controller.event_occurred('move-window');
                 this._disconnectHandlersFor('move-window');
             }
         });
@@ -120,7 +92,7 @@ const CodingChatboxTextService = new Lang.Class({
 
         let timeoutCb = Lang.bind(this, function() {
             this._disconnectHandlersFor('stop-moving-windows');
-            this._service.call_external_event('stop-moving-windows', null, null);
+            this._controller.event_occurred('stop-moving-windows');
             return false;
         });
 
