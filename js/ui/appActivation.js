@@ -43,6 +43,12 @@ const AppActivationContext = new Lang.Class({
         this._appActivationTime = 0;
 
         this._hiddenWindows = [];
+
+        this._appSystem = Shell.AppSystem.get_default();
+
+        this._tracker = Shell.WindowTracker.get_default();
+        this._tracker.connect('notify::focus-app',
+                              Lang.bind(this, this._onFocusAppChanged));
     },
 
     _doActivate: function(showSplash, timestamp) {
@@ -131,8 +137,7 @@ const AppActivationContext = new Lang.Class({
         // same ShellApp we called activate() on, as WMClass matching might
         // fail. For this reason, just pick to the first application that
         // will flip its state to running
-        let appSystem = Shell.AppSystem.get_default();
-        this._appStateId = appSystem.connect('app-state-changed',
+        this._appStateId = this._appSystem.connect('app-state-changed',
             Lang.bind(this, this._onAppStateChanged));
         this._appActivationTime = GLib.get_monotonic_time();
     },
@@ -244,6 +249,22 @@ const AppActivationContext = new Lang.Class({
             this._recordLaunchTime();
             this._maybeClearSplash();
         }
+    },
+
+    _onFocusAppChanged: function(tracker) {
+        if (this._splash == null)
+            return;
+
+        let app = tracker.focus_app;
+        if (app == null || app.get_id() === this._app.get_id())
+            return;
+
+        // The focused application changed and it is not the one that we are showing
+        // the splash for, so clear the splash after it times out (because we don't
+        // want to risk hiding too early)
+        this._appSystem.disconnect(this._appStateId);
+        this._appStateId = 0;
+        this._maybeClearSplash();
     }
 });
 
