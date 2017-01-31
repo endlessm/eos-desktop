@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-17 02:31+0000\n"
+"POT-Creation-Date: 2017-01-24 02:36+0000\n"
 "PO-Revision-Date: 2017-01-23 21:00+0000\n"
 "Last-Translator: MICHAL D. <black23@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/cs/)\n"
@@ -756,7 +756,7 @@ msgstr "Monitorování systému"
 msgid "Quit Application"
 msgstr "Opustit aplikaci"
 
-#: ../js/ui/iconGridLayout.js:249
+#: ../js/ui/iconGridLayout.js:272
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""

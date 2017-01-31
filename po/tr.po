@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-17 02:31+0000\n"
-"PO-Revision-Date: 2017-01-24 02:06+0000\n"
+"POT-Creation-Date: 2017-01-24 02:36+0000\n"
+"PO-Revision-Date: 2017-01-25 04:02+0000\n"
 "Last-Translator: Burcu Özacar <13urcu@gmail.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
 " emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
-msgstr "Lütfen müşteri desteğini %s olan doğrulama kodunuz ile bilgilendirin.\n%s aranarak veya %s adresine mail aracılığıyla ulaşarak yapabilirsiniz. Bu kod siz İptal tuşuna basıncaya veya bilgisayarınızı kapatncaya kadar geçerli kalacaktır."
+msgstr "Lütfen %s doğrulama kodunuzu müşteri hizmetleri ekibine %s numarasını arayarak veya %s adresine e-posta göndererek iletin. Bu kod siz İptal tuşuna basıncaya veya bilgisayarınızı kapatıncaya kadar geçerli kalacaktır."
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:846
@@ -309,7 +309,7 @@ msgstr "Pz"
 #: ../js/ui/calendar.js:110
 msgctxt "grid monday"
 msgid "M"
-msgstr "P"
+msgstr "Pt"
 
 #. Translators: Calendar grid abbreviation for Tuesday
 #: ../js/ui/calendar.js:112
@@ -333,7 +333,7 @@ msgstr "Pr"
 #: ../js/ui/calendar.js:118
 msgctxt "grid friday"
 msgid "F"
-msgstr "Cm"
+msgstr "C"
 
 #. Translators: Calendar grid abbreviation for Saturday
 #: ../js/ui/calendar.js:120
@@ -349,13 +349,13 @@ msgstr "Ct"
 #: ../js/ui/calendar.js:133
 msgctxt "list sunday"
 msgid "Su"
-msgstr "Pa"
+msgstr "Pz"
 
 #. Translators: Event list abbreviation for Monday
 #: ../js/ui/calendar.js:135
 msgctxt "list monday"
 msgid "M"
-msgstr "Pz"
+msgstr "Pt"
 
 #. Translators: Event list abbreviation for Tuesday
 #: ../js/ui/calendar.js:137
@@ -373,7 +373,7 @@ msgstr "Ç"
 #: ../js/ui/calendar.js:141
 msgctxt "list thursday"
 msgid "Th"
-msgstr "Pe"
+msgstr "Pr"
 
 #. Translators: Event list abbreviation for Friday
 #: ../js/ui/calendar.js:143
@@ -653,7 +653,7 @@ msgstr "Oturumu Kapat"
 
 #: ../js/ui/endSessionDialog.js:80
 msgid "Click Log Out to quit these applications and log out of the system."
-msgstr "Açık uygulamalardan ve sistemden çıkmak için Çıkış' a tıklayın."
+msgstr "Bu uygulamalardan ve sistemden çıkmak için Çıkış'a tıklayın."
 
 #: ../js/ui/endSessionDialog.js:83
 #, javascript-format
@@ -746,7 +746,7 @@ msgstr "Uygulamalardan çık..."
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr "Eğer bir süredir yanıt vermeyen bir uygulama varsa adını seçip Uygulamadan Çık'a tıklayın."
+msgstr "Eğer bir uygulama bir süredir yanıt vermiyorsa adını seçip Uygulamadan Çık'a tıklayın."
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
@@ -756,7 +756,7 @@ msgstr "Sistem Monitörü"
 msgid "Quit Application"
 msgstr "Uygulamadan Çık"
 
-#: ../js/ui/iconGridLayout.js:249
+#: ../js/ui/iconGridLayout.js:272
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s silindi"
@@ -764,14 +764,14 @@ msgstr "%s silindi"
 #: ../js/ui/internetSearch.js:99
 #, javascript-format
 msgid "Open \"%s\" in browser"
-msgstr "Browser ile %s aç."
+msgstr "%s dosyasını tarayıcı ile aç."
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
 #: ../js/ui/internetSearch.js:108
 #, javascript-format
 msgid "Search %s for \"%s\""
-msgstr "%s üzerinde %s ara."
+msgstr "%s üzerinde \"%s\" ara."
 
 #: ../js/ui/internetSearch.js:110
 #, javascript-format
@@ -1076,7 +1076,7 @@ msgstr "kimlik doğrulaması gerekli"
 #. module, which is missing
 #: ../js/ui/status/network.js:407
 msgid "firmware missing"
-msgstr "ürün bilgisi eksik"
+msgstr "aygıt sürücü yazılımı eksik"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
@@ -1227,13 +1227,13 @@ msgstr "Sistemi kapatmak kayıt edilmemiş çalışmaların kaybolmasına sebep 
 #: ../js/ui/userMenu.js:594
 #, javascript-format
 msgid "%s (remote)"
-msgstr "%s (uzak)"
+msgstr "%s (uzaktan erişim)"
 
 #. Translators: Console here refers to a tty like a VT console
 #: ../js/ui/userMenu.js:597
 #, javascript-format
 msgid "%s (console)"
-msgstr "%s (uçbirim)"
+msgstr "%s (terminal)"
 
 #: ../js/ui/viewSelector.js:512
 msgid "Applications"
@@ -1263,7 +1263,7 @@ msgstr "Değişiklikleri Kaydet"
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
 msgstr[0] "Ayar değişiklikleri %d saniye içerisinde geri alınacak"
-msgstr[1] "Ayar değişiklikleri %d saniye içerisinde geri alınacak"
+msgstr[1] "Ayar değişiklikleri %d saniye sonra geri alınacak"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
@@ -1276,7 +1276,7 @@ msgstr "Evolution Takvim"
 msgid "%u Output"
 msgid_plural "%u Outputs"
 msgstr[0] "%u Çıktı"
-msgstr[1] "%u Çıktı"
+msgstr[1] "%u Çıkış"
 
 #. translators:
 #. * The number of sound inputs on a particular device
@@ -1285,7 +1285,7 @@ msgstr[1] "%u Çıktı"
 msgid "%u Input"
 msgid_plural "%u Inputs"
 msgstr[0] "%u Girdi"
-msgstr[1] "%u Girdi"
+msgstr[1] "%u Giriş"
 
 #: ../src/gvc/gvc-mixer-control.c:2373
 msgid "System Sounds"
@@ -1297,15 +1297,15 @@ msgstr "Sürümü yazdır"
 
 #: ../src/main.c:326
 msgid "Mode used by GDM for login screen"
-msgstr "Oturum açma ekranında GDM tarafından kullanılan kip"
+msgstr "Oturum açma ekranında GDM tarafından kullanılan mod"
 
 #: ../src/main.c:332
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
-msgstr "Oturum açma için -\"gdm\" gibi- özel bir kip kullan"
+msgstr "Oturum açma için \"gdm\" gibi özel bir mod kullan"
 
 #: ../src/main.c:338
 msgid "List possible modes"
-msgstr "Mevcut kipleri listele"
+msgstr "Mevcut modları listele"
 
 #: ../src/shell-app.c:654
 #, c-format

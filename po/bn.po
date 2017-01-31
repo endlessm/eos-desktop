@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-17 02:31+0000\n"
+"POT-Creation-Date: 2017-01-24 02:36+0000\n"
 "PO-Revision-Date: 2016-12-06 02:29+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/bn/)\n"
@@ -748,7 +748,7 @@ msgstr "সিস্টেম মনিটর "
 msgid "Quit Application"
 msgstr "অ্যাপ্লিকেশন থেকে বেরোনো "
 
-#: ../js/ui/iconGridLayout.js:249
+#: ../js/ui/iconGridLayout.js:272
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s মুছে দেয়া হয়েছে"
