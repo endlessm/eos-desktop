@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-17 02:31+0000\n"
+"POT-Creation-Date: 2017-01-24 02:36+0000\n"
 "PO-Revision-Date: 2017-01-10 05:14+0000\n"
 "Last-Translator: e2f_in c7 <e2f_in_c7@outlook.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
@@ -752,7 +752,7 @@ msgstr "सिस्टम मॉनिटर"
 msgid "Quit Application"
 msgstr "ऐप्लिकेशन से बाहर निकलें"
 
-#: ../js/ui/iconGridLayout.js:249
+#: ../js/ui/iconGridLayout.js:272
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s को डिलीट कर दिया गया है"
