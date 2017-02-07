@@ -3,24 +3,13 @@
 const Shell = imports.gi.Shell;
 const Lang = imports.lang;
 const Signals = imports.signals;
-const Gio = imports.gi.Gio;
 
 const Main = imports.ui.main;
-
-/* Optional dependency: this schema will be installed on certain configurations where,
- * if the 'enabled' key is set, we'll want Chrome to replace Chromium in the favorites. */
-const GOOGLE_CHROME_INITIAL_SETUP_SCHEMA = 'com.endlessm.GoogleChromeInitialSetup';
 
 const AppFavorites = new Lang.Class({
     Name: 'AppFavorites',
 
     _init: function(settingsKey, showNotifications) {
-        let schema_source = Gio.SettingsSchemaSource.get_default();
-        this._chrome_helper_settings = null;
-        if (schema_source.lookup(GOOGLE_CHROME_INITIAL_SETUP_SCHEMA, true)) {
-            this._chrome_helper_settings = new Gio.Settings({ schema_id: GOOGLE_CHROME_INITIAL_SETUP_SCHEMA });
-        }
-
         this._favorites = {};
         this._settingsKey = settingsKey;
         this._showNotifications = showNotifications;
@@ -37,22 +26,6 @@ const AppFavorites = new Lang.Class({
     _reload: function() {
         let ids = global.settings.get_strv(this._settingsKey);
         let appSys = Shell.AppSystem.get_default();
-
-        if (this._chrome_helper_settings &&
-            this._chrome_helper_settings.get_boolean('enabled')) {
-            // Replace the Chromium browser's icon by Chrome's
-            // if the latter is to be enabled
-            ids = ids.map(function (id) {
-                if (id == 'chromium-browser.desktop')
-                    return 'google-chrome.desktop';
-                else
-                    return id;
-            });
-            // Store the resulting favorites so we guarantee
-            // the user sees the same configuration after reboot
-            global.settings.set_strv(this._settingsKey, ids);
-        }
-
         let apps = ids.map(function (id) {
                 // Some older versions of eos-theme incorrectly added
                 // eos-app-*.desktop to the dash favorites.
