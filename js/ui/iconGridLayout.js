@@ -118,11 +118,6 @@ const IconGridLayout = new Lang.Class({
                     }
                 }
             }
-
-            // Store the current layout so we guarantee the user sees the same
-            // configuration after reboot
-            let newLayout = GLib.Variant.new('a{sas}', iconTree);
-            global.settings.set_value(SCHEMA_KEY, newLayout);
         }
 
         this._iconTree = iconTree;
