@@ -130,6 +130,8 @@ const CodingManager = new Lang.Class({
         this._sessions.push(session);
 
         button.connect('button-press-event', Lang.bind(this, this._switchToBuilder, session));
+        button.connect('enter-event', Lang.bind(this, this._feedback_enter, session));
+        button.connect('leave-event', Lang.bind(this, this._feedback_leave, session));
         session.positionChangedIdApp = window.connect('position-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
         session.sizeChangedIdApp = window.connect('size-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
 
@@ -138,6 +140,63 @@ const CodingManager = new Lang.Class({
         session.overviewShowingId = Main.overview.connect('showing', Lang.bind(this, this._overviewShowing, session));
         session.windowMinimizedId = global.window_manager.connect('minimize', Lang.bind(this, this._windowMinimized, session));
         session.windowUnminimizedId = global.window_manager.connect('unminimize', Lang.bind(this, this._windowUnminimized, session));
+    },
+
+    _feedback_enter: function(actor, event, session) {
+        let window = session.actorApp;
+        window.rotation_angle_y = 0;
+        window.set_cull_back_face(true);
+        window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+        window.show();
+
+        let button = session.buttonApp;
+        button.rotation_angle_y = 0;
+        let rect = session.actorApp.meta_window.get_frame_rect();
+        // set the point around which the rotation occurs outside of the button actor, the
+        // points gets calculated relative to the actor points
+        button.rotation_center_y = new Clutter.Vertex({ x: button.width - (rect.width * 0.5),
+                                                        y: button.height * 0.5,
+                                                        z: 0 });
+        button.show();
+
+        Tweener.addTween(window, {
+            rotation_angle_y: -8,
+            time: WINDOW_ANIMATION_TIME * 4,
+            transition: 'easeOutQuad'
+        });
+
+        Tweener.addTween(button, {
+            rotation_angle_y: -8,
+            time: WINDOW_ANIMATION_TIME * 4,
+            transition: 'easeOutQuad'
+        });
+    },
+
+    _feedback_leave: function(actor, event, session) {
+        let window = session.actorApp;
+        window.set_cull_back_face(true);
+        window.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
+        window.show();
+
+        let button = session.buttonApp;
+        let rect = session.actorApp.meta_window.get_frame_rect();
+        // set the point around which the rotation occurs outside of the button actor, the
+        // points gets calculated relative to the actor points
+        button.rotation_center_y = new Clutter.Vertex({ x: button.width - (rect.width * 0.5),
+                                                        y: button.height * 0.5,
+                                                        z: 0 });
+        button.show();
+
+        Tweener.addTween(window, {
+            rotation_angle_y: 0,
+            time: WINDOW_ANIMATION_TIME * 8,
+            transition: 'easeOutQuad'
+        });
+        Tweener.addTween(button, {
+            rotation_angle_y: 0,
+            time: WINDOW_ANIMATION_TIME * 8,
+            transition: 'easeOutQuad'
+        });
     },
 
     _addButton: function(window) {
