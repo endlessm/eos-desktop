@@ -22,6 +22,9 @@ const FOLDER_DIR_NAME = 'desktop-directories';
 const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/eos-shell-content/icon-grid-defaults';
 const DEFAULT_CONFIG_NAME_BASE = 'icon-grid';
 
+const OVERRIDE_CONFIGS_DIR = Config.LOCALSTATEDIR + '/eos-image-defaults/icon-grid';
+const OVERRIDE_CONFIG_NAME_BASE = 'icon-grid';
+
 const PREPEND_CONFIGS_DIR = Config.LOCALSTATEDIR + '/eos-image-defaults/icon-grid';
 const PREPEND_CONFIG_NAME_BASE = 'icon-grid-prepend';
 
@@ -124,10 +127,17 @@ const IconGridLayout = new Lang.Class({
         return jsonString;
     },
 
-    _mergeJsonStrings: function(base, prepend, append) {
-        let baseNode = JSON.parse(base)
+    _mergeJsonStrings: function(base, override, prepend, append) {
+        let baseNode = null;
         let prependNode = null;
         let appendNode = null;
+        // If any image default override matches the user's locale,
+        // give that priority over the default from the base OS
+        if (override) {
+            baseNode = JSON.parse(override);
+        } else {
+            baseNode = JSON.parse(base);
+        }
         if (prepend) {
             prependNode = JSON.parse(prepend);
         }
@@ -148,6 +158,7 @@ const IconGridLayout = new Lang.Class({
     _getDefaultIcons: function() {
         let mergedJson = this._mergeJsonStrings(
             this._loadConfigJsonString(DEFAULT_CONFIGS_DIR, DEFAULT_CONFIG_NAME_BASE),
+            this._loadConfigJsonString(OVERRIDE_CONFIGS_DIR, OVERRIDE_CONFIG_NAME_BASE),
             this._loadConfigJsonString(PREPEND_CONFIGS_DIR, PREPEND_CONFIG_NAME_BASE),
             this._loadConfigJsonString(APPEND_CONFIGS_DIR ,APPEND_CONFIG_NAME_BASE)
         );
