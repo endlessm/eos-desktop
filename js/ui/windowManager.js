@@ -239,6 +239,10 @@ const DesktopOverlay = new Lang.Class({
     Name: 'DesktopOverlay',
     Extends: St.Widget,
 
+    Signals: {
+        'clicked': {},
+    },
+
     _init: function() {
         this.parent({ reactive: true });
 
@@ -484,7 +488,6 @@ const DesktopOverlay = new Lang.Class({
         this.hide();
     }
 });
-Signals.addSignalMethods(DesktopOverlay.prototype);
 
 const TilePreview = new Lang.Class({
     Name: 'TilePreview',
