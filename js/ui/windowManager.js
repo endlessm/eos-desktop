@@ -1549,7 +1549,7 @@ const WindowManager = new Lang.Class({
             return;
 
         let [action,,,direction] = binding.get_name().split('-');
-        let direction = Meta.MotionDirection[direction.toUpperCase()];
+        direction = Meta.MotionDirection[direction.toUpperCase()];
         let newWs;
 
 
