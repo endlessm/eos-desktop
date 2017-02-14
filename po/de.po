@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-24 02:36+0000\n"
+"POT-Creation-Date: 2017-02-07 02:31+0000\n"
 "PO-Revision-Date: 2016-12-16 21:04+0000\n"
 "Last-Translator: Stefan Schroeder <ondekoza@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/de/)\n"
@@ -228,12 +228,12 @@ msgstr "Weitere Programme"
 msgid "Delete"
 msgstr "Löschen"
 
-#: ../js/ui/appFavorites.js:108
+#: ../js/ui/appFavorites.js:135
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s wurde zu Ihren Favoriten hinzugefügt"
 
-#: ../js/ui/appFavorites.js:145
+#: ../js/ui/appFavorites.js:172
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s wurde aus Ihren Favoriten entfernt"
@@ -757,24 +757,24 @@ msgstr "System-Monitor"
 msgid "Quit Application"
 msgstr "Anwendung beenden"
 
-#: ../js/ui/iconGridLayout.js:272
+#: ../js/ui/iconGridLayout.js:277
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "»%s« wurde gelöscht"
 
-#: ../js/ui/internetSearch.js:99
+#: ../js/ui/internetSearch.js:118
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr "Öffne »%s« im Browser"
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
-#: ../js/ui/internetSearch.js:108
+#: ../js/ui/internetSearch.js:127
 #, javascript-format
 msgid "Search %s for \"%s\""
 msgstr "Suche nach »%s« mittels »%s«"
 
-#: ../js/ui/internetSearch.js:110
+#: ../js/ui/internetSearch.js:129
 #, javascript-format
 msgid "Search the internet for \"%s\""
 msgstr "Suche im Internet nach »%s«"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-24 02:36+0000\n"
+"POT-Creation-Date: 2017-02-07 02:31+0000\n"
 "PO-Revision-Date: 2017-01-09 06:05+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_TW/)\n"
@@ -219,12 +219,12 @@ msgstr "更多應用程式"
 msgid "Delete"
 msgstr "刪除"
 
-#: ../js/ui/appFavorites.js:108
+#: ../js/ui/appFavorites.js:135
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s 已加入您的喜好中。"
 
-#: ../js/ui/appFavorites.js:145
+#: ../js/ui/appFavorites.js:172
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s 已經從您的喜好中移除。"
@@ -744,24 +744,24 @@ msgstr "系統監控"
 msgid "Quit Application"
 msgstr "結束應用程式"
 
-#: ../js/ui/iconGridLayout.js:272
+#: ../js/ui/iconGridLayout.js:277
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "已刪除 %s"
 
-#: ../js/ui/internetSearch.js:99
+#: ../js/ui/internetSearch.js:118
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr "在瀏覽器中開啟「%s」"
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
-#: ../js/ui/internetSearch.js:108
+#: ../js/ui/internetSearch.js:127
 #, javascript-format
 msgid "Search %s for \"%s\""
 msgstr "用 %s 搜索「%s」"
 
-#: ../js/ui/internetSearch.js:110
+#: ../js/ui/internetSearch.js:129
 #, javascript-format
 msgid "Search the internet for \"%s\""
 msgstr "在網際網路上搜索「%s」"
