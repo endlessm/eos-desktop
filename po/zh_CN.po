@@ -6,7 +6,7 @@
 # Aron Xu <aronxu@gnome.org>, 2010-2013
 # chenzibing <chenzibing_endless@126.com>, 2016
 # chiachen L <luojiazhen@gmail.com>, 2011
-# e2f_cn c5 <e2f_cn_c3@outlook.com>, 2017
+# e2f_cn c5 <jarvisn@ecinnovations.com>, 2017
 # fanjunjun <tfanjunjun@126.com>, 2016
 # Jessica Ban <bancage@gmail.com>, 2010
 # jiero <lililjlj@gmail.com>, 2010
@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-24 02:36+0000\n"
+"POT-Creation-Date: 2017-02-07 02:31+0000\n"
 "PO-Revision-Date: 2017-01-10 13:51+0000\n"
 "Last-Translator: e2f_STM STM <STMcnhktw@outlook.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
@@ -235,12 +235,12 @@ msgstr "更多的Apps"
 msgid "Delete"
 msgstr "删除"
 
-#: ../js/ui/appFavorites.js:108
+#: ../js/ui/appFavorites.js:135
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s 已经添加到了您的收藏夹。"
 
-#: ../js/ui/appFavorites.js:145
+#: ../js/ui/appFavorites.js:172
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s 已经从您的收藏夹中移除。"
@@ -760,24 +760,24 @@ msgstr "系统监视器"
 msgid "Quit Application"
 msgstr "退出应用程序"
 
-#: ../js/ui/iconGridLayout.js:272
+#: ../js/ui/iconGridLayout.js:277
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s已删除"
 
-#: ../js/ui/internetSearch.js:99
+#: ../js/ui/internetSearch.js:118
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr "在浏览器中打开”%s”"
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
-#: ../js/ui/internetSearch.js:108
+#: ../js/ui/internetSearch.js:127
 #, javascript-format
 msgid "Search %s for \"%s\""
 msgstr "在%s里搜索\"%s\""
 
-#: ../js/ui/internetSearch.js:110
+#: ../js/ui/internetSearch.js:129
 #, javascript-format
 msgid "Search the internet for \"%s\""
 msgstr "在互联网里搜索\"%s\""

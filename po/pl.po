@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-24 02:36+0000\n"
+"POT-Creation-Date: 2017-02-07 02:31+0000\n"
 "PO-Revision-Date: 2016-12-06 02:29+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Polish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/pl/)\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>=14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
 msgid "System"
@@ -219,12 +219,12 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appFavorites.js:108
+#: ../js/ui/appFavorites.js:135
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "Program „%s” został dodany do ulubionych."
 
-#: ../js/ui/appFavorites.js:145
+#: ../js/ui/appFavorites.js:172
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "Program „%s” został usunięty z ulubionych."
@@ -654,6 +654,7 @@ msgid_plural "%s will be logged out automatically in %d seconds."
 msgstr[0] "Użytkownik %s zostanie wylogowany za %d sekundę."
 msgstr[1] "Użytkownik %s zostanie wylogowany za %d sekundy."
 msgstr[2] "Użytkownik %s zostanie wylogowany za %d sekund."
+msgstr[3] "Użytkownik %s zostanie wylogowany za %d sekund."
 
 #: ../js/ui/endSessionDialog.js:88
 #, javascript-format
@@ -662,6 +663,7 @@ msgid_plural "You will be logged out automatically in %d seconds."
 msgstr[0] "Wylogowanie nastąpi za %d sekundę."
 msgstr[1] "Wylogowanie nastąpi za %d sekundy."
 msgstr[2] "Wylogowanie nastąpi za %d sekund."
+msgstr[3] "Wylogowanie nastąpi za %d sekund."
 
 #: ../js/ui/endSessionDialog.js:93
 msgid "Logging out of the system."
@@ -688,6 +690,7 @@ msgid_plural "The system will power off automatically in %d seconds."
 msgstr[0] "Wyłączenie komputera nastąpi za %d sekundę."
 msgstr[1] "Wyłączenie komputera nastąpi za %d sekundy."
 msgstr[2] "Wyłączenie komputera nastąpi za %d sekund."
+msgstr[3] "Wyłączenie komputera nastąpi za %d sekund."
 
 #: ../js/ui/endSessionDialog.js:111
 msgid "Powering off the system."
@@ -720,6 +723,7 @@ msgid_plural "The system will restart automatically in %d seconds."
 msgstr[0] "Ponowne uruchomienie systemu nastąpi za %d sekundę."
 msgstr[1] "Ponowne uruchomienie systemu nastąpi za %d sekundy."
 msgstr[2] "Ponowne uruchomienie systemu nastąpi za %d sekund."
+msgstr[3] "Ponowne uruchomienie systemu nastąpi za %d sekund."
 
 #: ../js/ui/endSessionDialog.js:145
 msgid "Restarting the system."
@@ -752,24 +756,24 @@ msgstr ""
 msgid "Quit Application"
 msgstr ""
 
-#: ../js/ui/iconGridLayout.js:272
+#: ../js/ui/iconGridLayout.js:277
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:99
+#: ../js/ui/internetSearch.js:118
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr ""
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
-#: ../js/ui/internetSearch.js:108
+#: ../js/ui/internetSearch.js:127
 #, javascript-format
 msgid "Search %s for \"%s\""
 msgstr ""
 
-#: ../js/ui/internetSearch.js:110
+#: ../js/ui/internetSearch.js:129
 #, javascript-format
 msgid "Search the internet for \"%s\""
 msgstr ""
@@ -1261,6 +1265,7 @@ msgid_plural "Settings changes will revert in %d seconds"
 msgstr[0] "Zmiany ustawień zostaną przywrócone za %d sekundę"
 msgstr[1] "Zmiany ustawień zostaną przywrócone za %d sekundy"
 msgstr[2] "Zmiany ustawień zostaną przywrócone za %d sekund"
+msgstr[3] "Zmiany ustawień zostaną przywrócone za %d sekund"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
@@ -1275,6 +1280,7 @@ msgid_plural "%u Outputs"
 msgstr[0] "%u wyjście"
 msgstr[1] "%u wyjścia"
 msgstr[2] "%u wyjść"
+msgstr[3] "%u wyjść"
 
 #. translators:
 #. * The number of sound inputs on a particular device
@@ -1285,6 +1291,7 @@ msgid_plural "%u Inputs"
 msgstr[0] "%u wejście"
 msgstr[1] "%u wejścia"
 msgstr[2] "%u wejść"
+msgstr[3] "%u wejść"
 
 #: ../src/gvc/gvc-mixer-control.c:2373
 msgid "System Sounds"

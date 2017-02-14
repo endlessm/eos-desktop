@@ -10,7 +10,7 @@
 # Sergey Davidoff <shnatsel@gmail.com>, 2010
 # BrandStorm <serejka@gmail.com>, 2009
 # Stas Solovey <whats_up@tut.by>, 2011,2013-2016
-# valera5505 <valera5505@gmail.com>, 2014
+# Valery Kirichenko <valera5505@gmail.com>, 2014
 # Yuri Kozlov <yuray@komyakino.ru>, 2011-2012
 # Yuri Myasoedov <omerta13@yandex.ru>, 2012-2013
 # Yuri Myasoedov <ymyasoedov@yandex.ru>, 2012-2014
@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-24 02:36+0000\n"
+"POT-Creation-Date: 2017-02-07 02:31+0000\n"
 "PO-Revision-Date: 2016-12-06 02:29+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Russian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ru/)\n"
@@ -228,12 +228,12 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appFavorites.js:108
+#: ../js/ui/appFavorites.js:135
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "Приложение %s добавлено в избранное."
 
-#: ../js/ui/appFavorites.js:145
+#: ../js/ui/appFavorites.js:172
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "Приложение %s удалено из избранного."
@@ -765,24 +765,24 @@ msgstr ""
 msgid "Quit Application"
 msgstr ""
 
-#: ../js/ui/iconGridLayout.js:272
+#: ../js/ui/iconGridLayout.js:277
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:99
+#: ../js/ui/internetSearch.js:118
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr ""
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
-#: ../js/ui/internetSearch.js:108
+#: ../js/ui/internetSearch.js:127
 #, javascript-format
 msgid "Search %s for \"%s\""
 msgstr ""
 
-#: ../js/ui/internetSearch.js:110
+#: ../js/ui/internetSearch.js:129
 #, javascript-format
 msgid "Search the internet for \"%s\""
 msgstr ""
