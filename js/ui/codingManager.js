@@ -13,7 +13,6 @@ const St = imports.gi.St;
 
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
-const Util = imports.misc.util;
 
 const WINDOW_ANIMATION_TIME = 0.25;
 const WATCHDOG_TIME = 30000; // ms
@@ -247,8 +246,28 @@ const CodingManager = new Lang.Class({
         }
     },
 
+    _startBuilderForFlatpak: function(loadFlatpakValue) {
+        let params = new GLib.Variant('(sava{sv})', ['load-flatpak', [new GLib.Variant('s', loadFlatpakValue)], {}]);
+        Gio.DBus.session.call('org.gnome.Builder',
+                              '/org/gnome/Builder',
+                              'org.gtk.Actions',
+                              'Activate',
+                              params,
+                              null,
+                              Gio.DBusCallFlags.NONE,
+                              GLib.MAXINT32,
+                              null,
+                              function (conn, result) {
+                                  try {
+                                      conn.call_finish(result);
+                                  } catch (e) {
+                                      logError(e, 'Failed to start gnome-builder');
+                                  }
+                              });
+    },
+
     _switchToBuilder: function(actor, event, session) {
-        function constructCommand(appManifest) {
+        function constructLoadFlatpakValue(appManifest) {
             // add an app_id_override to the manifest to load
             return appManifest.get_path() + '+' + session.actorApp.meta_window.get_flatpak_id() + '.Coding';
         }
@@ -267,7 +286,7 @@ const CodingManager = new Lang.Class({
             this._watchdogId = Mainloop.timeout_add(WATCHDOG_TIME,
                                                     Lang.bind(this, this._watchdogTimeout));
 
-            Util.trySpawn(['flatpak', 'run', 'org.gnome.Builder', '-s', '-m', constructCommand(appManifest)]);
+            this._startBuilderForFlatpak(constructLoadFlatpakValue(appManifest));
             animateBounce(session.buttonApp);
         } else {
             session.actorBuilder.meta_window.activate(global.get_current_time());
