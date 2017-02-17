@@ -128,14 +128,14 @@ const IconGridLayout = new Lang.Class({
     },
 
     _mergeJsonStrings: function(base, override, prepend, append) {
-        let baseNode = null;
+        let baseNode = {};
         let prependNode = null;
         let appendNode = null;
         // If any image default override matches the user's locale,
         // give that priority over the default from the base OS
         if (override) {
             baseNode = JSON.parse(override);
-        } else {
+        } else if (base) {
             baseNode = JSON.parse(base);
         }
         if (prepend) {
