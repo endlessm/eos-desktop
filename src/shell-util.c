@@ -125,8 +125,8 @@ shell_util_get_transformed_allocation (ClutterActor    *actor,
  *
  * Return value: the formatted date. If the date is
  *  outside of the range of a GDateTime (which contains
- *  any plausible dates we actually care about), will
- *  return an empty string.
+ *  any plausible dates we actually care about), or in case of
+ *  error, it will return an empty string.
  */
 char *
 shell_util_format_date (const char *format,
@@ -144,8 +144,11 @@ shell_util_format_date (const char *format,
     return g_strdup ("");
 
   result = g_date_time_format (datetime, format);
-
   g_date_time_unref (datetime);
+
+  if (!result) /* format is malformed */
+    return g_strdup ("");
+
   return result;
 }
 
