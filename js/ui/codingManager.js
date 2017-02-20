@@ -4,6 +4,7 @@ const Clutter = imports.gi.Clutter;
 const Flatpak = imports.gi.Flatpak;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
@@ -13,6 +14,7 @@ const St = imports.gi.St;
 
 const AppActivation = imports.ui.appActivation;
 const Main = imports.ui.main;
+const Params = imports.misc.params;
 const Tweener = imports.ui.tweener;
 
 const WINDOW_ANIMATION_TIME = 0.25;
@@ -29,7 +31,10 @@ function _isBuilderSpeedwagon(window) {
             correspondingApp.get_id() === 'org.gnome.Builder.desktop');
 }
 
-_CODING_APPS = [
+const STATE_APP = 0;
+const STATE_BUILDER = 1;
+
+const _CODING_APPS = [
     'com.endlessm.Helloworld',
     'org.gnome.Weather'
 ];
@@ -91,6 +96,122 @@ function _synchronizeMetaWindowActorGeometries(src, dst) {
                                       srcGeometry.height);
 }
 
+const WindowTrackingButton = new Lang.Class({
+    Name: 'WindowTrackingButton',
+    Extends: St.Bin,
+    Properties: {
+        window: GObject.ParamSpec.object('window',
+                                         '',
+                                         '',
+                                         GObject.ParamFlags.READWRITE |
+                                         GObject.ParamFlags.CONSTRUCT_ONLY,
+                                         Meta.Window),
+        builder_window: GObject.ParamSpec.object('builder-window',
+                                                 '',
+                                                 '',
+                                                 GObject.ParamFlags.READWRITE,
+                                                 Meta.Window)
+    },
+
+    _init: function(params) {
+        this.parent(Params.parse(params, {
+            style_class: 'view-source',
+            reactive: true,
+            can_focus: true,
+            x_fill: true,
+            y_fill: false,
+            track_hover: true
+        }, true));
+
+        // Add button asset and set the child of this bin
+        let button = new St.Bin();
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/rotate.svg');
+        let gicon = new Gio.FileIcon({ file: iconFile });
+        let icon = new St.Icon({ style_class: 'view-source-icon',
+                                 gicon: gicon });
+        this.set_child(icon);
+
+        // Connect to signals on the window to determine when to move
+        // hide, and show the button. Note that WindowTrackingButton is
+        // constructed with the primary app window and we listen for signals
+        // on that. This is because of the assumption that both the app
+        // window and builder window are completely synchronized.
+        this._positionChangedId = this.window.connect(
+           'position-changed',  Lang.bind(this, this._updatePosition)
+        );
+        this._sizeChangedId = this.window.connect(
+            'size-changed', Lang.bind(this, this._updatePosition)
+        );
+
+        this._windowsRestackedId = Main.overview.connect(
+            'windows-restacked', Lang.bind(this, this._showIfWindowVisible)
+        );
+        this._overviewHidingId = Main.overview.connect(
+            'hiding', Lang.bind(this, this._showIfWindowVisible)
+        );
+        this._overviewShowingId = Main.overview.connect(
+            'showing', Lang.bind(this, this._hide)
+        );
+        this._windowMinimizedId = global.window_manager.connect(
+            'minimize', Lang.bind(this, this._hide)
+        );
+        this._windowUnminimizedId = global.window_manager.connect(
+            'unminimize', Lang.bind(this, this._show)
+        );
+
+        // Do the first position update here
+        this._updatePosition();
+    },
+
+    // Just fade out and fade the button back in again. This makes it
+    // look as though we have two buttons, but in reality we just have
+    // one.
+    switchAnimation: function() {
+        Tweener.addTween(this, {
+            opacity: 0,
+            time: WINDOW_ANIMATION_TIME / 2,
+            transition: 'linear',
+            onComplete: Lang.bind(this, function() {
+                Tweener.addTween(this, {
+                    opacity: 255,
+                    time: WINDOW_ANIMATION_TIME / 2,
+                    transition: 'linear',
+                });
+            })
+        });
+    },
+
+    _updatePosition: function() {
+        let rect = this.window.get_frame_rect();
+        this.set_position(rect.x + rect.width - BUTTON_OFFSET_X,
+                          rect.y + rect.height - BUTTON_OFFSET_Y);
+    },
+
+    _showIfWindowVisible: function() {
+        let focusedWindow = global.display.get_focus_window();
+        // Probably the root window, ignore.
+        if (!focusedWindow)
+            return;
+
+        // Show only if either this window or the builder window
+        // is in focus
+        if (focusedWindow === this.window ||
+            focusedWindow === this.builder_window) {
+            this._show();
+        } else {
+            this._hide();
+        }
+    },
+
+    _show: function() {
+        this.show();
+    },
+
+    _hide: function() {
+        this.hide();
+    }
+});
+
 const CodingManager = new Lang.Class({
     Name: 'CodingManager',
 
@@ -137,6 +258,7 @@ const CodingManager = new Lang.Class({
             if (Shell.WindowTracker.is_speedwagon_window(session.actorBuilder.meta_window)) {
                 session.actorBuilder = actor;
                 session.activationContext = null;
+                session.button.builder_window = actor.meta_window;
                 this._connectBuilderSizeAndPosition(session,
                                                     session.actorBuilder.meta_window);
                 _synchronizeMetaWindowActorGeometries(session.actorApp,
@@ -159,6 +281,9 @@ const CodingManager = new Lang.Class({
             tracker.untrack_coding_app_window();
         }
 
+        // Set the builder window here so that we can track it
+        // for focus changes.
+        session.button.builder_window = actor.meta_window;
         this._addSwitcherToApp(actor, session);
         return true;
     },
@@ -183,41 +308,37 @@ const CodingManager = new Lang.Class({
         this._removeSwitcherToApp(actor);
     },
 
+    _switchWindows: function(actor, event, session) {
+        // Switch to builder if the app is active. Otherwise switch to the app.
+        if (session.state === STATE_APP) {
+            this._switchToBuilder(session);
+        } else {
+            this._switchToApp(session);
+        }
+    },
+
     _addSwitcherToBuilder: function(actorApp) {
         let window = actorApp.meta_window;
 
         let button = this._addButton(window);
 
-        let session = { buttonApp: button,
+        let session = { button: button,
                         actorApp: actorApp,
-                        previousFocusedWindow: null };
+                        previousFocusedWindow: null,
+                        state: STATE_APP };
         this._sessions.push(session);
 
-        button.connect('button-press-event', Lang.bind(this, this._switchToBuilder, session));
+        button.connect('button-press-event', Lang.bind(this, this._switchWindows, session));
         session.positionChangedIdApp = window.connect('position-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
         session.sizeChangedIdApp = window.connect('size-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
 
-        session.windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowRestacked, session));
-        session.overviewHidingId = Main.overview.connect('hiding', Lang.bind(this, this._overviewHiding, session));
-        session.overviewShowingId = Main.overview.connect('showing', Lang.bind(this, this._overviewShowing, session));
+        session.windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowRestacked, session));;
         session.windowMinimizedId = global.window_manager.connect('minimize', Lang.bind(this, this._windowMinimized, session));
         session.windowUnminimizedId = global.window_manager.connect('unminimize', Lang.bind(this, this._windowUnminimized, session));
     },
 
     _addButton: function(window) {
-        let button = new St.Bin({ style_class: 'view-source',
-                                  reactive: true,
-                                  can_focus: true,
-                                  x_fill: true,
-                                  y_fill: false,
-                                  track_hover: true });
-        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/rotate.svg');
-        let gicon = new Gio.FileIcon({ file: iconFile });
-        let icon = new St.Icon({ style_class: 'view-source-icon',
-                                 gicon: gicon });
-        button.set_child(icon);
-        let rect = window.get_frame_rect();
-        button.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
+        let button = new WindowTrackingButton({ window: window });
         Main.layoutManager.addChrome(button);
         return button;
     },
@@ -245,14 +366,6 @@ const CodingManager = new Lang.Class({
             Main.overview.disconnect(session.windowsRestackedId);
             session.windowsRestackedId = 0;
         }
-        if (session.overviewHidingId !== 0) {
-            Main.overview.disconnect(session.overviewHidingId);
-            session.overviewHidingId = 0;
-        }
-        if (session.overviewShowingId !== 0) {
-            Main.overview.disconnect(session.overviewShowingId);
-            session.overviewShowingId = 0;
-        }
         if (session.windowMinimizedId !== 0) {
             global.window_manager.disconnect(session.windowMinimizedId);
             session.windowMinimizedId = 0;
@@ -262,8 +375,8 @@ const CodingManager = new Lang.Class({
             session.windowUnminimizedId = 0;
         }
 
-        Main.layoutManager.removeChrome(session.buttonApp);
-        session.buttonApp.destroy();
+        Main.layoutManager.removeChrome(session.button);
+        session.button.destroy();
         session.actorApp = null;
 
         // Builder window still open, keep it open
@@ -290,12 +403,9 @@ const CodingManager = new Lang.Class({
     },
 
     _clearBuilderSession: function(session) {
+        session.button.builder_window = null;
+        session.state = STATE_APP;
         this._disconnectBuilderSizeAndPosition(session);
-        if (session.buttonBuilder) {
-            Main.layoutManager.removeChrome(session.buttonBuilder);
-            session.buttonBuilder.destroy();
-            session.buttonBuilder = null;
-        }
     },
 
     _removeSwitcherToApp: function(actorBuilder) {
@@ -309,7 +419,6 @@ const CodingManager = new Lang.Class({
         if (session.actorApp) {
             session.actorApp.meta_window.activate(global.get_current_time());
             session.actorApp.show();
-            session.buttonApp.show();
         } else {
             this._removeSession(session);
         }
@@ -340,8 +449,8 @@ const CodingManager = new Lang.Class({
                               }));
     },
 
-    _switchToBuilder: function(actor, event, session) {
-        function constructLoadFlatpakValue(appManifest) {
+    _switchToBuilder: function(session) {
+        function constructCommand(appManifest) {
             // add an app_id_override to the manifest to load
             return appManifest.get_path() + '+' + session.actorApp.meta_window.get_flatpak_id() + '.Coding';
         }
@@ -383,8 +492,10 @@ const CodingManager = new Lang.Class({
             this._animate(session.actorApp,
                           session.actorBuilder,
                           Gtk.DirectionType.LEFT);
-            this._animateButtons(session.buttonApp, session.buttonBuilder);
+            session.button.switchAnimation();
         }
+
+        session.state = STATE_BUILDER;
     },
 
     _watchdogTimeout: function() {
@@ -402,7 +513,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _switchToApp: function(actor, event, session) {
+    _switchToApp: function(session) {
         if (!session.actorApp)
             return;
         session.actorApp.meta_window.activate(global.get_current_time());
@@ -412,7 +523,8 @@ const CodingManager = new Lang.Class({
         this._animate(session.actorBuilder,
                       session.actorApp,
                       Gtk.DirectionType.RIGHT);
-        this._animateButtons(session.buttonBuilder, session.buttonApp);
+        session.button.switchAnimation();
+        session.state = STATE_APP;
     },
 
     _getSession: function(actor) {
@@ -430,15 +542,6 @@ const CodingManager = new Lang.Class({
         session.sizeChangedIdBuilder = builderWindow.connect('size-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
     },
 
-    _addBuilderButton: function(session) {
-        let window = session.actorBuilder.meta_window;
-
-        let button = this._addButton(window);
-        session.buttonBuilder = button;
-        button.connect('button-press-event', Lang.bind(this, this._switchToApp, session));
-        this._connectBuilderSizeAndPosition(session, window);
-    },
-
     _animateToBuilder: function(session) {
         // We wait until the first frame of the window has been drawn
         // and damage updated in the compositor before we start rotating.
@@ -449,9 +552,7 @@ const CodingManager = new Lang.Class({
             this._animate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
 
             session.actorBuilder.disconnect(firstFrameConnection);
-
-            this._addBuilderButton(session);
-            this._animateButtons(session.buttonApp, session.buttonBuilder);
+            session.button.switchAnimation();
 
             return false;
         }));
@@ -461,7 +562,6 @@ const CodingManager = new Lang.Class({
 
     _updateAppSizeAndPosition: function(window, session) {
         let rect = session.actorApp.meta_window.get_frame_rect();
-        session.buttonApp.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         if (!session.actorBuilder)
             return;
         session.actorBuilder.meta_window.move_resize_frame(false,
@@ -473,7 +573,6 @@ const CodingManager = new Lang.Class({
 
     _updateBuilderSizeAndPosition: function(window, session) {
         let rect = session.actorBuilder.meta_window.get_frame_rect();
-        session.buttonBuilder.set_position(rect.x + rect.width - BUTTON_OFFSET_X, rect.y + rect.height - BUTTON_OFFSET_Y);
         if (!session.actorApp)
             return;
         session.actorApp.meta_window.move_resize_frame(false,
@@ -486,10 +585,8 @@ const CodingManager = new Lang.Class({
     _windowMinimized: function(shellwm, actor, session) {
         if (actor === session.actorApp && session.actorBuilder) {
             session.actorBuilder.meta_window.minimize();
-            session.buttonBuilder.hide();
         } else if (actor === session.actorBuilder && session.actorApp) {
             session.actorApp.meta_window.minimize();
-            session.buttonApp.hide();
         }
     },
 
@@ -531,18 +628,15 @@ const CodingManager = new Lang.Class({
                 this._animate(session.actorBuilder,
                               session.actorApp,
                               Gtk.DirectionType.RIGHT);
-                this._animateButtons(session.buttonBuilder, session.buttonApp);
+                session.button.switchAnimation();
                 return;
             }
-            session.buttonApp.show();
-            session.actorApp.show();
             // hide the underlying window to prevent glitches when resizing
             // the one on top, we do this for the animated switch case already
             if (session.actorBuilder)
                 session.actorBuilder.hide();
             return;
         } else if (appWindow === previousFocused) {
-            session.buttonApp.hide();
         }
 
         if (!session.actorBuilder)
@@ -560,36 +654,13 @@ const CodingManager = new Lang.Class({
                 this._animate(session.actorApp,
                               session.actorBuilder,
                               Gtk.DirectionType.LEFT);
-                this._animateButtons(session.buttonApp, session.buttonBuilder);
+                session.button.switchAnimation();
             } else {
-                if (session.buttonBuilder)
-                    session.buttonBuilder.show();
-                session.actorBuilder.show();
                 // hide the underlying window to prevent glitches when resizing
                 // the one on top, we do this for the animated switch case already
                 session.actorApp.hide();
             }
-        } else if (builderWindow === previousFocused) {
-            session.buttonBuilder.hide();
         }
-    },
-
-    _overviewHiding: function(overview, session) {
-        let focusedWindow = global.display.get_focus_window();
-        if (!focusedWindow)
-            return;
-
-        // we only need to verify a Builder window exist
-        if (session.actorBuilder && session.actorBuilder.meta_window === focusedWindow)
-            session.buttonBuilder.show();
-        else if (session.actorApp.meta_window === focusedWindow)
-            session.buttonApp.show();
-    },
-
-    _overviewShowing: function(overview, session) {
-        session.buttonApp.hide();
-        if (session.buttonBuilder)
-            session.buttonBuilder.hide();
     },
 
     _prepareAnimate: function(src, dst, direction) {
@@ -677,28 +748,6 @@ const CodingManager = new Lang.Class({
         Tweener.addTween(dst, {
             opacity: 255,
             time: WINDOW_ANIMATION_TIME,
-            transition: 'linear'
-        });
-    },
-
-    _animateButtons: function(src, dst) {
-        src.show();
-        dst.show();
-        dst.opacity = 0;
-        src.opacity = 255;
-        Tweener.addTween(src, {
-            opacity: 0,
-            time: WINDOW_ANIMATION_TIME,
-            transition: 'linear',
-            onComplete: function(button) { button.hide();
-                                           button.opacity = 255; },
-            onCompleteParams: [src]
-        });
-
-        Tweener.addTween(dst, {
-            opacity: 255,
-            delay: WINDOW_ANIMATION_TIME * 4,
-            time: WINDOW_ANIMATION_TIME * 4,
             transition: 'linear'
         });
     },
