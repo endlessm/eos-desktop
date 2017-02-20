@@ -34,11 +34,11 @@ _CODING_APPS = [
     'org.gnome.Weather'
 ];
 
-function _isCodingApp (flatpakID) {
+function _isCodingApp(flatpakID) {
     return _CODING_APPS.indexOf(flatpakID) != -1;
 }
 
-function _isBuilder (flatpakID) {
+function _isBuilder(flatpakID) {
     return flatpakID === 'org.gnome.Builder';
 }
 
