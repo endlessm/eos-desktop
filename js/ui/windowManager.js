@@ -1107,6 +1107,12 @@ const WindowManager = new Lang.Class({
             actor._windowType = type;
         }));
 
+        if (this._codingManager.addBuilderWindow(actor)) {
+            shellwm.completed_map(actor);
+            return;
+        }
+        this._codingManager.addAppWindow(actor);
+
         let isSplashWindow = Shell.WindowTracker.is_speedwagon_window(window);
 
         if (!isSplashWindow) {
@@ -1122,12 +1128,6 @@ const WindowManager = new Lang.Class({
                 return;
             }
         }
-
-        if (this._codingManager.addBuilderWindow(actor)) {
-            shellwm.completed_map(actor);
-            return;
-        }
-        this._codingManager.addAppWindow(actor);
 
         // for side components, we will hide the overview and then animate
         if (!this._shouldAnimateActor(actor) && !(SideComponent.isSideComponentWindow(window) && Main.overview.visible)) {
