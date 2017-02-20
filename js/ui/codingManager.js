@@ -62,6 +62,35 @@ function _getAppManifest(flatpakID) {
     return null;
 }
 
+// _synchronizeMetaWindowActorGeometries
+//
+// Synchronize geometry of MetaWindowActor src to dst by
+// applying both the physical geometry and maximization state.
+function _synchronizeMetaWindowActorGeometries(src, dst) {
+    let srcGeometry = src.meta_window.get_frame_rect();
+    let dstGeometry = dst.meta_window.get_frame_rect();
+
+    let srcIsMaximized = (src.meta_window.maximized_horizontally &&
+                          src.meta_window.maximized_vertically);
+    let dstIsMaximized = (dst.meta_window.maximized_horizontally &&
+                          dst.meta_window.maximized_vertically);
+
+    if (!srcIsMaximized && dstIsMaximized)
+        dst.meta_window.unmaximize(Meta.MaximizeFlags.BOTH);
+
+    if (srcIsMaximized && !dstIsMaximized)
+        dst.meta_window.maximize(Meta.MaximizeFlags.BOTH);
+
+    if (srcGeometry.equal(dstGeometry))
+        return;
+
+    dst.meta_window.move_resize_frame(false,
+                                      srcGeometry.x,
+                                      srcGeometry.y,
+                                      srcGeometry.width,
+                                      srcGeometry.height);
+}
+
 const CodingManager = new Lang.Class({
     Name: 'CodingManager',
 
@@ -110,8 +139,8 @@ const CodingManager = new Lang.Class({
                 session.activationContext = null;
                 this._connectBuilderSizeAndPosition(session,
                                                     session.actorBuilder.meta_window);
-                this._synchronizeWindows(session.actorApp,
-                                         session.actorBuilder);
+                _synchronizeMetaWindowActorGeometries(session.actorApp,
+                                                      session.actorBuilder);
                 return true;
             }
             return false;
@@ -563,38 +592,13 @@ const CodingManager = new Lang.Class({
             session.buttonBuilder.hide();
     },
 
-    _synchronizeWindows: function(src, dst) {
-        let srcGeometry = src.meta_window.get_frame_rect();
-        let dstGeometry = dst.meta_window.get_frame_rect();
-
-        let srcIsMaximized = (src.meta_window.maximized_horizontally &&
-                              src.meta_window.maximized_vertically);
-        let dstIsMaximized = (dst.meta_window.maximized_horizontally &&
-                              dst.meta_window.maximized_vertically);
-
-        if (!srcIsMaximized && dstIsMaximized)
-            dst.meta_window.unmaximize(Meta.MaximizeFlags.BOTH);
-
-        if (srcIsMaximized && !dstIsMaximized)
-            dst.meta_window.maximize(Meta.MaximizeFlags.BOTH);
-
-        if (srcGeometry.equal(dstGeometry))
-            return;
-
-        dst.meta_window.move_resize_frame(false,
-                                          srcGeometry.x,
-                                          srcGeometry.y,
-                                          srcGeometry.width,
-                                          srcGeometry.height);
-    },
-
     _prepareAnimate: function(src, dst, direction) {
         // We want to do this _first_ before setting up any animations.
         // Synchronising windows could cause kill-window-effects to
         // be emitted, which would undo some of the preparation
         // that we would have done such as setting backface culling
         // or rotation angles.
-        this._synchronizeWindows(src, dst);
+        _synchronizeMetaWindowActorGeometries(src, dst);
 
         this._rotateInActors.push(dst);
         this._rotateOutActors.push(src);
