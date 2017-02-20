@@ -161,6 +161,50 @@ const WindowTrackingButton = new Lang.Class({
 
         // Do the first position update here
         this._updatePosition();
+
+        // Add ourselves to the layout manager. Note that in order to
+        // remove this button, you will need to call eject
+        Main.layoutManager.addChrome(this);
+    },
+
+    eject: function() {
+        if (this._positionChangedId) {
+            this.window.disconnect(this._positionChangedId);
+            this._positionChangedId = 0;
+        }
+
+        if (this._sizeChangedId) {
+            this.window.disconnect(this._sizeChangedId);
+            this._positionChangedId = 0;
+        }
+
+        if (this._windowsRestackedId) {
+            Main.overview.disconnect(this._windowsRestackedId);
+            this._windowsRestackedId = 0;
+        }
+
+        if (this._overviewShowingId) {
+            Main.overview.disconnect(this._overviewShowingId);
+            this._overviewShowingId = 0;
+        }
+
+        if (this._overviewHidingId) {
+            Main.overview.disconnect(this._overviewHidingId);
+            this._overviewHidingId = 0;
+        }
+
+        if (this._windowMinimizedId) {
+            global.window_manager.disconnect(this._windowMinimizedId);
+            this._windowMinimizedId = 0;
+        }
+
+        if (this._windowUnminimizedId) {
+            global.window_manager.disconnect(this._windowUnminimizedId);
+            this._windowUnminimizedId = 0;
+        }
+
+        Main.layoutManager.removeChrome(this);
+        this.destroy();
     },
 
     // Just fade out and fade the button back in again. This makes it
@@ -212,215 +256,209 @@ const WindowTrackingButton = new Lang.Class({
     }
 });
 
-const CodingManager = new Lang.Class({
-    Name: 'CodingManager',
 
-    _init: function() {
-        this._sessions = [];
-        this._rotateInActors = [];
-        this._rotateOutActors = [];
+const CodingSession = new Lang.Class({
+    Name: 'CodingSession',
+    Extends: GObject.Object,
+    Properties: {
+        'app': GObject.ParamSpec.object('app',
+                                        '',
+                                        '',
+                                        GObject.ParamFlags.READWRITE |
+                                        GObject.ParamFlags.CONSTRUCT_ONLY,
+                                        Meta.WindowActor),
+        'builder': GObject.ParamSpec.object('builder',
+                                            '',
+                                            '',
+                                            GObject.ParamFlags.READWRITE,
+                                            Meta.WindowActor),
+        'button': GObject.ParamSpec.object('button',
+                                           '',
+                                           '',
+                                           GObject.ParamFlags.READWRITE |
+                                           GObject.ParamFlags.CONSTRUCT_ONLY,
+                                           WindowTrackingButton.$gtype)
+    },
+
+    _init: function(params) {
+        this.parent(params);
+
+        this._previouslyFocusedWindow = null;
+        this._state = STATE_APP;
+
+        this.button.connect('button-press-event',
+                            Lang.bind(this, this._switchWindows));
+        this._positionChangedIdApp = this.app.meta_window.connect(
+            'position-changed', Lang.bind(this, this._synchronizeWindows)
+        );
+        this._sizeChangedIdApp = this.app.meta_window.connect(
+            'size-changed', Lang.bind(this, this._synchronizeWindows)
+        );
+        this._windowsRestackedId = Main.overview.connect(
+            'windows-restacked', Lang.bind(this, this._windowRestacked)
+        );
+        this._windowMinimizedId = global.window_manager.connect(
+            'minimize', Lang.bind(this, this._applyWindowMinimizationState)
+        );
+        this._windowUnminimizedId = global.window_manager.connect(
+            'unminimize', Lang.bind(this, this._applyWindowUnminimizationState)
+        );
+
         this._watchdogId = 0;
-        this._codingApps = ['com.endlessm.Helloworld', 'org.gnome.Weather.Application'];
     },
 
-    addAppWindow: function(actor) {
-        if (!global.settings.get_boolean('enable-behind-the-screen'))
-            return;
-
-        let window = actor.meta_window;
-        if (!_isCodingApp(window.get_flatpak_id()))
-            return;
-
-        this._addSwitcherToBuilder(actor);
-    },
-
-    addBuilderWindow: function(actor) {
-        if (!global.settings.get_boolean('enable-behind-the-screen'))
+    // Maybe admit this actor if it is the kind of actor that we want
+    admitBuilderWindowActor: function(actor) {
+        // If there is a currently bound window and it is not a speedwagon,
+        // then we can't admit this window. Return false.
+        if (this.builder &&
+            !Shell.WindowTracker.is_speedwagon_window(this.builder.meta_window))
             return false;
 
-        let window = actor.meta_window;
-        let isSpeedwagonForBuilder = _isBuilderSpeedwagon(window);
+        // We can admit this window. Wire up signals and synchronize
+        // geometries now.
+        this.builder = actor;
+        this.button.builder_window = actor.meta_window;
+        this.activationContext = null;
 
-        if (!_isBuilder(window.get_flatpak_id()) &&
-            !isSpeedwagonForBuilder)
-            return false;
+        // The assumption here is that if we connect a new window, we
+        // are connecting a builder window (potentially 'on top') of the
+        // speedwagon window, so there is no need to disconnect
+        // signals
+        this._positionChangedIdBuilder = this.builder.meta_window.connect(
+            'position-changed', Lang.bind(this, this._synchronizeWindows)
+        );
+        this._sizeChangedIdBuilder = this.builder.meta_window.connect(
+            'size-changed', Lang.bind(this, this._synchronizeWindows)
+        );
+        _synchronizeMetaWindowActorGeometries(this.app, this.builder);
 
-        this._cancelWatchdog();
-
-        let session = this._sessions[this._sessions.length - 1];
-        if (!session)
-            return false;
-
-        if (session.actorBuilder) {
-            // If the currently bound actor is speedwagon window, then we'll
-            // want to remove that window from the association and track
-            // the builder window instead
-            if (Shell.WindowTracker.is_speedwagon_window(session.actorBuilder.meta_window)) {
-                session.actorBuilder = actor;
-                session.activationContext = null;
-                session.button.builder_window = actor.meta_window;
-                this._connectBuilderSizeAndPosition(session,
-                                                    session.actorBuilder.meta_window);
-                _synchronizeMetaWindowActorGeometries(session.actorApp,
-                                                      session.actorBuilder);
-                return true;
-            }
-            return false;
-        }
-
-        // If we are animating to a speedwagon window, we'll want to
-        // remove the 'above' attribute - we don't want the splash to
-        // appear over everything else.
-        if (isSpeedwagonForBuilder) {
+        if (Shell.WindowTracker.is_speedwagon_window(actor.meta_window)) {
+            // If we are animating to a speedwagon window, we'll want to
+            // remove the 'above' attribute - we don't want the splash to
+            // appear over everything else.
             actor.meta_window.unmake_above();
         } else {
             // We only want to untrack the coding app window at this
             // point and not at the point we show the speedwagon. This
             // will ensure that the shell window tracker is still
             // watching for the builder window to appear.
-            tracker.untrack_coding_app_window();
+            this._stopWatchingForBuilderWindowToComeOnline();
         }
 
-        // Set the builder window here so that we can track it
-        // for focus changes.
-        session.button.builder_window = actor.meta_window;
-        this._addSwitcherToApp(actor, session);
+        // Now, if we're not already on the builder window, we want to start
+        // animating to it here. This is different from just calling
+        // _switchToBuilder - we already have the window and we want to
+        // rotate to it as soon as its first frame appears
+        if (this._state === STATE_APP) {
+            // We wait until the first frame of the window has been drawn
+            // and damage updated in the compositor before we start rotating.
+            //
+            // This way we don't get ugly artifacts when rotating if
+            // a window is slow to draw.
+            let firstFrameConnection = this.builder.connect('first-frame', Lang.bind(this, function() {
+                this._animate(this.app,
+                              this.builder,
+                              Gtk.DirectionType.LEFT);
+
+                this.builder.disconnect(firstFrameConnection);
+                this.button.switchAnimation();
+
+                return false;
+            }));
+            this._prepareAnimate(this.app,
+                                 this.builder,
+                                 Gtk.DirectionType.LEFT);
+            this._state == STATE_BUILDER;
+        }
+
         return true;
     },
 
-    removeAppWindow: function(actor) {
-        let window = actor.meta_window;
-        if (!_isCodingApp(window.get_flatpak_id()))
-            return;
+    // Remove the builder window from this session. Disconnect
+    // any signals that we have connected to the builder window
+    // and show the app window
+    removeBuilderWindow: function() {
+        if (this._positionChangedIdBuilder) {
+            this.builder.meta_window.disconnect(this._positionChangedIdBuilder);
+            this._positionChangedIdBuilder = 0;
+        }
 
-        this._removeSwitcherToBuilder(actor);
+        if (this._sizeChangedIdBuilder) {
+            this.builder.meta_window.disconnect(this._sizeChangedIdBuilder);
+            this._sizeChangedIdBuilder = 0;
+        }
+
+        // Remove the builder_window reference from the button. There's no
+        // need to disconnect any signals here since the button doesn't
+        // care about signals on builder.
+        this.button.builder_window = null;
+        this.builder = null;
+        this._state = STATE_APP;
+
+        this.app.meta_window.activate(global.get_current_time());
+        this.app.show();
     },
 
-    removeBuilderWindow: function(actor) {
-        let window = actor.meta_window;
+    // 'Eject' out of this session and remove all pairings.
+    // Remove all connected signals and show the builder window if we have
+    // one.
+    //
+    // The assumption here is that the session will be removed immediately
+    // after ejection.
+    eject: function() {
+        if (this._positionChangedIdApp !== 0) {
+            this.app.meta_window.disconnect(this._positionChangedIdApp);
+            this.positionChangedIdApp = 0;
+        }
+        if (this._sizeChangedIdApp !== 0) {
+            this.app.meta_window.disconnect(this._sizeChangedIdApp);
+            this.sizeChangedIdApp = 0;
+        }
+        if (this._windowsRestackedId !== 0) {
+            Main.overview.disconnect(this._windowsRestackedId);
+            this._windowsRestackedId = 0;
+        }
+        if (this._windowMinimizedId !== 0) {
+            global.window_manager.disconnect(this._windowMinimizedId);
+            this._windowMinimizedId = 0;
+        }
+        if (this._windowUnminimizedId !== 0) {
+            global.window_manager.disconnect(this._windowUnminimizedId);
+            this._windowUnminimizedId = 0;
+        }
 
-        if (!this._isBuilder(window.get_flatpak_id()) &&
-            !_isBuilderSpeedwagon(window))
-            return;
+        // Eject the button
+        this.button.eject();
 
-        // We can remove either a speedwagon window or a normal builder window.
-        // That window will be registered in the session at this point.
-        this._removeSwitcherToApp(actor);
+        // If we have a builder window, disconnect any signals,
+        // show it and activate it now
+        if (this.builder) {
+            if (this._positionChangedIdBuilder) {
+                this.builder.meta_window.disconnect(this._positionChangedIdBuilder);
+                this._positionChangedIdBuilder = 0;
+            }
+
+            if (this._sizeChangedIdBuilder) {
+                this.builder.meta_window.disconnect(this._sizeChangedIdBuilder);
+                this._sizeChangedIdBuilder = 0;
+            }
+
+            this.builder.meta_window.activate(global.get_current_time());
+            this.builder.show();
+
+            // Note that we do not set this._state to STATE_APP here. Any
+            // further usage of this session is undefined and it should
+            // be removed.
+        }
     },
 
-    _switchWindows: function(actor, event, session) {
+    _switchWindows: function(actor, event) {
         // Switch to builder if the app is active. Otherwise switch to the app.
-        if (session.state === STATE_APP) {
-            this._switchToBuilder(session);
+        if (this._state === STATE_APP) {
+            this._switchToBuilder();
         } else {
-            this._switchToApp(session);
-        }
-    },
-
-    _addSwitcherToBuilder: function(actorApp) {
-        let window = actorApp.meta_window;
-
-        let button = this._addButton(window);
-
-        let session = { button: button,
-                        actorApp: actorApp,
-                        previousFocusedWindow: null,
-                        state: STATE_APP };
-        this._sessions.push(session);
-
-        button.connect('button-press-event', Lang.bind(this, this._switchWindows, session));
-        session.positionChangedIdApp = window.connect('position-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
-        session.sizeChangedIdApp = window.connect('size-changed', Lang.bind(this, this._updateAppSizeAndPosition, session));
-
-        session.windowsRestackedId = Main.overview.connect('windows-restacked', Lang.bind(this, this._windowRestacked, session));;
-        session.windowMinimizedId = global.window_manager.connect('minimize', Lang.bind(this, this._windowMinimized, session));
-        session.windowUnminimizedId = global.window_manager.connect('unminimize', Lang.bind(this, this._windowUnminimized, session));
-    },
-
-    _addButton: function(window) {
-        let button = new WindowTrackingButton({ window: window });
-        Main.layoutManager.addChrome(button);
-        return button;
-    },
-
-    _addSwitcherToApp: function(actorBuilder, session) {
-        session.actorBuilder = actorBuilder;
-
-        this._animateToBuilder(session);
-    },
-
-    _removeSwitcherToBuilder: function(actorApp) {
-        let session = this._getSession(actorApp);
-        if (!session)
-            return;
-
-        if (session.positionChangedIdApp !== 0) {
-            session.actorApp.meta_window.disconnect(session.positionChangedIdApp);
-            session.positionChangedIdApp = 0;
-        }
-        if (session.sizeChangedIdApp !== 0) {
-            session.actorApp.meta_window.disconnect(session.sizeChangedIdApp);
-            session.sizeChangedIdApp = 0;
-        }
-        if (session.windowsRestackedId !== 0) {
-            Main.overview.disconnect(session.windowsRestackedId);
-            session.windowsRestackedId = 0;
-        }
-        if (session.windowMinimizedId !== 0) {
-            global.window_manager.disconnect(session.windowMinimizedId);
-            session.windowMinimizedId = 0;
-        }
-        if (session.windowUnminimizedId !== 0) {
-            global.window_manager.disconnect(session.windowUnminimizedId);
-            session.windowUnminimizedId = 0;
-        }
-
-        Main.layoutManager.removeChrome(session.button);
-        session.button.destroy();
-        session.actorApp = null;
-
-        // Builder window still open, keep it open
-        // but remove the coding session specific parts
-        if (session.actorBuilder) {
-            this._clearBuilderSession(session);
-
-            session.actorBuilder.meta_window.activate(global.get_current_time());
-            session.actorBuilder.show();
-        } else {
-            this._removeSession(session);
-        }
-    },
-
-    _disconnectBuilderSizeAndPosition: function(session) {
-        if (session.positionChangedIdBuilder) {
-            session.actorBuilder.meta_window.disconnect(session.positionChangedIdBuilder);
-            session.positionChangedIdBuilder = 0;
-        }
-        if (session.sizeChangedIdBuilder) {
-            session.actorBuilder.meta_window.disconnect(session.sizeChangedIdBuilder);
-            session.sizeChangedIdBuilder = 0;
-        }
-    },
-
-    _clearBuilderSession: function(session) {
-        session.button.builder_window = null;
-        session.state = STATE_APP;
-        this._disconnectBuilderSizeAndPosition(session);
-    },
-
-    _removeSwitcherToApp: function(actorBuilder) {
-        let session = this._getSession(actorBuilder);
-        if (!session)
-            return;
-
-        this._clearBuilderSession(session);
-        session.actorBuilder = null;
-
-        if (session.actorApp) {
-            session.actorApp.meta_window.activate(global.get_current_time());
-            session.actorApp.show();
-        } else {
-            this._removeSession(session);
+            this._switchToApp();
         }
     },
 
@@ -449,25 +487,31 @@ const CodingManager = new Lang.Class({
                               }));
     },
 
-    _switchToBuilder: function(session) {
+    // Switch to a builder window, launching it if we haven't yet launched it.
+    //
+    // Note that this is not the same as just rotating to the window - we
+    // need to either launch the builder window if we don't have a reference
+    // to it (and show a speedwagon) or we just need to switch to an existing
+    // builder window.
+    _switchToBuilder: function() {
         function constructCommand(appManifest) {
             // add an app_id_override to the manifest to load
-            return appManifest.get_path() + '+' + session.actorApp.meta_window.get_flatpak_id() + '.Coding';
+            return appManifest.get_path() + '+' + this.app.meta_window.get_flatpak_id() + '.Coding';
         }
 
-        if (!session.actorBuilder) {
+        if (!this.builder) {
             // get the manifest of the application
             // return early before we setup anything
-            let appManifest = _getAppManifest(session.actorApp.meta_window.get_flatpak_id());
+            let appManifest = _getAppManifest(this.app.meta_window.get_flatpak_id());
             if (!appManifest) {
-                log('Error, coding: No manifest could be found for the app: ' + session.actorApp.meta_window.get_flatpak_id());
+                log('Error, coding: No manifest could be found for the app: ' + this.app.meta_window.get_flatpak_id());
                 return;
             }
 
             let tracker = Shell.WindowTracker.get_default();
-            tracker.track_coding_app_window(session.actorApp.meta_window);
+            tracker.track_coding_app_window(this.app.meta_window);
             this._watchdogId = Mainloop.timeout_add(WATCHDOG_TIME,
-                                                    Lang.bind(this, this._watchdogTimeout));
+                                                    Lang.bind(this, this._stopWatchingForBuilderWindowToComeOnline));
 
             // Since builder will be opened from the shell, we will want
             // to show a speedwagon window for it. However, we don't want to
@@ -485,180 +529,138 @@ const CodingManager = new Lang.Class({
             this._startBuilderForFlatpak(session,
                                          constructLoadFlatpakValue(appManifest));
         } else {
-            session.actorBuilder.meta_window.activate(global.get_current_time());
-            this._prepareAnimate(session.actorApp,
-                                 session.actorBuilder,
+            this.builder.meta_window.activate(global.get_current_time());
+            this._prepareAnimate(this.app,
+                                 this.builder,
                                  Gtk.DirectionType.LEFT);
-            this._animate(session.actorApp,
-                          session.actorBuilder,
+            this._animate(this.app,
+                          this.builder,
                           Gtk.DirectionType.LEFT);
-            session.button.switchAnimation();
+            this.button.switchAnimation();
         }
 
-        session.state = STATE_BUILDER;
+        this._state = STATE_BUILDER;
     },
 
-    _watchdogTimeout: function() {
-        let tracker = Shell.WindowTracker.get_default();
-        tracker.untrack_coding_app_window();
-        this._watchdogId = 0;
-
-        return false;
-    },
-
-    _cancelWatchdog: function() {
-        if (this._watchdogId !== 0) {
-            Mainloop.source_remove(this._watchdogId);
-            this._watchdogId = 0;
-        }
-    },
-
-    _switchToApp: function(session) {
-        if (!session.actorApp)
-            return;
-        session.actorApp.meta_window.activate(global.get_current_time());
-        this._prepareAnimate(session.actorBuilder,
-                             session.actorApp,
+    _switchToApp: function() {
+        this.app.meta_window.activate(global.get_current_time());
+        this._prepareAnimate(this.builder,
+                             this.app,
                              Gtk.DirectionType.RIGHT);
-        this._animate(session.actorBuilder,
-                      session.actorApp,
+        this._animate(this.builder,
+                      this.app,
                       Gtk.DirectionType.RIGHT);
-        session.button.switchAnimation();
-        session.state = STATE_APP;
+        this.button.switchAnimation();
+        this._state = STATE_APP;
     },
 
-    _getSession: function(actor) {
-        for (let i = 0; i < this._sessions.length; i++) {
-            let session = this._sessions[i];
-            if (session.actorApp === actor || session.actorBuilder === actor)
-                return session;
-        }
+    // Assuming that we are only listening to some signal on app and builder,
+    // given some window, determine which MetaWindowActor instance is the
+    // source and which is the destination, such that the source is where
+    // the signal occurred and the destination is where changes should be
+    // applied.
+    _srcAndDstPairFromWindow: function(window) {
+        let src = (window === this.app.meta_window ? this.app : this.builder);
+        let dst = (window === this.app.meta_window ? this.builder : this.app);
 
-        return null;
+        return [src, dst];
     },
 
-    _connectBuilderSizeAndPosition: function(session, builderWindow) {
-        session.positionChangedIdBuilder = builderWindow.connect('position-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
-        session.sizeChangedIdBuilder = builderWindow.connect('size-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
+    _srcAndDstPairFromWindowActor: function(actor) {
+        let src = actor;
+        let dst = (actor === this.app ? this.builder : this.app);
+
+        return [src, dst];
     },
 
-    _animateToBuilder: function(session) {
-        // We wait until the first frame of the window has been drawn
-        // and damage updated in the compositor before we start rotating.
-        //
-        // This way we don't get ugly artifacts when rotating if
-        // a window is slow to draw.
-        let firstFrameConnection = session.actorBuilder.connect('first-frame', Lang.bind(this, function() {
-            this._animate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
-
-            session.actorBuilder.disconnect(firstFrameConnection);
-            session.button.switchAnimation();
-
-            return false;
-        }));
-
-        this._prepareAnimate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
-    },
-
-    _updateAppSizeAndPosition: function(window, session) {
-        let rect = session.actorApp.meta_window.get_frame_rect();
-        if (!session.actorBuilder)
+    _synchronizeWindows: function(window) {
+        // No synchronization if builder has not been set here
+        if (!this.builder)
             return;
-        session.actorBuilder.meta_window.move_resize_frame(false,
-                                                           rect.x,
-                                                           rect.y,
-                                                           rect.width,
-                                                           rect.height);
+
+        let [src, dst] = this._srcAndDstPairFromWindow(window);
+        _synchronizeMetaWindowActorGeometries(src, dst);
     },
 
-    _updateBuilderSizeAndPosition: function(window, session) {
-        let rect = session.actorBuilder.meta_window.get_frame_rect();
-        if (!session.actorApp)
+    _applyWindowMinimizationState: function(shellwm, actor) {
+        // No synchronization if builder has not been set here
+        if (!this.builder)
             return;
-        session.actorApp.meta_window.move_resize_frame(false,
-                                                       rect.x,
-                                                       rect.y,
-                                                       rect.width,
-                                                       rect.height);
+
+        let [src, dst] = this._srcAndDstPairFromWindowActor(actor);
+        dst.meta_window.minimize();
     },
 
-    _windowMinimized: function(shellwm, actor, session) {
-        if (actor === session.actorApp && session.actorBuilder) {
-            session.actorBuilder.meta_window.minimize();
-        } else if (actor === session.actorBuilder && session.actorApp) {
-            session.actorApp.meta_window.minimize();
-        }
+    _applyWindowUnminimizationState: function(shellwm, window) {
+        // No synchronization if builder has not been set here
+        if (!this.builder)
+            return;
+
+        let [src, dst] = this._srcAndDstPairFromWindowActor(window);
+        dst.meta_window.unminimize();
     },
 
-    _windowUnminimized: function(shellwm, actor, session) {
-        if (actor === session.actorApp && session.actorBuilder)
-            session.actorBuilder.meta_window.unminimize();
-        else if (actor === session.actorBuilder && session.actorApp)
-            session.actorApp.meta_window.unminimize();
-    },
-
-    _windowRestacked: function(overview, stackIndices, session) {
+    _windowRestacked: function() {
         let focusedWindow = global.display.get_focus_window();
         if (!focusedWindow)
             return;
 
         // we get the signal for the same window switch twice
-        let previousFocused = session.previousFocusedWindow;
+        let previousFocused = this._previousFocusedWindow;
         if (focusedWindow === previousFocused)
             return;
 
         // keep track of the previous focused window so
         // that we can show the animation accordingly
-        session.previousFocusedWindow = focusedWindow;
+        this._previousFocusedWindow = focusedWindow;
 
-        let appWindow = session.actorApp.meta_window;
+        let appWindow = this.app.meta_window;
         let builderWindow = null;
-        if (session.actorBuilder)
-            builderWindow = session.actorBuilder.meta_window;
+        if (this.builder)
+            builderWindow = this.builder.meta_window;
 
         if (appWindow === focusedWindow) {
             if (builderWindow && builderWindow === previousFocused) {
                 // make sure we do not rotate when a rotation is running
-                if (this._rotateInActors.length || this._rotateOutActors.length)
+                if (this._rotatingInActor || this._rotatingOutActor)
                     return;
 
-                this._prepareAnimate(session.actorBuilder,
-                                     session.actorApp,
+                this._prepareAnimate(this.builder,
+                                     this.app,
                                      Gtk.DirectionType.RIGHT);
-                this._animate(session.actorBuilder,
-                              session.actorApp,
+                this._animate(this.builder,
+                              this.app,
                               Gtk.DirectionType.RIGHT);
-                session.button.switchAnimation();
+                this.button.switchAnimation();
                 return;
             }
             // hide the underlying window to prevent glitches when resizing
             // the one on top, we do this for the animated switch case already
-            if (session.actorBuilder)
-                session.actorBuilder.hide();
+            if (this.builder)
+                this.builder.hide();
             return;
-        } else if (appWindow === previousFocused) {
         }
 
-        if (!session.actorBuilder)
+        if (!this.builder)
             return;
 
         if (builderWindow === focusedWindow) {
             if (appWindow === previousFocused) {
                 // make sure we do not rotate when a rotation is running
-                if (this._rotateInActors.length || this._rotateOutActors.length)
+                if (this._rotatingInActor || this._rotatingOutActor)
                     return;
 
-                this._prepareAnimate(session.actorApp,
-                                     session.actorBuilder,
+                this._prepareAnimate(this.app,
+                                     this.builder,
                                      Gtk.DirectionType.LEFT);
-                this._animate(session.actorApp,
-                              session.actorBuilder,
+                this._animate(this.app,
+                              this.builder,
                               Gtk.DirectionType.LEFT);
-                session.button.switchAnimation();
+                this.button.switchAnimation();
             } else {
                 // hide the underlying window to prevent glitches when resizing
                 // the one on top, we do this for the animated switch case already
-                session.actorApp.hide();
+                this.app.hide();
             }
         }
     },
@@ -671,8 +673,8 @@ const CodingManager = new Lang.Class({
         // or rotation angles.
         _synchronizeMetaWindowActorGeometries(src, dst);
 
-        this._rotateInActors.push(dst);
-        this._rotateOutActors.push(src);
+        this._rotatingInActor = dst;
+        this._rotatingOutActor = src;
 
         // We set backface culling to be enabled here so that we can
         // smootly animate between the two windows. Without expensive
@@ -711,14 +713,14 @@ const CodingManager = new Lang.Class({
             rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
             time: WINDOW_ANIMATION_TIME * 4,
             transition: 'easeOutQuad',
-            onComplete: Lang.bind(this, this.rotateOutCompleted, src)
+            onComplete: Lang.bind(this, this._rotateOutCompleted)
         });
         Tweener.addTween(dst, {
             rotation_angle_y: 0,
             time: WINDOW_ANIMATION_TIME * 4,
             transition: 'easeOutQuad',
             onComplete: Lang.bind(this, function() {
-                this.rotateInCompleted(dst);
+                this._rotateInCompleted(dst);
 
                 // Look up the session for this actor and determine if it
                 // should be removed now because it was cancelled.
@@ -752,16 +754,104 @@ const CodingManager = new Lang.Class({
         });
     },
 
-    _removeEffect: function(list, actor) {
-        let idx = list.indexOf(actor);
-        if (idx != -1) {
-            list.splice(idx, 1);
-            return true;
+    // We need to keep these separate here so that they can be called
+    // by killEffects later if required.
+    _rotateInCompleted: function() {
+        let actor = this._rotatingInActor;
+        if (!actor)
+            return;
+
+        Tweener.removeTweens(actor);
+        actor.opacity = 255;
+        actor.rotation_angle_y = 0;
+        actor.set_cull_back_face(false);
+        this._rotatingInActor = null;
+    },
+
+    _rotateOutCompleted: function() {
+        let actor = this._rotatingOutActor;
+        if (!actor)
+            return;
+
+        Tweener.removeTweens(actor);
+        actor.hide();
+        actor.rotation_angle_y = 0;
+        actor.set_cull_back_face(false);
+        this._rotatingOutActor = null;
+    },
+
+    _stopWatchingForBuilderWindowToComeOnline: function() {
+        let tracker = Shell.WindowTracker.get_default();
+        tracker.untrack_coding_app_window();
+        if (this._watchdogId !== 0) {
+            Mainloop.source_remove(this._watchdogId);
+            this._watchdogId = 0;
         }
+
+        this._watchdogId = 0;
         return false;
     },
 
-    _removeSession: function(session) {
+    killEffects: function() {
+        this._rotateInCompleted();
+        this._rotateOutCompleted();
+    }
+});
+
+const CodingManager = new Lang.Class({
+    Name: 'CodingManager',
+
+    _init: function() {
+        this._sessions = [];
+    },
+
+    addAppWindow: function(actor) {
+        if (!global.settings.get_boolean('enable-behind-the-screen'))
+            return;
+
+        let window = actor.meta_window;
+        if (!_isCodingApp(window.get_flatpak_id()))
+            return;
+
+        this._sessions.push(new CodingSession({
+            app: actor,
+            button: new WindowTrackingButton({ window: actor.meta_window })
+        }));
+    },
+
+    addBuilderWindow: function(actor) {
+        if (!global.settings.get_boolean('enable-behind-the-screen'))
+            return false;
+
+        let window = actor.meta_window;
+        let isSpeedwagonForBuilder = _isBuilderSpeedwagon(window);
+
+        let window = actor.meta_window;
+        if (!_isBuilder(window.get_flatpak_id()) &&
+            !isSpeedwagonForBuilder)
+            return false;
+
+        // Get the last session in the list - we assume that we are
+        // adding a builder to this window
+        let session = this._sessions[this._sessions.length - 1];
+        if (!session)
+            return false;
+
+        return session.admitBuilderWindowActor(actor);
+    },
+
+    removeAppWindow: function(actor) {
+        let window = actor.meta_window;
+        if (!_isCodingApp(window.get_flatpak_id()))
+            return false;
+
+        let session = this._getSession(actor);
+        if (!session)
+            return false;
+
+        // Eject the session here and remove it from the list
+        session.eject();
+
         let idx = this._sessions.indexOf(session);
         if (idx != -1) {
             this._sessions.splice(idx, 1);
@@ -770,21 +860,36 @@ const CodingManager = new Lang.Class({
         return false;
     },
 
-    rotateInCompleted: function(actor) {
-        if (this._removeEffect(this._rotateInActors, actor)) {
-            Tweener.removeTweens(actor);
-            actor.opacity = 255;
-            actor.rotation_angle_y = 0;
-            actor.set_cull_back_face(false);
-        }
+    removeBuilderWindow: function(actor) {
+        let window = actor.meta_window;
+        let isSpeedwagonForBuilder = _isBuilderSpeedwagon(window);
+
+        if (!(this._isBuilder(window.get_flatpak_id()) ||
+              isSpeedwagonForBuilder))
+            return;
+
+        let session = this._getSession(actor);
+        if (!session)
+            return;
+
+        // We can remove either a speedwagon window or a normal builder window.
+        // That window will be registered in the session at this point.
+        session.removeBuilderWindow();
     },
 
-    rotateOutCompleted: function(actor) {
-        if (this._removeEffect(this._rotateOutActors, actor)) {
-            Tweener.removeTweens(actor);
-            actor.hide();
-            actor.rotation_angle_y = 0;
-            actor.set_cull_back_face(false);
+    killEffectsOnActor: function(actor) {
+        let session = this._getSession(actor);
+        if (session)
+            session.killEffects();
+    },
+
+    _getSession: function(actor) {
+        for (let i = 0; i < this._sessions.length; i++) {
+            let session = this._sessions[i];
+            if (session.app === actor || session.builder === actor)
+                return session;
         }
+
+        return null;
     }
 });
