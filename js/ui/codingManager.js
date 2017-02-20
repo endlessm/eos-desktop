@@ -214,7 +214,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _clearBuilderSession: function(session) {
+    _disconnectButtonPositioningBuilderSignals: function(session) {
         if (session.positionChangedIdBuilder !== 0) {
             session.actorBuilder.meta_window.disconnect(session.positionChangedIdBuilder);
             session.positionChangedIdBuilder = 0;
@@ -223,6 +223,10 @@ const CodingManager = new Lang.Class({
             session.actorBuilder.meta_window.disconnect(session.sizeChangedIdBuilder);
             session.sizeChangedIdBuilder = 0;
         }
+    },
+
+    _clearBuilderSession: function(session) {
+        this._disconnectButtonPositioningBuilderSignals(session);
         if (session.buttonBuilder) {
             Main.layoutManager.removeChrome(session.buttonBuilder);
             session.buttonBuilder.destroy();
@@ -352,15 +356,17 @@ const CodingManager = new Lang.Class({
         return null;
     },
 
+    _connectButtonPositioningSignalsToBuilder: function(session, builderWindow) {
+        session.positionChangedIdBuilder = builderWindow.connect('position-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
+        session.sizeChangedIdBuilder = builderWindow.connect('size-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
+    },
+
     _addBuilderButton: function(session) {
         let window = session.actorBuilder.meta_window;
 
         let button = this._addButton(window);
         session.buttonBuilder = button;
         button.connect('button-press-event', Lang.bind(this, this._switchToApp, session));
-
-        session.positionChangedIdBuilder = window.connect('position-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
-        session.sizeChangedIdBuilder = window.connect('size-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
     },
 
     _animateToBuilder: function(session) {
