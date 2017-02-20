@@ -34,12 +34,32 @@ _CODING_APPS = [
     'org.gnome.Weather'
 ];
 
-function _isCodingApp: function(flatpakID) {
+function _isCodingApp function(flatpakID) {
     return _CODING_APPS.indexOf(flatpakID) != -1;
 }
 
-function _isBuilder: function (flatpakID) {
+function _isBuilder function (flatpakID) {
     return flatpakID === 'org.gnome.Builder';
+}
+
+function _getAppManifestAt(location, flatpakID) {
+    let manifestFile = Gio.File.new_for_path(GLib.build_filenamev([location, 'app', flatpakID, 'current',
+                                                                   'active', 'files', 'manifest.json']));
+    if (!manifestFile.query_exists(null))
+        return null;
+    return manifestFile;
+}
+
+function _getAppManifest(flatpakID) {
+    let manifestFile = _getAppManifestAt(Flatpak.Installation.new_user(null).get_path().get_path(), flatpakID);
+    if (manifestFile)
+        return manifestFile;
+
+    manifestFile = _getAppManifestAt(Flatpak.Installation.new_system(null).get_path().get_path(), flatpakID);
+    if (manifestFile)
+        return manifestFile;
+
+    return null;
 }
 
 const CodingManager = new Lang.Class({
@@ -300,7 +320,7 @@ const CodingManager = new Lang.Class({
         if (!session.actorBuilder) {
             // get the manifest of the application
             // return early before we setup anything
-            let appManifest = this._getAppManifest(session.actorApp.meta_window.get_flatpak_id());
+            let appManifest = _getAppManifest(session.actorApp.meta_window.get_flatpak_id());
             if (!appManifest) {
                 log('Error, coding: No manifest could be found for the app: ' + session.actorApp.meta_window.get_flatpak_id());
                 return;
@@ -713,25 +733,5 @@ const CodingManager = new Lang.Class({
             actor.rotation_angle_y = 0;
             actor.set_cull_back_face(false);
         }
-    },
-
-    _getAppManifest: function(flatpakID) {
-        function getAppManifestAt(location, flatpakID) {
-            let manifestFile = Gio.File.new_for_path(GLib.build_filenamev([location, 'app', flatpakID, 'current',
-                                                                           'active', 'files', 'manifest.json']));
-            if (!manifestFile.query_exists(null))
-                return null;
-            return manifestFile;
-        }
-
-        let manifestFile = getAppManifestAt(Flatpak.Installation.new_user(null).get_path().get_path(), flatpakID);
-        if (manifestFile)
-	    return manifestFile;
-
-        manifestFile = getAppManifestAt(Flatpak.Installation.new_system(null).get_path().get_path(), flatpakID);
-        if (manifestFile)
-	    return manifestFile;
-
-        return null;
     }
 });
