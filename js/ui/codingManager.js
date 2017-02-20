@@ -11,6 +11,7 @@ const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
+const AppActivation = imports.ui.appActivation;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
 
@@ -285,6 +286,19 @@ const CodingManager = new Lang.Class({
             tracker.track_coding_app_window(session.actorApp.meta_window);
             this._watchdogId = Mainloop.timeout_add(WATCHDOG_TIME,
                                                     Lang.bind(this, this._watchdogTimeout));
+
+            // Since builder will be opened from the shell, we will want
+            // to show a speedwagon window for it. However, we don't want to
+            // show a speedwagon window in the case that builder is already
+            // open, because AppActivationContext will have no way of knowing
+            // that the app state changed. In that case, we just need to wait
+            // around until a builder window appears (though it should be much
+            // quicker because it is already in memory by that point).
+            let builderShellApp = Shell.AppSystem.get_default().lookup_app('org.gnome.Builder.desktop');
+            if (!builderShellApp.get_windows().length) {
+                let activationContext = new AppActivation.AppActivationContext(builderShellApp);
+                activationContext.showSplash(AppActivation.LAUNCH_REASON_CODING_BUILDER);
+            }
 
             this._startBuilderForFlatpak(constructLoadFlatpakValue(appManifest));
             animateBounce(session.buttonApp);
