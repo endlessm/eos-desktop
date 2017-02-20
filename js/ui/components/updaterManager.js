@@ -91,15 +91,33 @@ const UpdaterManager = new Lang.Class({
         this._proxyChangedId = 0;
         this._currentState = UpdaterState.NONE;
 
-        try {
-            this._config.load_from_file('/etc/eos-updater.conf',
-                                        GLib.KeyFileFlags.NONE);
-            this._lastAutoStep = this._config.get_integer(AUTO_UPDATES_GROUP_NAME,
-                                                          AUTO_UPDATES_LAST_STEP_KEY);
-        } catch (e) {
-            // don't spam if the file doesn't exist
-            if (!e.matches(GLib.FileError, GLib.FileError.NOENT)) {
-                logError(e, 'Can\'t load updater configuration');
+        // In priority order; should be kept in sync with the list in
+        // eos-autoupdater.c.
+        // FIXME: Ideally, this should be loaded by a shared library from
+        // eos-updater, rather than hard-coded here. Or eos-updater would
+        // expose a new property indicating whether a state change was
+        // triggered manually or automatically.
+        let configFiles = [
+            '/etc/eos-updater/eos-autoupdater.conf',  // new location
+            '/etc/eos-updater.conf',  // old location
+            '/usr/local/share/eos-updater/eos-autoupdater.conf',
+            '/usr/share/eos-updater/eos-autoupdater.conf',
+        ];
+
+        for (let i = 0; i < configFiles.len; i++) {
+            let configFile = configFiles[i];
+
+            try {
+                this._config.load_from_file(configFile,
+                                            GLib.KeyFileFlags.NONE);
+                this._lastAutoStep = this._config.get_integer(AUTO_UPDATES_GROUP_NAME,
+                                                              AUTO_UPDATES_LAST_STEP_KEY);
+                break;
+            } catch (e) {
+                // don't spam if the file doesn't exist
+                if (!e.matches(GLib.FileError, GLib.FileError.NOENT)) {
+                    logError(e, 'Can\'t load updater configuration');
+                }
             }
         }
     },
