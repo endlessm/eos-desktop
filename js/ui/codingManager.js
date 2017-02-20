@@ -494,9 +494,9 @@ const CodingSession = new Lang.Class({
     // to it (and show a speedwagon) or we just need to switch to an existing
     // builder window.
     _switchToBuilder: function() {
-        function constructLoadFlatpakValue(appManifest) {
+        function constructLoadFlatpakValue(app, appManifest) {
             // add an app_id_override to the manifest to load
-            return appManifest.get_path() + '+' + this.app.meta_window.get_flatpak_id() + '.Coding';
+            return appManifest.get_path() + '+' + app.meta_window.get_flatpak_id() + '.Coding';
         }
 
         if (!this.builder) {
@@ -526,8 +526,8 @@ const CodingSession = new Lang.Class({
                 session.activationContext.showSplash(AppActivation.LaunchReason.CODING_BUILDER);
             }
 
-            this._startBuilderForFlatpak(session,
-                                         constructLoadFlatpakValue(appManifest));
+            this._startBuilderForFlatpak(constructLoadFlatpakValue(this.app,
+                                                                   appManifest));
         } else {
             this.builder.meta_window.activate(global.get_current_time());
             this._prepareAnimate(this.app,
