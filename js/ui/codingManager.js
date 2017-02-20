@@ -494,7 +494,7 @@ const CodingSession = new Lang.Class({
     // to it (and show a speedwagon) or we just need to switch to an existing
     // builder window.
     _switchToBuilder: function() {
-        function constructCommand(appManifest) {
+        function constructLoadFlatpakValue(appManifest) {
             // add an app_id_override to the manifest to load
             return appManifest.get_path() + '+' + this.app.meta_window.get_flatpak_id() + '.Coding';
         }
