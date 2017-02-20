@@ -27,6 +27,9 @@ const SPLASH_SCREEN_TIMEOUT = 700; // ms
 const DEFAULT_MAXIMIZED_WINDOW_SIZE = 0.75;
 const LAUNCH_MAXIMIZED_DESKTOP_KEY = 'X-Endless-LaunchMaximized';
 
+const LAUNCH_REASON_UNINTERESTING = 'uninteresting';
+const LAUNCH_REASON_CODING_BUILDER = 'coding-builder';
+
 const AppActivationContext = new Lang.Class({
     Name: 'AppActivationContext',
 
@@ -84,26 +87,27 @@ const AppActivationContext = new Lang.Class({
         Main.overview.hide();
     },
 
-    showSplash: function() {
-        // Don't show splash screen unless the launch maximized key is true
+    showSplash: function(launchReason=LAUNCH_REASON_UNINTERESTING) {
         let info = this._app.get_app_info();
-        if (!(info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) &&
-              info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY))) {
-            return;
-        }
 
-        // Don't show splash screen if default maximize is disabled
-        if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
-            return;
-        }
+        let dontShowSplashConditions = (
+            // Don't show splash screen unless the launch maximized key is true
+            !(info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) &&
+              info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY)) ||
+            // Don't show splash screen if default maximize is disabled
+            global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY) ||
+            // Don't show splash screen if this is a link and the browser is
+            // running. We can't rely on any signal being emitted in that
+            // case, as links open in browser tabs.
+            (this._app.get_id().indexOf('eos-link-') != -1 &&
+             Util.getBrowserApp().state != Shell.AppState.STOPPED)
+        );
+        let alwaysShowSplashConditions = (
+            launchReason === LAUNCH_REASON_CODING_BUILDER
+        );
 
-        // Don't show splash screen if this is a link and the browser is
-        // running. We can't rely on any signal being emitted in that
-        // case, as links open in browser tabs.
-        if (this._app.get_id().indexOf('eos-link-') != -1 &&
-            Util.getBrowserApp().state != Shell.AppState.STOPPED) {
+        if (dontShowSplashConditions && !alwaysShowSplashConditions)
             return;
-        }
 
         // Prevent windows from being shown when the overview is hidden so it does
         // not affect the speedwagon's animation
