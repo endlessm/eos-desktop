@@ -29,6 +29,19 @@ function _isBuilderSpeedwagon(window) {
             correspondingApp.get_id() === 'org.gnome.Builder.desktop');
 }
 
+_CODING_APPS = [
+    'com.endlessm.Helloworld',
+    'org.gnome.Weather'
+];
+
+function _isCodingApp: function(flatpakID) {
+    return _CODING_APPS.indexOf(flatpakID) != -1;
+}
+
+function _isBuilder: function (flatpakID) {
+    return flatpakID === 'org.gnome.Builder';
+}
+
 const CodingManager = new Lang.Class({
     Name: 'CodingManager',
 
@@ -40,20 +53,12 @@ const CodingManager = new Lang.Class({
         this._codingApps = ['com.endlessm.Helloworld', 'org.gnome.Weather.Application'];
     },
 
-    _isCodingApp: function(flatpakID) {
-        return this._codingApps.indexOf(flatpakID) != -1;
-    },
-
-    _isBuilder: function(flatpakID) {
-        return flatpakID === 'org.gnome.Builder';
-    },
-
     addAppWindow: function(actor) {
         if (!global.settings.get_boolean('enable-behind-the-screen'))
             return;
 
         let window = actor.meta_window;
-        if (!this._isCodingApp(window.get_flatpak_id()))
+        if (!_isCodingApp(window.get_flatpak_id()))
             return;
 
         this._addSwitcherToBuilder(actor);
@@ -66,7 +71,7 @@ const CodingManager = new Lang.Class({
         let window = actor.meta_window;
         let isSpeedwagonForBuilder = _isBuilderSpeedwagon(window);
 
-        if (!this._isBuilder(window.get_flatpak_id()) &&
+        if (!_isBuilder(window.get_flatpak_id()) &&
             !isSpeedwagonForBuilder)
             return false;
 
@@ -111,7 +116,7 @@ const CodingManager = new Lang.Class({
 
     removeAppWindow: function(actor) {
         let window = actor.meta_window;
-        if (!this._isCodingApp(window.get_flatpak_id()))
+        if (!_isCodingApp(window.get_flatpak_id()))
             return;
 
         this._removeSwitcherToBuilder(actor);
