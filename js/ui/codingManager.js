@@ -122,9 +122,13 @@ const CodingManager = new Lang.Class({
         // appear over everything else.
         if (isSpeedwagonForBuilder) {
             actor.meta_window.unmake_above();
+        } else {
+            // We only want to untrack the coding app window at this
+            // point and not at the point we show the speedwagon. This
+            // will ensure that the shell window tracker is still
+            // watching for the builder window to appear.
+            tracker.untrack_coding_app_window();
         }
-
-        tracker.untrack_coding_app_window();
 
         this._addSwitcherToApp(actor, session);
         return true;
