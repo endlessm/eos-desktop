@@ -433,7 +433,10 @@ const CodingSession = new Lang.Class({
 
         // If we have a builder window, disconnect any signals,
         // show it and activate it now
-        if (this.builder) {
+        //
+        // For whatever reason, this.builder.meta_window seems to be
+        // undefined on speedwagon windows, so handle that case here.
+        if (this.builder && this.builder.meta_window) {
             if (this._positionChangedIdBuilder) {
                 this.builder.meta_window.disconnect(this._positionChangedIdBuilder);
                 this._positionChangedIdBuilder = 0;
