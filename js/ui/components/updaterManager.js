@@ -267,6 +267,12 @@ const UpdaterManager = new Lang.Class({
             return;
         }
 
+        // We don’t want to notify of errors arising from being a dev-converted
+        // system.
+        if (this._proxy.ErrorName == 'com.endlessm.Updater.Error.NotOstreeSystem') {
+            return;
+        }
+
         this._ensureSource();
 
         this._notification = new UpdaterNotification(this._source,
