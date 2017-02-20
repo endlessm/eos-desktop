@@ -81,11 +81,19 @@ const CodingManager = new Lang.Class({
     },
 
     addBuilderWindow: function(actor) {
+        let tracker = Shell.WindowTracker.get_default();
+        let correspondingApp = tracker.get_window_app(actor.meta_window);
+        let isSpeedwagonForBuilder = (
+            Shell.WindowTracker.is_speedwagon_window(actor.meta_window) &&
+            (correspondingApp ? correspondingApp.get_id() === 'org.gnome.Builder.desktop' : false)
+        );
+
         if (!global.settings.get_boolean('enable-behind-the-screen'))
             return false;
 
         let window = actor.meta_window;
-        if (!this._isBuilder(window.get_flatpak_id()))
+        if (!this._isBuilder(window.get_flatpak_id()) &&
+            !isSpeedwagonForBuilder)
             return false;
 
         this._cancelWatchdog();
@@ -94,9 +102,28 @@ const CodingManager = new Lang.Class({
         if (!session)
             return false;
 
-        if (session.actorBuilder)
+        if (session.actorBuilder) {
+            // If the currently bound actor is speedwagon window, then we'll
+            // want to remove that window from the association and track
+            // the builder window instead
+            if (Shell.WindowTracker.is_speedwagon_window(session.actorBuilder.meta_window)) {
+                session.actorBuilder = actor;
+                this._connectButtonPositioningSignalsToBuilder(session,
+                                                               session.actorBuilder.meta_window);
+                this._synchroniseWindows(session.actorApp,
+                                         session.actorBuilder);
+                return true;
+            }
             return false;
-        let tracker = Shell.WindowTracker.get_default();
+        }
+
+        // If we are animating to a speedwagon window, we'll want to
+        // remove the 'above' attribute - we don't want the splash to
+        // appear over everything else.
+        if (isSpeedwagonForBuilder) {
+            actor.meta_window.unmake_above();
+        }
+
         tracker.untrack_coding_app_window();
 
         this._addSwitcherToApp(actor, session);
