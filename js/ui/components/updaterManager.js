@@ -168,6 +168,13 @@ const UpdaterManager = new Lang.Class({
             return;
         }
 
+        // Clear any existing notifications (such as past errors), none of
+        // which are relevant to the current state.
+        if (this._notification) {
+            this._notification.destroy();
+            this._notification = null;
+        }
+
         if (state == UpdaterState.UPDATE_AVAILABLE) {
             this._notifyUpdateAvailable();
         } else if (state == UpdaterState.UPDATE_READY) {
@@ -201,10 +208,6 @@ const UpdaterManager = new Lang.Class({
     },
 
     _ensureSource: function() {
-        if (this._notification) {
-            this._notification.destroy();
-        }
-
         if (this._source) {
             return;
         }
