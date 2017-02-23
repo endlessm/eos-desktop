@@ -550,7 +550,7 @@ msgid "Software Update"
 msgstr "सॉफ्टवेयर अपडेट"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates available"
+msgid "Updates Available"
 msgstr "अपडेट्स उपलब्ध हैं"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -558,11 +558,11 @@ msgid "Software updates are available for your system"
 msgstr "सॉफ्टवेयर अपडेट्स आपके सिस्टम के लिए उपलब्ध हैं"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download now"
+msgid "Download Now"
 msgstr "अभी डाउनलोड करें"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates ready"
+msgid "Updates Ready"
 msgstr "अप्डेट्स तैयार हैंं"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -570,11 +570,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "सॉफ्टवेयर अपडेट्स आपके सिस्टम पर इंंस्टॉल्ड किए जाने के लिए उपलब्ध हैं"
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install now"
+msgid "Install Now"
 msgstr "अभी इंस्टॉल करें"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates installed"
+msgid "Updates Installed"
 msgstr "अपडेट्स इंस्टॉल किए गए"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -582,11 +582,11 @@ msgid "Software updates were installed on your system"
 msgstr "सॉफ्टवेयर अपडेट्स आपके सिस्टम पर इंस्टॉल किए गए"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart now"
+msgid "Restart Now"
 msgstr "अभी रीस्टार्ट करें"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update failed"
+msgid "Update Failed"
 msgstr "अपडेट्स विफल हुए"
 
 #: ../js/ui/components/updaterManager.js:256

@@ -562,7 +562,7 @@ msgid "Software Update"
 msgstr "软件更新"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates available"
+msgid "Updates Available"
 msgstr "可用的更新"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -570,11 +570,11 @@ msgid "Software updates are available for your system"
 msgstr "有可用于您系统的软件更新"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download now"
+msgid "Download Now"
 msgstr "马上下载"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates ready"
+msgid "Updates Ready"
 msgstr "更新已就绪"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -582,11 +582,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "软件更新已经准备好安装到您的系统"
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install now"
+msgid "Install Now"
 msgstr "马上安装"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates installed"
+msgid "Updates Installed"
 msgstr "更新完成"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -594,11 +594,11 @@ msgid "Software updates were installed on your system"
 msgstr "软件更新已经安装到您的系统"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart now"
+msgid "Restart Now"
 msgstr "马上重启"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update failed"
+msgid "Update Failed"
 msgstr "更新失败"
 
 #: ../js/ui/components/updaterManager.js:256

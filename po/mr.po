@@ -546,7 +546,7 @@ msgid "Software Update"
 msgstr "सॉफ्टवेअर अद्यतन"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates available"
+msgid "Updates Available"
 msgstr "अद्यतने उपलब्ध"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -554,11 +554,11 @@ msgid "Software updates are available for your system"
 msgstr "आपल्या प्रणालीकरिता अद्यतने उपलब्ध आहेत"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download now"
+msgid "Download Now"
 msgstr "डाउनलोड करा"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates ready"
+msgid "Updates Ready"
 msgstr "अद्यतने तयार"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -566,11 +566,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "सॉफ्टवेअर अद्यतने स्थापित करण्यासाठी तयार आहेत"
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install now"
+msgid "Install Now"
 msgstr "स्थापित करा"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates installed"
+msgid "Updates Installed"
 msgstr "अद्यतने स्थापित"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -578,11 +578,11 @@ msgid "Software updates were installed on your system"
 msgstr "आपल्या प्रणालीवर सॉफ्टवेअर अद्यतने स्थापित करण्यात आली आहेत"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart now"
+msgid "Restart Now"
 msgstr "पुन्हा चालू करा"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update failed"
+msgid "Update Failed"
 msgstr "अद्यतन अयशस्वी"
 
 #: ../js/ui/components/updaterManager.js:256

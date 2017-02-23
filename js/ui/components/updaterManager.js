@@ -228,9 +228,9 @@ const UpdaterManager = new Lang.Class({
         this._ensureSource();
 
         this._notification = new UpdaterNotification(this._source,
-            _("Updates available"),
+            _("Updates Available"),
             _("Software updates are available for your system"));
-        this._notification.addButton('download-updates', _("Download now"));
+        this._notification.addButton('download-updates', _("Download Now"));
 
         this._sendNotification();
     },
@@ -243,9 +243,9 @@ const UpdaterManager = new Lang.Class({
         this._ensureSource();
 
         this._notification = new UpdaterNotification(this._source,
-            _("Updates ready"),
+            _("Updates Ready"),
             _("Software updates are ready to be installed on your system"));
-        this._notification.addButton('apply-updates', _("Install now"));
+        this._notification.addButton('apply-updates', _("Install Now"));
 
         this._sendNotification();
     },
@@ -254,9 +254,9 @@ const UpdaterManager = new Lang.Class({
         this._ensureSource();
 
         this._notification = new UpdaterNotification(this._source,
-            _("Updates installed"),
+            _("Updates Installed"),
             _("Software updates were installed on your system"));
-        this._notification.addButton('restart-updates', _("Restart now"));
+        this._notification.addButton('restart-updates', _("Restart Now"));
 
         this._sendNotification();
     },
@@ -285,7 +285,7 @@ const UpdaterManager = new Lang.Class({
         this._ensureSource();
 
         this._notification = new UpdaterNotification(this._source,
-            _("Update failed"),
+            _("Update Failed"),
             _("We could not update your system"));
 
         this._sendNotification();
