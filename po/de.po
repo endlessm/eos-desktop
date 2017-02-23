@@ -555,7 +555,7 @@ msgid "Software Update"
 msgstr "Software-Update"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates available"
+msgid "Updates Available"
 msgstr "Updates verfügbar"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -563,11 +563,11 @@ msgid "Software updates are available for your system"
 msgstr "Es sind Software-Updates verfügbar"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download now"
+msgid "Download Now"
 msgstr "Jetzt herunterladen"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates ready"
+msgid "Updates Ready"
 msgstr "Updates stehen bereit"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -575,11 +575,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "Software-Updates stehen zur Installation bereit"
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install now"
+msgid "Install Now"
 msgstr "Jetzt installieren"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates installed"
+msgid "Updates Installed"
 msgstr "Updates sind installiert"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -587,11 +587,11 @@ msgid "Software updates were installed on your system"
 msgstr "Software-Updates sind installiert"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart now"
+msgid "Restart Now"
 msgstr "Jetzt Neustarten"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update failed"
+msgid "Update Failed"
 msgstr "Update ist fehlgeschlagen"
 
 #: ../js/ui/components/updaterManager.js:256

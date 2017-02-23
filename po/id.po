@@ -549,7 +549,7 @@ msgid "Software Update"
 msgstr "Pembaruan Perangkat Lunak"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates available"
+msgid "Updates Available"
 msgstr "Pembaruan tersedia"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -557,11 +557,11 @@ msgid "Software updates are available for your system"
 msgstr "Pembaruan perangkat lunak tersedia untuk sistem Anda"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download now"
+msgid "Download Now"
 msgstr "Unduh sekarang"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates ready"
+msgid "Updates Ready"
 msgstr "Pembaruan siap"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -569,11 +569,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "Pembaruan perangkat lunak siap dipasang pada sistem Anda"
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install now"
+msgid "Install Now"
 msgstr "Pasang sekarang"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates installed"
+msgid "Updates Installed"
 msgstr "Pembaruan telah dipasang"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -581,11 +581,11 @@ msgid "Software updates were installed on your system"
 msgstr "Pembaruan perangkat lunak sudah dipasang pada sistem Anda"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart now"
+msgid "Restart Now"
 msgstr "Mulai ulang sekarang"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update failed"
+msgid "Update Failed"
 msgstr "Gagal memperbarui"
 
 #: ../js/ui/components/updaterManager.js:256

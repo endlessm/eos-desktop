@@ -552,7 +552,7 @@ msgid "Software Update"
 msgstr "Update soft"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates available"
+msgid "Updates Available"
 msgstr "Sunt disponibile actualizari noi"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -560,11 +560,11 @@ msgid "Software updates are available for your system"
 msgstr "Sunt disponibile actualizari pentru sistem"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download now"
+msgid "Download Now"
 msgstr "Descarca acum"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates ready"
+msgid "Updates Ready"
 msgstr "Actualizari pregatite"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -572,11 +572,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "Actualizarile sunt pregatite pentru a fi instalate in sistem"
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install now"
+msgid "Install Now"
 msgstr "Instaleaza acum"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates installed"
+msgid "Updates Installed"
 msgstr "Actualizari instalate"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -584,11 +584,11 @@ msgid "Software updates were installed on your system"
 msgstr "Actualizarile au fost instalate in sistem"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart now"
+msgid "Restart Now"
 msgstr "Reporneste acum"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update failed"
+msgid "Update Failed"
 msgstr "Update esuat"
 
 #: ../js/ui/components/updaterManager.js:256
