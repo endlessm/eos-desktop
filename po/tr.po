@@ -554,7 +554,7 @@ msgid "Software Update"
 msgstr "Yazılım Güncelleme"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates available"
+msgid "Updates Available"
 msgstr "Güncellemeler mevcut"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -562,11 +562,11 @@ msgid "Software updates are available for your system"
 msgstr "Sisteminiz için yazılım güncellemeleri mevcut"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download now"
+msgid "Download Now"
 msgstr "İndir"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates ready"
+msgid "Updates Ready"
 msgstr "Güncellemeler hazır"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -574,11 +574,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "Yazılım güncellemeleri kurulmak üzere hazır"
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install now"
+msgid "Install Now"
 msgstr "Şimdi kur"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates installed"
+msgid "Updates Installed"
 msgstr "Güncellemeler kuruldu"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -586,11 +586,11 @@ msgid "Software updates were installed on your system"
 msgstr "Sisteminize yazılım güncellemeleri kuruldu"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart now"
+msgid "Restart Now"
 msgstr "Yeniden Başlat"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update failed"
+msgid "Update Failed"
 msgstr "Güncelleme başarısız"
 
 #: ../js/ui/components/updaterManager.js:256
