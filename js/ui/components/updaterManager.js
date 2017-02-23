@@ -11,10 +11,15 @@ const MessageTray = imports.ui.messageTray;
 const UpdaterIface = '<node> \
 <interface name="com.endlessm.Updater"> \
   <method name="Poll"/> \
+  <method name="PollVolume"> \
+    <arg type="s" name="path" /> \
+  </method> \
   <method name="Fetch"/> \
   <method name="Apply"/> \
   <property name="State"            type="u" access="read"/> \
   <property name="UpdateID"         type="s" access="read"/> \
+  <property name="UpdateRefspec"    type="s" access="read"/> \
+  <property name="OriginalRefspec"  type="s" access="read"/> \
   <property name="CurrentID"        type="s" access="read"/> \
   <property name="UpdateLabel"      type="s" access="read"/> \
   <property name="UpdateMessage"    type="s" access="read"/> \
@@ -24,6 +29,7 @@ const UpdaterIface = '<node> \
   <property name="FullDownloadSize" type="x" access="read"/> \
   <property name="FullUnpackedSize" type="x" access="read"/> \
   <property name="ErrorCode"        type="u" access="read"/> \
+  <property name="ErrorName"        type="s" access="read"/> \
   <property name="ErrorMessage"     type="s" access="read"/> \
   <signal name="StateChanged"> \
     <arg type="u" name="state"/> \
@@ -162,6 +168,13 @@ const UpdaterManager = new Lang.Class({
             return;
         }
 
+        // Clear any existing notifications (such as past errors), none of
+        // which are relevant to the current state.
+        if (this._notification) {
+            this._notification.destroy();
+            this._notification = null;
+        }
+
         if (state == UpdaterState.UPDATE_AVAILABLE) {
             this._notifyUpdateAvailable();
         } else if (state == UpdaterState.UPDATE_READY) {
@@ -195,10 +208,6 @@ const UpdaterManager = new Lang.Class({
     },
 
     _ensureSource: function() {
-        if (this._notification) {
-            this._notification.destroy();
-        }
-
         if (this._source) {
             return;
         }
