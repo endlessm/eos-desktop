@@ -1,6 +1,7 @@
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 
 const Clutter = imports.gi.Clutter;
+const CodingGameService = imports.gi.CodingGameService;
 const Flatpak = imports.gi.Flatpak;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
@@ -58,7 +59,65 @@ const CodingManager = new Lang.Class({
         this._rotateOutActors = [];
         this._watchdogId = 0;
         this._codingApps = ['com.endlessm.Helloworld', 'org.gnome.Weather.Application'];
+
+        this._flatpakMonitorId = 0;
+        this._commit = 0;
+        this._controller = this._createAppIntegrationController();
     },
+
+    _createAppIntegrationController: function() {
+        let controller = new CodingGameService.AppIntegrationController();
+        controller.service_event_with_listener('codeview-installed', Lang.bind(this, function() {
+            this._connectFlatpakMonitor();
+        }), Lang.bind(this, function() {
+            this._disconnectFlatpakMonitor();
+        }));
+        return controller;
+    },
+
+    _connectFlatpakMonitor: function() {
+        let userInstallation = Flatpak.Installation.new_user(null);
+
+        let apps = userInstallation.list_installed_refs_by_kind(Flatpak.RefKind.APP, null);
+        for (let i = 0; i < apps.length; i++) {
+            if (apps[i].name === 'org.gnome.Weather.Application') {
+                this._commit = apps[i].commit;
+                break;
+            }
+        }
+
+        this._flatpakMonitor = userInstallation.create_monitor(null);
+        this._flatpakMonitorId = this._flatpakMonitor.connect('changed',
+            Lang.bind(this, function(monitor, file, other, type) {
+                // we are monitoring a file .changed which
+                // gets deleted and created on every change independent
+                // of install or uninstall, therefore only track the done hint
+                if (type === Gio.FileMonitorEvent.CHANGES_DONE_HINT) {
+                    let app;
+                    try {
+                        let userInstallation = Flatpak.Installation.new_user(null);
+                        app = userInstallation.get_current_installed_app('org.gnome.Weather.Application', null);
+                    } catch(e) {
+                        // application not installed or just got deleted
+                        return;
+                    }
+
+                    if (app.commit === this._commit)
+                      return;
+
+                    this._commit = app.commit;
+                    this._controller.event_occurred('codeview-installed');
+                    this._disconnectFlatpakMonitor();
+                }
+        }));
+    },
+
+    _disconnectFlatpakMonitor: function() {
+        if (this._flatpakMonitorId) {
+            this._flatpakMonitor.disconnect(this._flatpakMonitorId);
+            this._flatpakMonitorId = 0;
+        }
+     },
 
     _isCodingApp: function(flatpakID) {
         return this._codingApps.indexOf(flatpakID) != -1;
