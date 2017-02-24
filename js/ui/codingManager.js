@@ -62,11 +62,23 @@ const CodingManager = new Lang.Class({
 
         this._flatpakMonitorId = 0;
         this._commit = 0;
+        this._codeViewFlipped = false;
+        this._codeViewStarted = false;
         this._controller = this._createAppIntegrationController();
     },
 
     _createAppIntegrationController: function() {
         let controller = new CodingGameService.AppIntegrationController();
+        controller.service_event_with_listener('codeview-started', Lang.bind(this, function() {
+            this._codeViewStarted = true;
+        }), Lang.bind(this, function() {
+            this._codeViewStarted = false;
+        }));
+        controller.service_event_with_listener('codeview-flipped', Lang.bind(this, function() {
+            this._codeViewFlipped = true;
+        }), Lang.bind(this, function() {
+            this._codeViewFlipped = false;
+        }));
         controller.service_event_with_listener('codeview-installed', Lang.bind(this, function() {
             this._connectFlatpakMonitor();
         }), Lang.bind(this, function() {
@@ -136,6 +148,11 @@ const CodingManager = new Lang.Class({
             return;
 
         this._addSwitcherToBuilder(actor);
+
+        if (this._codeViewStarted) {
+            this._controller.event_occurred('codeview-started');
+            this._codeViewStarted = false;
+        }
     },
 
     addBuilderWindow: function(actor) {
@@ -158,6 +175,12 @@ const CodingManager = new Lang.Class({
         tracker.untrack_coding_app_window();
 
         this._addSwitcherToApp(actor, session);
+
+        if (this._codeViewFlipped) {
+            this._controller.event_occurred('codeview-flipped');
+            this._codeViewFlipped = false;
+        }
+
         return true;
     },
 
