@@ -208,6 +208,7 @@ const WindowTrackingButton = new Lang.Class({
             this.emit('clicked');
         }));
 
+<<<<<<< HEAD
         // Connect to signals on the window to determine when to move
         // hide, and show the button. Note that WindowTrackingButton is
         // constructed with the primary app window and we listen for signals
@@ -235,6 +236,14 @@ const WindowTrackingButton = new Lang.Class({
         this._windowUnminimizedId = global.window_manager.connect(
             'unminimize', Lang.bind(this, this._show)
         );
+=======
+        this._addSwitcherToBuilder(actor);
+
+        if (this._codeViewStarted) {
+            this._controller.event_occurred('codeview-started');
+            this._codeViewStarted = false;
+        }
+>>>>>>> CodeView: listen as well for codeview-started and codeview-flipped
     },
 
     // Users MUST call destroy before unreferencing this button - this will
@@ -266,10 +275,22 @@ const WindowTrackingButton = new Lang.Class({
             this._overviewHidingId = 0;
         }
 
+<<<<<<< HEAD
         if (this._windowMinimizedId) {
             global.window_manager.disconnect(this._windowMinimizedId);
             this._windowMinimizedId = 0;
         }
+=======
+        this._addSwitcherToApp(actor, session);
+
+        if (this._codeViewFlipped) {
+            this._controller.event_occurred('codeview-flipped');
+            this._codeViewFlipped = false;
+        }
+
+        return true;
+    },
+>>>>>>> CodeView: listen as well for codeview-started and codeview-flipped
 
         if (this._windowUnminimizedId) {
             global.window_manager.disconnect(this._windowUnminimizedId);
@@ -938,6 +959,8 @@ const CodingManager = new Lang.Class({
 
         this._flatpakMonitorId = 0;
         this._commit = 0;
+        this._codeViewFlipped = false;
+        this._codeViewStarted = false;
         this._controller = this._createAppIntegrationController();
     },
 
@@ -1032,6 +1055,16 @@ const CodingManager = new Lang.Class({
 
     _createAppIntegrationController: function() {
         let controller = new CodingGameService.AppIntegrationController();
+        controller.service_event_with_listener('codeview-started', Lang.bind(this, function() {
+            this._codeViewStarted = true;
+        }), Lang.bind(this, function() {
+            this._codeViewStarted = false;
+        }));
+        controller.service_event_with_listener('codeview-flipped', Lang.bind(this, function() {
+            this._codeViewFlipped = true;
+        }), Lang.bind(this, function() {
+            this._codeViewFlipped = false;
+        }));
         controller.service_event_with_listener('codeview-installed', Lang.bind(this, function() {
             this._connectFlatpakMonitor();
         }), Lang.bind(this, function() {
