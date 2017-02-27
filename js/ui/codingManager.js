@@ -60,6 +60,7 @@ const CodingManager = new Lang.Class({
         this._watchdogId = 0;
         this._codingApps = ['com.endlessm.Helloworld', 'org.gnome.Weather.Application'];
 
+        this._flatpakMonitor = null;
         this._flatpakMonitorId = 0;
         this._commit = 0;
         this._codeViewFlipped = false;
@@ -104,30 +105,31 @@ const CodingManager = new Lang.Class({
                 // we are monitoring a file .changed which
                 // gets deleted and created on every change independent
                 // of install or uninstall, therefore only track the done hint
-                if (type === Gio.FileMonitorEvent.CHANGES_DONE_HINT) {
-                    let app;
-                    try {
-                        let userInstallation = Flatpak.Installation.new_user(null);
-                        app = userInstallation.get_current_installed_app('org.gnome.Weather.Application', null);
-                    } catch(e) {
-                        // application not installed or just got deleted
-                        return;
-                    }
+                if (type !== Gio.FileMonitorEvent.CHANGES_DONE_HINT)
+                    return;
 
-                    if (app.commit === this._commit)
-                      return;
-
-                    this._commit = app.commit;
-                    this._controller.event_occurred('codeview-installed');
-                    this._disconnectFlatpakMonitor();
+                let app;
+                try {
+                    app = userInstallation.get_current_installed_app('org.gnome.Weather.Application', null);
+                } catch(e) {
+                    // application not installed or just got deleted
+                    return;
                 }
-        }));
+
+                if (app.commit === this._commit)
+                    return;
+
+                this._commit = app.commit;
+                this._controller.event_occurred('codeview-installed');
+                this._disconnectFlatpakMonitor();
+            }));
     },
 
     _disconnectFlatpakMonitor: function() {
         if (this._flatpakMonitorId) {
             this._flatpakMonitor.disconnect(this._flatpakMonitorId);
             this._flatpakMonitorId = 0;
+            this._flatpakMonitor = null;
         }
      },
 
