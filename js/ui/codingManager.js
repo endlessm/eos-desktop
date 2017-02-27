@@ -331,7 +331,7 @@ const CodingManager = new Lang.Class({
             // around until a builder window appears (though it should be much
             // quicker because it is already in memory by that point).
             let builderShellApp = Shell.AppSystem.get_default().lookup_app('org.gnome.Builder.desktop');
-            if (!builderShellApp.get_windows().length) {
+            if (!builderShellApp.get_windows()) {
                 let activationContext = new AppActivation.AppActivationContext(builderShellApp);
                 activationContext.showSplash(AppActivation.LaunchReason.CODING_BUILDER);
             }
