@@ -109,8 +109,8 @@ const CodingManager = new Lang.Class({
             // the builder window instead
             if (Shell.WindowTracker.is_speedwagon_window(session.actorBuilder.meta_window)) {
                 session.actorBuilder = actor;
-                this._connectButtonPositioningSignalsToBuilder(session,
-                                                               session.actorBuilder.meta_window);
+                this._connectBuilderSizeAndPosition(session,
+                                                    session.actorBuilder.meta_window);
                 this._synchroniseWindows(session.actorApp,
                                          session.actorBuilder);
                 return true;
@@ -246,7 +246,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _disconnectButtonPositioningBuilderSignals: function(session) {
+    _disconnectBuilderSizeAndPosition: function(session) {
         if (session.positionChangedIdBuilder !== 0) {
             session.actorBuilder.meta_window.disconnect(session.positionChangedIdBuilder);
             session.positionChangedIdBuilder = 0;
@@ -258,7 +258,7 @@ const CodingManager = new Lang.Class({
     },
 
     _clearBuilderSession: function(session) {
-        this._disconnectButtonPositioningBuilderSignals(session);
+        this._disconnectBuilderSizeAndPosition(session);
         if (session.buttonBuilder) {
             Main.layoutManager.removeChrome(session.buttonBuilder);
             session.buttonBuilder.destroy();
@@ -388,7 +388,7 @@ const CodingManager = new Lang.Class({
         return null;
     },
 
-    _connectButtonPositioningSignalsToBuilder: function(session, builderWindow) {
+    _connectBuilderSizeAndPosition: function(session, builderWindow) {
         session.positionChangedIdBuilder = builderWindow.connect('position-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
         session.sizeChangedIdBuilder = builderWindow.connect('size-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
     },
