@@ -332,7 +332,7 @@ const CodingManager = new Lang.Class({
             let builderShellApp = Shell.AppSystem.get_default().lookup_app('org.gnome.Builder.desktop');
             if (!builderShellApp.get_windows().length) {
                 let activationContext = new AppActivation.AppActivationContext(builderShellApp);
-                activationContext.showSplash(AppActivation.LAUNCH_REASON_CODING_BUILDER);
+                activationContext.showSplash(AppActivation.LaunchReason.CODING_BUILDER);
             }
 
             this._startBuilderForFlatpak(constructLoadFlatpakValue(appManifest));

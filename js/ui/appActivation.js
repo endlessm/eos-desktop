@@ -27,8 +27,13 @@ const SPLASH_SCREEN_TIMEOUT = 700; // ms
 const DEFAULT_MAXIMIZED_WINDOW_SIZE = 0.75;
 const LAUNCH_MAXIMIZED_DESKTOP_KEY = 'X-Endless-LaunchMaximized';
 
-const LAUNCH_REASON_UNINTERESTING = 'uninteresting';
-const LAUNCH_REASON_CODING_BUILDER = 'coding-builder';
+const LaunchReason.UNINTERESTING = 'uninteresting';
+const LaunchReason.CODING_BUILDER = 'coding-builder';
+
+const LaunchReason = {
+    UNINTERESTING: 0,
+    CODING_BUILDER: 1
+};
 
 const AppActivationContext = new Lang.Class({
     Name: 'AppActivationContext',
@@ -87,7 +92,7 @@ const AppActivationContext = new Lang.Class({
         Main.overview.hide();
     },
 
-    showSplash: function(launchReason=LAUNCH_REASON_UNINTERESTING) {
+    showSplash: function(launchReason=LaunchReason.UNINTERESTING) {
         let info = this._app.get_app_info();
 
         let dontShowSplashConditions = (
@@ -103,7 +108,7 @@ const AppActivationContext = new Lang.Class({
              Util.getBrowserApp().state != Shell.AppState.STOPPED)
         );
         let alwaysShowSplashConditions = (
-            launchReason === LAUNCH_REASON_CODING_BUILDER
+            launchReason === LaunchReason.CODING_BUILDER
         );
 
         if (dontShowSplashConditions && !alwaysShowSplashConditions)
