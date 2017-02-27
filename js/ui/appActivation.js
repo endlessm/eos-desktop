@@ -27,13 +27,39 @@ const SPLASH_SCREEN_TIMEOUT = 700; // ms
 const DEFAULT_MAXIMIZED_WINDOW_SIZE = 0.75;
 const LAUNCH_MAXIMIZED_DESKTOP_KEY = 'X-Endless-LaunchMaximized';
 
-const LaunchReason.UNINTERESTING = 'uninteresting';
-const LaunchReason.CODING_BUILDER = 'coding-builder';
-
 const LaunchReason = {
     UNINTERESTING: 0,
     CODING_BUILDER: 1
 };
+
+
+// Determine if a splash screen should be shown for the provided
+// GDesktopAppInfo, LaunchReason and and other global settings
+function _shouldShowSplash(info, launchReason) {
+    // Short-circuit - if we're activating GNOME-Builder for Coding,
+    // then we always want to show a splash screen
+    if (launchReason === LaunchReason.CODING_BUILDER) {
+        return true;
+    }
+
+    if (!(info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) &&
+         info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY))) {
+        return false;
+    }
+
+    // Don't show splash screen if default maximize is disabled
+    if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
+        return false;
+    }
+
+    // Don't show splash screen if this is a link and the browser is
+    // running. We can't rely on any signal being emitted in that
+    // case, as links open in browser tabs.
+    if (this._app.get_id().indexOf('eos-link-') != -1 &&
+        Util.getBrowserApp().state != Shell.AppState.STOPPED) {
+        return false;
+    }
+}
 
 const AppActivationContext = new Lang.Class({
     Name: 'AppActivationContext',
@@ -93,26 +119,9 @@ const AppActivationContext = new Lang.Class({
     },
 
     showSplash: function(launchReason=LaunchReason.UNINTERESTING) {
-        let info = this._app.get_app_info();
-
-        let dontShowSplashConditions = (
-            // Don't show splash screen unless the launch maximized key is true
-            !(info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) &&
-              info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY)) ||
-            // Don't show splash screen if default maximize is disabled
-            global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY) ||
-            // Don't show splash screen if this is a link and the browser is
-            // running. We can't rely on any signal being emitted in that
-            // case, as links open in browser tabs.
-            (this._app.get_id().indexOf('eos-link-') != -1 &&
-             Util.getBrowserApp().state != Shell.AppState.STOPPED)
-        );
-        let alwaysShowSplashConditions = (
-            launchReason === LaunchReason.CODING_BUILDER
-        );
-
-        if (dontShowSplashConditions && !alwaysShowSplashConditions)
+        if (!_shouldShowSplash(this._app.get_app_info(), launchReason)) {
             return;
+        }
 
         // Prevent windows from being shown when the overview is hidden so it does
         // not affect the speedwagon's animation
