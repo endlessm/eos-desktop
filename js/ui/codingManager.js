@@ -85,7 +85,8 @@ const CodingManager = new Lang.Class({
         let correspondingApp = tracker.get_window_app(actor.meta_window);
         let isSpeedwagonForBuilder = (
             Shell.WindowTracker.is_speedwagon_window(actor.meta_window) &&
-            (correspondingApp ? correspondingApp.get_id() === 'org.gnome.Builder.desktop' : false)
+            correspondingApp &&
+            correspondingApp.get_id() === 'org.gnome.Builder.desktop'
         );
 
         if (!global.settings.get_boolean('enable-behind-the-screen'))
