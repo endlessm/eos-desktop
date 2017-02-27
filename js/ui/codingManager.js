@@ -399,6 +399,7 @@ const CodingManager = new Lang.Class({
         let button = this._addButton(window);
         session.buttonBuilder = button;
         button.connect('button-press-event', Lang.bind(this, this._switchToApp, session));
+        this._connectBuilderSizeAndPosition(window);
     },
 
     _animateToBuilder: function(session) {
