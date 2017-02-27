@@ -208,7 +208,6 @@ const WindowTrackingButton = new Lang.Class({
             this.emit('clicked');
         }));
 
-<<<<<<< HEAD
         // Connect to signals on the window to determine when to move
         // hide, and show the button. Note that WindowTrackingButton is
         // constructed with the primary app window and we listen for signals
@@ -236,14 +235,6 @@ const WindowTrackingButton = new Lang.Class({
         this._windowUnminimizedId = global.window_manager.connect(
             'unminimize', Lang.bind(this, this._show)
         );
-=======
-        this._addSwitcherToBuilder(actor);
-
-        if (this._codeViewStarted) {
-            this._controller.event_occurred('codeview-started');
-            this._codeViewStarted = false;
-        }
->>>>>>> CodeView: listen as well for codeview-started and codeview-flipped
     },
 
     // Users MUST call destroy before unreferencing this button - this will
@@ -275,22 +266,10 @@ const WindowTrackingButton = new Lang.Class({
             this._overviewHidingId = 0;
         }
 
-<<<<<<< HEAD
         if (this._windowMinimizedId) {
             global.window_manager.disconnect(this._windowMinimizedId);
             this._windowMinimizedId = 0;
         }
-=======
-        this._addSwitcherToApp(actor, session);
-
-        if (this._codeViewFlipped) {
-            this._controller.event_occurred('codeview-flipped');
-            this._codeViewFlipped = false;
-        }
-
-        return true;
-    },
->>>>>>> CodeView: listen as well for codeview-started and codeview-flipped
 
         if (this._windowUnminimizedId) {
             global.window_manager.disconnect(this._windowUnminimizedId);
@@ -957,6 +936,7 @@ const CodingManager = new Lang.Class({
 
         this._codingApps = ['com.endlessm.Helloworld', 'org.gnome.Weather.Application'];
 
+        this._flatpakMonitor = null;
         this._flatpakMonitorId = 0;
         this._commit = 0;
         this._codeViewFlipped = false;
@@ -1090,30 +1070,46 @@ const CodingManager = new Lang.Class({
                 // we are monitoring a file .changed which
                 // gets deleted and created on every change independent
                 // of install or uninstall, therefore only track the done hint
-                if (type === Gio.FileMonitorEvent.CHANGES_DONE_HINT) {
-                    let app;
-                    try {
-                        let userInstallation = Flatpak.Installation.new_user(null);
-                        app = userInstallation.get_current_installed_app('org.gnome.Weather.Application', null);
-                    } catch(e) {
-                        // application not installed or just got deleted
-                        return;
-                    }
+                if (type !== Gio.FileMonitorEvent.CHANGES_DONE_HINT)
+                    return;
 
-                    if (app.commit === this._commit)
-                      return;
-
-                    this._commit = app.commit;
-                    this._controller.event_occurred('codeview-installed');
-                    this._disconnectFlatpakMonitor();
+                let app;
+                try {
+                    app = userInstallation.get_current_installed_app('org.gnome.Weather.Application', null);
+                } catch(e) {
+                    // application not installed or just got deleted
+                    return;
                 }
-        }));
+
+                if (app.commit === this._commit)
+                    return;
+
+                this._commit = app.commit;
+                this._controller.event_occurred('codeview-installed');
+                this._disconnectFlatpakMonitor();
+            })
+        );
+    },
+
+    _onBuilderWindowAdded: function() {
+        if (this._codeViewStarted) {
+            this._controller.event_occurred('codeview-started');
+            this._codeViewStarted = false;
+        }
+    },
+
+    _onFlipped: function() {
+        if (this._codeViewFlipped) {
+            this._controller.event_occurred('codeview-flipped');
+            this._codeViewFlipped = false;
+        }
     },
 
     _disconnectFlatpakMonitor: function() {
         if (this._flatpakMonitorId) {
             this._flatpakMonitor.disconnect(this._flatpakMonitorId);
             this._flatpakMonitorId = 0;
+            this._flatpakMonitor = null;
         }
     },
 
