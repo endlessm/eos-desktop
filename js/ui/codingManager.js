@@ -12,6 +12,7 @@ const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
+const IconGridLayout = imports.ui.iconGridLayout;
 
 const AppActivation = imports.ui.appActivation;
 const Main = imports.ui.main;
@@ -939,8 +940,9 @@ const CodingManager = new Lang.Class({
         this._flatpakMonitor = null;
         this._flatpakMonitorId = 0;
         this._commit = 0;
-        this._codeViewFlipped = false;
         this._codeViewStarted = false;
+        this._codeViewFlipped = false;
+        this._codeViewInstalled = false;
         this._controller = this._createAppIntegrationController();
     },
 
@@ -990,6 +992,7 @@ const CodingManager = new Lang.Class({
 
         // Destroy the session here and remove it from the list
         session.destroy();
+        this._disconnectFlatpakMonitor();
 
         let idx = this._sessions.indexOf(session);
         if (idx != -1) {
@@ -1046,9 +1049,9 @@ const CodingManager = new Lang.Class({
             this._codeViewFlipped = false;
         }));
         controller.service_event_with_listener('codeview-installed', Lang.bind(this, function() {
-            this._connectFlatpakMonitor();
+            this._codeViewInstalled = true;
         }), Lang.bind(this, function() {
-            this._disconnectFlatpakMonitor();
+            this._codeViewInstalled = false;
         }));
         return controller;
     },
@@ -1085,13 +1088,18 @@ const CodingManager = new Lang.Class({
                     return;
 
                 this._commit = app.commit;
-                this._controller.event_occurred('codeview-installed');
+
+                if (this._codeViewInstalled)
+                    this._controller.event_occurred('codeview-installed');
+
                 this._disconnectFlatpakMonitor();
             })
         );
     },
 
     _onBuilderWindowAdded: function() {
+        this._connectFlatpakMonitor();
+
         if (this._codeViewStarted) {
             this._controller.event_occurred('codeview-started');
             this._codeViewStarted = false;
