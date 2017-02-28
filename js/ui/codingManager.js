@@ -319,7 +319,6 @@ const CodingSession = new Lang.Class({
         // geometries now.
         this.builder = actor;
         this.button.builder_window = actor.meta_window;
-        this.activationContext = null;
 
         // The assumption here is that if we connect a new window, we
         // are connecting a builder window (potentially 'on top') of the
@@ -344,6 +343,11 @@ const CodingSession = new Lang.Class({
             // will ensure that the shell window tracker is still
             // watching for the builder window to appear.
             this._stopWatchingForBuilderWindowToComeOnline();
+
+            // We also only want to set the activationContext to
+            // null at this point, since we might need to cancel the
+            // speedwagon window later
+            this.activationContext = null;
         }
 
         // Now, if we're not already on the builder window, we want to start
