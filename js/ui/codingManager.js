@@ -256,11 +256,11 @@ const CodingManager = new Lang.Class({
     },
 
     _disconnectBuilderSizeAndPosition: function(session) {
-        if (session.positionChangedIdBuilder !== 0) {
+        if (session.positionChangedIdBuilder) {
             session.actorBuilder.meta_window.disconnect(session.positionChangedIdBuilder);
             session.positionChangedIdBuilder = 0;
         }
-        if (session.sizeChangedIdBuilder !== 0) {
+        if (session.sizeChangedIdBuilder) {
             session.actorBuilder.meta_window.disconnect(session.sizeChangedIdBuilder);
             session.sizeChangedIdBuilder = 0;
         }
