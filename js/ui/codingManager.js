@@ -344,10 +344,9 @@ const CodingSession = new Lang.Class({
             // watching for the builder window to appear.
             this._stopWatchingForBuilderWindowToComeOnline();
 
-            // We also only want to set the activationContext to
-            // null at this point, since we might need to cancel the
-            // speedwagon window later
-            this.activationContext = null;
+            // We also only want to hide the speedwagon window at this
+            // point, since the other window has arrived.
+            this.splash.hide();
         }
 
         // Now, if we're not already on the builder window, we want to start
@@ -529,8 +528,12 @@ const CodingSession = new Lang.Class({
             // quicker because it is already in memory by that point).
             let builderShellApp = Shell.AppSystem.get_default().lookup_app('org.gnome.Builder.desktop');
             if (!builderShellApp.get_windows().length) {
-                this.activationContext = new AppActivation.AppActivationContext(builderShellApp);
-                this.activationContext.showSplash(AppActivation.LaunchReason.CODING_BUILDER);
+                // Right now we don't connect the close button - clicking on
+                // it will just do nothing. We expect the user to just click on
+                // the CodeView button in order to get back to the main
+                // window.
+                this.splash = new AppActivation.SpeedwagonSplash(builderShellApp);
+                this.splash.show(AppActivation.LaunchReason.CODING_BUILDER);
             }
 
             this._startBuilderForFlatpak(constructLoadFlatpakValue(this.app,
@@ -733,8 +736,7 @@ const CodingSession = new Lang.Class({
                 // app windows and cancel any splash
                 // screens.
                 if (this.cancelled) {
-                    this.activationContext.cancelSplash();
-                    this.activationContext = null;
+                    this.splash.rampOut();
                     this._stopWatchingForBuilderWindowToComeOnline();
                     this.removeBuilderWindow();
                 }
