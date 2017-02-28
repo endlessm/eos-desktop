@@ -469,7 +469,7 @@ const CodingSession = new Lang.Class({
         }
     },
 
-    _startBuilderForFlatpak: function(session, loadFlatpakValue) {
+    _startBuilderForFlatpak: function(loadFlatpakValue) {
         let params = new GLib.Variant('(sava{sv})', ['load-flatpak', [new GLib.Variant('s', loadFlatpakValue)], {}]);
         Gio.DBus.session.call('org.gnome.Builder',
                               '/org/gnome/Builder',
@@ -488,7 +488,7 @@ const CodingSession = new Lang.Class({
                                       // and wait for the flip animation
                                       // to complete, where we will
                                       // remove the builder window.
-                                      session.cancelled = true;
+                                      this.cancelled = true;
                                       logError(e, 'Failed to start gnome-builder');
                                   }
                               }));
@@ -529,8 +529,8 @@ const CodingSession = new Lang.Class({
             // quicker because it is already in memory by that point).
             let builderShellApp = Shell.AppSystem.get_default().lookup_app('org.gnome.Builder.desktop');
             if (!builderShellApp.get_windows().length) {
-                session.activationContext = new AppActivation.AppActivationContext(builderShellApp);
-                session.activationContext.showSplash(AppActivation.LaunchReason.CODING_BUILDER);
+                this.activationContext = new AppActivation.AppActivationContext(builderShellApp);
+                this.activationContext.showSplash(AppActivation.LaunchReason.CODING_BUILDER);
             }
 
             this._startBuilderForFlatpak(constructLoadFlatpakValue(this.app,
@@ -729,21 +729,14 @@ const CodingSession = new Lang.Class({
             onComplete: Lang.bind(this, function() {
                 this._rotateInCompleted(dst);
 
-                // Look up the session for this actor and determine if it
-                // should be removed now because it was cancelled.
-                let session = this._getSession(dst);
-                if (!session)
-                    return;
-
                 // Failed. Stop watching for coding
                 // app windows and cancel any splash
                 // screens.
-                if (session.cancelled) {
-                    Shell.WindowTracker.get_default().untrack_coding_app_window();
-                    this._cancelWatchdog();
-                    this._removeSwitcherToApp(dst);
-                    session.activationContext.cancelSplash();
-                    session.activationContext = null;
+                if (this.cancelled) {
+                    this.activationContext.cancelSplash();
+                    this.activationContext = null;
+                    this._stopWatchingForBuilderWindowToComeOnline();
+                    this.removeBuilderWindow();
                 }
             })
         });
