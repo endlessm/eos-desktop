@@ -36,7 +36,7 @@ const STATE_BUILDER = 1;
 
 const _CODING_APPS = [
     'com.endlessm.Helloworld',
-    'org.gnome.Weather'
+    'org.gnome.Weather.Application'
 ];
 
 function _isCodingApp(flatpakID) {
