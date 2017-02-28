@@ -50,6 +50,15 @@ function animateBounce(actor) {
     });
 }
 
+function _stopButtonAnimation(button) {
+    Tweener.removeTweens(button);
+    button.scale_y = 1;
+    button.scale_x = 1;
+    button.translation_y = 0;
+    button.translation_x = 0;
+}
+
+
 const CodingManager = new Lang.Class({
     Name: 'CodingManager',
 
@@ -258,6 +267,7 @@ const CodingManager = new Lang.Class({
     },
 
     _clearBuilderSession: function(session) {
+        _stopButtonAnimation(session.buttonApp);
         this._disconnectBuilderSizeAndPosition(session);
         if (session.buttonBuilder) {
             Main.layoutManager.removeChrome(session.buttonBuilder);
@@ -410,11 +420,7 @@ const CodingManager = new Lang.Class({
         // a window is slow to draw.
         let firstFrameConnection = session.actorBuilder.connect('first-frame', Lang.bind(this, function() {
             // reset the bouncing animation that was showed while Builder was loading
-            Tweener.removeTweens(session.buttonApp);
-            session.buttonApp.scale_y = 1;
-            session.buttonApp.scale_x = 1;
-            session.buttonApp.translation_y = 0;
-            session.buttonApp.translation_x = 0;
+            _stopButtonAnimation(session.buttonApp);
 
             this._animate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
 
