@@ -118,6 +118,17 @@ const AppActivationContext = new Lang.Class({
         Main.overview.hide();
     },
 
+    cancelSplash: function() {
+        this._cancelled = true;
+        this._clearSplash();
+        // If application doesn't quit very likely is because it
+        // didn't reach running state yet; so wait for it to
+        // finish
+        if (!this._app.request_quit()) {
+            this._abort = true;
+        }
+    },
+
     showSplash: function(launchReason=LaunchReason.UNINTERESTING) {
         if (!_shouldShowSplash(this._app.get_app_info(), launchReason)) {
             return;
@@ -131,16 +142,7 @@ const AppActivationContext = new Lang.Class({
 
         this._cancelled = false;
         this._splash = new SpeedwagonSplash(this._app);
-        this._splash.connect('close-clicked', Lang.bind(this, function() {
-            // If application doesn't quit very likely is because it
-            // didn't reach running state yet; so wait for it to
-            // finish
-            this._cancelled = true;
-            this._clearSplash();
-            if (!this._app.request_quit()) {
-                this._abort = true;
-            }
-        }));
+        this._splash.connect('close-clicked', Lang.bind(this, this.cancelSplash));
         this._splash.show();
 
         // Scale the timeout by the slow down factor, because otherwise
