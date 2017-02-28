@@ -3,7 +3,6 @@
 const Lang = imports.lang;
 const Shell = imports.gi.Shell;
 
-const Hash = imports.misc.hash;
 const Main = imports.ui.main;
 
 const WorkspaceMonitor = new Lang.Class({
