@@ -118,6 +118,7 @@ const CodingManager = new Lang.Class({
             // the builder window instead
             if (Shell.WindowTracker.is_speedwagon_window(session.actorBuilder.meta_window)) {
                 session.actorBuilder = actor;
+                session.activationContext = null;
                 this._connectBuilderSizeAndPosition(session,
                                                     session.actorBuilder.meta_window);
                 this._synchroniseWindows(session.actorApp,
@@ -308,11 +309,11 @@ const CodingManager = new Lang.Class({
                                   try {
                                       conn.call_finish(result);
                                   } catch (e) {
-                                      // Even though _removeSwitcherToApp expects
-                                      // actorBuilder, it can actually look
-                                      // up its own state internally with
-                                      // actorApp
-                                      this._removeSwitcherToApp(session.actorApp);
+                                      // Failed. Mark the session as cancelled
+                                      // and wait for the flip animation
+                                      // to complete, where we will
+                                      // remove the builder window.
+                                      session.cancelled = true;
                                       logError(e, 'Failed to start gnome-builder');
                                   }
                               }));
@@ -653,7 +654,26 @@ const CodingManager = new Lang.Class({
             rotation_angle_y: 0,
             time: WINDOW_ANIMATION_TIME * 4,
             transition: 'easeOutQuad',
-            onComplete: Lang.bind(this, this.rotateInCompleted, dst)
+            onComplete: Lang.bind(this, function() {
+                this.rotateInCompleted(dst);
+
+                // Look up the session for this actor and determine if it
+                // should be removed now because it was cancelled.
+                let session = this._getSession(dst);
+                if (!session)
+                    return;
+
+                // Failed. Stop watching for coding
+                // app windows and cancel any splash
+                // screens.
+                if (session.cancelled) {
+                    Shell.WindowTracker.get_default().untrack_coding_app_window();
+                    this._cancelWatchdog();
+                    this._removeSwitcherToApp(dst);
+                    session.activationContext.cancelSplash();
+                    session.activationContext = null;
+                }
+            })
         });
 
         // Gently fade the window in, this will paper over
