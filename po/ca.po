@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
+"POT-Creation-Date: 2017-02-21 02:29+0000\n"
 "PO-Revision-Date: 2016-12-06 02:29+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ca/)\n"
@@ -220,12 +220,12 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "S'ha afegit %s als preferits."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "S'ha suprimit %s dels preferits."
@@ -547,7 +547,7 @@ msgid "Software Update"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates Available"
+msgid "Updates available"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:205
@@ -555,11 +555,11 @@ msgid "Software updates are available for your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download Now"
+msgid "Download now"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates Ready"
+msgid "Updates ready"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:220
@@ -567,11 +567,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install Now"
+msgid "Install now"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates Installed"
+msgid "Updates installed"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:231
@@ -579,11 +579,11 @@ msgid "Software updates were installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart Now"
+msgid "Restart now"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update Failed"
+msgid "Update failed"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:256
@@ -749,7 +749,7 @@ msgstr ""
 msgid "Quit Application"
 msgstr ""
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
@@ -1284,19 +1284,19 @@ msgstr[1] "%u entrades"
 msgid "System Sounds"
 msgstr "Sons del sistema"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Mostra la versió"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "El mode que utilitzarà el GDM per a la pantalla d'entrada"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Utilitza un mode específic, p. ex. «gdm» per la pantalla d'entrada"
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "Llista els modes possibles"
 

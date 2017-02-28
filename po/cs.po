@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
+"POT-Creation-Date: 2017-02-21 02:29+0000\n"
 "PO-Revision-Date: 2017-01-23 21:00+0000\n"
 "Last-Translator: MICHAL D. <black23@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/cs/)\n"
@@ -223,12 +223,12 @@ msgstr "Více aplikací"
 msgid "Delete"
 msgstr "Odstranit"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s byl přidán mezi oblíbené."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s byl odstraněn z oblíbených."
@@ -550,7 +550,7 @@ msgid "Software Update"
 msgstr "Aktualizace software"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates Available"
+msgid "Updates available"
 msgstr "Dostupné aktualizace"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -558,11 +558,11 @@ msgid "Software updates are available for your system"
 msgstr "K dispozici jsou aktualizace software pro váš systém"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download Now"
+msgid "Download now"
 msgstr "Stáhnout nyní"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates Ready"
+msgid "Updates ready"
 msgstr "Aktualizace připraveny"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -570,11 +570,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install Now"
+msgid "Install now"
 msgstr "Instalovat nyní"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates Installed"
+msgid "Updates installed"
 msgstr "Aktualizace nainstalovány"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -582,11 +582,11 @@ msgid "Software updates were installed on your system"
 msgstr ""
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart Now"
+msgid "Restart now"
 msgstr "Restartovat nyní"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update Failed"
+msgid "Update failed"
 msgstr "Aktualizace selhala"
 
 #: ../js/ui/components/updaterManager.js:256
@@ -756,7 +756,7 @@ msgstr "Monitorování systému"
 msgid "Quit Application"
 msgstr "Opustit aplikaci"
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
@@ -1294,19 +1294,19 @@ msgstr[2] "%u vstupů"
 msgid "System Sounds"
 msgstr "Systémové zvuky"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Vypsat verzi"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Režim použitý GDM pro přihlašovací obrazovku"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Použít pro přihlašovací obrazovku zadaný režim, např. „gdm“."
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "Vypsat možné režimy"
 

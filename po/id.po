@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
+"POT-Creation-Date: 2017-02-21 02:29+0000\n"
 "PO-Revision-Date: 2017-01-09 06:03+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/id/)\n"
@@ -222,12 +222,12 @@ msgstr "Aplikasi Lainnya"
 msgid "Delete"
 msgstr "Hapus"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s telah ditambahkan ke favorit Anda."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s telah dihapus dari favorit Anda."
@@ -549,7 +549,7 @@ msgid "Software Update"
 msgstr "Pembaruan Perangkat Lunak"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates Available"
+msgid "Updates available"
 msgstr "Pembaruan tersedia"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -557,11 +557,11 @@ msgid "Software updates are available for your system"
 msgstr "Pembaruan perangkat lunak tersedia untuk sistem Anda"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download Now"
+msgid "Download now"
 msgstr "Unduh sekarang"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates Ready"
+msgid "Updates ready"
 msgstr "Pembaruan siap"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -569,11 +569,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "Pembaruan perangkat lunak siap dipasang pada sistem Anda"
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install Now"
+msgid "Install now"
 msgstr "Pasang sekarang"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates Installed"
+msgid "Updates installed"
 msgstr "Pembaruan telah dipasang"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -581,11 +581,11 @@ msgid "Software updates were installed on your system"
 msgstr "Pembaruan perangkat lunak sudah dipasang pada sistem Anda"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart Now"
+msgid "Restart now"
 msgstr "Mulai ulang sekarang"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update Failed"
+msgid "Update failed"
 msgstr "Gagal memperbarui"
 
 #: ../js/ui/components/updaterManager.js:256
@@ -747,7 +747,7 @@ msgstr "Monitor Sistem"
 msgid "Quit Application"
 msgstr "Tutup Aplikasi"
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s telah dihapus"
@@ -1279,19 +1279,19 @@ msgstr[0] "%u Masukan"
 msgid "System Sounds"
 msgstr "Suara Sistem"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Versi Cetak"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Mode yang dipakai oleh layar log masuk GDM"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Menggunakan mode tertentu, mis. \"gdm\" untuk layar masuk"
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "Menampilkan mode yang mungkin"
 
