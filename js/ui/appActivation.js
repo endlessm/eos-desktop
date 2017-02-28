@@ -59,6 +59,8 @@ function _shouldShowSplash(info, launchReason) {
         Util.getBrowserApp().state != Shell.AppState.STOPPED) {
         return false;
     }
+
+    return true;
 }
 
 const AppActivationContext = new Lang.Class({
