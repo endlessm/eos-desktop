@@ -26,38 +26,6 @@ const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
 const BUTTON_OFFSET_X = 33;
 const BUTTON_OFFSET_Y = 40;
 
-function animateBounce(actor) {
-    Tweener.removeTweens(actor);
-
-    Tweener.addTween(actor, {
-        scale_y: 1 + ICON_BOUNCE_MAX_SCALE,
-        scale_x: 1 + ICON_BOUNCE_MAX_SCALE,
-        translation_y: actor.height * ICON_BOUNCE_MAX_SCALE,
-        translation_x: actor.width * ICON_BOUNCE_MAX_SCALE / 2,
-        time: ICON_BOUNCE_ANIMATION_TIME * 0.25,
-        delay: 0.3,
-        transition: ICON_BOUNCE_ANIMATION_TYPE_1
-    });
-    Tweener.addTween(actor, {
-        scale_y: 1,
-        scale_x: 1,
-        translation_y: 0,
-        translation_x: 0,
-        time: ICON_BOUNCE_ANIMATION_TIME * 0.35,
-        transition: ICON_BOUNCE_ANIMATION_TYPE_2,
-        delay: ICON_BOUNCE_ANIMATION_TIME * 0.25 + 0.3,
-        onComplete: function() { animateBounce(actor); }
-    });
-}
-
-function _stopButtonAnimation(button) {
-    Tweener.removeTweens(button);
-    button.scale_y = 1;
-    button.scale_x = 1;
-    button.translation_y = 0;
-    button.translation_x = 0;
-}
-
 
 const CodingManager = new Lang.Class({
     Name: 'CodingManager',
@@ -364,7 +332,6 @@ const CodingManager = new Lang.Class({
 
             this._startBuilderForFlatpak(session,
                                          constructLoadFlatpakValue(appManifest));
-            animateBounce(session.buttonApp);
         } else {
             session.actorBuilder.meta_window.activate(global.get_current_time());
             this._prepareAnimate(session.actorApp,
@@ -436,9 +403,6 @@ const CodingManager = new Lang.Class({
         // This way we don't get ugly artifacts when rotating if
         // a window is slow to draw.
         let firstFrameConnection = session.actorBuilder.connect('first-frame', Lang.bind(this, function() {
-            // reset the bouncing animation that was showed while Builder was loading
-            _stopButtonAnimation(session.buttonApp);
-
             this._animate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
 
             session.actorBuilder.disconnect(firstFrameConnection);
