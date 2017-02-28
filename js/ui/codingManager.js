@@ -279,7 +279,6 @@ const CodingManager = new Lang.Class({
     },
 
     _clearBuilderSession: function(session) {
-        _stopButtonAnimation(session.buttonApp);
         this._disconnectBuilderSizeAndPosition(session);
         if (session.buttonBuilder) {
             Main.layoutManager.removeChrome(session.buttonBuilder);
