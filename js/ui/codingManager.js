@@ -519,22 +519,15 @@ const CodingSession = new Lang.Class({
             this._watchdogId = Mainloop.timeout_add(WATCHDOG_TIME,
                                                     Lang.bind(this, this._stopWatchingForBuilderWindowToComeOnline));
 
-            // Since builder will be opened from the shell, we will want
-            // to show a speedwagon window for it. However, we don't want to
-            // show a speedwagon window in the case that builder is already
-            // open, because AppActivationContext will have no way of knowing
-            // that the app state changed. In that case, we just need to wait
-            // around until a builder window appears (though it should be much
-            // quicker because it is already in memory by that point).
+            // We always show a splash screen, even if builder is running. We
+            // know when the window comes online so we can hide it accordingly.
             let builderShellApp = Shell.AppSystem.get_default().lookup_app('org.gnome.Builder.desktop');
-            if (!builderShellApp.get_windows().length) {
-                // Right now we don't connect the close button - clicking on
-                // it will just do nothing. We expect the user to just click on
-                // the CodeView button in order to get back to the main
-                // window.
-                this.splash = new AppActivation.SpeedwagonSplash(builderShellApp);
-                this.splash.show(AppActivation.LaunchReason.CODING_BUILDER);
-            }
+            // Right now we don't connect the close button - clicking on
+            // it will just do nothing. We expect the user to just click on
+            // the CodeView button in order to get back to the main
+            // window.
+            this.splash = new AppActivation.SpeedwagonSplash(builderShellApp);
+            this.splash.show(AppActivation.LaunchReason.CODING_BUILDER);
 
             this._startBuilderForFlatpak(constructLoadFlatpakValue(this.app,
                                                                    appManifest));
