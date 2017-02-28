@@ -90,18 +90,18 @@ const CodingManager = new Lang.Class({
     },
 
     addBuilderWindow: function(actor) {
-        let tracker = Shell.WindowTracker.get_default();
-        let correspondingApp = tracker.get_window_app(actor.meta_window);
-        let isSpeedwagonForBuilder = (
-            Shell.WindowTracker.is_speedwagon_window(actor.meta_window) &&
-            correspondingApp &&
-            correspondingApp.get_id() === 'org.gnome.Builder.desktop'
-        );
-
         if (!global.settings.get_boolean('enable-behind-the-screen'))
             return false;
 
         let window = actor.meta_window;
+        let tracker = Shell.WindowTracker.get_default();
+        let correspondingApp = tracker.get_window_app(window);
+        let isSpeedwagonForBuilder = (
+            Shell.WindowTracker.is_speedwagon_window(window) &&
+            correspondingApp &&
+            correspondingApp.get_id() === 'org.gnome.Builder.desktop'
+        );
+
         if (!this._isBuilder(window.get_flatpak_id()) &&
             !isSpeedwagonForBuilder)
             return false;
@@ -156,9 +156,9 @@ const CodingManager = new Lang.Class({
     removeBuilderWindow: function(actor) {
         let window = actor.meta_window;
         let tracker = Shell.WindowTracker.get_default();
-        let correspondingApp = tracker.get_window_app(actor.meta_window);
+        let correspondingApp = tracker.get_window_app(window);
         let isSpeedwagonForBuilder = (
-            Shell.WindowTracker.is_speedwagon_window(actor.meta_window) &&
+            Shell.WindowTracker.is_speedwagon_window(window) &&
             correspondingApp &&
             correspondingApp.get_id() === 'org.gnome.Builder.desktop'
         );
