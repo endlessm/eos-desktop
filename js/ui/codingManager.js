@@ -293,7 +293,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _startBuilderForFlatpak: function(loadFlatpakValue) {
+    _startBuilderForFlatpak: function(session, loadFlatpakValue) {
         let params = new GLib.Variant('(sava{sv})', ['load-flatpak', [new GLib.Variant('s', loadFlatpakValue)], {}]);
         Gio.DBus.session.call('org.gnome.Builder',
                               '/org/gnome/Builder',
@@ -304,13 +304,18 @@ const CodingManager = new Lang.Class({
                               Gio.DBusCallFlags.NONE,
                               GLib.MAXINT32,
                               null,
-                              function (conn, result) {
+                              Lang.bind(this,function (conn, result) {
                                   try {
                                       conn.call_finish(result);
                                   } catch (e) {
+                                      // Even though _removeSwitcherToApp expects
+                                      // actorBuilder, it can actually look
+                                      // up its own state internally with
+                                      // actorApp
+                                      this._removeSwitcherToApp(session.actorApp);
                                       logError(e, 'Failed to start gnome-builder');
                                   }
-                              });
+                              }));
     },
 
     _switchToBuilder: function(actor, event, session) {
@@ -346,7 +351,8 @@ const CodingManager = new Lang.Class({
                 activationContext.showSplash(AppActivation.LaunchReason.CODING_BUILDER);
             }
 
-            this._startBuilderForFlatpak(constructLoadFlatpakValue(appManifest));
+            this._startBuilderForFlatpak(session,
+                                         constructLoadFlatpakValue(appManifest));
             animateBounce(session.buttonApp);
         } else {
             session.actorBuilder.meta_window.activate(global.get_current_time());
