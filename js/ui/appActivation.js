@@ -35,7 +35,9 @@ const LaunchReason = {
 
 // Determine if a splash screen should be shown for the provided
 // GDesktopAppInfo, LaunchReason and other ther global settings
-function _shouldShowSplash(info, launchReason) {
+function _shouldShowSplash(app, launchReason) {
+    let info = app.get_app_info();
+
     // Short-circuit - if we're activating GNOME-Builder for Coding,
     // then we always want to show a splash screen
     if (launchReason === LaunchReason.CODING_BUILDER) {
@@ -55,7 +57,7 @@ function _shouldShowSplash(info, launchReason) {
     // Don't show splash screen if this is a link and the browser is
     // running. We can't rely on any signal being emitted in that
     // case, as links open in browser tabs.
-    if (this._app.get_id().indexOf('eos-link-') != -1 &&
+    if (app.get_id().indexOf('eos-link-') != -1 &&
         Util.getBrowserApp().state != Shell.AppState.STOPPED) {
         return false;
     }
@@ -132,7 +134,7 @@ const AppActivationContext = new Lang.Class({
     },
 
     showSplash: function(launchReason=LaunchReason.UNINTERESTING) {
-        if (!_shouldShowSplash(this._app.get_app_info(), launchReason)) {
+        if (!_shouldShowSplash(this._app, launchReason)) {
             return;
         }
 
