@@ -34,7 +34,7 @@ const LaunchReason = {
 
 
 // Determine if a splash screen should be shown for the provided
-// GDesktopAppInfo, LaunchReason and and other global settings
+// GDesktopAppInfo, LaunchReason and other ther global settings
 function _shouldShowSplash(info, launchReason) {
     // Short-circuit - if we're activating GNOME-Builder for Coding,
     // then we always want to show a splash screen
