@@ -155,9 +155,20 @@ const CodingManager = new Lang.Class({
 
     removeBuilderWindow: function(actor) {
         let window = actor.meta_window;
-        if (!this._isBuilder(window.get_flatpak_id()))
+        let tracker = Shell.WindowTracker.get_default();
+        let correspondingApp = tracker.get_window_app(actor.meta_window);
+        let isSpeedwagonForBuilder = (
+            Shell.WindowTracker.is_speedwagon_window(actor.meta_window) &&
+            correspondingApp &&
+            correspondingApp.get_id() === 'org.gnome.Builder.desktop'
+        );
+
+        if (!(this._isBuilder(window.get_flatpak_id()) ||
+              isSpeedwagonForBuilder))
             return;
 
+        // We can remove either a speedwagon window or a normal builder window.
+        // That window will be registered in the session at this point.
         this._removeSwitcherToApp(actor);
     },
 
