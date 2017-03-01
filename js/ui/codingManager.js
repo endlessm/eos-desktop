@@ -21,6 +21,13 @@ const WATCHDOG_TIME = 30000; // ms
 const BUTTON_OFFSET_X = 33;
 const BUTTON_OFFSET_Y = 40;
 
+function _isBuilderSpeedwagon(window) {
+    let tracker = Shell.WindowTracker.get_default();
+    let correspondingApp = tracker.get_window_app(window);
+    return (Shell.WindowTracker.is_speedwagon_window(window) &&
+            correspondingApp &&
+            correspondingApp.get_id() === 'org.gnome.Builder.desktop');
+}
 
 const CodingManager = new Lang.Class({
     Name: 'CodingManager',
@@ -57,13 +64,7 @@ const CodingManager = new Lang.Class({
             return false;
 
         let window = actor.meta_window;
-        let tracker = Shell.WindowTracker.get_default();
-        let correspondingApp = tracker.get_window_app(window);
-        let isSpeedwagonForBuilder = (
-            Shell.WindowTracker.is_speedwagon_window(window) &&
-            correspondingApp &&
-            correspondingApp.get_id() === 'org.gnome.Builder.desktop'
-        );
+        let isSpeedwagonForBuilder = _isBuilderSpeedwagon(window);
 
         if (!this._isBuilder(window.get_flatpak_id()) &&
             !isSpeedwagonForBuilder)
@@ -118,16 +119,10 @@ const CodingManager = new Lang.Class({
 
     removeBuilderWindow: function(actor) {
         let window = actor.meta_window;
-        let tracker = Shell.WindowTracker.get_default();
-        let correspondingApp = tracker.get_window_app(window);
-        let isSpeedwagonForBuilder = (
-            Shell.WindowTracker.is_speedwagon_window(window) &&
-            correspondingApp &&
-            correspondingApp.get_id() === 'org.gnome.Builder.desktop'
-        );
+
 
         if (!(this._isBuilder(window.get_flatpak_id()) ||
-              isSpeedwagonForBuilder))
+              _isBuilderSpeedwagon(window)))
             return;
 
         // We can remove either a speedwagon window or a normal builder window.
