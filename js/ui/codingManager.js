@@ -120,9 +120,8 @@ const CodingManager = new Lang.Class({
     removeBuilderWindow: function(actor) {
         let window = actor.meta_window;
 
-
-        if (!(this._isBuilder(window.get_flatpak_id()) ||
-              _isBuilderSpeedwagon(window)))
+        if (!this._isBuilder(window.get_flatpak_id()) &&
+            !_isBuilderSpeedwagon(window))
             return;
 
         // We can remove either a speedwagon window or a normal builder window.
