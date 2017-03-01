@@ -346,7 +346,7 @@ const CodingSession = new Lang.Class({
 
             // We also only want to hide the speedwagon window at this
             // point, since the other window has arrived.
-            this.splash.hide();
+            this.splash.rampOut();
         }
 
         // Now, if we're not already on the builder window, we want to start
