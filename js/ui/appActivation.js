@@ -34,7 +34,7 @@ const LaunchReason = {
 
 
 // Determine if a splash screen should be shown for the provided
-// GDesktopAppInfo, LaunchReason and other ther global settings
+// GDesktopAppInfo, LaunchReason and other global settings
 function _shouldShowSplash(app, launchReason) {
     let info = app.get_app_info();
 
