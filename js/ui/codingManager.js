@@ -220,6 +220,7 @@ const WindowTrackingButton = new Lang.Class({
                     opacity: 255,
                     time: WINDOW_ANIMATION_TIME / 2,
                     transition: 'linear',
+                    delay: WINDOW_ANIMATION_TIME * 3
                 });
             })
         });
