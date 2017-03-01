@@ -295,7 +295,7 @@ const CodingSession = new Lang.Class({
             'size-changed', Lang.bind(this, this._synchronizeWindows)
         );
         this._windowsRestackedId = Main.overview.connect(
-            'windows-restacked', Lang.bind(this, this._windowRestacked)
+            'windows-restacked', Lang.bind(this, this._windowsRestacked)
         );
         this._windowMinimizedId = global.window_manager.connect(
             'minimize', Lang.bind(this, this._applyWindowMinimizationState)
@@ -603,7 +603,7 @@ const CodingSession = new Lang.Class({
         dst.meta_window.unminimize();
     },
 
-    _windowRestacked: function() {
+    _windowsRestacked: function() {
         let focusedWindow = global.display.get_focus_window();
         if (!focusedWindow)
             return;
