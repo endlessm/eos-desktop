@@ -13,7 +13,6 @@ const Config = imports.misc.config;
 const ExtensionSystem = imports.ui.extensionSystem;
 const ExtensionDownloader = imports.ui.extensionDownloader;
 const ExtensionUtils = imports.misc.extensionUtils;
-const Hash = imports.misc.hash;
 const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
 const Screencast = imports.ui.screencast;
@@ -95,8 +94,8 @@ const GnomeShell = new Lang.Class({
         this._appstoreService = new AppStoreService();
         this._appLauncherService = new AppLauncher();
 
-        this._grabbedAccelerators = new Hash.Map();
-        this._grabbers = new Hash.Map();
+        this._grabbedAccelerators = new Map();
+        this._grabbers = new Map();
 
         global.display.connect('accelerator-activated', Lang.bind(this,
             function(display, action, deviceid, timestamp) {
@@ -229,9 +228,8 @@ const GnomeShell = new Lang.Class({
     },
 
     _onGrabberBusNameVanished: function(connection, name) {
-        let grabs = this._grabbedAccelerators.items();
-        for (let i = 0; i < grabs.length; i++) {
-            let [action, sender] = grabs[i];
+        let grabs = this._grabbedAccelerators.entries();
+        for (let [action, sender] of grabs) {
             if (sender == name)
                 this._ungrabAccelerator(action);
         }
