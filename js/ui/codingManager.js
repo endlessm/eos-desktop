@@ -84,7 +84,7 @@ const CodingManager = new Lang.Class({
                 session.activationContext = null;
                 this._connectBuilderSizeAndPosition(session,
                                                     session.actorBuilder.meta_window);
-                this._synchroniseWindows(session.actorApp,
+                this._synchronizeWindows(session.actorApp,
                                          session.actorBuilder);
                 return true;
             }
@@ -544,7 +544,7 @@ const CodingManager = new Lang.Class({
             session.buttonBuilder.hide();
     },
 
-    _synchroniseWindows: function(src, dst) {
+    _synchronizeWindows: function(src, dst) {
         let srcGeometry = src.meta_window.get_frame_rect();
         let dstGeometry = dst.meta_window.get_frame_rect();
 
@@ -575,7 +575,7 @@ const CodingManager = new Lang.Class({
         // be emitted, which would undo some of the preparation
         // that we would have done such as setting backface culling
         // or rotation angles.
-        this._synchroniseWindows(src, dst);
+        this._synchronizeWindows(src, dst);
 
         this._rotateInActors.push(dst);
         this._rotateOutActors.push(src);
