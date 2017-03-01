@@ -18,11 +18,6 @@ const Tweener = imports.ui.tweener;
 const WINDOW_ANIMATION_TIME = 0.25;
 const WATCHDOG_TIME = 30000; // ms
 
-const ICON_BOUNCE_MAX_SCALE = 0.4;
-const ICON_BOUNCE_ANIMATION_TIME = 1.0;
-const ICON_BOUNCE_ANIMATION_TYPE_1 = 'easeOutSine';
-const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
-
 const BUTTON_OFFSET_X = 33;
 const BUTTON_OFFSET_Y = 40;
 
