@@ -11,42 +11,22 @@ const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
+const AppActivation = imports.ui.appActivation;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
 
 const WINDOW_ANIMATION_TIME = 0.25;
 const WATCHDOG_TIME = 30000; // ms
 
-const ICON_BOUNCE_MAX_SCALE = 0.4;
-const ICON_BOUNCE_ANIMATION_TIME = 1.0;
-const ICON_BOUNCE_ANIMATION_TYPE_1 = 'easeOutSine';
-const ICON_BOUNCE_ANIMATION_TYPE_2 = 'easeOutBounce';
-
 const BUTTON_OFFSET_X = 33;
 const BUTTON_OFFSET_Y = 40;
 
-function animateBounce(actor) {
-    Tweener.removeTweens(actor);
-
-    Tweener.addTween(actor, {
-        scale_y: 1 + ICON_BOUNCE_MAX_SCALE,
-        scale_x: 1 + ICON_BOUNCE_MAX_SCALE,
-        translation_y: actor.height * ICON_BOUNCE_MAX_SCALE,
-        translation_x: actor.width * ICON_BOUNCE_MAX_SCALE / 2,
-        time: ICON_BOUNCE_ANIMATION_TIME * 0.25,
-        delay: 0.3,
-        transition: ICON_BOUNCE_ANIMATION_TYPE_1
-    });
-    Tweener.addTween(actor, {
-        scale_y: 1,
-        scale_x: 1,
-        translation_y: 0,
-        translation_x: 0,
-        time: ICON_BOUNCE_ANIMATION_TIME * 0.35,
-        transition: ICON_BOUNCE_ANIMATION_TYPE_2,
-        delay: ICON_BOUNCE_ANIMATION_TIME * 0.25 + 0.3,
-        onComplete: function() { animateBounce(actor); }
-    });
+function _isBuilderSpeedwagon(window) {
+    let tracker = Shell.WindowTracker.get_default();
+    let correspondingApp = tracker.get_window_app(window);
+    return (Shell.WindowTracker.is_speedwagon_window(window) &&
+            correspondingApp &&
+            correspondingApp.get_id() === 'org.gnome.Builder.desktop');
 }
 
 const CodingManager = new Lang.Class({
@@ -84,7 +64,10 @@ const CodingManager = new Lang.Class({
             return false;
 
         let window = actor.meta_window;
-        if (!this._isBuilder(window.get_flatpak_id()))
+        let isSpeedwagonForBuilder = _isBuilderSpeedwagon(window);
+
+        if (!this._isBuilder(window.get_flatpak_id()) &&
+            !isSpeedwagonForBuilder)
             return false;
 
         this._cancelWatchdog();
@@ -93,10 +76,34 @@ const CodingManager = new Lang.Class({
         if (!session)
             return false;
 
-        if (session.actorBuilder)
+        if (session.actorBuilder) {
+            // If the currently bound actor is speedwagon window, then we'll
+            // want to remove that window from the association and track
+            // the builder window instead
+            if (Shell.WindowTracker.is_speedwagon_window(session.actorBuilder.meta_window)) {
+                session.actorBuilder = actor;
+                session.activationContext = null;
+                this._connectBuilderSizeAndPosition(session,
+                                                    session.actorBuilder.meta_window);
+                this._synchronizeWindows(session.actorApp,
+                                         session.actorBuilder);
+                return true;
+            }
             return false;
-        let tracker = Shell.WindowTracker.get_default();
-        tracker.untrack_coding_app_window();
+        }
+
+        // If we are animating to a speedwagon window, we'll want to
+        // remove the 'above' attribute - we don't want the splash to
+        // appear over everything else.
+        if (isSpeedwagonForBuilder) {
+            actor.meta_window.unmake_above();
+        } else {
+            // We only want to untrack the coding app window at this
+            // point and not at the point we show the speedwagon. This
+            // will ensure that the shell window tracker is still
+            // watching for the builder window to appear.
+            tracker.untrack_coding_app_window();
+        }
 
         this._addSwitcherToApp(actor, session);
         return true;
@@ -112,9 +119,13 @@ const CodingManager = new Lang.Class({
 
     removeBuilderWindow: function(actor) {
         let window = actor.meta_window;
-        if (!this._isBuilder(window.get_flatpak_id()))
+
+        if (!this._isBuilder(window.get_flatpak_id()) &&
+            !_isBuilderSpeedwagon(window))
             return;
 
+        // We can remove either a speedwagon window or a normal builder window.
+        // That window will be registered in the session at this point.
         this._removeSwitcherToApp(actor);
     },
 
@@ -213,15 +224,19 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _clearBuilderSession: function(session) {
-        if (session.positionChangedIdBuilder !== 0) {
+    _disconnectBuilderSizeAndPosition: function(session) {
+        if (session.positionChangedIdBuilder) {
             session.actorBuilder.meta_window.disconnect(session.positionChangedIdBuilder);
             session.positionChangedIdBuilder = 0;
         }
-        if (session.sizeChangedIdBuilder !== 0) {
+        if (session.sizeChangedIdBuilder) {
             session.actorBuilder.meta_window.disconnect(session.sizeChangedIdBuilder);
             session.sizeChangedIdBuilder = 0;
         }
+    },
+
+    _clearBuilderSession: function(session) {
+        this._disconnectBuilderSizeAndPosition(session);
         if (session.buttonBuilder) {
             Main.layoutManager.removeChrome(session.buttonBuilder);
             session.buttonBuilder.destroy();
@@ -246,7 +261,7 @@ const CodingManager = new Lang.Class({
         }
     },
 
-    _startBuilderForFlatpak: function(loadFlatpakValue) {
+    _startBuilderForFlatpak: function(session, loadFlatpakValue) {
         let params = new GLib.Variant('(sava{sv})', ['load-flatpak', [new GLib.Variant('s', loadFlatpakValue)], {}]);
         Gio.DBus.session.call('org.gnome.Builder',
                               '/org/gnome/Builder',
@@ -257,13 +272,18 @@ const CodingManager = new Lang.Class({
                               Gio.DBusCallFlags.NONE,
                               GLib.MAXINT32,
                               null,
-                              function (conn, result) {
+                              Lang.bind(this,function (conn, result) {
                                   try {
                                       conn.call_finish(result);
                                   } catch (e) {
+                                      // Failed. Mark the session as cancelled
+                                      // and wait for the flip animation
+                                      // to complete, where we will
+                                      // remove the builder window.
+                                      session.cancelled = true;
                                       logError(e, 'Failed to start gnome-builder');
                                   }
-                              });
+                              }));
     },
 
     _switchToBuilder: function(actor, event, session) {
@@ -286,8 +306,21 @@ const CodingManager = new Lang.Class({
             this._watchdogId = Mainloop.timeout_add(WATCHDOG_TIME,
                                                     Lang.bind(this, this._watchdogTimeout));
 
-            this._startBuilderForFlatpak(constructLoadFlatpakValue(appManifest));
-            animateBounce(session.buttonApp);
+            // Since builder will be opened from the shell, we will want
+            // to show a speedwagon window for it. However, we don't want to
+            // show a speedwagon window in the case that builder is already
+            // open, because AppActivationContext will have no way of knowing
+            // that the app state changed. In that case, we just need to wait
+            // around until a builder window appears (though it should be much
+            // quicker because it is already in memory by that point).
+            let builderShellApp = Shell.AppSystem.get_default().lookup_app('org.gnome.Builder.desktop');
+            if (!builderShellApp.get_windows().length) {
+                session.activationContext = new AppActivation.AppActivationContext(builderShellApp);
+                session.activationContext.showSplash(AppActivation.LaunchReason.CODING_BUILDER);
+            }
+
+            this._startBuilderForFlatpak(session,
+                                         constructLoadFlatpakValue(appManifest));
         } else {
             session.actorBuilder.meta_window.activate(global.get_current_time());
             this._prepareAnimate(session.actorApp,
@@ -338,15 +371,18 @@ const CodingManager = new Lang.Class({
         return null;
     },
 
+    _connectBuilderSizeAndPosition: function(session, builderWindow) {
+        session.positionChangedIdBuilder = builderWindow.connect('position-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
+        session.sizeChangedIdBuilder = builderWindow.connect('size-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
+    },
+
     _addBuilderButton: function(session) {
         let window = session.actorBuilder.meta_window;
 
         let button = this._addButton(window);
         session.buttonBuilder = button;
         button.connect('button-press-event', Lang.bind(this, this._switchToApp, session));
-
-        session.positionChangedIdBuilder = window.connect('position-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
-        session.sizeChangedIdBuilder = window.connect('size-changed', Lang.bind(this, this._updateBuilderSizeAndPosition, session));
+        this._connectBuilderSizeAndPosition(session, window);
     },
 
     _animateToBuilder: function(session) {
@@ -356,13 +392,6 @@ const CodingManager = new Lang.Class({
         // This way we don't get ugly artifacts when rotating if
         // a window is slow to draw.
         let firstFrameConnection = session.actorBuilder.connect('first-frame', Lang.bind(this, function() {
-            // reset the bouncing animation that was showed while Builder was loading
-            Tweener.removeTweens(session.buttonApp);
-            session.buttonApp.scale_y = 1;
-            session.buttonApp.scale_x = 1;
-            session.buttonApp.translation_y = 0;
-            session.buttonApp.translation_x = 0;
-
             this._animate(session.actorApp, session.actorBuilder, Gtk.DirectionType.LEFT);
 
             session.actorBuilder.disconnect(firstFrameConnection);
@@ -509,7 +538,39 @@ const CodingManager = new Lang.Class({
             session.buttonBuilder.hide();
     },
 
+    _synchronizeWindows: function(src, dst) {
+        let srcGeometry = src.meta_window.get_frame_rect();
+        let dstGeometry = dst.meta_window.get_frame_rect();
+
+        let srcIsMaximized = (src.meta_window.maximized_horizontally &&
+                              src.meta_window.maximized_vertically);
+        let dstIsMaximized = (dst.meta_window.maximized_horizontally &&
+                              dst.meta_window.maximized_vertically);
+
+        if (!srcIsMaximized && dstIsMaximized)
+            dst.meta_window.unmaximize(Meta.MaximizeFlags.BOTH);
+
+        if (srcIsMaximized && !dstIsMaximized)
+            dst.meta_window.maximize(Meta.MaximizeFlags.BOTH);
+
+        if (srcGeometry.equal(dstGeometry))
+            return;
+
+        dst.meta_window.move_resize_frame(false,
+                                          srcGeometry.x,
+                                          srcGeometry.y,
+                                          srcGeometry.width,
+                                          srcGeometry.height);
+    },
+
     _prepareAnimate: function(src, dst, direction) {
+        // We want to do this _first_ before setting up any animations.
+        // Synchronising windows could cause kill-window-effects to
+        // be emitted, which would undo some of the preparation
+        // that we would have done such as setting backface culling
+        // or rotation angles.
+        this._synchronizeWindows(src, dst);
+
         this._rotateInActors.push(dst);
         this._rotateOutActors.push(src);
 
@@ -535,34 +596,11 @@ const CodingManager = new Lang.Class({
         dst.show();
         dst.opacity = 0;
 
-        let srcGeometry = src.meta_window.get_frame_rect();
-        let dstGeometry = dst.meta_window.get_frame_rect();
-
-        let srcIsMaximized = (src.meta_window.maximized_horizontally &&
-                              src.meta_window.maximized_vertically);
-        let dstIsMaximized = (dst.meta_window.maximized_horizontally &&
-                              dst.meta_window.maximized_vertically);
-
-        if (!srcIsMaximized && dstIsMaximized)
-            dst.meta_window.unmaximize(Meta.MaximizeFlags.BOTH);
-
-        if (srcIsMaximized && !dstIsMaximized)
-            dst.meta_window.maximize(Meta.MaximizeFlags.BOTH);
-
         // we have to set those after unmaximize/maximized otherwise they are lost
         dst.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
         src.rotation_angle_y = 0;
         dst.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
         src.pivot_point = new Clutter.Point({ x: 0.5, y: 0.5 });
-
-        if (srcGeometry.equal(dstGeometry))
-            return;
-
-        dst.meta_window.move_resize_frame(false,
-                                          srcGeometry.x,
-                                          srcGeometry.y,
-                                          srcGeometry.width,
-                                          srcGeometry.height);
     },
 
     _animate: function(src, dst, direction) {
@@ -579,7 +617,26 @@ const CodingManager = new Lang.Class({
             rotation_angle_y: 0,
             time: WINDOW_ANIMATION_TIME * 4,
             transition: 'easeOutQuad',
-            onComplete: Lang.bind(this, this.rotateInCompleted, dst)
+            onComplete: Lang.bind(this, function() {
+                this.rotateInCompleted(dst);
+
+                // Look up the session for this actor and determine if it
+                // should be removed now because it was cancelled.
+                let session = this._getSession(dst);
+                if (!session)
+                    return;
+
+                // Failed. Stop watching for coding
+                // app windows and cancel any splash
+                // screens.
+                if (session.cancelled) {
+                    Shell.WindowTracker.get_default().untrack_coding_app_window();
+                    this._cancelWatchdog();
+                    this._removeSwitcherToApp(dst);
+                    session.activationContext.cancelSplash();
+                    session.activationContext = null;
+                }
+            })
         });
 
         // Gently fade the window in, this will paper over

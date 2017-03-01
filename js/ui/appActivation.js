@@ -27,6 +27,44 @@ const SPLASH_SCREEN_TIMEOUT = 700; // ms
 const DEFAULT_MAXIMIZED_WINDOW_SIZE = 0.75;
 const LAUNCH_MAXIMIZED_DESKTOP_KEY = 'X-Endless-LaunchMaximized';
 
+const LaunchReason = {
+    UNINTERESTING: 0,
+    CODING_BUILDER: 1
+};
+
+
+// Determine if a splash screen should be shown for the provided
+// GDesktopAppInfo, LaunchReason and other global settings
+function _shouldShowSplash(app, launchReason) {
+    let info = app.get_app_info();
+
+    // Short-circuit - if we're activating GNOME-Builder for Coding,
+    // then we always want to show a splash screen
+    if (launchReason === LaunchReason.CODING_BUILDER) {
+        return true;
+    }
+
+    if (!(info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) &&
+         info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY))) {
+        return false;
+    }
+
+    // Don't show splash screen if default maximize is disabled
+    if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
+        return false;
+    }
+
+    // Don't show splash screen if this is a link and the browser is
+    // running. We can't rely on any signal being emitted in that
+    // case, as links open in browser tabs.
+    if (app.get_id().indexOf('eos-link-') != -1 &&
+        Util.getBrowserApp().state != Shell.AppState.STOPPED) {
+        return false;
+    }
+
+    return true;
+}
+
 const AppActivationContext = new Lang.Class({
     Name: 'AppActivationContext',
 
@@ -84,24 +122,19 @@ const AppActivationContext = new Lang.Class({
         Main.overview.hide();
     },
 
-    showSplash: function() {
-        // Don't show splash screen unless the launch maximized key is true
-        let info = this._app.get_app_info();
-        if (!(info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) &&
-              info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY))) {
-            return;
+    cancelSplash: function() {
+        this._cancelled = true;
+        this._clearSplash();
+        // If application doesn't quit very likely is because it
+        // didn't reach running state yet; so wait for it to
+        // finish
+        if (!this._app.request_quit()) {
+            this._abort = true;
         }
+    },
 
-        // Don't show splash screen if default maximize is disabled
-        if (global.settings.get_boolean(WindowManager.NO_DEFAULT_MAXIMIZE_KEY)) {
-            return;
-        }
-
-        // Don't show splash screen if this is a link and the browser is
-        // running. We can't rely on any signal being emitted in that
-        // case, as links open in browser tabs.
-        if (this._app.get_id().indexOf('eos-link-') != -1 &&
-            Util.getBrowserApp().state != Shell.AppState.STOPPED) {
+    showSplash: function(launchReason=LaunchReason.UNINTERESTING) {
+        if (!_shouldShowSplash(this._app, launchReason)) {
             return;
         }
 
@@ -113,16 +146,7 @@ const AppActivationContext = new Lang.Class({
 
         this._cancelled = false;
         this._splash = new SpeedwagonSplash(this._app);
-        this._splash.connect('close-clicked', Lang.bind(this, function() {
-            // If application doesn't quit very likely is because it
-            // didn't reach running state yet; so wait for it to
-            // finish
-            this._cancelled = true;
-            this._clearSplash();
-            if (!this._app.request_quit()) {
-                this._abort = true;
-            }
-        }));
+        this._splash.connect('close-clicked', Lang.bind(this, this.cancelSplash));
         this._splash.show();
 
         // Scale the timeout by the slow down factor, because otherwise
