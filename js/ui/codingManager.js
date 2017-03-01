@@ -23,14 +23,6 @@ const WATCHDOG_TIME = 30000; // ms
 const BUTTON_OFFSET_X = 33;
 const BUTTON_OFFSET_Y = 40;
 
-function _isBuilderSpeedwagon(window) {
-    let tracker = Shell.WindowTracker.get_default();
-    let correspondingApp = tracker.get_window_app(window);
-    return (Shell.WindowTracker.is_speedwagon_window(window) &&
-            correspondingApp &&
-            correspondingApp.get_id() === 'org.gnome.Builder.desktop');
-}
-
 const STATE_APP = 0;
 const STATE_BUILDER = 1;
 
@@ -45,6 +37,14 @@ function _isCodingApp(flatpakID) {
 
 function _isBuilder(flatpakID) {
     return flatpakID === 'org.gnome.Builder';
+}
+
+function _isBuilderSpeedwagon(window) {
+    let tracker = Shell.WindowTracker.get_default();
+    let correspondingApp = tracker.get_window_app(window);
+    return (Shell.WindowTracker.is_speedwagon_window(window) &&
+            correspondingApp &&
+            correspondingApp.get_id() === 'org.gnome.Builder.desktop');
 }
 
 function _getAppManifestAt(location, flatpakID) {
