@@ -372,7 +372,7 @@ const CodingSession = new Lang.Class({
             this._prepareAnimate(this.app,
                                  this.builder,
                                  Gtk.DirectionType.LEFT);
-            this._state == STATE_BUILDER;
+            this._state = STATE_BUILDER;
         }
 
         return true;
