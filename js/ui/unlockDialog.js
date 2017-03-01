@@ -299,6 +299,9 @@ const UnlockDialog = new Lang.Class({
     destroy: function() {
         this._userVerifier.clear();
 
+        this._userWidget.destroy();
+        this._userWidget = null;
+
         this.parent();
     },
 

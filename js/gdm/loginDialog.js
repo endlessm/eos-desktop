@@ -1078,6 +1078,8 @@ const LoginDialog = new Lang.Class({
         this._promptLoginHint.hide();
 
         this._promptUser.set_child(null);
+        this._userWidget.destroy();
+        this._userWidget = null;
 
         this._updateSensitivity(true);
         this._promptEntry.set_text('');
@@ -1393,8 +1395,11 @@ const LoginDialog = new Lang.Class({
     },
 
     _beginVerificationForItem: function(item) {
-        let userWidget = new UserWidget.UserWidget(item.user);
-        this._promptUser.set_child(userWidget.actor);
+        if (this._userWidget != null)
+            this._userWidget.destroy();
+
+        this._userWidget = new UserWidget.UserWidget(item.user);
+        this._promptUser.set_child(this._userWidget.actor);
 
         let tasks = [function() {
                          let userName = item.user.get_user_name();
@@ -1423,6 +1428,11 @@ const LoginDialog = new Lang.Class({
         if (this._userManagerLoadedId) {
             this._userManager.disconnect(this._userManagerLoadedId);
             this._userManagerLoadedId = 0;
+        }
+
+        if (this._userWidget != null) {
+            this._userWidget.destroy();
+            this._userWidget = null;
         }
     },
 
