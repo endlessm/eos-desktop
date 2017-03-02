@@ -47,6 +47,14 @@ function _isBuilderSpeedwagon(window) {
             correspondingApp.get_id() === 'org.gnome.Builder.desktop');
 }
 
+function _createIcon() {
+    let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/rotate.svg');
+    let gicon = new Gio.FileIcon({ file: iconFile });
+    let icon = new St.Icon({ style_class: 'view-source-icon',
+                             gicon: gicon });
+    return icon;
+}
+
 function _getAppManifestAt(location, flatpakID) {
     let manifestFile = Gio.File.new_for_path(GLib.build_filenamev([location, 'app', flatpakID, 'current',
                                                                    'active', 'files', 'manifest.json']));
@@ -125,11 +133,7 @@ const WindowTrackingButton = new Lang.Class({
 
         // Add button asset and set the child of this bin
         let button = new St.Bin();
-        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/rotate.svg');
-        let gicon = new Gio.FileIcon({ file: iconFile });
-        let icon = new St.Icon({ style_class: 'view-source-icon',
-                                 gicon: gicon });
-        this.set_child(icon);
+        this.set_child(_createIcon());
 
         // Connect to signals on the window to determine when to move
         // hide, and show the button. Note that WindowTrackingButton is
@@ -210,19 +214,63 @@ const WindowTrackingButton = new Lang.Class({
     // Just fade out and fade the button back in again. This makes it
     // look as though we have two buttons, but in reality we just have
     // one.
-    switchAnimation: function() {
+    switchAnimation: function(direction) {
+        let rect = this.window.get_frame_rect();
+
+        // this API is deprecated but the best option here to
+        // animate around a point outside of the actor
+        this.rotation_center_y = new Clutter.Vertex({ x: this.width - (rect.width * 0.5),
+                                                      y: this.height * 0.5,
+                                                      z: 0 });
+        this.rotation_angle_y = 0;
+        Tweener.addTween(this, {
+            rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
+            time: WINDOW_ANIMATION_TIME * 4,
+            transition: 'easeOutQuad'
+        });
         Tweener.addTween(this, {
             opacity: 0,
-            time: WINDOW_ANIMATION_TIME / 2,
+            time: WINDOW_ANIMATION_TIME * 2,
             transition: 'linear',
             onComplete: Lang.bind(this, function() {
+                Tweener.removeTweens(this);
+                this.rotation_angle_y = 0;
                 Tweener.addTween(this, {
                     opacity: 255,
-                    time: WINDOW_ANIMATION_TIME / 2,
+                    time: WINDOW_ANIMATION_TIME * 0.5,
                     transition: 'linear',
-                    delay: WINDOW_ANIMATION_TIME * 3
+                    delay: WINDOW_ANIMATION_TIME * 1.5
                 });
             })
+        });
+
+        let button = new St.Bin({ style_class: 'view-source',
+                                  x_fill: true,
+                                  y_fill: false });
+        button.set_child(_createIcon());
+
+        Main.layoutManager.addChrome(button);
+        button.set_position(rect.x + rect.width - BUTTON_OFFSET_X,
+                            rect.y + rect.height - BUTTON_OFFSET_Y);
+        button.rotation_center_y = new Clutter.Vertex({ x: button.width - (rect.width * 0.5),
+                                                        y: button.height * 0.5,
+                                                        z: 0 });
+        button.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
+        button.opacity = 0;
+        Tweener.addTween(button, {
+            rotation_angle_y: 0,
+            time: WINDOW_ANIMATION_TIME * 4,
+            transition: 'easeOutQuad',
+            onComplete: Lang.bind(this, function() {
+                Main.layoutManager.removeChrome(button);
+                button.destroy();
+            })
+        });
+        Tweener.addTween(button, {
+            opacity: 255,
+            time: WINDOW_ANIMATION_TIME * 2,
+            transition: 'linear',
+            delay: WINDOW_ANIMATION_TIME
         });
     },
 
@@ -366,7 +414,7 @@ const CodingSession = new Lang.Class({
                               Gtk.DirectionType.LEFT);
 
                 this.builder.disconnect(firstFrameConnection);
-                this.button.switchAnimation();
+                this.button.switchAnimation(Gtk.DirectionType.LEFT);
 
                 return false;
             }));
@@ -540,7 +588,7 @@ const CodingSession = new Lang.Class({
             this._animate(this.app,
                           this.builder,
                           Gtk.DirectionType.LEFT);
-            this.button.switchAnimation();
+            this.button.switchAnimation(Gtk.DirectionType.LEFT);
         }
 
         this._state = STATE_BUILDER;
@@ -554,7 +602,7 @@ const CodingSession = new Lang.Class({
         this._animate(this.builder,
                       this.app,
                       Gtk.DirectionType.RIGHT);
-        this.button.switchAnimation();
+        this.button.switchAnimation(Gtk.DirectionType.RIGHT);
         this._state = STATE_APP;
     },
 
@@ -634,7 +682,7 @@ const CodingSession = new Lang.Class({
                 this._animate(this.builder,
                               this.app,
                               Gtk.DirectionType.RIGHT);
-                this.button.switchAnimation();
+                this.button.switchAnimation(Gtk.DirectionType.RIGHT);
                 this._state = STATE_APP;
                 return;
             }
@@ -660,7 +708,7 @@ const CodingSession = new Lang.Class({
                 this._animate(this.app,
                               this.builder,
                               Gtk.DirectionType.LEFT);
-                this.button.switchAnimation();
+                this.button.switchAnimation(Gtk.DirectionType.LEFT);
                 this._state = STATE_BUILDER;
             } else {
                 // hide the underlying window to prevent glitches when resizing
