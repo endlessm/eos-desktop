@@ -403,7 +403,7 @@ msgstr "%A %d %B"
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
-msgstr "%A %d %B %Ey"
+msgstr "%A %d %B %Y"
 
 #: ../js/ui/calendar.js:751
 msgid "Today"
@@ -627,7 +627,7 @@ msgstr "การตั้งค่าวันที่และเวลา"
 #. AM").
 #: ../js/ui/dateMenu.js:214
 msgid "%A %B %e, %Y"
-msgstr "%A %d %B %Ey"
+msgstr "%A %e %B %Y"
 
 #: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
