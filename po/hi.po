@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Chandan kumar <chandankumar.093047@gmail.com>, 2012
+# Chandan kumar <chandankumar.093047@gmail.com>, 2012
 # e2f_in_c3 <e2f_in_c3@outlook.com>, 2016
 # e2f_in c7 <e2f_in_c7@outlook.com>, 2016-2017
 # rajesh <rajeshkajha@yahoo.com>, 2012-2014
@@ -13,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2017-01-10 05:14+0000\n"
-"Last-Translator: e2f_in c7 <e2f_in_c7@outlook.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 06:02+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -223,12 +224,12 @@ msgstr "अधिक ऐप्स"
 msgid "Delete"
 msgstr "डिलीट करें"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s को आपकी पसंदीदा में जोड़ा गया है."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s को आपकी पसंदीदा से हटाया गया है."
@@ -545,51 +546,51 @@ msgstr "सत्यापित करें"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "माफ करें, वह काम नहीं करता है. कृपया फिर कोशिश करें."
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr "सॉफ्टवेयर अपडेट"
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr "अपडेट्स उपलब्ध हैं"
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr "सॉफ्टवेयर अपडेट्स आपके सिस्टम के लिए उपलब्ध हैं"
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr "अभी डाउनलोड करें"
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr "अप्डेट्स तैयार हैंं"
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr "सॉफ्टवेयर अपडेट्स आपके सिस्टम पर इंंस्टॉल्ड किए जाने के लिए उपलब्ध हैं"
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr "अभी इंस्टॉल करें"
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr "अपडेट्स इंस्टॉल किए गए"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr "सॉफ्टवेयर अपडेट्स आपके सिस्टम पर इंस्टॉल किए गए"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr "अभी रीस्टार्ट करें"
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr "अपडेट्स विफल हुए"
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr "हम आपके सिस्टम पर अपडेट्स नहीं कर सकते"
 
@@ -752,7 +753,7 @@ msgstr "सिस्टम मॉनिटर"
 msgid "Quit Application"
 msgstr "ऐप्लिकेशन से बाहर निकलें"
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s को डिलीट कर दिया गया है"
@@ -850,7 +851,7 @@ msgstr "कोई संदेश नहीं"
 msgid "Message Tray"
 msgstr "संदेश तश्तरी"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "तंत्र जानकारी"
 
@@ -884,7 +885,7 @@ msgstr "toggle-switch-us"
 msgid "Enter a Command"
 msgstr "कमांड दर्ज करें"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "बंद करें"
 
@@ -1261,6 +1262,70 @@ msgid_plural "Settings changes will revert in %d seconds"
 msgstr[0] "सेटिंग बदलाव %d सेकेंड में वापस होगा"
 msgstr[1] "सेटिंग बदलाव %d सेकेंड में वापस होगा"
 
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr "न्यूनतम करें"
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr "गैर अधिकतम करें"
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr "अधिकतम करें"
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr "हटाएँ"
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr "आकार बदलें"
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr "ऑनस्क्रीन शीर्षकपट्टी खिसकाएँ"
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr "हमेशा ऊपर"
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr "हमेशा दृश्य कार्यस्थान पर"
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr "ऊपर कार्यस्थान में ले जाएँ"
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr "नीचे कार्यस्थान में ले जाएँ"
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr ""
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "एवोल्यूशन पंचांग"
@@ -1287,19 +1352,19 @@ msgstr[1] "%u इनपुट"
 msgid "System Sounds"
 msgstr "तंत्र ध्वनि"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "छपाई संस्करण"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "लॉगिन स्क्रीन के लिए प्रयुक्त जीडीएम अवस्था"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "विशेष अवस्था का उपयोग करें, उदाहरण के लिए लॉगिन स्क्रीन के लिए \"gdm\""
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "संभावित अवस्था सूचीबद्ध करें"
 

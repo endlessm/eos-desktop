@@ -4,12 +4,14 @@
 # 
 # Translators:
 # AlainLojewski <allomervan@gmail.com>, 2014
+# AlainLojewski <allomervan@gmail.com>, 2014
 # Alexandre Franke <alexandre.franke@gmail.com>, 2012,2015
 # Cyril Arnaud <cyril dot arnaud at gmail dot com>, 2011
 # Erwan Georget <egeorget@opmbx.org>, 2016
 # Luc Guillemin <luc.guillemin@gmail.com>, 2011
 # Luc Pionchon <pionchon.luc@gmail.com>, 2011
 # Mathieu Bridon <bochecha@daitauha.fr>, 2009
+# Mathieu Bridon <bochecha@fedoraproject.org>, 2009
 # Mathieu Stumpf <psychoslave@culture-libre.org>, 2013
 # Pablo Martin-Gomez <pablo.martin-gomez@laposte.net>, 2010
 # Pierre Henry <pierrehenry73@yahoo.fr>, 2012
@@ -18,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2017-01-09 06:02+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 06:01+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -228,12 +230,12 @@ msgstr "Plus d'Apps"
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s a été ajouté à vos favoris."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s a été supprimé de vos favoris."
@@ -550,51 +552,51 @@ msgstr "S'authentifier"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "Échec de l'authentification. Essayez à nouveau."
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr "Mise à jour logicielle"
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr "Mises à jour disponibles"
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr "Les mises à jour logicielles sont disponibles pour votre système"
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr "Télécharger maintenant"
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr "Mises à jour prête"
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr "Les mises à jour logicielles sont prêtes à être installées sur votre système"
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr "Installer maintenant"
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr "Mises à jour installées"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr "Les mises à jour logicielles ont été installées sur votre système"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr "Redémarrer maintenant"
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr "Echec d'une tentative de mise à jour"
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr "Nous n'avons pas pu mettre à jour votre système"
 
@@ -757,7 +759,7 @@ msgstr "Moniteur du système"
 msgid "Quit Application"
 msgstr "Quitter l'application"
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s a été effacé"
@@ -855,7 +857,7 @@ msgstr "Aucun message"
 msgid "Message Tray"
 msgstr "Tiroir de messagerie"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "Informations du système"
 
@@ -889,7 +891,7 @@ msgstr "toggle-switch-intl"
 msgid "Enter a Command"
 msgstr "Saisissez une commande"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "Fermer"
 
@@ -1266,6 +1268,70 @@ msgid_plural "Settings changes will revert in %d seconds"
 msgstr[0] "Les paramètres seront restaurés dans %d seconde"
 msgstr[1] "Les paramètres seront restaurés dans %d secondes"
 
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr "Minimiser"
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr "Réduire"
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr "Maximiser"
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr "Déplacer"
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr "Redimensionner"
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr "Déplacer la barre de titre sur l'écran"
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr "Toujours au premier plan"
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr "Toujours sur l'espace de travail visible"
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr "Déplacer vers l'espace de travail de gauche"
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr "Déplacer vers l'espace de travail de droite"
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr "Déplacer vers l'espace de travail supérieur"
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr "Déplacer vers l'espace de travail inférieur"
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr "Déplacer vers l'écran du haut"
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr "Déplacer vers l'écran du bas"
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr "Déplacer vers l'écran de gauche"
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr "Déplacer vers l'écran de droite"
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "Agenda d'Evolution"
@@ -1292,19 +1358,19 @@ msgstr[1] "%u entrées"
 msgid "System Sounds"
 msgstr "Sons système"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Affiche la version"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Mode utilisé par GDM pour l'écran de connexion"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Utiliser un mode particulier, par ex. « gdm » pour l'écran de connexion"
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "Lister les modes possibles"
 

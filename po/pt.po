@@ -17,8 +17,10 @@
 # Og Maciel <ogmaciel@gnome.org>, 2009
 # Pedro Albuquerque <palbuquerque73@gmail.com>, 2014-2015
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2013
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2013
 # Renato Peixoto Pinto <renato@endlessm.com>, 2013-2014
 # Ricardo Pitanga <pitanga@endlessm.com>, 2013
+# Richard Vignais, 2014
 # Richard Vignais, 2014
 # Roddy Shuler <roddy@endlessm.com>, 2013-2015
 # Rodrigo Flores <mail@rodrigoflores.org>, 2009
@@ -30,9 +32,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 06:02+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -240,12 +242,12 @@ msgstr ""
 msgid "Delete"
 msgstr "Excluir"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s foi adicionada aos seus favoritos."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s foi removida dos seus favoritos."
@@ -562,51 +564,51 @@ msgstr "Autenticar"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "Desculpe, não resultou. Por favor, tente novamente."
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr ""
 
@@ -769,7 +771,7 @@ msgstr ""
 msgid "Quit Application"
 msgstr ""
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
@@ -867,7 +869,7 @@ msgstr "Nenhuma Mensagem"
 msgid "Message Tray"
 msgstr "Zona de Notificações"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "Informação do sistema"
 
@@ -901,7 +903,7 @@ msgstr "toggle-switch-intl"
 msgid "Enter a Command"
 msgstr "Insira um comando"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "Fechar"
 
@@ -1278,6 +1280,70 @@ msgid_plural "Settings changes will revert in %d seconds"
 msgstr[0] "As alterações às definições serão revertidas em %d segundo"
 msgstr[1] "As alterações às definições serão revertidas em %d segundos"
 
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr "Minimizar"
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr "Remover maximização"
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr "Maximizar"
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr "Mover"
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr "Redimensionar"
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr "Mover barra de título no ecrã"
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr "Sempre no topo"
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr "Sempre na área de trabalho visível"
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr "Mover para a área de trabalho esquerda"
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr "Mover para a área de trabalho direita"
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr "Mover para a área de trabalho acima"
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr "Mover para a área de trabalho abaixo"
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr "Mover para o monitor acima"
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr "Mover para o monitor abaixo"
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr "Mover para o monitor à esquerda"
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr "Mover para o monitor à direita"
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "Calendário do Evolution"
@@ -1304,19 +1370,19 @@ msgstr[1] "%u entradas"
 msgid "System Sounds"
 msgstr "Sons de sistema"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Versão de impressão"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Modo utilizado pelo GDM para o ecrã de início de sessão"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Usar um modo específico, por ex. \"gdm\" para o ecrã de início de sessão"
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "Listar modos possíveis"
 

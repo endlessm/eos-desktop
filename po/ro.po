@@ -10,14 +10,14 @@
 # laurion <me_lawr@yahoo.com>, 2010
 # Lucian Adrian Grijincu <lucian.grijincu@gmail.com>, 2009-2011
 # Viorel-Cătălin Răpițeanu <rapiteanu.catalin@gmail.com>, 2013
-# Viorel-Cătălin Răpițeanu <rapiteanu.catalin@gmail.com>, 2014
+# Viorel-Cătălin Răpițeanu <rapiteanu.catalin@gmail.com>, 2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2016-12-11 17:56+0000\n"
-"Last-Translator: georgian balan <braila222@gmail.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 06:01+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Romanian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ro/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -225,12 +225,12 @@ msgstr "Mai multe aplicatii"
 msgid "Delete"
 msgstr "Sterge"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s a fost adăugat la favorite."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s a fost eliminat de la favorite."
@@ -547,51 +547,51 @@ msgstr "Autentificare"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "Nu a funcționat. Încercați din nou."
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr "Update soft"
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr "Sunt disponibile actualizari noi"
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr "Sunt disponibile actualizari pentru sistem"
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr "Descarca acum"
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr "Actualizari pregatite"
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr "Actualizarile sunt pregatite pentru a fi instalate in sistem"
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr "Instaleaza acum"
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr "Actualizari instalate"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr "Actualizarile au fost instalate in sistem"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr "Reporneste acum"
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr "Update esuat"
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr "Nu am putut actualiza sistemul"
 
@@ -758,7 +758,7 @@ msgstr "Monitorul de sistem"
 msgid "Quit Application"
 msgstr "Iesi din aplicatie"
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s a fost sters"
@@ -856,7 +856,7 @@ msgstr "Nici un mesaj"
 msgid "Message Tray"
 msgstr "Toate mesajele"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "Informații despre sistem"
 
@@ -890,7 +890,7 @@ msgstr "toggle-switch-us"
 msgid "Enter a Command"
 msgstr "Introduceți o comandă"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "Închide"
 
@@ -1268,9 +1268,73 @@ msgstr[0] "Schimbările vor fi restaurare în %d secundă"
 msgstr[1] "Schimbările vor fi restaurare în %d secunde"
 msgstr[2] "Schimbările vor fi restaurare în %d de secunde"
 
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr "Minimizează"
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr "Demaximizează"
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr "Maximizează"
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr "Mută"
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr "Redimensionează"
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr "Mută bara de titlu pe ecran"
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr "Întotdeauna deasupra"
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr "Întotdeauna pe spațiul de lucru vizibil"
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr "Mută pe spațiul de lucru din stânga"
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr "Mută pe spațiul de lucru din dreapta"
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr "Mută fereastra pe spațiul de lucru de mai sus"
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr "Mută fereastra pe spațiul de lucru de mai jos"
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr "Mută fereastra cu un monitor mai sus"
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr "Mută fereastra cu un monitor mai jos"
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr "Mută fereastra cu un monitor spre stânga"
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr "Mută fereastra cu un monitor spre dreapta"
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
-msgstr "Evolutie calendar"
+msgstr "Calendar Evolution"
 
 #. translators:
 #. * The number of sound outputs on a particular device
@@ -1296,19 +1360,19 @@ msgstr[2] "%u de intrări"
 msgid "System Sounds"
 msgstr "Sunete de sistem"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Tipărește versiunea"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Mod folosit de GDM pentru meniul de autentificare"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Utilizează un câmp specific, de exemplu „gdm” pentru ecranul de logare"
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "Enumeră câmpurile care pot fi afișate "
 

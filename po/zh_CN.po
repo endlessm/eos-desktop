@@ -3,19 +3,28 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Aron Xu <aronxu@gnome.org>, 2010-2013
+# Aron Xu <aronxu@gnome.org>, 2010-2013,2015-2016
 # chenzibing <chenzibing_endless@126.com>, 2016
 # chiachen L <luojiazhen@gmail.com>, 2011
+# chiachen L <luojiazhen@gmail.com>, 2011
+# David Young <dhyang555@gmail.com>, 2010
+# e2f_cn c5 <jarvisn@ecinnovations.com>, 2017
 # e2f_cn c5 <jarvisn@ecinnovations.com>, 2017
 # fanjunjun <tfanjunjun@126.com>, 2016
+# hui <www.eternalhui@gmail.com>, 2013-2014
 # Jessica Ban <bancage@gmail.com>, 2010
 # jiero <lililjlj@gmail.com>, 2010
+# liushuyu <liushuyu_011@126.com>, 2015
 # liuxuejiao <liuxuejiao_endless@126.com>, 2016
 # Marco Mai <marco@endlessm.com>, 2015
+# 1dot75cm <sensor.wen@gmail.com>, 2014
 # Ray Wang <raywang@gnome.org>, 2009,2011
 # Roddy Shuler <roddy@endlessm.com>, 2016
 # Star Brilliant <m13253@hotmail.com>, 2011
+# Star Brilliant <m13253@hotmail.com>, 2011
 # tanyuanxing <tanyuanxingendless@126.com>, 2016
+# Tong Hui <tonghuix@gmail.com>, 2013-2015
+# Wylmer Wang <wantinghard@gmail.com>, 2013-2014
 # YunQiang Su <wzssyqa@gmail.com>, 2010-2012
 # zhang ping <zhangping159@gmail.com>, 2010
 # zhifeng peng <jnufeng@126.com>, 2016
@@ -25,9 +34,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2017-01-10 13:51+0000\n"
-"Last-Translator: e2f_STM STM <STMcnhktw@outlook.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 06:02+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,7 +54,7 @@ msgstr "显示消息托盘"
 
 #: ../data/50-gnome-shell-system.xml.in.h:3
 msgid "Focus the active notification"
-msgstr "聚焦到活动的提示"
+msgstr "聚焦到活动通知"
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
 msgid "Show all applications"
@@ -80,7 +89,7 @@ msgstr "配置桌面扩展"
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
 msgid "There was an error loading the preferences dialog for %s:"
-msgstr "载入%s的属性对话框出错："
+msgstr "载入 %s 的首选想对话框出错："
 
 #: ../js/extensionPrefs/main.js:149
 msgid "Desktop Extensions"
@@ -103,7 +112,7 @@ msgstr "忘记密码？"
 #. manually entering the username.
 #: ../js/gdm/loginDialog.js:680
 msgid "Not listed?"
-msgstr "未在列表内？"
+msgstr "未列出？"
 
 #. Translators: During a password reset, prompt for the "secret code" provided
 #. by customer support.
@@ -184,12 +193,12 @@ msgstr "认证出错"
 #. to indicate the user can swipe their finger instead
 #: ../js/gdm/util.js:381
 msgid "(or swipe finger)"
-msgstr "（或滑动手指）"
+msgstr "(或滑动手指)"
 
 #: ../js/gdm/util.js:406
 #, javascript-format
 msgid "(e.g., user or %s)"
-msgstr "(如用户或 %s)"
+msgstr "(如 user 或 %s)"
 
 #: ../js/misc/util.js:122
 msgid "Command not found"
@@ -235,15 +244,15 @@ msgstr "更多的Apps"
 msgid "Delete"
 msgstr "删除"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s 已经添加到了您的收藏夹。"
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
-msgstr "%s 已经从您的收藏夹中移除。"
+msgstr "%s 已经从您的收藏夹移除。"
 
 #: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
@@ -268,7 +277,7 @@ msgstr "退出%s"
 
 #: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
-msgstr "更改背景……"
+msgstr "更换壁纸..."
 
 #: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
@@ -409,14 +418,14 @@ msgstr "没有计划"
 #: ../js/ui/calendar.js:738
 msgctxt "calendar heading"
 msgid "%A, %B %d"
-msgstr "%A, %B %d"
+msgstr "%m月%d日 %A"
 
 #. Translators: Shown on calendar heading when selected day occurs on
 #. different year
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
-msgstr "%A, %B %d, %Y"
+msgstr "%Y年%m月%d日 %A"
 
 #: ../js/ui/calendar.js:751
 msgid "Today"
@@ -436,11 +445,11 @@ msgstr "下周"
 
 #: ../js/ui/components/automountManager.js:90
 msgid "External drive connected"
-msgstr "外置驱动器连接"
+msgstr "外部驱动器已连接"
 
 #: ../js/ui/components/automountManager.js:101
 msgid "External drive disconnected"
-msgstr "外置驱动器断开连接"
+msgstr "外部驱动器已断开"
 
 #: ../js/ui/components/autorunManager.js:301
 msgid "Removable Devices"
@@ -449,7 +458,7 @@ msgstr "可移动设备"
 #: ../js/ui/components/autorunManager.js:601
 #, javascript-format
 msgid "Open with %s"
-msgstr "使用%s打开"
+msgstr "使用 %s 打开"
 
 #: ../js/ui/components/autorunManager.js:627
 msgid "Eject"
@@ -506,7 +515,7 @@ msgstr "访问无线网络“%s”需要密码或密钥。"
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
-msgstr "有线802.1X认证"
+msgstr "有线 802.1X 认证"
 
 #: ../js/ui/components/networkAgent.js:316
 msgid "Network name: "
@@ -514,11 +523,11 @@ msgstr "网络名称："
 
 #: ../js/ui/components/networkAgent.js:321
 msgid "DSL authentication"
-msgstr "DSL认证"
+msgstr "DSL 认证"
 
 #: ../js/ui/components/networkAgent.js:328
 msgid "PIN code required"
-msgstr "需要PIN码"
+msgstr "需要 PIN 码"
 
 #: ../js/ui/components/networkAgent.js:329
 msgid "PIN code is needed for the mobile broadband device"
@@ -557,51 +566,51 @@ msgstr "认证"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "抱歉，您的输入有误。请重试。"
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr "软件更新"
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr "可用的更新"
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr "有可用于您系统的软件更新"
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr "马上下载"
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr "更新已就绪"
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr "软件更新已经准备好安装到您的系统"
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr "马上安装"
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr "更新完成"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr "软件更新已经安装到您的系统"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr "马上重启"
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr "更新失败"
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr "我们未能升级您的系统"
 
@@ -667,13 +676,13 @@ msgstr "点击“注销“以退出这些应用程序及注销系统。"
 #, javascript-format
 msgid "%s will be logged out automatically in %d second."
 msgid_plural "%s will be logged out automatically in %d seconds."
-msgstr[0] "%s将在%d秒后自动注销。"
+msgstr[0] "%s 将在 %d 秒后自动注销。"
 
 #: ../js/ui/endSessionDialog.js:88
 #, javascript-format
 msgid "You will be logged out automatically in %d second."
 msgid_plural "You will be logged out automatically in %d seconds."
-msgstr[0] "您将在%d秒后自动注销。"
+msgstr[0] "您将在 %d 秒后自动注销。"
 
 #: ../js/ui/endSessionDialog.js:93
 msgid "Logging out of the system."
@@ -697,7 +706,7 @@ msgstr "点击关机以退出应用程序并关闭系统。"
 #, javascript-format
 msgid "The system will power off automatically in %d second."
 msgid_plural "The system will power off automatically in %d seconds."
-msgstr[0] "系统将在%d秒后自动关机。"
+msgstr[0] "系统将在 %d 秒后自动关机。"
 
 #: ../js/ui/endSessionDialog.js:111
 msgid "Powering off the system."
@@ -760,7 +769,7 @@ msgstr "系统监视器"
 msgid "Quit Application"
 msgstr "退出应用程序"
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s已删除"
@@ -794,7 +803,7 @@ msgstr "未安装扩展"
 #: ../js/ui/lookingGlass.js:697
 #, javascript-format
 msgid "%s has not emitted any errors."
-msgstr "%s没有发出任何错误信息。"
+msgstr "%s 没有传出任何错误信息。"
 
 #: ../js/ui/lookingGlass.js:703
 msgid "Hide Errors"
@@ -820,7 +829,7 @@ msgstr "错误"
 
 #: ../js/ui/lookingGlass.js:723
 msgid "Out of date"
-msgstr "过期"
+msgstr "过时"
 
 #: ../js/ui/lookingGlass.js:725
 msgid "Downloading"
@@ -828,7 +837,7 @@ msgstr "正在下载"
 
 #: ../js/ui/lookingGlass.js:749
 msgid "View Source"
-msgstr "查看源文件（代码）"
+msgstr "查看源"
 
 #: ../js/ui/lookingGlass.js:758
 msgid "Web Page"
@@ -858,7 +867,7 @@ msgstr "无消息"
 msgid "Message Tray"
 msgstr "消息托盘"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "系统信息"
 
@@ -892,13 +901,13 @@ msgstr "toggle-switch-us"
 msgid "Enter a Command"
 msgstr "输入一个命令"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "关闭"
 
 #: ../js/ui/screenShield.js:134
 msgid "GNOME needs to lock the screen"
-msgstr "GNOME需要锁定屏幕"
+msgstr "GNOME 需要锁定屏幕"
 
 #. We could not become modal, so we can't activate the
 #. screenshield. The user is probably very upset at this
@@ -912,15 +921,15 @@ msgstr "无法锁定"
 
 #: ../js/ui/screenShield.js:173 ../js/ui/screenShield.js:394
 msgid "Lock was blocked by an application"
-msgstr "锁定命令被某个应用程序阻止"
+msgstr "一个应用程序阻止了锁定"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
-msgstr "搜索……"
+msgstr "正在搜索..."
 
 #: ../js/ui/search.js:783
 msgid "No results."
-msgstr "没有结果。"
+msgstr "无结果。"
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -940,7 +949,7 @@ msgstr "隐藏文本"
 
 #: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
-msgstr "输入以便搜索……"
+msgstr "输入以搜索..."
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -972,7 +981,7 @@ msgstr "屏幕键盘"
 
 #: ../js/ui/status/accessibility.js:62
 msgid "Visual Alerts"
-msgstr "可视化警告信息"
+msgstr "视觉响铃"
 
 #: ../js/ui/status/accessibility.js:65
 msgid "Sticky Keys"
@@ -1067,7 +1076,7 @@ msgstr "正在断开……"
 
 #: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1347
 msgid "connecting..."
-msgstr "正在连接……"
+msgstr "正在连接..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
@@ -1150,13 +1159,13 @@ msgstr "电源设置"
 
 #: ../js/ui/status/power.js:58
 msgid "Fully Charged"
-msgstr "充电已完成"
+msgstr "已充满电"
 
 #. 0 is reported when UPower does not have enough data
 #. to estimate battery life
 #: ../js/ui/status/power.js:65 ../js/ui/status/power.js:71
 msgid "Estimating…"
-msgstr "估算中……"
+msgstr "正在估计..."
 
 #. Translators: this is <hours>:<minutes> Remaining (<percentage>)
 #: ../js/ui/status/power.js:79
@@ -1172,7 +1181,7 @@ msgstr "距充满还剩 %d:%02d (%d%%)"
 
 #: ../js/ui/status/volume.js:124
 msgid "Volume changed"
-msgstr "音量调整"
+msgstr "音量已变更"
 
 #. Translators: This is the label for audio volume
 #: ../js/ui/status/volume.js:249 ../js/ui/status/volume.js:297
@@ -1189,7 +1198,7 @@ msgstr "声音设置"
 
 #: ../js/ui/unlockDialog.js:121
 msgid "Log in as another user"
-msgstr "以其他用户身份登录"
+msgstr "以另一个用户身份登录"
 
 #: ../js/ui/unlockDialog.js:142
 msgid "Unlock Window"
@@ -1221,7 +1230,7 @@ msgstr "切换用户"
 
 #: ../js/ui/userMenu.js:561
 msgid "Other users are logged in."
-msgstr "其他用户已登陆。"
+msgstr "有其他用户登录。"
 
 #: ../js/ui/userMenu.js:566
 msgid "Shutting down might cause them to lose unsaved work."
@@ -1231,13 +1240,13 @@ msgstr "关闭窗口可能导致未保存的操作丢失。"
 #: ../js/ui/userMenu.js:594
 #, javascript-format
 msgid "%s (remote)"
-msgstr "%s（远程控制）"
+msgstr "%s (远程)"
 
 #. Translators: Console here refers to a tty like a VT console
 #: ../js/ui/userMenu.js:597
 #, javascript-format
 msgid "%s (console)"
-msgstr "%s （控制台）"
+msgstr "%s (控制台)"
 
 #: ../js/ui/viewSelector.js:512
 msgid "Applications"
@@ -1250,27 +1259,91 @@ msgstr "“%s”已就绪"
 
 #: ../js/ui/windowManager.js:71
 msgid "Do you want to keep these display settings?"
-msgstr "你要保持以上显示设置吗？"
+msgstr "你想保留这些显示设置吗？"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #: ../js/ui/windowManager.js:90
 msgid "Revert Settings"
-msgstr "恢复设置"
+msgstr "还原设置"
 
 #: ../js/ui/windowManager.js:94
 msgid "Keep Changes"
-msgstr "保持更改"
+msgstr "保留更改"
 
 #: ../js/ui/windowManager.js:112
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] "设置更改将在%d秒后恢复"
+msgstr[0] "设置更改将在 %d 后还原"
+
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr "最小化"
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr "取消最大化"
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr "最大化"
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr "移动"
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr "改变大小"
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr "在屏幕中移动标题栏"
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr "置顶"
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr "总在可见工作区"
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr "移至工作区的左侧"
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr "移至工作区的右侧"
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr "移至工作区的上端"
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr "移至工作区的下端"
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr "移到显示器的上端"
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr "移到显示器的下端"
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr "移到显示器的左侧"
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr "移至显示器的右侧"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
-msgstr "日历进展"
+msgstr "Evolution 日历"
 
 #. translators:
 #. * The number of sound outputs on a particular device
@@ -1278,7 +1351,7 @@ msgstr "日历进展"
 #, c-format
 msgid "%u Output"
 msgid_plural "%u Outputs"
-msgstr[0] "%u个输出"
+msgstr[0] "%u 个输出"
 
 #. translators:
 #. * The number of sound inputs on a particular device
@@ -1286,25 +1359,25 @@ msgstr[0] "%u个输出"
 #, c-format
 msgid "%u Input"
 msgid_plural "%u Inputs"
-msgstr[0] "%u个输入"
+msgstr[0] "%u 个输入"
 
 #: ../src/gvc/gvc-mixer-control.c:2373
 msgid "System Sounds"
 msgstr "系统声音"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "打印版本"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
-msgstr "用于登录界面的GDM模式"
+msgstr "GDM 用于登录屏幕的模式"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
-msgstr "使用指定模式，如登录界面用“gdm”模式"
+msgstr "使用指定模式，如 “gdm”用于登录屏幕的模式"
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "列出可用的模式"
 
@@ -1332,4 +1405,4 @@ msgstr "密码不能为空"
 
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"
-msgstr "认证请求被用户拒绝"
+msgstr "认证对话框被用户驳回"

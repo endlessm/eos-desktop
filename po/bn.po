@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 06:02+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -219,12 +219,12 @@ msgstr "আরও অ্যাপস"
 msgid "Delete"
 msgstr "মুছুন"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "আপনার পছন্দে %s যোগ করা হয়েছে।"
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "আপনার পছন্দ থেকে  %s বাদ হয়েছে।"
@@ -541,51 +541,51 @@ msgstr "যাচাই করা "
 msgid "Sorry, that didn't work. Please try again."
 msgstr "দুঃখিত, ওটা কাজ করেনি। আবার চেষ্টা করুন। "
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr "সফটওয়্যার হালনাগাদ "
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr "হালনাগাদ করা যাবে "
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr "আপনার সিস্টেমের জন্য সফটওয়্যার হালনাগাদ করা যাবে "
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr "নামান এখনই "
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr "নতুনাবস্থা তৈরি "
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr "সফটওয়্যার নতুনভাবে আপনার সিস্টেমে নেবার জন্য তৈরি  "
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr "এখনই নিন "
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr "হালনাগাদগুলো সংস্থাপিত হয়েছে "
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr "সফটওয়্যারের নতুন অবস্থাটি আপনার সিস্টেমে নেয়া হয়েছে"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr "আবার চালু করুন "
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr "হালনাগাদ ব্যর্থ হয়েছে "
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr "আপনার সিস্টেমটি হালনাগাদ করা যায়নি "
 
@@ -748,7 +748,7 @@ msgstr "সিস্টেম মনিটর "
 msgid "Quit Application"
 msgstr "অ্যাপ্লিকেশন থেকে বেরোনো "
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s মুছে দেয়া হয়েছে"
@@ -846,7 +846,7 @@ msgstr "বার্তা নেই "
 msgid "Message Tray"
 msgstr "বার্তা ট্রে "
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "সিস্টেম তথ্য"
 
@@ -880,7 +880,7 @@ msgstr "টগল-পরিবর্তন-আমাদের"
 msgid "Enter a Command"
 msgstr "একটি নির্দেশনা দিন "
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "বন্ধ "
 
@@ -1257,6 +1257,70 @@ msgid_plural "Settings changes will revert in %d seconds"
 msgstr[0] "%d সেকেন্ডে সেটিংসের পরিবর্তনগুলো আগের অবস্থায় ফেরত যাবে"
 msgstr[1] "%d সেকেন্ডে সেটিংসের পরিবর্তনগুলো আগের অবস্থায় ফেরত যাবে"
 
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr ""
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "বিবর্তন দিনপঞ্জী "
@@ -1283,19 +1347,19 @@ msgstr[1] "%u ইনপুট"
 msgid "System Sounds"
 msgstr "সিস্টেমের শব্দ"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "মুদ্রণ সংস্করণ"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "লগিন পর্দার জন্য জিডিএম ব্যবহৃত পদ্ধতি "
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "কোন বিশেষ পদ্ধতি ব্যবহার করুন, যেমন লগিন পর্দার জন্য \"জিডিএম\" "
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "সম্ভাব্য পদ্ধতির তালিকা "
 
