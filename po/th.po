@@ -4,6 +4,7 @@
 # 
 # Translators:
 # e2f_th_c4 <e2f_th_c4@outlook.com>, 2016
+# e2f_th_c4 <e2f_th_c4@outlook.com>, 2016
 # Roddy Shuler <roddy@endlessm.com>, 2016-2017
 # Sira Nokyoongtong <gumaraa@gmail.com>, 2010-2011
 # Theppitak Karoonboonyanan <thep@linux.thai.net>, 2012
@@ -11,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-14 02:30+0000\n"
-"PO-Revision-Date: 2017-02-17 20:59+0000\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 05:58+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Thai (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -402,7 +403,7 @@ msgstr "%A %d %B"
 #: ../js/ui/calendar.js:741
 msgctxt "calendar heading"
 msgid "%A, %B %d, %Y"
-msgstr "%A %d %B %Y"
+msgstr "%A %d %B %Ey"
 
 #: ../js/ui/calendar.js:751
 msgid "Today"
@@ -543,51 +544,51 @@ msgstr "ยืนยันตัวบุคคล"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "ขออภัย ยังไม่ผ่าน โปรดลองใหม่"
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr "อัปเดตซอฟท์แวร์"
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr "สามารถทำการอัปเดต"
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr "ระบบของคุณสามารถอัปเดตซอฟท์แวร์ได้"
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr "ดาวน์โหลดตอนนี้"
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr "พร้อมอัปเดต"
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr "พร้อมที่จะติดตั้งอัปเดตซอฟท์แวร์ลงบนระบบของคุณ"
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr "ติดตั้งตอนนี้"
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr "ติดตั้งอัปเดตแล้ว"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr "ติดตั้งอัปเดตซอฟท์แวร์บนระบบของคุณแล้ว"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr "เริ่มระบบใหม่ตอนนี้"
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr "อัปเดตล้มเหลว"
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr "เราไม่สามารถอัปเดตระบบของคุณ"
 
@@ -626,7 +627,7 @@ msgstr "การตั้งค่าวันที่และเวลา"
 #. AM").
 #: ../js/ui/dateMenu.js:214
 msgid "%A %B %e, %Y"
-msgstr "%A %e %B %Y"
+msgstr "%A %d %B %Ey"
 
 #: ../js/ui/endSessionDialog.js:49 ../js/ui/panel.js:37
 msgid ""
@@ -844,7 +845,7 @@ msgstr "ไม่มีข้อความ"
 msgid "Message Tray"
 msgstr "ถาดข้อความ"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "ข้อมูลระบบ"
 
@@ -878,7 +879,7 @@ msgstr "toggle-switch-intl"
 msgid "Enter a Command"
 msgstr "ป้อนคำสั่ง"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "ปิด"
 
@@ -1253,6 +1254,70 @@ msgstr "เก็บการเปลี่ยนแปลง"
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
 msgstr[0] "การเปลี่ยนการตั้งค่าจะย้อนกลับใน %d วินาที"
+
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr ""
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"

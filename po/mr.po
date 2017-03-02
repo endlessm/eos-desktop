@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 05:59+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Marathi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/mr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,7 +29,7 @@ msgstr "संदेश ट्रे दाखवा"
 
 #: ../data/50-gnome-shell-system.xml.in.h:3
 msgid "Focus the active notification"
-msgstr "सक्रीय सूचनेवर फोकस करा"
+msgstr "सक्रीय सूचनावर फोकस करा"
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
 msgid "Show all applications"
@@ -173,7 +173,7 @@ msgstr "(किंवा बोट फिरवा)"
 #: ../js/gdm/util.js:406
 #, javascript-format
 msgid "(e.g., user or %s)"
-msgstr "(उदा., वापरकर्ता किंवा %s)"
+msgstr "(उ.दा., वापरकर्ता किंवा %s)"
 
 #: ../js/misc/util.js:122
 msgid "Command not found"
@@ -219,12 +219,12 @@ msgstr "अधिक ऍप्स"
 msgid "Delete"
 msgstr "नष्ट"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s ला पसंतीमध्ये समाविष्ट केले आहे."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s ला पसंतीतून काढून टाकले."
@@ -271,7 +271,7 @@ msgstr "फोल्डर जोडा"
 #: ../js/ui/calendar.js:62
 msgctxt "event list time"
 msgid "All Day"
-msgstr "पूर्ण दिवस"
+msgstr "सर्व दिवस"
 
 #. Translators: Shown in calendar event list, if 24h format,
 #. \u2236 is a ratio character, similar to :
@@ -467,11 +467,11 @@ msgstr "कि: "
 
 #: ../js/ui/components/networkAgent.js:266
 msgid "Identity: "
-msgstr "ओळख"
+msgstr "आइडेंटिटि: "
 
 #: ../js/ui/components/networkAgent.js:268
 msgid "Private key password: "
-msgstr "खाजगी कि पासवर्ड: "
+msgstr "प्राइव्हेट कि पासवर्ड: "
 
 #: ../js/ui/components/networkAgent.js:280
 msgid "Service: "
@@ -479,7 +479,7 @@ msgstr "सर्व्हिस: "
 
 #: ../js/ui/components/networkAgent.js:309
 msgid "Authentication required by wireless network"
-msgstr "वायरलेस नेटवर्कतर्फे ओळख पटवणे आवश्यक"
+msgstr "वायरलेस नेटवर्कतर्फे आवश्यक ओळखपटवणे"
 
 #: ../js/ui/components/networkAgent.js:310
 #, javascript-format
@@ -490,7 +490,7 @@ msgstr "वायरलेस नेटवर्क '%s' वापरण्य�
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
-msgstr "वायर्ड 802.1X ओळख पटवणे"
+msgstr "वायर्ड 802.1X ओळखपटवणे"
 
 #: ../js/ui/components/networkAgent.js:316
 msgid "Network name: "
@@ -502,15 +502,15 @@ msgstr "DSL ओळख पटवणे"
 
 #: ../js/ui/components/networkAgent.js:328
 msgid "PIN code required"
-msgstr "पिनकोड आवश्यक"
+msgstr "PIN कोड आवश्यक"
 
 #: ../js/ui/components/networkAgent.js:329
 msgid "PIN code is needed for the mobile broadband device"
-msgstr "मोबाइल ब्रॉडबँड साधनाकरीता पिनकोड आवश्यक आहे"
+msgstr "मोबाइल ब्रॉडबँड साधनकरीता PIN कोड आवश्यक आहे"
 
 #: ../js/ui/components/networkAgent.js:330
 msgid "PIN: "
-msgstr "पिन:"
+msgstr "PIN: "
 
 #: ../js/ui/components/networkAgent.js:336
 msgid "Mobile broadband network password"
@@ -541,51 +541,51 @@ msgstr "ओळख पटवा"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "माफ करा, ते कार्य करू शकले नाही. कृपया पुनःप्रयत्न करा."
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr "सॉफ्टवेअर अद्यतन"
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr "अद्यतने उपलब्ध"
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr "आपल्या प्रणालीकरिता अद्यतने उपलब्ध आहेत"
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr "डाउनलोड करा"
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr "अद्यतने तयार"
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr "सॉफ्टवेअर अद्यतने स्थापित करण्यासाठी तयार आहेत"
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr "स्थापित करा"
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr "अद्यतने स्थापित"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr "आपल्या प्रणालीवर सॉफ्टवेअर अद्यतने स्थापित करण्यात आली आहेत"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr "पुन्हा चालू करा"
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr "अद्यतन अयशस्वी"
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr "आम्ही आपली प्रणाली अद्यतनित करू शकलो नाही"
 
@@ -748,7 +748,7 @@ msgstr "प्रणाली निरीक्षक"
 msgid "Quit Application"
 msgstr "ॲप्लिकेशनमधून बाहेर पडा"
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s नष्ट करण्यात आले आहे"
@@ -846,7 +846,7 @@ msgstr "संदेश नाही"
 msgid "Message Tray"
 msgstr "संदेश ट्रे"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "प्रणाली माहिती"
 
@@ -880,7 +880,7 @@ msgstr "toggle-switch-us"
 msgid "Enter a Command"
 msgstr "आदेश द्या"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "बंद करा"
 
@@ -1257,6 +1257,70 @@ msgid_plural "Settings changes will revert in %d seconds"
 msgstr[0] "सेटिंग्ज बदल %d सेकंदनंतर मूळस्थितीत येतील"
 msgstr[1] "सेटिंग्ज बदल %d सेकंदनंतर मूळस्थितीत येतील"
 
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr "छोटे करा"
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr "छोटे अशक्य करा"
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr "मोठे करा"
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr "हलवा"
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr "पुन्हा आकार द्या"
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr "शीर्षकपट्टीला ऑनस्क्रीनरित्या हलवा"
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr "नेहमी शीर्षवरील"
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr "नेहमी दृष्यास्पद कार्यक्षेत्रवर आढळते"
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr "वर्कस्पेस अपकडे जा"
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr "वर्कस्पेस डाउनकडे जा"
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr ""
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr ""
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "एव्हल्युशन दिनदर्शिका"
@@ -1283,19 +1347,19 @@ msgstr[1] "%u इंपुट"
 msgid "System Sounds"
 msgstr "प्रणाली आवाज"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "छपाई आवृत्ती"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "प्रवेश पडद्याकरीता GDM तर्फे वापरण्याजोगी मोड"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "निर्देशीत मोडचा वापर करा, उ.दा. प्रवेश स्क्रीनकरीता \"gdm\""
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "संभाव्य मोड्स्ची सूची दाखवा"
 

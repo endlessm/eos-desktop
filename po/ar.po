@@ -3,10 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# abderrahim <a.kitouni@gmail.com>, 2012
+# abderrahim <a.kitouni@gmail.com>, 2012,2014
 # abderrahim <a.kitouni@gmail.com>, 2012,2014
 # Ibrahim Saed <ibraheem5000@gmail.com>, 2012
 # Khaled Hosny <khaledhosny@eglug.org>, 2009-2016
+# Muhammed Abdulaziz <thenubianmuha_idrecy@yahoo.co.uk>, 2012
 # Muhammed Abdulaziz <thenubianmuha_idrecy@yahoo.co.uk>, 2012
 # Roddy Shuler <roddy@endlessm.com>, 2014-2015
 # Yasmin Diab <yasmin.diab.lopez@gmail.com>, 2014
@@ -14,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2017-01-07 12:11+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 06:03+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -224,12 +225,12 @@ msgstr "المزيد من التطبيقات"
 msgid "Delete"
 msgstr "حذف"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "أُضيف %s إلى مفضلتك."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "أُزيل %s من مفضّلتك."
@@ -546,51 +547,51 @@ msgstr "استوثق"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "للأسف لم يُفلح هذا. أعِد المحاولة."
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr "تحديث البرامج"
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr "التحديثات المتوفرة"
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr "تتوفر تحديثات برامج لنظامك"
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr "تنزيل الآن"
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr "التحديثات جاهزة"
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr "تحديثات البرامج جاهزة ليتم تثبيتها على النظام الخاص بك"
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr "تثبيت الآن"
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr "التحديثات المثبّتة"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr "تم تثبيت تحديثات البرامج على جهازك"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr "أعِد التشغيل الآن"
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr "فشل تحديث"
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr "لم نتمكن من تحديث نظامك"
 
@@ -769,7 +770,7 @@ msgstr "شاشة النظام"
 msgid "Quit Application"
 msgstr "الخروج من التطبيق"
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s تم حذفه"
@@ -867,7 +868,7 @@ msgstr "لا رسائل"
 msgid "Message Tray"
 msgstr "لوحة الرسائل"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "معلومات النظام"
 
@@ -901,7 +902,7 @@ msgstr "toggle-switch-intl"
 msgid "Enter a Command"
 msgstr "اكتب أمرًا"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "أغلِق"
 
@@ -1282,6 +1283,70 @@ msgstr[3] "سيُتراجع عن التغييرات بعد %d ثوان"
 msgstr[4] "سيُتراجع عن التغييرات بعد %d ثانية"
 msgstr[5] "سيُتراجع عن التغييرات بعد %d ثانية"
 
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr "صغّر"
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr "ألغِ التكبير"
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr "كبّر"
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr "انقل"
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr "غيّر الحجم"
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr "انقل شريط العنوان على الشاشة"
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr "دائما في القمّة"
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr "دائما على مساحة العمل المرئية"
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr "انقل لمساحة العمل على اليسار"
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr "انقل لمساحة العمل على اليمين"
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr "انقل لمساحة العمل لأعلى"
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr "انقل لمساحة العمل لأسفل"
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr "انقل للشاشة الأعلى"
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr "انقل للشاشة الأسفل"
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr "انقل للشاشة اليسرى"
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr "انقل للشاشة اليمنى"
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "تقويم إيفُليوشِن"
@@ -1316,19 +1381,19 @@ msgstr[5] "%u مدخل"
 msgid "System Sounds"
 msgstr "أصوات النظام"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "اطبع الإصدارة"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "الوضع الذي يستخدمه مدير ولوج جنوم لشاشة الولوج"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "استخدم طورا معينا، مثلا: \"gdm\" لشاشة الولوج"
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "اسرد كل الأطوار الممكنة"
 

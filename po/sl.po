@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2016-12-06 02:29+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 06:02+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Slovenian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -217,12 +217,12 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "Program \"%s\" je dodan med priljubljeno."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "Program \"%s\" je odstranjen iz priljubljenih."
@@ -539,51 +539,51 @@ msgstr "Overi"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "Dejanje je spodletelo. Poskusite znova."
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr ""
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr ""
 
@@ -754,7 +754,7 @@ msgstr ""
 msgid "Quit Application"
 msgstr ""
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr ""
@@ -852,7 +852,7 @@ msgstr "Ni sporočil"
 msgid "Message Tray"
 msgstr "Vrstica sporočanja"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "Podrobnosti sistema"
 
@@ -886,7 +886,7 @@ msgstr "toggle-switch-intl"
 msgid "Enter a Command"
 msgstr "Vnos ukaza"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "Zapri"
 
@@ -1265,6 +1265,70 @@ msgstr[1] "Spremembe nastavitev bodo povrnjene v %d sekundi."
 msgstr[2] "Spremembe nastavitev bodo povrnjene v %d sekundah."
 msgstr[3] "Spremembe nastavitev bodo povrnjene v %d sekundah."
 
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr "Skrči"
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr "Pomanjšaj"
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr "Razpni"
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr "Premakni"
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr "Spremeni velikost"
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr "Premakni nazivno vrstico na zaslon"
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr "Vedno na vrhu"
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr "Vedno na dejavni delovni površini"
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr "Premakni na delovno površino na levi"
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr "Premakni na delovno površino na desni"
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr "Premakni na zgornjo delovno površino"
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr "Premakni na spodnjo delovno površino"
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr "\t"
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr "Premakni na zaslon spodaj"
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr "Premakni na zaslon levo"
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr "Premakni na zaslon desno"
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "Koledar Evolution "
@@ -1295,19 +1359,19 @@ msgstr[3] "%u dovodi naprave"
 msgid "System Sounds"
 msgstr "Sistemski zvoki"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Izpiši različico"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Način uporabljen v GDM za prijavni naslov"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Uporabi poseben način, npr.: \"gdm\" za prijavni zaslon"
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "Seznam mogočih načinov"
 

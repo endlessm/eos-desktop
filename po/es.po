@@ -6,8 +6,9 @@
 # Benjamín Valero Espinosa <benjavalero@gmail.com>, 2011
 # c.sanchez <cassandra@endlessm.com>, 2014-2015
 # c.sanchez <cassandra@endlessm.com>, 2014
-# Daniel Mustieles <inactive+leo@transifex.com>, 2010-2013
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2010-2016
 # Eddy Alegria <eddy@endlessm.com>, 2014
+# goizueta <goizueta@endlessm.com>, 2014
 # goizueta <goizueta@endlessm.com>, 2014
 # Joel Gil León <joel@endlessm.com>, 2013-2014
 # Jorge González <jorgegonz@svn.gnome.org>, 2009-2011
@@ -18,9 +19,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2016-12-23 00:47+0000\n"
-"Last-Translator: Nuritzi Sanchez <ns@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 06:00+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -60,7 +61,7 @@ msgstr "EOS Shell"
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
 msgid "Window management and application launching"
-msgstr "Gestión de ventanas e inicio de programas"
+msgstr "Gestión de ventanas e inicio de aplicaciones"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
@@ -96,7 +97,7 @@ msgstr "¿Olvidaste tu contraseña?"
 #. manually entering the username.
 #: ../js/gdm/loginDialog.js:680
 msgid "Not listed?"
-msgstr "¿No estás en la lista?"
+msgstr "¿No está en la lista?"
 
 #. Translators: During a password reset, prompt for the "secret code" provided
 #. by customer support.
@@ -228,15 +229,15 @@ msgstr "Más programas"
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
-msgstr "Se ha añadido %s a tus favoritos."
+msgstr "Se ha añadido %s a sus favoritos."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
-msgstr "Se ha quitado %s de tus favoritos."
+msgstr "Se ha quitado %s de sus favoritos."
 
 #: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
@@ -454,7 +455,7 @@ msgstr "Contraseña:"
 
 #: ../js/ui/components/keyring.js:101
 msgid "Type again:"
-msgstr "Escribe de nuevo:"
+msgstr "Escriba de nuevo:"
 
 #: ../js/ui/components/networkAgent.js:132
 msgid "Connect"
@@ -503,7 +504,7 @@ msgstr "Autenticación 802.1X cableada"
 
 #: ../js/ui/components/networkAgent.js:316
 msgid "Network name: "
-msgstr "Nombre de la red:"
+msgstr "Nombre de la red: "
 
 #: ../js/ui/components/networkAgent.js:321
 msgid "DSL authentication"
@@ -548,53 +549,53 @@ msgstr "Autenticar"
 #. * for instance.
 #: ../js/ui/components/polkitAgent.js:256 ../js/ui/shellMountOperation.js:383
 msgid "Sorry, that didn't work. Please try again."
-msgstr "Eso no funciono. Por favor inténtalo de nuevo."
+msgstr "Inténtelo de nuevo."
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr "Actualización de software"
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr "Actualizaciones disponibles"
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr "Hay actualizaciones disponibles para tu sistema"
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr "Descargar ahora"
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr "Actualizaciones listas"
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr "Las actualizaciones están listas para instalar en tu sistema"
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr "Instalar ahora"
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr "Actualizaciones instaladas"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr "Las actualizaciones se han instalado en tu sistema"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr "Reiniciar ahora"
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr "Hubo un error durante la actualización"
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr "Tu sistema no se pudo actualizar"
 
@@ -604,7 +605,7 @@ msgstr "Ventanas"
 
 #: ../js/ui/dash.js:262 ../js/ui/dash.js:300
 msgid "Show Applications"
-msgstr "Mostrar programas"
+msgstr "Mostrar aplicaciones"
 
 #: ../js/ui/dash.js:298
 msgid "Remove from Favorites"
@@ -668,7 +669,7 @@ msgstr[1] "se cerrará automáticamente la sesión de %s en %d segundos."
 msgid "You will be logged out automatically in %d second."
 msgid_plural "You will be logged out automatically in %d seconds."
 msgstr[0] "Su sesión se cerrará automáticamente en %d segundo."
-msgstr[1] "Tu sesión se cerrará automáticamente en %d segundos."
+msgstr[1] "Su sesión se cerrará automáticamente en %d segundos."
 
 #: ../js/ui/endSessionDialog.js:93
 msgid "Logging out of the system."
@@ -677,7 +678,7 @@ msgstr "Cerrando la sesión."
 #: ../js/ui/endSessionDialog.js:96 ../js/ui/endSessionDialog.js:124
 msgctxt "button"
 msgid "Log Out"
-msgstr "Cerrar sesión"
+msgstr "Cerrar la sesión"
 
 #: ../js/ui/endSessionDialog.js:101
 msgctxt "title"
@@ -757,7 +758,7 @@ msgstr "Pantalla de administración"
 msgid "Quit Application"
 msgstr "Cerrar programa"
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s ha sido borrado"
@@ -855,7 +856,7 @@ msgstr "No hay mensajes"
 msgid "Message Tray"
 msgstr "Bandeja de mensajes"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "Información del sistema"
 
@@ -889,7 +890,7 @@ msgstr "toggle-switch-intl"
 msgid "Enter a Command"
 msgstr "Introducir un comando"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "Cerrar"
 
@@ -909,7 +910,7 @@ msgstr "No se pudo bloquear"
 
 #: ../js/ui/screenShield.js:173 ../js/ui/screenShield.js:394
 msgid "Lock was blocked by an application"
-msgstr "Un programa impidió el bloqueo"
+msgstr "Una aplicación impidió el bloqueo"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
@@ -917,7 +918,7 @@ msgstr "Buscando…"
 
 #: ../js/ui/search.js:783
 msgid "No results."
-msgstr "No hay resultados."
+msgstr "No se encontraron resultados."
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -937,7 +938,7 @@ msgstr "Ocultar texto"
 
 #: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
-msgstr "Escribe aquí para buscar…"
+msgstr "Escribir para buscar…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1182,7 +1183,7 @@ msgstr "Micrófono"
 
 #: ../js/ui/status/volume.js:310
 msgid "Sound Settings"
-msgstr "Configuración del sonido"
+msgstr "Configuración de sonido"
 
 #: ../js/ui/unlockDialog.js:121
 msgid "Log in as another user"
@@ -1218,7 +1219,7 @@ msgstr "Cambiar de usuario"
 
 #: ../js/ui/userMenu.js:561
 msgid "Other users are logged in."
-msgstr "Hay otros usuarios con la sesión iniciada"
+msgstr "Hay otros usuarios con la sesión iniciada."
 
 #: ../js/ui/userMenu.js:566
 msgid "Shutting down might cause them to lose unsaved work."
@@ -1238,7 +1239,7 @@ msgstr "%s (consola)"
 
 #: ../js/ui/viewSelector.js:512
 msgid "Applications"
-msgstr "Programas"
+msgstr "Aplicaciones"
 
 #: ../js/ui/windowAttentionHandler.js:19
 #, javascript-format
@@ -1247,13 +1248,13 @@ msgstr "«%s» está preparado"
 
 #: ../js/ui/windowManager.js:71
 msgid "Do you want to keep these display settings?"
-msgstr "¿Deseas mantener los cambios?"
+msgstr "¿Quiere mantener esta configuración de la pantalla?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #: ../js/ui/windowManager.js:90
 msgid "Revert Settings"
-msgstr "Revertir configuraciones"
+msgstr "Revertir configuración"
 
 #: ../js/ui/windowManager.js:94
 msgid "Keep Changes"
@@ -1263,12 +1264,76 @@ msgstr "Mantener cambios"
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] "Las configuraciones se revertirán en %d segundos"
-msgstr[1] "Los cambios de las configuraciones se revertirán en %d segundos"
+msgstr[0] "La configuración se revertirá en %d segundo"
+msgstr[1] "La configuración se revertirá en %d segundos"
+
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr "Minimizar"
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr "Desmaximizar"
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr "Maximizar"
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr "Mover"
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr "Redimensionar"
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr "Mover la barra de título a la pantalla"
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr "Siempre encima"
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr "Siempre en el área de trabajo visible"
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr "Mover al área de trabajo de la izquierda"
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr "Mover al área de trabajo de la derecha"
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr "Subir a un área de trabajo"
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr "Bajar a un área de trabajo"
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr "Mover a la pantalla de arriba"
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr "Mover a la pantalla de abajo"
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr "Mover a la pantalla de la izquierda"
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr "Mover a la pantalla de la derecha"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
-msgstr "Calendario de evolución"
+msgstr "Calendario de Evolution"
 
 #. translators:
 #. * The number of sound outputs on a particular device
@@ -1292,19 +1357,19 @@ msgstr[1] "%u entradas"
 msgid "System Sounds"
 msgstr "Sonidos del sistema"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Imprimir versión"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Modo usado por GDM para la pantalla de inicio"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Usar un modo específico, por ejemplo, «gdm» para la pantalla de inicio de sesión"
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "Listar los modos posibles"
 

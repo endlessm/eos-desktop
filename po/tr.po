@@ -17,9 +17,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2017-01-25 04:02+0000\n"
-"Last-Translator: Burcu Özacar <13urcu@gmail.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 06:00+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -227,12 +227,12 @@ msgstr "Daha Fazla Uygulama"
 msgid "Delete"
 msgstr "Sil"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s sık kullanılanlarınıza eklendi."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s sık kullanılanlarınızdan çıkarıldı."
@@ -303,13 +303,13 @@ msgstr "%l∶%M %p"
 #: ../js/ui/calendar.js:108
 msgctxt "grid sunday"
 msgid "S"
-msgstr "Pz"
+msgstr "P"
 
 #. Translators: Calendar grid abbreviation for Monday
 #: ../js/ui/calendar.js:110
 msgctxt "grid monday"
 msgid "M"
-msgstr "Pt"
+msgstr "P"
 
 #. Translators: Calendar grid abbreviation for Tuesday
 #: ../js/ui/calendar.js:112
@@ -327,7 +327,7 @@ msgstr "Ç"
 #: ../js/ui/calendar.js:116
 msgctxt "grid thursday"
 msgid "T"
-msgstr "Pr"
+msgstr "P"
 
 #. Translators: Calendar grid abbreviation for Friday
 #: ../js/ui/calendar.js:118
@@ -339,7 +339,7 @@ msgstr "C"
 #: ../js/ui/calendar.js:120
 msgctxt "grid saturday"
 msgid "S"
-msgstr "Ct"
+msgstr "C"
 
 #. Translators: Event list abbreviation for Sunday.
 #. *
@@ -441,7 +441,7 @@ msgstr "Çıkarılabilir Aygıtlar"
 #: ../js/ui/components/autorunManager.js:601
 #, javascript-format
 msgid "Open with %s"
-msgstr "%s ile aç"
+msgstr "%s ile Aç"
 
 #: ../js/ui/components/autorunManager.js:627
 msgid "Eject"
@@ -549,51 +549,51 @@ msgstr "Doğrula"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "Üzgünüm ama işe yaramadı. Lütfen tekrar deneyin."
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr "Yazılım Güncelleme"
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr "Güncellemeler mevcut"
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr "Sisteminiz için yazılım güncellemeleri mevcut"
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr "İndir"
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr "Güncellemeler hazır"
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr "Yazılım güncellemeleri kurulmak üzere hazır"
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr "Şimdi kur"
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr "Güncellemeler kuruldu"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr "Sisteminize yazılım güncellemeleri kuruldu"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr "Yeniden Başlat"
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr "Güncelleme başarısız"
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr "Sisteminizi güncelleştiremedik"
 
@@ -712,7 +712,7 @@ msgstr "Kapat"
 #: ../js/ui/endSessionDialog.js:135
 msgctxt "title"
 msgid "Restart"
-msgstr "Yeniden Başlat"
+msgstr "Bilgisayarı Yeniden Başlat"
 
 #: ../js/ui/endSessionDialog.js:137
 msgid "Click Restart to quit these applications and restart the system."
@@ -756,7 +756,7 @@ msgstr "Sistem Monitörü"
 msgid "Quit Application"
 msgstr "Uygulamadan Çık"
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s silindi"
@@ -790,7 +790,7 @@ msgstr "Herhangi bir uzantı kurulu değil"
 #: ../js/ui/lookingGlass.js:697
 #, javascript-format
 msgid "%s has not emitted any errors."
-msgstr "%s herhangi bir hata vermedi."
+msgstr "%s, herhangi bir hata vermedi."
 
 #: ../js/ui/lookingGlass.js:703
 msgid "Hide Errors"
@@ -854,7 +854,7 @@ msgstr "Mesaj Yok"
 msgid "Message Tray"
 msgstr "Mesaj Tepsisi"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "Sistem Bilgisi"
 
@@ -888,7 +888,7 @@ msgstr "toggle-switch-intl"
 msgid "Enter a Command"
 msgstr "Komut Girin"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "Kapat"
 
@@ -948,7 +948,7 @@ msgstr "Parolayı Hatırla"
 
 #: ../js/ui/shellMountOperation.js:403 ../js/ui/unlockDialog.js:110
 msgid "Unlock"
-msgstr "Kilidi Aç"
+msgstr "Kilit Aç"
 
 #: ../js/ui/status/accessibility.js:39
 msgid "Accessibility"
@@ -992,7 +992,7 @@ msgstr "Evrensel Erişim Ayarları"
 
 #: ../js/ui/status/accessibility.js:136
 msgid "High Contrast"
-msgstr "Yüksek Kontrast"
+msgstr "Yüksek Karşıtlık"
 
 #: ../js/ui/status/accessibility.js:185
 msgid "Large Text"
@@ -1217,7 +1217,7 @@ msgstr "Kullanıcı Değiştir"
 
 #: ../js/ui/userMenu.js:561
 msgid "Other users are logged in."
-msgstr "Diğer kullanıcılar oturum açmış."
+msgstr "Diğer kullanıcılar oturum açmış"
 
 #: ../js/ui/userMenu.js:566
 msgid "Shutting down might cause them to lose unsaved work."
@@ -1227,13 +1227,13 @@ msgstr "Sistemi kapatmak kayıt edilmemiş çalışmaların kaybolmasına sebep 
 #: ../js/ui/userMenu.js:594
 #, javascript-format
 msgid "%s (remote)"
-msgstr "%s (uzaktan erişim)"
+msgstr "%s (uzak)"
 
 #. Translators: Console here refers to a tty like a VT console
 #: ../js/ui/userMenu.js:597
 #, javascript-format
 msgid "%s (console)"
-msgstr "%s (terminal)"
+msgstr "%s (uçbirim)"
 
 #: ../js/ui/viewSelector.js:512
 msgid "Applications"
@@ -1246,7 +1246,7 @@ msgstr "'%s' hazır"
 
 #: ../js/ui/windowManager.js:71
 msgid "Do you want to keep these display settings?"
-msgstr "Bu görüntü ayarlarını kaydetmek istiyor musunuz?"
+msgstr "Bu görüntü ayarlarını saklamak istiyor musunuz?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
@@ -1256,7 +1256,7 @@ msgstr "Ayarları Eski Haline Getir"
 
 #: ../js/ui/windowManager.js:94
 msgid "Keep Changes"
-msgstr "Değişiklikleri Kaydet"
+msgstr "Değişiklikleri Sakla"
 
 #: ../js/ui/windowManager.js:112
 #, javascript-format
@@ -1264,6 +1264,70 @@ msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
 msgstr[0] "Ayar değişiklikleri %d saniye içerisinde geri alınacak"
 msgstr[1] "Ayar değişiklikleri %d saniye sonra geri alınacak"
+
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr "Simge durumuna küçült"
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr "Önceki Boyut"
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr "En üst düzeye çıkar"
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr "Taşı"
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr "Yeniden Boyutlandır"
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr "Başlık Çubuğunu Ekranda Taşı"
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr "Her Zaman Üstte"
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr "Her Zaman Görünür Çalışma Alanında"
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr "Soldaki Çalışma Alanına Taşı"
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr "Sağdaki Çalışma Alanına Taşı"
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr "Üstteki Çalışma Alanına Taşı"
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr "Alttaki Çalışma Alanına Taşı"
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr "Üstteki Monitöre Taşı"
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr "Alttaki Monitöre Taşı"
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr "Soldaki Monitöre Taşı"
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr "Sağdaki Monitöre Taşı"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
@@ -1291,21 +1355,21 @@ msgstr[1] "%u Giriş"
 msgid "System Sounds"
 msgstr "Sistem Sesleri"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Sürümü yazdır"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
-msgstr "Oturum açma ekranında GDM tarafından kullanılan mod"
+msgstr "Oturum açma ekranında GDM tarafından kullanılan kip"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
-msgstr "Oturum açma için \"gdm\" gibi özel bir mod kullan"
+msgstr "Oturum açma için -\"gdm\" gibi- özel bir kip kullan"
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
-msgstr "Mevcut modları listele"
+msgstr "Mevcut kipleri listele"
 
 #: ../src/shell-app.c:654
 #, c-format

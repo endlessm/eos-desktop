@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-07 02:31+0000\n"
-"PO-Revision-Date: 2017-01-09 06:03+0000\n"
-"Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-01 21:42-0800\n"
+"PO-Revision-Date: 2017-03-02 06:00+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -153,7 +153,7 @@ msgstr "Daya"
 
 #: ../js/gdm/powerMenu.js:93 ../js/ui/userMenu.js:35
 msgid "Suspend"
-msgstr "Tangguhkan"
+msgstr "Suspensi"
 
 #: ../js/gdm/powerMenu.js:98
 msgid "Restart"
@@ -222,12 +222,12 @@ msgstr "Aplikasi Lainnya"
 msgid "Delete"
 msgstr "Hapus"
 
-#: ../js/ui/appFavorites.js:135
+#: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s telah ditambahkan ke favorit Anda."
 
-#: ../js/ui/appFavorites.js:172
+#: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s telah dihapus dari favorit Anda."
@@ -544,51 +544,51 @@ msgstr "Otentikasi"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "Maaf, tidak berhasil. Silakan coba lagi."
 
-#: ../js/ui/components/updaterManager.js:188
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
 msgstr "Pembaruan Perangkat Lunak"
 
-#: ../js/ui/components/updaterManager.js:204
+#: ../js/ui/components/updaterManager.js:231
 msgid "Updates Available"
 msgstr "Pembaruan tersedia"
 
-#: ../js/ui/components/updaterManager.js:205
+#: ../js/ui/components/updaterManager.js:232
 msgid "Software updates are available for your system"
 msgstr "Pembaruan perangkat lunak tersedia untuk sistem Anda"
 
-#: ../js/ui/components/updaterManager.js:206
+#: ../js/ui/components/updaterManager.js:233
 msgid "Download Now"
 msgstr "Unduh sekarang"
 
-#: ../js/ui/components/updaterManager.js:219
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Ready"
 msgstr "Pembaruan siap"
 
-#: ../js/ui/components/updaterManager.js:220
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates are ready to be installed on your system"
 msgstr "Pembaruan perangkat lunak siap dipasang pada sistem Anda"
 
-#: ../js/ui/components/updaterManager.js:221
+#: ../js/ui/components/updaterManager.js:248
 msgid "Install Now"
 msgstr "Pasang sekarang"
 
-#: ../js/ui/components/updaterManager.js:230
+#: ../js/ui/components/updaterManager.js:257
 msgid "Updates Installed"
 msgstr "Pembaruan telah dipasang"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:258
 msgid "Software updates were installed on your system"
 msgstr "Pembaruan perangkat lunak sudah dipasang pada sistem Anda"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:259
 msgid "Restart Now"
 msgstr "Mulai ulang sekarang"
 
-#: ../js/ui/components/updaterManager.js:255
+#: ../js/ui/components/updaterManager.js:288
 msgid "Update Failed"
 msgstr "Gagal memperbarui"
 
-#: ../js/ui/components/updaterManager.js:256
+#: ../js/ui/components/updaterManager.js:289
 msgid "We could not update your system"
 msgstr "Kami tidak dapat memperbarui sistem Anda"
 
@@ -694,7 +694,7 @@ msgstr "Mematikan sistem."
 #: ../js/ui/endSessionDialog.js:148
 msgctxt "button"
 msgid "Restart"
-msgstr "Mulai Ulang"
+msgstr "Nyalakan Ulang"
 
 #: ../js/ui/endSessionDialog.js:121 ../js/ui/endSessionDialog.js:128
 msgctxt "button"
@@ -704,7 +704,7 @@ msgstr "Matikan"
 #: ../js/ui/endSessionDialog.js:135
 msgctxt "title"
 msgid "Restart"
-msgstr "Mulai Ulang"
+msgstr "Nyalakan Ulang"
 
 #: ../js/ui/endSessionDialog.js:137
 msgid "Click Restart to quit these applications and restart the system."
@@ -747,7 +747,7 @@ msgstr "Monitor Sistem"
 msgid "Quit Application"
 msgstr "Tutup Aplikasi"
 
-#: ../js/ui/iconGridLayout.js:277
+#: ../js/ui/iconGridLayout.js:260
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s telah dihapus"
@@ -815,7 +815,7 @@ msgstr "Mengunduh"
 
 #: ../js/ui/lookingGlass.js:749
 msgid "View Source"
-msgstr "Lihat Sumber"
+msgstr "Tilik Sumber"
 
 #: ../js/ui/lookingGlass.js:758
 msgid "Web Page"
@@ -845,7 +845,7 @@ msgstr "Tidak Ada Pesan"
 msgid "Message Tray"
 msgstr "Baki Pesan"
 
-#: ../js/ui/messageTray.js:2943
+#: ../js/ui/messageTray.js:2944
 msgid "System Information"
 msgstr "Informasi Sistem"
 
@@ -879,7 +879,7 @@ msgstr "toggle-switch-intl"
 msgid "Enter a Command"
 msgstr "Ketikkan Perintah"
 
-#: ../js/ui/runDialog.js:106
+#: ../js/ui/runDialog.js:106 ../js/ui/windowMenu.js:162
 msgid "Close"
 msgstr "Tutup"
 
@@ -899,7 +899,7 @@ msgstr "Tak bisa mengunci"
 
 #: ../js/ui/screenShield.js:173 ../js/ui/screenShield.js:394
 msgid "Lock was blocked by an application"
-msgstr "Kunci diblokir oleh sebuah aplikasi"
+msgstr "Kunci diblokir oleh suatu aplikasi"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
@@ -907,7 +907,7 @@ msgstr "Mencari…"
 
 #: ../js/ui/search.js:783
 msgid "No results."
-msgstr "Tak ada hasil"
+msgstr "Tak ada yang cocok."
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -955,7 +955,7 @@ msgstr "Pembaca Layar"
 
 #: ../js/ui/status/accessibility.js:58
 msgid "Screen Keyboard"
-msgstr "Papan Ketik di Layar"
+msgstr "Papan Tik di Layar"
 
 #: ../js/ui/status/accessibility.js:62
 msgid "Visual Alerts"
@@ -1054,7 +1054,7 @@ msgstr "memutus..."
 
 #: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1347
 msgid "connecting..."
-msgstr "menyambung..."
+msgstr "menghubungi..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
@@ -1255,6 +1255,70 @@ msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
 msgstr[0] "Perubahan tatanan akan dikembalikan dalam %d detik"
 
+#: ../js/ui/windowMenu.js:34
+msgid "Minimize"
+msgstr "Minimalkan"
+
+#: ../js/ui/windowMenu.js:41
+msgid "Unmaximize"
+msgstr "Tak Maksimalkan"
+
+#: ../js/ui/windowMenu.js:45
+msgid "Maximize"
+msgstr "Maksimalkan"
+
+#: ../js/ui/windowMenu.js:52
+msgid "Move"
+msgstr "Pindah"
+
+#: ../js/ui/windowMenu.js:58
+msgid "Resize"
+msgstr "Ubah Ukuran"
+
+#: ../js/ui/windowMenu.js:65
+msgid "Move Titlebar Onscreen"
+msgstr "Pindahkan Bilah Judul Pada Layar"
+
+#: ../js/ui/windowMenu.js:70
+msgid "Always on Top"
+msgstr "Selalu di Puncak"
+
+#: ../js/ui/windowMenu.js:89
+msgid "Always on Visible Workspace"
+msgstr "Selalu pada Ruang Kerja yang Tampak"
+
+#: ../js/ui/windowMenu.js:105
+msgid "Move to Workspace Left"
+msgstr "Pindah ke Ruang Kerja Kiri"
+
+#: ../js/ui/windowMenu.js:110
+msgid "Move to Workspace Right"
+msgstr "Pindah ke Ruang Kerja Kanan"
+
+#: ../js/ui/windowMenu.js:115
+msgid "Move to Workspace Up"
+msgstr "Pindah ke Ruang Kerja Atas"
+
+#: ../js/ui/windowMenu.js:120
+msgid "Move to Workspace Down"
+msgstr "Pindah ke Ruang Kerja Bawah"
+
+#: ../js/ui/windowMenu.js:136
+msgid "Move to Monitor Up"
+msgstr "Pindah ke Ruang Kerja Atas"
+
+#: ../js/ui/windowMenu.js:142
+msgid "Move to Monitor Down"
+msgstr "Pindah ke Ruang Kerja Bawah"
+
+#: ../js/ui/windowMenu.js:148
+msgid "Move to Monitor Left"
+msgstr "Pindahkan ke Monitor Kiri"
+
+#: ../js/ui/windowMenu.js:154
+msgid "Move to Monitor Right"
+msgstr "Pindahkan ke Monitor Kanan"
+
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
 msgstr "Evolution Kalender"
@@ -1279,19 +1343,19 @@ msgstr[0] "%u Masukan"
 msgid "System Sounds"
 msgstr "Suara Sistem"
 
-#: ../src/main.c:320
+#: ../src/main.c:321
 msgid "Print version"
 msgstr "Versi Cetak"
 
-#: ../src/main.c:326
+#: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
 msgstr "Mode yang dipakai oleh layar log masuk GDM"
 
-#: ../src/main.c:332
+#: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Menggunakan mode tertentu, mis. \"gdm\" untuk layar masuk"
 
-#: ../src/main.c:338
+#: ../src/main.c:339
 msgid "List possible modes"
 msgstr "Menampilkan mode yang mungkin"
 
