@@ -178,7 +178,16 @@ const OverviewEntry = new Lang.Class({
         this._spinnerAnimation = new Panel.AnimatedIcon('process-working.svg', SPINNER_ICON_SIZE);
         this._spinnerAnimation.actor.hide();
 
-        let hintActor = new St.Label({ text: _("Type to search…"),
+        // Set the search entry's text based on the current search engine
+        let entryText;
+        let searchEngine = Util.getSearchEngineName();
+
+        if (searchEngine != null)
+            entryText = _("Search %s and more…").format(searchEngine);
+        else
+            entryText = _("Search the internet and more…");
+
+        let hintActor = new St.Label({ text: entryText,
                                        style_class: 'search-entry-text-hint' });
 
         this.parent({ name: 'searchEntry',
