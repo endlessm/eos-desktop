@@ -171,6 +171,7 @@ const OverviewEntry = new Lang.Class({
         this._capturedEventId = 0;
 
         let primaryIcon = new St.Icon({ icon_name: 'edit-find-symbolic',
+                                        style_class: 'search-icon',
                                         icon_size: 16,
                                         track_hover: true });
 
