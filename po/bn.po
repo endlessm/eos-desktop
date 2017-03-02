@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-21 02:29+0000\n"
+"POT-Creation-Date: 2017-02-07 02:31+0000\n"
 "PO-Revision-Date: 2016-12-06 02:29+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/bn/)\n"
@@ -219,12 +219,12 @@ msgstr "আরও অ্যাপস"
 msgid "Delete"
 msgstr "মুছুন"
 
-#: ../js/ui/appFavorites.js:108
+#: ../js/ui/appFavorites.js:135
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "আপনার পছন্দে %s যোগ করা হয়েছে।"
 
-#: ../js/ui/appFavorites.js:145
+#: ../js/ui/appFavorites.js:172
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "আপনার পছন্দ থেকে  %s বাদ হয়েছে।"
@@ -546,7 +546,7 @@ msgid "Software Update"
 msgstr "সফটওয়্যার হালনাগাদ "
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates available"
+msgid "Updates Available"
 msgstr "হালনাগাদ করা যাবে "
 
 #: ../js/ui/components/updaterManager.js:205
@@ -554,11 +554,11 @@ msgid "Software updates are available for your system"
 msgstr "আপনার সিস্টেমের জন্য সফটওয়্যার হালনাগাদ করা যাবে "
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download now"
+msgid "Download Now"
 msgstr "নামান এখনই "
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates ready"
+msgid "Updates Ready"
 msgstr "নতুনাবস্থা তৈরি "
 
 #: ../js/ui/components/updaterManager.js:220
@@ -566,11 +566,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "সফটওয়্যার নতুনভাবে আপনার সিস্টেমে নেবার জন্য তৈরি  "
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install now"
+msgid "Install Now"
 msgstr "এখনই নিন "
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates installed"
+msgid "Updates Installed"
 msgstr "হালনাগাদগুলো সংস্থাপিত হয়েছে "
 
 #: ../js/ui/components/updaterManager.js:231
@@ -578,11 +578,11 @@ msgid "Software updates were installed on your system"
 msgstr "সফটওয়্যারের নতুন অবস্থাটি আপনার সিস্টেমে নেয়া হয়েছে"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart now"
+msgid "Restart Now"
 msgstr "আবার চালু করুন "
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update failed"
+msgid "Update Failed"
 msgstr "হালনাগাদ ব্যর্থ হয়েছে "
 
 #: ../js/ui/components/updaterManager.js:256
@@ -748,7 +748,7 @@ msgstr "সিস্টেম মনিটর "
 msgid "Quit Application"
 msgstr "অ্যাপ্লিকেশন থেকে বেরোনো "
 
-#: ../js/ui/iconGridLayout.js:260
+#: ../js/ui/iconGridLayout.js:277
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s মুছে দেয়া হয়েছে"
@@ -1283,19 +1283,19 @@ msgstr[1] "%u ইনপুট"
 msgid "System Sounds"
 msgstr "সিস্টেমের শব্দ"
 
-#: ../src/main.c:321
+#: ../src/main.c:320
 msgid "Print version"
 msgstr "মুদ্রণ সংস্করণ"
 
-#: ../src/main.c:327
+#: ../src/main.c:326
 msgid "Mode used by GDM for login screen"
 msgstr "লগিন পর্দার জন্য জিডিএম ব্যবহৃত পদ্ধতি "
 
-#: ../src/main.c:333
+#: ../src/main.c:332
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "কোন বিশেষ পদ্ধতি ব্যবহার করুন, যেমন লগিন পর্দার জন্য \"জিডিএম\" "
 
-#: ../src/main.c:339
+#: ../src/main.c:338
 msgid "List possible modes"
 msgstr "সম্ভাব্য পদ্ধতির তালিকা "
 

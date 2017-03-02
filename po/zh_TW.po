@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-21 02:29+0000\n"
+"POT-Creation-Date: 2017-02-07 02:31+0000\n"
 "PO-Revision-Date: 2017-01-09 06:05+0000\n"
 "Last-Translator: endlessmobile_build <philip@endlessm.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_TW/)\n"
@@ -219,12 +219,12 @@ msgstr "更多應用程式"
 msgid "Delete"
 msgstr "刪除"
 
-#: ../js/ui/appFavorites.js:108
+#: ../js/ui/appFavorites.js:135
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s 已加入您的喜好中。"
 
-#: ../js/ui/appFavorites.js:145
+#: ../js/ui/appFavorites.js:172
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s 已經從您的喜好中移除。"
@@ -546,7 +546,7 @@ msgid "Software Update"
 msgstr "軟體更新"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates available"
+msgid "Updates Available"
 msgstr "有可取得的更新"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -554,11 +554,11 @@ msgid "Software updates are available for your system"
 msgstr "有軟體更新可供系統使用"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download now"
+msgid "Download Now"
 msgstr "下載"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates ready"
+msgid "Updates Ready"
 msgstr "更新準備完畢"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -566,11 +566,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "軟體更新已經準備好要安裝在你的系統上"
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install now"
+msgid "Install Now"
 msgstr "現在安裝"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates installed"
+msgid "Updates Installed"
 msgstr "更新安裝完畢"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -578,11 +578,11 @@ msgid "Software updates were installed on your system"
 msgstr "軟體更新已安裝在你的系統中"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart now"
+msgid "Restart Now"
 msgstr "立即重新開始"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update failed"
+msgid "Update Failed"
 msgstr "更新失敗"
 
 #: ../js/ui/components/updaterManager.js:256
@@ -744,7 +744,7 @@ msgstr "系統監控"
 msgid "Quit Application"
 msgstr "結束應用程式"
 
-#: ../js/ui/iconGridLayout.js:260
+#: ../js/ui/iconGridLayout.js:277
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "已刪除 %s"
@@ -1276,19 +1276,19 @@ msgstr[0] "%u 輸入"
 msgid "System Sounds"
 msgstr "系統音效"
 
-#: ../src/main.c:321
+#: ../src/main.c:320
 msgid "Print version"
 msgstr "顯示版本"
 
-#: ../src/main.c:327
+#: ../src/main.c:326
 msgid "Mode used by GDM for login screen"
 msgstr "GDM 在登入畫面使用的模式"
 
-#: ../src/main.c:333
+#: ../src/main.c:332
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "使用指定的模式，例如「gdm」為登入畫面"
 
-#: ../src/main.c:339
+#: ../src/main.c:338
 msgid "List possible modes"
 msgstr "列出可能的模式"
 

@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-21 02:29+0000\n"
+"POT-Creation-Date: 2017-02-07 02:31+0000\n"
 "PO-Revision-Date: 2017-01-25 04:02+0000\n"
 "Last-Translator: Burcu Özacar <13urcu@gmail.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/tr/)\n"
@@ -227,12 +227,12 @@ msgstr "Daha Fazla Uygulama"
 msgid "Delete"
 msgstr "Sil"
 
-#: ../js/ui/appFavorites.js:108
+#: ../js/ui/appFavorites.js:135
 #, javascript-format
 msgid "%s has been added to your favorites."
 msgstr "%s sık kullanılanlarınıza eklendi."
 
-#: ../js/ui/appFavorites.js:145
+#: ../js/ui/appFavorites.js:172
 #, javascript-format
 msgid "%s has been removed from your favorites."
 msgstr "%s sık kullanılanlarınızdan çıkarıldı."
@@ -554,7 +554,7 @@ msgid "Software Update"
 msgstr "Yazılım Güncelleme"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates available"
+msgid "Updates Available"
 msgstr "Güncellemeler mevcut"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -562,11 +562,11 @@ msgid "Software updates are available for your system"
 msgstr "Sisteminiz için yazılım güncellemeleri mevcut"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download now"
+msgid "Download Now"
 msgstr "İndir"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates ready"
+msgid "Updates Ready"
 msgstr "Güncellemeler hazır"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -574,11 +574,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "Yazılım güncellemeleri kurulmak üzere hazır"
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install now"
+msgid "Install Now"
 msgstr "Şimdi kur"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates installed"
+msgid "Updates Installed"
 msgstr "Güncellemeler kuruldu"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -586,11 +586,11 @@ msgid "Software updates were installed on your system"
 msgstr "Sisteminize yazılım güncellemeleri kuruldu"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart now"
+msgid "Restart Now"
 msgstr "Yeniden Başlat"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update failed"
+msgid "Update Failed"
 msgstr "Güncelleme başarısız"
 
 #: ../js/ui/components/updaterManager.js:256
@@ -756,7 +756,7 @@ msgstr "Sistem Monitörü"
 msgid "Quit Application"
 msgstr "Uygulamadan Çık"
 
-#: ../js/ui/iconGridLayout.js:260
+#: ../js/ui/iconGridLayout.js:277
 #, javascript-format
 msgid "%s has been deleted"
 msgstr "%s silindi"
@@ -1291,19 +1291,19 @@ msgstr[1] "%u Giriş"
 msgid "System Sounds"
 msgstr "Sistem Sesleri"
 
-#: ../src/main.c:321
+#: ../src/main.c:320
 msgid "Print version"
 msgstr "Sürümü yazdır"
 
-#: ../src/main.c:327
+#: ../src/main.c:326
 msgid "Mode used by GDM for login screen"
 msgstr "Oturum açma ekranında GDM tarafından kullanılan mod"
 
-#: ../src/main.c:333
+#: ../src/main.c:332
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
 msgstr "Oturum açma için \"gdm\" gibi özel bir mod kullan"
 
-#: ../src/main.c:339
+#: ../src/main.c:338
 msgid "List possible modes"
 msgstr "Mevcut modları listele"
 

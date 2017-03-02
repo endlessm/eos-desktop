@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-21 02:29+0000\n"
+"POT-Creation-Date: 2017-02-14 02:30+0000\n"
 "PO-Revision-Date: 2017-02-17 20:59+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Thai (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/th/)\n"
@@ -548,7 +548,7 @@ msgid "Software Update"
 msgstr "อัปเดตซอฟท์แวร์"
 
 #: ../js/ui/components/updaterManager.js:204
-msgid "Updates available"
+msgid "Updates Available"
 msgstr "สามารถทำการอัปเดต"
 
 #: ../js/ui/components/updaterManager.js:205
@@ -556,11 +556,11 @@ msgid "Software updates are available for your system"
 msgstr "ระบบของคุณสามารถอัปเดตซอฟท์แวร์ได้"
 
 #: ../js/ui/components/updaterManager.js:206
-msgid "Download now"
+msgid "Download Now"
 msgstr "ดาวน์โหลดตอนนี้"
 
 #: ../js/ui/components/updaterManager.js:219
-msgid "Updates ready"
+msgid "Updates Ready"
 msgstr "พร้อมอัปเดต"
 
 #: ../js/ui/components/updaterManager.js:220
@@ -568,11 +568,11 @@ msgid "Software updates are ready to be installed on your system"
 msgstr "พร้อมที่จะติดตั้งอัปเดตซอฟท์แวร์ลงบนระบบของคุณ"
 
 #: ../js/ui/components/updaterManager.js:221
-msgid "Install now"
+msgid "Install Now"
 msgstr "ติดตั้งตอนนี้"
 
 #: ../js/ui/components/updaterManager.js:230
-msgid "Updates installed"
+msgid "Updates Installed"
 msgstr "ติดตั้งอัปเดตแล้ว"
 
 #: ../js/ui/components/updaterManager.js:231
@@ -580,11 +580,11 @@ msgid "Software updates were installed on your system"
 msgstr "ติดตั้งอัปเดตซอฟท์แวร์บนระบบของคุณแล้ว"
 
 #: ../js/ui/components/updaterManager.js:232
-msgid "Restart now"
+msgid "Restart Now"
 msgstr "เริ่มระบบใหม่ตอนนี้"
 
 #: ../js/ui/components/updaterManager.js:255
-msgid "Update failed"
+msgid "Update Failed"
 msgstr "อัปเดตล้มเหลว"
 
 #: ../js/ui/components/updaterManager.js:256
