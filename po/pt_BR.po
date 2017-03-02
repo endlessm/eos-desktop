@@ -73,7 +73,7 @@ msgstr "EOS Shell"
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
 msgid "Window management and application launching"
-msgstr "Gerenciamento de janelas e lançador de aplicativos"
+msgstr "Gerenciamento de janelas e lançador de programas"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
@@ -163,7 +163,7 @@ msgstr "Nome de usuário: "
 
 #: ../js/gdm/loginDialog.js:1451
 msgid "Login Window"
-msgstr "Janela de sessão"
+msgstr "Janela de início de sessão"
 
 #. Translators: accessible name of the power menu in the login screen
 #: ../js/gdm/powerMenu.js:36
@@ -617,7 +617,7 @@ msgstr "Janelas"
 
 #: ../js/ui/dash.js:262 ../js/ui/dash.js:300
 msgid "Show Applications"
-msgstr "Mostrar aplicativos"
+msgstr "Mostrar programas"
 
 #: ../js/ui/dash.js:298
 msgid "Remove from Favorites"
@@ -922,15 +922,15 @@ msgstr "Não foi possível bloquear"
 
 #: ../js/ui/screenShield.js:173 ../js/ui/screenShield.js:394
 msgid "Lock was blocked by an application"
-msgstr "O bloqueio foi impedido por um aplicativo"
+msgstr "O bloqueio foi impedido por um programa"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
-msgstr "Pesquisando…"
+msgstr "Procurando…"
 
 #: ../js/ui/search.js:783
 msgid "No results."
-msgstr "Nenhum resultado."
+msgstr "Sem resultados."
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -1040,7 +1040,7 @@ msgstr "Desative o Canto de Tela"
 
 #: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
-msgstr "Exibir disposição de teclado"
+msgstr "Exibir layout de teclado"
 
 #: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
@@ -1101,7 +1101,7 @@ msgstr "indisponível"
 
 #: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1352
 msgid "connection failed"
-msgstr "conexão falhou"
+msgstr "falha na conexão"
 
 #: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1201
 msgid "More…"
@@ -1156,7 +1156,7 @@ msgstr "Bateria"
 
 #: ../js/ui/status/power.js:51
 msgid "Power Settings"
-msgstr "Configurações de energia"
+msgstr "Configurações de economia de energia"
 
 #: ../js/ui/status/power.js:58
 msgid "Fully Charged"
@@ -1227,7 +1227,7 @@ msgstr "Nos dê a sua opinião"
 
 #: ../js/ui/userMenu.js:490
 msgid "Switch User"
-msgstr "Alternar usuário"
+msgstr "Trocar usuário"
 
 #: ../js/ui/userMenu.js:561
 msgid "Other users are logged in."
@@ -1251,7 +1251,7 @@ msgstr "%s (console)"
 
 #: ../js/ui/viewSelector.js:512
 msgid "Applications"
-msgstr "Aplicativos"
+msgstr "Programas"
 
 #: ../js/ui/windowAttentionHandler.js:19
 #, javascript-format
@@ -1260,7 +1260,7 @@ msgstr "\"%s\" está pronto"
 
 #: ../js/ui/windowManager.js:71
 msgid "Do you want to keep these display settings?"
-msgstr "Você deseja manter essas configurações de exibição?"
+msgstr "Você deseja manter essas configurações de tela?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
@@ -1276,8 +1276,8 @@ msgstr "Manter alterações"
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] "Alterações nas configurações serão revertidas em %d segundo"
-msgstr[1] "Alterações nas configurações serão revertidas em %d segundos"
+msgstr[0] "Mudanças nas configurações serão revertidas em %d segundo"
+msgstr[1] "Mudanças nas configurações serão revertidas em %d segundos"
 
 #: ../js/ui/windowMenu.js:34
 msgid "Minimize"
@@ -1379,7 +1379,7 @@ msgstr "Modo usado pelo GDM para a tela de início de sessão"
 
 #: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
-msgstr "Utilizar um modo específico, ex.: \"gdm\" para a tela de login"
+msgstr "Utilizar um modo específico, ex.: \"gdm\" para iniciar sessão"
 
 #: ../src/main.c:339
 msgid "List possible modes"

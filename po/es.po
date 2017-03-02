@@ -61,7 +61,7 @@ msgstr "EOS Shell"
 #: ../data/eos-session.desktop.in.in.h:2 ../data/eos-shell.desktop.in.in.h:2
 #: ../data/gdm-eos-shell.desktop.in.in.h:2
 msgid "Window management and application launching"
-msgstr "Gestión de ventanas e inicio de aplicaciones"
+msgstr "Gestión de ventanas e inicio de programas"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
@@ -97,7 +97,7 @@ msgstr "¿Olvidaste tu contraseña?"
 #. manually entering the username.
 #: ../js/gdm/loginDialog.js:680
 msgid "Not listed?"
-msgstr "¿No está en la lista?"
+msgstr "¿No estás en la lista?"
 
 #. Translators: During a password reset, prompt for the "secret code" provided
 #. by customer support.
@@ -232,12 +232,12 @@ msgstr "Eliminar"
 #: ../js/ui/appFavorites.js:108
 #, javascript-format
 msgid "%s has been added to your favorites."
-msgstr "Se ha añadido %s a sus favoritos."
+msgstr "Se ha añadido %s a tus favoritos."
 
 #: ../js/ui/appFavorites.js:145
 #, javascript-format
 msgid "%s has been removed from your favorites."
-msgstr "Se ha quitado %s de sus favoritos."
+msgstr "Se ha quitado %s de tus favoritos."
 
 #: ../js/ui/appIconBar.js:215
 msgid "Other workspaces"
@@ -455,7 +455,7 @@ msgstr "Contraseña:"
 
 #: ../js/ui/components/keyring.js:101
 msgid "Type again:"
-msgstr "Escriba de nuevo:"
+msgstr "Escribe de nuevo:"
 
 #: ../js/ui/components/networkAgent.js:132
 msgid "Connect"
@@ -549,7 +549,7 @@ msgstr "Autenticar"
 #. * for instance.
 #: ../js/ui/components/polkitAgent.js:256 ../js/ui/shellMountOperation.js:383
 msgid "Sorry, that didn't work. Please try again."
-msgstr "Inténtelo de nuevo."
+msgstr "Eso no funciono. Por favor inténtalo de nuevo."
 
 #: ../js/ui/components/updaterManager.js:215
 msgid "Software Update"
@@ -605,7 +605,7 @@ msgstr "Ventanas"
 
 #: ../js/ui/dash.js:262 ../js/ui/dash.js:300
 msgid "Show Applications"
-msgstr "Mostrar aplicaciones"
+msgstr "Mostrar programas"
 
 #: ../js/ui/dash.js:298
 msgid "Remove from Favorites"
@@ -668,8 +668,8 @@ msgstr[1] "se cerrará automáticamente la sesión de %s en %d segundos."
 #, javascript-format
 msgid "You will be logged out automatically in %d second."
 msgid_plural "You will be logged out automatically in %d seconds."
-msgstr[0] "Su sesión se cerrará automáticamente en %d segundo."
-msgstr[1] "Su sesión se cerrará automáticamente en %d segundos."
+msgstr[0] "Tu sesión se cerrará automáticamente en %d segundo."
+msgstr[1] "Tu sesión se cerrará automáticamente en %d segundos."
 
 #: ../js/ui/endSessionDialog.js:93
 msgid "Logging out of the system."
@@ -678,7 +678,7 @@ msgstr "Cerrando la sesión."
 #: ../js/ui/endSessionDialog.js:96 ../js/ui/endSessionDialog.js:124
 msgctxt "button"
 msgid "Log Out"
-msgstr "Cerrar la sesión"
+msgstr "Cerrar sesión"
 
 #: ../js/ui/endSessionDialog.js:101
 msgctxt "title"
@@ -910,7 +910,7 @@ msgstr "No se pudo bloquear"
 
 #: ../js/ui/screenShield.js:173 ../js/ui/screenShield.js:394
 msgid "Lock was blocked by an application"
-msgstr "Una aplicación impidió el bloqueo"
+msgstr "Un programa impidió el bloqueo"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
@@ -918,7 +918,7 @@ msgstr "Buscando…"
 
 #: ../js/ui/search.js:783
 msgid "No results."
-msgstr "No se encontraron resultados."
+msgstr "No hay resultados."
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -938,7 +938,7 @@ msgstr "Ocultar texto"
 
 #: ../js/ui/shellEntry.js:180
 msgid "Type to search…"
-msgstr "Escribir para buscar…"
+msgstr "Escribe aquí para buscar…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -1183,7 +1183,7 @@ msgstr "Micrófono"
 
 #: ../js/ui/status/volume.js:310
 msgid "Sound Settings"
-msgstr "Configuración de sonido"
+msgstr "Configuración del sonido"
 
 #: ../js/ui/unlockDialog.js:121
 msgid "Log in as another user"
@@ -1239,7 +1239,7 @@ msgstr "%s (consola)"
 
 #: ../js/ui/viewSelector.js:512
 msgid "Applications"
-msgstr "Aplicaciones"
+msgstr "Programas"
 
 #: ../js/ui/windowAttentionHandler.js:19
 #, javascript-format
@@ -1248,13 +1248,13 @@ msgstr "«%s» está preparado"
 
 #: ../js/ui/windowManager.js:71
 msgid "Do you want to keep these display settings?"
-msgstr "¿Quiere mantener esta configuración de la pantalla?"
+msgstr "¿Deseas mantener los cambios?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #: ../js/ui/windowManager.js:90
 msgid "Revert Settings"
-msgstr "Revertir configuración"
+msgstr "Revertir configuraciones"
 
 #: ../js/ui/windowManager.js:94
 msgid "Keep Changes"
@@ -1264,8 +1264,8 @@ msgstr "Mantener cambios"
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] "La configuración se revertirá en %d segundo"
-msgstr[1] "La configuración se revertirá en %d segundos"
+msgstr[0] "Los cambios de las configuraciones se revertirán en %d segundo"
+msgstr[1] "Los cambios de las configuraciones se revertirán en %d segundos"
 
 #: ../js/ui/windowMenu.js:34
 msgid "Minimize"
