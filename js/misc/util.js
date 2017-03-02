@@ -7,6 +7,7 @@ const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const Config = imports.misc.config;
+const Json = imports.gi.Json;
 const Tweener = imports.ui.tweener;
 
 const FALLBACK_BROWSER_ID = 'chromium-browser.desktop';
@@ -267,4 +268,48 @@ function blockClickEventsOnActor(actor) {
     actor.connect('button-release-event', function (actor, event) {
         return true;
     });
+}
+
+function getSearchEngineName() {
+    let path = GLib.build_filenamev([GLib.get_user_config_dir(), 'chromium', 'Default', 'Preferences']);
+    let parser = new Json.Parser();
+
+    try {
+        parser.load_from_file(path);
+    } catch(e if e.matches(GLib.FileError, GLib.FileError.NOENT)) {
+        // User has not run Chromium yet.
+        return null;
+    } catch (e) {
+        logError(e, 'error while parsing Chromium preferences');
+        return null;
+    }
+
+    let root = parser.get_root().get_object();
+
+    let searchProviderDataNode = root.get_member('default_search_provider_data');
+    if (!searchProviderDataNode || searchProviderDataNode.get_node_type() != Json.NodeType.OBJECT) {
+        return null;
+    }
+
+    let searchProviderData = searchProviderDataNode.get_object();
+    if (!searchProviderData) {
+        return null;
+    }
+
+    let templateUrlDataNode = searchProviderData.get_member('template_url_data');
+    if (!templateUrlDataNode || templateUrlDataNode.get_node_type() != Json.NodeType.OBJECT) {
+        return null;
+    }
+
+    let templateUrlData = templateUrlDataNode.get_object();
+    if (!templateUrlData) {
+        return null;
+    }
+
+    let shortNameNode = templateUrlData.get_member('short_name');
+    if (!shortNameNode || shortNameNode.get_node_type() != Json.NodeType.VALUE) {
+        return null;
+    }
+
+    return shortNameNode.get_string();
 }
