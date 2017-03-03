@@ -588,9 +588,8 @@ const CodingSession = new Lang.Class({
                           this.builder,
                           Gtk.DirectionType.LEFT);
             this.button.switchAnimation(Gtk.DirectionType.LEFT);
+            this._state = STATE_BUILDER;
         }
-
-        this._state = STATE_BUILDER;
     },
 
     _switchToApp: function() {
