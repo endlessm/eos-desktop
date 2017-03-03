@@ -332,7 +332,6 @@ const CodingSession = new Lang.Class({
     _init: function(params) {
         this.parent(params);
 
-        this._previouslyFocusedWindow = null;
         this._state = STATE_APP;
 
         this.button.connect('button-press-event',
@@ -658,22 +657,13 @@ const CodingSession = new Lang.Class({
         if (!focusedWindow)
             return;
 
-        // we get the signal for the same window switch twice
-        let previousFocused = this._previousFocusedWindow;
-        if (focusedWindow === previousFocused)
-            return;
-
-        // keep track of the previous focused window so
-        // that we can show the animation accordingly
-        this._previousFocusedWindow = focusedWindow;
-
         let appWindow = this.app.meta_window;
         let builderWindow = null;
         if (this.builder)
             builderWindow = this.builder.meta_window;
 
         if (appWindow === focusedWindow) {
-            if (builderWindow && builderWindow === previousFocused) {
+            if (builderWindow && this._state === STATE_BUILDER) {
                 // make sure we do not rotate when a rotation is running
                 if (this._rotatingInActor || this._rotatingOutActor)
                     return;
@@ -698,7 +688,7 @@ const CodingSession = new Lang.Class({
             return;
 
         if (builderWindow === focusedWindow) {
-            if (appWindow === previousFocused) {
+            if (this._state === STATE_APP) {
                 // make sure we do not rotate when a rotation is running
                 if (this._rotatingInActor || this._rotatingOutActor)
                     return;
