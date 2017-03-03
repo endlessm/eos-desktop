@@ -510,11 +510,10 @@ const CodingSession = new Lang.Class({
 
     _switchWindows: function(actor, event) {
         // Switch to builder if the app is active. Otherwise switch to the app.
-        if (this._state === STATE_APP) {
+        if (this._state === STATE_APP)
             this._switchToBuilder();
-        } else {
+        else
             this._switchToApp();
-        }
     },
 
     _startBuilderForFlatpak: function(loadFlatpakValue) {
