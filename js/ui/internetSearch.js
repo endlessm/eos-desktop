@@ -2,7 +2,6 @@
 
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
-const Json = imports.gi.Json;
 const Lang = imports.lang;
 
 const Main = imports.ui.main;
@@ -49,54 +48,10 @@ const InternetSearchProvider = new Lang.Class({
         this._networkMonitor = Gio.NetworkMonitor.get_default();
     },
 
-    _parseEngineName: function() {
-        let path = GLib.build_filenamev([GLib.get_user_config_dir(), 'chromium', 'Default', 'Preferences']);
-        let parser = new Json.Parser();
-
-        try {
-            parser.load_from_file(path);
-        } catch(e if e.matches(GLib.FileError, GLib.FileError.NOENT)) {
-            // User has not run Chromium yet.
-            return null;
-        } catch (e) {
-            logError(e, 'error while parsing Chromium preferences');
-            return null;
-        }
-
-        let root = parser.get_root().get_object();
-
-        let searchProviderDataNode = root.get_member('default_search_provider_data');
-        if (!searchProviderDataNode || searchProviderDataNode.get_node_type() != Json.NodeType.OBJECT) {
-            return null;
-        }
-
-        let searchProviderData = searchProviderDataNode.get_object();
-        if (!searchProviderData) {
-            return null;
-        }
-
-        let templateUrlDataNode = searchProviderData.get_member('template_url_data');
-        if (!templateUrlDataNode || templateUrlDataNode.get_node_type() != Json.NodeType.OBJECT) {
-            return null;
-        }
-
-        let templateUrlData = templateUrlDataNode.get_object();
-        if (!templateUrlData) {
-            return null;
-        }
-
-        let shortNameNode = templateUrlData.get_member('short_name');
-        if (!shortNameNode || shortNameNode.get_node_type() != Json.NodeType.VALUE) {
-            return null;
-        }
-
-        return shortNameNode.get_string();
-    },
-
     _getEngineName: function() {
         if (!this._engineNameParsed) {
             this._engineNameParsed = true;
-            this._engineName = this._parseEngineName();
+            this._engineName = Util.getSearchEngineName();
         }
 
         return this._engineName;

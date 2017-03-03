@@ -7,9 +7,11 @@ const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const Config = imports.misc.config;
+const Json = imports.gi.Json;
 const Tweener = imports.ui.tweener;
 
 const FALLBACK_BROWSER_ID = 'chromium-browser.desktop';
+const GOOGLE_CHROME_ID = 'google-chrome.desktop';
 
 // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
 const _balancedParens = '\\((?:[^\\s()<>]+|(?:\\(?:[^\\s()<>]+\\)))*\\)';
@@ -239,11 +241,16 @@ function insertSorted(array, val, cmp) {
     return pos;
 }
 
-function getBrowserApp() {
+function getBrowserId() {
     let id = FALLBACK_BROWSER_ID;
     let app = Gio.app_info_get_default_for_type('x-scheme-handler/http', true);
     if (app != null)
         id = app.get_id();
+    return id;
+}
+
+function getBrowserApp() {
+    let id = getBrowserId();
     let appSystem = Shell.AppSystem.get_default();
     let browserApp = appSystem.lookup_app(id);
     return browserApp;
@@ -267,4 +274,78 @@ function blockClickEventsOnActor(actor) {
     actor.connect('button-release-event', function (actor, event) {
         return true;
     });
+}
+
+function getJsonSearchEngine(folder) {
+    let path = GLib.build_filenamev([GLib.get_user_config_dir(), folder, 'Default', 'Preferences']);
+    let parser = new Json.Parser();
+
+    /*
+     * Translators: this is the name of the search engine that shows in the
+     * Shell's desktop search entry.
+     */
+    let default_string = _("Google");
+
+    try {
+        parser.load_from_file(path);
+    } catch(e if e.matches(GLib.FileError, GLib.FileError.NOENT)) {
+        // User has not run Chromium yet.
+        return default_string;
+    } catch (e) {
+        logError(e, 'error while parsing Chromium preferences');
+        return null;
+    }
+
+    let root = parser.get_root().get_object();
+
+    let searchProviderDataNode = root.get_member('default_search_provider_data');
+    if (!searchProviderDataNode || searchProviderDataNode.get_node_type() != Json.NodeType.OBJECT) {
+        return default_string;
+    }
+
+    let searchProviderData = searchProviderDataNode.get_object();
+    if (!searchProviderData) {
+        return default_string;
+    }
+
+    let templateUrlDataNode = searchProviderData.get_member('template_url_data');
+    if (!templateUrlDataNode || templateUrlDataNode.get_node_type() != Json.NodeType.OBJECT) {
+        return default_string;
+    }
+
+    let templateUrlData = templateUrlDataNode.get_object();
+    if (!templateUrlData) {
+        return default_string;
+    }
+
+    let shortNameNode = templateUrlData.get_member('short_name');
+    if (!shortNameNode || shortNameNode.get_node_type() != Json.NodeType.VALUE) {
+        return default_string;
+    }
+
+    return shortNameNode.get_string();
+}
+
+function getChromeSearchEngine() {
+    return getJsonSearchEngine('google-chrome');
+}
+
+function getChromiumSearchEngine() {
+    return getJsonSearchEngine('chromium');
+}
+
+// getSearchEngineName:
+//
+// Retrieves the current search engine from
+// the default browser.
+function getSearchEngineName() {
+    let browser = getBrowserId();
+
+    if (browser === FALLBACK_BROWSER_ID) {
+        return getChromiumSearchEngine();
+    } else if (browser === GOOGLE_CHROME_ID){
+        return getChromeSearchEngine();
+    } else {
+        return null;
+    }
 }
