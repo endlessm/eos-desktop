@@ -618,11 +618,12 @@ const CodingSession = new Lang.Class({
         return [src, dst];
     },
 
-    _srcAndDstPairFromWindowActor: function(actor) {
-        let src = actor;
-        let dst = (actor === this.app ? this.builder : this.app);
-
-        return [src, dst];
+    _isActorFromSession: function(actor) {
+        if (actor === this.app && this.builder)
+            return this.builder;
+        else if (actor === this.builder && this.app)
+            return this.app;
+        return null;
     },
 
     _synchronizeWindows: function(window) {
@@ -639,17 +640,19 @@ const CodingSession = new Lang.Class({
         if (!this.builder)
             return;
 
-        let [src, dst] = this._srcAndDstPairFromWindowActor(actor);
-        dst.meta_window.minimize();
+        let toMini = this._isActorFromSession(actor);
+        if (toMini)
+            toMini.meta_window.minimize();
     },
 
-    _applyWindowUnminimizationState: function(shellwm, window) {
+    _applyWindowUnminimizationState: function(shellwm, actor) {
         // No synchronization if builder has not been set here
         if (!this.builder)
             return;
 
-        let [src, dst] = this._srcAndDstPairFromWindowActor(window);
-        dst.meta_window.unminimize();
+        let toUnMini = this._isActorFromSession(actor);
+        if (toUnMini)
+            toUnMini.meta_window.unminimize();
     },
 
     _windowsRestacked: function() {
