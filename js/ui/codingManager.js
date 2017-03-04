@@ -726,10 +726,6 @@ const CodingSession = new Lang.Class({
                 this._state = STATE_APP;
                 return;
             }
-            // hide the underlying window to prevent glitches when resizing
-            // the one on top, we do this for the animated switch case already
-            if (this.builder)
-                this.builder.hide();
             return;
         }
 
@@ -750,10 +746,6 @@ const CodingSession = new Lang.Class({
                               Gtk.DirectionType.LEFT);
                 this.button.switchAnimation(Gtk.DirectionType.LEFT);
                 this._state = STATE_BUILDER;
-            } else {
-                // hide the underlying window to prevent glitches when resizing
-                // the one on top, we do this for the animated switch case already
-                this.app.hide();
             }
         }
     },
