@@ -595,6 +595,10 @@ const CodingSession = new Lang.Class({
     // need to either launch the builder window if we don't have a reference
     // to it (and show a speedwagon) or we just need to switch to an existing
     // builder window.
+    //
+    // This function and the one below do not check this._state to determine
+    // if a flip animation should be played. That is the responsibility of
+    // the caller.
     _switchToBuilder: function() {
         function constructLoadFlatpakValue(app, appManifest) {
             // add an app_id_override to the manifest to load
@@ -716,37 +720,12 @@ const CodingSession = new Lang.Class({
         let appWindow = this.app.meta_window;
         let builderWindow = this.builder.meta_window;
 
-        if (appWindow === focusedWindow) {
-            if (builderWindow && this._state === STATE_BUILDER) {
-
-                this._prepareAnimate(this.builder,
-                                     this.app,
-                                     Gtk.DirectionType.RIGHT);
-                this._animate(this.builder,
-                              this.app,
-                              Gtk.DirectionType.RIGHT);
-                this.button.switchAnimation(Gtk.DirectionType.RIGHT);
-                this._state = STATE_APP;
-                return;
-            }
-            return;
+        if (appWindow === focusedWindow && this._state === STATE_BUILDER) {
+            this._switchToApp();
         }
 
-        if (builderWindow === focusedWindow) {
-            if (this._state === STATE_APP) {
-                // make sure we do not rotate when a rotation is running
-                if (this._rotatingInActor || this._rotatingOutActor)
-                    return;
-
-                this._prepareAnimate(this.app,
-                                     this.builder,
-                                     Gtk.DirectionType.LEFT);
-                this._animate(this.app,
-                              this.builder,
-                              Gtk.DirectionType.LEFT);
-                this.button.switchAnimation(Gtk.DirectionType.LEFT);
-                this._state = STATE_BUILDER;
-            }
+        if (builderWindow === focusedWindow && this._state === STATE_APP) {
+            this._switchToBuilder();
         }
     },
 
