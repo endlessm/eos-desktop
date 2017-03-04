@@ -27,22 +27,11 @@ const SPLASH_SCREEN_TIMEOUT = 700; // ms
 const DEFAULT_MAXIMIZED_WINDOW_SIZE = 0.75;
 const LAUNCH_MAXIMIZED_DESKTOP_KEY = 'X-Endless-LaunchMaximized';
 
-const LaunchReason = {
-    UNINTERESTING: 0,
-    CODING_BUILDER: 1
-};
-
 
 // Determine if a splash screen should be shown for the provided
-// GDesktopAppInfo, LaunchReason and other global settings
-function _shouldShowSplash(app, launchReason) {
+// GDesktopAppInfo and other global settings
+function _shouldShowSplash(app) {
     let info = app.get_app_info();
-
-    // Short-circuit - if we're activating GNOME-Builder for Coding,
-    // then we always want to show a splash screen
-    if (launchReason === LaunchReason.CODING_BUILDER) {
-        return true;
-    }
 
     if (!(info && info.has_key(LAUNCH_MAXIMIZED_DESKTOP_KEY) &&
          info.get_boolean(LAUNCH_MAXIMIZED_DESKTOP_KEY))) {
@@ -133,8 +122,8 @@ const AppActivationContext = new Lang.Class({
         }
     },
 
-    showSplash: function(launchReason=LaunchReason.UNINTERESTING) {
-        if (!_shouldShowSplash(this._app, launchReason)) {
+    showSplash: function() {
+        if (!_shouldShowSplash(this._app)) {
             return;
         }
 
