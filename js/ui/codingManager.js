@@ -201,7 +201,7 @@ const WindowTrackingButton = new Lang.Class({
         this.parent(params);
 
         // The button will be auto-added to the manager. Note that in order to
-        // remove this button, you will need to call eject() from outside
+        // remove this button, you will need to call destroy() from outside
         // this class or use removeChrome from within it.
         this._button = _createInputEnabledViewSourceButtonInRectCorner(this.window.get_frame_rect());
         this._button.connect('button-press-event', Lang.bind(this, function() {
@@ -237,7 +237,10 @@ const WindowTrackingButton = new Lang.Class({
         );
     },
 
-    eject: function() {
+    // Users MUST call destroy before unreferencing this button - this will
+    // cause it to disconnect all signals and remove its button from any
+    // layout managers.
+    destroy: function() {
         if (this._positionChangedId) {
             this.window.disconnect(this._positionChangedId);
             this._positionChangedId = 0;
@@ -503,13 +506,13 @@ const CodingSession = new Lang.Class({
         this.app.show();
     },
 
-    // 'Eject' out of this session and remove all pairings.
+    // Eject out of this session and remove all pairings.
     // Remove all connected signals and show the builder window if we have
     // one.
     //
     // The assumption here is that the session will be removed immediately
-    // after ejection.
-    eject: function() {
+    // after destruction.
+    destroy: function() {
         if (this._positionChangedIdApp !== 0) {
             this.app.meta_window.disconnect(this._positionChangedIdApp);
             this.positionChangedIdApp = 0;
@@ -531,8 +534,8 @@ const CodingSession = new Lang.Class({
             this._windowUnminimizedId = 0;
         }
 
-        // Eject the button
-        this.button.eject();
+        // Destroy the button too
+        this.button.destroy();
 
         // If we have a builder window, disconnect any signals,
         // show it and activate it now
@@ -976,8 +979,8 @@ const CodingManager = new Lang.Class({
         if (!session)
             return false;
 
-        // Eject the session here and remove it from the list
-        session.eject();
+        // Destroy the session here and remove it from the list
+        session.destroy();
 
         let idx = this._sessions.indexOf(session);
         if (idx != -1) {
