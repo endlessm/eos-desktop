@@ -111,15 +111,11 @@ function _synchronizeViewSourceButtonToRectCorner(button, rect) {
 function _createViewSourceButtonInRectCorner(rect) {
     let button = new St.Bin({
         style_class: 'view-source',
-        reactive: true,
-        can_focus: true,
         x_fill: true,
-        y_fill: false,
-        track_hover: true
+        y_fill: true
     });
     button.set_child(_createIcon());
     _synchronizeViewSourceButtonToRectCorner(button, rect);
-    Main.layoutManager.addChrome(button);
     return button;
 }
 
@@ -191,13 +187,23 @@ const WindowTrackingButton = new Lang.Class({
     _init: function(params) {
         this.parent(params);
 
+        let rect = this.window.get_frame_rect();
+
         // The button will be auto-added to the manager. Note that in order to
         // remove this button, you will need to call eject() from outside
         // this class or use removeChrome from within it.
-        this._button = _createViewSourceButtonInRectCorner(this.window.get_frame_rect());
+        this._button = _createViewSourceButtonInRectCorner(rect);
+
+        // Do required setup to make this button interactive, by allowing
+        // it to be focused, connecting to the button-press-event signal
+        // and adding chrome to the toplevel layoutManager.
+        this._button.reactive = true;
+        this._button.can_focus = true;
+        this._button.track_hover = true;
         this._button.connect('button-press-event', Lang.bind(this, function() {
             this.emit('clicked');
         }));
+        Main.layoutManager.addChrome(this._button);
 
         // Connect to signals on the window to determine when to move
         // hide, and show the button. Note that WindowTrackingButton is
@@ -302,6 +308,8 @@ const WindowTrackingButton = new Lang.Class({
         // animation along with the incoming window. This is removed as soon
         // as the animation is complete.
         let animationButton = _createViewSourceButtonInRectCorner(rect);
+        Main.layoutManager.uiGroup.add_actor(animationButton);
+
         _flipButtonAroundRectCenter({
             button: animationButton,
             rect: rect,
@@ -311,7 +319,6 @@ const WindowTrackingButton = new Lang.Class({
             finishOpacity: 255,
             opacityDelay: WINDOW_ANIMATION_TIME,
             onRotationComplete: function() {
-                Main.layoutManager.removeChrome(animationButton);
                 animationButton.destroy();
             }
         });
