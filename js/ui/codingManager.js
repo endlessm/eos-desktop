@@ -258,14 +258,7 @@ const WindowTrackingButton = new Lang.Class({
             })
         });
 
-        let button = new St.Bin({ style_class: 'view-source',
-                                  x_fill: true,
-                                  y_fill: false });
-        button.set_child(_createIcon());
-
-        Main.layoutManager.addChrome(button);
-        button.set_position(rect.x + rect.width - BUTTON_OFFSET_X,
-                            rect.y + rect.height - BUTTON_OFFSET_Y);
+        let button = _createViewSourceButtonInRectCorner(rect);
         button.rotation_center_y = new Clutter.Vertex({ x: button.width - (rect.width * 0.5),
                                                         y: button.height * 0.5,
                                                         z: 0 });
