@@ -123,6 +123,47 @@ function _createViewSourceButtonInRectCorner(rect) {
     return button;
 }
 
+function _flipButtonAroundRectCenter(button,
+                                     rect,
+                                     startAngle,
+                                     finishAngle,
+                                     startOpacity,
+                                     finishOpacity,
+                                     opacityDelay,
+                                     onRotationComplete,
+                                     onButtonFadeComplete) {
+    // this API is deprecated but the best option here to
+    // animate around a point outside of the actor
+    button.rotation_center_y = new Clutter.Vertex({
+        x: button.width - (rect.width * 0.5),
+        y: button.height * 0.5,
+        z: 0
+    });
+    button.rotation_angle_y = startAngle;
+    button.opacity = startOpacity;
+    Tweener.addTween(button, {
+        rotation_angle_y: finishAngle,
+        time: WINDOW_ANIMATION_TIME * 4,
+        transition: 'easeOutQuad',
+        onComplete: function() {
+            if (onRotationComplete) {
+                onRotationComplete();
+            }
+        }
+    });
+    Tweener.addTween(button, {
+        opacity: finishOpacity,
+        time: WINDOW_ANIMATION_TIME * 2,
+        transition: 'linear',
+        delay: opacityDelay,
+        onComplete: function() {
+            if (onButtonFadeComplete) {
+                onButtonFadeComplete();
+            }
+        }
+    });
+}
+
 const WindowTrackingButton = new Lang.Class({
     Name: 'WindowTrackingButton',
     Extends: GObject.Object,
@@ -229,56 +270,45 @@ const WindowTrackingButton = new Lang.Class({
     switchAnimation: function(direction) {
         let rect = this.window.get_frame_rect();
 
-        // this API is deprecated but the best option here to
-        // animate around a point outside of the actor
-        this._button.rotation_center_y = new Clutter.Vertex({
-            x: this._button.width - (rect.width * 0.5),
-            y: this._button.height * 0.5,
-            z: 0
-        });
-        this._button.rotation_angle_y = 0;
-        Tweener.addTween(this._button, {
-            rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
-            time: WINDOW_ANIMATION_TIME * 4,
-            transition: 'easeOutQuad'
-        });
-        Tweener.addTween(this._button, {
-            opacity: 0,
-            time: WINDOW_ANIMATION_TIME * 2,
-            transition: 'linear',
-            onComplete: Lang.bind(this, function() {
-                Tweener.removeTweens(this._button);
-                this._button.rotation_angle_y = 0;
-                Tweener.addTween(this._button, {
-                    opacity: 255,
-                    time: WINDOW_ANIMATION_TIME * 0.5,
-                    transition: 'linear',
-                    delay: WINDOW_ANIMATION_TIME * 1.5
-                });
-            })
-        });
+        // Start an animation for flipping the main button around the
+        // center of the window.
+        _flipButtonAroundRectCenter(this._button,
+                                    rect,
+                                    0,
+                                    direction == Gtk.DirectionType.RIGHT ? 180 : -180,
+                                    255,
+                                    0,
+                                    0,
+                                    null,
+                                    Lang.bind(this, function() {
+                                        Tweener.removeTweens(this._button);
+                                        this._button.rotation_angle_y = 0;
+                                        // Fade in again once we're done, since
+                                        // we'll need to display this button
+                                        Tweener.addTween(this._button, {
+                                            opacity: 255,
+                                            time: WINDOW_ANIMATION_TIME * 0.5,
+                                            transition: 'linear',
+                                            delay: WINDOW_ANIMATION_TIME * 1.5
+                                        });
+                                    }));
 
-        let button = _createViewSourceButtonInRectCorner(rect);
-        button.rotation_center_y = new Clutter.Vertex({ x: button.width - (rect.width * 0.5),
-                                                        y: button.height * 0.5,
-                                                        z: 0 });
-        button.rotation_angle_y = direction == Gtk.DirectionType.RIGHT ? -180 : 180;
-        button.opacity = 0;
-        Tweener.addTween(button, {
-            rotation_angle_y: 0,
-            time: WINDOW_ANIMATION_TIME * 4,
-            transition: 'easeOutQuad',
-            onComplete: Lang.bind(this, function() {
-                Main.layoutManager.removeChrome(button);
-                button.destroy();
-            })
-        });
-        Tweener.addTween(button, {
-            opacity: 255,
-            time: WINDOW_ANIMATION_TIME * 2,
-            transition: 'linear',
-            delay: WINDOW_ANIMATION_TIME
-        });
+        // Create a temporary button which we'll use to show a "flip-in"
+        // animation along with the incoming window. This is removed as soon
+        // as the animation is complete.
+        let animationButton = _createViewSourceButtonInRectCorner(rect);
+        _flipButtonAroundRectCenter(animationButton,
+                                    rect,
+                                    direction == Gtk.DirectionType.RIGHT ? -180 : 180,
+                                    0,
+                                    0,
+                                    255,
+                                    WINDOW_ANIMATION_TIME,
+                                    function() {
+                                        Main.layoutManager.removeChrome(animationButton);
+                                        animationButton.destroy();
+                                    },
+                                    null);
     },
 
     _updatePosition: function() {
