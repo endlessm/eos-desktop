@@ -919,7 +919,6 @@ const CodingSession = new Lang.Class({
             this._watchdogId = 0;
         }
 
-        this._watchdogId = 0;
         return false;
     },
 
