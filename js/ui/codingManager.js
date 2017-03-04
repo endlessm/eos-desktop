@@ -993,9 +993,9 @@ const CodingManager = new Lang.Class({
         let window = actor.meta_window;
         let isSpeedwagonForBuilder = _isBuilderSpeedwagon(window);
 
-        if (!(_isBuilder(window.get_flatpak_id()) ||
-              isSpeedwagonForBuilder))
-            return;
+        if (!_isBuilder(window.get_flatpak_id()) &&
+            !isSpeedwagonForBuilder)
+            return false;
 
         let session = this._getSession(actor);
         if (!session)
