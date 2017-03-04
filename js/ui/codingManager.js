@@ -691,7 +691,9 @@ const CodingSession = new Lang.Class({
             return;
 
         let toMini = this._isActorFromSession(actor);
-        if (toMini)
+
+        // Only want to minimize if we weren't already minimized.
+        if (toMini && !toMini.meta_window.minimized)
             toMini.meta_window.minimize();
     },
 
@@ -701,7 +703,12 @@ const CodingSession = new Lang.Class({
             return;
 
         let toUnMini = this._isActorFromSession(actor);
-        if (toUnMini)
+
+        // We only want to unminimize a window here if it was previously
+        // unminimized. Unminimizing it again and switching to it without
+        // flipping will cause the secondary unminimized window to be
+        // activated and flipped to.
+        if (toUnMini && toUnMini.meta_window.minimized) {
             toUnMini.meta_window.unminimize();
     },
 
