@@ -709,14 +709,16 @@ const CodingSession = new Lang.Class({
         if (!this.builder)
             return;
 
+        // make sure we do not rotate when a rotation is running
+        if (this._rotatingInActor || this._rotatingOutActor)
+            return;
+
         let appWindow = this.app.meta_window;
         let builderWindow = this.builder.meta_window;
 
         if (appWindow === focusedWindow) {
             if (builderWindow && this._state === STATE_BUILDER) {
-                // make sure we do not rotate when a rotation is running
-                if (this._rotatingInActor || this._rotatingOutActor)
-                    return;
+
                 this._prepareAnimate(this.builder,
                                      this.app,
                                      Gtk.DirectionType.RIGHT);
