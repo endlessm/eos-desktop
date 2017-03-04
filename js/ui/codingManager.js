@@ -103,6 +103,26 @@ function _synchronizeMetaWindowActorGeometries(src, dst) {
                                       srcGeometry.height);
 }
 
+function _synchronizeViewSourceButtonToRectCorner(button, rect) {
+    button.set_position(rect.x + rect.width - BUTTON_OFFSET_X,
+                        rect.y + rect.height - BUTTON_OFFSET_Y);
+}
+
+function _createViewSourceButtonInRectCorner(rect) {
+    let button = new St.Bin({
+        style_class: 'view-source',
+        reactive: true,
+        can_focus: true,
+        x_fill: true,
+        y_fill: false,
+        track_hover: true
+    });
+    button.set_child(_createIcon());
+    _synchronizeViewSourceButtonToRectCorner(button, rect);
+    Main.layoutManager.addChrome(button);
+    return button;
+}
+
 const WindowTrackingButton = new Lang.Class({
     Name: 'WindowTrackingButton',
     Extends: GObject.Object,
@@ -126,16 +146,10 @@ const WindowTrackingButton = new Lang.Class({
     _init: function(params) {
         this.parent(params);
 
-        // Add button asset and set the child of this bin
-        this._button = new St.Bin({
-            style_class: 'view-source',
-            reactive: true,
-            can_focus: true,
-            x_fill: true,
-            y_fill: false,
-            track_hover: true
-        });
-        this._button.set_child(_createIcon());
+        // The button will be auto-added to the manager. Note that in order to
+        // remove this button, you will need to call eject() from outside
+        // this class or use removeChrome from within it.
+        this._button = _createViewSourceButtonInRectCorner(this.window.get_frame_rect());
         this._button.connect('button-press-event', Lang.bind(this, function() {
             this.emit('clicked');
         }));
@@ -167,13 +181,6 @@ const WindowTrackingButton = new Lang.Class({
         this._windowUnminimizedId = global.window_manager.connect(
             'unminimize', Lang.bind(this, this._show)
         );
-
-        // Do the first position update here
-        this._updatePosition();
-
-        // Add ourselves to the layout manager. Note that in order to
-        // remove this button, you will need to call eject
-        Main.layoutManager.addChrome(this._button);
     },
 
     eject: function() {
@@ -283,8 +290,7 @@ const WindowTrackingButton = new Lang.Class({
 
     _updatePosition: function() {
         let rect = this.window.get_frame_rect();
-        this._button.set_position(rect.x + rect.width - BUTTON_OFFSET_X,
-                                  rect.y + rect.height - BUTTON_OFFSET_Y);
+        _synchronizeViewSourceButtonToRectCorner(this._button, rect);
     },
 
     _showIfWindowVisible: function() {
