@@ -706,10 +706,11 @@ const CodingSession = new Lang.Class({
         if (!focusedWindow)
             return;
 
+        if (!this.builder)
+            return;
+
         let appWindow = this.app.meta_window;
-        let builderWindow = null;
-        if (this.builder)
-            builderWindow = this.builder.meta_window;
+        let builderWindow = this.builder.meta_window;
 
         if (appWindow === focusedWindow) {
             if (builderWindow && this._state === STATE_BUILDER) {
@@ -728,9 +729,6 @@ const CodingSession = new Lang.Class({
             }
             return;
         }
-
-        if (!this.builder)
-            return;
 
         if (builderWindow === focusedWindow) {
             if (this._state === STATE_APP) {
