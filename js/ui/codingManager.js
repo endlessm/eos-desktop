@@ -120,6 +120,18 @@ function _createViewSourceButtonInRectCorner(rect) {
     return button;
 }
 
+function _createInputEnabledViewSourceButtonInRectCorner(rect) {
+    // Do required setup to make this button interactive,
+    // by allowing it to be focused and adding chrome
+    // to the toplevel layoutManager.
+    let button = _createViewSourceButtonInRectCorner(rect);
+    button.reactive = true;
+    button.can_focus = true;
+    button.track_hover = true;
+    Main.layoutManager.addChrome(button);
+    return button;
+}
+
 function _flipButtonAroundRectCenter(props) {
     let {
         button,
@@ -191,18 +203,10 @@ const WindowTrackingButton = new Lang.Class({
         // The button will be auto-added to the manager. Note that in order to
         // remove this button, you will need to call eject() from outside
         // this class or use removeChrome from within it.
-        this._button = _createViewSourceButtonInRectCorner(this.window.get_frame_rect());
-
-        // Do required setup to make this button interactive, by allowing
-        // it to be focused, connecting to the button-press-event signal
-        // and adding chrome to the toplevel layoutManager.
-        this._button.reactive = true;
-        this._button.can_focus = true;
-        this._button.track_hover = true;
+        this._button = _createInputEnabledViewSourceButtonInRectCorner(this.window.get_frame_rect());
         this._button.connect('button-press-event', Lang.bind(this, function() {
             this.emit('clicked');
         }));
-        Main.layoutManager.addChrome(this._button);
 
         // Connect to signals on the window to determine when to move
         // hide, and show the button. Note that WindowTrackingButton is
