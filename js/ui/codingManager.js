@@ -656,6 +656,40 @@ const CodingSession = new Lang.Class({
         this._state = STATE_APP;
     },
 
+    // Given some recently-focused actor, switch to it without
+    // flipping the two windows. We might want this behaviour instead
+    // of flipping the windows in cases where we unminimized a window
+    // or left the overview. This will cause the state to instantly change
+    // and prevent things from being flipped later in _windowRestacked
+    _switchToWindowWithoutFlipping: function(actor) {
+        // Neither the app window nor the builder, return
+        if (actor !== this.app && actor !== this.builder)
+            return;
+
+        // We need to do a few housekeeping things here:
+        // 1. Change the _state variable to indicate whether we are now
+        //    on the app, or the builder window.
+        // 2. Depending on that state, hide and show windows. We might have
+        //    hidden windows during the flip animation, so we need to show
+        //    any relevant windows and hide any irrelevant ones
+        // 3. Ensure that the relevant window is activated (usually just
+        //    by activating it again). For instance, in the unminimize case,
+        //    unminimizing the sibling window will cause it to activate
+        //    which then breaks the user's expectations (it should unminimize
+        //    but not activate). Re-activating ensures that we present
+        //    the right story to the user.
+        this._state = (actor === this.app ? STATE_APP : STATE_BUILDER);
+        if (this._state === STATE_APP) {
+            this.builder.hide();
+            this.app.show();
+        } else {
+            this.app.hide();
+            this.builder.show();
+        }
+
+        actor.meta_window.activate(global.get_current_time());
+    },
+
     // Assuming that we are only listening to some signal on app and builder,
     // given some window, determine which MetaWindowActor instance is the
     // source and which is the destination, such that the source is where
@@ -710,6 +744,11 @@ const CodingSession = new Lang.Class({
         // activated and flipped to.
         if (toUnMini && toUnMini.meta_window.minimized) {
             toUnMini.meta_window.unminimize();
+
+            // Window was unminimized. Ensure that this actor is focused
+            // and switch to it instantly
+            this._switchToWindowWithoutFlipping(actor);
+        }
     },
 
     _windowsRestacked: function() {
@@ -720,18 +759,41 @@ const CodingSession = new Lang.Class({
         if (!this.builder)
             return;
 
-        // make sure we do not rotate when a rotation is running
+        let appWindow = this.app.meta_window;
+        let builderWindow = this.builder.meta_window;
+        let nextState = null;
+
+        // Determine if we need to change the state of this session by
+        // examining the focused window
+        if (appWindow === focusedWindow && this._state === STATE_BUILDER) {
+            nextState = STATE_APP;
+        } else if (builderWindow === focusedWindow && this._state === STATE_APP) {
+            nextState = STATE_BUILDER;
+        }
+
+        // No changes to be made, so return directly
+        if (nextState === null)
+            return;
+
+        // If the overview is still showing or animating out, we probably
+        // selected this window from the overview. In that case, flipping
+        // make no sense, immediately change the state and show the
+        // recently activated window.
+        if (Main.overview.visible || Main.overview.animationInProgress) {
+            let actor = (nextState === STATE_APP ? this.app : this.builder);
+            this._switchToWindowWithoutFlipping(actor);
+            return;
+        }
+
+        // If we reached this point, we'll be rotating the two windows.
+        // First, make sure we do not rotate when a rotation is running,
+        // then use the state to figure out which way to flip
         if (this._rotatingInActor || this._rotatingOutActor)
             return;
 
-        let appWindow = this.app.meta_window;
-        let builderWindow = this.builder.meta_window;
-
-        if (appWindow === focusedWindow && this._state === STATE_BUILDER) {
+        if (nextState === STATE_APP) {
             this._switchToApp();
-        }
-
-        if (builderWindow === focusedWindow && this._state === STATE_APP) {
+        } else {
             this._switchToBuilder();
         }
     },
