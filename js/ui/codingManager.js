@@ -12,6 +12,7 @@ const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
+
 const AppActivation = imports.ui.appActivation;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
@@ -187,12 +188,10 @@ const WindowTrackingButton = new Lang.Class({
     _init: function(params) {
         this.parent(params);
 
-        let rect = this.window.get_frame_rect();
-
         // The button will be auto-added to the manager. Note that in order to
         // remove this button, you will need to call eject() from outside
         // this class or use removeChrome from within it.
-        this._button = _createViewSourceButtonInRectCorner(rect);
+        this._button = _createViewSourceButtonInRectCorner(this.window.get_frame_rect());
 
         // Do required setup to make this button interactive, by allowing
         // it to be focused, connecting to the button-press-event signal
