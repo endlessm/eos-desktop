@@ -14,7 +14,6 @@ const St = imports.gi.St;
 
 const AppActivation = imports.ui.appActivation;
 const Main = imports.ui.main;
-const Params = imports.misc.params;
 const Tweener = imports.ui.tweener;
 
 const WINDOW_ANIMATION_TIME = 0.25;
@@ -106,7 +105,7 @@ function _synchronizeMetaWindowActorGeometries(src, dst) {
 
 const WindowTrackingButton = new Lang.Class({
     Name: 'WindowTrackingButton',
-    Extends: St.Bin,
+    Extends: GObject.Object,
     Properties: {
         window: GObject.ParamSpec.object('window',
                                          '',
@@ -120,20 +119,26 @@ const WindowTrackingButton = new Lang.Class({
                                                  GObject.ParamFlags.READWRITE,
                                                  Meta.Window)
     },
+    Signals: {
+        'clicked': {}
+    },
 
     _init: function(params) {
-        this.parent(Params.parse(params, {
+        this.parent(params);
+
+        // Add button asset and set the child of this bin
+        this._button = new St.Bin({
             style_class: 'view-source',
             reactive: true,
             can_focus: true,
             x_fill: true,
             y_fill: false,
             track_hover: true
-        }, true));
-
-        // Add button asset and set the child of this bin
-        let button = new St.Bin();
-        this.set_child(_createIcon());
+        });
+        this._button.set_child(_createIcon());
+        this._button.connect('button-press-event', Lang.bind(this, function() {
+            this.emit('clicked');
+        }));
 
         // Connect to signals on the window to determine when to move
         // hide, and show the button. Note that WindowTrackingButton is
@@ -168,7 +173,7 @@ const WindowTrackingButton = new Lang.Class({
 
         // Add ourselves to the layout manager. Note that in order to
         // remove this button, you will need to call eject
-        Main.layoutManager.addChrome(this);
+        Main.layoutManager.addChrome(this._button);
     },
 
     eject: function() {
@@ -207,8 +212,8 @@ const WindowTrackingButton = new Lang.Class({
             this._windowUnminimizedId = 0;
         }
 
-        Main.layoutManager.removeChrome(this);
-        this.destroy();
+        Main.layoutManager.removeChrome(this._button);
+        this._button.destroy();
     },
 
     // Just fade out and fade the button back in again. This makes it
@@ -219,23 +224,25 @@ const WindowTrackingButton = new Lang.Class({
 
         // this API is deprecated but the best option here to
         // animate around a point outside of the actor
-        this.rotation_center_y = new Clutter.Vertex({ x: this.width - (rect.width * 0.5),
-                                                      y: this.height * 0.5,
-                                                      z: 0 });
-        this.rotation_angle_y = 0;
-        Tweener.addTween(this, {
+        this._button.rotation_center_y = new Clutter.Vertex({
+            x: this._button.width - (rect.width * 0.5),
+            y: this._button.height * 0.5,
+            z: 0
+        });
+        this._button.rotation_angle_y = 0;
+        Tweener.addTween(this._button, {
             rotation_angle_y: direction == Gtk.DirectionType.RIGHT ? 180 : -180,
             time: WINDOW_ANIMATION_TIME * 4,
             transition: 'easeOutQuad'
         });
-        Tweener.addTween(this, {
+        Tweener.addTween(this._button, {
             opacity: 0,
             time: WINDOW_ANIMATION_TIME * 2,
             transition: 'linear',
             onComplete: Lang.bind(this, function() {
-                Tweener.removeTweens(this);
-                this.rotation_angle_y = 0;
-                Tweener.addTween(this, {
+                Tweener.removeTweens(this._button);
+                this._button.rotation_angle_y = 0;
+                Tweener.addTween(this._button, {
                     opacity: 255,
                     time: WINDOW_ANIMATION_TIME * 0.5,
                     transition: 'linear',
@@ -276,8 +283,8 @@ const WindowTrackingButton = new Lang.Class({
 
     _updatePosition: function() {
         let rect = this.window.get_frame_rect();
-        this.set_position(rect.x + rect.width - BUTTON_OFFSET_X,
-                          rect.y + rect.height - BUTTON_OFFSET_Y);
+        this._button.set_position(rect.x + rect.width - BUTTON_OFFSET_X,
+                                  rect.y + rect.height - BUTTON_OFFSET_Y);
     },
 
     _showIfWindowVisible: function() {
@@ -297,11 +304,11 @@ const WindowTrackingButton = new Lang.Class({
     },
 
     _show: function() {
-        this.show();
+        this._button.show();
     },
 
     _hide: function() {
-        this.hide();
+        this._button.hide();
     }
 });
 
@@ -334,7 +341,7 @@ const CodingSession = new Lang.Class({
 
         this._state = STATE_APP;
 
-        this.button.connect('button-press-event',
+        this.button.connect('clicked',
                             Lang.bind(this, this._switchWindows));
         this._positionChangedIdApp = this.app.meta_window.connect(
             'position-changed', Lang.bind(this, this._synchronizeWindows)
