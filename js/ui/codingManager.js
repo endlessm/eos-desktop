@@ -242,7 +242,7 @@ const WindowTrackingButton = new Lang.Class({
 
         if (this._sizeChangedId) {
             this.window.disconnect(this._sizeChangedId);
-            this._positionChangedId = 0;
+            this._sizeChangedId = 0;
         }
 
         if (this._windowsRestackedId) {
