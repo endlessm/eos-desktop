@@ -361,6 +361,83 @@ const WindowTrackingButton = new Lang.Class({
     }
 });
 
+const CodingInstallationMonitor = new Lang.Class({
+    Name: 'CodingInstallationMonitor',
+    Extends: GObject.Object,
+    Properties: {
+        'flatpak-name': GObject.ParamSpec.string('flatpak-name',
+                                                 '',
+                                                 '',
+                                                 GObject.ParamFlags.READWRITE |
+                                                 GObject.ParamFlags.CONSTRUCT_ONLY,
+                                                 ''),
+        'installed': GObject.ParamSpec.boolean('installed',
+                                               '',
+                                               '',
+                                               GObject.ParamFlags.READABLE,
+                                               false)
+    },
+    Signals: {
+        'app-installed': {}
+    },
+
+    _init: function(params) {
+        this.parent(params);
+
+        let userInstallation = Flatpak.Installation.new_user(null);
+
+        let apps = userInstallation.list_installed_refs_by_kind(Flatpak.RefKind.APP, null);
+        for (let i = 0; i < apps.length; i++) {
+            if (apps[i].name === params.app_name) {
+                this._commit = apps[i].commit;
+                break;
+            }
+        }
+
+        this._flatpakMonitor = userInstallation.create_monitor(null);
+        this._flatpakMonitorId = this._flatpakMonitor.connect('changed',
+            Lang.bind(this, function(monitor, file, other, type) {
+                // we are monitoring a file .changed which
+                // gets deleted and created on every change independent
+                // of install or uninstall, therefore only track the done hint
+                if (type !== Gio.FileMonitorEvent.CHANGES_DONE_HINT)
+                    return;
+
+                let app;
+                try {
+                    app = userInstallation.get_current_installed_app(this.app_name, null);
+                } catch(e) {
+                    // application not installed or just got deleted
+                    return;
+                }
+
+                if (app.commit === this._commit)
+                    return;
+
+                this._commit = app.commit;
+                this.emit('app-installed');
+
+                if (this._codeViewInstalled)
+                    this._controller.event_occurred('codeview-installed');
+
+                this.disconnect();
+            })
+        );
+    },
+
+    disconnect: function() {
+        if (this._flatpakMonitorId) {
+            this._flatpakMonitor.disconnect(this._flatpakMonitorId);
+            this._flatpakMonitorId = 0;
+            this._flatpakMonitor = null;
+        }
+    },
+
+    get installed() {
+        return this._commit !== 0;
+    }
+});
+
 
 const CodingSession = new Lang.Class({
     Name: 'CodingSession',
@@ -382,7 +459,13 @@ const CodingSession = new Lang.Class({
                                            '',
                                            GObject.ParamFlags.READWRITE |
                                            GObject.ParamFlags.CONSTRUCT_ONLY,
-                                           WindowTrackingButton.$gtype)
+                                           WindowTrackingButton.$gtype),
+        'install-monitor': GObject.ParamSpec.object('install-monitor',
+                                                    '',
+                                                    '',
+                                                    GObject.ParamFlags.READWRITE |
+                                                    GObject.ParamFlags.CONSTRUCT_ONLY,
+                                                    CodingInstallationMonitor.$gtype)
     },
 
     _init: function(params) {
@@ -537,6 +620,9 @@ const CodingSession = new Lang.Class({
 
         // Destroy the button too
         this.button.destroy();
+
+        // And the installation monitor
+        this.install_monitor.disconnect();
 
         // If we have a builder window, disconnect any signals,
         // show it and activate it now
@@ -937,9 +1023,6 @@ const CodingManager = new Lang.Class({
 
         this._codingApps = ['com.endlessm.Helloworld', 'org.gnome.Weather.Application'];
 
-        this._flatpakMonitor = null;
-        this._flatpakMonitorId = 0;
-        this._commit = 0;
         this._codeViewStarted = false;
         this._codeViewFlipped = false;
         this._codeViewInstalled = false;
@@ -956,7 +1039,10 @@ const CodingManager = new Lang.Class({
 
         this._sessions.push(new CodingSession({
             app: actor,
-            button: new WindowTrackingButton({ window: actor.meta_window })
+            button: new WindowTrackingButton({ window: actor.meta_window }),
+            install_monitor: new CodingInstallationMonitor({
+                flatpak_name: window.get_flatpak_id()
+            });
         }));
         return true;
     },
@@ -1056,47 +1142,6 @@ const CodingManager = new Lang.Class({
         return controller;
     },
 
-    _connectFlatpakMonitor: function() {
-        let userInstallation = Flatpak.Installation.new_user(null);
-
-        let apps = userInstallation.list_installed_refs_by_kind(Flatpak.RefKind.APP, null);
-        for (let i = 0; i < apps.length; i++) {
-            if (apps[i].name === 'org.gnome.Weather.Application') {
-                this._commit = apps[i].commit;
-                break;
-            }
-        }
-
-        this._flatpakMonitor = userInstallation.create_monitor(null);
-        this._flatpakMonitorId = this._flatpakMonitor.connect('changed',
-            Lang.bind(this, function(monitor, file, other, type) {
-                // we are monitoring a file .changed which
-                // gets deleted and created on every change independent
-                // of install or uninstall, therefore only track the done hint
-                if (type !== Gio.FileMonitorEvent.CHANGES_DONE_HINT)
-                    return;
-
-                let app;
-                try {
-                    app = userInstallation.get_current_installed_app('org.gnome.Weather.Application', null);
-                } catch(e) {
-                    // application not installed or just got deleted
-                    return;
-                }
-
-                if (app.commit === this._commit)
-                    return;
-
-                this._commit = app.commit;
-
-                if (this._codeViewInstalled)
-                    this._controller.event_occurred('codeview-installed');
-
-                this._disconnectFlatpakMonitor();
-            })
-        );
-    },
-
     _onBuilderWindowAdded: function() {
         this._connectFlatpakMonitor();
 
@@ -1110,14 +1155,6 @@ const CodingManager = new Lang.Class({
         if (this._codeViewFlipped) {
             this._controller.event_occurred('codeview-flipped');
             this._codeViewFlipped = false;
-        }
-    },
-
-    _disconnectFlatpakMonitor: function() {
-        if (this._flatpakMonitorId) {
-            this._flatpakMonitor.disconnect(this._flatpakMonitorId);
-            this._flatpakMonitorId = 0;
-            this._flatpakMonitor = null;
         }
     },
 
