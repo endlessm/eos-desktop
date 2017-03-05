@@ -467,6 +467,14 @@ const CodingSession = new Lang.Class({
                                                     GObject.ParamFlags.CONSTRUCT_ONLY,
                                                     CodingInstallationMonitor.$gtype)
     },
+    Signals: {
+        'opened': {},
+        'ready': {},
+        'closed': {},
+        'flipped': {
+            param_types: [ GObject.TYPE_INT ]
+        }
+    },
 
     _init: function(params) {
         this.parent(params);
@@ -534,6 +542,7 @@ const CodingSession = new Lang.Class({
             // We also only want to hide the speedwagon window at this
             // point, since the other window has arrived.
             this.splash.rampOut();
+            this.emit('ready');
         }
 
         // Now, if we're not already on the builder window, we want to start
@@ -560,6 +569,7 @@ const CodingSession = new Lang.Class({
                                  this.builder,
                                  Gtk.DirectionType.LEFT);
             this._state = STATE_BUILDER;
+            this.emit('flipped', this._state);
         }
 
         return true;
@@ -585,9 +595,11 @@ const CodingSession = new Lang.Class({
         this.button.builder_window = null;
         this.builder = null;
         this._state = STATE_APP;
+        this.emit('flipped', this._state);
 
         this.app.meta_window.activate(global.get_current_time());
         this.app.show();
+        this.emit('closed');
     },
 
     // Eject out of this session and remove all pairings.
@@ -642,6 +654,7 @@ const CodingSession = new Lang.Class({
 
             this.builder.meta_window.activate(global.get_current_time());
             this.builder.show();
+            this.emit('closed');
 
             // Note that we do not set this._state to STATE_APP here. Any
             // further usage of this session is undefined and it should
@@ -734,6 +747,7 @@ const CodingSession = new Lang.Class({
                           Gtk.DirectionType.LEFT);
             this.button.switchAnimation(Gtk.DirectionType.LEFT);
             this._state = STATE_BUILDER;
+            this.emit('flipped', this._state);
         }
     },
 
@@ -747,6 +761,7 @@ const CodingSession = new Lang.Class({
                       Gtk.DirectionType.RIGHT);
         this.button.switchAnimation(Gtk.DirectionType.RIGHT);
         this._state = STATE_APP;
+        this.emit('flipped', this._state);
     },
 
     // Given some recently-focused actor, switch to it without
@@ -781,6 +796,7 @@ const CodingSession = new Lang.Class({
         }
 
         actor.meta_window.activate(global.get_current_time());
+        this.emit('flipped', this._state);
     },
 
     // Assuming that we are only listening to some signal on app and builder,
