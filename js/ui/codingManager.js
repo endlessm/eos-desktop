@@ -208,18 +208,6 @@ const WindowTrackingButton = new Lang.Class({
             this.emit('clicked');
         }));
 
-        // Connect to signals on the window to determine when to move
-        // hide, and show the button. Note that WindowTrackingButton is
-        // constructed with the primary app window and we listen for signals
-        // on that. This is because of the assumption that both the app
-        // window and builder window are completely synchronized.
-        this._positionChangedId = this.window.connect(
-           'position-changed',  Lang.bind(this, this._updatePosition)
-        );
-        this._sizeChangedId = this.window.connect(
-            'size-changed', Lang.bind(this, this._updatePosition)
-        );
-
         this._windowsRestackedId = Main.overview.connect(
             'windows-restacked', Lang.bind(this, this._showIfWindowVisible)
         );
@@ -234,6 +222,27 @@ const WindowTrackingButton = new Lang.Class({
         );
         this._windowUnminimizedId = global.window_manager.connect(
             'unminimize', Lang.bind(this, this._show)
+        );
+
+        this.track(this.window);
+    },
+
+    track: function(window) {
+        // Untrack the current window and track the newly specified one.
+        if (this._positionChangedId) {
+            this._trackingWindow.disconnect(this.positionChangedId);
+        }
+
+        if (this._sizeChangedId) {
+            this._trackingWindow.disconnect(this.sizeChangedId);
+        }
+
+        this._trackingWindow = window;
+        this._positionChangedId = this._trackingWindow.connect(
+           'position-changed',  Lang.bind(this, this._updatePosition)
+        );
+        this._sizeChangedId = this._trackingWindow.connect(
+            'size-changed', Lang.bind(this, this._updatePosition)
         );
     },
 
@@ -284,7 +293,7 @@ const WindowTrackingButton = new Lang.Class({
     // look as though we have two buttons, but in reality we just have
     // one.
     switchAnimation: function(direction) {
-        let rect = this.window.get_frame_rect();
+        let rect = this._trackingWindow.get_frame_rect();
 
         // Start an animation for flipping the main button around the
         // center of the window.
@@ -331,7 +340,7 @@ const WindowTrackingButton = new Lang.Class({
     },
 
     _updatePosition: function() {
-        let rect = this.window.get_frame_rect();
+        let rect = this._trackingWindow.get_frame_rect();
         _synchronizeViewSourceButtonToRectCorner(this._button, rect);
     },
 
@@ -423,6 +432,11 @@ const CodingSession = new Lang.Class({
         this.builder = actor;
         this.button.builder_window = actor.meta_window;
 
+        // Also update the button, if required
+        if (this._state === STATE_BUILDER) {
+            this.button.track(actor.meta_window);
+        }
+
         // The assumption here is that if we connect a new window, we
         // are connecting a builder window (potentially 'on top') of the
         // speedwagon window, so there is no need to disconnect
@@ -472,6 +486,7 @@ const CodingSession = new Lang.Class({
 
                 return false;
             }));
+            this.button.track(this.builder.meta_window);
             this._prepareAnimate(this.app,
                                  this.builder,
                                  Gtk.DirectionType.LEFT);
@@ -499,6 +514,7 @@ const CodingSession = new Lang.Class({
         // need to disconnect any signals here since the button doesn't
         // care about signals on builder.
         this.button.builder_window = null;
+        this.button.track(this.app.meta_window);
         this.builder = null;
         this._state = STATE_APP;
 
@@ -645,6 +661,7 @@ const CodingSession = new Lang.Class({
             this._animate(this.app,
                           this.builder,
                           Gtk.DirectionType.LEFT);
+            this.button.track(this.builder.meta_window);
             this.button.switchAnimation(Gtk.DirectionType.LEFT);
             this._state = STATE_BUILDER;
         }
@@ -658,6 +675,7 @@ const CodingSession = new Lang.Class({
         this._animate(this.builder,
                       this.app,
                       Gtk.DirectionType.RIGHT);
+        this.button.track(this.app.meta_window);
         this.button.switchAnimation(Gtk.DirectionType.RIGHT);
         this._state = STATE_APP;
     },
