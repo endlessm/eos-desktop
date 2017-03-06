@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-01 21:42-0800\n"
-"PO-Revision-Date: 2017-03-02 06:02+0000\n"
+"POT-Creation-Date: 2017-03-03 13:48-0800\n"
+"PO-Revision-Date: 2017-03-03 21:50+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/ja/)\n"
 "MIME-Version: 1.0\n"
@@ -182,20 +182,26 @@ msgstr "(あるいは指でスワイプする)"
 msgid "(e.g., user or %s)"
 msgstr "(たとえば、user あるいは %s)"
 
-#: ../js/misc/util.js:122
+#: ../js/misc/util.js:124
 msgid "Command not found"
 msgstr "コマンドが見つかりません"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:155
+#: ../js/misc/util.js:157
 msgid "Could not parse command:"
 msgstr "次のコマンドは解析できません:"
 
-#: ../js/misc/util.js:163
+#: ../js/misc/util.js:165
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "'%s'の実行に失敗しました:"
+
+#. * Translators: this is the name of the search engine that shows in the
+#. * Shell's desktop search entry.
+#: ../js/misc/util.js:287
+msgid "Google"
+msgstr ""
 
 #: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
@@ -236,23 +242,23 @@ msgstr "%s をお気に入りに追加しました。"
 msgid "%s has been removed from your favorites."
 msgstr "%s をお気に入りから削除しました。"
 
-#: ../js/ui/appIconBar.js:215
+#: ../js/ui/appIconBar.js:214
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:224
+#: ../js/ui/appIconBar.js:223
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:299
+#: ../js/ui/appIconBar.js:298
 msgid "Pin to Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:303
+#: ../js/ui/appIconBar.js:302
 msgid "Unpin from Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:319
+#: ../js/ui/appIconBar.js:318
 #, javascript-format
 msgid "Quit %s"
 msgstr ""
@@ -756,19 +762,19 @@ msgstr ""
 msgid "%s has been deleted"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:118
+#: ../js/ui/internetSearch.js:73
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr ""
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
-#: ../js/ui/internetSearch.js:127
+#: ../js/ui/internetSearch.js:82
 #, javascript-format
 msgid "Search %s for \"%s\""
 msgstr ""
 
-#: ../js/ui/internetSearch.js:129
+#: ../js/ui/internetSearch.js:84
 #, javascript-format
 msgid "Search the internet for \"%s\""
 msgstr ""
@@ -825,27 +831,27 @@ msgstr "ソースの表示"
 msgid "Web Page"
 msgstr "ウェブページ"
 
-#: ../js/ui/messageTray.js:1313
+#: ../js/ui/messageTray.js:1312
 msgid "Open"
 msgstr "開く"
 
-#: ../js/ui/messageTray.js:1320
+#: ../js/ui/messageTray.js:1319
 msgid "Remove"
 msgstr "削除"
 
-#: ../js/ui/messageTray.js:1631
+#: ../js/ui/messageTray.js:1630
 msgid "Clear Messages"
 msgstr "メッセージをクリア"
 
-#: ../js/ui/messageTray.js:1658
+#: ../js/ui/messageTray.js:1657
 msgid "Notification Settings"
 msgstr "通知設定"
 
-#: ../js/ui/messageTray.js:1848
+#: ../js/ui/messageTray.js:1847
 msgid "No Messages"
 msgstr "メッセージなし"
 
-#: ../js/ui/messageTray.js:1922
+#: ../js/ui/messageTray.js:1921
 msgid "Message Tray"
 msgstr "メッセージトレイ"
 
@@ -929,9 +935,14 @@ msgstr "文字を表示"
 msgid "Hide Text"
 msgstr "文字を非表示"
 
-#: ../js/ui/shellEntry.js:180
-msgid "Type to search…"
-msgstr "検索ワードを入力…"
+#: ../js/ui/shellEntry.js:186
+#, javascript-format
+msgid "Search %s and more…"
+msgstr ""
+
+#: ../js/ui/shellEntry.js:188
+msgid "Search the internet and more…"
+msgstr ""
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -994,7 +1005,7 @@ msgid "Large Text"
 msgstr "大きな文字"
 
 #: ../js/ui/status/bluetooth.js:32 ../js/ui/status/bluetooth.js:43
-#: ../js/ui/status/network.js:703
+#: ../js/ui/status/network.js:702
 msgid "Bluetooth"
 msgstr "Bluetooth"
 
@@ -1003,7 +1014,7 @@ msgid "Bluetooth Settings"
 msgstr "Bluetooth の設定"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:143
+#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:142
 msgid "hardware disabled"
 msgstr "ハードウェア無効"
 
@@ -1031,103 +1042,103 @@ msgstr "地域と言語の設定"
 msgid "Volume, network, battery"
 msgstr "音量, ネットワーク, バッテリー"
 
-#: ../js/ui/status/network.js:75
+#: ../js/ui/status/network.js:74
 msgid "<unknown>"
 msgstr "< 不明 >"
 
-#: ../js/ui/status/network.js:128
+#: ../js/ui/status/network.js:127
 msgid "Wi-Fi"
 msgstr "Wi-Fi"
 
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
-#: ../js/ui/status/network.js:165
+#: ../js/ui/status/network.js:164
 msgid "disabled"
 msgstr "利用不可"
 
 #. Translators: this is for network devices that are physically present but
 #. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:388
+#: ../js/ui/status/network.js:387
 msgid "unmanaged"
 msgstr "管理対象外"
 
-#: ../js/ui/status/network.js:390
+#: ../js/ui/status/network.js:389
 msgid "disconnecting..."
 msgstr "切断中..."
 
-#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1347
+#: ../js/ui/status/network.js:395 ../js/ui/status/network.js:1346
 msgid "connecting..."
 msgstr "接続中..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1350
+#: ../js/ui/status/network.js:398 ../js/ui/status/network.js:1349
 msgid "authentication required"
 msgstr "認証の要求"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:407
+#: ../js/ui/status/network.js:406
 msgid "firmware missing"
 msgstr "ファームウェア未検出"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:411
+#: ../js/ui/status/network.js:410
 msgid "unavailable"
 msgstr "利用不可"
 
-#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1352
+#: ../js/ui/status/network.js:412 ../js/ui/status/network.js:1351
 msgid "connection failed"
 msgstr "接続失敗"
 
-#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1201
+#: ../js/ui/status/network.js:465 ../js/ui/status/network.js:1200
 msgid "More…"
 msgstr "その他…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1151
+#: ../js/ui/status/network.js:493 ../js/ui/status/network.js:1150
 msgid "Connected (private)"
 msgstr "接続 (制限付)"
 
-#: ../js/ui/status/network.js:560
+#: ../js/ui/status/network.js:559
 msgid "Wired"
 msgstr "有線接続"
 
-#: ../js/ui/status/network.js:580
+#: ../js/ui/status/network.js:579
 msgid "Mobile broadband"
 msgstr "モバイルブロードバンド"
 
-#: ../js/ui/status/network.js:1474
+#: ../js/ui/status/network.js:1472
 msgid "Network"
 msgstr ""
 
-#: ../js/ui/status/network.js:1531
+#: ../js/ui/status/network.js:1529
 msgid "Enable networking"
 msgstr "ネットワークを利用可能にする"
 
-#: ../js/ui/status/network.js:1589
+#: ../js/ui/status/network.js:1587
 msgid "Network Settings"
 msgstr "ネットワーク設定"
 
-#: ../js/ui/status/network.js:1606
+#: ../js/ui/status/network.js:1604
 msgid "Network Manager"
 msgstr "ネットワークマネージャー"
 
-#: ../js/ui/status/network.js:1696
+#: ../js/ui/status/network.js:1694
 msgid "Connection failed"
 msgstr "接続失敗"
 
-#: ../js/ui/status/network.js:1697
+#: ../js/ui/status/network.js:1695
 msgid "Activation of network connection failed"
 msgstr "ネットワーク接続を有効にできません"
 
-#: ../js/ui/status/network.js:2058
+#: ../js/ui/status/network.js:2056
 msgid "Networking is disabled"
 msgstr "ネットワークを利用できません"
 

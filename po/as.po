@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-01 21:42-0800\n"
-"PO-Revision-Date: 2017-03-02 06:02+0000\n"
+"POT-Creation-Date: 2017-03-03 13:48-0800\n"
+"PO-Revision-Date: 2017-03-03 21:50+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Assamese (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/as/)\n"
 "MIME-Version: 1.0\n"
@@ -175,20 +175,26 @@ msgstr "(অথবা আঙুলি স্বাইপ কৰক)"
 msgid "(e.g., user or %s)"
 msgstr "(উদাহৰণ, ব্যৱহাৰকাৰী অথবা %s)"
 
-#: ../js/misc/util.js:122
+#: ../js/misc/util.js:124
 msgid "Command not found"
 msgstr "কমান্ড পোৱা নগল"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:155
+#: ../js/misc/util.js:157
 msgid "Could not parse command:"
 msgstr "কমান্ড বিশ্লেষন কৰিব নোৱাৰি:"
 
-#: ../js/misc/util.js:163
+#: ../js/misc/util.js:165
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "'%s' ৰ প্ৰেৰণ ব্যৰ্থ হল:"
+
+#. * Translators: this is the name of the search engine that shows in the
+#. * Shell's desktop search entry.
+#: ../js/misc/util.js:287
+msgid "Google"
+msgstr ""
 
 #: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
@@ -229,23 +235,23 @@ msgstr "%s ক আপোনাৰ পছন্দলে যোগ কৰা হ�
 msgid "%s has been removed from your favorites."
 msgstr "%s ক আপোনাৰ পছন্দৰ পৰা আতৰোৱা হৈছে।"
 
-#: ../js/ui/appIconBar.js:215
+#: ../js/ui/appIconBar.js:214
 msgid "Other workspaces"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:224
+#: ../js/ui/appIconBar.js:223
 msgid "Current workspace"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:299
+#: ../js/ui/appIconBar.js:298
 msgid "Pin to Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:303
+#: ../js/ui/appIconBar.js:302
 msgid "Unpin from Taskbar"
 msgstr ""
 
-#: ../js/ui/appIconBar.js:319
+#: ../js/ui/appIconBar.js:318
 #, javascript-format
 msgid "Quit %s"
 msgstr ""
@@ -753,19 +759,19 @@ msgstr ""
 msgid "%s has been deleted"
 msgstr ""
 
-#: ../js/ui/internetSearch.js:118
+#: ../js/ui/internetSearch.js:73
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr ""
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
-#: ../js/ui/internetSearch.js:127
+#: ../js/ui/internetSearch.js:82
 #, javascript-format
 msgid "Search %s for \"%s\""
 msgstr ""
 
-#: ../js/ui/internetSearch.js:129
+#: ../js/ui/internetSearch.js:84
 #, javascript-format
 msgid "Search the internet for \"%s\""
 msgstr ""
@@ -822,27 +828,27 @@ msgstr "উৎস দৰ্শন কৰক"
 msgid "Web Page"
 msgstr "ৱেব পৃষ্ঠা"
 
-#: ../js/ui/messageTray.js:1313
+#: ../js/ui/messageTray.js:1312
 msgid "Open"
 msgstr "খোলক"
 
-#: ../js/ui/messageTray.js:1320
+#: ../js/ui/messageTray.js:1319
 msgid "Remove"
 msgstr "আতৰাওক"
 
-#: ../js/ui/messageTray.js:1631
+#: ../js/ui/messageTray.js:1630
 msgid "Clear Messages"
 msgstr "বাৰ্তাসমূহ পৰিষ্কাৰ কৰক"
 
-#: ../js/ui/messageTray.js:1658
+#: ../js/ui/messageTray.js:1657
 msgid "Notification Settings"
 msgstr "অধিসূচনা সংহতিসমূহ"
 
-#: ../js/ui/messageTray.js:1848
+#: ../js/ui/messageTray.js:1847
 msgid "No Messages"
 msgstr "কোনো বাৰ্তা নাই"
 
-#: ../js/ui/messageTray.js:1922
+#: ../js/ui/messageTray.js:1921
 msgid "Message Tray"
 msgstr "বাৰ্তা ট্ৰে"
 
@@ -926,9 +932,14 @@ msgstr "লিখনি দেখুৱাওক"
 msgid "Hide Text"
 msgstr "লিখনি লুকুৱাওক"
 
-#: ../js/ui/shellEntry.js:180
-msgid "Type to search…"
-msgstr "সন্ধান কৰিবলে টাইপ কৰক…"
+#: ../js/ui/shellEntry.js:186
+#, javascript-format
+msgid "Search %s and more…"
+msgstr ""
+
+#: ../js/ui/shellEntry.js:188
+msgid "Search the internet and more…"
+msgstr ""
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -991,7 +1002,7 @@ msgid "Large Text"
 msgstr "ডাঙৰ লিখনি"
 
 #: ../js/ui/status/bluetooth.js:32 ../js/ui/status/bluetooth.js:43
-#: ../js/ui/status/network.js:703
+#: ../js/ui/status/network.js:702
 msgid "Bluetooth"
 msgstr "ব্লুটুথ"
 
@@ -1000,7 +1011,7 @@ msgid "Bluetooth Settings"
 msgstr "ব্লুটুথ সংহতিসমূহ"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:143
+#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:142
 msgid "hardware disabled"
 msgstr "হাৰ্ডৱেৰ অসামৰ্থবান কৰা আছে"
 
@@ -1028,103 +1039,103 @@ msgstr "অঞ্চল আৰু ভাষা সংহতিসমূহ"
 msgid "Volume, network, battery"
 msgstr "ভলিউম, নেটৱাৰ্ক, বেটাৰি"
 
-#: ../js/ui/status/network.js:75
+#: ../js/ui/status/network.js:74
 msgid "<unknown>"
 msgstr "<unknown>"
 
-#: ../js/ui/status/network.js:128
+#: ../js/ui/status/network.js:127
 msgid "Wi-Fi"
 msgstr "Wi-Fi"
 
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
-#: ../js/ui/status/network.js:165
+#: ../js/ui/status/network.js:164
 msgid "disabled"
 msgstr "অসামৰ্থবান"
 
 #. Translators: this is for network devices that are physically present but
 #. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:388
+#: ../js/ui/status/network.js:387
 msgid "unmanaged"
 msgstr "অব্যৱস্থাপিত"
 
-#: ../js/ui/status/network.js:390
+#: ../js/ui/status/network.js:389
 msgid "disconnecting..."
 msgstr "বিচ্ছিনিত কৰা হৈছে..."
 
-#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1347
+#: ../js/ui/status/network.js:395 ../js/ui/status/network.js:1346
 msgid "connecting..."
 msgstr "সংযোগ কৰা হৈছে..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1350
+#: ../js/ui/status/network.js:398 ../js/ui/status/network.js:1349
 msgid "authentication required"
 msgstr "প্ৰমাণীকৰণৰ প্ৰয়োজন"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:407
+#: ../js/ui/status/network.js:406
 msgid "firmware missing"
 msgstr "ফাৰ্মৱেৰ সন্ধানহীন"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:411
+#: ../js/ui/status/network.js:410
 msgid "unavailable"
 msgstr "উপলব্ধ নাই"
 
-#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1352
+#: ../js/ui/status/network.js:412 ../js/ui/status/network.js:1351
 msgid "connection failed"
 msgstr "সংযোগ ব্যৰ্থ"
 
-#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1201
+#: ../js/ui/status/network.js:465 ../js/ui/status/network.js:1200
 msgid "More…"
 msgstr "অধিক…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1151
+#: ../js/ui/status/network.js:493 ../js/ui/status/network.js:1150
 msgid "Connected (private)"
 msgstr "সংযোগিত (ব্যক্তিগত)"
 
-#: ../js/ui/status/network.js:560
+#: ../js/ui/status/network.js:559
 msgid "Wired"
 msgstr "তাৰঁযুক্ত"
 
-#: ../js/ui/status/network.js:580
+#: ../js/ui/status/network.js:579
 msgid "Mobile broadband"
 msgstr "মবাইল ব্ৰডবেণ্ড"
 
-#: ../js/ui/status/network.js:1474
+#: ../js/ui/status/network.js:1472
 msgid "Network"
 msgstr "নেটৱাৰ্ক"
 
-#: ../js/ui/status/network.js:1531
+#: ../js/ui/status/network.js:1529
 msgid "Enable networking"
 msgstr "নেটৱাৰ্কিং সামৰ্থবান কৰক"
 
-#: ../js/ui/status/network.js:1589
+#: ../js/ui/status/network.js:1587
 msgid "Network Settings"
 msgstr "নেটৱৰ্ক সংহতিসমূহ"
 
-#: ../js/ui/status/network.js:1606
+#: ../js/ui/status/network.js:1604
 msgid "Network Manager"
 msgstr "নেটৱৰ্ক ব্যৱস্থাপক"
 
-#: ../js/ui/status/network.js:1696
+#: ../js/ui/status/network.js:1694
 msgid "Connection failed"
 msgstr "সংযোগ ব্যৰ্থ"
 
-#: ../js/ui/status/network.js:1697
+#: ../js/ui/status/network.js:1695
 msgid "Activation of network connection failed"
 msgstr "নেটৱৰ্ক সংযোগ সক্ৰিয়কৰণ ব্যৰ্থ হল"
 
-#: ../js/ui/status/network.js:2058
+#: ../js/ui/status/network.js:2056
 msgid "Networking is disabled"
 msgstr "নেটৱাৰ্কিং অসামৰ্থবান কৰা আছে"
 

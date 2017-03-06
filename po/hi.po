@@ -14,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-01 21:42-0800\n"
-"PO-Revision-Date: 2017-03-02 06:02+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-03 13:48-0800\n"
+"PO-Revision-Date: 2017-03-06 05:58+0000\n"
+"Last-Translator: e2f_in c7 <e2f_in_c7@outlook.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/hi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -180,20 +180,26 @@ msgstr "(या स्वाइप फिंगर)"
 msgid "(e.g., user or %s)"
 msgstr "(उदाहरण के लिए, उपयोक्ता या %s)"
 
-#: ../js/misc/util.js:122
+#: ../js/misc/util.js:124
 msgid "Command not found"
 msgstr "कमांड नहीं मिला"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:155
+#: ../js/misc/util.js:157
 msgid "Could not parse command:"
 msgstr "कमांड का विश्लेषण नहीं कर सका:"
 
-#: ../js/misc/util.js:163
+#: ../js/misc/util.js:165
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "'%s' का निष्पादन विफल:"
+
+#. * Translators: this is the name of the search engine that shows in the
+#. * Shell's desktop search entry.
+#: ../js/misc/util.js:287
+msgid "Google"
+msgstr "Google"
 
 #: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
@@ -234,23 +240,23 @@ msgstr "%s को आपकी पसंदीदा में जोड़ा �
 msgid "%s has been removed from your favorites."
 msgstr "%s को आपकी पसंदीदा से हटाया गया है."
 
-#: ../js/ui/appIconBar.js:215
+#: ../js/ui/appIconBar.js:214
 msgid "Other workspaces"
 msgstr "अन्य कार्यस्थल"
 
-#: ../js/ui/appIconBar.js:224
+#: ../js/ui/appIconBar.js:223
 msgid "Current workspace"
 msgstr "मौजूदा कार्यस्थल"
 
-#: ../js/ui/appIconBar.js:299
+#: ../js/ui/appIconBar.js:298
 msgid "Pin to Taskbar"
 msgstr "टास्कबार में पिन करें"
 
-#: ../js/ui/appIconBar.js:303
+#: ../js/ui/appIconBar.js:302
 msgid "Unpin from Taskbar"
 msgstr "टास्कबार से अनपिन करें"
 
-#: ../js/ui/appIconBar.js:319
+#: ../js/ui/appIconBar.js:318
 #, javascript-format
 msgid "Quit %s"
 msgstr "%s से बाहर निकलें"
@@ -758,19 +764,19 @@ msgstr "ऐप्लिकेशन से बाहर निकलें"
 msgid "%s has been deleted"
 msgstr "%s को डिलीट कर दिया गया है"
 
-#: ../js/ui/internetSearch.js:118
+#: ../js/ui/internetSearch.js:73
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr "ब्राउजर में \"%s\" ओपन करें"
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
-#: ../js/ui/internetSearch.js:127
+#: ../js/ui/internetSearch.js:82
 #, javascript-format
 msgid "Search %s for \"%s\""
 msgstr "\"%s\" के लिए %s खोजें"
 
-#: ../js/ui/internetSearch.js:129
+#: ../js/ui/internetSearch.js:84
 #, javascript-format
 msgid "Search the internet for \"%s\""
 msgstr "\"%s\" के लिए इंटरनेट पर खोजें"
@@ -827,27 +833,27 @@ msgstr "श्रोत दिखाएँ"
 msgid "Web Page"
 msgstr "वेब पृष्ठ"
 
-#: ../js/ui/messageTray.js:1313
+#: ../js/ui/messageTray.js:1312
 msgid "Open"
 msgstr "खोलें"
 
-#: ../js/ui/messageTray.js:1320
+#: ../js/ui/messageTray.js:1319
 msgid "Remove"
 msgstr "हटाएँ"
 
-#: ../js/ui/messageTray.js:1631
+#: ../js/ui/messageTray.js:1630
 msgid "Clear Messages"
 msgstr "संदेश साफ़ करें"
 
-#: ../js/ui/messageTray.js:1658
+#: ../js/ui/messageTray.js:1657
 msgid "Notification Settings"
 msgstr "अधिसूचना सेटिंग्स"
 
-#: ../js/ui/messageTray.js:1848
+#: ../js/ui/messageTray.js:1847
 msgid "No Messages"
 msgstr "कोई संदेश नहीं"
 
-#: ../js/ui/messageTray.js:1922
+#: ../js/ui/messageTray.js:1921
 msgid "Message Tray"
 msgstr "संदेश तश्तरी"
 
@@ -931,9 +937,14 @@ msgstr "पाठ दिखाएँ"
 msgid "Hide Text"
 msgstr "पाठ छिपाएँ"
 
-#: ../js/ui/shellEntry.js:180
-msgid "Type to search…"
-msgstr "खोजने के लिए टाइप करें…"
+#: ../js/ui/shellEntry.js:186
+#, javascript-format
+msgid "Search %s and more…"
+msgstr "%s और अधिक खोजें"
+
+#: ../js/ui/shellEntry.js:188
+msgid "Search the internet and more…"
+msgstr "इंटरनेट और अधिक खोजें"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -996,7 +1007,7 @@ msgid "Large Text"
 msgstr "बड़ा पाठ"
 
 #: ../js/ui/status/bluetooth.js:32 ../js/ui/status/bluetooth.js:43
-#: ../js/ui/status/network.js:703
+#: ../js/ui/status/network.js:702
 msgid "Bluetooth"
 msgstr "ब्लूटूथ"
 
@@ -1005,7 +1016,7 @@ msgid "Bluetooth Settings"
 msgstr "ब्लूटूथ सेटिंग्स"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:143
+#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:142
 msgid "hardware disabled"
 msgstr "हार्डवेयर निष्क्रिय"
 
@@ -1033,103 +1044,103 @@ msgstr "क्षेत्र और भाषा सेटिंग्स"
 msgid "Volume, network, battery"
 msgstr "आयतन, संजाल, बैटरी"
 
-#: ../js/ui/status/network.js:75
+#: ../js/ui/status/network.js:74
 msgid "<unknown>"
 msgstr "<अज्ञात>"
 
-#: ../js/ui/status/network.js:128
+#: ../js/ui/status/network.js:127
 msgid "Wi-Fi"
 msgstr "वाई-फाई"
 
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
-#: ../js/ui/status/network.js:165
+#: ../js/ui/status/network.js:164
 msgid "disabled"
 msgstr "अक्षम"
 
 #. Translators: this is for network devices that are physically present but
 #. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:388
+#: ../js/ui/status/network.js:387
 msgid "unmanaged"
 msgstr "अप्रबंधित"
 
-#: ../js/ui/status/network.js:390
+#: ../js/ui/status/network.js:389
 msgid "disconnecting..."
 msgstr "डिसकनेक्ट कर रहा है..."
 
-#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1347
+#: ../js/ui/status/network.js:395 ../js/ui/status/network.js:1346
 msgid "connecting..."
 msgstr "कनेक्ट कर रहा है..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1350
+#: ../js/ui/status/network.js:398 ../js/ui/status/network.js:1349
 msgid "authentication required"
 msgstr "सत्यापन जरूरी"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:407
+#: ../js/ui/status/network.js:406
 msgid "firmware missing"
 msgstr "फर्मवेयर अनुपस्थित"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:411
+#: ../js/ui/status/network.js:410
 msgid "unavailable"
 msgstr "अनुपलब्ध"
 
-#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1352
+#: ../js/ui/status/network.js:412 ../js/ui/status/network.js:1351
 msgid "connection failed"
 msgstr "संबंधन विफल"
 
-#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1201
+#: ../js/ui/status/network.js:465 ../js/ui/status/network.js:1200
 msgid "More…"
 msgstr "अधिक…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1151
+#: ../js/ui/status/network.js:493 ../js/ui/status/network.js:1150
 msgid "Connected (private)"
 msgstr "कनेक्टेड (निजी)"
 
-#: ../js/ui/status/network.js:560
+#: ../js/ui/status/network.js:559
 msgid "Wired"
 msgstr "तारसहित"
 
-#: ../js/ui/status/network.js:580
+#: ../js/ui/status/network.js:579
 msgid "Mobile broadband"
 msgstr "मोबाइल ब्रॉडबैंड"
 
-#: ../js/ui/status/network.js:1474
+#: ../js/ui/status/network.js:1472
 msgid "Network"
 msgstr "नेटवर्क"
 
-#: ../js/ui/status/network.js:1531
+#: ../js/ui/status/network.js:1529
 msgid "Enable networking"
 msgstr "संजालन सक्रिय"
 
-#: ../js/ui/status/network.js:1589
+#: ../js/ui/status/network.js:1587
 msgid "Network Settings"
 msgstr "नेटवर्क सेटिंग्स"
 
-#: ../js/ui/status/network.js:1606
+#: ../js/ui/status/network.js:1604
 msgid "Network Manager"
 msgstr "संजाल प्रबंधक"
 
-#: ../js/ui/status/network.js:1696
+#: ../js/ui/status/network.js:1694
 msgid "Connection failed"
 msgstr "कनेक्शन असफल"
 
-#: ../js/ui/status/network.js:1697
+#: ../js/ui/status/network.js:1695
 msgid "Activation of network connection failed"
 msgstr "संजाल कनेक्शन का सक्रियन असफल"
 
-#: ../js/ui/status/network.js:2058
+#: ../js/ui/status/network.js:2056
 msgid "Networking is disabled"
 msgstr "संजालन निष्क्रिय"
 
@@ -1296,11 +1307,11 @@ msgstr "हमेशा दृश्य कार्यस्थान पर"
 
 #: ../js/ui/windowMenu.js:105
 msgid "Move to Workspace Left"
-msgstr ""
+msgstr "बाएँ कार्यस्थान में ले जाएँ"
 
 #: ../js/ui/windowMenu.js:110
 msgid "Move to Workspace Right"
-msgstr ""
+msgstr "दाएँ कार्यस्थान में ले जाएँ"
 
 #: ../js/ui/windowMenu.js:115
 msgid "Move to Workspace Up"
@@ -1312,19 +1323,19 @@ msgstr "नीचे कार्यस्थान में ले जाए�
 
 #: ../js/ui/windowMenu.js:136
 msgid "Move to Monitor Up"
-msgstr ""
+msgstr "ऊपर मॉनिटर पर जाएँ"
 
 #: ../js/ui/windowMenu.js:142
 msgid "Move to Monitor Down"
-msgstr ""
+msgstr "नीचे मॉनिटर पर जाएँ"
 
 #: ../js/ui/windowMenu.js:148
 msgid "Move to Monitor Left"
-msgstr ""
+msgstr "बाएँ मॉनिटर पर जाएँ"
 
 #: ../js/ui/windowMenu.js:154
 msgid "Move to Monitor Right"
-msgstr ""
+msgstr "दाएँ मॉनिटर पर जाएँ"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
