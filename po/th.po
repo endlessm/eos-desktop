@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-01 21:42-0800\n"
-"PO-Revision-Date: 2017-03-02 05:58+0000\n"
+"POT-Creation-Date: 2017-03-03 13:48-0800\n"
+"PO-Revision-Date: 2017-03-04 13:46+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Thai (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -178,20 +178,26 @@ msgstr "(หรือลูบจอ)"
 msgid "(e.g., user or %s)"
 msgstr "(เช่น ผู้ใช้ หรือ %s)"
 
-#: ../js/misc/util.js:122
+#: ../js/misc/util.js:124
 msgid "Command not found"
 msgstr "ไม่พบคำสั่ง"
 
 #. Replace "Error invoking GLib.shell_parse_argv: " with
 #. something nicer
-#: ../js/misc/util.js:155
+#: ../js/misc/util.js:157
 msgid "Could not parse command:"
 msgstr "ไม่สามารถแจงคำสั่ง:"
 
-#: ../js/misc/util.js:163
+#: ../js/misc/util.js:165
 #, javascript-format
 msgid "Execution of '%s' failed:"
 msgstr "คำสั่ง '%s' ทำงานล้มเหลว:"
+
+#. * Translators: this is the name of the search engine that shows in the
+#. * Shell's desktop search entry.
+#: ../js/misc/util.js:287
+msgid "Google"
+msgstr "Google"
 
 #: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
@@ -232,23 +238,23 @@ msgstr "%s ถูกเพิ่มเข้าในรายการโปร
 msgid "%s has been removed from your favorites."
 msgstr "%s ถูกลบออกจากรายการโปรดของคุณแล้ว"
 
-#: ../js/ui/appIconBar.js:215
+#: ../js/ui/appIconBar.js:214
 msgid "Other workspaces"
 msgstr "พื้นที่ทำงานอื่นๆ"
 
-#: ../js/ui/appIconBar.js:224
+#: ../js/ui/appIconBar.js:223
 msgid "Current workspace"
 msgstr "พื้นที่ทำงานปัจจุบัน"
 
-#: ../js/ui/appIconBar.js:299
+#: ../js/ui/appIconBar.js:298
 msgid "Pin to Taskbar"
 msgstr "ปักหมุดที่ทาสก์บาร์"
 
-#: ../js/ui/appIconBar.js:303
+#: ../js/ui/appIconBar.js:302
 msgid "Unpin from Taskbar"
 msgstr "ถอดหมุดจากทาสก์บาร์"
 
-#: ../js/ui/appIconBar.js:319
+#: ../js/ui/appIconBar.js:318
 #, javascript-format
 msgid "Quit %s"
 msgstr "จบการทำงาน %s "
@@ -752,19 +758,19 @@ msgstr "ออกจากแอพพลิเคชัน"
 msgid "%s has been deleted"
 msgstr "%s ได้ถูกลบแล้ว"
 
-#: ../js/ui/internetSearch.js:118
+#: ../js/ui/internetSearch.js:73
 #, javascript-format
 msgid "Open \"%s\" in browser"
 msgstr "เปิด \"%s\" ในเบราว์เซอร์"
 
 #. Translators: the first %s is the search engine name, and the second
 #. * is the search string. For instance, 'Search Google for "hello"'.
-#: ../js/ui/internetSearch.js:127
+#: ../js/ui/internetSearch.js:82
 #, javascript-format
 msgid "Search %s for \"%s\""
 msgstr "ค้นหา %s สำหรับ \"%s\""
 
-#: ../js/ui/internetSearch.js:129
+#: ../js/ui/internetSearch.js:84
 #, javascript-format
 msgid "Search the internet for \"%s\""
 msgstr "ค้นหา \"%s\" ในอินเตอร์เน็ต"
@@ -821,27 +827,27 @@ msgstr "ดูซอร์ส"
 msgid "Web Page"
 msgstr "หน้าเว็บ"
 
-#: ../js/ui/messageTray.js:1313
+#: ../js/ui/messageTray.js:1312
 msgid "Open"
 msgstr "เปิด"
 
-#: ../js/ui/messageTray.js:1320
+#: ../js/ui/messageTray.js:1319
 msgid "Remove"
 msgstr "ลบ"
 
-#: ../js/ui/messageTray.js:1631
+#: ../js/ui/messageTray.js:1630
 msgid "Clear Messages"
 msgstr "ล้างข้อความ"
 
-#: ../js/ui/messageTray.js:1658
+#: ../js/ui/messageTray.js:1657
 msgid "Notification Settings"
 msgstr "การตั้งค่าการแจ้งเตือน"
 
-#: ../js/ui/messageTray.js:1848
+#: ../js/ui/messageTray.js:1847
 msgid "No Messages"
 msgstr "ไม่มีข้อความ"
 
-#: ../js/ui/messageTray.js:1922
+#: ../js/ui/messageTray.js:1921
 msgid "Message Tray"
 msgstr "ถาดข้อความ"
 
@@ -925,9 +931,14 @@ msgstr "แสดงข้อความ"
 msgid "Hide Text"
 msgstr "ซ่อนข้อความ"
 
-#: ../js/ui/shellEntry.js:180
-msgid "Type to search…"
-msgstr "พิมพ์เพื่อค้นหา…"
+#: ../js/ui/shellEntry.js:186
+#, javascript-format
+msgid "Search %s and more…"
+msgstr "ค้นหา %s และอื่นๆ..."
+
+#: ../js/ui/shellEntry.js:188
+msgid "Search the internet and more…"
+msgstr "ค้นหาในอินเทอร์เน็ตและอื่นๆ..."
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
@@ -990,7 +1001,7 @@ msgid "Large Text"
 msgstr "อักษรขนาดใหญ่"
 
 #: ../js/ui/status/bluetooth.js:32 ../js/ui/status/bluetooth.js:43
-#: ../js/ui/status/network.js:703
+#: ../js/ui/status/network.js:702
 msgid "Bluetooth"
 msgstr "บลูทูท"
 
@@ -999,7 +1010,7 @@ msgid "Bluetooth Settings"
 msgstr "ตั้งค่าบลูทูท"
 
 #. TRANSLATORS: this means that bluetooth was disabled by hardware rfkill
-#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:143
+#: ../js/ui/status/bluetooth.js:81 ../js/ui/status/network.js:142
 msgid "hardware disabled"
 msgstr "ฮาร์ดแวร์ปิดการใช้งานอยู่"
 
@@ -1027,103 +1038,103 @@ msgstr "การตั้งค่าภูมิภาคและภาษา
 msgid "Volume, network, battery"
 msgstr "ความดังเสียง, เครือข่าย, แบตเตอรี่"
 
-#: ../js/ui/status/network.js:75
+#: ../js/ui/status/network.js:74
 msgid "<unknown>"
 msgstr "<ไม่ทราบ>"
 
-#: ../js/ui/status/network.js:128
+#: ../js/ui/status/network.js:127
 msgid "Wi-Fi"
 msgstr "Wi-Fi"
 
 #. Translators: this indicates that wireless or wwan is disabled by hardware
 #. killswitch
-#: ../js/ui/status/network.js:165
+#: ../js/ui/status/network.js:164
 msgid "disabled"
 msgstr "ปิดใช้"
 
 #. Translators: this is for network devices that are physically present but
 #. are not
 #. under NetworkManager's control (and thus cannot be used in the menu)
-#: ../js/ui/status/network.js:388
+#: ../js/ui/status/network.js:387
 msgid "unmanaged"
 msgstr "ไม่ถูกจัดการ"
 
-#: ../js/ui/status/network.js:390
+#: ../js/ui/status/network.js:389
 msgid "disconnecting..."
 msgstr "กำลังตัดการเชื่อมต่อ..."
 
-#: ../js/ui/status/network.js:396 ../js/ui/status/network.js:1347
+#: ../js/ui/status/network.js:395 ../js/ui/status/network.js:1346
 msgid "connecting..."
 msgstr "กำลังเชื่อมต่อ..."
 
 #. Translators: this is for network connections that require some kind of key
 #. or password
-#: ../js/ui/status/network.js:399 ../js/ui/status/network.js:1350
+#: ../js/ui/status/network.js:398 ../js/ui/status/network.js:1349
 msgid "authentication required"
 msgstr "ต้องยืนยันตัวบุคคล"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
 #. module, which is missing
-#: ../js/ui/status/network.js:407
+#: ../js/ui/status/network.js:406
 msgid "firmware missing"
 msgstr "ขาดเฟิร์มแวร์"
 
 #. Translators: this is for a network device that cannot be activated (for
 #. example it
 #. is disabled by rfkill, or it has no coverage
-#: ../js/ui/status/network.js:411
+#: ../js/ui/status/network.js:410
 msgid "unavailable"
 msgstr "ไม่สามารถใช้งานได้"
 
-#: ../js/ui/status/network.js:413 ../js/ui/status/network.js:1352
+#: ../js/ui/status/network.js:412 ../js/ui/status/network.js:1351
 msgid "connection failed"
 msgstr "เชื่อมต่อไม่สำเร็จ"
 
-#: ../js/ui/status/network.js:466 ../js/ui/status/network.js:1201
+#: ../js/ui/status/network.js:465 ../js/ui/status/network.js:1200
 msgid "More…"
 msgstr "เพิ่มเติม…"
 
 #. TRANSLATORS: this is the indication that a connection for another logged in
 #. user is active,
 #. and we cannot access its settings (including the name)
-#: ../js/ui/status/network.js:494 ../js/ui/status/network.js:1151
+#: ../js/ui/status/network.js:493 ../js/ui/status/network.js:1150
 msgid "Connected (private)"
 msgstr "เชื่อมต่อแล้ว (ส่วนตัว)"
 
-#: ../js/ui/status/network.js:560
+#: ../js/ui/status/network.js:559
 msgid "Wired"
 msgstr "ใช้สาย"
 
-#: ../js/ui/status/network.js:580
+#: ../js/ui/status/network.js:579
 msgid "Mobile broadband"
 msgstr "บรอดแบนด์มือถือ"
 
-#: ../js/ui/status/network.js:1474
+#: ../js/ui/status/network.js:1472
 msgid "Network"
 msgstr "เครือข่าย"
 
-#: ../js/ui/status/network.js:1531
+#: ../js/ui/status/network.js:1529
 msgid "Enable networking"
 msgstr "เปิดใช้งานเครือข่าย"
 
-#: ../js/ui/status/network.js:1589
+#: ../js/ui/status/network.js:1587
 msgid "Network Settings"
 msgstr "ตั้งค่าเครือข่าย"
 
-#: ../js/ui/status/network.js:1606
+#: ../js/ui/status/network.js:1604
 msgid "Network Manager"
 msgstr "โปรแกรมจัดการเครือข่าย"
 
-#: ../js/ui/status/network.js:1696
+#: ../js/ui/status/network.js:1694
 msgid "Connection failed"
 msgstr "เชื่อมต่อไม่สำเร็จ"
 
-#: ../js/ui/status/network.js:1697
+#: ../js/ui/status/network.js:1695
 msgid "Activation of network connection failed"
 msgstr "เปิดใช้ช่องเชื่อมต่อไม่สำเร็จ"
 
-#: ../js/ui/status/network.js:2058
+#: ../js/ui/status/network.js:2056
 msgid "Networking is disabled"
 msgstr "การใช้เครือข่ายถูกปิด"
 
@@ -1257,67 +1268,67 @@ msgstr[0] "การเปลี่ยนการตั้งค่าจะย
 
 #: ../js/ui/windowMenu.js:34
 msgid "Minimize"
-msgstr ""
+msgstr "ย่อเล็กสุด"
 
 #: ../js/ui/windowMenu.js:41
 msgid "Unmaximize"
-msgstr ""
+msgstr "ยกเลิกขยายใหญ่สุด"
 
 #: ../js/ui/windowMenu.js:45
 msgid "Maximize"
-msgstr ""
+msgstr "ขยายใหญ่สุด"
 
 #: ../js/ui/windowMenu.js:52
 msgid "Move"
-msgstr ""
+msgstr "ย้าย"
 
 #: ../js/ui/windowMenu.js:58
 msgid "Resize"
-msgstr ""
+msgstr "ปรับขนาด"
 
 #: ../js/ui/windowMenu.js:65
 msgid "Move Titlebar Onscreen"
-msgstr ""
+msgstr "ย้ายแถบชื่อเรื่องบนหน้าจอ"
 
 #: ../js/ui/windowMenu.js:70
 msgid "Always on Top"
-msgstr ""
+msgstr "อยู่ด้านบนเสมอ"
 
 #: ../js/ui/windowMenu.js:89
 msgid "Always on Visible Workspace"
-msgstr ""
+msgstr "อยู่บนพื้นที่ทำงานที่มองเห็นได้เสมอ"
 
 #: ../js/ui/windowMenu.js:105
 msgid "Move to Workspace Left"
-msgstr ""
+msgstr "ย้ายพื้นที่ทำงานไปด้านซ้าย"
 
 #: ../js/ui/windowMenu.js:110
 msgid "Move to Workspace Right"
-msgstr ""
+msgstr "ย้ายพื้นที่ทำงานไปด้านขวา"
 
 #: ../js/ui/windowMenu.js:115
 msgid "Move to Workspace Up"
-msgstr ""
+msgstr "ย้ายพื้นที่ทำงานไปด้านบน"
 
 #: ../js/ui/windowMenu.js:120
 msgid "Move to Workspace Down"
-msgstr ""
+msgstr "ย้ายพื้นที่ทำงานไปด้านล่าง"
 
 #: ../js/ui/windowMenu.js:136
 msgid "Move to Monitor Up"
-msgstr ""
+msgstr "ย้ายจอภาพไปด้านบน"
 
 #: ../js/ui/windowMenu.js:142
 msgid "Move to Monitor Down"
-msgstr ""
+msgstr "ย้ายจอภาพไปด้านล่าง"
 
 #: ../js/ui/windowMenu.js:148
 msgid "Move to Monitor Left"
-msgstr ""
+msgstr "ย้ายจอภาพไปด้านซ้าย"
 
 #: ../js/ui/windowMenu.js:154
 msgid "Move to Monitor Right"
-msgstr ""
+msgstr "ย้ายจอภาพไปด้านขวา"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
