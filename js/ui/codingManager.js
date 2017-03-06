@@ -627,7 +627,7 @@ const CodingSession = new Lang.Class({
             // the CodeView button in order to get back to the main
             // window.
             this.splash = new AppActivation.SpeedwagonSplash(builderShellApp);
-            this.splash.show(AppActivation.LaunchReason.CODING_BUILDER);
+            this.splash.show();
 
             this._startBuilderForFlatpak(constructLoadFlatpakValue(this.app,
                                                                    appManifest));
