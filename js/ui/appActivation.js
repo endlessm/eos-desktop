@@ -29,7 +29,7 @@ const LAUNCH_MAXIMIZED_DESKTOP_KEY = 'X-Endless-LaunchMaximized';
 
 
 // Determine if a splash screen should be shown for the provided
-// GDesktopAppInfo and other global settings
+// ShellApp and other global settings
 function _shouldShowSplash(app) {
     let info = app.get_app_info();
 
