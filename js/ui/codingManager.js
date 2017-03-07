@@ -12,7 +12,6 @@ const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
-
 const AppActivation = imports.ui.appActivation;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
