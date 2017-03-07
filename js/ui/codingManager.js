@@ -109,7 +109,7 @@ function _synchronizeViewSourceButtonToRectCorner(button, rect) {
 }
 
 function _createViewSourceButtonInRectCorner(rect) {
-    let button = new St.Bin({
+    let button = new St.Button({
         style_class: 'view-source',
         x_fill: true,
         y_fill: true
@@ -203,7 +203,7 @@ const WindowTrackingButton = new Lang.Class({
         // remove this button, you will need to call destroy() from outside
         // this class or use removeChrome from within it.
         this._button = _createInputEnabledViewSourceButtonInRectCorner(this.window.get_frame_rect());
-        this._button.connect('button-press-event', Lang.bind(this, function() {
+        this._button.connect('clicked', Lang.bind(this, function() {
             this.emit('clicked');
         }));
 
