@@ -937,16 +937,17 @@ const CodingManager = new Lang.Class({
 
     addAppWindow: function(actor) {
         if (!global.settings.get_boolean('enable-behind-the-screen'))
-            return;
+            return false;
 
         let window = actor.meta_window;
         if (!_isCodingApp(window.get_flatpak_id()))
-            return;
+            return false;
 
         this._sessions.push(new CodingSession({
             app: actor,
             button: new WindowTrackingButton({ window: actor.meta_window })
         }));
+        return true;
     },
 
     addBuilderWindow: function(actor) {
@@ -999,11 +1000,12 @@ const CodingManager = new Lang.Class({
 
         let session = this._getSession(actor);
         if (!session)
-            return;
+            return false;
 
         // We can remove either a speedwagon window or a normal builder window.
         // That window will be registered in the session at this point.
         session.removeBuilderWindow();
+        return true;
     },
 
     killEffectsOnActor: function(actor) {
