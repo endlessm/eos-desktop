@@ -616,8 +616,7 @@ const WindowManager = new Lang.Class({
             this._unminimizeWindowDone(shellwm, actor);
             this._mapWindowDone(shellwm, actor);
             this._destroyWindowDone(shellwm, actor);
-            this._codingManager.rotateInCompleted(actor);
-            this._codingManager.rotateOutCompleted(actor);
+            this._codingManager.killEffectsOnActor(actor);
         }));
 
         this._shellwm.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
