@@ -24,16 +24,16 @@
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2013
 # Ricardo Pitanga <pitanga@endlessm.com>, 2013
 # Richard Vignais, 2014
-# Roddy Shuler <roddy@endlessm.com>, 2015-2016
+# Roddy Shuler <roddy@endlessm.com>, 2015-2017
 # Rodrigo Flores <mail@rodrigoflores.org>, 2009
 # Rodrigo Padula <contato@rodrigopadula.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-03 13:48-0800\n"
-"PO-Revision-Date: 2017-03-06 22:04+0000\n"
-"Last-Translator: Mariana Barbosa <mariana@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-07 02:30+0000\n"
+"PO-Revision-Date: 2017-03-08 22:49+0000\n"
+"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -791,12 +791,12 @@ msgstr "Abrir \"%s\" na Internet"
 #: ../js/ui/internetSearch.js:82
 #, javascript-format
 msgid "Search %s for \"%s\""
-msgstr "Pesquisar %s por %s\""
+msgstr "Buscar no %s por \"%s\""
 
 #: ../js/ui/internetSearch.js:84
 #, javascript-format
 msgid "Search the internet for \"%s\""
-msgstr "Pesquisar por %s\" na internet"
+msgstr "Buscar na internet por \"%s\""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
@@ -932,7 +932,7 @@ msgstr "O bloqueio foi impedido por um programa"
 
 #: ../js/ui/search.js:781
 msgid "Searching…"
-msgstr "Procurando…"
+msgstr "Buscando…"
 
 #: ../js/ui/search.js:783
 msgid "No results."
@@ -957,11 +957,11 @@ msgstr "Ocultar texto"
 #: ../js/ui/shellEntry.js:186
 #, javascript-format
 msgid "Search %s and more…"
-msgstr "Pesquisar no %s e mais...."
+msgstr "Busque no %s e mais…"
 
 #: ../js/ui/shellEntry.js:188
 msgid "Search the internet and more…"
-msgstr "Pesquisar na internet e mais..."
+msgstr "Busque na internet e mais…"
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"

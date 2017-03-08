@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-03 13:48-0800\n"
-"PO-Revision-Date: 2017-03-06 23:16+0000\n"
+"POT-Creation-Date: 2017-03-07 02:30+0000\n"
+"PO-Revision-Date: 2017-03-08 22:48+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -784,7 +784,7 @@ msgstr "Buscar %s por \"%s\""
 #: ../js/ui/internetSearch.js:84
 #, javascript-format
 msgid "Search the internet for \"%s\""
-msgstr "Buscar \"%s\" en internet"
+msgstr "Buscar en internet por \"%s\""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
