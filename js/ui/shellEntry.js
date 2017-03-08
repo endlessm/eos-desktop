@@ -175,7 +175,7 @@ const OverviewEntry = new Lang.Class({
                                         icon_size: 16,
                                         track_hover: true });
 
-        this._spinnerAnimation = new Panel.AnimatedIcon('process-working.svg', SPINNER_ICON_SIZE);
+        this._spinnerAnimation = new Panel.AnimatedIcon('process-working-dark.svg', SPINNER_ICON_SIZE);
         this._spinnerAnimation.actor.hide();
 
         // Set the search entry's text based on the current search engine
