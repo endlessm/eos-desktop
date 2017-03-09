@@ -979,7 +979,7 @@ StScrollBar StButton#vhandle:active {
 
 /* Search Box */
 #searchEntry {
-    width: 300px;
+    width: 350px;
     height: 38px;
 
     margin-top: 8px;
@@ -1001,6 +1001,8 @@ StScrollBar StButton#vhandle:active {
 }
 
 #searchEntry.low-resolution {
+    width: 300px;
+
     -minimum-vpadding: 20px;
 }
 
