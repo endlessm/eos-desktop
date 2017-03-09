@@ -405,6 +405,10 @@ const CodingSession = new Lang.Class({
         this._windowUnminimizedId = global.window_manager.connect(
             'unminimize', Lang.bind(this, this._applyWindowUnminimizationState)
         );
+        this._constrainGeometryAppId = this.app.meta_window.connect(
+            'geometry-allocate',
+            Lang.bind(this, this._constrainGeometry)
+        );
 
         this._watchdogId = 0;
     },
@@ -440,6 +444,13 @@ const CodingSession = new Lang.Class({
             // appear over everything else.
             actor.meta_window.unmake_above();
         } else {
+            // Connect the real builder window to the geometry-allocate
+            // signal
+            this._constrainGeometryBuilderId = this.builder.meta_window.connect(
+                'geometry-allocate',
+                Lang.bind(this, this._constrainGeometry)
+            );
+
             // We only want to untrack the coding app window at this
             // point and not at the point we show the speedwagon. This
             // will ensure that the shell window tracker is still
@@ -494,6 +505,11 @@ const CodingSession = new Lang.Class({
             this._sizeChangedIdBuilder = 0;
         }
 
+        if (this._constrainGeometryBuilderId) {
+            this.builder.meta_window.disconnect(this._constrainGeometryBuilderId);
+            this._constrainGeometryBuilderId = 0;
+        }
+
         // Remove the builder_window reference from the button. There's no
         // need to disconnect any signals here since the button doesn't
         // care about signals on builder.
@@ -533,6 +549,16 @@ const CodingSession = new Lang.Class({
             this._windowUnminimizedId = 0;
         }
 
+        if (this._constrainGeometryAppId) {
+            this.app.meta_window.disconnect(this._constrainGeometryAppId);
+            this._constrainGeometryAppId = 0;
+        }
+
+        if (this._constrainGeometryBuilderId) {
+            this.builder.meta_window.disconnect(this._constrainGeometryBuilderId);
+            this._constrainGeometryBuilderId = 0;
+        }
+
         // Destroy the button too
         this.button.destroy();
 
@@ -559,6 +585,22 @@ const CodingSession = new Lang.Class({
             // further usage of this session is undefined and it should
             // be removed.
         }
+    },
+
+    _constrainGeometry: function(window) {
+        if (!this.builder)
+            return;
+
+        // Get the minimum size of both the app and the builder window
+        // and then determine the maximum of the two. We won't permit
+        // either window to get any smaller.
+        let [minAppWidth, minAppHeight] = this.app.meta_window.get_minimum_size_hints();
+        let [minBuilderWidth, minBuilderHeight] = this.builder.meta_window.get_minimum_size_hints();
+
+        let minWidth = Math.max(minAppWidth, minBuilderWidth);
+        let minHeight = Math.max(minAppHeight, minBuilderHeight);
+
+        window.expand_allocated_geometry(minWidth, minHeight);
     },
 
     _switchWindows: function(actor, event) {
