@@ -607,7 +607,7 @@ const WindowManager = new Lang.Class({
                                         function () { Main.layoutManager.emit('background-clicked'); });
         }));
 
-        this._codingManager = new CodingManager.CodingManager();
+        this._codingManager = new CodingManager.CodeViewManager({});
 
         this._switchData = null;
         this._shellwm.connect('kill-switch-workspace', Lang.bind(this, this._switchWorkspaceDone));
