@@ -468,7 +468,6 @@ const CodingSession = new Lang.Class({
                                                     CodingInstallationMonitor.$gtype)
     },
     Signals: {
-        'opened': {},
         'ready': {},
         'closed': {},
         'flipped': {
