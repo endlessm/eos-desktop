@@ -1034,18 +1034,140 @@ const CodingSession = new Lang.Class({
     }
 });
 
-const CodingManager = new Lang.Class({
-    Name: 'CodingManager',
+const OS_INTEGRATION_APP = 'org.gnome.Weather.Application';
 
-    _init: function() {
+const CodingOSIntegration = new Lang.Class({
+    Name: 'CodingOSIntegration',
+
+    _init: function(manager) {
+        let listeningFor = Set();
+
+        manager.connect('session-created', Lang.bind(this, function(instance, session) {
+            // Check to see if the session was created on org.gnome.Weather.Application
+            if (session.app.meta_window.get_flatpak_id() !== OS_INTEGRATION_APP)
+                return;
+
+            if (listeningFor.has('codeview-app-opened')) {
+                listeningFor.delete('codeview-app-opened');
+                controller.event_occurred('codeview-app-opened');
+            }
+
+            // Now connect to the relevant signals on the session. We don't need
+            // to worry about disconnection, since when the session goes away
+            // we can just ignore them
+            session.connect('ready', Lang.bind(this, function() {
+                if (listeningFor.has('codeview-started')) {
+                    listeningFor.delete('codeview-started');
+                    controller.event_occurred('codeview-started');
+                }
+            }));
+
+            session.install_monitor.connect('app-installed', Lang.bind(this, function() {
+                if (listeningFor.has('codeview-installed')) {
+                    listeningFor.delete('codeview-installed');
+                    controller.event_occurred('codeview-installed');
+                }
+            }));
+
+            session.connect('flipped', Lang.bind(this, function() {
+                if (listeningFor.has('codeview-flipped')) {
+                    listeningFor.delete('codeview-flipped');
+                    controller.event_occurred('codeview-flipped');
+                }
+            }));
+
+                if (listeningFor.has('codeview-closed')) {
+                    listeningFor.delete('codeview-closed');
+                    controller.event_occurred('codeview-closed');
+                }
+            }));
+        }));
+
+        // Now create an AppIntegrationController and listen for events
+        // on the manager. We will determine whether we need to fire events
+        // from here.
+        let controller = new CodingGameService.AppIntegrationController();
+        controller.service_event_with_listener('codeview-app-opened', Lang.bind(this, function() {
+            // Check the current sessions to see if we already have a CodeView
+            // session open
+            if (manager.sessions.some(s =>
+                    s.app.meta_window.get_flatpak_id() === OS_INTEGRATION_APP
+            )) {
+                controller.event_occurred('codeview-app-opened');
+                return;
+            }
+
+            listeningFor.add('codeview-app-opened');
+        }), Lang.bind(this, function() {
+            listeningFor.delete('codeview-app-opened');
+        }));
+        controller.service_event_with_listener('codeview-started', Lang.bind(this, function() {
+            // Check the current sessions to see if we already have a CodeView
+            // session open
+            if (manager.sessions.some(s =>
+                    s.app.meta_window.get_flatpak_id() === OS_INTEGRATION_APP &&
+                    s.builder !== NULL
+            )) {
+                controller.event_occurred('codeview-started');
+                return;
+            }
+
+            listeningFor.add('codeview-started');
+        }), Lang.bind(this, function() {
+            listeningFor.delete('codeview-started');
+        }));
+        controller.service_event_with_listener('codeview-installed', Lang.bind(this, function() {
+            // Check the current sessions to see if we already have a CodeView
+            // session open that has an installed application
+            if (manager.sessions.some(s =>
+                    s.app.meta_window.get_flatpak_id() === OS_INTEGRATION_APP &&
+                    s.install_monitor.installed
+            )) {
+                controller.event_occurred('codeview-installed');
+                return;
+            }
+
+            listeningFor.add('codeview-installed');
+        }), Lang.bind(this, function() {
+            listeningFor.delete('codeview-installed');
+        }));
+        controller.service_event_with_listener('codeview-flipped', Lang.bind(this, function() {
+            // Check the current sessions to see if we already have a CodeView
+            // session open that was flipped
+            if (manager.sessions.some(s =>
+                    s.app.meta_window.get_flatpak_id() === OS_INTEGRATION_APP &&
+                    s.state === STATE_BUILDER
+            )) {
+                controller.event_occurred('codeview-flipped');
+                return;
+            }
+
+            listeningFor.add('codeview-flipped');
+        }), Lang.bind(this, function() {
+            listeningFor.delete('codeview-flipped');
+        }));
+    }
+});
+
+const CodeViewManager = new Lang.Class({
+    Name: 'CodeViewManager',
+    Extends: GObject.Object,
+    Signals: {
+        'session-created': {
+            param_types: [ GObject.TYPE_OBJECT ]
+        }
+    },
+
+    get sessions() {
+        return this._sessions;
+    },
+
+    _init: function(params) {
+        this.parent(params);
         this._sessions = [];
 
         this._codingApps = ['com.endlessm.Helloworld', 'org.gnome.Weather.Application'];
-
-        this._codeViewStarted = false;
-        this._codeViewFlipped = false;
-        this._codeViewInstalled = false;
-        this._controller = this._createAppIntegrationController();
+        this._integration = new CodingOSIntegration(this);
     },
 
     addAppWindow: function(actor) {
@@ -1056,13 +1178,16 @@ const CodingManager = new Lang.Class({
         if (!_isCodingApp(window.get_flatpak_id()))
             return false;
 
-        this._sessions.push(new CodingSession({
+        let session = new CodingSession({
             app: actor,
             button: new WindowTrackingButton({ window: actor.meta_window }),
             install_monitor: new CodingInstallationMonitor({
                 flatpak_name: window.get_flatpak_id()
-            });
-        }));
+            })
+        });
+        this._sessions.push(session);
+        log("Session created");
+        this.emit('session-created', session);
         return true;
     },
 
@@ -1139,42 +1264,6 @@ const CodingManager = new Lang.Class({
         }
 
         return null;
-    }
-
-    _createAppIntegrationController: function() {
-        let controller = new CodingGameService.AppIntegrationController();
-        controller.service_event_with_listener('codeview-started', Lang.bind(this, function() {
-            this._codeViewStarted = true;
-        }), Lang.bind(this, function() {
-            this._codeViewStarted = false;
-        }));
-        controller.service_event_with_listener('codeview-flipped', Lang.bind(this, function() {
-            this._codeViewFlipped = true;
-        }), Lang.bind(this, function() {
-            this._codeViewFlipped = false;
-        }));
-        controller.service_event_with_listener('codeview-installed', Lang.bind(this, function() {
-            this._codeViewInstalled = true;
-        }), Lang.bind(this, function() {
-            this._codeViewInstalled = false;
-        }));
-        return controller;
-    },
-
-    _onBuilderWindowAdded: function() {
-        this._connectFlatpakMonitor();
-
-        if (this._codeViewStarted) {
-            this._controller.event_occurred('codeview-started');
-            this._codeViewStarted = false;
-        }
-    },
-
-    _onFlipped: function() {
-        if (this._codeViewFlipped) {
-            this._controller.event_occurred('codeview-flipped');
-            this._codeViewFlipped = false;
-        }
     },
 
     _isCodingApp: function(flatpakID) {
