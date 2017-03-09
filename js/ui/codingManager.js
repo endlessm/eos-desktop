@@ -475,6 +475,10 @@ const CodingSession = new Lang.Class({
         }
     },
 
+    get state() {
+        return this._state;
+    },
+
     _init: function(params) {
         this.parent(params);
 
