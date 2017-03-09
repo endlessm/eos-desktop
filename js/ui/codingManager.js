@@ -1222,7 +1222,6 @@ const CodeViewManager = new Lang.Class({
 
         // Destroy the session here and remove it from the list
         session.destroy();
-        this._disconnectFlatpakMonitor();
 
         let idx = this._sessions.indexOf(session);
         if (idx != -1) {
