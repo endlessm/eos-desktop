@@ -190,23 +190,6 @@ const UpdaterManager = new Lang.Class({
         this._currentState = state;
     },
 
-    _onActionInvoked: function(notification, actionId) {
-        this._notification.destroy();
-        
-        if (actionId == 'download-updates') {
-            this._proxy.FetchRemote();
-        } else if (actionId == 'apply-updates') {
-            this._proxy.ApplyRemote();
-        } else if (actionId == 'restart-updates') {
-            this._loginManager.reboot();
-        }
-    },
-
-    _sendNotification: function() {
-        this._notification.connect('action-invoked', Lang.bind(this, this._onActionInvoked));
-        this._source.notify(this._notification);
-    },
-
     _ensureSource: function() {
         if (this._source) {
             return;
@@ -230,9 +213,12 @@ const UpdaterManager = new Lang.Class({
         this._notification = new UpdaterNotification(this._source,
             _("Updates Available"),
             _("Software updates are available for your system"));
-        this._notification.addButton('download-updates', _("Download Now"));
+        this._notification.addAction(_("Download Now"), Lang.bind(this, function() {
+            this._notification.destroy();
+            this._proxy.FetchRemote();
+        }));
 
-        this._sendNotification();
+        this._source.notify(this._notification);
     },
 
     _notifyUpdateReady: function() {
@@ -245,9 +231,12 @@ const UpdaterManager = new Lang.Class({
         this._notification = new UpdaterNotification(this._source,
             _("Updates Ready"),
             _("Software updates are ready to be installed on your system"));
-        this._notification.addButton('apply-updates', _("Install Now"));
+        this._notification.addAction(_("Install Now"), Lang.bind(this, function() {
+            this._notification.destroy();
+            this._proxy.ApplyRemote();
+        }));
 
-        this._sendNotification();
+        this._source.notify(this._notification);
     },
 
     _notifyUpdateApplied: function() {
@@ -256,9 +245,12 @@ const UpdaterManager = new Lang.Class({
         this._notification = new UpdaterNotification(this._source,
             _("Updates Installed"),
             _("Software updates were installed on your system"));
-        this._notification.addButton('restart-updates', _("Restart Now"));
+        this._notification.addAction(_("Restart Now"), Lang.bind(this, function() {
+            this._notification.destroy();
+            this._loginManager.reboot();
+        }));
 
-        this._sendNotification();
+        this._source.notify(this._notification);
     },
 
     _notifyError: function() {
@@ -288,7 +280,7 @@ const UpdaterManager = new Lang.Class({
             _("Update Failed"),
             _("We could not update your system"));
 
-        this._sendNotification();
+        this._source.notify(this._notification);
     }
 });
 const Component = UpdaterManager;
