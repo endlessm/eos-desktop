@@ -78,6 +78,9 @@ function _getAppManifest(flatpakID) {
 //
 // Synchronize geometry of MetaWindowActor src to dst by
 // applying both the physical geometry and maximization state.
+//
+// The return value signifies whether the maximization state changed,
+// which make cause the hidden window to be shown.
 function _synchronizeMetaWindowActorGeometries(src, dst) {
     let srcGeometry = src.meta_window.get_frame_rect();
     let dstGeometry = dst.meta_window.get_frame_rect();
@@ -94,13 +97,15 @@ function _synchronizeMetaWindowActorGeometries(src, dst) {
         dst.meta_window.maximize(Meta.MaximizeFlags.BOTH);
 
     if (srcGeometry.equal(dstGeometry))
-        return;
+        return srcIsMaximized != dstIsMaximized;
 
     dst.meta_window.move_resize_frame(false,
                                       srcGeometry.x,
                                       srcGeometry.y,
                                       srcGeometry.width,
                                       srcGeometry.height);
+
+    return srcIsMaximized != dstIsMaximized;
 }
 
 function _synchronizeViewSourceButtonToRectCorner(button, rect) {
@@ -721,7 +726,19 @@ const CodingSession = new Lang.Class({
             return;
 
         let [src, dst] = this._srcAndDstPairFromWindow(window);
-        _synchronizeMetaWindowActorGeometries(src, dst);
+        let maximizationStateChanged = _synchronizeMetaWindowActorGeometries(
+            src, dst
+        );
+
+        // If the maximization state changed, we may end up with windows that
+        // are shown. Use the current state to determine which  window to hide.
+        if (maximizationStateChanged) {
+            if (this._state === STATE_BUILDER) {
+                this.app.hide();
+            } else {
+                this.builder.hide();
+            }
+        }
     },
 
     _applyWindowMinimizationState: function(shellwm, actor) {
