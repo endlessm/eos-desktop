@@ -979,7 +979,7 @@ StScrollBar StButton#vhandle:active {
 
 /* Search Box */
 #searchEntry {
-    width: 300px;
+    width: 350px;
     height: 38px;
 
     margin-top: 8px;
@@ -991,7 +991,7 @@ StScrollBar StButton#vhandle:active {
     color: #484645;
     selected-color: #ededed;
     caret-color: #333;
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.8);
 
     border-radius: 19px;
     box-shadow: 0px 0px 4px rgba(0,0,0,0.7);
@@ -1001,12 +1001,19 @@ StScrollBar StButton#vhandle:active {
 }
 
 #searchEntry.low-resolution {
+    width: 300px;
+
     -minimum-vpadding: 20px;
 }
 
 #searchEntry:rtl {
     padding-left: 4px;
     padding-right: 8px;
+}
+
+#searchEntry:hover,
+#searchEntry:focus {
+    background-color: rgba(255, 255, 255, 0.95);
 }
 
 .search-entry-text-hint {
