@@ -230,11 +230,11 @@ const WindowTrackingButton = new Lang.Class({
     track: function(window) {
         // Untrack the current window and track the newly specified one.
         if (this._positionChangedId) {
-            this._trackingWindow.disconnect(this.positionChangedId);
+            this._trackingWindow.disconnect(this._positionChangedId);
         }
 
         if (this._sizeChangedId) {
-            this._trackingWindow.disconnect(this.sizeChangedId);
+            this._trackingWindow.disconnect(this._sizeChangedId);
         }
 
         this._trackingWindow = window;
