@@ -53,8 +53,8 @@ function _wrapTweening(target, tweeningParameters) {
         }
     }
 
-    //if (!Gtk.Settings.get_default().gtk_enable_animations)
-    //    tweeningParameters['time'] = 0.000001;
+    if (!Gtk.Settings.get_default().gtk_enable_animations)
+        tweeningParameters['time'] = 0.000001;
 
     _addHandler(target, tweeningParameters, 'onComplete', _tweenCompleted);
 }
