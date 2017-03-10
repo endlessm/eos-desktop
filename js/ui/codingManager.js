@@ -387,7 +387,7 @@ const CodingInstallationMonitor = new Lang.Class({
 
         let apps = userInstallation.list_installed_refs_by_kind(Flatpak.RefKind.APP, null);
         for (let i = 0; i < apps.length; i++) {
-            if (apps[i].name === params.app_name) {
+            if (apps[i].name === params.flatpak_name) {
                 this._commit = apps[i].commit;
                 break;
             }
@@ -1186,7 +1186,7 @@ const CodeViewManager = new Lang.Class({
             })
         });
         this._sessions.push(session);
-        log("Session created");
+
         this.emit('session-created', session);
         return true;
     },
