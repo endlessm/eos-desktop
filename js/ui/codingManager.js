@@ -12,7 +12,6 @@ const Mainloop = imports.mainloop;
 const Meta = imports.gi.Meta;
 const Shell = imports.gi.Shell;
 const St = imports.gi.St;
-const IconGridLayout = imports.ui.iconGridLayout;
 
 const AppActivation = imports.ui.appActivation;
 const Main = imports.ui.main;
@@ -1076,6 +1075,7 @@ const CodingOSIntegration = new Lang.Class({
                 }
             }));
 
+            session.connect('closed', Lang.bind(this, function() {
                 if (listeningFor.has('codeview-closed')) {
                     listeningFor.delete('codeview-closed');
                     controller.event_occurred('codeview-closed');
