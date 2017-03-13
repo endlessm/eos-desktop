@@ -457,6 +457,9 @@ const AppStoreIface = '<node> \
 <method name="AddApplication"> \
     <arg type="s" direction="in" name="id" /> \
 </method> \
+<method name="AddAppIfNotVisible"> \
+    <arg type="s" direction="in" name="id" /> \
+</method> \
 <method name="RemoveApplication"> \
     <arg type="s" direction="in" name="id" /> \
 </method> \
@@ -493,6 +496,21 @@ const AppStoreService = new Lang.Class({
         eventRecorder.record_event(SHELL_APP_ADDED_EVENT, appId);
 
         if (!IconGridLayout.layout.iconIsFolder(id)) {
+            IconGridLayout.layout.appendIcon(id, IconGridLayout.DESKTOP_GRID_ID);
+        }
+    },
+
+    AddAppIfNotVisible: function(id) {
+        let eventRecorder = EosMetrics.EventRecorder.get_default();
+        let appId = new GLib.Variant('s', id);
+        eventRecorder.record_event(SHELL_APP_ADDED_EVENT, appId);
+
+        if (IconGridLayout.layout.iconIsFolder(id)) {
+            return;
+        }
+
+        let visibleIcons = IconGridLayout.layout.getIcons(IconGridLayout.DESKTOP_GRID_ID);
+        if (visibleIcons.indexOf(id) == -1) {
             IconGridLayout.layout.appendIcon(id, IconGridLayout.DESKTOP_GRID_ID);
         }
     },
