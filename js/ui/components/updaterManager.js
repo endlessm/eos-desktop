@@ -269,8 +269,9 @@ const UpdaterManager = new Lang.Class({
         }
 
         // We don’t want to notify of errors arising from being a dev-converted
-        // system.
-        if (this._proxy.ErrorName == 'com.endlessm.Updater.Error.NotOstreeSystem') {
+        // system or live system.
+        if (this._proxy.ErrorName == 'com.endlessm.Updater.Error.NotOstreeSystem' ||
+            this._proxy.ErrorName == 'com.endlessm.Updater.Error.LiveBoot') {
             return;
         }
 
