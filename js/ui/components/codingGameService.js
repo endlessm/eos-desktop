@@ -122,7 +122,7 @@ const CodingChatboxTextService = new Lang.Class({
                         connection: global.display.connect('grab-op-begin', grabOpBeginCb)
                     },
                     {
-                        source: GLib.timeout_add(GLib.PRIORITY_DEFAULT, 5000, timeoutCb)
+                        source: GLib.timeout_add(GLib.PRIORITY_DEFAULT, 2500, timeoutCb)
                     }
                 ];
             }
