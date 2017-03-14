@@ -80,7 +80,7 @@ function _getAppManifest(flatpakID) {
 // applying both the physical geometry and maximization state.
 //
 // The return value signifies whether the maximization state changed,
-// which make cause the hidden window to be shown.
+// which may cause the hidden window to be shown.
 function _synchronizeMetaWindowActorGeometries(src, dst) {
     let srcGeometry = src.meta_window.get_frame_rect();
     let dstGeometry = dst.meta_window.get_frame_rect();
@@ -89,6 +89,7 @@ function _synchronizeMetaWindowActorGeometries(src, dst) {
                           src.meta_window.maximized_vertically);
     let dstIsMaximized = (dst.meta_window.maximized_horizontally &&
                           dst.meta_window.maximized_vertically);
+    let maximizationStateChanged = srcIsMaximized != dstIsMaximized;
 
     if (!srcIsMaximized && dstIsMaximized)
         dst.meta_window.unmaximize(Meta.MaximizeFlags.BOTH);
@@ -97,7 +98,7 @@ function _synchronizeMetaWindowActorGeometries(src, dst) {
         dst.meta_window.maximize(Meta.MaximizeFlags.BOTH);
 
     if (srcGeometry.equal(dstGeometry))
-        return srcIsMaximized != dstIsMaximized;
+        return maximizationStateChanged;
 
     dst.meta_window.move_resize_frame(false,
                                       srcGeometry.x,
@@ -105,7 +106,7 @@ function _synchronizeMetaWindowActorGeometries(src, dst) {
                                       srcGeometry.width,
                                       srcGeometry.height);
 
-    return srcIsMaximized != dstIsMaximized;
+    return maximizationStateChanged;
 }
 
 function _synchronizeViewSourceButtonToRectCorner(button, rect) {
@@ -731,7 +732,7 @@ const CodingSession = new Lang.Class({
         );
 
         // If the maximization state changed, we may end up with windows that
-        // are shown. Use the current state to determine which  window to hide.
+        // are shown. Use the current state to determine which window to hide.
         if (maximizationStateChanged) {
             if (this._state === STATE_BUILDER) {
                 this.app.hide();
