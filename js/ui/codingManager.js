@@ -404,7 +404,7 @@ const CodingInstallationMonitor = new Lang.Class({
 
                 let app;
                 try {
-                    app = userInstallation.get_current_installed_app(this.app_name, null);
+                    app = userInstallation.get_current_installed_app(this.flatpak_name, null);
                 } catch(e) {
                     // application not installed or just got deleted
                     return;
