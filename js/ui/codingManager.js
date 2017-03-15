@@ -416,9 +416,6 @@ const CodingInstallationMonitor = new Lang.Class({
                 this._commit = app.commit;
                 this.emit('app-installed');
 
-                if (this._codeViewInstalled)
-                    this._controller.event_occurred('codeview-installed');
-
                 this.disconnect();
             })
         );
