@@ -14,6 +14,7 @@ const Shell = imports.gi.Shell;
 const St = imports.gi.St;
 
 const AppActivation = imports.ui.appActivation;
+const IconGridLayout = imports.ui.iconGridLayout;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
 
@@ -377,7 +378,9 @@ const CodingInstallationMonitor = new Lang.Class({
                                                false)
     },
     Signals: {
-        'app-installed': {}
+        'app-installed': {
+            param_types: [ GObject.TYPE_OBJECT ]
+        }
     },
 
     _init: function(params) {
@@ -416,7 +419,7 @@ const CodingInstallationMonitor = new Lang.Class({
 
                 this._commit = app.commit;
                 this._changed = true;
-                this.emit('app-installed');
+                this.emit('app-installed', app);
 
                 this.disconnect();
             })
@@ -1032,6 +1035,36 @@ const CodingSession = new Lang.Class({
     }
 });
 
+// Given a FlatpakInstalledRef app, look up its exports directory
+// and find any relevant .desktop files and add them to the desktop
+// if they are not already added.
+function addFlatpakAppToDesktop(app) {
+    // First, get the exports directory. We'll look in here to find
+    // any exported .desktop files
+    let deploy = app.get_deploy_dir();
+    let applications = Gio.File.new_for_path(GLib.build_filenamev([
+        deploy,
+        'export',
+        'share',
+        'applications'
+    ]));
+
+    let enumerator = applications.enumerate_children('standard::*',
+                                                     Gio.FileQueryInfoFlags.NONE,
+                                                     null);
+
+    let childInfo = null;
+    while ((childInfo = enumerator.next_file(null)) !== null) {
+        let name = childInfo.get_name();
+        if (name.endsWith('.desktop')) {
+            if (!IconGridLayout.layout.iconIsFolder(name)) {
+                IconGridLayout.layout.appendIcon(name,
+                                                 IconGridLayout.DESKTOP_GRID_ID);
+            }
+        }
+    }
+}
+
 const OS_INTEGRATION_APP = 'org.gnome.Weather.Application';
 
 const CodingOSIntegration = new Lang.Class({
@@ -1060,11 +1093,14 @@ const CodingOSIntegration = new Lang.Class({
                 }
             }));
 
-            session.install_monitor.connect('app-installed', Lang.bind(this, function() {
+            session.install_monitor.connect('app-installed', Lang.bind(this, function(monitor, app) {
                 if (listeningFor.has('codeview-installed')) {
                     listeningFor.delete('codeview-installed');
                     controller.event_occurred('codeview-installed');
                 }
+
+                // Add the app to the desktop if we haven't got it already
+                addFlatpakAppToDesktop(app);
             }));
 
             session.connect('flipped', Lang.bind(this, function() {
