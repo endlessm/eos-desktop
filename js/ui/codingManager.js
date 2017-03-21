@@ -1103,7 +1103,7 @@ const CodingOSIntegration = new Lang.Class({
             // session open
             if (manager.sessions.some(s =>
                     s.app.meta_window.get_flatpak_id() === OS_INTEGRATION_APP &&
-                    s.builder !== NULL
+                    s.builder !== null
             )) {
                 controller.event_occurred('codeview-started');
                 return;
