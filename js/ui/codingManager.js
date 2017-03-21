@@ -382,6 +382,7 @@ const CodingInstallationMonitor = new Lang.Class({
 
     _init: function(params) {
         this.parent(params);
+        this._changed = false;
 
         let userInstallation = Flatpak.Installation.new_user(null);
 
@@ -414,6 +415,7 @@ const CodingInstallationMonitor = new Lang.Class({
                     return;
 
                 this._commit = app.commit;
+                this._changed = true;
                 this.emit('app-installed');
 
                 this.disconnect();
@@ -430,7 +432,7 @@ const CodingInstallationMonitor = new Lang.Class({
     },
 
     get installed() {
-        return this._commit !== 0;
+        return this._changed;
     }
 });
 
