@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-07 02:30+0000\n"
+"POT-Creation-Date: 2017-03-14 01:30+0000\n"
 "PO-Revision-Date: 2017-03-03 21:50+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: German (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/de/)\n"
@@ -556,51 +556,51 @@ msgstr "Anmelden"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "Entschuldigung, das hat nicht funktioniert. Bitte versuchen Sie es erneut."
 
-#: ../js/ui/components/updaterManager.js:215
+#: ../js/ui/components/updaterManager.js:198
 msgid "Software Update"
 msgstr "Software-Update"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:214
 msgid "Updates Available"
 msgstr "Updates verfügbar"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software updates are available for your system"
 msgstr "Es sind Software-Updates verfügbar"
 
-#: ../js/ui/components/updaterManager.js:233
+#: ../js/ui/components/updaterManager.js:216
 msgid "Download Now"
 msgstr "Jetzt herunterladen"
 
-#: ../js/ui/components/updaterManager.js:246
+#: ../js/ui/components/updaterManager.js:232
 msgid "Updates Ready"
 msgstr "Updates stehen bereit"
 
-#: ../js/ui/components/updaterManager.js:247
+#: ../js/ui/components/updaterManager.js:233
 msgid "Software updates are ready to be installed on your system"
 msgstr "Software-Updates stehen zur Installation bereit"
 
-#: ../js/ui/components/updaterManager.js:248
+#: ../js/ui/components/updaterManager.js:234
 msgid "Install Now"
 msgstr "Jetzt installieren"
 
-#: ../js/ui/components/updaterManager.js:257
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Installed"
 msgstr "Updates sind installiert"
 
-#: ../js/ui/components/updaterManager.js:258
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates were installed on your system"
 msgstr "Software-Updates sind installiert"
 
-#: ../js/ui/components/updaterManager.js:259
+#: ../js/ui/components/updaterManager.js:248
 msgid "Restart Now"
 msgstr "Jetzt Neustarten"
 
-#: ../js/ui/components/updaterManager.js:288
+#: ../js/ui/components/updaterManager.js:281
 msgid "Update Failed"
 msgstr "Update ist fehlgeschlagen"
 
-#: ../js/ui/components/updaterManager.js:289
+#: ../js/ui/components/updaterManager.js:282
 msgid "We could not update your system"
 msgstr "Wir konnten das Update nicht ausführen"
 

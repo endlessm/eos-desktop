@@ -7,14 +7,15 @@
 # dirgita <dirgitadevina@yahoo.co.id>, 2011-2012,2014
 # Hartono <hartono.s10@gmail.com>, 2016
 # Roddy Shuler <roddy@endlessm.com>, 2016
+# Septira Taruna <septira@endlessm.com>, 2017
 # Wibiharto <wibinem@yahoo.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-07 02:30+0000\n"
-"PO-Revision-Date: 2017-03-03 22:00+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-14 01:30+0000\n"
+"PO-Revision-Date: 2017-03-15 06:19+0000\n"
+"Last-Translator: Septira Taruna <septira@endlessm.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -550,51 +551,51 @@ msgstr "Otentikasi"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "Maaf, tidak berhasil. Silakan coba lagi."
 
-#: ../js/ui/components/updaterManager.js:215
+#: ../js/ui/components/updaterManager.js:198
 msgid "Software Update"
 msgstr "Pembaruan Perangkat Lunak"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:214
 msgid "Updates Available"
 msgstr "Pembaruan tersedia"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software updates are available for your system"
 msgstr "Pembaruan perangkat lunak tersedia untuk sistem Anda"
 
-#: ../js/ui/components/updaterManager.js:233
+#: ../js/ui/components/updaterManager.js:216
 msgid "Download Now"
 msgstr "Unduh sekarang"
 
-#: ../js/ui/components/updaterManager.js:246
+#: ../js/ui/components/updaterManager.js:232
 msgid "Updates Ready"
 msgstr "Pembaruan siap"
 
-#: ../js/ui/components/updaterManager.js:247
+#: ../js/ui/components/updaterManager.js:233
 msgid "Software updates are ready to be installed on your system"
 msgstr "Pembaruan perangkat lunak siap dipasang pada sistem Anda"
 
-#: ../js/ui/components/updaterManager.js:248
+#: ../js/ui/components/updaterManager.js:234
 msgid "Install Now"
 msgstr "Pasang sekarang"
 
-#: ../js/ui/components/updaterManager.js:257
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Installed"
 msgstr "Pembaruan telah dipasang"
 
-#: ../js/ui/components/updaterManager.js:258
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates were installed on your system"
 msgstr "Pembaruan perangkat lunak sudah dipasang pada sistem Anda"
 
-#: ../js/ui/components/updaterManager.js:259
+#: ../js/ui/components/updaterManager.js:248
 msgid "Restart Now"
 msgstr "Mulai ulang sekarang"
 
-#: ../js/ui/components/updaterManager.js:288
+#: ../js/ui/components/updaterManager.js:281
 msgid "Update Failed"
 msgstr "Gagal memperbarui"
 
-#: ../js/ui/components/updaterManager.js:289
+#: ../js/ui/components/updaterManager.js:282
 msgid "We could not update your system"
 msgstr "Kami tidak dapat memperbarui sistem Anda"
 
@@ -1100,7 +1101,7 @@ msgstr "Lebih banyak…"
 #. and we cannot access its settings (including the name)
 #: ../js/ui/status/network.js:493 ../js/ui/status/network.js:1150
 msgid "Connected (private)"
-msgstr "Termsabung (pribadi)"
+msgstr "Tersambung (pribadi)"
 
 #: ../js/ui/status/network.js:559
 msgid "Wired"
@@ -1254,7 +1255,7 @@ msgstr "Apakah Anda ingin mempertahankan pengaturan tampilan ini?"
 #. to avoid ellipsizing the labels.
 #: ../js/ui/windowManager.js:90
 msgid "Revert Settings"
-msgstr "Balikkan Tatanan"
+msgstr "Kembalikan Pengaturan"
 
 #: ../js/ui/windowManager.js:94
 msgid "Keep Changes"
@@ -1292,7 +1293,7 @@ msgstr "Pindahkan Bilah Judul Pada Layar"
 
 #: ../js/ui/windowMenu.js:70
 msgid "Always on Top"
-msgstr "Selalu di Puncak"
+msgstr "Selalu di Atas"
 
 #: ../js/ui/windowMenu.js:89
 msgid "Always on Visible Workspace"

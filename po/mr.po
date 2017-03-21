@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-07 02:30+0000\n"
+"POT-Creation-Date: 2017-03-14 01:30+0000\n"
 "PO-Revision-Date: 2017-03-03 21:50+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Marathi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/mr/)\n"
@@ -547,51 +547,51 @@ msgstr "ओळख पटवा"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "माफ करा, ते कार्य करू शकले नाही. कृपया पुनःप्रयत्न करा."
 
-#: ../js/ui/components/updaterManager.js:215
+#: ../js/ui/components/updaterManager.js:198
 msgid "Software Update"
 msgstr "सॉफ्टवेअर अद्यतन"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:214
 msgid "Updates Available"
 msgstr "अद्यतने उपलब्ध"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software updates are available for your system"
 msgstr "आपल्या प्रणालीकरिता अद्यतने उपलब्ध आहेत"
 
-#: ../js/ui/components/updaterManager.js:233
+#: ../js/ui/components/updaterManager.js:216
 msgid "Download Now"
 msgstr "डाउनलोड करा"
 
-#: ../js/ui/components/updaterManager.js:246
+#: ../js/ui/components/updaterManager.js:232
 msgid "Updates Ready"
 msgstr "अद्यतने तयार"
 
-#: ../js/ui/components/updaterManager.js:247
+#: ../js/ui/components/updaterManager.js:233
 msgid "Software updates are ready to be installed on your system"
 msgstr "सॉफ्टवेअर अद्यतने स्थापित करण्यासाठी तयार आहेत"
 
-#: ../js/ui/components/updaterManager.js:248
+#: ../js/ui/components/updaterManager.js:234
 msgid "Install Now"
 msgstr "स्थापित करा"
 
-#: ../js/ui/components/updaterManager.js:257
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Installed"
 msgstr "अद्यतने स्थापित"
 
-#: ../js/ui/components/updaterManager.js:258
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates were installed on your system"
 msgstr "आपल्या प्रणालीवर सॉफ्टवेअर अद्यतने स्थापित करण्यात आली आहेत"
 
-#: ../js/ui/components/updaterManager.js:259
+#: ../js/ui/components/updaterManager.js:248
 msgid "Restart Now"
 msgstr "पुन्हा चालू करा"
 
-#: ../js/ui/components/updaterManager.js:288
+#: ../js/ui/components/updaterManager.js:281
 msgid "Update Failed"
 msgstr "अद्यतन अयशस्वी"
 
-#: ../js/ui/components/updaterManager.js:289
+#: ../js/ui/components/updaterManager.js:282
 msgid "We could not update your system"
 msgstr "आम्ही आपली प्रणाली अद्यतनित करू शकलो नाही"
 

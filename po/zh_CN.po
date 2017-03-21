@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-07 02:30+0000\n"
+"POT-Creation-Date: 2017-03-14 01:30+0000\n"
 "PO-Revision-Date: 2017-03-06 03:24+0000\n"
 "Last-Translator: CN C2 <e2f48d4sf5ds@outlook.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/zh_CN/)\n"
@@ -573,51 +573,51 @@ msgstr "认证"
 msgid "Sorry, that didn't work. Please try again."
 msgstr "抱歉，您的输入有误。请重试。"
 
-#: ../js/ui/components/updaterManager.js:215
+#: ../js/ui/components/updaterManager.js:198
 msgid "Software Update"
 msgstr "软件更新"
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:214
 msgid "Updates Available"
 msgstr "可用的更新"
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software updates are available for your system"
 msgstr "有可用于您系统的软件更新"
 
-#: ../js/ui/components/updaterManager.js:233
+#: ../js/ui/components/updaterManager.js:216
 msgid "Download Now"
 msgstr "马上下载"
 
-#: ../js/ui/components/updaterManager.js:246
+#: ../js/ui/components/updaterManager.js:232
 msgid "Updates Ready"
 msgstr "更新已就绪"
 
-#: ../js/ui/components/updaterManager.js:247
+#: ../js/ui/components/updaterManager.js:233
 msgid "Software updates are ready to be installed on your system"
 msgstr "软件更新已经准备好安装到您的系统"
 
-#: ../js/ui/components/updaterManager.js:248
+#: ../js/ui/components/updaterManager.js:234
 msgid "Install Now"
 msgstr "马上安装"
 
-#: ../js/ui/components/updaterManager.js:257
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Installed"
 msgstr "更新完成"
 
-#: ../js/ui/components/updaterManager.js:258
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates were installed on your system"
 msgstr "软件更新已经安装到您的系统"
 
-#: ../js/ui/components/updaterManager.js:259
+#: ../js/ui/components/updaterManager.js:248
 msgid "Restart Now"
 msgstr "马上重启"
 
-#: ../js/ui/components/updaterManager.js:288
+#: ../js/ui/components/updaterManager.js:281
 msgid "Update Failed"
 msgstr "更新失败"
 
-#: ../js/ui/components/updaterManager.js:289
+#: ../js/ui/components/updaterManager.js:282
 msgid "We could not update your system"
 msgstr "我们未能升级您的系统"
 

@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Aditi Kabir <aditi.kabir@gmail.com>, 2016
+# cyrus adhikari <adhikari@mpower-social.com>, 2017
 # Shimon Sharmin <oparthib@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-07 02:30+0000\n"
-"PO-Revision-Date: 2017-03-03 21:50+0000\n"
-"Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
+"POT-Creation-Date: 2017-03-14 01:30+0000\n"
+"PO-Revision-Date: 2017-03-19 13:20+0000\n"
+"Last-Translator: cyrus adhikari <adhikari@mpower-social.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,7 +22,7 @@ msgstr ""
 
 #: ../data/50-gnome-shell-system.xml.in.h:1
 msgid "System"
-msgstr "প্রক্রিয়া"
+msgstr "সিস্টেম"
 
 #: ../data/50-gnome-shell-system.xml.in.h:2
 msgid "Show the message tray"
@@ -29,7 +30,7 @@ msgstr "বার্তাসমূহ দেখান"
 
 #: ../data/50-gnome-shell-system.xml.in.h:3
 msgid "Focus the active notification"
-msgstr "সক্রিয় সূচকে মনযোগ দেয়া"
+msgstr "সক্রিয় নোটিফিকেশনে মনযোগ দেয়া   "
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
 msgid "Show all applications"
@@ -41,7 +42,7 @@ msgstr "সমস্ত এপ্লিকেশনের তালিকা খ
 
 #: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr "প্রতিক্রিয়া"
+msgstr "ফীডব্যাক "
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
@@ -55,11 +56,11 @@ msgstr "উইন্ডো ব্যবস্থাপনা এবং অ্য
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:1
 msgid "Extensions"
-msgstr ""
+msgstr "সম্প্রসারণ"
 
 #: ../data/eos-shell-extension-prefs.desktop.in.in.h:2
 msgid "Configure Desktop Extensions"
-msgstr ""
+msgstr "ডেস্কটপ এক্সটেনশানগুলির কনফিগার"
 
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
@@ -68,11 +69,11 @@ msgstr "পছন্দসই ডায়ালগ %s: লোড হবার স�
 
 #: ../js/extensionPrefs/main.js:149
 msgid "Desktop Extensions"
-msgstr ""
+msgstr "ডেস্কটপ এক্সটেনশানগুলি"
 
 #: ../js/gdm/loginDialog.js:410
 msgid "Session…"
-msgstr "অধিবেশনকাল"
+msgstr "অধিবেশনকাল..."
 
 #: ../js/gdm/loginDialog.js:620
 msgid "Show password hint"
@@ -93,7 +94,7 @@ msgstr "তালিকায় নেই?"
 #. by customer support.
 #: ../js/gdm/loginDialog.js:836
 msgid "Enter unlock code provided by customer support:"
-msgstr "ক্রেতা সহায়ক থেকে দেয়া খুলবার কোডটি লিখুন"
+msgstr "ক্রেতা সহায়ক থেকে দেয়া খুলবার কোডটি লিখুনঃ"
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
@@ -183,7 +184,7 @@ msgstr "কমান্ড পাওয়া যায়নি"
 #. something nicer
 #: ../js/misc/util.js:157
 msgid "Could not parse command:"
-msgstr "কমান্ড পার্স করা যায়নি:"
+msgstr "কমান্ড পার্স করা যায় নি:"
 
 #: ../js/misc/util.js:165
 #, javascript-format
@@ -194,7 +195,7 @@ msgstr "'%s' কার্যকর করা ব্যর্থ:"
 #. * Shell's desktop search entry.
 #: ../js/misc/util.js:287
 msgid "Google"
-msgstr ""
+msgstr "গুগল"
 
 #: ../js/ui/appDisplay.js:1199
 msgid "Remove from desktop"
@@ -547,51 +548,51 @@ msgstr "যাচাই করা "
 msgid "Sorry, that didn't work. Please try again."
 msgstr "দুঃখিত, ওটা কাজ করেনি। আবার চেষ্টা করুন। "
 
-#: ../js/ui/components/updaterManager.js:215
+#: ../js/ui/components/updaterManager.js:198
 msgid "Software Update"
 msgstr "সফটওয়্যার হালনাগাদ "
 
-#: ../js/ui/components/updaterManager.js:231
+#: ../js/ui/components/updaterManager.js:214
 msgid "Updates Available"
 msgstr "হালনাগাদ করা যাবে "
 
-#: ../js/ui/components/updaterManager.js:232
+#: ../js/ui/components/updaterManager.js:215
 msgid "Software updates are available for your system"
 msgstr "আপনার সিস্টেমের জন্য সফটওয়্যার হালনাগাদ করা যাবে "
 
-#: ../js/ui/components/updaterManager.js:233
+#: ../js/ui/components/updaterManager.js:216
 msgid "Download Now"
 msgstr "নামান এখনই "
 
-#: ../js/ui/components/updaterManager.js:246
+#: ../js/ui/components/updaterManager.js:232
 msgid "Updates Ready"
 msgstr "নতুনাবস্থা তৈরি "
 
-#: ../js/ui/components/updaterManager.js:247
+#: ../js/ui/components/updaterManager.js:233
 msgid "Software updates are ready to be installed on your system"
 msgstr "সফটওয়্যার নতুনভাবে আপনার সিস্টেমে নেবার জন্য তৈরি  "
 
-#: ../js/ui/components/updaterManager.js:248
+#: ../js/ui/components/updaterManager.js:234
 msgid "Install Now"
 msgstr "এখনই নিন "
 
-#: ../js/ui/components/updaterManager.js:257
+#: ../js/ui/components/updaterManager.js:246
 msgid "Updates Installed"
 msgstr "হালনাগাদগুলো সংস্থাপিত হয়েছে "
 
-#: ../js/ui/components/updaterManager.js:258
+#: ../js/ui/components/updaterManager.js:247
 msgid "Software updates were installed on your system"
 msgstr "সফটওয়্যারের নতুন অবস্থাটি আপনার সিস্টেমে নেয়া হয়েছে"
 
-#: ../js/ui/components/updaterManager.js:259
+#: ../js/ui/components/updaterManager.js:248
 msgid "Restart Now"
 msgstr "আবার চালু করুন "
 
-#: ../js/ui/components/updaterManager.js:288
+#: ../js/ui/components/updaterManager.js:281
 msgid "Update Failed"
 msgstr "হালনাগাদ ব্যর্থ হয়েছে "
 
-#: ../js/ui/components/updaterManager.js:289
+#: ../js/ui/components/updaterManager.js:282
 msgid "We could not update your system"
 msgstr "আপনার সিস্টেমটি হালনাগাদ করা যায়নি "
 
