@@ -22,6 +22,9 @@ typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 servicedir = $(datadir)/dbus-1/services
 service_DATA = $(service_in_files:.service.in=.service)
 
+grand_central_providersdir = $(datadir)/com.endlessm.GrandCentral/ContentProviders
+grand_central_providers_DATA = org.gnome.Shell.provider
+
 %.service: %.service.in Makefile
 	$(AM_V_GEN)									\
 		[ -d $(@D) ] || $(mkdir_p) $(@D) ;					\

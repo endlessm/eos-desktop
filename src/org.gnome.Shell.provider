@@ -1,0 +1,5 @@
+[GrandCentralContentProvider]
+DesktopId=org.gnome.Shell.desktop
+BusName=org.gnome.Shell.GrandCentralContent
+ObjectPath=/org/gnome/Shell/GrandCentral/Notifications
+Version=2
