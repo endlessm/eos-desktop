@@ -852,11 +852,13 @@ const GtkNotificationDaemonAppSource = new Lang.Class({
     activateAction: function(actionId, target) {
         let app = this._createApp();
         app.ActivateActionRemote(actionId, target ? [target] : [], getPlatformData());
+        Main.overview.hide();
     },
 
     open: function() {
         let app = this._createApp();
         app.ActivateRemote(getPlatformData());
+        Main.overview.hide();
     },
 
     addNotification: function(notificationId, notificationParams, showBanner) {
