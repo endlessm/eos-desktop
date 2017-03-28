@@ -1672,10 +1672,41 @@ const MessageTrayContextMenu = new Lang.Class({
 
 });
 
+const GrandCentralNotificationsIface = '\
+<node> \
+  <interface name="com.endlessm.GrandCentralContent"> \
+    <method name="ContentQuery"> \
+      <arg type="s" name="Query" direction="in" /> \
+      <arg type="s" name="Result" direction="out" /> \
+    </method> \
+    <method name="QueryNotifications"> \
+      <arg name="notifications" direction="out" type="aa{ss}" /> \
+    </method> \
+  </interface> \
+</node>';
+
+function nullToEmptyString(variable) {
+    if (variable === null) {
+        return '';
+    }
+
+    return variable;
+}
+
 const MessageTray = new Lang.Class({
     Name: 'MessageTray',
 
     _init: function() {
+        this._grandCentralDBusImpl = Gio.DBusExportedObject.wrapJSObject(GrandCentralNotificationsIface, this);
+        Gio.DBus.own_name(Gio.BusType.SESSION,
+                          'org.gnome.Shell.GrandCentralContent',
+                          Gio.BusNameOwnerFlags.NONE,
+                          Lang.bind(this, function(conn, name) {
+                              this._grandCentralDBusImpl.export(conn,
+                                                                '/org/gnome/Shell/GrandCentral/Notifications');
+                          }),
+                          null,
+                          null);
         this._presence = new GnomeSession.Presence(Lang.bind(this, function(proxy, error) {
             this._onStatusChanged(proxy.status);
         }));
@@ -1716,6 +1747,7 @@ const MessageTray = new Lang.Class({
         this._notificationWidget.hide();
         this._notificationFocusGrabber = new FocusGrabber(this._notificationWidget);
         this._notificationQueue = [];
+        this._notificationHistory = [];
         this._notification = null;
         this._notificationClickedId = 0;
 
@@ -1881,6 +1913,14 @@ const MessageTray = new Lang.Class({
         this._contextMenu.actor.hide();
         Main.layoutManager.addChrome(this._contextMenu.actor);
 
+    },
+
+    ContentQuery: function() {
+        return '';
+    },
+
+    QueryNotificationsAsync: function(query, invocation) {
+        invocation.return_value(new GLib.Variant('(aa{ss})', [this._notificationHistory]));
     },
 
     _openContextMenu: function () {
@@ -2548,6 +2588,12 @@ const MessageTray = new Lang.Class({
 
     _showNotification: function() {
         this._notification = this._notificationQueue.shift();
+        this._notificationHistory.unshift({
+            title: this._notification.title,
+            body: this._notification.bannerBodyText,
+            source: this._notification.source.title,
+            icon: nullToEmptyString(this._notification._icon.gicon.to_string())
+        });
 
         this._userActiveWhileNotificationShown = this.idleMonitor.get_idletime() <= IDLE_TIME;
         if (!this._userActiveWhileNotificationShown) {
