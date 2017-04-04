@@ -58,7 +58,7 @@ const CodingManager = new Lang.Class({
         this._rotateInActors = [];
         this._rotateOutActors = [];
         this._watchdogId = 0;
-        this._codingApps = ['com.endlessm.Helloworld', 'org.gnome.Weather.Application'];
+        this._codingApps = ['com.endlessm.Helloworld', 'org.gnome.Weather'];
     },
 
     _isCodingApp: function(flatpakID) {
