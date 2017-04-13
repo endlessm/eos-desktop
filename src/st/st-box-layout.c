@@ -921,10 +921,11 @@ st_box_layout_paint (ClutterActor *actor)
    * the borders and background stay in place; after drawing the borders and
    * background, we clip to the content area */
   if (priv->hadjustment || priv->vadjustment)
-    cogl_clip_push_rectangle ((int)content_box.x1,
-                              (int)content_box.y1,
-                              (int)content_box.x2,
-                              (int)content_box.y2);
+    cogl_framebuffer_push_rectangle_clip (cogl_get_draw_framebuffer (),
+                                          (int)content_box.x1,
+                                          (int)content_box.y1,
+                                          (int)content_box.x2,
+                                          (int)content_box.y2);
 
   for (child = clutter_actor_get_first_child (actor);
        child != NULL;
@@ -932,7 +933,7 @@ st_box_layout_paint (ClutterActor *actor)
     clutter_actor_paint (child);
 
   if (priv->hadjustment || priv->vadjustment)
-    cogl_clip_pop ();
+    cogl_framebuffer_pop_clip (cogl_get_draw_framebuffer ());
 }
 
 static void
@@ -973,10 +974,11 @@ st_box_layout_pick (ClutterActor       *actor,
   content_box.y2 += y;
 
   if (priv->hadjustment || priv->vadjustment)
-    cogl_clip_push_rectangle ((int)content_box.x1,
-                              (int)content_box.y1,
-                              (int)content_box.x2,
-                              (int)content_box.y2);
+    cogl_framebuffer_push_rectangle_clip (cogl_get_draw_framebuffer (),
+                                          (int)content_box.x1,
+                                          (int)content_box.y1,
+                                          (int)content_box.x2,
+                                          (int)content_box.y2);
 
   for (child = clutter_actor_get_first_child (actor);
        child != NULL;
@@ -984,7 +986,7 @@ st_box_layout_pick (ClutterActor       *actor,
     clutter_actor_paint (child);
 
   if (priv->hadjustment || priv->vadjustment)
-    cogl_clip_pop ();
+    cogl_framebuffer_pop_clip (cogl_get_draw_framebuffer ());
 }
 
 static gboolean
