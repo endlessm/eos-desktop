@@ -22,10 +22,10 @@ override_dh_auto_configure:
 		$(CONFFLAGS)
 
 override_dh_auto_test:
-        # Tests need a display to run correctly on OBS, and
-        # even like having it sometimes it might fail, so
-        # make sure we run them with -i and inside xvfb.
-        xvfb-run --auto-servernum make -i check
+	# Tests need a display to run correctly on OBS, and
+	# even like having it sometimes it might fail, so
+	# make sure we run them with -i and inside xvfb.
+	xvfb-run --auto-servernum make -i check
 
 override_dh_install:
 	find debian/tmp -name '*.la' -delete
