@@ -55,7 +55,7 @@ if $PKG_CONFIG --exists gstreamer-1.0 '>=' $GSTREAMER_MIN_VERSION ; then
    AC_MSG_RESULT(yes)
    build_recorder=true
    recorder_modules="gstreamer-1.0 gstreamer-base-1.0 x11 gtk+-3.0"
-   PKG_CHECK_MODULES(TEST_SHELL_RECORDER, $recorder_modules clutter-1.0 xfixes)
+   PKG_CHECK_MODULES(TEST_SHELL_RECORDER, $recorder_modules mutter-clutter-1.0 xfixes)
 else
    AC_MSG_RESULT(no)
 fi
@@ -77,10 +77,10 @@ AS_IF([test x$enable_systemd != xno], [
 
 AC_MSG_RESULT($enable_systemd)
 
-CLUTTER_MIN_VERSION=1.13.4
+CLUTTER_MIN_VERSION=1.21.5
 GOBJECT_INTROSPECTION_MIN_VERSION=0.10.1
 GJS_MIN_VERSION=1.36.1
-MUTTER_MIN_VERSION=3.8.0
+MUTTER_MIN_VERSION=3.22.1
 GTK_MIN_VERSION=3.7.9
 GIO_MIN_VERSION=2.35.0
 LIBECAL_MIN_VERSION=3.5.3
@@ -97,12 +97,11 @@ PKG_CHECK_MODULES(EOS_SHELL, gio-unix-2.0 >= $GIO_MIN_VERSION
 			       libxml-2.0
                                gtk+-3.0 >= $GTK_MIN_VERSION
                                atk-bridge-2.0
-                               libmutter >= $MUTTER_MIN_VERSION
                                gjs-1.0 >= $GJS_MIN_VERSION
                                $recorder_modules
                                gdk-x11-3.0 libsoup-2.4
-			       clutter-x11-1.0 >= $CLUTTER_MIN_VERSION
-			       clutter-glx-1.0 >= $CLUTTER_MIN_VERSION
+                               mutter-clutter-1.0 >= $CLUTTER_MIN_VERSION
+                               mutter-cogl-pango-1.0
                                libstartup-notification-1.0 >= $STARTUP_NOTIFICATION_MIN_VERSION
                                gobject-introspection-1.0 >= $GOBJECT_INTROSPECTION_MIN_VERSION
 			       libcanberra libcanberra-gtk3
@@ -113,8 +112,10 @@ PKG_CHECK_MODULES(EOS_SHELL, gio-unix-2.0 >= $GIO_MIN_VERSION
                                eosmetrics-0)
 
 PKG_CHECK_MODULES(EOS_SHELL_JS, gio-2.0 gjs-1.0 >= $GJS_MIN_VERSION)
-PKG_CHECK_MODULES(ST, clutter-1.0 gtk+-3.0 libcroco-0.6 >= 0.6.8 x11)
-PKG_CHECK_MODULES(EOS_SHELL_FX, clutter-1.0 >= 1.16 glib-2.0 >= 2.38 libwindowfx_wobbly)
+PKG_CHECK_MODULES(MUTTER, libmutter >= $MUTTER_MIN_VERSION)
+
+PKG_CHECK_MODULES(ST, mutter-clutter-1.0 gtk+-3.0 libcroco-0.6 >= 0.6.8 x11)
+PKG_CHECK_MODULES(EOS_SHELL_FX, mutter-clutter-1.0 >= 1.16 glib-2.0 >= 2.38 libwindowfx_wobbly)
 PKG_CHECK_MODULES(SHELL_PERF_HELPER, gtk+-3.0 gio-2.0)
 PKG_CHECK_MODULES(SHELL_HOTPLUG_SNIFFER, gio-2.0 gdk-pixbuf-2.0)
 PKG_CHECK_MODULES(TRAY, gtk+-3.0)

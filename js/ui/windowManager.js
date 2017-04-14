@@ -37,7 +37,6 @@ const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
 const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
 
-const DISPLAY_REVERT_TIMEOUT = 30; // in seconds - keep in sync with mutter
 const ONE_SECOND = 1000; // in ms
 
 const DisplayChangeDialog = new Lang.Class({
@@ -73,7 +72,7 @@ const DisplayChangeDialog = new Lang.Class({
                        { y_fill:  false,
                          y_align: St.Align.START });
 
-        this._countDown = DISPLAY_REVERT_TIMEOUT;
+        this._countDown = Meta.prefs_get_display_configuration_timeout();
         let message = this._formatCountDown();
         this._descriptionLabel = new St.Label({ style_class: 'prompt-dialog-description',
                                                 text: this._formatCountDown() });

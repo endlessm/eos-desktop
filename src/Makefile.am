@@ -13,7 +13,7 @@ SUBDIRS = gvc
 
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = --warn-all --warn-error --add-include-path=$(srcdir)
+INTROSPECTION_SCANNER_ARGS = --warn-all --warn-error --add-include-path=$(srcdir) --add-include-path=$(MUTTER_GIR_DIR) -L$(MUTTER_TYPELIB_DIR)
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir) --includedir=$(MUTTER_TYPELIB_DIR)
 
 typelibdir = $(pkglibdir)
@@ -96,6 +96,7 @@ include Makefile-hotplug-sniffer.am
 
 eos_shell_cflags =				\
 	$(EOS_SHELL_CFLAGS)			\
+	$(MUTTER_CFLAGS)			\
 	@EOS_C_COVERAGE_CFLAGS@			\
 	-I$(srcdir)/tray			\
 	-DVERSION=\"$(VERSION)\"		\
@@ -217,7 +218,7 @@ eos_shell_real_SOURCES =		\
 	main.c
 eos_shell_real_CPPFLAGS = $(eos_shell_cflags)
 eos_shell_real_LDADD = libeos-shell.la libeos-shell-fx.la $(libeos_shell_la_LIBADD)
-eos_shell_real_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
+eos_shell_real_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@ -rpath $(MUTTER_TYPELIB_DIR)
 
 eos_shell_extension_prefs_SOURCES = 	\
 	gnome-shell-extension-prefs.c 	\
@@ -228,7 +229,7 @@ nodist_eos_shell_extension_prefs_SOURCES = \
 	$(NULL)
 eos_shell_extension_prefs_CPPFLAGS = $(eos_shell_cflags)
 eos_shell_extension_prefs_LDADD = $(EOS_SHELL_LIBS) -lm
-eos_shell_extension_prefs_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
+eos_shell_extension_prefs_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@ -rpath $(MUTTER_TYPELIB_DIR)
 
 ########################################
 
@@ -291,9 +292,9 @@ eos_shell_perf_helper_LDFLAGS = @EOS_C_COVERAGE_LDFLAGS@
 
 noinst_PROGRAMS += run-js-test
 
-run_js_test_CPPFLAGS = $(eos_shell_cflags)
-run_js_test_LDADD = libeos-shell.la $(libeos_shell_la_LIBADD)
-run_js_test_LDFLAGS = -export-dynamic
+run_js_test_CPPFLAGS = $(MUTTER_CFLAGS) $(eos_shell_cflags)
+run_js_test_LDADD = libeos-shell.la $(libeos_shell_la_LIBADD) $(MUTTER_LIBS)
+run_js_test_LDFLAGS = -export-dynamic -rpath $(MUTTER_TYPELIB_DIR)
 
 run_js_test_SOURCES =			\
 	run-js-test.c
@@ -328,13 +329,14 @@ libeos_shell_la_LIBADD =		\
 	-lm				\
 	@EOS_C_COVERAGE_LDFLAGS@	\
 	$(EOS_SHELL_LIBS)		\
+	$(MUTTER_LIBS)			\
 	$(BLUETOOTH_LIBS)		\
 	libst-1.0.la       		\
 	libtray.la			\
 	gvc/libgvc.la			\
 	$(NULL)
 
-libeos_shell_la_CPPFLAGS = $(eos_shell_cflags)
+libeos_shell_la_CPPFLAGS = $(eos_shell_cflags) $(MUTTER_CFLAGS)
 
 ShellMenu-0.1.gir: libeos-shell.la
 ShellMenu_0_1_gir_INCLUDES = Gio-2.0

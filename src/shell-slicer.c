@@ -117,14 +117,14 @@ shell_slicer_paint_child (ShellSlicer *self)
 
   cogl_push_matrix ();
 
-  cogl_clip_push_rectangle (0, 0, width, height);
+  cogl_framebuffer_push_rectangle_clip (cogl_get_draw_framebuffer (), 0, 0, width, height);
   cogl_translate ((int)(0.5 + x_align_factor * (width - child_width)),
                   (int)(0.5 + y_align_factor * (height - child_height)),
                   0);
 
   clutter_actor_paint (child);
 
-  cogl_clip_pop ();
+  cogl_framebuffer_pop_clip (cogl_get_draw_framebuffer ());
 
   cogl_pop_matrix ();
 }

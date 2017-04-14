@@ -2498,7 +2498,7 @@ st_theme_node_paint (StThemeNode           *node,
       get_background_position (node, &allocation, &background_box, &texture_coords);
 
       if (has_visible_outline || node->background_repeat)
-        cogl_clip_push_rectangle (allocation.x1, allocation.y1, allocation.x2, allocation.y2);
+        cogl_framebuffer_push_rectangle_clip (cogl_get_draw_framebuffer (), allocation.x1, allocation.y1, allocation.x2, allocation.y2);
 
       /* CSS based drop shadows
        *
@@ -2525,7 +2525,7 @@ st_theme_node_paint (StThemeNode           *node,
                                    paint_opacity);
 
       if (has_visible_outline || node->background_repeat)
-        cogl_clip_pop ();
+        cogl_framebuffer_pop_clip (cogl_get_draw_framebuffer ());
     }
 }
 
