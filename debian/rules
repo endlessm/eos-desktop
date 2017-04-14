@@ -1,19 +1,39 @@
 #!/usr/bin/make -f
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/autotools.mk
-include /usr/share/cdbs/1/rules/utils.mk
-include /usr/share/cdbs/1/class/gnome.mk
--include /usr/share/gnome-pkg-tools/1/rules/gnome-get-source.mk
+include /usr/share/gnome-pkg-tools/1/rules/gnome-get-source.mk
 
-$(patsubst %,binary-predeb/%,$(DEB_ALL_PACKAGES)) ::
-	dh_girepository -p$(cdbs_curpkg) -l src:src/gvc -p /usr/lib/mutter \
+%:
+	dh $@ --with gir
+
+override_dh_autoreconf:
+	dh_autoreconf --as-needed
+
+ifeq ($(DEB_HOST_ARCH_OS),linux)
+CONFFLAGS = \
+	--enable-networkmanager \
+	--enable-systemd
+endif
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		--libdir=/usr/lib \
+		--libexecdir="\$${libdir}/eos-shell" \
+		--enable-compile-warnings \
+		$(CONFFLAGS)
+
+override_dh_install:
+	find debian/tmp -name '*.la' -delete
+	dh_install --list-missing
+
+override_dh_makeshlibs:
+	dh_makeshlibs -Xlibeos-shell
+
+override_dh_shlibdeps:
+	# eos-shell uses mutters private mutter-clutter-1.0.so etc.
+	dh_shlibdeps -l"usr/lib/$(DEB_HOST_MULTIARCH)/mutter"
+
+override_dh_girepository:
+	dh_girepository \
+		-l src:src/gvc \
+		-p /usr/lib/$(DEB_HOST_MULTIARCH)/mutter \
 		/usr/lib/eos-shell
-	find debian/$(cdbs_curpkg) -name '*.la' -exec rm -f '{}' ';'
-
-DEB_CONFIGURE_EXTRA_FLAGS += --enable-compile-warnings=yes
-
-DEB_DH_MAKESHLIBS_ARGS_eos-shell = -Xlibeos-shell
-
-# List any files which are not installed
-common-binary-post-install-arch:: list-missing
