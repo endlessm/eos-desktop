@@ -2,9 +2,6 @@
 
 include /usr/share/gnome-pkg-tools/1/rules/gnome-get-source.mk
 
-# Tests don't run correctly on headless machines (e.g. OBS)
-DEB_BUILD_OPTIONS += nocheck
-
 %:
 	dh $@ --with gir
 
@@ -23,6 +20,12 @@ override_dh_auto_configure:
 		--libexecdir="\$${libdir}/eos-shell" \
 		--enable-compile-warnings \
 		$(CONFFLAGS)
+
+override_dh_auto_test:
+        # Tests need a display to run correctly on OBS, and
+        # even like having it sometimes it might fail, so
+        # make sure we run them with -i and inside xvfb.
+        xvfb-run --auto-servernum make -i check
 
 override_dh_install:
 	find debian/tmp -name '*.la' -delete
