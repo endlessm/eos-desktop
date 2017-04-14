@@ -27,7 +27,7 @@ function isSideComponentWindow (metaWindow) {
  */
 function shouldHideOtherWindows (metaWindow) {
     return isSideComponentWindow(metaWindow) &&
-               (metaWindow.get_wm_class() == 'Eos-app-store' || Main.socialBar.launchedFromDesktop);
+               (metaWindow.get_wm_class() == 'Eos-app-store' || Main.socialBar.launchedFromDesktop || Main.discoveryFeed.launchedFromDesktop);
 };
 
 /**
