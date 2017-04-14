@@ -2,6 +2,9 @@
 
 include /usr/share/gnome-pkg-tools/1/rules/gnome-get-source.mk
 
+# Tests don't run correctly on headless machines (e.g. OBS)
+DEB_BUILD_OPTIONS += nocheck
+
 %:
 	dh $@ --with gir
 
