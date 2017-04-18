@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-21 01:31+0000\n"
+"POT-Creation-Date: 2017-04-18 01:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1243,22 +1243,22 @@ msgstr ""
 msgid "'%s' is ready"
 msgstr ""
 
-#: ../js/ui/windowManager.js:71
+#: ../js/ui/windowManager.js:70
 msgid "Do you want to keep these display settings?"
 msgstr ""
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
 #.
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:89
 msgid "Revert Settings"
 msgstr ""
 
-#: ../js/ui/windowManager.js:94
+#: ../js/ui/windowManager.js:93
 msgid "Keep Changes"
 msgstr ""
 
-#: ../js/ui/windowManager.js:112
+#: ../js/ui/windowManager.js:111
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
