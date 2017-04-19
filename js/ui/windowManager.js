@@ -833,27 +833,42 @@ const WindowManager = new Lang.Class({
             return;
         }
 
-        let endX;
-        if (actor.x <= monitor.x) {
-            endX = monitor.x - actor.width;
-        } else {
-            endX = monitor.x + monitor.width;
-        }
-
         actor.opacity = 255;
         actor.show();
 
-        Tweener.addTween(actor,
-                         { x: endX,
-                           time: WINDOW_ANIMATION_TIME,
-                           transition: "easeOutQuad",
-                           onComplete: onComplete,
-                           onCompleteScope: this,
-                           onCompleteParams: [shellwm, actor],
-                           onOverwrite: onOverwrite,
-                           onOverwriteScope: this,
-                           onOverwriteParams: [shellwm, actor]
-                         });
+        if (SideComponent.isGrandCentralWindow(actor.meta_window)) {
+            let endY = monitor.y - actor.height;
+            Tweener.addTween(actor,
+                             { y: endY,
+                               time: WINDOW_ANIMATION_TIME,
+                               transition: "easeOutQuad",
+                               onComplete: onComplete,
+                               onCompleteScope: this,
+                               onCompleteParams: [shellwm, actor],
+                               onOverwrite: onOverwrite,
+                               onOverwriteScope: this,
+                               onOverwriteParams: [shellwm, actor]
+                             });
+        }
+        else {
+            let endX;
+            if (actor.x <= monitor.x) {
+                endX = monitor.x - actor.width;
+            } else {
+                endX = monitor.x + monitor.width;
+            }
+            Tweener.addTween(actor,
+                             { x: endX,
+                               time: WINDOW_ANIMATION_TIME,
+                               transition: "easeOutQuad",
+                               onComplete: onComplete,
+                               onCompleteScope: this,
+                               onCompleteParams: [shellwm, actor],
+                               onOverwrite: onOverwrite,
+                               onOverwriteScope: this,
+                               onOverwriteParams: [shellwm, actor]
+                             });
+        }
     },
 
     _minimizeWindow : function(shellwm, actor) {
@@ -1058,29 +1073,48 @@ const WindowManager = new Lang.Class({
             return;
         }
 
-        let origX = actor.x;
-        if (origX == monitor.x) {
-            // the side bar will appear from the left side
-            actor.set_position(monitor.x - actor.width, actor.y);
-        } else {
-            // ... from the right side
-            actor.set_position(monitor.x + monitor.width, actor.y);
+        if (SideComponent.isGrandCentralWindow(actor.meta_window)) {
+            // the GrandCentral window will appear from the top center
+            let origY = actor.y;
+            actor.set_position(actor.x, monitor.y - actor.height);
+
+            Tweener.addTween(actor,
+                             { y: origY,
+                               time: WINDOW_ANIMATION_TIME,
+                               transition: "easeOutQuad",
+                               onComplete: this._mapWindowDone,
+                               onCompleteScope: this,
+                               onCompleteParams: [shellwm, actor],
+                               onOverwrite: this._mapWindowOverwrite,
+                               onOverwriteScope: this,
+                               onOverwriteParams: [shellwm, actor]
+                             });
+        }
+        else {
+            let origX = actor.x;
+            if (origX == monitor.x) {
+                // the side bar will appear from the left side
+                actor.set_position(monitor.x - actor.width, actor.y);
+            } else {
+                // ... from the right side
+                actor.set_position(monitor.x + monitor.width, actor.y);
+            }
+
+            Tweener.addTween(actor,
+                             { x: origX,
+                               time: WINDOW_ANIMATION_TIME,
+                               transition: "easeOutQuad",
+                               onComplete: this._mapWindowDone,
+                               onCompleteScope: this,
+                               onCompleteParams: [shellwm, actor],
+                               onOverwrite: this._mapWindowOverwrite,
+                               onOverwriteScope: this,
+                               onOverwriteParams: [shellwm, actor]
+                             });
         }
 
         actor.opacity = 255;
         actor.show();
-
-        Tweener.addTween(actor,
-                         { x: origX,
-                           time: WINDOW_ANIMATION_TIME,
-                           transition: "easeOutQuad",
-                           onComplete: this._mapWindowDone,
-                           onCompleteScope: this,
-                           onCompleteParams: [shellwm, actor],
-                           onOverwrite: this._mapWindowOverwrite,
-                           onOverwriteScope: this,
-                           onOverwriteParams: [shellwm, actor]
-                         });
 
         if (SideComponent.shouldHideOtherWindows(actor.meta_window)) {
             this._hideOtherWindows(actor, animateFade);

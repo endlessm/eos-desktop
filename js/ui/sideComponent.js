@@ -41,6 +41,15 @@ function launchedFromDesktop (metaWindow) {
                    Main.socialBar.launchedFromDesktop);
 };
 
+/**
+ * isGrandCentralWindow:
+ * @metaWindow: an instance of #Meta.Window
+ * @return: whether the #Meta.Window is from the GrendCentral application
+ */
+function isGrandCentralWindow (metaWindow) {
+    return metaWindow && (metaWindow.get_wm_class() == 'Com.endlessm.GrandCentral');
+};
+
 const SideComponent = new Lang.Class({
     Name: 'SideComponent',
     Extends: GObject.Object,
