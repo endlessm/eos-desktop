@@ -53,16 +53,18 @@ const ViewsDisplayLayout = new Lang.Class({
     Name: 'ViewsDisplayLayout',
     Extends: Clutter.BinLayout,
 
-    _init: function(entry, allViewActor, searchResultsActor) {
+    _init: function(entry, gc, allViewActor, searchResultsActor) {
         this.parent();
 
         this._entry = entry;
+        this._gc = gc;
         this._allViewActor = allViewActor;
         this._searchResultsActor = searchResultsActor;
 
         this._entry.connect('style-changed', Lang.bind(this, this._onStyleChanged));
         this._allViewActor.connect('style-changed', Lang.bind(this, this._onStyleChanged));
 
+        this._heightAboveGC = 0;
         this._heightAboveEntry = 0;
         this.searchResultsTween = 0;
         this._lowResolutionMode = false;
@@ -81,13 +83,18 @@ const ViewsDisplayLayout = new Lang.Class({
             return;
 
         this._allViewActor.visible = v != 1;
+        this._gc.visible = v != 1;
         this._searchResultsActor.visible = v != 0;
 
         this._allViewActor.opacity = (1 - v) * 255;
+        this._gc.opacity = (1 - v) * 255;
         this._searchResultsActor.opacity = v * 255;
 
         let entryTranslation = - this._heightAboveEntry * v;
         this._entry.translation_y = entryTranslation;
+        let gcTranslation = - this._heightAboveGC * v;
+        this._gc.translation_y = gcTranslation;
+
         this._searchResultsActor.translation_y = entryTranslation;
 
         this._searchResultsTween = v;
@@ -131,6 +138,16 @@ const ViewsDisplayLayout = new Lang.Class({
         let allViewHeight = this._allViewActor.get_preferred_height(availWidth)[1];
         let heightAboveGrid = this._calcAllViewPlacement(allViewHeight, entryHeight, availHeight);
         this._heightAboveEntry = this._centeredHeightAbove(entryHeight, heightAboveGrid);
+
+        let gcHeight = this._gc.get_preferred_height(availWidth)[1];
+
+        let gcBox = box.copy();
+        let x1 = (availWidth - this._gc.get_width()) * 0.5;
+        gcBox.y1 = this._heightAboveGC;
+        gcBox.y2 = gcBox.y1 + gcHeight;
+        gcBox.x1 = x1;
+        gcBox.x2 = x1 + this._gc.get_width();
+        this._gc.allocate(gcBox, flags);
 
         let entryBox = box.copy();
         entryBox.y1 = this._heightAboveEntry + entryTopMargin;
@@ -180,19 +197,21 @@ const ViewsDisplayContainer = new Lang.Class({
         'views-page-changed': { }
     },
 
-    _init: function(entry, allView, searchResults) {
+    _init: function(entry, gc, allView, searchResults) {
         this._activePage = null;
 
         this._entry = entry;
+        this._gc = gc;
         this._allView = allView;
         this._searchResults = searchResults;
 
-        let layoutManager = new ViewsDisplayLayout(entry, allView.actor, searchResults.actor);
+        let layoutManager = new ViewsDisplayLayout(entry, gc, allView.actor, searchResults.actor);
         this.parent({ layout_manager: layoutManager,
                       x_expand: true,
                       y_expand: true });
 
         this.add_actor(this._entry);
+        this.add_actor(this._gc);
         this.add_actor(this._allView.actor);
         this.add_actor(this._searchResults.actor);
 
@@ -284,7 +303,19 @@ const ViewsDisplay = new Lang.Class({
         Main.overview.addAction(clickAction, false);
         this._searchResults.actor.bind_property('mapped', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
 
-        this.actor = new ViewsDisplayContainer(this.entry, this._allView, this._searchResults);
+        let icon = new St.Icon({ icon_name: 'edit-find-symbolic',
+                                style_class: 'discovery-feed-icon',
+                                icon_size: 16,
+                                track_hover: true });
+        this.gc = new St.Button({ style_class: 'discovery-feed',
+                                  x_align: Clutter.ActorAlign.CENTER,
+                                  y_align: Clutter.ActorAlign.CENTER });
+        this.gc.set_child(icon);
+        this.gc.connect('clicked', Lang.bind(this, function() {
+          Main.discoveryFeed.show(0);
+        }));
+
+        this.actor = new ViewsDisplayContainer(this.entry, this.gc, this._allView, this._searchResults);
         // This makes sure that any DnD ops get channeled to the icon grid logic
         // otherwise dropping an item outside of the grid bounds fails
         this.actor._delegate = this;
@@ -406,7 +437,15 @@ const ViewsClone = new Lang.Class({
         let appGridContainer = new AppDisplay.AllViewContainer(iconGridClone);
         appGridContainer.reactive = false;
 
-        let layoutManager = new ViewsDisplayLayout(entry, appGridContainer, null);
+        let icon = new St.Icon({ icon_name: 'edit-find-symbolic',
+                                 style_class: 'discovery-feed-icon',
+                                 icon_size: 16,
+                                 track_hover: true });
+        gc = new St.Button({ style_class: 'discovery-feed' });
+        gc.set_child(icon);
+        gc.reactive = false;
+
+        let layoutManager = new ViewsDisplayLayout(entry, gc, appGridContainer, null);
         this.parent({ layout_manager: layoutManager,
                       x_expand: true,
                       y_expand: true,
@@ -416,6 +455,7 @@ const ViewsClone = new Lang.Class({
                                                           enabled: false });
         iconGridClone.add_effect(this._saturation);
 
+        this.add_child(gc);
         this.add_child(entry);
         this.add_child(appGridContainer);
 
