@@ -836,7 +836,7 @@ const WindowManager = new Lang.Class({
         actor.opacity = 255;
         actor.show();
 
-        if (SideComponent.isGrandCentralWindow(actor.meta_window)) {
+        if (SideComponent.isDiscoveryFeedWindow(actor.meta_window)) {
             let endY = monitor.y - actor.height;
             Tweener.addTween(actor,
                              { y: endY,
@@ -1073,8 +1073,8 @@ const WindowManager = new Lang.Class({
             return;
         }
 
-        if (SideComponent.isGrandCentralWindow(actor.meta_window)) {
-            // the GrandCentral window will appear from the top center
+        if (SideComponent.isDiscoveryFeedWindow(actor.meta_window)) {
+            // the DiscoveryFeed window will appear from the top center
             let origY = actor.y;
             actor.set_position(actor.x, monitor.y - actor.height);
 

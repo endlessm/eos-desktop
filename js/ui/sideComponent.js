@@ -42,12 +42,12 @@ function launchedFromDesktop (metaWindow) {
 };
 
 /**
- * isGrandCentralWindow:
+ * isDiscoveryFeedWindow:
  * @metaWindow: an instance of #Meta.Window
- * @return: whether the #Meta.Window is from the GrendCentral application
+ * @return: whether the #Meta.Window is from the DiscoveryFeed application
  */
-function isGrandCentralWindow (metaWindow) {
-    return metaWindow && (metaWindow.get_wm_class() == 'Com.endlessm.GrandCentral');
+function isDiscoveryFeedWindow (metaWindow) {
+    return metaWindow && (metaWindow.get_wm_class() == 'Com.endlessm.DiscoveryFeed');
 };
 
 const SideComponent = new Lang.Class({
