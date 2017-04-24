@@ -328,7 +328,7 @@ const ViewsDisplay = new Lang.Class({
 
         this.discoveryFeed = new DiscoveryFeedButton();
         this.discoveryFeed.connect('clicked', Lang.bind(this, function() {
-          Main.discoveryFeed.show(0);
+            Main.discoveryFeed.show(global.get_current_time());
         }));
 
         this.actor = new ViewsDisplayContainer(this.entry, this.discoveryFeed, this._allView, this._searchResults);
