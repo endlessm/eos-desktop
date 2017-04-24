@@ -106,17 +106,21 @@ const ViewsDisplayLayout = new Lang.Class({
             return;
 
         this._allViewActor.visible = v != 1;
-        this._discoveryFeedButton.visible = v != 1;
+
+        if (this._discoveryFeedButton !== null) {
+            this._discoveryFeedButton.visible = v != 1;
+            this._discoveryFeedButton.opacity = (1 - v) * 255;
+            let discoveryFeedButtonTranslation = - this._heightAboveDiscoveryFeedButton * v;
+            this._discoveryFeedButton.translation_y = discoveryFeedButtonTranslation;
+        }
+
         this._searchResultsActor.visible = v != 0;
 
         this._allViewActor.opacity = (1 - v) * 255;
-        this._discoveryFeedButton.opacity = (1 - v) * 255;
         this._searchResultsActor.opacity = v * 255;
 
         let entryTranslation = - this._heightAboveEntry * v;
         this._entry.translation_y = entryTranslation;
-        let discoveryFeedButtonTranslation = - this._heightAboveDiscoveryFeedButton * v;
-        this._discoveryFeedButton.translation_y = discoveryFeedButtonTranslation;
 
         this._searchResultsActor.translation_y = entryTranslation;
 
@@ -162,15 +166,16 @@ const ViewsDisplayLayout = new Lang.Class({
         let heightAboveGrid = this._calcAllViewPlacement(allViewHeight, entryHeight, availHeight);
         this._heightAboveEntry = this._centeredHeightAbove(entryHeight, heightAboveGrid);
 
-        let discoveryFeedButtonHeight = this._discoveryFeedButton.get_preferred_height(availWidth)[1];
-
-        let discoveryFeedButtonBox = box.copy();
-        let x1 = (availWidth - this._discoveryFeedButton.get_width()) * 0.5;
-        discoveryFeedButtonBox.y1 = this._heightAboveDiscoveryFeedButton;
-        discoveryFeedButtonBox.y2 = discoveryFeedButtonBox.y1 + discoveryFeedButtonHeight;
-        discoveryFeedButtonBox.x1 = x1;
-        discoveryFeedButtonBox.x2 = x1 + this._discoveryFeedButton.get_width();
-        this._discoveryFeedButton.allocate(discoveryFeedButtonBox, flags);
+        if (this._discoveryFeedButton !== null) {
+            let discoveryFeedButtonHeight = this._discoveryFeedButton.get_preferred_height(availWidth)[1];
+            let discoveryFeedButtonBox = box.copy();
+            let x1 = (availWidth - this._discoveryFeedButton.get_width()) * 0.5;
+            discoveryFeedButtonBox.y1 = this._heightAboveDiscoveryFeedButton;
+            discoveryFeedButtonBox.y2 = discoveryFeedButtonBox.y1 + discoveryFeedButtonHeight;
+            discoveryFeedButtonBox.x1 = x1;
+            discoveryFeedButtonBox.x2 = x1 + this._discoveryFeedButton.get_width();
+            this._discoveryFeedButton.allocate(discoveryFeedButtonBox, flags);
+        }
 
         let entryBox = box.copy();
         entryBox.y1 = this._heightAboveEntry + entryTopMargin;
@@ -234,7 +239,8 @@ const ViewsDisplayContainer = new Lang.Class({
                       y_expand: true });
 
         this.add_actor(this._entry);
-        this.add_actor(this._discoveryFeedButton);
+        if (this._discoveryFeedButton !== null)
+            this.add_actor(this._discoveryFeedButton);
         this.add_actor(this._allView.actor);
         this.add_actor(this._searchResults.actor);
 
@@ -289,6 +295,7 @@ const ViewsDisplay = new Lang.Class({
     _init: function() {
         this._enterSearchTimeoutId = 0;
         this._localSearchMetricTimeoutId = 0;
+        this.discoveryFeed = null;
 
         this._allView = new AppDisplay.AllView();
 
@@ -326,10 +333,12 @@ const ViewsDisplay = new Lang.Class({
         Main.overview.addAction(clickAction, false);
         this._searchResults.actor.bind_property('mapped', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
 
-        this.discoveryFeed = new DiscoveryFeedButton();
-        this.discoveryFeed.connect('clicked', Lang.bind(this, function() {
-            Main.discoveryFeed.show(global.get_current_time());
-        }));
+        if (global.settings.get_boolean('enable-discovery-feed')) {
+            this.discoveryFeed = new DiscoveryFeedButton();
+            this.discoveryFeed.connect('clicked', Lang.bind(this, function() {
+                Main.discoveryFeed.show(global.get_current_time());
+            }));
+        }
 
         this.actor = new ViewsDisplayContainer(this.entry, this.discoveryFeed, this._allView, this._searchResults);
         // This makes sure that any DnD ops get channeled to the icon grid logic
@@ -453,9 +462,11 @@ const ViewsClone = new Lang.Class({
         let appGridContainer = new AppDisplay.AllViewContainer(iconGridClone);
         appGridContainer.reactive = false;
 
-        let discoveryFeed = new DiscoveryFeedButton();
-        discoveryFeed.reactive = false;
-
+        let discoveryFeed = null;
+        if (global.settings.get_boolean('enable-discovery-feed')) {
+            discoveryFeed = new DiscoveryFeedButton();
+            discoveryFeed.reactive = false;
+        }
         let layoutManager = new ViewsDisplayLayout(entry, discoveryFeed, appGridContainer, null);
         this.parent({ layout_manager: layoutManager,
                       x_expand: true,
@@ -466,7 +477,8 @@ const ViewsClone = new Lang.Class({
                                                           enabled: false });
         iconGridClone.add_effect(this._saturation);
 
-        this.add_child(discoveryFeed);
+        if (discoveryFeed !== null)
+            this.add_child(discoveryFeed);
         this.add_child(entry);
         this.add_child(appGridContainer);
 
