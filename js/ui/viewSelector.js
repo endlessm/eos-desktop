@@ -49,6 +49,29 @@ const ViewsDisplayPage = {
     SEARCH: 2,
 };
 
+/** DiscoveryFeedButton:
+ *
+ * This class handles the button to launch the discovery feed application
+ */
+const DiscoveryFeedButton = new Lang.Class({
+    Name: 'DiscoveryFeedButton',
+    Extends: St.Button,
+
+    _init: function() {
+        this._icon = new St.Icon({ icon_name: 'edit-find-symbolic',
+                                   style_class: 'discovery-feed-icon',
+                                   icon_size: 16,
+                                   track_hover: true });
+
+        this.parent({ name: 'discovery-feed',
+                      child: this._icon,
+                      style_class: 'discovery-feed',
+                      x_align: Clutter.ActorAlign.CENTER,
+                      y_align: Clutter.ActorAlign.CENTER });
+    }
+});
+
+
 const ViewsDisplayLayout = new Lang.Class({
     Name: 'ViewsDisplayLayout',
     Extends: Clutter.BinLayout,
@@ -303,19 +326,12 @@ const ViewsDisplay = new Lang.Class({
         Main.overview.addAction(clickAction, false);
         this._searchResults.actor.bind_property('mapped', clickAction, 'enabled', GObject.BindingFlags.SYNC_CREATE);
 
-        let icon = new St.Icon({ icon_name: 'edit-find-symbolic',
-                                style_class: 'discovery-feed-icon',
-                                icon_size: 16,
-                                track_hover: true });
-        this.gc = new St.Button({ style_class: 'discovery-feed',
-                                  x_align: Clutter.ActorAlign.CENTER,
-                                  y_align: Clutter.ActorAlign.CENTER });
-        this.gc.set_child(icon);
-        this.gc.connect('clicked', Lang.bind(this, function() {
+        this.discoveryFeed = new DiscoveryFeedButton();
+        this.discoveryFeed.connect('clicked', Lang.bind(this, function() {
           Main.discoveryFeed.show(0);
         }));
 
-        this.actor = new ViewsDisplayContainer(this.entry, this.gc, this._allView, this._searchResults);
+        this.actor = new ViewsDisplayContainer(this.entry, this.discoveryFeed, this._allView, this._searchResults);
         // This makes sure that any DnD ops get channeled to the icon grid logic
         // otherwise dropping an item outside of the grid bounds fails
         this.actor._delegate = this;
@@ -437,15 +453,10 @@ const ViewsClone = new Lang.Class({
         let appGridContainer = new AppDisplay.AllViewContainer(iconGridClone);
         appGridContainer.reactive = false;
 
-        let icon = new St.Icon({ icon_name: 'edit-find-symbolic',
-                                 style_class: 'discovery-feed-icon',
-                                 icon_size: 16,
-                                 track_hover: true });
-        gc = new St.Button({ style_class: 'discovery-feed' });
-        gc.set_child(icon);
-        gc.reactive = false;
+        let discoveryFeed = new DiscoveryFeedButton();
+        discoveryFeed.reactive = false;
 
-        let layoutManager = new ViewsDisplayLayout(entry, gc, appGridContainer, null);
+        let layoutManager = new ViewsDisplayLayout(entry, discoveryFeed, appGridContainer, null);
         this.parent({ layout_manager: layoutManager,
                       x_expand: true,
                       y_expand: true,
@@ -455,7 +466,7 @@ const ViewsClone = new Lang.Class({
                                                           enabled: false });
         iconGridClone.add_effect(this._saturation);
 
-        this.add_child(gc);
+        this.add_child(discoveryFeed);
         this.add_child(entry);
         this.add_child(appGridContainer);
 
