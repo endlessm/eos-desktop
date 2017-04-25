@@ -707,10 +707,6 @@ const IconGrid = new Lang.Class({
     },
 
     animateShuffling: function(changedItems, removedItems, originalItemData, callback) {
-        // We need to repaint the grid since the last icon added might not be
-        // drawn yet
-        this.actor.paint();
-
         let children = this.actor.get_children();
         let node = this.actor.get_theme_node();
         let contentBox = node.get_content_box(this.actor.allocation);
