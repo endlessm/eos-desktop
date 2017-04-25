@@ -58,14 +58,13 @@ const DiscoveryFeedButton = new Lang.Class({
     Extends: St.Button,
 
     _init: function() {
-        this._icon = new St.Icon({ icon_name: 'edit-find-symbolic',
+        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/discovery-feed-open-tab.png');
+        let gicon = new Gio.FileIcon({ file: iconFile });
+        this._icon = new St.Icon({ gicon: gicon,
                                    style_class: 'discovery-feed-icon',
-                                   icon_size: 16,
                                    track_hover: true });
-
         this.parent({ name: 'discovery-feed',
                       child: this._icon,
-                      style_class: 'discovery-feed',
                       x_align: Clutter.ActorAlign.CENTER,
                       y_align: Clutter.ActorAlign.CENTER });
     }

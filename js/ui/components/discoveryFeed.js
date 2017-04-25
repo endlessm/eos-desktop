@@ -6,10 +6,11 @@ const Main = imports.ui.main;
 const SideComponent = imports.ui.sideComponent;
 
 const DISCOVERY_FEED_NAME = 'com.endlessm.DiscoveryFeed';
+const DISCOVERY_FEED_IFACE = 'com.endlessm.DiscoveryFeed';
 const DISCOVERY_FEED_PATH = '/com/endlessm/DiscoveryFeed';
 
 const DiscoveryFeedIface = '<node> \
-<interface name="' + DISCOVERY_FEED_NAME + '"> \
+<interface name="' + DISCOVERY_FEED_IFACE + '"> \
 <method name="show"> \
   <arg type="u" direction="in" name="timestamp"/> \
 </method> \
