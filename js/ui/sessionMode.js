@@ -91,7 +91,7 @@ const _modes = {
         unlockDialog: imports.ui.unlockDialog.UnlockDialog,
         components: ['networkAgent', 'polkitAgent',
                      'keyring', 'autorunManager', 'automountManager',
-                     'updaterManager', 'socialBar', 'appStore'],
+                     'updaterManager', 'socialBar', 'appStore', 'discoveryFeed'],
         panel: {
             left: ['userMenu', 'panelSeparator', 'appIcons'],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',
@@ -114,7 +114,7 @@ const _modes = {
         unlockDialog: imports.ui.unlockDialog.UnlockDialog,
         components: ['networkAgent', 'polkitAgent',
                      'keyring', 'autorunManager', 'automountManager',
-                     'updaterManager', 'socialBar', 'appStore', 'codingManager', 'codingGameService'],
+                     'updaterManager', 'socialBar', 'appStore', 'codingManager', 'codingGameService', 'discoveryFeed'],
         panel: {
             left: ['userMenu', 'panelSeparator', 'appIcons'],
             right: ['dateMenu', 'a11y', 'keyboard', 'volume', 'bluetooth',

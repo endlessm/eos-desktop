@@ -49,6 +49,7 @@ const LOW_RESOLUTION_HEIGHT = 600;
 let appStore = null;
 let codingManager = null;
 let componentManager = null;
+let discoveryFeed = null;
 let panel = null;
 let overview = null;
 let runDialog = null;

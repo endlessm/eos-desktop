@@ -3199,3 +3199,8 @@ StScrollBar StButton#vhandle:active {
     icon-size: 30px;
 }
 
+.discovery-feed-icon {
+    width: 44px;
+    height: 23px;
+}
+
