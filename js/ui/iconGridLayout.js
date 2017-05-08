@@ -22,13 +22,13 @@ const FOLDER_DIR_NAME = 'desktop-directories';
 const DEFAULT_CONFIGS_DIR = Config.DATADIR + '/eos-shell-content/icon-grid-defaults';
 const DEFAULT_CONFIG_NAME_BASE = 'icon-grid';
 
-const OVERRIDE_CONFIGS_DIR = Config.LOCALSTATEDIR + '/eos-image-defaults/icon-grid';
+const OVERRIDE_CONFIGS_DIR = Config.LOCALSTATEDIR + '/lib/eos-image-defaults/icon-grid';
 const OVERRIDE_CONFIG_NAME_BASE = 'icon-grid';
 
-const PREPEND_CONFIGS_DIR = Config.LOCALSTATEDIR + '/eos-image-defaults/icon-grid';
+const PREPEND_CONFIGS_DIR = Config.LOCALSTATEDIR + '/lib/eos-image-defaults/icon-grid';
 const PREPEND_CONFIG_NAME_BASE = 'icon-grid-prepend';
 
-const APPEND_CONFIGS_DIR = Config.LOCALSTATEDIR + '/eos-image-defaults/icon-grid';
+const APPEND_CONFIGS_DIR = Config.LOCALSTATEDIR + '/lib/eos-image-defaults/icon-grid';
 const APPEND_CONFIG_NAME_BASE = 'icon-grid-append';
 
 /* Occurs when an application is uninstalled, meaning removed from the desktop's
