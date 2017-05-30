@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-18 01:32+0000\n"
+"POT-Creation-Date: 2017-05-30 01:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -195,32 +195,32 @@ msgstr ""
 msgid "Google"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1199
+#: ../js/ui/appDisplay.js:1189
 msgid "Remove from desktop"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1708
+#: ../js/ui/appDisplay.js:1698
 msgid "Warning"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1714
+#: ../js/ui/appDisplay.js:1704
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1720
+#: ../js/ui/appDisplay.js:1710
 msgid "We are just trying to keep you safe."
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1726
+#: ../js/ui/appDisplay.js:1716
 msgid "OK"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2030
+#: ../js/ui/appDisplay.js:2020
 msgid "More Apps"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:2039
+#: ../js/ui/appDisplay.js:2029
 msgid "Delete"
 msgstr ""
 
@@ -595,7 +595,7 @@ msgstr ""
 msgid "We could not update your system"
 msgstr ""
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:570
 msgid "Windows"
 msgstr ""
 
@@ -1234,7 +1234,7 @@ msgstr ""
 msgid "%s (console)"
 msgstr ""
 
-#: ../js/ui/viewSelector.js:512
+#: ../js/ui/viewSelector.js:574
 msgid "Applications"
 msgstr ""
 

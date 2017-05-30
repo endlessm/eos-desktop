@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-11 01:32+0000\n"
+"POT-Creation-Date: 2017-05-23 01:33+0000\n"
 "PO-Revision-Date: 2017-03-03 21:50+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Marathi (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/mr/)\n"
@@ -196,32 +196,32 @@ msgstr "'%s' चालवणे अपयशी:"
 msgid "Google"
 msgstr ""
 
-#: ../js/ui/appDisplay.js:1199
+#: ../js/ui/appDisplay.js:1189
 msgid "Remove from desktop"
 msgstr "डेस्कटॉपवरून काढून टाका"
 
-#: ../js/ui/appDisplay.js:1708
+#: ../js/ui/appDisplay.js:1698
 msgid "Warning"
 msgstr "धोक्याचा इशारा"
 
-#: ../js/ui/appDisplay.js:1714
+#: ../js/ui/appDisplay.js:1704
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "फोल्डर नष्ट करण्याकरिता प्रथम त्यातील सर्व आयटम काढा "
 
-#: ../js/ui/appDisplay.js:1720
+#: ../js/ui/appDisplay.js:1710
 msgid "We are just trying to keep you safe."
 msgstr "आम्ही आपल्याला फक्त सुरक्षित ठेवण्याचा प्रयत्न करत आहोत."
 
-#: ../js/ui/appDisplay.js:1726
+#: ../js/ui/appDisplay.js:1716
 msgid "OK"
 msgstr "ठीक आहे"
 
-#: ../js/ui/appDisplay.js:2030
+#: ../js/ui/appDisplay.js:2020
 msgid "More Apps"
 msgstr "अधिक ऍप्स"
 
-#: ../js/ui/appDisplay.js:2039
+#: ../js/ui/appDisplay.js:2029
 msgid "Delete"
 msgstr "नष्ट"
 
@@ -595,7 +595,7 @@ msgstr "अद्यतन अयशस्वी"
 msgid "We could not update your system"
 msgstr "आम्ही आपली प्रणाली अद्यतनित करू शकलो नाही"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:570
 msgid "Windows"
 msgstr "पटल"
 
@@ -1238,7 +1238,7 @@ msgstr "%s (रिमोट)"
 msgid "%s (console)"
 msgstr "%s (कंसोल)"
 
-#: ../js/ui/viewSelector.js:512
+#: ../js/ui/viewSelector.js:574
 msgid "Applications"
 msgstr "ॲप्लिकेशन्स्"
 
@@ -1247,21 +1247,21 @@ msgstr "ॲप्लिकेशन्स्"
 msgid "'%s' is ready"
 msgstr "'%s' सज्ज आहे"
 
-#: ../js/ui/windowManager.js:71
+#: ../js/ui/windowManager.js:70
 msgid "Do you want to keep these display settings?"
 msgstr "तुम्हाला या डिस्पले सेटिंग्ज जपवून ठेवायचे?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:89
 msgid "Revert Settings"
 msgstr "सेटिंग्जना मूळस्थितीत आणा"
 
-#: ../js/ui/windowManager.js:94
+#: ../js/ui/windowManager.js:93
 msgid "Keep Changes"
 msgstr "बदल जपवून ठेवा"
 
-#: ../js/ui/windowManager.js:112
+#: ../js/ui/windowManager.js:111
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"

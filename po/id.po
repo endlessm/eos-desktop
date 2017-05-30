@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-11 01:32+0000\n"
-"PO-Revision-Date: 2017-03-15 06:19+0000\n"
+"POT-Creation-Date: 2017-05-23 01:33+0000\n"
+"PO-Revision-Date: 2017-05-25 04:33+0000\n"
 "Last-Translator: Septira Taruna <septira@endlessm.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/id/)\n"
 "MIME-Version: 1.0\n"
@@ -29,11 +29,11 @@ msgstr "Sistem"
 
 #: ../data/50-gnome-shell-system.xml.in.h:2
 msgid "Show the message tray"
-msgstr "Tampilkan baki pesan"
+msgstr "Tampilkan kotak pesan"
 
 #: ../data/50-gnome-shell-system.xml.in.h:3
 msgid "Focus the active notification"
-msgstr "Fokuskan pemberitahuan yang aktif"
+msgstr "Fokus ke pemberitahuan yang aktif"
 
 #: ../data/50-gnome-shell-system.xml.in.h:4
 msgid "Show all applications"
@@ -45,7 +45,7 @@ msgstr "Buka menu aplikasi"
 
 #: ../data/eos-link-feedback.desktop.in.in.h:1
 msgid "Feedback"
-msgstr "Umpan Balik"
+msgstr "Saran dan masukan"
 
 #: ../data/eos-session.desktop.in.in.h:1 ../data/eos-shell.desktop.in.in.h:1
 #: ../data/gdm-eos-shell.desktop.in.in.h:1
@@ -68,7 +68,7 @@ msgstr "Konfigurasi Ekstensi Desktop"
 #: ../js/extensionPrefs/main.js:117
 #, javascript-format
 msgid "There was an error loading the preferences dialog for %s:"
-msgstr "Ada galat saat memuat dialog preferensi bagi %s:"
+msgstr "Terjadi error saat memuat dialog preferensi bagi %s:"
 
 #: ../js/extensionPrefs/main.js:149
 msgid "Desktop Extensions"
@@ -97,7 +97,7 @@ msgstr "Tak masuk daftar?"
 #. by customer support.
 #: ../js/gdm/loginDialog.js:836
 msgid "Enter unlock code provided by customer support:"
-msgstr "Masukkan kode pembuka yang diberikan oleh dukungan pelanggan:"
+msgstr "Masukkan kode yang diberikan oleh dukungan pelanggan:"
 
 #. Translators: Password reset. The first %s is a verification code, the
 #. second is one or more phone numbers, and the third is an email.
@@ -107,7 +107,7 @@ msgid ""
 "Please inform customer support of your verification code %s by calling %s or"
 " emailing %s. The code will remain valid until you click Cancel or turn off "
 "your computer."
-msgstr "Mohon informasikan kode verifikasi Anda kepada dukungan pelanggan %s dengan menghubungi %s atau mengirimkan surel %s. Kode berlaku sampai Anda mengklik Batalkan atau mematikan komputer Anda."
+msgstr "Mohon informasikan kode verifikasi Anda kepada dukungan pelanggan %s dengan menghubungi %s atau mengirimkan email %s. Kode berlaku sampai Anda mengklik Batal atau mematikan komputer Anda."
 
 #. Translators: Button on login dialog, after clicking Forgot Password?
 #: ../js/gdm/loginDialog.js:846
@@ -145,7 +145,7 @@ msgstr "Nama pengguna: "
 
 #: ../js/gdm/loginDialog.js:1451
 msgid "Login Window"
-msgstr "Jendela Log Masuk"
+msgstr "Jendela Login"
 
 #. Translators: accessible name of the power menu in the login screen
 #: ../js/gdm/powerMenu.js:36
@@ -166,7 +166,7 @@ msgstr "Matikan"
 
 #: ../js/gdm/util.js:264
 msgid "Authentication error"
-msgstr "Galat otentikasi"
+msgstr "Error otentikasi"
 
 #. Translators: this message is shown below the password entry field
 #. to indicate the user can swipe their finger instead
@@ -177,7 +177,7 @@ msgstr "(atau gesekkan jari)"
 #: ../js/gdm/util.js:406
 #, javascript-format
 msgid "(e.g., user or %s)"
-msgstr "(cth., pengguna dari %s)"
+msgstr "(cth., pengguna atau %s)"
 
 #: ../js/misc/util.js:124
 msgid "Command not found"
@@ -200,32 +200,32 @@ msgstr "Eksekusi '%s' gagal:"
 msgid "Google"
 msgstr "Google"
 
-#: ../js/ui/appDisplay.js:1199
+#: ../js/ui/appDisplay.js:1189
 msgid "Remove from desktop"
 msgstr "Hapus dari desktop"
 
-#: ../js/ui/appDisplay.js:1708
+#: ../js/ui/appDisplay.js:1698
 msgid "Warning"
 msgstr "Peringatan"
 
-#: ../js/ui/appDisplay.js:1714
+#: ../js/ui/appDisplay.js:1704
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Untuk menghapus sebuah folder Anda harus menghapus semua item di dalamnya terlebih dahulu."
 
-#: ../js/ui/appDisplay.js:1720
+#: ../js/ui/appDisplay.js:1710
 msgid "We are just trying to keep you safe."
-msgstr "Kami hanya mencoba menjaga Anda agar tetap aman."
+msgstr "Kami hanya mencoba menjaga supaya Anda tetap aman."
 
-#: ../js/ui/appDisplay.js:1726
+#: ../js/ui/appDisplay.js:1716
 msgid "OK"
 msgstr "Oke"
 
-#: ../js/ui/appDisplay.js:2030
+#: ../js/ui/appDisplay.js:2020
 msgid "More Apps"
 msgstr "Aplikasi Lainnya"
 
-#: ../js/ui/appDisplay.js:2039
+#: ../js/ui/appDisplay.js:2029
 msgid "Delete"
 msgstr "Hapus"
 
@@ -241,19 +241,19 @@ msgstr "%s telah dihapus dari favorit Anda."
 
 #: ../js/ui/appIconBar.js:214
 msgid "Other workspaces"
-msgstr "Area kerja lainnya"
+msgstr "Layar kerja lainnya"
 
 #: ../js/ui/appIconBar.js:223
 msgid "Current workspace"
-msgstr "Area kerja saat ini"
+msgstr "Layar kerja saat ini"
 
 #: ../js/ui/appIconBar.js:298
 msgid "Pin to Taskbar"
-msgstr "Sematkan ke Bilah Tugas"
+msgstr "Sematkan ke Taskbar"
 
 #: ../js/ui/appIconBar.js:302
 msgid "Unpin from Taskbar"
-msgstr "Lepaskan semat dari Bilah Tugas"
+msgstr "Lepaskan dari Taskbar"
 
 #: ../js/ui/appIconBar.js:318
 #, javascript-format
@@ -262,7 +262,7 @@ msgstr "Keluar %s"
 
 #: ../js/ui/backgroundMenu.js:22
 msgid "Change Background…"
-msgstr "Ubah Latar…"
+msgstr "Ubah Latar Belakang…"
 
 #: ../js/ui/backgroundMenu.js:26
 msgid "Add App"
@@ -396,7 +396,7 @@ msgstr "kalender:MY"
 #. Translators: Text to show if there are no events
 #: ../js/ui/calendar.js:722
 msgid "Nothing Scheduled"
-msgstr "Tidak Ada Jadwal"
+msgstr "Tidak Ada Acara"
 
 #. Translators: Shown on calendar heading when selected day occurs on current
 #. year
@@ -438,7 +438,7 @@ msgstr "Drive eksternal terputus"
 
 #: ../js/ui/components/autorunManager.js:301
 msgid "Removable Devices"
-msgstr "Perangkat Yang Dapat Dicabut"
+msgstr "Perangkat yang Dapat Dilepas"
 
 #: ../js/ui/components/autorunManager.js:601
 #, javascript-format
@@ -451,7 +451,7 @@ msgstr "Keluarkan"
 
 #: ../js/ui/components/keyring.js:82 ../js/ui/components/polkitAgent.js:268
 msgid "Password:"
-msgstr "Sandi:"
+msgstr "Kata Sandi:"
 
 #: ../js/ui/components/keyring.js:101
 msgid "Type again:"
@@ -468,12 +468,12 @@ msgstr "Sambung"
 #: ../js/ui/components/networkAgent.js:282
 #: ../js/ui/components/networkAgent.js:292
 msgid "Password: "
-msgstr "Sandi: "
+msgstr "Kata Sandi: "
 
 #. static WEP
 #: ../js/ui/components/networkAgent.js:228
 msgid "Key: "
-msgstr "Tombol: "
+msgstr "Kunci: "
 
 #: ../js/ui/components/networkAgent.js:266
 msgid "Identity: "
@@ -481,7 +481,7 @@ msgstr "Identitas: "
 
 #: ../js/ui/components/networkAgent.js:268
 msgid "Private key password: "
-msgstr "Sandi kunci privat: "
+msgstr "Kata sandi kunci privat: "
 
 #: ../js/ui/components/networkAgent.js:280
 msgid "Service: "
@@ -496,7 +496,7 @@ msgstr "Otentikasi diperlukan oleh jaringan nirkabel"
 msgid ""
 "Passwords or encryption keys are required to access the wireless network "
 "'%s'."
-msgstr "Sandi atau kunci penyandian diperlukan untuk mengakses jaringan nirkabel '%s'."
+msgstr "Kata sandi atau kunci enkripsi diperlukan untuk mengakses jaringan nirkabel '%s'."
 
 #: ../js/ui/components/networkAgent.js:314
 msgid "Wired 802.1X authentication"
@@ -524,12 +524,12 @@ msgstr "PIN: "
 
 #: ../js/ui/components/networkAgent.js:336
 msgid "Mobile broadband network password"
-msgstr "Sandi jaringan data seluler"
+msgstr "Kata sandi jaringan data seluler"
 
 #: ../js/ui/components/networkAgent.js:337
 #, javascript-format
 msgid "A password is required to connect to '%s'."
-msgstr "Sebuah kata sandi dibutuhkan untuk menyambung ke '%s'."
+msgstr "Membutuhkan kata sandi untuk menyambung ke '%s'."
 
 #: ../js/ui/components/polkitAgent.js:55
 msgid "Authentication Required"
@@ -557,7 +557,7 @@ msgstr "Pembaruan Perangkat Lunak"
 
 #: ../js/ui/components/updaterManager.js:214
 msgid "Updates Available"
-msgstr "Pembaruan tersedia"
+msgstr "Pembaruan Tersedia"
 
 #: ../js/ui/components/updaterManager.js:215
 msgid "Software updates are available for your system"
@@ -569,7 +569,7 @@ msgstr "Unduh sekarang"
 
 #: ../js/ui/components/updaterManager.js:232
 msgid "Updates Ready"
-msgstr "Pembaruan siap"
+msgstr "Pembaruan Sudah Siap"
 
 #: ../js/ui/components/updaterManager.js:233
 msgid "Software updates are ready to be installed on your system"
@@ -589,7 +589,7 @@ msgstr "Pembaruan perangkat lunak sudah dipasang pada sistem Anda"
 
 #: ../js/ui/components/updaterManager.js:248
 msgid "Restart Now"
-msgstr "Mulai ulang sekarang"
+msgstr "Nyalakan ulang sekarang"
 
 #: ../js/ui/components/updaterManager.js:281
 msgid "Update Failed"
@@ -599,7 +599,7 @@ msgstr "Gagal memperbarui"
 msgid "We could not update your system"
 msgstr "Kami tidak dapat memperbarui sistem Anda"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:570
 msgid "Windows"
 msgstr "Jendela"
 
@@ -640,7 +640,7 @@ msgstr "%A, %e %B %Y"
 msgid ""
 "Remember that shared accounts are not protected by a password, so make sure "
 "to delete any files that you want to keep private."
-msgstr "Harap diingat bahwa akun yang dibagikan tidak dilindungi oleh kata sandi, jadi pastikan untuk menghapus file yang ingin Anda pertahankan tetap pribadi."
+msgstr "Harap diingat bahwa akun bersama tidak dilindungi oleh kata sandi, pastikan Anda menghapus file yang bersifat pribadi."
 
 #: ../js/ui/endSessionDialog.js:77
 #, javascript-format
@@ -661,13 +661,13 @@ msgstr "Klik Keluar untuk menutup aplikasi ini serta keluar dari sistem."
 #, javascript-format
 msgid "%s will be logged out automatically in %d second."
 msgid_plural "%s will be logged out automatically in %d seconds."
-msgstr[0] "%s akan log keluar otomatis dalam %d detik.\t\t"
+msgstr[0] "%s akan keluar otomatis dalam %d detik.\t\t"
 
 #: ../js/ui/endSessionDialog.js:88
 #, javascript-format
 msgid "You will be logged out automatically in %d second."
 msgid_plural "You will be logged out automatically in %d seconds."
-msgstr[0] "Anda akan log keluar otomatis dalam %d detik."
+msgstr[0] "Anda akan keluar otomatis dalam %d detik."
 
 #: ../js/ui/endSessionDialog.js:93
 msgid "Logging out of the system."
@@ -715,17 +715,17 @@ msgstr "Nyalakan Ulang"
 
 #: ../js/ui/endSessionDialog.js:137
 msgid "Click Restart to quit these applications and restart the system."
-msgstr "Klik Mulai Ulang untuk menutup aplikasi ini serta menyalakan kembali sistem."
+msgstr "Klik Nyalakan Ulang untuk menutup aplikasi ini serta menyalakan kembali sistem."
 
 #: ../js/ui/endSessionDialog.js:140
 #, javascript-format
 msgid "The system will restart automatically in %d second."
 msgid_plural "The system will restart automatically in %d seconds."
-msgstr[0] "Sistem ini akan otomatis dimulai ulang dalam %d detik."
+msgstr[0] "Sistem ini akan otomatis dinyalakan ulang dalam %d detik."
 
 #: ../js/ui/endSessionDialog.js:145
 msgid "Restarting the system."
-msgstr "Memulai ulang sistem."
+msgstr "Menyalakan ulang sistem."
 
 #: ../js/ui/extensionDownloader.js:199
 msgid "Install"
@@ -744,7 +744,7 @@ msgstr "Keluar aplikasi…"
 msgid ""
 "If an application doesn't respond for a while, select its name and click "
 "Quit Application."
-msgstr "Jika aplikasi tidak merespons selama beberapa waktu, pilih namanya dan klik Hentikan Aplikasi."
+msgstr "Jika aplikasi tidak merespons selama beberapa waktu, pilih namanya dan klik Keluar Aplikasi."
 
 #: ../js/ui/forceAppExitDialog.js:84
 msgid "System Monitor"
@@ -752,7 +752,7 @@ msgstr "Monitor Sistem"
 
 #: ../js/ui/forceAppExitDialog.js:89
 msgid "Quit Application"
-msgstr "Tutup Aplikasi"
+msgstr "Keluar Aplikasi"
 
 #: ../js/ui/iconGridLayout.js:260
 #, javascript-format
@@ -778,25 +778,25 @@ msgstr "Cari internet untuk \"%s\""
 
 #: ../js/ui/keyboard.js:621 ../js/ui/status/keyboard.js:783
 msgid "Keyboard"
-msgstr "Papan Ketik"
+msgstr "Keyboard"
 
 #: ../js/ui/lookingGlass.js:643
 msgid "No extensions installed"
-msgstr "Tak ada ekstensi terpasang"
+msgstr "Tidak ada ekstensi yang terpasang"
 
 #. Translators: argument is an extension UUID.
 #: ../js/ui/lookingGlass.js:697
 #, javascript-format
 msgid "%s has not emitted any errors."
-msgstr "%s tidak menampilkan galat apa pun."
+msgstr "%s tidak menampilkan error apa pun."
 
 #: ../js/ui/lookingGlass.js:703
 msgid "Hide Errors"
-msgstr "Sembunyikan Galat"
+msgstr "Sembunyikan Error"
 
 #: ../js/ui/lookingGlass.js:707 ../js/ui/lookingGlass.js:767
 msgid "Show Errors"
-msgstr "Tampilkan Galat"
+msgstr "Tampilkan Error"
 
 #: ../js/ui/lookingGlass.js:716
 msgid "Enabled"
@@ -810,7 +810,7 @@ msgstr "Dinonaktifkan"
 
 #: ../js/ui/lookingGlass.js:721
 msgid "Error"
-msgstr "Galat"
+msgstr "Error"
 
 #: ../js/ui/lookingGlass.js:723
 msgid "Out of date"
@@ -822,7 +822,7 @@ msgstr "Mengunduh"
 
 #: ../js/ui/lookingGlass.js:749
 msgid "View Source"
-msgstr "Tilik Sumber"
+msgstr "Lihat Sumber"
 
 #: ../js/ui/lookingGlass.js:758
 msgid "Web Page"
@@ -850,7 +850,7 @@ msgstr "Tidak Ada Pesan"
 
 #: ../js/ui/messageTray.js:1921
 msgid "Message Tray"
-msgstr "Baki Pesan"
+msgstr "Kotak Pesan"
 
 #: ../js/ui/messageTray.js:2944
 msgid "System Information"
@@ -871,7 +871,7 @@ msgstr "Gambaran"
 
 #: ../js/ui/panel.js:376
 msgid "Taskbar"
-msgstr "Bilah Tugas"
+msgstr "Taskbar"
 
 #. Translators: this MUST be either "toggle-switch-us"
 #. (for toggle switches containing the English words
@@ -902,7 +902,7 @@ msgstr "GNOME perlu mengunci layar"
 #. screen, where we're not affected by grabs
 #: ../js/ui/screenShield.js:172 ../js/ui/screenShield.js:393
 msgid "Unable to lock"
-msgstr "Tak bisa mengunci"
+msgstr "Tidak bisa mengunci"
 
 #: ../js/ui/screenShield.js:173 ../js/ui/screenShield.js:394
 msgid "Lock was blocked by an application"
@@ -914,7 +914,7 @@ msgstr "Mencari…"
 
 #: ../js/ui/search.js:783
 msgid "No results."
-msgstr "Tak ada yang cocok."
+msgstr "Tidak ditemukan hasil."
 
 #: ../js/ui/shellEntry.js:66
 msgid "Copy"
@@ -939,15 +939,15 @@ msgstr "Cari %s dan lainnya..."
 
 #: ../js/ui/shellEntry.js:188
 msgid "Search the internet and more…"
-msgstr "Telusuri intenet dan lainnya..."
+msgstr "Telusuri internet dan lainnya..."
 
 #: ../js/ui/shellMountOperation.js:370
 msgid "Password"
-msgstr "Sandi"
+msgstr "Kata Sandi"
 
 #: ../js/ui/shellMountOperation.js:391
 msgid "Remember Password"
-msgstr "Ingat Sandi"
+msgstr "Ingat Kata Sandi"
 
 #: ../js/ui/shellMountOperation.js:403 ../js/ui/unlockDialog.js:110
 msgid "Unlock"
@@ -959,7 +959,7 @@ msgstr "Aksesibilitas"
 
 #: ../js/ui/status/accessibility.js:47
 msgid "Zoom"
-msgstr "Zum"
+msgstr "Zoom"
 
 #: ../js/ui/status/accessibility.js:54
 msgid "Screen Reader"
@@ -967,7 +967,7 @@ msgstr "Pembaca Layar"
 
 #: ../js/ui/status/accessibility.js:58
 msgid "Screen Keyboard"
-msgstr "Papan Tik di Layar"
+msgstr "Keyboard di Layar"
 
 #: ../js/ui/status/accessibility.js:62
 msgid "Visual Alerts"
@@ -975,7 +975,7 @@ msgstr "Peringatan Visual"
 
 #: ../js/ui/status/accessibility.js:65
 msgid "Sticky Keys"
-msgstr "Tombol Lengket"
+msgstr "Tombol Sticky"
 
 #: ../js/ui/status/accessibility.js:68
 msgid "Slow Keys"
@@ -983,11 +983,11 @@ msgstr "Tombol Lambat"
 
 #: ../js/ui/status/accessibility.js:71
 msgid "Bounce Keys"
-msgstr "Tombol Pantul"
+msgstr "Tombol Bounce"
 
 #: ../js/ui/status/accessibility.js:74
 msgid "Mouse Keys"
-msgstr "Tombol Tetikus"
+msgstr "Tombol Mouse"
 
 #: ../js/ui/status/accessibility.js:78
 msgid "Universal Access Settings"
@@ -1017,19 +1017,19 @@ msgstr "perangkat keras dinoaktifkan"
 
 #: ../js/ui/status/hotCornerIndicator.js:19
 msgid "Hot Corner Indicator"
-msgstr "Indikator Sudut Hangat"
+msgstr "Indikator Hot Corner"
 
 #: ../js/ui/status/hotCornerIndicator.js:40
 msgid "Enable Hot Corner"
-msgstr "Aktifkan Sudut Hangat"
+msgstr "Aktifkan Hot Corner"
 
 #: ../js/ui/status/hotCornerIndicator.js:44
 msgid "Disable Hot Corner"
-msgstr "Nonaktifkan Sudut Hangat"
+msgstr "Nonaktifkan Hot Corner"
 
 #: ../js/ui/status/keyboard.js:809
 msgid "Show Keyboard Layout"
-msgstr "Tampilkan Tata Letak Papan Tik"
+msgstr "Tampilkan Tata Letak Keyboard"
 
 #: ../js/ui/status/keyboard.js:814
 msgid "Region & Language Settings"
@@ -1062,7 +1062,7 @@ msgstr "tak dikelola"
 
 #: ../js/ui/status/network.js:389
 msgid "disconnecting..."
-msgstr "memutus..."
+msgstr "memutus hubungan..."
 
 #: ../js/ui/status/network.js:395 ../js/ui/status/network.js:1346
 msgid "connecting..."
@@ -1072,7 +1072,7 @@ msgstr "menghubungi..."
 #. or password
 #: ../js/ui/status/network.js:398 ../js/ui/status/network.js:1349
 msgid "authentication required"
-msgstr "diperlukan otentikasi"
+msgstr "memerlukan otentikasi"
 
 #. Translators: this is for devices that require some kind of firmware or
 #. kernel
@@ -1220,11 +1220,11 @@ msgstr "Ganti Pengguna"
 
 #: ../js/ui/userMenu.js:561
 msgid "Other users are logged in."
-msgstr "Pengguna lain sedang log masuk."
+msgstr "Pengguna lain sedang login."
 
 #: ../js/ui/userMenu.js:566
 msgid "Shutting down might cause them to lose unsaved work."
-msgstr "Mematikan dapat menyebabkan mereka kehilangan pekerjaan yang belum disimpan."
+msgstr "Mematikan dapat menyebabkan pengguna lain kehilangan pekerjaan yang belum disimpan."
 
 #. Translators: Remote here refers to a remote session, like a ssh login
 #: ../js/ui/userMenu.js:594
@@ -1238,7 +1238,7 @@ msgstr "%s (jarak jauh)"
 msgid "%s (console)"
 msgstr "%s (konsol)"
 
-#: ../js/ui/viewSelector.js:512
+#: ../js/ui/viewSelector.js:574
 msgid "Applications"
 msgstr "Aplikasi"
 
@@ -1247,25 +1247,25 @@ msgstr "Aplikasi"
 msgid "'%s' is ready"
 msgstr "'%s' telah siap"
 
-#: ../js/ui/windowManager.js:71
+#: ../js/ui/windowManager.js:70
 msgid "Do you want to keep these display settings?"
-msgstr "Apakah Anda ingin mempertahankan pengaturan tampilan ini?"
+msgstr "Apakah Anda ingin menyimpan pengaturan display ini?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:89
 msgid "Revert Settings"
 msgstr "Kembalikan Pengaturan"
 
-#: ../js/ui/windowManager.js:94
+#: ../js/ui/windowManager.js:93
 msgid "Keep Changes"
 msgstr "Simpan Perubahan"
 
-#: ../js/ui/windowManager.js:112
+#: ../js/ui/windowManager.js:111
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
-msgstr[0] "Perubahan tatanan akan dikembalikan dalam %d detik"
+msgstr[0] "Perubahan pengaturan akan dikembalikan ke sebelumnya dalam %d detik"
 
 #: ../js/ui/windowMenu.js:34
 msgid "Minimize"
@@ -1273,7 +1273,7 @@ msgstr "Minimalkan"
 
 #: ../js/ui/windowMenu.js:41
 msgid "Unmaximize"
-msgstr "Tak Maksimalkan"
+msgstr "Jangan Maksimalkan"
 
 #: ../js/ui/windowMenu.js:45
 msgid "Maximize"
@@ -1289,7 +1289,7 @@ msgstr "Ubah Ukuran"
 
 #: ../js/ui/windowMenu.js:65
 msgid "Move Titlebar Onscreen"
-msgstr "Pindahkan Bilah Judul Pada Layar"
+msgstr "Pindahkan Kolom Judul Pada Layar"
 
 #: ../js/ui/windowMenu.js:70
 msgid "Always on Top"
@@ -1297,31 +1297,31 @@ msgstr "Selalu di Atas"
 
 #: ../js/ui/windowMenu.js:89
 msgid "Always on Visible Workspace"
-msgstr "Selalu pada Ruang Kerja yang Tampak"
+msgstr "Selalu pada Layar Kerja yang Tampak"
 
 #: ../js/ui/windowMenu.js:105
 msgid "Move to Workspace Left"
-msgstr "Pindah ke Ruang Kerja Kiri"
+msgstr "Pindahkan ke Layar Kerja Kiri"
 
 #: ../js/ui/windowMenu.js:110
 msgid "Move to Workspace Right"
-msgstr "Pindah ke Ruang Kerja Kanan"
+msgstr "Pindahkan ke Layar Kerja Kanan"
 
 #: ../js/ui/windowMenu.js:115
 msgid "Move to Workspace Up"
-msgstr "Pindah ke Ruang Kerja Atas"
+msgstr "Pindahkan ke Layar Kerja Atas"
 
 #: ../js/ui/windowMenu.js:120
 msgid "Move to Workspace Down"
-msgstr "Pindah ke Ruang Kerja Bawah"
+msgstr "Pindahkan ke Layar Kerja Bawah"
 
 #: ../js/ui/windowMenu.js:136
 msgid "Move to Monitor Up"
-msgstr "Pindah ke Ruang Kerja Atas"
+msgstr "Pindahkan ke Monitor Atas"
 
 #: ../js/ui/windowMenu.js:142
 msgid "Move to Monitor Down"
-msgstr "Pindah ke Ruang Kerja Bawah"
+msgstr "Pindahkan ke Monitor Bawah"
 
 #: ../js/ui/windowMenu.js:148
 msgid "Move to Monitor Left"
@@ -1333,7 +1333,7 @@ msgstr "Pindahkan ke Monitor Kanan"
 
 #: ../src/calendar-server/evolution-calendar.desktop.in.in.h:1
 msgid "Evolution Calendar"
-msgstr "Evolution Kalender"
+msgstr "Kalender Evolution"
 
 #. translators:
 #. * The number of sound outputs on a particular device
@@ -1341,7 +1341,7 @@ msgstr "Evolution Kalender"
 #, c-format
 msgid "%u Output"
 msgid_plural "%u Outputs"
-msgstr[0] "%u Keluaran"
+msgstr[0] "%u Output"
 
 #. translators:
 #. * The number of sound inputs on a particular device
@@ -1349,7 +1349,7 @@ msgstr[0] "%u Keluaran"
 #, c-format
 msgid "%u Input"
 msgid_plural "%u Inputs"
-msgstr[0] "%u Masukan"
+msgstr[0] "%u Input"
 
 #: ../src/gvc/gvc-mixer-control.c:2373
 msgid "System Sounds"
@@ -1357,19 +1357,19 @@ msgstr "Suara Sistem"
 
 #: ../src/main.c:321
 msgid "Print version"
-msgstr "Versi Cetak"
+msgstr "Versi cetak"
 
 #: ../src/main.c:327
 msgid "Mode used by GDM for login screen"
-msgstr "Mode yang dipakai oleh layar log masuk GDM"
+msgstr "Mode yang dipakai oleh GDM untuk layar login"
 
 #: ../src/main.c:333
 msgid "Use a specific mode, e.g. \"gdm\" for login screen"
-msgstr "Menggunakan mode tertentu, mis. \"gdm\" untuk layar masuk"
+msgstr "Menggunakan mode tertentu, misalnya \"gdm\" untuk layar login"
 
 #: ../src/main.c:339
 msgid "List possible modes"
-msgstr "Menampilkan mode yang mungkin"
+msgstr "Menampilkan mode yang ada"
 
 #: ../src/shell-app.c:654
 #, c-format
@@ -1383,15 +1383,15 @@ msgstr "Tanpa Nama"
 #: ../src/shell-desktop-dir-info.c:745
 #, c-format
 msgid "Custom definition for %s"
-msgstr "Definisi sesuaian untuk %s"
+msgstr "Definisi bebas untuk %s"
 
 #: ../src/shell-keyring-prompt.c:708
 msgid "Passwords do not match."
-msgstr "Sandi tidak cocok."
+msgstr "Kata sandi tidak cocok."
 
 #: ../src/shell-keyring-prompt.c:716
 msgid "Password cannot be blank"
-msgstr "Sandi tidak boleh kosong"
+msgstr "Kata sandi tidak boleh kosong"
 
 #: ../src/shell-polkit-authentication-agent.c:343
 msgid "Authentication dialog was dismissed by the user"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-11 01:32+0000\n"
+"POT-Creation-Date: 2017-05-23 01:33+0000\n"
 "PO-Revision-Date: 2017-03-19 13:20+0000\n"
 "Last-Translator: cyrus adhikari <adhikari@mpower-social.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/bn/)\n"
@@ -197,32 +197,32 @@ msgstr "'%s' কার্যকর করা ব্যর্থ:"
 msgid "Google"
 msgstr "গুগল"
 
-#: ../js/ui/appDisplay.js:1199
+#: ../js/ui/appDisplay.js:1189
 msgid "Remove from desktop"
 msgstr "ডেস্কটপ সরান"
 
-#: ../js/ui/appDisplay.js:1708
+#: ../js/ui/appDisplay.js:1698
 msgid "Warning"
 msgstr "সতর্ক বার্তা"
 
-#: ../js/ui/appDisplay.js:1714
+#: ../js/ui/appDisplay.js:1704
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "কোন ফোল্ডার মুছতে হলে আপনাকে প্রথমে এর ভেতরের জিনিষগুলো মুছতে হবে।"
 
-#: ../js/ui/appDisplay.js:1720
+#: ../js/ui/appDisplay.js:1710
 msgid "We are just trying to keep you safe."
 msgstr "আমরা আপনাকে নিরাপত্তা দিতে চেষ্টা করছি"
 
-#: ../js/ui/appDisplay.js:1726
+#: ../js/ui/appDisplay.js:1716
 msgid "OK"
 msgstr "ঠিক আছে"
 
-#: ../js/ui/appDisplay.js:2030
+#: ../js/ui/appDisplay.js:2020
 msgid "More Apps"
 msgstr "আরও অ্যাপস"
 
-#: ../js/ui/appDisplay.js:2039
+#: ../js/ui/appDisplay.js:2029
 msgid "Delete"
 msgstr "মুছুন"
 
@@ -596,7 +596,7 @@ msgstr "হালনাগাদ ব্যর্থ হয়েছে "
 msgid "We could not update your system"
 msgstr "আপনার সিস্টেমটি হালনাগাদ করা যায়নি "
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:570
 msgid "Windows"
 msgstr "উইন্ডো"
 
@@ -1239,7 +1239,7 @@ msgstr "%s (রিমোট)"
 msgid "%s (console)"
 msgstr "%s (কনসোল)"
 
-#: ../js/ui/viewSelector.js:512
+#: ../js/ui/viewSelector.js:574
 msgid "Applications"
 msgstr "অ্যাপ্লিকেশন"
 
@@ -1248,21 +1248,21 @@ msgstr "অ্যাপ্লিকেশন"
 msgid "'%s' is ready"
 msgstr "'%s' প্রস্তুত"
 
-#: ../js/ui/windowManager.js:71
+#: ../js/ui/windowManager.js:70
 msgid "Do you want to keep these display settings?"
 msgstr "আপনি কি এই ডিসপ্লে সেটিংটি রাখতে চান? "
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:89
 msgid "Revert Settings"
 msgstr "সেটিং পূর্বাবস্থায় নিন "
 
-#: ../js/ui/windowManager.js:94
+#: ../js/ui/windowManager.js:93
 msgid "Keep Changes"
 msgstr "পরিবর্তন রাখুন "
 
-#: ../js/ui/windowManager.js:112
+#: ../js/ui/windowManager.js:111
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"

@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-11 01:32+0000\n"
+"POT-Creation-Date: 2017-05-23 01:33+0000\n"
 "PO-Revision-Date: 2017-03-03 22:07+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: French (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/fr/)\n"
@@ -207,32 +207,32 @@ msgstr "Exécution de « %s » impossible :"
 msgid "Google"
 msgstr "Google"
 
-#: ../js/ui/appDisplay.js:1199
+#: ../js/ui/appDisplay.js:1189
 msgid "Remove from desktop"
 msgstr "Supprimer du bureau"
 
-#: ../js/ui/appDisplay.js:1708
+#: ../js/ui/appDisplay.js:1698
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../js/ui/appDisplay.js:1714
+#: ../js/ui/appDisplay.js:1704
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Pour supprimer un dossier, vous devez d'abord supprimer tous les éléments à l'intérieur de celui-ci."
 
-#: ../js/ui/appDisplay.js:1720
+#: ../js/ui/appDisplay.js:1710
 msgid "We are just trying to keep you safe."
 msgstr "Nous essayons simplement de vous garder en sécurité."
 
-#: ../js/ui/appDisplay.js:1726
+#: ../js/ui/appDisplay.js:1716
 msgid "OK"
 msgstr "Valider"
 
-#: ../js/ui/appDisplay.js:2030
+#: ../js/ui/appDisplay.js:2020
 msgid "More Apps"
 msgstr "Plus d'Apps"
 
-#: ../js/ui/appDisplay.js:2039
+#: ../js/ui/appDisplay.js:2029
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -606,7 +606,7 @@ msgstr "Echec d'une tentative de mise à jour"
 msgid "We could not update your system"
 msgstr "Nous n'avons pas pu mettre à jour votre système"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:570
 msgid "Windows"
 msgstr "Fenêtres"
 
@@ -1249,7 +1249,7 @@ msgstr "%s (distant)"
 msgid "%s (console)"
 msgstr "%s (console)"
 
-#: ../js/ui/viewSelector.js:512
+#: ../js/ui/viewSelector.js:574
 msgid "Applications"
 msgstr "Applications"
 
@@ -1258,21 +1258,21 @@ msgstr "Applications"
 msgid "'%s' is ready"
 msgstr "« %s » est prêt"
 
-#: ../js/ui/windowManager.js:71
+#: ../js/ui/windowManager.js:70
 msgid "Do you want to keep these display settings?"
 msgstr "Voulez-vous conserver ces paramètres d'affichage ?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:89
 msgid "Revert Settings"
 msgstr "Restaurer les paramètres"
 
-#: ../js/ui/windowManager.js:94
+#: ../js/ui/windowManager.js:93
 msgid "Keep Changes"
 msgstr "Conserver les modifications"
 
-#: ../js/ui/windowManager.js:112
+#: ../js/ui/windowManager.js:111
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"

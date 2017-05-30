@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eos-desktop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-11 01:32+0000\n"
+"POT-Creation-Date: 2017-05-23 01:33+0000\n"
 "PO-Revision-Date: 2017-03-03 23:09+0000\n"
 "Last-Translator: Roddy Shuler <roddy@endlessm.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/endless-mobile-inc/eos-desktop/language/vi/)\n"
@@ -199,32 +199,32 @@ msgstr "Lỗi thực hiện '%s':"
 msgid "Google"
 msgstr "Google"
 
-#: ../js/ui/appDisplay.js:1199
+#: ../js/ui/appDisplay.js:1189
 msgid "Remove from desktop"
 msgstr "Xóa khỏi màn hình"
 
-#: ../js/ui/appDisplay.js:1708
+#: ../js/ui/appDisplay.js:1698
 msgid "Warning"
 msgstr "Cảnh báo"
 
-#: ../js/ui/appDisplay.js:1714
+#: ../js/ui/appDisplay.js:1704
 msgid ""
 "To delete a folder you have to remove all of the items inside of it first."
 msgstr "Để xóa một thư mục, bạn phải xóa tất cả các mục trong thư mục đó trước."
 
-#: ../js/ui/appDisplay.js:1720
+#: ../js/ui/appDisplay.js:1710
 msgid "We are just trying to keep you safe."
 msgstr "Chúng tôi chỉ đang cố giữ cho bạn được an toàn."
 
-#: ../js/ui/appDisplay.js:1726
+#: ../js/ui/appDisplay.js:1716
 msgid "OK"
 msgstr "OK"
 
-#: ../js/ui/appDisplay.js:2030
+#: ../js/ui/appDisplay.js:2020
 msgid "More Apps"
 msgstr "Các Ứng dụng khác"
 
-#: ../js/ui/appDisplay.js:2039
+#: ../js/ui/appDisplay.js:2029
 msgid "Delete"
 msgstr "Xóa"
 
@@ -598,7 +598,7 @@ msgstr "Cập nhật không thành công"
 msgid "We could not update your system"
 msgstr "Chúng tôi không thể cập nhật hệ thống của bạn"
 
-#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:508
+#: ../js/ui/ctrlAltTab.js:29 ../js/ui/viewSelector.js:570
 msgid "Windows"
 msgstr "Cửa sổ"
 
@@ -1237,7 +1237,7 @@ msgstr "%s (máy chủ)"
 msgid "%s (console)"
 msgstr "%s (bàn điều khiển)"
 
-#: ../js/ui/viewSelector.js:512
+#: ../js/ui/viewSelector.js:574
 msgid "Applications"
 msgstr "Ứng dụng"
 
@@ -1246,21 +1246,21 @@ msgstr "Ứng dụng"
 msgid "'%s' is ready"
 msgstr "'%s' đã sẵn sàng"
 
-#: ../js/ui/windowManager.js:71
+#: ../js/ui/windowManager.js:70
 msgid "Do you want to keep these display settings?"
 msgstr "Bạn có muốn giữ những cài đặt màn hình hiển thị này không?"
 
 #. Translators: this and the following message should be limited in lenght,
 #. to avoid ellipsizing the labels.
-#: ../js/ui/windowManager.js:90
+#: ../js/ui/windowManager.js:89
 msgid "Revert Settings"
 msgstr "Phục hồi lại các cài đặt"
 
-#: ../js/ui/windowManager.js:94
+#: ../js/ui/windowManager.js:93
 msgid "Keep Changes"
 msgstr "Giữ các thay đổi"
 
-#: ../js/ui/windowManager.js:112
+#: ../js/ui/windowManager.js:111
 #, javascript-format
 msgid "Settings changes will revert in %d second"
 msgid_plural "Settings changes will revert in %d seconds"
