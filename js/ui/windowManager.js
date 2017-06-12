@@ -36,7 +36,8 @@ const DIM_BRIGHTNESS = -0.3;
 const DIM_TIME = 0.500;
 const UNDIM_TIME = 0.250;
 const SKYPE_WINDOW_CLOSE_TIMEOUT_MS = 1000;
-
+const DISCOVERY_FEED_OPACITY = 200;
+const FULL_OPACITY = 255;
 const ONE_SECOND = 1000; // in ms
 
 const DisplayChangeDialog = new Lang.Class({
@@ -537,7 +538,7 @@ const TilePreview = new Lang.Class({
                            y: tileRect.y,
                            width: tileRect.width,
                            height: tileRect.height,
-                           opacity: 255,
+                           opacity: FULL_OPACITY,
                            time: WINDOW_ANIMATION_TIME,
                            transition: 'easeOutQuad'
                          });
@@ -833,11 +834,11 @@ const WindowManager = new Lang.Class({
             return;
         }
 
-        actor.opacity = 255;
-        actor.show();
-
         if (SideComponent.isDiscoveryFeedWindow(actor.meta_window)) {
             let endY = monitor.y - actor.height;
+            actor.opacity = DISCOVERY_FEED_OPACITY;
+            actor.show();
+
             Tweener.addTween(actor,
                              { y: endY,
                                time: WINDOW_ANIMATION_TIME,
@@ -852,6 +853,8 @@ const WindowManager = new Lang.Class({
         }
         else {
             let endX;
+            actor.opacity = FULL_OPACITY;
+            actor.show();
             if (actor.x <= monitor.x) {
                 endX = monitor.x - actor.width;
             } else {
@@ -891,7 +894,7 @@ const WindowManager = new Lang.Class({
         if (this._removeEffect(this._minimizing, actor)) {
             Tweener.removeTweens(actor);
             actor.set_scale(1.0, 1.0);
-            actor.set_opacity(255);
+            actor.set_opacity(FULL_OPACITY);
             actor.move_anchor_point_from_gravity(Clutter.Gravity.NORTH_WEST);
 
             shellwm.completed_minimize(actor);
@@ -1048,17 +1051,17 @@ const WindowManager = new Lang.Class({
                 continue;
             }
 
-            if (animate && winActors[i].opacity != 255) {
+            if (animate && winActors[i].opacity != FULL_OPACITY) {
                 winActors[i].show();
                 Tweener.addTween(winActors[i],
-                                 { opacity: 255,
+                                 { opacity: FULL_OPACITY,
                                    time: WINDOW_ANIMATION_TIME,
                                    transition: 'easeOutQuad',
-                                   onOverwrite: function(winActor) { winActor.opacity = 255; },
+                                   onOverwrite: function(winActor) { winActor.opacity = FULL_OPACITY; },
                                    onOverwriteParams: [winActors[i]]
                                  });
             } else {
-                winActors[i].opacity = 255;
+                winActors[i].opacity = FULL_OPACITY;
                 winActors[i].show();
             }
         }
@@ -1077,7 +1080,7 @@ const WindowManager = new Lang.Class({
             // the DiscoveryFeed window will appear from the top center
             let origY = actor.y;
             actor.set_position(actor.x, monitor.y - actor.height);
-
+            actor.opacity = DISCOVERY_FEED_OPACITY;
             Tweener.addTween(actor,
                              { y: origY,
                                time: WINDOW_ANIMATION_TIME,
@@ -1099,7 +1102,7 @@ const WindowManager = new Lang.Class({
                 // ... from the right side
                 actor.set_position(monitor.x + monitor.width, actor.y);
             }
-
+            actor.opacity = FULL_OPACITY;
             Tweener.addTween(actor,
                              { x: origX,
                                time: WINDOW_ANIMATION_TIME,
@@ -1113,7 +1116,6 @@ const WindowManager = new Lang.Class({
                              });
         }
 
-        actor.opacity = 255;
         actor.show();
 
         if (SideComponent.shouldHideOtherWindows(actor.meta_window)) {
@@ -1238,7 +1240,7 @@ const WindowManager = new Lang.Class({
                                }
                              });
             Tweener.addTween(actor,
-                             { opacity: 255,
+                             { opacity: FULL_OPACITY,
                                time: WINDOW_ANIMATION_TIME * 2,
                                transition: 'easeOutCubic',
                                onComplete: this._mapWindowDone,
@@ -1254,7 +1256,7 @@ const WindowManager = new Lang.Class({
     _mapWindowDone : function(shellwm, actor) {
         if (this._removeEffect(this._mapping, actor)) {
             Tweener.removeTweens(actor);
-            actor.opacity = 255;
+            actor.opacity = SideComponent.isDiscoveryFeedWindow(actor.meta_window) ? DISCOVERY_FEED_OPACITY : FULL_OPACITY;
             actor.scale_x = 1;
             actor.scale_y = 1;
             shellwm.completed_map(actor);
