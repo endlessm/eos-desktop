@@ -58,15 +58,26 @@ const DiscoveryFeedButton = new Lang.Class({
     Extends: St.Button,
 
     _init: function() {
-        let iconFile = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/discovery-feed-open-tab.png');
-        let gicon = new Gio.FileIcon({ file: iconFile });
-        this._icon = new St.Icon({ gicon: gicon,
+        let iconFileNormal = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/discovery-feed-open-tab.png');
+        this._giconNormal = new Gio.FileIcon({ file: iconFileNormal });
+        let iconFileHover = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/discovery-feed-open-tab_hover.png');
+        this._giconHover = new Gio.FileIcon({ file: iconFileHover });
+        this._icon = new St.Icon({ gicon: this._giconNormal,
                                    style_class: 'discovery-feed-icon',
                                    track_hover: true });
         this.parent({ name: 'discovery-feed',
                       child: this._icon,
                       x_align: Clutter.ActorAlign.CENTER,
                       y_align: Clutter.ActorAlign.CENTER });
+        this.connect('notify::hover', Lang.bind(this, this._onHoverChanged));
+    },
+
+    _onHoverChanged: function(actor) {
+        if (actor.get_hover()) {
+            this._icon.gicon = this._giconHover;
+        } else {
+            this._icon.gicon = this._giconNormal;
+        }
     }
 });
 
